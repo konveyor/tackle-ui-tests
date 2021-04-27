@@ -24,3 +24,14 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 import '@testing-library/cypress/add-commands';
+import { userNameInput, userPasswordInput, LoginButton } from '../integration/views/login.view';
+
+const tackle_ui_url = Cypress.env('tackleUrl');
+
+Cypress.Commands.add('login', (username, password) => {
+    cy.visit(tackle_ui_url)
+    cy.get(userNameInput).clear().type(username)
+    cy.get(userPasswordInput).clear().type(password)
+    cy.get(LoginButton).click()
+    cy.get('h1').contains('Application inventory')
+})
