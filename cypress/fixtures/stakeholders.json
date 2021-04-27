@@ -1,0 +1,14 @@
+[
+    {
+        "displayName": "Bruce Wayne",
+        "email": "bruce.wayne@wenp.com",
+        "jobFunction": "Business Service Owner / Manager",
+        "group": "Saving And Investments"
+    },
+    {
+        "displayName": "Clark Kent",
+        "email": "clark.kent@krypton.com",
+        "jobFunction": "Solution Architect",
+        "group": "Home Loan"
+    }
+]
