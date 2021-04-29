@@ -38,7 +38,7 @@ describe('Create New Stakeholder', () => {
         // Wait untill stakeholder create api is executed
         cy.wait('@postStakeholder');
 
-        //Assert that newly created stakeholders exist
+        // Assert that newly created stakeholder exist
         cy.get(stakeholderTableRows).get('td[data-label=Email]').should('contain', stakeholder.email);
         cy.get(stakeholderTableRows).get('td[data-label="Display name"]').should('contain', stakeholder.displayName);
     });
