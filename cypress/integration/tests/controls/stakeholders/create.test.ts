@@ -7,7 +7,7 @@ const userName = Cypress.env('user');
 const userPassword = Cypress.env('pass');
 const tackleUiUrl = Cypress.env('tackleUrl');
 
-var stakeholder
+var stakeholder;
 
 describe('Create New Stakeholder', () => {
     before('Login and load data', function() {
@@ -22,7 +22,7 @@ describe('Create New Stakeholder', () => {
 
         // Interceptors
         cy.intercept('POST', '/api/controls/stakeholder*').as('postStakeholder');
-        cy.intercept('GET', '/api/controls/stakeholder*').as('getStakeholders')
+        cy.intercept('GET', '/api/controls/stakeholder*').as('getStakeholders');
 
         // Ensure Stakeholders page is opened
         cy.visit(tackleUiUrl + '/controls/stakeholders');

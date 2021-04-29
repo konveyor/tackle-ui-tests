@@ -7,6 +7,6 @@ describe('Log In', () => {
 
     it('Login to Pathfinder', () => {
         cy.login(userName, userPassword);
-        cy.get('h1').should('contain', 'Application inventory')
+        cy.get('h1').should('contain', 'Application inventory');
     });
 });
