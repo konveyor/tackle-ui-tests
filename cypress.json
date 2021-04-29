@@ -2,7 +2,7 @@
   "viewportWidth": 1280,
   "viewportHeight": 880,
   "env":{
-    "username": "",
+    "user": "",
     "pass": "",
     "tackleUrl": ""
   }
