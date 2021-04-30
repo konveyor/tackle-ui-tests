@@ -27,7 +27,7 @@
 
 2. Got to folder and install
 
-    `Cd tackle-ui-tests`
+    `cd tackle-ui-tests`
 
     `npm install .`
 
