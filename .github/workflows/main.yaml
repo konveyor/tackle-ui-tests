@@ -1,0 +1,11 @@
+name: tackle-ui-tests
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Prettier
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: npm install .
+      - run: npm run check
