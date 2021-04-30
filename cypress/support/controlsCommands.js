@@ -2,9 +2,10 @@ import '@testing-library/cypress/add-commands';
 import { createStakeholderButton, stakeholderEmailInput, stakeholderNameInput, 
          jobFunctionInput, groupInput, stakeholderFormButton, 
          stakeholderTable, stakeholderTableRows, 
-         confirmButton, itemsPerPageSelector } from '../integration/views/stakeholder.view';
+         confirmButton } from '../integration/views/stakeholder.view';
+import { itemsPerPageSelector } from '../integration/views/common.view';
 import { createNewStakeholdergroupButton, stakeholdergroupNameInput, stakeholdergroupDescriptionInput, 
-    stakeholdergroupCreateButton, confirmDeleteButton} from '../integration/views/stakeholdergroups.view';
+         stakeholdergroupCreateButton, confirmDeleteButton} from '../integration/views/stakeholdergroups.view';
 
 // -- Create new stakeholder with min data (name and email) --
 Cypress.Commands.add('createStakeholderMin', (stakeholderData) => {
@@ -16,18 +17,18 @@ Cypress.Commands.add('createStakeholderMin', (stakeholderData) => {
 });
 
 // -- Create new stakeholder group with minimum data (name and description) --
-Cypress.Commands.add('createStakeholdergroupMin', (stakeholdergroupData) => {
+Cypress.Commands.add('createStakeholdergroupMin', (stakeholdergroup) => {
     cy.get(createNewStakeholdergroupButton).click();
-    cy.get(stakeholdergroupNameInput).clear().type(stakeholdergroupData.name);
-    cy.get(stakeholdergroupDescriptionInput).clear().type(stakeholdergroupData.description);
+    cy.get(stakeholdergroupNameInput).clear().type(stakeholdergroup.name);
+    cy.get(stakeholdergroupDescriptionInput).clear().type(stakeholdergroup.description);
     cy.get(stakeholdergroupCreateButton).should("not.be.disabled");
     cy.get('form.pf-c-form').submit();
 });
 
 // -- Delete stakeholder group --
-Cypress.Commands.add('deleteStakeholdergroup', (stakeholdergroupName) => {
+Cypress.Commands.add('deleteStakeholdergroup', (stakeholdergroup) => {
     cy.get("table[aria-label='App table'] > tbody > tr").as('tableRows')
-    cy.get('@tableRows').get('td[data-label=Name]').contains(stakeholdergroupName).siblings('td[data-key=4]').find('button[aria-label=delete]').click()
+    cy.get('@tableRows').get('td[data-label=Name]').contains(stakeholdergroup.name).siblings('td[data-key=4]').find('button[aria-label=delete]').click()
     cy.get(confirmDeleteButton).click()
 });
 

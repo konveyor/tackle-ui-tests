@@ -1,10 +1,6 @@
 /// <reference types="cypress" />
 
 import "../../../../support/index";
-import {
-  stakeholderTableRows,
-  itemsPerPageSelector,
-} from "../../../views/stakeholder.view";
 import { stakeholdergroupTableRows } from "../../../views/stakeholdergroups.view";
 
 const userName = Cypress.env("user");
@@ -34,7 +30,7 @@ describe("Create New Stakeholder", () => {
       "deleteStakeholdergroup"
     );
 
-    // Ensure Stakeholders page is opened
+    // Ensure Stakeholder groups page is opened
     cy.visit(tackleUiUrl + "/controls/stakeholder-groups");
     cy.wait(5000);
 
@@ -44,14 +40,14 @@ describe("Create New Stakeholder", () => {
   it("Single stakeholder group with name and description", function () {
     cy.createStakeholdergroupMin(stakeholdergroup);
 
-    // Wait untill stakeholder create api is executed
+    // Wait untill stakeholder group create api is executed
     cy.wait("@postStakeholdergroup");
 
     //Select max(100) number of items to display from table per page
     cy.selectItemsPerPage(100);
     cy.wait("@getStakeholdersgroup");
 
-    // Assert that newly created stakeholder exists
+    // Assert that newly created stakeholder group exists
     cy.get(stakeholdergroupTableRows)
       .get("td[data-label=Name]")
       .should("contain", stakeholdergroup.name);
@@ -61,7 +57,7 @@ describe("Create New Stakeholder", () => {
   });
 
   after("Delete stakeholder group", function () {
-    cy.deleteStakeholdergroup(stakeholdergroup.name);
+    cy.deleteStakeholdergroup(stakeholdergroup);
     cy.wait("@deleteStakeholdergroup");
   });
 });
