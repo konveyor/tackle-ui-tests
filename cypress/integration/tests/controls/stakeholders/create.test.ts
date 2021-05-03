@@ -33,5 +33,6 @@ describe("Create New Stakeholder", () => {
 
         // Assert that newly created stakeholder is deleted
         cy.get(tdTag).should("not.contain", stakeholder.stakeholderEmail);
+
     });
 });
