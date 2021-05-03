@@ -1,9 +1,9 @@
 {
-  "name": "tackle-ui",
+  "name": "tackle-ui-tests",
   "version": "0.1.0",
-  "description": "Tackle integration tests",
-  "main": "server.js",
-  "repository": "https://github.com/carlosthe19916/tackle-ui-testing-poc.git",
+  "description": "Tackle Web UI Tests",
+  "main": "index.js",
+  "repository": "https://github.com/konveyor/tackle-ui-tests.git",
   "dependencies": {
     "@testing-library/cypress": "^7.0.5",
     "cypress": "^7.1.0",
@@ -13,7 +13,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "check": "prettier --check 'cypress/*/*/*/*/*.ts'",
-    "format": "prettier --write 'cypress/*/*/*/*/*.ts'"
+    "check": "prettier --check './**/*.{ts,js,json}'",
+    "format": "prettier --write './**/*.{ts,js,json}'"
   }
 }
