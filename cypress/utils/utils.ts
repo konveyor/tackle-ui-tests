@@ -20,6 +20,6 @@ export function login(): void {
   cy.visit(tackleUiUrl);
   inputText(loginView.userNameInput, userName);
   inputText(loginView.userPasswordInput, userPassword);
-  clickByText("button", loginView.loginButton);
+  click(loginView.loginButton);
   cy.get('h1').contains('Application inventory');
 }
