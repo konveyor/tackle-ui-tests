@@ -19,7 +19,7 @@ describe("Create New Stakeholder", () => {
     it("Stakeholder crud operations", function() {
 
         // Create new stakeholder
-        stakeholder.createMin();
+        stakeholder.create();
         cy.wait("@postStakeholder");
 
         // Edit stakeholder"s name

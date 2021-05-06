@@ -12,25 +12,25 @@ describe("Create New Job Function", () => {
         login();
 
         // Interceptors
-        cy.intercept("POST", "/api/controls/job-function*").as("postJobFunction");
-        cy.intercept("GET", "/api/controls/job-function*").as("getJobFunctions");
+        cy.intercept("POST", "/api/controls/job-function*").as("postJobfunction");
+        cy.intercept("GET", "/api/controls/job-function*").as("getJobfunctions");
     });
 
     it("jobfunctions crud", function () {
 
         // Create new job function
         jobfunctions.create();
-        cy.wait("@postJobFunction");
+        cy.wait("@postJobfunction");
 
         // Edit job function name
         jobfunctions.edit();
-        cy.wait("@getJobFunctions");
+        cy.wait("@getJobfunctions");
 
         // Delete job function
         jobfunctions.delete();
-        cy.wait("@getJobFunctions");
+        cy.wait("@getJobfunctions");
 
         // Assert that job function is deleted
-        cy.get(tdTag).should("not.contain", jobfunctions.jobFunctionName);
+        cy.get(tdTag).should("not.contain", jobfunctions.jobfunctionName);
     });
 });

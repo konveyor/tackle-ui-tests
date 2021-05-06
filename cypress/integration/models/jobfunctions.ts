@@ -1,4 +1,4 @@
-import { controls, jobFunctions, tdTag, trTag } from "../types/constants";
+import { controls, jobfunctions, tdTag, trTag } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import { jobfunctionNameInput } from "../views/jobfunctions.view";
 import { confirmButton,
@@ -7,13 +7,14 @@ import { confirmButton,
 } from "../views/commoncontrols.view";
 import { clickByText, inputText, click, selectItemsPerPage, submitForm } from "../../utils/utils";
 import * as faker from "faker";
+
 export class Jobfunctions {
 
-  jobFunctionName;
+  jobfunctionName;
 
   protected static clickJobfunctions(): void {
     clickByText(navMenu, controls);
-    clickByText(navTab, jobFunctions);
+    clickByText(navTab, jobfunctions);
   }
 
   protected fillName(name: string): void {
@@ -21,15 +22,15 @@ export class Jobfunctions {
   }
 
   getJobFuncName(): string {
-    this.jobFunctionName = faker.name.jobType();
-    return this.jobFunctionName;
+    this.jobfunctionName = faker.name.jobType();
+    return this.jobfunctionName;
   }
 
   create(): void {
     Jobfunctions.clickJobfunctions();
     clickByText("button", "Create new");
     this.getJobFuncName();
-    this.fillName(this.jobFunctionName);
+    this.fillName(this.jobfunctionName);
     submitForm();
   }
 
@@ -38,13 +39,13 @@ export class Jobfunctions {
     selectItemsPerPage(100);
     cy.wait(2000);
     cy.get(tdTag)
-      .contains(this.jobFunctionName)
+      .contains(this.jobfunctionName)
       .parent(trTag)
       .within(() => {
         click(editButton);
     });
     this.getJobFuncName();
-    this.fillName(this.jobFunctionName);
+    this.fillName(this.jobfunctionName);
     submitForm();
   }
 
@@ -53,7 +54,7 @@ export class Jobfunctions {
     selectItemsPerPage(100);
     cy.wait(2000);
     cy.get(tdTag)
-      .contains(this.jobFunctionName)
+      .contains(this.jobfunctionName)
       .parent(trTag)
       .within(() => {
         click(deleteButton);

@@ -9,6 +9,7 @@ import { confirmButton,
 } from "../views/commoncontrols.view";
 import { clickByText, inputText, click, selectItemsPerPage, submitForm } from "../../utils/utils";
 import * as faker from "faker";
+
 export class Stakeholders {
 
   stakeholderName;
@@ -37,7 +38,7 @@ export class Stakeholders {
     return this.stakeholderEmail;
   }
 
-  createMin(): void {
+  create(): void {
     Stakeholders.clickStakeholders();
     clickByText("button", "Create new");
     this.getStakeholderName();
