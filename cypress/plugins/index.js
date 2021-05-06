@@ -20,17 +20,7 @@
 //   // `on` is used to hook into various events Cypress emits
 //   // `config` is the resolved Cypress config
 // }
-
-const faker = require("faker");
-
+// export a function
 module.exports = (on, config) => {
-	on("task", {
-		stakeholderData() {
-			stakeholder = {
-				displayName: faker.name.findName(),
-				email: faker.internet.email(),
-			};
-			return stakeholder;
-		},
-	});
-};
+    // configure plugins here
+}
