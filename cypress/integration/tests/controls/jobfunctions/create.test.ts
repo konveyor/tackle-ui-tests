@@ -17,7 +17,6 @@ describe("Create New Job Function", () => {
     });
 
     it("jobfunctions crud", function () {
-
         // Create new job function
         jobfunctions.create();
         cy.wait("@postJobfunction");

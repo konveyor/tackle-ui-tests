@@ -7,7 +7,7 @@ import { tdTag } from "../../../types/constants";
 describe("Create New Stakeholder", () => {
     const stakeholder = new Stakeholders();
 
-    before("Login", function() {
+    before("Login", function () {
         // Perform login
         login();
 
@@ -16,8 +16,7 @@ describe("Create New Stakeholder", () => {
         cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");
     });
 
-    it("Stakeholder crud operations", function() {
-
+    it("Stakeholder crud operations", function () {
         // Create new stakeholder
         stakeholder.create();
         cy.wait("@postStakeholder");

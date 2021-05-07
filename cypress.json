@@ -1,9 +1,9 @@
 {
-  "viewportWidth": 1280,
-  "viewportHeight": 880,
-  "env":{
-    "user": "",
-    "pass": "",
-    "tackleUrl": ""
-  }
+    "viewportWidth": 1280,
+    "viewportHeight": 880,
+    "env": {
+        "user": "",
+        "pass": "",
+        "tackleUrl": ""
+    }
 }
