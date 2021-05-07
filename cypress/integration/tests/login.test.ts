@@ -3,9 +3,7 @@
 import { login } from "../../utils/utils";
 
 describe("Log In", () => {
-
     it("Login to Pathfinder", () => {
-
         // Login
         login();
 
