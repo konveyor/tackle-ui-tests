@@ -8,8 +8,8 @@ export const itemsPerPageSelector = 'button[aria-label="Items per page"]';
 export const confirmDeleteButton = "button[aria-label=confirm]";
 
 // Widgets on New stakeholder group view
-export const stakeholdergroupNameInput = "input[name=name]";
-export const stakeholdergroupDescriptionInput = "textarea[name=description]";
-export const stakeholdergroupMemberSelect = '[placeholder="Select a memebr"]';
+export const stakeholdergroupName = "input[name=name]";
+export const stakeholdergroupDescription = "textarea[name=description]";
+export const stakeholdergroupMember = '[placeholder="Select a memebr"]';
 export const stakeholdergroupCreateButton = "button[aria-label=submit]";
 export const stakeholdergroupCancelButton = "button[aria-label=cancel]";
