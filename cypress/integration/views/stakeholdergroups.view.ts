@@ -1,3 +1,3 @@
-export const stakeholdergroupName = "input[name=name]";
-export const stakeholdergroupDescription = "textarea[name=description]";
-export const stakeholdergroupMember = "[placeholder='Select a member']";
+export const stakeholdergroupNameInput = "input[name=name]";
+export const stakeholdergroupDescriptionInput = "textarea[name=description]";
+export const stakeholdergroupMemberSelect = "[placeholder='Select a member']";

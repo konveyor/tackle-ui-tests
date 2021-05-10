@@ -1,9 +1,21 @@
 import { controls, stakeholdergroups, tdTag, trTag } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
-import { stakeholdergroupName, stakeholdergroupDescription } from "../views/stakeholdergroups.view";
+import {
+    stakeholdergroupNameInput,
+    stakeholdergroupDescriptionInput,
+    stakeholdergroupMemberSelect,
+} from "../views/stakeholdergroups.view";
 import { confirmButton, editButton, deleteButton } from "../views/commoncontrols.view";
-import { clickByText, inputText, click, selectItemsPerPage, submitForm } from "../../utils/utils";
+import {
+    clickByText,
+    inputText,
+    click,
+    selectItemsPerPage,
+    submitForm,
+    selectMember,
+} from "../../utils/utils";
 import * as faker from "faker";
+import { memoize } from "cypress/types/lodash";
 
 export class Stakeholdergroups {
     stakeholdergroupName;
@@ -15,11 +27,15 @@ export class Stakeholdergroups {
     }
 
     protected fillName(name: string): void {
-        inputText(stakeholdergroupName, name);
+        inputText(stakeholdergroupNameInput, name);
     }
 
     protected fillDescription(description: string): void {
-        inputText(stakeholdergroupDescription, description);
+        inputText(stakeholdergroupDescriptionInput, description);
+    }
+
+    protected selectMember(member: string): void {
+        selectMember(stakeholdergroupMemberSelect, member);
     }
 
     getStakeholdergroupName(): string {
@@ -32,17 +48,24 @@ export class Stakeholdergroups {
         return this.stakeholdergroupDescription;
     }
 
-    create(): void {
+    getCurrentstakeholdergroupName(): string {
+        return this.stakeholdergroupName;
+    }
+
+    create(member?: string): void {
         Stakeholdergroups.clickStakeholdergroups();
         clickByText("button", "Create new");
         this.getStakeholdergroupName();
         this.getStakeholdergroupDescription();
         this.fillName(this.stakeholdergroupName);
         this.fillDescription(this.stakeholdergroupDescription);
+        if (member) {
+            this.selectMember(member);
+        }
         submitForm();
     }
 
-    edit(): void {
+    edit(member?: string): void {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -56,6 +79,9 @@ export class Stakeholdergroups {
         this.getStakeholdergroupDescription();
         this.fillName(this.stakeholdergroupName);
         this.fillDescription(this.stakeholdergroupDescription);
+        if (member) {
+            this.selectMember(member);
+        }
         // Implement edit stakeholder groups' member
         submitForm();
     }
