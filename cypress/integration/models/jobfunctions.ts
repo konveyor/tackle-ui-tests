@@ -45,12 +45,12 @@ export class Jobfunctions {
         submitForm();
     }
 
-    delete(): void {
+    delete(jobfunctionName: string = this.jobfunctionName): void {
         Jobfunctions.clickJobfunctions();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(this.jobfunctionName)
+            .contains(jobfunctionName)
             .parent(trTag)
             .within(() => {
                 click(deleteButton);

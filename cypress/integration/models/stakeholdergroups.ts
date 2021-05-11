@@ -60,12 +60,12 @@ export class Stakeholdergroups {
         submitForm();
     }
 
-    delete(): void {
+    delete(stakeholdergroupName: string = this.stakeholdergroupName): void {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(this.stakeholdergroupName)
+            .contains(stakeholdergroupName)
             .parent(trTag)
             .within(() => {
                 click(deleteButton);
