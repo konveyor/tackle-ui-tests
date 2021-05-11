@@ -27,6 +27,7 @@ export function login(): void {
     inputText(loginView.userNameInput, userName);
     inputText(loginView.userPasswordInput, userPassword);
     click(loginView.loginButton);
+    cy.wait(2000);
     cy.get("h1").contains("Application inventory");
 }
 
@@ -34,4 +35,13 @@ export function selectItemsPerPage(items: number): void {
     cy.get(commonView.itemsPerPageMenu).find(commonView.itemsPerPageToggleButton).eq(0).click();
     cy.get(commonView.itemsPerPageMenuOptions);
     cy.get(`li > button[data-action="per-page-${items}"]`).click();
+}
+
+export function select(fieldId: string, memberName: string): void {
+    cy.get(fieldId).click();
+    cy.contains("button", memberName).click();
+}
+
+export function removeMember(memberName: string): void {
+    cy.get("span").contains(memberName).siblings(commonView.removeButton).click();
 }
