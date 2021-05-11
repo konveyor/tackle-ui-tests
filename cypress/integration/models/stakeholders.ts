@@ -1,8 +1,23 @@
 import { controls, stakeholders, tdTag, trTag } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
-import { stakeholderNameInput, stakeholderEmailInput } from "../views/stakeholders.view";
-import { confirmButton, editButton, deleteButton } from "../views/commoncontrols.view";
-import { clickByText, inputText, click, selectItemsPerPage, submitForm } from "../../utils/utils";
+import { 
+    stakeholderNameInput,
+    stakeholderEmailInput,
+    jobfunctionInput,
+    groupInput 
+} from "../views/stakeholders.view";
+import { confirmButton,
+    editButton,
+    deleteButton
+} from "../views/commoncontrols.view";
+import { clickByText,
+    inputText,
+    click,
+    selectItemsPerPage,
+    submitForm,
+    select,
+    removeMember
+} from "../../utils/utils";
 import * as faker from "faker";
 
 export class Stakeholders {
@@ -22,6 +37,20 @@ export class Stakeholders {
         inputText(stakeholderEmailInput, email);
     }
 
+    protected selectJobfunction(jobfunction: string): void {
+        select(jobfunctionInput, jobfunction);
+    }
+
+    protected selectGroups(groups: Array<string>): void {
+        groups.forEach(function (group) {
+            select(groupInput, group);
+        });
+    }
+
+    protected removeGroup(group: string): void {
+        removeMember(group);
+    }
+
     getStakeholderName(): string {
         this.stakeholderName = faker.name.findName();
         return this.stakeholderName;
@@ -32,17 +61,23 @@ export class Stakeholders {
         return this.stakeholderEmail;
     }
 
-    create(): void {
+    create(jobfunction?: string, groups?: Array<string>): void {
         Stakeholders.clickStakeholders();
         clickByText("button", "Create new");
         this.getStakeholderName();
         this.getStakeholderEmail();
         this.fillEmail(this.stakeholderEmail);
         this.fillName(this.stakeholderName);
+        if (jobfunction) {
+            this.selectJobfunction(jobfunction);
+        }
+        if (groups) {
+            this.selectGroups(groups);
+        }
         submitForm();
     }
 
-    edit(jobFunction?: boolean, groups?: boolean): void {
+    edit(jobfunction?: string, groups?: Array<string>): void {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -54,16 +89,21 @@ export class Stakeholders {
             });
         this.getStakeholderName();
         this.fillName(this.stakeholderName);
-        // jobfunction and group edit to be implemented
+        if (jobfunction) {
+            this.selectJobfunction(jobfunction);
+        }
+        if (groups) {
+            this.removeGroup(groups[0]);
+        }
         submitForm();
     }
 
-    delete(): void {
+    delete(stakeholderEmail: string = this.stakeholderEmail): void {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(this.stakeholderEmail)
+            .contains(stakeholderEmail)
             .parent(trTag)
             .within(() => {
                 click(deleteButton);
