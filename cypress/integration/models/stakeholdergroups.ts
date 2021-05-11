@@ -12,10 +12,9 @@ import {
     click,
     selectItemsPerPage,
     submitForm,
-    selectMember,
+    selectFormItems,
 } from "../../utils/utils";
 import * as faker from "faker";
-import { memoize } from "cypress/types/lodash";
 
 export class Stakeholdergroups {
     stakeholdergroupName;
@@ -35,7 +34,7 @@ export class Stakeholdergroups {
     }
 
     protected selectMember(member: string): void {
-        selectMember(stakeholdergroupMemberSelect, member);
+        selectFormItems(stakeholdergroupMemberSelect, member);
     }
 
     getStakeholdergroupName(): string {
@@ -43,21 +42,23 @@ export class Stakeholdergroups {
         return this.stakeholdergroupName;
     }
 
+    getNewStakeholdergroupName(): string {
+        return faker.company.companyName();
+    }
+
     getStakeholdergroupDescription(): string {
         this.stakeholdergroupDescription = faker.lorem.sentence();
         return this.stakeholdergroupDescription;
     }
 
-    getCurrentstakeholdergroupName(): string {
-        return this.stakeholdergroupName;
-    }
-
-    create(member?: string): void {
+    create(name?: string, description?: string, member?: string): void {
         Stakeholdergroups.clickStakeholdergroups();
         clickByText("button", "Create new");
         this.getStakeholdergroupName();
         this.getStakeholdergroupDescription();
+        this.stakeholdergroupName = name || this.stakeholdergroupName;
         this.fillName(this.stakeholdergroupName);
+        this.stakeholdergroupDescription = description || this.stakeholdergroupDescription;
         this.fillDescription(this.stakeholdergroupDescription);
         if (member) {
             this.selectMember(member);
@@ -65,7 +66,7 @@ export class Stakeholdergroups {
         submitForm();
     }
 
-    edit(member?: string): void {
+    edit(name?: string, description?: string, member?: string): void {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -75,23 +76,32 @@ export class Stakeholdergroups {
             .within(() => {
                 click(editButton);
             });
-        this.getStakeholdergroupName();
-        this.getStakeholdergroupDescription();
-        this.fillName(this.stakeholdergroupName);
-        this.fillDescription(this.stakeholdergroupDescription);
+
+        this.stakeholdergroupName = name || this.stakeholdergroupName;
+
+        if (name) {
+            this.fillName(name);
+        }
+
+        this.stakeholdergroupDescription = description || this.stakeholdergroupDescription;
+
+        if (description) {
+            this.fillDescription(description);
+        }
+
         if (member) {
             this.selectMember(member);
         }
-        // Implement edit stakeholder groups' member
+
         submitForm();
     }
 
-    delete(): void {
+    delete(name?: string): void {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(this.stakeholdergroupName)
+            .contains(name || this.stakeholdergroupName)
             .parent(trTag)
             .within(() => {
                 click(deleteButton);
