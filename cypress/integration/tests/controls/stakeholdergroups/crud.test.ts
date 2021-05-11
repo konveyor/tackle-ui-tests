@@ -30,7 +30,7 @@ describe("A single Stakeholder group", () => {
         cy.wait("@getStakeholdergroups");
 
         // Delete stakeholder group
-        stakeholdergroup.delete(newStakeholdergroupName);
+        stakeholdergroup.delete();
         cy.wait("@getStakeholdergroups");
 
         // Assert that newly created stakeholder group is deleted

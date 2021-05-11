@@ -1,67 +1,68 @@
 /// <reference types="cypress" />
 
-import { login } from "../../../../utils/utils";
-import { Stakeholdergroups } from "../../../models/stakeholdergroups";
-import { Stakeholders } from "../../../models/stakeholders";
-import { tdTag } from "../../../types/constants";
+import { login, clickByText, inputText } from "../../../../utils/utils";
+import { navMenu, navTab } from "../../../views/menu.view";
+import { controls, stakeholdergroups } from "../../../types/constants";
+import {
+    stakeholdergroupNameInput,
+    stakeholdergroupNameHelper,
+    stakeholdergroupDescriptionInput,
+    stakeholdergroupDescriptionHelper,
+} from "../../../views/stakeholdergroups.view";
 
-describe("A single Stakeholder group", () => {
-    const stakeholdergroup = new Stakeholdergroups();
-    const stakeholders = new Stakeholders();
+import * as commonView from "../../../../integration/views/commoncontrols.view";
+import * as faker from "faker";
 
+describe("Basic checks while creating stakeholder groups", () => {
     beforeEach("Login", function () {
         // Perform login
         login();
 
-        // Interceptors
-        cy.intercept("POST", "/api/controls/stakeholder-group*").as("postStakeholdergroups");
-        cy.intercept("GET", "/api/controls/stakeholder-group*").as("getStakeholdergroups");
+        // Navigate to "New stakeholder group" page
+        clickByText(navMenu, controls);
+        clickByText(navTab, stakeholdergroups);
+        clickByText("button", "Create new");
     });
 
-    it("Stakeholder group crud operations", function () {
-        // Create new stakeholder group
-        stakeholdergroup.create();
-        cy.wait("@postStakeholdergroups");
+    it("Stakeholder name and description contraints check", function () {
+        // Check "Create" and "Cancel" button status
+        cy.get(commonView.submitButton).should("be.disabled");
+        cy.get(commonView.cancelButton).should("not.be.disabled");
 
-        // Edit stakeholder group's name and description
-        stakeholdergroup.edit();
-        cy.wait("@getStakeholdergroups");
+        // Name constraints
+        inputText(stakeholdergroupNameInput, "te");
+        cy.get(stakeholdergroupNameHelper).should(
+            "contain",
+            "This field must contain at least 3 characters."
+        );
+        inputText(stakeholdergroupNameInput, faker.random.words(50));
+        cy.get(stakeholdergroupNameHelper).should(
+            "contain",
+            "This field must contain fewer than 120 characters."
+        );
+        inputText(stakeholdergroupNameInput, "test");
+        cy.get(commonView.submitButton).should("not.be.disabled");
 
-        // Delete stakeholder group
-        stakeholdergroup.delete();
-        cy.wait("@getStakeholdergroups");
-
-        // Assert that newly created stakeholder group is deleted
-        cy.get(tdTag).should("not.contain", stakeholdergroup.getCurrentstakeholdergroupName);
+        // Description constraints
+        inputText(stakeholdergroupDescriptionInput, faker.random.words(120));
+        cy.get(stakeholdergroupDescriptionHelper).should(
+            "contain",
+            "This field must contain fewer than 250 characters."
+        );
     });
 
-    it("Stakeholder group CRUD with Stakeholder Member attached", function () {
-        // Create stakeholder
-        stakeholders.create();
-        var stakeholderName;
-        stakeholderName = stakeholders.getCurrentStakeholderName();
-        // Create new stakeholder group
-        stakeholdergroup.create(stakeholderName);
-        cy.wait("@postStakeholdergroups");
-        // Check if stakeholder member attached to stakeholder group
-        cy.get(tdTag).should("contain", "1");
+    it("Cancel and close on stakholder group creation", function () {
+        // Cancel creating stakeholder group
+        cy.get(commonView.cancelButton).click();
+        cy.wait(100);
 
-        // Edit stakeholder group with name, description and member
-        stakeholdergroup.edit(stakeholderName);
-        cy.wait("@getStakeholdergroups");
-        // Check if stakeholder group's member count is updated
-        cy.get(tdTag).should("contain", "0");
+        clickByText("button", "Create new");
 
-        // Delete stakeholder group
-        stakeholdergroup.delete();
-        cy.wait("@getStakeholdergroups");
+        // Close create stakeholder group page
+        cy.get(commonView.closeButton).click();
+        cy.wait(100);
 
-        // Assert that newly created stakeholder group is deleted
-        cy.get(tdTag).should("not.contain", stakeholdergroup.getCurrentstakeholdergroupName);
-
-        // Delete stakeholder
-        stakeholders.delete();
-        // Assert that newly created stakeholder is deleted
-        cy.get(tdTag).should("not.contain", stakeholderName);
+        // Asserting stakholder groups page
+        cy.contains("button", "Create new").should("exist");
     });
 });

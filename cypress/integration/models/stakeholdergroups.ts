@@ -78,16 +78,10 @@ export class Stakeholdergroups {
             });
 
         this.stakeholdergroupName = name || this.stakeholdergroupName;
-
-        if (name) {
-            this.fillName(name);
-        }
+        this.fillName(this.stakeholdergroupName);
 
         this.stakeholdergroupDescription = description || this.stakeholdergroupDescription;
-
-        if (description) {
-            this.fillDescription(description);
-        }
+        this.fillDescription(this.stakeholdergroupDescription);
 
         if (member) {
             this.selectMember(member);
