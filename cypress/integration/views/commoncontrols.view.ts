@@ -6,3 +6,4 @@ export const deleteButton = "button[aria-label=delete]";
 export const controlsForm = "form.pf-c-form";
 export const itemsPerPageMenu = "div.pf-c-options-menu";
 export const itemsPerPageMenuOptions = "ul[aria-labelledby='pagination-options-menu-toggle']";
+export const removeButton = "button[aria-label='Remove']";
