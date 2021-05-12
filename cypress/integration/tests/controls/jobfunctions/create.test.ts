@@ -1,35 +1,64 @@
 /// <reference types="cypress" />
 
-import { login } from "../../../../utils/utils";
+import * as utils from "../../../../utils/utils";
 import { Jobfunctions } from "../../../models/jobfunctions";
-import { tdTag } from "../../../types/constants";
+import { navMenu, navTab } from "../../../views/menu.view";
+import  * as view from "../../../views/jobfunctions.view"
+import * as constants from "../../../types/constants";
+import * as commonView from "../../../../integration/views/commoncontrols.view";
+import * as faker from "faker";
 
 describe("Create New Job Function", () => {
     const jobfunctions = new Jobfunctions();
 
-    before("Login", () => {
+    beforeEach("Login", function () {
         // Perform login
-        login();
-
-        // Interceptors
-        cy.intercept("POST", "/api/controls/job-function*").as("postJobfunction");
-        cy.intercept("GET", "/api/controls/job-function*").as("getJobfunctions");
+        utils.login();
     });
 
-    it("jobfunctions crud", function () {
-        // Create new job function
-        jobfunctions.create();
-        cy.wait("@postJobfunction");
+    
+    it("jobfunctions field validations", function () { 
+        // Create new job function 
+        utils.clickByText(navMenu, constants.controls);
+        utils.clickByText(navTab, constants.jobfunctions);
+        utils.clickByText(constants.button, constants.createNewButton);
 
-        // Edit job function name
-        jobfunctions.edit();
-        cy.wait("@getJobfunctions");
+        // Check "Create" and "Cancel" button status
+        cy.get(commonView.submitButton).should("be.disabled");
+        cy.get(commonView.cancelButton).should("not.be.disabled");
 
-        // Delete job function
-        jobfunctions.delete();
-        cy.wait("@getJobfunctions");
-
-        // Assert that job function is deleted
-        cy.get(tdTag).should("not.contain", jobfunctions.jobfunctionName);
+        // Name constraints
+        utils.inputText(view.jobfunctionNameInput, " ");
+        cy.get(view.jobfunctionsNameHelper).should("contain", "This field is required.");
+        utils.inputText(view.jobfunctionNameInput, "ab");
+        cy.wait(100)
+        cy.get(view.jobfunctionsNameHelper).should("contain", "This field must contain at least 3 characters.");
+        utils.inputText(view.jobfunctionNameInput, faker.random.words(50));
+        cy.get(view.jobfunctionsNameHelper).should("contain", "This field must contain fewer than 120 characters.");
+        utils.inputText(view.jobfunctionNameInput, "test");
+        cy.get(commonView.submitButton).should("not.be.disabled");
+        cy.get(commonView.cancelButton).click();
     });
+
+    it("jobfunctions duplicate name", function () { 
+        // Create new job function 
+        jobfunctions.create(); 
+        jobfunctions.create(jobfunctions.jobfunctionName); 
+        cy.get(view.jobfunctionAlert).should("contain.text", "ERROR: duplicate key value violates unique constraint"); 
+        cy.wait(100); 
+        cy.get(commonView.closeButton).click(); 
+        jobfunctions.delete() 
+    });
+
+    it("jobfunctions update", function () { 
+        // Edit job function and cancel
+        jobfunctions.create(); 
+        jobfunctions.edit(faker.name.jobType(), true); 
+        cy.wait(100); 
+        // Edit and Save
+        jobfunctions.edit(faker.name.jobType()); 
+        cy.wait(100); 
+        jobfunctions.delete() 
+    });
+
 });
