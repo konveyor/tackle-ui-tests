@@ -37,7 +37,7 @@ export function selectItemsPerPage(items: number): void {
     cy.get(`li > button[data-action="per-page-${items}"]`).click();
 }
 
-export function select(fieldId: string, memberName: string): void {
+export function selectFormItems(fieldId: string, memberName: string): void {
     cy.get(fieldId).click();
     cy.contains("button", memberName).click();
 }
