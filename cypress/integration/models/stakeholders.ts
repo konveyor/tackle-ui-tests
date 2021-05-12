@@ -15,7 +15,7 @@ import { clickByText,
     click,
     selectItemsPerPage,
     submitForm,
-    select,
+    selectFormItems,
     removeMember
 } from "../../utils/utils";
 import * as faker from "faker";
@@ -38,17 +38,19 @@ export class Stakeholders {
     }
 
     protected selectJobfunction(jobfunction: string): void {
-        select(jobfunctionInput, jobfunction);
+        selectFormItems(jobfunctionInput, jobfunction);
     }
 
     protected selectGroups(groups: Array<string>): void {
         groups.forEach(function (group) {
-            select(groupInput, group);
+            selectFormItems(groupInput, group);
         });
     }
 
-    protected removeGroup(group: string): void {
-        removeMember(group);
+    protected removeGroups(groups: Array<string>): void {
+        groups.forEach(function (group) {
+            removeMember(group);
+        });
     }
 
     getStakeholderName(): string {
@@ -77,7 +79,7 @@ export class Stakeholders {
         submitForm();
     }
 
-    edit(jobfunction?: string, groups?: Array<string>): void {
+    edit(jobfunction?: string, addGroups?: Array<string>, removeGroups?: Array<string>): void {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -92,8 +94,11 @@ export class Stakeholders {
         if (jobfunction) {
             this.selectJobfunction(jobfunction);
         }
-        if (groups) {
-            this.removeGroup(groups[0]);
+        if (addGroups) {
+            this.selectGroups(addGroups);
+        }
+        if (removeGroups) {
+            this.removeGroups(removeGroups);
         }
         submitForm();
     }
