@@ -1,4 +1,11 @@
-import { controls, stakeholdergroups, tdTag, trTag } from "../types/constants";
+import {
+    controls,
+    stakeholdergroups,
+    tdTag,
+    trTag,
+    button,
+    createNewButton,
+} from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import {
     stakeholdergroupNameInput,
@@ -57,20 +64,17 @@ export class Stakeholdergroups {
         return this.stakeholdergroupDescription;
     }
 
-    create(name?: string, description?: string, member?: string): void {
+    create(member?: string): void {
         Stakeholdergroups.clickStakeholdergroups();
-        clickByText("button", "Create new");
+        clickByText(button, createNewButton);
         this.getStakeholdergroupName();
         this.getStakeholdergroupDescription();
-        this.stakeholdergroupName = name || this.stakeholdergroupName;
         this.fillName(this.stakeholdergroupName);
-        this.stakeholdergroupDescription = description || this.stakeholdergroupDescription;
         this.fillDescription(this.stakeholdergroupDescription);
         if (member) {
             this.selectMember(member);
         }
         submitForm();
-        console.log(`Success! ${this.stakeholdergroupName} was added as a stakeholder group.`);
         checkFlashMessage(
             flashMessage,
             `Success! ${this.stakeholdergroupName} was added as a stakeholder group.`
@@ -89,11 +93,15 @@ export class Stakeholdergroups {
             });
 
         this.stakeholdergroupName = name || this.stakeholdergroupName;
-        this.fillName(this.stakeholdergroupName);
+        if (name) {
+            this.fillName(name);
+        }
 
         this.stakeholdergroupDescription = description || this.stakeholdergroupDescription;
-        this.fillDescription(this.stakeholdergroupDescription);
 
+        if (description) {
+            this.fillDescription(this.stakeholdergroupDescription);
+        }
         if (member) {
             this.selectMember(member);
         }
@@ -105,12 +113,29 @@ export class Stakeholdergroups {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
+        this.stakeholdergroupName = name || this.stakeholdergroupName;
         cy.get(tdTag)
-            .contains(name || this.stakeholdergroupName)
+            .contains(this.stakeholdergroupName)
             .parent(trTag)
             .within(() => {
                 click(deleteButton);
             });
         click(confirmButton);
+    }
+
+    exists(name?: string) {
+        Stakeholdergroups.clickStakeholdergroups();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        this.stakeholdergroupName = name || this.stakeholdergroupName;
+        cy.get(tdTag).should("contain", this.stakeholdergroupName);
+    }
+
+    notExists(name?: string) {
+        Stakeholdergroups.clickStakeholdergroups();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        this.stakeholdergroupName = name || this.stakeholdergroupName;
+        cy.get(tdTag).should("not.contain", this.stakeholdergroupName);
     }
 }
