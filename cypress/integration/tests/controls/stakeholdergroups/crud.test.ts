@@ -4,7 +4,7 @@ import { login, selectItemsPerPage, click } from "../../../../utils/utils";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Stakeholders } from "../../../models/stakeholders";
 import { tdTag, trTag } from "../../../types/constants";
-import { expandRow, flashMessage } from "../../../views/commoncontrols.view";
+import { expandRow } from "../../../views/commoncontrols.view";
 
 describe("A single Stakeholder group", () => {
     const stakeholdergroup = new Stakeholdergroups();
@@ -23,10 +23,10 @@ describe("A single Stakeholder group", () => {
         // Create new stakeholder group
         stakeholdergroup.create();
         cy.wait("@postStakeholdergroups");
+        stakeholdergroup.exists();
 
-        // Edit stakeholder group's name and description
-        var newStakeholdergroupName = stakeholdergroup.getNewStakeholdergroupName();
-        stakeholdergroup.edit(newStakeholdergroupName);
+        // Edit stakeholder group's name
+        stakeholdergroup.edit(stakeholdergroup.getNewStakeholdergroupName());
         cy.wait("@getStakeholdergroups");
 
         // Delete stakeholder group
@@ -34,18 +34,20 @@ describe("A single Stakeholder group", () => {
         cy.wait("@getStakeholdergroups");
 
         // Assert that newly created stakeholder group is deleted
-        cy.get(tdTag).should("not.contain", newStakeholdergroupName);
+        stakeholdergroup.notExists();
     });
 
     it("Stakeholder group CRUD with Stakeholder Member attached", function () {
         // Create stakeholder
         stakeholders.create();
+        stakeholders.exists();
         var memberStakeholderName;
         memberStakeholderName = stakeholders.stakeholderName;
 
         // Create new stakeholder group
-        stakeholdergroup.create(null, null, memberStakeholderName);
+        stakeholdergroup.create(memberStakeholderName);
         cy.wait("@postStakeholdergroups");
+        stakeholdergroup.exists();
 
         // Check if stakeholder member attached to stakeholder group
         selectItemsPerPage(100);
@@ -80,12 +82,11 @@ describe("A single Stakeholder group", () => {
         cy.wait("@getStakeholdergroups");
 
         // Assert that newly created stakeholder group is deleted
-        cy.get(tdTag).should("not.contain", stakeholdergroup.stakeholdergroupName);
-
+        stakeholdergroup.notExists();
         // Delete stakeholder
         stakeholders.delete();
 
         // Assert that created stakeholder is deleted
-        cy.get(tdTag).should("not.contain", memberStakeholderName);
+        stakeholders.notExists();
     });
 });
