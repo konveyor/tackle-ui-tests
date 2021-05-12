@@ -1,11 +1,12 @@
 /// <reference types="cypress" />
 
-import { login } from "../../../../utils/utils";
+import { login, click } from "../../../../utils/utils";
 import { Stakeholders } from "../../../models/stakeholders";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Jobfunctions } from "../../../models/jobfunctions";
-import { tdTag } from "../../../types/constants";
+import { tdTag, trTag } from "../../../types/constants";
 import { groupsCount } from "../../../views/stakeholders.view";
+import { expandRow } from "../../../views/commoncontrols.view";
 
 describe("Stakeholder CRUD operations", () => {
     const stakeholder = new Stakeholders();
@@ -63,9 +64,18 @@ describe("Stakeholder CRUD operations", () => {
         cy.wait("@putStakeholder");
         cy.wait("@getStakeholders");
 
-        // Assert that edit operation has been done by checking number of groups
-        //cy.get(tdTag).contains(stakeholder.stakeholderEmail).siblings(groupsCount).should("contain", "1");
-
+        // Assert that edit operation has been done by checking number of groups and added group exists
+        cy.get(tdTag)
+          .contains(stakeholder.stakeholderEmail)
+          .parent(trTag)
+          .within(() => {
+            click(expandRow);
+          })
+          .get("div > dd")
+          .should("contain", stakeholdergroups[1]);
+        // [12/05/2021] To be uncommented and checked when bug is resolved 
+        // cy.get(tdTag).contains(stakeholder.stakeholderEmail).siblings(groupsCount).should("contain", "1");
+ 
         // Delete stakeholder
         stakeholder.delete();
         cy.wait("@getStakeholders");
