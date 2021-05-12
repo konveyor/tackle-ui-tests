@@ -4,7 +4,7 @@ import { login, selectItemsPerPage, click } from "../../../../utils/utils";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Stakeholders } from "../../../models/stakeholders";
 import { tdTag, trTag } from "../../../types/constants";
-import { expandRow } from "../../../views/commoncontrols.view";
+import { expandRow, flashMessage } from "../../../views/commoncontrols.view";
 
 describe("A single Stakeholder group", () => {
     const stakeholdergroup = new Stakeholdergroups();

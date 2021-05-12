@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, inputText } from "../../../../utils/utils";
+import { login, clickByText, inputText, submitForm } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, stakeholdergroups } from "../../../types/constants";
 import {
@@ -9,22 +9,24 @@ import {
     stakeholdergroupDescriptionInput,
     stakeholdergroupDescriptionHelper,
 } from "../../../views/stakeholdergroups.view";
+import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 
 import * as commonView from "../../../../integration/views/commoncontrols.view";
 import * as faker from "faker";
 
 describe("Basic checks while creating stakeholder groups", () => {
+    const stakeholdergroup = new Stakeholdergroups();
+
     beforeEach("Login", function () {
         // Perform login
         login();
+    });
 
+    it("Stakeholder name and description contraints check", function () {
         // Navigate to "New stakeholder group" page
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholdergroups);
         clickByText("button", "Create new");
-    });
-
-    it("Stakeholder name and description contraints check", function () {
         // Check "Create" and "Cancel" button status
         cy.get(commonView.submitButton).should("be.disabled");
         cy.get(commonView.cancelButton).should("not.be.disabled");
@@ -52,6 +54,10 @@ describe("Basic checks while creating stakeholder groups", () => {
     });
 
     it("Cancel and close on stakholder group creation", function () {
+        // Navigate to "New stakeholder group" page
+        clickByText(navMenu, controls);
+        clickByText(navTab, stakeholdergroups);
+        clickByText("button", "Create new");
         // Cancel creating stakeholder group
         cy.get(commonView.cancelButton).click();
         cy.wait(100);
@@ -64,5 +70,26 @@ describe("Basic checks while creating stakeholder groups", () => {
 
         // Asserting stakholder groups page
         cy.contains("button", "Create new").should("exist");
+    });
+
+    it("Stakeholder group name must unique", function () {
+        stakeholdergroup.create();
+
+        // Navigate to "New stakeholder group" page
+        clickByText("button", "Create new");
+
+        // Check Name duplication
+        inputText(stakeholdergroupNameInput, stakeholdergroup.stakeholdergroupName);
+
+        submitForm();
+
+        cy.get(commonView.duplicateNameWarning).should(
+            "contain.text",
+            "ERROR: duplicate key value violates unique constraint"
+        );
+
+        // Delete created stakeholder group
+        cy.get(commonView.closeButton).click();
+        stakeholdergroup.delete();
     });
 });

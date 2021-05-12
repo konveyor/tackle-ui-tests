@@ -27,6 +27,7 @@ export function login(): void {
     inputText(loginView.userNameInput, userName);
     inputText(loginView.userPasswordInput, userPassword);
     click(loginView.loginButton);
+    cy.wait(2000);
     cy.get("h1").contains("Application inventory");
 }
 
@@ -39,4 +40,8 @@ export function selectItemsPerPage(items: number): void {
 export function selectFormItems(fieldId: string, item: string): void {
     cy.get(fieldId).click();
     cy.contains("button", item).click();
+}
+
+export function checkFlashMessage(fieldId: string, message: string): void {
+    cy.get(fieldId).should("contain.text", message);
 }

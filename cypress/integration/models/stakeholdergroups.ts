@@ -5,7 +5,12 @@ import {
     stakeholdergroupDescriptionInput,
     stakeholdergroupMemberSelect,
 } from "../views/stakeholdergroups.view";
-import { confirmButton, editButton, deleteButton } from "../views/commoncontrols.view";
+import {
+    confirmButton,
+    editButton,
+    deleteButton,
+    flashMessage,
+} from "../views/commoncontrols.view";
 import {
     clickByText,
     inputText,
@@ -13,6 +18,7 @@ import {
     selectItemsPerPage,
     submitForm,
     selectFormItems,
+    checkFlashMessage,
 } from "../../utils/utils";
 import * as faker from "faker";
 
@@ -64,6 +70,11 @@ export class Stakeholdergroups {
             this.selectMember(member);
         }
         submitForm();
+        console.log(`Success! ${this.stakeholdergroupName} was added as a stakeholder group.`);
+        checkFlashMessage(
+            flashMessage,
+            `Success! ${this.stakeholdergroupName} was added as a stakeholder group.`
+        );
     }
 
     edit(name?: string, description?: string, member?: string): void {

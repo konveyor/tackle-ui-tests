@@ -9,3 +9,5 @@ export const controlsForm = "form.pf-c-form";
 export const itemsPerPageMenu = "div.pf-c-options-menu";
 export const itemsPerPageMenuOptions = "ul[aria-labelledby='pagination-options-menu-toggle']";
 export const expandRow = "button[aria-label=Details]";
+export const flashMessage = "div[aria-label='Success Alert']";
+export const duplicateNameWarning = "div[aria-label='Danger Alert']";
