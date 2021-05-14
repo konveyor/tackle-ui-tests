@@ -1,8 +1,33 @@
-import { controls, stakeholdergroups, tdTag, trTag } from "../types/constants";
+import {
+    controls,
+    stakeholdergroups,
+    tdTag,
+    trTag,
+    button,
+    createNewButton,
+} from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
-import { stakeholdergroupName, stakeholdergroupDescription } from "../views/stakeholdergroups.view";
-import { confirmButton, editButton, deleteButton } from "../views/commoncontrols.view";
-import { clickByText, inputText, click, selectItemsPerPage, submitForm } from "../../utils/utils";
+import {
+    stakeholdergroupNameInput,
+    stakeholdergroupDescriptionInput,
+    stakeholdergroupMemberSelect,
+} from "../views/stakeholdergroups.view";
+import {
+    confirmButton,
+    editButton,
+    deleteButton,
+    successAlertMessage,
+} from "../views/commoncontrols.view";
+import {
+    clickByText,
+    inputText,
+    click,
+    selectItemsPerPage,
+    submitForm,
+    cancelForm,
+    selectFormItems,
+    checkSuccessAlert,
+} from "../../utils/utils";
 import * as faker from "faker";
 
 export class Stakeholdergroups {
@@ -15,11 +40,15 @@ export class Stakeholdergroups {
     }
 
     protected fillName(name: string): void {
-        inputText(stakeholdergroupName, name);
+        inputText(stakeholdergroupNameInput, name);
     }
 
     protected fillDescription(description: string): void {
-        inputText(stakeholdergroupDescription, description);
+        inputText(stakeholdergroupDescriptionInput, description);
+    }
+
+    protected selectMember(member: string): void {
+        selectFormItems(stakeholdergroupMemberSelect, member);
     }
 
     getStakeholdergroupName(): string {
@@ -32,17 +61,33 @@ export class Stakeholdergroups {
         return this.stakeholdergroupDescription;
     }
 
-    create(): void {
+    create({ member = null, cancel = false } = {}): void {
         Stakeholdergroups.clickStakeholdergroups();
-        clickByText("button", "Create new");
-        this.getStakeholdergroupName();
-        this.getStakeholdergroupDescription();
-        this.fillName(this.stakeholdergroupName);
-        this.fillDescription(this.stakeholdergroupDescription);
-        submitForm();
+        clickByText(button, createNewButton);
+        if (cancel) {
+            cancelForm();
+        } else {
+            this.getStakeholdergroupName();
+            this.getStakeholdergroupDescription();
+            this.fillName(this.stakeholdergroupName);
+            this.fillDescription(this.stakeholdergroupDescription);
+            if (member) {
+                this.selectMember(member);
+            }
+            submitForm();
+            checkSuccessAlert(
+                successAlertMessage,
+                `Success! ${this.stakeholdergroupName} was added as a stakeholder group.`
+            );
+        }
     }
 
-    edit(): void {
+    edit({
+        name = this.stakeholdergroupName,
+        description = this.stakeholdergroupName,
+        member = null,
+        cancel = false,
+    } = {}): void {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -52,24 +97,53 @@ export class Stakeholdergroups {
             .within(() => {
                 click(editButton);
             });
-        this.getStakeholdergroupName();
-        this.getStakeholdergroupDescription();
-        this.fillName(this.stakeholdergroupName);
-        this.fillDescription(this.stakeholdergroupDescription);
-        // Implement edit stakeholder groups' member
-        submitForm();
+
+        if (
+            !cancel &&
+            (name !== this.stakeholdergroupName ||
+                description !== this.stakeholdergroupDescription ||
+                member)
+        ) {
+            this.fillName(name);
+            this.fillDescription(this.stakeholdergroupDescription);
+            if (member) {
+                this.selectMember(member);
+            }
+            submitForm();
+            this.stakeholdergroupName = name;
+        } else {
+            cancelForm();
+        }
     }
 
-    delete(): void {
+    delete({ name = this.stakeholdergroupName, cancel = false } = {}): void {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(this.stakeholdergroupName)
+            .contains(name)
             .parent(trTag)
             .within(() => {
                 click(deleteButton);
             });
-        click(confirmButton);
+        if (cancel) {
+            cancelForm();
+        } else {
+            click(confirmButton);
+        }
+    }
+
+    exists({ name = this.stakeholdergroupName } = {}) {
+        Stakeholdergroups.clickStakeholdergroups();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        cy.get(tdTag).should("contain", name);
+    }
+
+    notExists({ name = this.stakeholdergroupName } = {}) {
+        Stakeholdergroups.clickStakeholdergroups();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        cy.get(tdTag).should("not.contain", name);
     }
 }

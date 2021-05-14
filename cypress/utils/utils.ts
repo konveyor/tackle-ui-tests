@@ -22,11 +22,16 @@ export function submitForm(): void {
     cy.get(commonView.controlsForm).submit();
 }
 
+export function cancelForm(): void {
+    cy.get(commonView.cancelButton).click();
+}
+
 export function login(): void {
     cy.visit(tackleUiUrl);
     inputText(loginView.userNameInput, userName);
     inputText(loginView.userPasswordInput, userPassword);
     click(loginView.loginButton);
+    cy.wait(2000);
     cy.get("h1").contains("Application inventory");
 }
 
@@ -34,4 +39,13 @@ export function selectItemsPerPage(items: number): void {
     cy.get(commonView.itemsPerPageMenu).find(commonView.itemsPerPageToggleButton).eq(0).click();
     cy.get(commonView.itemsPerPageMenuOptions);
     cy.get(`li > button[data-action="per-page-${items}"]`).click();
+}
+
+export function selectFormItems(fieldId: string, item: string): void {
+    cy.get(fieldId).click();
+    cy.contains("button", item).click();
+}
+
+export function checkSuccessAlert(fieldId: string, message: string): void {
+    cy.get(fieldId).should("contain.text", message);
 }

@@ -70,4 +70,20 @@ export class Stakeholders {
             });
         click(confirmButton);
     }
+
+    exists(email?: string) {
+        Stakeholders.clickStakeholders();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        this.stakeholderEmail = email || this.stakeholderEmail;
+        cy.get(tdTag).should("contain", this.stakeholderEmail);
+    }
+
+    notExists(email?: string) {
+        Stakeholders.clickStakeholders();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        this.stakeholderEmail = email || this.stakeholderEmail;
+        cy.get(tdTag).should("not.contain", this.stakeholderEmail);
+    }
 }
