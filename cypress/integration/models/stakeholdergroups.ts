@@ -56,10 +56,6 @@ export class Stakeholdergroups {
         return this.stakeholdergroupName;
     }
 
-    getNewStakeholdergroupName(): string {
-        return faker.company.companyName();
-    }
-
     getStakeholdergroupDescription(): string {
         this.stakeholdergroupDescription = faker.lorem.sentence();
         return this.stakeholdergroupDescription;

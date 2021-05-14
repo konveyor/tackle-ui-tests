@@ -5,6 +5,7 @@ import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Stakeholders } from "../../../models/stakeholders";
 import { tdTag, trTag } from "../../../types/constants";
 import { expandRow } from "../../../views/commoncontrols.view";
+import * as faker from "faker";
 
 describe("A single Stakeholder group", () => {
     const stakeholdergroup = new Stakeholdergroups();
@@ -26,7 +27,7 @@ describe("A single Stakeholder group", () => {
         stakeholdergroup.exists();
 
         // Edit stakeholder group's name
-        stakeholdergroup.edit({ name: stakeholdergroup.getNewStakeholdergroupName() });
+        stakeholdergroup.edit({ name: faker.company.companyName() });
         cy.wait("@getStakeholdergroups");
 
         // Delete stakeholder group
