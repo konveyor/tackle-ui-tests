@@ -16,7 +16,7 @@ import {
     confirmButton,
     editButton,
     deleteButton,
-    flashMessage,
+    successAlertMessage,
 } from "../views/commoncontrols.view";
 import {
     clickByText,
@@ -24,8 +24,9 @@ import {
     click,
     selectItemsPerPage,
     submitForm,
+    cancelForm,
     selectFormItems,
-    checkFlashMessage,
+    checkSuccessAlert,
 } from "../../utils/utils";
 import * as faker from "faker";
 
@@ -64,24 +65,33 @@ export class Stakeholdergroups {
         return this.stakeholdergroupDescription;
     }
 
-    create(member?: string): void {
+    create(member?: string, cancel: boolean = false): void {
         Stakeholdergroups.clickStakeholdergroups();
         clickByText(button, createNewButton);
-        this.getStakeholdergroupName();
-        this.getStakeholdergroupDescription();
-        this.fillName(this.stakeholdergroupName);
-        this.fillDescription(this.stakeholdergroupDescription);
-        if (member) {
-            this.selectMember(member);
+        if (cancel) {
+            cancelForm();
+        } else {
+            this.getStakeholdergroupName();
+            this.getStakeholdergroupDescription();
+            this.fillName(this.stakeholdergroupName);
+            this.fillDescription(this.stakeholdergroupDescription);
+            if (member) {
+                this.selectMember(member);
+            }
+            submitForm();
+            checkSuccessAlert(
+                successAlertMessage,
+                `Success! ${this.stakeholdergroupName} was added as a stakeholder group.`
+            );
         }
-        submitForm();
-        checkFlashMessage(
-            flashMessage,
-            `Success! ${this.stakeholdergroupName} was added as a stakeholder group.`
-        );
     }
 
-    edit(name?: string, description?: string, member?: string): void {
+    edit(
+        name: string = this.stakeholdergroupName,
+        description: string = this.stakeholdergroupDescription,
+        member?: string,
+        cancel: boolean = false
+    ): void {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -92,24 +102,25 @@ export class Stakeholdergroups {
                 click(editButton);
             });
 
-        this.stakeholdergroupName = name || this.stakeholdergroupName;
-        if (name) {
+        if (
+            !cancel &&
+            (name !== this.stakeholdergroupName ||
+                description !== this.stakeholdergroupDescription ||
+                member)
+        ) {
             this.fillName(name);
-        }
-
-        this.stakeholdergroupDescription = description || this.stakeholdergroupDescription;
-
-        if (description) {
             this.fillDescription(this.stakeholdergroupDescription);
+            if (member) {
+                this.selectMember(member);
+            }
+            submitForm();
+            this.stakeholdergroupName = name;
+        } else {
+            cancelForm();
         }
-        if (member) {
-            this.selectMember(member);
-        }
-
-        submitForm();
     }
 
-    delete(name?: string): void {
+    delete(name?: string, cancel: boolean = false): void {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -120,7 +131,11 @@ export class Stakeholdergroups {
             .within(() => {
                 click(deleteButton);
             });
-        click(confirmButton);
+        if (cancel) {
+            cancelForm();
+        } else {
+            click(confirmButton);
+        }
     }
 
     exists(name?: string) {
