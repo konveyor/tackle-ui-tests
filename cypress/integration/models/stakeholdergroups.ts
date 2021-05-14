@@ -65,7 +65,7 @@ export class Stakeholdergroups {
         return this.stakeholdergroupDescription;
     }
 
-    create(member?: string, cancel: boolean = false): void {
+    create({ member = null, cancel = false } = {}): void {
         Stakeholdergroups.clickStakeholdergroups();
         clickByText(button, createNewButton);
         if (cancel) {
@@ -86,12 +86,12 @@ export class Stakeholdergroups {
         }
     }
 
-    edit(
-        name: string = this.stakeholdergroupName,
-        description: string = this.stakeholdergroupDescription,
-        member?: string,
-        cancel: boolean = false
-    ): void {
+    edit({
+        name = this.stakeholdergroupName,
+        description = this.stakeholdergroupName,
+        member = null,
+        cancel = false,
+    } = {}): void {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -120,13 +120,12 @@ export class Stakeholdergroups {
         }
     }
 
-    delete(name?: string, cancel: boolean = false): void {
+    delete({ name = this.stakeholdergroupName, cancel = false } = {}): void {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
-        this.stakeholdergroupName = name || this.stakeholdergroupName;
         cy.get(tdTag)
-            .contains(this.stakeholdergroupName)
+            .contains(name)
             .parent(trTag)
             .within(() => {
                 click(deleteButton);
@@ -138,19 +137,17 @@ export class Stakeholdergroups {
         }
     }
 
-    exists(name?: string) {
+    exists({ name = this.stakeholdergroupName } = {}) {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
-        this.stakeholdergroupName = name || this.stakeholdergroupName;
-        cy.get(tdTag).should("contain", this.stakeholdergroupName);
+        cy.get(tdTag).should("contain", name);
     }
 
-    notExists(name?: string) {
+    notExists({ name = this.stakeholdergroupName } = {}) {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
-        this.stakeholdergroupName = name || this.stakeholdergroupName;
-        cy.get(tdTag).should("not.contain", this.stakeholdergroupName);
+        cy.get(tdTag).should("not.contain", name);
     }
 }
