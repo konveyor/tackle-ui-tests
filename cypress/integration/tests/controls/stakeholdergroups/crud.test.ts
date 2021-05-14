@@ -26,7 +26,7 @@ describe("A single Stakeholder group", () => {
         stakeholdergroup.exists();
 
         // Edit stakeholder group's name
-        stakeholdergroup.edit(stakeholdergroup.getNewStakeholdergroupName());
+        stakeholdergroup.edit({ name: stakeholdergroup.getNewStakeholdergroupName() });
         cy.wait("@getStakeholdergroups");
 
         // Delete stakeholder group
@@ -45,7 +45,7 @@ describe("A single Stakeholder group", () => {
         memberStakeholderName = stakeholders.stakeholderName;
 
         // Create new stakeholder group
-        stakeholdergroup.create(memberStakeholderName);
+        stakeholdergroup.create({ member: memberStakeholderName });
         cy.wait("@postStakeholdergroups");
         stakeholdergroup.exists();
 
@@ -62,7 +62,7 @@ describe("A single Stakeholder group", () => {
             .should("contain", memberStakeholderName);
 
         // Edit stakeholder group with name, description and member
-        stakeholdergroup.edit(undefined, undefined, memberStakeholderName);
+        stakeholdergroup.edit({ member: memberStakeholderName });
         cy.wait("@getStakeholdergroups");
 
         // Check if stakeholder group's member is removed
