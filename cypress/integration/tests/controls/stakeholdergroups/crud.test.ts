@@ -62,7 +62,7 @@ describe("A single Stakeholder group", () => {
             .should("contain", memberStakeholderName);
 
         // Edit stakeholder group with name, description and member
-        stakeholdergroup.edit(null, null, memberStakeholderName);
+        stakeholdergroup.edit(undefined, undefined, memberStakeholderName);
         cy.wait("@getStakeholdergroups");
 
         // Check if stakeholder group's member is removed
