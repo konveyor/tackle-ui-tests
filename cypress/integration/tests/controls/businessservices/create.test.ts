@@ -50,4 +50,23 @@ describe("Basic checks while creating business services", () => {
         inputText(businessServiceDescriptionInput, faker.random.words(120));
         cy.get(commonView.DescriptionHelper).should("contain", descriptionMaxChars);
     });
+
+    it("Cancel and close on business services creation", function () {
+        // Navigate to "New stakeholder group" page
+        clickByText(navMenu, controls);
+        clickByText(navTab, businessservices);
+        clickByText(button, createNewButton);
+        // Cancel creating stakeholder group
+        cy.get(commonView.cancelButton).click();
+        cy.wait(100);
+
+        clickByText(button, createNewButton);
+
+        // Close create stakeholder group page
+        cy.get(commonView.closeButton).click();
+        cy.wait(100);
+
+        // Asserting stakholder groups page
+        cy.contains(button, createNewButton).should("exist");
+    });
 });
