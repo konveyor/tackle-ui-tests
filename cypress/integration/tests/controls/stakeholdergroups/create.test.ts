@@ -40,15 +40,15 @@ describe("Basic checks while creating stakeholder groups", () => {
 
         // Name constraints
         inputText(stakeholdergroupNameInput, "te");
-        cy.get(commonView.NameHelper).should("contain", nameLeastChars);
+        cy.get(commonView.nameHelper).should("contain", nameLeastChars);
         inputText(stakeholdergroupNameInput, faker.random.words(50));
-        cy.get(commonView.NameHelper).should("contain", nameMaxChars);
+        cy.get(commonView.nameHelper).should("contain", nameMaxChars);
         inputText(stakeholdergroupNameInput, "test");
         cy.get(commonView.submitButton).should("not.be.disabled");
 
         // Description constraints
         inputText(stakeholdergroupDescriptionInput, faker.random.words(120));
-        cy.get(commonView.DescriptionHelper).should("contain", descriptionMaxChars);
+        cy.get(commonView.descriptionHelper).should("contain", descriptionMaxChars);
     });
 
     it("Cancel and close on stakholder group creation", function () {
