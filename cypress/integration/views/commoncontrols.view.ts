@@ -14,3 +14,5 @@ export const expandRow = "button[aria-label=Details]";
 export const successAlertMessage = "div[aria-label='Success Alert']";
 export const duplicateNameWarning = "div[aria-label='Danger Alert']";
 export const membersDivContainer = "div.pf-c-chip-group";
+export const nameHelper = "div[id=name-helper]";
+export const descriptionHelper = "div[id=description-helper]";
