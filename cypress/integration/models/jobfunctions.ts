@@ -45,7 +45,7 @@ export class Jobfunctions {
         submitForm();
     }
 
-    delete(jobfunctionName: string = this.jobfunctionName): void {
+    delete({ jobfunctionName = this.jobfunctionName, cancel = false }): void {
         Jobfunctions.clickJobfunctions();
         selectItemsPerPage(100);
         cy.wait(2000);
