@@ -2,7 +2,6 @@
 
 import { login } from "../../../../utils/utils";
 import { BusinessServices } from "../../../models/businessservices";
-import * as faker from "faker";
 
 describe("A single Business service", () => {
     const businessService = new BusinessServices();
@@ -19,7 +18,7 @@ describe("A single Business service", () => {
         businessService.exists();
 
         // Edit Business service's name
-        businessService.edit({ name: faker.company.companyName() });
+        businessService.edit({ name: businessService.getBusinessServiceName() });
 
         // Delete Business service
         businessService.delete();

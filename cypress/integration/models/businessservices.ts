@@ -31,10 +31,10 @@ import {
 import * as faker from "faker";
 
 export class BusinessServices {
-    businessServiceName;
-    businessServiceDescription;
+    businessServiceName: string = this.getBusinessServiceName();
+    businessServiceDescription: string = this.getBusinessServiceDescription();
 
-    protected static clickStakeholdergroups(): void {
+    protected static clickBusinessservices(): void {
         clickByText(navMenu, controls);
         clickByText(navTab, businessservices);
     }
@@ -52,25 +52,28 @@ export class BusinessServices {
     }
 
     getBusinessServiceName(): string {
-        this.businessServiceName = faker.company.companyName();
-        return this.businessServiceName;
+        return faker.company.companyName();
     }
 
     getBusinessServiceDescription(): string {
-        this.businessServiceDescription = faker.lorem.sentence();
-        return this.businessServiceDescription;
+        return faker.lorem.sentence();
     }
 
-    create({ owner = null, cancel = false } = {}): void {
-        BusinessServices.clickStakeholdergroups();
+    create({
+        name = this.businessServiceName,
+        description = this.businessServiceDescription,
+        owner = null,
+        cancel = false,
+    } = {}): void {
+        BusinessServices.clickBusinessservices();
         clickByText(button, createNewButton);
         if (cancel) {
             cancelForm();
         } else {
             this.getBusinessServiceName();
             this.getBusinessServiceDescription();
-            this.fillName(this.businessServiceName);
-            this.fillDescription(this.businessServiceDescription);
+            this.fillName(name);
+            this.fillDescription(description);
             if (owner) {
                 this.selectOwner(owner);
             }
@@ -88,7 +91,7 @@ export class BusinessServices {
         owner = null,
         cancel = false,
     } = {}): void {
-        BusinessServices.clickStakeholdergroups();
+        BusinessServices.clickBusinessservices();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
@@ -117,7 +120,7 @@ export class BusinessServices {
     }
 
     delete({ name = this.businessServiceName, cancel = false } = {}): void {
-        BusinessServices.clickStakeholdergroups();
+        BusinessServices.clickBusinessservices();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
@@ -134,14 +137,14 @@ export class BusinessServices {
     }
 
     exists({ name = this.businessServiceName } = {}) {
-        BusinessServices.clickStakeholdergroups();
+        BusinessServices.clickBusinessservices();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag).should("contain", name);
     }
 
     notExists({ name = this.businessServiceName } = {}) {
-        BusinessServices.clickStakeholdergroups();
+        BusinessServices.clickBusinessservices();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag).should("not.contain", name);
