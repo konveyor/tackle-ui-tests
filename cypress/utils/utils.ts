@@ -22,6 +22,10 @@ export function submitForm(): void {
     cy.get(commonView.controlsForm).submit();
 }
 
+export function cancelForm(): void {
+    cy.get(commonView.cancelButton).click();
+}
+
 export function login(): void {
     cy.visit(tackleUiUrl);
     inputText(loginView.userNameInput, userName);
@@ -37,11 +41,11 @@ export function selectItemsPerPage(items: number): void {
     cy.get(`li > button[data-action="per-page-${items}"]`).click();
 }
 
-export function selectFormItems(fieldId: string, memberName: string): void {
+export function selectFormItems(fieldId: string, item: string): void {
     cy.get(fieldId).click();
-    cy.contains("button", memberName).click();
+    cy.contains("button", item).click();
 }
 
-export function removeMember(memberName: string): void {
-    cy.get("span").contains(memberName).siblings(commonView.removeButton).click();
+export function checkSuccessAlert(fieldId: string, message: string): void {
+    cy.get(fieldId).should("contain.text", message);
 }
