@@ -40,15 +40,15 @@ describe("Basic checks while creating business services", () => {
 
         // Name constraints
         inputText(businessServiceNameInput, "te");
-        cy.get(commonView.NameHelper).should("contain", nameLeastChars);
+        cy.get(commonView.nameHelper).should("contain", nameLeastChars);
         inputText(businessServiceNameInput, faker.random.words(50));
-        cy.get(commonView.NameHelper).should("contain", nameMaxChars);
+        cy.get(commonView.nameHelper).should("contain", nameMaxChars);
         inputText(businessServiceNameInput, "test");
         cy.get(commonView.submitButton).should("not.be.disabled");
 
         // Description constraints
         inputText(businessServiceDescriptionInput, faker.random.words(120));
-        cy.get(commonView.DescriptionHelper).should("contain", descriptionMaxChars);
+        cy.get(commonView.descriptionHelper).should("contain", descriptionMaxChars);
     });
 
     it("Cancel and close on business services creation", function () {
@@ -68,5 +68,23 @@ describe("Basic checks while creating business services", () => {
 
         // Asserting stakholder groups page
         cy.contains(button, createNewButton).should("exist");
+    });
+
+    it("Business services name must unique", function () {
+        businessServices.create();
+
+        // Navigate to "New stakeholder group" page
+        clickByText(button, createNewButton);
+
+        // Check Name duplication
+        inputText(businessServiceNameInput, businessServices.businessServiceName);
+
+        submitForm();
+
+        cy.get(commonView.duplicateNameWarning).should("contain.text", nameUniqueWarning);
+
+        // Delete created stakeholder group
+        cy.get(commonView.closeButton).click();
+        businessServices.delete();
     });
 });
