@@ -1,28 +1,28 @@
-import { controls, stakeholders, tdTag, trTag } from "../types/constants";
+import { controls, stakeholders, tdTag, trTag, button, createNewButton } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
-import { 
+import {
     stakeholderNameInput,
     stakeholderEmailInput,
     jobfunctionInput,
-    groupInput 
+    groupInput,
 } from "../views/stakeholders.view";
-import { confirmButton,
-    editButton,
-    deleteButton
-} from "../views/commoncontrols.view";
-import { clickByText,
+import * as commonView from "../views/commoncontrols.view";
+import {
+    clickByText,
     inputText,
     click,
     selectItemsPerPage,
     submitForm,
     selectFormItems,
-    removeMember
+    removeMember,
+    cancelForm,
+    checkSuccessAlert,
 } from "../../utils/utils";
 import * as faker from "faker";
 
 export class Stakeholders {
-    stakeholderName;
-    stakeholderEmail;
+    stakeholderName: string = this.getStakeholderName();
+    stakeholderEmail: string = this.getStakeholderEmail();
 
     protected static clickStakeholders(): void {
         clickByText(navMenu, controls);
@@ -54,32 +54,48 @@ export class Stakeholders {
     }
 
     getStakeholderName(): string {
-        this.stakeholderName = faker.name.findName();
-        return this.stakeholderName;
+        return faker.name.findName();
     }
 
     getStakeholderEmail(): string {
-        this.stakeholderEmail = faker.internet.email();
-        return this.stakeholderEmail;
+        return faker.internet.email();
     }
 
-    create(jobfunction?: string, groups?: Array<string>): void {
+    create({
+        name = this.stakeholderName,
+        email = this.stakeholderEmail,
+        jobfunction = null,
+        groups = [],
+        cancel = false,
+    } = {}): void {
         Stakeholders.clickStakeholders();
-        clickByText("button", "Create new");
-        this.getStakeholderName();
-        this.getStakeholderEmail();
-        this.fillEmail(this.stakeholderEmail);
-        this.fillName(this.stakeholderName);
-        if (jobfunction) {
-            this.selectJobfunction(jobfunction);
+        clickByText(button, createNewButton);
+        if (cancel) {
+            cancelForm();
+        } else {
+            this.fillEmail(email);
+            this.fillName(name);
+            if (jobfunction) {
+                this.selectJobfunction(jobfunction);
+            }
+            if (groups.length != 0) {
+                this.selectGroups(groups);
+            }
+            submitForm();
+            checkSuccessAlert(
+                commonView.successAlertMessage,
+                `Success! ${name} was added as a stakeholder.`
+            );
         }
-        if (groups) {
-            this.selectGroups(groups);
-        }
-        submitForm();
     }
 
-    edit(jobfunction?: string, addGroups?: Array<string>, removeGroups?: Array<string>): void {
+    edit({
+        name = this.stakeholderName,
+        email = this.stakeholderEmail,
+        jobfunction = null,
+        groups = [],
+        cancel = false,
+    } = {}): void {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -87,33 +103,45 @@ export class Stakeholders {
             .contains(this.stakeholderEmail)
             .parent(trTag)
             .within(() => {
-                click(editButton);
+                click(commonView.editButton);
             });
-        this.getStakeholderName();
-        this.fillName(this.stakeholderName);
-        if (jobfunction) {
-            this.selectJobfunction(jobfunction);
+        if (cancel) {
+            cancelForm();
+        } else {
+            if (
+                name != this.stakeholderName ||
+                email != this.stakeholderEmail ||
+                jobfunction ||
+                groups.length != 0
+            ) {
+                this.fillName(name);
+                if (email != this.stakeholderEmail) this.fillEmail(email);
+                if (jobfunction) this.selectJobfunction(jobfunction);
+                if (groups.length != 0) this.selectGroups(groups);
+                submitForm();
+                this.stakeholderName = name;
+                this.stakeholderEmail = email;
+            } else {
+                cy.get(commonView.submitButton).should("not.be.enabled");
+            }
         }
-        if (addGroups) {
-            this.selectGroups(addGroups);
-        }
-        if (removeGroups) {
-            this.removeGroups(removeGroups);
-        }
-        submitForm();
     }
 
-    delete(stakeholderEmail: string = this.stakeholderEmail): void {
+    delete({ email = this.stakeholderEmail, cancel = false } = {}): void {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(stakeholderEmail)
+            .contains(email)
             .parent(trTag)
             .within(() => {
-                click(deleteButton);
+                click(commonView.deleteButton);
             });
-        click(confirmButton);
+        if (cancel) {
+            cancelForm();
+        } else {
+            click(commonView.confirmButton);
+        }
     }
 
     exists(email?: string) {

@@ -29,7 +29,7 @@ describe("Stakeholder CRUD operations", () => {
         cy.wait("@postStakeholder");
 
         // Edit stakeholder name
-        stakeholder.edit();
+        stakeholder.edit({ name: stakeholder.getStakeholderName() });
         cy.wait("@getStakeholders");
 
         // Assert that stakeholder name got edited
@@ -47,7 +47,7 @@ describe("Stakeholder CRUD operations", () => {
         var jobfunctions: Array<string> = [];
         var stakeholdergroups: Array<string> = [];
         for (let i = 0; i < 2; i++) {
-            // Create job functions
+            // Create new job functions
             jobfunction.create();
             jobfunctions.push(jobfunction.jobfunctionName);
 
@@ -55,27 +55,44 @@ describe("Stakeholder CRUD operations", () => {
             stakeholdergroup.create();
             stakeholdergroups.push(stakeholdergroup.stakeholdergroupName);
         }
-        // Create stakeholder with above members
-        stakeholder.create(jobfunctions[0], [stakeholdergroups[0]]);
+        // Create new stakeholder with one of the job function and group created above
+        stakeholder.create({ jobfunction: jobfunctions[0], groups: [stakeholdergroups[0]] });
         cy.wait("@postStakeholder");
 
-        // Edit stakeholder
-        stakeholder.edit(jobfunctions[1], [stakeholdergroups[1]], [stakeholdergroups[0]]);
+        // Edit stakeholder name, jobfunction and stakeholdergroup (by removing first one and adding second)
+        stakeholder.edit({
+            name: stakeholder.getStakeholderName(),
+            jobfunction: jobfunctions[1],
+            groups: stakeholdergroups,
+        });
         cy.wait("@putStakeholder");
         cy.wait("@getStakeholders");
 
         // Assert that edit operation has been done by checking number of groups and added group exists
         cy.get(tdTag)
-          .contains(stakeholder.stakeholderEmail)
-          .parent(trTag)
-          .within(() => {
-            click(expandRow);
-          })
-          .get("div > dd")
-          .should("contain", stakeholdergroups[1]);
-        // [12/05/2021] To be uncommented and checked when bug is resolved 
-        // cy.get(tdTag).contains(stakeholder.stakeholderEmail).siblings(groupsCount).should("contain", "1");
- 
+            .contains(stakeholder.stakeholderEmail)
+            .parent(trTag)
+            .within(() => {
+                click(expandRow);
+            })
+            .get("div > dd")
+            .should("contain", stakeholdergroups[1]);
+
+        // [17 May 2021] : Known bug, will be uncommented, when bug is fixed
+        // Assert that previous stakeholder group was removed
+        // cy.get(tdTag)
+        //   .contains(stakeholder.stakeholderEmail)
+        //   .parent(trTag)
+        //   .within(() => {
+        //     click(expandRow);
+        //   })
+        //   .get("div > dd")
+        //     .should("not.contain", stakeholdergroups[0]);
+        // cy.get(tdTag)
+        //     .contains(stakeholder.stakeholderEmail)
+        //     .siblings(groupsCount)
+        //     .should("contain", "1");
+
         // Delete stakeholder
         stakeholder.delete();
         cy.wait("@getStakeholders");
@@ -86,10 +103,10 @@ describe("Stakeholder CRUD operations", () => {
         // Delete jobfunctions and groups created at the start of test
         for (let i = 0; i < 2; i++) {
             // Delete job functions
-            jobfunction.delete(jobfunctions[i]);
+            jobfunction.delete({ jobfunctionName: jobfunctions[i] });
 
             // Delete stakeholder groups
-            stakeholdergroup.delete(stakeholdergroups[i]);
+            stakeholdergroup.delete({ name: stakeholdergroups[i] });
         }
     });
 });
