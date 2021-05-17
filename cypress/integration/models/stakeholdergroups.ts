@@ -35,6 +35,7 @@ export class Stakeholdergroups {
         if (members) this.members = members;
     }
 
+
     protected static clickStakeholdergroups(): void {
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholdergroups);
@@ -48,6 +49,7 @@ export class Stakeholdergroups {
         inputText(stakeholdergroupDescriptionInput, description);
     }
 
+
     protected selectMembers(members: Array<string>): void {
         members.forEach(function (member) {
             selectFormItems(stakeholdergroupMemberSelect, member);
@@ -55,6 +57,7 @@ export class Stakeholdergroups {
     }
 
     create(cancel = false): void {
+
         Stakeholdergroups.clickStakeholdergroups();
         clickByText(button, createNewButton);
         if (cancel) {
