@@ -78,7 +78,7 @@ describe("Stakeholder CRUD operations", () => {
             .get("div > dd")
             .should("contain", stakeholdergroups[1]);
 
-        // [17 May 2021] : Known bug, will be uncommented, when bug is fixed
+        // [17 May 2021] : Known bug (https://issues.redhat.com/browse/TACKLE-141), will be uncommented, when bug is fixed
         // Assert that previous stakeholder group was removed
         // cy.get(tdTag)
         //   .contains(stakeholder.stakeholderEmail)
