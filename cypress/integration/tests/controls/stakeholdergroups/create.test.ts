@@ -14,9 +14,7 @@ import {
 } from "../../../types/constants";
 import {
     stakeholdergroupNameInput,
-    stakeholdergroupNameHelper,
     stakeholdergroupDescriptionInput,
-    stakeholdergroupDescriptionHelper,
 } from "../../../views/stakeholdergroups.view";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 
@@ -42,15 +40,15 @@ describe("Basic checks while creating stakeholder groups", () => {
 
         // Name constraints
         inputText(stakeholdergroupNameInput, "te");
-        cy.get(stakeholdergroupNameHelper).should("contain", nameLeastChars);
+        cy.get(commonView.NameHelper).should("contain", nameLeastChars);
         inputText(stakeholdergroupNameInput, faker.random.words(50));
-        cy.get(stakeholdergroupNameHelper).should("contain", nameMaxChars);
+        cy.get(commonView.NameHelper).should("contain", nameMaxChars);
         inputText(stakeholdergroupNameInput, "test");
         cy.get(commonView.submitButton).should("not.be.disabled");
 
         // Description constraints
         inputText(stakeholdergroupDescriptionInput, faker.random.words(120));
-        cy.get(stakeholdergroupDescriptionHelper).should("contain", descriptionMaxChars);
+        cy.get(commonView.DescriptionHelper).should("contain", descriptionMaxChars);
     });
 
     it("Cancel and close on stakholder group creation", function () {
