@@ -19,7 +19,6 @@ import {
 } from "../../utils/utils";
 import * as commonView from "../views/common.view";
 
-
 export class Stakeholders {
     name: string;
     email: string;
