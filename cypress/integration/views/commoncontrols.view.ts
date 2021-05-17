@@ -11,3 +11,5 @@ export const itemsPerPageMenuOptions = "ul[aria-labelledby='pagination-options-m
 export const expandRow = "button[aria-label=Details]";
 export const successAlertMessage = "div[aria-label='Success Alert']";
 export const duplicateNameWarning = "div[aria-label='Danger Alert']";
+export const nameHelper = "div[id=name-helper]";
+export const descriptionHelper = "div[id=description-helper]";
