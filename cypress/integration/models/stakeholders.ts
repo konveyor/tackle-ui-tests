@@ -105,25 +105,22 @@ export class Stakeholders {
             .within(() => {
                 click(commonView.editButton);
             });
-        if (cancel) {
-            cancelForm();
-        } else {
-            if (
-                name != this.stakeholderName ||
+        if (
+            !cancel &&
+            (name != this.stakeholderName ||
                 email != this.stakeholderEmail ||
                 jobfunction ||
-                groups.length != 0
-            ) {
-                this.fillName(name);
-                if (email != this.stakeholderEmail) this.fillEmail(email);
-                if (jobfunction) this.selectJobfunction(jobfunction);
-                if (groups.length != 0) this.selectGroups(groups);
-                submitForm();
-                this.stakeholderName = name;
-                this.stakeholderEmail = email;
-            } else {
-                cy.get(commonView.submitButton).should("not.be.enabled");
-            }
+                groups.length != 0)
+        ) {
+            this.fillName(name);
+            if (email != this.stakeholderEmail) this.fillEmail(email);
+            if (jobfunction) this.selectJobfunction(jobfunction);
+            if (groups.length != 0) this.selectGroups(groups);
+            submitForm();
+            this.stakeholderName = name;
+            this.stakeholderEmail = email;
+        } else {
+            cancelForm();
         }
     }
 
