@@ -7,12 +7,9 @@ import { Jobfunctions } from "../../../models/jobfunctions";
 import { tdTag, trTag } from "../../../types/constants";
 import { groupsCount } from "../../../views/stakeholders.view";
 import { expandRow } from "../../../views/commoncontrols.view";
+import * as data from "../../../../utils/data_utils";
 
 describe("Stakeholder CRUD operations", () => {
-    const stakeholder = new Stakeholders();
-    const stakeholdergroup = new Stakeholdergroups();
-    const jobfunction = new Jobfunctions();
-
     beforeEach("Login", function () {
         // Perform login
         login();
@@ -24,89 +21,137 @@ describe("Stakeholder CRUD operations", () => {
     });
 
     it("Stakeholder crud operations", function () {
+        const stakeholder = new Stakeholders(data.getStakeholderEmail(), data.getStakeholderName());
         // Create new stakeholder
         stakeholder.create();
         cy.wait("@postStakeholder");
+        stakeholder.exists();
 
         // Edit stakeholder name
-        stakeholder.edit({ name: stakeholder.getStakeholderName() });
+        var updatedStakeholderName = data.getStakeholderName();
+        stakeholder.edit({ name: updatedStakeholderName });
         cy.wait("@getStakeholders");
 
         // Assert that stakeholder name got edited
-        cy.get(tdTag).should("contain", stakeholder.stakeholderName);
+        cy.get(tdTag).should("contain", updatedStakeholderName);
 
         // Delete stakeholder
         stakeholder.delete();
         cy.wait("@getStakeholders");
 
         // Assert that newly created stakeholder is deleted
-        cy.get(tdTag).should("not.contain", stakeholder.stakeholderEmail);
+        stakeholder.notExists();
+    });
+
+    it("Stakeholder crud cancel", function () {
+        const stakeholder = new Stakeholders(data.getStakeholderEmail(), data.getStakeholderName());
+        // Cancel the Create new stakeholder task
+        stakeholder.create(true);
+        stakeholder.notExists();
+
+        // Create new stakeholder for edit and delete cancel verification purpose
+        stakeholder.create();
+        cy.wait("@postStakeholder");
+        stakeholder.exists();
+
+        // Cancel the Edit stakeholder task
+        stakeholder.edit({}, true);
+
+        // Assert that stakeholder name did not get edited
+        cy.get(tdTag).should("contain", stakeholder.name);
+
+        // Cancel the Delete stakeholder task
+        stakeholder.delete(true);
+
+        // Assert that stakeholder still exists, as delete was cancelled
+        stakeholder.exists();
+
+        // Finally, perform clean up by deleting the stakeholder
+        stakeholder.delete();
+        cy.wait("@getStakeholders");
+        stakeholder.notExists();
     });
 
     it("Stakeholder crud operations with members (jobfunction and groups)", function () {
-        var jobfunctions: Array<string> = [];
-        var stakeholdergroups: Array<string> = [];
+        var jobfunctions: Array<Jobfunctions> = [];
+        var stakeholdergroups: Array<Stakeholdergroups> = [];
+        var stakeholdergroupNames: Array<string> = [];
         for (let i = 0; i < 2; i++) {
             // Create new job functions
+            const jobfunction = new Jobfunctions();
             jobfunction.create();
-            jobfunctions.push(jobfunction.jobfunctionName);
+            jobfunctions.push(jobfunction);
 
             // Create new stakeholder groups
+            const stakeholdergroup = new Stakeholdergroups();
             stakeholdergroup.create();
-            stakeholdergroups.push(stakeholdergroup.stakeholdergroupName);
+            stakeholdergroups.push(stakeholdergroup);
+            stakeholdergroupNames.push(stakeholdergroup.stakeholdergroupName);
         }
+
+        var stakeholderEmail = data.getStakeholderEmail();
+        var stakeholderName = data.getStakeholderName();
+
+        // Create new object for Stakeholder
+        const stakeholder = new Stakeholders(
+            stakeholderEmail,
+            stakeholderName,
+            jobfunctions[0].jobfunctionName,
+            [stakeholdergroupNames[0]]
+        );
+
         // Create new stakeholder with one of the job function and group created above
-        stakeholder.create({ jobfunction: jobfunctions[0], groups: [stakeholdergroups[0]] });
+        stakeholder.create();
         cy.wait("@postStakeholder");
+        stakeholder.exists();
 
         // Edit stakeholder name, jobfunction and stakeholdergroup (by removing first one and adding second)
         stakeholder.edit({
-            name: stakeholder.getStakeholderName(),
-            jobfunction: jobfunctions[1],
-            groups: stakeholdergroups,
+            name: data.getStakeholderName(),
+            jobfunction: jobfunctions[1].jobfunctionName,
+            groups: stakeholdergroupNames,
         });
         cy.wait("@putStakeholder");
         cy.wait("@getStakeholders");
 
         // Assert that edit operation has been done by checking number of groups and added group exists
         cy.get(tdTag)
-            .contains(stakeholder.stakeholderEmail)
+            .contains(stakeholder.email)
             .parent(trTag)
             .within(() => {
                 click(expandRow);
             })
             .get("div > dd")
-            .should("contain", stakeholdergroups[1]);
+            .should("contain", stakeholdergroupNames[1]);
 
-        // [17 May 2021] : Known bug (https://issues.redhat.com/browse/TACKLE-141), will be uncommented, when bug is fixed
+        // [17 May 2021] : Known bug (https://issues.redhat.com/browse/TACKLE-141), fails the test
         // Assert that previous stakeholder group was removed
-        // cy.get(tdTag)
-        //   .contains(stakeholder.stakeholderEmail)
-        //   .parent(trTag)
-        //   .within(() => {
-        //     click(expandRow);
-        //   })
-        //   .get("div > dd")
-        //     .should("not.contain", stakeholdergroups[0]);
-        // cy.get(tdTag)
-        //     .contains(stakeholder.stakeholderEmail)
-        //     .siblings(groupsCount)
-        //     .should("contain", "1");
+        cy.get(tdTag)
+            .contains(stakeholder.email)
+            .parent(trTag)
+            .within(() => {
+                click(expandRow);
+            })
+            .get("div > dd")
+            .should("not.contain", stakeholdergroupNames[0]);
+
+        // Assert that there should be only one member present
+        cy.get(tdTag).contains(stakeholder.email).siblings(groupsCount).should("contain", "1");
 
         // Delete stakeholder
         stakeholder.delete();
         cy.wait("@getStakeholders");
 
         // Assert that newly created stakeholder is deleted
-        cy.get(tdTag).should("not.contain", stakeholder.stakeholderEmail);
+        stakeholder.notExists();
 
         // Delete jobfunctions and groups created at the start of test
-        for (let i = 0; i < 2; i++) {
-            // Delete job functions
-            jobfunction.delete({ jobfunctionName: jobfunctions[i] });
+        jobfunctions.forEach(function (jobfunction) {
+            jobfunction.delete();
+        });
 
-            // Delete stakeholder groups
-            stakeholdergroup.delete({ name: stakeholdergroups[i] });
-        }
+        stakeholdergroups.forEach(function (stakeholdergroup) {
+            stakeholdergroup.delete();
+        });
     });
 });

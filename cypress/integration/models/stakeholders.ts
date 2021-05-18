@@ -1,4 +1,12 @@
-import { controls, stakeholders, tdTag, trTag, button, createNewButton } from "../types/constants";
+import {
+    controls,
+    stakeholders,
+    tdTag,
+    trTag,
+    button,
+    createNewButton,
+    jobfunctions,
+} from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import {
     stakeholderNameInput,
@@ -18,11 +26,19 @@ import {
     cancelForm,
     checkSuccessAlert,
 } from "../../utils/utils";
-import * as faker from "faker";
 
 export class Stakeholders {
-    stakeholderName: string = this.getStakeholderName();
-    stakeholderEmail: string = this.getStakeholderEmail();
+    name: string;
+    email: string;
+    jobfunction: string;
+    groups: Array<string>;
+
+    constructor(email: string, name: string, jobfunction?: string, groups?: Array<string>) {
+        this.email = email;
+        this.name = name;
+        if (jobfunction) this.jobfunction = jobfunction;
+        if (groups) this.groups = groups;
+    }
 
     protected static clickStakeholders(): void {
         clickByText(navMenu, controls);
@@ -53,83 +69,75 @@ export class Stakeholders {
         });
     }
 
-    getStakeholderName(): string {
-        return faker.name.findName();
-    }
-
-    getStakeholderEmail(): string {
-        return faker.internet.email();
-    }
-
-    create({
-        name = this.stakeholderName,
-        email = this.stakeholderEmail,
-        jobfunction = null,
-        groups = [],
-        cancel = false,
-    } = {}): void {
+    create(cancel = false): void {
         Stakeholders.clickStakeholders();
         clickByText(button, createNewButton);
         if (cancel) {
             cancelForm();
         } else {
-            this.fillEmail(email);
-            this.fillName(name);
-            if (jobfunction) {
-                this.selectJobfunction(jobfunction);
+            this.fillEmail(this.email);
+            this.fillName(this.name);
+            if (this.jobfunction) {
+                this.selectJobfunction(this.jobfunction);
             }
-            if (groups.length != 0) {
-                this.selectGroups(groups);
+            if (this.groups) {
+                this.selectGroups(this.groups);
             }
             submitForm();
             checkSuccessAlert(
                 commonView.successAlertMessage,
-                `Success! ${name} was added as a stakeholder.`
+                `Success! ${this.name} was added as a stakeholder.`
             );
         }
     }
 
-    edit({
-        name = this.stakeholderName,
-        email = this.stakeholderEmail,
-        jobfunction = null,
-        groups = [],
-        cancel = false,
-    } = {}): void {
+    edit(
+        updatedValue: {
+            email?: string;
+            name?: string;
+            jobfunction?: string;
+            groups?: Array<string>;
+        },
+        cancel = false
+    ): void {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(this.stakeholderEmail)
+            .contains(this.email)
             .parent(trTag)
             .within(() => {
                 click(commonView.editButton);
             });
-        if (
-            !cancel &&
-            (name != this.stakeholderName ||
-                email != this.stakeholderEmail ||
-                jobfunction ||
-                groups.length != 0)
-        ) {
-            this.fillName(name);
-            if (email != this.stakeholderEmail) this.fillEmail(email);
-            if (jobfunction) this.selectJobfunction(jobfunction);
-            if (groups.length != 0) this.selectGroups(groups);
-            submitForm();
-            this.stakeholderName = name;
-            this.stakeholderEmail = email;
-        } else {
+        if (cancel) {
             cancelForm();
+        } else {
+            if (updatedValue.email && updatedValue.email != this.email) {
+                this.fillEmail(updatedValue.email);
+                this.email = updatedValue.email;
+            }
+            if (updatedValue.name && updatedValue.name != this.name) {
+                this.fillName(updatedValue.name);
+                this.name = updatedValue.name;
+            }
+            if (updatedValue.jobfunction && updatedValue.jobfunction != this.jobfunction) {
+                this.selectJobfunction(updatedValue.jobfunction);
+                this.jobfunction = updatedValue.jobfunction;
+            }
+            if (updatedValue.groups && updatedValue.groups.length != 0) {
+                this.selectGroups(updatedValue.groups);
+                this.groups = updatedValue.groups;
+            }
+            if (updatedValue) submitForm();
         }
     }
 
-    delete({ email = this.stakeholderEmail, cancel = false } = {}): void {
+    delete(cancel = false): void {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(email)
+            .contains(this.email)
             .parent(trTag)
             .within(() => {
                 click(commonView.deleteButton);
@@ -141,19 +149,17 @@ export class Stakeholders {
         }
     }
 
-    exists(email?: string) {
+    exists(email = this.email) {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
-        this.stakeholderEmail = email || this.stakeholderEmail;
-        cy.get(tdTag).should("contain", this.stakeholderEmail);
+        cy.get(tdTag).should("contain", email);
     }
 
-    notExists(email?: string) {
+    notExists(email = this.email) {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
-        this.stakeholderEmail = email || this.stakeholderEmail;
-        cy.get(tdTag).should("not.contain", this.stakeholderEmail);
+        cy.get(tdTag).should("not.contain", email);
     }
 }
