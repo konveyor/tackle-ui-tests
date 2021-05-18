@@ -5,6 +5,8 @@ export const closeButton = "button[aria-label=Close]";
 export const confirmButton = "button[aria-label=confirm]";
 export const editButton = "button[aria-label=edit]";
 export const deleteButton = "button[aria-label=delete]";
+export const removeButton = "button[aria-label='Remove']";
+export const clearAllButton = "button[aria-label='Clear all']";
 export const controlsForm = "form.pf-c-form";
 export const itemsPerPageMenu = "div.pf-c-options-menu";
 export const itemsPerPageMenuOptions = "ul[aria-labelledby='pagination-options-menu-toggle']";

@@ -1,5 +1,5 @@
 import * as loginView from "../integration/views/login.view";
-import * as commonView from "../integration/views/commoncontrols.view";
+import * as commonView from "../integration/views/common.view";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
