@@ -1,13 +1,44 @@
-import { controls, stakeholders, tdTag, trTag } from "../types/constants";
+import {
+    controls,
+    stakeholders,
+    tdTag,
+    trTag,
+    button,
+    createNewButton,
+    jobfunctions,
+} from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
-import { stakeholderNameInput, stakeholderEmailInput } from "../views/stakeholders.view";
-import { confirmButton, editButton, deleteButton } from "../views/commoncontrols.view";
-import { clickByText, inputText, click, selectItemsPerPage, submitForm } from "../../utils/utils";
-import * as faker from "faker";
+import {
+    stakeholderNameInput,
+    stakeholderEmailInput,
+    jobfunctionInput,
+    groupInput,
+} from "../views/stakeholders.view";
+import * as commonView from "../views/commoncontrols.view";
+import {
+    clickByText,
+    inputText,
+    click,
+    selectItemsPerPage,
+    submitForm,
+    selectFormItems,
+    removeMember,
+    cancelForm,
+    checkSuccessAlert,
+} from "../../utils/utils";
 
 export class Stakeholders {
-    stakeholderName;
-    stakeholderEmail;
+    name: string;
+    email: string;
+    jobfunction: string;
+    groups: Array<string>;
+
+    constructor(email: string, name: string, jobfunction?: string, groups?: Array<string>) {
+        this.email = email;
+        this.name = name;
+        if (jobfunction) this.jobfunction = jobfunction;
+        if (groups) this.groups = groups;
+    }
 
     protected static clickStakeholders(): void {
         clickByText(navMenu, controls);
@@ -22,68 +53,113 @@ export class Stakeholders {
         inputText(stakeholderEmailInput, email);
     }
 
-    getStakeholderName(): string {
-        this.stakeholderName = faker.name.findName();
-        return this.stakeholderName;
+    protected selectJobfunction(jobfunction: string): void {
+        selectFormItems(jobfunctionInput, jobfunction);
     }
 
-    getStakeholderEmail(): string {
-        this.stakeholderEmail = faker.internet.email();
-        return this.stakeholderEmail;
+    protected selectGroups(groups: Array<string>): void {
+        groups.forEach(function (group) {
+            selectFormItems(groupInput, group);
+        });
     }
 
-    create(): void {
+    protected removeGroups(groups: Array<string>): void {
+        groups.forEach(function (group) {
+            removeMember(group);
+        });
+    }
+
+    create(cancel = false): void {
         Stakeholders.clickStakeholders();
-        clickByText("button", "Create new");
-        this.getStakeholderName();
-        this.getStakeholderEmail();
-        this.fillEmail(this.stakeholderEmail);
-        this.fillName(this.stakeholderName);
-        submitForm();
+        clickByText(button, createNewButton);
+        if (cancel) {
+            cancelForm();
+        } else {
+            this.fillEmail(this.email);
+            this.fillName(this.name);
+            if (this.jobfunction) {
+                this.selectJobfunction(this.jobfunction);
+            }
+            if (this.groups) {
+                this.selectGroups(this.groups);
+            }
+            submitForm();
+            checkSuccessAlert(
+                commonView.successAlertMessage,
+                `Success! ${this.name} was added as a stakeholder.`
+            );
+        }
     }
 
-    edit(jobFunction?: boolean, groups?: boolean): void {
+    edit(
+        updatedValue: {
+            email?: string;
+            name?: string;
+            jobfunction?: string;
+            groups?: Array<string>;
+        },
+        cancel = false
+    ): void {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(this.stakeholderEmail)
+            .contains(this.email)
             .parent(trTag)
             .within(() => {
-                click(editButton);
+                click(commonView.editButton);
             });
-        this.getStakeholderName();
-        this.fillName(this.stakeholderName);
-        // jobfunction and group edit to be implemented
-        submitForm();
+        if (cancel) {
+            cancelForm();
+        } else {
+            if (updatedValue.email && updatedValue.email != this.email) {
+                this.fillEmail(updatedValue.email);
+                this.email = updatedValue.email;
+            }
+            if (updatedValue.name && updatedValue.name != this.name) {
+                this.fillName(updatedValue.name);
+                this.name = updatedValue.name;
+            }
+            if (updatedValue.jobfunction && updatedValue.jobfunction != this.jobfunction) {
+                this.selectJobfunction(updatedValue.jobfunction);
+                this.jobfunction = updatedValue.jobfunction;
+            }
+            if (updatedValue.groups && updatedValue.groups.length != 0) {
+                this.selectGroups(updatedValue.groups);
+                this.groups = updatedValue.groups;
+            }
+            if (updatedValue) submitForm();
+        }
     }
 
-    delete(): void {
+    delete(cancel = false): void {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(this.stakeholderEmail)
+            .contains(this.email)
             .parent(trTag)
             .within(() => {
-                click(deleteButton);
+                click(commonView.deleteButton);
             });
-        click(confirmButton);
+        if (cancel) {
+            cancelForm();
+        } else {
+            click(commonView.confirmButton);
+        }
     }
 
-    exists(email?: string) {
+    exists(email = this.email) {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
-        this.stakeholderEmail = email || this.stakeholderEmail;
-        cy.get(tdTag).should("contain", this.stakeholderEmail);
+        cy.get(tdTag).should("contain", email);
     }
 
-    notExists(email?: string) {
+    notExists(email = this.email) {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
-        this.stakeholderEmail = email || this.stakeholderEmail;
-        cy.get(tdTag).should("not.contain", this.stakeholderEmail);
+        cy.get(tdTag).should("not.contain", email);
     }
 }

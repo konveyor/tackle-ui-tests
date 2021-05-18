@@ -2,7 +2,14 @@ import { controls, jobfunctions, tdTag, trTag } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import { jobfunctionNameInput } from "../views/jobfunctions.view";
 import { confirmButton, editButton, deleteButton } from "../views/commoncontrols.view";
-import { clickByText, inputText, click, selectItemsPerPage, submitForm } from "../../utils/utils";
+import {
+    clickByText,
+    inputText,
+    click,
+    selectItemsPerPage,
+    submitForm,
+    cancelForm,
+} from "../../utils/utils";
 import * as faker from "faker";
 
 export class Jobfunctions {
@@ -45,16 +52,20 @@ export class Jobfunctions {
         submitForm();
     }
 
-    delete(): void {
+    delete({ jobfunctionName = this.jobfunctionName, cancel = false } = {}): void {
         Jobfunctions.clickJobfunctions();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(this.jobfunctionName)
+            .contains(jobfunctionName)
             .parent(trTag)
             .within(() => {
                 click(deleteButton);
             });
-        click(confirmButton);
+        if (cancel) {
+            cancelForm();
+        } else {
+            click(confirmButton);
+        }
     }
 }

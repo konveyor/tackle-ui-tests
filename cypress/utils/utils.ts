@@ -49,3 +49,7 @@ export function selectFormItems(fieldId: string, item: string): void {
 export function checkSuccessAlert(fieldId: string, message: string): void {
     cy.get(fieldId).should("contain.text", message);
 }
+
+export function removeMember(memberName: string): void {
+    cy.get("span").contains(memberName).siblings(commonView.removeButton).click();
+}
