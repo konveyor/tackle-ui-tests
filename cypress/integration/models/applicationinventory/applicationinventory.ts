@@ -27,13 +27,27 @@ import {
     selectFormItems,
     checkSuccessAlert,
 } from "../../../utils/utils";
-import * as faker from "faker";
 
 export class ApplicationInventory {
-    applicationName: string = this.getApplicationName();
-    applicationDescription: string = this.getApplicationDescription();
-    applicationComment: string = this.getApplicationComment();
+    name: string;
+    description: string;
+    business: string;
+    tags: Array<string>;
+    comment: string;
 
+    constructor(
+        name: string,
+        description?: string,
+        comment?: string,
+        business?: string,
+        tags?: Array<string>
+    ) {
+        this.name = name;
+        this.description = description;
+        this.comment = comment;
+        if (business) this.business = business;
+        if (tags) this.tags = tags;
+    }
     protected static clickApplicationInventory(): void {
         clickByText(navMenu, applicationinventory);
     }
@@ -53,97 +67,90 @@ export class ApplicationInventory {
         selectFormItems(applicationBusinessServiceSelect, service);
     }
 
-    protected selectTags(tag: string): void {
-        selectFormItems(applicationTagsSelect, tag);
+    protected selectTags(tags: Array<string>): void {
+        tags.forEach(function (tag) {
+            selectFormItems(applicationTagsSelect, tag);
+        });
     }
 
-    getApplicationName(): string {
-        return faker.name.findName();
-    }
-
-    getApplicationDescription(): string {
-        return faker.lorem.sentence();
-    }
-
-    getApplicationComment(): string {
-        return faker.lorem.sentence();
-    }
-
-    create({
-        name = this.applicationName,
-        description = this.applicationDescription,
-        businessservice = null,
-        tags = null,
-        comment = this.applicationComment,
-        cancel = false,
-    } = {}): void {
+    create(cancel = false): void {
         ApplicationInventory.clickApplicationInventory();
         clickByText(button, createNewButton);
         if (cancel) {
             cancelForm();
         } else {
-            this.fillName(name);
-            this.fillDescription(description);
-            this.fillComment(comment);
-            if (businessservice) {
-                this.selectBusinessService(businessservice);
+            this.fillName(this.name);
+            this.fillDescription(this.description);
+            this.fillComment(this.comment);
+            if (this.business) {
+                this.selectBusinessService(this.business);
             }
-            if (tags) {
-                this.selectTags(tags);
+            if (this.tags) {
+                this.selectTags(this.tags);
             }
             submitForm();
-            checkSuccessAlert(successAlertMessage, `Success! ${name} was added as a application.`);
+            checkSuccessAlert(
+                successAlertMessage,
+                `Success! ${this.name} was added as a application.`
+            );
         }
     }
 
-    edit({
-        name = this.applicationName,
-        description = this.applicationDescription,
-        businessservice = null,
-        tags = null,
-        comment = this.applicationComment,
-        cancel = false,
-    } = {}): void {
+    edit(
+        updatedValues: {
+            name?: string;
+            description?: string;
+            business?: string;
+            tags?: Array<string>;
+            comment?: string;
+        },
+        cancel = false
+    ): void {
         ApplicationInventory.clickApplicationInventory();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(this.applicationName)
+            .contains(this.name)
             .parent(trTag)
             .within(() => {
                 click(editButton);
             });
 
-        if (
-            !cancel &&
-            (name !== this.applicationName ||
-                description !== this.applicationDescription ||
-                businessservice ||
-                tags ||
-                comment != this.applicationComment)
-        ) {
-            this.fillName(name);
-            this.fillDescription(description);
-            this.fillComment(comment);
-            if (businessservice) {
-                this.selectBusinessService(businessservice);
-            }
-            if (tags) {
-                this.selectTags(tags);
-            }
-            submitForm();
-            this.applicationName = name;
-        } else {
+        if (cancel) {
             cancelForm();
+        } else {
+            if (updatedValues.name && updatedValues.name != this.name) {
+                this.fillName(updatedValues.name);
+                this.name = updatedValues.name;
+            }
+            if (updatedValues.description && updatedValues.description != this.description) {
+                this.fillDescription(updatedValues.description);
+                this.description = updatedValues.description;
+            }
+            if (updatedValues.business && updatedValues.business != this.business) {
+                this.selectBusinessService(updatedValues.business);
+                this.business = updatedValues.business;
+            }
+            if (updatedValues.tags && updatedValues.tags != this.tags) {
+                this.selectTags(updatedValues.tags);
+                this.tags = updatedValues.tags;
+            }
+            if (updatedValues.comment && updatedValues.comment != this.comment) {
+                this.fillComment(updatedValues.comment);
+                this.comment = updatedValues.comment;
+            }
+            if (updatedValues) {
+                submitForm();
+            }
         }
     }
 
-    delete({ name = this.applicationName, cancel = false } = {}): void {
+    delete(cancel = false): void {
         ApplicationInventory.clickApplicationInventory();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(name)
+            .contains(this.name)
             .parent(trTag)
             .within(() => {
                 click(actionButton);
@@ -158,14 +165,14 @@ export class ApplicationInventory {
         }
     }
 
-    exists({ name = this.applicationName } = {}) {
+    exists(name = this.name) {
         ApplicationInventory.clickApplicationInventory();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag).should("contain", name);
     }
 
-    notExists({ name = this.applicationName } = {}) {
+    notExists(name = this.name) {
         ApplicationInventory.clickApplicationInventory();
         selectItemsPerPage(100);
         cy.wait(2000);
