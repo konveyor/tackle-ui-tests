@@ -23,7 +23,10 @@ import * as data from "../../../../utils/data_utils";
 import * as faker from "faker";
 
 describe("Basic checks while creating stakeholder groups", () => {
-    const stakeholdergroup = new Stakeholdergroups(data.getStakeholdergroupName(), data.getStakeholdergroupDescription());
+    const stakeholdergroup = new Stakeholdergroups(
+        data.getStakeholdergroupName(),
+        data.getStakeholdergroupDescription()
+    );
 
     beforeEach("Login", function () {
         // Perform login

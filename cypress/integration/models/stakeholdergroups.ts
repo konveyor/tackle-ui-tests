@@ -75,9 +75,9 @@ export class Stakeholdergroups {
 
     edit(
         updatedValue: {
-            name?: string,
-            description?: string,
-            members?: Array<string>
+            name?: string;
+            description?: string;
+            members?: Array<string>;
         },
         cancel = false
     ): void {

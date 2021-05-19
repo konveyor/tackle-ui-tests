@@ -84,7 +84,10 @@ describe("Stakeholder CRUD operations", () => {
             jobfunctions.push(jobfunction);
 
             // Create new stakeholder groups
-            const stakeholdergroup = new Stakeholdergroups(data.getStakeholdergroupName(), data.getStakeholdergroupDescription());
+            const stakeholdergroup = new Stakeholdergroups(
+                data.getStakeholdergroupName(),
+                data.getStakeholdergroupDescription()
+            );
             stakeholdergroup.create();
             stakeholdergroups.push(stakeholdergroup);
             stakeholdergroupNames.push(stakeholdergroup.name);

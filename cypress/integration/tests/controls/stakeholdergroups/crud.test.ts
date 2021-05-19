@@ -20,7 +20,10 @@ describe("Single Stakeholder group CRUD operations", () => {
     });
 
     it("Stakeholder group CRUD operations", function () {
-        const stakeholdergroup = new Stakeholdergroups(data.getStakeholdergroupName(), data.getStakeholdergroupDescription());
+        const stakeholdergroup = new Stakeholdergroups(
+            data.getStakeholdergroupName(),
+            data.getStakeholdergroupDescription()
+        );
         // Create new stakeholder group
         stakeholdergroup.create();
         cy.wait("@postStakeholdergroups");
@@ -55,7 +58,7 @@ describe("Single Stakeholder group CRUD operations", () => {
             data.getStakeholdergroupDescription(),
             [memberStakeholderName]
         );
-        
+
         // Create new stakeholder group
         stakeholdergroup.create();
         cy.wait("@postStakeholdergroups");
@@ -74,12 +77,11 @@ describe("Single Stakeholder group CRUD operations", () => {
             .should("contain", memberStakeholderName);
 
         // Edit stakeholder group with name, description and member
-        stakeholdergroup.edit(
-            {
-                name: data.getStakeholdergroupName(),
-                description: data.getStakeholdergroupDescription(),
-                members: [memberStakeholderName]
-            });
+        stakeholdergroup.edit({
+            name: data.getStakeholdergroupName(),
+            description: data.getStakeholdergroupDescription(),
+            members: [memberStakeholderName],
+        });
         cy.wait("@getStakeholdergroups");
 
         // Check if stakeholder group's member is removed

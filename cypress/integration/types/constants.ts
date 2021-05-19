@@ -8,8 +8,8 @@ export const createNewButton = "Create new";
 export const button = "button";
 
 export const minCharsMsg = "This field must contain at least 3 characters.";
-export const max120CharsMsg = "This field must contain fewer than 120 characters."
-export const max250CharsMsg = "This field must contain fewer than 250 characters."
+export const max120CharsMsg = "This field must contain fewer than 120 characters.";
+export const max250CharsMsg = "This field must contain fewer than 250 characters.";
 export const duplicateErrMsg = "ERROR: duplicate key value violates unique constraint";
 
 // Stakeholder groups warnings
@@ -20,4 +20,3 @@ export const nameUniqueWarning = "ERROR: duplicate key value violates unique con
 
 // Stakeholder specific helper/error messages
 export const invalidEmailMsg = "This field requires a valid email.";
-

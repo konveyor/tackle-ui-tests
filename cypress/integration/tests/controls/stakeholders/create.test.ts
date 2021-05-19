@@ -17,7 +17,7 @@ import {
     stakeholderEmailInput,
     stakeholderNameInput,
     emailHelper,
-    displayNameHelper
+    displayNameHelper,
 } from "../../../views/stakeholders.view";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Stakeholders } from "../../../models/stakeholders";
@@ -50,7 +50,6 @@ describe("Basic checks while creating stakeholder", () => {
         cy.get(emailHelper).should("contain", max120CharsMsg);
         inputText(stakeholderEmailInput, data.getRandomWord(10));
         cy.get(emailHelper).should("contain", invalidEmailMsg);
-
 
         // Name constraints
         inputText(stakeholderNameInput, data.getRandomWord(2));

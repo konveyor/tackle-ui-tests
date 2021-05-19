@@ -1,11 +1,4 @@
-import {
-    controls,
-    stakeholders,
-    tdTag,
-    trTag,
-    button,
-    createNewButton,
-} from "../types/constants";
+import { controls, stakeholders, tdTag, trTag, button, createNewButton } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import {
     stakeholderNameInput,
