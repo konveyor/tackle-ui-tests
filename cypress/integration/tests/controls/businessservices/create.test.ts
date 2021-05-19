@@ -19,7 +19,6 @@ import {
 import * as commonView from "../../../../integration/views/commoncontrols.view";
 
 import { BusinessServices } from "../../../models/businessservices";
-import * as faker from "faker";
 import * as data from "../../../../utils/data_utils";
 
 describe("Basic checks while creating business services", () => {
@@ -40,13 +39,13 @@ describe("Basic checks while creating business services", () => {
         // Name constraints
         inputText(businessServiceNameInput, "te");
         cy.get(commonView.nameHelper).should("contain", nameLeastChars);
-        inputText(businessServiceNameInput, faker.random.words(50));
+        inputText(businessServiceNameInput, data.getLongString());
         cy.get(commonView.nameHelper).should("contain", nameMaxChars);
         inputText(businessServiceNameInput, "test");
         cy.get(commonView.submitButton).should("not.be.disabled");
 
         // Description constraints
-        inputText(businessServiceDescriptionInput, faker.random.words(120));
+        inputText(businessServiceDescriptionInput, data.getLongString());
         cy.get(commonView.descriptionHelper).should("contain", descriptionMaxChars);
     });
 
