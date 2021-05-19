@@ -12,12 +12,9 @@ import {
     businessServiceDescriptionInput,
     businessServiceOwnerSelect,
 } from "../views/businessservices.view";
-import {
-    confirmButton,
-    editButton,
-    deleteButton,
-    successAlertMessage,
-} from "../views/commoncontrols.view";
+
+import * as commonView from "../views/commoncontrols.view";
+
 import {
     clickByText,
     inputText,
@@ -28,11 +25,17 @@ import {
     selectFormItems,
     checkSuccessAlert,
 } from "../../utils/utils";
-import * as faker from "faker";
 
 export class BusinessServices {
-    businessServiceName: string = this.getBusinessServiceName();
-    businessServiceDescription: string = this.getBusinessServiceDescription();
+    name: string;
+    description: string;
+    owner: string;
+
+    constructor(name: string, description?: string, owner?: string) {
+        this.name = name;
+        this.description = description;
+        if (owner) this.owner = owner;
+    }
 
     protected static clickBusinessservices(): void {
         clickByText(navMenu, controls);
@@ -51,99 +54,89 @@ export class BusinessServices {
         selectFormItems(businessServiceOwnerSelect, owner);
     }
 
-    getBusinessServiceName(): string {
-        return faker.company.companyName();
-    }
-
-    getBusinessServiceDescription(): string {
-        return faker.lorem.sentence();
-    }
-
-    create({
-        name = this.businessServiceName,
-        description = this.businessServiceDescription,
-        owner = null,
-        cancel = false,
-    } = {}): void {
+    create(cancel = false): void {
         BusinessServices.clickBusinessservices();
         clickByText(button, createNewButton);
         if (cancel) {
             cancelForm();
         } else {
-            this.getBusinessServiceName();
-            this.getBusinessServiceDescription();
-            this.fillName(name);
-            this.fillDescription(description);
-            if (owner) {
-                this.selectOwner(owner);
+            this.fillName(this.name);
+            this.fillDescription(this.description);
+            if (this.owner) {
+                this.selectOwner(this.owner);
             }
             submitForm();
             checkSuccessAlert(
-                successAlertMessage,
-                `Success! ${this.businessServiceName} was added as a business service.`
+                commonView.successAlertMessage,
+                `Success! ${this.name} was added as a business service.`
             );
         }
     }
 
-    edit({
-        name = this.businessServiceName,
-        description = this.businessServiceDescription,
-        owner = null,
-        cancel = false,
-    } = {}): void {
+    edit(
+        updateValues: {
+            name?: string;
+            description?: string;
+            owner?: string;
+        },
+        cancel = false
+    ): void {
         BusinessServices.clickBusinessservices();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(this.businessServiceName)
+            .contains(this.name)
             .parent(trTag)
             .within(() => {
-                click(editButton);
+                click(commonView.editButton);
             });
 
-        if (
-            !cancel &&
-            (name !== this.businessServiceName ||
-                description !== this.businessServiceDescription ||
-                owner)
-        ) {
-            this.fillName(name);
-            this.fillDescription(description);
-            if (owner) {
-                this.selectOwner(owner);
-            }
-            submitForm();
-            this.businessServiceName = name;
-        } else {
+        if (cancel) {
             cancelForm();
+        } else {
+            if (updateValues.name && updateValues.name != this.name) {
+                this.fillName(updateValues.name);
+                this.name = updateValues.name;
+            }
+            if (updateValues.description && updateValues.description != this.description) {
+                this.fillDescription(updateValues.description);
+                this.description = updateValues.description;
+            }
+            if (updateValues.owner && updateValues.owner != this.owner) {
+                this.selectOwner(updateValues.owner);
+                this.owner = updateValues.owner;
+            }
+            if (updateValues) {
+                submitForm();
+            }
         }
     }
 
-    delete({ name = this.businessServiceName, cancel = false } = {}): void {
+    delete(cancel = false): void {
         BusinessServices.clickBusinessservices();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(name)
+            .contains(this.name)
             .parent(trTag)
             .within(() => {
-                click(deleteButton);
+                click(commonView.deleteButton);
             });
         if (cancel) {
             cancelForm();
         } else {
-            click(confirmButton);
+            click(commonView.confirmButton);
         }
     }
 
-    exists({ name = this.businessServiceName } = {}) {
+    exists(name = this.name) {
         BusinessServices.clickBusinessservices();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag).should("contain", name);
     }
 
-    notExists({ name = this.businessServiceName } = {}) {
+    notExists(name = this.name) {
         BusinessServices.clickBusinessservices();
         selectItemsPerPage(100);
         cy.wait(2000);
