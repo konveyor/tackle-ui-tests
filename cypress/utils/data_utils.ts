@@ -15,3 +15,7 @@ export function getBusinessServiceName(): string {
 export function getBusinessServiceDescription(): string {
     return faker.lorem.sentence();
 }
+
+export function getLongString(): string {
+    return faker.random.words(75);
+}
