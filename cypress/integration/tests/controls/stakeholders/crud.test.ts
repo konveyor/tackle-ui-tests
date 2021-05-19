@@ -6,7 +6,7 @@ import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Jobfunctions } from "../../../models/jobfunctions";
 import { tdTag, trTag } from "../../../types/constants";
 import { groupsCount } from "../../../views/stakeholders.view";
-import { expandRow } from "../../../views/commoncontrols.view";
+import { expandRow } from "../../../views/common.view";
 import * as data from "../../../../utils/data_utils";
 
 describe("Stakeholder CRUD operations", () => {
