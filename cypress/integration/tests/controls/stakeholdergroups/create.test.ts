@@ -19,17 +19,18 @@ import {
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 
 import * as commonView from "../../../../integration/views/commoncontrols.view";
+import * as data from "../../../../utils/data_utils";
 import * as faker from "faker";
 
 describe("Basic checks while creating stakeholder groups", () => {
-    const stakeholdergroup = new Stakeholdergroups();
+    const stakeholdergroup = new Stakeholdergroups(data.getStakeholdergroupName(), data.getStakeholdergroupDescription());
 
     beforeEach("Login", function () {
         // Perform login
         login();
     });
 
-    it("Stakeholder name and description contraints check", function () {
+    it("Stakeholder group name and description constraints check", function () {
         // Navigate to "New stakeholder group" page
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholdergroups);
@@ -70,14 +71,14 @@ describe("Basic checks while creating stakeholder groups", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("Stakeholder group name must unique", function () {
+    it("Stakeholder group name must be unique", function () {
         stakeholdergroup.create();
 
         // Navigate to "New stakeholder group" page
         clickByText(button, createNewButton);
 
         // Check Name duplication
-        inputText(stakeholdergroupNameInput, stakeholdergroup.stakeholdergroupName);
+        inputText(stakeholdergroupNameInput, stakeholdergroup.name);
 
         submitForm();
 

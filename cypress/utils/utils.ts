@@ -31,7 +31,7 @@ export function login(): void {
     inputText(loginView.userNameInput, userName);
     inputText(loginView.userPasswordInput, userPassword);
     click(loginView.loginButton);
-    cy.wait(2000);
+    cy.wait(4000);
     cy.get("h1").contains("Application inventory");
 }
 

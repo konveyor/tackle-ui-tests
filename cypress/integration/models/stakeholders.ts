@@ -5,7 +5,6 @@ import {
     trTag,
     button,
     createNewButton,
-    jobfunctions,
 } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import {

@@ -3,9 +3,10 @@
 import { login } from "../../../../utils/utils";
 import { Jobfunctions } from "../../../models/jobfunctions";
 import { tdTag } from "../../../types/constants";
+import * as data from "../../../../utils/data_utils";
 
-describe("Create New Job Function", () => {
-    const jobfunctions = new Jobfunctions();
+describe("Job Function CRUD operations", () => {
+    const jobfunction = new Jobfunctions(data.getJobFuncName());
 
     before("Login", () => {
         // Perform login
@@ -16,20 +17,24 @@ describe("Create New Job Function", () => {
         cy.intercept("GET", "/api/controls/job-function*").as("getJobfunctions");
     });
 
-    it("jobfunctions crud", function () {
+    it("Jobfunction CRUD", function () {
         // Create new job function
-        jobfunctions.create();
+        jobfunction.create();
         cy.wait("@postJobfunction");
 
         // Edit job function name
-        jobfunctions.edit();
+        var updatedJobfuncName = data.getJobFuncName();
+        jobfunction.edit(updatedJobfuncName);
         cy.wait("@getJobfunctions");
 
+        // Assert that jobfunction name got edited
+        cy.get(tdTag).should("contain", updatedJobfuncName);
+
         // Delete job function
-        jobfunctions.delete();
+        jobfunction.delete();
         cy.wait("@getJobfunctions");
 
         // Assert that job function is deleted
-        cy.get(tdTag).should("not.contain", jobfunctions.jobfunctionName);
+        cy.get(tdTag).should("not.contain", jobfunction.name);
     });
 });

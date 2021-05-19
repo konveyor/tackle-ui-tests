@@ -7,3 +7,23 @@ export function getStakeholderName(): string {
 export function getStakeholderEmail(): string {
     return faker.internet.email();
 }
+
+export function getStakeholdergroupName(): string {
+    return faker.company.companyName();
+}
+
+export function getStakeholdergroupDescription(): string {
+    return faker.lorem.sentence();
+}
+
+export function getJobFuncName(): string {
+    return faker.name.jobType();
+}
+
+export function getRandomWord(length: number): string {
+    return faker.lorem.word(length);
+}
+
+export function getRandomWords(length: number): string {
+    return faker.lorem.words(length);
+}

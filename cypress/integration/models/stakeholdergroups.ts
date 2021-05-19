@@ -12,12 +12,7 @@ import {
     stakeholdergroupDescriptionInput,
     stakeholdergroupMemberSelect,
 } from "../views/stakeholdergroups.view";
-import {
-    confirmButton,
-    editButton,
-    deleteButton,
-    successAlertMessage,
-} from "../views/commoncontrols.view";
+import * as commonView from "../views/commoncontrols.view";
 import {
     clickByText,
     inputText,
@@ -28,11 +23,17 @@ import {
     selectFormItems,
     checkSuccessAlert,
 } from "../../utils/utils";
-import * as faker from "faker";
 
 export class Stakeholdergroups {
-    stakeholdergroupName;
-    stakeholdergroupDescription;
+    name: string;
+    description: string;
+    members: Array<string>;
+
+    constructor(name: string, description?: string, members?: Array<string>) {
+        this.name = name;
+        if (description) this.description = description;
+        if (members) this.members = members;
+    }
 
     protected static clickStakeholdergroups(): void {
         clickByText(navMenu, controls);
@@ -47,100 +48,92 @@ export class Stakeholdergroups {
         inputText(stakeholdergroupDescriptionInput, description);
     }
 
-    protected selectMember(member: string): void {
-        selectFormItems(stakeholdergroupMemberSelect, member);
+    protected selectMembers(members: Array<string>): void {
+        members.forEach(function (member) {
+            selectFormItems(stakeholdergroupMemberSelect, member);
+        });
     }
 
-    getStakeholdergroupName(): string {
-        this.stakeholdergroupName = faker.company.companyName();
-        return this.stakeholdergroupName;
-    }
-
-    getStakeholdergroupDescription(): string {
-        this.stakeholdergroupDescription = faker.lorem.sentence();
-        return this.stakeholdergroupDescription;
-    }
-
-    create({ member = null, cancel = false } = {}): void {
+    create(cancel = false): void {
         Stakeholdergroups.clickStakeholdergroups();
         clickByText(button, createNewButton);
         if (cancel) {
             cancelForm();
         } else {
-            this.getStakeholdergroupName();
-            this.getStakeholdergroupDescription();
-            this.fillName(this.stakeholdergroupName);
-            this.fillDescription(this.stakeholdergroupDescription);
-            if (member) {
-                this.selectMember(member);
+            this.fillName(this.name);
+            this.fillDescription(this.description);
+            if (this.members) {
+                this.selectMembers(this.members);
             }
             submitForm();
             checkSuccessAlert(
-                successAlertMessage,
-                `Success! ${this.stakeholdergroupName} was added as a stakeholder group.`
+                commonView.successAlertMessage,
+                `Success! ${this.name} was added as a stakeholder group.`
             );
         }
     }
 
-    edit({
-        name = this.stakeholdergroupName,
-        description = this.stakeholdergroupName,
-        member = null,
-        cancel = false,
-    } = {}): void {
+    edit(
+        updatedValue: {
+            name?: string,
+            description?: string,
+            members?: Array<string>
+        },
+        cancel = false
+    ): void {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(this.stakeholdergroupName)
+            .contains(this.name)
             .parent(trTag)
             .within(() => {
-                click(editButton);
-            });
-
-        if (
-            !cancel &&
-            (name !== this.stakeholdergroupName ||
-                description !== this.stakeholdergroupDescription ||
-                member)
-        ) {
-            this.fillName(name);
-            this.fillDescription(this.stakeholdergroupDescription);
-            if (member) {
-                this.selectMember(member);
-            }
-            submitForm();
-            this.stakeholdergroupName = name;
-        } else {
-            cancelForm();
-        }
-    }
-
-    delete({ name = this.stakeholdergroupName, cancel = false } = {}): void {
-        Stakeholdergroups.clickStakeholdergroups();
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(tdTag)
-            .contains(name)
-            .parent(trTag)
-            .within(() => {
-                click(deleteButton);
+                click(commonView.editButton);
             });
         if (cancel) {
             cancelForm();
         } else {
-            click(confirmButton);
+            if (updatedValue.name && updatedValue.name != this.name) {
+                this.fillName(updatedValue.name);
+                this.name = updatedValue.name;
+            }
+            if (updatedValue.description && updatedValue.description != this.description) {
+                this.fillDescription(updatedValue.description);
+                this.description = updatedValue.description;
+            }
+            if (updatedValue.members && updatedValue.members.length != 0) {
+                this.selectMembers(updatedValue.members);
+                this.members = updatedValue.members;
+            }
+            if (updatedValue) submitForm();
         }
     }
 
-    exists({ name = this.stakeholdergroupName } = {}) {
+    delete(cancel = false): void {
+        Stakeholdergroups.clickStakeholdergroups();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(trTag)
+            .within(() => {
+                click(commonView.deleteButton);
+            });
+        if (cancel) {
+            cancelForm();
+        } else {
+            click(commonView.confirmButton);
+        }
+    }
+
+    exists(name = this.name) {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag).should("contain", name);
     }
 
-    notExists({ name = this.stakeholdergroupName } = {}) {
+    notExists(name = this.name) {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
