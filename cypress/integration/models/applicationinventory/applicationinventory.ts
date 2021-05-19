@@ -43,8 +43,8 @@ export class ApplicationInventory {
         tags?: Array<string>
     ) {
         this.name = name;
-        this.description = description;
-        this.comment = comment;
+        if (description) this.description = description;
+        if (comment) this.comment = comment;
         if (business) this.business = business;
         if (tags) this.tags = tags;
     }
@@ -80,8 +80,12 @@ export class ApplicationInventory {
             cancelForm();
         } else {
             this.fillName(this.name);
-            this.fillDescription(this.description);
-            this.fillComment(this.comment);
+            if (this.description) {
+                this.fillDescription(this.description);
+            }
+            if (this.comment) {
+                this.fillComment(this.comment);
+            }
             if (this.business) {
                 this.selectBusinessService(this.business);
             }
