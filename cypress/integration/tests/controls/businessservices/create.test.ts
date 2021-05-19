@@ -15,15 +15,14 @@ import {
 import {
     businessServiceNameInput,
     businessServiceDescriptionInput,
-} from "../../../views/businessservice.view";
+} from "../../../views/businessservices.view";
 import * as commonView from "../../../../integration/views/commoncontrols.view";
 
 import { BusinessServices } from "../../../models/businessservices";
 import * as faker from "faker";
+import * as data from "../../../../utils/data_utils";
 
 describe("Basic checks while creating business services", () => {
-    const businessServices = new BusinessServices();
-
     beforeEach("Login", function () {
         // Perform login
         login();
@@ -71,13 +70,15 @@ describe("Basic checks while creating business services", () => {
     });
 
     it("Business services name must unique", function () {
+        const businessServices = new BusinessServices(data.getStakeholderName());
+        // Create business service
         businessServices.create();
 
         // Navigate to "New stakeholder group" page
         clickByText(button, createNewButton);
 
         // Check Name duplication
-        inputText(businessServiceNameInput, businessServices.businessServiceName);
+        inputText(businessServiceNameInput, businessServices.name);
 
         submitForm();
 
