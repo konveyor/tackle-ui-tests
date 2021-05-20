@@ -16,7 +16,7 @@ import {
     editButton,
     actionButton,
 } from "../../views/applicationinventory.view";
-import { confirmButton, successAlertMessage } from "../../views/common.view";
+import * as commonView from "../../views/common.view";
 import {
     clickByText,
     inputText,
@@ -94,7 +94,7 @@ export class ApplicationInventory {
             }
             submitForm();
             checkSuccessAlert(
-                successAlertMessage,
+                commonView.successAlertMessage,
                 `Success! ${this.name} was added as a application.`
             );
         }
@@ -144,6 +144,7 @@ export class ApplicationInventory {
                 this.comment = updatedValues.comment;
             }
             if (updatedValues) {
+                this.name = updatedValues.name;
                 submitForm();
             }
         }
@@ -165,21 +166,7 @@ export class ApplicationInventory {
         if (cancel) {
             cancelForm();
         } else {
-            click(confirmButton);
+            click(commonView.confirmButton);
         }
-    }
-
-    exists(name = this.name) {
-        ApplicationInventory.clickApplicationInventory();
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(tdTag).should("contain", name);
-    }
-
-    notExists(name = this.name) {
-        ApplicationInventory.clickApplicationInventory();
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(tdTag).should("not.contain", name);
     }
 }

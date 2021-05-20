@@ -27,7 +27,6 @@ import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import * as data from "../../../../utils/data_utils";
 import * as commonView from "../../../../integration/views/common.view";
 
-
 describe("Stakeholder groups validations", () => {
     const stakeholdergroup = new Stakeholdergroups(data.getCompanyName(), data.getDescription());
 

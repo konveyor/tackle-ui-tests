@@ -98,7 +98,7 @@ describe("Stakeholder CRUD operations", () => {
         }
 
         // Create new object for stakeholder
-       const stakeholder = new Stakeholders(
+        const stakeholder = new Stakeholders(
             data.getEmail(),
             data.getFullName(),
             jobfunctions[0].name,

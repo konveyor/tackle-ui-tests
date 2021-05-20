@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 
-import { login } from "../../../../utils/utils";
+import { exists, login, notExists } from "../../../../utils/utils";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import * as data from "../../../../utils/data_utils";
 
-describe("A single Application", () => {
+describe("Application crud operations", () => {
     beforeEach("Login", function () {
         // Perform login
         login();
@@ -14,20 +14,22 @@ describe("A single Application", () => {
         cy.intercept("GET", "/api/application-inventory/application*").as("getApplication");
     });
 
-    it("Application crud operations", function () {
+    it("Application crud", function () {
         const application = new ApplicationInventory(
-            data.getName(),
+            data.getFullName(),
             data.getDescription(),
-            data.getComment()
+            data.getDescription() // refering description value as comment
         );
 
         // Create new application
         application.create();
+        exists(application.name);
         cy.wait("@postApplication");
 
         // Edit application's name
-        var updateApplicationName = data.getName();
-        application.edit({ name: updateApplicationName });
+        var updatedApplicationName = data.getFullName();
+        application.edit({ name: updatedApplicationName });
+        exists(updatedApplicationName);
         cy.wait("@getApplication");
 
         // Delete application
@@ -35,6 +37,6 @@ describe("A single Application", () => {
         cy.wait("@getApplication");
 
         // Assert that newly created application is deleted
-        application.notExists();
+        notExists(application.name);
     });
 });
