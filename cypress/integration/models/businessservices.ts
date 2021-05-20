@@ -33,7 +33,7 @@ export class BusinessServices {
 
     constructor(name: string, description?: string, owner?: string) {
         this.name = name;
-        this.description = description;
+        if (description) this.description = description;
         if (owner) this.owner = owner;
     }
 
@@ -61,7 +61,9 @@ export class BusinessServices {
             cancelForm();
         } else {
             this.fillName(this.name);
-            this.fillDescription(this.description);
+            if (this.description) {
+                this.fillDescription(this.description);
+            }
             if (this.owner) {
                 this.selectOwner(this.owner);
             }
