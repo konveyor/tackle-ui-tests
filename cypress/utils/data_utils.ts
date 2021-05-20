@@ -26,4 +26,14 @@ export function getRandomWord(length: number): string {
 
 export function getRandomWords(length: number): string {
     return faker.lorem.words(length);
+export function getBusinessServiceName(): string {
+    return faker.company.companyName();
+}
+
+export function getBusinessServiceDescription(): string {
+    return faker.lorem.sentence();
+}
+
+export function getLongString(): string {
+    return faker.random.words(75);
 }
