@@ -1,12 +1,12 @@
 /// <reference types="cypress" />
 
-import { login } from "../../../../utils/utils";
+import { exists, login, notExists } from "../../../../utils/utils";
 import { Jobfunctions } from "../../../models/jobfunctions";
 import { tdTag } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 
 describe("Job Function CRUD operations", () => {
-    const jobfunction = new Jobfunctions(data.getJobFuncName());
+    const jobfunction = new Jobfunctions(data.getJobTitle());
 
     before("Login", () => {
         // Perform login
@@ -23,18 +23,18 @@ describe("Job Function CRUD operations", () => {
         cy.wait("@postJobfunction");
 
         // Edit job function name
-        var updatedJobfuncName = data.getJobFuncName();
+        var updatedJobfuncName = data.getJobTitle();
         jobfunction.edit(updatedJobfuncName);
         cy.wait("@getJobfunctions");
 
         // Assert that jobfunction name got edited
-        cy.get(tdTag).should("contain", updatedJobfuncName);
+        exists(updatedJobfuncName);
 
         // Delete job function
         jobfunction.delete();
         cy.wait("@getJobfunctions");
 
         // Assert that job function is deleted
-        cy.get(tdTag).should("not.contain", jobfunction.name);
+        notExists(jobfunction.name);
     });
 });

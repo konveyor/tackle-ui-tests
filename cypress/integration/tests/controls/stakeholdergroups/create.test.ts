@@ -21,7 +21,7 @@ import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import * as commonView from "../../../../integration/views/commoncontrols.view";
 import * as data from "../../../../utils/data_utils";
 
-describe("Basic checks while creating stakeholder groups", () => {
+describe("Stakeholder groups validations", () => {
     const stakeholdergroup = new Stakeholdergroups(data.getCompanyName(), data.getSentence());
 
     beforeEach("Login", function () {
@@ -29,7 +29,7 @@ describe("Basic checks while creating stakeholder groups", () => {
         login();
     });
 
-    it("Stakeholder group name and description constraints check", function () {
+    it("Stakeholder group field validations", function () {
         // Navigate to "New stakeholder group" page
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholdergroups);
@@ -43,7 +43,7 @@ describe("Basic checks while creating stakeholder groups", () => {
         cy.get(commonView.nameHelper).should("contain", minCharsMsg);
         inputText(stakeholdergroupNameInput, data.getRandomWords(50));
         cy.get(commonView.nameHelper).should("contain", max120CharsMsg);
-        inputText(stakeholdergroupNameInput, "test");
+        inputText(stakeholdergroupNameInput, data.getRandomWord(4));
         cy.get(commonView.submitButton).should("not.be.disabled");
 
         // Description constraints
@@ -51,7 +51,7 @@ describe("Basic checks while creating stakeholder groups", () => {
         cy.get(commonView.descriptionHelper).should("contain", max250CharsMsg);
     });
 
-    it("Cancel and close on stakholder group creation", function () {
+    it("Stakholder group button validations", function () {
         // Navigate to "New stakeholder group" page
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholdergroups);
@@ -70,7 +70,7 @@ describe("Basic checks while creating stakeholder groups", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("Stakeholder group name must be unique", function () {
+    it("Stakeholder group unique constraint validation", function () {
         stakeholdergroup.create();
 
         // Navigate to "New stakeholder group" page
@@ -78,9 +78,7 @@ describe("Basic checks while creating stakeholder groups", () => {
 
         // Check Name duplication
         inputText(stakeholdergroupNameInput, stakeholdergroup.name);
-
         submitForm();
-
         cy.get(commonView.duplicateNameWarning).should("contain.text", duplicateErrMsg);
 
         // Delete created stakeholder group

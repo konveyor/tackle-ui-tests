@@ -140,18 +140,4 @@ export class Stakeholders {
             click(commonView.confirmButton);
         }
     }
-
-    exists(email = this.email) {
-        Stakeholders.clickStakeholders();
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(tdTag).should("contain", email);
-    }
-
-    notExists(email = this.email) {
-        Stakeholders.clickStakeholders();
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(tdTag).should("not.contain", email);
-    }
 }

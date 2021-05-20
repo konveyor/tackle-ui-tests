@@ -1,6 +1,13 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, inputText, submitForm } from "../../../../utils/utils";
+import {
+    login,
+    clickByText,
+    inputText,
+    submitForm,
+    exists,
+    notExists,
+} from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
     controls,
@@ -19,21 +26,24 @@ import {
     emailHelper,
     displayNameHelper,
 } from "../../../views/stakeholders.view";
-import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Stakeholders } from "../../../models/stakeholders";
 
 import * as commonView from "../../../../integration/views/commoncontrols.view";
 import * as data from "../../../../utils/data_utils";
 
-describe("Basic checks while creating stakeholder", () => {
+describe("Stakeholder validations", () => {
     const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
 
     beforeEach("Login", function () {
         // Perform login
         login();
+
+        // Interceptors
+        cy.intercept("POST", "/api/controls/stakeholder*").as("postStakeholder");
+        cy.intercept("DELETE", "/api/controls/stakeholder/*").as("deleteStakeholder");
     });
 
-    it("Stakeholder name and email constraints check", function () {
+    it("Stakeholder field validations", function () {
         // Navigate to stakeholder tab and click create new button
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
@@ -66,7 +76,7 @@ describe("Basic checks while creating stakeholder", () => {
         cy.get(commonView.cancelButton).click();
     });
 
-    it("Cancel and close form for stakholder creation", function () {
+    it("Stakholder button validations", function () {
         // Navigate to stakeholder tab and click create new button
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
@@ -86,9 +96,11 @@ describe("Basic checks while creating stakeholder", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("Stakeholder unique constraint check", function () {
+    it("Stakeholder unique constraint validation", function () {
         // Create a new stakeholder
         stakeholder.create();
+        cy.wait("@postStakeholder");
+        exists(stakeholder.email);
 
         // Navigate to stakeholder tab and click create new button
         clickByText(button, createNewButton);
@@ -102,5 +114,7 @@ describe("Basic checks while creating stakeholder", () => {
         // Delete created stakeholder
         cy.get(commonView.closeButton).click();
         stakeholder.delete();
+        cy.wait("@deleteStakeholder");
+        notExists(stakeholder.email);
     });
 });
