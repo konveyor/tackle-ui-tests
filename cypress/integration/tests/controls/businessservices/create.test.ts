@@ -21,13 +21,13 @@ import * as commonView from "../../../../integration/views/commoncontrols.view";
 import { BusinessServices } from "../../../models/businessservices";
 import * as data from "../../../../utils/data_utils";
 
-describe("Basic checks while creating business services", () => {
+describe("Business service validations", () => {
     beforeEach("Login", function () {
         // Perform login
         login();
     });
 
-    it("Business services name and description contraints check", function () {
+    it("Business service field validations", function () {
         // Navigate to "New stakeholder group" page
         clickByText(navMenu, controls);
         clickByText(navTab, businessservices);
@@ -49,7 +49,7 @@ describe("Basic checks while creating business services", () => {
         cy.get(commonView.descriptionHelper).should("contain", descriptionMaxChars);
     });
 
-    it("Cancel and close on business services creation", function () {
+    it("Business service button validations", function () {
         // Navigate to "New stakeholder group" page
         clickByText(navMenu, controls);
         clickByText(navTab, businessservices);
@@ -68,7 +68,7 @@ describe("Basic checks while creating business services", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("Business services name must unique", function () {
+    it("Business service unique name validation", function () {
         const businessServices = new BusinessServices(data.getStakeholderName());
         // Create business service
         businessServices.create();
