@@ -16,9 +16,9 @@ describe("A single Application", () => {
 
     it("Application crud operations", function () {
         const application = new ApplicationInventory(
-            data.getApplicationName(),
-            data.getApplicationDescription(),
-            data.getApplicationComment()
+            data.getName(),
+            data.getDescription(),
+            data.getComment()
         );
 
         // Create new application
@@ -26,7 +26,7 @@ describe("A single Application", () => {
         cy.wait("@postApplication");
 
         // Edit application's name
-        var updateApplicationName = data.getApplicationName();
+        var updateApplicationName = data.getName();
         application.edit({ name: updateApplicationName });
         cy.wait("@getApplication");
 
