@@ -6,10 +6,10 @@ import {
     controls,
     stakeholdergroups,
     button,
-    nameUniqueWarning,
-    nameLeastChars,
-    nameMaxChars,
-    descriptionMaxChars,
+    duplicateErrMsg,
+    minCharsMsg,
+    max120CharsMsg,
+    max250CharsMsg,
     createNewButton,
 } from "../../../types/constants";
 import {
@@ -20,13 +20,9 @@ import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 
 import * as commonView from "../../../../integration/views/commoncontrols.view";
 import * as data from "../../../../utils/data_utils";
-import * as faker from "faker";
 
 describe("Basic checks while creating stakeholder groups", () => {
-    const stakeholdergroup = new Stakeholdergroups(
-        data.getStakeholdergroupName(),
-        data.getStakeholdergroupDescription()
-    );
+    const stakeholdergroup = new Stakeholdergroups(data.getCompanyName(), data.getSentence());
 
     beforeEach("Login", function () {
         // Perform login
@@ -43,16 +39,16 @@ describe("Basic checks while creating stakeholder groups", () => {
         cy.get(commonView.cancelButton).should("not.be.disabled");
 
         // Name constraints
-        inputText(stakeholdergroupNameInput, "te");
-        cy.get(commonView.nameHelper).should("contain", nameLeastChars);
-        inputText(stakeholdergroupNameInput, faker.random.words(50));
-        cy.get(commonView.nameHelper).should("contain", nameMaxChars);
+        inputText(stakeholdergroupNameInput, data.getRandomWord(2));
+        cy.get(commonView.nameHelper).should("contain", minCharsMsg);
+        inputText(stakeholdergroupNameInput, data.getRandomWords(50));
+        cy.get(commonView.nameHelper).should("contain", max120CharsMsg);
         inputText(stakeholdergroupNameInput, "test");
         cy.get(commonView.submitButton).should("not.be.disabled");
 
         // Description constraints
-        inputText(stakeholdergroupDescriptionInput, faker.random.words(120));
-        cy.get(commonView.descriptionHelper).should("contain", descriptionMaxChars);
+        inputText(stakeholdergroupDescriptionInput, data.getRandomWords(120));
+        cy.get(commonView.descriptionHelper).should("contain", max250CharsMsg);
     });
 
     it("Cancel and close on stakholder group creation", function () {
@@ -85,7 +81,7 @@ describe("Basic checks while creating stakeholder groups", () => {
 
         submitForm();
 
-        cy.get(commonView.duplicateNameWarning).should("contain.text", nameUniqueWarning);
+        cy.get(commonView.duplicateNameWarning).should("contain.text", duplicateErrMsg);
 
         // Delete created stakeholder group
         cy.get(commonView.closeButton).click();

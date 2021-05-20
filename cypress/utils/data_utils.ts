@@ -1,22 +1,22 @@
 import * as faker from "faker";
 
-export function getStakeholderName(): string {
+export function getFullName(): string {
     return faker.name.findName();
 }
 
-export function getStakeholderEmail(): string {
+export function getEmail(): string {
     return faker.internet.email();
 }
 
-export function getStakeholdergroupName(): string {
+export function getCompanyName(): string {
     return faker.company.companyName();
 }
 
-export function getStakeholdergroupDescription(): string {
+export function getSentence(): string {
     return faker.lorem.sentence();
 }
 
-export function getJobFuncName(): string {
+export function getJobTitle(): string {
     return faker.name.jobType();
 }
 
@@ -26,14 +26,4 @@ export function getRandomWord(length: number): string {
 
 export function getRandomWords(length: number): string {
     return faker.lorem.words(length);
-export function getBusinessServiceName(): string {
-    return faker.company.companyName();
-}
-
-export function getBusinessServiceDescription(): string {
-    return faker.lorem.sentence();
-}
-
-export function getLongString(): string {
-    return faker.random.words(75);
 }

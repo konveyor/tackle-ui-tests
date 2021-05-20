@@ -8,7 +8,7 @@ import { expandRow } from "../../../views/commoncontrols.view";
 import * as data from "../../../../utils/data_utils";
 
 describe("Single Stakeholder group CRUD operations", () => {
-    const stakeholder = new Stakeholders(data.getStakeholderEmail(), data.getStakeholderName());
+    const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
 
     beforeEach("Login", function () {
         // Perform login
@@ -20,17 +20,14 @@ describe("Single Stakeholder group CRUD operations", () => {
     });
 
     it("Stakeholder group CRUD operations", function () {
-        const stakeholdergroup = new Stakeholdergroups(
-            data.getStakeholdergroupName(),
-            data.getStakeholdergroupDescription()
-        );
+        const stakeholdergroup = new Stakeholdergroups(data.getCompanyName(), data.getSentence());
         // Create new stakeholder group
         stakeholdergroup.create();
         cy.wait("@postStakeholdergroups");
         stakeholdergroup.exists();
 
         // Edit stakeholder group's name
-        var updateStakeholdergroupName = data.getStakeholdergroupName();
+        var updateStakeholdergroupName = data.getCompanyName();
         stakeholdergroup.edit({ name: updateStakeholdergroupName });
         cy.wait("@getStakeholdergroups");
 
@@ -53,11 +50,9 @@ describe("Single Stakeholder group CRUD operations", () => {
         // memberStakeholderName = stakeholder.stakeholderName;
 
         // Create new object of stakeholdergroup with members
-        const stakeholdergroup = new Stakeholdergroups(
-            data.getStakeholdergroupName(),
-            data.getStakeholdergroupDescription(),
-            [memberStakeholderName]
-        );
+        const stakeholdergroup = new Stakeholdergroups(data.getCompanyName(), data.getSentence(), [
+            memberStakeholderName,
+        ]);
 
         // Create new stakeholder group
         stakeholdergroup.create();
@@ -78,8 +73,8 @@ describe("Single Stakeholder group CRUD operations", () => {
 
         // Edit stakeholder group with name, description and member
         stakeholdergroup.edit({
-            name: data.getStakeholdergroupName(),
-            description: data.getStakeholdergroupDescription(),
+            name: data.getCompanyName(),
+            description: data.getSentence(),
             members: [memberStakeholderName],
         });
         cy.wait("@getStakeholdergroups");

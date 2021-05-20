@@ -6,10 +6,10 @@ import {
     controls,
     businessservices,
     button,
-    nameUniqueWarning,
-    nameLeastChars,
-    nameMaxChars,
-    descriptionMaxChars,
+    duplicateErrMsg,
+    minCharsMsg,
+    max120CharsMsg,
+    max250CharsMsg,
     createNewButton,
 } from "../../../types/constants";
 import {
@@ -37,16 +37,16 @@ describe("Business service validations", () => {
         cy.get(commonView.cancelButton).should("not.be.disabled");
 
         // Name constraints
-        inputText(businessServiceNameInput, "te");
-        cy.get(commonView.nameHelper).should("contain", nameLeastChars);
-        inputText(businessServiceNameInput, data.getLongString());
-        cy.get(commonView.nameHelper).should("contain", nameMaxChars);
+        inputText(businessServiceNameInput, data.getRandomWord(2));
+        cy.get(commonView.nameHelper).should("contain", minCharsMsg);
+        inputText(businessServiceNameInput, data.getRandomWords(45));
+        cy.get(commonView.nameHelper).should("contain", max120CharsMsg);
         inputText(businessServiceNameInput, "test");
         cy.get(commonView.submitButton).should("not.be.disabled");
 
         // Description constraints
-        inputText(businessServiceDescriptionInput, data.getLongString());
-        cy.get(commonView.descriptionHelper).should("contain", descriptionMaxChars);
+        inputText(businessServiceDescriptionInput, data.getRandomWords(75));
+        cy.get(commonView.descriptionHelper).should("contain", max250CharsMsg);
     });
 
     it("Business service button validations", function () {
@@ -69,7 +69,7 @@ describe("Business service validations", () => {
     });
 
     it("Business service unique name validation", function () {
-        const businessServices = new BusinessServices(data.getStakeholderName());
+        const businessServices = new BusinessServices(data.getCompanyName());
         // Create business service
         businessServices.create();
 
@@ -81,7 +81,7 @@ describe("Business service validations", () => {
 
         submitForm();
 
-        cy.get(commonView.duplicateNameWarning).should("contain.text", nameUniqueWarning);
+        cy.get(commonView.duplicateNameWarning).should("contain.text", duplicateErrMsg);
 
         // Delete created stakeholder group
         cy.get(commonView.closeButton).click();

@@ -26,7 +26,7 @@ import * as commonView from "../../../../integration/views/commoncontrols.view";
 import * as data from "../../../../utils/data_utils";
 
 describe("Basic checks while creating stakeholder", () => {
-    const stakeholder = new Stakeholders(data.getStakeholderEmail(), data.getStakeholderName());
+    const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
 
     beforeEach("Login", function () {
         // Perform login
@@ -58,8 +58,8 @@ describe("Basic checks while creating stakeholder", () => {
         cy.get(displayNameHelper).should("contain", max250CharsMsg);
 
         // Validate the create button is enabled with valid inputs
-        inputText(stakeholderEmailInput, data.getStakeholderEmail());
-        inputText(stakeholderNameInput, data.getStakeholderName());
+        inputText(stakeholderEmailInput, data.getEmail());
+        inputText(stakeholderNameInput, data.getFullName());
         cy.get(commonView.submitButton).should("not.be.disabled");
 
         // Close the form
@@ -95,7 +95,7 @@ describe("Basic checks while creating stakeholder", () => {
 
         // Check email duplication
         inputText(stakeholderEmailInput, stakeholder.email);
-        inputText(stakeholderNameInput, data.getStakeholderName());
+        inputText(stakeholderNameInput, data.getFullName());
         submitForm();
         cy.get(commonView.duplicateNameWarning).should("contain.text", duplicateErrMsg);
 

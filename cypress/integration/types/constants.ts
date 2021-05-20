@@ -8,16 +8,11 @@ export const tdTag = "td";
 export const createNewButton = "Create new";
 export const button = "button";
 
+// Error helper messages general to all views
 export const minCharsMsg = "This field must contain at least 3 characters.";
 export const max120CharsMsg = "This field must contain fewer than 120 characters.";
 export const max250CharsMsg = "This field must contain fewer than 250 characters.";
 export const duplicateErrMsg = "ERROR: duplicate key value violates unique constraint";
-
-// Stakeholder groups warnings
-export const nameLeastChars = "This field must contain at least 3 characters.";
-export const nameMaxChars = "This field must contain fewer than 120 characters.";
-export const descriptionMaxChars = "This field must contain fewer than 250 characters.";
-export const nameUniqueWarning = "ERROR: duplicate key value violates unique constraint";
 
 // Stakeholder specific helper/error messages
 export const invalidEmailMsg = "This field requires a valid email.";

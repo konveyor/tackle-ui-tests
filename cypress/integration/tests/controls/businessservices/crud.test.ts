@@ -5,10 +5,7 @@ import { BusinessServices } from "../../../models/businessservices";
 import * as data from "../../../../utils/data_utils";
 
 describe("A single Business service", () => {
-    const businessService = new BusinessServices(
-        data.getBusinessServiceName(),
-        data.getBusinessServiceDescription()
-    );
+    const businessService = new BusinessServices(data.getCompanyName(), data.getSentence());
 
     beforeEach("Login", function () {
         // Perform login
@@ -25,7 +22,7 @@ describe("A single Business service", () => {
         cy.wait("@postBusinessService");
 
         // Edit Business service's name
-        var updatedBusinessServiceName = data.getBusinessServiceName();
+        var updatedBusinessServiceName = data.getCompanyName();
         businessService.edit({ name: updatedBusinessServiceName });
         cy.wait("@getBusinessService");
 

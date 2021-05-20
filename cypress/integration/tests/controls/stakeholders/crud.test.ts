@@ -21,14 +21,14 @@ describe("Stakeholder CRUD operations", () => {
     });
 
     it("Stakeholder CRUD operations", function () {
-        const stakeholder = new Stakeholders(data.getStakeholderEmail(), data.getStakeholderName());
+        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         // Create new stakeholder
         stakeholder.create();
         cy.wait("@postStakeholder");
         cy.get(tdTag).should("contain", stakeholder.email);
 
         // Edit stakeholder name
-        var updatedStakeholderName = data.getStakeholderName();
+        var updatedStakeholderName = data.getFullName();
         stakeholder.edit({ name: updatedStakeholderName });
         cy.wait("@getStakeholders");
 
@@ -44,8 +44,12 @@ describe("Stakeholder CRUD operations", () => {
     });
 
     it("Stakeholder CRUD cancel", function () {
-        var initialStakeholderName = data.getStakeholderName();
-        const stakeholder = new Stakeholders(data.getStakeholderEmail(), initialStakeholderName);
+        // Create a dummy stakeholder, so that atleast one stakeholder is present and table exists
+        const dummyStakeholder = new Stakeholders(data.getEmail(), data.getFullName());
+        dummyStakeholder.create();
+
+        var initialStakeholderName = data.getFullName();
+        const stakeholder = new Stakeholders(data.getEmail(), initialStakeholderName);
         // Cancel the Create new stakeholder task
         stakeholder.create(true);
         cy.get(tdTag).should("not.contain", stakeholder.email);
@@ -71,6 +75,8 @@ describe("Stakeholder CRUD operations", () => {
         stakeholder.delete();
         cy.wait("@getStakeholders");
         cy.get(tdTag).should("not.contain", stakeholder.email);
+        dummyStakeholder.delete();
+        cy.wait("@getStakeholders");
     });
 
     it("Stakeholder CRUD operations with members (jobfunction and groups)", function () {
@@ -79,22 +85,22 @@ describe("Stakeholder CRUD operations", () => {
         var stakeholdergroupNames: Array<string> = [];
         for (let i = 0; i < 2; i++) {
             // Create new job functions
-            const jobfunction = new Jobfunctions(data.getJobFuncName());
+            const jobfunction = new Jobfunctions(data.getJobTitle());
             jobfunction.create();
             jobfunctions.push(jobfunction);
 
             // Create new stakeholder groups
             const stakeholdergroup = new Stakeholdergroups(
-                data.getStakeholdergroupName(),
-                data.getStakeholdergroupDescription()
+                data.getCompanyName(),
+                data.getSentence()
             );
             stakeholdergroup.create();
             stakeholdergroups.push(stakeholdergroup);
             stakeholdergroupNames.push(stakeholdergroup.name);
         }
 
-        var stakeholderEmail = data.getStakeholderEmail();
-        var stakeholderName = data.getStakeholderName();
+        var stakeholderEmail = data.getEmail();
+        var stakeholderName = data.getFullName();
 
         // Create new object for Stakeholder
         const stakeholder = new Stakeholders(
@@ -111,7 +117,7 @@ describe("Stakeholder CRUD operations", () => {
 
         // Edit stakeholder name, jobfunction and stakeholdergroup (by removing first one and adding second)
         stakeholder.edit({
-            name: data.getStakeholderName(),
+            name: data.getFullName(),
             jobfunction: jobfunctions[1].name,
             groups: stakeholdergroupNames,
         });
@@ -128,19 +134,19 @@ describe("Stakeholder CRUD operations", () => {
             .get("div > dd")
             .should("contain", stakeholdergroupNames[1]);
 
-        // // [17 May 2021] : Known bug (https://issues.redhat.com/browse/TACKLE-141), fails the test
-        // // Assert that previous stakeholder group was removed
-        // cy.get(tdTag)
-        //     .contains(stakeholder.email)
-        //     .parent(trTag)
-        //     .within(() => {
-        //         click(expandRow);
-        //     })
-        //     .get("div > dd")
-        //     .should("not.contain", stakeholdergroupNames[0]);
+        // [17 May 2021] : Known bug (https://issues.redhat.com/browse/TACKLE-141), fails the test
+        // Assert that previous stakeholder group was removed
+        cy.get(tdTag)
+            .contains(stakeholder.email)
+            .parent(trTag)
+            .within(() => {
+                click(expandRow);
+            })
+            .get("div > dd")
+            .should("not.contain", stakeholdergroupNames[0]);
 
-        // // Assert that there should be only one member present
-        // cy.get(tdTag).contains(stakeholder.email).siblings(groupsCount).should("contain", "1");
+        // Assert that there should be only one member present
+        cy.get(tdTag).contains(stakeholder.email).siblings(groupsCount).should("contain", "1");
 
         // Delete stakeholder
         stakeholder.delete();
