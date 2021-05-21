@@ -44,14 +44,10 @@ describe("Stakeholder validations", () => {
     });
 
     it("Stakeholder field validations", function () {
-        // Navigate to stakeholder tab and click create new button
+        // Navigate to stakeholder tab and click "Create New" button
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         clickByText(button, createNewButton);
-
-        // Check "Create" and "Cancel" button status
-        cy.get(commonView.submitButton).should("be.disabled");
-        cy.get(commonView.cancelButton).should("not.be.disabled");
 
         // Email constraints
         inputText(stakeholderEmailInput, data.getRandomWord(2));
@@ -82,13 +78,17 @@ describe("Stakeholder validations", () => {
         clickByText(navTab, stakeholders);
         clickByText(button, createNewButton);
 
+        // Check "Create" and "Cancel" button status
+        cy.get(commonView.submitButton).should("be.disabled");
+        cy.get(commonView.cancelButton).should("not.be.disabled");
+
         // Cancel creating new stakeholder
         cy.get(commonView.cancelButton).click();
         cy.wait(100);
 
         clickByText(button, createNewButton);
 
-        // Close create stakeholder form
+        // Close the "Create New" stakeholder form
         cy.get(commonView.closeButton).click();
         cy.wait(100);
 

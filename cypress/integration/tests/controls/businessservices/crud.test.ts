@@ -5,7 +5,7 @@ import { BusinessServices } from "../../../models/businessservices";
 import * as data from "../../../../utils/data_utils";
 
 describe("Business service CRUD", () => {
-    const businessService = new BusinessServices(data.getCompanyName(), data.getSentence());
+    const businessService = new BusinessServices(data.getCompanyName(), data.getDescription());
 
     beforeEach("Login", function () {
         // Perform login

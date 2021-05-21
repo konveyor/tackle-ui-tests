@@ -7,7 +7,7 @@ import { tdTag, trTag } from "../../../types/constants";
 import { expandRow } from "../../../views/commoncontrols.view";
 import * as data from "../../../../utils/data_utils";
 
-describe("Single Stakeholder group CRUD operations", () => {
+describe("Stakeholder group CRUD operations", () => {
     const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
 
     beforeEach("Login", function () {
@@ -19,8 +19,11 @@ describe("Single Stakeholder group CRUD operations", () => {
         cy.intercept("GET", "/api/controls/stakeholder-group*").as("getStakeholdergroups");
     });
 
-    it("Stakeholder group CRUD operations", function () {
-        const stakeholdergroup = new Stakeholdergroups(data.getCompanyName(), data.getSentence());
+    it("Stakeholder group CRUD", function () {
+        const stakeholdergroup = new Stakeholdergroups(
+            data.getCompanyName(),
+            data.getDescription()
+        );
         // Create new stakeholder group
         stakeholdergroup.create();
         cy.wait("@postStakeholdergroups");
@@ -31,7 +34,7 @@ describe("Single Stakeholder group CRUD operations", () => {
         stakeholdergroup.edit({ name: updateStakeholdergroupName });
         cy.wait("@getStakeholdergroups");
 
-        // Assert that stakeholdergroup name got edited
+        // Assert that stakeholder group name got edited
         exists(updateStakeholdergroupName);
 
         // Delete stakeholder group
@@ -48,17 +51,19 @@ describe("Single Stakeholder group CRUD operations", () => {
         exists(stakeholder.email);
         var memberStakeholderName = stakeholder.name;
 
-        // Create new object of stakeholdergroup with members
-        const stakeholdergroup = new Stakeholdergroups(data.getCompanyName(), data.getSentence(), [
-            memberStakeholderName,
-        ]);
+        // Create new object of stakeholder group with members
+        const stakeholdergroup = new Stakeholdergroups(
+            data.getCompanyName(),
+            data.getDescription(),
+            [memberStakeholderName]
+        );
 
         // Create new stakeholder group
         stakeholdergroup.create();
         cy.wait("@postStakeholdergroups");
         exists(stakeholdergroup.name);
 
-        // Check if stakeholder member attached to stakeholder group
+        // Check if stakeholder member is attached to stakeholder group
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
@@ -70,10 +75,10 @@ describe("Single Stakeholder group CRUD operations", () => {
             .get("div > dd")
             .should("contain", memberStakeholderName);
 
-        // Edit stakeholder group with name, description and member
+        // Edit the current stakeholder group's name, description and member
         stakeholdergroup.edit({
             name: data.getCompanyName(),
-            description: data.getSentence(),
+            description: data.getDescription(),
             members: [memberStakeholderName],
         });
         cy.wait("@getStakeholdergroups");

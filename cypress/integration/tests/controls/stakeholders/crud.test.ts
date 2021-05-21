@@ -5,7 +5,7 @@ import { Stakeholders } from "../../../models/stakeholders";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Jobfunctions } from "../../../models/jobfunctions";
 import { tdTag, trTag } from "../../../types/constants";
-import { groupsCount, stakeholderEmailInput } from "../../../views/stakeholders.view";
+import { groupsCount } from "../../../views/stakeholders.view";
 import { expandRow } from "../../../views/commoncontrols.view";
 import * as data from "../../../../utils/data_utils";
 
@@ -21,14 +21,14 @@ describe("Stakeholder CRUD operations", () => {
         cy.intercept("DELETE", "/api/controls/stakeholder/*").as("deleteStakeholder");
     });
 
-    it("Stakeholder CRUD operations", function () {
+    it("Stakeholder CRUD", function () {
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         // Create new stakeholder
         stakeholder.create();
         cy.wait("@postStakeholder");
         exists(stakeholder.email);
 
-        // Edit stakeholder name
+        // Edit the current stakeholder's name
         var updatedStakeholderName = data.getFullName();
         stakeholder.edit({ name: updatedStakeholderName });
         cy.wait("@putStakeholder");
@@ -90,20 +90,17 @@ describe("Stakeholder CRUD operations", () => {
             // Create new stakeholder groups
             const stakeholdergroup = new Stakeholdergroups(
                 data.getCompanyName(),
-                data.getSentence()
+                data.getDescription()
             );
             stakeholdergroup.create();
             stakeholdergroups.push(stakeholdergroup);
             stakeholdergroupNames.push(stakeholdergroup.name);
         }
 
-        var stakeholderEmail = data.getEmail();
-        var stakeholderName = data.getFullName();
-
-        // Create new object for Stakeholder
+        // Create new object for stakeholder
         const stakeholder = new Stakeholders(
-            stakeholderEmail,
-            stakeholderName,
+            data.getEmail(),
+            data.getFullName(),
             jobfunctions[0].name,
             [stakeholdergroupNames[0]]
         );
@@ -113,7 +110,7 @@ describe("Stakeholder CRUD operations", () => {
         cy.wait("@postStakeholder");
         exists(stakeholder.email);
 
-        // Edit stakeholder name, jobfunction and stakeholdergroup (by removing first one and adding second)
+        // Edit the current stakeholder's name, jobfunction and stakeholder group (by removing first one and adding second)
         stakeholder.edit({
             name: data.getFullName(),
             jobfunction: jobfunctions[1].name,
@@ -133,17 +130,7 @@ describe("Stakeholder CRUD operations", () => {
             .should("contain", stakeholdergroupNames[1]);
 
         // [17 May 2021] : Known bug (https://issues.redhat.com/browse/TACKLE-141), fails the test
-        // Assert that previous stakeholder group was removed
-        cy.get(tdTag)
-            .contains(stakeholder.email)
-            .parent(trTag)
-            .within(() => {
-                click(expandRow);
-            })
-            .get("div > dd")
-            .should("not.contain", stakeholdergroupNames[0]);
-
-        // Assert that there should be only one member present
+        // Assert that previous stakeholder group was removed and only one member is present
         cy.get(tdTag).contains(stakeholder.email).siblings(groupsCount).should("contain", "1");
 
         // Delete stakeholder

@@ -2,7 +2,6 @@
 
 import { exists, login, notExists } from "../../../../utils/utils";
 import { Jobfunctions } from "../../../models/jobfunctions";
-import { tdTag } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 
 describe("Job Function CRUD operations", () => {
@@ -21,8 +20,9 @@ describe("Job Function CRUD operations", () => {
         // Create new job function
         jobfunction.create();
         cy.wait("@postJobfunction");
+        exists(jobfunction.name);
 
-        // Edit job function name
+        // Edit the current job function's name
         var updatedJobfuncName = data.getJobTitle();
         jobfunction.edit(updatedJobfuncName);
         cy.wait("@getJobfunctions");
