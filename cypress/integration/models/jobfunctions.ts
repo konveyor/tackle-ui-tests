@@ -1,7 +1,7 @@
-import { controls, jobfunctions, tdTag, trTag } from "../types/constants";
+import { controls, jobfunctions, tdTag, trTag, button, createNewButton } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import { jobfunctionNameInput } from "../views/jobfunctions.view";
-import { confirmButton, editButton, deleteButton } from "../views/commoncontrols.view";
+import * as commonView from "../views/commoncontrols.view";
 import {
     clickByText,
     inputText,
@@ -10,10 +10,13 @@ import {
     submitForm,
     cancelForm,
 } from "../../utils/utils";
-import * as faker from "faker";
 
 export class Jobfunctions {
-    jobfunctionName;
+    name: string;
+
+    constructor(name: string) {
+        this.name = name;
+    }
 
     protected static clickJobfunctions(): void {
         clickByText(navMenu, controls);
@@ -24,48 +27,48 @@ export class Jobfunctions {
         inputText(jobfunctionNameInput, name);
     }
 
-    getJobFuncName(): string {
-        this.jobfunctionName = faker.name.jobType();
-        return this.jobfunctionName;
-    }
-
-    create(): void {
+    create(cancel = false): void {
         Jobfunctions.clickJobfunctions();
-        clickByText("button", "Create new");
-        this.getJobFuncName();
-        this.fillName(this.jobfunctionName);
+        clickByText(button, createNewButton);
+        this.fillName(this.name);
         submitForm();
     }
 
-    edit(): void {
+    edit(updatedName: string, cancel = false): void {
         Jobfunctions.clickJobfunctions();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(this.jobfunctionName)
+            .contains(this.name)
             .parent(trTag)
             .within(() => {
-                click(editButton);
-            });
-        this.getJobFuncName();
-        this.fillName(this.jobfunctionName);
-        submitForm();
-    }
-
-    delete({ jobfunctionName = this.jobfunctionName, cancel = false } = {}): void {
-        Jobfunctions.clickJobfunctions();
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(tdTag)
-            .contains(jobfunctionName)
-            .parent(trTag)
-            .within(() => {
-                click(deleteButton);
+                click(commonView.editButton);
             });
         if (cancel) {
             cancelForm();
         } else {
-            click(confirmButton);
+            if (updatedName != this.name) {
+                this.fillName(updatedName);
+                this.name = updatedName;
+                submitForm();
+            }
+        }
+    }
+
+    delete(cancel = false): void {
+        Jobfunctions.clickJobfunctions();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(trTag)
+            .within(() => {
+                click(commonView.deleteButton);
+            });
+        if (cancel) {
+            cancelForm();
+        } else {
+            click(commonView.confirmButton);
         }
     }
 }

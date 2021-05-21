@@ -130,18 +130,4 @@ export class BusinessServices {
             click(commonView.confirmButton);
         }
     }
-
-    exists(name = this.name) {
-        BusinessServices.clickBusinessservices();
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(tdTag).should("contain", name);
-    }
-
-    notExists(name = this.name) {
-        BusinessServices.clickBusinessservices();
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(tdTag).should("not.contain", name);
-    }
 }

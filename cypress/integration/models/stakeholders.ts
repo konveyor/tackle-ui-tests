@@ -1,12 +1,4 @@
-import {
-    controls,
-    stakeholders,
-    tdTag,
-    trTag,
-    button,
-    createNewButton,
-    jobfunctions,
-} from "../types/constants";
+import { controls, stakeholders, tdTag, trTag, button, createNewButton } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import {
     stakeholderNameInput,
@@ -147,19 +139,5 @@ export class Stakeholders {
         } else {
             click(commonView.confirmButton);
         }
-    }
-
-    exists(email = this.email) {
-        Stakeholders.clickStakeholders();
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(tdTag).should("contain", email);
-    }
-
-    notExists(email = this.email) {
-        Stakeholders.clickStakeholders();
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(tdTag).should("not.contain", email);
     }
 }

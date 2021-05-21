@@ -31,7 +31,7 @@ export function login(): void {
     inputText(loginView.userNameInput, userName);
     inputText(loginView.userPasswordInput, userPassword);
     click(loginView.loginButton);
-    cy.wait(2000);
+    cy.wait(5000);
     cy.get("h1").contains("Application inventory");
 }
 
@@ -52,4 +52,29 @@ export function checkSuccessAlert(fieldId: string, message: string): void {
 
 export function removeMember(memberName: string): void {
     cy.get("span").contains(memberName).siblings(commonView.removeButton).click();
+}
+
+export function exists(value: string) {
+    // Wait for DOM to render table and sibling elements
+    cy.wait(2000);
+    cy.get(commonView.appTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.wait(2000);
+                cy.get("td").should("contain", value);
+            }
+        });
+}
+
+export function notExists(value: string) {
+    // Wait for DOM to render table and sibling elements
+    cy.wait(2000);
+    cy.get(commonView.appTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("td").should("not.contain", value);
+            }
+        });
 }

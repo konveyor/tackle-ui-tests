@@ -1,15 +1,14 @@
 /// <reference types="cypress" />
 
-import { login, selectItemsPerPage, click } from "../../../../utils/utils";
+import { login, selectItemsPerPage, click, exists, notExists } from "../../../../utils/utils";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Stakeholders } from "../../../models/stakeholders";
 import { tdTag, trTag } from "../../../types/constants";
 import { expandRow } from "../../../views/commoncontrols.view";
-import * as faker from "faker";
+import * as data from "../../../../utils/data_utils";
 
-describe("A single Stakeholder group", () => {
-    const stakeholdergroup = new Stakeholdergroups();
-    const stakeholders = new Stakeholders();
+describe("Stakeholder group CRUD operations", () => {
+    const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
 
     beforeEach("Login", function () {
         // Perform login
@@ -20,41 +19,55 @@ describe("A single Stakeholder group", () => {
         cy.intercept("GET", "/api/controls/stakeholder-group*").as("getStakeholdergroups");
     });
 
-    it("Stakeholder group crud operations", function () {
+    it("Stakeholder group CRUD", function () {
+        const stakeholdergroup = new Stakeholdergroups(
+            data.getCompanyName(),
+            data.getDescription()
+        );
         // Create new stakeholder group
         stakeholdergroup.create();
         cy.wait("@postStakeholdergroups");
-        stakeholdergroup.exists();
+        exists(stakeholdergroup.name);
 
         // Edit stakeholder group's name
-        stakeholdergroup.edit({ name: faker.company.companyName() });
+        var updateStakeholdergroupName = data.getCompanyName();
+        stakeholdergroup.edit({ name: updateStakeholdergroupName });
         cy.wait("@getStakeholdergroups");
+
+        // Assert that stakeholder group name got edited
+        exists(updateStakeholdergroupName);
 
         // Delete stakeholder group
         stakeholdergroup.delete();
         cy.wait("@getStakeholdergroups");
 
         // Assert that newly created stakeholder group is deleted
-        stakeholdergroup.notExists();
+        notExists(stakeholdergroup.name);
     });
 
-    it("Stakeholder group CRUD with Stakeholder Member attached", function () {
+    it("Stakeholder group CRUD with stakeholder member attached", function () {
         // Create stakeholder
-        stakeholders.create();
-        stakeholders.exists();
-        var memberStakeholderName;
-        memberStakeholderName = stakeholders.stakeholderName;
+        stakeholder.create();
+        exists(stakeholder.email);
+        var memberStakeholderName = stakeholder.name;
+
+        // Create new object of stakeholder group with members
+        const stakeholdergroup = new Stakeholdergroups(
+            data.getCompanyName(),
+            data.getDescription(),
+            [memberStakeholderName]
+        );
 
         // Create new stakeholder group
-        stakeholdergroup.create({ member: memberStakeholderName });
+        stakeholdergroup.create();
         cy.wait("@postStakeholdergroups");
-        stakeholdergroup.exists();
+        exists(stakeholdergroup.name);
 
-        // Check if stakeholder member attached to stakeholder group
+        // Check if stakeholder member is attached to stakeholder group
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(stakeholdergroup.stakeholdergroupName)
+            .contains(stakeholdergroup.name)
             .parent(trTag)
             .within(() => {
                 click(expandRow);
@@ -62,15 +75,19 @@ describe("A single Stakeholder group", () => {
             .get("div > dd")
             .should("contain", memberStakeholderName);
 
-        // Edit stakeholder group with name, description and member
-        stakeholdergroup.edit({ member: memberStakeholderName });
+        // Edit the current stakeholder group's name, description and member
+        stakeholdergroup.edit({
+            name: data.getCompanyName(),
+            description: data.getDescription(),
+            members: [memberStakeholderName],
+        });
         cy.wait("@getStakeholdergroups");
 
         // Check if stakeholder group's member is removed
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
-            .contains(stakeholdergroup.stakeholdergroupName)
+            .contains(stakeholdergroup.name)
             .parent(trTag)
             .within(() => {
                 click(expandRow);
@@ -83,11 +100,12 @@ describe("A single Stakeholder group", () => {
         cy.wait("@getStakeholdergroups");
 
         // Assert that newly created stakeholder group is deleted
-        stakeholdergroup.notExists();
+        notExists(stakeholdergroup.name);
+
         // Delete stakeholder
-        stakeholders.delete();
+        stakeholder.delete();
 
         // Assert that created stakeholder is deleted
-        stakeholders.notExists();
+        notExists(stakeholder.email);
     });
 });

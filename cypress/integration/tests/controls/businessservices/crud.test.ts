@@ -1,14 +1,11 @@
 /// <reference types="cypress" />
 
-import { login } from "../../../../utils/utils";
+import { exists, login, notExists } from "../../../../utils/utils";
 import { BusinessServices } from "../../../models/businessservices";
 import * as data from "../../../../utils/data_utils";
 
-describe("A single Business service", () => {
-    const businessService = new BusinessServices(
-        data.getBusinessServiceName(),
-        data.getBusinessServiceDescription()
-    );
+describe("Business service CRUD", () => {
+    const businessService = new BusinessServices(data.getCompanyName(), data.getDescription());
 
     beforeEach("Login", function () {
         // Perform login
@@ -19,21 +16,23 @@ describe("A single Business service", () => {
         cy.intercept("GET", "/api/controls/business-service*").as("getBusinessService");
     });
 
-    it("Business service crud operations", function () {
+    it("Business service CRUD operations", function () {
         // Create new Business service
         businessService.create();
         cy.wait("@postBusinessService");
+        exists(businessService.name);
 
         // Edit Business service's name
-        var updatedBusinessServiceName = data.getBusinessServiceName();
+        var updatedBusinessServiceName = data.getCompanyName();
         businessService.edit({ name: updatedBusinessServiceName });
         cy.wait("@getBusinessService");
+        exists(updatedBusinessServiceName);
 
         // Delete Business service
         businessService.delete();
         cy.wait("@getBusinessService");
 
         // Assert that Business service is deleted
-        businessService.notExists();
+        notExists(businessService.name);
     });
 });
