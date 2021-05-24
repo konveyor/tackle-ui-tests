@@ -10,7 +10,8 @@ export function inputText(fieldId: string, text: string): void {
 }
 
 export function clickByText(fieldId: string, buttonText: string): void {
-    cy.contains(fieldId, buttonText).click();
+    // https://github.com/cypress-io/cypress/issues/2000#issuecomment-561468114
+    cy.contains(fieldId, buttonText).click({ force: true });
 }
 
 export function click(fieldId: string): void {
@@ -54,7 +55,7 @@ export function removeMember(memberName: string): void {
     cy.get("span").contains(memberName).siblings(commonView.removeButton).click();
 }
 
-export function exists(value: string) {
+export function exists(value: string): void {
     // Wait for DOM to render table and sibling elements
     cy.wait(2000);
     cy.get(commonView.appTable)
@@ -67,7 +68,7 @@ export function exists(value: string) {
         });
 }
 
-export function notExists(value: string) {
+export function notExists(value: string): void {
     // Wait for DOM to render table and sibling elements
     cy.wait(2000);
     cy.get(commonView.appTable)
@@ -77,4 +78,17 @@ export function notExists(value: string) {
                 cy.get("td").should("not.contain", value);
             }
         });
+}
+
+export function selectFilter(filterName: string): void {
+    cy.wait(2000);
+    cy.get("div.pf-c-input-group").find(commonView.filterToggleButton).click();
+    cy.get("ul[role=menu] > li").contains("button", filterName).click();
+}
+
+export function applySearchFilter(filterName: string, searchText: string): void {
+    selectFilter(filterName);
+    inputText(commonView.filterInput, searchText);
+    click(commonView.searchButton);
+    cy.wait(2000);
 }

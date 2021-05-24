@@ -7,6 +7,11 @@ export const trTag = "tr";
 export const tdTag = "td";
 export const createNewButton = "Create new";
 export const button = "button";
+export const emailFilter = "Email";
+export const displayNameFilter = "Display name";
+export const jobfunctionFilter = "Job function";
+export const groupFilter = "Group";
+export const clearAllFilters = "Clear all filters";
 
 // Error helper messages general to all views
 export const minCharsMsg = "This field must contain at least 3 characters.";
