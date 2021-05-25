@@ -33,15 +33,11 @@ describe("Job Function Validations", () => {
         cy.intercept("POST", "/api/controls/job-function*").as("postJobfunctions");
     });
 
-    it("Jobfunction field validations", function () {
+    it("Job function field validations", function () {
         // Create new job function
         clickByText(navMenu, controls);
         clickByText(navTab, jobfunctions);
         clickByText(button, createNewButton);
-
-        // Check "Create" and "Cancel" button status
-        cy.get(commonView.submitButton).should("be.disabled");
-        cy.get(commonView.cancelButton).should("not.be.disabled");
 
         // Name constraints
         inputText(jobfunctionNameInput, " ");
@@ -55,7 +51,7 @@ describe("Job Function Validations", () => {
         cy.get(commonView.cancelButton).click();
     });
 
-    it("Jobfunction unique name constraint validation", function () {
+    it("Job function unique name constraint validation", function () {
         // Create new job function
         jobfunction.create();
         cy.wait("@postJobfunctions");
@@ -72,8 +68,8 @@ describe("Job Function Validations", () => {
         notExists(jobfunction.name);
     });
 
-    it("Jobfunction button validations", function () {
-        // Navigate to jobfunction tab and click create new button
+    it("Job function button validations", function () {
+        // Navigate to job function tab and click create new button
         clickByText(navMenu, controls);
         clickByText(navTab, jobfunctions);
         clickByText(button, createNewButton);
@@ -96,13 +92,10 @@ describe("Job Function Validations", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("jobfunction update", function () {
+    it("job function update and cancel validation", function () {
         // Edit job function and cancel
         jobfunction.create();
         jobfunction.edit(data.getJobTitle(), true);
-        cy.wait(100);
-        // Edit and Save
-        jobfunction.edit(data.getJobTitle());
         cy.wait(100);
         jobfunction.delete();
     });

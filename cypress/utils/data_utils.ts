@@ -34,3 +34,8 @@ export function getRandomWords(numberOfWords: number): string {
     // returns random words separated by space
     return faker.lorem.words(numberOfWords);
 }
+
+export function getRandomNumber(): string {
+    // returns a word of specified charLength
+    return faker.datatype.number();
+}
