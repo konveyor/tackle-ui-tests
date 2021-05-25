@@ -15,7 +15,6 @@ export const stakeholdergroups = "Stakeholder groups";
 export const tdTag = "td";
 export const trTag = "tr";
 
-
 // Error helper messages general to all views
 export const duplicateErrMsg = "ERROR: duplicate key value violates unique constraint";
 export const max120CharsMsg = "This field must contain fewer than 120 characters.";

@@ -1,4 +1,3 @@
-
 /// <reference types="cypress" />
 import {
     login,
@@ -17,7 +16,7 @@ import {
     duplicateErrMsg,
     createNewButton,
 } from "../../../types/constants";
- import { Jobfunctions } from "../../../models/jobfunctions";
+import { Jobfunctions } from "../../../models/jobfunctions";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { jobfunctionNameInput } from "../../../views/jobfunctions.view";
 import * as commonView from "../../../../integration/views/commoncontrols.view";
@@ -30,13 +29,12 @@ describe("Job Function Validations", () => {
         // Perform login
         login();
 
-         // Interceptors
-         cy.intercept("POST", "/api/controls/job-function*").as("postJobfunctions");    
+        // Interceptors
+        cy.intercept("POST", "/api/controls/job-function*").as("postJobfunctions");
     });
 
-    
-    it("Jobfunction field validations", function () { 
-        // Create new job function 
+    it("Jobfunction field validations", function () {
+        // Create new job function
         clickByText(navMenu, controls);
         clickByText(navTab, jobfunctions);
         clickByText(button, createNewButton);
@@ -56,10 +54,10 @@ describe("Job Function Validations", () => {
         cy.get(commonView.submitButton).should("not.be.disabled");
         cy.get(commonView.cancelButton).click();
     });
-    
-    it("Jobfunction unique name constraint validation", function () { 
-        // Create new job function 
-        jobfunction.create(); 
+
+    it("Jobfunction unique name constraint validation", function () {
+        // Create new job function
+        jobfunction.create();
         cy.wait("@postJobfunctions");
         exists(jobfunction.name);
         // Create job function with same name again
@@ -72,7 +70,6 @@ describe("Job Function Validations", () => {
         cy.get(commonView.closeButton).click();
         jobfunction.delete();
         notExists(jobfunction.name);
-
     });
 
     it("Jobfunction button validations", function () {
@@ -99,15 +96,14 @@ describe("Job Function Validations", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("jobfunction update", function () { 
+    it("jobfunction update", function () {
         // Edit job function and cancel
-        jobfunction.create(); 
-        jobfunction.edit(data.getJobTitle(), true); 
-        cy.wait(100); 
+        jobfunction.create();
+        jobfunction.edit(data.getJobTitle(), true);
+        cy.wait(100);
         // Edit and Save
-        jobfunction.edit(data.getJobTitle()); 
-        cy.wait(100); 
-        jobfunction.delete() 
+        jobfunction.edit(data.getJobTitle());
+        cy.wait(100);
+        jobfunction.delete();
     });
-
 });

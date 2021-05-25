@@ -1,11 +1,6 @@
 /// <reference types="cypress" />
 
-import {
-    login,
-    clickByText,
-    exists,
-    applySearchFilter,
-} from "../../../../utils/utils";
+import { login, clickByText, exists, applySearchFilter } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
     controls,
@@ -40,7 +35,7 @@ describe("Jobfunction filter validations", function () {
             jobfunction.delete();
         });
     });
-    
+
     it("Name filter validations", function () {
         clickByText(navMenu, controls);
         clickByText(navTab, jobfunctions);
