@@ -84,11 +84,11 @@ describe("Job Function Validations", () => {
 
         clickByText(button, createNewButton);
 
-        // Close the "Create New" jobfunction form
+        // Close the "Create New" job function form
         cy.get(commonView.closeButton).click();
         cy.wait(100);
 
-        // Assert that jobfunction tab is opened
+        // Assert that job function tab is opened
         cy.contains(button, createNewButton).should("exist");
     });
 

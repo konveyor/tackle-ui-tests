@@ -16,7 +16,7 @@ import * as data from "../../../../utils/data_utils";
 var jobfunctionsList: Array<Jobfunctions> = [];
 var invalidSearchInput = data.getRandomNumber();
 
-describe("Jobfunction filter validations", function () {
+describe("Job function filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
 

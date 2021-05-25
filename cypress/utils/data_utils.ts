@@ -36,6 +36,6 @@ export function getRandomWords(numberOfWords: number): string {
 }
 
 export function getRandomNumber(): string {
-    // returns a word of specified charLength
+    // returns a random number
     return faker.datatype.number();
 }
