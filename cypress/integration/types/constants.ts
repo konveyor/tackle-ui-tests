@@ -1,7 +1,9 @@
+export const applicationinventory = "Application inventory";
 export const businessservices = "Business services";
 export const button = "button";
 export const clearAllFilters = "Clear all filters";
 export const controls = "Controls";
+export const deleteAction = "Delete";
 export const createNewButton = "Create new";
 export const displayNameFilter = "Display name";
 export const emailFilter = "Email";

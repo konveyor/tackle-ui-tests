@@ -1,7 +1,6 @@
 import { controls, jobfunctions, tdTag, trTag, button, createNewButton } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import { jobfunctionNameInput } from "../views/jobfunctions.view";
-import * as commonView from "../views/commoncontrols.view";
 import {
     clickByText,
     inputText,
@@ -10,6 +9,7 @@ import {
     submitForm,
     cancelForm,
 } from "../../utils/utils";
+import * as commonView from "../../integration/views/common.view";
 
 export class Jobfunctions {
     name: string;
