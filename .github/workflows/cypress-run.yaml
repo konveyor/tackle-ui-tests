@@ -1,0 +1,35 @@
+name: Cypress test run
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    # run job once a day
+    - cron:  '0 */24 * * *'
+jobs:
+  cypress-run:
+    name: Cypress run
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          headless: true
+          record: true
+          config: pageLoadTimeout=500000
+          spec: |
+            cypress/integration/tests/*.test.ts
+            cypress/integration/tests/**/*.test.ts
+          env: true
+        env:
+          # pass the Dashboard record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # pass GitHub token to allow accurately detecting a build vs a re-run build
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # provide username/password/URL of the project
+          CYPRESS_user: ${{ secrets.TACKLE_USER }}
+          CYPRESS_pass: ${{ secrets.TACKLE_PASS }}
+          CYPRESS_tackleUrl: ${{ secrets.TACKLE_URL }}
