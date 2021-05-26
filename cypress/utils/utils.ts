@@ -92,3 +92,35 @@ export function applySearchFilter(filterName: string, searchText: string): void 
     click(commonView.searchButton);
     cy.wait(2000);
 }
+
+export function sortAsc(sortCriteria: string): void {
+    cy.get(`th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
+        if ($tableHeader.attr("aria-sort") === "descending") {
+            $tableHeader.find("button").trigger("click");
+        }
+    });
+}
+
+export function sortDesc(sortCriteria: string): void {
+    cy.get(`th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
+        if ($tableHeader.attr("aria-sort") === "ascending") {
+            $tableHeader.find("button").trigger("click");
+        }
+    });
+}
+
+export function verifySortAsc(sortCriteria: string): void {
+    var itemList = [];
+    cy.get(`td[data-label="${sortCriteria}"]`).each(($ele) => {
+        itemList.push($ele.text());
+    });
+    cy.wrap(itemList).should("deep.equal", itemList.sort());
+}
+
+export function verifySortDesc(sortCriteria: string): void {
+    var itemList = [];
+    cy.get(`td[data-label="${sortCriteria}"]`).each(($ele) => {
+        itemList.push($ele.text());
+    });
+    cy.wrap(itemList).invoke("reverse").should("deep.equal", itemList.sort());
+}
