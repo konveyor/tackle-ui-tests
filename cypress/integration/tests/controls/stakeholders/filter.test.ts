@@ -15,10 +15,10 @@ import {
     button,
     tdTag,
     trTag,
-    emailFilter,
-    displayNameFilter,
-    jobfunctionFilter,
-    groupFilter,
+    email,
+    displayName,
+    jobfunction,
+    group,
     clearAllFilters,
 } from "../../../types/constants";
 
@@ -97,7 +97,7 @@ describe("Stakeholder filter validations", function () {
 
         // Enter an existing email substring and apply it as search filter
         var validSearchInput = stakeholdersList[0].email.substring(0, 5);
-        applySearchFilter(emailFilter, validSearchInput);
+        applySearchFilter(email, validSearchInput);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
         exists(stakeholdersList[0].email);
@@ -112,7 +112,7 @@ describe("Stakeholder filter validations", function () {
         cy.wait("@getStakeholders");
 
         // Enter a non-existing email substring and apply it as search filter
-        applySearchFilter(emailFilter, invalidSearchInput);
+        applySearchFilter(email, invalidSearchInput);
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
@@ -126,7 +126,7 @@ describe("Stakeholder filter validations", function () {
 
         // Enter an existing display name substring and apply it as search filter
         var validSearchInput = stakeholdersList[0].name.substring(0, 3);
-        applySearchFilter(displayNameFilter, validSearchInput);
+        applySearchFilter(displayName, validSearchInput);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
         exists(stakeholdersList[0].name);
@@ -141,7 +141,7 @@ describe("Stakeholder filter validations", function () {
         cy.wait("@getStakeholders");
 
         // Enter a non-existing display name substring and apply it as search filter
-        applySearchFilter(displayNameFilter, invalidSearchInput);
+        applySearchFilter(displayName, invalidSearchInput);
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
@@ -155,7 +155,7 @@ describe("Stakeholder filter validations", function () {
 
         // Enter an existing job function substring and apply it as search filter
         var validSearchInput = stakeholdersList[0].jobfunction.substring(0, 3);
-        applySearchFilter(jobfunctionFilter, validSearchInput);
+        applySearchFilter(jobfunction, validSearchInput);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
         cy.get(tdTag)
@@ -175,7 +175,7 @@ describe("Stakeholder filter validations", function () {
         cy.wait("@getStakeholders");
 
         // Enter a non-existing job function substring and apply it as search filter
-        applySearchFilter(jobfunctionFilter, invalidSearchInput);
+        applySearchFilter(jobfunction, invalidSearchInput);
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
@@ -189,7 +189,7 @@ describe("Stakeholder filter validations", function () {
 
         // Enter an existing group substring and apply it as search filter
         var validSearchInput = stakeholdersList[0].groups[0].substring(0, 3);
-        applySearchFilter(groupFilter, validSearchInput);
+        applySearchFilter(group, validSearchInput);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
         cy.get(tdTag)
@@ -212,7 +212,7 @@ describe("Stakeholder filter validations", function () {
         cy.wait("@getStakeholders");
 
         // Enter a non-existing group substring and apply it as search filter
-        applySearchFilter(groupFilter, invalidSearchInput);
+        applySearchFilter(group, invalidSearchInput);
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");

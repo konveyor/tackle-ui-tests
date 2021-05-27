@@ -2,13 +2,7 @@
 
 import { login, clickByText, exists, applySearchFilter } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
-import {
-    controls,
-    jobfunctions,
-    button,
-    nameFilter,
-    clearAllFilters,
-} from "../../../types/constants";
+import { controls, jobfunctions, button, name, clearAllFilters } from "../../../types/constants";
 
 import { Jobfunctions } from "../../../models/jobfunctions";
 import * as data from "../../../../utils/data_utils";
@@ -42,16 +36,16 @@ describe("Job function filter validations", function () {
 
         // Enter an existing display name substring and assert
         var validSearchInput = jobfunctionsList[0].name.substring(0, 3);
-        applySearchFilter(nameFilter, validSearchInput);
+        applySearchFilter(name, validSearchInput);
         exists(jobfunctionsList[0].name);
         clickByText(button, clearAllFilters);
 
-        applySearchFilter(nameFilter, jobfunctionsList[1].name);
+        applySearchFilter(name, jobfunctionsList[1].name);
         exists(jobfunctionsList[1].name);
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing display name substring and apply it as search filter
-        applySearchFilter(nameFilter, invalidSearchInput);
+        applySearchFilter(name, invalidSearchInput);
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
