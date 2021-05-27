@@ -4,8 +4,8 @@ import { login, selectItemsPerPage, click, exists, notExists } from "../../../..
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Stakeholders } from "../../../models/stakeholders";
 import { tdTag, trTag } from "../../../types/constants";
-import { expandRow } from "../../../views/commoncontrols.view";
 import * as data from "../../../../utils/data_utils";
+import { expandRow } from "../../../views/common.view";
 
 describe("Stakeholder group CRUD operations", () => {
     const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());

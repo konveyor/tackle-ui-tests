@@ -13,7 +13,7 @@ import {
     businessServiceOwnerSelect,
 } from "../views/businessservices.view";
 
-import * as commonView from "../views/commoncontrols.view";
+import * as commonView from "../views/common.view";
 
 import {
     clickByText,

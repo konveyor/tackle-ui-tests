@@ -23,7 +23,7 @@ import {
     businessServiceNameInput,
     businessServiceDescriptionInput,
 } from "../../../views/businessservices.view";
-import * as commonView from "../../../../integration/views/commoncontrols.view";
+import * as commonView from "../../../../integration/views/common.view";
 
 import { BusinessServices } from "../../../models/businessservices";
 import * as data from "../../../../utils/data_utils";

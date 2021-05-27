@@ -12,7 +12,7 @@ import {
     stakeholdergroupDescriptionInput,
     stakeholdergroupMemberSelect,
 } from "../views/stakeholdergroups.view";
-import * as commonView from "../views/commoncontrols.view";
+import * as commonView from "../views/common.view";
 import {
     clickByText,
     inputText,

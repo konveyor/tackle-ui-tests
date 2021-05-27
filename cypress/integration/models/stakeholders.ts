@@ -6,7 +6,6 @@ import {
     jobfunctionInput,
     groupInput,
 } from "../views/stakeholders.view";
-import * as commonView from "../views/commoncontrols.view";
 import {
     clickByText,
     inputText,
@@ -18,6 +17,7 @@ import {
     cancelForm,
     checkSuccessAlert,
 } from "../../utils/utils";
+import * as commonView from "../views/common.view";
 
 export class Stakeholders {
     name: string;

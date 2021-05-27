@@ -26,7 +26,7 @@ import { Stakeholders } from "../../../models/stakeholders";
 import { Jobfunctions } from "../../../models/jobfunctions";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 
-import * as commonView from "../../../../integration/views/commoncontrols.view";
+import * as commonView from "../../../../integration/views/common.view";
 import * as data from "../../../../utils/data_utils";
 
 var stakeholdersList: Array<Stakeholders> = [];
