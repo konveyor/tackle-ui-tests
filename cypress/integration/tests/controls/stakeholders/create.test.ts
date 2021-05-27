@@ -28,7 +28,7 @@ import {
 } from "../../../views/stakeholders.view";
 import { Stakeholders } from "../../../models/stakeholders";
 
-import * as commonView from "../../../../integration/views/commoncontrols.view";
+import * as commonView from "../../../../integration/views/common.view";
 import * as data from "../../../../utils/data_utils";
 
 describe("Stakeholder validations", () => {
