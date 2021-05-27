@@ -7,6 +7,7 @@ import {
     notExists,
     click,
     applySearchFilter,
+    selectItemsPerPage,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -158,6 +159,7 @@ describe("Stakeholder filter validations", function () {
         applySearchFilter(jobfunctionFilter, validSearchInput);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
+        selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(stakeholdersList[0].email)
             .siblings()
@@ -192,6 +194,7 @@ describe("Stakeholder filter validations", function () {
         applySearchFilter(groupFilter, validSearchInput);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
+        selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(stakeholdersList[0].email)
             .parent(trTag)
