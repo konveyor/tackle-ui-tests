@@ -17,7 +17,7 @@ import {
     stakeholders,
     displayName,
     jobfunction,
-    groups,
+    groupCount,
 } from "../../../types/constants";
 
 import { Stakeholders } from "../../../models/stakeholders";
@@ -163,19 +163,19 @@ describe("Stakeholder sort validations", function () {
         cy.wait("@getStakeholders");
 
         // Sort the stakeholders by group count in ascending order
-        sortAsc(groups);
+        sortAsc(groupCount);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
-        const afterAscSortList = getTableColumnData(groups);
+        const afterAscSortList = getTableColumnData(groupCount);
         verifySortAsc(afterAscSortList);
 
         // Sort the stakeholders by group count in descending order
-        sortDesc(groups);
+        sortDesc(groupCount);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in descending order
-        const afterDescSortList = getTableColumnData(groups);
+        const afterDescSortList = getTableColumnData(groupCount);
         verifySortDesc(afterDescSortList);
     });
 });

@@ -1,5 +1,6 @@
 import * as loginView from "../integration/views/login.view";
 import * as commonView from "../integration/views/common.view";
+import { groupCount, memberCount, tagCount } from "../integration/types/constants";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
@@ -119,7 +120,7 @@ export function sortDesc(sortCriteria: string): void {
 export function getTableColumnData(columnName: string): Array<string> {
     var itemList = [];
     cy.get(`td[data-label="${columnName}"]`).each(($ele) => {
-        if (columnName === "Group(s)" || columnName === "Member(s)" || columnName === "Tag(s)") {
+        if (columnName === groupCount || columnName === memberCount || columnName === tagCount) {
             itemList.push(Number($ele.text()));
         } else {
             itemList.push($ele.text().toString().toLowerCase());
