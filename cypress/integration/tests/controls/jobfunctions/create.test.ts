@@ -19,7 +19,7 @@ import {
 import { Jobfunctions } from "../../../models/jobfunctions";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { jobfunctionNameInput } from "../../../views/jobfunctions.view";
-import * as commonView from "../../../../integration/views/commoncontrols.view";
+import * as commonView from "../../../../integration/views/common.view";
 import * as data from "../../../../utils/data_utils";
 
 describe("Job Function Validations", () => {
