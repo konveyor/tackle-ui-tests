@@ -1,9 +1,11 @@
 import * as loginView from "../integration/views/login.view";
 import * as commonView from "../integration/views/common.view";
+import { groupCount, memberCount, tagCount } from "../integration/types/constants";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
 const tackleUiUrl = Cypress.env("tackleUrl");
+const { _ } = Cypress;
 
 export function inputText(fieldId: string, text: string): void {
     cy.get(fieldId).clear().type(text);
@@ -91,4 +93,52 @@ export function applySearchFilter(filterName: string, searchText: string): void 
     inputText(commonView.filterInput, searchText);
     click(commonView.searchButton);
     cy.wait(2000);
+}
+
+export function sortAsc(sortCriteria: string): void {
+    cy.get(`th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
+        if (
+            $tableHeader.attr("aria-sort") === "descending" ||
+            $tableHeader.attr("aria-sort") === "none"
+        ) {
+            $tableHeader.find("button").trigger("click");
+        }
+    });
+}
+
+export function sortDesc(sortCriteria: string): void {
+    cy.get(`th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
+        if (
+            $tableHeader.attr("aria-sort") === "ascending" ||
+            $tableHeader.attr("aria-sort") === "none"
+        ) {
+            $tableHeader.find("button").trigger("click");
+        }
+    });
+}
+
+export function getTableColumnData(columnName: string): Array<string> {
+    var itemList = [];
+    cy.get(`td[data-label="${columnName}"]`).each(($ele) => {
+        if (columnName === groupCount || columnName === memberCount || columnName === tagCount) {
+            itemList.push(Number($ele.text()));
+        } else {
+            itemList.push($ele.text().toString().toLowerCase());
+        }
+    });
+    return itemList;
+}
+
+export function verifySortAsc(listToVerify: Array<any>): void {
+    cy.wrap(listToVerify).then((capturedList) => {
+        const sortedList = _.sortBy(capturedList);
+        expect(capturedList).to.be.deep.equal(sortedList);
+    });
+}
+
+export function verifySortDesc(listToVerify: Array<any>): void {
+    cy.wrap(listToVerify).then((capturedList) => {
+        const reverseSortedList = _.sortBy(capturedList).reverse();
+        expect(capturedList).to.be.deep.equal(reverseSortedList);
+    });
 }
