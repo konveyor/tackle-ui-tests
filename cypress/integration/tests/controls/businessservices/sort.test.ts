@@ -26,13 +26,13 @@ describe("Business services sort validations", function () {
         login();
 
         // Create multiple bussiness services and stakeholders
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 2; i++) {
             // Create new stakeholder
             const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
             stakeholder.create();
             stakeholdersList.push(stakeholder);
 
-            // Create new stakeholder group
+            // Create new business service
             const businessservice = new BusinessServices(
                 data.getCompanyName(),
                 data.getDescription(),

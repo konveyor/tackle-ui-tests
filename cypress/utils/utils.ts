@@ -118,6 +118,7 @@ export function sortDesc(sortCriteria: string): void {
 }
 
 export function getTableColumnData(columnName: string): Array<string> {
+    selectItemsPerPage(100);
     var itemList = [];
     cy.get(`td[data-label="${columnName}"]`).each(($ele) => {
         if (columnName === groupCount || columnName === memberCount || columnName === tagCount) {
