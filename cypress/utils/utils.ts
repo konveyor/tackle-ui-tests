@@ -39,6 +39,7 @@ export function login(): void {
 }
 
 export function selectItemsPerPage(items: number): void {
+    cy.wait(2000);
     cy.get(commonView.itemsPerPageMenu).find(commonView.itemsPerPageToggleButton).eq(0).click();
     cy.get(commonView.itemsPerPageMenuOptions);
     cy.get(`li > button[data-action="per-page-${items}"]`).click();
@@ -59,6 +60,7 @@ export function removeMember(memberName: string): void {
 
 export function exists(value: string): void {
     // Wait for DOM to render table and sibling elements
+    selectItemsPerPage(100);
     cy.wait(2000);
     cy.get(commonView.appTable)
         .next()
@@ -72,6 +74,7 @@ export function exists(value: string): void {
 
 export function notExists(value: string): void {
     // Wait for DOM to render table and sibling elements
+    selectItemsPerPage(100);
     cy.wait(2000);
     cy.get(commonView.appTable)
         .next()
