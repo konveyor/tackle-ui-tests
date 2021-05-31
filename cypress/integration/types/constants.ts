@@ -14,7 +14,6 @@ export const jobfunctions = "Job functions";
 export const jobfunction = "Job function";
 export const memberCount = "Member count";
 export const name = "Name";
-export const members = "Member(s)";
 export const stakeholders = "Stakeholders";
 export const stakeholdergroups = "Stakeholder groups";
 export const tagCount = "Tag count";

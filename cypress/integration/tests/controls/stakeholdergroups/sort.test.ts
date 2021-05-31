@@ -11,7 +11,7 @@ import {
 } from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, stakeholdergroups, name, members } from "../../../types/constants";
+import { controls, stakeholdergroups, name, memberCount } from "../../../types/constants";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Stakeholders } from "../../../models/stakeholders";
 
@@ -92,19 +92,19 @@ describe("Stakeholder groups sort validations", function () {
         cy.wait("@getStakeholdergroups");
 
         // Sort the stakeholder groups by members in ascending order
-        sortAsc(members);
+        sortAsc(memberCount);
         cy.wait(2000);
 
         // Verify that the stakeholder groups table rows are displayed in ascending order
-        const afterAscSortList = getTableColumnData(members);
+        const afterAscSortList = getTableColumnData(memberCount);
         verifySortAsc(afterAscSortList);
 
         // Sort the stakeholder groups by members in descending order
-        sortDesc(members);
+        sortDesc(memberCount);
         cy.wait(2000);
 
         // Verify that the stakeholder groups table rows are displayed in descending order
-        const afterDescSortList = getTableColumnData(members);
+        const afterDescSortList = getTableColumnData(memberCount);
         verifySortDesc(afterDescSortList);
     });
 });
