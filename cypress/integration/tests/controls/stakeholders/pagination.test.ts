@@ -25,7 +25,6 @@ describe("Stakeholder pagination validations", function () {
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
 
-        cy.wait(2000);
         var rowsToCreate = 0;
 
         // Get the current table row count and create appropriate test data rows for testing pagination
