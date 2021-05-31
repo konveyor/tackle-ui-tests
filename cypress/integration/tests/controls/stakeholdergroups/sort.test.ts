@@ -9,31 +9,37 @@ import {
     verifySortDesc,
     getTableColumnData,
 } from "../../../../utils/utils";
+import * as data from "../../../../utils/data_utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, stakeholdergroups, name, members } from "../../../types/constants";
-
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
-
-import * as data from "../../../../utils/data_utils";
+import { Stakeholders } from "../../../models/stakeholders";
 
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
-var stakeholderGroupNames: Array<string> = [];
+var stakeholdersList: Array<Stakeholders> = [];
+var stakeholderNames: Array<string> = [];
 
-describe("Stakeholder sort validations", function () {
+describe("Stakeholder groups sort validations", function () {
     before("Login and Create Test Data", function () {
         // Perform login
         login();
 
-        // Create multiple stakeholder groups
-        for (let i = 0; i < 2; i++) {
+        // Create multiple stakeholder groups and stakeholders
+        for (let i = 0; i < 3; i++) {
+            // Create new stakeholder
+            const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
+            stakeholder.create();
+            stakeholdersList.push(stakeholder);
+            stakeholderNames.push(stakeholder.name);
+
             // Create new stakeholder group
             const stakeholdergroup = new Stakeholdergroups(
                 data.getCompanyName(),
-                data.getDescription()
+                data.getDescription(),
+                stakeholderNames
             );
             stakeholdergroup.create();
             stakeholdergroupsList.push(stakeholdergroup);
-            stakeholderGroupNames.push(stakeholdergroup.name);
         }
     });
 
@@ -46,14 +52,18 @@ describe("Stakeholder sort validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Delete the stakeholder groups created before the tests
+        // Delete the stakeholder groups and stakeholders created before the tests
         stakeholdergroupsList.forEach(function (stakeholdergroup) {
             stakeholdergroup.delete();
+        });
+
+        stakeholdersList.forEach(function (stakeholder) {
+            stakeholder.delete();
         });
     });
 
     it("Name sort validations", function () {
-        // Navigate to stakeholder tab
+        // Navigate to stakeholder groups tab
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholdergroups);
         cy.wait("@getStakeholdergroups");
@@ -62,7 +72,7 @@ describe("Stakeholder sort validations", function () {
         sortAsc(name);
         cy.wait(2000);
 
-        // Verify that the stakeholder group rows are displayed in ascending order
+        // Verify that the stakeholder groups table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(name);
         verifySortAsc(afterAscSortList);
 
@@ -70,7 +80,7 @@ describe("Stakeholder sort validations", function () {
         sortDesc(name);
         cy.wait(2000);
 
-        // Verify that the stakeholder groups rows are displayed in descending order
+        // Verify that the stakeholder groups table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(name);
         verifySortDesc(afterDescSortList);
     });
@@ -85,7 +95,7 @@ describe("Stakeholder sort validations", function () {
         sortAsc(members);
         cy.wait(2000);
 
-        // Verify that the stakeholder groups rows are displayed in ascending order
+        // Verify that the stakeholder groups table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(members);
         verifySortAsc(afterAscSortList);
 
@@ -93,7 +103,7 @@ describe("Stakeholder sort validations", function () {
         sortDesc(members);
         cy.wait(2000);
 
-        // Verify that the stakeholder groups rows are displayed in descending order
+        // Verify that the stakeholder groups table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(members);
         verifySortDesc(afterDescSortList);
     });
