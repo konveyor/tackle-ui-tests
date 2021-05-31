@@ -88,6 +88,7 @@ export class BusinessServices {
         cy.wait(2000);
         cy.get(tdTag)
             .contains(this.name)
+            .parent(tdTag)
             .parent(trTag)
             .within(() => {
                 click(commonView.editButton);
@@ -120,6 +121,7 @@ export class BusinessServices {
         cy.wait(2000);
         cy.get(tdTag)
             .contains(this.name)
+            .parent(tdTag)
             .parent(trTag)
             .within(() => {
                 click(commonView.deleteButton);

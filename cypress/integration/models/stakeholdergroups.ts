@@ -86,6 +86,7 @@ export class Stakeholdergroups {
         cy.wait(2000);
         cy.get(tdTag)
             .contains(this.name)
+            .parent(tdTag)
             .parent(trTag)
             .within(() => {
                 click(commonView.editButton);
@@ -115,6 +116,7 @@ export class Stakeholdergroups {
         cy.wait(2000);
         cy.get(tdTag)
             .contains(this.name)
+            .parent(tdTag)
             .parent(trTag)
             .within(() => {
                 click(commonView.deleteButton);
