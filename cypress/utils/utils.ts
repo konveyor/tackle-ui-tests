@@ -59,6 +59,7 @@ export function removeMember(memberName: string): void {
 
 export function exists(value: string): void {
     // Wait for DOM to render table and sibling elements
+    selectItemsPerPage(100);
     cy.wait(2000);
     cy.get(commonView.appTable)
         .next()
