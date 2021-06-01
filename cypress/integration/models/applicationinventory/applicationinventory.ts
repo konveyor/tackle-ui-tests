@@ -115,6 +115,7 @@ export class ApplicationInventory {
         cy.wait(2000);
         cy.get(tdTag)
             .contains(this.name)
+            .parent(tdTag)
             .parent(trTag)
             .within(() => {
                 click(editButton);
@@ -156,6 +157,7 @@ export class ApplicationInventory {
         cy.wait(2000);
         cy.get(tdTag)
             .contains(this.name)
+            .parent(tdTag)
             .parent(trTag)
             .within(() => {
                 click(actionButton);
