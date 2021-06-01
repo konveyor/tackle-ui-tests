@@ -192,7 +192,7 @@ describe("Stakeholder pagination validations", function () {
         // Delete all items of last page
         cy.get(appTable)
             .get("tbody")
-            .find("tr")
+            .find(trTag)
             .each(($tableRow) => {
                 var email = $tableRow.find("td[data-label='Email']").text();
                 cy.get(tdTag)
