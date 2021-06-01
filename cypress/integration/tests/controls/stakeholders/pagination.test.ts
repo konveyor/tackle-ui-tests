@@ -11,7 +11,9 @@ import {
     firstPageButton,
     lastPageButton,
     nextPageButton,
+    pageNumInput,
     prevPageButton,
+    appTable,
 } from "../../../views/common.view";
 
 var stakeholdersList: Array<Stakeholders> = [];
@@ -24,27 +26,43 @@ describe("Stakeholder pagination validations", function () {
         // Navigate to stakeholder tab
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-
         var rowsToCreate = 0;
 
-        // Get the current table row count and create appropriate test data rows for testing pagination
+        // Get the current table row count and create appropriate test data rows
         selectItemsPerPage(100);
         cy.wait(2000);
-        cy.get("td[data-label=Email]").then(($rows) => {
-            var rowCount = $rows.length;
-            if (rowCount <= 10) {
-                rowsToCreate = 11 - rowCount;
-            }
-            // Create test data, only if the rows are insufficient (less than 11)
-            if (rowsToCreate > 0) {
-                // Create multiple stakeholders
-                for (let i = 0; i < rowsToCreate; i++) {
-                    const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-                    stakeholder.create();
-                    stakeholdersList.push(stakeholder);
+        cy.get(appTable)
+            .next()
+            .then(($div) => {
+                if (!$div.hasClass("pf-c-empty-state")) {
+                    cy.get("td[data-label=Email]").then(($rows) => {
+                        var rowCount = $rows.length;
+                        cy.log("Row count", rowCount);
+                        if (rowCount <= 10) {
+                            rowsToCreate = 11 - rowCount;
+                        }
+                        if (rowsToCreate > 0) {
+                            // Create multiple stakeholders
+                            for (let i = 0; i < rowsToCreate; i++) {
+                                const stakeholder = new Stakeholders(
+                                    data.getEmail(),
+                                    data.getFullName()
+                                );
+                                stakeholder.create();
+                                stakeholdersList.push(stakeholder);
+                            }
+                        }
+                    });
+                } else {
+                    rowsToCreate = 11;
+                    // Create multiple stakeholders
+                    for (let i = 0; i < rowsToCreate; i++) {
+                        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
+                        stakeholder.create();
+                        stakeholdersList.push(stakeholder);
+                    }
                 }
-            }
-        });
+            });
     });
 
     beforeEach("Persist session", function () {
@@ -99,7 +117,53 @@ describe("Stakeholder pagination validations", function () {
             cy.wrap($previousBtn).should("not.be.disabled");
         });
 
-        // Verify that navigation button to first page is enabled after moving to second page
+        // Verify that navigation button to first page is enabled after moving to next page
         cy.get(firstPageButton).should("not.be.disabled");
+    });
+
+    it("Items per page validations", function () {
+        // Navigate to stakeholder tab
+        clickByText(navMenu, controls);
+        clickByText(navTab, stakeholders);
+        cy.wait("@getStakeholders");
+
+        // Select 10 items per page
+        selectItemsPerPage(10);
+        cy.wait(2000);
+
+        // Verify that only 10 items are displayed
+        cy.get("td[data-label=Email]").then(($rows) => {
+            var rowCount = $rows.length;
+            cy.wrap($rows.length).should("eq", 10);
+        });
+
+        // Select 20 items per page
+        selectItemsPerPage(20);
+        cy.wait(2000);
+
+        // Verify that items less than or equal to 20 and greater than 10 are displayed
+        cy.get("td[data-label=Email]").then(($rows) => {
+            var rowCount = $rows.length;
+            cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
+        });
+    });
+
+    it("Page number validations", function () {
+        // Navigate to stakeholder tab
+        clickByText(navMenu, controls);
+        clickByText(navTab, stakeholders);
+        cy.wait("@getStakeholders");
+
+        // Select 10 items per page
+        selectItemsPerPage(10);
+        cy.wait(2000);
+
+        // Go to page number 2
+        cy.get(pageNumInput).clear().type("2").type("{enter}");
+
+        // Verify that page number has changed, as previous page nav button got enabled
+        cy.get(prevPageButton).each(($previousBtn) => {
+            cy.wrap($previousBtn).should("not.be.disabled");
+        });
     });
 });

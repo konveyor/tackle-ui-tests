@@ -39,9 +39,16 @@ export function login(): void {
 }
 
 export function selectItemsPerPage(items: number): void {
-    cy.get(commonView.itemsPerPageMenu).find(commonView.itemsPerPageToggleButton).eq(0).click();
-    cy.get(commonView.itemsPerPageMenuOptions);
-    cy.get(`li > button[data-action="per-page-${items}"]`).click();
+    cy.wait(2000);
+    cy.get(commonView.itemsPerPageMenu)
+        .find(commonView.itemsPerPageToggleButton)
+        .then(($toggleBtn) => {
+            if (!$toggleBtn.eq(0).is(":disabled")) {
+                $toggleBtn.eq(0).trigger("click");
+                cy.get(commonView.itemsPerPageMenuOptions);
+                cy.get(`li > button[data-action="per-page-${items}"]`).click();
+            }
+        });
 }
 
 export function selectFormItems(fieldId: string, item: string): void {
