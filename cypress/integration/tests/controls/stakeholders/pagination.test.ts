@@ -1,8 +1,8 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, selectItemsPerPage } from "../../../../utils/utils";
+import { login, clickByText, selectItemsPerPage, click } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, stakeholders } from "../../../types/constants";
+import { controls, stakeholders, tdTag, trTag } from "../../../types/constants";
 
 import { Stakeholders } from "../../../models/stakeholders";
 
@@ -14,6 +14,8 @@ import {
     pageNumInput,
     prevPageButton,
     appTable,
+    deleteButton,
+    confirmButton,
 } from "../../../views/common.view";
 
 var stakeholdersList: Array<Stakeholders> = [];
@@ -37,7 +39,6 @@ describe("Stakeholder pagination validations", function () {
                 if (!$div.hasClass("pf-c-empty-state")) {
                     cy.get("td[data-label=Email]").then(($rows) => {
                         var rowCount = $rows.length;
-                        cy.log("Row count", rowCount);
                         if (rowCount <= 10) {
                             rowsToCreate = 11 - rowCount;
                         }
@@ -76,8 +77,17 @@ describe("Stakeholder pagination validations", function () {
     after("Perform test data clean up", function () {
         // Delete the stakeholders created before the tests
         if (stakeholdersList.length > 0) {
+            // Navigate to stakeholder tab
+            clickByText(navMenu, controls);
+            clickByText(navTab, stakeholders);
+            cy.wait("@getStakeholders");
+            selectItemsPerPage(100);
+            cy.wait(2000);
+
             stakeholdersList.forEach(function (stakeholder) {
-                stakeholder.delete();
+                cy.get("td[data-label=Email]").each(($rows) => {
+                    if ($rows.text() === stakeholder.email) stakeholder.delete();
+                });
             });
         }
     });
@@ -133,7 +143,6 @@ describe("Stakeholder pagination validations", function () {
 
         // Verify that only 10 items are displayed
         cy.get("td[data-label=Email]").then(($rows) => {
-            var rowCount = $rows.length;
             cy.wrap($rows.length).should("eq", 10);
         });
 
@@ -143,7 +152,6 @@ describe("Stakeholder pagination validations", function () {
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
         cy.get("td[data-label=Email]").then(($rows) => {
-            var rowCount = $rows.length;
             cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
         });
     });
@@ -164,6 +172,42 @@ describe("Stakeholder pagination validations", function () {
         // Verify that page number has changed, as previous page nav button got enabled
         cy.get(prevPageButton).each(($previousBtn) => {
             cy.wrap($previousBtn).should("not.be.disabled");
+        });
+    });
+
+    it("Last page item(s) deletion, impact on page reload validation", function () {
+        // Navigate to stakeholder tab
+        clickByText(navMenu, controls);
+        clickByText(navTab, stakeholders);
+        cy.wait("@getStakeholders");
+
+        // Select 10 items per page
+        selectItemsPerPage(10);
+        cy.wait(2000);
+
+        // Navigate to last page
+        cy.get(lastPageButton).click();
+        cy.wait(2000);
+
+        // Delete all items of last page
+        cy.get(appTable)
+            .get("tbody")
+            .find("tr")
+            .each(($tableRow) => {
+                var email = $tableRow.find("td[data-label='Email']").text();
+                cy.get(tdTag)
+                    .contains(email)
+                    .parent(trTag)
+                    .within(() => {
+                        click(deleteButton);
+                    });
+                cy.get(confirmButton).click();
+                cy.wait(2000);
+            });
+
+        // Verify that page is re-directed to previous one
+        cy.get("td[data-label=Email]").then(($rows) => {
+            cy.wrap($rows.length).should("eq", 10);
         });
     });
 });
