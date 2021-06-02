@@ -76,6 +76,6 @@ describe("Business service CRUD operations", () => {
         cy.wait("@getStakeholders");
 
         // Assert that stakeholder owner is deleted
-        notExists(stakeholder.name);
+        notExists(stakeholder.email);
     });
 });
