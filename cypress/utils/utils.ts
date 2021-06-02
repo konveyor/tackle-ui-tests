@@ -8,7 +8,7 @@ const tackleUiUrl = Cypress.env("tackleUrl");
 const { _ } = Cypress;
 
 export function inputText(fieldId: string, text: string): void {
-    cy.get(fieldId).clear().type(text);
+    cy.get(fieldId).click().focused().clear().type(text);
 }
 
 export function clickByText(fieldId: string, buttonText: string): void {
@@ -66,11 +66,13 @@ export function removeMember(memberName: string): void {
 
 export function exists(value: string): void {
     // Wait for DOM to render table and sibling elements
+    selectItemsPerPage(100);
     cy.wait(2000);
     cy.get(commonView.appTable)
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
+                selectItemsPerPage(100);
                 cy.wait(2000);
                 cy.get("td").should("contain", value);
             }
@@ -79,11 +81,13 @@ export function exists(value: string): void {
 
 export function notExists(value: string): void {
     // Wait for DOM to render table and sibling elements
+    selectItemsPerPage(100);
     cy.wait(2000);
     cy.get(commonView.appTable)
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
+                selectItemsPerPage(100);
                 cy.get("td").should("not.contain", value);
             }
         });
