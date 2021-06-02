@@ -19,3 +19,8 @@ export const descriptionHelper = "div[id=description-helper]";
 export const filterToggleButton = "button.pf-c-dropdown__toggle";
 export const filterInput = "input[aria-label='filter-text']";
 export const searchButton = "button[aria-label=search]";
+export const nextPageButton = "button[aria-label='Go to next page']";
+export const prevPageButton = "button[aria-label='Go to previous page']";
+export const lastPageButton = "button[aria-label='Go to last page']";
+export const firstPageButton = "button[aria-label='Go to first page']";
+export const pageNumInput = "input[aria-label='Current page']";
