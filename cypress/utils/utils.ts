@@ -59,12 +59,12 @@ export function removeMember(memberName: string): void {
 
 export function exists(value: string): void {
     // Wait for DOM to render table and sibling elements
-    selectItemsPerPage(100);
     cy.wait(2000);
     cy.get(commonView.appTable)
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
+                selectItemsPerPage(100);
                 cy.wait(2000);
                 cy.get("td").should("contain", value);
             }
@@ -73,12 +73,12 @@ export function exists(value: string): void {
 
 export function notExists(value: string): void {
     // Wait for DOM to render table and sibling elements
-    selectItemsPerPage(100);
     cy.wait(2000);
     cy.get(commonView.appTable)
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
+                selectItemsPerPage(100);
                 cy.get("td").should("not.contain", value);
             }
         });
