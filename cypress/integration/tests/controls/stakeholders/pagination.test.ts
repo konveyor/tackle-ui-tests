@@ -205,7 +205,7 @@ describe("Stakeholder pagination validations", function () {
                 cy.wait(2000);
             });
 
-        // Verify that page is re-directed to previous one
+        // Verify that page is re-directed to previous page
         cy.get("td[data-label=Email]").then(($rows) => {
             cy.wrap($rows.length).should("eq", 10);
         });
