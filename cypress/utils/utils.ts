@@ -45,7 +45,6 @@ export function selectItemsPerPage(items: number): void {
         .then(($toggleBtn) => {
             if (!$toggleBtn.eq(0).is(":disabled")) {
                 $toggleBtn.eq(0).trigger("click");
-                cy.wait(50000);
                 cy.get(commonView.itemsPerPageMenuOptions);
                 cy.get(`li > button[data-action="per-page-${items}"]`).click();
             }
