@@ -20,21 +20,9 @@ var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var stakeholdergroupNames: Array<string> = [];
 
 describe("Stakeholder linked to stakeholder groups and job function", () => {
-    before("Login and Create Test Data", function () {
+    before("Login", function () {
         // Perform login
         login();
-
-        // Create two stakeholder groups
-        for (let i = 0; i < 2; i++) {
-            // Create new stakeholder groups
-            const stakeholdergroup = new Stakeholdergroups(
-                data.getCompanyName(),
-                data.getDescription()
-            );
-            stakeholdergroup.create();
-            stakeholdergroupsList.push(stakeholdergroup);
-            stakeholdergroupNames.push(stakeholdergroup.name);
-        }
     });
 
     beforeEach("Login", function () {
@@ -55,6 +43,18 @@ describe("Stakeholder linked to stakeholder groups and job function", () => {
     });
 
     it("Stakeholder group attach, update and delete dependency on stakeholder", function () {
+        // Create two stakeholder groups
+        for (let i = 0; i < 2; i++) {
+            // Create new stakeholder groups
+            const stakeholdergroup = new Stakeholdergroups(
+                data.getCompanyName(),
+                data.getDescription()
+            );
+            stakeholdergroup.create();
+            stakeholdergroupsList.push(stakeholdergroup);
+            stakeholdergroupNames.push(stakeholdergroup.name);
+        }
+
         // Create new stakeholder and attach two stakeholder groups
         const stakeholder = new Stakeholders(
             data.getEmail(),
