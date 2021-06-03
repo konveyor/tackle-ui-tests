@@ -25,7 +25,7 @@ describe("Stakeholder groups pagination validations", function () {
         // Perform login
         login();
 
-        // Navigate to stakeholder tab
+        // Navigate to stakeholder groups tab
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholdergroups);
         var rowsToCreate = 0;
@@ -45,12 +45,9 @@ describe("Stakeholder groups pagination validations", function () {
                         if (rowsToCreate > 0) {
                             // Create multiple stakeholder groups
                             for (let i = 0; i < rowsToCreate; i++) {
-                                const stakeholder = new Stakeholdergroups(
-                                    data.getEmail(),
-                                    data.getFullName()
-                                );
-                                stakeholder.create();
-                                stakeholdergroupsList.push(stakeholder);
+                                const stakeholdergroup = new Stakeholdergroups(data.getFullName());
+                                stakeholdergroup.create();
+                                stakeholdergroupsList.push(stakeholdergroup);
                             }
                         }
                     });
@@ -199,7 +196,6 @@ describe("Stakeholder groups pagination validations", function () {
                 cy.get(tdTag)
                     .contains(name)
                     .parent(tdTag)
-
                     .parent(trTag)
                     .within(() => {
                         click(deleteButton);
