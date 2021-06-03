@@ -171,4 +171,42 @@ describe("Business services pagination validations", function () {
             cy.wrap($previousBtn).should("not.be.disabled");
         });
     });
+
+    it("Last page item(s) deletion, impact on page reload validation", function () {
+        // Issue - https://issues.redhat.com/browse/TACKLE-155
+        // Navigate to business services tab
+        clickByText(navMenu, controls);
+        clickByText(navTab, businessservices);
+        cy.wait("@getBusinessService");
+
+        // Select 10 items per page
+        selectItemsPerPage(10);
+        cy.wait(2000);
+
+        // Navigate to last page
+        cy.get(lastPageButton).click();
+        cy.wait(2000);
+
+        // Delete all items of last page
+        cy.get(appTable)
+            .get("tbody")
+            .find(trTag)
+            .each(($tableRow) => {
+                var name = $tableRow.find("td[data-label='Name']").text();
+                cy.get(tdTag)
+                    .contains(name)
+                    .parent(tdTag)
+                    .parent(trTag)
+                    .within(() => {
+                        click(deleteButton);
+                    });
+                cy.get(confirmButton).click();
+                cy.wait(2000);
+            });
+
+        // Verify that page is re-directed to previous page
+        cy.get("td[data-label=Name]").then(($rows) => {
+            cy.wrap($rows.length).should("eq", 10);
+        });
+    });
 });
