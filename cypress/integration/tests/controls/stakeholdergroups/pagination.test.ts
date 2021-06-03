@@ -155,4 +155,23 @@ describe("Stakeholder groups pagination validations", function () {
             cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
         });
     });
+
+    it("Page number validations", function () {
+        // Navigate to stakeholder groups tab
+        clickByText(navMenu, controls);
+        clickByText(navTab, stakeholdergroups);
+        cy.wait("@getStakeholdergroups");
+
+        // Select 10 items per page
+        selectItemsPerPage(10);
+        cy.wait(2000);
+
+        // Go to page number 2
+        cy.get(pageNumInput).clear().type("2").type("{enter}");
+
+        // Verify that page number has changed, as previous page nav button got enabled
+        cy.get(prevPageButton).each(($previousBtn) => {
+            cy.wrap($previousBtn).should("not.be.disabled");
+        });
+    });
 });
