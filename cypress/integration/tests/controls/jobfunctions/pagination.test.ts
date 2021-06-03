@@ -127,4 +127,29 @@ describe("Job functions pagination validations", function () {
         // Verify that navigation button to first page is enabled after moving to next page
         cy.get(firstPageButton).should("not.be.disabled");
     });
+
+    it("Items per page validations", function () {
+        // Navigate to Job functions tab
+        clickByText(navMenu, controls);
+        clickByText(navTab, jobfunctions);
+        cy.wait("@getJobfunctions");
+
+        // Select 10 items per page
+        selectItemsPerPage(10);
+        cy.wait(2000);
+
+        // Verify that only 10 items are displayed
+        cy.get("td[data-label=Name]").then(($rows) => {
+            cy.wrap($rows.length).should("eq", 10);
+        });
+
+        // Select 20 items per page
+        selectItemsPerPage(20);
+        cy.wait(2000);
+
+        // Verify that items less than or equal to 20 and greater than 10 are displayed
+        cy.get("td[data-label=Name]").then(($rows) => {
+            cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
+        });
+    });
 });
