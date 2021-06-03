@@ -152,4 +152,23 @@ describe("Business services pagination validations", function () {
             cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
         });
     });
+
+    it("Page number validations", function () {
+        // Navigate to business services tab
+        clickByText(navMenu, controls);
+        clickByText(navTab, businessservices);
+        cy.wait("@getBusinessService");
+
+        // Select 10 items per page
+        selectItemsPerPage(10);
+        cy.wait(2000);
+
+        // Go to page number 2
+        cy.get(pageNumInput).clear().type("2").type("{enter}");
+
+        // Verify that page number has changed, as previous page nav button got enabled
+        cy.get(prevPageButton).each(($previousBtn) => {
+            cy.wrap($previousBtn).should("not.be.disabled");
+        });
+    });
 });
