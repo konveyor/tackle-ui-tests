@@ -1,6 +1,6 @@
 ## End-to-end Cypress tests for tackle-ui
 
-### Get Started ###
+### Getting Started ###
 
 #### Requirements
 1. Operating system
@@ -25,7 +25,7 @@
 
     `git clone https://github.com/konveyor/tackle-ui-tests.git`
 
-2. Got to folder and install
+2. Go to folder and install
 
     `cd tackle-ui-tests`
 
