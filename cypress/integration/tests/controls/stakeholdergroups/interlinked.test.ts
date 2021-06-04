@@ -126,6 +126,6 @@ describe("Stakeholder group linked to stakeholder members", () => {
         stakeholdersList[0].delete();
         cy.wait("@getStakeholders");
         // Assert that first stakeholder deleted
-        notExists(stakeholdersList[1].name);
+        notExists(stakeholdersList[0].name);
     });
 });
