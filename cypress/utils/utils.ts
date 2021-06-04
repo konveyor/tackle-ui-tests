@@ -187,6 +187,7 @@ export function existsWithinRow(
     fieldId: string,
     valueToSearch: string
 ): void {
+    // Verifies if the valueToSearch exists within the row
     cy.get(tdTag)
         .contains(rowIdentifier)
         .parent(trTag)
@@ -200,6 +201,7 @@ export function notExistsWithinRow(
     fieldId: string,
     valueToSearch: string
 ): void {
+    // Verifies if the valueToSearch does not exists within the row
     cy.get(tdTag)
         .contains(rowIdentifier)
         .parent(trTag)
