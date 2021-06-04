@@ -19,6 +19,7 @@ export const member = "Member";
 export const owner = "Owner";
 export const stakeholders = "Stakeholders";
 export const stakeholdergroups = "Stakeholder groups";
+export const tags = "Tags";
 export const tagCount = "Tag count";
 export const tdTag = "td";
 export const trTag = "tr";

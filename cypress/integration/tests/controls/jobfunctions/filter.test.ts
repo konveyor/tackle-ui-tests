@@ -8,7 +8,7 @@ import { Jobfunctions } from "../../../models/jobfunctions";
 import * as data from "../../../../utils/data_utils";
 
 var jobfunctionsList: Array<Jobfunctions> = [];
-var invalidSearchInput = data.getRandomNumber();
+var invalidSearchInput = String(data.getRandomNumber());
 
 describe("Job function filter validations", function () {
     before("Login and Create Test Data", function () {
