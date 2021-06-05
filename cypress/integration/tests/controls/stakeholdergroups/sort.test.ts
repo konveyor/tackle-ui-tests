@@ -68,21 +68,26 @@ describe("Stakeholder groups sort validations", function () {
         clickByText(navTab, stakeholdergroups);
         cy.wait("@getStakeholdergroups");
 
+        // get unsorted list when page loads
+        const unsortedList = getTableColumnData(name);
+
         // Sort the stakeholder groups by name in ascending order
+        cy.wait(2000);
         sortAsc(name);
         cy.wait(2000);
 
         // Verify that the stakeholder groups table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(name);
-        verifySortAsc(afterAscSortList);
+        verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholder groups by name in descending order
+        cy.wait(2000);
         sortDesc(name);
         cy.wait(2000);
 
         // Verify that the stakeholder groups table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(name);
-        verifySortDesc(afterDescSortList);
+        verifySortDesc(afterDescSortList, unsortedList);
     });
 
     it("Member(s) sort validations", function () {
@@ -91,20 +96,25 @@ describe("Stakeholder groups sort validations", function () {
         clickByText(navTab, stakeholdergroups);
         cy.wait("@getStakeholdergroups");
 
+        // get unsorted list when page loads
+        const unsortedList = getTableColumnData(memberCount);
+
         // Sort the stakeholder groups by members in ascending order
+        cy.wait(2000);
         sortAsc(memberCount);
         cy.wait(2000);
 
         // Verify that the stakeholder groups table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(memberCount);
-        verifySortAsc(afterAscSortList);
+        verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholder groups by members in descending order
+        cy.wait(2000);
         sortDesc(memberCount);
         cy.wait(2000);
 
         // Verify that the stakeholder groups table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(memberCount);
-        verifySortDesc(afterDescSortList);
+        verifySortDesc(afterDescSortList, unsortedList);
     });
 });

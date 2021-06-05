@@ -91,23 +91,28 @@ describe("Stakeholder sort validations", function () {
         // Navigate to stakeholder tab
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
+        cy.wait("@getStakeholders");cy.wait("@getStakeholders");
+
+        // get unsorted list when page loads
+        const unsortedList = getTableColumnData(email);
 
         // Sort the stakeholders by email in ascending order
+        cy.wait(2000);
         sortAsc(email);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(email);
-        verifySortAsc(afterAscSortList);
+        verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by email in descending order
+        cy.wait(2000);
         sortDesc(email);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in descending order
         const afterDescSortList = getTableColumnData(email);
-        verifySortDesc(afterDescSortList);
+        verifySortDesc(afterDescSortList, unsortedList);
     });
 
     it("Display name sort validations", function () {
@@ -116,21 +121,26 @@ describe("Stakeholder sort validations", function () {
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
 
+        // get unsorted list when page loads
+        const unsortedList = getTableColumnData(displayName);
+
         // Sort the stakeholders by display name in ascending order
+        cy.wait(2000);
         sortAsc(displayName);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(displayName);
-        verifySortAsc(afterAscSortList);
+        verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by display name in descending order
+        cy.wait(2000);
         sortDesc(displayName);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in descending order
         const afterDescSortList = getTableColumnData(displayName);
-        verifySortDesc(afterDescSortList);
+        verifySortDesc(afterDescSortList, unsortedList);
     });
 
     it("Job function sort validations", function () {
@@ -139,21 +149,26 @@ describe("Stakeholder sort validations", function () {
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
 
+        // get unsorted list when page loads
+        const unsortedList = getTableColumnData(jobfunction);
+
         // Sort the stakeholders by Job function in ascending order
+        cy.wait(2000);
         sortAsc(jobfunction);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(jobfunction);
-        verifySortAsc(afterAscSortList);
+        verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by Job function in descending order
+        cy.wait(2000);
         sortDesc(jobfunction);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in descending order
         const afterDescSortList = getTableColumnData(jobfunction);
-        verifySortDesc(afterDescSortList);
+        verifySortDesc(afterDescSortList, unsortedList);
     });
 
     it("Group sort validations", function () {
@@ -162,20 +177,25 @@ describe("Stakeholder sort validations", function () {
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
 
+        // get unsorted list when page loads
+        const unsortedList = getTableColumnData(groupCount);
+
         // Sort the stakeholders by group count in ascending order
+        cy.wait(2000);
         sortAsc(groupCount);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(groupCount);
-        verifySortAsc(afterAscSortList);
+        verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by group count in descending order
+        cy.wait(2000);
         sortDesc(groupCount);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in descending order
         const afterDescSortList = getTableColumnData(groupCount);
-        verifySortDesc(afterDescSortList);
+        verifySortDesc(afterDescSortList, unsortedList);
     });
 });

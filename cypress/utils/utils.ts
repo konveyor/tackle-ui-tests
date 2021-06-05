@@ -140,16 +140,16 @@ export function getTableColumnData(columnName: string): Array<string> {
     return itemList;
 }
 
-export function verifySortAsc(listToVerify: Array<any>): void {
+export function verifySortAsc(listToVerify: Array<any>, unsortedList: Array<any>): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        const sortedList = _.sortBy(capturedList);
-        expect(capturedList).to.be.deep.equal(sortedList);
+        const SortedList = _.sortBy(unsortedList);
+        expect(capturedList).to.be.deep.equal(SortedList);
     });
 }
 
-export function verifySortDesc(listToVerify: Array<any>): void {
+export function verifySortDesc(listToVerify: Array<any>, unsortedList: Array<any>): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        const reverseSortedList = _.sortBy(capturedList).reverse();
+        const reverseSortedList = _.sortBy(unsortedList).reverse();
         expect(capturedList).to.be.deep.equal(reverseSortedList);
     });
 }
