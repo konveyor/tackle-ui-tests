@@ -17,7 +17,7 @@ export function clickByText(fieldId: string, buttonText: string): void {
 }
 
 export function click(fieldId: string): void {
-    cy.get(fieldId).click();
+    cy.get(fieldId).click({ force: true });
 }
 
 export function submitForm(): void {

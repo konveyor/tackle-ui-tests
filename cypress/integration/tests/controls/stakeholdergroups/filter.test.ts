@@ -154,6 +154,7 @@ describe("Stakeholder groups filter validations", function () {
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(stakeholdergroupsList[0].name)
+            .parent(tdTag)
             .parent(trTag)
             .within(() => {
                 click(commonView.expandRow);
