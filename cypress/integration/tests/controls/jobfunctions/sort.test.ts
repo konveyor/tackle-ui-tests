@@ -11,11 +11,7 @@ import {
 } from "../../../../utils/utils";
 const { _ } = Cypress;
 import { navMenu, navTab } from "../../../views/menu.view";
-import {
-    controls,
-    name,
-    jobfunctions,
-} from "../../../types/constants";
+import { controls, name, jobfunctions } from "../../../types/constants";
 
 import { Jobfunctions } from "../../../models/jobfunctions";
 import * as data from "../../../../utils/data_utils";
@@ -56,10 +52,10 @@ describe("Job function sorting", function () {
         clickByText(navMenu, controls);
         clickByText(navTab, jobfunctions);
         cy.wait("@getJobfunctions");
-        
+
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(name);
-        
+
         // Sort the Job functions by name in ascending order
         sortAsc(name);
         cy.wait(2000);
@@ -69,7 +65,6 @@ describe("Job function sorting", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the job function by name in descending order
-        cy.wait(2000);
         sortDesc(name);
         cy.wait(2000);
 
@@ -77,5 +72,4 @@ describe("Job function sorting", function () {
         const afterDescSortList = getTableColumnData(name);
         verifySortDesc(afterDescSortList, unsortedList);
     });
-
 });

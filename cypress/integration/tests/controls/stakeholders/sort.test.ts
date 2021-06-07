@@ -91,13 +91,13 @@ describe("Stakeholder sort validations", function () {
         // Navigate to stakeholder tab
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");cy.wait("@getStakeholders");
+        cy.wait("@getStakeholders");
+        cy.wait("@getStakeholders");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(email);
 
         // Sort the stakeholders by email in ascending order
-        cy.wait(2000);
         sortAsc(email);
         cy.wait(2000);
 
@@ -106,7 +106,6 @@ describe("Stakeholder sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by email in descending order
-        cy.wait(2000);
         sortDesc(email);
         cy.wait(2000);
 
@@ -125,7 +124,6 @@ describe("Stakeholder sort validations", function () {
         const unsortedList = getTableColumnData(displayName);
 
         // Sort the stakeholders by display name in ascending order
-        cy.wait(2000);
         sortAsc(displayName);
         cy.wait(2000);
 
@@ -134,7 +132,6 @@ describe("Stakeholder sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by display name in descending order
-        cy.wait(2000);
         sortDesc(displayName);
         cy.wait(2000);
 
@@ -153,7 +150,6 @@ describe("Stakeholder sort validations", function () {
         const unsortedList = getTableColumnData(jobfunction);
 
         // Sort the stakeholders by Job function in ascending order
-        cy.wait(2000);
         sortAsc(jobfunction);
         cy.wait(2000);
 
@@ -162,7 +158,6 @@ describe("Stakeholder sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by Job function in descending order
-        cy.wait(2000);
         sortDesc(jobfunction);
         cy.wait(2000);
 
@@ -181,7 +176,6 @@ describe("Stakeholder sort validations", function () {
         const unsortedList = getTableColumnData(groupCount);
 
         // Sort the stakeholders by group count in ascending order
-        cy.wait(2000);
         sortAsc(groupCount);
         cy.wait(2000);
 
@@ -190,7 +184,6 @@ describe("Stakeholder sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by group count in descending order
-        cy.wait(2000);
         sortDesc(groupCount);
         cy.wait(2000);
 

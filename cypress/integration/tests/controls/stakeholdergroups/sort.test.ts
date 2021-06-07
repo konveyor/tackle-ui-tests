@@ -72,7 +72,6 @@ describe("Stakeholder groups sort validations", function () {
         const unsortedList = getTableColumnData(name);
 
         // Sort the stakeholder groups by name in ascending order
-        cy.wait(2000);
         sortAsc(name);
         cy.wait(2000);
 
@@ -81,7 +80,6 @@ describe("Stakeholder groups sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholder groups by name in descending order
-        cy.wait(2000);
         sortDesc(name);
         cy.wait(2000);
 
@@ -100,7 +98,6 @@ describe("Stakeholder groups sort validations", function () {
         const unsortedList = getTableColumnData(memberCount);
 
         // Sort the stakeholder groups by members in ascending order
-        cy.wait(2000);
         sortAsc(memberCount);
         cy.wait(2000);
 
@@ -109,7 +106,6 @@ describe("Stakeholder groups sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholder groups by members in descending order
-        cy.wait(2000);
         sortDesc(memberCount);
         cy.wait(2000);
 
