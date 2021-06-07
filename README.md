@@ -34,3 +34,13 @@
 3. Open Cypress and run test cases
 
     `npx cypress open`
+
+#### Code formatting using Prettier tool
+
+1. Format code
+
+    `npm run format`
+
+2. Check formatting
+
+    `npm run check`
