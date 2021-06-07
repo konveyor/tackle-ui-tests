@@ -44,3 +44,8 @@
 2. Check formatting
 
     `npm run check`
+
+#### Test runs
+1. Click [here](https://dashboard.cypress.io/projects/cbdv4m/runs) to see **Old** test runs
+
+2. Click [here](https://dashboard.cypress.io/projects/dvmnpr/runs) to see **Current** test runs
