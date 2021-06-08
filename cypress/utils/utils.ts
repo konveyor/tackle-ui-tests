@@ -143,8 +143,8 @@ export function getTableColumnData(columnName: string): Array<string> {
 
 export function verifySortAsc(listToVerify: Array<any>, unsortedList: Array<any>): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        const SortedList = _.sortBy(unsortedList);
-        expect(capturedList).to.be.deep.equal(SortedList);
+        const sortedList = _.sortBy(unsortedList);
+        expect(capturedList).to.be.deep.equal(sortedList);
     });
 }
 
