@@ -62,6 +62,7 @@ describe("Stakeholder group linked to stakeholder members", () => {
         cy.wait(2000);
         cy.get(tdTag)
             .contains(stakeholdergroup.name)
+            .parent(tdTag)
             .parent(trTag)
             .within(() => {
                 click(expandRow);
@@ -87,6 +88,7 @@ describe("Stakeholder group linked to stakeholder members", () => {
         cy.wait(2000);
         cy.get(tdTag)
             .contains(stakeholdergroup.name)
+            .parent(tdTag)
             .parent(trTag)
             .within(() => {
                 click(expandRow);
@@ -108,6 +110,7 @@ describe("Stakeholder group linked to stakeholder members", () => {
         cy.wait(2000);
         cy.get(tdTag)
             .contains(stakeholdergroup.name)
+            .parent(tdTag)
             .parent(trTag)
             .within(() => {
                 click(expandRow);

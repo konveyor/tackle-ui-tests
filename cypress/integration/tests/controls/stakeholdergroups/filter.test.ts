@@ -12,7 +12,6 @@ import {
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
     controls,
-    stakeholders,
     stakeholdergroups,
     button,
     tdTag,
@@ -144,7 +143,7 @@ describe("Stakeholder groups filter validations", function () {
     it("Member filter validations", function () {
         // Navigate to stakeholder groups tab
         clickByText(navMenu, controls);
-        clickByText(navTab, stakeholders);
+        clickByText(navTab, stakeholdergroups);
         cy.wait("@getStakeholdergroups");
 
         // Enter an existing member substring and apply it as search filter
@@ -155,6 +154,7 @@ describe("Stakeholder groups filter validations", function () {
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(stakeholdergroupsList[0].name)
+            .parent(tdTag)
             .parent(trTag)
             .within(() => {
                 click(commonView.expandRow);

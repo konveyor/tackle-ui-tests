@@ -85,9 +85,7 @@ describe("Application validations", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it.skip("Application unique constraint validation", function () {
-        // Run this test after fix - https://issues.redhat.com/browse/TACKLE-179
-
+    it("Application unique constraint validation", function () {
         const application = new ApplicationInventory(data.getFullName());
 
         // Create a new application
