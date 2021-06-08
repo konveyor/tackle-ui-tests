@@ -86,8 +86,6 @@ describe("Application validations", () => {
     });
 
     it("Application unique constraint validation", function () {
-        // Fixed - https://issues.redhat.com/browse/TACKLE-179
-
         const application = new ApplicationInventory(data.getFullName());
 
         // Create a new application
