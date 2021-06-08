@@ -92,7 +92,6 @@ describe("Stakeholder sort validations", function () {
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
-        cy.wait("@getStakeholders");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(email);
