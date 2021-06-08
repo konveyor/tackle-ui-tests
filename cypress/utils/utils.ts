@@ -17,7 +17,7 @@ export function clickByText(fieldId: string, buttonText: string): void {
 }
 
 export function click(fieldId: string): void {
-    cy.get(fieldId).click();
+    cy.get(fieldId).click({ force: true });
 }
 
 export function submitForm(): void {
@@ -47,6 +47,7 @@ export function selectItemsPerPage(items: number): void {
                 $toggleBtn.eq(0).trigger("click");
                 cy.get(commonView.itemsPerPageMenuOptions);
                 cy.get(`li > button[data-action="per-page-${items}"]`).click();
+                cy.wait(2000);
             }
         });
 }
@@ -140,16 +141,16 @@ export function getTableColumnData(columnName: string): Array<string> {
     return itemList;
 }
 
-export function verifySortAsc(listToVerify: Array<any>): void {
+export function verifySortAsc(listToVerify: Array<any>, unsortedList: Array<any>): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        const sortedList = _.sortBy(capturedList);
+        const sortedList = _.sortBy(unsortedList);
         expect(capturedList).to.be.deep.equal(sortedList);
     });
 }
 
-export function verifySortDesc(listToVerify: Array<any>): void {
+export function verifySortDesc(listToVerify: Array<any>, unsortedList: Array<any>): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        const reverseSortedList = _.sortBy(capturedList).reverse();
+        const reverseSortedList = _.sortBy(unsortedList).reverse();
         expect(capturedList).to.be.deep.equal(reverseSortedList);
     });
 }

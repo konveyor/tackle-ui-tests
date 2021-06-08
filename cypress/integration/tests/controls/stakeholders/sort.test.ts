@@ -93,13 +93,16 @@ describe("Stakeholder sort validations", function () {
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
 
+        // get unsorted list when page loads
+        const unsortedList = getTableColumnData(email);
+
         // Sort the stakeholders by email in ascending order
         sortAsc(email);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(email);
-        verifySortAsc(afterAscSortList);
+        verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by email in descending order
         sortDesc(email);
@@ -107,7 +110,7 @@ describe("Stakeholder sort validations", function () {
 
         // Verify that the stakeholder rows are displayed in descending order
         const afterDescSortList = getTableColumnData(email);
-        verifySortDesc(afterDescSortList);
+        verifySortDesc(afterDescSortList, unsortedList);
     });
 
     it("Display name sort validations", function () {
@@ -116,13 +119,16 @@ describe("Stakeholder sort validations", function () {
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
 
+        // get unsorted list when page loads
+        const unsortedList = getTableColumnData(displayName);
+
         // Sort the stakeholders by display name in ascending order
         sortAsc(displayName);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(displayName);
-        verifySortAsc(afterAscSortList);
+        verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by display name in descending order
         sortDesc(displayName);
@@ -130,7 +136,7 @@ describe("Stakeholder sort validations", function () {
 
         // Verify that the stakeholder rows are displayed in descending order
         const afterDescSortList = getTableColumnData(displayName);
-        verifySortDesc(afterDescSortList);
+        verifySortDesc(afterDescSortList, unsortedList);
     });
 
     it("Job function sort validations", function () {
@@ -139,13 +145,16 @@ describe("Stakeholder sort validations", function () {
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
 
+        // get unsorted list when page loads
+        const unsortedList = getTableColumnData(jobfunction);
+
         // Sort the stakeholders by Job function in ascending order
         sortAsc(jobfunction);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(jobfunction);
-        verifySortAsc(afterAscSortList);
+        verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by Job function in descending order
         sortDesc(jobfunction);
@@ -153,7 +162,7 @@ describe("Stakeholder sort validations", function () {
 
         // Verify that the stakeholder rows are displayed in descending order
         const afterDescSortList = getTableColumnData(jobfunction);
-        verifySortDesc(afterDescSortList);
+        verifySortDesc(afterDescSortList, unsortedList);
     });
 
     it("Group sort validations", function () {
@@ -162,13 +171,16 @@ describe("Stakeholder sort validations", function () {
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
 
+        // get unsorted list when page loads
+        const unsortedList = getTableColumnData(groupCount);
+
         // Sort the stakeholders by group count in ascending order
         sortAsc(groupCount);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(groupCount);
-        verifySortAsc(afterAscSortList);
+        verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by group count in descending order
         sortDesc(groupCount);
@@ -176,6 +188,6 @@ describe("Stakeholder sort validations", function () {
 
         // Verify that the stakeholder rows are displayed in descending order
         const afterDescSortList = getTableColumnData(groupCount);
-        verifySortDesc(afterDescSortList);
+        verifySortDesc(afterDescSortList, unsortedList);
     });
 });
