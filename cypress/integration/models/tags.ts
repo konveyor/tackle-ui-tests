@@ -134,6 +134,14 @@ export class Tagtype {
         inputText(rankInput, rank);
     }
 
+    assertColumnValue(columnName, columnVal) {
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(trTag)
+            .find(`td[data-label='${columnName}']`)
+            .should("contain", columnVal);
+    }
+
     create(cancel = false): void {
         clickTags();
         clickByText(button, createTagtypeButton);
