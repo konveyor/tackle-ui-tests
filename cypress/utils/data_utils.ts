@@ -35,7 +35,26 @@ export function getRandomWords(numberOfWords: number): string {
     return faker.lorem.words(numberOfWords);
 }
 
-export function getRandomNumber(): string {
-    // returns a random number
-    return faker.datatype.number();
+export function getRandomNumber(min = 1111, max = 5555): number {
+    // returns a random number between range min to max
+    return Math.floor(Math.random() * (max - min) + min);
+}
+
+export function getColor(): string {
+    // returns a random color from the fixed set of available colors
+    const colors = ["Blue", "Cyan", "Green", "Orange", "Purple", "Red"];
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+export function getExistingTagtype(): string {
+    // returns a random tag type from the existing list
+    const tagtypes = [
+        "Application Type",
+        "Database",
+        "Data Center",
+        "Language",
+        "Operating System",
+        "Runtime",
+    ];
+    return tagtypes[Math.floor(Math.random() * tagtypes.length)];
 }

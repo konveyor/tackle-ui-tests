@@ -1,13 +1,13 @@
 import * as loginView from "../integration/views/login.view";
 import * as commonView from "../integration/views/common.view";
-import { groupCount, memberCount, tagCount } from "../integration/types/constants";
+import { groupCount, memberCount, tagCount, tdTag, trTag } from "../integration/types/constants";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
 const tackleUiUrl = Cypress.env("tackleUrl");
 const { _ } = Cypress;
 
-export function inputText(fieldId: string, text: string): void {
+export function inputText(fieldId: string, text: any): void {
     cy.get(fieldId).click().focused().clear().type(text);
 }
 
@@ -153,4 +153,60 @@ export function verifySortDesc(listToVerify: Array<any>, unsortedList: Array<any
         const reverseSortedList = _.sortBy(unsortedList).reverse();
         expect(capturedList).to.be.deep.equal(reverseSortedList);
     });
+}
+
+export function expandRowDetails(rowIdentifier: string): void {
+    // displays row details by clicking on the expand button
+    cy.get(tdTag)
+        .contains(rowIdentifier)
+        .parent(trTag)
+        .within(() => {
+            cy.get(commonView.expandRow).then(($btn) => {
+                if ($btn.attr("aria-expanded") === "false") {
+                    $btn.trigger("click");
+                }
+            });
+        });
+}
+
+export function closeRowDetails(rowIdentifier: string): void {
+    // closes row details by clicking on the collapse button
+    cy.get(tdTag)
+        .contains(rowIdentifier)
+        .parent(trTag)
+        .within(() => {
+            cy.get(commonView.expandRow).then(($btn) => {
+                if ($btn.attr("aria-expanded") === "true") {
+                    $btn.trigger("click");
+                }
+            });
+        });
+}
+
+export function existsWithinRow(
+    rowIdentifier: string,
+    fieldId: string,
+    valueToSearch: string
+): void {
+    // Verifies if the valueToSearch exists within the row
+    cy.get(tdTag)
+        .contains(rowIdentifier)
+        .parent(trTag)
+        .next()
+        .find(fieldId)
+        .should("contain", valueToSearch);
+}
+
+export function notExistsWithinRow(
+    rowIdentifier: string,
+    fieldId: string,
+    valueToSearch: string
+): void {
+    // Verifies if the valueToSearch does not exists within the row
+    cy.get(tdTag)
+        .contains(rowIdentifier)
+        .parent(trTag)
+        .next()
+        .find(fieldId)
+        .should("not.contain", valueToSearch);
 }

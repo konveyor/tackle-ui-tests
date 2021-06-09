@@ -1,12 +1,18 @@
 /// <reference types="cypress" />
 
-import { login, click, exists, notExists } from "../../../../utils/utils";
+import {
+    login,
+    exists,
+    notExists,
+    existsWithinRow,
+    expandRowDetails,
+    closeRowDetails,
+} from "../../../../utils/utils";
 import { Stakeholders } from "../../../models/stakeholders";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Jobfunctions } from "../../../models/jobfunctions";
-import { tdTag, trTag } from "../../../types/constants";
+import { tdTag } from "../../../types/constants";
 import { groupsCount } from "../../../views/stakeholders.view";
-import { expandRow } from "../../../views/common.view";
 import * as data from "../../../../utils/data_utils";
 
 describe("Stakeholder CRUD operations", () => {
@@ -120,16 +126,10 @@ describe("Stakeholder CRUD operations", () => {
         cy.wait("@getStakeholders");
 
         // Assert that edit operation has been done by checking number of groups and added group exists
-        cy.get(tdTag)
-            .contains(stakeholder.email)
-            .parent(trTag)
-            .within(() => {
-                click(expandRow);
-            })
-            .get("div > dd")
-            .should("contain", stakeholdergroupNames[1]);
+        expandRowDetails(stakeholder.email);
+        existsWithinRow(stakeholder.email, "div > dd", stakeholdergroupNames[1]);
+        closeRowDetails(stakeholder.email);
 
-        // [17 May 2021] : Known bug (https://issues.redhat.com/browse/TACKLE-141), fails the test
         // Assert that previous stakeholder group was removed and only one member is present
         cy.get(tdTag).contains(stakeholder.email).siblings(groupsCount).should("contain", "1");
 
