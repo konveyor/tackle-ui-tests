@@ -6,5 +6,11 @@
         "pass": "",
         "tackleUrl": ""
     },
-    "projectId": "1g7617"
+    "reporter": "@reportportal/agent-js-cypress",
+    "reporterOptions": {
+        "endpoint": "https://reportportal.cloud.paas.psi.redhat.com/api/v1",
+        "token": "******",
+        "launch": "ghubale_TEST_EXAMPLE",
+        "project": "ghubale_personal"
+    }
 }

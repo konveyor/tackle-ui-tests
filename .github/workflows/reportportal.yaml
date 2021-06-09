@@ -1,0 +1,40 @@
+
+name: CI-pipeline
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: cypress/browsers:node12.18.3-chrome87-ff82
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2, 3]
+    env:
+      CI_BUILD_ID: ${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: 'UI Tests - Chrome'
+        uses: cypress-io/github-action@v2
+        with:
+          config-file: cypress.json
+          group: 'UI Tests - Chrome'
+          headless: true
+          spec: |
+            cypress/integration/tests/*.test.ts
+            cypress/integration/tests/**/*.test.ts
+          record: true
+          parallel: true
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACTIONS_RUNNER_DEBUG: true
+          # provide username/password/URL of the project
+          CYPRESS_user: ${{ secrets.TACKLE_USER }}
+          CYPRESS_pass: ${{ secrets.TACKLE_PASS }}
+          CYPRESS_tackleUrl: ${{ secrets.TACKLE_URL }}
+
