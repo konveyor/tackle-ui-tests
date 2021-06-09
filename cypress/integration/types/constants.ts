@@ -28,6 +28,8 @@ export const trTag = "tr";
 
 // Error helper messages general to all views
 export const duplicateErrMsg = "ERROR: duplicate key value violates unique constraint";
+export const fieldReqMsg = "This field is required.";
+export const max40CharMsg = "This field must contain fewer than 40 characters.";
 export const max120CharsMsg = "This field must contain fewer than 120 characters.";
 export const max250CharsMsg = "This field must contain fewer than 250 characters.";
 export const minCharsMsg = "This field must contain at least 3 characters.";
