@@ -25,6 +25,8 @@ export const tags = "Tags";
 export const tagCount = "Tag count";
 export const tdTag = "td";
 export const trTag = "tr";
+export const tagtype = "Tag type";
+export const tagName = "Tag name";
 
 // Error helper messages general to all views
 export const duplicateErrMsg = "ERROR: duplicate key value violates unique constraint";
