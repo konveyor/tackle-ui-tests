@@ -30,7 +30,7 @@ describe("Tag type pagination validations", function () {
         clickByText(navTab, tags);
         var rowsToCreate = 0;
 
-        // Get the current table row count and create appropriate test data rows
+        // Get the current table row count for tag types and create appropriate test data rows
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(appTable)
