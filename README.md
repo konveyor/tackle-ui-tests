@@ -48,5 +48,4 @@
 #### Test runs
 1. Click here to see **Old** test runs - [run1](https://dashboard.cypress.io/projects/cbdv4m/runs), [run2](https://dashboard.cypress.io/projects/dvmnpr/runs)
 
-2. Click [here](https://dashboard.cypress.io/projects/dedqgi/runs) to see **Current** test runs
-
+2. Click [here](https://dashboard.cypress.io/projects/1g7617/runs) to see **Current** test runs
