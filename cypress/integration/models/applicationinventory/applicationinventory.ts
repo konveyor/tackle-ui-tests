@@ -5,6 +5,10 @@ import {
     button,
     createNewButton,
     deleteAction,
+    assess,
+    next,
+    review,
+    save,
 } from "../../types/constants";
 import { navMenu } from "../../views/menu.view";
 import {
@@ -15,6 +19,16 @@ import {
     applicationCommentInput,
     editButton,
     actionButton,
+    selectBox,
+    stakeholderSelect,
+    stakeholdergroupsSelect,
+    selectInput,
+    criticalityInput,
+    priorityInput,
+    questionBlock,
+    radioInput,
+    assessmentColumnSelector,
+    reviewColumnSelector,
 } from "../../views/applicationinventory.view";
 import * as commonView from "../../views/common.view";
 import {
@@ -27,6 +41,7 @@ import {
     selectFormItems,
     checkSuccessAlert,
 } from "../../../utils/utils";
+import * as data from "../../../utils/data_utils";
 
 export class ApplicationInventory {
     name: string;
@@ -71,6 +86,94 @@ export class ApplicationInventory {
         tags.forEach(function (tag) {
             selectFormItems(applicationTagsSelect, tag);
         });
+    }
+
+    protected selectStakeholders(stakeholders: Array<string>): void {
+        stakeholders.forEach(function (stakeholder) {
+            selectFormItems(stakeholderSelect, stakeholder);
+        });
+    }
+
+    protected selectStakeholdergroups(stakeholdergroups: Array<string>): void {
+        stakeholdergroups.forEach(function (stakeholdergroup) {
+            selectFormItems(stakeholdergroupsSelect, stakeholdergroup);
+        });
+    }
+
+    protected selectMigrationAction(risk: string): void {
+        if (risk === "low") {
+            const migrationActions = ["Replatform", "Repurchase", "Retain"];
+            var action = migrationActions[Math.floor(Math.random() * migrationActions.length)];
+            cy.get(selectInput).eq(0).click();
+            cy.contains(button, action).click();
+        }
+    }
+
+    protected selectEffortEstimate(risk: string): void {
+        if (risk === "low") {
+            cy.get(selectInput).eq(1).click();
+            cy.contains(button, "Small").click();
+        }
+    }
+
+    protected fillCriticality(risk: string): void {
+        if (risk === "low") {
+            inputText(criticalityInput, data.getRandomNumber(1, 4));
+        }
+    }
+
+    protected fillPriority(risk: string): void {
+        if (risk === "low") {
+            inputText(priorityInput, data.getRandomNumber(1, 4));
+        }
+    }
+
+    protected selectApplication(): void {
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                click(selectBox);
+            });
+    }
+
+    protected selectAnswer(risk: string): void {
+        for (let i = 0; i < 5; i++) {
+            cy.get(questionBlock).each(($question) => {
+                var totalOptions = $question.find("div.pf-l-stack").children("div").length;
+                var optionToSelect: number;
+                if (risk === "low") {
+                    optionToSelect = totalOptions - 1;
+                } else if (risk === "medium") {
+                    optionToSelect = totalOptions / 2 - 1;
+                } else {
+                    optionToSelect = 1;
+                }
+                cy.wrap($question)
+                    .find("div.pf-l-stack")
+                    .children("div")
+                    .eq(optionToSelect)
+                    .find(radioInput)
+                    .check();
+            });
+            if (i === 4) {
+                clickByText(button, save);
+            } else {
+                clickByText(button, next);
+            }
+        }
+    }
+
+    protected verifyCompleteStatus(columnSelector): void {
+        selectItemsPerPage(100);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                cy.get(columnSelector).find("div").should("contain", "Completed");
+            });
     }
 
     create(cancel = false): void {
@@ -170,5 +273,52 @@ export class ApplicationInventory {
         } else {
             click(commonView.confirmButton);
         }
+    }
+
+    perform_assessment(
+        risk,
+        stakeholders?: Array<string>,
+        stakeholdergroups?: Array<string>
+    ): void {
+        if (stakeholders == undefined && stakeholdergroups == undefined) {
+            expect(
+                false,
+                "Atleast one arg out of stakeholder or stakeholder group must be provided !"
+            ).to.equal(true);
+        } else {
+            ApplicationInventory.clickApplicationInventory();
+            selectItemsPerPage(100);
+            cy.wait(2000);
+            this.selectApplication();
+            clickByText(button, assess);
+            cy.wait(2000);
+            if (stakeholders) this.selectStakeholders(stakeholders);
+            if (stakeholdergroups) this.selectStakeholdergroups(stakeholdergroups);
+            clickByText(button, next);
+            cy.wait(200);
+            this.selectAnswer(risk);
+        }
+    }
+
+    perform_review(risk): void {
+        ApplicationInventory.clickApplicationInventory();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        this.selectApplication();
+        clickByText(button, review);
+        cy.wait(2000);
+        this.selectMigrationAction(risk);
+        this.selectEffortEstimate(risk);
+        this.fillCriticality(risk);
+        this.fillPriority(risk);
+        clickByText(button, "Submit review");
+    }
+
+    is_assessed(): void {
+        this.verifyCompleteStatus(assessmentColumnSelector);
+    }
+
+    is_reviewed(): void {
+        this.verifyCompleteStatus(reviewColumnSelector);
     }
 }
