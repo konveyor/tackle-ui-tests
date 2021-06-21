@@ -58,3 +58,10 @@ export function getExistingTagtype(): string {
     ];
     return tagtypes[Math.floor(Math.random() * tagtypes.length)];
 }
+
+export function getAppName(): string {
+    // returns a new random application name
+    let random_word = getRandomWords(1);
+    let app_name = "test-app-" + random_word;
+    return app_name;
+}

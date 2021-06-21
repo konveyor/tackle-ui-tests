@@ -1,6 +1,20 @@
 import * as loginView from "../integration/views/login.view";
 import * as commonView from "../integration/views/common.view";
-import { groupCount, memberCount, tagCount, tdTag, trTag } from "../integration/types/constants";
+import {
+    button,
+    groupCount,
+    memberCount,
+    next,
+    save,
+    tagCount,
+    tdTag,
+    trTag,
+} from "../integration/types/constants";
+import {
+    questionBlock,
+    radioInput,
+    selectInput,
+} from "../integration/views/applicationinventory.view";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
@@ -8,7 +22,9 @@ const tackleUiUrl = Cypress.env("tackleUrl");
 const { _ } = Cypress;
 
 export function inputText(fieldId: string, text: any): void {
-    cy.get(fieldId).click().focused().clear().type(text);
+    cy.get(fieldId).click().focused().clear();
+    cy.wait(200);
+    cy.get(fieldId).clear().type(text);
 }
 
 export function clickByText(fieldId: string, buttonText: string): void {
