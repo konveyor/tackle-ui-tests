@@ -1,20 +1,6 @@
 import * as loginView from "../integration/views/login.view";
 import * as commonView from "../integration/views/common.view";
-import {
-    button,
-    groupCount,
-    memberCount,
-    next,
-    save,
-    tagCount,
-    tdTag,
-    trTag,
-} from "../integration/types/constants";
-import {
-    questionBlock,
-    radioInput,
-    selectInput,
-} from "../integration/views/applicationinventory.view";
+import { groupCount, memberCount, tagCount, tdTag, trTag } from "../integration/types/constants";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");

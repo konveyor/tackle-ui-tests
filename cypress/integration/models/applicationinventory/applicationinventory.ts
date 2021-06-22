@@ -20,15 +20,6 @@ import {
     editButton,
     actionButton,
     selectBox,
-    stakeholderSelect,
-    stakeholdergroupsSelect,
-    selectInput,
-    criticalityInput,
-    priorityInput,
-    questionBlock,
-    radioInput,
-    assessmentColumnSelector,
-    reviewColumnSelector,
 } from "../../views/applicationinventory.view";
 import * as commonView from "../../views/common.view";
 import {
@@ -42,6 +33,19 @@ import {
     checkSuccessAlert,
 } from "../../../utils/utils";
 import * as data from "../../../utils/data_utils";
+import {
+    assessmentColumnSelector,
+    questionBlock,
+    radioInput,
+    stakeholdergroupsSelect,
+    stakeholderSelect,
+} from "../../views/assessment.view";
+import {
+    criticalityInput,
+    priorityInput,
+    reviewColumnSelector,
+    selectInput,
+} from "../../views/review.view";
 
 export class ApplicationInventory {
     name: string;
@@ -101,31 +105,55 @@ export class ApplicationInventory {
     }
 
     protected selectMigrationAction(risk: string): void {
+        var action: string;
         if (risk === "low") {
-            const migrationActions = ["Replatform", "Repurchase", "Retain"];
-            var action = migrationActions[Math.floor(Math.random() * migrationActions.length)];
-            cy.get(selectInput).eq(0).click();
-            cy.contains(button, action).click();
+            const migrationActions = ["Replatform", "Refactor", "Rehost", "Retain"];
+            action = migrationActions[Math.floor(Math.random() * migrationActions.length)];
+        } else if (risk === "medium") {
+            const migrationActions = ["Replatform", "Repurchase", "Refactor"];
+            action = migrationActions[Math.floor(Math.random() * migrationActions.length)];
+        } else {
+            const migrationActions = ["Repurchase", "Retire"];
+            action = migrationActions[Math.floor(Math.random() * migrationActions.length)];
         }
+        cy.get(selectInput).eq(0).click();
+        cy.contains(button, action).click();
     }
 
     protected selectEffortEstimate(risk: string): void {
+        var effort: string;
         if (risk === "low") {
-            cy.get(selectInput).eq(1).click();
-            cy.contains(button, "Small").click();
+            effort = "Small";
+        } else if (risk === "medium") {
+            effort = "Medium";
+        } else {
+            const effortEstimates = ["Large", "Extra large"];
+            effort = effortEstimates[Math.floor(Math.random() * effortEstimates.length)];
         }
+        cy.get(selectInput).eq(1).click();
+        cy.contains(button, effort).click();
+    }
+
+    protected getNumByRisk(risk: string): number {
+        var num: number;
+        if (risk === "low") {
+            num = data.getRandomNumber(1, 4);
+        } else if (risk === "medium") {
+            num = data.getRandomNumber(5, 7);
+        } else {
+            num = data.getRandomNumber(8, 10);
+        }
+        return num;
     }
 
     protected fillCriticality(risk: string): void {
-        if (risk === "low") {
-            inputText(criticalityInput, data.getRandomNumber(1, 4));
-        }
+        var criticality = this.getNumByRisk(risk);
+        inputText(criticalityInput, criticality);
     }
 
     protected fillPriority(risk: string): void {
-        if (risk === "low") {
-            inputText(priorityInput, data.getRandomNumber(1, 4));
-        }
+        var priority = this.getNumByRisk(risk);
+        inputText(priorityInput, priority);
     }
 
     protected selectApplication(): void {
@@ -135,27 +163,52 @@ export class ApplicationInventory {
             .parent(trTag)
             .within(() => {
                 click(selectBox);
+                cy.wait(500);
             });
     }
 
-    protected selectAnswer(risk: string): void {
+    protected clickRadioOption(questionSelector, optionToSelect) {
+        cy.wrap(questionSelector)
+            .find("div.pf-l-stack")
+            .children("div")
+            .eq(optionToSelect)
+            .find(radioInput)
+            .check();
+    }
+
+    protected selectAnswers(risk: string): void {
         for (let i = 0; i < 5; i++) {
             cy.get(questionBlock).each(($question) => {
                 var totalOptions = $question.find("div.pf-l-stack").children("div").length;
                 var optionToSelect: number;
                 if (risk === "low") {
                     optionToSelect = totalOptions - 1;
+                    this.clickRadioOption($question, optionToSelect);
                 } else if (risk === "medium") {
-                    optionToSelect = totalOptions / 2 - 1;
+                    cy.wrap($question)
+                        .children()
+                        .find("div.pf-l-split__item")
+                        .then(($questionLine) => {
+                            /* These 3 questions generate high risk with mean options, 
+                            hence to keep risk to medium, select last options for these set of specifc questions */
+                            if (
+                                $questionLine.text() ===
+                                    "Does the application have legal and/or licensing requirements?" ||
+                                $questionLine.text() ===
+                                    "Does the application require specific hardware?" ||
+                                $questionLine.text() ===
+                                    "How is the application clustering managed?"
+                            ) {
+                                optionToSelect = totalOptions - 1;
+                            } else {
+                                optionToSelect = Math.floor(totalOptions / 2);
+                            }
+                            this.clickRadioOption($question, optionToSelect);
+                        });
                 } else {
                     optionToSelect = 1;
+                    this.clickRadioOption($question, optionToSelect);
                 }
-                cy.wrap($question)
-                    .find("div.pf-l-stack")
-                    .children("div")
-                    .eq(optionToSelect)
-                    .find(radioInput)
-                    .check();
             });
             if (i === 4) {
                 clickByText(button, save);
@@ -283,30 +336,28 @@ export class ApplicationInventory {
         if (stakeholders == undefined && stakeholdergroups == undefined) {
             expect(
                 false,
-                "Atleast one arg out of stakeholder or stakeholder group must be provided !"
+                "Atleast one arg out of stakeholder or stakeholdergroups must be provided !"
             ).to.equal(true);
         } else {
             ApplicationInventory.clickApplicationInventory();
             selectItemsPerPage(100);
-            cy.wait(2000);
             this.selectApplication();
             clickByText(button, assess);
             cy.wait(2000);
             if (stakeholders) this.selectStakeholders(stakeholders);
             if (stakeholdergroups) this.selectStakeholdergroups(stakeholdergroups);
             clickByText(button, next);
-            cy.wait(200);
-            this.selectAnswer(risk);
+            cy.wait(500);
+            this.selectAnswers(risk);
         }
     }
 
     perform_review(risk): void {
         ApplicationInventory.clickApplicationInventory();
         selectItemsPerPage(100);
-        cy.wait(2000);
         this.selectApplication();
         clickByText(button, review);
-        cy.wait(2000);
+        cy.wait(8000);
         this.selectMigrationAction(risk);
         this.selectEffortEstimate(risk);
         this.fillCriticality(risk);
