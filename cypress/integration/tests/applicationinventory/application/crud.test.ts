@@ -16,7 +16,7 @@ describe("Application crud operations", () => {
 
     it("Application crud", function () {
         const application = new ApplicationInventory(
-            data.getFullName(),
+            data.getAppName(),
             data.getDescription(),
             data.getDescription() // refering description value as comment
         );
@@ -27,7 +27,7 @@ describe("Application crud operations", () => {
         cy.wait("@postApplication");
 
         // Edit application's name
-        var updatedApplicationName = data.getFullName();
+        var updatedApplicationName = data.getAppName();
         application.edit({ name: updatedApplicationName });
         exists(updatedApplicationName);
         cy.wait("@getApplication");
