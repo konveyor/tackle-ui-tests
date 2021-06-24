@@ -212,3 +212,16 @@ export function notExistsWithinRow(
         .find(fieldId)
         .should("not.contain", valueToSearch);
 }
+
+export function deleteTableRows(): void {
+    cy.get(commonView.appTable)
+        .get("tbody")
+        .find(trTag)
+        .each(($tableRow) => {
+            cy.wrap($tableRow).within(() => {
+                click(commonView.deleteButton);
+            });
+            cy.get(commonView.confirmButton).click();
+            cy.wait(2000);
+        });
+}

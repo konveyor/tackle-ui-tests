@@ -1,8 +1,8 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, selectItemsPerPage, click } from "../../../../utils/utils";
+import { login, clickByText, selectItemsPerPage, deleteTableRows } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, businessservices, tdTag, trTag } from "../../../types/constants";
+import { controls, businessservices } from "../../../types/constants";
 
 import { BusinessServices } from "../../../models/businessservices";
 
@@ -14,8 +14,6 @@ import {
     pageNumInput,
     prevPageButton,
     appTable,
-    deleteButton,
-    confirmButton,
 } from "../../../views/common.view";
 
 var businessservicesList: Array<BusinessServices> = [];
@@ -28,6 +26,13 @@ describe("Business services pagination validations", function () {
         // Navigate to business services tab
         clickByText(navMenu, controls);
         clickByText(navTab, businessservices);
+        function createMultipleBusinessservices(num): void {
+            for (let i = 0; i < num; i++) {
+                const businessservice = new BusinessServices(data.getFullName());
+                businessservice.create();
+                businessservicesList.push(businessservice);
+            }
+        }
         var rowsToCreate = 0;
 
         // Get the current table row count and create appropriate test data rows
@@ -44,21 +49,13 @@ describe("Business services pagination validations", function () {
                         }
                         if (rowsToCreate > 0) {
                             // Create multiple business services
-                            for (let i = 0; i < rowsToCreate; i++) {
-                                const businessservice = new BusinessServices(data.getFullName());
-                                businessservice.create();
-                                businessservicesList.push(businessservice);
-                            }
+                            createMultipleBusinessservices(rowsToCreate);
                         }
                     });
                 } else {
                     rowsToCreate = 11;
                     // Create multiple business services
-                    for (let i = 0; i < rowsToCreate; i++) {
-                        const businessservice = new BusinessServices(data.getFullName());
-                        businessservice.create();
-                        businessservicesList.push(businessservice);
-                    }
+                    createMultipleBusinessservices(rowsToCreate);
                 }
             });
     });
@@ -188,21 +185,7 @@ describe("Business services pagination validations", function () {
         cy.wait(2000);
 
         // Delete all items of last page
-        cy.get(appTable)
-            .get("tbody")
-            .find(trTag)
-            .each(($tableRow) => {
-                var name = $tableRow.find("td[data-label='Name']").text();
-                cy.get(tdTag)
-                    .contains(name)
-                    .parent(tdTag)
-                    .parent(trTag)
-                    .within(() => {
-                        click(deleteButton);
-                    });
-                cy.get(confirmButton).click();
-                cy.wait(2000);
-            });
+        deleteTableRows();
 
         // Verify that page is re-directed to previous page
         cy.get("td[data-label=Name]").then(($rows) => {

@@ -61,7 +61,7 @@ export class Stakeholdergroups {
             cancelForm();
         } else {
             this.fillName(this.name);
-            this.fillDescription(this.description);
+            if (this.description) this.fillDescription(this.description);
             if (this.members) {
                 this.selectMembers(this.members);
             }

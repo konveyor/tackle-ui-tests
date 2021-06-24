@@ -1,8 +1,13 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, selectItemsPerPage, click } from "../../../../../utils/utils";
+import {
+    login,
+    clickByText,
+    selectItemsPerPage,
+    deleteTableRows,
+} from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, tags, tdTag, trTag } from "../../../../types/constants";
+import { controls, tags } from "../../../../types/constants";
 
 import { Tagtype } from "../../../../models/tags";
 
@@ -14,8 +19,6 @@ import {
     pageNumInput,
     prevPageButton,
     appTable,
-    deleteButton,
-    confirmButton,
 } from "../../../../views/common.view";
 
 var tagtypeList: Array<Tagtype> = [];
@@ -28,6 +31,17 @@ describe("Tag type pagination validations", function () {
         // Navigate to Tags tab
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
+        function createMultipleTagtypes(num): void {
+            for (let i = 0; i < num; i++) {
+                const tagtype = new Tagtype(
+                    data.getRandomWords(2),
+                    data.getColor(),
+                    data.getRandomNumber(11, 22)
+                );
+                tagtype.create();
+                tagtypeList.push(tagtype);
+            }
+        }
         var rowsToCreate = 0;
 
         // Get the current table row count for tag types and create appropriate test data rows
@@ -44,29 +58,13 @@ describe("Tag type pagination validations", function () {
                         }
                         if (rowsToCreate > 0) {
                             // Create multiple tag types
-                            for (let i = 0; i < rowsToCreate; i++) {
-                                const tagtype = new Tagtype(
-                                    data.getRandomWords(2),
-                                    data.getColor(),
-                                    data.getRandomNumber(11, 22)
-                                );
-                                tagtype.create();
-                                tagtypeList.push(tagtype);
-                            }
+                            createMultipleTagtypes(rowsToCreate);
                         }
                     });
                 } else {
                     rowsToCreate = 11;
                     // Create multiple tag types
-                    for (let i = 0; i < rowsToCreate; i++) {
-                        const tagtype = new Tagtype(
-                            data.getRandomWords(2),
-                            data.getColor(),
-                            data.getRandomNumber(11, 22)
-                        );
-                        tagtype.create();
-                        tagtypeList.push(tagtype);
-                    }
+                    createMultipleTagtypes(rowsToCreate);
                 }
             });
     });
@@ -195,20 +193,7 @@ describe("Tag type pagination validations", function () {
         cy.wait(2000);
 
         // Delete all items of last page
-        cy.get(appTable)
-            .get("tbody")
-            .find(trTag)
-            .each(($tableRow) => {
-                var tagtypeName = $tableRow.find("td[data-label='Tag type']").text();
-                cy.get(tdTag)
-                    .contains(tagtypeName)
-                    .parent(trTag)
-                    .within(() => {
-                        click(deleteButton);
-                    });
-                cy.get(confirmButton).click();
-                cy.wait(2000);
-            });
+        deleteTableRows();
 
         // Verify that page is re-directed to previous page
         cy.get("td[data-label='Tag type']").then(($rows) => {
