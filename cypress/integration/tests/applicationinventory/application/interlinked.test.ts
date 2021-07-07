@@ -1,0 +1,112 @@
+/// <reference types="cypress" />
+
+import { login, clickByText, notExists } from "../../../../utils/utils";
+import { Tag } from "../../../models/tags";
+import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
+import { navMenu } from "../../../views/menu.view";
+import { navTab } from "../../../views/menu.view";
+import { Stakeholders } from "../../../models/stakeholders";
+
+import { applicationinventory, controls, businessservices, tags } from "../../../types/constants";
+
+import * as data from "../../../../utils/data_utils";
+import { BusinessServices } from "../../../models/businessservices";
+
+var stakeholdersList: Array<Stakeholders> = [];
+var businessservicesList: Array<BusinessServices> = [];
+var tagList: Array<Tag> = [];
+var applicationList: Array<ApplicationInventory> = [];
+
+describe("Application inventory interlinked to tags and business service", () => {
+    before("Login and Create Test Data", function () {
+        // Perform login
+        login();
+
+        // Create multiple bussiness services and stakeholders
+        for (let i = 0; i < 2; i++) {
+            const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
+            stakeholder.create();
+            stakeholdersList.push(stakeholder);
+
+            // Create new business service
+            const businessservice = new BusinessServices(
+                data.getCompanyName(),
+                data.getDescription(),
+                stakeholder.name
+            );
+            businessservice.create();
+            businessservicesList.push(businessservice);
+
+            // Create new tag
+            const tag = new Tag(data.getRandomWord(6), data.getExistingTagtype());
+            tag.create();
+            tagList.push(tag);
+
+            // Navigate to application inventory tab and create new application
+            const application = new ApplicationInventory(
+                data.getAppName(),
+                data.getDescription(),
+                data.getDescription(),
+                businessservice.name,
+                [tag.name]
+            );
+            application.create();
+            applicationList.push(application);
+            cy.wait(2000);
+        }
+    });
+
+    beforeEach("Persist session", function () {
+        // Save the session and token cookie for maintaining one login session
+        Cypress.Cookies.preserveOnce("AUTH_SESSION_ID", "KEYCLOAK_SESSION");
+
+        // Interceptors
+        cy.intercept("POST", "/api/controls/business-service*").as("postBusinessService");
+        cy.intercept("GET", "/api/controls/business-service*").as("getBusinessService");
+
+        // Interceptors
+        cy.intercept("POST", "/api/controls/tag*").as("postTag");
+        cy.intercept("GET", "/api/controls/tag*").as("getTag");
+
+        // Interceptors
+        cy.intercept("GET", "/api/application-inventory/application*").as("getApplication");
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the bussiness services and stakeholders created before the tests
+
+        businessservicesList.forEach(function (businessservice) {
+            businessservice.delete();
+        });
+
+        stakeholdersList.forEach(function (stakeholder) {
+            stakeholder.delete();
+        });
+
+        tagList.forEach(function (tag) {
+            tag.delete();
+        });
+
+        // Delete application
+        applicationList.forEach(function (application) {
+            application.delete();
+        });
+    });
+
+    it("Business Service update and delete dependency on application inventory", function () {
+        // Navigate to Business Service and delete
+        clickByText(navMenu, controls);
+        clickByText(navTab, businessservices);
+
+        businessservicesList[0].delete();
+        notExists(businessservicesList[0].name);
+
+        // Navigate to tags and delete
+        clickByText(navTab, tags);
+        tagList[0].delete();
+
+        // Navigate to application inventory
+        clickByText(navMenu, applicationinventory);
+        cy.wait("@getApplication");
+    });
+});
