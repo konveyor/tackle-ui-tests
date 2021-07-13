@@ -20,6 +20,7 @@ import {
     editButton,
     actionButton,
     selectBox,
+    tags,
 } from "../../views/applicationinventory.view";
 import * as commonView from "../../views/common.view";
 import {
@@ -301,7 +302,6 @@ export class ApplicationInventory {
                 this.comment = updatedValues.comment;
             }
             if (updatedValues) {
-                this.name = updatedValues.name;
                 submitForm();
             }
         }
@@ -371,5 +371,60 @@ export class ApplicationInventory {
 
     is_reviewed(): void {
         this.verifyCompleteStatus(reviewColumnSelector);
+    }
+
+    getColumnText(columnSelector, columnText: string): void {
+        selectItemsPerPage(100);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                cy.get(columnSelector).find("span").should("contain", columnText);
+            });
+    }
+
+    expandApplicationRow(): void {
+        // displays row details by clicking on the expand button
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                cy.get(commonView.expandRow).then(($btn) => {
+                    if ($btn.attr("aria-expanded") === "false") {
+                        $btn.trigger("click");
+                    }
+                });
+            });
+    }
+
+    closeApplicationRow(): void {
+        // closes row details by clicking on the collapse button
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                cy.get(commonView.expandRow).then(($btn) => {
+                    if ($btn.attr("aria-expanded") === "true") {
+                        $btn.trigger("click");
+                    }
+                });
+            });
+    }
+
+    existsWithinRow(rowIdentifier: string, fieldId: string, valueToSearch: string): void {
+        // Verifies if the valueToSearch exists within the row
+        cy.get(tdTag)
+            .contains(rowIdentifier)
+            .parent(tdTag)
+            .parent(trTag)
+            .next()
+            .find(tags)
+            .contains(fieldId)
+            .parent("dt")
+            .next()
+            .should("contain", valueToSearch);
     }
 }

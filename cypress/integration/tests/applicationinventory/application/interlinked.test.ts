@@ -3,11 +3,17 @@
 import { login, clickByText, notExists } from "../../../../utils/utils";
 import { Tag } from "../../../models/tags";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
+import { businessColumnSelector } from "../../../views/applicationinventory.view";
 import { navMenu } from "../../../views/menu.view";
 import { navTab } from "../../../views/menu.view";
 import { Stakeholders } from "../../../models/stakeholders";
 
-import { applicationinventory, controls, businessservices, tags } from "../../../types/constants";
+import {
+    applicationinventory,
+    controls,
+    businessservices,
+    tags
+} from "../../../types/constants";
 
 import * as data from "../../../../utils/data_utils";
 import { BusinessServices } from "../../../models/businessservices";
@@ -22,7 +28,7 @@ describe("Application inventory interlinked to tags and business service", () =>
         // Perform login
         login();
 
-        // Create multiple bussiness services and stakeholders
+        // Create multiple bussiness services and tags
         for (let i = 0; i < 2; i++) {
             const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
             stakeholder.create();
@@ -73,24 +79,18 @@ describe("Application inventory interlinked to tags and business service", () =>
     });
 
     after("Perform test data clean up", function () {
-        // Delete the bussiness services and stakeholders created before the tests
-
-        businessservicesList.forEach(function (businessservice) {
-            businessservice.delete();
-        });
-
+        // Delete the applications and stakeholders created before the tests
         stakeholdersList.forEach(function (stakeholder) {
             stakeholder.delete();
-        });
-
-        tagList.forEach(function (tag) {
-            tag.delete();
         });
 
         // Delete application
         applicationList.forEach(function (application) {
             application.delete();
         });
+        // Clean up business service and tags
+        businessservicesList[1].delete();
+        tagList[1].delete();
     });
 
     it("Business Service update and delete dependency on application inventory", function () {
@@ -107,6 +107,27 @@ describe("Application inventory interlinked to tags and business service", () =>
 
         // Navigate to application inventory
         clickByText(navMenu, applicationinventory);
+        cy.wait(100);
         cy.wait("@getApplication");
+        applicationList[0].getColumnText(businessColumnSelector, "Not available");
+        cy.wait(100);
+
+        // Assert that created tag exists
+        applicationList[0].expandApplicationRow();
+        applicationList[0].existsWithinRow(applicationList[0].name, "Tags", "Unknown");
+        applicationList[0].closeApplicationRow();
+
+        applicationList[0].edit({
+            business: businessservicesList[1].name,
+            tags: [tagList[1].name],
+        });
+        cy.wait("@getApplication");
+        applicationList[0].getColumnText(businessColumnSelector, businessservicesList[1].name);
+        cy.wait(100);
+
+        // Assert that created tag exists
+        applicationList[0].expandApplicationRow();
+        applicationList[0].existsWithinRow(applicationList[0].name, "Tags", tagList[1].name);
+        applicationList[0].closeApplicationRow();
     });
 });
