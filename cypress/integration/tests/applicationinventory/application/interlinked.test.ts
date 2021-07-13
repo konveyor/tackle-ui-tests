@@ -8,12 +8,7 @@ import { navMenu } from "../../../views/menu.view";
 import { navTab } from "../../../views/menu.view";
 import { Stakeholders } from "../../../models/stakeholders";
 
-import {
-    applicationinventory,
-    controls,
-    businessservices,
-    tags
-} from "../../../types/constants";
+import { applicationinventory, controls, businessservices, tags } from "../../../types/constants";
 
 import * as data from "../../../../utils/data_utils";
 import { BusinessServices } from "../../../models/businessservices";
