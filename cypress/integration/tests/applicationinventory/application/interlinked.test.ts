@@ -93,6 +93,7 @@ describe("Application inventory interlinked to tags and business service", () =>
         clickByText(navMenu, controls);
         clickByText(navTab, businessservices);
 
+        //Delete associated business service
         businessservicesList[0].delete();
         notExists(businessservicesList[0].name);
 
@@ -104,10 +105,12 @@ describe("Application inventory interlinked to tags and business service", () =>
         clickByText(navMenu, applicationinventory);
         cy.wait(100);
         cy.wait("@getApplication");
+
+        // Assert that deleted business service is removed from application
         applicationList[0].getColumnText(businessColumnSelector, "Not available");
         cy.wait(100);
 
-        // Assert that created tag exists
+        // Assert that deleted tag is removed
         applicationList[0].expandApplicationRow();
         applicationList[0].existsWithinRow(applicationList[0].name, "Tags", "Unknown");
         applicationList[0].closeApplicationRow();
@@ -117,6 +120,8 @@ describe("Application inventory interlinked to tags and business service", () =>
             tags: [tagList[1].name],
         });
         cy.wait("@getApplication");
+
+        // Assert that business service is updated
         applicationList[0].getColumnText(businessColumnSelector, businessservicesList[1].name);
         cy.wait(100);
 
