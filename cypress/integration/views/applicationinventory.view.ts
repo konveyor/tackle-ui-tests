@@ -6,3 +6,5 @@ export const applicationCommentInput = "textarea[name=comments]";
 export const editButton = "div[class='pf-c-inline-edit__action pf-m-enable-editable'] > button";
 export const actionButton = "div > button[aria-label='Actions']";
 export const selectBox = "input[type=checkbox]";
+export const businessColumnSelector = "td[data-label='Business service']";
+export const tags = "span";
