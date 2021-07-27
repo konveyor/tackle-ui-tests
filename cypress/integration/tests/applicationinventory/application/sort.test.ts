@@ -10,7 +10,7 @@ import {
     getTableColumnData,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
-import { applicationinventory, name, tags } from "../../../types/constants";
+import { applicationinventory, name, tagCount, review } from "../../../types/constants";
 
 import * as data from "../../../../utils/data_utils";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
@@ -42,9 +42,13 @@ describe("Business services sort validations", function () {
 
     after("Perform test data clean up", function () {
         // Delete the applications created before the tests
-
         applicationsList.forEach(function (application) {
-            application.delete();
+            cy.get(".pf-c-table > tbody > tr")
+                .not(".pf-c-table__expandable-row")
+                .find("td[data-label=Name]")
+                .each(($rows) => {
+                    if ($rows.text() === application.name) application.delete();
+                });
         });
     });
 
@@ -72,28 +76,54 @@ describe("Business services sort validations", function () {
         const afterDescSortList = getTableColumnData(name);
         verifySortDesc(afterDescSortList, unsortedList);
     });
-    it("Tag(s) sort validations", function () {
+
+    it("Review sort validations", function () {
         // Navigate to application inventory page
         clickByText(navMenu, applicationinventory);
         cy.wait("@getApplications");
 
         // get unsorted list when page loads
-        const unsortedList = getTableColumnData(tags);
+        const unsortedList = getTableColumnData(review);
 
-        // Sort the application inventory by tags in ascending order
-        sortAsc(tags);
+        // Sort the application inventory by review in ascending order
+        sortAsc(review);
         cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in ascending order
-        const afterAscSortList = getTableColumnData(tags);
+        const afterAscSortList = getTableColumnData(review);
         verifySortAsc(afterAscSortList, unsortedList);
 
-        // Sort the application inventory by tags in descending order
-        sortDesc(tags);
+        // Sort the application inventory by name in descending order
+        sortDesc(review);
         cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in descending order
-        const afterDescSortList = getTableColumnData(tags);
+        const afterDescSortList = getTableColumnData(review);
+        verifySortDesc(afterDescSortList, unsortedList);
+    });
+
+    it("Tag count sort validations", function () {
+        // Navigate to application inventory page
+        clickByText(navMenu, applicationinventory);
+        cy.wait("@getApplications");
+
+        // get unsorted list when page loads
+        const unsortedList = getTableColumnData(tagCount);
+
+        // Sort the application inventory by Tag count in ascending order
+        sortAsc(tagCount);
+        cy.wait(2000);
+
+        // Verify that the application inventory table rows are displayed in ascending order
+        const afterAscSortList = getTableColumnData(tagCount);
+        verifySortAsc(afterAscSortList, unsortedList);
+
+        // Sort the application inventory by tags in descending order
+        sortDesc(tagCount);
+        cy.wait(2000);
+
+        // Verify that the application inventory table rows are displayed in descending order
+        const afterDescSortList = getTableColumnData(tagCount);
         verifySortDesc(afterDescSortList, unsortedList);
     });
 });
