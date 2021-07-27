@@ -68,7 +68,8 @@ describe("Stakeholder group linked to stakeholder members", () => {
                 click(expandRow);
             })
             .get("div > dd")
-            .should("contain", `${membersList[1]}, ${membersList[0]}`);
+            .should("contain", membersList[0])
+            .and("contain", membersList[1]);
 
         // Update name of second stakeholder
         var updatedStakeholderName = data.getFullName();
