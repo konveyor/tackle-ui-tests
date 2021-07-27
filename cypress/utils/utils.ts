@@ -214,14 +214,16 @@ export function notExistsWithinRow(
 }
 
 export function deleteTableRows(): void {
-    cy.get(commonView.appTable)
-        .get("tbody")
-        .find(trTag)
-        .each(($tableRow) => {
-            cy.wrap($tableRow).within(() => {
-                click(commonView.deleteButton);
-            });
+    cy.get(commonView.appTable).get("tbody").find(trTag).as("rowsIdentifier");
+    cy.get("@rowsIdentifier").then(($tableRows) => {
+        for (let i = 0; i < $tableRows.length; i++) {
+            cy.get("@rowsIdentifier")
+                .eq(0)
+                .within(() => {
+                    click(commonView.deleteButton);
+                });
             cy.get(commonView.confirmButton).click();
             cy.wait(2000);
-        });
+        }
+    });
 }
