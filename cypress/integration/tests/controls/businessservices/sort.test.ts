@@ -71,13 +71,16 @@ describe("Business services sort validations", function () {
         clickByText(navTab, businessservices);
         cy.wait("@getBusinessService");
 
+        // get unsorted list when page loads
+        const unsortedList = getTableColumnData(name);
+
         // Sort the business services by name in ascending order
         sortAsc(name);
         cy.wait(2000);
 
         // Verify that the business services table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(name);
-        verifySortAsc(afterAscSortList);
+        verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the business services by name in descending order
         sortDesc(name);
@@ -85,7 +88,7 @@ describe("Business services sort validations", function () {
 
         // Verify that the business services table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(name);
-        verifySortDesc(afterDescSortList);
+        verifySortDesc(afterDescSortList, unsortedList);
     });
 
     it("Owner sort validations", function () {
@@ -94,13 +97,16 @@ describe("Business services sort validations", function () {
         clickByText(navTab, businessservices);
         cy.wait("@getBusinessService");
 
+        // get unsorted list when page loads
+        const unsortedList = getTableColumnData(owner);
+
         // Sort the business services by owner in ascending order
         sortAsc(owner);
         cy.wait(2000);
 
         // Verify that the business services table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(owner);
-        verifySortAsc(afterAscSortList);
+        verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the business services by owner in descending order
         sortDesc(owner);
@@ -108,6 +114,6 @@ describe("Business services sort validations", function () {
 
         // Verify that the business services table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(owner);
-        verifySortDesc(afterDescSortList);
+        verifySortDesc(afterDescSortList, unsortedList);
     });
 });
