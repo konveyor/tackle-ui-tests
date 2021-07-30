@@ -107,4 +107,25 @@ describe("Application inventory filter validations", function () {
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
     });
+    
+    it("Tag filter validations", function () {
+        clickByText(navMenu, applicationinventory);
+
+        // Enter an existing name substring and assert
+        var validSearchInput = applicationsList[0].tags[0].substring(0, 3);
+        applySearchFilter(name, validSearchInput);
+        exists(applicationsList[0].tags[0]);
+        clickByText(button, clearAllFilters);
+
+        applySearchFilter(name, applicationsList[1].tags[0]);
+        exists(applicationsList[1].name);
+        clickByText(button, clearAllFilters);
+
+        // Enter a non-existing name substring and apply it as search filter
+        applySearchFilter(name, invalidSearchInput);
+
+        // Assert that no search results are found
+        cy.get("h2").contains("No results found");
+    });
+
 });
