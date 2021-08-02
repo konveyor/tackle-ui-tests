@@ -108,8 +108,8 @@ export function notExists(value: string): void {
 }
 
 export function selectFilter(filterName: string): void {
-    cy.wait(2000);
-    cy.get("div.pf-c-input-group").find(commonView.filterToggleButton).click();
+    cy.wait(4000);
+    cy.get("div.pf-c-input-group").eq(0).find(commonView.filterToggleButton).click({ force: true });
     cy.get("ul[role=menu] > li").contains("button", filterName).click();
 }
 
@@ -129,12 +129,17 @@ export function applySearchFilter(filterName: string, searchText: any): void {
     } else {
         if (Array.isArray(searchText)) {
             searchText.forEach(function (searchTextValue) {
-                inputText(commonView.filterInput, searchTextValue);
+                cy.get(commonView.filterInput).eq(0).click().focused().clear();
+                cy.wait(200);
+                cy.get(commonView.filterInput).eq(0).clear().type(searchTextValue);
+                cy.get(commonView.searchButton).eq(0).click({ force: true });
                 click(commonView.searchButton);
             });
         } else {
-            inputText(commonView.filterInput, searchText);
-            click(commonView.searchButton);
+            cy.get(commonView.filterInput).eq(0).click().focused().clear();
+            cy.wait(200);
+            cy.get(commonView.filterInput).eq(0).clear().type(searchText);
+            cy.get(commonView.searchButton).eq(0).click({ force: true });
         }
     }
     cy.wait(2000);

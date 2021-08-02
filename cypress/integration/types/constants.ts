@@ -23,6 +23,7 @@ export const member = "Member";
 export const rank = "Rank";
 export const review = "Review";
 export const owner = "Owner";
+export const reports = "Reports";
 export const save = "Save";
 export const stakeholders = "Stakeholders";
 export const stakeholdergroups = "Stakeholder groups";

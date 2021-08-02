@@ -158,13 +158,14 @@ export class ApplicationInventory {
     }
 
     protected selectApplication(): void {
+        cy.wait(4000);
         cy.get(tdTag)
             .contains(this.name)
             .parent(tdTag)
             .parent(trTag)
             .within(() => {
                 click(selectBox);
-                cy.wait(500);
+                cy.wait(2000);
             });
     }
 
@@ -344,11 +345,11 @@ export class ApplicationInventory {
             selectItemsPerPage(100);
             this.selectApplication();
             clickByText(button, assess);
-            cy.wait(2000);
+            cy.wait(6000);
             if (stakeholders) this.selectStakeholders(stakeholders);
             if (stakeholdergroups) this.selectStakeholdergroups(stakeholdergroups);
             clickByText(button, next);
-            cy.wait(500);
+            cy.wait(1000);
             this.selectAnswers(risk);
         }
     }
