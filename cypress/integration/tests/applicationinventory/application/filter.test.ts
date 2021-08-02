@@ -29,18 +29,18 @@ describe("Application inventory filter validations", function () {
 
         for (let i = 0; i < 3; i++) {
             // Create new business service
-            const businessservice = new BusinessServices(data.getCompanyName());
-            businessservice.create();
+            const businessService = new BusinessServices(data.getCompanyName());
+            businessService.create();
 
-            businessserviceList.push(businessservice);
+            businessserviceList.push(businessService);
         }
 
         for (let i = 0; i < 3; i++) {
             // Create new tag
-            const Newtag = new Tag(data.getRandomWord(6), data.getExistingTagtype());
-            Newtag.create();
+            const newTag = new Tag(data.getRandomWord(6), data.getExistingTagtype());
+            newTag.create();
 
-            tagList.push(Newtag);
+            tagList.push(newTag);
         }
 
         for (let i = 0; i < 2; i++) {
