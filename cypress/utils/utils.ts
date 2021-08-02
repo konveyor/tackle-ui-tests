@@ -1,6 +1,14 @@
 import * as loginView from "../integration/views/login.view";
 import * as commonView from "../integration/views/common.view";
-import { groupCount, memberCount, tagCount, tdTag, trTag } from "../integration/types/constants";
+import {
+    businessservice,
+    tag,
+    groupCount,
+    memberCount,
+    tagCount,
+    tdTag,
+    trTag,
+} from "../integration/types/constants";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
@@ -48,7 +56,7 @@ export function selectItemsPerPage(items: number): void {
             if (!$toggleBtn.eq(0).is(":disabled")) {
                 $toggleBtn.eq(0).trigger("click");
                 cy.get(commonView.itemsPerPageMenuOptions);
-                cy.get(`li > button[data-action="per-page-${items}"]`).click();
+                cy.get(`li > button[data-action="per-page-${items}"]`).click({ force: true });
                 cy.wait(2000);
             }
         });
@@ -101,10 +109,30 @@ export function selectFilter(filterName: string): void {
     cy.get("ul[role=menu] > li").contains("button", filterName).click();
 }
 
-export function applySearchFilter(filterName: string, searchText: string): void {
+export function applySearchFilter(filterName: string, searchText: any): void {
     selectFilter(filterName);
-    inputText(commonView.filterInput, searchText);
-    click(commonView.searchButton);
+    if (filterName == businessservice || filterName == tag) {
+        cy.get("div.pf-c-input-group").find("div.pf-c-select > div > button").click();
+        if (Array.isArray(searchText)) {
+            searchText.forEach(function (searchTextValue) {
+                cy.get("div.pf-c-select__menu > fieldset > label > span")
+                    .contains(searchTextValue)
+                    .click();
+            });
+        } else {
+            cy.get("div.pf-c-select__menu > fieldset > label > span").contains(searchText).click();
+        }
+    } else {
+        if (Array.isArray(searchText)) {
+            searchText.forEach(function (searchTextValue) {
+                inputText(commonView.filterInput, searchTextValue);
+                click(commonView.searchButton);
+            });
+        } else {
+            inputText(commonView.filterInput, searchText);
+            click(commonView.searchButton);
+        }
+    }
     cy.wait(2000);
 }
 

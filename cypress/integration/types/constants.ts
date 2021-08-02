@@ -1,6 +1,7 @@
 export const applicationinventory = "Application inventory";
 export const assess = "Assess";
 export const businessservices = "Business services";
+export const businessservice = "Business service";
 export const button = "button";
 export const clearAllFilters = "Clear all filters";
 export const controls = "Controls";
@@ -25,6 +26,7 @@ export const owner = "Owner";
 export const save = "Save";
 export const stakeholders = "Stakeholders";
 export const stakeholdergroups = "Stakeholder groups";
+export const tag = "Tag";
 export const tags = "Tags";
 export const tagCount = "Tag count";
 export const tdTag = "td";
