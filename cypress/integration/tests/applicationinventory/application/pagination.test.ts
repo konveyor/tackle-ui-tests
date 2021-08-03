@@ -22,25 +22,29 @@ describe("Application inventory pagination validations", function () {
 
         // Get the current table row count and create appropriate test data rows
         selectItemsPerPage(100);
-        cy.wait(2000);
         cy.get(commonView.appTable)
             .next()
             .then(($div) => {
                 if (!$div.hasClass("pf-c-empty-state")) {
-                    cy.get("td[data-label=Name]").then(($rows) => {
-                        var rowCount = $rows.length;
-                        if (rowCount <= 10) {
-                            rowsToCreate = 11 - rowCount;
-                        }
-                        if (rowsToCreate > 0) {
-                            // Create multiple Applications
-                            for (let i = 0; i < rowsToCreate; i++) {
-                                const application = new ApplicationInventory(data.getFullName());
-                                application.create();
-                                applicationsList.push(application);
+                    cy.get(".pf-c-table > tbody > tr")
+                        .not(".pf-c-table__expandable-row")
+                        .find("td[data-label=Name]")
+                        .then(($rows) => {
+                            var rowCount = $rows.length;
+                            if (rowCount <= 10) {
+                                rowsToCreate = 11 - rowCount;
                             }
-                        }
-                    });
+                            if (rowsToCreate > 0) {
+                                // Create multiple Applications
+                                for (let i = 0; i < rowsToCreate; i++) {
+                                    const application = new ApplicationInventory(
+                                        data.getFullName()
+                                    );
+                                    application.create();
+                                    applicationsList.push(application);
+                                }
+                            }
+                        });
                 } else {
                     rowsToCreate = 11;
                     // Create multiple Applications
@@ -71,9 +75,12 @@ describe("Application inventory pagination validations", function () {
             cy.wait(2000);
 
             applicationsList.forEach(function (application) {
-                cy.get("td[data-label=Name]").each(($rows) => {
-                    if ($rows.text() === application.name) application.delete();
-                });
+                cy.get(".pf-c-table > tbody > tr")
+                    .not(".pf-c-table__expandable-row")
+                    .find("td[data-label=Name]")
+                    .each(($rows) => {
+                        if ($rows.text() === application.name) application.delete();
+                    });
             });
         }
     });
@@ -126,18 +133,24 @@ describe("Application inventory pagination validations", function () {
         cy.wait(2000);
 
         // Verify that only 10 items are displayed
-        cy.get("td[data-label=Name]").then(($rows) => {
-            cy.wrap($rows.length).should("eq", 10);
-        });
+        cy.get(".pf-c-table > tbody > tr")
+            .not(".pf-c-table__expandable-row")
+            .find("td[data-label=Name]")
+            .then(($rows) => {
+                cy.wrap($rows.length).should("eq", 10);
+            });
 
         // Select 20 items per page
         selectItemsPerPage(20);
         cy.wait(2000);
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
-        cy.get("td[data-label=Name]").then(($rows) => {
-            cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
-        });
+        cy.get(".pf-c-table > tbody > tr")
+            .not(".pf-c-table__expandable-row")
+            .find("td[data-label=Name]")
+            .then(($rows) => {
+                cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
+            });
     });
 
     it("Page number validations", function () {
@@ -176,8 +189,10 @@ describe("Application inventory pagination validations", function () {
         cy.get(commonView.appTable)
             .get("tbody")
             .find(trTag)
+            .not(".pf-c-table__expandable-row")
             .each(($tableRow) => {
-                var name = $tableRow.find("td[data-label='Name']").find("span").text();
+                var name = $tableRow.find("td[data-label=Name]").text();
+
                 cy.get(tdTag)
                     .contains(name)
                     .parent(tdTag)
@@ -192,8 +207,11 @@ describe("Application inventory pagination validations", function () {
             });
 
         // Verify that page is re-directed to previous page
-        cy.get("td[data-label=Name]").then(($rows) => {
-            cy.wrap($rows.length).should("eq", 10);
-        });
+        cy.get(".pf-c-table > tbody > tr")
+            .not(".pf-c-table__expandable-row")
+            .find("td[data-label=Name]")
+            .then(($rows) => {
+                cy.wrap($rows.length).should("eq", 10);
+            });
     });
 });
