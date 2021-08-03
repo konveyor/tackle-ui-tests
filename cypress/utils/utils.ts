@@ -283,6 +283,6 @@ export function openManageImportsPage(): void {
     // Opens the manage import applications page
     cy.get(actionButton).eq(1).click();
     cy.get("a.pf-c-dropdown__menu-item").contains("Manage imports").click();
-    cy.wait(2000)
-    cy.get("h1").contains("Application imports")
+    cy.wait(2000);
+    cy.get("h1").contains("Application imports");
 }
