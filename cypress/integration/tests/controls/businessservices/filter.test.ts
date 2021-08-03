@@ -27,20 +27,17 @@ describe("Business services filter validations", function () {
         for (let i = 0; i < 3; i++) {
             const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
             stakeholder.create();
-
             stakeholdersList.push(stakeholder);
         }
 
-        // Create multiple job functions
+        // Create multiple business services
         for (let i = 0; i < 2; i++) {
-            // Create new job function
             const newBusinessservice = new BusinessServices(
                 data.getFullName(),
                 data.getDescription(),
                 stakeholdersList[i].name
             );
             newBusinessservice.create();
-
             businessservicesList.push(newBusinessservice);
         }
     });
