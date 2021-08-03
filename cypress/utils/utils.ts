@@ -164,13 +164,20 @@ export function sortDesc(sortCriteria: string): void {
 export function getTableColumnData(columnName: string): Array<string> {
     selectItemsPerPage(100);
     var itemList = [];
-    cy.get(`td[data-label="${columnName}"]`).each(($ele) => {
-        if (columnName === groupCount || columnName === memberCount || columnName === tagCount) {
-            itemList.push(Number($ele.text()));
-        } else {
-            itemList.push($ele.text().toString().toLowerCase());
-        }
-    });
+    cy.get(".pf-c-table > tbody > tr")
+        .not(".pf-c-table__expandable-row")
+        .find(`td[data-label="${columnName}"]`)
+        .each(($ele) => {
+            if (
+                columnName === groupCount ||
+                columnName === memberCount ||
+                columnName === tagCount
+            ) {
+                itemList.push(Number($ele.text()));
+            } else {
+                itemList.push($ele.text().toString().toLowerCase());
+            }
+        });
     return itemList;
 }
 
