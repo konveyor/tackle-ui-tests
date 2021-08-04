@@ -1,5 +1,6 @@
 import * as loginView from "../integration/views/login.view";
 import * as commonView from "../integration/views/common.view";
+import "cypress-file-upload";
 import {
     businessservice,
     tag,
@@ -8,7 +9,9 @@ import {
     tagCount,
     tdTag,
     trTag,
+    button,
 } from "../integration/types/constants";
+import { actionButton } from "../integration/views/applicationinventory.view";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
@@ -261,4 +264,25 @@ export function deleteTableRows(): void {
             cy.wait(2000);
         }
     });
+}
+
+export function importApplication(fileName: string): void {
+    // Performs application import via csv file upload
+    cy.get(actionButton).eq(1).click();
+    clickByText(button, "Import");
+    cy.wait(500);
+    cy.get('input[type="file"]').attachFile(fileName, {
+        subjectType: "drag-n-drop",
+    });
+    cy.wait(2000);
+    cy.get("form.pf-c-form").find("button").contains("Import").click({ force: true });
+    checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
+}
+
+export function openManageImportsPage(): void {
+    // Opens the manage import applications page
+    cy.get(actionButton).eq(1).click();
+    cy.get("a.pf-c-dropdown__menu-item").contains("Manage imports").click();
+    cy.wait(2000);
+    cy.get("h1").contains("Application imports");
 }
