@@ -156,7 +156,7 @@ describe("Application import operations", () => {
         clickByText(navMenu, applicationinventory);
         cy.wait("@getApplication");
 
-        // Import csv having same name applications differentitated by whitespaces
+        // Import csv having applications with same name, differentiated by whitespaces
         const fileName = "app_name_with_spaces.csv";
         importApplication(filePath + fileName);
         cy.wait(2000);
