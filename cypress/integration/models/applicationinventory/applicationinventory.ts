@@ -317,9 +317,9 @@ export class ApplicationInventory {
             .parent(trTag)
             .within(() => {
                 click(actionButton);
-            })
-            .contains(button, deleteAction)
-            .click();
+                cy.wait(500);
+                clickByText(button, deleteAction);
+            });
 
         if (cancel) {
             cancelForm();
