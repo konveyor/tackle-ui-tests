@@ -6,12 +6,14 @@ import {
     importApplication,
     login,
     openManageImportsPage,
+    openErrorReport,
+    verifyAppImport,
+    verifyImportErrorMsg,
 } from "../../../../utils/utils";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import { BusinessServices } from "../../../models/businessservices";
 import { navMenu } from "../../../views/menu.view";
 import { applicationinventory, button } from "../../../types/constants";
-import { actionButton } from "../../../views/applicationinventory.view";
 
 const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/";
@@ -69,13 +71,7 @@ describe("Application import operations", () => {
         openManageImportsPage();
 
         // Verify import applications page shows correct information
-        cy.get("table > tbody > tr")
-            .eq(0)
-            .within(() => {
-                cy.get("td[data-label='File name']").should("contain", fileName);
-                cy.get("td[data-label='Status']").find("div").should("contain", "Completed");
-                cy.get("td[data-label='Accepted']").should("contain", 2);
-            });
+        verifyAppImport(fileName, "Completed", 2, 0);
     });
 
     it("Duplicate applications import", function () {
@@ -91,23 +87,15 @@ describe("Application import operations", () => {
         openManageImportsPage();
 
         // Verify import applications page shows correct information
-        cy.get("table > tbody > tr")
-            .eq(0)
-            .within(() => {
-                cy.get("td[data-label='File name']").should("contain", fileName);
-                cy.get("td[data-label='Status']").find("div").should("contain", "Completed");
-                cy.get("td[data-label='Accepted']").should("contain", 0);
-                cy.get("td[data-label='Rejected']").should("contain", 2);
-                cy.get(actionButton).click();
-                cy.get(button).contains("View error report").click();
-            });
+        verifyAppImport(fileName, "Completed", 0, 2);
 
-        // Verify the error report message
-        cy.wait(2000);
-        cy.get("h1").contains("Error report");
-        cy.get("table > tbody > tr > td")
-            .should("contain", "Duplicate ApplicationName in table: Import-app-1")
-            .and("contain", "Duplicate ApplicationName in table: Import-app-2");
+        // Verify the error report messages
+        openErrorReport();
+        var errorMsgs = [
+            "Duplicate ApplicationName in table: Import-app-1",
+            "Duplicate ApplicationName in table: Import-app-2",
+        ];
+        verifyImportErrorMsg(errorMsgs);
     });
 
     it("Applications import for non existing tags and business service", function () {
@@ -123,22 +111,86 @@ describe("Application import operations", () => {
         openManageImportsPage();
 
         // Verify import applications page shows correct information
-        cy.get("table > tbody > tr")
-            .eq(0)
-            .within(() => {
-                cy.get("td[data-label='File name']").should("contain", fileName);
-                cy.get("td[data-label='Status']").find("div").should("contain", "Completed");
-                cy.get("td[data-label='Accepted']").should("contain", 0);
-                cy.get("td[data-label='Rejected']").should("contain", 2);
-                cy.get(actionButton).click();
-                cy.get(button).contains("View error report").click();
-            });
+        verifyAppImport(fileName, "Completed", 0, 2);
+
+        // Verify the error report messages
+        openErrorReport();
+        var errorMsgs = [
+            "Business Service: Finance does not exist",
+            "Tag Type Database and Tag H2O combination does not exist",
+        ];
+        verifyImportErrorMsg(errorMsgs);
+    });
+
+    it("Applications import with minimum required field(s) and empty row", function () {
+        clickByText(navMenu, applicationinventory);
+        cy.wait("@getApplication");
+
+        // Import csv with an empty row between two valid rows having minimum required field(s)
+        const fileName = "mandatory_and_empty_rows.csv";
+        importApplication(filePath + fileName);
+        cy.wait(2000);
+
+        // Verify imported apps are visible in table
+        exists("Import-app-5");
+        exists("Import-app-6");
+
+        // Create objects for imported apps
+        for (let i = 5; i <= 6; i++) {
+            const importedApp = new ApplicationInventory(`Import-app-${i}`);
+            applicationsList.push(importedApp);
+        }
+
+        // Open application imports page
+        openManageImportsPage();
+
+        // Verify import applications page shows correct information
+        verifyAppImport(fileName, "Completed", 2, 1);
 
         // Verify the error report message
+        openErrorReport();
+        verifyImportErrorMsg("Application Name is mandatory");
+    });
+
+    it("Applications import having same name with spaces", function () {
+        clickByText(navMenu, applicationinventory);
+        cy.wait("@getApplication");
+
+        // Import csv having same name applications differentitated by whitespaces
+        const fileName = "app_name_with_spaces.csv";
+        importApplication(filePath + fileName);
         cy.wait(2000);
-        cy.get("h1").contains("Error report");
-        cy.get("table > tbody > tr > td")
-            .should("contain", "Business Service: Finance does not exist")
-            .and("contain", "Tag Type Database and Tag H2O combination does not exist");
+
+        // Create object for imported app
+        const importedApp = new ApplicationInventory("Import-app-7");
+        applicationsList.push(importedApp);
+
+        // Open application imports page
+        openManageImportsPage();
+
+        // Verify import applications page shows correct information
+        // Fails due to bug - https://issues.redhat.com/browse/TACKLE-274
+        verifyAppImport(fileName, "Completed", 1, 1);
+
+        // Verify the error report message
+        openErrorReport();
+        verifyImportErrorMsg("Duplicate ApplicationName in table: Import-app-7");
+    });
+
+    it("Applications import having description and comments exceeding allowed limits", function () {
+        clickByText(navMenu, applicationinventory);
+        cy.wait("@getApplication");
+
+        // Import csv having description and comments over the allowed limits
+        // Fails due to bug - https://issues.redhat.com/browse/TACKLE-268
+        const fileName = "desc_comments_char_limit_rows.csv";
+        importApplication(filePath + fileName);
+        cy.wait(2000);
+
+        // Open application imports page
+        openManageImportsPage();
+
+        // Verify import applications page shows correct information
+        verifyAppImport(fileName, "Completed", 0, 2);
     });
 });

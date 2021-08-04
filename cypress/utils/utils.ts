@@ -286,3 +286,37 @@ export function openManageImportsPage(): void {
     cy.wait(2000);
     cy.get("h1").contains("Application imports");
 }
+
+export function openErrorReport(): void {
+    // Open error report for the first row
+    cy.get("table > tbody > tr").eq(0).as("firstRow");
+    cy.get("@firstRow").find(actionButton).click();
+    cy.get("@firstRow").find(button).contains("View error report").click();
+    cy.wait(2000);
+    cy.get("h1").contains("Error report");
+}
+
+export function verifyAppImport(
+    fileName: string,
+    status: string,
+    accepted: number,
+    rejected: number
+): void {
+    // Verify the app import features for a single row
+    cy.get("table > tbody > tr").eq(0).as("firstRow");
+    cy.get("@firstRow").find("td[data-label='File name']").should("contain", fileName);
+    cy.get("@firstRow").find("td[data-label='Status']").find("div").should("contain", status);
+    cy.get("@firstRow").find("td[data-label='Accepted']").should("contain", accepted);
+    cy.get("@firstRow").find("td[data-label='Rejected']").should("contain", rejected);
+}
+
+export function verifyImportErrorMsg(errorMsg: any): void {
+    // Verifies if the error message appears in the error report table
+    if (Array.isArray(errorMsg)) {
+        errorMsg.forEach(function (message) {
+            cy.get("table > tbody > tr > td").should("contain", message);
+        });
+    } else {
+        cy.get("table > tbody > tr > td").should("contain", errorMsg);
+    }
+}
