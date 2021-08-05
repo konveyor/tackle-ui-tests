@@ -5,6 +5,7 @@ import {
     clickByText,
     sortAsc,
     sortDesc,
+    verifySort,
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
@@ -33,7 +34,14 @@ describe("Tag type sort validations", function () {
         cy.wait("@getTagtypes");
 
         // Get unsorted list when page loads
-        const unsortedList = getTableColumnData(tagtype);
+        const expectedAscSortedList = [
+            "application type",
+            "database",
+            "data center",
+            "language",
+            "operating system",
+            "runtime",
+        ];
 
         // Sort the tag type by name in ascending order
         // Issue for sorting corner cases - https://issues.redhat.com/browse/TACKLE-231
@@ -42,7 +50,7 @@ describe("Tag type sort validations", function () {
 
         // Verify that the tag type rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(tagtype);
-        verifySortAsc(afterAscSortList, unsortedList);
+        verifySort(afterAscSortList, expectedAscSortedList);
 
         // Sort the tag type by name in descending order
         sortDesc(tagtype);
@@ -50,7 +58,7 @@ describe("Tag type sort validations", function () {
 
         // Verify that the tag type rows are displayed in descending order
         const afterDescSortList = getTableColumnData(tagtype);
-        verifySortDesc(afterDescSortList, unsortedList);
+        verifySort(afterDescSortList, [...expectedAscSortedList].reverse());
     });
 
     it("Rank sort validations", function () {
