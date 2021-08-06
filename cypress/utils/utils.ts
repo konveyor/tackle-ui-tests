@@ -173,9 +173,9 @@ export function getTableColumnData(columnName: string): Array<string> {
                 columnName === memberCount ||
                 columnName === tagCount
             ) {
-                itemList.push(Number($ele.text()));
+                if ($ele.text() !== "") itemList.push(Number($ele.text()));
             } else {
-                itemList.push($ele.text().toString().toLowerCase());
+                if ($ele.text() !== "") itemList.push($ele.text().toString().toLowerCase());
             }
         });
     return itemList;
@@ -183,14 +183,18 @@ export function getTableColumnData(columnName: string): Array<string> {
 
 export function verifySortAsc(listToVerify: Array<any>, unsortedList: Array<any>): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        const sortedList = _.sortBy(unsortedList);
+        var sortedList = unsortedList.sort((a, b) =>
+            a.toString().localeCompare(b, "en-us", { ignorePunctuation: true })
+        );
         expect(capturedList).to.be.deep.equal(sortedList);
     });
 }
 
 export function verifySortDesc(listToVerify: Array<any>, unsortedList: Array<any>): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        const reverseSortedList = _.sortBy(unsortedList).reverse();
+        var reverseSortedList = unsortedList.sort((a, b) =>
+            b.toString().localeCompare(a, "en-us", { ignorePunctuation: true })
+        );
         expect(capturedList).to.be.deep.equal(reverseSortedList);
     });
 }
