@@ -10,6 +10,7 @@ import {
     tdTag,
     trTag,
     button,
+    rank,
 } from "../integration/types/constants";
 import { actionButton } from "../integration/views/applicationinventory.view";
 
@@ -171,11 +172,12 @@ export function getTableColumnData(columnName: string): Array<string> {
             if (
                 columnName === groupCount ||
                 columnName === memberCount ||
-                columnName === tagCount
+                columnName === tagCount ||
+                columnName === rank
             ) {
-                itemList.push(Number($ele.text()));
+                if ($ele.text() !== "") itemList.push(Number($ele.text()));
             } else {
-                itemList.push($ele.text().toString().toLowerCase());
+                if ($ele.text() !== "") itemList.push($ele.text().toString().toLowerCase());
             }
         });
     return itemList;
@@ -183,14 +185,24 @@ export function getTableColumnData(columnName: string): Array<string> {
 
 export function verifySortAsc(listToVerify: Array<any>, unsortedList: Array<any>): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        const sortedList = _.sortBy(unsortedList);
+        var sortedList = unsortedList.sort((a, b) =>
+            a.toString().localeCompare(b, "en-us", {
+                ignorePunctuation: true,
+                numeric: !unsortedList.some(isNaN),
+            })
+        );
         expect(capturedList).to.be.deep.equal(sortedList);
     });
 }
 
 export function verifySortDesc(listToVerify: Array<any>, unsortedList: Array<any>): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        const reverseSortedList = _.sortBy(unsortedList).reverse();
+        var reverseSortedList = unsortedList.sort((a, b) =>
+            b.toString().localeCompare(a, "en-us", {
+                ignorePunctuation: true,
+                numeric: !unsortedList.some(isNaN),
+            })
+        );
         expect(capturedList).to.be.deep.equal(reverseSortedList);
     });
 }
