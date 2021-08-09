@@ -33,8 +33,17 @@ export function selectItemsPerPageIdentifiedRisks(items: number): void {
 }
 
 export function expandArticle(name: string): void {
-    cy.xpath(
-        `//h3[contains(text(), '${name}')]//ancestor::article//div[@class='pf-c-card__header-toggle']//button/span`
-    ).click({ force: true });
     cy.wait(2000);
+    // Workaround to make sure if table is displayed or not.
+    // If not then click on expand toggle
+    cy.get("div.pf-l-stack__item > article")
+        .eq(3)
+        .then(($article) => {
+            if (!$article.hasClass("pf-c-card pf-m-expanded")) {
+                cy.wait(2000);
+                cy.xpath(
+                    `//h3[contains(text(), '${name}')]//ancestor::article//div[@class='pf-c-card__header-toggle']//button/span`
+                ).click({ force: true });
+            }
+        });
 }
