@@ -10,6 +10,11 @@ import {
     tag,
     button,
     clearAllFilters,
+    application,
+    category,
+    question,
+    answer,
+    applicationinventory,
 } from "../../types/constants";
 import { adoptionCandidateDistributionTable } from "../../views/reports.view";
 import { ApplicationInventory } from "../../models/applicationinventory/applicationinventory";
@@ -27,6 +32,7 @@ var applicationsList: Array<ApplicationInventory> = [];
 var businessServiceList: Array<BusinessServices> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 var tagList: Array<Tag> = [];
+var invalidSearchInput = String(data.getRandomNumber());
 
 describe("Reports filter validations", () => {
     before("Login and create test data", function () {
@@ -98,9 +104,16 @@ describe("Reports filter validations", () => {
             tag.delete();
         });
 
-        // Delete the applications
+        // Delete the Applications created before the tests
+        clickByText(navMenu, applicationinventory);
+        cy.wait(3000);
         applicationsList.forEach(function (application) {
-            application.delete();
+            cy.get(".pf-c-table > tbody > tr")
+                .not(".pf-c-table__expandable-row")
+                .find("td[data-label=Name]")
+                .each(($rows) => {
+                    if ($rows.text() === application.name) application.delete();
+                });
         });
     });
 
@@ -135,8 +148,31 @@ describe("Reports filter validations", () => {
 
         var applicationsData = getTableColumnData("Application(s)");
         cy.wrap(applicationsData).each((application) => {
-            expect(validSearchInput).to.equal(application);
+            expect(application).to.have.string(validSearchInput);
         });
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+
+        // Enter a invalid substring and apply it as search filter
+        applySearchFilter(name, invalidSearchInput);
+
+        // Expand article cards
+        expandArticle("Suggested adoption plan");
+        expandArticle("Identified risks");
+
+        // Assert that no search results are found
+        // Check for current landscape donut charts
+        cy.get("div > h2").eq(0).contains("No data available");
+
+        // Check for Adoption candidate distribution table
+        cy.get("div > h2").eq(1).contains("No data available");
+
+        // Check for Suggested adoption plan graphs
+        cy.get("div > h2").eq(2).contains("No data available");
+
+        // Check for Identified risks table
+        cy.get("div > h2").eq(3).contains("No results found");
 
         // Clear all filters
         clickByText(button, clearAllFilters);
@@ -172,8 +208,31 @@ describe("Reports filter validations", () => {
 
         var applicationsData = getTableColumnData("Application(s)");
         cy.wrap(applicationsData).each((application) => {
-            expect(validSearchInput).to.equal(application);
+            expect(application).to.have.string(applicationsList[0].name);
         });
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+
+        // Enter a invalid substring and apply it as search filter
+        applySearchFilter(description, invalidSearchInput);
+
+        // Expand article cards
+        expandArticle("Suggested adoption plan");
+        expandArticle("Identified risks");
+
+        // Assert that no search results are found
+        // Check for current landscape donut charts
+        cy.get("div > h2").eq(0).contains("No data available");
+
+        // Check for Adoption candidate distribution table
+        cy.get("div > h2").eq(1).contains("No data available");
+
+        // Check for Suggested adoption plan graphs
+        cy.get("div > h2").eq(2).contains("No data available");
+
+        // Check for Identified risks table
+        cy.get("div > h2").eq(3).contains("No results found");
 
         // Clear all filters
         clickByText(button, clearAllFilters);
@@ -209,7 +268,7 @@ describe("Reports filter validations", () => {
 
         var applicationsData = getTableColumnData("Application(s)");
         cy.wrap(applicationsData).each((application) => {
-            expect(applicationsList[0].name).to.equal(application);
+            expect(application).to.have.string(applicationsList[0].name);
         });
 
         // Clear all filters
@@ -246,8 +305,198 @@ describe("Reports filter validations", () => {
 
         var applicationsData = getTableColumnData("Application(s)");
         cy.wrap(applicationsData).each((application) => {
-            expect(applicationsList[0].name).to.equal(application);
+            expect(application).to.have.string(applicationsList[0].name);
         });
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Identified risk - Application field validations", function () {
+        // Navigate to reports
+        clickByText(navMenu, reports);
+        cy.wait(2000);
+
+        // Enter an application name and apply it as search filter
+        var validSearchInput = applicationsList[0].name.substring(0, 11);
+
+        // Expand table Identified risks
+        expandArticle("Identified risks");
+        cy.wait(2000);
+
+        selectItemsPerPageIdentifiedRisks(100);
+
+        applySearchFilter(application, validSearchInput, true);
+        cy.wait(3000);
+
+        // Get list of filtered applications rows and varify
+        var applicationsData = getTableColumnData("Application(s)");
+        cy.wrap(applicationsData).each((application) => {
+            expect(application).to.have.string(validSearchInput);
+        });
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+
+        applySearchFilter(application, applicationsList[0].name, true);
+        cy.wait(3000);
+
+        // Get list of filtered applications rows and varify
+        var applicationsData = getTableColumnData("Application(s)");
+        cy.wrap(applicationsData).each((application) => {
+            expect(application).to.have.string(validSearchInput);
+        });
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+
+        // Enter a invalid substring and apply it as search filter
+        applySearchFilter(application, invalidSearchInput);
+
+        // Assert that no search results are found
+        cy.get("h2").contains("No results found");
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Identified risk - Category field validations", function () {
+        // Navigate to reports
+        clickByText(navMenu, reports);
+        cy.wait(2000);
+
+        // Expand table Identified risks
+        expandArticle("Identified risks");
+        cy.wait(2000);
+
+        selectItemsPerPageIdentifiedRisks(100);
+
+        // Get an category of assessment questions and apply it as search filter
+        var validSearchInput = "Application details".substring(0, 16);
+
+        applySearchFilter(category, validSearchInput, true);
+        cy.wait(3000);
+
+        // Get list of filtered category rows and varify
+        var categoryData = getTableColumnData("Category");
+        cy.wrap(categoryData).each((category) => {
+            expect(validSearchInput.toLowerCase()).to.equal(category);
+        });
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+
+        applySearchFilter(category, "Application details", true);
+        cy.wait(3000);
+
+        // Get list of filtered category rows and varify
+        var categoryData = getTableColumnData("Category");
+        cy.wrap(categoryData).each((category) => {
+            expect(validSearchInput.toLowerCase()).to.equal(category);
+        });
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+
+        // Enter a invalid substring and apply it as search filter
+        applySearchFilter(category, invalidSearchInput);
+
+        // Assert that no search results are found
+        cy.get("h2").contains("No results found");
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Identified risk - Question field validations", function () {
+        // Navigate to reports
+        clickByText(navMenu, reports);
+        cy.wait(2000);
+
+        // Expand table Identified risks
+        expandArticle("Identified risks");
+        cy.wait(2000);
+
+        selectItemsPerPageIdentifiedRisks(100);
+
+        // Get a question from assessment question's list and apply it as search filter
+        var validSearchInput = "How is the application tested?".substring(0, 15);
+        applySearchFilter(question, validSearchInput, true);
+        cy.wait(3000);
+
+        // Get list of filtered questions rows and varify
+        var questionsData = getTableColumnData("Question");
+        cy.wrap(questionsData).each((question) => {
+            expect(validSearchInput.toLowerCase()).to.equal(question);
+        });
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+
+        applySearchFilter(question, "How is the application tested?", true);
+        cy.wait(3000);
+
+        // Get list of filtered questions rows and varify
+        var questionsData = getTableColumnData("Question");
+        cy.wrap(questionsData).each((question) => {
+            expect(validSearchInput.toLowerCase()).to.equal(question);
+        });
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+
+        // Enter a invalid substring and apply it as search filter
+        applySearchFilter(question, invalidSearchInput);
+
+        // Assert that no search results are found
+        cy.get("h2").contains("No results found");
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Identified risk - Answer field validations", function () {
+        // Navigate to reports
+        clickByText(navMenu, reports);
+        cy.wait(2000);
+
+        // Expand table Identified risks
+        expandArticle("Identified risks");
+        cy.wait(2000);
+
+        selectItemsPerPageIdentifiedRisks(100);
+
+        // select an answer input from existing answers and apply it as search filter
+        var validSearchInput = "Not tracked".substring(0, 7);
+        applySearchFilter(answer, validSearchInput, true);
+        cy.wait(3000);
+
+        // Get list of filtered answers rows and varify
+        var answersData = getTableColumnData("Answer");
+        cy.wrap(answersData).each((answer) => {
+            expect(validSearchInput.toLowerCase()).to.equal(answer);
+        });
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+
+        applySearchFilter(answer, "Not tracked", true);
+        cy.wait(3000);
+
+        // Get list of filtered answers rows and varify
+        var answersData = getTableColumnData("Answer");
+        cy.wrap(answersData).each((answer) => {
+            expect(validSearchInput.toLowerCase()).to.equal(answer);
+        });
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+
+        // Enter a invalid substring and apply it as search filter
+        applySearchFilter(answer, invalidSearchInput);
+
+        // Assert that no search results are found
+        cy.get("h2").contains("No results found");
 
         // Clear all filters
         clickByText(button, clearAllFilters);

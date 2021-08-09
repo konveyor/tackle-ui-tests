@@ -129,7 +129,6 @@ export function filterInputText(searchTextValue: string, value: number): void {
     cy.wait(200);
     cy.get(commonView.filterInput).eq(value).clear().type(searchTextValue);
     cy.get(commonView.searchButton).eq(value).click({ force: true });
-    click(commonView.searchButton);
 }
 
 export function applySearchFilter(
