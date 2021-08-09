@@ -107,14 +107,37 @@ export function notExists(value: string): void {
         });
 }
 
-export function selectFilter(filterName: string): void {
+export function selectFilter(filterName: string, identifiedRisk?: boolean): void {
     cy.wait(4000);
-    cy.get("div.pf-c-input-group").eq(0).find(commonView.filterToggleButton).click({ force: true });
-    cy.get("ul[role=menu] > li").contains("button", filterName).click();
+    if (identifiedRisk) {
+        cy.get("div.pf-c-input-group")
+            .find(commonView.filterToggleButton)
+            .eq(1)
+            .click({ force: true });
+        cy.get("ul[role=menu] > li").contains("button", filterName).click();
+    } else {
+        cy.get("div.pf-c-input-group")
+            .eq(0)
+            .find(commonView.filterToggleButton)
+            .click({ force: true });
+        cy.get("ul[role=menu] > li").contains("button", filterName).click();
+    }
 }
 
-export function applySearchFilter(filterName: string, searchText: any): void {
-    selectFilter(filterName);
+export function filterInputText(searchTextValue: string, value: number): void {
+    cy.get(commonView.filterInput).eq(value).click().focused().clear();
+    cy.wait(200);
+    cy.get(commonView.filterInput).eq(value).clear().type(searchTextValue);
+    cy.get(commonView.searchButton).eq(value).click({ force: true });
+    click(commonView.searchButton);
+}
+
+export function applySearchFilter(
+    filterName: string,
+    searchText: any,
+    identifiedRisk?: boolean
+): void {
+    selectFilter(filterName, identifiedRisk);
     if (filterName == businessservice || filterName == tag) {
         cy.get("div.pf-c-input-group").find("div.pf-c-select > div > button").click();
         if (Array.isArray(searchText)) {
@@ -129,17 +152,18 @@ export function applySearchFilter(filterName: string, searchText: any): void {
     } else {
         if (Array.isArray(searchText)) {
             searchText.forEach(function (searchTextValue) {
-                cy.get(commonView.filterInput).eq(0).click().focused().clear();
-                cy.wait(200);
-                cy.get(commonView.filterInput).eq(0).clear().type(searchTextValue);
-                cy.get(commonView.searchButton).eq(0).click({ force: true });
-                click(commonView.searchButton);
+                if (identifiedRisk) {
+                    filterInputText(searchTextValue, 1);
+                } else {
+                    filterInputText(searchTextValue, 0);
+                }
             });
         } else {
-            cy.get(commonView.filterInput).eq(0).click().focused().clear();
-            cy.wait(200);
-            cy.get(commonView.filterInput).eq(0).clear().type(searchText);
-            cy.get(commonView.searchButton).eq(0).click({ force: true });
+            if (identifiedRisk) {
+                filterInputText(searchText, 1);
+            } else {
+                filterInputText(searchText, 0);
+            }
         }
     }
     cy.wait(2000);
