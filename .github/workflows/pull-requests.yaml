@@ -1,0 +1,24 @@
+name: Pull request test
+on: [pull_request]
+jobs:
+  cypress-run:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'RFR')
+    name: Cypress run
+    runs-on: self-hosted
+    steps:
+        # Checkout to pull request branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        # Install NPM dependencies
+      - name: Install NPM
+        run: npm install .
+        # Get all the files added to pull request
+      - id: file_changes
+        uses: trilom/file-changes-action@v1.2.3
+        # Create event to generate ouput of comma separated test files only
+      - id: event
+        run: |
+          test_files=`python -c 'print(",".join([file for file in ${{steps.file_changes.outputs.files_added}} if ".test.ts" in file]))'`
+          echo "::set-output name=tests::$test_files"
+      - name: Run cypress test cases
+        run: npx cypress run --spec ${{ steps.event.outputs.tests }} --env user="tackle",pass="password",tackleUrl=""
