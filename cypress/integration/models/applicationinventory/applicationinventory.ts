@@ -325,6 +325,7 @@ export class ApplicationInventory {
             cancelForm();
         } else {
             click(commonView.confirmButton);
+            cy.wait(2000);
         }
     }
 
