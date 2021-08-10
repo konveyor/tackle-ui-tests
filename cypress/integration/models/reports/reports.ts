@@ -33,11 +33,17 @@ export function selectItemsPerPageIdentifiedRisks(items: number): void {
 }
 
 export function expandArticle(name: string): void {
+    let value: number;
+    if (name === "Suggested adoption plan") {
+        value = 2;
+    } else {
+        value = 3;
+    }
     cy.wait(2000);
     // Workaround to make sure if table is displayed or not.
     // If not then click on expand toggle
     cy.get("div.pf-l-stack__item > article")
-        .eq(3)
+        .eq(value)
         .then(($article) => {
             if (!$article.hasClass("pf-c-card pf-m-expanded")) {
                 cy.wait(2000);

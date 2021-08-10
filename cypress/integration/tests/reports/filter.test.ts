@@ -1,6 +1,12 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, applySearchFilter, getTableColumnData } from "../../../utils/utils";
+import {
+    login,
+    clickByText,
+    applySearchFilter,
+    getTableColumnData,
+    selectFilter,
+} from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
 import {
     reports,
@@ -70,17 +76,15 @@ describe("Reports filter validations", () => {
             application.create();
             applicationsList.push(application);
         }
-        for (let i = 0; i < 1; i++) {
-            // Perform assessment of application
-            applicationsList[i].perform_assessment("high", [stakeholder.name]);
-            cy.wait(4000);
-            applicationsList[i].is_assessed();
-            cy.wait(4000);
-            // Perform application review
-            applicationsList[i].perform_review("high");
-            cy.wait(4000);
-            applicationsList[i].is_reviewed();
-        }
+        // Perform assessment of application
+        applicationsList[0].perform_assessment("high", [stakeholder.name]);
+        cy.wait(4000);
+        applicationsList[0].is_assessed();
+        cy.wait(4000);
+        // Perform application review
+        applicationsList[0].perform_review("high");
+        cy.wait(4000);
+        applicationsList[0].is_reviewed();
     });
 
     beforeEach("Persist session", function () {
@@ -158,8 +162,10 @@ describe("Reports filter validations", () => {
         applySearchFilter(name, invalidSearchInput);
 
         // Expand article cards
-        expandArticle("Suggested adoption plan");
         expandArticle("Identified risks");
+        cy.wait(2000);
+        expandArticle("Suggested adoption plan");
+        cy.wait(2000);
 
         // Assert that no search results are found
         // Check for current landscape donut charts
@@ -218,8 +224,10 @@ describe("Reports filter validations", () => {
         applySearchFilter(description, invalidSearchInput);
 
         // Expand article cards
-        expandArticle("Suggested adoption plan");
         expandArticle("Identified risks");
+        cy.wait(2000);
+        expandArticle("Suggested adoption plan");
+        cy.wait(2000);
 
         // Assert that no search results are found
         // Check for current landscape donut charts
@@ -317,6 +325,11 @@ describe("Reports filter validations", () => {
         clickByText(navMenu, reports);
         cy.wait(2000);
 
+        // Workaround for filters - Keeping default filter selected for reports filter
+        // if it gets changed to tag/business service due to last test case then
+        // eq(1) for identified filter text input does not apply
+        selectFilter("Name");
+
         // Enter an application name and apply it as search filter
         var validSearchInput = applicationsList[0].name.substring(0, 11);
 
@@ -332,7 +345,7 @@ describe("Reports filter validations", () => {
         // Get list of filtered applications rows and varify
         var applicationsData = getTableColumnData("Application(s)");
         cy.wrap(applicationsData).each((application) => {
-            expect(application).to.have.string(validSearchInput);
+            expect(application).to.have.string(applicationsList[0].name);
         });
 
         // Clear all filters
@@ -344,14 +357,14 @@ describe("Reports filter validations", () => {
         // Get list of filtered applications rows and varify
         var applicationsData = getTableColumnData("Application(s)");
         cy.wrap(applicationsData).each((application) => {
-            expect(application).to.have.string(validSearchInput);
+            expect(application).to.have.string(applicationsList[0].name);
         });
 
         // Clear all filters
         clickByText(button, clearAllFilters);
 
         // Enter a invalid substring and apply it as search filter
-        applySearchFilter(application, invalidSearchInput);
+        applySearchFilter(application, invalidSearchInput, true);
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
@@ -372,7 +385,8 @@ describe("Reports filter validations", () => {
         selectItemsPerPageIdentifiedRisks(100);
 
         // Get an category of assessment questions and apply it as search filter
-        var validSearchInput = "Application details".substring(0, 16);
+        var categoryString = "Application details";
+        var validSearchInput = categoryString.substring(0, 16);
 
         applySearchFilter(category, validSearchInput, true);
         cy.wait(3000);
@@ -380,26 +394,26 @@ describe("Reports filter validations", () => {
         // Get list of filtered category rows and varify
         var categoryData = getTableColumnData("Category");
         cy.wrap(categoryData).each((category) => {
-            expect(validSearchInput.toLowerCase()).to.equal(category);
+            expect(categoryString.toLowerCase()).to.equal(category);
         });
 
         // Clear all filters
         clickByText(button, clearAllFilters);
 
-        applySearchFilter(category, "Application details", true);
+        applySearchFilter(category, categoryString, true);
         cy.wait(3000);
 
         // Get list of filtered category rows and varify
         var categoryData = getTableColumnData("Category");
         cy.wrap(categoryData).each((category) => {
-            expect(validSearchInput.toLowerCase()).to.equal(category);
+            expect(categoryString.toLowerCase()).to.equal(category);
         });
 
         // Clear all filters
         clickByText(button, clearAllFilters);
 
         // Enter a invalid substring and apply it as search filter
-        applySearchFilter(category, invalidSearchInput);
+        applySearchFilter(category, invalidSearchInput, true);
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
@@ -420,33 +434,34 @@ describe("Reports filter validations", () => {
         selectItemsPerPageIdentifiedRisks(100);
 
         // Get a question from assessment question's list and apply it as search filter
-        var validSearchInput = "How is the application tested?".substring(0, 15);
+        var questionString = "How is the application tested?";
+        var validSearchInput = questionString.substring(0, 27);
         applySearchFilter(question, validSearchInput, true);
         cy.wait(3000);
 
         // Get list of filtered questions rows and varify
         var questionsData = getTableColumnData("Question");
         cy.wrap(questionsData).each((question) => {
-            expect(validSearchInput.toLowerCase()).to.equal(question);
+            expect(questionString.toLowerCase()).to.equal(question);
         });
 
         // Clear all filters
         clickByText(button, clearAllFilters);
 
-        applySearchFilter(question, "How is the application tested?", true);
+        applySearchFilter(question, questionString, true);
         cy.wait(3000);
 
         // Get list of filtered questions rows and varify
         var questionsData = getTableColumnData("Question");
         cy.wrap(questionsData).each((question) => {
-            expect(validSearchInput.toLowerCase()).to.equal(question);
+            expect(questionString.toLowerCase()).to.equal(question);
         });
 
         // Clear all filters
         clickByText(button, clearAllFilters);
 
         // Enter a invalid substring and apply it as search filter
-        applySearchFilter(question, invalidSearchInput);
+        applySearchFilter(question, invalidSearchInput, true);
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
@@ -467,33 +482,34 @@ describe("Reports filter validations", () => {
         selectItemsPerPageIdentifiedRisks(100);
 
         // select an answer input from existing answers and apply it as search filter
-        var validSearchInput = "Not tracked".substring(0, 7);
+        var answerString = "Not tracked";
+        var validSearchInput = answerString.substring(0, 7);
         applySearchFilter(answer, validSearchInput, true);
         cy.wait(3000);
 
         // Get list of filtered answers rows and varify
         var answersData = getTableColumnData("Answer");
         cy.wrap(answersData).each((answer) => {
-            expect(validSearchInput.toLowerCase()).to.equal(answer);
+            expect(answerString.toLowerCase()).to.equal(answer);
         });
 
         // Clear all filters
         clickByText(button, clearAllFilters);
 
-        applySearchFilter(answer, "Not tracked", true);
+        applySearchFilter(answer, answerString, true);
         cy.wait(3000);
 
         // Get list of filtered answers rows and varify
         var answersData = getTableColumnData("Answer");
         cy.wrap(answersData).each((answer) => {
-            expect(validSearchInput.toLowerCase()).to.equal(answer);
+            expect(answerString.toLowerCase()).to.equal(answer);
         });
 
         // Clear all filters
         clickByText(button, clearAllFilters);
 
         // Enter a invalid substring and apply it as search filter
-        applySearchFilter(answer, invalidSearchInput);
+        applySearchFilter(answer, invalidSearchInput, true);
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
