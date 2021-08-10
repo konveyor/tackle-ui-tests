@@ -61,6 +61,8 @@ describe("Tags filter validations", function () {
         // Issue - https://issues.redhat.com/browse/TACKLE-151
         cy.get("h2").contains("No results found");
 
+        clickByText(button, clearAllFilters);
+
         // Delete the tag
         tag.delete();
         cy.wait(2000);

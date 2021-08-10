@@ -117,6 +117,8 @@ describe("Stakeholder filter validations", function () {
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
+
+        clickByText(button, clearAllFilters);
     });
 
     it("Display name filter validations", function () {
@@ -146,6 +148,8 @@ describe("Stakeholder filter validations", function () {
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
+
+        clickByText(button, clearAllFilters);
     });
 
     it("Job function filter validations", function () {
@@ -181,6 +185,8 @@ describe("Stakeholder filter validations", function () {
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
+
+        clickByText(button, clearAllFilters);
     });
 
     it("Group filter validations", function () {
@@ -219,5 +225,7 @@ describe("Stakeholder filter validations", function () {
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
+
+        clickByText(button, clearAllFilters);
     });
 });
