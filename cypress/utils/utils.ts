@@ -107,14 +107,35 @@ export function notExists(value: string): void {
         });
 }
 
-export function selectFilter(filterName: string): void {
-    cy.wait(2000);
-    cy.get("div.pf-c-input-group").find(commonView.filterToggleButton).click();
+export function selectFilter(filterName: string, identifiedRisk?: boolean): void {
+    cy.wait(4000);
+    if (identifiedRisk) {
+        cy.get("div.pf-c-input-group")
+            .find(commonView.filterToggleButton)
+            .eq(1)
+            .click({ force: true });
+    } else {
+        cy.get("div.pf-c-input-group")
+            .eq(0)
+            .find(commonView.filterToggleButton)
+            .click({ force: true });
+    }
     cy.get("ul[role=menu] > li").contains("button", filterName).click();
 }
 
-export function applySearchFilter(filterName: string, searchText: any): void {
-    selectFilter(filterName);
+export function filterInputText(searchTextValue: string, value: number): void {
+    cy.get(commonView.filterInput).eq(value).click().focused().clear();
+    cy.wait(200);
+    cy.get(commonView.filterInput).eq(value).clear().type(searchTextValue);
+    cy.get(commonView.searchButton).eq(value).click({ force: true });
+}
+
+export function applySearchFilter(
+    filterName: string,
+    searchText: any,
+    identifiedRisk?: boolean
+): void {
+    selectFilter(filterName, identifiedRisk);
     if (filterName == businessservice || filterName == tag) {
         cy.get("div.pf-c-input-group").find("div.pf-c-select > div > button").click();
         if (Array.isArray(searchText)) {
@@ -129,12 +150,18 @@ export function applySearchFilter(filterName: string, searchText: any): void {
     } else {
         if (Array.isArray(searchText)) {
             searchText.forEach(function (searchTextValue) {
-                inputText(commonView.filterInput, searchTextValue);
-                click(commonView.searchButton);
+                if (identifiedRisk) {
+                    filterInputText(searchTextValue, 1);
+                } else {
+                    filterInputText(searchTextValue, 0);
+                }
             });
         } else {
-            inputText(commonView.filterInput, searchText);
-            click(commonView.searchButton);
+            if (identifiedRisk) {
+                filterInputText(searchText, 1);
+            } else {
+                filterInputText(searchText, 0);
+            }
         }
     }
     cy.wait(2000);
