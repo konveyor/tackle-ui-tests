@@ -18,7 +18,8 @@ jobs:
         # Create event to generate ouput of comma separated test files only
       - id: event
         run: |
-          test_files=`python -c 'print(",".join([file for file in ${{steps.file_changes.outputs.files_added}} if ".test.ts" in file]))'`
+          test_files=`python3 -c 'print(",".join([file for file in ${{steps.file_changes.outputs.files_modified}} if ".test.ts" in file]))'`
           echo "::set-output name=tests::$test_files"
+          echo "::set-output name=tackleUrl::'https://tackle-ghubale-tackle.apps.mgn02.cnv-qe.rhcloud.com'"
       - name: Run cypress test cases
-        run: npx cypress run --spec ${{ steps.event.outputs.tests }} --env user="tackle",pass="password",tackleUrl="https://tackle-ghubale-tackle.apps.mgn02.cnv-qe.rhcloud.com"
+        run: npx cypress run --spec ${{ steps.event.outputs.tests }} --env user=${{ steps.event.outputs.tackleUrl }},pass="password",tackleUrl=${{ steps.event.outputs.tackleUrl }}
