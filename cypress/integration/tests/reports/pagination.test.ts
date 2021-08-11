@@ -29,6 +29,15 @@ describe("Reports pagination validations", () => {
         clickByText(navMenu, applicationinventory);
         var rowsToCreate = 0;
 
+        function createApplication(rowsToCreate: number): void {
+            // Create multiple Applications
+            for (let i = 0; i < rowsToCreate; i++) {
+                const application = new ApplicationInventory(data.getFullName());
+                application.create();
+                applicationsList.push(application);
+            }
+        }
+
         // Get the current table row count and create appropriate test data rows
         selectItemsPerPage(100);
         cy.get(commonView.appTable)
@@ -44,31 +53,20 @@ describe("Reports pagination validations", () => {
                                 rowsToCreate = 10 - rowCount;
                             }
                             if (rowsToCreate > 0) {
-                                // Create multiple Applications
-                                for (let i = 0; i < rowsToCreate; i++) {
-                                    const application = new ApplicationInventory(
-                                        data.getFullName()
-                                    );
-                                    application.create();
-                                    applicationsList.push(application);
-                                }
+                                createApplication(rowsToCreate);
                             }
                         });
                 } else {
                     rowsToCreate = 10;
-                    // Create multiple Applications
-                    for (let i = 0; i < rowsToCreate; i++) {
-                        const application = new ApplicationInventory(data.getFullName());
-                        application.create();
-                        applicationsList.push(application);
-                    }
+                    createApplication(rowsToCreate);
                 }
             });
 
-        const newApplication = new ApplicationInventory(data.getFullName());
-        newApplication.create();
-        applicationsList.push(newApplication);
+        rowsToCreate = 1;
+        createApplication(rowsToCreate);
 
+        // Get the last extra application created
+        var newApplication = applicationsList[applicationsList.length - 1];
         // Perform assessment of application
         newApplication.perform_assessment("high", [stakeholder.name]);
         cy.wait(4000);
