@@ -47,9 +47,10 @@
 
 #### Pull request testing
 
-1. Pull requests will be tested against environment before merging to main codebase
-2. Pull request's owner must add **RFR** label once pull request is ready to test against environment
-3. After adding 'RFR' label; Owner should force push the pull request to trigger GitHub action
+1. Update Pull request with upstream main branch
+2. Pull requests will be tested against environment before merging to main codebase
+3. Pull request's owner must add **RFR** label once pull request is ready to test against environment
+4. After adding 'RFR' label; Owner should force push the pull request to trigger GitHub action
 
 #### Test runs
 1. Click here to see **Old** test runs - [run1](https://dashboard.cypress.io/projects/cbdv4m/runs), [run2](https://dashboard.cypress.io/projects/dvmnpr/runs)

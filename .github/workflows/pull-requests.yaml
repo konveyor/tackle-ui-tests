@@ -14,12 +14,14 @@ jobs:
         run: npm install .
         # Get all the files added to pull request
       - id: file_changes
-        uses: trilom/file-changes-action@v1.2.3
+        uses: jitterbit/get-changed-files@v1
+        with:
+          format: 'json'
         # Create event to generate ouput of comma separated test files only
       - id: event
         run: |
-          test_files=`python3 -c 'print(",".join([file for file in ${{steps.file_changes.outputs.files_modified}} if ".test.ts" in file]))'`
+          test_files=`python3 -c 'print(",".join([file for file in ${{ steps.file_changes.outputs.all }} if ".test.ts" in file]))'`
           echo "::set-output name=tests::$test_files"
           echo "::set-output name=tackleUrl::'https://tackle-ghubale-tackle.apps.mgn02.cnv-qe.rhcloud.com'"
       - name: Run cypress test cases
-        run: npx cypress run --spec ${{ steps.event.outputs.tests }} --env user=${{ steps.event.outputs.tackleUrl }},pass="password",tackleUrl=${{ steps.event.outputs.tackleUrl }}
+        run: npx cypress run --spec ${{ steps.event.outputs.tests }} --env user="tackle",pass="password",tackleUrl=${{ steps.event.outputs.tackleUrl }}
