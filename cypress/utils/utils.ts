@@ -11,6 +11,9 @@ import {
     trTag,
     button,
     rank,
+    criticality,
+    priority,
+    confidence,
 } from "../integration/types/constants";
 import { actionButton } from "../integration/views/applicationinventory.view";
 
@@ -200,7 +203,10 @@ export function getTableColumnData(columnName: string): Array<string> {
                 columnName === groupCount ||
                 columnName === memberCount ||
                 columnName === tagCount ||
-                columnName === rank
+                columnName === rank ||
+                columnName === criticality ||
+                columnName === priority ||
+                columnName === confidence
             ) {
                 if ($ele.text() !== "") itemList.push(Number($ele.text()));
             } else {
