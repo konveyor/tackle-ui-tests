@@ -17,7 +17,7 @@ import { ApplicationInventory } from "../../../models/applicationinventory/appli
 
 var applicationsList: Array<ApplicationInventory> = [];
 
-describe("Business services sort validations", function () {
+describe("Application inventory sort validations", function () {
     before("Login and Create Test Data", function () {
         // Perform login
         login();
