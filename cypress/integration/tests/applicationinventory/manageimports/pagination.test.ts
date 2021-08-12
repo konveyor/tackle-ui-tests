@@ -41,7 +41,10 @@ describe("Manage imports pagination validations", function () {
         // Import multiple csv files
         function importMultipleFiles(num): void {
             for (let i = 0; i < rowsToCreate; i++) {
-                importApplication(filePath + filesToImport[i]);
+                var j = 0;
+                if (i <= 2) j = i;
+                importApplication(filePath + filesToImport[j]);
+                cy.wait(2000);
             }
         }
 
