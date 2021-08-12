@@ -27,7 +27,7 @@ export function getJobTitle(): string {
 
 export function getRandomWord(charLength: number): string {
     // returns a word of specified charLength
-    return getRandomWords(1) + faker.lorem.word(charLength);
+    return faker.lorem.word(charLength);
 }
 
 export function getRandomWords(numberOfWords: number): string {
