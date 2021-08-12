@@ -15,7 +15,7 @@
         "typescript": "^4.2.4"
     },
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "tests": "npx cypress run --spec ./**/*.test.ts",
         "check": "prettier --check './**/*.{ts,js,json}'",
         "format": "prettier --write './**/*.{ts,js,json}'"
     }

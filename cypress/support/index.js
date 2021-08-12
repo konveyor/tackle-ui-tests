@@ -19,8 +19,3 @@ import "./commands";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 require("cypress-xpath"); // Refer - https://www.npmjs.com/package/cypress-xpath
-
-
-const registerReportPortalPlugin = require('@reportportal/agent-js-cypress/lib/plugin');
-module.exports = (on) => registerReportPortalPlugin(on);
-

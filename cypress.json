@@ -2,16 +2,8 @@
     "viewportWidth": 1280,
     "viewportHeight": 880,
     "env": {
-        "user": "tackle",
-        "pass": "password",
-        "tackleUrl": "https://tackle-ghubale-tackle.apps.mgn02.cnv-qe.rhcloud.com/"
-    },
-    "reporter": "@reportportal/agent-js-cypress",
-    "reporterOptions": {
-        "endpoint": "https://reportportal-migration-qe.apps.ocp4.prod.psi.redhat.com/api/v1",
-        "token": "93c2f0cb-5f34-45d1-b518-3a77018a5e29",
-        "launch": "ghubale_TEST_EXAMPLE",
-        "project": "ghubale_personal",
-        "description": "Tackle automation results"
-        }
+        "user": "",
+        "pass": "",
+        "tackleUrl": ""
     }
+}
