@@ -1,4 +1,4 @@
-name: tackle-ui-tests
+name: Code formatting
 on: [push, pull_request]
 
 jobs:

@@ -88,6 +88,8 @@ describe("Business services filter validations", function () {
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
+
+        clickByText(button, clearAllFilters);
     });
 
     it("Description filter validations", function () {
@@ -119,6 +121,8 @@ describe("Business services filter validations", function () {
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
+
+        clickByText(button, clearAllFilters);
     });
 
     it("Owner filter validations", function () {
@@ -150,5 +154,7 @@ describe("Business services filter validations", function () {
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
+
+        clickByText(button, clearAllFilters);
     });
 });
