@@ -68,12 +68,9 @@ describe("Business services filter validations", function () {
         applySearchFilter(name, validSearchInput);
         exists(businessservicesList[0].name);
 
-        if (businessservicesList[1].name.substring(0, 3) == validSearchInput) {
+        if (businessservicesList[1].name.indexOf(validSearchInput) >= 0) {
             exists(businessservicesList[1].name);
-        } else {
-            notExists(businessservicesList[1].name);
         }
-
         clickByText(button, clearAllFilters);
 
         // Enter an existing exact name and assert
@@ -101,12 +98,9 @@ describe("Business services filter validations", function () {
         applySearchFilter(description, validSearchInput);
         exists(businessservicesList[0].description);
 
-        if (businessservicesList[1].description.substring(0, 8) == validSearchInput) {
+        if (businessservicesList[1].description.indexOf(validSearchInput) >= 0) {
             exists(businessservicesList[1].description);
-        } else {
-            notExists(businessservicesList[1].description);
         }
-
         clickByText(button, clearAllFilters);
 
         // Enter an existing exact description and assert
@@ -134,12 +128,9 @@ describe("Business services filter validations", function () {
         applySearchFilter(owner, validSearchInput);
         exists(businessservicesList[0].owner);
 
-        if (businessservicesList[1].owner.substring(0, 3) == validSearchInput) {
+        if (businessservicesList[1].owner.indexOf(validSearchInput) >= 0) {
             exists(businessservicesList[1].owner);
-        } else {
-            notExists(businessservicesList[1].owner);
         }
-
         clickByText(button, clearAllFilters);
 
         // Enter an existing exact owner and assert

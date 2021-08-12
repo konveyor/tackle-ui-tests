@@ -102,10 +102,8 @@ describe("Stakeholder filter validations", function () {
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
         exists(stakeholdersList[0].email);
-        if (stakeholdersList[1].email.substring(0, 5) == validSearchInput) {
+        if (stakeholdersList[1].email.indexOf(validSearchInput) >= 0) {
             exists(stakeholdersList[1].email);
-        } else {
-            notExists(stakeholdersList[1].email);
         }
 
         // Clear all filters
@@ -133,10 +131,8 @@ describe("Stakeholder filter validations", function () {
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
         exists(stakeholdersList[0].name);
-        if (stakeholdersList[1].name.substring(0, 3) == validSearchInput) {
+        if (stakeholdersList[1].name.indexOf(validSearchInput) >= 0) {
             exists(stakeholdersList[1].name);
-        } else {
-            notExists(stakeholdersList[1].name);
         }
 
         // Clear all filters
@@ -170,10 +166,8 @@ describe("Stakeholder filter validations", function () {
             .get("td[data-label='Job function']")
             .should("contain", stakeholdersList[0].jobfunction);
 
-        if (stakeholdersList[1].jobfunction.substring(0, 3) == validSearchInput) {
+        if (stakeholdersList[1].jobfunction.indexOf(validSearchInput) >= 0) {
             exists(stakeholdersList[1].email);
-        } else {
-            notExists(stakeholdersList[1].email);
         }
 
         // Clear all filters
@@ -210,10 +204,8 @@ describe("Stakeholder filter validations", function () {
             .get("div > dd")
             .should("contain", stakeholdersList[0].groups[0]);
 
-        if (stakeholdersList[1].groups[0].substring(0, 3) == validSearchInput) {
+        if (stakeholdersList[1].groups[0].indexOf(validSearchInput) >= 0) {
             exists(stakeholdersList[1].email);
-        } else {
-            notExists(stakeholdersList[1].email);
         }
 
         // Clear all filters

@@ -94,12 +94,9 @@ describe("Application inventory filter validations", function () {
         cy.wait(2000);
         exists(applicationsList[0].name);
 
-        if (applicationsList[1].name.substring(0, 11) == validSearchInput) {
+        if (applicationsList[1].name.indexOf(validSearchInput) >= 0) {
             exists(applicationsList[1].name);
-        } else {
-            notExists(applicationsList[1].name);
         }
-
         clickByText(button, clearAllFilters);
 
         // Enter an exact existing name and assert
@@ -130,12 +127,9 @@ describe("Application inventory filter validations", function () {
         cy.wait(2000);
         exists(applicationsList[0].description);
 
-        if (applicationsList[1].description.substring(0, 8) == validSearchInput) {
+        if (applicationsList[1].description.indexOf(validSearchInput) >= 0) {
             exists(applicationsList[1].description);
-        } else {
-            notExists(applicationsList[1].description);
         }
-
         clickByText(button, clearAllFilters);
 
         // Enter an exact existing description substring and assert
@@ -165,7 +159,6 @@ describe("Application inventory filter validations", function () {
         applySearchFilter(businessservice, validSearchInput);
         cy.wait(2000);
         exists(applicationsList[0].business);
-        notExists(applicationsList[1].business);
 
         clickByText(button, clearAllFilters);
 
@@ -190,7 +183,6 @@ describe("Application inventory filter validations", function () {
         cy.wait(2000);
 
         exists(applicationsList[0].tags[0]);
-        notExists(applicationsList[1].tags[0]);
 
         clickByText(button, clearAllFilters);
 

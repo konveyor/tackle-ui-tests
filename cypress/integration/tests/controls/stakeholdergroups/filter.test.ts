@@ -86,10 +86,8 @@ describe("Stakeholder groups filter validations", function () {
 
         // Assert that stakeholder groups row(s) containing the search text is/are displayed
         exists(stakeholdergroupsList[0].name);
-        if (stakeholdergroupsList[1].name.substring(0, 5) == validSearchInput) {
+        if (stakeholdergroupsList[1].name.indexOf(validSearchInput) >= 0) {
             exists(stakeholdersList[1].name);
-        } else {
-            notExists(stakeholdersList[1].name);
         }
 
         // Clear all filters
@@ -119,10 +117,8 @@ describe("Stakeholder groups filter validations", function () {
 
         // Assert that stakeholder groups row(s) containing the search text is/are displayed
         exists(stakeholdergroupsList[0].description);
-        if (stakeholdergroupsList[1].description.substring(0, 3) == validSearchInput) {
+        if (stakeholdergroupsList[1].description.indexOf(validSearchInput) >= 0) {
             exists(stakeholdergroupsList[1].description);
-        } else {
-            notExists(stakeholdergroupsList[1].description);
         }
 
         // Clear all filters
@@ -162,10 +158,8 @@ describe("Stakeholder groups filter validations", function () {
             .get("div > dd")
             .should("contain", stakeholdergroupsList[0].members[0]);
 
-        if (stakeholdergroupsList[1].members[0].substring(0, 3) == validSearchInput) {
+        if (stakeholdergroupsList[1].members[0].indexOf(validSearchInput) >= 0) {
             exists(stakeholdergroupsList[1].members[0]);
-        } else {
-            notExists(stakeholdergroupsList[1].members[0]);
         }
 
         // Clear all filters
