@@ -58,7 +58,6 @@ describe("Tags filter validations", function () {
         applySearchFilter(tagName, invalidSearchInput);
 
         // Assert that no search results are found
-        // Issue - https://issues.redhat.com/browse/TACKLE-151
         cy.get("h2").contains("No results found");
 
         clickByText(button, clearAllFilters);

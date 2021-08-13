@@ -90,10 +90,8 @@ describe("Manage applications import filter validations", function () {
 
         // Assert that application import row(s) containing the search text is/are displayed
         exists(filesToImport[0]);
-        if (filesToImport[1].substring(0, 5) == validSearchInput) {
+        if (filesToImport[1].indexOf(validSearchInput) >= 0) {
             exists(filesToImport[1]);
-        } else {
-            notExists(filesToImport[1]);
         }
 
         // Clear all filters

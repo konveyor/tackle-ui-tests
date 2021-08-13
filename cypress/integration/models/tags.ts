@@ -105,6 +105,7 @@ export class Tag {
         cy.wait(2000);
         expandRowDetails(this.tagtype);
         this.clickTagAction("Delete");
+        cy.wait(1000);
         if (cancel) {
             cancelForm();
         } else {
@@ -197,6 +198,7 @@ export class Tagtype {
             .parent(trTag)
             .within(() => {
                 click(commonView.deleteButton);
+                cy.wait(1000);
             });
         if (cancel) {
             cancelForm();
