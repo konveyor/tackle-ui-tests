@@ -1,5 +1,5 @@
 name: Pull request test
-on: [pull_request]
+on: [pull_request, workflow_dispatch]
 jobs:
   cypress-run:
     if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'RFR')
@@ -24,4 +24,5 @@ jobs:
           echo "::set-output name=tests::$test_files"
           echo "::set-output name=tackleUrl::'https://tackle-ghubale-tackle.apps.mgn02.cnv-qe.rhcloud.com'"
       - name: Run cypress test cases
+        if: ${{ steps.event.outputs.tests }}
         run: npx cypress run --spec ${{ steps.event.outputs.tests }} --env user="tackle",pass="password",tackleUrl=${{ steps.event.outputs.tackleUrl }}
