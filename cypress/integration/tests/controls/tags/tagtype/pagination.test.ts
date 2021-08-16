@@ -177,27 +177,4 @@ describe("Tag type pagination validations", function () {
             cy.wrap($previousBtn).should("not.be.disabled");
         });
     });
-
-    it("Last page item(s) deletion, impact on page reload validation", function () {
-        // Navigate to Tags tab
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
-        cy.wait("@getTagtypes");
-
-        // Select 10 items per page
-        selectItemsPerPage(10);
-        cy.wait(2000);
-
-        // Navigate to last page
-        cy.get(lastPageButton).click();
-        cy.wait(2000);
-
-        // Delete all items of last page
-        deleteTableRows();
-
-        // Verify that page is re-directed to previous page
-        cy.get("td[data-label='Tag type']").then(($rows) => {
-            cy.wrap($rows.length).should("eq", 10);
-        });
-    });
 });
