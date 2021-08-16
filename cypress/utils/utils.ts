@@ -52,7 +52,7 @@ export function login(): void {
     inputText(loginView.userPasswordInput, userPassword);
     click(loginView.loginButton);
     cy.wait(5000);
-    cy.get("h1").contains("Application inventory");
+    cy.get("h1", { timeout: 15000 }).contains("Application inventory");
 }
 
 export function selectItemsPerPage(items: number): void {
