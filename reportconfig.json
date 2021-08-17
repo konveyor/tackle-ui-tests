@@ -1,0 +1,18 @@
+{
+    "viewportWidth": 1280,
+    "viewportHeight": 880,
+    "env": {
+        "user": "",
+        "pass": "",
+        "tackleUrl": ""
+    },
+    "reporter": "@reportportal/agent-js-cypress",
+    "reporterOptions": {
+        "endpoint": "",
+        "token": "",
+        "launch": "Tackle-1.0",
+        "project": "mta",
+        "description": "Tackle automation results",
+        "autoMerge": true
+    }
+}

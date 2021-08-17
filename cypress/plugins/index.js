@@ -21,6 +21,20 @@
 //   // `config` is the resolved Cypress config
 // }
 // export a function
+
+const registerReportPortalPlugin = require("@reportportal/agent-js-cypress/lib/plugin");
+module.exports = (on) => registerReportPortalPlugin(on);
+
 module.exports = (on, config) => {
     // configure plugins here
+    // Update report portal token value
+    const updatedConfig = {
+        ...config,
+        reporterOptions: {
+            ...config.reporterOptions,
+            token: process.env.RP_TOKEN,
+            endpoint: process.env.RP_ENDPOINT,
+        },
+    };
+    return updatedConfig;
 };
