@@ -9,11 +9,14 @@ import {
     openErrorReport,
     verifyAppImport,
     verifyImportErrorMsg,
+    selectItemsPerPage,
+    deleteApplicationTableRows,
 } from "../../../../utils/utils";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import { BusinessServices } from "../../../models/businessservices";
 import { navMenu } from "../../../views/menu.view";
 import { applicationinventory, button } from "../../../types/constants";
+import * as commonView from "../../../views/common.view";
 
 const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/";
@@ -23,6 +26,24 @@ describe("Application import operations", () => {
     before("Login and create test data", function () {
         // Perform login
         login();
+
+        // Navigate to application inventory tab
+        clickByText(navMenu, applicationinventory);
+        cy.wait(2000);
+
+        // Select 100 items per page
+        selectItemsPerPage(100);
+        cy.wait(2000);
+
+        // Check if the application inventory table is empty, else delete the existing rows
+        cy.get(commonView.appTable)
+            .next()
+            .then(($div) => {
+                if (!$div.hasClass("pf-c-empty-state")) {
+                    // Delete all items of page
+                    deleteApplicationTableRows();
+                }
+            });
 
         // Create business service
         businessService.create();

@@ -7,6 +7,7 @@ import {
     click,
     importApplication,
     openManageImportsPage,
+    deleteApplicationTableRows,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import { applicationinventory, button, tdTag, trTag, deleteAction } from "../../../types/constants";
@@ -29,6 +30,24 @@ describe("Manage imports pagination validations", function () {
     before("Login and Create Test Data", function () {
         // Perform login
         login();
+
+        // Navigate to application inventory tab
+        clickByText(navMenu, applicationinventory);
+        cy.wait(2000);
+
+        // Select 100 items per page
+        selectItemsPerPage(100);
+        cy.wait(2000);
+
+        // Check if the application inventory table is empty, else delete the existing rows
+        cy.get(commonView.appTable)
+            .next()
+            .then(($div) => {
+                if (!$div.hasClass("pf-c-empty-state")) {
+                    // Delete all items of page
+                    deleteApplicationTableRows();
+                }
+            });
 
         // Create business service
         businessService.create();
@@ -101,11 +120,17 @@ describe("Manage imports pagination validations", function () {
 
         // Delete the Applications created before the tests
         applicationsList.forEach(function (application) {
-            cy.get(".pf-c-table > tbody > tr")
-                .not(".pf-c-table__expandable-row")
-                .find("td[data-label=Name]")
-                .each(($rows) => {
-                    if ($rows.text() === application.name) application.delete();
+            cy.get(commonView.appTable)
+                .next()
+                .then(($div) => {
+                    if (!$div.hasClass("pf-c-empty-state")) {
+                        cy.get(".pf-c-table > tbody > tr")
+                            .not(".pf-c-table__expandable-row")
+                            .find("td[data-label=Name]")
+                            .each(($rows) => {
+                                if ($rows.text() === application.name) application.delete();
+                            });
+                    }
                 });
         });
     });
