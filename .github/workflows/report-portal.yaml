@@ -24,4 +24,4 @@ jobs:
         run: |
           export RP_TOKEN=${{ secrets.REPORT_TOKEN }}
           export RP_ENDPOINT=${{ secrets.PORTAL_ENDPOINT }}
-          npm run tests --env user=${{ secrets.TACKLE_USER }},pass=${{ secrets.TACKLE_PASS }},tackleUrl=${{ secrets.TACKLE_URL }} --config-file reportconfig.json
+          npx cypress run --spec **/*.test.ts --env user=${{ secrets.TACKLE_USER }},pass=${{ secrets.TACKLE_PASS }},tackleUrl=${{ secrets.TACKLE_URL }} --config-file reportconfig.json
