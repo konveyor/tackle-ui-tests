@@ -192,25 +192,6 @@ describe("Application inventory pagination validations", function () {
 
         // Delete all items of last page
         deleteApplicationTableRows();
-        // cy.get(commonView.appTable)
-        //     .get("tbody")
-        //     .find(trTag)
-        //     .not(".pf-c-table__expandable-row")
-        //     .each(($tableRow) => {
-        //         var name = $tableRow.find("td[data-label=Name]").text();
-
-        //         cy.get(tdTag)
-        //             .contains(name)
-        //             .parent(tdTag)
-        //             .parent(trTag)
-        //             .within(() => {
-        //                 click(actionButton);
-        //             })
-        //             .contains(button, deleteAction)
-        //             .click();
-        //         click(commonView.confirmButton);
-        //         cy.wait(4000);
-        //     });
 
         // Verify that page is re-directed to previous page
         cy.get(".pf-c-table > tbody > tr")
