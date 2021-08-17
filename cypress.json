@@ -6,7 +6,6 @@
         "pass": "",
         "tackleUrl": ""
     },
-    "projectId": "1g7617",
-    "retries": 1,
+    "retries": 2,
     "defaultCommandTimeout": 8000
 }

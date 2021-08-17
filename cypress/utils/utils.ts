@@ -14,6 +14,7 @@ import {
     criticality,
     priority,
     confidence,
+    deleteAction,
 } from "../integration/types/constants";
 import { actionButton } from "../integration/views/applicationinventory.view";
 
@@ -53,6 +54,14 @@ export function login(): void {
     click(loginView.loginButton);
     cy.wait(5000);
     cy.get("h1", { timeout: 15000 }).contains("Application inventory");
+}
+
+export function logout(): void {
+    clickByText(button, userName);
+    cy.wait(500);
+    clickByText("a", "Logout");
+    cy.wait(4000);
+    cy.get("h1", { timeout: 15000 }).contains("Log in to your account");
 }
 
 export function selectItemsPerPage(items: number): void {
@@ -364,4 +373,27 @@ export function verifyImportErrorMsg(errorMsg: any): void {
     } else {
         cy.get("table > tbody > tr > td").should("contain", errorMsg);
     }
+}
+
+export function deleteApplicationTableRows(): void {
+    cy.get(commonView.appTable)
+        .get("tbody")
+        .find(trTag)
+        .not(".pf-c-table__expandable-row")
+        .each(($tableRow) => {
+            var name = $tableRow.find("td[data-label=Name]").text();
+            cy.get(tdTag)
+                .contains(name)
+                .parent(tdTag)
+                .parent(trTag)
+                .within(() => {
+                    click(actionButton);
+                    cy.wait(800);
+                })
+                .contains(button, deleteAction)
+                .click();
+            cy.wait(800);
+            click(commonView.confirmButton);
+            cy.wait(4000);
+        });
 }
