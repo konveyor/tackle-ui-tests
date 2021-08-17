@@ -51,6 +51,7 @@
 2. Pull requests will be tested against environment before merging to main codebase
 3. Pull request's owner must add **RFR** label once pull request is ready to test against environment
 4. After adding 'RFR' label; Owner should force push the pull request to trigger GitHub action
+5. In some cases, reviewer wants to trigger the PR test GH action but he/she can't force push the branch. Hence added feature of triggering GH action manually. Steps to trigger GH action for PR testing manually :- Go to Actions tab > Click on GH action(Pull request test) > Click on run workflow dropdown > select PR branch > Click on button Run workflow
 
 #### Test runs
 1. Click here to see **Old** test runs - [run1](https://dashboard.cypress.io/projects/cbdv4m/runs), [run2](https://dashboard.cypress.io/projects/dvmnpr/runs)

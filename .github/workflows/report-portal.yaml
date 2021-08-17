@@ -1,0 +1,27 @@
+name: Report portal
+on:
+  # To trigger job manually
+  workflow_dispatch:
+  
+  # To schedule job
+  schedule:
+      # At the end of every day
+    - cron: 0 0 * * *
+
+jobs:
+  cypress-run:
+    name: Cypress run
+    runs-on: self-hosted
+    steps:
+        # Checkout to pull request branch
+      - name: Checkout
+        uses: actions/checkout@v2
+        # Install NPM dependencies
+      - name: Install NPM
+        run: npm install .
+        # Run cypress integration tests and upload results to report portal
+      - name: Run cypress test cases and publish results to report portal
+        run: |
+          export RP_TOKEN=${{ secrets.REPORT_TOKEN }}
+          export RP_ENDPOINT=${{ secrets.PORTAL_ENDPOINT }}
+          npx cypress run --spec **/*.test.ts --env user=${{ secrets.TACKLE_USER }},pass=${{ secrets.TACKLE_PASS }},tackleUrl=${{ secrets.TACKLE_URL }} --config-file reportconfig.json
