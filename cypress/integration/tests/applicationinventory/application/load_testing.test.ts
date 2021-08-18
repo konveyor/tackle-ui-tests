@@ -38,7 +38,7 @@ describe("Load testing", () => {
             tagList.push(tag);
 
         // Navigate to application inventory tab and create new application
-        for (let l = 0; l < 2; l++) {
+        for (let l = 0; l < 100; l++) {
             const application = new ApplicationInventory(
                 data.getAppName(),
                 data.getDescription(),
@@ -95,7 +95,7 @@ describe("Load testing", () => {
     });
 
     it("Assess and Review all applications", function () {
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < 100; i++) {
             // Perform assessment of application
             var risk = data.getRandomRisk()
             applicationList[i].perform_assessment(risk, stakeholdersNameList);
