@@ -80,6 +80,9 @@ describe("Manage applications import sort validations", function () {
 
         // Interceptors
         cy.intercept("GET", "/api/application-inventory/application*").as("getApplications");
+        cy.intercept("GET", "/api/application-inventory/import-summary*").as(
+            "getImportApplications"
+        );
     });
 
     after("Perform test data clean up", function () {
@@ -112,6 +115,7 @@ describe("Manage applications import sort validations", function () {
         clickByText(navMenu, applicationinventory);
         cy.wait("@getApplications");
         openManageImportsPage();
+        cy.wait("@getImportApplications");
 
         // Get unsorted list when page loads
         const unsortedList = getTableColumnData(date);
