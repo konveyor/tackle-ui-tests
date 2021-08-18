@@ -1,5 +1,16 @@
 import * as faker from "faker";
 
+function generate_random_string(string_length) {
+    let random_string = '';
+    let random_ascii;
+    for(let i = 0; i < string_length; i++) {
+        random_ascii = Math.floor((Math.random() * 25) + 97);
+        random_string += String.fromCharCode(random_ascii)
+    }
+    return random_string
+}
+
+
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
     return faker.name.findName();
@@ -62,6 +73,16 @@ export function getExistingTagtype(): string {
 export function getAppName(): string {
     // returns a new random application name
     let random_word = getRandomWords(1);
-    let app_name = "test-app-" + random_word;
+    let app_name = "test-app-" + generate_random_string(8) + "-" + random_word;
     return app_name;
+}
+
+export function getRandomRisk(): string {
+    // returns a random tag type from the existing list
+    const risk = [
+        "high",
+        "medium",
+        "low"
+    ];
+    return risk[Math.floor(Math.random() * risk.length)];
 }

@@ -329,6 +329,20 @@ export class ApplicationInventory {
             cy.wait(2000);
         }
     }
+    
+    delete_all_applications(applicationsList): void {
+        // Delete the applications created before the
+        clickByText(navMenu, applicationinventory);
+        cy.wait(2000);
+        applicationsList.forEach(function (application) {
+            cy.get(".pf-c-table > tbody > tr")
+                .not(".pf-c-table__expandable-row")
+                .find("td[data-label=Name]")
+                .each(($rows) => {
+                    if ($rows.text() === application.name) application.delete();
+                });
+        });
+    }
 
     perform_assessment(
         risk,
