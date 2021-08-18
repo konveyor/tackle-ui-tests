@@ -22,12 +22,12 @@ export function getDescription(): string {
 
 export function getJobTitle(): string {
     // returns a random job title related to any job area (like Marketing, Accounts etc.)
-    return faker.name.jobArea();
+    return randomWordGenerator(6);
 }
 
 export function getRandomWord(charLength: number): string {
     // returns a word of specified charLength
-    return faker.lorem.word(charLength);
+    return randomWordGenerator(charLength);
 }
 
 export function getRandomWords(numberOfWords: number): string {
@@ -64,4 +64,13 @@ export function getAppName(): string {
     let random_word = getRandomWords(1);
     let app_name = "test-app-" + random_word;
     return app_name;
+}
+
+export function randomWordGenerator(length: number): string {
+    var generatedWord = "";
+    const charsToUse = "aAbBcCdDeEfFgGhHiIjJkKlLmNnoOpPqQrRsStTuUvVwWxXyYzZ";
+    for (let i = 0; i < length; i++) {
+        generatedWord += charsToUse.charAt(Math.floor(Math.random() * charsToUse.length));
+    }
+    return generatedWord;
 }

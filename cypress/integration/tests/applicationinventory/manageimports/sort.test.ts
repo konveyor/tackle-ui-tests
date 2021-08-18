@@ -10,9 +10,12 @@ import {
     getTableColumnData,
     importApplication,
     openManageImportsPage,
+    selectItemsPerPage,
+    deleteApplicationTableRows,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import { applicationinventory } from "../../../types/constants";
+import * as commonView from "../../../views/common.view";
 
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import { BusinessServices } from "../../../models/businessservices";
@@ -26,6 +29,24 @@ describe("Manage applications import sort validations", function () {
     before("Login and create test data", function () {
         // Perform login
         login();
+
+        // Navigate to application inventory tab
+        clickByText(navMenu, applicationinventory);
+        cy.wait(2000);
+
+        // Select 100 items per page
+        selectItemsPerPage(100);
+        cy.wait(2000);
+
+        // Check if the application inventory table is empty, else delete the existing rows
+        cy.get(commonView.appTable)
+            .next()
+            .then(($div) => {
+                if (!$div.hasClass("pf-c-empty-state")) {
+                    // Delete all items of page
+                    deleteApplicationTableRows();
+                }
+            });
 
         // Create business service
         businessService.create();
@@ -59,21 +80,32 @@ describe("Manage applications import sort validations", function () {
 
         // Interceptors
         cy.intercept("GET", "/api/application-inventory/application*").as("getApplications");
+        cy.intercept("GET", "/api/application-inventory/import-summary*").as(
+            "getImportApplications"
+        );
     });
 
     after("Perform test data clean up", function () {
         // Delete the business service
         businessService.delete();
 
-        // Delete the applications created before the
+        // Navigate to application inventory tab
         clickByText(navMenu, applicationinventory);
         cy.wait(2000);
+
+        // Delete the applications created before the tests
         applicationsList.forEach(function (application) {
-            cy.get(".pf-c-table > tbody > tr")
-                .not(".pf-c-table__expandable-row")
-                .find("td[data-label=Name]")
-                .each(($rows) => {
-                    if ($rows.text() === application.name) application.delete();
+            cy.get(commonView.appTable)
+                .next()
+                .then(($div) => {
+                    if (!$div.hasClass("pf-c-empty-state")) {
+                        cy.get(".pf-c-table > tbody > tr")
+                            .not(".pf-c-table__expandable-row")
+                            .find("td[data-label=Name]")
+                            .each(($rows) => {
+                                if ($rows.text() === application.name) application.delete();
+                            });
+                    }
                 });
         });
     });
@@ -83,6 +115,7 @@ describe("Manage applications import sort validations", function () {
         clickByText(navMenu, applicationinventory);
         cy.wait("@getApplications");
         openManageImportsPage();
+        cy.wait("@getImportApplications");
 
         // Get unsorted list when page loads
         const unsortedList = getTableColumnData(date);

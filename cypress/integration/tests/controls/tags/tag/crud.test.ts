@@ -27,7 +27,7 @@ describe("Tag CRUD operations", () => {
 
     it("Tag CRUD", function () {
         // Create new tag
-        const tag = new Tag(data.getRandomWord(6), data.getExistingTagtype());
+        const tag = new Tag(data.getRandomWord(8), data.getExistingTagtype());
         tag.create();
         cy.wait("@postTag");
 
@@ -37,7 +37,7 @@ describe("Tag CRUD operations", () => {
         closeRowDetails(tag.tagtype);
 
         // Edit the tag and tag type name
-        var updatedTagName = data.getRandomWord(6);
+        var updatedTagName = data.getRandomWord(8);
         var updatedTagtypeName = data.getExistingTagtype();
         tag.edit({ name: updatedTagName, tagtype: updatedTagtypeName });
         cy.wait("@putTag");

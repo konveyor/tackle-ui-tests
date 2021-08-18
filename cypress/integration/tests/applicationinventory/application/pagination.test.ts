@@ -1,6 +1,12 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, selectItemsPerPage, click } from "../../../../utils/utils";
+import {
+    login,
+    clickByText,
+    selectItemsPerPage,
+    click,
+    deleteApplicationTableRows,
+} from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import { applicationinventory, button, tdTag, trTag, deleteAction } from "../../../types/constants";
 import { actionButton } from "../../../views/applicationinventory.view";
@@ -20,6 +26,15 @@ describe("Application inventory pagination validations", function () {
         clickByText(navMenu, applicationinventory);
         var rowsToCreate = 0;
 
+        function createMultipleApplications(rowsToCreate: number): void {
+            // Create multiple Applications
+            for (let i = 0; i < rowsToCreate; i++) {
+                const application = new ApplicationInventory(data.getFullName());
+                application.create();
+                applicationsList.push(application);
+            }
+        }
+
         // Get the current table row count and create appropriate test data rows
         selectItemsPerPage(100);
         cy.get(commonView.appTable)
@@ -36,23 +51,13 @@ describe("Application inventory pagination validations", function () {
                             }
                             if (rowsToCreate > 0) {
                                 // Create multiple Applications
-                                for (let i = 0; i < rowsToCreate; i++) {
-                                    const application = new ApplicationInventory(
-                                        data.getFullName()
-                                    );
-                                    application.create();
-                                    applicationsList.push(application);
-                                }
+                                createMultipleApplications(rowsToCreate);
                             }
                         });
                 } else {
                     rowsToCreate = 11;
                     // Create multiple Applications
-                    for (let i = 0; i < rowsToCreate; i++) {
-                        const application = new ApplicationInventory(data.getFullName());
-                        application.create();
-                        applicationsList.push(application);
-                    }
+                    createMultipleApplications(rowsToCreate);
                 }
             });
     });
@@ -186,25 +191,7 @@ describe("Application inventory pagination validations", function () {
         cy.wait(2000);
 
         // Delete all items of last page
-        cy.get(commonView.appTable)
-            .get("tbody")
-            .find(trTag)
-            .not(".pf-c-table__expandable-row")
-            .each(($tableRow) => {
-                var name = $tableRow.find("td[data-label=Name]").text();
-
-                cy.get(tdTag)
-                    .contains(name)
-                    .parent(tdTag)
-                    .parent(trTag)
-                    .within(() => {
-                        click(actionButton);
-                    })
-                    .contains(button, deleteAction)
-                    .click();
-                click(commonView.confirmButton);
-                cy.wait(4000);
-            });
+        deleteApplicationTableRows();
 
         // Verify that page is re-directed to previous page
         cy.get(".pf-c-table > tbody > tr")

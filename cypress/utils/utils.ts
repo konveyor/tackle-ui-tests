@@ -14,8 +14,9 @@ import {
     criticality,
     priority,
     confidence,
+    deleteAction,
 } from "../integration/types/constants";
-import { actionButton } from "../integration/views/applicationinventory.view";
+import { actionButton, date } from "../integration/views/applicationinventory.view";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
@@ -52,7 +53,15 @@ export function login(): void {
     inputText(loginView.userPasswordInput, userPassword);
     click(loginView.loginButton);
     cy.wait(5000);
-    cy.get("h1").contains("Application inventory");
+    cy.get("h1", { timeout: 15000 }).contains("Application inventory");
+}
+
+export function logout(): void {
+    clickByText(button, userName);
+    cy.wait(500);
+    clickByText("a", "Logout");
+    cy.wait(4000);
+    cy.get("h1", { timeout: 15000 }).contains("Log in to your account");
 }
 
 export function selectItemsPerPage(items: number): void {
@@ -194,6 +203,7 @@ export function sortDesc(sortCriteria: string): void {
 
 export function getTableColumnData(columnName: string): Array<string> {
     selectItemsPerPage(100);
+    cy.wait(4000);
     var itemList = [];
     cy.get(".pf-c-table > tbody > tr")
         .not(".pf-c-table__expandable-row")
@@ -209,6 +219,8 @@ export function getTableColumnData(columnName: string): Array<string> {
                 columnName === confidence
             ) {
                 if ($ele.text() !== "") itemList.push(Number($ele.text()));
+            } else if (columnName === date) {
+                if ($ele.text() !== "") itemList.push(new Date($ele.text().toString()).getTime());
             } else {
                 if ($ele.text() !== "") itemList.push($ele.text().toString().toLowerCase());
             }
@@ -364,4 +376,27 @@ export function verifyImportErrorMsg(errorMsg: any): void {
     } else {
         cy.get("table > tbody > tr > td").should("contain", errorMsg);
     }
+}
+
+export function deleteApplicationTableRows(): void {
+    cy.get(commonView.appTable)
+        .get("tbody")
+        .find(trTag)
+        .not(".pf-c-table__expandable-row")
+        .each(($tableRow) => {
+            var name = $tableRow.find("td[data-label=Name]").text();
+            cy.get(tdTag)
+                .contains(name)
+                .parent(tdTag)
+                .parent(trTag)
+                .within(() => {
+                    click(actionButton);
+                    cy.wait(800);
+                })
+                .contains(button, deleteAction)
+                .click();
+            cy.wait(800);
+            click(commonView.confirmButton);
+            cy.wait(4000);
+        });
 }

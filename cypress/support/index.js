@@ -14,6 +14,24 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
+import {
+    applicationinventory,
+    button,
+    deleteAction,
+    tdTag,
+    trTag,
+} from "../integration/types/constants";
+import { actionButton } from "../integration/views/applicationinventory.view";
+import { navMenu } from "../integration/views/menu.view";
+import {
+    click,
+    clickByText,
+    deleteApplicationTableRows,
+    login,
+    logout,
+    selectItemsPerPage,
+} from "../utils/utils";
+import * as commonView from "../integration/views/common.view";
 import "./commands";
 
 // Alternatively you can use CommonJS syntax:

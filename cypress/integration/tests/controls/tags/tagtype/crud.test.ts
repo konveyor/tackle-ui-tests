@@ -21,7 +21,7 @@ describe("Tag Type CRUD operations", () => {
     it("Tag type CRUD", function () {
         // Create new tag type
         const tagtype = new Tagtype(
-            data.getRandomWord(5),
+            data.getRandomWord(8),
             data.getColor(),
             data.getRandomNumber(1, 30)
         );
@@ -30,7 +30,7 @@ describe("Tag Type CRUD operations", () => {
         exists(tagtype.name);
 
         // Edit the tag type name, rank and color
-        var updatedTagtype = data.getRandomWord(5);
+        var updatedTagtype = data.getRandomWord(8);
         var updatedRank = data.getRandomNumber(10, 30);
         var updatedColor = data.getColor();
         tagtype.edit({ name: updatedTagtype, rank: updatedRank, color: updatedColor });
@@ -58,7 +58,7 @@ describe("Tag Type CRUD operations", () => {
     it("Tag type CRUD with member (tags)", function () {
         // Create new tag type
         const tagtype = new Tagtype(
-            data.getRandomWord(5),
+            data.getRandomWord(8),
             data.getColor(),
             data.getRandomNumber(1, 30)
         );

@@ -168,28 +168,4 @@ describe("Job functions pagination validations", function () {
             cy.wrap($previousBtn).should("not.be.disabled");
         });
     });
-
-    it("Last page item(s) deletion, impact on page reload validation", function () {
-        // Issue - https://issues.redhat.com/browse/TACKLE-155
-        // Navigate to Job functions tab
-        clickByText(navMenu, controls);
-        clickByText(navTab, jobfunctions);
-        cy.wait("@getJobfunctions");
-
-        // Select 10 items per page
-        selectItemsPerPage(10);
-        cy.wait(2000);
-
-        // Navigate to last page
-        cy.get(lastPageButton).click();
-        cy.wait(2000);
-
-        // Delete all items of last page
-        deleteTableRows();
-
-        // Verify that page is re-directed to previous page
-        cy.get("td[data-label=Name]").then(($rows) => {
-            cy.wrap($rows.length).should("eq", 10);
-        });
-    });
 });
