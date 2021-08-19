@@ -1,6 +1,11 @@
 /// <reference types="cypress" />
 
-import { login, selectItemsPerPage, deleteApplicationTableRows , clickByText} from "../../../../utils/utils";
+import {
+    login,
+    selectItemsPerPage,
+    deleteApplicationTableRows,
+    clickByText,
+} from "../../../../utils/utils";
 import { Tag } from "../../../models/tags";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import { Stakeholders } from "../../../models/stakeholders";
@@ -81,7 +86,7 @@ describe("Load testing", () => {
         tagList.forEach(function (tag) {
             tag.delete();
         });
-        
+
         // Delete all apps in App inventory page
         clickByText(navMenu, applicationinventory);
         cy.wait(2000);
