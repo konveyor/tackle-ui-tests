@@ -1,11 +1,19 @@
 /// <reference types="cypress" />
 
-import { login, selectItemsPerPage, deleteApplicationTableRows } from "../../../../utils/utils";
+import {
+    login,
+    selectItemsPerPage,
+    deleteApplicationTableRows,
+    clickByText,
+} from "../../../../utils/utils";
 import { Tag } from "../../../models/tags";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import { Stakeholders } from "../../../models/stakeholders";
 import * as data from "../../../../utils/data_utils";
 import { BusinessServices } from "../../../models/businessservices";
+import { navMenu } from "../../../views/menu.view";
+import { applicationinventory } from "../../../types/constants";
+import * as commonView from "../../../views/common.view";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdersNameList: Array<string> = [];
@@ -36,7 +44,7 @@ describe("Load testing", () => {
         tagList.push(tag);
 
         // Navigate to application inventory tab and create new application
-        for (let l = 0; l < 100; l++) {
+        for (let l = 0; l < 2; l++) {
             const application = new ApplicationInventory(
                 data.getAppName(),
                 data.getDescription(),
@@ -71,23 +79,33 @@ describe("Load testing", () => {
         });
 
         // Clean up business service and tags
-        businessservicesList.forEach(function (stakeholder) {
-            stakeholder.delete();
+        businessservicesList.forEach(function (businessservice) {
+            businessservice.delete();
         });
 
-        tagList.forEach(function (stakeholder) {
-            stakeholder.delete();
+        tagList.forEach(function (tag) {
+            tag.delete();
         });
+
+        // Delete all apps in App inventory page
+        clickByText(navMenu, applicationinventory);
+        cy.wait(2000);
 
         // Select 100 items per page
         selectItemsPerPage(100);
         cy.wait(2000);
-        // Delete all applications
-        deleteApplicationTableRows();
+
+        // delete all existing rows
+        cy.get(commonView.appTable)
+            .next()
+            .then(($div) => {
+                // Delete all items of page
+                deleteApplicationTableRows();
+            });
     });
 
     it("Assess and Review all applications", function () {
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 2; i++) {
             // Perform assessment of application
             var risk = data.getRandomRisk();
             applicationList[i].perform_assessment(risk, stakeholdersNameList);
