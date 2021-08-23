@@ -25,4 +25,4 @@ jobs:
           echo "::set-output name=tackleUrl::'https://tackle-ghubale-tackle.apps.mgn02.cnv-qe.rhcloud.com'"
       - name: Run cypress test cases
         if: ${{ steps.event.outputs.tests }}
-        run: npx cypress run --spec ${{ steps.event.outputs.tests }} --env user="tackle",pass="password",tackleUrl=${{ steps.event.outputs.tackleUrl }}
+        run: npx cypress run --spec ${{ steps.event.outputs.tests }} --env user="tackle",pass="password",tackleUrl=${{ steps.event.outputs.tackleUrl }} --config video=false
