@@ -182,20 +182,19 @@ describe("Application import operations", () => {
         importApplication(filePath + fileName);
         cy.wait(2000);
 
-        // Create object for imported app
-        const importedApp = new ApplicationInventory("Import-app-7");
-        applicationsList.push(importedApp);
-
         // Open application imports page
         openManageImportsPage();
 
         // Verify import applications page shows correct information
-        // Fails due to bug - https://issues.redhat.com/browse/TACKLE-274
-        verifyAppImport(fileName, "Completed", 1, 1);
+        verifyAppImport(fileName, "Completed", 0, 2);
 
         // Verify the error report message
         openErrorReport();
-        verifyImportErrorMsg("Duplicate ApplicationName in table: Import-app-7");
+        const errorMsgs = [
+            "Duplicate Application Name within file: Import-app-7",
+            "Duplicate Application Name within file: Import-app-7",
+        ];
+        verifyImportErrorMsg(errorMsgs);
     });
 
     it("Applications import having description and comments exceeding allowed limits", function () {
