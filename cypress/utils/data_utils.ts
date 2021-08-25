@@ -74,3 +74,9 @@ export function randomWordGenerator(length: number): string {
     }
     return generatedWord;
 }
+
+export function getRandomRisk(): string {
+    // returns a random tag type from the existing list
+    const risk = ["high", "medium", "low"];
+    return risk[Math.floor(Math.random() * risk.length)];
+}
