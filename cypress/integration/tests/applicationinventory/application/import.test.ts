@@ -182,7 +182,6 @@ describe("Application import operations", () => {
         importApplication(filePath + fileName);
         cy.wait(2000);
 
-
         // Open application imports page
         openManageImportsPage();
 
