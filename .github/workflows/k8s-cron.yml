@@ -16,8 +16,6 @@ jobs:
         with:
           path: tackle-ui-tests
           ref: ${{ matrix.branch }}
-      - name: tests
-        run: ls tackle-ui-tests
 
       - name: Checkout input branch
         uses: actions/checkout@v2

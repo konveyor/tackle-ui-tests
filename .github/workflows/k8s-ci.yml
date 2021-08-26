@@ -17,8 +17,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: tackle-ui-tests
-      - name: tests
-        run: ls tackle-ui-tests
 
       - name: Checkout tackle
         uses: actions/checkout@v2
