@@ -19,13 +19,6 @@ jobs:
           path: tackle-ui-tests
           ref: ${{ matrix.branch }}
 
-      - name: Checkout input branch
-        uses: actions/checkout@v2
-        if: ${{ github.event.inputs.branch != '' }}
-        with:
-          path: tackle-ui-tests
-          ref: ${{ github.event.inputs.branch }}
-
       - name: Checkout tackle
         uses: actions/checkout@v2
         with:
