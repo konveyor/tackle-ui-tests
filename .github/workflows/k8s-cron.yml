@@ -2,8 +2,8 @@ name: Regression tests Cron
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
-  
+    - cron: "0 0 * * *"
+
 jobs:
   k8s:
     runs-on: ubuntu-latest
