@@ -1,11 +1,16 @@
 {
     "viewportWidth": 1280,
     "viewportHeight": 880,
+    "pageLoadTimeout": 100000,
     "video": false,
     "env": {
         "user": "",
         "pass": "",
         "tackleUrl": ""
+    },
+    "retries": {
+        "runMode": 2,
+        "openMode": 0
     },
     "reporter": "@reportportal/agent-js-cypress",
     "reporterOptions": {
