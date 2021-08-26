@@ -7,12 +7,12 @@ on:
       - dev
   schedule:
     - cron: "*/5 * * * *"
-  # workflow_dispatch:
-  #   inputs:
-  #     branch:
-  #       required: false
-  #       default: "main"
-  #       description: "The branch you want to run tests against"
+  workflow_dispatch:
+    inputs:
+      branch:
+        required: false
+        default: "main"
+        description: "The branch you want to run tests against"
 
 jobs:
   k8s:
