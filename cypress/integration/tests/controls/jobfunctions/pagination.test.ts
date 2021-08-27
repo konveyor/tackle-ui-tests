@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, selectItemsPerPage, deleteTableRows } from "../../../../utils/utils";
+import { login, clickByText, selectItemsPerPage, preservecookies } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, jobfunctions } from "../../../types/constants";
 
@@ -62,7 +62,7 @@ describe("Job functions pagination validations", function () {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        Cypress.Cookies.preserveOnce("AUTH_SESSION_ID", "KEYCLOAK_SESSION");
+        preservecookies();
 
         // Interceptors for Job functions
         cy.intercept("GET", "/api/controls/job-function*").as("getJobfunctions");

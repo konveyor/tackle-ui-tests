@@ -1,6 +1,13 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, inputText, submitForm, click } from "../../../../../utils/utils";
+import {
+    login,
+    clickByText,
+    inputText,
+    submitForm,
+    click,
+    preservecookies,
+} from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import {
     controls,
@@ -34,7 +41,7 @@ describe("Tag type validations", () => {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        Cypress.Cookies.preserveOnce("AUTH_SESSION_ID", "KEYCLOAK_SESSION");
+        preservecookies();
 
         // Interceptors
         cy.intercept("POST", "/api/controls/tag-type*").as("postTagtype");

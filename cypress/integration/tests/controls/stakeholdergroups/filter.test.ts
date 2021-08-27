@@ -8,6 +8,7 @@ import {
     click,
     applySearchFilter,
     selectItemsPerPage,
+    preservecookies,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -57,7 +58,7 @@ describe("Stakeholder groups filter validations", function () {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        Cypress.Cookies.preserveOnce("AUTH_SESSION_ID", "KEYCLOAK_SESSION");
+        preservecookies();
 
         // Interceptors
         cy.intercept("GET", "/api/controls/stakeholder-group*").as("getStakeholdergroups");

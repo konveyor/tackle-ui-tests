@@ -1,6 +1,12 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, exists, notExists, applySearchFilter } from "../../../../utils/utils";
+import {
+    login,
+    clickByText,
+    exists,
+    preservecookies,
+    applySearchFilter,
+} from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import {
     applicationinventory,
@@ -60,7 +66,7 @@ describe("Application inventory filter validations", function () {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        Cypress.Cookies.preserveOnce("AUTH_SESSION_ID", "KEYCLOAK_SESSION");
+        preservecookies();
 
         // Interceptors
         cy.intercept("POST", "/api/application-inventory/application*").as("postApplication");

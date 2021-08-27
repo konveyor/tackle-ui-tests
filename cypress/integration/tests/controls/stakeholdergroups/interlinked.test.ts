@@ -7,6 +7,7 @@ import {
     clickByText,
     exists,
     notExists,
+    preservecookies,
 } from "../../../../utils/utils";
 import { navTab } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
@@ -35,7 +36,7 @@ describe("Stakeholder group linked to stakeholder members", () => {
 
     beforeEach("Login", function () {
         // Save the session and token cookie for maintaining one login session
-        Cypress.Cookies.preserveOnce("AUTH_SESSION_ID", "KEYCLOAK_SESSION");
+        preservecookies();
 
         // Interceptors for stakeholder groups
         cy.intercept("POST", "/api/controls/stakeholder-group*").as("postStakeholdergroups");
