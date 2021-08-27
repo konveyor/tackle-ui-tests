@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, selectItemsPerPage } from "../../../utils/utils";
+import { login, clickByText, selectItemsPerPage, preservecookies } from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
 import { reports, applicationinventory } from "../../types/constants";
 import { ApplicationInventory } from "../../models/applicationinventory/applicationinventory";
@@ -80,7 +80,7 @@ describe("Reports pagination validations", () => {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        Cypress.Cookies.preserveOnce("AUTH_SESSION_ID", "KEYCLOAK_SESSION");
+        preservecookies();
     });
 
     after("Perform test data clean up", function () {

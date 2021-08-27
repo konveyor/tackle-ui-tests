@@ -1,6 +1,12 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, selectItemsPerPage, deleteTableRows } from "../../../../utils/utils";
+import {
+    login,
+    clickByText,
+    selectItemsPerPage,
+    deleteTableRows,
+    preservecookies,
+} from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, businessservices } from "../../../types/constants";
 
@@ -62,7 +68,7 @@ describe("Business services pagination validations", function () {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        Cypress.Cookies.preserveOnce("AUTH_SESSION_ID", "KEYCLOAK_SESSION");
+        preservecookies();
 
         // Interceptors for business services
         cy.intercept("GET", "/api/controls/business-service*").as("getBusinessService");

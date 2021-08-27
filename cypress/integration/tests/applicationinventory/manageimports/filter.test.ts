@@ -9,6 +9,7 @@ import {
     exists,
     selectItemsPerPage,
     deleteApplicationTableRows,
+    preservecookies,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import { applicationinventory, button, clearAllFilters } from "../../../types/constants";
@@ -75,7 +76,7 @@ describe("Manage applications import filter validations", function () {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        Cypress.Cookies.preserveOnce("AUTH_SESSION_ID", "KEYCLOAK_SESSION");
+        preservecookies();
 
         // Interceptors
         cy.intercept("GET", "/api/application-inventory/application*").as("getApplications");
