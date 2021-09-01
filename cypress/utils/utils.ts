@@ -402,9 +402,7 @@ export function deleteApplicationTableRows(): void {
 }
 
 export function preservecookies(): void {
-    cy.getCookies()
-        .should("have.length", 3)
-        .then((cookies) => {
-            Cypress.Cookies.preserveOnce(cookies[0].name, cookies[1].name, cookies[2].name);
-        });
+    Cypress.Cookies.defaults({
+        preserve: /SESSION/,
+    });
 }
