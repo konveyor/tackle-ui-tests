@@ -1,15 +1,31 @@
-name: Pull request test
-on: [pull_request]
+name: Regression tests Cron
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
   k8s:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        browser: [chrome]
+        branch: [main, dev]
         kubernetes_version: [v1.19.14, v1.20.10, v1.21.4]
       fail-fast: false
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: tackle-ui-tests
+          ref: ${{ matrix.branch }}
+
+      - name: Checkout input branch
+        uses: actions/checkout@v2
+        if: ${{ github.event.inputs.branch != '' }}
+        with:
+          path: tackle-ui-tests
+          ref: ${{ github.event.inputs.branch }}
+
       - name: Checkout tackle
         uses: actions/checkout@v2
         with:
@@ -18,8 +34,8 @@ jobs:
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.3.1
         with:
-          minikube version: v1.22.0
-          kubernetes version: ${{ matrix.kubernetes_version }}
+          minikube version: v1.18.1
+          kubernetes version: v1.20.2
           start args: "--addons=registry --addons=ingress"
       - name: Validate Minikube
         run: minikube status | grep Running
@@ -56,22 +72,21 @@ jobs:
           echo $external_ip;
           export endpoint=$external_ip;
           echo "CYPRESS_tackleUrl=https://$external_ip" >>$GITHUB_ENV'
-     
-      - name: Checkout to pull request branch
-        uses: actions/checkout@v2
-       # Install NPM dependencies
-      - name: Install NPM
-        run: npm install .
-      - id: file_changes
-        uses: jitterbit/get-changed-files@v1
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
         with:
-          format: 'json'
-        # Create event to generate ouput of comma separated test files only
-      - id: event
-        run: |
-          test_files=`python3 -c 'print(",".join([file for file in ${{ steps.file_changes.outputs.all }} if ".test.ts" in file]))'`
-          echo "::set-output name=tests::$test_files"
-          echo "::set-output name=tackleUrl::'${{ env.CYPRESS_tackleUrl }}'"
-      - name: Run cypress test cases
-        if: ${{ steps.event.outputs.tests }}
-        run: npx cypress run --spec ${{ steps.event.outputs.tests }} --env user="tackle",pass="password",tackleUrl=${{ steps.event.outputs.tackleUrl }} --config video=false
+          working-directory: tackle-ui-tests
+          record: false
+          start: npx echo "Starting Minikube Cypress tests"
+          config: pageLoadTimeout=100000,retries=2,video=false
+          browser: chrome
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_user: tackle
+          CYPRESS_pass: password
+      - uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: minikube-tests-screenshots
+          path: tackle-ui-tests/cypress/screenshots

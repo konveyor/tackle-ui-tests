@@ -8,6 +8,7 @@ import {
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
+    preservecookies,
 } from "../../../../utils/utils";
 const { _ } = Cypress;
 import { navMenu, navTab } from "../../../views/menu.view";
@@ -66,7 +67,7 @@ describe("Stakeholder sort validations", function () {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        Cypress.Cookies.preserveOnce("AUTH_SESSION_ID", "KEYCLOAK_SESSION");
+        preservecookies();
 
         // Interceptors
         cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");

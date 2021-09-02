@@ -400,3 +400,9 @@ export function deleteApplicationTableRows(): void {
             cy.wait(4000);
         });
 }
+
+export function preservecookies(): void {
+    Cypress.Cookies.defaults({
+        preserve: /SESSION/,
+    });
+}

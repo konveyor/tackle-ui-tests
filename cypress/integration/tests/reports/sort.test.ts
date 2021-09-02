@@ -8,6 +8,7 @@ import {
     sortDesc,
     getTableColumnData,
     sortAsc,
+    preservecookies,
 } from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
 import {
@@ -55,7 +56,7 @@ describe("Reports sort validations", () => {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        Cypress.Cookies.preserveOnce("AUTH_SESSION_ID", "KEYCLOAK_SESSION");
+        preservecookies();
     });
 
     after("Perform test data clean up", function () {

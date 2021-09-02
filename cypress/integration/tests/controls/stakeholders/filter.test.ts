@@ -4,7 +4,7 @@ import {
     login,
     clickByText,
     exists,
-    notExists,
+    preservecookies,
     click,
     applySearchFilter,
     selectItemsPerPage,
@@ -69,7 +69,7 @@ describe("Stakeholder filter validations", function () {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        Cypress.Cookies.preserveOnce("AUTH_SESSION_ID", "KEYCLOAK_SESSION");
+        preservecookies();
 
         // Interceptors
         cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");

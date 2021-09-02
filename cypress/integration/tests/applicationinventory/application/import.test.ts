@@ -11,6 +11,7 @@ import {
     verifyImportErrorMsg,
     selectItemsPerPage,
     deleteApplicationTableRows,
+    preservecookies,
 } from "../../../../utils/utils";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import { BusinessServices } from "../../../models/businessservices";
@@ -51,7 +52,7 @@ describe("Application import operations", () => {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        Cypress.Cookies.preserveOnce("AUTH_SESSION_ID", "KEYCLOAK_SESSION");
+        preservecookies();
 
         // Interceptors
         cy.intercept("GET", "/api/application-inventory/application*").as("getApplication");

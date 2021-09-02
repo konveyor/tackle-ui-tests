@@ -8,6 +8,7 @@ import {
     importApplication,
     openManageImportsPage,
     deleteApplicationTableRows,
+    preservecookies,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import { applicationinventory, button, tdTag, trTag, deleteAction } from "../../../types/constants";
@@ -102,7 +103,7 @@ describe("Manage imports pagination validations", function () {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        Cypress.Cookies.preserveOnce("AUTH_SESSION_ID", "KEYCLOAK_SESSION");
+        preservecookies();
 
         // Interceptors for Applications
         cy.intercept("GET", "/api/application-inventory/application*").as("getApplications");

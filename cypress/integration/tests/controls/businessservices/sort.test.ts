@@ -8,6 +8,7 @@ import {
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
+    preservecookies,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, businessservices, name, owner } from "../../../types/constants";
@@ -46,7 +47,7 @@ describe("Business services sort validations", function () {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        Cypress.Cookies.preserveOnce("AUTH_SESSION_ID", "KEYCLOAK_SESSION");
+        preservecookies();
 
         // Interceptors
         cy.intercept("POST", "/api/controls/business-service*").as("postBusinessService");

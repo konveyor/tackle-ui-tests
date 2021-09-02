@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, notExists } from "../../../../utils/utils";
+import { login, clickByText, notExists, preservecookies } from "../../../../utils/utils";
 import { Tag } from "../../../models/tags";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import { businessColumnSelector } from "../../../views/applicationinventory.view";
@@ -59,7 +59,7 @@ describe("Application inventory interlinked to tags and business service", () =>
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        Cypress.Cookies.preserveOnce("AUTH_SESSION_ID", "KEYCLOAK_SESSION");
+        preservecookies();
 
         // Interceptors
         cy.intercept("POST", "/api/controls/business-service*").as("postBusinessService");
