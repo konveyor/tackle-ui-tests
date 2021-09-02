@@ -10,12 +10,7 @@ on:
 jobs:
   k8s:
     name: Cypress run daily
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        branch: [main]
-        kubernetes_version: [v1.21.4]
-      fail-fast: false
+    runs-on: self-hosted
     steps:
       - name: Checkout tackle
         uses: actions/checkout@v2
@@ -28,6 +23,7 @@ jobs:
           minikube version: v1.18.1
           kubernetes version: v1.20.2
           start args: "--addons=registry --addons=ingress"
+          github token: ${{ secrets.GITHUB_TOKEN }}
       - name: Validate Minikube
         run: minikube status | grep Running
       - name: Validate Cluster
@@ -66,17 +62,14 @@ jobs:
       
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          path: tackle-ui-tests
-          ref: ${{ matrix.branch }}
         # Install NPM dependencies
       - name: Install NPM
         run: npm install .
         # Run cypress integration tests and upload results to report portal
       - name: Run cypress test cases and publish results to report portal
         run: |
-          export RP_TOKEN=${{ secrets.REPORT_TOKEN }}
-          export RP_ENDPOINT=${{ secrets.PORTAL_ENDPOINT }}
+          export RP_TOKEN="93c2f0cb-5f34-45d1-b518-3a77018a5e29"
+          export RP_ENDPOINT="https://reportportal-migration-qe.apps.ocp4.prod.psi.redhat.com/api/v1"
           export RP_LAUNCH="Tackle-1.0-daily"
           echo "::set-output name=tackleUrl::'${{ env.CYPRESS_tackleUrl }}'"
-          npx cypress run --spec **/login.test.ts --env user=${{ secrets.TACKLE_USER }},pass=${{ secrets.TACKLE_PASS }},tackleUrl=${{ steps.event.outputs.tackleUrl }} --config-file **/reportconfig.json
+          npx cypress run --spec **/login.test.ts --env user=tackle,pass=password,tackleUrl=${{ steps.event.outputs.tackleUrl }} --config-file reportconfig.json

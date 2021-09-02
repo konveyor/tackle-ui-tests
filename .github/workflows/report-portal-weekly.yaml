@@ -7,29 +7,25 @@ on:
   
   # To schedule job
   schedule:
-      # At 00:00 on Sunday
+      # At 00:00 on every Sunday
     - cron: 0 0 * * 0
 
 jobs:
   cypress-run:
     name: Cypress run weekly
     runs-on: self-hosted
-    strategy:
-      matrix:
-        branch: [main]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          path: tackle-ui-tests
-          ref: ${{ matrix.branch }}
         # Install NPM dependencies
       - name: Install NPM
         run: npm install .
+      - name: version
+        run: npm version
         # Run cypress integration tests and upload results to report portal
       - name: Run cypress test cases and publish results to report portal
         run: |
-          export RP_TOKEN=${{ secrets.REPORT_TOKEN }}
-          export RP_ENDPOINT=${{ secrets.PORTAL_ENDPOINT }}
+          export RP_TOKEN="93c2f0cb-5f34-45d1-b518-3a77018a5e29"
+          export RP_ENDPOINT="https://reportportal-migration-qe.apps.ocp4.prod.psi.redhat.com/api/v1"
           export RP_LAUNCH="Tackle-1.0-weekly"
-          npx cypress run --spec **/login.test.ts --env user=${{ secrets.TACKLE_USER }},pass=${{ secrets.TACKLE_PASS }},tackleUrl=${{ secrets.TACKLE_URL }} --config-file reportconfig.json
+          npx cypress run --spec **/login.test.ts --env user=tackle,pass=password,tackleUrl="https://tackle-ghubale-tackle.apps.mgn02.cnv-qe.rhcloud.com/" --config-file reportconfig.json
