@@ -1,3 +1,4 @@
+# Execute on pushing new changes to main or dev branch
 name: Regression tests CI
 
 on:

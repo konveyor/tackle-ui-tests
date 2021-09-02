@@ -16,7 +16,7 @@
     "reporterOptions": {
         "endpoint": "",
         "token": "",
-        "launch": "Tackle-1.0",
+        "launch": "",
         "project": "mta",
         "description": "Tackle automation results",
         "autoMerge": true

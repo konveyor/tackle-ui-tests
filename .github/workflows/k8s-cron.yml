@@ -1,3 +1,4 @@
+# Execute daily and publish results to report portal
 name: Regression tests Cron
 
 on:

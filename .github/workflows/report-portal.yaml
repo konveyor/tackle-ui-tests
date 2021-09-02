@@ -1,104 +1,29 @@
-name: Report portal
+# Execute weekly and publish results to report portal
+name: Report portal weekly
 on:
-  pull_request:
   # To trigger job manually
   workflow_dispatch:
+  
+  # To schedule job
   schedule:
-    - cron: "0 0 * * *"
+      # At 00:00 on Sunday
+    - cron: 0 0 * * 0
 
 jobs:
-  k8s:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        branch: [main]
+  cypress-run:
+    name: Cypress run weekly
+    runs-on: self-hosted
     steps:
-  
-
-      # - name: Checkout tackle
-      #   uses: actions/checkout@v2
-      #   with:
-      #     repository: konveyor/tackle
-      #     path: tackle
-      # - name: Setup Minikube
-      #   uses: manusa/actions-setup-minikube@v2.3.1
-      #   with:
-      #     minikube version: v1.18.1
-      #     kubernetes version: v1.20.2
-      #     start args: "--addons=registry --addons=ingress"
-      # - name: Validate Minikube
-      #   run: minikube status | grep Running
-      # - name: Validate Cluster
-      #   run: kubectl get nodes
-      # - name: Validate enabled addon in arg
-      #   run: minikube addons list -o json | jq '.registry.Status' | grep enabled
-      # - name: Kubectl create namespace
-      #   run: kubectl create ns tackle
-
-      # - name: Deploy tackle
-      #   run: sleep 60s && kubectl create -f tackle/kubernetes/kubernetes-tackle.yaml -n tackle
-
-      # - name: Verify keycloak
-      #   run: kubectl wait deployment/keycloak --for condition=available --timeout=-1s -n tackle
-      # - name: Verify tackle-controls
-      #   run: kubectl wait deployment/tackle-controls --for condition=available --timeout=-1s -n tackle
-      # - name: Verify tackle-application-inventory
-      #   run: kubectl wait deployment/tackle-application-inventory --for condition=available --timeout=-1s -n tackle
-      # - name: Verify tackle-pathfinder
-      #   run: kubectl wait deployment/tackle-pathfinder --for condition=available --timeout=-1s -n tackle
-      # - name: Verify tackle-ui
-      #   run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n tackle
-
-      # - name: Wait for Ingress and run cypress tests
-      #   run: |
-      #     bash -c 'external_ip="";
-      #     while [ -z $external_ip ];
-      #       do echo "Waiting for end point...";
-      #       external_ip=$(kubectl get ingress tackle --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}" -n tackle);[ -z "$external_ip" ] &&
-      #       sleep 10;
-      #     done;
-      #     echo "End point ready:" &&
-      #     echo $external_ip;
-      #     export endpoint=$external_ip;
-      #     echo "CYPRESS_tackleUrl=https://$external_ip" >>$GITHUB_ENV'
-     
-      # - name: Checkout tackle-ui-tests
-      #   uses: actions/checkout@v2
-      #     ref: ${{ matrix.branch }}
-      # - name: Install NPM dependencies
-      #   run: npm install .
-      # - id: event
-      #   run: |
-      #     echo "::set-output name=tackleUrl::'${{ env.CYPRESS_tackleUrl }}'"
-      # - name: Run cypress test cases
-      #   run: |
-      #     export RP_TOKEN="1bce96f2-5ad9-43c3-9e6e-445c116a5859"
-      #     export RP_ENDPOINT="https://reportportal-migration-qe.apps.ocp4.prod.psi.redhat.com/api/v1"
-      #     npx cypress run --spec **/login.test.ts --env user="alice",pass="password",tackleUrl=${{ steps.event.outputs.tackleUrl }} --config-file reportconfig.json
+        # Checkout to pull request branch
       - name: Checkout
         uses: actions/checkout@v2
-        with:
-          path: tackle-ui-tests
-          ref: ${{ matrix.branch }}
-      
-      - name: fies
-        run: ls -R
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
-        with:
-          working-directory: tackle-ui-tests
-          start: npx echo "Starting Minikube Cypress tests"
-          config: pageLoadTimeout=100000,retries=2,video=false
-          browser: ${{ matrix.browser }}
-          config-file: reportconfig.json
-          spec: "**/login.test.ts"
-          record: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CYPRESS_user: tackle
-          CYPRESS_pass: password
-          CYPRESS_tackleUrl: ${{ env.CYPRESS_tackleUrl }}
-          RP_TOKEN: "1bce96f2-5ad9-43c3-9e6e-445c116a5859"
-          RP_ENDPOINT: "https://reportportal-migration-qe.apps.ocp4.prod.psi.redhat.com/api/v1"
-      - name: fies
-        run: ls -R
+        # Install NPM dependencies
+      - name: Install NPM
+        run: npm install .
+        # Run cypress integration tests and upload results to report portal
+      - name: Run cypress test cases and publish results to report portal
+        run: |
+          export RP_TOKEN=${{ secrets.REPORT_TOKEN }}
+          export RP_ENDPOINT=${{ secrets.PORTAL_ENDPOINT }}
+          export RP_LAUNCH="Tackle-1.0-weekly"
+          npx cypress run --spec **/*.test.ts --env user=${{ secrets.TACKLE_USER }},pass=${{ secrets.TACKLE_PASS }},tackleUrl=${{ secrets.TACKLE_URL }} --config-file reportconfig.json

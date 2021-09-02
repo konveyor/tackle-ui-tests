@@ -1,3 +1,4 @@
+# Execute on pull request to execute test cases
 name: Pull request test
 on: [pull_request]
 

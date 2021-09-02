@@ -1,5 +1,10 @@
+# Execute to check code formatting on pull request and push to main/dev branch
 name: Code formatting
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
+      - dev
 
 jobs:
   build:

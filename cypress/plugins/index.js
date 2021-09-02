@@ -34,6 +34,7 @@ module.exports = (on, config) => {
             ...config.reporterOptions,
             token: process.env.RP_TOKEN,
             endpoint: process.env.RP_ENDPOINT,
+            launch: process.env.RP_LAUNCH,
         },
     };
     return updatedConfig;
