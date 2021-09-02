@@ -1,6 +1,7 @@
 # Execute weekly and publish results to report portal
 name: Report portal weekly
 on:
+  pull_request:
   # To trigger job manually
   workflow_dispatch:
   
@@ -13,10 +14,15 @@ jobs:
   cypress-run:
     name: Cypress run weekly
     runs-on: self-hosted
+    strategy:
+      matrix:
+        branch: [main]
     steps:
-        # Checkout to pull request branch
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          path: tackle-ui-tests
+          ref: ${{ matrix.branch }}
         # Install NPM dependencies
       - name: Install NPM
         run: npm install .
@@ -26,4 +32,4 @@ jobs:
           export RP_TOKEN=${{ secrets.REPORT_TOKEN }}
           export RP_ENDPOINT=${{ secrets.PORTAL_ENDPOINT }}
           export RP_LAUNCH="Tackle-1.0-weekly"
-          npx cypress run --spec **/*.test.ts --env user=${{ secrets.TACKLE_USER }},pass=${{ secrets.TACKLE_PASS }},tackleUrl=${{ secrets.TACKLE_URL }} --config-file reportconfig.json
+          npx cypress run --spec **/login.test.ts --env user=${{ secrets.TACKLE_USER }},pass=${{ secrets.TACKLE_PASS }},tackleUrl=${{ secrets.TACKLE_URL }} --config-file reportconfig.json

@@ -1,25 +1,22 @@
 # Execute daily and publish results to report portal
-name: Regression tests Cron
+name: Report portal daily
 
 on:
+  pull_request:
   schedule:
+      # At the end of every day
     - cron: "0 0 * * *"
 
 jobs:
   k8s:
+    name: Cypress run daily
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        branch: [main, dev]
-        kubernetes_version: [v1.19.14, v1.20.10, v1.21.4]
+        branch: [main]
+        kubernetes_version: [v1.21.4]
       fail-fast: false
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          path: tackle-ui-tests
-          ref: ${{ matrix.branch }}
-
       - name: Checkout tackle
         uses: actions/checkout@v2
         with:
@@ -66,21 +63,20 @@ jobs:
           echo $external_ip;
           export endpoint=$external_ip;
           echo "CYPRESS_tackleUrl=https://$external_ip" >>$GITHUB_ENV'
-
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
+      
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
-          working-directory: tackle-ui-tests
-          record: false
-          start: npx echo "Starting Minikube Cypress tests"
-          config: pageLoadTimeout=100000,retries=2,video=false
-          browser: chrome
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CYPRESS_user: tackle
-          CYPRESS_pass: password
-      - uses: actions/upload-artifact@v1
-        if: failure()
-        with:
-          name: minikube-tests-screenshots
-          path: tackle-ui-tests/cypress/screenshots
+          path: tackle-ui-tests
+          ref: ${{ matrix.branch }}
+        # Install NPM dependencies
+      - name: Install NPM
+        run: npm install .
+        # Run cypress integration tests and upload results to report portal
+      - name: Run cypress test cases and publish results to report portal
+        run: |
+          export RP_TOKEN=${{ secrets.REPORT_TOKEN }}
+          export RP_ENDPOINT=${{ secrets.PORTAL_ENDPOINT }}
+          export RP_LAUNCH="Tackle-1.0-daily"
+          echo "::set-output name=tackleUrl::'${{ env.CYPRESS_tackleUrl }}'"
+          npx cypress run --spec **/login.test.ts --env user=${{ secrets.TACKLE_USER }},pass=${{ secrets.TACKLE_PASS }},tackleUrl=${{ steps.event.outputs.tackleUrl }} --config-file **/reportconfig.json

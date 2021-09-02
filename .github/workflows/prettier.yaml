@@ -1,6 +1,7 @@
 # Execute to check code formatting on pull request and push to main/dev branch
 name: Code formatting
 on:
+  pull_request:
   push:
     branches:
       - main
