@@ -107,12 +107,12 @@ describe("Application inventory interlinked to tags and business service", () =>
         cy.wait("@getApplication");
 
         // Assert that deleted business service is removed from application
-        applicationList[0].getColumnText(businessColumnSelector, "Not available");
+        applicationList[0].getColumnText(businessColumnSelector, "");
         cy.wait(100);
 
         // Assert that deleted tag is removed
         applicationList[0].expandApplicationRow();
-        applicationList[0].existsWithinRow(applicationList[0].name, "Tags", "Unknown");
+        applicationList[0].existsWithinRow(applicationList[0].name, "Tags", "");
         applicationList[0].closeApplicationRow();
 
         applicationList[0].edit({
