@@ -1,19 +1,27 @@
 {
     "viewportWidth": 1280,
     "viewportHeight": 880,
+    "pageLoadTimeout": 100000,
     "video": false,
     "env": {
         "user": "",
         "pass": "",
         "tackleUrl": ""
     },
+    "retries": {
+        "runMode": 2,
+        "openMode": 0
+    },
     "reporter": "@reportportal/agent-js-cypress",
     "reporterOptions": {
-        "endpoint": "",
-        "token": "",
-        "launch": "Tackle-1.0",
-        "project": "mta",
+        "endpoint": "https://reportportal-migration-qe.apps.ocp4.prod.psi.redhat.com/api/v1",
+        "token": "93c2f0cb-5f34-45d1-b518-3a77018a5e29",
+        "launch": "Tackle-1.0-weekly",
+        "project": "ghubale_personal",
         "description": "Tackle automation results",
         "autoMerge": true
+
+          
+  
     }
 }
