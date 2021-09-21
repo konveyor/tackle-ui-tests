@@ -1,5 +1,5 @@
-name: Pull request test
-on: [pull_request]
+# name: Pull request test
+# on: [pull_request]
 
 jobs:
   k8s:

@@ -1,5 +1,5 @@
-name: Code formatting
-on: [push, pull_request, workflow_dispatch]
+# name: Code formatting
+# on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
