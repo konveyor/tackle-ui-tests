@@ -7,6 +7,7 @@
         "pass": "",
         "tackleUrl": ""
     },
+    "projectId": "cbdv4m",
     "reporter": "@reportportal/agent-js-cypress",
     "reporterOptions": {
         "endpoint": "",
