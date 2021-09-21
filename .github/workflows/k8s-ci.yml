@@ -1,10 +1,11 @@
 name: Regression tests CI
 
 on:
-  push:
-    branches:
-      - main
-      - dev
+  pull_request:
+  # push:
+  #   branches:
+  #     - main
+  #     - dev
 
 jobs:
   k8s:
@@ -12,7 +13,8 @@ jobs:
     strategy:
       matrix:
         browser: [chrome]
-        kubernetes_version: [v1.19.14, v1.20.10, v1.21.4]
+        kubernetes_version: [v1.20.10]
+        containers: [1, 2, 3]
       fail-fast: false
     steps:
       - name: Checkout
@@ -71,14 +73,17 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           working-directory: tackle-ui-tests
-          record: false
+          record: true
           start: npx echo "Starting Minikube Cypress tests"
           config: pageLoadTimeout=100000,retries=2,video=false
           browser: ${{ matrix.browser }}
+          parallel: true
+          group: 'Tackle parallel tests'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_user: tackle
           CYPRESS_pass: password
+          CYPRESS_RECORD_KEY: cbdv4m
       - uses: actions/upload-artifact@v1
         if: failure()
         with:
