@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        branch: [main, dev]
+        branch: [main]
         kubernetes_version: [v1.21.4]
-        containers: [1, 2, 3, 4]
+        containers: [1, 2, 3]
       fail-fast: false
     steps:
       - name: Checkout
@@ -20,13 +20,6 @@ jobs:
         with:
           path: tackle-ui-tests
           ref: ${{ matrix.branch }}
-
-      - name: Checkout input branch
-        uses: actions/checkout@v2
-        if: ${{ github.event.inputs.branch != '' }}
-        with:
-          path: tackle-ui-tests
-          ref: ${{ github.event.inputs.branch }}
 
       - name: Checkout tackle
         uses: actions/checkout@v2
