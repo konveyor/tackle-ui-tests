@@ -15,7 +15,7 @@ import { tdTag } from "../../../types/constants";
 import { groupsCount } from "../../../views/stakeholders.view";
 import * as data from "../../../../utils/data_utils";
 
-describe("Stakeholder CRUD operations", () => {
+describe("Stakeholder CRUD operations", { tags: '@sanity'}, () => {
     beforeEach("Login", function () {
         // Perform login
         login();

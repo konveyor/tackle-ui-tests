@@ -35,8 +35,14 @@ var jobfunctionsList: Array<Jobfunctions> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var invalidSearchInput = "qqqqq";
 
-describe("Stakeholder filter validations", function () {
+describe("Stakeholder filter validations", { tags: '@filter'}, function () {
     before("Login and Create Test Data", function () {
+
+        // Prevent before hook from running, if the tag is excluded from run
+        if (Cypress.env('grepTags')) {
+            if (!Cypress.env('grepTags').includes('@filter')) return;
+        }
+
         // Perform login
         login();
 
