@@ -54,9 +54,9 @@
 5. In some cases, reviewer wants to trigger the PR test GH action but he/she can't force push the branch. Hence added feature of triggering GH action manually. Steps to trigger GH action for PR testing manually :- Go to Actions tab > Click on GH action(Pull request test) > Click on run workflow dropdown > select PR branch > Click on button Run workflow
 
 #### Test runs
-1. Click here to see **Old** test runs - [run1](https://dashboard.cypress.io/projects/cbdv4m/runs), [run2](https://dashboard.cypress.io/projects/dvmnpr/runs)
+1. Click here to see **Old** test runs - [run1](https://dashboard.cypress.io/projects/cbdv4m/runs), [run2](https://dashboard.cypress.io/projects/dvmnpr/runs), [run3](https://dashboard.cypress.io/projects/1g7617/runs)
 
-2. Click [here](https://dashboard.cypress.io/projects/1g7617/runs) to see **Current** test runs
+2. Click [here](https://reportportal-migration-qe.apps.ocp4.prod.psi.redhat.com) to see **Current** test runs
 
 #### Tag based test execution
 1. To run tests based on tags, use below command - 
