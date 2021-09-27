@@ -12,7 +12,6 @@ jobs:
       matrix:
         branch: [main]
         kubernetes_version: [v1.21.4]
-        containers: [1, 2, 3]
       fail-fast: false
     steps:
       - name: Checkout
@@ -75,14 +74,11 @@ jobs:
           start: npx echo "Starting Minikube Cypress tests"
           config: pageLoadTimeout=100000,retries=2,video=false
           browser: chrome
-          record: true
-          parallel: true
-          group: 'Tackle integration tests'
+          record: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CYPRESS_user: tackle
           CYPRESS_pass: password
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
       - uses: actions/upload-artifact@v1
         if: failure()
         with:
