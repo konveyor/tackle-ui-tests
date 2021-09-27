@@ -14,24 +14,6 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import {
-    applicationinventory,
-    button,
-    deleteAction,
-    tdTag,
-    trTag,
-} from "../integration/types/constants";
-import { actionButton } from "../integration/views/applicationinventory.view";
-import { navMenu } from "../integration/views/menu.view";
-import {
-    click,
-    clickByText,
-    deleteApplicationTableRows,
-    login,
-    logout,
-    selectItemsPerPage,
-} from "../utils/utils";
-import * as commonView from "../integration/views/common.view";
 import "./commands";
 
 // Alternatively you can use CommonJS syntax:
@@ -40,4 +22,4 @@ require("cypress-xpath"); // Refer - https://www.npmjs.com/package/cypress-xpath
 
 // load and register the grep feature
 // https://github.com/bahmutov/cypress-grep
-require('cypress-grep')();
+require("cypress-grep")();

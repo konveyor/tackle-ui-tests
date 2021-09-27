@@ -8,6 +8,7 @@ import {
     click,
     applySearchFilter,
     selectItemsPerPage,
+    hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -35,13 +36,10 @@ var jobfunctionsList: Array<Jobfunctions> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var invalidSearchInput = "qqqqq";
 
-describe("Stakeholder filter validations", { tags: '@filter'}, function () {
+describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
-
         // Prevent before hook from running, if the tag is excluded from run
-        if (Cypress.env('grepTags')) {
-            if (!Cypress.env('grepTags').includes('@filter')) return;
-        }
+        if (hasToBeSkipped("@tier2")) return;
 
         // Perform login
         login();

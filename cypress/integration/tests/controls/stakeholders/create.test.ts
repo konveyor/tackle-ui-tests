@@ -7,6 +7,8 @@ import {
     submitForm,
     exists,
     notExists,
+    hasToBeSkipped,
+    preservecookies,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -31,12 +33,20 @@ import { Stakeholders } from "../../../models/stakeholders";
 import * as commonView from "../../../../integration/views/common.view";
 import * as data from "../../../../utils/data_utils";
 
-describe("Stakeholder validations", () => {
+describe("Stakeholder validations", { tags: "@tier2" }, () => {
     const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
 
-    beforeEach("Login", function () {
+    before("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
+    });
+
+    beforeEach("Persist session", function () {
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
 
         // Interceptors
         cy.intercept("POST", "/api/controls/stakeholder*").as("postStakeholder");

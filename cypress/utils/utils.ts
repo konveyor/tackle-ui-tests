@@ -406,3 +406,11 @@ export function preservecookies(): void {
         preserve: /SESSION/,
     });
 }
+
+// Checks if the hook has to be skipped, if the tag is not mentioned during test run
+export function hasToBeSkipped(tagName: string): boolean {
+    if (Cypress.env("grepTags")) {
+        if (!Cypress.env("grepTags").includes(tagName)) return true;
+    }
+    return false;
+}

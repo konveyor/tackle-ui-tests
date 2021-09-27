@@ -8,6 +8,7 @@ import {
     exists,
     notExists,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navTab } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
@@ -20,13 +21,16 @@ import * as data from "../../../../utils/data_utils";
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var stakeholdergroupNames: Array<string> = [];
 
-describe("Stakeholder linked to stakeholder groups and job function", () => {
+describe("Stakeholder linked to stakeholder groups and job function", { tags: "@tier1" }, () => {
     before("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1")) return;
+
         // Perform login
         login();
     });
 
-    beforeEach("Login", function () {
+    beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
         preservecookies();
 
