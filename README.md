@@ -57,3 +57,12 @@
 1. Click here to see **Old** test runs - [run1](https://dashboard.cypress.io/projects/cbdv4m/runs), [run2](https://dashboard.cypress.io/projects/dvmnpr/runs)
 
 2. Click [here](https://dashboard.cypress.io/projects/1g7617/runs) to see **Current** test runs
+
+#### Tag based test execution
+1. To run tests based on tags, use below command - 
+
+    `npx cypress run --env grepTags=@tagName`
+
+2. To run multiple tags(tiers) in a single run, provide tag names appended in below format - 
+
+    `npx cypress run --env grepTags=@tag1+@tag2`
