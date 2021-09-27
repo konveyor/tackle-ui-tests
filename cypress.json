@@ -1,12 +1,12 @@
 {
     "viewportWidth": 1280,
     "viewportHeight": 880,
+    "video": false,
     "env": {
         "user": "",
         "pass": "",
         "tackleUrl": ""
     },
-    "projectId": "cbdv4m",
     "retries": {
         "runMode": 2,
         "openMode": 0
