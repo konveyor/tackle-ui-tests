@@ -7,6 +7,8 @@ import {
     existsWithinRow,
     expandRowDetails,
     closeRowDetails,
+    hasToBeSkipped,
+    preservecookies,
 } from "../../../../utils/utils";
 import { Stakeholders } from "../../../models/stakeholders";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
@@ -15,10 +17,18 @@ import { tdTag } from "../../../types/constants";
 import { groupsCount } from "../../../views/stakeholders.view";
 import * as data from "../../../../utils/data_utils";
 
-describe("Stakeholder CRUD operations", () => {
-    beforeEach("Login", function () {
+describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
+    before("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1")) return;
+
         // Perform login
         login();
+    });
+
+    beforeEach("Persist session", function () {
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
 
         // Interceptors
         cy.intercept("POST", "/api/controls/stakeholder*").as("postStakeholder");

@@ -38,3 +38,8 @@ module.exports = (on, config) => {
     };
     return updatedConfig;
 };
+
+module.exports = (on, config) => {
+    // register cypress-grep plugin code
+    require("cypress-grep/src/plugin")(config);
+};
