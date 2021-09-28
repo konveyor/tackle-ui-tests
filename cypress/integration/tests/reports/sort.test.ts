@@ -9,6 +9,7 @@ import {
     getTableColumnData,
     sortAsc,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
 import {
@@ -27,8 +28,11 @@ import { Stakeholders } from "../../models/stakeholders";
 var applicationsList: Array<ApplicationInventory> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 
-describe("Reports sort validations", () => {
+describe("Reports sort validations", { tags: "@tier2" }, () => {
     before("Login and create test data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
 
@@ -60,6 +64,9 @@ describe("Reports sort validations", () => {
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Delete the stakeholder
         stakeholdersList.forEach(function (stakeholder) {
             stakeholder.delete();

@@ -7,6 +7,8 @@ import {
     submitForm,
     exists,
     notExists,
+    hasToBeSkipped,
+    preservecookies,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -27,12 +29,20 @@ import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import * as data from "../../../../utils/data_utils";
 import * as commonView from "../../../../integration/views/common.view";
 
-describe("Stakeholder groups validations", () => {
+describe("Stakeholder groups validations", { tags: "@tier2" }, () => {
     const stakeholdergroup = new Stakeholdergroups(data.getCompanyName(), data.getDescription());
 
-    beforeEach("Login", function () {
+    before("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
+    });
+
+    beforeEach("Persist session", function () {
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
     });
 
     it("Stakeholder group field validations", function () {

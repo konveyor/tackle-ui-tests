@@ -12,6 +12,7 @@ import {
     selectItemsPerPage,
     deleteApplicationTableRows,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../../utils/utils";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import { BusinessServices } from "../../../models/businessservices";
@@ -23,8 +24,11 @@ const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/";
 var applicationsList: Array<ApplicationInventory> = [];
 
-describe("Application import operations", () => {
+describe("Application import operations", { tags: "@tier1" }, () => {
     before("Login and create test data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1")) return;
+
         // Perform login
         login();
 
@@ -59,6 +63,9 @@ describe("Application import operations", () => {
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1")) return;
+
         // Delete the business service
         businessService.delete();
 
@@ -203,7 +210,6 @@ describe("Application import operations", () => {
         cy.wait("@getApplication");
 
         // Import csv having description and comments over the allowed limits
-        // Fails due to bug - https://issues.redhat.com/browse/TACKLE-268
         const fileName = "desc_comments_char_limit_rows.csv";
         importApplication(filePath + fileName);
         cy.wait(2000);

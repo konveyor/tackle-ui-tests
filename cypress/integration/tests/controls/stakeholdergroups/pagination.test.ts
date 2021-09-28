@@ -6,6 +6,7 @@ import {
     selectItemsPerPage,
     deleteTableRows,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, stakeholdergroups } from "../../../types/constants";
@@ -24,8 +25,11 @@ import {
 
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 
-describe("Stakeholder groups pagination validations", function () {
+describe("Stakeholder groups pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
+
         // Perform login
         login();
 

@@ -7,6 +7,7 @@ import {
     getTableColumnData,
     selectFilter,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
 import {
@@ -41,8 +42,11 @@ var stakeholdersList: Array<Stakeholders> = [];
 var tagList: Array<Tag> = [];
 var invalidSearchInput = String(data.getRandomNumber());
 
-describe("Reports filter validations", () => {
+describe("Reports filter validations", { tags: "@tier2" }, () => {
     before("Login and create test data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
 
@@ -94,6 +98,9 @@ describe("Reports filter validations", () => {
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Delete the stakeholder
         stakeholdersList.forEach(function (stakeholder) {
             stakeholder.delete();

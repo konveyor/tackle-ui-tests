@@ -4,11 +4,11 @@ import {
     login,
     clickByText,
     exists,
-    notExists,
     click,
     applySearchFilter,
     selectItemsPerPage,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -33,8 +33,11 @@ var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var invalidSearchInput = data.getRandomNumber();
 
-describe("Stakeholder groups filter validations", function () {
+describe("Stakeholder groups filter validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
+        // Prevent before hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
 

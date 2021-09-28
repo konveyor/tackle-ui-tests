@@ -7,6 +7,7 @@ import {
     submitForm,
     click,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import {
@@ -33,8 +34,11 @@ import { Tagtype } from "../../../../models/tags";
 import * as commonView from "../../../../../integration/views/common.view";
 import * as data from "../../../../../utils/data_utils";
 
-describe("Tag type validations", () => {
+describe("Tag type validations", { tags: "@tier2" }, () => {
     before("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
     });

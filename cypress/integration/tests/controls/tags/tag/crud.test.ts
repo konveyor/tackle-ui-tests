@@ -7,14 +7,18 @@ import {
     existsWithinRow,
     closeRowDetails,
     notExistsWithinRow,
+    hasToBeSkipped,
 } from "../../../../../utils/utils";
 import { Tag } from "../../../../models/tags";
 
 import { tdTag } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 
-describe("Tag CRUD operations", () => {
+describe("Tag CRUD operations", { tags: "@tier1" }, () => {
     beforeEach("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1")) return;
+
         // Perform login
         login();
 

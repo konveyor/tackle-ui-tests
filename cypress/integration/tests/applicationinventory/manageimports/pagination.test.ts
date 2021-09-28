@@ -9,6 +9,7 @@ import {
     openManageImportsPage,
     deleteApplicationTableRows,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import { applicationinventory, button, tdTag, trTag, deleteAction } from "../../../types/constants";
@@ -27,8 +28,11 @@ const filesToImport = [
     "non_existing_tags_business_service_rows.csv",
 ];
 
-describe("Manage imports pagination validations", function () {
+describe("Manage imports pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
+
         // Perform login
         login();
 
@@ -110,6 +114,9 @@ describe("Manage imports pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
+
         // Delete the business service
         businessService.delete();
 

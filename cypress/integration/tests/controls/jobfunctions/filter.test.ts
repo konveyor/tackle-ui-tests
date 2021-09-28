@@ -1,6 +1,12 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, exists, applySearchFilter } from "../../../../utils/utils";
+import {
+    login,
+    clickByText,
+    exists,
+    applySearchFilter,
+    hasToBeSkipped,
+} from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, jobfunctions, button, name, clearAllFilters } from "../../../types/constants";
 
@@ -10,8 +16,11 @@ import * as data from "../../../../utils/data_utils";
 var jobfunctionsList: Array<Jobfunctions> = [];
 var invalidSearchInput = String(data.getRandomNumber());
 
-describe("Job function filter validations", function () {
+describe("Job function filter validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
+        // Prevent before hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         login();
 
         // Create multiple job functions

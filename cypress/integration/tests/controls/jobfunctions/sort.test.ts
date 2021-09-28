@@ -9,6 +9,7 @@ import {
     verifySortDesc,
     getTableColumnData,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../../utils/utils";
 const { _ } = Cypress;
 import { navMenu, navTab } from "../../../views/menu.view";
@@ -19,8 +20,11 @@ import * as data from "../../../../utils/data_utils";
 
 var jobfunctionsList: Array<Jobfunctions> = [];
 
-describe("Job function sorting", function () {
+describe("Job function sorting", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
 

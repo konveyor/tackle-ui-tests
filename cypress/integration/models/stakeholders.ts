@@ -1,4 +1,4 @@
-import { controls, stakeholders, tdTag, trTag, button, createNewButton } from "../types/constants";
+import { controls, stakeholders, tdTag, button, createNewButton } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import {
     stakeholderNameInput,
@@ -61,6 +61,10 @@ export class Stakeholders {
         });
     }
 
+    protected performRowAction(buttonName: string): void {
+        cy.get(tdTag).contains(this.email).siblings(tdTag).find(buttonName).click();
+    }
+
     create(cancel = false): void {
         Stakeholders.clickStakeholders();
         clickByText(button, createNewButton);
@@ -95,12 +99,7 @@ export class Stakeholders {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
-        cy.get(tdTag)
-            .contains(this.email)
-            .parent(trTag)
-            .within(() => {
-                click(commonView.editButton);
-            });
+        this.performRowAction(commonView.editButton);
         if (cancel) {
             cancelForm();
         } else {
@@ -128,12 +127,7 @@ export class Stakeholders {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
-        cy.get(tdTag)
-            .contains(this.email)
-            .parent(trTag)
-            .within(() => {
-                click(commonView.deleteButton);
-            });
+        this.performRowAction(commonView.deleteButton);
         if (cancel) {
             cancelForm();
         } else {

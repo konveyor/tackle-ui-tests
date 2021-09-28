@@ -9,6 +9,7 @@ import {
     verifySortDesc,
     getTableColumnData,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import { navMenu, navTab } from "../../../views/menu.view";
@@ -20,8 +21,11 @@ var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholderNames: Array<string> = [];
 
-describe("Stakeholder groups sort validations", function () {
+describe("Stakeholder groups sort validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
 

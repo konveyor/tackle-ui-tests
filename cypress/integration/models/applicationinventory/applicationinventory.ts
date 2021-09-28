@@ -231,6 +231,10 @@ export class ApplicationInventory {
             });
     }
 
+    protected performRowAction(buttonName: string): void {
+        cy.get(tdTag).contains(this.name).parent(tdTag).siblings(tdTag).find(buttonName).click();
+    }
+
     create(cancel = false): void {
         ApplicationInventory.clickApplicationInventory();
         clickByText(button, createNewButton);
@@ -271,13 +275,7 @@ export class ApplicationInventory {
         ApplicationInventory.clickApplicationInventory();
         selectItemsPerPage(100);
         cy.wait(2000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(editButton);
-            });
+        this.performRowAction(editButton);
 
         if (cancel) {
             cancelForm();

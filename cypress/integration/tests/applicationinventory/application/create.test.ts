@@ -7,6 +7,8 @@ import {
     submitForm,
     exists,
     notExists,
+    hasToBeSkipped,
+    preservecookies,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import {
@@ -27,10 +29,18 @@ import { ApplicationInventory } from "../../../models/applicationinventory/appli
 import * as commonView from "../../../../integration/views/common.view";
 import * as data from "../../../../utils/data_utils";
 
-describe("Application validations", () => {
-    beforeEach("Login", function () {
+describe("Application validations", { tags: "@tier2" }, () => {
+    before("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
+    });
+
+    beforeEach("Persist session", function () {
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
 
         // Interceptors
         cy.intercept("POST", "/api/application-inventory/application*").as("postApplication");

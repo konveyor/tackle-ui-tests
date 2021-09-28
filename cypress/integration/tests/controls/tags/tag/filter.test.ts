@@ -7,6 +7,7 @@ import {
     expandRowDetails,
     existsWithinRow,
     closeRowDetails,
+    hasToBeSkipped,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import {
@@ -21,8 +22,11 @@ import { Tag } from "../../../../models/tags";
 
 import * as data from "../../../../../utils/data_utils";
 
-describe("Tags filter validations", function () {
+describe("Tags filter validations", { tags: "@tier2" }, function () {
     before("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
 

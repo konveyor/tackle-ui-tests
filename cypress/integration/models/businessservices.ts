@@ -1,11 +1,4 @@
-import {
-    controls,
-    businessservices,
-    tdTag,
-    trTag,
-    button,
-    createNewButton,
-} from "../types/constants";
+import { controls, businessservices, tdTag, button, createNewButton } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import {
     businessServiceNameInput,
@@ -54,6 +47,10 @@ export class BusinessServices {
         selectFormItems(businessServiceOwnerSelect, owner);
     }
 
+    protected performRowAction(buttonName: string): void {
+        cy.get(tdTag).contains(this.name).parent(tdTag).siblings(tdTag).find(buttonName).click();
+    }
+
     create(cancel = false): void {
         BusinessServices.clickBusinessservices();
         clickByText(button, createNewButton);
@@ -86,13 +83,7 @@ export class BusinessServices {
         BusinessServices.clickBusinessservices();
         selectItemsPerPage(100);
         cy.wait(2000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(commonView.editButton);
-            });
+        this.performRowAction(commonView.editButton);
 
         if (cancel) {
             cancelForm();
@@ -119,13 +110,7 @@ export class BusinessServices {
         BusinessServices.clickBusinessservices();
         selectItemsPerPage(100);
         cy.wait(2000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(commonView.deleteButton);
-            });
+        this.performRowAction(commonView.deleteButton);
         if (cancel) {
             cancelForm();
         } else {

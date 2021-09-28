@@ -176,7 +176,7 @@ export function applySearchFilter(
             }
         }
     }
-    cy.wait(2000);
+    cy.wait(4000);
 }
 
 export function sortAsc(sortCriteria: string): void {

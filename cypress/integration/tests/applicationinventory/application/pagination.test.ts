@@ -6,10 +6,10 @@ import {
     selectItemsPerPage,
     preservecookies,
     deleteApplicationTableRows,
+    hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
-import { applicationinventory, button, tdTag, trTag, deleteAction } from "../../../types/constants";
-import { actionButton } from "../../../views/applicationinventory.view";
+import { applicationinventory } from "../../../types/constants";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 
 import * as data from "../../../../utils/data_utils";
@@ -17,8 +17,11 @@ import * as commonView from "../../../views/common.view";
 
 var applicationsList: Array<ApplicationInventory> = [];
 
-describe("Application inventory pagination validations", function () {
+describe("Application inventory pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
+
         // Perform login
         login();
 
@@ -177,7 +180,6 @@ describe("Application inventory pagination validations", function () {
     });
 
     it("Last page item(s) deletion, impact on page reload validation", function () {
-        // Issue - https://issues.redhat.com/browse/TACKLE-181
         // Navigate to Application inventory tab
         clickByText(navMenu, applicationinventory);
         cy.wait("@getApplications");
