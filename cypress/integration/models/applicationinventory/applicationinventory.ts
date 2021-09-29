@@ -32,6 +32,7 @@ import {
     cancelForm,
     selectFormItems,
     checkSuccessAlert,
+    performRowAction,
 } from "../../../utils/utils";
 import * as data from "../../../utils/data_utils";
 import {
@@ -231,10 +232,6 @@ export class ApplicationInventory {
             });
     }
 
-    protected performRowAction(buttonName: string): void {
-        cy.get(tdTag).contains(this.name).parent(tdTag).siblings(tdTag).find(buttonName).click();
-    }
-
     create(cancel = false): void {
         ApplicationInventory.clickApplicationInventory();
         clickByText(button, createNewButton);
@@ -275,7 +272,7 @@ export class ApplicationInventory {
         ApplicationInventory.clickApplicationInventory();
         selectItemsPerPage(100);
         cy.wait(2000);
-        this.performRowAction(editButton);
+        performRowAction(this.name, editButton);
 
         if (cancel) {
             cancelForm();

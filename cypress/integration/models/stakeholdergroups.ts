@@ -15,6 +15,7 @@ import {
     cancelForm,
     selectFormItems,
     checkSuccessAlert,
+    performRowAction,
 } from "../../utils/utils";
 
 export class Stakeholdergroups {
@@ -47,10 +48,6 @@ export class Stakeholdergroups {
         });
     }
 
-    protected performRowAction(buttonName: string): void {
-        cy.get(tdTag).contains(this.name).parent(tdTag).siblings(tdTag).find(buttonName).click();
-    }
-
     create(cancel = false): void {
         Stakeholdergroups.clickStakeholdergroups();
         clickByText(button, createNewButton);
@@ -81,7 +78,7 @@ export class Stakeholdergroups {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
-        this.performRowAction(commonView.editButton);
+        performRowAction(this.name, commonView.editButton);
         if (cancel) {
             cancelForm();
         } else {
@@ -105,7 +102,7 @@ export class Stakeholdergroups {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
-        this.performRowAction(commonView.deleteButton);
+        performRowAction(this.name, commonView.deleteButton);
         if (cancel) {
             cancelForm();
         } else {

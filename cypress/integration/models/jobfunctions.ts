@@ -8,6 +8,7 @@ import {
     selectItemsPerPage,
     submitForm,
     cancelForm,
+    performRowAction,
 } from "../../utils/utils";
 import * as commonView from "../../integration/views/common.view";
 
@@ -27,10 +28,6 @@ export class Jobfunctions {
         inputText(jobfunctionNameInput, name);
     }
 
-    protected performRowAction(buttonName: string): void {
-        cy.get(tdTag).contains(this.name).parent(tdTag).siblings(tdTag).find(buttonName).click();
-    }
-
     create(cancel = false): void {
         Jobfunctions.clickJobfunctions();
         clickByText(button, createNewButton);
@@ -46,7 +43,7 @@ export class Jobfunctions {
         Jobfunctions.clickJobfunctions();
         selectItemsPerPage(100);
         cy.wait(2000);
-        this.performRowAction(commonView.editButton);
+        performRowAction(this.name, commonView.editButton);
 
         if (cancel) {
             cancelForm();
@@ -63,7 +60,7 @@ export class Jobfunctions {
         Jobfunctions.clickJobfunctions();
         selectItemsPerPage(100);
         cy.wait(2000);
-        this.performRowAction(commonView.deleteButton);
+        performRowAction(this.name, commonView.deleteButton);
         if (cancel) {
             cancelForm();
         } else {

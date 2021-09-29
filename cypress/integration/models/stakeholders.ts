@@ -16,6 +16,7 @@ import {
     removeMember,
     cancelForm,
     checkSuccessAlert,
+    performRowAction,
 } from "../../utils/utils";
 import * as commonView from "../views/common.view";
 
@@ -61,10 +62,6 @@ export class Stakeholders {
         });
     }
 
-    protected performRowAction(buttonName: string): void {
-        cy.get(tdTag).contains(this.email).siblings(tdTag).find(buttonName).click();
-    }
-
     create(cancel = false): void {
         Stakeholders.clickStakeholders();
         clickByText(button, createNewButton);
@@ -99,7 +96,7 @@ export class Stakeholders {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
-        this.performRowAction(commonView.editButton);
+        performRowAction(this.email, commonView.editButton, false);
         if (cancel) {
             cancelForm();
         } else {
@@ -127,7 +124,7 @@ export class Stakeholders {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
-        this.performRowAction(commonView.deleteButton);
+        performRowAction(this.email, commonView.deleteButton, false);
         if (cancel) {
             cancelForm();
         } else {
