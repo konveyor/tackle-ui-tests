@@ -3,7 +3,7 @@
 import { login } from "../../utils/utils";
 
 describe("Log In", () => {
-    it("Login to Pathfinder", () => {
+    it("Login to Pathfinder", { tags: "@tier1" }, () => {
         // Login
         login();
 

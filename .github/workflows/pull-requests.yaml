@@ -2,13 +2,29 @@ name: Pull request test
 on: [pull_request]
 
 jobs:
-  k8s:
+  k8s-tests:
+    name: Collect test cases
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        browser: [chrome]
-        kubernetes_version: [v1.19.14, v1.20.10, v1.21.4]
-      fail-fast: false
+    outputs:
+      tests: ${{ steps.event.outputs.tests }}
+    steps:
+      - name: Checkout to pull request branch
+        uses: actions/checkout@v2
+      - id: file_changes
+        uses: jitterbit/get-changed-files@v1
+        with:
+          format: 'json'
+        # Create event to generate ouput of comma separated test files only
+      - id: event
+        run: |
+          test_files=`python3 -c 'print(",".join([file for file in ${{ steps.file_changes.outputs.all }} if ".test.ts" in file]))'`
+          echo "::set-output name=tests::$test_files"
+
+  k8s:
+    name: Run collected tests
+    needs: k8s-tests
+    if: ${{ needs.k8s-tests.outputs.tests }}
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout tackle
         uses: actions/checkout@v2
@@ -19,7 +35,7 @@ jobs:
         uses: manusa/actions-setup-minikube@v2.3.1
         with:
           minikube version: v1.22.0
-          kubernetes version: ${{ matrix.kubernetes_version }}
+          kubernetes version: v1.21.4
           start args: "--addons=registry --addons=ingress"
       - name: Validate Minikube
         run: minikube status | grep Running
@@ -62,16 +78,5 @@ jobs:
        # Install NPM dependencies
       - name: Install NPM
         run: npm install .
-      - id: file_changes
-        uses: jitterbit/get-changed-files@v1
-        with:
-          format: 'json'
-        # Create event to generate ouput of comma separated test files only
-      - id: event
-        run: |
-          test_files=`python3 -c 'print(",".join([file for file in ${{ steps.file_changes.outputs.all }} if ".test.ts" in file]))'`
-          echo "::set-output name=tests::$test_files"
-          echo "::set-output name=tackleUrl::'${{ env.CYPRESS_tackleUrl }}'"
       - name: Run cypress test cases
-        if: ${{ steps.event.outputs.tests }}
-        run: npx cypress run --spec ${{ steps.event.outputs.tests }} --env user="tackle",pass="password",tackleUrl=${{ steps.event.outputs.tackleUrl }} --config video=false
+        run: npx cypress run --spec ${{ needs.k8s-tests.outputs.tests }} --env user="tackle",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
