@@ -1,11 +1,14 @@
 /// <reference types="cypress" />
 
-import { exists, login, notExists } from "../../../../utils/utils";
+import { exists, hasToBeSkipped, login, notExists } from "../../../../utils/utils";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import * as data from "../../../../utils/data_utils";
 
-describe("Application crud operations", () => {
+describe("Application crud operations", { tags: "@tier1" }, () => {
     beforeEach("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1")) return;
+
         // Perform login
         login();
 

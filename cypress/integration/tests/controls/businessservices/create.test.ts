@@ -7,6 +7,8 @@ import {
     submitForm,
     exists,
     notExists,
+    hasToBeSkipped,
+    preservecookies,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -28,10 +30,18 @@ import * as commonView from "../../../../integration/views/common.view";
 import { BusinessServices } from "../../../models/businessservices";
 import * as data from "../../../../utils/data_utils";
 
-describe("Business service validations", () => {
-    beforeEach("Login", function () {
+describe("Business service validations", { tags: "@tier2" }, () => {
+    before("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
+    });
+
+    beforeEach("Persist session", function () {
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
     });
 
     it("Business service field validations", function () {

@@ -7,6 +7,7 @@ import {
     notExists,
     applySearchFilter,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -27,9 +28,14 @@ var businessservicesList: Array<BusinessServices> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 var invalidSearchInput = String(data.getRandomNumber());
 
-describe("Business services filter validations", function () {
+describe("Business services filter validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
+        // Peform login
         login();
+
         // Create multiple stakeholder owners
         for (let i = 0; i < 3; i++) {
             const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());

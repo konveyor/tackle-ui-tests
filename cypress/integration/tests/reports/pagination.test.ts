@@ -1,6 +1,12 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, selectItemsPerPage, preservecookies } from "../../../utils/utils";
+import {
+    login,
+    clickByText,
+    selectItemsPerPage,
+    preservecookies,
+    hasToBeSkipped,
+} from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
 import { reports, applicationinventory } from "../../types/constants";
 import { ApplicationInventory } from "../../models/applicationinventory/applicationinventory";
@@ -16,8 +22,11 @@ import * as commonView from "../../views/common.view";
 var applicationsList: Array<ApplicationInventory> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 
-describe("Reports pagination validations", () => {
+describe("Reports pagination validations", { tags: "@tier3" }, () => {
     before("Login and create test data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
+
         // Perform login
         login();
 
@@ -84,6 +93,9 @@ describe("Reports pagination validations", () => {
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
+
         // Delete the stakeholder
         stakeholdersList.forEach(function (stakeholder) {
             stakeholder.delete();

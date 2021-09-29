@@ -10,6 +10,7 @@ import {
     selectItemsPerPage,
     deleteApplicationTableRows,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import { applicationinventory, button, clearAllFilters } from "../../../types/constants";
@@ -30,8 +31,11 @@ const filesToImport = [
 ];
 var invalidSearchInput = String(data.getRandomNumber());
 
-describe("Manage applications import filter validations", function () {
+describe("Manage applications import filter validations", { tags: "@tier2" }, function () {
     before("Login and create test data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
 
@@ -83,6 +87,9 @@ describe("Manage applications import filter validations", function () {
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Delete the business service
         businessService.delete();
 

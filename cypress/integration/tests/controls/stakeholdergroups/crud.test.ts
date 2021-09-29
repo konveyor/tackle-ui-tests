@@ -1,18 +1,34 @@
 /// <reference types="cypress" />
 
-import { login, selectItemsPerPage, click, exists, notExists } from "../../../../utils/utils";
+import {
+    login,
+    selectItemsPerPage,
+    click,
+    exists,
+    notExists,
+    hasToBeSkipped,
+    preservecookies,
+} from "../../../../utils/utils";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Stakeholders } from "../../../models/stakeholders";
 import { tdTag, trTag } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import { expandRow } from "../../../views/common.view";
 
-describe("Stakeholder group CRUD operations", () => {
+describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
     const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
 
-    beforeEach("Login", function () {
+    before("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1")) return;
+
         // Perform login
         login();
+    });
+
+    beforeEach("Persist session", function () {
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
 
         // Interceptors
         cy.intercept("POST", "/api/controls/stakeholder-group*").as("postStakeholdergroups");

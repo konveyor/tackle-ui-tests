@@ -1,11 +1,4 @@
-import {
-    controls,
-    businessservices,
-    tdTag,
-    trTag,
-    button,
-    createNewButton,
-} from "../types/constants";
+import { controls, businessservices, tdTag, button, createNewButton } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import {
     businessServiceNameInput,
@@ -24,6 +17,7 @@ import {
     cancelForm,
     selectFormItems,
     checkSuccessAlert,
+    performRowAction,
 } from "../../utils/utils";
 
 export class BusinessServices {
@@ -86,13 +80,7 @@ export class BusinessServices {
         BusinessServices.clickBusinessservices();
         selectItemsPerPage(100);
         cy.wait(2000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(commonView.editButton);
-            });
+        performRowAction(this.name, commonView.editButton);
 
         if (cancel) {
             cancelForm();
@@ -119,13 +107,7 @@ export class BusinessServices {
         BusinessServices.clickBusinessservices();
         selectItemsPerPage(100);
         cy.wait(2000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(commonView.deleteButton);
-            });
+        performRowAction(this.name, commonView.deleteButton);
         if (cancel) {
             cancelForm();
         } else {

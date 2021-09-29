@@ -9,6 +9,7 @@ import {
     verifySortDesc,
     getTableColumnData,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import { applicationinventory, name, tagCount, review } from "../../../types/constants";
@@ -18,8 +19,11 @@ import { ApplicationInventory } from "../../../models/applicationinventory/appli
 
 var applicationsList: Array<ApplicationInventory> = [];
 
-describe("Application inventory sort validations", function () {
+describe("Application inventory sort validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
         var tagsList = ["C++", "COBOL", "Java"];

@@ -6,6 +6,7 @@ import {
     selectItemsPerPage,
     deleteTableRows,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, businessservices } from "../../../types/constants";
@@ -24,8 +25,11 @@ import {
 
 var businessservicesList: Array<BusinessServices> = [];
 
-describe("Business services pagination validations", function () {
+describe("Business services pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
+
         // Perform login
         login();
 
@@ -176,7 +180,6 @@ describe("Business services pagination validations", function () {
     });
 
     it("Last page item(s) deletion, impact on page reload validation", function () {
-        // Issue - https://issues.redhat.com/browse/TACKLE-155
         // Navigate to business services tab
         clickByText(navMenu, controls);
         clickByText(navTab, businessservices);

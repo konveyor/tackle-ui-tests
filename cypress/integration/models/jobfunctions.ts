@@ -1,4 +1,4 @@
-import { controls, jobfunctions, tdTag, trTag, button, createNewButton } from "../types/constants";
+import { controls, jobfunctions, tdTag, button, createNewButton } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import { jobfunctionNameInput } from "../views/jobfunctions.view";
 import {
@@ -8,6 +8,7 @@ import {
     selectItemsPerPage,
     submitForm,
     cancelForm,
+    performRowAction,
 } from "../../utils/utils";
 import * as commonView from "../../integration/views/common.view";
 
@@ -30,21 +31,20 @@ export class Jobfunctions {
     create(cancel = false): void {
         Jobfunctions.clickJobfunctions();
         clickByText(button, createNewButton);
-        this.fillName(this.name);
-        submitForm();
+        if (cancel) {
+            cancelForm();
+        } else {
+            this.fillName(this.name);
+            submitForm();
+        }
     }
 
     edit(updatedName: string, cancel = false): void {
         Jobfunctions.clickJobfunctions();
         selectItemsPerPage(100);
         cy.wait(2000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(commonView.editButton);
-            });
+        performRowAction(this.name, commonView.editButton);
+
         if (cancel) {
             cancelForm();
         } else {
@@ -60,13 +60,7 @@ export class Jobfunctions {
         Jobfunctions.clickJobfunctions();
         selectItemsPerPage(100);
         cy.wait(2000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(commonView.deleteButton);
-            });
+        performRowAction(this.name, commonView.deleteButton);
         if (cancel) {
             cancelForm();
         } else {

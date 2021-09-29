@@ -176,7 +176,7 @@ export function applySearchFilter(
             }
         }
     }
-    cy.wait(2000);
+    cy.wait(4000);
 }
 
 export function sortAsc(sortCriteria: string): void {
@@ -413,4 +413,17 @@ export function hasToBeSkipped(tagName: string): boolean {
         if (!Cypress.env("grepTags").includes(tagName)) return true;
     }
     return false;
+}
+
+// Perform edit/delete action on the specified row selector
+export function performRowAction(
+    rowSelector: string,
+    buttonName: string,
+    hasParentTd = true
+): void {
+    if (hasParentTd) {
+        cy.get(tdTag).contains(rowSelector).parent(tdTag).siblings(tdTag).find(buttonName).click();
+    } else {
+        cy.get(tdTag).contains(rowSelector).siblings(tdTag).find(buttonName).click();
+    }
 }

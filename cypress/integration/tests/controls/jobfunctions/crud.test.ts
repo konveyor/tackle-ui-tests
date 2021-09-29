@@ -1,13 +1,16 @@
 /// <reference types="cypress" />
 
-import { exists, login, notExists } from "../../../../utils/utils";
+import { exists, hasToBeSkipped, login, notExists } from "../../../../utils/utils";
 import { Jobfunctions } from "../../../models/jobfunctions";
 import * as data from "../../../../utils/data_utils";
 
-describe("Job Function CRUD operations", () => {
+describe("Job Function CRUD operations", { tags: "@tier1" }, () => {
     const jobfunction = new Jobfunctions(data.getJobTitle());
 
     before("Login", () => {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1")) return;
+
         // Perform login
         login();
 

@@ -1,6 +1,12 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, selectItemsPerPage, preservecookies } from "../../../../utils/utils";
+import {
+    login,
+    clickByText,
+    selectItemsPerPage,
+    preservecookies,
+    hasToBeSkipped,
+} from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, jobfunctions } from "../../../types/constants";
 
@@ -18,8 +24,11 @@ import {
 
 var jobfunctionsList: Array<Jobfunctions> = [];
 
-describe("Job functions pagination validations", function () {
+describe("Job functions pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
+        // Prevent before hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
+
         // Perform login
         login();
 

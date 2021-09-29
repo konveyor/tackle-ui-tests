@@ -8,6 +8,7 @@ import {
     exists,
     notExists,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navTab } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
@@ -19,8 +20,11 @@ import * as data from "../../../../utils/data_utils";
 var stakeholdersList: Array<Stakeholders> = [];
 var membersList: Array<string> = [];
 
-describe("Stakeholder group linked to stakeholder members", () => {
+describe("Stakeholder group linked to stakeholder members", { tags: "@tier1" }, () => {
     before("Login and Create Test Data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1")) return;
+
         // Perform login
         login();
 

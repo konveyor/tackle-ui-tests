@@ -1,13 +1,22 @@
 /// <reference types="cypress" />
 
-import { login, clickByText, exists, applySearchFilter } from "../../../../../utils/utils";
+import {
+    login,
+    clickByText,
+    exists,
+    applySearchFilter,
+    hasToBeSkipped,
+} from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import { controls, button, clearAllFilters, tags, tagtype } from "../../../../types/constants";
 
 import * as data from "../../../../../utils/data_utils";
 
-describe("Tag type filter validations", function () {
+describe("Tag type filter validations", { tags: "@tier2" }, function () {
     before("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
 

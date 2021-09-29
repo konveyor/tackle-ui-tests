@@ -9,6 +9,7 @@ import {
     verifySortDesc,
     getTableColumnData,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, businessservices, name, owner } from "../../../types/constants";
@@ -21,8 +22,11 @@ var stakeholdersList: Array<Stakeholders> = [];
 var businessservicesList: Array<BusinessServices> = [];
 var businessserviceNames: Array<string> = [];
 
-describe("Business services sort validations", function () {
+describe("Business services sort validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
 

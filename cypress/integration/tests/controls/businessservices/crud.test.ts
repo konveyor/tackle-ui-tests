@@ -1,15 +1,23 @@
 /// <reference types="cypress" />
 
-import { exists, login, notExists } from "../../../../utils/utils";
+import { exists, hasToBeSkipped, login, notExists, preservecookies } from "../../../../utils/utils";
 import { BusinessServices } from "../../../models/businessservices";
 import { Stakeholders } from "../../../models/stakeholders";
 
 import * as data from "../../../../utils/data_utils";
 
-describe("Business service CRUD operations", () => {
-    beforeEach("Login", function () {
+describe("Business service CRUD operations", { tags: "@tier1" }, () => {
+    before("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1")) return;
+
         // Perform login
         login();
+    });
+
+    beforeEach("Persist session", function () {
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
 
         // Interceptors for business services
         cy.intercept("POST", "/api/controls/business-service*").as("postBusinessService");

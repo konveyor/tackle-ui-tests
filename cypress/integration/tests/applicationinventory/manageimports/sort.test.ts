@@ -13,6 +13,7 @@ import {
     selectItemsPerPage,
     deleteApplicationTableRows,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import { applicationinventory } from "../../../types/constants";
@@ -26,8 +27,11 @@ const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/";
 var applicationsList: Array<ApplicationInventory> = [];
 
-describe("Manage applications import sort validations", function () {
+describe("Manage applications import sort validations", { tags: "@tier2" }, function () {
     before("Login and create test data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
 
@@ -87,6 +91,9 @@ describe("Manage applications import sort validations", function () {
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Delete the business service
         businessService.delete();
 

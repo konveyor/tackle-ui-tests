@@ -1,15 +1,29 @@
 /// <reference types="cypress" />
 
-import { login, exists, notExists } from "../../../../../utils/utils";
+import {
+    login,
+    exists,
+    notExists,
+    hasToBeSkipped,
+    preservecookies,
+} from "../../../../../utils/utils";
 import { Tagtype, Tag } from "../../../../models/tags";
 
 import * as data from "../../../../../utils/data_utils";
 import { color, rank, tagCount } from "../../../../types/constants";
 
-describe("Tag Type CRUD operations", () => {
-    beforeEach("Login", function () {
+describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
+    before("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1")) return;
+
         // Perform login
         login();
+    });
+
+    beforeEach("Persist session", function () {
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
 
         // Interceptors
         cy.intercept("POST", "/api/controls/tag-type*").as("postTagtype");

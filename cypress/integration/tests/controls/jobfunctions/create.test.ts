@@ -6,6 +6,8 @@ import {
     submitForm,
     exists,
     notExists,
+    hasToBeSkipped,
+    preservecookies,
 } from "../../../../utils/utils";
 import {
     controls,
@@ -22,12 +24,20 @@ import { jobfunctionNameInput } from "../../../views/jobfunctions.view";
 import * as commonView from "../../../../integration/views/common.view";
 import * as data from "../../../../utils/data_utils";
 
-describe("Job Function Validations", () => {
+describe("Job Function Validations", { tags: "@tier2" }, () => {
     const jobfunction = new Jobfunctions(data.getJobTitle());
 
-    beforeEach("Login", function () {
+    before("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
+    });
+
+    beforeEach("Persist session", function () {
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
 
         // Interceptors
         cy.intercept("POST", "/api/controls/job-function*").as("postJobfunctions");
@@ -92,7 +102,7 @@ describe("Job Function Validations", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("job function update and cancel validation", function () {
+    it("Job function update and cancel validation", function () {
         // Edit job function and cancel
         jobfunction.create();
         jobfunction.edit(data.getJobTitle(), true);

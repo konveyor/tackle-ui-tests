@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { login, preservecookies } from "../../../../utils/utils";
+import { hasToBeSkipped, login, preservecookies } from "../../../../utils/utils";
 
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 
@@ -10,8 +10,11 @@ import { Stakeholders } from "../../../models/stakeholders";
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdersNameList: Array<string> = [];
 
-describe("Application assessment and review tests", () => {
+describe("Application assessment and review tests", { tags: "@tier1" }, () => {
     before("Login and Create Test Data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1")) return;
+
         // Perform login
         login();
 

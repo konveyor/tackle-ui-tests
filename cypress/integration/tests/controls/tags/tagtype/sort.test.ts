@@ -9,12 +9,16 @@ import {
     verifySortDesc,
     getTableColumnData,
     preservecookies,
+    hasToBeSkipped,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import { controls, tags, tagtype, rank, tagCount } from "../../../../types/constants";
 
-describe("Tag type sort validations", function () {
+describe("Tag type sort validations", { tags: "@tier2" }, function () {
     before("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Perform login
         login();
     });
@@ -37,7 +41,6 @@ describe("Tag type sort validations", function () {
         const unsortedList = getTableColumnData(tagtype);
 
         // Sort the tag type by name in ascending order
-        // Issue for sorting corner cases - https://issues.redhat.com/browse/TACKLE-231
         sortAsc(tagtype);
         cy.wait(2000);
 

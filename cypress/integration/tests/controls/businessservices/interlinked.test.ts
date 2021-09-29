@@ -1,16 +1,25 @@
 /// <reference types="cypress" />
 
-import { login, selectItemsPerPage, clickByText, exists, notExists } from "../../../../utils/utils";
+import {
+    login,
+    selectItemsPerPage,
+    clickByText,
+    exists,
+    notExists,
+    hasToBeSkipped,
+} from "../../../../utils/utils";
 import { navTab } from "../../../views/menu.view";
 import { BusinessServices } from "../../../models/businessservices";
 import { Stakeholders } from "../../../models/stakeholders";
 import { tdTag, businessservices } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 
-describe("Business service linked to stakeholder", () => {
+describe("Business service linked to stakeholder", { tags: "@tier1" }, () => {
     beforeEach("Login", function () {
-        // Perform login
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1")) return;
 
+        // Perform login
         login();
 
         // Interceptors for business services

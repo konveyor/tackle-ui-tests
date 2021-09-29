@@ -1,11 +1,4 @@
-import {
-    controls,
-    stakeholdergroups,
-    tdTag,
-    trTag,
-    button,
-    createNewButton,
-} from "../types/constants";
+import { controls, stakeholdergroups, tdTag, button, createNewButton } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import {
     stakeholdergroupNameInput,
@@ -22,6 +15,7 @@ import {
     cancelForm,
     selectFormItems,
     checkSuccessAlert,
+    performRowAction,
 } from "../../utils/utils";
 
 export class Stakeholdergroups {
@@ -84,13 +78,7 @@ export class Stakeholdergroups {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(commonView.editButton);
-            });
+        performRowAction(this.name, commonView.editButton);
         if (cancel) {
             cancelForm();
         } else {
@@ -114,13 +102,7 @@ export class Stakeholdergroups {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(commonView.deleteButton);
-            });
+        performRowAction(this.name, commonView.deleteButton);
         if (cancel) {
             cancelForm();
         } else {
