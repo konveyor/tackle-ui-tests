@@ -79,11 +79,7 @@ jobs:
           browser: ${{ matrix.browser }}
           parallel: true
           group: 'Tackle parallel tests'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CYPRESS_user: tackle
-          CYPRESS_pass: password
-          CYPRESS_RECORD_KEY: b97a845d-b106-4da9-830e-33690ba48a21
+
       - uses: actions/upload-artifact@v1
         if: failure()
         with:
