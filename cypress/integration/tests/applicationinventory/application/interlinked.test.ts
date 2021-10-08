@@ -3,23 +3,40 @@
 import {
     login,
     clickByText,
+    exists,
     notExists,
     preservecookies,
     hasToBeSkipped,
+    click,
 } from "../../../../utils/utils";
 import { Tag } from "../../../models/tags";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import { businessColumnSelector } from "../../../views/applicationinventory.view";
+import {
+    continueButton,
+    stakeholdergroupsSelect,
+    stakeholderSelect,
+} from "../../../views/assessment.view";
 import { navMenu } from "../../../views/menu.view";
 import { navTab } from "../../../views/menu.view";
 import { Stakeholders } from "../../../models/stakeholders";
+import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 
-import { applicationinventory, controls, businessservices, tags } from "../../../types/constants";
+import {
+    applicationinventory,
+    controls,
+    businessservices,
+    tags,
+    button,
+    assess,
+} from "../../../types/constants";
 
 import * as data from "../../../../utils/data_utils";
 import { BusinessServices } from "../../../models/businessservices";
 
 var stakeholdersList: Array<Stakeholders> = [];
+var stakeholdersNameList: Array<string> = [];
+var stakeholdergroupNameList: Array<string> = [];
 var businessservicesList: Array<BusinessServices> = [];
 var tagList: Array<Tag> = [];
 var applicationList: Array<ApplicationInventory> = [];
@@ -40,6 +57,7 @@ describe(
                 const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
                 stakeholder.create();
                 stakeholdersList.push(stakeholder);
+                stakeholdersNameList.push(stakeholder.name);
 
                 // Create new business service
                 const businessservice = new BusinessServices(
@@ -77,6 +95,10 @@ describe(
             cy.intercept("POST", "/api/controls/business-service*").as("postBusinessService");
             cy.intercept("GET", "/api/controls/business-service*").as("getBusinessService");
 
+            // Interceptors for stakeholder groups
+            cy.intercept("POST", "/api/controls/stakeholder-group*").as("postStakeholdergroups");
+            cy.intercept("GET", "/api/controls/stakeholder-group*").as("getStakeholdergroups");
+
             // Interceptors
             cy.intercept("POST", "/api/controls/tag*").as("postTag");
             cy.intercept("GET", "/api/controls/tag*").as("getTag");
@@ -89,18 +111,10 @@ describe(
             // Prevent hook from running, if the tag is excluded from run
             if (hasToBeSkipped("@tier1")) return;
 
-            // Delete the applications and stakeholders created before the tests
-            stakeholdersList.forEach(function (stakeholder) {
-                stakeholder.delete();
-            });
-
             // Delete application
             applicationList.forEach(function (application) {
                 application.delete();
             });
-            // Clean up business service and tags
-            businessservicesList[1].delete();
-            tagList[1].delete();
         });
 
         it("Business Service update and delete dependency on application inventory", function () {
@@ -144,6 +158,58 @@ describe(
             applicationList[0].expandApplicationRow();
             applicationList[0].existsWithinRow(applicationList[0].name, "Tags", tagList[1].name);
             applicationList[0].closeApplicationRow();
+        });
+
+        it("Stakeholder, businessservice, tag and stakeholdergroup delete dependency on application inventory", function () {
+            //Add stakeholder group
+            const stakeholdergroup = new Stakeholdergroups(
+                data.getCompanyName(),
+                data.getDescription(),
+                stakeholdersNameList
+            );
+            stakeholdergroup.create();
+            stakeholdergroupNameList.push(stakeholdergroup.name);
+            cy.wait("@postStakeholdergroups");
+            exists(stakeholdergroup.name);
+
+            // Perform assessment of application
+            applicationList[1].perform_assessment(
+                "low",
+                stakeholdersNameList,
+                stakeholdergroupNameList
+            );
+            cy.wait(2000);
+            applicationList[1].is_assessed();
+
+            // Delete the stakeholders
+            stakeholdersList.forEach(function (stakeholder) {
+                stakeholder.delete();
+            });
+            // Delete the stakeholdergroups
+            stakeholdergroup.delete();
+            // Clean up business service and tags
+            businessservicesList[1].delete();
+            tagList[1].delete();
+
+            clickByText(navMenu, applicationinventory);
+            cy.wait("@getApplication");
+
+            // Assert that business service is updated
+            applicationList[1].getColumnText(businessColumnSelector, "");
+            cy.wait(100);
+
+            // Assert that created tag exists
+            applicationList[1].expandApplicationRow();
+            applicationList[1].existsWithinRow(applicationList[1].name, "Tags", "");
+            applicationList[1].closeApplicationRow();
+
+            applicationList[1].selectApplication();
+            clickByText(button, assess);
+            click(continueButton);
+            cy.wait(6000);
+            //Verify that values show blank
+            cy.get(stakeholderSelect).should("have.value", "");
+            cy.get(stakeholdergroupsSelect).should("have.value", "");
         });
     }
 );

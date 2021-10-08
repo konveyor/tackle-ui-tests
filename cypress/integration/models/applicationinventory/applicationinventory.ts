@@ -158,7 +158,7 @@ export class ApplicationInventory {
         inputText(priorityInput, priority);
     }
 
-    protected selectApplication(): void {
+    selectApplication(): void {
         cy.wait(4000);
         cy.get(tdTag)
             .contains(this.name)
