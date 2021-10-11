@@ -41,83 +41,83 @@ var businessservicesList: Array<BusinessServices> = [];
 var tagList: Array<Tag> = [];
 var applicationList: Array<ApplicationInventory> = [];
 
-describe(
-    "Application inventory interlinked to tags and business service",
-    { tags: "@tier1" },
-    () => {
-        before("Login and Create Test Data", function () {
-            // Prevent hook from running, if the tag is excluded from run
-            if (hasToBeSkipped("@tier1")) return;
+describe("Application inventory interlinked to tags and business service", () => {
+    before("Login and Create Test Data", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@newtest")) return;
 
-            // Perform login
-            login();
+        // Perform login
+        login();
 
-            // Create multiple bussiness services and tags
-            for (let i = 0; i < 2; i++) {
-                const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-                stakeholder.create();
-                stakeholdersList.push(stakeholder);
-                stakeholdersNameList.push(stakeholder.name);
+        // Create multiple bussiness services and tags
+        for (let i = 0; i < 2; i++) {
+            const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
+            stakeholder.create();
+            stakeholdersList.push(stakeholder);
+            stakeholdersNameList.push(stakeholder.name);
 
-                // Create new business service
-                const businessservice = new BusinessServices(
-                    data.getCompanyName(),
-                    data.getDescription(),
-                    stakeholder.name
-                );
-                businessservice.create();
-                businessservicesList.push(businessservice);
+            // Create new business service
+            const businessservice = new BusinessServices(
+                data.getCompanyName(),
+                data.getDescription(),
+                stakeholder.name
+            );
+            businessservice.create();
+            businessservicesList.push(businessservice);
 
-                // Create new tag
-                const tag = new Tag(data.getRandomWord(6), data.getExistingTagtype());
-                tag.create();
-                tagList.push(tag);
+            // Create new tag
+            const tag = new Tag(data.getRandomWord(6), data.getExistingTagtype());
+            tag.create();
+            tagList.push(tag);
 
-                // Navigate to application inventory tab and create new application
-                const application = new ApplicationInventory(
-                    data.getAppName(),
-                    data.getDescription(),
-                    data.getDescription(),
-                    businessservice.name,
-                    [tag.name]
-                );
-                application.create();
-                applicationList.push(application);
-                cy.wait(2000);
-            }
+            // Navigate to application inventory tab and create new application
+            const application = new ApplicationInventory(
+                data.getAppName(),
+                data.getDescription(),
+                data.getDescription(),
+                businessservice.name,
+                [tag.name]
+            );
+            application.create();
+            applicationList.push(application);
+            cy.wait(2000);
+        }
+    });
+
+    beforeEach("Persist session", function () {
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
+
+        // Interceptors
+        cy.intercept("POST", "/api/controls/business-service*").as("postBusinessService");
+        cy.intercept("GET", "/api/controls/business-service*").as("getBusinessService");
+
+        // Interceptors for stakeholder groups
+        cy.intercept("POST", "/api/controls/stakeholder-group*").as("postStakeholdergroups");
+        cy.intercept("GET", "/api/controls/stakeholder-group*").as("getStakeholdergroups");
+
+        // Interceptors
+        cy.intercept("POST", "/api/controls/tag*").as("postTag");
+        cy.intercept("GET", "/api/controls/tag*").as("getTag");
+
+        // Interceptors
+        cy.intercept("GET", "/api/application-inventory/application*").as("getApplication");
+    });
+
+    after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@newtest")) return;
+
+        // Delete application
+        applicationList.forEach(function (application) {
+            application.delete();
         });
+    });
 
-        beforeEach("Persist session", function () {
-            // Save the session and token cookie for maintaining one login session
-            preservecookies();
-
-            // Interceptors
-            cy.intercept("POST", "/api/controls/business-service*").as("postBusinessService");
-            cy.intercept("GET", "/api/controls/business-service*").as("getBusinessService");
-
-            // Interceptors for stakeholder groups
-            cy.intercept("POST", "/api/controls/stakeholder-group*").as("postStakeholdergroups");
-            cy.intercept("GET", "/api/controls/stakeholder-group*").as("getStakeholdergroups");
-
-            // Interceptors
-            cy.intercept("POST", "/api/controls/tag*").as("postTag");
-            cy.intercept("GET", "/api/controls/tag*").as("getTag");
-
-            // Interceptors
-            cy.intercept("GET", "/api/application-inventory/application*").as("getApplication");
-        });
-
-        after("Perform test data clean up", function () {
-            // Prevent hook from running, if the tag is excluded from run
-            if (hasToBeSkipped("@tier1")) return;
-
-            // Delete application
-            applicationList.forEach(function (application) {
-                application.delete();
-            });
-        });
-
-        it("Business Service update and delete dependency on application inventory", function () {
+    it(
+        "Business Service update and delete dependency on application inventory",
+        { tags: "@tier1" },
+        function () {
             // Navigate to Business Service and delete
             clickByText(navMenu, controls);
             clickByText(navTab, businessservices);
@@ -158,9 +158,13 @@ describe(
             applicationList[0].expandApplicationRow();
             applicationList[0].existsWithinRow(applicationList[0].name, "Tags", tagList[1].name);
             applicationList[0].closeApplicationRow();
-        });
+        }
+    );
 
-        it("Stakeholder, businessservice, tag and stakeholdergroup delete dependency on application inventory", function () {
+    it(
+        "Stakeholder, businessservice, tag and stakeholdergroup delete dependency on application inventory",
+        { tags: "@newtest" },
+        function () {
             //Add stakeholder group
             const stakeholdergroup = new Stakeholdergroups(
                 data.getCompanyName(),
@@ -210,6 +214,6 @@ describe(
             //Verify that values show blank
             cy.get(stakeholderSelect).should("have.value", "");
             cy.get(stakeholdergroupsSelect).should("have.value", "");
-        });
-    }
-);
+        }
+    );
+});
