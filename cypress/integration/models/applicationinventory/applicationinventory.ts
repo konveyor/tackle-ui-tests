@@ -21,6 +21,8 @@ import {
     actionButton,
     selectBox,
     tags,
+    dependenciesDropdownBtn,
+    closeForm,
 } from "../../views/applicationinventory.view";
 import * as commonView from "../../views/common.view";
 import {
@@ -423,5 +425,36 @@ export class ApplicationInventory {
             .parent("dt")
             .next()
             .should("contain", valueToSearch);
+    }
+
+    openManageDependencies(): void {
+        // Opens the manage dependencies dialog from application inventory page
+        ApplicationInventory.clickApplicationInventory();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        performRowAction(this.name, actionButton);
+        cy.wait(500);
+        clickByText(button, "Manage dependencies");
+    }
+
+    protected selectDependency(dropdownNum: number, appList: Array<string>): void {
+        appList.forEach(function (app) {
+            cy.get(dependenciesDropdownBtn).eq(dropdownNum).click();
+            cy.contains("button", app).click();
+        });
+    }
+
+    addDependencies(northbound?: Array<string>, southbound?: Array<string>): void {
+        if (northbound || southbound) {
+            this.openManageDependencies();
+            cy.wait(1000);
+            if (northbound.length > 0) {
+                this.selectDependency(0, northbound);
+            }
+            if (southbound.length > 0) {
+                this.selectDependency(1, southbound);
+            }
+            click(closeForm);
+        }
     }
 }

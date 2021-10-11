@@ -6,6 +6,8 @@ export const applicationTagsSelect = "[placeholder='Select a tag(s)']";
 export const applicationCommentInput = "textarea[name=comments]";
 export const businessColumnSelector = "td[data-label='Business service']";
 export const csvFileName = "File name";
+export const closeForm = "button[aria-label='close']";
+export const dependenciesDropdownBtn = "button[aria-label='Options menu']";
 export const date = "Date";
 export const editButton = "div[class='pf-c-inline-edit__action pf-m-enable-editable'] > button";
 export const importStatus = "Status";
