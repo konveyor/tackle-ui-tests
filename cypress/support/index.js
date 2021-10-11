@@ -23,3 +23,7 @@ require("cypress-xpath"); // Refer - https://www.npmjs.com/package/cypress-xpath
 // load and register the grep feature
 // https://github.com/bahmutov/cypress-grep
 require("cypress-grep")();
+
+//index.js inside support folder
+
+import 'cypress-mochawesome-reporter/register';
