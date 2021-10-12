@@ -8,6 +8,7 @@ import {
     preservecookies,
     hasToBeSkipped,
     click,
+    isLoggedIn,
 } from "../../../../utils/utils";
 import { Tag } from "../../../models/tags";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
@@ -44,10 +45,13 @@ var applicationList: Array<ApplicationInventory> = [];
 describe("Application inventory interlinked to tags and business service", () => {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@newtest")) return;
+        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
 
         // Perform login
         login();
+
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
 
         // Create multiple bussiness services and tags
         for (let i = 0; i < 2; i++) {
@@ -84,34 +88,21 @@ describe("Application inventory interlinked to tags and business service", () =>
         }
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
-        // Interceptors
-        cy.intercept("POST", "/api/controls/business-service*").as("postBusinessService");
-        cy.intercept("GET", "/api/controls/business-service*").as("getBusinessService");
-
+    beforeEach("Define interceptors", function () {
         // Interceptors for stakeholder groups
         cy.intercept("POST", "/api/controls/stakeholder-group*").as("postStakeholdergroups");
-        cy.intercept("GET", "/api/controls/stakeholder-group*").as("getStakeholdergroups");
 
-        // Interceptors
-        cy.intercept("POST", "/api/controls/tag*").as("postTag");
-        cy.intercept("GET", "/api/controls/tag*").as("getTag");
-
-        // Interceptors
+        // Interceptors for applications
         cy.intercept("GET", "/api/application-inventory/application*").as("getApplication");
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@newtest")) return;
-
-        // Delete application
-        applicationList.forEach(function (application) {
-            application.delete();
-        });
+        // Delete applications
+        if (applicationList.length > 0) {
+            applicationList.forEach(function (application) {
+                application.delete();
+            });
+        }
     });
 
     it(
@@ -152,12 +143,17 @@ describe("Application inventory interlinked to tags and business service", () =>
 
             // Assert that business service is updated
             applicationList[0].getColumnText(businessColumnSelector, businessservicesList[1].name);
-            cy.wait(100);
+            cy.wait(1000);
 
             // Assert that created tag exists
             applicationList[0].expandApplicationRow();
             applicationList[0].existsWithinRow(applicationList[0].name, "Tags", tagList[1].name);
             applicationList[0].closeApplicationRow();
+            cy.wait(1000);
+
+            // Remove deleted items from lists
+            // businessservicesList.splice(0, 1);
+            // tagList.splice(0, 1);
         }
     );
 
@@ -189,8 +185,10 @@ describe("Application inventory interlinked to tags and business service", () =>
             stakeholdersList.forEach(function (stakeholder) {
                 stakeholder.delete();
             });
+
             // Delete the stakeholdergroups
             stakeholdergroup.delete();
+
             // Clean up business service and tags
             businessservicesList[1].delete();
             tagList[1].delete();
@@ -211,9 +209,15 @@ describe("Application inventory interlinked to tags and business service", () =>
             clickByText(button, assess);
             click(continueButton);
             cy.wait(6000);
+
             //Verify that values show blank
             cy.get(stakeholderSelect).should("have.value", "");
             cy.get(stakeholdergroupsSelect).should("have.value", "");
+
+            // Remove deleted items from lists
+            // stakeholdersList.splice(0, 2);
+            // businessservicesList.pop();
+            // tagList.pop();
         }
     );
 });
