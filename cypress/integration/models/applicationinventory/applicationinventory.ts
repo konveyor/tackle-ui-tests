@@ -427,8 +427,8 @@ export class ApplicationInventory {
             .should("contain", valueToSearch);
     }
 
+    // Opens the manage dependencies dialog from application inventory page
     openManageDependencies(): void {
-        // Opens the manage dependencies dialog from application inventory page
         ApplicationInventory.clickApplicationInventory();
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -437,8 +437,9 @@ export class ApplicationInventory {
         clickByText(button, "Manage dependencies");
     }
 
-    protected selectDependency(dropdownNum: number, appList: Array<string>): void {
-        appList.forEach(function (app) {
+    // Selects the application as dependency from dropdown. Arg dropdownNum value 0 selects northbound, whereas value 1 selects southbound
+    selectDependency(dropdownNum: number, appNameList: Array<string>): void {
+        appNameList.forEach(function (app) {
             cy.get(dependenciesDropdownBtn).eq(dropdownNum).click();
             cy.contains("button", app).click();
         });
@@ -454,6 +455,7 @@ export class ApplicationInventory {
             if (southbound.length > 0) {
                 this.selectDependency(1, southbound);
             }
+            cy.wait(2000);
             click(closeForm);
         }
     }
