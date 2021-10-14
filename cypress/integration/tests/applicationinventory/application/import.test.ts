@@ -178,7 +178,7 @@ describe("Application import operations", { tags: "@tier1" }, () => {
 
         // Verify the error report message
         openErrorReport();
-        verifyImportErrorMsg("Application Name is mandatory");
+        verifyImportErrorMsg("Invalid Record Type");
     });
 
     it("Applications import having same name with spaces", function () {
