@@ -16,8 +16,7 @@ import {
     confidence,
     deleteAction,
 } from "../integration/types/constants";
-import { actionButton, closeForm, date } from "../integration/views/applicationinventory.view";
-import { ApplicationInventory } from "../integration/models/applicationinventory/applicationinventory";
+import { actionButton, date } from "../integration/views/applicationinventory.view";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
@@ -427,35 +426,4 @@ export function performRowAction(
     } else {
         cy.get(tdTag).contains(rowSelector).siblings(tdTag).find(buttonName).click();
     }
-}
-
-// Verifies if the north or south bound dependencies exist for an application
-export function verifyDependencies(
-    application: ApplicationInventory,
-    northboundApps?: Array<string>,
-    southboundApps?: Array<string>
-): void {
-    application.openManageDependencies();
-    cy.wait(2000);
-    if (northboundApps) {
-        northboundApps.forEach(function (app) {
-            dependencyExists("northbound", app);
-        });
-    }
-    if (southboundApps) {
-        southboundApps.forEach(function (app) {
-            dependencyExists("southbound", app);
-        });
-    }
-    click(closeForm);
-}
-
-// wrapper to find if app name is displayed in the dropdown under respective dependency
-function dependencyExists(dependencyType: string, appName: string): void {
-    cy.get("div")
-        .contains(`Add ${dependencyType} dependencies`)
-        .parent("div")
-        .siblings()
-        .find("span")
-        .should("contain.text", appName);
 }

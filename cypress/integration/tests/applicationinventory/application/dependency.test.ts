@@ -1,12 +1,6 @@
 /// <reference types="cypress" />
 
-import {
-    click,
-    hasToBeSkipped,
-    login,
-    preservecookies,
-    verifyDependencies,
-} from "../../../../utils/utils";
+import { click, hasToBeSkipped, login, preservecookies } from "../../../../utils/utils";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import * as data from "../../../../utils/data_utils";
 import {
@@ -58,10 +52,10 @@ describe("Manage application dependencies", { tags: "@newtest" }, () => {
         applicationsList[1].addDependencies(northboundApps, southboundApps);
 
         // Verify app 1 contains 2nd app as its southbound dependency
-        verifyDependencies(applicationsList[0], [], [applicationsList[1].name]);
+        applicationsList[0].verifyDependencies([], [applicationsList[1].name]);
 
         // Verify app 3 contains 2nd app as its northbound dependency
-        verifyDependencies(applicationsList[2], [applicationsList[1].name]);
+        applicationsList[2].verifyDependencies([applicationsList[1].name]);
 
         // Remove the dependencies as part of cleanup for next test
         applicationsList[1].addDependencies(northboundApps, southboundApps);

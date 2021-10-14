@@ -445,6 +445,7 @@ export class ApplicationInventory {
         });
     }
 
+    // Add/Remove north or sout bound dependency for an application
     addDependencies(northbound?: Array<string>, southbound?: Array<string>): void {
         if (northbound || southbound) {
             this.openManageDependencies();
@@ -458,5 +459,34 @@ export class ApplicationInventory {
             cy.wait(2000);
             click(closeForm);
         }
+    }
+
+    // Verifies if the north or south bound dependencies exist for an application
+    verifyDependencies(northboundApps?: Array<string>, southboundApps?: Array<string>): void {
+        if (northboundApps || southboundApps) {
+            this.openManageDependencies();
+            cy.wait(2000);
+            if (northboundApps && northboundApps.length > 0) {
+                northboundApps.forEach((app) => {
+                    this.dependencyExists("northbound", app);
+                });
+            }
+            if (southboundApps && southboundApps.length > 0) {
+                southboundApps.forEach((app) => {
+                    this.dependencyExists("southbound", app);
+                });
+            }
+            click(closeForm);
+        }
+    }
+
+    // Checks if app name is displayed in the dropdown under respective dependency
+    protected dependencyExists(dependencyType: string, appName: string): void {
+        cy.get("div")
+            .contains(`Add ${dependencyType} dependencies`)
+            .parent("div")
+            .siblings()
+            .find("span")
+            .should("contain.text", appName);
     }
 }
