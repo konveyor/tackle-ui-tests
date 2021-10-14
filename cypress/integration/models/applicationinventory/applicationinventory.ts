@@ -445,7 +445,7 @@ export class ApplicationInventory {
         });
     }
 
-    // Add/Remove north or sout bound dependency for an application
+    // Add/Remove north or south bound dependency for an application
     addDependencies(northbound?: Array<string>, southbound?: Array<string>): void {
         if (northbound || southbound) {
             this.openManageDependencies();

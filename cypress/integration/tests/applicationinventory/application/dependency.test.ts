@@ -68,14 +68,14 @@ describe("Manage application dependencies", { tags: "@newtest" }, () => {
         // Add northbound and southbound dependencies for 2nd app from list
         applicationsList[1].addDependencies(northboundApps, southboundApps);
 
-        // Adding app 2 as northbound dependency for 1st app should yield cyclic eror
+        // Adding app 2 as northbound dependency for 1st app should yield cyclic error
         applicationsList[0].openManageDependencies();
         applicationsList[0].selectDependency(0, [applicationsList[1].name]);
         cy.wait(500);
         cy.get(northboundHelper).should("contain.text", cyclicDependenciesErrorMsg);
         click(closeForm);
 
-        // Adding app 2 as northbound dependency for 3rd app should yield cyclic eror
+        // Adding app 2 as southbound dependency for 3rd app should yield cyclic error
         applicationsList[2].openManageDependencies();
         applicationsList[2].selectDependency(1, [applicationsList[1].name]);
         cy.wait(500);
