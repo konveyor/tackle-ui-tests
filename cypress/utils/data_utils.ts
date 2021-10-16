@@ -82,7 +82,6 @@ export function getRandomRisk(): string {
 }
 
 export function getExistingTagtypes(): string[] {
-    // returns a random tag type from the existing list
     const tagtypes = [
         "Application Type",
         "Database",

@@ -3,6 +3,7 @@
 import {
     login,
     clickByText,
+    notExists,
     exists,
     preservecookies,
     hasToBeSkipped,
@@ -22,10 +23,17 @@ import {
     stakeholderSelect,
 } from "../../../views/assessment.view";
 import { navMenu } from "../../../views/menu.view";
+import { navTab } from "../../../views/menu.view";
 import { Stakeholders } from "../../../models/stakeholders";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
-
-import { applicationinventory, button, assess } from "../../../types/constants";
+import {
+    applicationinventory,
+    controls,
+    businessservices,
+    tags,
+    button,
+    assess,
+} from "../../../types/constants";
 
 import * as data from "../../../../utils/data_utils";
 import { BusinessServices } from "../../../models/businessservices";
@@ -106,6 +114,54 @@ describe("Application inventory interlinked to tags and business service", () =>
         deleteAllTagTypes();
         deleteApplicationTableRows();
     });
+
+    it(
+        "Business Service update and delete dependency on application inventory",
+        { tags: "@tier1" },
+        function () {
+            // Navigate to Business Service and delete
+            clickByText(navMenu, controls);
+            clickByText(navTab, businessservices);
+
+            //Delete associated business service
+            businessservicesList[0].delete();
+            notExists(businessservicesList[0].name);
+
+            // Navigate to tags and delete
+            clickByText(navTab, tags);
+            tagList[0].delete();
+
+            // Navigate to application inventory
+            clickByText(navMenu, applicationinventory);
+            cy.wait(100);
+            cy.wait("@getApplication");
+
+            // Assert that deleted business service is removed from application
+            applicationList[0].getColumnText(businessColumnSelector, "");
+            cy.wait(100);
+
+            // Assert that deleted tag is removed
+            applicationList[0].expandApplicationRow();
+            applicationList[0].existsWithinRow(applicationList[0].name, "Tags", "");
+            applicationList[0].closeApplicationRow();
+
+            applicationList[0].edit({
+                business: businessservicesList[1].name,
+                tags: [tagList[1].name],
+            });
+            cy.wait("@getApplication");
+
+            // Assert that business service is updated
+            applicationList[0].getColumnText(businessColumnSelector, businessservicesList[1].name);
+            cy.wait(1000);
+
+            // Assert that created tag exists
+            applicationList[0].expandApplicationRow();
+            applicationList[0].existsWithinRow(applicationList[0].name, "Tags", tagList[1].name);
+            applicationList[0].closeApplicationRow();
+            cy.wait(1000);
+        }
+    );
 
     it(
         "Stakeholder, businessservice, tag and stakeholdergroup delete dependency on application inventory",
