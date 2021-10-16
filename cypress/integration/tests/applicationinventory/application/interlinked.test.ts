@@ -4,13 +4,16 @@ import {
     login,
     clickByText,
     exists,
-    notExists,
     preservecookies,
     hasToBeSkipped,
     click,
-    isLoggedIn,
+    deleteAllBusinessServices,
+    deleteAllStakeholders,
+    deleteAllStakeholderGroups,
+    deleteApplicationTableRows,
+    deleteAllTagTypes,
 } from "../../../../utils/utils";
-import { Tag } from "../../../models/tags";
+import { Tag, Tagtype } from "../../../models/tags";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import { businessColumnSelector } from "../../../views/applicationinventory.view";
 import {
@@ -19,18 +22,10 @@ import {
     stakeholderSelect,
 } from "../../../views/assessment.view";
 import { navMenu } from "../../../views/menu.view";
-import { navTab } from "../../../views/menu.view";
 import { Stakeholders } from "../../../models/stakeholders";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 
-import {
-    applicationinventory,
-    controls,
-    businessservices,
-    tags,
-    button,
-    assess,
-} from "../../../types/constants";
+import { applicationinventory, button, assess } from "../../../types/constants";
 
 import * as data from "../../../../utils/data_utils";
 import { BusinessServices } from "../../../models/businessservices";
@@ -69,8 +64,16 @@ describe("Application inventory interlinked to tags and business service", () =>
             businessservice.create();
             businessservicesList.push(businessservice);
 
+            //Create Tag type
+            const tagType = new Tagtype(
+                data.getRandomWord(8),
+                data.getColor(),
+                data.getRandomNumber()
+            );
+            tagType.create();
+
             // Create new tag
-            const tag = new Tag(data.getRandomWord(6), data.getExistingTagtype());
+            const tag = new Tag(data.getRandomWord(6), tagType.name);
             tag.create();
             tagList.push(tag);
 
@@ -97,65 +100,12 @@ describe("Application inventory interlinked to tags and business service", () =>
     });
 
     after("Perform test data clean up", function () {
-        // Delete applications
-        if (applicationList.length > 0) {
-            applicationList.forEach(function (application) {
-                application.delete();
-            });
-        }
+        deleteAllStakeholders();
+        deleteAllStakeholderGroups();
+        deleteAllBusinessServices();
+        deleteAllTagTypes();
+        deleteApplicationTableRows();
     });
-
-    it(
-        "Business Service update and delete dependency on application inventory",
-        { tags: "@tier1" },
-        function () {
-            // Navigate to Business Service and delete
-            clickByText(navMenu, controls);
-            clickByText(navTab, businessservices);
-
-            //Delete associated business service
-            businessservicesList[0].delete();
-            notExists(businessservicesList[0].name);
-
-            // Navigate to tags and delete
-            clickByText(navTab, tags);
-            tagList[0].delete();
-
-            // Navigate to application inventory
-            clickByText(navMenu, applicationinventory);
-            cy.wait(100);
-            cy.wait("@getApplication");
-
-            // Assert that deleted business service is removed from application
-            applicationList[0].getColumnText(businessColumnSelector, "");
-            cy.wait(100);
-
-            // Assert that deleted tag is removed
-            applicationList[0].expandApplicationRow();
-            applicationList[0].existsWithinRow(applicationList[0].name, "Tags", "");
-            applicationList[0].closeApplicationRow();
-
-            applicationList[0].edit({
-                business: businessservicesList[1].name,
-                tags: [tagList[1].name],
-            });
-            cy.wait("@getApplication");
-
-            // Assert that business service is updated
-            applicationList[0].getColumnText(businessColumnSelector, businessservicesList[1].name);
-            cy.wait(1000);
-
-            // Assert that created tag exists
-            applicationList[0].expandApplicationRow();
-            applicationList[0].existsWithinRow(applicationList[0].name, "Tags", tagList[1].name);
-            applicationList[0].closeApplicationRow();
-            cy.wait(1000);
-
-            // Remove deleted items from lists
-            // businessservicesList.splice(0, 1);
-            // tagList.splice(0, 1);
-        }
-    );
 
     it(
         "Stakeholder, businessservice, tag and stakeholdergroup delete dependency on application inventory",
@@ -213,11 +163,6 @@ describe("Application inventory interlinked to tags and business service", () =>
             //Verify that values show blank
             cy.get(stakeholderSelect).should("have.value", "");
             cy.get(stakeholdergroupsSelect).should("have.value", "");
-
-            // Remove deleted items from lists
-            // stakeholdersList.splice(0, 2);
-            // businessservicesList.pop();
-            // tagList.pop();
         }
     );
 });

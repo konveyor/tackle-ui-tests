@@ -1,5 +1,12 @@
+import { BusinessServices } from "../integration/models/businessservices";
+import { Stakeholders } from "../integration/models/stakeholders";
+import { Stakeholdergroups } from "../integration/models/stakeholdergroups";
+import { clickTags } from "../integration/models/tags";
+
 import * as loginView from "../integration/views/login.view";
 import * as commonView from "../integration/views/common.view";
+import { navMenu } from "../integration/views/menu.view";
+import * as data from "../utils/data_utils";
 import "cypress-file-upload";
 import {
     businessservice,
@@ -15,6 +22,7 @@ import {
     priority,
     confidence,
     deleteAction,
+    applicationinventory,
 } from "../integration/types/constants";
 import { actionButton, date } from "../integration/views/applicationinventory.view";
 
@@ -272,6 +280,9 @@ export function closeRowDetails(rowIdentifier: string): void {
         .contains(rowIdentifier)
         .parent(trTag)
         .within(() => {
+            if (!button["aria-label=Details"]) {
+                return;
+            }
             cy.get(commonView.expandRow).then(($btn) => {
                 if ($btn.attr("aria-expanded") === "true") {
                     $btn.trigger("click");
@@ -379,6 +390,8 @@ export function verifyImportErrorMsg(errorMsg: any): void {
 }
 
 export function deleteApplicationTableRows(): void {
+    clickByText(navMenu, applicationinventory);
+    cy.wait(800);
     cy.get(commonView.appTable)
         .get("tbody")
         .find(trTag)
@@ -426,4 +439,145 @@ export function performRowAction(
     } else {
         cy.get(tdTag).contains(rowSelector).siblings(tdTag).find(buttonName).click();
     }
+}
+
+export function createStakeholder(numberofstakeholder: number): Array<Stakeholders> {
+    var stakeholdersList: Array<Stakeholders> = [];
+    for (let i = 0; i < numberofstakeholder; i++) {
+        // Create new stakeholder
+        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
+        stakeholder.create();
+        stakeholdersList.push(stakeholder);
+    }
+    return stakeholdersList;
+}
+
+export function createStakeholderGroup(
+    numberofstakeholdergroup: number,
+    stakeholdersList: Array<Stakeholders>
+): Array<Stakeholdergroups> {
+    var stakeholdergroupsList: Array<Stakeholdergroups> = [];
+    for (let i = 0; i < numberofstakeholdergroup; i++) {
+        // Create new stakeholder group
+        const stakeholdergroup = new Stakeholdergroups(
+            data.getCompanyName(),
+            data.getDescription(),
+            [stakeholdersList[i].name]
+        );
+        stakeholdergroup.create();
+        stakeholdergroupsList.push(stakeholdergroup);
+    }
+    return stakeholdergroupsList;
+}
+
+export function deleteAllStakeholders(cancel = false): void {
+    Stakeholders.clickStakeholders();
+    selectItemsPerPage(100);
+    cy.wait(2000);
+    cy.get(commonView.appTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        var name = $tableRow.find("td[data-label=Email]").text();
+                        cy.get(tdTag)
+                            .contains(name)
+                            .parent(trTag)
+                            .within(() => {
+                                click(commonView.deleteButton);
+                                cy.wait(800);
+                            });
+                        click(commonView.confirmButton);
+                        cy.wait(4000);
+                    });
+            }
+        });
+}
+
+export function deleteAllStakeholderGroups(cancel = false): void {
+    Stakeholdergroups.clickStakeholdergroups();
+    selectItemsPerPage(100);
+    cy.wait(2000);
+    cy.get(commonView.appTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        var name = $tableRow.find("td[data-label=Name]").text();
+                        cy.get(tdTag)
+                            .contains(name)
+                            .parent(trTag)
+                            .within(() => {
+                                click(commonView.deleteButton);
+                                cy.wait(800);
+                            });
+                        click(commonView.confirmButton);
+                        cy.wait(4000);
+                    });
+            }
+        });
+}
+
+export function deleteAllBusinessServices(cancel = false): void {
+    BusinessServices.clickBusinessservices();
+    selectItemsPerPage(100);
+    cy.wait(2000);
+    cy.get(commonView.appTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        var name = $tableRow.find("td[data-label=Name]").text();
+                        cy.get(tdTag)
+                            .contains(name)
+                            .parent(tdTag)
+                            .siblings(tdTag)
+                            .within(() => {
+                                click(commonView.deleteButton);
+                                cy.wait(800);
+                            });
+                        click(commonView.confirmButton);
+                        cy.wait(4000);
+                    });
+            }
+        });
+}
+
+export function deleteAllTagTypes(cancel = false): void {
+    clickTags();
+    selectItemsPerPage(100);
+    cy.wait(2000);
+    cy.get(commonView.appTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        cy.wait(1000);
+                        var name = $tableRow.find('td[data-label="Tag type"]').text();
+                        if (!(data.getExistingTagtypes().indexOf(name) > -1)) {
+                            cy.get(tdTag)
+                                .contains(name)
+                                .parent(trTag)
+                                .within(() => {
+                                    click(commonView.deleteButton);
+                                    cy.wait(800);
+                                });
+                            click(commonView.confirmButton);
+                            cy.wait(4000);
+                        }
+                    });
+            }
+        });
 }

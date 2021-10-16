@@ -29,7 +29,7 @@ export class Stakeholdergroups {
         if (members) this.members = members;
     }
 
-    protected static clickStakeholdergroups(): void {
+    public static clickStakeholdergroups(): void {
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholdergroups);
     }
