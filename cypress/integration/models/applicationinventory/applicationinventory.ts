@@ -9,6 +9,8 @@ import {
     next,
     review,
     save,
+    name,
+    tagCount,
 } from "../../types/constants";
 import { navMenu } from "../../views/menu.view";
 import {
@@ -488,5 +490,21 @@ export class ApplicationInventory {
             .siblings()
             .find("span")
             .should("contain.text", appName);
+    }
+
+    verifyTagCount(tagsCount: number): void {
+        // Verify tag count for specific application
+        ApplicationInventory.clickApplicationInventory();
+        selectItemsPerPage(100);
+        cy.wait(4000);
+        cy.get(".pf-c-table > tbody > tr")
+            .not(".pf-c-table__expandable-row")
+            .each(($ele) => {
+                if ($ele.find(`td[data-label="${name}"]`).text() == this.name) {
+                    expect(parseInt($ele.find(`td[data-label="${tagCount}"]`).text())).to.equal(
+                        tagsCount
+                    );
+                }
+            });
     }
 }

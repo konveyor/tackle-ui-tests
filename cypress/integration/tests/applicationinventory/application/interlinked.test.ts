@@ -61,7 +61,7 @@ describe(
                     data.getDescription(),
                     data.getDescription(),
                     businessservice.name,
-                    [tag.name]
+                    [tagList[i].name]
                 );
                 application.create();
                 applicationList.push(application);
@@ -144,6 +144,13 @@ describe(
             applicationList[0].expandApplicationRow();
             applicationList[0].existsWithinRow(applicationList[0].name, "Tags", tagList[1].name);
             applicationList[0].closeApplicationRow();
+        });
+
+        it("application inventory tag count", { tags: "@newtest" }, function () {
+            applicationList[0].verifyTagCount(1);
+            // Delete tag
+            tagList[0].delete();
+            applicationList[0].verifyTagCount(0);
         });
     }
 );
