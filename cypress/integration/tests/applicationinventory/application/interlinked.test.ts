@@ -61,7 +61,7 @@ describe(
                     data.getDescription(),
                     data.getDescription(),
                     businessservice.name,
-                    [tag.name]
+                    [tagList[i].name]
                 );
                 application.create();
                 applicationList.push(application);
@@ -100,7 +100,6 @@ describe(
             });
             // Clean up business service and tags
             businessservicesList[1].delete();
-            tagList[1].delete();
         });
 
         it("Business Service update and delete dependency on application inventory", function () {
@@ -144,6 +143,13 @@ describe(
             applicationList[0].expandApplicationRow();
             applicationList[0].existsWithinRow(applicationList[0].name, "Tags", tagList[1].name);
             applicationList[0].closeApplicationRow();
+        });
+
+        it("application inventory tag count", { tags: "@newtest" }, function () {
+            applicationList[1].verifyTagCount(1);
+            // Delete tag
+            tagList[1].delete();
+            applicationList[1].verifyTagCount(0);
         });
     }
 );
