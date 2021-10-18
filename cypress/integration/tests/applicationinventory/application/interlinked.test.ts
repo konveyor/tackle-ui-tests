@@ -100,7 +100,6 @@ describe(
             });
             // Clean up business service and tags
             businessservicesList[1].delete();
-            tagList[1].delete();
         });
 
         it("Business Service update and delete dependency on application inventory", function () {
@@ -147,10 +146,10 @@ describe(
         });
 
         it("application inventory tag count", { tags: "@newtest" }, function () {
-            applicationList[0].verifyTagCount(1);
+            applicationList[1].verifyTagCount(1);
             // Delete tag
-            tagList[0].delete();
-            applicationList[0].verifyTagCount(0);
+            tagList[1].delete();
+            applicationList[1].verifyTagCount(0);
         });
     }
 );
