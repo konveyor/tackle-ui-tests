@@ -1,7 +1,8 @@
 import { BusinessServices } from "../integration/models/businessservices";
 import { Stakeholders } from "../integration/models/stakeholders";
 import { Stakeholdergroups } from "../integration/models/stakeholdergroups";
-import { clickTags } from "../integration/models/tags";
+import { ApplicationInventory } from "../integration/models/applicationinventory/applicationinventory";
+import { Tag, Tagtype, clickTags } from "../integration/models/tags";
 
 import * as loginView from "../integration/views/login.view";
 import * as commonView from "../integration/views/common.view";
@@ -470,6 +471,61 @@ export function createStakeholderGroup(
     return stakeholdergroupsList;
 }
 
+export function createBusinessServices(
+    numberofbusinessservice: number,
+    stakeholdersList: Array<Stakeholders>
+): Array<BusinessServices> {
+    var businessservicesList: Array<BusinessServices> = [];
+    for (let i = 0; i < numberofbusinessservice; i++) {
+        // Create new business service
+        const businessservice = new BusinessServices(
+            data.getCompanyName(),
+            data.getDescription(),
+            stakeholdersList[i].name
+        );
+        businessservice.create();
+        businessservicesList.push(businessservice);
+    }
+    return businessservicesList;
+}
+
+export function createTags(numberoftags: number): Array<Tag> {
+    var tagList: Array<Tag> = [];
+    for (let i = 0; i < numberoftags; i++) {
+        //Create Tag type
+        const tagType = new Tagtype(data.getRandomWord(8), data.getColor(), data.getRandomNumber());
+        tagType.create();
+
+        // Create new tag
+        const tag = new Tag(data.getRandomWord(6), tagType.name);
+        tag.create();
+        tagList.push(tag);
+    }
+    return tagList;
+}
+
+export function createApplications(
+    numberofapplications: number,
+    businessservicesList: Array<BusinessServices>,
+    tagList: Array<Tag>
+): Array<ApplicationInventory> {
+    var applicationList: Array<ApplicationInventory> = [];
+    for (let i = 0; i < numberofapplications; i++) {
+        // Navigate to application inventory tab and create new application
+        const application = new ApplicationInventory(
+            data.getAppName(),
+            data.getDescription(),
+            data.getDescription(),
+            businessservicesList[i].name,
+            [tagList[i].name]
+        );
+        application.create();
+        applicationList.push(application);
+        cy.wait(2000);
+    }
+    return applicationList;
+}
+
 export function deleteAllStakeholders(cancel = false): void {
     Stakeholders.clickStakeholders();
     selectItemsPerPage(100);
@@ -512,7 +568,8 @@ export function deleteAllStakeholderGroups(cancel = false): void {
                         var name = $tableRow.find("td[data-label=Name]").text();
                         cy.get(tdTag)
                             .contains(name)
-                            .parent(trTag)
+                            .parent(tdTag)
+                            .siblings(tdTag)
                             .within(() => {
                                 click(commonView.deleteButton);
                                 cy.wait(800);

@@ -4,7 +4,6 @@ import {
     login,
     clickByText,
     notExists,
-    exists,
     preservecookies,
     hasToBeSkipped,
     click,
@@ -13,8 +12,13 @@ import {
     deleteAllStakeholderGroups,
     deleteApplicationTableRows,
     deleteAllTagTypes,
+    createStakeholder,
+    createStakeholderGroup,
+    createBusinessServices,
+    createTags,
+    createApplications,
 } from "../../../../utils/utils";
-import { Tag, Tagtype } from "../../../models/tags";
+import { Tag } from "../../../models/tags";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import { businessColumnSelector } from "../../../views/applicationinventory.view";
 import {
@@ -34,13 +38,10 @@ import {
     button,
     assess,
 } from "../../../types/constants";
-
-import * as data from "../../../../utils/data_utils";
 import { BusinessServices } from "../../../models/businessservices";
 
 var stakeholdersList: Array<Stakeholders> = [];
-var stakeholdersNameList: Array<string> = [];
-var stakeholdergroupNameList: Array<string> = [];
+var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var businessservicesList: Array<BusinessServices> = [];
 var tagList: Array<Tag> = [];
 var applicationList: Array<ApplicationInventory> = [];
@@ -56,47 +57,12 @@ describe("Application inventory interlinked to tags and business service", () =>
         // Save the session and token cookie for maintaining one login session
         preservecookies();
 
-        // Create multiple bussiness services and tags
-        for (let i = 0; i < 2; i++) {
-            const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-            stakeholder.create();
-            stakeholdersList.push(stakeholder);
-            stakeholdersNameList.push(stakeholder.name);
-
-            // Create new business service
-            const businessservice = new BusinessServices(
-                data.getCompanyName(),
-                data.getDescription(),
-                stakeholder.name
-            );
-            businessservice.create();
-            businessservicesList.push(businessservice);
-
-            //Create Tag type
-            const tagType = new Tagtype(
-                data.getRandomWord(8),
-                data.getColor(),
-                data.getRandomNumber()
-            );
-            tagType.create();
-
-            // Create new tag
-            const tag = new Tag(data.getRandomWord(6), tagType.name);
-            tag.create();
-            tagList.push(tag);
-
-            // Navigate to application inventory tab and create new application
-            const application = new ApplicationInventory(
-                data.getAppName(),
-                data.getDescription(),
-                data.getDescription(),
-                businessservice.name,
-                [tag.name]
-            );
-            application.create();
-            applicationList.push(application);
-            cy.wait(2000);
-        }
+        //Create data
+        stakeholdersList = createStakeholder(2);
+        stakeholdergroupsList = createStakeholderGroup(2, stakeholdersList);
+        businessservicesList = createBusinessServices(2, stakeholdersList);
+        tagList = createTags(2);
+        applicationList = createApplications(2, businessservicesList, tagList);
     });
 
     beforeEach("Define interceptors", function () {
@@ -167,35 +133,20 @@ describe("Application inventory interlinked to tags and business service", () =>
         "Stakeholder, businessservice, tag and stakeholdergroup delete dependency on application inventory",
         { tags: "@newtest" },
         function () {
-            //Add stakeholder group
-            const stakeholdergroup = new Stakeholdergroups(
-                data.getCompanyName(),
-                data.getDescription(),
-                stakeholdersNameList
-            );
-            stakeholdergroup.create();
-            stakeholdergroupNameList.push(stakeholdergroup.name);
-            cy.wait("@postStakeholdergroups");
-            exists(stakeholdergroup.name);
-
             // Perform assessment of application
             applicationList[1].perform_assessment(
                 "low",
-                stakeholdersNameList,
-                stakeholdergroupNameList
+                [stakeholdersList[1].name],
+                [stakeholdergroupsList[1].name]
             );
             cy.wait(2000);
             applicationList[1].is_assessed();
+            //check the tag count on the application
+            applicationList[1].verifyTagCount(1);
 
-            // Delete the stakeholders
-            stakeholdersList.forEach(function (stakeholder) {
-                stakeholder.delete();
-            });
-
-            // Delete the stakeholdergroups
-            stakeholdergroup.delete();
-
-            // Clean up business service and tags
+            // Delete the stakeholders, group , BS and tags
+            stakeholdersList[1].delete;
+            stakeholdergroupsList[1].delete();
             businessservicesList[1].delete();
             tagList[1].delete();
 
@@ -210,6 +161,8 @@ describe("Application inventory interlinked to tags and business service", () =>
             applicationList[1].expandApplicationRow();
             applicationList[1].existsWithinRow(applicationList[1].name, "Tags", "");
             applicationList[1].closeApplicationRow();
+            // Verify that tag count is updated once the tag is deleted.
+            applicationList[1].verifyTagCount(0);
 
             applicationList[1].selectApplication();
             clickByText(button, assess);
@@ -222,12 +175,3 @@ describe("Application inventory interlinked to tags and business service", () =>
         }
     );
 });
-
-        it("application inventory tag count", { tags: "@newtest" }, function () {
-            applicationList[1].verifyTagCount(1);
-            // Delete tag
-            tagList[1].delete();
-            applicationList[1].verifyTagCount(0);
-        });
-    }
-);
