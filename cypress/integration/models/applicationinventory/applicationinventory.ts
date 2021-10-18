@@ -9,6 +9,8 @@ import {
     next,
     review,
     save,
+    name,
+    tagCount,
 } from "../../types/constants";
 import { navMenu } from "../../views/menu.view";
 import {
@@ -21,6 +23,8 @@ import {
     actionButton,
     selectBox,
     tags,
+    dependenciesDropdownBtn,
+    closeForm,
 } from "../../views/applicationinventory.view";
 import * as commonView from "../../views/common.view";
 import {
@@ -423,5 +427,84 @@ export class ApplicationInventory {
             .parent("dt")
             .next()
             .should("contain", valueToSearch);
+    }
+
+    // Opens the manage dependencies dialog from application inventory page
+    openManageDependencies(): void {
+        ApplicationInventory.clickApplicationInventory();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        performRowAction(this.name, actionButton);
+        cy.wait(500);
+        clickByText(button, "Manage dependencies");
+    }
+
+    // Selects the application as dependency from dropdown. Arg dropdownNum value 0 selects northbound, whereas value 1 selects southbound
+    selectDependency(dropdownNum: number, appNameList: Array<string>): void {
+        appNameList.forEach(function (app) {
+            cy.get(dependenciesDropdownBtn).eq(dropdownNum).click();
+            cy.contains("button", app).click();
+        });
+    }
+
+    // Add/Remove north or south bound dependency for an application
+    addDependencies(northbound?: Array<string>, southbound?: Array<string>): void {
+        if (northbound || southbound) {
+            this.openManageDependencies();
+            cy.wait(1000);
+            if (northbound.length > 0) {
+                this.selectDependency(0, northbound);
+            }
+            if (southbound.length > 0) {
+                this.selectDependency(1, southbound);
+            }
+            cy.wait(2000);
+            click(closeForm);
+        }
+    }
+
+    // Verifies if the north or south bound dependencies exist for an application
+    verifyDependencies(northboundApps?: Array<string>, southboundApps?: Array<string>): void {
+        if (northboundApps || southboundApps) {
+            this.openManageDependencies();
+            cy.wait(2000);
+            if (northboundApps && northboundApps.length > 0) {
+                northboundApps.forEach((app) => {
+                    this.dependencyExists("northbound", app);
+                });
+            }
+            if (southboundApps && southboundApps.length > 0) {
+                southboundApps.forEach((app) => {
+                    this.dependencyExists("southbound", app);
+                });
+            }
+            click(closeForm);
+        }
+    }
+
+    // Checks if app name is displayed in the dropdown under respective dependency
+    protected dependencyExists(dependencyType: string, appName: string): void {
+        cy.get("div")
+            .contains(`Add ${dependencyType} dependencies`)
+            .parent("div")
+            .siblings()
+            .find("span")
+            .should("contain.text", appName);
+    }
+
+    verifyTagCount(tagsCount: number): void {
+        // Verify tag count for specific application
+        ApplicationInventory.clickApplicationInventory();
+        selectItemsPerPage(100);
+        cy.wait(4000);
+        cy.get(".pf-c-table > tbody > tr")
+            .not(".pf-c-table__expandable-row")
+            .each(($ele) => {
+                if ($ele.find(`td[data-label="${name}"]`).text() == this.name) {
+                    expect(parseInt($ele.find(`td[data-label="${tagCount}"]`).text())).to.equal(
+                        tagsCount
+                    );
+                }
+            });
     }
 }

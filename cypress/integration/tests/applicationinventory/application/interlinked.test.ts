@@ -222,3 +222,12 @@ describe("Application inventory interlinked to tags and business service", () =>
         }
     );
 });
+
+        it("application inventory tag count", { tags: "@newtest" }, function () {
+            applicationList[1].verifyTagCount(1);
+            // Delete tag
+            tagList[1].delete();
+            applicationList[1].verifyTagCount(0);
+        });
+    }
+);
