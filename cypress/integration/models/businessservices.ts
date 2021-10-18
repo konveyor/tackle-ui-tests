@@ -31,7 +31,7 @@ export class BusinessServices {
         if (owner) this.owner = owner;
     }
 
-    protected static clickBusinessservices(): void {
+    public static clickBusinessservices(): void {
         clickByText(navMenu, controls);
         clickByText(navTab, businessservices);
     }

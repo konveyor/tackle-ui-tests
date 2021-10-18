@@ -3,3 +3,4 @@ export const stakeholdergroupsSelect = "input[placeholder='Select stakeholder gr
 export const questionBlock = "div[cy-data='question']";
 export const radioInput = "input[type='radio']";
 export const assessmentColumnSelector = "td[data-label='Assessment']";
+export const continueButton = "button[aria-label=confirm]";

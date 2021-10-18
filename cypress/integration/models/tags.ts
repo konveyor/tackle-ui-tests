@@ -111,6 +111,7 @@ export class Tag {
         } else {
             click(commonView.confirmButton);
         }
+        cy.wait(2000);
         closeRowDetails(this.tagtype);
     }
 }

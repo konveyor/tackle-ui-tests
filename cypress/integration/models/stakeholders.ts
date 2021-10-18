@@ -33,7 +33,7 @@ export class Stakeholders {
         if (groups) this.groups = groups;
     }
 
-    protected static clickStakeholders(): void {
+    public static clickStakeholders(): void {
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
     }

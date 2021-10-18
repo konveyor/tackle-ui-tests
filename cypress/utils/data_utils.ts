@@ -81,3 +81,15 @@ export function getRandomRisk(): string {
     const risk = ["high", "medium", "low"];
     return risk[Math.floor(Math.random() * risk.length)];
 }
+
+export function getExistingTagtypes(): string[] {
+    const tagtypes = [
+        "Application Type",
+        "Database",
+        "Data Center",
+        "Language",
+        "Operating System",
+        "Runtime",
+    ];
+    return tagtypes;
+}
