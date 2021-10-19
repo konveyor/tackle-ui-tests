@@ -16,7 +16,6 @@ import { Stakeholders } from "../../models/stakeholders";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var applicationsList: Array<ApplicationInventory> = [];
-var stakeholdersNameList: Array<string> = [];
 
 describe("Application risks tests", { tags: "@newtest" }, () => {
     var risktype = ["low", "medium", "high"];
@@ -45,7 +44,7 @@ describe("Application risks tests", { tags: "@newtest" }, () => {
             applicationsList.push(application);
 
             // Perform assessment of application
-            application.perform_assessment(risktype[i], stakeholdersNameList);
+            application.perform_assessment(risktype[i], [stakeholdersList[0].name]);
             cy.wait(2000);
             application.is_assessed();
 
