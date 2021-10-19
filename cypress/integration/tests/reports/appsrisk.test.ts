@@ -1,6 +1,12 @@
 /// <reference types="cypress" />
 
-import { hasToBeSkipped, login, preservecookies, clickByText } from "../../../utils/utils";
+import {
+    hasToBeSkipped,
+    login,
+    preservecookies,
+    clickByText,
+    createStakeholder,
+} from "../../../utils/utils";
 import { verifyApplicationRisk } from "../../models/reports/reports";
 import { ApplicationInventory } from "../../models/applicationinventory/applicationinventory";
 import { navMenu } from "../../views/menu.view";
@@ -12,7 +18,7 @@ var stakeholdersList: Array<Stakeholders> = [];
 var applicationsList: Array<ApplicationInventory> = [];
 var stakeholdersNameList: Array<string> = [];
 
-describe("Application assessment and review tests", { tags: "@newtest" }, () => {
+describe("Application risks tests", { tags: "@newtest" }, () => {
     var risktype = ["low", "medium", "high"];
 
     before("Login and Create Test Data", function () {
@@ -22,13 +28,10 @@ describe("Application assessment and review tests", { tags: "@newtest" }, () => 
         // Perform login
         login();
 
-        // Navigate to stakeholders control tab and create new stakeholder
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-        stakeholder.create();
-        cy.wait(2000);
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
 
-        stakeholdersList.push(stakeholder);
-        stakeholdersNameList.push(stakeholder.name);
+        stakeholdersList = createStakeholder(1);
 
         for (let i = 0; i < 3; i++) {
             // Navigate to application inventory tab and create new application
@@ -53,23 +56,25 @@ describe("Application assessment and review tests", { tags: "@newtest" }, () => 
         }
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-    });
-
     after("Perform test data clean up", function () {
-        // Delete the stakeholders created before the tests
-        stakeholdersList.forEach(function (stakeholder) {
-            stakeholder.delete();
-        });
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@newtest")) return;
 
-        applicationsList.forEach(function (application) {
-            application.delete();
-        });
+        // Delete the stakeholders created before the tests
+        if (stakeholdersList.length > 0) {
+            stakeholdersList.forEach(function (stakeholder) {
+                stakeholder.delete();
+            });
+        }
+
+        if (applicationsList.length > 0) {
+            applicationsList.forEach(function (application) {
+                application.delete();
+            });
+        }
     });
 
-    it("List applications by risk", function () {
+    it("Application risk validation", function () {
         // Navigate to reports page
         clickByText(navMenu, reports);
         cy.wait(3000);
