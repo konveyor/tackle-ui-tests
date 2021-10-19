@@ -5,7 +5,7 @@ import {
     clickByText,
     selectItemsPerPage,
     preservecookies,
-    deleteApplicationTableRows,
+    deleteAppTableRows,
     hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
@@ -193,7 +193,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
         cy.wait(2000);
 
         // Delete all items of last page
-        deleteApplicationTableRows();
+        deleteAppTableRows();
 
         // Verify that page is re-directed to previous page
         cy.get(".pf-c-table > tbody > tr")

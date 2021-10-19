@@ -390,8 +390,7 @@ export function verifyImportErrorMsg(errorMsg: any): void {
     }
 }
 
-export function deleteApplicationTableRows(): void {
-    clickByText(navMenu, applicationinventory);
+export function deleteAllApplicationTableRows(): void {
     cy.wait(800);
     cy.get(commonView.appTable)
         .get("tbody")
@@ -413,6 +412,15 @@ export function deleteApplicationTableRows(): void {
             click(commonView.confirmButton);
             cy.wait(4000);
         });
+}
+
+export function deleteAppTableRows(): void {
+    deleteAllApplicationTableRows();
+}
+
+export function deleteApplicationTableRows(): void {
+    clickByText(navMenu, applicationinventory);
+    deleteAllApplicationTableRows();
 }
 
 export function preservecookies(): void {
