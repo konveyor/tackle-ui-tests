@@ -1,6 +1,7 @@
 /// <reference types="cypress" />
 /// <reference types="cypress-xpath" />
 
+import { applicationName, risk } from "../../types/constants";
 import * as commonView from "../../views/common.view";
 import { itemsPerPageMenu, itemsPerPageToggleButton } from "../../views/reports.view";
 
@@ -50,6 +51,21 @@ export function expandArticle(name: string): void {
                 cy.xpath(
                     `//h3[contains(text(), '${name}')]//ancestor::article//div[@class='pf-c-card__header-toggle']//button/span`
                 ).click({ force: true });
+            }
+        });
+}
+
+export function verifyApplicationRisk(risktype: string, appName: string): void {
+    // Verifies particular application's risk type
+    selectItemsPerPageAdoptionCandidate(100);
+    cy.wait(4000);
+    cy.get(".pf-c-table > tbody > tr")
+        .not(".pf-c-table__expandable-row")
+        .each(($ele) => {
+            if ($ele.find(`td[data-label="${applicationName}"]`).text() == appName) {
+                expect($ele.find(`td[data-label="${risk}"]`).text().toLowerCase()).to.equal(
+                    risktype
+                );
             }
         });
 }

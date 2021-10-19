@@ -31,6 +31,7 @@ export const priority = "Priority";
 export const question = "Question";
 export const rank = "Rank";
 export const review = "Review";
+export const risk = "Risk";
 export const owner = "Owner";
 export const reports = "Reports";
 export const save = "Save";
