@@ -6,6 +6,8 @@ import {
     selectItemsPerPage,
     preservecookies,
     hasToBeSkipped,
+    createMultipleJobfunctions,
+    deleteAllJobfunctions,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, jobfunctions } from "../../../types/constants";
@@ -33,15 +35,6 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
         login();
 
         // Navigate to Job functions tab
-        clickByText(navMenu, controls);
-        clickByText(navTab, jobfunctions);
-        function createMultipleJobfunctions(num): void {
-            for (let i = 0; i < num; i++) {
-                const jobfunction = new Jobfunctions(data.getFullName());
-                jobfunction.create();
-                jobfunctionsList.push(jobfunction);
-            }
-        }
         var rowsToCreate = 0;
 
         // Get the current table row count and create appropriate test data rows
@@ -79,20 +72,7 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
 
     after("Perform test data clean up", function () {
         // Delete the Job functions created before the tests
-        if (jobfunctionsList.length > 0) {
-            // Navigate to Job functions tab
-            clickByText(navMenu, controls);
-            clickByText(navTab, jobfunctions);
-            cy.wait("@getJobfunctions");
-            selectItemsPerPage(100);
-            cy.wait(2000);
-
-            jobfunctionsList.forEach(function (jobfunction) {
-                cy.get("td[data-label=Name]").each(($rows) => {
-                    if ($rows.text() === jobfunction.name) jobfunction.delete();
-                });
-            });
-        }
+        deleteAllJobfunctions();
     });
 
     it("Navigation button validations", function () {

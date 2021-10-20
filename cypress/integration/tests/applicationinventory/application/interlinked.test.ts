@@ -12,7 +12,7 @@ import {
     deleteAllStakeholderGroups,
     deleteApplicationTableRows,
     deleteAllTagTypes,
-    createStakeholder,
+    createMultipleStakeholders,
     createStakeholderGroup,
     createBusinessServices,
     createTags,
@@ -58,7 +58,7 @@ describe("Application inventory interlinked to tags and business service", () =>
         preservecookies();
 
         //Create data
-        stakeholdersList = createStakeholder(2);
+        stakeholdersList = createMultipleStakeholders(2);
         stakeholdergroupsList = createStakeholderGroup(2, stakeholdersList);
         businessservicesList = createBusinessServices(2, stakeholdersList);
         tagList = createTags(2);

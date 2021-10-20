@@ -7,6 +7,8 @@ import {
     deleteTableRows,
     preservecookies,
     hasToBeSkipped,
+    createMultipleStakeholderGroups,
+    deleteAllStakeholderGroups,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, stakeholdergroups } from "../../../types/constants";
@@ -34,15 +36,6 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
         login();
 
         // Navigate to stakeholder groups tab
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholdergroups);
-        function createMultipleStakeholdergroups(num): void {
-            for (let i = 0; i < num; i++) {
-                const stakeholdergroup = new Stakeholdergroups(data.getCompanyName());
-                stakeholdergroup.create();
-                stakeholdergroupsList.push(stakeholdergroup);
-            }
-        }
         var rowsToCreate = 0;
 
         // Get the current table row count and create appropriate test data rows
@@ -59,13 +52,13 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
                         }
                         if (rowsToCreate > 0) {
                             // Create multiple stakeholder groups
-                            createMultipleStakeholdergroups(rowsToCreate);
+                            createMultipleStakeholderGroups(rowsToCreate);
                         }
                     });
                 } else {
                     rowsToCreate = 11;
                     // Create multiple stakeholder groups
-                    createMultipleStakeholdergroups(rowsToCreate);
+                    createMultipleStakeholderGroups(rowsToCreate);
                 }
             });
     });
@@ -80,20 +73,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
 
     after("Perform test data clean up", function () {
         // Delete the stakeholder groups created before the tests
-        if (stakeholdergroupsList.length > 0) {
-            // Navigate to stakeholder groups tab
-            clickByText(navMenu, controls);
-            clickByText(navTab, stakeholdergroups);
-            cy.wait("@getStakeholdergroups");
-            selectItemsPerPage(100);
-            cy.wait(2000);
-
-            stakeholdergroupsList.forEach(function (stakeholdergroup) {
-                cy.get("td[data-label=Name]").each(($rows) => {
-                    if ($rows.text() === stakeholdergroup.name) stakeholdergroup.delete();
-                });
-            });
-        }
+        deleteAllStakeholderGroups();
     });
 
     it("Navigation button validations", function () {

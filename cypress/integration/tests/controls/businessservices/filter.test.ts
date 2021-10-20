@@ -8,6 +8,10 @@ import {
     applySearchFilter,
     preservecookies,
     hasToBeSkipped,
+    createMultipleStakeholders,
+    createBusinessServices,
+    deleteAllBusinessServices,
+    deleteAllStakeholders,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -37,34 +41,16 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
         login();
 
         // Create multiple stakeholder owners
-        for (let i = 0; i < 3; i++) {
-            const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-            stakeholder.create();
-            stakeholdersList.push(stakeholder);
-        }
+        stakeholdersList = createMultipleStakeholders(3);
 
         // Create multiple business services
-        for (let i = 0; i < 2; i++) {
-            const newBusinessservice = new BusinessServices(
-                data.getFullName(),
-                data.getDescription(),
-                stakeholdersList[i].name
-            );
-            newBusinessservice.create();
-            businessservicesList.push(newBusinessservice);
-        }
+        businessservicesList = createBusinessServices(2, stakeholdersList);
     });
 
     after("Perform test data clean up", function () {
         // Delete the business services
-        businessservicesList.forEach(function (businessservice) {
-            businessservice.delete();
-        });
-
-        // Delete the stakeholders
-        stakeholdersList.forEach(function (stakeholder) {
-            stakeholder.delete();
-        });
+        deleteAllBusinessServices();
+        deleteAllStakeholders();
     });
 
     beforeEach("Persist session", function () {

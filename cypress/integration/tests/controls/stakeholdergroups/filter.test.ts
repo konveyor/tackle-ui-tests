@@ -9,6 +9,8 @@ import {
     selectItemsPerPage,
     preservecookies,
     hasToBeSkipped,
+    createMultipleStakeholders,
+    createMultipleStakeholderGroups,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -42,21 +44,8 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
         login();
 
         // Create multiple stakeholder groups and stakeholders
-        for (let i = 0; i < 2; i++) {
-            // Create new stakeholder
-            const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-            stakeholder.create();
-            stakeholdersList.push(stakeholder);
-
-            // Create new stakeholder group
-            const stakeholdergroup = new Stakeholdergroups(
-                data.getCompanyName(),
-                data.getDescription(),
-                [stakeholder.name]
-            );
-            stakeholdergroup.create();
-            stakeholdergroupsList.push(stakeholdergroup);
-        }
+        stakeholdersList = createMultipleStakeholders(2);
+        stakeholdergroupsList = createMultipleStakeholderGroups(2, stakeholdersList);
     });
 
     beforeEach("Persist session", function () {

@@ -3,6 +3,7 @@ import { Stakeholders } from "../integration/models/stakeholders";
 import { Stakeholdergroups } from "../integration/models/stakeholdergroups";
 import { ApplicationInventory } from "../integration/models/applicationinventory/applicationinventory";
 import { Tag, Tagtype, clickTags } from "../integration/models/tags";
+import { Jobfunctions } from "../integration/models/jobfunctions";
 
 import * as loginView from "../integration/views/login.view";
 import * as commonView from "../integration/views/common.view";
@@ -442,7 +443,7 @@ export function performRowAction(
     }
 }
 
-export function createStakeholder(numberofstakeholder: number): Array<Stakeholders> {
+export function createMultipleStakeholders(numberofstakeholder: number): Array<Stakeholders> {
     var stakeholdersList: Array<Stakeholders> = [];
     for (let i = 0; i < numberofstakeholder; i++) {
         // Create new stakeholder
@@ -452,18 +453,29 @@ export function createStakeholder(numberofstakeholder: number): Array<Stakeholde
     }
     return stakeholdersList;
 }
+export function createMultipleJobfunctions(num): Array<Jobfunctions> {
+    var jobfunctionsList: Array<Jobfunctions> = [];
+    for (let i = 0; i < num; i++) {
+        const jobfunction = new Jobfunctions(data.getFullName());
+        jobfunction.create();
+        jobfunctionsList.push(jobfunction);
+    }
+    return jobfunctionsList;
+}
 
-export function createStakeholderGroup(
+export function createMultipleStakeholderGroups(
     numberofstakeholdergroup: number,
-    stakeholdersList: Array<Stakeholders>
+    stakeholdersList?: Array<Stakeholders>
 ): Array<Stakeholdergroups> {
     var stakeholdergroupsList: Array<Stakeholdergroups> = [];
     for (let i = 0; i < numberofstakeholdergroup; i++) {
+        var stakeholders: Array<string> = [];
+        if (stakeholdersList) stakeholders.push(stakeholdersList[i].name);
         // Create new stakeholder group
         const stakeholdergroup = new Stakeholdergroups(
             data.getCompanyName(),
             data.getDescription(),
-            [stakeholdersList[i].name]
+            stakeholders
         );
         stakeholdergroup.create();
         stakeholdergroupsList.push(stakeholdergroup);
@@ -473,15 +485,17 @@ export function createStakeholderGroup(
 
 export function createBusinessServices(
     numberofbusinessservice: number,
-    stakeholdersList: Array<Stakeholders>
+    stakeholdersList?: Array<Stakeholders>
 ): Array<BusinessServices> {
     var businessservicesList: Array<BusinessServices> = [];
     for (let i = 0; i < numberofbusinessservice; i++) {
+        var stakeholders: string;
+        if (stakeholdersList) stakeholders = stakeholdersList[i].name;
         // Create new business service
         const businessservice = new BusinessServices(
             data.getCompanyName(),
             data.getDescription(),
-            stakeholdersList[i].name
+            stakeholders
         );
         businessservice.create();
         businessservicesList.push(businessservice);
@@ -506,24 +520,59 @@ export function createTags(numberoftags: number): Array<Tag> {
 
 export function createApplications(
     numberofapplications: number,
-    businessservicesList: Array<BusinessServices>,
-    tagList: Array<Tag>
+    businessservice?: BusinessServices,
+    tagList?: Array<Tag>
 ): Array<ApplicationInventory> {
     var applicationList: Array<ApplicationInventory> = [];
+    var tags: string[];
+    if (businessservice) var business = businessservice;
+    if (tagList) {
+        for (let j = 0; j < tagList.length; j++) {
+            tags.push(tagList[j].name);
+        }
+    }
     for (let i = 0; i < numberofapplications; i++) {
         // Navigate to application inventory tab and create new application
         const application = new ApplicationInventory(
             data.getAppName(),
             data.getDescription(),
             data.getDescription(),
-            businessservicesList[i].name,
-            [tagList[i].name]
+            business.name,
+            tags
         );
         application.create();
         applicationList.push(application);
         cy.wait(2000);
     }
     return applicationList;
+}
+
+export function deleteAllJobfunctions(cancel = false): void {
+    Jobfunctions.clickJobfunctions();
+    selectItemsPerPage(100);
+    cy.wait(2000);
+    cy.get(commonView.appTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        var name = $tableRow.find("td[data-label=Name]").text();
+                        cy.get(tdTag)
+                            .contains(name)
+                            .parent(tdTag)
+                            .siblings(tdTag)
+                            .within(() => {
+                                click(commonView.deleteButton);
+                                cy.wait(800);
+                            });
+                        click(commonView.confirmButton);
+                        cy.wait(4000);
+                    });
+            }
+        });
 }
 
 export function deleteAllStakeholders(cancel = false): void {

@@ -10,6 +10,10 @@ import {
     getTableColumnData,
     preservecookies,
     hasToBeSkipped,
+    createStakeholder,
+    createBusinessServices,
+    deleteAllBusinessServices,
+    deleteAllStakeholders,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, businessservices, name, owner } from "../../../types/constants";
@@ -31,22 +35,8 @@ describe("Business services sort validations", { tags: "@tier2" }, function () {
         login();
 
         // Create multiple bussiness services and stakeholders
-        for (let i = 0; i < 2; i++) {
-            // Create new stakeholder
-            const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-            stakeholder.create();
-            stakeholdersList.push(stakeholder);
-
-            // Create new business service
-            const businessservice = new BusinessServices(
-                data.getCompanyName(),
-                data.getDescription(),
-                stakeholder.name
-            );
-            businessservice.create();
-            businessservicesList.push(businessservice);
-            businessserviceNames.push(businessservice.name);
-        }
+        stakeholdersList = createStakeholder(2);
+        businessservicesList = createBusinessServices(2, stakeholdersList);
     });
 
     beforeEach("Persist session", function () {
@@ -60,14 +50,8 @@ describe("Business services sort validations", { tags: "@tier2" }, function () {
 
     after("Perform test data clean up", function () {
         // Delete the bussiness services and stakeholders created before the tests
-
-        businessservicesList.forEach(function (businessservice) {
-            businessservice.delete();
-        });
-
-        stakeholdersList.forEach(function (stakeholder) {
-            stakeholder.delete();
-        });
+        deleteAllBusinessServices();
+        deleteAllStakeholders();
     });
 
     it("Name sort validations", function () {

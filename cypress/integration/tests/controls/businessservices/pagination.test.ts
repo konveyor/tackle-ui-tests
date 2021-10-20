@@ -7,6 +7,8 @@ import {
     deleteTableRows,
     preservecookies,
     hasToBeSkipped,
+    createBusinessServices,
+    deleteAllBusinessServices,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, businessservices } from "../../../types/constants";
@@ -34,15 +36,6 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
         login();
 
         // Navigate to business services tab
-        clickByText(navMenu, controls);
-        clickByText(navTab, businessservices);
-        function createMultipleBusinessservices(num): void {
-            for (let i = 0; i < num; i++) {
-                const businessservice = new BusinessServices(data.getFullName());
-                businessservice.create();
-                businessservicesList.push(businessservice);
-            }
-        }
         var rowsToCreate = 0;
 
         // Get the current table row count and create appropriate test data rows
@@ -59,13 +52,13 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
                         }
                         if (rowsToCreate > 0) {
                             // Create multiple business services
-                            createMultipleBusinessservices(rowsToCreate);
+                            createBusinessServices(rowsToCreate);
                         }
                     });
                 } else {
                     rowsToCreate = 11;
                     // Create multiple business services
-                    createMultipleBusinessservices(rowsToCreate);
+                    createBusinessServices(rowsToCreate);
                 }
             });
     });
@@ -80,20 +73,7 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
 
     after("Perform test data clean up", function () {
         // Delete the business services created before the tests
-        if (businessservicesList.length > 0) {
-            // Navigate to business services tab
-            clickByText(navMenu, controls);
-            clickByText(navTab, businessservices);
-            cy.wait("@getBusinessService");
-            selectItemsPerPage(100);
-            cy.wait(2000);
-
-            businessservicesList.forEach(function (businessservice) {
-                cy.get("td[data-label=Name]").each(($rows) => {
-                    if ($rows.text() === businessservice.name) businessservice.delete();
-                });
-            });
-        }
+        deleteAllBusinessServices();
     });
 
     it("Navigation button validations", function () {

@@ -10,6 +10,7 @@ import {
     getTableColumnData,
     preservecookies,
     hasToBeSkipped,
+    createMultipleJobfunctions,
 } from "../../../../utils/utils";
 const { _ } = Cypress;
 import { navMenu, navTab } from "../../../views/menu.view";
@@ -29,12 +30,7 @@ describe("Job function sorting", { tags: "@tier2" }, function () {
         login();
 
         // Create multiple job functions
-        for (let i = 0; i < 2; i++) {
-            // Create new job function
-            const jobfunction = new Jobfunctions(data.getJobTitle());
-            jobfunction.create();
-            jobfunctionsList.push(jobfunction);
-        }
+        jobfunctionsList = createMultipleJobfunctions(2);
     });
 
     beforeEach("Persist session", function () {
