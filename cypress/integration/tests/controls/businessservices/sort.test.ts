@@ -10,8 +10,8 @@ import {
     getTableColumnData,
     preservecookies,
     hasToBeSkipped,
-    createStakeholder,
-    createBusinessServices,
+    createMultipleStakeholders,
+    createMultipleBusinessServices,
     deleteAllBusinessServices,
     deleteAllStakeholders,
 } from "../../../../utils/utils";
@@ -19,12 +19,10 @@ import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, businessservices, name, owner } from "../../../types/constants";
 
 import { Stakeholders } from "../../../models/stakeholders";
-import * as data from "../../../../utils/data_utils";
 import { BusinessServices } from "../../../models/businessservices";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var businessservicesList: Array<BusinessServices> = [];
-var businessserviceNames: Array<string> = [];
 
 describe("Business services sort validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
@@ -33,10 +31,9 @@ describe("Business services sort validations", { tags: "@tier2" }, function () {
 
         // Perform login
         login();
-
-        // Create multiple bussiness services and stakeholders
-        stakeholdersList = createStakeholder(2);
-        businessservicesList = createBusinessServices(2, stakeholdersList);
+        // Create data
+        stakeholdersList = createMultipleStakeholders(2);
+        businessservicesList = createMultipleBusinessServices(2, stakeholdersList);
     });
 
     beforeEach("Persist session", function () {
@@ -50,6 +47,7 @@ describe("Business services sort validations", { tags: "@tier2" }, function () {
 
     after("Perform test data clean up", function () {
         // Delete the bussiness services and stakeholders created before the tests
+
         deleteAllBusinessServices();
         deleteAllStakeholders();
     });
