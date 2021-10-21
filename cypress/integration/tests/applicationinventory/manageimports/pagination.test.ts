@@ -101,8 +101,9 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier3")) return;
 
-        // Delete all applications
         businessService.delete();
+
+        // Delete all applications
         deleteApplicationTableRows();
     });
 

@@ -30,7 +30,6 @@ import {
     category,
     question,
     answer,
-    applicationinventory,
 } from "../../types/constants";
 import { adoptionCandidateDistributionTable } from "../../views/reports.view";
 import { ApplicationInventory } from "../../models/applicationinventory/applicationinventory";

@@ -59,8 +59,11 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     });
 
     after("Perform test data clean up", function () {
+        if (hasToBeSkipped("@tier2")) return;
+
         // Delete the business services
         deleteAllBusinessServices();
+
         deleteAllTagTypes();
         deleteApplicationTableRows();
     });

@@ -29,6 +29,8 @@ describe("Application import operations", { tags: "@tier1" }, () => {
 
         // Perform login
         login();
+
+        // Delete the existing application rows
         deleteApplicationTableRows();
         // Create business service
         businessService.create();
@@ -48,6 +50,8 @@ describe("Application import operations", { tags: "@tier1" }, () => {
 
         // Delete the business service
         businessService.delete();
+
+        // Delete the existing application rows
         deleteApplicationTableRows();
     });
 

@@ -28,6 +28,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
 
         // Perform login
         login();
+
         // Clear pre-existing data
         deleteAllStakeholders();
         // Create 11 rows
@@ -43,6 +44,9 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
+
         // Delete the stakeholders created before the tests
         deleteAllStakeholders();
     });

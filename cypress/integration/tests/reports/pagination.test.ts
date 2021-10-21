@@ -12,7 +12,7 @@ import {
     deleteApplicationTableRows,
 } from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
-import { reports, applicationinventory } from "../../types/constants";
+import { reports } from "../../types/constants";
 import { ApplicationInventory } from "../../models/applicationinventory/applicationinventory";
 import {
     selectItemsPerPageAdoptionCandidate,
@@ -60,6 +60,7 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier3")) return;
+
         // Delete All
         deleteAllStakeholders();
         deleteApplicationTableRows();

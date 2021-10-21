@@ -42,6 +42,9 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
+
         // Delete the business services created before the tests
         deleteAllBusinessServices();
     });

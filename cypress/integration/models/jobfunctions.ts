@@ -19,7 +19,7 @@ export class Jobfunctions {
         this.name = name;
     }
 
-    protected static clickJobfunctions(): void {
+    public static clickJobfunctions(): void {
         clickByText(navMenu, controls);
         clickByText(navTab, jobfunctions);
     }

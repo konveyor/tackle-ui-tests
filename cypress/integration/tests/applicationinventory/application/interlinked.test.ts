@@ -74,6 +74,9 @@ describe("Application inventory interlinked to tags and business service", () =>
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
+
         deleteAllStakeholders();
         deleteAllStakeholderGroups();
         deleteAllBusinessServices();

@@ -16,7 +16,6 @@ import {
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import { applicationinventory } from "../../../types/constants";
-import * as commonView from "../../../views/common.view";
 
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import { BusinessServices } from "../../../models/businessservices";
@@ -33,6 +32,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
 
         // Perform login
         login();
+
         // Delete all applications
         deleteApplicationTableRows();
 

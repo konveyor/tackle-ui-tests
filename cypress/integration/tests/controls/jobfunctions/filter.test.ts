@@ -30,6 +30,9 @@ describe("Job function filter validations", { tags: "@tier2" }, function () {
     });
 
     after("Perform test data clean up", function () {
+        // Prevent before hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Delete the job functions
         deleteAllJobfunctions();
     });

@@ -18,7 +18,6 @@ import {
 import { navMenu } from "../../views/menu.view";
 import {
     reports,
-    applicationinventory,
     applicationName,
     criticality,
     effort,
@@ -26,7 +25,6 @@ import {
     confidence,
 } from "../../types/constants";
 import { ApplicationInventory } from "../../models/applicationinventory/applicationinventory";
-import * as data from "../../../utils/data_utils";
 import { Stakeholders } from "../../models/stakeholders";
 
 var applicationsList: Array<ApplicationInventory> = [];

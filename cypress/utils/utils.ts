@@ -391,12 +391,14 @@ export function verifyImportErrorMsg(errorMsg: any): void {
     }
 }
 
-export function deleteApplicationTableRows(): void {
-    clickByText(navMenu, applicationinventory);
-    cy.wait(800);
-    // Select 100 items per page
-    selectItemsPerPage(100);
-    cy.wait(2000);
+export function deleteApplicationTableRows(lastPage = false): void {
+    if (!lastPage) {
+        clickByText(navMenu, applicationinventory);
+        cy.wait(800);
+        // Select 100 items per page
+        selectItemsPerPage(100);
+        cy.wait(2000);
+    }
     cy.get(commonView.appTable)
         .next()
         .then(($div) => {

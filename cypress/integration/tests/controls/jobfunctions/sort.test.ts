@@ -42,6 +42,9 @@ describe("Job function sorting", { tags: "@tier2" }, function () {
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Delete the job functions after before the tests
         deleteAllJobfunctions();
     });

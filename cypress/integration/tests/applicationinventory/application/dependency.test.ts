@@ -34,6 +34,8 @@ describe("Manage application dependencies", { tags: "@newtest" }, () => {
     });
 
     after("Perform test data clean up", function () {
+        if (hasToBeSkipped("@newtest")) return;
+
         // Delete the applications
         deleteApplicationTableRows();
     });

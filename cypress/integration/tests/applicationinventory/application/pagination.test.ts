@@ -38,6 +38,9 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
+
         // Delete the Applications created before the tests
         deleteApplicationTableRows();
     });
@@ -142,7 +145,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
         cy.wait(2000);
 
         // Delete all items of last page
-        deleteApplicationTableRows();
+        deleteApplicationTableRows(true);
 
         // Verify that page is re-directed to previous page
         cy.get(".pf-c-table > tbody > tr")

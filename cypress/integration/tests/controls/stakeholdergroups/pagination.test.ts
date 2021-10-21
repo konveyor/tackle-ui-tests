@@ -49,6 +49,9 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
+
         // Delete the stakeholder groups created before the tests
         deleteAllStakeholderGroups();
     });

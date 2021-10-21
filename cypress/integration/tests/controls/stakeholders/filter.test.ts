@@ -12,6 +12,9 @@ import {
     deleteAllStakeholders,
     deleteAllJobfunctions,
     deleteAllStakeholderGroups,
+    createMultipleJobfunctions,
+    createMultipleStakeholderGroups,
+    createMultipleStakeholders,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -48,30 +51,9 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
         login();
 
         // Create multiple job functions, stakeholder groups and stakeholders
-        for (let i = 0; i < 2; i++) {
-            // Create new job function
-            const jobfunction = new Jobfunctions(data.getJobTitle());
-            jobfunction.create();
-            jobfunctionsList.push(jobfunction);
-
-            // Create new stakeholder group
-            const stakeholdergroup = new Stakeholdergroups(
-                data.getCompanyName(),
-                data.getDescription()
-            );
-            stakeholdergroup.create();
-            stakeholdergroupsList.push(stakeholdergroup);
-
-            // Create new stakeholder
-            const stakeholder = new Stakeholders(
-                data.getEmail(),
-                data.getFullName(),
-                jobfunction.name,
-                [stakeholdergroup.name]
-            );
-            stakeholder.create();
-            stakeholdersList.push(stakeholder);
-        }
+        jobfunctionsList = createMultipleJobfunctions(2);
+        stakeholdergroupsList = createMultipleStakeholderGroups(2);
+        stakeholdersList = createMultipleStakeholders(2, jobfunctionsList, stakeholdergroupsList);
     });
 
     beforeEach("Persist session", function () {
@@ -83,6 +65,9 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
     });
 
     after("Perform test data clean up", function () {
+        // Prevent before hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Delete the job functions, stakeholder groups and stakeholders created before the tests
         deleteAllJobfunctions();
         deleteAllStakeholders();

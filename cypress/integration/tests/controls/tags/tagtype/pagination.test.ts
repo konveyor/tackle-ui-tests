@@ -12,7 +12,6 @@ import {
 import { navMenu, navTab } from "../../../../views/menu.view";
 import { controls, tags } from "../../../../types/constants";
 
-import { Tagtype } from "../../../../models/tags";
 import {
     firstPageButton,
     lastPageButton,
@@ -65,6 +64,9 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
+
         // Delete the tags created before the tests
         deleteAllTagTypes();
     });

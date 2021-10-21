@@ -14,7 +14,6 @@ import { verifyApplicationRisk } from "../../models/reports/reports";
 import { ApplicationInventory } from "../../models/applicationinventory/applicationinventory";
 import { navMenu } from "../../views/menu.view";
 import { reports } from "../../types/constants";
-import * as data from "../../../utils/data_utils";
 import { Stakeholders } from "../../models/stakeholders";
 
 var stakeholdersList: Array<Stakeholders> = [];

@@ -7,7 +7,6 @@ import {
     openManageImportsPage,
     applySearchFilter,
     exists,
-    selectItemsPerPage,
     deleteApplicationTableRows,
     preservecookies,
     hasToBeSkipped,
@@ -15,7 +14,6 @@ import {
 import { navMenu } from "../../../views/menu.view";
 import { applicationinventory, button, clearAllFilters } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
-import * as commonView from "../../../views/common.view";
 
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import { BusinessServices } from "../../../models/businessservices";
