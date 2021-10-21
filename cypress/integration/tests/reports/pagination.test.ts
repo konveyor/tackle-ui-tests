@@ -36,9 +36,7 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
         var rowsToCreate = 11;
 
         // Create 11 applications
-        selectItemsPerPage(100);
         deleteApplicationTableRows();
-        cy.wait(1000);
         applicationsList = createMultipleApplications(rowsToCreate);
 
         // Get the last extra application created

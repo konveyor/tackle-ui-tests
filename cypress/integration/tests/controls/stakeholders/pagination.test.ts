@@ -33,7 +33,6 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
         // Perform login
         login();
         //Clear pre-existing data
-        selectItemsPerPage(100);
         deleteAllStakeholders();
         //Create 11 rows
         createMultipleStakeholders(11);

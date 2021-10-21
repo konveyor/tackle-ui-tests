@@ -37,8 +37,6 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
         //Delete pre-existing data
         deleteAllStakeholderGroups();
         // Create 11 rows
-        selectItemsPerPage(100);
-        cy.wait(2000);
         createMultipleStakeholderGroups(11);
     });
 

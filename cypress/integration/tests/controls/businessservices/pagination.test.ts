@@ -34,33 +34,10 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
 
         // Perform login
         login();
-
-        // Navigate to business services tab
-        var rowsToCreate = 0;
-
-        // Get the current table row count and create appropriate test data rows
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(appTable)
-            .next()
-            .then(($div) => {
-                if (!$div.hasClass("pf-c-empty-state")) {
-                    cy.get("td[data-label=Name]").then(($rows) => {
-                        var rowCount = $rows.length;
-                        if (rowCount <= 10) {
-                            rowsToCreate = 11 - rowCount;
-                        }
-                        if (rowsToCreate > 0) {
-                            // Create multiple business services
-                            createMultipleBusinessServices(rowsToCreate);
-                        }
-                    });
-                } else {
-                    rowsToCreate = 11;
-                    // Create multiple business services
-                    createMultipleBusinessServices(rowsToCreate);
-                }
-            });
+        //Clear pre-existing data
+        deleteAllBusinessServices();
+        //Create 11 rows
+        createMultipleBusinessServices(11);
     });
 
     beforeEach("Persist session", function () {
