@@ -13,10 +13,10 @@ import {
     deleteApplicationTableRows,
     deleteAllTagTypes,
     createMultipleStakeholders,
-    createStakeholderGroup,
-    createBusinessServices,
-    createTags,
-    createApplications,
+    createMultipleStakeholderGroups,
+    createMultipleBusinessServices,
+    createMultipleTags,
+    createMultipleApplications,
 } from "../../../../utils/utils";
 import { Tag } from "../../../models/tags";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
@@ -59,10 +59,10 @@ describe("Application inventory interlinked to tags and business service", () =>
 
         //Create data
         stakeholdersList = createMultipleStakeholders(2);
-        stakeholdergroupsList = createStakeholderGroup(2, stakeholdersList);
-        businessservicesList = createBusinessServices(2, stakeholdersList);
-        tagList = createTags(2);
-        applicationList = createApplications(2, businessservicesList, tagList);
+        stakeholdergroupsList = createMultipleStakeholderGroups(2, stakeholdersList);
+        businessservicesList = createMultipleBusinessServices(2, stakeholdersList);
+        tagList = createMultipleTags(2);
+        applicationList = createMultipleApplications(2, businessservicesList, tagList);
     });
 
     beforeEach("Define interceptors", function () {

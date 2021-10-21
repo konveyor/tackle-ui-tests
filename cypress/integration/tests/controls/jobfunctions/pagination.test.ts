@@ -33,33 +33,13 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
 
         // Perform login
         login();
-
-        // Navigate to Job functions tab
-        var rowsToCreate = 0;
-
         // Get the current table row count and create appropriate test data rows
         selectItemsPerPage(100);
         cy.wait(2000);
-        cy.get(appTable)
-            .next()
-            .then(($div) => {
-                if (!$div.hasClass("pf-c-empty-state")) {
-                    cy.get("td[data-label=Name]").then(($rows) => {
-                        var rowCount = $rows.length;
-                        if (rowCount <= 10) {
-                            rowsToCreate = 11 - rowCount;
-                        }
-                        if (rowsToCreate > 0) {
-                            // Create multiple Job functions
-                            createMultipleJobfunctions(rowsToCreate);
-                        }
-                    });
-                } else {
-                    rowsToCreate = 11;
-                    // Create multiple Job functions
-                    createMultipleJobfunctions(rowsToCreate);
-                }
-            });
+        //Delete all pre-existing job functions
+        deleteAllJobfunctions();
+        //Create 11 Job functions
+        createMultipleJobfunctions(11);
     });
 
     beforeEach("Persist session", function () {

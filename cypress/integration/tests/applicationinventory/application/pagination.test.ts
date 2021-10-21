@@ -7,12 +7,11 @@ import {
     preservecookies,
     deleteApplicationTableRows,
     hasToBeSkipped,
+    createMultipleApplications,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import { applicationinventory } from "../../../types/constants";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
-
-import * as data from "../../../../utils/data_utils";
 import * as commonView from "../../../views/common.view";
 
 var applicationsList: Array<ApplicationInventory> = [];
@@ -25,44 +24,9 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
         // Perform login
         login();
 
-        // Navigate to Application inventory tab
-        clickByText(navMenu, applicationinventory);
-        var rowsToCreate = 0;
-
-        function createMultipleApplications(rowsToCreate: number): void {
-            // Create multiple Applications
-            for (let i = 0; i < rowsToCreate; i++) {
-                const application = new ApplicationInventory(data.getFullName());
-                application.create();
-                applicationsList.push(application);
-            }
-        }
-
-        // Get the current table row count and create appropriate test data rows
-        selectItemsPerPage(100);
-        cy.get(commonView.appTable)
-            .next()
-            .then(($div) => {
-                if (!$div.hasClass("pf-c-empty-state")) {
-                    cy.get(".pf-c-table > tbody > tr")
-                        .not(".pf-c-table__expandable-row")
-                        .find("td[data-label=Name]")
-                        .then(($rows) => {
-                            var rowCount = $rows.length;
-                            if (rowCount <= 10) {
-                                rowsToCreate = 11 - rowCount;
-                            }
-                            if (rowsToCreate > 0) {
-                                // Create multiple Applications
-                                createMultipleApplications(rowsToCreate);
-                            }
-                        });
-                } else {
-                    rowsToCreate = 11;
-                    // Create multiple Applications
-                    createMultipleApplications(rowsToCreate);
-                }
-            });
+        // Navigate to Application inventory tab, delete all and create 11 applications
+        deleteApplicationTableRows();
+        applicationsList = createMultipleApplications(11);
     });
 
     beforeEach("Persist session", function () {
@@ -75,22 +39,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
 
     after("Perform test data clean up", function () {
         // Delete the Applications created before the tests
-        if (applicationsList.length > 0) {
-            // Navigate to Application inventory tab
-            clickByText(navMenu, applicationinventory);
-            cy.wait("@getApplications");
-            selectItemsPerPage(100);
-            cy.wait(2000);
-
-            applicationsList.forEach(function (application) {
-                cy.get(".pf-c-table > tbody > tr")
-                    .not(".pf-c-table__expandable-row")
-                    .find("td[data-label=Name]")
-                    .each(($rows) => {
-                        if ($rows.text() === application.name) application.delete();
-                    });
-            });
-        }
+        deleteApplicationTableRows();
     });
 
     it("Navigation button validations", function () {

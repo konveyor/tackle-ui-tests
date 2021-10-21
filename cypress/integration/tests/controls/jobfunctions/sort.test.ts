@@ -11,6 +11,7 @@ import {
     preservecookies,
     hasToBeSkipped,
     createMultipleJobfunctions,
+    deleteAllJobfunctions,
 } from "../../../../utils/utils";
 const { _ } = Cypress;
 import { navMenu, navTab } from "../../../views/menu.view";
@@ -43,9 +44,7 @@ describe("Job function sorting", { tags: "@tier2" }, function () {
 
     after("Perform test data clean up", function () {
         // Delete the job functions after before the tests
-        jobfunctionsList.forEach(function (jobfunction) {
-            jobfunction.delete();
-        });
+        deleteAllJobfunctions();
     });
 
     it("Name sort validations", function () {

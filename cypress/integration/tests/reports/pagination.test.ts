@@ -6,11 +6,14 @@ import {
     selectItemsPerPage,
     preservecookies,
     hasToBeSkipped,
+    createMultipleStakeholders,
+    createMultipleApplications,
+    deleteAllStakeholders,
+    deleteApplicationTableRows,
 } from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
 import { reports, applicationinventory } from "../../types/constants";
 import { ApplicationInventory } from "../../models/applicationinventory/applicationinventory";
-import * as data from "../../../utils/data_utils";
 import {
     selectItemsPerPageAdoptionCandidate,
     selectItemsPerPageIdentifiedRisks,
@@ -29,55 +32,19 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
 
         // Perform login
         login();
+        stakeholdersList = createMultipleStakeholders(1);
+        var rowsToCreate = 11;
 
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-        stakeholder.create();
-        stakeholdersList.push(stakeholder);
-
-        // Navigate to Application inventory tab
-        clickByText(navMenu, applicationinventory);
-        var rowsToCreate = 0;
-
-        function createApplication(rowsToCreate: number): void {
-            // Create multiple Applications
-            for (let i = 0; i < rowsToCreate; i++) {
-                const application = new ApplicationInventory(data.getFullName());
-                application.create();
-                applicationsList.push(application);
-            }
-        }
-
-        // Get the current table row count and create appropriate test data rows
+        // Create 11 applications
         selectItemsPerPage(100);
-        cy.get(commonView.appTable)
-            .next()
-            .then(($div) => {
-                if (!$div.hasClass("pf-c-empty-state")) {
-                    cy.get(".pf-c-table > tbody > tr")
-                        .not(".pf-c-table__expandable-row")
-                        .find("td[data-label=Name]")
-                        .then(($rows) => {
-                            var rowCount = $rows.length;
-                            if (rowCount <= 10) {
-                                rowsToCreate = 10 - rowCount;
-                            }
-                            if (rowsToCreate > 0) {
-                                createApplication(rowsToCreate);
-                            }
-                        });
-                } else {
-                    rowsToCreate = 10;
-                    createApplication(rowsToCreate);
-                }
-            });
-
-        rowsToCreate = 1;
-        createApplication(rowsToCreate);
+        deleteApplicationTableRows();
+        cy.wait(1000);
+        applicationsList = createMultipleApplications(rowsToCreate);
 
         // Get the last extra application created
         var newApplication = applicationsList[applicationsList.length - 1];
         // Perform assessment of application
-        newApplication.perform_assessment("high", [stakeholder.name]);
+        newApplication.perform_assessment("high", [stakeholdersList[0].name]);
         cy.wait(4000);
         newApplication.is_assessed();
         cy.wait(4000);
@@ -95,23 +62,9 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier3")) return;
-
-        // Delete the stakeholder
-        stakeholdersList.forEach(function (stakeholder) {
-            stakeholder.delete();
-        });
-
-        // Delete the Applications created before the tests
-        clickByText(navMenu, applicationinventory);
-        cy.wait(3000);
-        applicationsList.forEach(function (application) {
-            cy.get(".pf-c-table > tbody > tr")
-                .not(".pf-c-table__expandable-row")
-                .find("td[data-label=Name]")
-                .each(($rows) => {
-                    if ($rows.text() === application.name) application.delete();
-                });
-        });
+        // Delete All
+        deleteAllStakeholders();
+        deleteApplicationTableRows();
     });
 
     it("Adoption candidate distribution - Navigation button validations", function () {

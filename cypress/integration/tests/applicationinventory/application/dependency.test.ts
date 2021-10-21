@@ -1,6 +1,13 @@
 /// <reference types="cypress" />
 
-import { click, hasToBeSkipped, login, preservecookies } from "../../../../utils/utils";
+import {
+    click,
+    hasToBeSkipped,
+    login,
+    preservecookies,
+    createMultipleApplications,
+    deleteApplicationTableRows,
+} from "../../../../utils/utils";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import * as data from "../../../../utils/data_utils";
 import {
@@ -24,24 +31,12 @@ describe("Manage application dependencies", { tags: "@newtest" }, () => {
         preservecookies();
 
         // Create new applications
-        for (let i = 0; i < 3; i++) {
-            const application = new ApplicationInventory(
-                data.getAppName(),
-                data.getDescription(),
-                data.getDescription()
-            );
-            application.create();
-            applicationsList.push(application);
-        }
+        applicationsList = createMultipleApplications(3);
     });
 
     after("Perform test data clean up", function () {
         // Delete the applications
-        if (applicationsList.length > 0) {
-            applicationsList.forEach(function (application) {
-                application.delete();
-            });
-        }
+        deleteApplicationTableRows();
     });
 
     it("Non-cyclic dependencies", function () {

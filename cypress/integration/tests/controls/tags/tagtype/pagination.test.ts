@@ -6,6 +6,8 @@ import {
     selectItemsPerPage,
     preservecookies,
     hasToBeSkipped,
+    createMultipleTags,
+    deleteAllTagTypes,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import { controls, tags } from "../../../../types/constants";
@@ -31,21 +33,6 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
 
         // Perform login
         login();
-
-        // Navigate to Tags tab
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
-        function createMultipleTagtypes(num): void {
-            for (let i = 0; i < num; i++) {
-                const tagtype = new Tagtype(
-                    data.getRandomWords(2),
-                    data.getColor(),
-                    data.getRandomNumber(11, 22)
-                );
-                tagtype.create();
-                tagtypeList.push(tagtype);
-            }
-        }
         var rowsToCreate = 0;
 
         // Get the current table row count for tag types and create appropriate test data rows
@@ -62,13 +49,13 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
                         }
                         if (rowsToCreate > 0) {
                             // Create multiple tag types
-                            createMultipleTagtypes(rowsToCreate);
+                            createMultipleTags(rowsToCreate);
                         }
                     });
                 } else {
                     rowsToCreate = 11;
                     // Create multiple tag types
-                    createMultipleTagtypes(rowsToCreate);
+                    createMultipleTags(rowsToCreate);
                 }
             });
     });
@@ -83,20 +70,7 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
 
     after("Perform test data clean up", function () {
         // Delete the tags created before the tests
-        if (tagtypeList.length > 0) {
-            // Navigate to Tags tab
-            clickByText(navMenu, controls);
-            clickByText(navTab, tags);
-            cy.wait("@getTagtypes");
-            selectItemsPerPage(100);
-            cy.wait(2000);
-
-            tagtypeList.forEach(function (tagtype) {
-                cy.get("td[data-label='Tag type']").each(($rows) => {
-                    if ($rows.text() === tagtype.name) tagtype.delete();
-                });
-            });
-        }
+        deleteAllTagTypes();
     });
 
     it("Navigation button validations", function () {

@@ -1,6 +1,11 @@
 /// <reference types="cypress" />
 
-import { hasToBeSkipped, login, preservecookies } from "../../../../utils/utils";
+import {
+    hasToBeSkipped,
+    login,
+    preservecookies,
+    deleteAllStakeholders,
+} from "../../../../utils/utils";
 
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 
@@ -37,9 +42,7 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
 
     after("Perform test data clean up", function () {
         // Delete the stakeholders created before the tests
-        stakeholdersList.forEach(function (stakeholder) {
-            stakeholder.delete();
-        });
+        deleteAllStakeholders();
     });
 
     it("Application assessment and review with low risk", function () {

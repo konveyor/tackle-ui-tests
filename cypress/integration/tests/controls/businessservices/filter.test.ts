@@ -9,7 +9,7 @@ import {
     preservecookies,
     hasToBeSkipped,
     createMultipleStakeholders,
-    createBusinessServices,
+    createMultipleBusinessServices,
     deleteAllBusinessServices,
     deleteAllStakeholders,
 } from "../../../../utils/utils";
@@ -44,7 +44,7 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
         stakeholdersList = createMultipleStakeholders(3);
 
         // Create multiple business services
-        businessservicesList = createBusinessServices(2, stakeholdersList);
+        businessservicesList = createMultipleBusinessServices(2, stakeholdersList);
     });
 
     after("Perform test data clean up", function () {

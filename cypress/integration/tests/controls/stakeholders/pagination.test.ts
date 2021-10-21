@@ -7,13 +7,13 @@ import {
     deleteTableRows,
     preservecookies,
     hasToBeSkipped,
+    createMultipleStakeholders,
+    deleteAllStakeholders,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, stakeholders } from "../../../types/constants";
 
 import { Stakeholders } from "../../../models/stakeholders";
-
-import * as data from "../../../../utils/data_utils";
 import {
     firstPageButton,
     lastPageButton,
@@ -32,42 +32,11 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
 
         // Perform login
         login();
-
-        // Navigate to stakeholder tab
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholders);
-        function createMultipleStakeholders(num): void {
-            for (let i = 0; i < num; i++) {
-                const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-                stakeholder.create();
-                stakeholdersList.push(stakeholder);
-            }
-        }
-        var rowsToCreate = 0;
-
-        // Get the current table row count and create appropriate test data rows
+        //Clear pre-existing data
         selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(appTable)
-            .next()
-            .then(($div) => {
-                if (!$div.hasClass("pf-c-empty-state")) {
-                    cy.get("td[data-label=Email]").then(($rows) => {
-                        var rowCount = $rows.length;
-                        if (rowCount <= 10) {
-                            rowsToCreate = 11 - rowCount;
-                        }
-                        if (rowsToCreate > 0) {
-                            // Create multiple stakeholders
-                            createMultipleStakeholders(rowsToCreate);
-                        }
-                    });
-                } else {
-                    rowsToCreate = 11;
-                    // Create multiple stakeholders
-                    createMultipleStakeholders(rowsToCreate);
-                }
-            });
+        deleteAllStakeholders();
+        //Create 11 rows
+        createMultipleStakeholders(11);
     });
 
     beforeEach("Persist session", function () {
@@ -80,20 +49,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
 
     after("Perform test data clean up", function () {
         // Delete the stakeholders created before the tests
-        if (stakeholdersList.length > 0) {
-            // Navigate to stakeholder tab
-            clickByText(navMenu, controls);
-            clickByText(navTab, stakeholders);
-            cy.wait("@getStakeholders");
-            selectItemsPerPage(100);
-            cy.wait(2000);
-
-            stakeholdersList.forEach(function (stakeholder) {
-                cy.get("td[data-label=Email]").each(($rows) => {
-                    if ($rows.text() === stakeholder.email) stakeholder.delete();
-                });
-            });
-        }
+        deleteAllStakeholders();
     });
 
     it("Navigation button validations", function () {

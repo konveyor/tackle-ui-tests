@@ -11,6 +11,8 @@ import {
     hasToBeSkipped,
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
+    deleteAllStakeholders,
+    deleteAllStakeholderGroups,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -58,13 +60,8 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
 
     after("Perform test data clean up", function () {
         // Delete the stakeholder groups and stakeholders created before the tests
-        stakeholdergroupsList.forEach(function (stakeholdergroup) {
-            stakeholdergroup.delete();
-        });
-
-        stakeholdersList.forEach(function (stakeholder) {
-            stakeholder.delete();
-        });
+        deleteAllStakeholders();
+        deleteAllStakeholderGroups();
     });
 
     it("Name filter validations", function () {

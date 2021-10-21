@@ -7,6 +7,12 @@ import {
     preservecookies,
     applySearchFilter,
     hasToBeSkipped,
+    createMultipleBusinessServices,
+    createMultipleTags,
+    createMultipleApplications,
+    deleteAllBusinessServices,
+    deleteAllTagTypes,
+    deleteApplicationTableRows,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import {
@@ -38,35 +44,9 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         // Perform login
         login();
 
-        for (let i = 0; i < 3; i++) {
-            // Create new business service
-            const businessService = new BusinessServices(data.getCompanyName());
-            businessService.create();
-
-            businessserviceList.push(businessService);
-        }
-
-        for (let i = 0; i < 3; i++) {
-            // Create new tag
-            const newTag = new Tag(data.getRandomWord(6), data.getExistingTagtype());
-            newTag.create();
-
-            tagList.push(newTag);
-        }
-
-        for (let i = 0; i < 2; i++) {
-            // Create new applications
-            const application = new ApplicationInventory(
-                data.getAppName(),
-                data.getDescription(),
-                data.getDescription(), // refering description value as comment
-                businessserviceList[i].name,
-                [tagList[i].name]
-            );
-            application.create();
-
-            applicationsList.push(application);
-        }
+        businessserviceList = createMultipleBusinessServices(3);
+        tagList = createMultipleTags(3);
+        applicationsList = createMultipleApplications(2, businessserviceList, tagList);
     });
 
     beforeEach("Persist session", function () {
@@ -80,19 +60,9 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
 
     after("Perform test data clean up", function () {
         // Delete the business services
-        businessserviceList.forEach(function (businessService) {
-            businessService.delete();
-        });
-
-        // Delete the applications
-        tagList.forEach(function (tag) {
-            tag.delete();
-        });
-
-        // Delete the applications
-        applicationsList.forEach(function (application) {
-            application.delete();
-        });
+        deleteAllBusinessServices();
+        deleteAllTagTypes();
+        deleteApplicationTableRows();
     });
 
     it("Name filter validations", function () {

@@ -9,6 +9,9 @@ import {
     applySearchFilter,
     selectItemsPerPage,
     hasToBeSkipped,
+    deleteAllStakeholders,
+    deleteAllJobfunctions,
+    deleteAllStakeholderGroups,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -81,17 +84,9 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
     after("Perform test data clean up", function () {
         // Delete the job functions, stakeholder groups and stakeholders created before the tests
-        jobfunctionsList.forEach(function (jobfunction) {
-            jobfunction.delete();
-        });
-
-        stakeholdergroupsList.forEach(function (stakeholdergroup) {
-            stakeholdergroup.delete();
-        });
-
-        stakeholdersList.forEach(function (stakeholder) {
-            stakeholder.delete();
-        });
+        deleteAllJobfunctions();
+        deleteAllStakeholders();
+        deleteAllStakeholderGroups();
     });
 
     it("Email filter validations", function () {

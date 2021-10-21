@@ -7,7 +7,7 @@ import {
     deleteTableRows,
     preservecookies,
     hasToBeSkipped,
-    createBusinessServices,
+    createMultipleBusinessServices,
     deleteAllBusinessServices,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
@@ -52,13 +52,13 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
                         }
                         if (rowsToCreate > 0) {
                             // Create multiple business services
-                            createBusinessServices(rowsToCreate);
+                            createMultipleBusinessServices(rowsToCreate);
                         }
                     });
                 } else {
                     rowsToCreate = 11;
                     // Create multiple business services
-                    createBusinessServices(rowsToCreate);
+                    createMultipleBusinessServices(rowsToCreate);
                 }
             });
     });

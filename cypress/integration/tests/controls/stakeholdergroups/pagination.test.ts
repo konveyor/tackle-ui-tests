@@ -34,33 +34,12 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
 
         // Perform login
         login();
-
-        // Navigate to stakeholder groups tab
-        var rowsToCreate = 0;
-
-        // Get the current table row count and create appropriate test data rows
+        //Delete pre-existing data
+        deleteAllStakeholderGroups();
+        // Create 11 rows
         selectItemsPerPage(100);
         cy.wait(2000);
-        cy.get(appTable)
-            .next()
-            .then(($div) => {
-                if (!$div.hasClass("pf-c-empty-state")) {
-                    cy.get("td[data-label=Name]").then(($rows) => {
-                        var rowCount = $rows.length;
-                        if (rowCount <= 10) {
-                            rowsToCreate = 11 - rowCount;
-                        }
-                        if (rowsToCreate > 0) {
-                            // Create multiple stakeholder groups
-                            createMultipleStakeholderGroups(rowsToCreate);
-                        }
-                    });
-                } else {
-                    rowsToCreate = 11;
-                    // Create multiple stakeholder groups
-                    createMultipleStakeholderGroups(rowsToCreate);
-                }
-            });
+        createMultipleStakeholderGroups(11);
     });
 
     beforeEach("Persist session", function () {

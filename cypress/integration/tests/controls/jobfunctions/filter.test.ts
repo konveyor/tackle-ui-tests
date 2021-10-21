@@ -7,6 +7,7 @@ import {
     applySearchFilter,
     hasToBeSkipped,
     createMultipleJobfunctions,
+    deleteAllJobfunctions,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, jobfunctions, button, name, clearAllFilters } from "../../../types/constants";
@@ -30,9 +31,7 @@ describe("Job function filter validations", { tags: "@tier2" }, function () {
 
     after("Perform test data clean up", function () {
         // Delete the job functions
-        jobfunctionsList.forEach(function (jobfunction) {
-            jobfunction.delete();
-        });
+        deleteAllJobfunctions();
     });
 
     it("Name filter validations", function () {

@@ -394,25 +394,33 @@ export function verifyImportErrorMsg(errorMsg: any): void {
 export function deleteApplicationTableRows(): void {
     clickByText(navMenu, applicationinventory);
     cy.wait(800);
+    // Select 100 items per page
+    selectItemsPerPage(100);
+    cy.wait(2000);
     cy.get(commonView.appTable)
-        .get("tbody")
-        .find(trTag)
-        .not(".pf-c-table__expandable-row")
-        .each(($tableRow) => {
-            var name = $tableRow.find("td[data-label=Name]").text();
-            cy.get(tdTag)
-                .contains(name)
-                .parent(tdTag)
-                .parent(trTag)
-                .within(() => {
-                    click(actionButton);
-                    cy.wait(800);
-                })
-                .contains(button, deleteAction)
-                .click();
-            cy.wait(800);
-            click(commonView.confirmButton);
-            cy.wait(4000);
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        var name = $tableRow.find("td[data-label=Name]").text();
+                        cy.get(tdTag)
+                            .contains(name)
+                            .parent(tdTag)
+                            .parent(trTag)
+                            .within(() => {
+                                click(actionButton);
+                                cy.wait(800);
+                            })
+                            .contains(button, deleteAction)
+                            .click();
+                        cy.wait(800);
+                        click(commonView.confirmButton);
+                        cy.wait(4000);
+                    });
+            }
         });
 }
 
@@ -443,11 +451,24 @@ export function performRowAction(
     }
 }
 
-export function createMultipleStakeholders(numberofstakeholder: number): Array<Stakeholders> {
+export function createMultipleStakeholders(
+    numberofstakeholder: number,
+    jobfunctionList?: Array<Jobfunctions>,
+    stakeholdergroupsList?: Array<Stakeholdergroups>
+): Array<Stakeholders> {
     var stakeholdersList: Array<Stakeholders> = [];
     for (let i = 0; i < numberofstakeholder; i++) {
+        var jobfunction: string;
+        var stakeholderGroupNames: Array<string> = [];
+        if (jobfunctionList) jobfunction = jobfunctionList[i].name;
+        if (stakeholdergroupsList) stakeholderGroupNames.push(stakeholdergroupsList[i].name);
         // Create new stakeholder
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
+        const stakeholder = new Stakeholders(
+            data.getEmail(),
+            data.getFullName(),
+            jobfunction,
+            stakeholderGroupNames
+        );
         stakeholder.create();
         stakeholdersList.push(stakeholder);
     }
@@ -483,7 +504,7 @@ export function createMultipleStakeholderGroups(
     return stakeholdergroupsList;
 }
 
-export function createBusinessServices(
+export function createMultipleBusinessServices(
     numberofbusinessservice: number,
     stakeholdersList?: Array<Stakeholders>
 ): Array<BusinessServices> {
@@ -503,7 +524,7 @@ export function createBusinessServices(
     return businessservicesList;
 }
 
-export function createTags(numberoftags: number): Array<Tag> {
+export function createMultipleTags(numberoftags: number): Array<Tag> {
     var tagList: Array<Tag> = [];
     for (let i = 0; i < numberoftags; i++) {
         //Create Tag type
@@ -518,26 +539,23 @@ export function createTags(numberoftags: number): Array<Tag> {
     return tagList;
 }
 
-export function createApplications(
+export function createMultipleApplications(
     numberofapplications: number,
-    businessservice?: BusinessServices,
+    businessservice?: Array<BusinessServices>,
     tagList?: Array<Tag>
 ): Array<ApplicationInventory> {
     var applicationList: Array<ApplicationInventory> = [];
     var tags: string[];
-    if (businessservice) var business = businessservice;
-    if (tagList) {
-        for (let j = 0; j < tagList.length; j++) {
-            tags.push(tagList[j].name);
-        }
-    }
+    var business: string;
     for (let i = 0; i < numberofapplications; i++) {
+        if (businessservice) business = businessservice[i].name;
+        if (tagList) tags = [tagList[i].name];
         // Navigate to application inventory tab and create new application
         const application = new ApplicationInventory(
             data.getAppName(),
             data.getDescription(),
             data.getDescription(),
-            business.name,
+            business,
             tags
         );
         application.create();
