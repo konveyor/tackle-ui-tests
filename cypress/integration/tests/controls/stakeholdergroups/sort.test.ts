@@ -10,8 +10,11 @@ import {
     getTableColumnData,
     preservecookies,
     hasToBeSkipped,
+    createMultipleStakeholders,
+    createMultipleStakeholderGroups,
+    deleteAllStakeholders,
+    deleteAllStakeholderGroups,
 } from "../../../../utils/utils";
-import * as data from "../../../../utils/data_utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, stakeholdergroups, name, memberCount } from "../../../types/constants";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
@@ -19,7 +22,6 @@ import { Stakeholders } from "../../../models/stakeholders";
 
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var stakeholdersList: Array<Stakeholders> = [];
-var stakeholderNames: Array<string> = [];
 
 describe("Stakeholder groups sort validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
@@ -30,22 +32,8 @@ describe("Stakeholder groups sort validations", { tags: "@tier2" }, function () 
         login();
 
         // Create multiple stakeholder groups and stakeholders
-        for (let i = 0; i < 3; i++) {
-            // Create new stakeholder
-            const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-            stakeholder.create();
-            stakeholdersList.push(stakeholder);
-            stakeholderNames.push(stakeholder.name);
-
-            // Create new stakeholder group
-            const stakeholdergroup = new Stakeholdergroups(
-                data.getCompanyName(),
-                data.getDescription(),
-                stakeholderNames
-            );
-            stakeholdergroup.create();
-            stakeholdergroupsList.push(stakeholdergroup);
-        }
+        stakeholdersList = createMultipleStakeholders(3);
+        stakeholdergroupsList = createMultipleStakeholderGroups(3, stakeholdersList);
     });
 
     beforeEach("Persist session", function () {
@@ -57,14 +45,12 @@ describe("Stakeholder groups sort validations", { tags: "@tier2" }, function () 
     });
 
     after("Perform test data clean up", function () {
-        // Delete the stakeholder groups and stakeholders created before the tests
-        stakeholdergroupsList.forEach(function (stakeholdergroup) {
-            stakeholdergroup.delete();
-        });
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
 
-        stakeholdersList.forEach(function (stakeholder) {
-            stakeholder.delete();
-        });
+        // Delete the stakeholder groups and stakeholders created before the tests
+        deleteAllStakeholders();
+        deleteAllStakeholderGroups();
     });
 
     it("Name sort validations", function () {

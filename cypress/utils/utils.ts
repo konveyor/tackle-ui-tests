@@ -3,6 +3,7 @@ import { Stakeholders } from "../integration/models/stakeholders";
 import { Stakeholdergroups } from "../integration/models/stakeholdergroups";
 import { ApplicationInventory } from "../integration/models/applicationinventory/applicationinventory";
 import { Tag, Tagtype, clickTags } from "../integration/models/tags";
+import { Jobfunctions } from "../integration/models/jobfunctions";
 
 import * as loginView from "../integration/views/login.view";
 import * as commonView from "../integration/views/common.view";
@@ -390,28 +391,38 @@ export function verifyImportErrorMsg(errorMsg: any): void {
     }
 }
 
-export function deleteApplicationTableRows(): void {
-    clickByText(navMenu, applicationinventory);
-    cy.wait(800);
+export function deleteApplicationTableRows(lastPage = false): void {
+    if (!lastPage) {
+        clickByText(navMenu, applicationinventory);
+        cy.wait(800);
+        // Select 100 items per page
+        selectItemsPerPage(100);
+        cy.wait(2000);
+    }
     cy.get(commonView.appTable)
-        .get("tbody")
-        .find(trTag)
-        .not(".pf-c-table__expandable-row")
-        .each(($tableRow) => {
-            var name = $tableRow.find("td[data-label=Name]").text();
-            cy.get(tdTag)
-                .contains(name)
-                .parent(tdTag)
-                .parent(trTag)
-                .within(() => {
-                    click(actionButton);
-                    cy.wait(800);
-                })
-                .contains(button, deleteAction)
-                .click();
-            cy.wait(800);
-            click(commonView.confirmButton);
-            cy.wait(4000);
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        var name = $tableRow.find("td[data-label=Name]").text();
+                        cy.get(tdTag)
+                            .contains(name)
+                            .parent(tdTag)
+                            .parent(trTag)
+                            .within(() => {
+                                click(actionButton);
+                                cy.wait(800);
+                            })
+                            .contains(button, deleteAction)
+                            .click();
+                        cy.wait(800);
+                        click(commonView.confirmButton);
+                        cy.wait(4000);
+                    });
+            }
         });
 }
 
@@ -442,28 +453,52 @@ export function performRowAction(
     }
 }
 
-export function createStakeholder(numberofstakeholder: number): Array<Stakeholders> {
+export function createMultipleStakeholders(
+    numberofstakeholder: number,
+    jobfunctionList?: Array<Jobfunctions>,
+    stakeholdergroupsList?: Array<Stakeholdergroups>
+): Array<Stakeholders> {
     var stakeholdersList: Array<Stakeholders> = [];
     for (let i = 0; i < numberofstakeholder; i++) {
+        var jobfunction: string;
+        var stakeholderGroupNames: Array<string> = [];
+        if (jobfunctionList) jobfunction = jobfunctionList[i].name;
+        if (stakeholdergroupsList) stakeholderGroupNames.push(stakeholdergroupsList[i].name);
         // Create new stakeholder
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
+        const stakeholder = new Stakeholders(
+            data.getEmail(),
+            data.getFullName(),
+            jobfunction,
+            stakeholderGroupNames
+        );
         stakeholder.create();
         stakeholdersList.push(stakeholder);
     }
     return stakeholdersList;
 }
+export function createMultipleJobfunctions(num): Array<Jobfunctions> {
+    var jobfunctionsList: Array<Jobfunctions> = [];
+    for (let i = 0; i < num; i++) {
+        const jobfunction = new Jobfunctions(data.getFullName());
+        jobfunction.create();
+        jobfunctionsList.push(jobfunction);
+    }
+    return jobfunctionsList;
+}
 
-export function createStakeholderGroup(
+export function createMultipleStakeholderGroups(
     numberofstakeholdergroup: number,
-    stakeholdersList: Array<Stakeholders>
+    stakeholdersList?: Array<Stakeholders>
 ): Array<Stakeholdergroups> {
     var stakeholdergroupsList: Array<Stakeholdergroups> = [];
     for (let i = 0; i < numberofstakeholdergroup; i++) {
+        var stakeholders: Array<string> = [];
+        if (stakeholdersList) stakeholders.push(stakeholdersList[i].name);
         // Create new stakeholder group
         const stakeholdergroup = new Stakeholdergroups(
             data.getCompanyName(),
             data.getDescription(),
-            [stakeholdersList[i].name]
+            stakeholders
         );
         stakeholdergroup.create();
         stakeholdergroupsList.push(stakeholdergroup);
@@ -471,17 +506,19 @@ export function createStakeholderGroup(
     return stakeholdergroupsList;
 }
 
-export function createBusinessServices(
+export function createMultipleBusinessServices(
     numberofbusinessservice: number,
-    stakeholdersList: Array<Stakeholders>
+    stakeholdersList?: Array<Stakeholders>
 ): Array<BusinessServices> {
     var businessservicesList: Array<BusinessServices> = [];
     for (let i = 0; i < numberofbusinessservice; i++) {
+        var stakeholders: string;
+        if (stakeholdersList) stakeholders = stakeholdersList[i].name;
         // Create new business service
         const businessservice = new BusinessServices(
             data.getCompanyName(),
             data.getDescription(),
-            stakeholdersList[i].name
+            stakeholders
         );
         businessservice.create();
         businessservicesList.push(businessservice);
@@ -489,7 +526,7 @@ export function createBusinessServices(
     return businessservicesList;
 }
 
-export function createTags(numberoftags: number): Array<Tag> {
+export function createMultipleTags(numberoftags: number): Array<Tag> {
     var tagList: Array<Tag> = [];
     for (let i = 0; i < numberoftags; i++) {
         //Create Tag type
@@ -504,26 +541,58 @@ export function createTags(numberoftags: number): Array<Tag> {
     return tagList;
 }
 
-export function createApplications(
+export function createMultipleApplications(
     numberofapplications: number,
-    businessservicesList: Array<BusinessServices>,
-    tagList: Array<Tag>
+    businessservice?: Array<BusinessServices>,
+    tagList?: Array<Tag>
 ): Array<ApplicationInventory> {
     var applicationList: Array<ApplicationInventory> = [];
+    var tags: string[];
+    var business: string;
     for (let i = 0; i < numberofapplications; i++) {
+        if (businessservice) business = businessservice[i].name;
+        if (tagList) tags = [tagList[i].name];
         // Navigate to application inventory tab and create new application
         const application = new ApplicationInventory(
             data.getAppName(),
             data.getDescription(),
             data.getDescription(),
-            businessservicesList[i].name,
-            [tagList[i].name]
+            business,
+            tags
         );
         application.create();
         applicationList.push(application);
         cy.wait(2000);
     }
     return applicationList;
+}
+
+export function deleteAllJobfunctions(cancel = false): void {
+    Jobfunctions.clickJobfunctions();
+    selectItemsPerPage(100);
+    cy.wait(2000);
+    cy.get(commonView.appTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        var name = $tableRow.find("td[data-label=Name]").text();
+                        cy.get(tdTag)
+                            .contains(name)
+                            .parent(tdTag)
+                            .siblings(tdTag)
+                            .within(() => {
+                                click(commonView.deleteButton);
+                                cy.wait(800);
+                            });
+                        click(commonView.confirmButton);
+                        cy.wait(4000);
+                    });
+            }
+        });
 }
 
 export function deleteAllStakeholders(cancel = false): void {

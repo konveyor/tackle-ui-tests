@@ -6,23 +6,18 @@ import {
     selectItemsPerPage,
     preservecookies,
     hasToBeSkipped,
+    createMultipleJobfunctions,
+    deleteAllJobfunctions,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, jobfunctions } from "../../../types/constants";
-
-import { Jobfunctions } from "../../../models/jobfunctions";
-
-import * as data from "../../../../utils/data_utils";
 import {
     firstPageButton,
     lastPageButton,
     nextPageButton,
     pageNumInput,
     prevPageButton,
-    appTable,
 } from "../../../views/common.view";
-
-var jobfunctionsList: Array<Jobfunctions> = [];
 
 describe("Job functions pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
@@ -31,42 +26,13 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
 
         // Perform login
         login();
-
-        // Navigate to Job functions tab
-        clickByText(navMenu, controls);
-        clickByText(navTab, jobfunctions);
-        function createMultipleJobfunctions(num): void {
-            for (let i = 0; i < num; i++) {
-                const jobfunction = new Jobfunctions(data.getFullName());
-                jobfunction.create();
-                jobfunctionsList.push(jobfunction);
-            }
-        }
-        var rowsToCreate = 0;
-
         // Get the current table row count and create appropriate test data rows
         selectItemsPerPage(100);
         cy.wait(2000);
-        cy.get(appTable)
-            .next()
-            .then(($div) => {
-                if (!$div.hasClass("pf-c-empty-state")) {
-                    cy.get("td[data-label=Name]").then(($rows) => {
-                        var rowCount = $rows.length;
-                        if (rowCount <= 10) {
-                            rowsToCreate = 11 - rowCount;
-                        }
-                        if (rowsToCreate > 0) {
-                            // Create multiple Job functions
-                            createMultipleJobfunctions(rowsToCreate);
-                        }
-                    });
-                } else {
-                    rowsToCreate = 11;
-                    // Create multiple Job functions
-                    createMultipleJobfunctions(rowsToCreate);
-                }
-            });
+        // Delete all pre-existing job functions
+        deleteAllJobfunctions();
+        // Create 11 Job functions
+        createMultipleJobfunctions(11);
     });
 
     beforeEach("Persist session", function () {
@@ -78,21 +44,11 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
     });
 
     after("Perform test data clean up", function () {
-        // Delete the Job functions created before the tests
-        if (jobfunctionsList.length > 0) {
-            // Navigate to Job functions tab
-            clickByText(navMenu, controls);
-            clickByText(navTab, jobfunctions);
-            cy.wait("@getJobfunctions");
-            selectItemsPerPage(100);
-            cy.wait(2000);
+        // Prevent before hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
 
-            jobfunctionsList.forEach(function (jobfunction) {
-                cy.get("td[data-label=Name]").each(($rows) => {
-                    if ($rows.text() === jobfunction.name) jobfunction.delete();
-                });
-            });
-        }
+        // Delete the Job functions created before the tests
+        deleteAllJobfunctions();
     });
 
     it("Navigation button validations", function () {

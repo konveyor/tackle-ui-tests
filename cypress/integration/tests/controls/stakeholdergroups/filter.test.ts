@@ -9,6 +9,10 @@ import {
     selectItemsPerPage,
     preservecookies,
     hasToBeSkipped,
+    createMultipleStakeholders,
+    createMultipleStakeholderGroups,
+    deleteAllStakeholders,
+    deleteAllStakeholderGroups,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -42,21 +46,8 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
         login();
 
         // Create multiple stakeholder groups and stakeholders
-        for (let i = 0; i < 2; i++) {
-            // Create new stakeholder
-            const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-            stakeholder.create();
-            stakeholdersList.push(stakeholder);
-
-            // Create new stakeholder group
-            const stakeholdergroup = new Stakeholdergroups(
-                data.getCompanyName(),
-                data.getDescription(),
-                [stakeholder.name]
-            );
-            stakeholdergroup.create();
-            stakeholdergroupsList.push(stakeholdergroup);
-        }
+        stakeholdersList = createMultipleStakeholders(2);
+        stakeholdergroupsList = createMultipleStakeholderGroups(2, stakeholdersList);
     });
 
     beforeEach("Persist session", function () {
@@ -68,14 +59,12 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
     });
 
     after("Perform test data clean up", function () {
-        // Delete the stakeholder groups and stakeholders created before the tests
-        stakeholdergroupsList.forEach(function (stakeholdergroup) {
-            stakeholdergroup.delete();
-        });
+        // Prevent before hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
 
-        stakeholdersList.forEach(function (stakeholder) {
-            stakeholder.delete();
-        });
+        // Delete the stakeholder groups and stakeholders created before the tests
+        deleteAllStakeholders();
+        deleteAllStakeholderGroups();
     });
 
     it("Name filter validations", function () {

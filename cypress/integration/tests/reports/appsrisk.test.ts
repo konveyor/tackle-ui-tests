@@ -5,13 +5,15 @@ import {
     login,
     preservecookies,
     clickByText,
-    createStakeholder,
+    createMultipleStakeholders,
+    createMultipleApplications,
+    deleteAllStakeholders,
+    deleteApplicationTableRows,
 } from "../../../utils/utils";
 import { verifyApplicationRisk } from "../../models/reports/reports";
 import { ApplicationInventory } from "../../models/applicationinventory/applicationinventory";
 import { navMenu } from "../../views/menu.view";
 import { reports } from "../../types/constants";
-import * as data from "../../../utils/data_utils";
 import { Stakeholders } from "../../models/stakeholders";
 
 var stakeholdersList: Array<Stakeholders> = [];
@@ -30,28 +32,18 @@ describe("Application risks tests", { tags: "@newtest" }, () => {
         // Save the session and token cookie for maintaining one login session
         preservecookies();
 
-        stakeholdersList = createStakeholder(1);
-
-        for (let i = 0; i < 3; i++) {
-            // Navigate to application inventory tab and create new application
-            const application = new ApplicationInventory(
-                data.getAppName(),
-                data.getDescription(),
-                data.getDescription()
-            );
-            application.create();
-            cy.wait(2000);
-            applicationsList.push(application);
-
+        stakeholdersList = createMultipleStakeholders(1);
+        applicationsList = createMultipleApplications(3);
+        for (let i = 0; i < applicationsList.length; i++) {
             // Perform assessment of application
-            application.perform_assessment(risktype[i], [stakeholdersList[0].name]);
+            applicationsList[i].perform_assessment(risktype[i], [stakeholdersList[0].name]);
             cy.wait(2000);
-            application.is_assessed();
+            applicationsList[i].is_assessed();
 
             // Perform application review
-            application.perform_review(risktype[i]);
+            applicationsList[i].perform_review(risktype[i]);
             cy.wait(2000);
-            application.is_reviewed();
+            applicationsList[i].is_reviewed();
         }
     });
 
@@ -60,17 +52,8 @@ describe("Application risks tests", { tags: "@newtest" }, () => {
         if (hasToBeSkipped("@newtest")) return;
 
         // Delete the stakeholders created before the tests
-        if (stakeholdersList.length > 0) {
-            stakeholdersList.forEach(function (stakeholder) {
-                stakeholder.delete();
-            });
-        }
-
-        if (applicationsList.length > 0) {
-            applicationsList.forEach(function (application) {
-                application.delete();
-            });
-        }
+        deleteAllStakeholders();
+        deleteApplicationTableRows();
     });
 
     it("Application risk validation", function () {

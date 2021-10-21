@@ -10,11 +10,14 @@ import {
     sortAsc,
     preservecookies,
     hasToBeSkipped,
+    createMultipleApplications,
+    createMultipleStakeholders,
+    deleteAllStakeholders,
+    deleteApplicationTableRows,
 } from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
 import {
     reports,
-    applicationinventory,
     applicationName,
     criticality,
     effort,
@@ -22,7 +25,6 @@ import {
     confidence,
 } from "../../types/constants";
 import { ApplicationInventory } from "../../models/applicationinventory/applicationinventory";
-import * as data from "../../../utils/data_utils";
 import { Stakeholders } from "../../models/stakeholders";
 
 var applicationsList: Array<ApplicationInventory> = [];
@@ -36,25 +38,20 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
         // Perform login
         login();
 
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-        stakeholder.create();
-        stakeholdersList.push(stakeholder);
+        stakeholdersList = createMultipleStakeholders(1);
+        applicationsList = createMultipleApplications(2);
 
         var risks = ["low", "medium", "high"];
-        for (let i = 0; i < 2; i++) {
-            const newApplication = new ApplicationInventory(data.getFullName());
-            newApplication.create();
-            applicationsList.push(newApplication);
-
+        for (let i = 0; i < applicationsList.length; i++) {
             // Perform assessment of application
-            newApplication.perform_assessment(risks[i], [stakeholder.name]);
+            applicationsList[i].perform_assessment(risks[i], [stakeholdersList[0].name]);
             cy.wait(4000);
-            newApplication.is_assessed();
+            applicationsList[i].is_assessed();
             cy.wait(4000);
             // Perform application review
-            newApplication.perform_review(risks[i]);
+            applicationsList[i].perform_review(risks[i]);
             cy.wait(4000);
-            newApplication.is_reviewed();
+            applicationsList[i].is_reviewed();
         }
     });
 
@@ -67,22 +64,9 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;
 
-        // Delete the stakeholder
-        stakeholdersList.forEach(function (stakeholder) {
-            stakeholder.delete();
-        });
-
-        // Delete the Applications created before the tests
-        clickByText(navMenu, applicationinventory);
-        cy.wait(3000);
-        applicationsList.forEach(function (application) {
-            cy.get(".pf-c-table > tbody > tr")
-                .not(".pf-c-table__expandable-row")
-                .find("td[data-label=Name]")
-                .each(($rows) => {
-                    if ($rows.text() === application.name) application.delete();
-                });
-        });
+        // Delete All
+        deleteAllStakeholders();
+        deleteApplicationTableRows();
     });
 
     it("Adoption candidate distribution - Application name sort validations", function () {

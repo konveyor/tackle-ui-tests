@@ -12,11 +12,11 @@ import {
     deleteAllStakeholderGroups,
     deleteApplicationTableRows,
     deleteAllTagTypes,
-    createStakeholder,
-    createStakeholderGroup,
-    createBusinessServices,
-    createTags,
-    createApplications,
+    createMultipleStakeholders,
+    createMultipleStakeholderGroups,
+    createMultipleBusinessServices,
+    createMultipleTags,
+    createMultipleApplications,
 } from "../../../../utils/utils";
 import { Tag } from "../../../models/tags";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
@@ -57,12 +57,12 @@ describe("Application inventory interlinked to tags and business service", () =>
         // Save the session and token cookie for maintaining one login session
         preservecookies();
 
-        //Create data
-        stakeholdersList = createStakeholder(2);
-        stakeholdergroupsList = createStakeholderGroup(2, stakeholdersList);
-        businessservicesList = createBusinessServices(2, stakeholdersList);
-        tagList = createTags(2);
-        applicationList = createApplications(2, businessservicesList, tagList);
+        // Create data
+        stakeholdersList = createMultipleStakeholders(2);
+        stakeholdergroupsList = createMultipleStakeholderGroups(2, stakeholdersList);
+        businessservicesList = createMultipleBusinessServices(2, stakeholdersList);
+        tagList = createMultipleTags(2);
+        applicationList = createMultipleApplications(2, businessservicesList, tagList);
     });
 
     beforeEach("Define interceptors", function () {
@@ -74,6 +74,9 @@ describe("Application inventory interlinked to tags and business service", () =>
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
+
         deleteAllStakeholders();
         deleteAllStakeholderGroups();
         deleteAllBusinessServices();

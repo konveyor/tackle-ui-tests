@@ -8,6 +8,14 @@ import {
     selectFilter,
     preservecookies,
     hasToBeSkipped,
+    createMultipleStakeholders,
+    createMultipleBusinessServices,
+    createMultipleTags,
+    createMultipleApplications,
+    deleteAllStakeholders,
+    deleteAllBusinessServices,
+    deleteAllTagTypes,
+    deleteApplicationTableRows,
 } from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
 import {
@@ -22,7 +30,6 @@ import {
     category,
     question,
     answer,
-    applicationinventory,
 } from "../../types/constants";
 import { adoptionCandidateDistributionTable } from "../../views/reports.view";
 import { ApplicationInventory } from "../../models/applicationinventory/applicationinventory";
@@ -50,39 +57,13 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         // Perform login
         login();
 
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-        stakeholder.create();
-        stakeholdersList.push(stakeholder);
+        stakeholdersList = createMultipleStakeholders(1);
+        businessServiceList = createMultipleBusinessServices(2);
+        tagList = createMultipleTags(3);
+        applicationsList = createMultipleApplications(2, businessServiceList, tagList);
 
-        // Create new business services
-        for (let i = 0; i < 2; i++) {
-            const businessservice = new BusinessServices(data.getCompanyName());
-            businessservice.create();
-            businessServiceList.push(businessservice);
-        }
-
-        // Create new tags
-        for (let i = 0; i < 3; i++) {
-            const newTag = new Tag(data.getRandomWord(6), data.getExistingTagtype());
-            newTag.create();
-            tagList.push(newTag);
-        }
-
-        for (let i = 0; i < 2; i++) {
-            const application = new ApplicationInventory(
-                data.getAppName(),
-                data.getDescription(),
-                data.getDescription(), // refering description value as comment
-                businessServiceList[i].name,
-                [tagList[i].name]
-            );
-
-            // Create a new application
-            application.create();
-            applicationsList.push(application);
-        }
         // Perform assessment of application
-        applicationsList[0].perform_assessment("high", [stakeholder.name]);
+        applicationsList[0].perform_assessment("high", [stakeholdersList[0].name]);
         cy.wait(4000);
         applicationsList[0].is_assessed();
         cy.wait(4000);
@@ -102,31 +83,10 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         if (hasToBeSkipped("@tier2")) return;
 
         // Delete the stakeholder
-        stakeholdersList.forEach(function (stakeholder) {
-            stakeholder.delete();
-        });
-
-        // Delete the business services
-        businessServiceList.forEach(function (businessService) {
-            businessService.delete();
-        });
-
-        // Delete the tags
-        tagList.forEach(function (tag) {
-            tag.delete();
-        });
-
-        // Delete the Applications created before the tests
-        clickByText(navMenu, applicationinventory);
-        cy.wait(3000);
-        applicationsList.forEach(function (application) {
-            cy.get(".pf-c-table > tbody > tr")
-                .not(".pf-c-table__expandable-row")
-                .find("td[data-label=Name]")
-                .each(($rows) => {
-                    if ($rows.text() === application.name) application.delete();
-                });
-        });
+        deleteAllStakeholders();
+        deleteAllBusinessServices();
+        deleteAllTagTypes();
+        deleteApplicationTableRows();
     });
 
     it("Name field validations", function () {

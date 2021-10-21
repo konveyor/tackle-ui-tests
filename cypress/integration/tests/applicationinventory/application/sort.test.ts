@@ -10,6 +10,7 @@ import {
     getTableColumnData,
     preservecookies,
     hasToBeSkipped,
+    deleteApplicationTableRows,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import { applicationinventory, name, tagCount, review } from "../../../types/constants";
@@ -46,15 +47,11 @@ describe("Application inventory sort validations", { tags: "@tier2" }, function 
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Delete the applications created before the tests
-        applicationsList.forEach(function (application) {
-            cy.get(".pf-c-table > tbody > tr")
-                .not(".pf-c-table__expandable-row")
-                .find("td[data-label=Name]")
-                .each(($rows) => {
-                    if ($rows.text() === application.name) application.delete();
-                });
-        });
+        deleteApplicationTableRows();
     });
 
     it("Name sort validations", function () {

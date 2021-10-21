@@ -9,6 +9,7 @@ import {
     notExists,
     preservecookies,
     hasToBeSkipped,
+    createMultipleStakeholders,
 } from "../../../../utils/utils";
 import { navTab } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
@@ -29,12 +30,9 @@ describe("Stakeholder group linked to stakeholder members", { tags: "@tier1" }, 
         login();
 
         // Create two stakeholders
-        for (let i = 0; i < 2; i++) {
-            // Create new stakeholder
-            const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-            stakeholder.create();
-            stakeholdersList.push(stakeholder);
-            membersList.push(stakeholder.name);
+        stakeholdersList = createMultipleStakeholders(2);
+        for (let i = 0; i < stakeholdersList.length; i++) {
+            membersList.push(stakeholdersList[i].name);
         }
     });
 

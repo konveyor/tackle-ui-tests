@@ -10,6 +10,12 @@ import {
     getTableColumnData,
     preservecookies,
     hasToBeSkipped,
+    createMultipleJobfunctions,
+    createMultipleStakeholderGroups,
+    createMultipleStakeholders,
+    deleteAllJobfunctions,
+    deleteAllStakeholders,
+    deleteAllStakeholderGroups,
 } from "../../../../utils/utils";
 const { _ } = Cypress;
 import { navMenu, navTab } from "../../../views/menu.view";
@@ -26,12 +32,9 @@ import { Stakeholders } from "../../../models/stakeholders";
 import { Jobfunctions } from "../../../models/jobfunctions";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 
-import * as data from "../../../../utils/data_utils";
-
 var stakeholdersList: Array<Stakeholders> = [];
 var jobfunctionsList: Array<Jobfunctions> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
-var stakeholderGroupNames: Array<string> = [];
 
 describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
@@ -42,31 +45,9 @@ describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
         login();
 
         // Create multiple job functions, stakeholder groups and stakeholders
-        for (let i = 0; i < 2; i++) {
-            // Create new job function
-            const jobfunction = new Jobfunctions(data.getJobTitle());
-            jobfunction.create();
-            jobfunctionsList.push(jobfunction);
-
-            // Create new stakeholder group
-            const stakeholdergroup = new Stakeholdergroups(
-                data.getCompanyName(),
-                data.getDescription()
-            );
-            stakeholdergroup.create();
-            stakeholdergroupsList.push(stakeholdergroup);
-            stakeholderGroupNames.push(stakeholdergroup.name);
-
-            // Create new stakeholder
-            const stakeholder = new Stakeholders(
-                data.getEmail(),
-                data.getFullName(),
-                jobfunction.name,
-                stakeholderGroupNames
-            );
-            stakeholder.create();
-            stakeholdersList.push(stakeholder);
-        }
+        jobfunctionsList = createMultipleJobfunctions(2);
+        stakeholdergroupsList = createMultipleStakeholderGroups(2);
+        stakeholdersList = createMultipleStakeholders(2, jobfunctionsList, stakeholdergroupsList);
     });
 
     beforeEach("Persist session", function () {
@@ -78,18 +59,13 @@ describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Delete the job functions, stakeholder groups and stakeholders created before the tests
-        jobfunctionsList.forEach(function (jobfunction) {
-            jobfunction.delete();
-        });
-
-        stakeholdergroupsList.forEach(function (stakeholdergroup) {
-            stakeholdergroup.delete();
-        });
-
-        stakeholdersList.forEach(function (stakeholder) {
-            stakeholder.delete();
-        });
+        deleteAllJobfunctions();
+        deleteAllStakeholders();
+        deleteAllStakeholderGroups();
     });
 
     it("Email sort validations", function () {

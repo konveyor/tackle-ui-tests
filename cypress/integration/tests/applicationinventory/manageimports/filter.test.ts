@@ -7,7 +7,6 @@ import {
     openManageImportsPage,
     applySearchFilter,
     exists,
-    selectItemsPerPage,
     deleteApplicationTableRows,
     preservecookies,
     hasToBeSkipped,
@@ -15,7 +14,6 @@ import {
 import { navMenu } from "../../../views/menu.view";
 import { applicationinventory, button, clearAllFilters } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
-import * as commonView from "../../../views/common.view";
 
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import { BusinessServices } from "../../../models/businessservices";
@@ -38,24 +36,8 @@ describe("Manage applications import filter validations", { tags: "@tier2" }, fu
 
         // Perform login
         login();
-
-        // Navigate to application inventory tab
-        clickByText(navMenu, applicationinventory);
-        cy.wait(2000);
-
-        // Select 100 items per page
-        selectItemsPerPage(100);
-        cy.wait(2000);
-
-        // Check if the application inventory table is empty, else delete the existing rows
-        cy.get(commonView.appTable)
-            .next()
-            .then(($div) => {
-                if (!$div.hasClass("pf-c-empty-state")) {
-                    // Delete all items of page
-                    deleteApplicationTableRows();
-                }
-            });
+        // Delete all items of page
+        deleteApplicationTableRows();
 
         // Create business service
         businessService.create();
@@ -92,26 +74,7 @@ describe("Manage applications import filter validations", { tags: "@tier2" }, fu
 
         // Delete the business service
         businessService.delete();
-
-        // Navigate to application inventory tab
-        clickByText(navMenu, applicationinventory);
-        cy.wait(2000);
-
-        // Delete the applications created before the tests
-        applicationsList.forEach(function (application) {
-            cy.get(commonView.appTable)
-                .next()
-                .then(($div) => {
-                    if (!$div.hasClass("pf-c-empty-state")) {
-                        cy.get(".pf-c-table > tbody > tr")
-                            .not(".pf-c-table__expandable-row")
-                            .find("td[data-label=Name]")
-                            .each(($rows) => {
-                                if ($rows.text() === application.name) application.delete();
-                            });
-                    }
-                });
-        });
+        deleteApplicationTableRows();
     });
 
     it("File name filter validations", function () {

@@ -7,23 +7,18 @@ import {
     deleteTableRows,
     preservecookies,
     hasToBeSkipped,
+    createMultipleBusinessServices,
+    deleteAllBusinessServices,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, businessservices } from "../../../types/constants";
-
-import { BusinessServices } from "../../../models/businessservices";
-
-import * as data from "../../../../utils/data_utils";
 import {
     firstPageButton,
     lastPageButton,
     nextPageButton,
     pageNumInput,
     prevPageButton,
-    appTable,
 } from "../../../views/common.view";
-
-var businessservicesList: Array<BusinessServices> = [];
 
 describe("Business services pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
@@ -32,42 +27,10 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
 
         // Perform login
         login();
-
-        // Navigate to business services tab
-        clickByText(navMenu, controls);
-        clickByText(navTab, businessservices);
-        function createMultipleBusinessservices(num): void {
-            for (let i = 0; i < num; i++) {
-                const businessservice = new BusinessServices(data.getFullName());
-                businessservice.create();
-                businessservicesList.push(businessservice);
-            }
-        }
-        var rowsToCreate = 0;
-
-        // Get the current table row count and create appropriate test data rows
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(appTable)
-            .next()
-            .then(($div) => {
-                if (!$div.hasClass("pf-c-empty-state")) {
-                    cy.get("td[data-label=Name]").then(($rows) => {
-                        var rowCount = $rows.length;
-                        if (rowCount <= 10) {
-                            rowsToCreate = 11 - rowCount;
-                        }
-                        if (rowsToCreate > 0) {
-                            // Create multiple business services
-                            createMultipleBusinessservices(rowsToCreate);
-                        }
-                    });
-                } else {
-                    rowsToCreate = 11;
-                    // Create multiple business services
-                    createMultipleBusinessservices(rowsToCreate);
-                }
-            });
+        // Clear pre-existing data
+        deleteAllBusinessServices();
+        // Create 11 rows
+        createMultipleBusinessServices(11);
     });
 
     beforeEach("Persist session", function () {
@@ -79,21 +42,11 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
     });
 
     after("Perform test data clean up", function () {
-        // Delete the business services created before the tests
-        if (businessservicesList.length > 0) {
-            // Navigate to business services tab
-            clickByText(navMenu, controls);
-            clickByText(navTab, businessservices);
-            cy.wait("@getBusinessService");
-            selectItemsPerPage(100);
-            cy.wait(2000);
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
 
-            businessservicesList.forEach(function (businessservice) {
-                cy.get("td[data-label=Name]").each(($rows) => {
-                    if ($rows.text() === businessservice.name) businessservice.delete();
-                });
-            });
-        }
+        // Delete the business services created before the tests
+        deleteAllBusinessServices();
     });
 
     it("Navigation button validations", function () {

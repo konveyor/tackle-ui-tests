@@ -10,13 +10,14 @@ import {
     getTableColumnData,
     preservecookies,
     hasToBeSkipped,
+    createMultipleJobfunctions,
+    deleteAllJobfunctions,
 } from "../../../../utils/utils";
 const { _ } = Cypress;
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, name, jobfunctions } from "../../../types/constants";
 
 import { Jobfunctions } from "../../../models/jobfunctions";
-import * as data from "../../../../utils/data_utils";
 
 var jobfunctionsList: Array<Jobfunctions> = [];
 
@@ -29,12 +30,7 @@ describe("Job function sorting", { tags: "@tier2" }, function () {
         login();
 
         // Create multiple job functions
-        for (let i = 0; i < 2; i++) {
-            // Create new job function
-            const jobfunction = new Jobfunctions(data.getJobTitle());
-            jobfunction.create();
-            jobfunctionsList.push(jobfunction);
-        }
+        jobfunctionsList = createMultipleJobfunctions(2);
     });
 
     beforeEach("Persist session", function () {
@@ -46,10 +42,11 @@ describe("Job function sorting", { tags: "@tier2" }, function () {
     });
 
     after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
         // Delete the job functions after before the tests
-        jobfunctionsList.forEach(function (jobfunction) {
-            jobfunction.delete();
-        });
+        deleteAllJobfunctions();
     });
 
     it("Name sort validations", function () {
