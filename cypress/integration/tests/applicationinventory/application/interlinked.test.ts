@@ -57,7 +57,7 @@ describe("Application inventory interlinked to tags and business service", () =>
         // Save the session and token cookie for maintaining one login session
         preservecookies();
 
-        //Create data
+        // Create data
         stakeholdersList = createMultipleStakeholders(2);
         stakeholdergroupsList = createMultipleStakeholderGroups(2, stakeholdersList);
         businessservicesList = createMultipleBusinessServices(2, stakeholdersList);

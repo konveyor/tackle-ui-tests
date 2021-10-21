@@ -13,17 +13,13 @@ import {
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, stakeholders } from "../../../types/constants";
 
-import { Stakeholders } from "../../../models/stakeholders";
 import {
     firstPageButton,
     lastPageButton,
     nextPageButton,
     pageNumInput,
     prevPageButton,
-    appTable,
 } from "../../../views/common.view";
-
-var stakeholdersList: Array<Stakeholders> = [];
 
 describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
@@ -32,9 +28,9 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
 
         // Perform login
         login();
-        //Clear pre-existing data
+        // Clear pre-existing data
         deleteAllStakeholders();
-        //Create 11 rows
+        // Create 11 rows
         createMultipleStakeholders(11);
     });
 

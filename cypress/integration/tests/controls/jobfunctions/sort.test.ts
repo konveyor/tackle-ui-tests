@@ -18,7 +18,6 @@ import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, name, jobfunctions } from "../../../types/constants";
 
 import { Jobfunctions } from "../../../models/jobfunctions";
-import * as data from "../../../../utils/data_utils";
 
 var jobfunctionsList: Array<Jobfunctions> = [];
 

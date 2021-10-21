@@ -9,7 +9,6 @@ import {
     deleteApplicationTableRows,
 } from "../../../../utils/utils";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
-import * as data from "../../../../utils/data_utils";
 import {
     closeForm,
     cyclicDependenciesErrorMsg,

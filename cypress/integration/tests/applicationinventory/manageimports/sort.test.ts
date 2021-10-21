@@ -10,7 +10,6 @@ import {
     getTableColumnData,
     importApplication,
     openManageImportsPage,
-    selectItemsPerPage,
     deleteApplicationTableRows,
     preservecookies,
     hasToBeSkipped,

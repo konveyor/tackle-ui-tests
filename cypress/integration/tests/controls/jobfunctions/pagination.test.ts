@@ -11,20 +11,13 @@ import {
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, jobfunctions } from "../../../types/constants";
-
-import { Jobfunctions } from "../../../models/jobfunctions";
-
-import * as data from "../../../../utils/data_utils";
 import {
     firstPageButton,
     lastPageButton,
     nextPageButton,
     pageNumInput,
     prevPageButton,
-    appTable,
 } from "../../../views/common.view";
-
-var jobfunctionsList: Array<Jobfunctions> = [];
 
 describe("Job functions pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
@@ -36,9 +29,9 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
         // Get the current table row count and create appropriate test data rows
         selectItemsPerPage(100);
         cy.wait(2000);
-        //Delete all pre-existing job functions
+        // Delete all pre-existing job functions
         deleteAllJobfunctions();
-        //Create 11 Job functions
+        // Create 11 Job functions
         createMultipleJobfunctions(11);
     });
 

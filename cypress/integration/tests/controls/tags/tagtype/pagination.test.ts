@@ -13,8 +13,6 @@ import { navMenu, navTab } from "../../../../views/menu.view";
 import { controls, tags } from "../../../../types/constants";
 
 import { Tagtype } from "../../../../models/tags";
-
-import * as data from "../../../../../utils/data_utils";
 import {
     firstPageButton,
     lastPageButton,
@@ -23,8 +21,6 @@ import {
     prevPageButton,
     appTable,
 } from "../../../../views/common.view";
-
-var tagtypeList: Array<Tagtype> = [];
 
 describe("Tag type pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {

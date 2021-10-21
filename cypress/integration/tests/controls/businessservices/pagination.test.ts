@@ -12,20 +12,13 @@ import {
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, businessservices } from "../../../types/constants";
-
-import { BusinessServices } from "../../../models/businessservices";
-
-import * as data from "../../../../utils/data_utils";
 import {
     firstPageButton,
     lastPageButton,
     nextPageButton,
     pageNumInput,
     prevPageButton,
-    appTable,
 } from "../../../views/common.view";
-
-var businessservicesList: Array<BusinessServices> = [];
 
 describe("Business services pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
@@ -34,9 +27,9 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
 
         // Perform login
         login();
-        //Clear pre-existing data
+        // Clear pre-existing data
         deleteAllBusinessServices();
-        //Create 11 rows
+        // Create 11 rows
         createMultipleBusinessServices(11);
     });
 
