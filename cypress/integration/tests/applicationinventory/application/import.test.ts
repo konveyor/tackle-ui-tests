@@ -22,10 +22,10 @@ const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/";
 var applicationsList: Array<ApplicationInventory> = [];
 
-describe("Application import operations", { tags: "@tier1" }, () => {
+describe("Application import operations", () => {
     before("Login and create test data", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
+        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
 
         // Perform login
         login();
@@ -46,7 +46,7 @@ describe("Application import operations", { tags: "@tier1" }, () => {
 
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
+        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
 
         // Delete the business service
         businessService.delete();
@@ -55,7 +55,7 @@ describe("Application import operations", { tags: "@tier1" }, () => {
         deleteApplicationTableRows();
     });
 
-    it("Valid applications import", function () {
+    it("Valid applications import", { tags: "@tier1" }, function () {
         clickByText(navMenu, applicationinventory);
         cy.wait("@getApplication");
 
@@ -81,7 +81,7 @@ describe("Application import operations", { tags: "@tier1" }, () => {
         verifyAppImport(fileName, "Completed", 2, 0);
     });
 
-    it("Duplicate applications import", function () {
+    it("Duplicate applications import", { tags: "@tier1" }, function () {
         clickByText(navMenu, applicationinventory);
         cy.wait("@getApplication");
 
@@ -105,61 +105,69 @@ describe("Application import operations", { tags: "@tier1" }, () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Applications import for non existing tags and business service", function () {
-        clickByText(navMenu, applicationinventory);
-        cy.wait("@getApplication");
+    it(
+        "Applications import for non existing tags and business service",
+        { tags: "@tier1" },
+        function () {
+            clickByText(navMenu, applicationinventory);
+            cy.wait("@getApplication");
 
-        // Import csv with non-existent businsess service and tag rows
-        const fileName = "non_existing_tags_business_service_rows.csv";
-        importApplication(filePath + fileName);
-        cy.wait(2000);
+            // Import csv with non-existent businsess service and tag rows
+            const fileName = "non_existing_tags_business_service_rows.csv";
+            importApplication(filePath + fileName);
+            cy.wait(2000);
 
-        // Open application imports page
-        openManageImportsPage();
+            // Open application imports page
+            openManageImportsPage();
 
-        // Verify import applications page shows correct information
-        verifyAppImport(fileName, "Completed", 0, 2);
+            // Verify import applications page shows correct information
+            verifyAppImport(fileName, "Completed", 0, 2);
 
-        // Verify the error report messages
-        openErrorReport();
-        var errorMsgs = [
-            "Business Service: Finance does not exist",
-            "Tag Type Database and Tag H2O combination does not exist",
-        ];
-        verifyImportErrorMsg(errorMsgs);
-    });
-
-    it("Applications import with minimum required field(s) and empty row", function () {
-        clickByText(navMenu, applicationinventory);
-        cy.wait("@getApplication");
-
-        // Import csv with an empty row between two valid rows having minimum required field(s)
-        const fileName = "mandatory_and_empty_rows.csv";
-        importApplication(filePath + fileName);
-        cy.wait(2000);
-
-        // Verify imported apps are visible in table
-        exists("Import-app-5");
-        exists("Import-app-6");
-
-        // Create objects for imported apps
-        for (let i = 5; i <= 6; i++) {
-            const importedApp = new ApplicationInventory(`Import-app-${i}`);
-            applicationsList.push(importedApp);
+            // Verify the error report messages
+            openErrorReport();
+            var errorMsgs = [
+                "Business Service: Finance does not exist",
+                "Tag Type Database and Tag H2O combination does not exist",
+            ];
+            verifyImportErrorMsg(errorMsgs);
         }
+    );
 
-        // Open application imports page
-        openManageImportsPage();
+    it(
+        "Applications import with minimum required field(s) and empty row",
+        { tags: "@tier1" },
+        function () {
+            clickByText(navMenu, applicationinventory);
+            cy.wait("@getApplication");
 
-        // Verify import applications page shows correct information
-        verifyAppImport(fileName, "Completed", 2, 1);
+            // Import csv with an empty row between two valid rows having minimum required field(s)
+            const fileName = "mandatory_and_empty_rows.csv";
+            importApplication(filePath + fileName);
+            cy.wait(2000);
 
-        // Verify the error report message
-        openErrorReport();
-        verifyImportErrorMsg("Invalid Record Type");
-    });
+            // Verify imported apps are visible in table
+            exists("Import-app-5");
+            exists("Import-app-6");
 
-    it("Applications import having same name with spaces", function () {
+            // Create objects for imported apps
+            for (let i = 5; i <= 6; i++) {
+                const importedApp = new ApplicationInventory(`Import-app-${i}`);
+                applicationsList.push(importedApp);
+            }
+
+            // Open application imports page
+            openManageImportsPage();
+
+            // Verify import applications page shows correct information
+            verifyAppImport(fileName, "Completed", 2, 1);
+
+            // Verify the error report message
+            openErrorReport();
+            verifyImportErrorMsg("Invalid Record Type");
+        }
+    );
+
+    it("Applications import having same name with spaces", { tags: "@tier1" }, function () {
         clickByText(navMenu, applicationinventory);
         cy.wait("@getApplication");
 
@@ -183,12 +191,32 @@ describe("Application import operations", { tags: "@tier1" }, () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Applications import having description and comments exceeding allowed limits", function () {
+    it(
+        "Applications import having description and comments exceeding allowed limits",
+        { tags: "@tier1" },
+        function () {
+            clickByText(navMenu, applicationinventory);
+            cy.wait("@getApplication");
+
+            // Import csv having description and comments over the allowed limits
+            const fileName = "desc_comments_char_limit_rows.csv";
+            importApplication(filePath + fileName);
+            cy.wait(2000);
+
+            // Open application imports page
+            openManageImportsPage();
+
+            // Verify import applications page shows correct information
+            verifyAppImport(fileName, "Completed", 0, 2);
+        }
+    );
+
+    it("Applications import for invalid csv schema", { tags: "@newtest" }, function () {
         clickByText(navMenu, applicationinventory);
         cy.wait("@getApplication");
 
-        // Import csv having description and comments over the allowed limits
-        const fileName = "desc_comments_char_limit_rows.csv";
+        // Import csv invalid schema
+        const fileName = "invalid_column_schema.csv";
         importApplication(filePath + fileName);
         cy.wait(2000);
 
@@ -196,6 +224,24 @@ describe("Application import operations", { tags: "@tier1" }, () => {
         openManageImportsPage();
 
         // Verify import applications page shows correct information
-        verifyAppImport(fileName, "Completed", 0, 2);
+        verifyAppImport(fileName, "Error", 0, 2);
+
+        // Verify if error is reported and link to documentation is present and working
+        cy.get("table > tbody > tr")
+            .eq(0)
+            .find("td[data-label='Status']")
+            .find("div")
+            .contains("button", "Error")
+            .click();
+        cy.wait(500);
+        cy.get("div.pf-c-popover__content")
+            .find("footer")
+            .find("a")
+            .then(($anchor) => {
+                var doc_link = $anchor.attr("href").toString();
+                cy.request(doc_link).then((resp) => {
+                    expect(resp.status).to.eq(200);
+                });
+            });
     });
 });
