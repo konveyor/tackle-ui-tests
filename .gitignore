@@ -106,6 +106,7 @@ dist
 # Node modules folder
 node_modules
 
-# Cypress videos and screenshots
+# Cypress videos, screenshots and downloads
 cypress/videos/
 cypress/screenshots/
+cypress/downloads/
