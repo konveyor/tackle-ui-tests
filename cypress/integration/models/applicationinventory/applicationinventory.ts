@@ -25,7 +25,7 @@ import {
     tags,
     dependenciesDropdownBtn,
     closeForm,
-    copy
+    copy,
 } from "../../views/applicationinventory.view";
 import * as commonView from "../../views/common.view";
 import {
@@ -533,8 +533,8 @@ export class ApplicationInventory {
 
     selectApps(applicationList: Array<ApplicationInventory>): void {
         cy.wait(4000);
-        for(let i=0; i<applicationList.length; i++){
-            if(applicationList[i].name != this.name){
+        for (let i = 0; i < applicationList.length; i++) {
+            if (applicationList[i].name != this.name) {
                 cy.get(".pf-m-compact> tbody > tr > td")
                     .contains(applicationList[i].name)
                     .parent(trTag)
@@ -543,7 +543,6 @@ export class ApplicationInventory {
                         cy.wait(2000);
                     });
             }
-        }    
-        
+        }
     }
 }

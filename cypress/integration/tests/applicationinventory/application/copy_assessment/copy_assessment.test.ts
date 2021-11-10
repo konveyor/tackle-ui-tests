@@ -8,7 +8,7 @@ import {
     createMultipleStakeholderGroups,
     createMultipleApplications,
     deleteAllStakeholders,
-    deleteApplicationTableRows
+    deleteApplicationTableRows,
 } from "../../../../../utils/utils";
 import { ApplicationInventory } from "../../../../models/applicationinventory/applicationinventory";
 
@@ -34,7 +34,6 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
         stakeholdersList = createMultipleStakeholders(1);
         stakeholdergroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
         applicationList = createMultipleApplications(2);
-
     });
 
     beforeEach("Persist session", function () {
@@ -53,17 +52,15 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
     });
 
     it("Copy assessment to itself", function () {
-
         // Perform assessment of application
-        
+
         applicationList[0].perform_assessment("low", [stakeholdersList[0].name]);
         cy.wait(2000);
         applicationList[0].is_assessed();
-        //TO -do check if button is disabled if not assessed 
-        
+        //TO -do check if button is disabled if not assessed
+
         // copy assessment
         applicationList[0].copy_assessment(applicationList);
         cy.wait(2000);
     });
-
 });
