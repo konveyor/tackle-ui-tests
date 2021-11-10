@@ -509,7 +509,7 @@ export class ApplicationInventory {
             });
     }
 
-    copy_assessment(applicationList: Array<ApplicationInventory>, cancel = false): void {
+    verifyCopyAssessmentDisabled(): void {
         ApplicationInventory.clickApplicationInventory();
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -520,8 +520,12 @@ export class ApplicationInventory {
             .within(() => {
                 click(actionButton);
                 cy.wait(500);
-                clickByText(button, "Copy assessment");
+                cy.get("ul > li").find(button).should("not.contain", "Copy assessment");
             });
+    }
+
+    copy_assessment(applicationList: Array<ApplicationInventory>, cancel = false): void {
+        this.openCopyAssessmentModel();
         this.selectApps(applicationList);
         if (cancel) {
             cancelForm();
@@ -544,5 +548,20 @@ export class ApplicationInventory {
                     });
             }
         }
+    }
+
+    openCopyAssessmentModel(): void {
+        ApplicationInventory.clickApplicationInventory();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                click(actionButton);
+                cy.wait(500);
+                clickByText(button, "Copy assessment");
+            });
     }
 }
