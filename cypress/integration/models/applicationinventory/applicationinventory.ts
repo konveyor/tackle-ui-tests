@@ -25,6 +25,7 @@ import {
     tags,
     dependenciesDropdownBtn,
     closeForm,
+    copy,
 } from "../../views/applicationinventory.view";
 import * as commonView from "../../views/common.view";
 import {
@@ -506,5 +507,42 @@ export class ApplicationInventory {
                     );
                 }
             });
+    }
+
+    copy_assessment(applicationList: Array<ApplicationInventory>, cancel = false): void {
+        ApplicationInventory.clickApplicationInventory();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                click(actionButton);
+                cy.wait(500);
+                clickByText(button, "Copy assessment");
+            });
+        this.selectApps(applicationList);
+        if (cancel) {
+            cancelForm();
+        } else {
+            click(copy);
+            cy.wait(2000);
+        }
+    }
+
+    selectApps(applicationList: Array<ApplicationInventory>): void {
+        cy.wait(4000);
+        for (let i = 0; i < applicationList.length; i++) {
+            if (applicationList[i].name != this.name) {
+                cy.get(".pf-m-compact> tbody > tr > td")
+                    .contains(applicationList[i].name)
+                    .parent(trTag)
+                    .within(() => {
+                        click(selectBox);
+                        cy.wait(2000);
+                    });
+            }
+        }
     }
 }
