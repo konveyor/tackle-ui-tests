@@ -91,7 +91,7 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         deleteApplicationTableRows();
     });
 
-    it("Name filter valications", function () {
+    it("Name filter validations", function () {
         // Open the copy assessment model for application 1
         applicationList[0].openCopyAssessmentModel();
 
@@ -114,7 +114,7 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         cy.get(closeButton).click();
     });
 
-    it("Description filter valications", function () {
+    it("Description filter validations", function () {
         // Open the copy assessment model for application 1
         applicationList[0].openCopyAssessmentModel();
 
@@ -137,7 +137,7 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         cy.get(closeButton).click();
     });
 
-    it("Bussiness service filter valications", function () {
+    it("Bussiness service filter validations", function () {
         // Open the copy assessment model for application 1
         applicationList[0].openCopyAssessmentModel();
 
@@ -162,7 +162,7 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         cy.get(closeButton).click();
     });
 
-    it("Tag filter valications", function () {
+    it("Tag filter validations", function () {
         // Open the copy assessment model for application 1
         applicationList[0].openCopyAssessmentModel();
 
