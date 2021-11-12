@@ -4,6 +4,11 @@ import {
     hasToBeSkipped,
     login,
     preservecookies,
+    sortAsc,
+    sortDesc,
+    verifySortAsc,
+    verifySortDesc,
+    getTableColumnData,
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
     createMultipleApplications,
@@ -11,12 +16,11 @@ import {
     deleteApplicationTableRows,
     deleteAllStakeholderGroups,
 } from "../../../../../utils/utils";
+import { name } from "../../../../types/constants";
 import { ApplicationInventory } from "../../../../models/applicationinventory/applicationinventory";
 
 import { Stakeholders } from "../../../../models/stakeholders";
 import { Stakeholdergroups } from "../../../../models/stakeholdergroups";
-import { trTag } from "../../../../types/constants";
-import { copy, selectBox } from "../../../../views/applicationinventory.view";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdersList: Array<Stakeholders> = [];
@@ -37,9 +41,6 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
         stakeholdersList = createMultipleStakeholders(1);
         stakeholdergroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
         applicationList = createMultipleApplications(4);
-
-        // Verify copy assessment is not enabled untill assessment is done
-        applicationList[0].verifyCopyAssessmentDisabled();
 
         // Perform assessment of application
         applicationList[0].perform_assessment("low", [stakeholdersList[0].name]);
@@ -68,38 +69,28 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
         deleteApplicationTableRows();
     });
 
-    it("Copy assessment to self", function () {
-        // Copy assessment to self, checkbox should be disabled
-        applicationList[0].openCopyAssessmentModel();
-        cy.get(".pf-m-compact> tbody > tr > td")
-            .contains(applicationList[0].name)
-            .parent(trTag)
-            .within(() => {
-                cy.get(selectBox).should("be.disabled");
-                cy.wait(2000);
-            });
-    });
-
-    it("Copy button not enabled until one app is selected", function () {
-        // Copy assessment to self, should be disabled
+    it("Application name sort validations", function () {
+        // Navigate to application inventory page and open manage imports
         applicationList[0].openCopyAssessmentModel();
         cy.wait(2000);
-        cy.get(copy).should("be.disabled");
-        applicationList[0].selectApps(applicationList);
-        cy.get(copy).should("not.be.disabled");
-    });
 
-    it("Copy assessment to more than one application", function () {
-        // Verify copy assessment is not enabled untill assessment is done
-        applicationList[1].verifyCopyAssessmentDisabled();
+        // get unsorted list when page loads
+        const unsortedList = getTableColumnData(name);
 
-        // Perform copy assessment of all the applications
-        applicationList[0].copy_assessment(applicationList);
-        cy.wait(4000);
+        // Sort the applications groups by name in ascending order
+        sortAsc(name);
+        cy.wait(2000);
 
-        // Verify that all the applications were assessed
-        for (let i = 1; i < applicationList.length; i++) {
-            applicationList[i].is_assessed();
-        }
+        // Verify that the applications rows are displayed in ascending order
+        const afterAscSortList = getTableColumnData(name);
+        verifySortAsc(afterAscSortList, unsortedList);
+
+        // Sort the applications by name in descending order
+        sortDesc(name);
+        cy.wait(2000);
+
+        // Verify that the applications are displayed in descending order
+        const afterDescSortList = getTableColumnData(name);
+        verifySortDesc(afterDescSortList, unsortedList);
     });
 });
