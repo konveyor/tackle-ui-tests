@@ -4,11 +4,11 @@ import {
     hasToBeSkipped,
     login,
     preservecookies,
-    sortAsc,
-    sortDesc,
+    sortAscCopyAssessmentTable,
+    sortDescCopyAssessmentTable,
     verifySortAsc,
     verifySortDesc,
-    getTableColumnData,
+    getColumnDataforCopyAssessmentTable,
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
     createMultipleApplications,
@@ -70,27 +70,27 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
     });
 
     it("Application name sort validations", function () {
-        // Navigate to application inventory page and open manage imports
+        // Navigate to application inventory page and open copy assessment page
         applicationList[0].openCopyAssessmentModel();
         cy.wait(2000);
 
         // get unsorted list when page loads
-        const unsortedList = getTableColumnData(name);
+        const unsortedList = getColumnDataforCopyAssessmentTable(name);
 
         // Sort the applications groups by name in ascending order
-        sortAsc(name);
+        sortAscCopyAssessmentTable(name);
         cy.wait(2000);
 
         // Verify that the applications rows are displayed in ascending order
-        const afterAscSortList = getTableColumnData(name);
+        const afterAscSortList = getColumnDataforCopyAssessmentTable(name);
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the applications by name in descending order
-        sortDesc(name);
+        sortDescCopyAssessmentTable(name);
         cy.wait(2000);
 
         // Verify that the applications are displayed in descending order
-        const afterDescSortList = getTableColumnData(name);
+        const afterDescSortList = getColumnDataforCopyAssessmentTable(name);
         verifySortDesc(afterDescSortList, unsortedList);
     });
 });
