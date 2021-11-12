@@ -570,7 +570,7 @@ export function createMultipleApplications(
 export function createApplicationObjects(numberOfObjects: number): Array<ApplicationInventory> {
     var applicationObjectsList: Array<ApplicationInventory> = [];
     for (let i = 0; i < numberOfObjects; i++) {
-        // Create an onject of application
+        // Create an object of application
         const application = new ApplicationInventory(data.getAppName());
         applicationObjectsList.push(application);
     }
