@@ -211,6 +211,41 @@ export function sortDesc(sortCriteria: string): void {
     });
 }
 
+export function sortAscCopyAssessmentTable(sortCriteria: string): void {
+    cy.get(`.pf-m-compact > thead > tr > th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
+        if (
+            $tableHeader.attr("aria-sort") === "descending" ||
+            $tableHeader.attr("aria-sort") === "none"
+        ) {
+            $tableHeader.find("button").trigger("click");
+        }
+    });
+}
+
+export function sortDescCopyAssessmentTable(sortCriteria: string): void {
+    cy.get(`.pf-m-compact > thead > tr > th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
+        if (
+            $tableHeader.attr("aria-sort") === "ascending" ||
+            $tableHeader.attr("aria-sort") === "none"
+        ) {
+            $tableHeader.find("button").trigger("click");
+        }
+    });
+}
+
+export function getColumnDataforCopyAssessmentTable(columnName: string): Array<string> {
+    selectItemsPerPage(100);
+    cy.wait(4000);
+    var itemList = [];
+    cy.get(".pf-m-compact > tbody > tr")
+        .not(".pf-c-table__expandable-row")
+        .find(`td[data-label="${columnName}"]`)
+        .each(($ele) => {
+            if ($ele.text() !== "") itemList.push($ele.text().toString().toLowerCase());
+        });
+    return itemList;
+}
+
 export function getTableColumnData(columnName: string): Array<string> {
     selectItemsPerPage(100);
     cy.wait(4000);
