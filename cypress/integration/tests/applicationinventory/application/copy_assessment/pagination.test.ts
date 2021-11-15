@@ -17,10 +17,10 @@ import { Stakeholders } from "../../../../models/stakeholders";
 var stakeholdersList: Array<Stakeholders> = [];
 var applicationList: Array<ApplicationInventory> = [];
 
-describe("Assessment pagination validations", { tags: "@Newtest" }, function () {
+describe("Assessment pagination validations", { tags: "@newtest" }, function () {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@Newtest")) return;
+        if (hasToBeSkipped("@newtest")) return;
 
         // Perform login
         login();
