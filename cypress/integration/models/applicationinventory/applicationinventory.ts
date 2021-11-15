@@ -564,4 +564,20 @@ export class ApplicationInventory {
                 clickByText(button, "Copy assessment");
             });
     }
+
+    selectItemsPerPage(items: number): void {
+        cy.wait(2000);
+        cy.get(".pf-m-compact")
+            .eq(1)
+            .find(commonView.itemsPerPageMenu)
+            .find(commonView.itemsPerPageToggleButton)
+            .then(($toggleBtn) => {
+                if (!$toggleBtn.eq(0).is(":disabled")) {
+                    $toggleBtn.eq(0).trigger("click");
+                    cy.get(commonView.itemsPerPageMenuOptions);
+                    cy.get(`li > button[data-action="per-page-${items}"]`).click({ force: true });
+                    cy.wait(2000);
+                }
+            });
+    }
 }
