@@ -102,4 +102,52 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
             applicationList[i].is_assessed();
         }
     });
+
+    it("Copy assessment select options validations", function () {
+        // Open copy assessment and review page
+        applicationList[0].openCopyAssessmentModel();
+
+        // select 10 items per page
+        applicationList[0].selectItemsPerPage(10);
+        cy.wait(1000);
+
+        // Select all the applications on page
+        cy.get("button[aria-label='Select']").click();
+        if (applicationList.length < 11) {
+            cy.get("ul[role=menu] > li")
+                .contains("a", `Select page (${applicationList.length} items)`)
+                .click();
+        } else {
+            cy.get("ul[role=menu] > li").contains("a", `Select page (10 items)`).click();
+        }
+
+        cy.get("input[name='confirm']").check();
+        cy.get(copy).should("not.be.disabled");
+        if (applicationList.length < 11) {
+            cy.get("button[aria-label='Select'] > span").should(
+                "contain",
+                `${applicationList.length - 1} selected`
+            );
+        } else {
+            cy.get("button[aria-label='Select'] > span").should("contain", "9 selected");
+        }
+
+        // Select all applications
+        cy.get("button[aria-label='Select']").click();
+        cy.get("ul[role=menu] > li")
+            .contains("a", `Select all (${applicationList.length} items)`)
+            .click();
+        cy.get("input[name='confirm']").check();
+        cy.get(copy).should("not.be.disabled");
+        cy.get("button[aria-label='Select'] > span").should(
+            "contain",
+            `${applicationList.length - 1} selected`
+        );
+
+        // Deselect all applications
+        cy.get("button[aria-label='Select']").click();
+        cy.get("ul[role=menu] > li").contains("a", "Select none (0 items)").click();
+        cy.wait(1000);
+        cy.get(copy).should("be.disabled");
+    });
 });
