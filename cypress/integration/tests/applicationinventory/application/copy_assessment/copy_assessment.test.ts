@@ -113,17 +113,36 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
 
         // Select all the applications on page
         cy.get("button[aria-label='Select']").click();
-        cy.get("ul[role=menu] > li").contains("a", "Select page (4 items)").click();
+        if (applicationList.length < 11) {
+            cy.get("ul[role=menu] > li")
+                .contains("a", `Select page (${applicationList.length} items)`)
+                .click();
+        } else {
+            cy.get("ul[role=menu] > li").contains("a", `Select page (10 items)`).click();
+        }
+
         cy.get("input[name='confirm']").check();
         cy.get(copy).should("not.be.disabled");
-        cy.get("button[aria-label='Select'] > span").should("contain", "3 selected");
+        if (applicationList.length < 11) {
+            cy.get("button[aria-label='Select'] > span").should(
+                "contain",
+                `${applicationList.length - 1} selected`
+            );
+        } else {
+            cy.get("button[aria-label='Select'] > span").should("contain", "9 selected");
+        }
 
         // Select all applications
         cy.get("button[aria-label='Select']").click();
-        cy.get("ul[role=menu] > li").contains("a", "Select all (4 items)").click();
+        cy.get("ul[role=menu] > li")
+            .contains("a", `Select all (${applicationList.length} items)`)
+            .click();
         cy.get("input[name='confirm']").check();
         cy.get(copy).should("not.be.disabled");
-        cy.get("button[aria-label='Select'] > span").should("contain", "3 selected");
+        cy.get("button[aria-label='Select'] > span").should(
+            "contain",
+            `${applicationList.length - 1} selected`
+        );
 
         // Deselect all applications
         cy.get("button[aria-label='Select']").click();
