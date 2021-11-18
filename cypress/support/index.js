@@ -23,6 +23,3 @@ require("cypress-xpath"); // Refer - https://www.npmjs.com/package/cypress-xpath
 // load and register the grep feature
 // https://github.com/bahmutov/cypress-grep
 require("cypress-grep")();
-
-// Use to create XML report file
-import "cypress-mochawesome-reporter/register";
