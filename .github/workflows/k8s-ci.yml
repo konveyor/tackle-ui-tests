@@ -1,6 +1,7 @@
 name: Regression tests CI
 
 on:
+  pull_request:
   push:
     branches:
       - main

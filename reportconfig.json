@@ -7,13 +7,23 @@
         "pass": "",
         "tackleUrl": ""
     },
-    "reporter": "@reportportal/agent-js-cypress",
+    "reporter": "cypress-multi-reporters",
     "reporterOptions": {
-        "endpoint": "",
-        "token": "",
-        "launch": "Tackle-1.0",
-        "project": "mta",
-        "description": "Tackle automation results",
-        "autoMerge": true
-    }
+        "reporterEnabled": "cypress-mochawesome-reporter, mocha-junit-reporter",
+        "cypressMochawesomeReporterReporterOptions": {
+            "reportDir": "cypress/reports",
+            "charts": true,
+            "reportPageTitle": "Tackle Test Suite",
+            "embeddedScreenshots": true,
+            "inlineAssets": true
+        },
+        "mochaJunitReporterReporterOptions": {
+            "mochaFile": "cypress/reports/junit/results-[hash].xml"
+        }
+    },
+    "retries": {
+        "runMode": 2,
+        "openMode": 0
+    },
+    "defaultCommandTimeout": 8000
 }
