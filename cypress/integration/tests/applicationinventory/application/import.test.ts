@@ -212,6 +212,7 @@ describe("Application import operations", () => {
     );
 
     it("Applications import for invalid csv schema", { tags: "@newtest" }, function () {
+        // Impacted by bug - https://issues.redhat.com/browse/TACKLE-320
         clickByText(navMenu, applicationinventory);
         cy.wait("@getApplication");
 
