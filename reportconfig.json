@@ -9,14 +9,7 @@
     },
     "reporter": "cypress-multi-reporters",
     "reporterOptions": {
-        "reporterEnabled": "cypress-mochawesome-reporter, mocha-junit-reporter",
-        "cypressMochawesomeReporterReporterOptions": {
-            "reportDir": "cypress/reports",
-            "charts": true,
-            "reportPageTitle": "Tackle Test Suite",
-            "embeddedScreenshots": true,
-            "inlineAssets": true
-        },
+        "reporterEnabled": "mocha-junit-reporter",
         "mochaJunitReporterReporterOptions": {
             "mochaFile": "cypress/reports/junit/results-[hash].xml"
         }
