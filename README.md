@@ -66,3 +66,26 @@
 2. To run multiple tags(tiers) in a single run, provide tag names appended in below format - 
 
     `npx cypress run --env grepTags=@tag1+@tag2`
+
+#### Running tests locally over Tackle UI hosted on minikube
+
+1. Install minikube on your local machine by referring to [docs](https://minikube.sigs.k8s.io/docs/start/)
+2. Start minikube by specifying needed addons and kubernetes version using below command
+
+    `minikube start --addons=registry --addons=ingress --kubernetes-version v1.20.2`
+
+3. Create new namespace for deploying Tackle UI
+
+    `kubectl create ns $tackleNamespace`
+
+4. Save the yaml from tackle [repo](https://github.com/konveyor/tackle/blob/main/kubernetes/kubernetes-tackle.yaml) locally, eg - /tmp/tackle/tackle.yaml
+
+    `kubectl create -f /tmp/tackle/tackle.yaml -n $tackleNamespace`
+
+5. Wait for some time to let deployment finish and extract the Tackle UI web page url (typically an IP) using command - 
+
+    `kubectl get ingress tackle --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}" -n $tackleNamespace`
+
+6. Once the Tackle UI is running on above address, tests can be run against this local instance using below command -
+
+    `npx cypress run --config video=false --browser /path/to/your/browser`
