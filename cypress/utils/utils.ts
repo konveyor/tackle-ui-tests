@@ -58,7 +58,7 @@ export function cancelForm(): void {
 }
 
 export function login(): void {
-    cy.visit(tackleUiUrl);
+    cy.visit("/");
     inputText(loginView.userNameInput, userName);
     inputText(loginView.userPasswordInput, userPassword);
     click(loginView.loginButton);

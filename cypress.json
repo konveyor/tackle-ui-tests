@@ -3,13 +3,14 @@
     "viewportHeight": 880,
     "video": false,
     "env": {
-        "user": "",
-        "pass": "",
-        "tackleUrl": ""
+        "user": "admin",
+        "pass": "qum5net",
+        "tackleUrl": "https://tackle-konveyor-tackle.apps.mig01.cnv-qe.rhcloud.com/"
     },
     "retries": {
         "runMode": 2,
         "openMode": 0
     },
-    "defaultCommandTimeout": 8000
+    "defaultCommandTimeout": 8000,
+    "baseUrl": "https://tackle-konveyor-tackle.apps.mig01.cnv-qe.rhcloud.com/"
 }

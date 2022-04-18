@@ -55,8 +55,16 @@ describe("Stakeholder validations", { tags: "@tier2" }, () => {
 
     it("Stakeholder field validations", function () {
         // Navigate to stakeholder tab and click "Create New" button
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholders);
+        // clickByText(navMenu, controls);
+        // clickByText(navTab, stakeholders);
+        
+        cy.visit({
+            url: '/controls/stakeholders',
+            method: 'GET',
+          })
+
+      
+        
         clickByText(button, createNewButton);
 
         // Email constraints
