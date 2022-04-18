@@ -47,8 +47,9 @@ describe("Stakeholder groups validations", { tags: "@tier2" }, () => {
 
     it("Stakeholder group field validations", function () {
         // Navigate to stakeholder group tab and click "Create New" button
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholdergroups);
+        // clickByText(navMenu, controls);
+        // clickByText(navTab, stakeholdergroups);
+        
         clickByText(button, createNewButton);
 
         // Name constraints
