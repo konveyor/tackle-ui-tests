@@ -15,6 +15,7 @@ import {
     createMultipleJobfunctions,
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
+    selectUserPerspective
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -61,7 +62,7 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
         preservecookies();
 
         // Interceptors
-        cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");
+        cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
     });
 
     after("Perform test data clean up", function () {
@@ -76,6 +77,7 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
     it("Email filter validations", function () {
         // Navigate to stakeholder tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
@@ -105,6 +107,7 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
     it("Display name filter validations", function () {
         // Navigate to stakeholder tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
@@ -134,6 +137,7 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
     it("Job function filter validations", function () {
         // Navigate to stakeholder tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
@@ -169,6 +173,7 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
     it("Group filter validations", function () {
         // Navigate to stakeholder tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");

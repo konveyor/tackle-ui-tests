@@ -9,6 +9,7 @@ import {
     hasToBeSkipped,
     createMultipleStakeholders,
     deleteAllStakeholders,
+    selectUserPerspective
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, stakeholders } from "../../../types/constants";
@@ -40,7 +41,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
         preservecookies();
 
         // Interceptors
-        cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");
+        cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
     });
 
     after("Perform test data clean up", function () {
@@ -53,6 +54,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
 
     it("Navigation button validations", function () {
         // Navigate to stakeholder tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
@@ -92,6 +94,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
 
     it("Items per page validations", function () {
         // Navigate to stakeholder tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
@@ -117,6 +120,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
 
     it("Page number validations", function () {
         // Navigate to stakeholder tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
@@ -136,6 +140,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
 
     it("Last page item(s) deletion, impact on page reload validation", function () {
         // Navigate to stakeholder tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
