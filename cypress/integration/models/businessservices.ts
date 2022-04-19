@@ -18,7 +18,7 @@ import {
     selectFormItems,
     checkSuccessAlert,
     performRowAction,
-    selectUserPerspective
+    selectUserPerspective,
 } from "../../utils/utils";
 
 export class BusinessServices {

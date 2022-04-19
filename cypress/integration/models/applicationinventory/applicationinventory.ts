@@ -38,7 +38,7 @@ import {
     selectFormItems,
     checkSuccessAlert,
     performRowAction,
-    selectUserPerspective
+    selectUserPerspective,
 } from "../../../utils/utils";
 import * as data from "../../../utils/data_utils";
 import {

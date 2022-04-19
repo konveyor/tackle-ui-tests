@@ -10,7 +10,7 @@ import {
     hasToBeSkipped,
     preservecookies,
     deleteAllStakeholders,
-    selectUserPerspective
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {

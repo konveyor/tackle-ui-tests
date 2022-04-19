@@ -17,7 +17,7 @@ import {
     cancelForm,
     checkSuccessAlert,
     performRowAction,
-    selectUserPerspective
+    selectUserPerspective,
 } from "../../utils/utils";
 import * as commonView from "../views/common.view";
 

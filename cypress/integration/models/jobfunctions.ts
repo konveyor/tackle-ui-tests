@@ -9,7 +9,7 @@ import {
     submitForm,
     cancelForm,
     performRowAction,
-    selectUserPerspective
+    selectUserPerspective,
 } from "../../utils/utils";
 import * as commonView from "../../integration/views/common.view";
 
