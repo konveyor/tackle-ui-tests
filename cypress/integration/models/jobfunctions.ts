@@ -1,4 +1,4 @@
-import { controls, jobfunctions, tdTag, button, createNewButton } from "../types/constants";
+import { controls, jobFunctions, tdTag, button, createNewButton } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import { jobfunctionNameInput } from "../views/jobfunctions.view";
 import {
@@ -21,7 +21,7 @@ export class Jobfunctions {
 
     public static clickJobfunctions(): void {
         clickByText(navMenu, controls);
-        clickByText(navTab, jobfunctions);
+        clickByText(navTab, jobFunctions);
     }
 
     protected fillName(name: string): void {

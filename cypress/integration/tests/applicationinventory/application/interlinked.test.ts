@@ -31,9 +31,9 @@ import { navTab } from "../../../views/menu.view";
 import { Stakeholders } from "../../../models/stakeholders";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import {
-    applicationinventory,
+    applicationInventory,
     controls,
-    businessservices,
+    businessServices,
     tags,
     button,
     assess,
@@ -90,7 +90,7 @@ describe("Application inventory interlinked to tags and business service", () =>
         function () {
             // Navigate to Business Service and delete
             clickByText(navMenu, controls);
-            clickByText(navTab, businessservices);
+            clickByText(navTab, businessServices);
 
             //Delete associated business service
             businessservicesList[0].delete();
@@ -101,7 +101,7 @@ describe("Application inventory interlinked to tags and business service", () =>
             tagList[0].delete();
 
             // Navigate to application inventory
-            clickByText(navMenu, applicationinventory);
+            clickByText(navMenu, applicationInventory);
             cy.wait(100);
             cy.wait("@getApplication");
 
@@ -153,7 +153,7 @@ describe("Application inventory interlinked to tags and business service", () =>
             businessservicesList[1].delete();
             tagList[1].delete();
 
-            clickByText(navMenu, applicationinventory);
+            clickByText(navMenu, applicationInventory);
             cy.wait("@getApplication");
 
             // Assert that business service is updated

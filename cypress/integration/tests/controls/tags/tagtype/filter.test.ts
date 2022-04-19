@@ -8,7 +8,7 @@ import {
     hasToBeSkipped,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, button, clearAllFilters, tags, tagtype } from "../../../../types/constants";
+import { controls, button, clearAllFilters, tags, tagType } from "../../../../types/constants";
 
 import * as data from "../../../../../utils/data_utils";
 
@@ -32,7 +32,7 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
 
         // Enter an existing tag type name substring and apply it as search filter
         var validSearchInput = data.getExistingTagtype();
-        applySearchFilter(tagtype, validSearchInput);
+        applySearchFilter(tagType, validSearchInput);
 
         // Assert that tag type row(s) containing the search text is/are displayed
         exists(validSearchInput);
@@ -43,7 +43,7 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
 
         // Enter a non-existing tag type name substring and apply it as search filter
         var invalidSearchInput = String(data.getRandomNumber(111111, 222222));
-        applySearchFilter(tagtype, invalidSearchInput);
+        applySearchFilter(tagType, invalidSearchInput);
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");

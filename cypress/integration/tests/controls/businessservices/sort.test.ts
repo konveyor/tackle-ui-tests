@@ -16,7 +16,7 @@ import {
     deleteAllStakeholders,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, businessservices, name, owner } from "../../../types/constants";
+import { controls, businessServices, name, owner } from "../../../types/constants";
 
 import { Stakeholders } from "../../../models/stakeholders";
 import { BusinessServices } from "../../../models/businessservices";
@@ -57,7 +57,7 @@ describe("Business services sort validations", { tags: "@tier2" }, function () {
     it("Name sort validations", function () {
         // Navigate to business services tab
         clickByText(navMenu, controls);
-        clickByText(navTab, businessservices);
+        clickByText(navTab, businessServices);
         cy.wait("@getBusinessService");
 
         // get unsorted list when page loads
@@ -83,7 +83,7 @@ describe("Business services sort validations", { tags: "@tier2" }, function () {
     it("Owner sort validations", function () {
         // Navigate to business services tab
         clickByText(navMenu, controls);
-        clickByText(navTab, businessservices);
+        clickByText(navTab, businessServices);
         cy.wait("@getBusinessService");
 
         // get unsorted list when page loads

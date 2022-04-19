@@ -22,7 +22,7 @@ import {
     reports,
     name,
     description,
-    businessservice,
+    businessService,
     tag,
     button,
     clearAllFilters,
@@ -221,7 +221,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
         // select an existing application business service and apply it as search filter
         var validSearchInput = applicationsList[0].business;
-        applySearchFilter(businessservice, validSearchInput);
+        applySearchFilter(businessService, validSearchInput);
         cy.wait(3000);
 
         // Check element filtered for table Adoption Candidate Distribution

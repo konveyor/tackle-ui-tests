@@ -14,7 +14,7 @@ import {
 import { navTab } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Stakeholders } from "../../../models/stakeholders";
-import { tdTag, trTag, stakeholdergroups } from "../../../types/constants";
+import { tdTag, trTag, stakeholderGroups } from "../../../types/constants";
 import { expandRow } from "../../../views/common.view";
 import * as data from "../../../../utils/data_utils";
 
@@ -85,7 +85,7 @@ describe("Stakeholder group linked to stakeholder members", { tags: "@tier1" }, 
         cy.wait("@getStakeholdergroups");
 
         // Go to stakeholder group page
-        clickByText(navTab, stakeholdergroups);
+        clickByText(navTab, stakeholderGroups);
 
         // Check if second stakeholder's name attached to stakeholder group updated
         selectItemsPerPage(100);
@@ -107,7 +107,7 @@ describe("Stakeholder group linked to stakeholder members", { tags: "@tier1" }, 
         notExists(stakeholdersList[1].name);
 
         // Go to stakeholder group page
-        clickByText(navTab, stakeholdergroups);
+        clickByText(navTab, stakeholderGroups);
 
         // Check if second stakeholder's name detached from stakeholder group
         selectItemsPerPage(100);

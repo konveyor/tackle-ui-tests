@@ -15,7 +15,7 @@ import {
     hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
-import { applicationinventory } from "../../../types/constants";
+import { applicationInventory } from "../../../types/constants";
 
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import { BusinessServices } from "../../../models/businessservices";
@@ -39,7 +39,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
         // Create business service
         businessService.create();
         // Open the application inventory page
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait(2000);
 
         // Import multiple csv files
@@ -83,7 +83,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
 
     it("Date sort validations", function () {
         // Navigate to application inventory page and open manage imports
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
         cy.wait("@getImportApplications");
@@ -110,7 +110,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
 
     it("User sort validations", function () {
         // Navigate to application inventory page and open manage imports
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
 
@@ -136,7 +136,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
 
     it("File name sort validations", function () {
         // Navigate to application inventory page and open manage imports
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
 
@@ -162,7 +162,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
 
     it("Import status sort validations", function () {
         // Navigate to application inventory page and open manage imports
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
 

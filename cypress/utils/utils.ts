@@ -11,7 +11,7 @@ import { navMenu } from "../integration/views/menu.view";
 import * as data from "../utils/data_utils";
 import "cypress-file-upload";
 import {
-    businessservice,
+    businessService,
     tag,
     groupCount,
     memberCount,
@@ -24,7 +24,9 @@ import {
     priority,
     confidence,
     deleteAction,
-    applicationinventory,
+    applicationInventory,
+    optionMenu,
+    userPerspectiveMenu,
 } from "../integration/types/constants";
 import { actionButton, date } from "../integration/views/applicationinventory.view";
 
@@ -158,7 +160,7 @@ export function applySearchFilter(
     identifiedRisk?: boolean
 ): void {
     selectFilter(filterName, identifiedRisk);
-    if (filterName == businessservice || filterName == tag) {
+    if (filterName == businessService || filterName == tag) {
         cy.get("div.pf-c-input-group").find("div.pf-c-select > div > button").click();
         if (Array.isArray(searchText)) {
             searchText.forEach(function (searchTextValue) {
@@ -428,7 +430,7 @@ export function verifyImportErrorMsg(errorMsg: any): void {
 
 export function deleteApplicationTableRows(lastPage = false): void {
     if (!lastPage) {
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait(800);
         // Select 100 items per page
         selectItemsPerPage(100);
@@ -751,4 +753,9 @@ export function deleteAllTagTypes(cancel = false): void {
                     });
             }
         });
+}
+
+export function selectUserPerspective(userType: string): void {
+    click(optionMenu);
+    clickByText(userPerspectiveMenu, userType);
 }

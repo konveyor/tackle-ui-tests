@@ -1,4 +1,4 @@
-import { controls, stakeholdergroups, tdTag, button, createNewButton } from "../types/constants";
+import { controls, stakeholderGroups, tdTag, button, createNewButton } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import {
     stakeholdergroupNameInput,
@@ -31,7 +31,7 @@ export class Stakeholdergroups {
 
     public static clickStakeholdergroups(): void {
         clickByText(navMenu, controls);
-        clickByText(navTab, stakeholdergroups);
+        clickByText(navTab, stakeholderGroups);
     }
 
     protected fillName(name: string): void {

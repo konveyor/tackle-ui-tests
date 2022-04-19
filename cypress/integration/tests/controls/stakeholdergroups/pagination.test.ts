@@ -11,7 +11,7 @@ import {
     deleteAllStakeholderGroups,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, stakeholdergroups } from "../../../types/constants";
+import { controls, stakeholderGroups } from "../../../types/constants";
 
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 
@@ -59,7 +59,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
     it("Navigation button validations", function () {
         // Navigate to stakeholder groups tab
         clickByText(navMenu, controls);
-        clickByText(navTab, stakeholdergroups);
+        clickByText(navTab, stakeholderGroups);
         cy.wait("@getStakeholdergroups");
 
         // select 10 items per page
@@ -98,7 +98,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
     it("Items per page validations", function () {
         // Navigate to stakeholder groups tab
         clickByText(navMenu, controls);
-        clickByText(navTab, stakeholdergroups);
+        clickByText(navTab, stakeholderGroups);
         cy.wait("@getStakeholdergroups");
 
         // Select 10 items per page
@@ -123,7 +123,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
     it("Page number validations", function () {
         // Navigate to stakeholder groups tab
         clickByText(navMenu, controls);
-        clickByText(navTab, stakeholdergroups);
+        clickByText(navTab, stakeholderGroups);
         cy.wait("@getStakeholdergroups");
 
         // Select 10 items per page
@@ -143,7 +143,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
         // Issue - https://issues.redhat.com/browse/TACKLE-155
         // Navigate to stakeholder groups tab
         clickByText(navMenu, controls);
-        clickByText(navTab, stakeholdergroups);
+        clickByText(navTab, stakeholderGroups);
         cy.wait("@getStakeholdergroups");
 
         // Select 10 items per page
