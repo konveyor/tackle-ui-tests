@@ -1,4 +1,4 @@
-import { controls, businessservices, tdTag, button, createNewButton } from "../types/constants";
+import { controls, businessServices, tdTag, button, createNewButton } from "../types/constants";
 import { navMenu, navTab } from "../views/menu.view";
 import {
     businessServiceNameInput,
@@ -33,7 +33,7 @@ export class BusinessServices {
 
     public static clickBusinessservices(): void {
         clickByText(navMenu, controls);
-        clickByText(navTab, businessservices);
+        clickByText(navTab, businessServices);
     }
 
     protected fillName(name: string): void {

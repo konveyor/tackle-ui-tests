@@ -15,7 +15,7 @@ import {
 } from "../../../../utils/utils";
 const { _ } = Cypress;
 import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, name, jobfunctions } from "../../../types/constants";
+import { controls, name, jobFunctions } from "../../../types/constants";
 
 import { Jobfunctions } from "../../../models/jobfunctions";
 
@@ -52,7 +52,7 @@ describe("Job function sorting", { tags: "@tier2" }, function () {
     it("Name sort validations", function () {
         // Navigate to job functions tab
         clickByText(navMenu, controls);
-        clickByText(navTab, jobfunctions);
+        clickByText(navTab, jobFunctions);
         cy.wait("@getJobfunctions");
 
         // get unsorted list when page loads

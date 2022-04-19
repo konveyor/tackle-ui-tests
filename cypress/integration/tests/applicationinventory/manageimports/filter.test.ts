@@ -12,7 +12,7 @@ import {
     hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
-import { applicationinventory, button, clearAllFilters } from "../../../types/constants";
+import { applicationInventory, button, clearAllFilters } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
@@ -43,7 +43,7 @@ describe("Manage applications import filter validations", { tags: "@tier2" }, fu
         businessService.create();
 
         // Open the application inventory page
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait(2000);
 
         // Import multiple csv files
@@ -79,7 +79,7 @@ describe("Manage applications import filter validations", { tags: "@tier2" }, fu
 
     it("File name filter validations", function () {
         // Navigate to application inventory page and open manage imports
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
 

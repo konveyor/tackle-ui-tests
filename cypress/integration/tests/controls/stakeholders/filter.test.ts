@@ -25,7 +25,7 @@ import {
     trTag,
     email,
     displayName,
-    jobfunction,
+    jobFunction,
     group,
     clearAllFilters,
 } from "../../../types/constants";
@@ -140,7 +140,7 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
         // Enter an existing job function substring and apply it as search filter
         var validSearchInput = stakeholdersList[0].jobfunction.substring(0, 3);
-        applySearchFilter(jobfunction, validSearchInput);
+        applySearchFilter(jobFunction, validSearchInput);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
         selectItemsPerPage(100);
@@ -159,7 +159,7 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
         cy.wait("@getStakeholders");
 
         // Enter a non-existing job function substring and apply it as search filter
-        applySearchFilter(jobfunction, invalidSearchInput);
+        applySearchFilter(jobFunction, invalidSearchInput);
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");

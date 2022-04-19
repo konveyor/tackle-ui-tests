@@ -11,7 +11,7 @@ import {
 import { navTab } from "../../../views/menu.view";
 import { BusinessServices } from "../../../models/businessservices";
 import { Stakeholders } from "../../../models/stakeholders";
-import { tdTag, businessservices } from "../../../types/constants";
+import { tdTag, businessServices } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 
 describe("Business service linked to stakeholder", { tags: "@tier1" }, () => {
@@ -61,7 +61,7 @@ describe("Business service linked to stakeholder", { tags: "@tier1" }, () => {
         cy.wait("@getStakeholders");
 
         // Go to business services page
-        clickByText(navTab, businessservices);
+        clickByText(navTab, businessServices);
 
         // Verify stakeholder's name attached to business service updated
         selectItemsPerPage(100);
@@ -78,7 +78,7 @@ describe("Business service linked to stakeholder", { tags: "@tier1" }, () => {
         notExists(stakeholder.name);
 
         // Go to business services page
-        clickByText(navTab, businessservices);
+        clickByText(navTab, businessServices);
 
         // Verify stakeholder's name detached from business services
         selectItemsPerPage(100);
