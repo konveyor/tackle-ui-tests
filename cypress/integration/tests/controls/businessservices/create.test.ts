@@ -13,7 +13,7 @@ import {
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
     controls,
-    businessservices,
+    businessServices,
     button,
     duplicateErrMsg,
     minCharsMsg,
@@ -47,7 +47,7 @@ describe("Business service validations", { tags: "@tier2" }, () => {
     it("Business service field validations", function () {
         // Navigate to business service tab and click "Create New" button
         clickByText(navMenu, controls);
-        clickByText(navTab, businessservices);
+        clickByText(navTab, businessServices);
         clickByText(button, createNewButton);
 
         // Name constraints
@@ -69,7 +69,7 @@ describe("Business service validations", { tags: "@tier2" }, () => {
     it("Business service button validations", function () {
         // Navigate to business service tab and click "Create New" button
         clickByText(navMenu, controls);
-        clickByText(navTab, businessservices);
+        clickByText(navTab, businessServices);
         clickByText(button, createNewButton);
 
         // Check "Create" and "Cancel" button status

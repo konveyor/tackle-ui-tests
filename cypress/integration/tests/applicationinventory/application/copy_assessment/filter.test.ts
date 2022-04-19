@@ -19,7 +19,7 @@ import { ApplicationInventory } from "../../../../models/applicationinventory/ap
 
 import { Stakeholders } from "../../../../models/stakeholders";
 import {
-    businessservice,
+    businessService,
     button,
     clearAllFilters,
     description,
@@ -143,7 +143,7 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
 
         // Enter an existing business seervice linked to application and assert
         var validSearchInput = applicationList[1].business;
-        applySearchFilter(businessservice, validSearchInput, true);
+        applySearchFilter(businessService, validSearchInput, true);
         cy.wait(2000);
         cy.get(copyAssessmentTableTd)
             .should("contain", applicationList[1].name)
@@ -151,7 +151,7 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         clickByText(button, clearAllFilters);
 
         // Enter a business service not linked to any application and apply it as search filter
-        applySearchFilter(businessservice, businessservicesList[1].name, true);
+        applySearchFilter(businessService, businessservicesList[1].name, true);
         cy.wait(3000);
 
         // Assert that no search results are found

@@ -12,7 +12,7 @@ import {
     hasToBeSkipped,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, tags, tagtype, rank, tagCount } from "../../../../types/constants";
+import { controls, tags, tagType, rank, tagCount } from "../../../../types/constants";
 
 describe("Tag type sort validations", { tags: "@tier2" }, function () {
     before("Login", function () {
@@ -38,22 +38,22 @@ describe("Tag type sort validations", { tags: "@tier2" }, function () {
         cy.wait("@getTagtypes");
 
         // Get unsorted list when page loads
-        const unsortedList = getTableColumnData(tagtype);
+        const unsortedList = getTableColumnData(tagType);
 
         // Sort the tag type by name in ascending order
-        sortAsc(tagtype);
+        sortAsc(tagType);
         cy.wait(2000);
 
         // Verify that the tag type rows are displayed in ascending order
-        const afterAscSortList = getTableColumnData(tagtype);
+        const afterAscSortList = getTableColumnData(tagType);
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the tag type by name in descending order
-        sortDesc(tagtype);
+        sortDesc(tagType);
         cy.wait(2000);
 
         // Verify that the tag type rows are displayed in descending order
-        const afterDescSortList = getTableColumnData(tagtype);
+        const afterDescSortList = getTableColumnData(tagType);
         verifySortDesc(afterDescSortList, unsortedList);
     });
 

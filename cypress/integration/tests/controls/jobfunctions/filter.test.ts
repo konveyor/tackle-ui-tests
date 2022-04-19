@@ -10,7 +10,7 @@ import {
     deleteAllJobfunctions,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, jobfunctions, button, name, clearAllFilters } from "../../../types/constants";
+import { controls, jobFunctions, button, name, clearAllFilters } from "../../../types/constants";
 
 import { Jobfunctions } from "../../../models/jobfunctions";
 import * as data from "../../../../utils/data_utils";
@@ -39,7 +39,7 @@ describe("Job function filter validations", { tags: "@tier2" }, function () {
 
     it("Name filter validations", function () {
         clickByText(navMenu, controls);
-        clickByText(navTab, jobfunctions);
+        clickByText(navTab, jobFunctions);
 
         // Enter an existing display name substring and assert
         var validSearchInput = jobfunctionsList[0].name.substring(0, 3);

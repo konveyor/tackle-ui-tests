@@ -16,7 +16,7 @@ import {
     deleteAllStakeholderGroups,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, stakeholdergroups, name, memberCount } from "../../../types/constants";
+import { controls, stakeholderGroups, name, memberCount } from "../../../types/constants";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Stakeholders } from "../../../models/stakeholders";
 
@@ -56,7 +56,7 @@ describe("Stakeholder groups sort validations", { tags: "@tier2" }, function () 
     it("Name sort validations", function () {
         // Navigate to stakeholder groups tab
         clickByText(navMenu, controls);
-        clickByText(navTab, stakeholdergroups);
+        clickByText(navTab, stakeholderGroups);
         cy.wait("@getStakeholdergroups");
 
         // get unsorted list when page loads
@@ -82,7 +82,7 @@ describe("Stakeholder groups sort validations", { tags: "@tier2" }, function () 
     it("Member(s) sort validations", function () {
         // Navigate to stakeholder groups tab
         clickByText(navMenu, controls);
-        clickByText(navTab, stakeholdergroups);
+        clickByText(navTab, stakeholderGroups);
         cy.wait("@getStakeholdergroups");
 
         // get unsorted list when page loads

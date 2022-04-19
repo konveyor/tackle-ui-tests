@@ -16,12 +16,12 @@ import {
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import {
-    applicationinventory,
+    applicationInventory,
     button,
     name,
     clearAllFilters,
     description,
-    businessservice,
+    businessService,
     tag,
 } from "../../../types/constants";
 
@@ -69,7 +69,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     });
 
     it("Name filter validations", function () {
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
 
         // Enter an existing name substring and assert
@@ -102,7 +102,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     });
 
     it("Descriptions filter validations", function () {
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
 
         // Enter an existing description substring and assert
@@ -135,19 +135,19 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     });
 
     it("Business service filter validations", function () {
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
 
         // Enter an existing businessservice and assert
         var validSearchInput = applicationsList[0].business;
-        applySearchFilter(businessservice, validSearchInput);
+        applySearchFilter(businessService, validSearchInput);
         cy.wait(2000);
         exists(applicationsList[0].business);
 
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing business service and apply it as search filter
-        applySearchFilter(businessservice, businessserviceList[2].name);
+        applySearchFilter(businessService, businessserviceList[2].name);
         cy.wait(3000);
 
         // Assert that no search results are found
@@ -158,7 +158,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     });
 
     it("Tag filter validations", function () {
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
 
         // Enter an existing tag and assert

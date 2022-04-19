@@ -13,7 +13,7 @@ import {
     deleteApplicationTableRows,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
-import { applicationinventory, name, tagCount, review } from "../../../types/constants";
+import { applicationInventory, name, tagCount, review } from "../../../types/constants";
 
 import * as data from "../../../../utils/data_utils";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
@@ -56,7 +56,7 @@ describe("Application inventory sort validations", { tags: "@tier2" }, function 
 
     it("Name sort validations", function () {
         // Navigate to application inventory page
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
 
         // get unsorted list when page loads
@@ -81,7 +81,7 @@ describe("Application inventory sort validations", { tags: "@tier2" }, function 
 
     it("Review sort validations", function () {
         // Navigate to application inventory page
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
 
         // get unsorted list when page loads
@@ -106,7 +106,7 @@ describe("Application inventory sort validations", { tags: "@tier2" }, function 
 
     it("Tag count sort validations", function () {
         // Navigate to application inventory page
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
 
         // get unsorted list when page loads

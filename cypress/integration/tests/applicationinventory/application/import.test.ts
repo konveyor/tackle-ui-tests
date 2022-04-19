@@ -16,7 +16,7 @@ import {
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import { BusinessServices } from "../../../models/businessservices";
 import { navMenu } from "../../../views/menu.view";
-import { applicationinventory, button } from "../../../types/constants";
+import { applicationInventory, button } from "../../../types/constants";
 
 const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/";
@@ -56,7 +56,7 @@ describe("Application import operations", () => {
     });
 
     it("Valid applications import", { tags: "@tier1" }, function () {
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
 
         // Import valid csv
@@ -82,7 +82,7 @@ describe("Application import operations", () => {
     });
 
     it("Duplicate applications import", { tags: "@tier1" }, function () {
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
 
         // Import already imported valid csv file
@@ -109,7 +109,7 @@ describe("Application import operations", () => {
         "Applications import for non existing tags and business service",
         { tags: "@tier1" },
         function () {
-            clickByText(navMenu, applicationinventory);
+            clickByText(navMenu, applicationInventory);
             cy.wait("@getApplication");
 
             // Import csv with non-existent businsess service and tag rows
@@ -137,7 +137,7 @@ describe("Application import operations", () => {
         "Applications import with minimum required field(s) and empty row",
         { tags: "@tier1" },
         function () {
-            clickByText(navMenu, applicationinventory);
+            clickByText(navMenu, applicationInventory);
             cy.wait("@getApplication");
 
             // Import csv with an empty row between two valid rows having minimum required field(s)
@@ -168,7 +168,7 @@ describe("Application import operations", () => {
     );
 
     it("Applications import having same name with spaces", { tags: "@tier1" }, function () {
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
 
         // Import csv having applications with same name, differentiated by whitespaces
@@ -195,7 +195,7 @@ describe("Application import operations", () => {
         "Applications import having description and comments exceeding allowed limits",
         { tags: "@tier1" },
         function () {
-            clickByText(navMenu, applicationinventory);
+            clickByText(navMenu, applicationInventory);
             cy.wait("@getApplication");
 
             // Import csv having description and comments over the allowed limits
@@ -213,7 +213,7 @@ describe("Application import operations", () => {
 
     it("Applications import for invalid csv schema", { tags: "@newtest" }, function () {
         // Impacted by bug - https://issues.redhat.com/browse/TACKLE-320
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
 
         // Import csv invalid schema

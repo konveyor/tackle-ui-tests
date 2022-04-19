@@ -9,10 +9,11 @@ import {
     notExists,
     hasToBeSkipped,
     preservecookies,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import {
-    applicationinventory,
+    applicationInventory,
     button,
     minCharsMsg,
     max120CharsMsg,
@@ -36,6 +37,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
 
         // Perform login
         login();
+        selectUserPerspective("Developer");
     });
 
     beforeEach("Persist session", function () {
@@ -49,7 +51,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
 
     it("Application field validations", function () {
         // Navigate to application inventory page and click "Create New" button
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         clickByText(button, createNewButton);
 
         // Name constraints
@@ -74,7 +76,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
 
     it("Application button validations", function () {
         // Navigate to application inventory page and click create new button
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         clickByText(button, createNewButton);
 
         // Check "Create" and "Cancel" button status

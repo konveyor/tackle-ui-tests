@@ -11,7 +11,7 @@ import {
 } from "../../../../utils/utils";
 import {
     controls,
-    jobfunctions,
+    jobFunctions,
     button,
     minCharsMsg,
     max120CharsMsg,
@@ -46,7 +46,7 @@ describe("Job Function Validations", { tags: "@tier2" }, () => {
     it("Job function field validations", function () {
         // Create new job function
         clickByText(navMenu, controls);
-        clickByText(navTab, jobfunctions);
+        clickByText(navTab, jobFunctions);
         clickByText(button, createNewButton);
 
         // Name constraints
@@ -81,7 +81,7 @@ describe("Job Function Validations", { tags: "@tier2" }, () => {
     it("Job function button validations", function () {
         // Navigate to job function tab and click create new button
         clickByText(navMenu, controls);
-        clickByText(navTab, jobfunctions);
+        clickByText(navTab, jobFunctions);
         clickByText(button, createNewButton);
 
         // Check "Create" and "Cancel" button status

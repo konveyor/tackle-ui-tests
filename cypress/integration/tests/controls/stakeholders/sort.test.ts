@@ -24,7 +24,7 @@ import {
     email,
     stakeholders,
     displayName,
-    jobfunction,
+    jobFunction,
     groupCount,
 } from "../../../types/constants";
 
@@ -127,22 +127,22 @@ describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
         cy.wait("@getStakeholders");
 
         // get unsorted list when page loads
-        const unsortedList = getTableColumnData(jobfunction);
+        const unsortedList = getTableColumnData(jobFunction);
 
         // Sort the stakeholders by Job function in ascending order
-        sortAsc(jobfunction);
+        sortAsc(jobFunction);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
-        const afterAscSortList = getTableColumnData(jobfunction);
+        const afterAscSortList = getTableColumnData(jobFunction);
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by Job function in descending order
-        sortDesc(jobfunction);
+        sortDesc(jobFunction);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in descending order
-        const afterDescSortList = getTableColumnData(jobfunction);
+        const afterDescSortList = getTableColumnData(jobFunction);
         verifySortDesc(afterDescSortList, unsortedList);
     });
 

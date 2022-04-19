@@ -11,7 +11,7 @@ import {
     deleteAllBusinessServices,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, businessservices } from "../../../types/constants";
+import { controls, businessServices } from "../../../types/constants";
 import {
     firstPageButton,
     lastPageButton,
@@ -52,7 +52,7 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
     it("Navigation button validations", function () {
         // Navigate to business services tab
         clickByText(navMenu, controls);
-        clickByText(navTab, businessservices);
+        clickByText(navTab, businessServices);
         cy.wait("@getBusinessService");
 
         // select 10 items per page
@@ -91,7 +91,7 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
     it("Items per page validations", function () {
         // Navigate to business services tab
         clickByText(navMenu, controls);
-        clickByText(navTab, businessservices);
+        clickByText(navTab, businessServices);
         cy.wait("@getBusinessService");
 
         // Select 10 items per page
@@ -116,7 +116,7 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
     it("Page number validations", function () {
         // Navigate to business services tab
         clickByText(navMenu, controls);
-        clickByText(navTab, businessservices);
+        clickByText(navTab, businessServices);
         cy.wait("@getBusinessService");
 
         // Select 10 items per page
@@ -135,7 +135,7 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
     it("Last page item(s) deletion, impact on page reload validation", function () {
         // Navigate to business services tab
         clickByText(navMenu, controls);
-        clickByText(navTab, businessservices);
+        clickByText(navTab, businessServices);
         cy.wait("@getBusinessService");
 
         // Select 10 items per page

@@ -10,7 +10,7 @@ import {
     createMultipleApplications,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
-import { applicationinventory } from "../../../types/constants";
+import { applicationInventory } from "../../../types/constants";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import * as commonView from "../../../views/common.view";
 
@@ -47,7 +47,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
 
     it("Navigation button validations", function () {
         // Navigate to Application inventory tab
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
 
         // select 10 items per page
@@ -85,7 +85,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
 
     it("Items per page validations", function () {
         // Navigate to Application inventory tab
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
 
         // Select 10 items per page
@@ -115,7 +115,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
 
     it("Page number validations", function () {
         // Navigate to Application inventory tab
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
 
         // Select 10 items per page
@@ -133,7 +133,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
 
     it("Last page item(s) deletion, impact on page reload validation", function () {
         // Navigate to Application inventory tab
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
 
         // Select 10 items per page

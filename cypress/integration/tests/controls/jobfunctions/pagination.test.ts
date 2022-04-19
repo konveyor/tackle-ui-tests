@@ -10,7 +10,7 @@ import {
     deleteAllJobfunctions,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, jobfunctions } from "../../../types/constants";
+import { controls, jobFunctions } from "../../../types/constants";
 import {
     firstPageButton,
     lastPageButton,
@@ -54,7 +54,7 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
     it("Navigation button validations", function () {
         // Navigate to Job functions tab
         clickByText(navMenu, controls);
-        clickByText(navTab, jobfunctions);
+        clickByText(navTab, jobFunctions);
         cy.wait("@getJobfunctions");
 
         // select 10 items per page
@@ -93,7 +93,7 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
     it("Items per page validations", function () {
         // Navigate to Job functions tab
         clickByText(navMenu, controls);
-        clickByText(navTab, jobfunctions);
+        clickByText(navTab, jobFunctions);
         cy.wait("@getJobfunctions");
 
         // Select 10 items per page
@@ -118,7 +118,7 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
     it("Page number validations", function () {
         // Navigate to Job functions tab
         clickByText(navMenu, controls);
-        clickByText(navTab, jobfunctions);
+        clickByText(navTab, jobFunctions);
         cy.wait("@getJobfunctions");
 
         // Select 10 items per page

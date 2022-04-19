@@ -16,7 +16,7 @@ import {
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
     controls,
-    businessservices,
+    businessServices,
     description,
     owner,
     button,
@@ -63,7 +63,7 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
 
     it("Name filter validations", function () {
         clickByText(navMenu, controls);
-        clickByText(navTab, businessservices);
+        clickByText(navTab, businessServices);
 
         // Enter an existing display name substring and assert
         var validSearchInput = businessservicesList[0].name.substring(0, 3);
@@ -93,7 +93,7 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
 
     it("Description filter validations", function () {
         clickByText(navMenu, controls);
-        clickByText(navTab, businessservices);
+        clickByText(navTab, businessServices);
 
         // Enter an existing description substring and assert
         var validSearchInput = businessservicesList[0].description.substring(0, 8);
@@ -123,7 +123,7 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
 
     it("Owner filter validations", function () {
         clickByText(navMenu, controls);
-        clickByText(navTab, businessservices);
+        clickByText(navTab, businessServices);
 
         // Enter an existing owner substring and assert
         var validSearchInput = businessservicesList[0].owner.substring(0, 3);

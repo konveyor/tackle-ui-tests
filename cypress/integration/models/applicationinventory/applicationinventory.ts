@@ -1,5 +1,5 @@
 import {
-    applicationinventory,
+    applicationInventory,
     tdTag,
     trTag,
     button,
@@ -75,7 +75,7 @@ export class ApplicationInventory {
         if (tags) this.tags = tags;
     }
     protected static clickApplicationInventory(): void {
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
     }
 
     protected fillName(name: string): void {

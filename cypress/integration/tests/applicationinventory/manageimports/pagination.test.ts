@@ -12,7 +12,7 @@ import {
     hasToBeSkipped,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
-import { applicationinventory, button, tdTag, trTag, deleteAction } from "../../../types/constants";
+import { applicationInventory, button, tdTag, trTag, deleteAction } from "../../../types/constants";
 import { actionButton } from "../../../views/applicationinventory.view";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 
@@ -42,7 +42,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
         businessService.create();
 
         // Navigate to Application inventory tab
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait(5000);
         var rowsToCreate = 0;
 
@@ -109,7 +109,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
 
     it("Navigation button validations", function () {
         // Navigate to Application inventory tab and open manage imports page
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
 
@@ -148,7 +148,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
 
     it("Items per page validations", function () {
         // Navigate to Application inventory tab and open manage imports page
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
 
@@ -179,7 +179,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
 
     it("Page number validations", function () {
         // Navigate to Application inventory tab and open manage imports page
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
 
@@ -198,7 +198,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
 
     it("Last page item(s) deletion, impact on page reload validation", function () {
         // Navigate to Application inventory tab and open manage imports page
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
 
