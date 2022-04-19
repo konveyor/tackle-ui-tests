@@ -9,6 +9,7 @@ import {
     submitForm,
     cancelForm,
     performRowAction,
+    selectUserPerspective
 } from "../../utils/utils";
 import * as commonView from "../../integration/views/common.view";
 
@@ -20,6 +21,7 @@ export class Jobfunctions {
     }
 
     public static clickJobfunctions(): void {
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, jobFunctions);
     }

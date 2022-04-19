@@ -17,6 +17,7 @@ import {
     cancelForm,
     checkSuccessAlert,
     performRowAction,
+    selectUserPerspective
 } from "../../utils/utils";
 import * as commonView from "../views/common.view";
 
@@ -34,6 +35,7 @@ export class Stakeholders {
     }
 
     public static clickStakeholders(): void {
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
     }
@@ -79,7 +81,7 @@ export class Stakeholders {
             submitForm();
             checkSuccessAlert(
                 commonView.successAlertMessage,
-                `Success! ${this.name} was added as a stakeholder.`
+                `Success! ${this.name} was added as a(n) stakeholder.`
             );
         }
     }

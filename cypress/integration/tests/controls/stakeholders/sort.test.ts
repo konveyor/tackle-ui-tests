@@ -16,6 +16,7 @@ import {
     deleteAllJobfunctions,
     deleteAllStakeholders,
     deleteAllStakeholderGroups,
+    selectUserPerspective
 } from "../../../../utils/utils";
 const { _ } = Cypress;
 import { navMenu, navTab } from "../../../views/menu.view";
@@ -55,7 +56,7 @@ describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
         preservecookies();
 
         // Interceptors
-        cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");
+        cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
     });
 
     after("Perform test data clean up", function () {
@@ -70,6 +71,7 @@ describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
 
     it("Email sort validations", function () {
         // Navigate to stakeholder tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
@@ -96,6 +98,7 @@ describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
 
     it("Display name sort validations", function () {
         // Navigate to stakeholder tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
@@ -122,6 +125,7 @@ describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
 
     it("Job function sort validations", function () {
         // Navigate to stakeholder tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
@@ -148,6 +152,7 @@ describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
 
     it("Group sort validations", function () {
         // Navigate to stakeholder tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");

@@ -31,10 +31,9 @@ describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
         preservecookies();
 
         // Interceptors
-        cy.intercept("POST", "/api/controls/stakeholder*").as("postStakeholder");
-        cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");
-        cy.intercept("PUT", "/api/controls/stakeholder/*").as("putStakeholder");
-        cy.intercept("DELETE", "/api/controls/stakeholder/*").as("deleteStakeholder");
+        cy.intercept("POST", "/hub/stakeholder*").as("postStakeholder");
+        cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
+        cy.intercept("DELETE", "/hub/stakeholder*/*").as("deleteStakeholder");
     });
 
     it("Stakeholder CRUD", function () {
@@ -47,7 +46,6 @@ describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
         // Edit the current stakeholder's name
         var updatedStakeholderName = data.getFullName();
         stakeholder.edit({ name: updatedStakeholderName });
-        cy.wait("@putStakeholder");
         cy.wait("@getStakeholders");
 
         // Assert that stakeholder name got edited

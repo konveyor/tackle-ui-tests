@@ -9,7 +9,7 @@ export const removeButton = "button[aria-label='Remove']";
 export const clearAllButton = "button[aria-label='Clear all']";
 export const controlsForm = "form.pf-c-form";
 export const itemsPerPageMenu = "div.pf-c-options-menu";
-export const itemsPerPageMenuOptions = "ul[aria-labelledby='pagination-options-menu-toggle']";
+export const itemsPerPageMenuOptions = "ul[aria-labelledby='pagination-id-toggle']";
 export const expandRow = "button[aria-label=Details]";
 export const successAlertMessage = "div[aria-label='Success Alert']";
 export const duplicateNameWarning = "div[aria-label='Danger Alert']";
