@@ -16,7 +16,7 @@ import {
     deleteAllJobfunctions,
     deleteAllStakeholders,
     deleteAllStakeholderGroups,
-    selectUserPerspective
+    selectUserPerspective,
 } from "../../../../utils/utils";
 const { _ } = Cypress;
 import { navMenu, navTab } from "../../../views/menu.view";

@@ -9,7 +9,7 @@ import {
     notExists,
     hasToBeSkipped,
     preservecookies,
-    selectUserPerspective
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
