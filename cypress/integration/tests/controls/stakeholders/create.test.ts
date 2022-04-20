@@ -9,6 +9,7 @@ import {
     notExists,
     hasToBeSkipped,
     preservecookies,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -49,12 +50,13 @@ describe("Stakeholder validations", { tags: "@tier2" }, () => {
         preservecookies();
 
         // Interceptors
-        cy.intercept("POST", "/api/controls/stakeholder*").as("postStakeholder");
-        cy.intercept("DELETE", "/api/controls/stakeholder/*").as("deleteStakeholder");
+        cy.intercept("POST", "/hub/stakeholder*").as("postStakeholder");
+        cy.intercept("DELETE", "/hub/stakeholder*/*").as("deleteStakeholder");
     });
 
     it("Stakeholder field validations", function () {
         // Navigate to stakeholder tab and click "Create New" button
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         clickByText(button, createNewButton);
@@ -84,6 +86,7 @@ describe("Stakeholder validations", { tags: "@tier2" }, () => {
 
     it("Stakholder button validations", function () {
         // Navigate to stakeholder tab and click create new button
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         clickByText(button, createNewButton);

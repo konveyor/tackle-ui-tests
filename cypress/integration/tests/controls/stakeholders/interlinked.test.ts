@@ -35,16 +35,16 @@ describe("Stakeholder linked to stakeholder groups and job function", { tags: "@
         preservecookies();
 
         // Interceptors for stakeholder groups
-        cy.intercept("POST", "/api/controls/stakeholder-group*").as("postStakeholdergroups");
-        cy.intercept("GET", "/api/controls/stakeholder-group*").as("getStakeholdergroups");
+        cy.intercept("POST", "/hub/stakeholder-group*").as("postStakeholdergroups");
+        cy.intercept("GET", "/hub/stakeholder-group*").as("getStakeholdergroups");
 
         // Interceptors for stakeholders
-        cy.intercept("POST", "/api/controls/stakeholder*").as("postStakeholder");
-        cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");
+        cy.intercept("POST", "/hub/stakeholder*").as("postStakeholder");
+        cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
 
         // Interceptors for job functions
-        cy.intercept("POST", "/api/controls/job-function*").as("postJobfunction");
-        cy.intercept("GET", "/api/controls/job-function*").as("getJobfunctions");
+        cy.intercept("POST", "/hub/job-function*").as("postJobfunction");
+        cy.intercept("GET", "/hub/job-function*").as("getJobfunctions");
     });
 
     it("Stakeholder group attach, update and delete dependency on stakeholder", function () {

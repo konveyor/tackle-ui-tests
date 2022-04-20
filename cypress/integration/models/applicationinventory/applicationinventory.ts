@@ -38,6 +38,7 @@ import {
     selectFormItems,
     checkSuccessAlert,
     performRowAction,
+    selectUserPerspective,
 } from "../../../utils/utils";
 import * as data from "../../../utils/data_utils";
 import {
@@ -75,6 +76,7 @@ export class ApplicationInventory {
         if (tags) this.tags = tags;
     }
     protected static clickApplicationInventory(): void {
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
     }
 

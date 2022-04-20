@@ -18,6 +18,7 @@ import {
     selectFormItems,
     checkSuccessAlert,
     performRowAction,
+    selectUserPerspective,
 } from "../../utils/utils";
 
 export class BusinessServices {
@@ -32,6 +33,7 @@ export class BusinessServices {
     }
 
     public static clickBusinessservices(): void {
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, businessServices);
     }

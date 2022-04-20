@@ -16,6 +16,7 @@ import {
     selectFormItems,
     checkSuccessAlert,
     performRowAction,
+    selectUserPerspective,
 } from "../../utils/utils";
 
 export class Stakeholdergroups {
@@ -30,6 +31,7 @@ export class Stakeholdergroups {
     }
 
     public static clickStakeholdergroups(): void {
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholderGroups);
     }
