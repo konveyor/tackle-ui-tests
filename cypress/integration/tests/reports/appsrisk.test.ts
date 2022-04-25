@@ -8,7 +8,7 @@ import {
     createMultipleStakeholders,
     createMultipleApplications,
     deleteAllStakeholders,
-    deleteApplicationTableRows,
+    deleteApplicationTableRows, selectUserPerspective,
 } from "../../../utils/utils";
 import { verifyApplicationRisk } from "../../models/reports/reports";
 import { ApplicationInventory } from "../../models/applicationinventory/applicationinventory";
@@ -58,6 +58,7 @@ describe("Application risks tests", { tags: "@newtest" }, () => {
 
     it("Application risk validation", function () {
         // Navigate to reports page
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(3000);
 

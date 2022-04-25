@@ -7,7 +7,7 @@ import {
     exists,
     notExists,
     hasToBeSkipped,
-    preservecookies,
+    preservecookies, selectUserPerspective,
 } from "../../../../utils/utils";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Stakeholders } from "../../../models/stakeholders";
@@ -31,11 +31,14 @@ describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
         preservecookies();
 
         // Interceptors
-        cy.intercept("POST", "/api/controls/stakeholder-group*").as("postStakeholdergroups");
-        cy.intercept("GET", "/api/controls/stakeholder-group*").as("getStakeholdergroups");
+        cy.intercept("POST", "/hub/stakeholdergroups*").as("postStakeholdergroups");
+        cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");
     });
 
     it("Stakeholder group CRUD", function () {
+
+        selectUserPerspective("Developer");
+
         const stakeholdergroup = new Stakeholdergroups(
             data.getCompanyName(),
             data.getDescription()
@@ -62,6 +65,9 @@ describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Stakeholder group CRUD with stakeholder member attached", function () {
+
+        selectUserPerspective("Developer");
+
         // Create stakeholder
         stakeholder.create();
         exists(stakeholder.email);

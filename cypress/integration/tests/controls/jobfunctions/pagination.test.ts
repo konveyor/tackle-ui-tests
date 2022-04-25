@@ -7,7 +7,7 @@ import {
     preservecookies,
     hasToBeSkipped,
     createMultipleJobfunctions,
-    deleteAllJobfunctions,
+    deleteAllJobfunctions, selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, jobFunctions } from "../../../types/constants";
@@ -40,7 +40,7 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
         preservecookies();
 
         // Interceptors for Job functions
-        cy.intercept("GET", "/api/controls/job-function*").as("getJobfunctions");
+        cy.intercept("GET", "/hub/jobfunctions*").as("getJobfunctions");
     });
 
     after("Perform test data clean up", function () {
@@ -53,6 +53,7 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
 
     it("Navigation button validations", function () {
         // Navigate to Job functions tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, jobFunctions);
         cy.wait("@getJobfunctions");
@@ -92,6 +93,7 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
 
     it("Items per page validations", function () {
         // Navigate to Job functions tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, jobFunctions);
         cy.wait("@getJobfunctions");
@@ -117,6 +119,7 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
 
     it("Page number validations", function () {
         // Navigate to Job functions tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, jobFunctions);
         cy.wait("@getJobfunctions");

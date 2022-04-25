@@ -1,6 +1,13 @@
 /// <reference types="cypress" />
 
-import { exists, hasToBeSkipped, login, notExists, preservecookies } from "../../../../utils/utils";
+import {
+    exists,
+    hasToBeSkipped,
+    login,
+    notExists,
+    preservecookies,
+    selectUserPerspective
+} from "../../../../utils/utils";
 import { BusinessServices } from "../../../models/businessservices";
 import { Stakeholders } from "../../../models/stakeholders";
 
@@ -20,16 +27,18 @@ describe("Business service CRUD operations", { tags: "@tier1" }, () => {
         preservecookies();
 
         // Interceptors for business services
-        cy.intercept("POST", "/api/controls/business-service*").as("postBusinessService");
-        cy.intercept("GET", "/api/controls/business-service*").as("getBusinessService");
+        cy.intercept("POST", "/hub/businessservices*").as("postBusinessService");
+        cy.intercept("GET", "/hub/businessservices*").as("getBusinessService");
 
         // Interceptors for stakeholders
-        cy.intercept("POST", "/api/controls/stakeholder*").as("postStakeholder");
-        cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");
+        cy.intercept("POST", "/hub/stakeholders*").as("postStakeholder");
+        cy.intercept("GET", "/hub/stakeholders*").as("getStakeholders");
     });
 
     it("Business service CRUD", function () {
         const businessService = new BusinessServices(data.getCompanyName(), data.getDescription());
+
+        selectUserPerspective("Developer");
 
         // Create new Business service
         businessService.create();
@@ -51,6 +60,9 @@ describe("Business service CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Business service CRUD with owner", function () {
+
+        selectUserPerspective("Developer");
+
         // Create owner - stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();

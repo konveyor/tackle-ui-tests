@@ -7,7 +7,7 @@ import {
     submitForm,
     click,
     preservecookies,
-    hasToBeSkipped,
+    hasToBeSkipped, selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import {
@@ -44,12 +44,13 @@ describe("Tag validations", { tags: "@tier2" }, () => {
         preservecookies();
 
         // Interceptors
-        cy.intercept("POST", "/api/controls/tag*").as("postTag");
-        cy.intercept("GET", "/api/controls/tag*").as("getTag");
+        cy.intercept("POST", "/hub/tag*").as("postTag");
+        cy.intercept("GET", "/hub/tag*").as("getTag");
     });
 
     it("Tag field validations", function () {
         // Navigate to Tags tab and click "Create tag" button
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
         clickByText(button, createTagButton);
@@ -73,6 +74,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
 
     it("Tag button validations", function () {
         // Navigate to Tags tab and click "Create tag" button
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
         clickByText(button, createTagButton);

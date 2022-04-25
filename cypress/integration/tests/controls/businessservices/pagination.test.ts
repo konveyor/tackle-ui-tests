@@ -8,7 +8,7 @@ import {
     preservecookies,
     hasToBeSkipped,
     createMultipleBusinessServices,
-    deleteAllBusinessServices,
+    deleteAllBusinessServices, selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, businessServices } from "../../../types/constants";
@@ -38,7 +38,7 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
         preservecookies();
 
         // Interceptors for business services
-        cy.intercept("GET", "/api/controls/business-service*").as("getBusinessService");
+        cy.intercept("GET", "/hub/business-service*").as("getBusinessService");
     });
 
     after("Perform test data clean up", function () {
@@ -51,6 +51,7 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
 
     it("Navigation button validations", function () {
         // Navigate to business services tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, businessServices);
         cy.wait("@getBusinessService");
@@ -90,6 +91,7 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
 
     it("Items per page validations", function () {
         // Navigate to business services tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, businessServices);
         cy.wait("@getBusinessService");

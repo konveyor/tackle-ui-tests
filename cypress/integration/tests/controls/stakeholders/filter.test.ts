@@ -76,6 +76,8 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
     });
 
     it("Email filter validations", function () {
+
+        selectUserPerspective("Developer");
         // Navigate to stakeholder tab
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
@@ -106,6 +108,9 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
     });
 
     it("Display name filter validations", function () {
+
+        selectUserPerspective("Developer");
+
         // Navigate to stakeholder tab
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
@@ -137,6 +142,7 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
     it("Job function filter validations", function () {
         // Navigate to stakeholder tab
+        selectUserPerspective("Developer");
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
@@ -173,6 +179,7 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
     it("Group filter validations", function () {
         // Navigate to stakeholder tab
+        selectUserPerspective("Developer");
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
