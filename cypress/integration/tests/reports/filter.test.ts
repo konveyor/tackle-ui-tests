@@ -15,7 +15,7 @@ import {
     deleteAllStakeholders,
     deleteAllBusinessServices,
     deleteAllTagTypes,
-    deleteApplicationTableRows,
+    deleteApplicationTableRows, selectUserPerspective,
 } from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
 import {
@@ -91,6 +91,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
     it("Name field validations", function () {
         // Navigate to reports
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(2000);
 
@@ -154,6 +155,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
     it("Description field validations", function () {
         // Navigate to reports
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(2000);
 
@@ -216,6 +218,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
     it("Business service field validations", function () {
         // Navigate to reports
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(2000);
 
@@ -253,6 +256,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
     it("Tag field validations", function () {
         // Navigate to reports
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(2000);
 
@@ -290,6 +294,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
     it("Identified risk - Application field validations", function () {
         // Navigate to reports
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(2000);
 
@@ -343,6 +348,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
     it("Identified risk - Category field validations", function () {
         // Navigate to reports
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(2000);
 
@@ -392,6 +398,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
     it("Identified risk - Question field validations", function () {
         // Navigate to reports
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(2000);
 
@@ -440,6 +447,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
     it("Identified risk - Answer field validations", function () {
         // Navigate to reports
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(2000);
 

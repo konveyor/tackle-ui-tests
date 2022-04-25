@@ -65,7 +65,7 @@ describe("Manage applications import filter validations", { tags: "@tier2" }, fu
         preservecookies();
 
         // Interceptors
-        cy.intercept("GET", "/api/application-inventory/application*").as("getApplications");
+        cy.intercept("GET", "/hub/application*").as("getApplications");
     });
 
     after("Perform test data clean up", function () {

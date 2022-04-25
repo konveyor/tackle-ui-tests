@@ -73,7 +73,7 @@ export class Tag {
             submitForm();
             checkSuccessAlert(
                 commonView.successAlertMessage,
-                `Success! ${this.name} was added as a tag.`
+                `Success! ${this.name} was added as a(n) tag.`
             );
         }
     }
@@ -157,7 +157,7 @@ export class Tagtype {
             submitForm();
             checkSuccessAlert(
                 commonView.successAlertMessage,
-                `Success! ${this.name} was added as a tag type.`
+                `Success! ${this.name} was added as a(n) tag type.`
             );
         }
     }

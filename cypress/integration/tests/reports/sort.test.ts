@@ -13,7 +13,7 @@ import {
     createMultipleApplications,
     createMultipleStakeholders,
     deleteAllStakeholders,
-    deleteApplicationTableRows,
+    deleteApplicationTableRows, selectUserPerspective,
 } from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
 import {
@@ -71,6 +71,7 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
 
     it("Adoption candidate distribution - Application name sort validations", function () {
         // Navigate to reports page
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -96,6 +97,7 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
 
     it("Adoption candidate distribution - Criticality sort validations", function () {
         // Navigate to reports page
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -121,6 +123,7 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
 
     it("Adoption candidate distribution - Priority sort validations", function () {
         // Navigate to reports page
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(3000);
 

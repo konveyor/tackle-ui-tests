@@ -13,7 +13,7 @@ import {
     createMultipleStakeholders,
     createMultipleBusinessServices,
     deleteAllBusinessServices,
-    deleteAllStakeholders,
+    deleteAllStakeholders, selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, businessServices, name, owner } from "../../../types/constants";
@@ -41,8 +41,8 @@ describe("Business services sort validations", { tags: "@tier2" }, function () {
         preservecookies();
 
         // Interceptors
-        cy.intercept("POST", "/api/controls/business-service*").as("postBusinessService");
-        cy.intercept("GET", "/api/controls/business-service*").as("getBusinessService");
+        cy.intercept("POST", "/hub/business-service*").as("postBusinessService");
+        cy.intercept("GET", "/hub/business-service*").as("getBusinessService");
     });
 
     after("Perform test data clean up", function () {
@@ -56,6 +56,7 @@ describe("Business services sort validations", { tags: "@tier2" }, function () {
 
     it("Name sort validations", function () {
         // Navigate to business services tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, businessServices);
         cy.wait("@getBusinessService");
@@ -82,6 +83,7 @@ describe("Business services sort validations", { tags: "@tier2" }, function () {
 
     it("Owner sort validations", function () {
         // Navigate to business services tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, businessServices);
         cy.wait("@getBusinessService");

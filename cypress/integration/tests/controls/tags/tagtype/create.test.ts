@@ -7,7 +7,7 @@ import {
     submitForm,
     click,
     preservecookies,
-    hasToBeSkipped,
+    hasToBeSkipped, selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import {
@@ -48,12 +48,13 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
         preservecookies();
 
         // Interceptors
-        cy.intercept("POST", "/api/controls/tag-type*").as("postTagtype");
-        cy.intercept("GET", "/api/controls/tag-type*").as("getTagtypes");
+        cy.intercept("POST", "/hub/tag-type*").as("postTagtype");
+        cy.intercept("GET", "/hub/tag-type*").as("getTagtypes");
     });
 
     it("Tag type field validations", function () {
         // Navigate to Tags tab and click "Create tag type" button
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
         clickByText(button, createTagtypeButton);
@@ -84,6 +85,7 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
 
     it("Tag type button validations", function () {
         // Navigate to Tags tab and click "Create tag type" button
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
         clickByText(button, createTagtypeButton);
@@ -107,6 +109,7 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
     });
 
     it("Tag type unique constraint validation", function () {
+        selectUserPerspective("Developer");
         const tagtype = new Tagtype(
             data.getRandomWord(5),
             data.getColor(),

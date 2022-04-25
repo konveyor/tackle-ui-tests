@@ -5,7 +5,7 @@ import {
     exists,
     notExists,
     hasToBeSkipped,
-    preservecookies,
+    preservecookies, selectUserPerspective,
 } from "../../../../../utils/utils";
 import { Tagtype, Tag } from "../../../../models/tags";
 
@@ -26,13 +26,15 @@ describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
         preservecookies();
 
         // Interceptors
-        cy.intercept("POST", "/api/controls/tag-type*").as("postTagtype");
-        cy.intercept("GET", "/api/controls/tag-type*").as("getTagtypes");
-        cy.intercept("PUT", "/api/controls/tag-type/*").as("putTagtype");
-        cy.intercept("DELETE", "/api/controls/tag-type/*").as("deleteTagtype");
+        cy.intercept("POST", "/hub/tag-type*").as("postTagtype");
+        cy.intercept("GET", "/hub/tag-type*").as("getTagtypes");
+        cy.intercept("PUT", "/hub/tag-type/*").as("putTagtype");
+        cy.intercept("DELETE", "/hub/tag-type/*").as("deleteTagtype");
     });
 
     it("Tag type CRUD", function () {
+        selectUserPerspective("Developer");
+
         // Create new tag type
         const tagtype = new Tagtype(
             data.getRandomWord(8),
@@ -70,6 +72,8 @@ describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Tag type CRUD with member (tags)", function () {
+        selectUserPerspective("Developer");
+
         // Create new tag type
         const tagtype = new Tagtype(
             data.getRandomWord(8),

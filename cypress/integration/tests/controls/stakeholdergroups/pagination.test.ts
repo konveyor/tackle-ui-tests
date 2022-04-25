@@ -8,7 +8,7 @@ import {
     preservecookies,
     hasToBeSkipped,
     createMultipleStakeholderGroups,
-    deleteAllStakeholderGroups,
+    deleteAllStakeholderGroups, selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, stakeholderGroups } from "../../../types/constants";
@@ -45,7 +45,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
         preservecookies();
 
         // Interceptors
-        cy.intercept("GET", "/api/controls/stakeholder-group*").as("getStakeholdergroups");
+        cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");
     });
 
     after("Perform test data clean up", function () {
@@ -58,6 +58,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
 
     it("Navigation button validations", function () {
         // Navigate to stakeholder groups tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholderGroups);
         cy.wait("@getStakeholdergroups");
@@ -97,6 +98,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
 
     it("Items per page validations", function () {
         // Navigate to stakeholder groups tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholderGroups);
         cy.wait("@getStakeholdergroups");
@@ -122,6 +124,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
 
     it("Page number validations", function () {
         // Navigate to stakeholder groups tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholderGroups);
         cy.wait("@getStakeholdergroups");
@@ -142,6 +145,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
     it("Last page item(s) deletion, impact on page reload validation", function () {
         // Issue - https://issues.redhat.com/browse/TACKLE-155
         // Navigate to stakeholder groups tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholderGroups);
         cy.wait("@getStakeholdergroups");

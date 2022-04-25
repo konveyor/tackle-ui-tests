@@ -66,8 +66,8 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
         preservecookies();
 
         // Interceptors
-        cy.intercept("GET", "/api/application-inventory/application*").as("getApplications");
-        cy.intercept("GET", "/api/application-inventory/import-summary*").as(
+        cy.intercept("GET", "/hub/application*").as("getApplications");
+        cy.intercept("GET", "/hub/import-summary*").as(
             "getImportApplications"
         );
     });

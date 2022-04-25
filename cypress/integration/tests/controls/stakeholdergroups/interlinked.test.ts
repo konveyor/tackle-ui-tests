@@ -9,7 +9,7 @@ import {
     notExists,
     preservecookies,
     hasToBeSkipped,
-    createMultipleStakeholders,
+    createMultipleStakeholders, selectUserPerspective,
 } from "../../../../utils/utils";
 import { navTab } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
@@ -41,15 +41,18 @@ describe("Stakeholder group linked to stakeholder members", { tags: "@tier1" }, 
         preservecookies();
 
         // Interceptors for stakeholder groups
-        cy.intercept("POST", "/api/controls/stakeholder-group*").as("postStakeholdergroups");
-        cy.intercept("GET", "/api/controls/stakeholder-group*").as("getStakeholdergroups");
+        cy.intercept("POST", "/hub/stakeholdergroups*").as("postStakeholdergroups");
+        cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");
 
         // Interceptors for stakeholders
-        cy.intercept("POST", "/api/controls/stakeholder*").as("postStakeholder");
-        cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");
+        cy.intercept("POST", "/hub/stakeholder*").as("postStakeholder");
+        cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
     });
 
     it("stakeholders attach, update and delete dependency on stakeholder group", function () {
+
+        selectUserPerspective("Developer");
+
         // Create new stakeholder group and attach two stakeholder members
         const stakeholdergroup = new Stakeholdergroups(
             data.getCompanyName(),

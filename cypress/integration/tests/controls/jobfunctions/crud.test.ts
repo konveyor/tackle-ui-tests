@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { exists, hasToBeSkipped, login, notExists } from "../../../../utils/utils";
+import {exists, hasToBeSkipped, login, notExists, selectUserPerspective} from "../../../../utils/utils";
 import { Jobfunctions } from "../../../models/jobfunctions";
 import * as data from "../../../../utils/data_utils";
 
@@ -15,11 +15,13 @@ describe("Job Function CRUD operations", { tags: "@tier1" }, () => {
         login();
 
         // Interceptors
-        cy.intercept("POST", "/api/controls/job-function*").as("postJobfunction");
-        cy.intercept("GET", "/api/controls/job-function*").as("getJobfunctions");
+        cy.intercept("POST", "/hub/jobfunctions*").as("postJobfunction");
+        cy.intercept("GET", "/hub/jobfunctions*").as("getJobfunctions");
     });
 
     it("Jobfunction CRUD", function () {
+        selectUserPerspective("Developer");
+
         // Create new job function
         jobfunction.create();
         cy.wait("@postJobfunction");

@@ -43,7 +43,7 @@ describe("Application inventory sort validations", { tags: "@tier2" }, function 
         preservecookies();
 
         // Interceptors
-        cy.intercept("GET", "/api/application-inventory/application*").as("getApplications");
+        cy.intercept("GET", "/hub/application*").as("getApplications");
     });
 
     after("Perform test data clean up", function () {

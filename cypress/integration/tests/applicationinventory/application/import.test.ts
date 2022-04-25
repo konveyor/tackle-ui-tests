@@ -41,7 +41,7 @@ describe("Application import operations", () => {
         preservecookies();
 
         // Interceptors
-        cy.intercept("GET", "/api/application-inventory/application*").as("getApplication");
+        cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     after("Perform test data clean up", function () {

@@ -8,7 +8,7 @@ import {
     exists,
     notExists,
     preservecookies,
-    hasToBeSkipped,
+    hasToBeSkipped, selectUserPerspective,
 } from "../../../../utils/utils";
 import { navTab } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
@@ -35,19 +35,22 @@ describe("Stakeholder linked to stakeholder groups and job function", { tags: "@
         preservecookies();
 
         // Interceptors for stakeholder groups
-        cy.intercept("POST", "/hub/stakeholder-group*").as("postStakeholdergroups");
-        cy.intercept("GET", "/hub/stakeholder-group*").as("getStakeholdergroups");
+        cy.intercept("POST", "/hub/stakeholdergroups*").as("postStakeholdergroups");
+        cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");
 
         // Interceptors for stakeholders
         cy.intercept("POST", "/hub/stakeholder*").as("postStakeholder");
         cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
 
         // Interceptors for job functions
-        cy.intercept("POST", "/hub/job-function*").as("postJobfunction");
-        cy.intercept("GET", "/hub/job-function*").as("getJobfunctions");
+        cy.intercept("POST", "/hub/jobfunctions*").as("postJobfunction");
+        cy.intercept("GET", "/hub/jobfunctions*").as("getJobfunctions");
     });
 
     it("Stakeholder group attach, update and delete dependency on stakeholder", function () {
+
+        selectUserPerspective("Developer");
+
         // Create two stakeholder groups
         for (let i = 0; i < 2; i++) {
             // Create new stakeholder groups
@@ -143,6 +146,9 @@ describe("Stakeholder linked to stakeholder groups and job function", { tags: "@
     });
 
     it("Job function attach, update and delete dependency on stakeholder", function () {
+
+        selectUserPerspective("Developer");
+
         // Create new job function
         const jobfunction = new Jobfunctions(data.getJobTitle());
         jobfunction.create();

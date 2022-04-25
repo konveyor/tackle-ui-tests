@@ -8,7 +8,7 @@ import {
     expandRowDetails,
     closeRowDetails,
     hasToBeSkipped,
-    preservecookies,
+    preservecookies, selectUserPerspective,
 } from "../../../../utils/utils";
 import { Stakeholders } from "../../../models/stakeholders";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
@@ -37,6 +37,7 @@ describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Stakeholder CRUD", function () {
+        selectUserPerspective("Developer");
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         // Create new stakeholder
         stakeholder.create();
@@ -61,6 +62,7 @@ describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Stakeholder CRUD cancel", function () {
+        selectUserPerspective("Developer");
         var initialStakeholderName = data.getFullName();
         const stakeholder = new Stakeholders(data.getEmail(), initialStakeholderName);
         // Cancel the Create new stakeholder task
@@ -92,6 +94,7 @@ describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Stakeholder CRUD operations with members (jobfunction and groups)", function () {
+        selectUserPerspective("Developer");
         var jobfunctions: Array<Jobfunctions> = [];
         var stakeholdergroups: Array<Stakeholdergroups> = [];
         var stakeholdergroupNames: Array<string> = [];

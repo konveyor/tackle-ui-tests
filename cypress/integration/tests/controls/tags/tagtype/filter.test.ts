@@ -5,7 +5,7 @@ import {
     clickByText,
     exists,
     applySearchFilter,
-    hasToBeSkipped,
+    hasToBeSkipped, selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import { controls, button, clearAllFilters, tags, tagType } from "../../../../types/constants";
@@ -21,11 +21,12 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
         login();
 
         // Interceptors
-        cy.intercept("GET", "/api/controls/tag-type*").as("getTagtypes");
+        cy.intercept("GET", "/hub/tag-type*").as("getTagtypes");
     });
 
     it("Tag type filter validations", function () {
         // Navigate to Tags tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
         cy.wait("@getTagtypes");

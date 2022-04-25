@@ -9,7 +9,7 @@ import {
     createMultipleStakeholders,
     createMultipleApplications,
     deleteAllStakeholders,
-    deleteApplicationTableRows,
+    deleteApplicationTableRows, selectUserPerspective,
 } from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
 import { reports } from "../../types/constants";
@@ -68,6 +68,7 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
 
     it("Adoption candidate distribution - Navigation button validations", function () {
         // Navigate to reports page
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -104,6 +105,7 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
 
     it("Adoption candidate distribution - Items per page validations", function () {
         // Navigate to reports page
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -128,6 +130,7 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
 
     it("Adoption candidate distribution - Page number validations", function () {
         // Navigate to reports page
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -146,6 +149,7 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
 
     it("Identified risks - Navigation button validations", function () {
         // Navigate to reports page
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -183,6 +187,7 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
 
     it("Identified risks - Items per page validations", function () {
         // Navigate to reports page
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -211,6 +216,7 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
 
     it("Identified risks - Page number validations", function () {
         // Navigate to reports page
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(3000);
 

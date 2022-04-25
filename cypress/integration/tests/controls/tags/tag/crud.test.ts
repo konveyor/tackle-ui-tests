@@ -7,7 +7,7 @@ import {
     existsWithinRow,
     closeRowDetails,
     notExistsWithinRow,
-    hasToBeSkipped,
+    hasToBeSkipped, selectUserPerspective,
 } from "../../../../../utils/utils";
 import { Tag } from "../../../../models/tags";
 
@@ -23,13 +23,14 @@ describe("Tag CRUD operations", { tags: "@tier1" }, () => {
         login();
 
         // Interceptors
-        cy.intercept("POST", "/api/controls/tag*").as("postTag");
-        cy.intercept("GET", "/api/controls/tag*").as("getTag");
-        cy.intercept("PUT", "/api/controls/tag/*").as("putTag");
-        cy.intercept("DELETE", "/api/controls/tag/*").as("deleteTag");
+        cy.intercept("POST", "/hub/tag*").as("postTag");
+        cy.intercept("GET", "/hub/tag*").as("getTag");
+        cy.intercept("PUT", "/hub/tag/*").as("putTag");
+        cy.intercept("DELETE", "/hub/tag/*").as("deleteTag");
     });
 
     it("Tag CRUD", function () {
+        selectUserPerspective("Developer");
         // Create new tag
         const tag = new Tag(data.getRandomWord(8), data.getExistingTagtype());
         tag.create();
