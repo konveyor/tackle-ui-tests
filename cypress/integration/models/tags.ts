@@ -11,6 +11,7 @@ import {
     checkSuccessAlert,
     expandRowDetails,
     closeRowDetails,
+    selectWithinModal,
 } from "../../utils/utils";
 import * as commonView from "../views/common.view";
 import {
@@ -41,7 +42,7 @@ export class Tag {
     }
 
     protected selectTagtype(tagtype: string): void {
-        click(dropdownMenuToggle);
+        selectWithinModal(dropdownMenuToggle);
         clickByText(button, tagtype);
     }
 

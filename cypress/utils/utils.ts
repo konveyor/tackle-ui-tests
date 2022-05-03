@@ -759,3 +759,9 @@ export function selectUserPerspective(userType: string): void {
     click(optionMenu);
     clickByText(userPerspectiveMenu, userType);
 }
+
+export function selectWithinModal(selector: string): void {
+    cy.get("[id^=pf-modal-part-]").within(() => {
+        click(selector);
+    });
+}
