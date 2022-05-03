@@ -76,7 +76,6 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
     });
 
     it("Email filter validations", function () {
-
         selectUserPerspective("Developer");
         // Navigate to stakeholder tab
         selectUserPerspective("Developer");
@@ -108,7 +107,6 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
     });
 
     it("Display name filter validations", function () {
-
         selectUserPerspective("Developer");
 
         // Navigate to stakeholder tab

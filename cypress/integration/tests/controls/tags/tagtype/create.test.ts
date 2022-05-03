@@ -7,7 +7,8 @@ import {
     submitForm,
     click,
     preservecookies,
-    hasToBeSkipped, selectUserPerspective,
+    hasToBeSkipped,
+    selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import {

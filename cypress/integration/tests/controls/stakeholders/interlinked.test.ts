@@ -8,7 +8,8 @@ import {
     exists,
     notExists,
     preservecookies,
-    hasToBeSkipped, selectUserPerspective,
+    hasToBeSkipped,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navTab } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
@@ -48,7 +49,6 @@ describe("Stakeholder linked to stakeholder groups and job function", { tags: "@
     });
 
     it("Stakeholder group attach, update and delete dependency on stakeholder", function () {
-
         selectUserPerspective("Developer");
 
         // Create two stakeholder groups
@@ -146,7 +146,6 @@ describe("Stakeholder linked to stakeholder groups and job function", { tags: "@
     });
 
     it("Job function attach, update and delete dependency on stakeholder", function () {
-
         selectUserPerspective("Developer");
 
         // Create new job function

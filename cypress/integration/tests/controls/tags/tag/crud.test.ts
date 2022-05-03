@@ -7,7 +7,8 @@ import {
     existsWithinRow,
     closeRowDetails,
     notExistsWithinRow,
-    hasToBeSkipped, selectUserPerspective,
+    hasToBeSkipped,
+    selectUserPerspective,
 } from "../../../../../utils/utils";
 import { Tag } from "../../../../models/tags";
 

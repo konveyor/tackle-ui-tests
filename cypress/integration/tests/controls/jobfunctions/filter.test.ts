@@ -7,7 +7,8 @@ import {
     applySearchFilter,
     hasToBeSkipped,
     createMultipleJobfunctions,
-    deleteAllJobfunctions, selectUserPerspective,
+    deleteAllJobfunctions,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, jobFunctions, button, name, clearAllFilters } from "../../../types/constants";
@@ -38,7 +39,6 @@ describe("Job function filter validations", { tags: "@tier2" }, function () {
     });
 
     it("Name filter validations", function () {
-
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, jobFunctions);

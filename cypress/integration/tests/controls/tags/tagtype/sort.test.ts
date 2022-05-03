@@ -9,7 +9,8 @@ import {
     verifySortDesc,
     getTableColumnData,
     preservecookies,
-    hasToBeSkipped, selectUserPerspective,
+    hasToBeSkipped,
+    selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import { controls, tags, tagType, rank, tagCount } from "../../../../types/constants";

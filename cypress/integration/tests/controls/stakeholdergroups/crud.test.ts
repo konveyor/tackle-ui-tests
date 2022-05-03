@@ -7,7 +7,8 @@ import {
     exists,
     notExists,
     hasToBeSkipped,
-    preservecookies, selectUserPerspective,
+    preservecookies,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Stakeholders } from "../../../models/stakeholders";
@@ -36,7 +37,6 @@ describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Stakeholder group CRUD", function () {
-
         selectUserPerspective("Developer");
 
         const stakeholdergroup = new Stakeholdergroups(
@@ -65,7 +65,6 @@ describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Stakeholder group CRUD with stakeholder member attached", function () {
-
         selectUserPerspective("Developer");
 
         // Create stakeholder

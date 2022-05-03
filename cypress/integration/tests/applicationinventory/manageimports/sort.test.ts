@@ -67,9 +67,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
 
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplications");
-        cy.intercept("GET", "/hub/import-summary*").as(
-            "getImportApplications"
-        );
+        cy.intercept("GET", "/hub/import-summary*").as("getImportApplications");
     });
 
     after("Perform test data clean up", function () {

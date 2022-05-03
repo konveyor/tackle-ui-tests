@@ -9,7 +9,8 @@ import {
     createMultipleStakeholders,
     createMultipleApplications,
     deleteAllStakeholders,
-    deleteApplicationTableRows, selectUserPerspective,
+    deleteApplicationTableRows,
+    selectUserPerspective,
 } from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
 import { reports } from "../../types/constants";

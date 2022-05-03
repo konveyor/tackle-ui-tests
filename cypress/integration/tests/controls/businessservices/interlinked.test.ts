@@ -6,7 +6,8 @@ import {
     clickByText,
     exists,
     notExists,
-    hasToBeSkipped, selectUserPerspective,
+    hasToBeSkipped,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navTab } from "../../../views/menu.view";
 import { BusinessServices } from "../../../models/businessservices";
@@ -32,7 +33,6 @@ describe("Business service linked to stakeholder", { tags: "@tier1" }, () => {
     });
 
     it("stakeholder attach, update and delete dependency on business service", function () {
-
         selectUserPerspective("Developer");
 
         // Create new stakeholder

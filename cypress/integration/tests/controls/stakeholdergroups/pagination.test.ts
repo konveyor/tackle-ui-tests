@@ -8,7 +8,8 @@ import {
     preservecookies,
     hasToBeSkipped,
     createMultipleStakeholderGroups,
-    deleteAllStakeholderGroups, selectUserPerspective,
+    deleteAllStakeholderGroups,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, stakeholderGroups } from "../../../types/constants";

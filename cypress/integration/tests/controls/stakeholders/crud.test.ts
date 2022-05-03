@@ -8,7 +8,8 @@ import {
     expandRowDetails,
     closeRowDetails,
     hasToBeSkipped,
-    preservecookies, selectUserPerspective,
+    preservecookies,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { Stakeholders } from "../../../models/stakeholders";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";

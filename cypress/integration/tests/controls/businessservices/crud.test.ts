@@ -6,7 +6,7 @@ import {
     login,
     notExists,
     preservecookies,
-    selectUserPerspective
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { BusinessServices } from "../../../models/businessservices";
 import { Stakeholders } from "../../../models/stakeholders";
@@ -60,7 +60,6 @@ describe("Business service CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Business service CRUD with owner", function () {
-
         selectUserPerspective("Developer");
 
         // Create owner - stakeholder
