@@ -55,7 +55,6 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
     it("Navigation button validations", function () {
         // Navigate to stakeholder tab
         selectUserPerspective("Developer");
-        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         cy.wait("@getStakeholders");
