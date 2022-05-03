@@ -45,8 +45,8 @@ describe("Application validations", { tags: "@tier2" }, () => {
         preservecookies();
 
         // Interceptors
-        cy.intercept("POST", "/api/application-inventory/application*").as("postApplication");
-        cy.intercept("GET", "/api/application-inventory/application*").as("getApplication");
+        cy.intercept("POST", "/hub/application*").as("postApplication");
+        cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     it("Application field validations", function () {

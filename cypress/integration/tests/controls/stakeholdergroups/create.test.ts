@@ -9,6 +9,7 @@ import {
     notExists,
     hasToBeSkipped,
     preservecookies,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -47,6 +48,7 @@ describe("Stakeholder groups validations", { tags: "@tier2" }, () => {
 
     it("Stakeholder group field validations", function () {
         // Navigate to stakeholder group tab and click "Create New" button
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholderGroups);
         clickByText(button, createNewButton);
@@ -69,6 +71,7 @@ describe("Stakeholder groups validations", { tags: "@tier2" }, () => {
 
     it("Stakholder group button validations", function () {
         // Navigate to stakeholder group tab and click "Create New" button
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholderGroups);
         clickByText(button, createNewButton);
@@ -92,6 +95,8 @@ describe("Stakeholder groups validations", { tags: "@tier2" }, () => {
     });
 
     it("Stakeholder group unique constraint validation", function () {
+        selectUserPerspective("Developer");
+
         // Create new stakeholder group
         stakeholdergroup.create();
         exists(stakeholdergroup.name);

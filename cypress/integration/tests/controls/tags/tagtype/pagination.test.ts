@@ -8,6 +8,7 @@ import {
     hasToBeSkipped,
     createMultipleTags,
     deleteAllTagTypes,
+    selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import { controls, tags } from "../../../../types/constants";
@@ -60,7 +61,7 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
         preservecookies();
 
         // Interceptors
-        cy.intercept("GET", "/api/controls/tag-type*").as("getTagtypes");
+        cy.intercept("GET", "/hub/tag-type*").as("getTagtypes");
     });
 
     after("Perform test data clean up", function () {
@@ -73,6 +74,7 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
 
     it("Navigation button validations", function () {
         // Navigate to Tags tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
         cy.wait("@getTagtypes");
@@ -112,6 +114,7 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
 
     it("Items per page validations", function () {
         // Navigate to Tags tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
         cy.wait("@getTagtypes");
@@ -137,6 +140,7 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
 
     it("Page number validations", function () {
         // Navigate to Tags tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
         cy.wait("@getTagtypes");

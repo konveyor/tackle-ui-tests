@@ -94,7 +94,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
         preservecookies();
 
         // Interceptors for Applications
-        cy.intercept("GET", "/api/application-inventory/application*").as("getApplications");
+        cy.intercept("GET", "/hub/application*").as("getApplications");
     });
 
     after("Perform test data clean up", function () {

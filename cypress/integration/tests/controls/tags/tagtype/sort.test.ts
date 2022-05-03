@@ -10,6 +10,7 @@ import {
     getTableColumnData,
     preservecookies,
     hasToBeSkipped,
+    selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import { controls, tags, tagType, rank, tagCount } from "../../../../types/constants";
@@ -28,11 +29,12 @@ describe("Tag type sort validations", { tags: "@tier2" }, function () {
         preservecookies();
 
         // Interceptors
-        cy.intercept("GET", "/api/controls/tag-type*").as("getTagtypes");
+        cy.intercept("GET", "/hub/tag-type*").as("getTagtypes");
     });
 
     it("Tag type name sort validations", function () {
         // Navigate to Tags tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
         cy.wait("@getTagtypes");
@@ -59,6 +61,7 @@ describe("Tag type sort validations", { tags: "@tier2" }, function () {
 
     it("Rank sort validations", function () {
         // Navigate to Tags tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
         cy.wait("@getTagtypes");
@@ -85,6 +88,7 @@ describe("Tag type sort validations", { tags: "@tier2" }, function () {
 
     it("Tag count sort validations", function () {
         // Navigate to Tags tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
         cy.wait("@getTagtypes");

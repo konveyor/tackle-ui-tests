@@ -7,6 +7,7 @@ import {
     exists,
     notExists,
     hasToBeSkipped,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navTab } from "../../../views/menu.view";
 import { BusinessServices } from "../../../models/businessservices";
@@ -23,15 +24,17 @@ describe("Business service linked to stakeholder", { tags: "@tier1" }, () => {
         login();
 
         // Interceptors for business services
-        cy.intercept("POST", "/api/controls/business-service*").as("postBusinessService");
-        cy.intercept("GET", "/api/controls/business-service*").as("getBusinessService");
+        cy.intercept("POST", "/hub/business-service*").as("postBusinessService");
+        cy.intercept("GET", "/hub/business-service*").as("getBusinessService");
 
         // Interceptors for stakeholders
-        cy.intercept("POST", "/api/controls/stakeholder*").as("postStakeholder");
-        cy.intercept("GET", "/api/controls/stakeholder*").as("getStakeholders");
+        cy.intercept("POST", "/hub/stakeholder*").as("postStakeholder");
+        cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
     });
 
     it("stakeholder attach, update and delete dependency on business service", function () {
+        selectUserPerspective("Developer");
+
         // Create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();

@@ -8,6 +8,7 @@ import {
     click,
     preservecookies,
     hasToBeSkipped,
+    selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import {
@@ -17,6 +18,7 @@ import {
     duplicateErrMsg,
     max40CharMsg,
     fieldReqMsg,
+    max120CharsMsg,
 } from "../../../../types/constants";
 import {
     createTagButton,
@@ -44,19 +46,20 @@ describe("Tag validations", { tags: "@tier2" }, () => {
         preservecookies();
 
         // Interceptors
-        cy.intercept("POST", "/api/controls/tag*").as("postTag");
-        cy.intercept("GET", "/api/controls/tag*").as("getTag");
+        cy.intercept("POST", "/hub/tag*").as("postTag");
+        cy.intercept("GET", "/hub/tag*").as("getTag");
     });
 
     it("Tag field validations", function () {
         // Navigate to Tags tab and click "Create tag" button
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
         clickByText(button, createTagButton);
 
         // Name constraints
         inputText(nameInput, data.getRandomWords(40));
-        cy.get(nameHelper).should("contain", max40CharMsg);
+        cy.get(nameHelper).should("contain", max120CharsMsg);
 
         // Tag Type constraints
         cy.get(tagTypeHelper).should("contain", fieldReqMsg);
@@ -73,6 +76,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
 
     it("Tag button validations", function () {
         // Navigate to Tags tab and click "Create tag" button
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
         clickByText(button, createTagButton);
@@ -99,6 +103,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
         const tag = new Tag(data.getRandomWord(5), data.getExistingTagtype());
 
         // Create a new tag
+        selectUserPerspective("Developer");
         tag.create();
         cy.wait("@postTag");
         cy.wait(2000);

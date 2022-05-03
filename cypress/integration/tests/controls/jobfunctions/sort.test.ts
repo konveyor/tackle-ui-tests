@@ -12,6 +12,7 @@ import {
     hasToBeSkipped,
     createMultipleJobfunctions,
     deleteAllJobfunctions,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 const { _ } = Cypress;
 import { navMenu, navTab } from "../../../views/menu.view";
@@ -38,7 +39,7 @@ describe("Job function sorting", { tags: "@tier2" }, function () {
         preservecookies();
 
         // Interceptors
-        cy.intercept("GET", "/api/controls/job-function*").as("getJobfunctions");
+        cy.intercept("GET", "/hub/jobfunctions*").as("getJobfunctions");
     });
 
     after("Perform test data clean up", function () {
@@ -51,6 +52,7 @@ describe("Job function sorting", { tags: "@tier2" }, function () {
 
     it("Name sort validations", function () {
         // Navigate to job functions tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, jobFunctions);
         cy.wait("@getJobfunctions");

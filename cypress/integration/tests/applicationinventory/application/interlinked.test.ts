@@ -67,10 +67,10 @@ describe("Application inventory interlinked to tags and business service", () =>
 
     beforeEach("Define interceptors", function () {
         // Interceptors for stakeholder groups
-        cy.intercept("POST", "/api/controls/stakeholder-group*").as("postStakeholdergroups");
+        cy.intercept("POST", "/hub/stakeholdergroups*").as("postStakeholdergroups");
 
         // Interceptors for applications
-        cy.intercept("GET", "/api/application-inventory/application*").as("getApplication");
+        cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     after("Perform test data clean up", function () {

@@ -13,6 +13,7 @@ import {
     createMultipleStakeholderGroups,
     deleteAllStakeholders,
     deleteAllStakeholderGroups,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -55,7 +56,7 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
         preservecookies();
 
         // Interceptors
-        cy.intercept("GET", "/api/controls/stakeholder-group*").as("getStakeholdergroups");
+        cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");
     });
 
     after("Perform test data clean up", function () {
@@ -69,6 +70,7 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
 
     it("Name filter validations", function () {
         // Navigate to stakeholder groups tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholderGroups);
         cy.wait("@getStakeholdergroups");
@@ -100,6 +102,7 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
 
     it("Description filter validations", function () {
         // Navigate to stakeholder groups tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholderGroups);
         cy.wait("@getStakeholdergroups");
@@ -131,6 +134,7 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
 
     it("Member filter validations", function () {
         // Navigate to stakeholder groups tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholderGroups);
         cy.wait("@getStakeholdergroups");

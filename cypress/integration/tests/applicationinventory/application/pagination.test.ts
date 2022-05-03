@@ -34,7 +34,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
         preservecookies();
 
         // Interceptors for Applications
-        cy.intercept("GET", "/api/application-inventory/application*").as("getApplications");
+        cy.intercept("GET", "/hub/application*").as("getApplications");
     });
 
     after("Perform test data clean up", function () {

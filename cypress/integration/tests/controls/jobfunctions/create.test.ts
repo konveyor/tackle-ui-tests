@@ -8,6 +8,7 @@ import {
     notExists,
     hasToBeSkipped,
     preservecookies,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import {
     controls,
@@ -40,11 +41,12 @@ describe("Job Function Validations", { tags: "@tier2" }, () => {
         preservecookies();
 
         // Interceptors
-        cy.intercept("POST", "/api/controls/job-function*").as("postJobfunctions");
+        cy.intercept("POST", "/hub/jobfunctions*").as("postJobfunctions");
     });
 
     it("Job function field validations", function () {
         // Create new job function
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, jobFunctions);
         clickByText(button, createNewButton);
@@ -62,6 +64,8 @@ describe("Job Function Validations", { tags: "@tier2" }, () => {
     });
 
     it("Job function unique name constraint validation", function () {
+        selectUserPerspective("Developer");
+
         // Create new job function
         jobfunction.create();
         cy.wait("@postJobfunctions");
@@ -80,6 +84,7 @@ describe("Job Function Validations", { tags: "@tier2" }, () => {
 
     it("Job function button validations", function () {
         // Navigate to job function tab and click create new button
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, jobFunctions);
         clickByText(button, createNewButton);

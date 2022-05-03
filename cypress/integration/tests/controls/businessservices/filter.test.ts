@@ -12,6 +12,7 @@ import {
     createMultipleBusinessServices,
     deleteAllBusinessServices,
     deleteAllStakeholders,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -62,6 +63,7 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
     });
 
     it("Name filter validations", function () {
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, businessServices);
 
@@ -92,6 +94,7 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
     });
 
     it("Description filter validations", function () {
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, businessServices);
 
@@ -122,6 +125,7 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
     });
 
     it("Owner filter validations", function () {
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, businessServices);
 

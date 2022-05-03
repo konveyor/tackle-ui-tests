@@ -37,7 +37,7 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
         preservecookies();
 
         // Interceptors
-        cy.intercept("GET", "/api/application-inventory/application*").as("getApplication");
+        cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     after("Perform test data clean up", function () {

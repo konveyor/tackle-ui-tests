@@ -9,6 +9,7 @@ import {
     notExists,
     hasToBeSkipped,
     preservecookies,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -46,6 +47,7 @@ describe("Business service validations", { tags: "@tier2" }, () => {
 
     it("Business service field validations", function () {
         // Navigate to business service tab and click "Create New" button
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, businessServices);
         clickByText(button, createNewButton);
@@ -68,6 +70,7 @@ describe("Business service validations", { tags: "@tier2" }, () => {
 
     it("Business service button validations", function () {
         // Navigate to business service tab and click "Create New" button
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, businessServices);
         clickByText(button, createNewButton);
@@ -92,6 +95,9 @@ describe("Business service validations", { tags: "@tier2" }, () => {
 
     it("Business service unique constraint validation", function () {
         const businessService = new BusinessServices(data.getCompanyName());
+
+        selectUserPerspective("Developer");
+
         // Create new business service
         businessService.create();
         exists(businessService.name);
