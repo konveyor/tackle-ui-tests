@@ -11,7 +11,8 @@ import {
     preservecookies,
     hasToBeSkipped,
     createMultipleJobfunctions,
-    deleteAllJobfunctions, selectUserPerspective,
+    deleteAllJobfunctions,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 const { _ } = Cypress;
 import { navMenu, navTab } from "../../../views/menu.view";

@@ -7,7 +7,8 @@ import {
     exists,
     notExists,
     hasToBeSkipped,
-    preservecookies, selectUserPerspective,
+    preservecookies,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import {
     controls,
@@ -63,7 +64,6 @@ describe("Job Function Validations", { tags: "@tier2" }, () => {
     });
 
     it("Job function unique name constraint validation", function () {
-
         selectUserPerspective("Developer");
 
         // Create new job function

@@ -8,7 +8,8 @@ import {
     exists,
     notExists,
     hasToBeSkipped,
-    preservecookies, selectUserPerspective,
+    preservecookies,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {

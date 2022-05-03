@@ -8,7 +8,8 @@ import {
     exists,
     notExists,
     hasToBeSkipped,
-    preservecookies, selectUserPerspective,
+    preservecookies,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -94,7 +95,6 @@ describe("Stakeholder groups validations", { tags: "@tier2" }, () => {
     });
 
     it("Stakeholder group unique constraint validation", function () {
-
         selectUserPerspective("Developer");
 
         // Create new stakeholder group

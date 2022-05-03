@@ -7,7 +7,8 @@ import {
     preservecookies,
     hasToBeSkipped,
     createMultipleTags,
-    deleteAllTagTypes, selectUserPerspective,
+    deleteAllTagTypes,
+    selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import { controls, tags } from "../../../../types/constants";

@@ -1,6 +1,12 @@
 /// <reference types="cypress" />
 
-import {exists, hasToBeSkipped, login, notExists, selectUserPerspective} from "../../../../utils/utils";
+import {
+    exists,
+    hasToBeSkipped,
+    login,
+    notExists,
+    selectUserPerspective,
+} from "../../../../utils/utils";
 import { Jobfunctions } from "../../../models/jobfunctions";
 import * as data from "../../../../utils/data_utils";
 

@@ -12,7 +12,8 @@ import {
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
     deleteAllStakeholders,
-    deleteAllStakeholderGroups, selectUserPerspective,
+    deleteAllStakeholderGroups,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -132,7 +133,6 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
     });
 
     it("Member filter validations", function () {
-
         // Navigate to stakeholder groups tab
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);

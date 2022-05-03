@@ -15,7 +15,8 @@ import {
     deleteAllStakeholders,
     deleteAllBusinessServices,
     deleteAllTagTypes,
-    deleteApplicationTableRows, selectUserPerspective,
+    deleteApplicationTableRows,
+    selectUserPerspective,
 } from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
 import {

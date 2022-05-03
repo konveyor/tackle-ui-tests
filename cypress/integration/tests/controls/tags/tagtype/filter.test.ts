@@ -5,7 +5,8 @@ import {
     clickByText,
     exists,
     applySearchFilter,
-    hasToBeSkipped, selectUserPerspective,
+    hasToBeSkipped,
+    selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import { controls, button, clearAllFilters, tags, tagType } from "../../../../types/constants";

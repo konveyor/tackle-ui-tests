@@ -13,7 +13,8 @@ import {
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
     deleteAllStakeholders,
-    deleteAllStakeholderGroups, selectUserPerspective,
+    deleteAllStakeholderGroups,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, stakeholderGroups, name, memberCount } from "../../../types/constants";

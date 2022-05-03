@@ -13,7 +13,8 @@ import {
     createMultipleStakeholders,
     createMultipleBusinessServices,
     deleteAllBusinessServices,
-    deleteAllStakeholders, selectUserPerspective,
+    deleteAllStakeholders,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { controls, businessServices, name, owner } from "../../../types/constants";

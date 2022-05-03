@@ -9,7 +9,8 @@ import {
     notExists,
     preservecookies,
     hasToBeSkipped,
-    createMultipleStakeholders, selectUserPerspective,
+    createMultipleStakeholders,
+    selectUserPerspective,
 } from "../../../../utils/utils";
 import { navTab } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
@@ -50,7 +51,6 @@ describe("Stakeholder group linked to stakeholder members", { tags: "@tier1" }, 
     });
 
     it("stakeholders attach, update and delete dependency on stakeholder group", function () {
-
         selectUserPerspective("Developer");
 
         // Create new stakeholder group and attach two stakeholder members
