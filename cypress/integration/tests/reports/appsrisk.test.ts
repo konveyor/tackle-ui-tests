@@ -49,12 +49,12 @@ describe("Application risks tests", { tags: "@newtest" }, () => {
     });
 
     after("Perform test data clean up", function () {
-        // // Prevent hook from running, if the tag is excluded from run
-        // if (hasToBeSkipped("@newtest")) return;
-        //
-        // // Delete the stakeholders created before the tests
-        // deleteAllStakeholders();
-        // deleteApplicationTableRows();
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@newtest")) return;
+
+        // Delete the stakeholders created before the tests
+        deleteAllStakeholders();
+        deleteApplicationTableRows();
     });
 
     it("Application risk validation", function () {
