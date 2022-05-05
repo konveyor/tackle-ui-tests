@@ -2,3 +2,4 @@
 LICENSE
 node_modules
 *.md
+license-checker-config.json
