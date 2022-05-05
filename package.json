@@ -22,5 +22,8 @@
         "check": "prettier --check './**/*.{ts,js,json}'",
         "format": "prettier --write './**/*.{ts,js,json}'",
         "mergereports": "npx jrm ./cypress/reports/junitreport.xml ./cypress/reports/junit/*.xml"
+    },
+    "devDependencies": {
+        "license-check-and-add": "^4.0.5"
     }
 }
