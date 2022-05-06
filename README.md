@@ -89,3 +89,14 @@
 6. Once the Tackle UI is running on above address, tests can be run against this local instance using below command -
 
     `npx cypress run --config video=false --browser /path/to/your/browser`
+
+### License's header management
+To check if the license's header is available in all eligible files, execute:
+```shell
+yarn license-check-and-add check
+```
+
+To add the license's header to all eligible files, execute:
+```shell
+yarn license-check-and-add add
+```
