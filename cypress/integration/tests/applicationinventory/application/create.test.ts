@@ -71,7 +71,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
 
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
+        if (hasToBeSkipped("@tier3")) return;
         deleteAllBusinessServices();
         deleteApplicationTableRows();
     });

@@ -619,16 +619,6 @@ export function createMultipleApplications(
     return applicationList;
 }
 
-export function createApplicationObjects(numberOfObjects: number): Array<ApplicationInventory> {
-    var applicationObjectsList: Array<ApplicationInventory> = [];
-    for (let i = 0; i < numberOfObjects; i++) {
-        // Create an object of application
-        const application = new ApplicationInventory(data.getAppName());
-        applicationObjectsList.push(application);
-    }
-    return applicationObjectsList;
-}
-
 export function deleteAllJobfunctions(cancel = false): void {
     Jobfunctions.clickJobfunctions();
     selectItemsPerPage(100);
