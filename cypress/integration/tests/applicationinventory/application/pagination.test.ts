@@ -23,7 +23,7 @@ import {
     deleteApplicationTableRows,
     hasToBeSkipped,
     createMultipleApplications,
-    createMultipleBusinessServices
+    createMultipleBusinessServices,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import { BusinessServices } from "../../../models/businessservices";
