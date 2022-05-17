@@ -595,14 +595,14 @@ export function createMultipleTags(numberoftags: number): Array<Tag> {
 
 export function createMultipleApplications(
     numberofapplications: number,
-    businessservice?: Array<BusinessServices>,
+    businessservice: Array<BusinessServices>,
     tagList?: Array<Tag>
 ): Array<ApplicationInventory> {
     var applicationList: Array<ApplicationInventory> = [];
     var tags: string[];
     var business: string;
     for (let i = 0; i < numberofapplications; i++) {
-        if (businessservice) business = businessservice[i].name;
+        business = businessservice[i].name;
         if (tagList) tags = [tagList[i].name];
         // Navigate to application inventory tab and create new application
         const application = new ApplicationInventory(

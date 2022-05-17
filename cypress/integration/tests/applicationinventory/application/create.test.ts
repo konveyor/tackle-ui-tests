@@ -24,26 +24,31 @@ import {
     notExists,
     hasToBeSkipped,
     preservecookies,
-    selectUserPerspective,
+    createMultipleBusinessServices,
+    selectFormItems,
+    deleteApplicationTableRows,
+    deleteAllBusinessServices,
 } from "../../../../utils/utils";
-import { navMenu } from "../../../views/menu.view";
 import {
-    applicationInventory,
     button,
     minCharsMsg,
     max120CharsMsg,
     max250CharsMsg,
-    duplicateErrMsg,
+    duplicateName,
     createNewButton,
 } from "../../../types/constants";
 import {
     applicationDescriptionInput,
     applicationNameInput,
+    applicationBusinessServiceSelect,
 } from "../../../views/applicationinventory.view";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 
 import * as commonView from "../../../../integration/views/common.view";
 import * as data from "../../../../utils/data_utils";
+import { BusinessServices } from "../../../models/businessservices";
+
+var businessservicesList: Array<BusinessServices> = [];
 
 describe("Application validations", { tags: "@tier2" }, () => {
     before("Login", function () {
@@ -52,7 +57,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
 
         // Perform login
         login();
-        selectUserPerspective("Developer");
+        businessservicesList = createMultipleBusinessServices(1);
     });
 
     beforeEach("Persist session", function () {
@@ -64,10 +69,19 @@ describe("Application validations", { tags: "@tier2" }, () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
+    after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
+        deleteAllBusinessServices();
+        deleteApplicationTableRows();
+    });
+
     it("Application field validations", function () {
         // Navigate to application inventory page and click "Create New" button
-        clickByText(navMenu, applicationInventory);
+        ApplicationInventory.clickApplicationInventory();
         clickByText(button, createNewButton);
+
+        selectFormItems(applicationBusinessServiceSelect, businessservicesList[0].name);
 
         // Name constraints
         inputText(applicationNameInput, data.getRandomWord(2));
@@ -86,12 +100,13 @@ describe("Application validations", { tags: "@tier2" }, () => {
         cy.get(commonView.submitButton).should("not.be.disabled");
 
         // Close the form
-        cy.get(commonView.cancelButton).click();
+        cy.get(commonView.closeButton).click();
+        cy.wait(100);
     });
 
     it("Application button validations", function () {
         // Navigate to application inventory page and click create new button
-        clickByText(navMenu, applicationInventory);
+        ApplicationInventory.clickApplicationInventory();
         clickByText(button, createNewButton);
 
         // Check "Create" and "Cancel" button status
@@ -113,7 +128,11 @@ describe("Application validations", { tags: "@tier2" }, () => {
     });
 
     it("Application unique constraint validation", function () {
-        const application = new ApplicationInventory(data.getFullName());
+        ApplicationInventory.clickApplicationInventory();
+        const application = new ApplicationInventory(
+            data.getFullName(),
+            businessservicesList[0].name
+        );
 
         // Create a new application
         application.create();
@@ -125,8 +144,8 @@ describe("Application validations", { tags: "@tier2" }, () => {
 
         // Check name duplication
         inputText(applicationNameInput, application.name);
-        submitForm();
-        cy.get(commonView.duplicateNameWarning).should("contain.text", duplicateErrMsg);
+        selectFormItems(applicationBusinessServiceSelect, businessservicesList[0].name);
+        cy.get(commonView.nameHelper).should("contain.text", duplicateName);
 
         // Delete created application
         cy.get(commonView.closeButton).click();

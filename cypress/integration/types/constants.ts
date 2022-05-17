@@ -18,6 +18,7 @@ export const applicationName = "Application name";
 export const application = "Application";
 export const applicationInventory = "Application inventory";
 export const assess = "Assess";
+export const assessment = "Assessment";
 export const businessServices = "Business services";
 export const businessService = "Business service";
 export const button = "button";
@@ -64,6 +65,8 @@ export const userPerspectiveMenu = ".pf-c-select__menu-item";
 
 // Error helper messages general to all views
 export const duplicateErrMsg = "ERROR: duplicate key value violates unique constraint";
+export const duplicateEmail = "Please use a different email address.";
+export const duplicateName = "Please use a different name.";
 export const fieldReqMsg = "This field is required.";
 export const max40CharMsg = "This field must contain fewer than 40 characters.";
 export const max120CharsMsg = "This field must contain fewer than 120 characters.";

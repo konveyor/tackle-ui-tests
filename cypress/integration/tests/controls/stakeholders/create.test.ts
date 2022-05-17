@@ -35,8 +35,10 @@ import {
     max120CharsMsg,
     max250CharsMsg,
     duplicateErrMsg,
+    duplicateStakeholder,
     invalidEmailMsg,
     createNewButton,
+    duplicateEmail,
 } from "../../../types/constants";
 import {
     stakeholderEmailInput,
@@ -88,7 +90,7 @@ describe("Stakeholder validations", { tags: "@tier2" }, () => {
         inputText(stakeholderNameInput, data.getRandomWord(2));
         cy.get(displayNameHelper).should("contain", minCharsMsg);
         inputText(stakeholderNameInput, data.getRandomWords(90));
-        cy.get(displayNameHelper).should("contain", max250CharsMsg);
+        cy.get(displayNameHelper).should("contain", max120CharsMsg);
 
         // Validate the create button is enabled with valid inputs
         inputText(stakeholderEmailInput, data.getEmail());
@@ -136,8 +138,7 @@ describe("Stakeholder validations", { tags: "@tier2" }, () => {
         // Check email duplication
         inputText(stakeholderEmailInput, stakeholder.email);
         inputText(stakeholderNameInput, data.getFullName());
-        submitForm();
-        cy.get(commonView.duplicateNameWarning).should("contain.text", duplicateErrMsg);
+        cy.get(commonView.emailHelper).should("contain.text", duplicateEmail);
 
         // Delete created stakeholder
         cy.get(commonView.closeButton).click();
