@@ -26,9 +26,11 @@ import { ApplicationInventory } from "../../../models/applicationinventory/appli
 
 import * as data from "../../../../utils/data_utils";
 import { Stakeholders } from "../../../models/stakeholders";
+import { BusinessServices } from "../../../models/businessservices";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdersNameList: Array<string> = [];
+var businessServiceName = "";
 
 describe("Application assessment and review tests", { tags: "@tier1" }, () => {
     before("Login and Create Test Data", function () {
@@ -45,6 +47,12 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
 
         stakeholdersList.push(stakeholder);
         stakeholdersNameList.push(stakeholder.name);
+
+        const businessService = new BusinessServices(data.getCompanyName());
+        // Create new business service
+        businessService.create();
+        data.exists(businessService.name);
+        businessServiceName = businessService.name;
     });
 
     beforeEach("Persist session", function () {
@@ -60,6 +68,8 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
 
         // Delete the stakeholders created before the tests
         deleteAllStakeholders();
+        businessService.delete();
+        notExists(businessService.name);
     });
 
     it("Application assessment and review with low risk", function () {
@@ -69,7 +79,7 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
             data.getDescription(),
             data.getDescription()
         );
-        application.create();
+        application.create(businessServiceName);
         cy.wait("@getApplication");
         cy.wait(2000);
 
