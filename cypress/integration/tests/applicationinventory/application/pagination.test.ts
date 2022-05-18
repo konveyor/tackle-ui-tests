@@ -23,13 +23,16 @@ import {
     deleteApplicationTableRows,
     hasToBeSkipped,
     createMultipleApplications,
+    createMultipleBusinessServices,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
+import { BusinessServices } from "../../../models/businessservices";
 import { applicationInventory } from "../../../types/constants";
 import { ApplicationInventory } from "../../../models/applicationinventory/applicationinventory";
 import * as commonView from "../../../views/common.view";
 
 var applicationsList: Array<ApplicationInventory> = [];
+var businessservicesList: Array<BusinessServices> = [];
 
 describe("Application inventory pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
@@ -41,7 +44,8 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
 
         // Navigate to Application inventory tab, delete all and create 11 applications
         deleteApplicationTableRows();
-        applicationsList = createMultipleApplications(11);
+        businessservicesList = createMultipleBusinessServices(1);
+        applicationsList = createMultipleApplications(11, businessservicesList);
     });
 
     beforeEach("Persist session", function () {

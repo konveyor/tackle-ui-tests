@@ -31,6 +31,7 @@ export const duplicateNameWarning = "div[aria-label='Danger Alert']";
 export const appTable = "table[aria-label='main-table']";
 export const nameHelper = "div[id=name-helper]";
 export const descriptionHelper = "div[id=description-helper]";
+export const emailHelper = "div[id=email-helper]";
 export const filterToggleButton = "div.pf-c-dropdown > button.pf-c-dropdown__toggle";
 export const filterInput = "input[aria-label='filter-text']";
 export const searchButton = "button[aria-label=search]";

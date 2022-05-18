@@ -26,8 +26,9 @@ import {
     save,
     name,
     tagCount,
+    assessment,
 } from "../../types/constants";
-import { navMenu } from "../../views/menu.view";
+import { navMenu, navTab } from "../../views/menu.view";
 import {
     applicationNameInput,
     applicationDescriptionInput,
@@ -72,27 +73,28 @@ import {
 
 export class ApplicationInventory {
     name: string;
-    description: string;
     business: string;
+    description: string;
     tags: Array<string>;
     comment: string;
 
     constructor(
         name: string,
+        business: string,
         description?: string,
         comment?: string,
-        business?: string,
         tags?: Array<string>
     ) {
         this.name = name;
+        this.business = business;
         if (description) this.description = description;
         if (comment) this.comment = comment;
-        if (business) this.business = business;
         if (tags) this.tags = tags;
     }
-    protected static clickApplicationInventory(): void {
+    public static clickApplicationInventory(): void {
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
+        clickByText(navTab, assessment);
     }
 
     protected fillName(name: string): void {
@@ -261,14 +263,12 @@ export class ApplicationInventory {
             cancelForm();
         } else {
             this.fillName(this.name);
+            this.selectBusinessService(this.business);
             if (this.description) {
                 this.fillDescription(this.description);
             }
             if (this.comment) {
                 this.fillComment(this.comment);
-            }
-            if (this.business) {
-                this.selectBusinessService(this.business);
             }
             if (this.tags) {
                 this.selectTags(this.tags);
