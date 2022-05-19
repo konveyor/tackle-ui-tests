@@ -26,6 +26,7 @@ import {
     deleteAllStakeholders,
     deleteApplicationTableRows,
     selectUserPerspective,
+    createMultipleBusinessServices,
 } from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
 import { reports } from "../../types/constants";
@@ -37,9 +38,11 @@ import {
 } from "../../models/reports/reports";
 import { Stakeholders } from "../../models/stakeholders";
 import * as commonView from "../../views/common.view";
+import { BusinessServices } from "../../models/businessservices";
 
 var applicationsList: Array<ApplicationInventory> = [];
 var stakeholdersList: Array<Stakeholders> = [];
+var businessservicelist: Array<BusinessServices> = [];
 
 describe("Reports pagination validations", { tags: "@tier3" }, () => {
     before("Login and create test data", function () {
@@ -51,9 +54,12 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
         stakeholdersList = createMultipleStakeholders(1);
         var rowsToCreate = 11;
 
+        // Create 1 Business Service
+        businessservicelist = createMultipleBusinessServices(1);
+
         // Create 11 applications
         deleteApplicationTableRows();
-        applicationsList = createMultipleApplications(rowsToCreate);
+        applicationsList = createMultipleApplications(rowsToCreate, businessservicelist);
 
         // Get the last extra application created
         var newApplication = applicationsList[applicationsList.length - 1];

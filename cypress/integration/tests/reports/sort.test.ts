@@ -30,6 +30,7 @@ import {
     deleteAllStakeholders,
     deleteApplicationTableRows,
     selectUserPerspective,
+    createMultipleBusinessServices,
 } from "../../../utils/utils";
 import { navMenu } from "../../views/menu.view";
 import {
@@ -42,9 +43,11 @@ import {
 } from "../../types/constants";
 import { ApplicationInventory } from "../../models/applicationinventory/applicationinventory";
 import { Stakeholders } from "../../models/stakeholders";
+import { BusinessServices } from "../../models/businessservices";
 
 var applicationsList: Array<ApplicationInventory> = [];
 var stakeholdersList: Array<Stakeholders> = [];
+var businessservicelist: Array<BusinessServices> = [];
 
 describe("Reports sort validations", { tags: "@tier2" }, () => {
     before("Login and create test data", function () {
@@ -54,8 +57,9 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
         // Perform login
         login();
 
+        businessservicelist = createMultipleBusinessServices(1);
         stakeholdersList = createMultipleStakeholders(1);
-        applicationsList = createMultipleApplications(2);
+        applicationsList = createMultipleApplications(2, businessservicelist);
 
         var risks = ["low", "medium", "high"];
         for (let i = 0; i < applicationsList.length; i++) {

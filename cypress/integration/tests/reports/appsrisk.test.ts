@@ -25,15 +25,18 @@ import {
     deleteAllStakeholders,
     deleteApplicationTableRows,
     selectUserPerspective,
+    createMultipleBusinessServices,
 } from "../../../utils/utils";
 import { verifyApplicationRisk } from "../../models/reports/reports";
 import { ApplicationInventory } from "../../models/applicationinventory/applicationinventory";
 import { navMenu } from "../../views/menu.view";
-import { reports } from "../../types/constants";
+import { businessService, reports } from "../../types/constants";
 import { Stakeholders } from "../../models/stakeholders";
+import { BusinessServices } from "../../models/businessservices";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var applicationsList: Array<ApplicationInventory> = [];
+var businessservicelist: Array<BusinessServices> = [];
 
 describe("Application risks tests", { tags: "@newtest" }, () => {
     var risktype = ["low", "medium", "high"];
@@ -47,9 +50,9 @@ describe("Application risks tests", { tags: "@newtest" }, () => {
 
         // Save the session and token cookie for maintaining one login session
         preservecookies();
-
+        businessservicelist = createMultipleBusinessServices(1);
         stakeholdersList = createMultipleStakeholders(1);
-        applicationsList = createMultipleApplications(3);
+        applicationsList = createMultipleApplications(3, businessservicelist);
         for (let i = 0; i < applicationsList.length; i++) {
             // Perform assessment of application
             applicationsList[i].perform_assessment(risktype[i], [stakeholdersList[0].name]);
