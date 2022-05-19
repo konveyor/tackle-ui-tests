@@ -25,13 +25,15 @@ import {
     hasToBeSkipped,
     preservecookies,
     selectUserPerspective,
+    click,
 } from "../../../../utils/utils";
 import { Stakeholders } from "../../../models/stakeholders";
 import { Stakeholdergroups } from "../../../models/stakeholdergroups";
 import { Jobfunctions } from "../../../models/jobfunctions";
-import { tdTag } from "../../../types/constants";
+import { tdTag, trTag } from "../../../types/constants";
 import { groupsCount } from "../../../views/stakeholders.view";
 import * as data from "../../../../utils/data_utils";
+import { expandRow } from "../../../views/common.view";
 
 describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -149,8 +151,9 @@ describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
             jobfunction: jobfunctions[1].name,
             groups: stakeholdergroupNames,
         });
-        cy.wait("@putStakeholder");
+        cy.wait("@postStakeholder");
         cy.wait("@getStakeholders");
+        cy.wait(2000);
 
         // Assert that edit operation has been done by checking number of groups and added group exists
         expandRowDetails(stakeholder.email);

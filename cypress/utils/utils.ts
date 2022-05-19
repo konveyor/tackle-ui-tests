@@ -155,11 +155,11 @@ export function selectFilter(filterName: string, identifiedRisk?: boolean): void
             .click({ force: true });
     } else {
         cy.get("div.pf-c-input-group")
-            .eq(0)
-            .find(commonView.filterToggleButton)
+            .get(commonView.filterToggleButton)
+            .eq(2)
             .click({ force: true });
     }
-    cy.get("ul[role=menu] > li").contains("button", filterName).click();
+    cy.get("ul[role=menu] > li").contains("a", filterName).click();
 }
 
 export function filterInputText(searchTextValue: string, value: number): void {
