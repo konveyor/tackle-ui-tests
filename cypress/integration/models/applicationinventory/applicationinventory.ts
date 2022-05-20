@@ -256,7 +256,7 @@ export class ApplicationInventory {
             });
     }
 
-    create(cancel = false, business): void {
+    create(cancel = false): void {
         ApplicationInventory.clickApplicationInventory();
         clickByText(button, createNewButton);
         if (cancel) {
