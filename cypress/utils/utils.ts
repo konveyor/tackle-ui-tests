@@ -13,12 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { BusinessServices } from "../integration/models/businessservices";
-import { Stakeholders } from "../integration/models/stakeholders";
-import { Stakeholdergroups } from "../integration/models/stakeholdergroups";
-import { ApplicationInventory } from "../integration/models/applicationinventory/applicationinventory";
-import { Tag, Tagtype, clickTags } from "../integration/models/tags";
-import { Jobfunctions } from "../integration/models/jobfunctions";
+import { BusinessServices } from "../integration/models/developer/controls/businessservices";
+import { Stakeholders } from "../integration/models/developer/controls/stakeholders";
+import { Stakeholdergroups } from "../integration/models/developer/controls/stakeholdergroups";
+import { ApplicationInventory } from "../integration/models/developer/applicationinventory/applicationinventory";
+import { Tag, Tagtype, clickTags } from "../integration/models/developer/controls/tags";
+import { Jobfunctions } from "../integration/models/developer/controls/jobfunctions";
 
 import * as loginView from "../integration/views/login.view";
 import * as commonView from "../integration/views/common.view";
@@ -595,13 +595,14 @@ export function createMultipleTags(numberoftags: number): Array<Tag> {
 
 export function createMultipleApplications(
     numberofapplications: number,
-    businessservice: Array<BusinessServices>,
+    businessservice?: Array<BusinessServices>,
     tagList?: Array<Tag>
 ): Array<ApplicationInventory> {
     var applicationList: Array<ApplicationInventory> = [];
     var tags: string[];
     var business: string;
     for (let i = 0; i < numberofapplications; i++) {
+        if (!businessservice) businessservice = createMultipleBusinessServices(numberofapplications);
         business = businessservice[i].name;
         if (tagList) tags = [tagList[i].name];
         // Navigate to application inventory tab and create new application
@@ -618,6 +619,18 @@ export function createMultipleApplications(
     }
     return applicationList;
 }
+
+export function createApplicationObjects(numberOfObjects: number): Array<ApplicationInventory> {
+    var applicationObjectsList: Array<ApplicationInventory> = [];
+    var businessservice = createMultipleBusinessServices(1);
+    for (let i = 0; i < numberOfObjects; i++) {
+        // Create an object of application
+        const application = new ApplicationInventory(data.getAppName(),businessservice[0].name);
+        applicationObjectsList.push(application);
+    }
+    return applicationObjectsList;
+}
+
 
 export function deleteAllJobfunctions(cancel = false): void {
     Jobfunctions.clickJobfunctions();
