@@ -166,7 +166,10 @@ describe("Application import operations", () => {
 
             // Create objects for imported apps
             for (let i = 5; i <= 6; i++) {
-                const importedApp = new ApplicationInventory(`Import-app-${i}`, businessService.name);
+                const importedApp = new ApplicationInventory(
+                    `Import-app-${i}`,
+                    businessService.name
+                );
                 applicationsList.push(importedApp);
             }
 

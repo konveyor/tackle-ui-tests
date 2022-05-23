@@ -27,7 +27,13 @@ import {
     hasToBeSkipped,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
-import { applicationInventory, button, tdTag, trTag, deleteAction } from "../../../../types/constants";
+import {
+    applicationInventory,
+    button,
+    tdTag,
+    trTag,
+    deleteAction,
+} from "../../../../types/constants";
 import { actionButton } from "../../../../views/applicationinventory.view";
 import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
 

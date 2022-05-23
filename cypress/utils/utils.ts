@@ -602,7 +602,8 @@ export function createMultipleApplications(
     var tags: string[];
     var business: string;
     for (let i = 0; i < numberofapplications; i++) {
-        if (!businessservice) businessservice = createMultipleBusinessServices(numberofapplications);
+        if (!businessservice)
+            businessservice = createMultipleBusinessServices(numberofapplications);
         business = businessservice[i].name;
         if (tagList) tags = [tagList[i].name];
         // Navigate to application inventory tab and create new application
@@ -625,12 +626,11 @@ export function createApplicationObjects(numberOfObjects: number): Array<Applica
     var businessservice = createMultipleBusinessServices(1);
     for (let i = 0; i < numberOfObjects; i++) {
         // Create an object of application
-        const application = new ApplicationInventory(data.getAppName(),businessservice[0].name);
+        const application = new ApplicationInventory(data.getAppName(), businessservice[0].name);
         applicationObjectsList.push(application);
     }
     return applicationObjectsList;
 }
-
 
 export function deleteAllJobfunctions(cancel = false): void {
     Jobfunctions.clickJobfunctions();
