@@ -19,33 +19,29 @@ import {
     login,
     clickByText,
     inputText,
-    submitForm,
-    click,
     preservecookies,
     hasToBeSkipped,
     selectUserPerspective,
-} from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
+} from "../../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../../views/menu.view";
 import {
     controls,
     tags,
     button,
-    duplicateErrMsg,
-    max40CharMsg,
     fieldReqMsg,
     max120CharsMsg,
-} from "../../../../types/constants";
+    duplicateName,
+} from "../../../../../types/constants";
 import {
     createTagButton,
     nameInput,
     nameHelper,
     tagTypeHelper,
     dropdownMenuToggle,
-} from "../../../../views/tags.view";
-import { Tag } from "../../../../models/controls/tags";
-
-import * as commonView from "../../../../../integration/views/common.view";
-import * as data from "../../../../../utils/data_utils";
+} from "../../../../../views/tags.view";
+import { Tag } from "../../../../../models/developer/controls/tags";
+import * as commonView from "../../../../../../integration/views/common.view";
+import * as data from "../../../../../../utils/data_utils";
 
 describe("Tag validations", { tags: "@tier2" }, () => {
     before("Login", function () {
@@ -81,7 +77,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
 
         // Validate the create button is enabled with valid inputs
         inputText(nameInput, data.getRandomWord(5));
-        click(dropdownMenuToggle);
+        cy.get(dropdownMenuToggle).eq(2).click();
         clickByText(button, data.getExistingTagtype());
         cy.get(commonView.submitButton).should("not.be.disabled");
 
@@ -128,10 +124,10 @@ describe("Tag validations", { tags: "@tier2" }, () => {
 
         // Check tag name duplication
         inputText(nameInput, tag.name);
-        click(dropdownMenuToggle);
+        cy.get(dropdownMenuToggle).eq(2).click();
         clickByText(button, tag.tagtype);
-        submitForm();
-        cy.get(commonView.duplicateNameWarning).should("contain.text", duplicateErrMsg);
+        cy.get(commonView.submitButton).should("be.disabled");
+        cy.get(commonView.nameHelper).should("contain.text", duplicateName);
         cy.get(commonView.closeButton).click();
         cy.wait(100);
 

@@ -24,8 +24,8 @@ import {
     closeRowDetails,
     hasToBeSkipped,
     selectUserPerspective,
-} from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
+} from "../../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../../views/menu.view";
 import {
     controls,
     button,
@@ -33,10 +33,10 @@ import {
     tags,
     tagName,
     tdTag,
-} from "../../../../types/constants";
-import { Tag } from "../../../../models/controls/tags";
+} from "../../../../../types/constants";
+import { Tag } from "../../../../../models/developer/controls/tags";
 
-import * as data from "../../../../../utils/data_utils";
+import * as data from "../../../../../../utils/data_utils";
 
 describe("Tags filter validations", { tags: "@tier2" }, function () {
     before("Login", function () {
@@ -55,7 +55,7 @@ describe("Tags filter validations", { tags: "@tier2" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
-        cy.wait("@getTagtypes");
+        cy.get("@getTagtypes");
 
         const tag = new Tag(data.getRandomWord(5), data.getExistingTagtype());
         tag.create();
