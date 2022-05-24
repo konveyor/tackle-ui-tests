@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+import 'cypress-react-selector';
 import { controls, tags, tdTag, trTag, button } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 
@@ -135,6 +136,9 @@ export class Tag {
 export class Tagtype {
     name: string;
     rank: number;
+fieldId
+:
+"color"
     color: string;
 
     constructor(name: string, color: string, rank?: number) {
@@ -144,7 +148,8 @@ export class Tagtype {
     }
 
     protected selectColor(color: string): void {
-        click(dropdownMenuToggle);
+        cy.waitForReact()
+        cy.react('FormGroup', { props: {   fieldId : 'color'   }}).click();
         clickByText(button, color);
     }
 
@@ -174,7 +179,7 @@ export class Tagtype {
                 commonView.successAlertMessage,
                 `Success! ${this.name} was added as a(n) tag type.`
             );
-        }
+        } 
     }
 
     edit(updatedValue: { name?: string; rank?: number; color?: string }, cancel = false): void {
