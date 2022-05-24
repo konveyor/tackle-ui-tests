@@ -24,11 +24,11 @@ import {
     notExistsWithinRow,
     hasToBeSkipped,
     selectUserPerspective,
-} from "../../../../../utils/utils";
-import { Tag } from "../../../../models/controls/tags";
+} from "../../../../../../utils/utils";
+import { Tag } from "../../../../../models/developer/controls/tags";
 
-import { tdTag } from "../../../../types/constants";
-import * as data from "../../../../../utils/data_utils";
+import { tdTag } from "../../../../../types/constants";
+import * as data from "../../../../../../utils/data_utils";
 
 describe("Tag CRUD operations", { tags: "@tier1" }, () => {
     beforeEach("Login", function () {
@@ -61,7 +61,7 @@ describe("Tag CRUD operations", { tags: "@tier1" }, () => {
         var updatedTagName = data.getRandomWord(8);
         var updatedTagtypeName = data.getExistingTagtype();
         tag.edit({ name: updatedTagName, tagtype: updatedTagtypeName });
-        cy.wait("@putTag");
+        cy.get("@putTag");
         cy.wait(2000);
 
         // Assert that tag type name got updated
@@ -74,7 +74,7 @@ describe("Tag CRUD operations", { tags: "@tier1" }, () => {
 
         // Delete tag
         tag.delete();
-        cy.wait("@deleteTag");
+        cy.get("@deleteTag");
         cy.wait(2000);
 
         // Assert that tag got deleted
