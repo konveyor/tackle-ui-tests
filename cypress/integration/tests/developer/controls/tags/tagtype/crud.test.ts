@@ -28,7 +28,6 @@ import { Tagtype, Tag } from "../../../../../models/developer/controls/tags";
 import * as data from "../../../../../../utils/data_utils";
 import { color, rank, tagCount } from "../../../../../types/constants";
 
-
 describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run

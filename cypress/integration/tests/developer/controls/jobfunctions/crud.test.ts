@@ -25,7 +25,6 @@ import {
 import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
 import * as data from "../../../../../utils/data_utils";
 
-
 describe("Job Function CRUD operations", { tags: "@tier1" }, () => {
     const jobfunction = new Jobfunctions(data.getJobTitle());
 

@@ -30,7 +30,6 @@ import { Stakeholders } from "../../../../models/developer/controls/stakeholders
 import { tdTag, businessServices } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 
-
 describe("Business service linked to stakeholder", { tags: "@tier1" }, () => {
     beforeEach("Login", function () {
         // Prevent hook from running, if the tag is excluded from run

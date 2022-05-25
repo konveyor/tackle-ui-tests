@@ -59,7 +59,6 @@ import {
 import { Tag } from "../../../models/developer/controls/tags";
 import { Stakeholders } from "../../../models/developer/controls/stakeholders";
 
-
 var applicationsList: Array<ApplicationInventory> = [];
 var businessServiceList: Array<BusinessServices> = [];
 var stakeholdersList: Array<Stakeholders> = [];

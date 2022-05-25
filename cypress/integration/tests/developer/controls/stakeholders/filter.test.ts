@@ -58,7 +58,6 @@ var jobfunctionsList: Array<Jobfunctions> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var invalidSearchInput = "qqqqq";
 
-
 describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
         // Prevent before hook from running, if the tag is excluded from run

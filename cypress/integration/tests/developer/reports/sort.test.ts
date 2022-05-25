@@ -45,7 +45,6 @@ import { ApplicationInventory } from "../../../models/developer/applicationinven
 import { Stakeholders } from "../../../models/developer/controls/stakeholders";
 import { BusinessServices } from "../../../models/developer/controls/businessservices";
 
-
 var applicationsList: Array<ApplicationInventory> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 var businessservicelist: Array<BusinessServices> = [];

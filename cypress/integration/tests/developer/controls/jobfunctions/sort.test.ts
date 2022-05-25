@@ -35,7 +35,6 @@ import { controls, name, jobFunctions } from "../../../../types/constants";
 
 import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
 
-
 var jobfunctionsList: Array<Jobfunctions> = [];
 
 describe("Job function sorting", { tags: "@tier2" }, function () {

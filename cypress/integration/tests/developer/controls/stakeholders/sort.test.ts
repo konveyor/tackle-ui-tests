@@ -48,7 +48,6 @@ import { Stakeholders } from "../../../../models/developer/controls/stakeholders
 import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
 import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
 
-
 var stakeholdersList: Array<Stakeholders> = [];
 var jobfunctionsList: Array<Jobfunctions> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];

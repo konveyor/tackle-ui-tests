@@ -40,7 +40,6 @@ import { jobfunctionNameInput } from "../../../../views/jobfunctions.view";
 import * as commonView from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
 
-
 describe("Job Function Validations", { tags: "@tier2" }, () => {
     const jobfunction = new Jobfunctions(data.getJobTitle());
 

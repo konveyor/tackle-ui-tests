@@ -31,7 +31,6 @@ import { controls, jobFunctions, button, name, clearAllFilters } from "../../../
 import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
 import * as data from "../../../../../utils/data_utils";
 
-
 var jobfunctionsList: Array<Jobfunctions> = [];
 var invalidSearchInput = String(data.getRandomNumber());
 

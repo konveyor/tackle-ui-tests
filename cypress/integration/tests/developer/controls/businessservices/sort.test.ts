@@ -37,7 +37,6 @@ import { controls, businessServices, name, owner } from "../../../../types/const
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 
-
 var stakeholdersList: Array<Stakeholders> = [];
 var businessservicesList: Array<BusinessServices> = [];
 

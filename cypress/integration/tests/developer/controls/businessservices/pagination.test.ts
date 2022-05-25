@@ -36,7 +36,6 @@ import {
     prevPageButton,
 } from "../../../../views/common.view";
 
-
 describe("Business services pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run

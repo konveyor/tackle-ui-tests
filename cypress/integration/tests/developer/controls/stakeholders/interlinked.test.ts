@@ -34,7 +34,6 @@ import { tdTag, trTag, stakeholders } from "../../../../types/constants";
 import { expandRow } from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
 
-
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var stakeholdergroupNames: Array<string> = [];
 

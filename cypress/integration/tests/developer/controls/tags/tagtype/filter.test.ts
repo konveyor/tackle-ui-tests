@@ -28,7 +28,6 @@ import { controls, button, clearAllFilters, tags, tagType } from "../../../../..
 
 import * as data from "../../../../../../utils/data_utils";
 
-
 describe("Tag type filter validations", { tags: "@tier2" }, function () {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run

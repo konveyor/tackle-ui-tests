@@ -44,7 +44,6 @@ import { BusinessServices } from "../../../../models/developer/controls/business
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 import * as data from "../../../../../utils/data_utils";
 
-
 var businessservicesList: Array<BusinessServices> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 var invalidSearchInput = String(data.getRandomNumber());

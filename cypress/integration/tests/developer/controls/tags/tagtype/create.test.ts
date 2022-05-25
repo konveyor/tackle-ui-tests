@@ -50,7 +50,6 @@ import { Tagtype } from "../../../../../models/developer/controls/tags";
 import * as commonView from "../../../../../views/common.view";
 import * as data from "../../../../../../utils/data_utils";
 
-
 describe("Tag type validations", { tags: "@tier2" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
