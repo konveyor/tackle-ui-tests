@@ -24,9 +24,9 @@ import {
     createMultipleTags,
     deleteAllTagTypes,
     selectUserPerspective,
-} from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, tags } from "../../../../types/constants";
+} from "../../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../../views/menu.view";
+import { controls, tags } from "../../../../../types/constants";
 
 import {
     firstPageButton,
@@ -35,7 +35,7 @@ import {
     pageNumInput,
     prevPageButton,
     appTable,
-} from "../../../../views/common.view";
+} from "../../../../../views/common.view";
 
 describe("Tag type pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {

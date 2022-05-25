@@ -28,8 +28,8 @@ import {
     deleteAllBusinessServices,
     deleteAllStakeholders,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { navMenu, navTab } from "../../../views/menu.view";
+} from "../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../views/menu.view";
 import {
     controls,
     businessServices,
@@ -38,11 +38,11 @@ import {
     button,
     name,
     clearAllFilters,
-} from "../../../types/constants";
+} from "../../../../types/constants";
 
-import { BusinessServices } from "../../../models/controls/businessservices";
-import { Stakeholders } from "../../../models/controls/stakeholders";
-import * as data from "../../../../utils/data_utils";
+import { BusinessServices } from "../../../../models/developer/controls/businessservices";
+import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
+import * as data from "../../../../../utils/data_utils";
 
 var businessservicesList: Array<BusinessServices> = [];
 var stakeholdersList: Array<Stakeholders> = [];

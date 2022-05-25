@@ -24,12 +24,12 @@ import {
     createMultipleJobfunctions,
     deleteAllJobfunctions,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, jobFunctions, button, name, clearAllFilters } from "../../../types/constants";
+} from "../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../views/menu.view";
+import { controls, jobFunctions, button, name, clearAllFilters } from "../../../../types/constants";
 
-import { Jobfunctions } from "../../../models/controls/jobfunctions";
-import * as data from "../../../../utils/data_utils";
+import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
+import * as data from "../../../../../utils/data_utils";
 
 var jobfunctionsList: Array<Jobfunctions> = [];
 var invalidSearchInput = String(data.getRandomNumber());

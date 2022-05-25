@@ -28,12 +28,12 @@ import {
     createMultipleJobfunctions,
     deleteAllJobfunctions,
     selectUserPerspective,
-} from "../../../../utils/utils";
+} from "../../../../../utils/utils";
 const { _ } = Cypress;
-import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, name, jobFunctions } from "../../../types/constants";
+import { navMenu, navTab } from "../../../../views/menu.view";
+import { controls, name, jobFunctions } from "../../../../types/constants";
 
-import { Jobfunctions } from "../../../models/controls/jobfunctions";
+import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
 
 var jobfunctionsList: Array<Jobfunctions> = [];
 

@@ -24,8 +24,8 @@ import {
     preservecookies,
     hasToBeSkipped,
     selectUserPerspective,
-} from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
+} from "../../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../../views/menu.view";
 import {
     controls,
     tags,
@@ -34,7 +34,7 @@ import {
     max40CharMsg,
     fieldReqMsg,
     minCharsMsg,
-} from "../../../../types/constants";
+} from "../../../../../types/constants";
 import {
     createTagtypeButton,
     nameInput,
@@ -44,11 +44,11 @@ import {
     rankHelper,
     positiveRankMsg,
     colorHelper,
-} from "../../../../views/tags.view";
-import { Tagtype } from "../../../../models/controls/tags";
+} from "../../../../../views/tags.view";
+import { Tagtype } from "../../../../../models/developer/controls/tags";
 
-import * as commonView from "../../../../../integration/views/common.view";
-import * as data from "../../../../../utils/data_utils";
+import * as commonView from "../../../../../views/common.view";
+import * as data from "../../../../../../utils/data_utils";
 
 describe("Tag type validations", { tags: "@tier2" }, () => {
     before("Login", function () {

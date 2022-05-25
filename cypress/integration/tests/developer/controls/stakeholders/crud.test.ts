@@ -25,13 +25,13 @@ import {
     hasToBeSkipped,
     preservecookies,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { Stakeholders } from "../../../models/controls/stakeholders";
-import { Stakeholdergroups } from "../../../models/controls/stakeholdergroups";
-import { Jobfunctions } from "../../../models/controls/jobfunctions";
-import { tdTag } from "../../../types/constants";
-import { groupsCount } from "../../../views/stakeholders.view";
-import * as data from "../../../../utils/data_utils";
+} from "../../../../../utils/utils";
+import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
+import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
+import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
+import { tdTag } from "../../../../types/constants";
+import { groupsCount } from "../../../../views/stakeholders.view";
+import * as data from "../../../../../utils/data_utils";
 
 describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
     before("Login", function () {

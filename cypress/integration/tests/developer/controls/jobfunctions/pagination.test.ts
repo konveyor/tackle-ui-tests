@@ -24,16 +24,16 @@ import {
     createMultipleJobfunctions,
     deleteAllJobfunctions,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, jobFunctions } from "../../../types/constants";
+} from "../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../views/menu.view";
+import { controls, jobFunctions } from "../../../../types/constants";
 import {
     firstPageButton,
     lastPageButton,
     nextPageButton,
     pageNumInput,
     prevPageButton,
-} from "../../../views/common.view";
+} from "../../../../views/common.view";
 
 describe("Job functions pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
