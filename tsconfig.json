@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "es5",
         "lib": ["es5", "dom"],
-        "types": ["cypress", "cypress-xpath", "@testing-library/cypress"],
+        "types": ["cypress", "cypress-xpath", "@testing-library/cypress", "cypress-react-selector"],
         "skipLibCheck": true,
         "allowJs": true
     },

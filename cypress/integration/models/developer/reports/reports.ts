@@ -16,9 +16,9 @@ limitations under the License.
 /// <reference types="cypress" />
 /// <reference types="cypress-xpath" />
 
-import { applicationName, risk } from "../../types/constants";
-import * as commonView from "../../views/common.view";
-import { itemsPerPageMenu, itemsPerPageToggleButton } from "../../views/reports.view";
+import { applicationName, risk } from "../../../types/constants";
+import * as commonView from "../../../views/common.view";
+import { itemsPerPageMenu, itemsPerPageToggleButton } from "../../../views/reports.view";
 
 export function selectItemsPerPageAdoptionCandidate(items: number): void {
     cy.get(itemsPerPageMenu)

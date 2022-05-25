@@ -135,6 +135,7 @@ export class Tag {
 export class Tagtype {
     name: string;
     rank: number;
+    fieldId: "color";
     color: string;
 
     constructor(name: string, color: string, rank?: number) {
@@ -144,7 +145,8 @@ export class Tagtype {
     }
 
     protected selectColor(color: string): void {
-        click(dropdownMenuToggle);
+        cy.waitForReact();
+        cy.react("FormGroup", { props: { fieldId: "color" } }).click();
         clickByText(button, color);
     }
 
