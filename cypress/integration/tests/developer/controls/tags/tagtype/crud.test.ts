@@ -22,11 +22,12 @@ import {
     hasToBeSkipped,
     preservecookies,
     selectUserPerspective,
-} from "../../../../../utils/utils";
-import { Tagtype, Tag } from "../../../../models/controls/tags";
+} from "../../../../../../utils/utils";
+import { Tagtype, Tag } from "../../../../../models/developer/controls/tags";
 
-import * as data from "../../../../../utils/data_utils";
-import { color, rank, tagCount } from "../../../../types/constants";
+import * as data from "../../../../../../utils/data_utils";
+import { color, rank, tagCount } from "../../../../../types/constants";
+
 
 describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
     before("Login", function () {

@@ -23,12 +23,13 @@ import {
     notExists,
     hasToBeSkipped,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { navTab } from "../../../views/menu.view";
-import { BusinessServices } from "../../../models/controls/businessservices";
-import { Stakeholders } from "../../../models/controls/stakeholders";
-import { tdTag, businessServices } from "../../../types/constants";
-import * as data from "../../../../utils/data_utils";
+} from "../../../../../utils/utils";
+import { navTab } from "../../../../views/menu.view";
+import { BusinessServices } from "../../../../models/developer/controls/businessservices";
+import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
+import { tdTag, businessServices } from "../../../../types/constants";
+import * as data from "../../../../../utils/data_utils";
+
 
 describe("Business service linked to stakeholder", { tags: "@tier1" }, () => {
     beforeEach("Login", function () {

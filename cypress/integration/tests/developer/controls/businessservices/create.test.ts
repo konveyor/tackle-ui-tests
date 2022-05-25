@@ -25,8 +25,8 @@ import {
     hasToBeSkipped,
     preservecookies,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { navMenu, navTab } from "../../../views/menu.view";
+} from "../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../views/menu.view";
 import {
     controls,
     businessServices,
@@ -36,15 +36,16 @@ import {
     max120CharsMsg,
     max250CharsMsg,
     createNewButton,
-} from "../../../types/constants";
+} from "../../../../types/constants";
 import {
     businessServiceNameInput,
     businessServiceDescriptionInput,
-} from "../../../views/businessservices.view";
-import * as commonView from "../../../../integration/views/common.view";
+} from "../../../../views/businessservices.view";
+import * as commonView from "../../../../views/common.view";
 
-import { BusinessServices } from "../../../models/businessservices";
-import * as data from "../../../../utils/data_utils";
+import { BusinessServices } from "../../../../models/developer/controls/businessservices";
+import * as data from "../../../../../utils/data_utils";
+
 
 describe("Business service validations", { tags: "@tier2" }, () => {
     before("Login", function () {

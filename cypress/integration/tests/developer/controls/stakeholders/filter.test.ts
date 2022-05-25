@@ -31,8 +31,8 @@ import {
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { navMenu, navTab } from "../../../views/menu.view";
+} from "../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../views/menu.view";
 import {
     controls,
     stakeholders,
@@ -44,19 +44,20 @@ import {
     jobFunction,
     group,
     clearAllFilters,
-} from "../../../types/constants";
+} from "../../../../types/constants";
 
-import { Stakeholders } from "../../../models/controls/stakeholders";
-import { Jobfunctions } from "../../../models/controls/jobfunctions";
-import { Stakeholdergroups } from "../../../models/controls/stakeholdergroups";
+import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
+import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
+import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
 
-import * as commonView from "../../../../integration/views/common.view";
-import * as data from "../../../../utils/data_utils";
+import * as commonView from "../../../../views/common.view";
+import * as data from "../../../../../utils/data_utils";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var jobfunctionsList: Array<Jobfunctions> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var invalidSearchInput = "qqqqq";
+
 
 describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {

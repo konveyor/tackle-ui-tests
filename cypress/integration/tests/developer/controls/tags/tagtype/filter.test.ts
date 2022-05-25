@@ -22,11 +22,12 @@ import {
     applySearchFilter,
     hasToBeSkipped,
     selectUserPerspective,
-} from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, button, clearAllFilters, tags, tagType } from "../../../../types/constants";
+} from "../../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../../views/menu.view";
+import { controls, button, clearAllFilters, tags, tagType } from "../../../../../types/constants";
 
-import * as data from "../../../../../utils/data_utils";
+import * as data from "../../../../../../utils/data_utils";
+
 
 describe("Tag type filter validations", { tags: "@tier2" }, function () {
     before("Login", function () {

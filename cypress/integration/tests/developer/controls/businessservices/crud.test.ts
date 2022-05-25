@@ -22,11 +22,12 @@ import {
     notExists,
     preservecookies,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { BusinessServices } from "../../../models/controls/businessservices";
-import { Stakeholders } from "../../../models/controls/stakeholders";
+} from "../../../../../utils/utils";
+import { BusinessServices } from "../../../../models/developer/controls/businessservices";
+import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 
-import * as data from "../../../../utils/data_utils";
+import * as data from "../../../../../utils/data_utils";
+
 
 describe("Business service CRUD operations", { tags: "@tier1" }, () => {
     before("Login", function () {

@@ -30,12 +30,13 @@ import {
     deleteAllBusinessServices,
     deleteAllStakeholders,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, businessServices, name, owner } from "../../../types/constants";
+} from "../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../views/menu.view";
+import { controls, businessServices, name, owner } from "../../../../types/constants";
 
-import { Stakeholders } from "../../../models/controls/stakeholders";
-import { BusinessServices } from "../../../models/controls/businessservices";
+import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
+import { BusinessServices } from "../../../../models/developer/controls/businessservices";
+
 
 var stakeholdersList: Array<Stakeholders> = [];
 var businessservicesList: Array<BusinessServices> = [];

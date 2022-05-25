@@ -25,8 +25,8 @@ import {
     hasToBeSkipped,
     preservecookies,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { navMenu, navTab } from "../../../views/menu.view";
+} from "../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../views/menu.view";
 import {
     controls,
     stakeholders,
@@ -36,17 +36,18 @@ import {
     invalidEmailMsg,
     createNewButton,
     duplicateEmail,
-} from "../../../types/constants";
+} from "../../../../types/constants";
 import {
     stakeholderEmailInput,
     stakeholderNameInput,
     emailHelper,
     displayNameHelper,
-} from "../../../views/stakeholders.view";
-import { Stakeholders } from "../../../models/controls/stakeholders";
+} from "../../../../views/stakeholders.view";
+import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 
-import * as commonView from "../../../../integration/views/common.view";
-import * as data from "../../../../utils/data_utils";
+import * as commonView from "../../../../views/common.view";
+import * as data from "../../../../../utils/data_utils";
+
 
 describe("Stakeholder validations", { tags: "@tier2" }, () => {
     const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());

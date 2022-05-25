@@ -32,9 +32,9 @@ import {
     deleteAllStakeholders,
     deleteAllStakeholderGroups,
     selectUserPerspective,
-} from "../../../../utils/utils";
+} from "../../../../../utils/utils";
 const { _ } = Cypress;
-import { navMenu, navTab } from "../../../views/menu.view";
+import { navMenu, navTab } from "../../../../views/menu.view";
 import {
     controls,
     email,
@@ -42,11 +42,12 @@ import {
     displayName,
     jobFunction,
     groupCount,
-} from "../../../types/constants";
+} from "../../../../types/constants";
 
-import { Stakeholders } from "../../../models/controls/stakeholders";
-import { Jobfunctions } from "../../../models/controls/jobfunctions";
-import { Stakeholdergroups } from "../../../models/controls/stakeholdergroups";
+import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
+import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
+import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
+
 
 var stakeholdersList: Array<Stakeholders> = [];
 var jobfunctionsList: Array<Jobfunctions> = [];

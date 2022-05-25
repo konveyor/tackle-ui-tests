@@ -40,6 +40,7 @@ import { Stakeholders } from "../../../models/developer/controls/stakeholders";
 import * as commonView from "../../../views/common.view";
 import { BusinessServices } from "../../../models/developer/controls/businessservices";
 
+
 var applicationsList: Array<ApplicationInventory> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 var businessservicelist: Array<BusinessServices> = [];
