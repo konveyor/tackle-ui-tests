@@ -33,7 +33,7 @@ export const nameHelper = "div[id=name-helper]";
 export const descriptionHelper = "div[id=description-helper]";
 export const emailHelper = "div[id=email-helper]";
 export const filterToggleButton = "div.pf-c-dropdown > button.pf-c-dropdown__toggle";
-export const filterInput = "input[aria-label='filter-text']";
+export const filterInput = "div.pf-c-input-group";
 export const searchButton = "button[aria-label='search button for search input']";
 export const nextPageButton = "button[aria-label='Go to next page']";
 export const prevPageButton = "button[aria-label='Go to previous page']";
