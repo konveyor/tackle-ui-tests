@@ -30,11 +30,11 @@ import {
     deleteAllStakeholders,
     deleteAllStakeholderGroups,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, stakeholderGroups, name, memberCount } from "../../../types/constants";
-import { Stakeholdergroups } from "../../../models/controls/stakeholdergroups";
-import { Stakeholders } from "../../../models/controls/stakeholders";
+} from "../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../views/menu.view";
+import { controls, stakeholderGroups, name, memberCount } from "../../../../types/constants";
+import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
+import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var stakeholdersList: Array<Stakeholders> = [];

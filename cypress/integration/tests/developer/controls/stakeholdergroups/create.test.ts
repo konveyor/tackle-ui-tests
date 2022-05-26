@@ -25,8 +25,8 @@ import {
     hasToBeSkipped,
     preservecookies,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { navMenu, navTab } from "../../../views/menu.view";
+} from "../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../views/menu.view";
 import {
     controls,
     stakeholderGroups,
@@ -36,14 +36,15 @@ import {
     max120CharsMsg,
     max250CharsMsg,
     createNewButton,
-} from "../../../types/constants";
+    duplicateName,
+} from "../../../../types/constants";
 import {
     stakeholdergroupNameInput,
     stakeholdergroupDescriptionInput,
-} from "../../../views/stakeholdergroups.view";
-import { Stakeholdergroups } from "../../../models/controls/stakeholdergroups";
-import * as data from "../../../../utils/data_utils";
-import * as commonView from "../../../../integration/views/common.view";
+} from "../../../../views/stakeholdergroups.view";
+import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
+import * as data from "../../../../../utils/data_utils";
+import * as commonView from "../../../../../integration/views/common.view";
 
 describe("Stakeholder groups validations", { tags: "@tier2" }, () => {
     const stakeholdergroup = new Stakeholdergroups(data.getCompanyName(), data.getDescription());
@@ -121,8 +122,8 @@ describe("Stakeholder groups validations", { tags: "@tier2" }, () => {
 
         // Check name duplication
         inputText(stakeholdergroupNameInput, stakeholdergroup.name);
-        submitForm();
-        cy.get(commonView.duplicateNameWarning).should("contain.text", duplicateErrMsg);
+        cy.get(commonView.submitButton).should("be.disabled");
+        cy.get(commonView.nameHelper).should("contain.text", duplicateName);
 
         // Delete created stakeholder group
         cy.get(commonView.closeButton).click();

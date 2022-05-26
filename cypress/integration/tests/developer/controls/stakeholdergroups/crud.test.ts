@@ -24,12 +24,12 @@ import {
     hasToBeSkipped,
     preservecookies,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { Stakeholdergroups } from "../../../models/controls/stakeholdergroups";
-import { Stakeholders } from "../../../models/controls/stakeholders";
-import { tdTag, trTag } from "../../../types/constants";
-import * as data from "../../../../utils/data_utils";
-import { expandRow } from "../../../views/common.view";
+} from "../../../../../utils/utils";
+import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
+import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
+import { tdTag, trTag } from "../../../../types/constants";
+import * as data from "../../../../../utils/data_utils";
+import { expandRow } from "../../../../views/common.view";
 
 describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
     const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());

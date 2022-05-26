@@ -29,8 +29,8 @@ import {
     deleteAllStakeholders,
     deleteAllStakeholderGroups,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { navMenu, navTab } from "../../../views/menu.view";
+} from "../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../views/menu.view";
 import {
     controls,
     stakeholderGroups,
@@ -41,13 +41,14 @@ import {
     member,
     clearAllFilters,
     name,
-} from "../../../types/constants";
+    stakeholders,
+} from "../../../../types/constants";
 
-import { Stakeholders } from "../../../models/controls/stakeholders";
-import { Stakeholdergroups } from "../../../models/controls/stakeholdergroups";
+import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
+import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
 
-import * as commonView from "../../../../integration/views/common.view";
-import * as data from "../../../../utils/data_utils";
+import * as commonView from "../../../../../integration/views/common.view";
+import * as data from "../../../../../utils/data_utils";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
@@ -102,17 +103,17 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
 
         // Enter a non-existing name substring and apply it as search filter
         applySearchFilter(name, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No stakeholder groups available");
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
     });
 
     it("Description filter validations", function () {
@@ -134,17 +135,17 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
 
         // Enter a non-existing description substring and apply it as search filter
         applySearchFilter(description, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No stakeholder groups available");
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
     });
 
     it("Member filter validations", function () {
@@ -156,7 +157,7 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
 
         // Enter an existing member substring and apply it as search filter
         var validSearchInput = stakeholdergroupsList[0].members[0].substring(0, 3);
-        applySearchFilter(member, validSearchInput);
+        applySearchFilter(stakeholders, validSearchInput);
 
         // Assert that stakeholder groups row(s) containing the search text is/are displayed
         selectItemsPerPage(100);
@@ -176,16 +177,16 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
 
         // Enter a non-existing member substring and apply it as search filter
-        applySearchFilter(member, invalidSearchInput);
+        applySearchFilter(stakeholders, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No stakeholder groups available");
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
     });
 });

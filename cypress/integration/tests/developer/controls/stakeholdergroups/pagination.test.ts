@@ -25,13 +25,13 @@ import {
     createMultipleStakeholderGroups,
     deleteAllStakeholderGroups,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, stakeholderGroups } from "../../../types/constants";
+} from "../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../views/menu.view";
+import { controls, stakeholderGroups } from "../../../../types/constants";
 
-import { Stakeholdergroups } from "../../../models/controls/stakeholdergroups";
+import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
 
-import * as data from "../../../../utils/data_utils";
+import * as data from "../../../../../utils/data_utils";
 import {
     firstPageButton,
     lastPageButton,
@@ -39,7 +39,7 @@ import {
     pageNumInput,
     prevPageButton,
     appTable,
-} from "../../../views/common.view";
+} from "../../../../views/common.view";
 
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 
@@ -101,7 +101,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
 
         // Navigate to next page
         cy.get(nextPageButton).eq(0).click();
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
 
         // Verify that previous buttons are enabled after moving to next page
         cy.get(prevPageButton).each(($previousBtn) => {
@@ -150,7 +150,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
         cy.wait(2000);
 
         // Go to page number 2
-        cy.get(pageNumInput).clear().type("2").type("{enter}");
+        cy.get(pageNumInput).eq(0).clear().type("2").type("{enter}");
 
         // Verify that page number has changed, as previous page nav button got enabled
         cy.get(prevPageButton).each(($previousBtn) => {
@@ -171,7 +171,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
         cy.wait(2000);
 
         // Navigate to last page
-        cy.get(lastPageButton).click();
+        cy.get(lastPageButton).eq(0).click();
         cy.wait(2000);
 
         // Delete all items of last page

@@ -26,13 +26,13 @@ import {
     hasToBeSkipped,
     createMultipleStakeholders,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { navTab } from "../../../views/menu.view";
-import { Stakeholdergroups } from "../../../models/controls/stakeholdergroups";
-import { Stakeholders } from "../../../models/controls/stakeholders";
-import { tdTag, trTag, stakeholderGroups } from "../../../types/constants";
-import { expandRow } from "../../../views/common.view";
-import * as data from "../../../../utils/data_utils";
+} from "../../../../../utils/utils";
+import { navTab } from "../../../../views/menu.view";
+import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
+import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
+import { tdTag, trTag, stakeholderGroups } from "../../../../types/constants";
+import { expandRow } from "../../../../views/common.view";
+import * as data from "../../../../../utils/data_utils";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var membersList: Array<string> = [];
