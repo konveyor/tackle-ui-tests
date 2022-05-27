@@ -34,7 +34,7 @@ import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory, button } from "../../../../types/constants";
 
 const businessService = new BusinessServices("Finance and HR");
-const filePath = "app_import/";
+const filePath = "app_import/csv";
 var applicationsList: Array<ApplicationInventory> = [];
 
 describe("Application import operations", () => {

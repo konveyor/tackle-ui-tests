@@ -110,6 +110,12 @@ export function selectFormItems(fieldId: string, item: string): void {
     cy.contains("button", item).click();
 }
 
+export function selectReactFormItems(locator: string, item: string): void {
+    cy.waitForReact();
+    cy.react("FormGroup", { props: { fieldId: locator } }).click();
+    cy.contains("button", item).click();
+}
+
 export function checkSuccessAlert(fieldId: string, message: string): void {
     cy.get(fieldId).should("contain.text", message);
 }
@@ -399,6 +405,18 @@ export function importApplication(fileName: string): void {
     cy.wait(2000);
     cy.get("form.pf-c-form").find("button").contains("Import").click({ force: true });
     checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
+}
+
+
+export function uploadfile(fileName: string): void {
+    // Performs application import via csv file upload
+    // cy.get(actionButton).eq(1).click();
+    // clickByText(button, "Import");
+    cy.wait(500);
+    cy.get('input[id="file-filename"]').attachFile(fileName);
+    cy.wait(2000);
+    // cy.get("form.pf-c-form").find("button").contains("Import").click({ force: true });
+    // checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
 }
 
 export function openManageImportsPage(): void {
