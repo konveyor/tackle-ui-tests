@@ -29,7 +29,7 @@ jobs:
       - name: Checkout tackle
         uses: actions/checkout@v2
         with:
-          repository: konveyor/tackle
+          repository: konveyor/tackle2-operator
           path: tackle
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.3.1
@@ -43,40 +43,56 @@ jobs:
         run: kubectl get nodes
       - name: Validate enabled addon in arg
         run: minikube addons list -o json | jq '.registry.Status' | grep enabled
-      - name: Kubectl create namespace
-        run: kubectl create ns tackle
+      - name: Kubectl create addons
+        run: minikube addons enable dashboard
+        run: minikube addons enable ingress
+        run: minikube addons enable olm
 
-      - name: Deploy tackle
-        run: sleep 60s && kubectl create -f tackle/kubernetes/kubernetes-tackle.yaml -n tackle
+      - name: Deploy CRD
+        run: kubectl apply -f https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/crds.yaml
+      - name: Deploy OLM
+        run: kubectl apply -f https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/olm.yaml
+      - name: Deploy k8s
+        run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle2-operator/main/tackle-k8s.yaml 
 
-      - name: Verify keycloak
-        run: kubectl wait deployment/keycloak --for condition=available --timeout=-1s -n tackle
-      - name: Verify tackle-controls
-        run: kubectl wait deployment/tackle-controls --for condition=available --timeout=-1s -n tackle
-      - name: Verify tackle-application-inventory
-        run: kubectl wait deployment/tackle-application-inventory --for condition=available --timeout=-1s -n tackle
-      - name: Verify tackle-pathfinder
-        run: kubectl wait deployment/tackle-pathfinder --for condition=available --timeout=-1s -n tackle
+      - name: Create CRD
+        run: kubectl apply -f https://github.com/konveyor/tackle-ui-tests/.github/crd.yaml 
+
+      - name: Check pod status
+        run: kubectl get pods -n konveyor-tackle
+
+      - name: Verify hub
+        run: kubectl wait deployment/tackle-hub --for condition=available --timeout=-1s -n konveyor-tackle
+      - name: Verify keycloack-controls
+        run: kubectl wait deployment/tackle-keycloak-postgresql --for condition=available --timeout=-1s -n konveyor-tackle
+      - name: Verify tackle-keycloack-sso
+        run: kubectl wait deployment/tackle-keycloak-sso --for condition=available --timeout=-1s -n konveyor-tackle
+      - name: Verify tackle-operator
+        run: kubectl wait deployment/tackle-operator --for condition=available --timeout=-1s -n konveyor-tackle
+      - name: Verify pathfinder
+        run: kubectl wait deployment/tackle-pathfinder --for condition=available --timeout=-1s -n konveyor-tackle
+      - name: Verify tackle-pathfinder-postgresql
+        run: kubectl wait deployment/tackle-pathfinder-postgresql --for condition=available --timeout=-1s -n konveyor-tackle
       - name: Verify tackle-ui
-        run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n tackle
+        run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n konveyor-tackle
 
       - name: Wait for Ingress
         run: |
           bash -c 'external_ip="";
           while [ -z $external_ip ];
             do echo "Waiting for end point...";
-            external_ip=$(kubectl get ingress tackle --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}" -n tackle);[ -z "$external_ip" ] &&
+            external_ip=$(kubectl get ingress tackle --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}" -n konveyor-tackle);[ -z "$external_ip" ] &&
             sleep 10;
           done;
           echo "End point ready:" &&
           echo $external_ip;
           export endpoint=$external_ip;
           echo "CYPRESS_tackleUrl=https://$external_ip" >>$GITHUB_ENV'
-     
+
       - name: Checkout to pull request branch
         uses: actions/checkout@v2
        # Install NPM dependencies
       - name: Install NPM
         run: npm install .
       - name: Run cypress test cases
-        run: npx cypress run --spec ${{ needs.k8s-tests.outputs.tests }} --env user="tackle",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
+        run: npx cypress run --spec ${{ needs.k8s-tests.outputs.tests }} --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
