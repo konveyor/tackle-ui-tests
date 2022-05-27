@@ -16,7 +16,8 @@
         "mocha": "^9.1.2",
         "mocha-junit-reporter": "^2.0.2",
         "prettier": "^2.2.1",
-        "typescript": "^4.2.4"
+        "typescript": "^4.2.4",
+        "cypress-react-selector": "^2.3.17"
     },
     "scripts": {
         "check": "prettier --check './**/*.{ts,js,json}'",

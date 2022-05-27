@@ -25,16 +25,16 @@ import {
     createMultipleBusinessServices,
     deleteAllBusinessServices,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, businessServices } from "../../../types/constants";
+} from "../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../views/menu.view";
+import { controls, businessServices } from "../../../../types/constants";
 import {
     firstPageButton,
     lastPageButton,
     nextPageButton,
     pageNumInput,
     prevPageButton,
-} from "../../../views/common.view";
+} from "../../../../views/common.view";
 
 describe("Business services pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {

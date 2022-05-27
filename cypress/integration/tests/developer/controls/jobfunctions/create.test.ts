@@ -24,7 +24,7 @@ import {
     hasToBeSkipped,
     preservecookies,
     selectUserPerspective,
-} from "../../../../utils/utils";
+} from "../../../../../utils/utils";
 import {
     controls,
     jobFunctions,
@@ -33,12 +33,12 @@ import {
     max120CharsMsg,
     duplicateErrMsg,
     createNewButton,
-} from "../../../types/constants";
-import { Jobfunctions } from "../../../models/jobfunctions";
-import { navMenu, navTab } from "../../../views/menu.view";
-import { jobfunctionNameInput } from "../../../views/jobfunctions.view";
-import * as commonView from "../../../../integration/views/common.view";
-import * as data from "../../../../utils/data_utils";
+} from "../../../../types/constants";
+import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
+import { navMenu, navTab } from "../../../../views/menu.view";
+import { jobfunctionNameInput } from "../../../../views/jobfunctions.view";
+import * as commonView from "../../../../views/common.view";
+import * as data from "../../../../../utils/data_utils";
 
 describe("Job Function Validations", { tags: "@tier2" }, () => {
     const jobfunction = new Jobfunctions(data.getJobTitle());

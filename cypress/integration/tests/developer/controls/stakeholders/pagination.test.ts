@@ -25,9 +25,9 @@ import {
     createMultipleStakeholders,
     deleteAllStakeholders,
     selectUserPerspective,
-} from "../../../../utils/utils";
-import { navMenu, navTab } from "../../../views/menu.view";
-import { controls, stakeholders } from "../../../types/constants";
+} from "../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../views/menu.view";
+import { controls, stakeholders } from "../../../../types/constants";
 
 import {
     firstPageButton,
@@ -35,7 +35,7 @@ import {
     nextPageButton,
     pageNumInput,
     prevPageButton,
-} from "../../../views/common.view";
+} from "../../../../views/common.view";
 
 describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {

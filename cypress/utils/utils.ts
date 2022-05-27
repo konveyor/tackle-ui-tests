@@ -706,7 +706,7 @@ export function deleteAllStakeholderGroups(cancel = false): void {
                             .siblings(tdTag)
                             .within(() => {
                                 click(commonView.deleteButton);
-                                cy.wait(800);
+                                cy.wait(1000);
                             });
                         click(commonView.confirmButton);
                         cy.wait(4000);

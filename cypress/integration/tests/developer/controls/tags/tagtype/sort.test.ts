@@ -26,9 +26,9 @@ import {
     preservecookies,
     hasToBeSkipped,
     selectUserPerspective,
-} from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, tags, tagType, rank, tagCount } from "../../../../types/constants";
+} from "../../../../../../utils/utils";
+import { navMenu, navTab } from "../../../../../views/menu.view";
+import { controls, tags, tagType, rank, tagCount } from "../../../../../types/constants";
 
 describe("Tag type sort validations", { tags: "@tier2" }, function () {
     before("Login", function () {
