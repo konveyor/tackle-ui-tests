@@ -96,7 +96,7 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
 
         // Navigate to next page
         cy.get(nextPageButton).eq(0).click();
-        cy.wait("@getJobfunctions");
+        cy.get("@getJobfunctions");
 
         // Verify that previous buttons are enabled after moving to next page
         cy.get(prevPageButton).each(($previousBtn) => {
@@ -145,7 +145,7 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
         cy.wait(2000);
 
         // Go to page number 2
-        cy.get(pageNumInput).clear().type("2").type("{enter}");
+        cy.get(pageNumInput).eq(0).clear().type("2").type("{enter}");
 
         // Verify that page number has changed, as previous page nav button got enabled
         cy.get(prevPageButton).each(($previousBtn) => {

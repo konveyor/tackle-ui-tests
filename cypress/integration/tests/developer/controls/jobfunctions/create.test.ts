@@ -31,8 +31,8 @@ import {
     button,
     minCharsMsg,
     max120CharsMsg,
-    duplicateErrMsg,
     createNewButton,
+    duplicateName,
 } from "../../../../types/constants";
 import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
 import { navMenu, navTab } from "../../../../views/menu.view";
@@ -88,8 +88,8 @@ describe("Job Function Validations", { tags: "@tier2" }, () => {
         // Create job function with same name again
         clickByText(button, createNewButton);
         inputText(jobfunctionNameInput, jobfunction.name);
-        submitForm();
-        cy.get(commonView.duplicateNameWarning).should("contain.text", duplicateErrMsg);
+        cy.get(commonView.submitButton).should("be.disabled");
+        cy.get(commonView.nameHelper).should("contain.text", duplicateName);
 
         // Delete created jobfunction
         cy.get(commonView.closeButton).click();
