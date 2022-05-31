@@ -41,7 +41,7 @@ import * as commonView from "../../../../views/common.view";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 
 const businessService = new BusinessServices("Finance and HR");
-const filePath = "app_import/";
+const filePath = "app_import/csv";
 var applicationsList: Array<ApplicationInventory> = [];
 const filesToImport = [
     "valid_application_rows.csv",

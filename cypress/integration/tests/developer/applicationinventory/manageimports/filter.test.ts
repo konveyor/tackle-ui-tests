@@ -35,7 +35,7 @@ import { BusinessServices } from "../../../../models/developer/controls/business
 import { csvFileName } from "../../../../views/applicationinventory.view";
 
 const businessService = new BusinessServices("Finance and HR");
-const filePath = "app_import/";
+const filePath = "app_import/csv";
 var applicationsList: Array<ApplicationInventory> = [];
 const filesToImport = [
     "valid_application_rows.csv",

@@ -37,7 +37,7 @@ import { BusinessServices } from "../../../../models/developer/controls/business
 import { csvFileName, date, importStatus, user } from "../../../../views/applicationinventory.view";
 
 const businessService = new BusinessServices("Finance and HR");
-const filePath = "app_import/";
+const filePath = "app_import/csv";
 var applicationsList: Array<ApplicationInventory> = [];
 
 describe("Manage applications import sort validations", { tags: "@tier2" }, function () {
