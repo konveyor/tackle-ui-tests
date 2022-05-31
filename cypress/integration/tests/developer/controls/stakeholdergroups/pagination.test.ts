@@ -77,7 +77,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholderGroups);
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
 
         // select 10 items per page
         selectItemsPerPage(10);
@@ -117,7 +117,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholderGroups);
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
 
         // Select 10 items per page
         selectItemsPerPage(10);
@@ -143,7 +143,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholderGroups);
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
 
         // Select 10 items per page
         selectItemsPerPage(10);
