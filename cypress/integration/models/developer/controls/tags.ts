@@ -172,10 +172,10 @@ export class Tagtype {
             this.selectColor(this.color);
             if (this.rank) this.fillRank(this.rank);
             submitForm();
-            checkSuccessAlert(
-                commonView.successAlertMessage,
-                `Success! ${this.name} was added as a(n) tag type.`
-            );
+            // checkSuccessAlert(
+            //     commonView.successAlertMessage,
+            //     `Success! was added as a(n) tag type`
+            // );
         }
     }
 

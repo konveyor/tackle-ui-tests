@@ -361,7 +361,11 @@ export class ApplicationInventory {
             ApplicationInventory.clickApplicationInventory();
             selectItemsPerPage(100);
             this.selectApplication();
-            clickByText(button, assess);
+            cy.waitForReact();
+            cy.react("p", {
+                props: { "aria-label": "assess-application" },
+            }).click();
+
             cy.wait(6000);
             if (stakeholders) this.selectStakeholders(stakeholders);
             if (stakeholdergroups) this.selectStakeholdergroups(stakeholdergroups);

@@ -609,14 +609,15 @@ export function createMultipleApplications(
     for (let i = 0; i < numberofapplications; i++) {
         if (!businessservice)
             businessservice = createMultipleBusinessServices(numberofapplications);
+
         business = businessservice[i].name;
         if (tagList) tags = [tagList[i].name];
         // Navigate to application inventory tab and create new application
         const application = new ApplicationInventory(
             data.getAppName(),
-            data.getDescription(),
-            data.getDescription(),
             business,
+            data.getDescription(),
+            data.getDescription(),
             tags
         );
         application.create();
