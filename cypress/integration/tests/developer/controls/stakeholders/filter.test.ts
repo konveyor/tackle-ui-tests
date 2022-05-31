@@ -40,7 +40,7 @@ import {
     tdTag,
     trTag,
     email,
-    displayName,
+    name,
     jobFunction,
     group,
     clearAllFilters,
@@ -116,7 +116,7 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
         applySearchFilter(email, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No stakeholders available");
 
         clickByText(button, clearAllFilters);
     });
@@ -132,7 +132,7 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
         // Enter an existing display name substring and apply it as search filter
         var validSearchInput = stakeholdersList[0].name.substring(0, 3);
-        applySearchFilter(displayName, validSearchInput);
+        applySearchFilter(name, validSearchInput);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
         exists(stakeholdersList[0].name);
@@ -142,13 +142,13 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // Enter a non-existing display name substring and apply it as search filter
-        applySearchFilter(displayName, invalidSearchInput);
+        applySearchFilter(name, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No stakeholders available");
 
         clickByText(button, clearAllFilters);
     });
@@ -179,13 +179,13 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // Enter a non-existing job function substring and apply it as search filter
         applySearchFilter(jobFunction, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No stakeholders available");
 
         clickByText(button, clearAllFilters);
     });
@@ -219,13 +219,13 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // Enter a non-existing group substring and apply it as search filter
         applySearchFilter(group, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No stakeholders available");
 
         clickByText(button, clearAllFilters);
     });

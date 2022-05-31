@@ -149,8 +149,9 @@ describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
             jobfunction: jobfunctions[1].name,
             groups: stakeholdergroupNames,
         });
-        cy.wait("@putStakeholder");
+        cy.wait("@postStakeholder");
         cy.wait("@getStakeholders");
+        cy.wait(2000);
 
         // Assert that edit operation has been done by checking number of groups and added group exists
         expandRowDetails(stakeholder.email);
