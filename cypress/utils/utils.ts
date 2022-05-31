@@ -419,14 +419,10 @@ export function importApplication(fileName: string): void {
 }
 
 export function uploadfile(fileName: string): void {
-    // Performs application import via csv file upload
-    // cy.get(actionButton).eq(1).click();
-    // clickByText(button, "Import");
+    // Uplaod any file
     cy.wait(500);
     cy.get('input[id="file-filename"]').attachFile(fileName);
     cy.wait(2000);
-    // cy.get("form.pf-c-form").find("button").contains("Import").click({ force: true });
-    // checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
 }
 
 export function openManageImportsPage(): void {
