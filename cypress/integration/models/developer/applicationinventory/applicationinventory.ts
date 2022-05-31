@@ -42,6 +42,7 @@ import {
     dependenciesDropdownBtn,
     closeForm,
     copy,
+    reactSelectorAssessButton,
 } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
@@ -362,10 +363,7 @@ export class ApplicationInventory {
             selectItemsPerPage(100);
             this.selectApplication();
             cy.waitForReact();
-            cy.react("p", {
-                props: { "aria-label": "assess-application" },
-            }).click();
-
+            cy.react("p", reactSelectorAssessButton).click();
             cy.wait(6000);
             if (stakeholders) this.selectStakeholders(stakeholders);
             if (stakeholdergroups) this.selectStakeholdergroups(stakeholdergroups);

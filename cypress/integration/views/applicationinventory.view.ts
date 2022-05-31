@@ -35,3 +35,8 @@ export const southboundHelper = "div[id=southbound-dependencies-helper]";
 export const selectBox = "input[type=checkbox]";
 export const tags = "span";
 export const user = "User";
+
+//React Selectors
+export const reactSelectorAssessButton = {
+    props: { "aria-label": "assess-application" },
+};
