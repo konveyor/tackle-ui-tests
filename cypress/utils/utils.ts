@@ -46,8 +46,8 @@ import {
 } from "../integration/types/constants";
 import { actionButton, date } from "../integration/views/applicationinventory.view";
 import {
-    reactSelectorUserPerspectiveSelectorWhenAdminIsSelected,
-    reactSelectorUserPerspectiveSelectorWhenDeveloperIsSelected,
+    reactUserPerspectiveAdmin,
+    reactUserPerspectiveDeveloper,
 } from "../integration/views/common.view";
 
 const userName = Cypress.env("user");
@@ -780,12 +780,9 @@ export function deleteAllTagTypes(cancel = false): void {
 
 export function selectUserPerspective(userType: string): void {
     cy.waitForReact();
-    let selectComp = cy.react(
-        reactComponentNameSelect,
-        reactSelectorUserPerspectiveSelectorWhenDeveloperIsSelected
-    );
+    let selectComp = cy.react(reactComponentNameSelect, reactUserPerspectiveDeveloper);
     if (!selectComp) {
-        selectComp = cy.react("Select", reactSelectorUserPerspectiveSelectorWhenAdminIsSelected);
+        selectComp = cy.react("Select", reactUserPerspectiveAdmin);
     }
     selectComp.click();
     clickByText(userPerspectiveMenu, userType);
