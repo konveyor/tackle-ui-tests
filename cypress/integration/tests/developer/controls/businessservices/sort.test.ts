@@ -75,7 +75,7 @@ describe("Business services sort validations", { tags: "@tier2" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, businessServices);
-        cy.wait("@getBusinessService");
+        cy.get("@getBusinessService");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(name);
@@ -102,7 +102,7 @@ describe("Business services sort validations", { tags: "@tier2" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, businessServices);
-        cy.wait("@getBusinessService");
+        cy.get("@getBusinessService");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(owner);

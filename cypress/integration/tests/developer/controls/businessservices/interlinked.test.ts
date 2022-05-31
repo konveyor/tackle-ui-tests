@@ -62,7 +62,7 @@ describe("Business service linked to stakeholder", { tags: "@tier1" }, () => {
             stakeholder.name
         );
         businessservice.create();
-        cy.wait("@postBusinessService");
+        cy.get("@postBusinessService");
         exists(businessservice.name);
 
         // Verify stakeholder attached to business service

@@ -34,10 +34,10 @@ import {
     controls,
     businessServices,
     description,
-    owner,
     button,
     name,
     clearAllFilters,
+    createdBy,
 } from "../../../../types/constants";
 
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
@@ -103,7 +103,7 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
         applySearchFilter(name, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No business services available");
 
         clickByText(button, clearAllFilters);
     });
@@ -134,7 +134,7 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
         applySearchFilter(description, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No business services available");
 
         clickByText(button, clearAllFilters);
     });
@@ -146,7 +146,7 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
 
         // Enter an existing owner substring and assert
         var validSearchInput = businessservicesList[0].owner.substring(0, 3);
-        applySearchFilter(owner, validSearchInput);
+        applySearchFilter(createdBy, validSearchInput);
         exists(businessservicesList[0].owner);
 
         if (businessservicesList[1].owner.indexOf(validSearchInput) >= 0) {
@@ -155,17 +155,17 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
         clickByText(button, clearAllFilters);
 
         // Enter an existing exact owner and assert
-        applySearchFilter(owner, businessservicesList[1].owner);
+        applySearchFilter(createdBy, businessservicesList[1].owner);
         exists(businessservicesList[1].owner);
         notExists(businessservicesList[0].owner);
 
         clickByText(button, clearAllFilters);
 
         // Enter a non-attached owner substring and apply it as search filter
-        applySearchFilter(owner, stakeholdersList[2].name);
+        applySearchFilter(createdBy, stakeholdersList[2].name);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No business services available");
 
         clickByText(button, clearAllFilters);
     });

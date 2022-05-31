@@ -49,6 +49,7 @@ export const rank = "Rank";
 export const review = "Review";
 export const risk = "Risk";
 export const owner = "Owner";
+export const createdBy = "Created By";
 export const reports = "Reports";
 export const save = "Save";
 export const stakeholders = "Stakeholders";

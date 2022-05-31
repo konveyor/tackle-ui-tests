@@ -70,11 +70,11 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, businessServices);
-        cy.wait("@getBusinessService");
+        cy.get("@getBusinessService");
 
         // select 10 items per page
         selectItemsPerPage(10);
-        cy.wait("@getBusinessService");
+        cy.get("@getBusinessService");
 
         // Verify next buttons are enabled as there are more than 11 rows present
         cy.get(nextPageButton).each(($nextBtn) => {
@@ -94,7 +94,7 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
 
         // Navigate to next page
         cy.get(nextPageButton).eq(0).click();
-        cy.wait("@getBusinessService");
+        cy.get("@getBusinessService");
 
         // Verify that previous buttons are enabled after moving to next page
         cy.get(prevPageButton).each(($previousBtn) => {
@@ -110,7 +110,7 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, businessServices);
-        cy.wait("@getBusinessService");
+        cy.get("@getBusinessService");
 
         // Select 10 items per page
         selectItemsPerPage(10);
@@ -133,16 +133,17 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
 
     it("Page number validations", function () {
         // Navigate to business services tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, businessServices);
-        cy.wait("@getBusinessService");
+        cy.get("@getBusinessService");
 
         // Select 10 items per page
         selectItemsPerPage(10);
         cy.wait(2000);
 
         // Go to page number 2
-        cy.get(pageNumInput).clear().type("2").type("{enter}");
+        cy.get(pageNumInput).eq(0).clear().type("2").type("{enter}");
 
         // Verify that page number has changed, as previous page nav button got enabled
         cy.get(prevPageButton).each(($previousBtn) => {
@@ -152,16 +153,17 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
 
     it("Last page item(s) deletion, impact on page reload validation", function () {
         // Navigate to business services tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, businessServices);
-        cy.wait("@getBusinessService");
+        cy.get("@getBusinessService");
 
         // Select 10 items per page
         selectItemsPerPage(10);
         cy.wait(2000);
 
         // Navigate to last page
-        cy.get(lastPageButton).click();
+        cy.get(lastPageButton).eq(0).click();
         cy.wait(2000);
 
         // Delete all items of last page
