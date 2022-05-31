@@ -43,8 +43,8 @@ export const pageNumInput = "input[aria-label='Current page']";
 
 //React Selectors
 export const reactSelectorUserPerspectiveSelectorWhenAdminIsSelected = {
-    props: { selections: "Developer" },
+    props: { selections: "Administrator" },
 };
 export const reactSelectorUserPerspectiveSelectorWhenDeveloperIsSelected = {
-    props: { selections: "Administrator" },
+    props: { selections: "Developer" },
 };
