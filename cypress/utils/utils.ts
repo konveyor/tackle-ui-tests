@@ -110,9 +110,20 @@ export function selectFormItems(fieldId: string, item: string): void {
     cy.contains("button", item).click();
 }
 
-export function selectReactFormItems(locator: string, item: string): void {
+export function selectReactFormItems(
+    locator: string,
+    item: string,
+    formId?: string,
+    fieldId?: string
+): void {
+    if (!formId) {
+        formId = "FormGroup";
+    }
+    if (!fieldId) {
+        fieldId = "fieldId";
+    }
     cy.waitForReact();
-    cy.react("FormGroup", { props: { fieldId: locator } }).click();
+    cy.react(formId, { props: { fieldId: locator } }).click();
     cy.contains("button", item).click();
 }
 
@@ -406,7 +417,6 @@ export function importApplication(fileName: string): void {
     cy.get("form.pf-c-form").find("button").contains("Import").click({ force: true });
     checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
 }
-
 
 export function uploadfile(fileName: string): void {
     // Performs application import via csv file upload

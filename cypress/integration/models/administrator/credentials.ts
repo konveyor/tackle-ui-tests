@@ -20,7 +20,7 @@ import {
     descriptionInput,
     usernameInput,
     passwordInput,
-    privatePassphraseInput
+    privatePassphraseInput,
 } from "../../views/credentials.view";
 import {
     clickByText,
@@ -45,11 +45,18 @@ export class Credentials {
     username?: string;
     password?: string;
     fileName?: string;
-    privatePassphrase?: string
+    privatePassphrase?: string;
 
-
-    constructor(name: string, description: string, type: string, userCredentials: string, username?: string,
-        password?: string, fileName?: string, privatePassphrase?: string) {
+    constructor(
+        name: string,
+        description: string,
+        type: string,
+        userCredentials: string,
+        username?: string,
+        password?: string,
+        fileName?: string,
+        privatePassphrase?: string
+    ) {
         this.name = name;
         this.description = description;
         this.type = type;
@@ -89,8 +96,8 @@ export class Credentials {
         inputText(passwordInput, password);
     }
 
-    protected uploadSSHKey(fileName: string):void{
-        uploadfile(fileName)
+    protected uploadSSHKey(fileName: string): void {
+        uploadfile(fileName);
     }
 
     protected fillPrivatePassphrase(privatePassphrase: string): void {
@@ -103,21 +110,21 @@ export class Credentials {
         if (cancel) {
             cancelForm();
         } else {
-            this.fillName(this.name); 
+            this.fillName(this.name);
             this.fillDescription(this.description);
-            this.selectType(this.type)
-            if (this.type == "Source Control"){
-                this.selectUserCrdentials(this.userCredentials)
-                if (this.userCredentials == "Username/Password"){
+            this.selectType(this.type);
+            if (this.type == "Source Control") {
+                this.selectUserCrdentials(this.userCredentials);
+                if (this.userCredentials == "Username/Password") {
                     this.fillUsername(this.username);
                     this.fillPassword(this.password);
                 }
-                if (this.userCredentials == "Source Private Key/Passphrase"){
+                if (this.userCredentials == "Source Private Key/Passphrase") {
                     uploadfile(this.fileName);
-                    if(this.privatePassphrase) this.fillPrivatePassphrase(this.privatePassphrase);
+                    if (this.privatePassphrase) this.fillPrivatePassphrase(this.privatePassphrase);
                 }
             }
-            
+
             submitForm();
             checkSuccessAlert(
                 commonView.successAlertMessage,
@@ -125,6 +132,4 @@ export class Credentials {
             );
         }
     }
-
-    
 }

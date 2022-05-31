@@ -52,8 +52,14 @@ describe("Credentials CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Credentials Source Control CRUD", function () {
-        const credential = new Credentials("source_"+data.getFullName(), data.getDescription(),
-        "Source Control", "Username/Password", "xyz", "abcde");
+        const credential = new Credentials(
+            "source_" + data.getFullName(),
+            data.getDescription(),
+            "Source Control",
+            "Username/Password",
+            "xyz",
+            "abcde"
+        );
         // Create new stakeholder
         credential.create();
         cy.wait("@postCredentials");
@@ -61,12 +67,17 @@ describe("Credentials CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Credentials SSH CRUD", function () {
-        const credential = new Credentials("ssh_"+data.getFullName(), data.getDescription(),
-        "Source Control", "Source Private Key/Passphrase", filePath, "abcde");
+        const credential = new Credentials(
+            "ssh_" + data.getFullName(),
+            data.getDescription(),
+            "Source Control",
+            "Source Private Key/Passphrase",
+            filePath,
+            "abcde"
+        );
         // Create new stakeholder
         credential.create();
         cy.wait("@getCredentials");
         exists(credential.name);
     });
-
 });
