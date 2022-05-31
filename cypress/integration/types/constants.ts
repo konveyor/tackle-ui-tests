@@ -63,6 +63,9 @@ export const tagName = "Tag name";
 export const optionMenu = '[aria-label="Options menu"]';
 export const userPerspectiveMenu = ".pf-c-select__menu-item";
 
+//React Component Names
+export const reactComponentNameSelect = "Select";
+
 // Error helper messages general to all views
 export const duplicateErrMsg = "ERROR: duplicate key value violates unique constraint";
 export const duplicateEmail = "Please use a different email address.";

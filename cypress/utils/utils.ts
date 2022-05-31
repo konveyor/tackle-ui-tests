@@ -42,8 +42,13 @@ import {
     applicationInventory,
     optionMenu,
     userPerspectiveMenu,
+    reactComponentNameSelect,
 } from "../integration/types/constants";
 import { actionButton, date } from "../integration/views/applicationinventory.view";
+import {
+    reactSelectorUserPerspectiveSelectorWhenAdminIsSelected,
+    reactSelectorUserPerspectiveSelectorWhenDeveloperIsSelected,
+} from "../integration/views/common.view";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
@@ -76,6 +81,7 @@ export function cancelForm(): void {
 
 export function login(): void {
     cy.visit(tackleUiUrl);
+    cy.waitForReact();
     inputText(loginView.userNameInput, userName);
     inputText(loginView.userPasswordInput, userPassword);
     click(loginView.loginButton);
@@ -774,7 +780,14 @@ export function deleteAllTagTypes(cancel = false): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    click(optionMenu);
+    let selectComp = cy.react(
+        reactComponentNameSelect,
+        reactSelectorUserPerspectiveSelectorWhenDeveloperIsSelected
+    );
+    if (!selectComp) {
+        selectComp = cy.react("Select", reactSelectorUserPerspectiveSelectorWhenAdminIsSelected);
+    }
+    selectComp.click();
     clickByText(userPerspectiveMenu, userType);
 }
 

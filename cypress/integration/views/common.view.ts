@@ -40,3 +40,11 @@ export const prevPageButton = "button[aria-label='Go to previous page']";
 export const lastPageButton = "button[aria-label='Go to last page']";
 export const firstPageButton = "button[aria-label='Go to first page']";
 export const pageNumInput = "input[aria-label='Current page']";
+
+//React Selectors
+export const reactSelectorUserPerspectiveSelectorWhenAdminIsSelected = {
+    props: { selections: "Developer" },
+};
+export const reactSelectorUserPerspectiveSelectorWhenDeveloperIsSelected = {
+    props: { selections: "Administrator" },
+};
