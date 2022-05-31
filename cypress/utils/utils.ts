@@ -81,7 +81,6 @@ export function cancelForm(): void {
 
 export function login(): void {
     cy.visit(tackleUiUrl);
-    cy.waitForReact();
     inputText(loginView.userNameInput, userName);
     inputText(loginView.userPasswordInput, userPassword);
     click(loginView.loginButton);
@@ -780,6 +779,7 @@ export function deleteAllTagTypes(cancel = false): void {
 }
 
 export function selectUserPerspective(userType: string): void {
+    cy.waitForReact();
     let selectComp = cy.react(
         reactComponentNameSelect,
         reactSelectorUserPerspectiveSelectorWhenDeveloperIsSelected
