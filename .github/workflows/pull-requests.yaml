@@ -43,9 +43,11 @@ jobs:
         run: kubectl get nodes
       - name: Validate enabled addon in arg
         run: minikube addons list -o json | jq '.registry.Status' | grep enabled
-      - name: Kubectl create addons
+      - name: Kubectl enable addons
         run: minikube addons enable dashboard
+      - name: Kubectl enable ingress
         run: minikube addons enable ingress
+      - name: Kubectl enable olm
         run: minikube addons enable olm
 
       - name: Deploy CRD
