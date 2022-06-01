@@ -42,9 +42,9 @@ export const firstPageButton = "button[aria-label='Go to first page']";
 export const pageNumInput = "input[aria-label='Current page']";
 
 //React Selectors
-export const reactUserPerspectiveAdmin = {
+export const userPerspectiveAdminState = {
     props: { selections: "Administrator" },
 };
-export const reactUserPerspectiveDeveloper = {
+export const userPerspectiveDeveloperState = {
     props: { selections: "Developer" },
 };

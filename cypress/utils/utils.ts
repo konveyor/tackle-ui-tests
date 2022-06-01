@@ -40,14 +40,13 @@ import {
     confidence,
     deleteAction,
     applicationInventory,
-    optionMenu,
     userPerspectiveMenu,
-    reactComponentNameSelect,
+    select,
 } from "../integration/types/constants";
 import { actionButton, date } from "../integration/views/applicationinventory.view";
 import {
-    reactUserPerspectiveAdmin,
-    reactUserPerspectiveDeveloper,
+    userPerspectiveAdminState,
+    userPerspectiveDeveloperState,
 } from "../integration/views/common.view";
 
 const userName = Cypress.env("user");
@@ -780,9 +779,12 @@ export function deleteAllTagTypes(cancel = false): void {
 
 export function selectUserPerspective(userType: string): void {
     cy.waitForReact();
-    let selectComp = cy.react(reactComponentNameSelect, reactUserPerspectiveDeveloper);
+
+    //Check if Dev can add some prop for both states
+    //This seemed the most stable option to uniquely identify the component
+    let selectComp = cy.react(select, userPerspectiveDeveloperState);
     if (!selectComp) {
-        selectComp = cy.react("Select", reactUserPerspectiveAdmin);
+        selectComp = cy.react(select, userPerspectiveAdminState);
     }
     selectComp.click();
     clickByText(userPerspectiveMenu, userType);
