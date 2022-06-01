@@ -172,10 +172,10 @@ export class Tagtype {
             this.selectColor(this.color);
             if (this.rank) this.fillRank(this.rank);
             submitForm();
-            cy.pause()
+            cy.pause();
             checkSuccessAlert(
                 commonView.successAlertMessage,
-                'Success! was added as a(n) tag type.'
+                "Success! was added as a(n) tag type."
             );
         }
     }
