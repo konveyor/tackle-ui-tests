@@ -809,8 +809,9 @@ export function deleteAllTagTypes(cancel = false): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    click(optionMenu);
-    clickByText(userPerspectiveMenu, userType);
+    cy.waitForReact();
+    cy.react("Select", { props: { toggleAriaLabel: "Options menu" } }).click();
+    cy.contains("button", userType).click();
 }
 
 export function selectWithinModal(selector: string): void {
