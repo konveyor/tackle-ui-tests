@@ -1,0 +1,42 @@
+{
+  "ignoreDefaultIgnores": false,
+  "ignore": [
+    ".dockerignore",
+    ".eslintcache",
+    ".gitignore",
+    ".prettierignore",
+    ".prettierrc",
+    "Dockerfile",
+    "yarn.lock",
+    "build/**",
+    ".github/**",
+    "*.md",
+    ".idea/*",
+    ".storybook/*",
+    "**/*.csv",
+    "**/*.snap",
+    "**/*.log",
+    "**/*.svg",
+    "docker-compose.yml",
+    "codecov.yml",
+    "nginx.conf.template",
+    "**/robots.txt",
+    "**/keycloak.json.template"
+  ],
+  "license": "LICENSE_HEADER",
+  "licenseFormats": {
+    "js": {
+      "prepend": "/*",
+      "append": " */",
+      "eachLine": {
+        "prepend": " * "
+      }
+    },
+    "dotfile": {
+      "eachLine": {
+        "prepend": "# "
+      }
+    }
+  },
+  "trailingWhitespace": "TRIM"
+}

@@ -1,9 +1,24 @@
-import { BusinessServices } from "../integration/models/businessservices";
-import { Stakeholders } from "../integration/models/stakeholders";
-import { Stakeholdergroups } from "../integration/models/stakeholdergroups";
-import { ApplicationInventory } from "../integration/models/applicationinventory/applicationinventory";
-import { Tag, Tagtype, clickTags } from "../integration/models/tags";
-import { Jobfunctions } from "../integration/models/jobfunctions";
+/*
+Copyright © 2021 the Konveyor Contributors (https://konveyor.io/)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+import { BusinessServices } from "../integration/models/developer/controls/businessservices";
+import { Stakeholders } from "../integration/models/developer/controls/stakeholders";
+import { Stakeholdergroups } from "../integration/models/developer/controls/stakeholdergroups";
+import { ApplicationInventory } from "../integration/models/developer/applicationinventory/applicationinventory";
+import { Tag, Tagtype, clickTags } from "../integration/models/developer/controls/tags";
+import { Jobfunctions } from "../integration/models/developer/controls/jobfunctions";
 
 import * as loginView from "../integration/views/login.view";
 import * as commonView from "../integration/views/common.view";
@@ -11,7 +26,7 @@ import { navMenu } from "../integration/views/menu.view";
 import * as data from "../utils/data_utils";
 import "cypress-file-upload";
 import {
-    businessservice,
+    businessService,
     tag,
     groupCount,
     memberCount,
@@ -24,7 +39,9 @@ import {
     priority,
     confidence,
     deleteAction,
-    applicationinventory,
+    applicationInventory,
+    optionMenu,
+    userPerspectiveMenu,
 } from "../integration/types/constants";
 import { actionButton, date } from "../integration/views/applicationinventory.view";
 
@@ -59,9 +76,20 @@ export function cancelForm(): void {
 
 export function login(): void {
     cy.visit(tackleUiUrl);
+
     inputText(loginView.userNameInput, userName);
     inputText(loginView.userPasswordInput, userPassword);
     click(loginView.loginButton);
+    cy.wait(5000);
+
+    // Change password screen.
+    cy.get("h1").then(($a) => {
+        if ($a.find("Update Password").length) {
+            inputText(loginView.changePasswordInput, userPassword);
+            inputText(loginView.confirmPasswordInput, userPassword);
+            click(loginView.submitButton);
+        }
+    });
     cy.wait(5000);
     cy.get("h1", { timeout: 15000 }).contains("Application inventory");
 }
@@ -90,6 +118,23 @@ export function selectItemsPerPage(items: number): void {
 
 export function selectFormItems(fieldId: string, item: string): void {
     cy.get(fieldId).click();
+    cy.contains("button", item).click();
+}
+
+export function selectReactFormItems(
+    locator: string,
+    item: string,
+    formId?: string,
+    fieldId?: string
+): void {
+    if (!formId) {
+        formId = "FormGroup";
+    }
+    if (!fieldId) {
+        fieldId = "fieldId";
+    }
+    cy.waitForReact();
+    cy.react(formId, { props: { fieldId: locator } }).click();
     cy.contains("button", item).click();
 }
 
@@ -138,11 +183,11 @@ export function selectFilter(filterName: string, identifiedRisk?: boolean): void
             .click({ force: true });
     } else {
         cy.get("div.pf-c-input-group")
-            .eq(0)
-            .find(commonView.filterToggleButton)
+            .get(commonView.filterToggleButton)
+            .eq(2)
             .click({ force: true });
     }
-    cy.get("ul[role=menu] > li").contains("button", filterName).click();
+    cy.get("ul[role=menu] > li").contains("a", filterName).click();
 }
 
 export function filterInputText(searchTextValue: string, value: number): void {
@@ -158,7 +203,7 @@ export function applySearchFilter(
     identifiedRisk?: boolean
 ): void {
     selectFilter(filterName, identifiedRisk);
-    if (filterName == businessservice || filterName == tag) {
+    if (filterName == businessService || filterName == tag) {
         cy.get("div.pf-c-input-group").find("div.pf-c-select > div > button").click();
         if (Array.isArray(searchText)) {
             searchText.forEach(function (searchTextValue) {
@@ -384,6 +429,13 @@ export function importApplication(fileName: string): void {
     checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
 }
 
+export function uploadfile(fileName: string): void {
+    // Uplaod any file
+    cy.wait(500);
+    cy.get('input[id="file-filename"]').attachFile(fileName);
+    cy.wait(2000);
+}
+
 export function openManageImportsPage(): void {
     // Opens the manage import applications page
     cy.get(actionButton).eq(1).click();
@@ -428,7 +480,7 @@ export function verifyImportErrorMsg(errorMsg: any): void {
 
 export function deleteApplicationTableRows(lastPage = false): void {
     if (!lastPage) {
-        clickByText(navMenu, applicationinventory);
+        clickByText(navMenu, applicationInventory);
         cy.wait(800);
         // Select 100 items per page
         selectItemsPerPage(100);
@@ -585,14 +637,16 @@ export function createMultipleApplications(
     var tags: string[];
     var business: string;
     for (let i = 0; i < numberofapplications; i++) {
-        if (businessservice) business = businessservice[i].name;
+        if (!businessservice)
+            businessservice = createMultipleBusinessServices(numberofapplications);
+        business = businessservice[i].name;
         if (tagList) tags = [tagList[i].name];
         // Navigate to application inventory tab and create new application
         const application = new ApplicationInventory(
             data.getAppName(),
-            data.getDescription(),
-            data.getDescription(),
             business,
+            data.getDescription(),
+            data.getDescription(),
             tags
         );
         application.create();
@@ -604,9 +658,10 @@ export function createMultipleApplications(
 
 export function createApplicationObjects(numberOfObjects: number): Array<ApplicationInventory> {
     var applicationObjectsList: Array<ApplicationInventory> = [];
+    var businessservice = createMultipleBusinessServices(1);
     for (let i = 0; i < numberOfObjects; i++) {
         // Create an object of application
-        const application = new ApplicationInventory(data.getAppName());
+        const application = new ApplicationInventory(data.getAppName(), businessservice[0].name);
         applicationObjectsList.push(application);
     }
     return applicationObjectsList;
@@ -686,7 +741,7 @@ export function deleteAllStakeholderGroups(cancel = false): void {
                             .siblings(tdTag)
                             .within(() => {
                                 click(commonView.deleteButton);
-                                cy.wait(800);
+                                cy.wait(1000);
                             });
                         click(commonView.confirmButton);
                         cy.wait(4000);
@@ -751,4 +806,16 @@ export function deleteAllTagTypes(cancel = false): void {
                     });
             }
         });
+}
+
+export function selectUserPerspective(userType: string): void {
+    cy.waitForReact();
+    cy.react("Select", { props: { toggleAriaLabel: "Options menu" } }).click();
+    cy.contains("button", userType).click();
+}
+
+export function selectWithinModal(selector: string): void {
+    cy.get("[id^=pf-modal-part-]").within(() => {
+        click(selector);
+    });
 }
