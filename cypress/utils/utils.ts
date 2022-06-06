@@ -810,7 +810,18 @@ export function deleteAllTagTypes(cancel = false): void {
 
 export function selectUserPerspective(userType: string): void {
     cy.waitForReact();
-    cy.react("Select", { props: { toggleAriaLabel: "Options menu" } }).click();
+
+    //Check if Dev can add some prop for both states
+    //This seemed the most stable option to uniquely identify the component
+    let selectComp = cy.react("Select", {
+        props: { selections: "Developer" },
+    });
+    if (!selectComp) {
+        selectComp = cy.react("Select", {
+            props: { selections: "Administrator" },
+        });
+    }
+    selectComp.click();
     cy.contains("button", userType).click();
 }
 
