@@ -347,10 +347,9 @@ export class ApplicationInventory {
         }
     }
 
-   click_access_button(): void {
-                cy.react("p", { props: { "aria-label": "assess-application" }}).click();
-   }
-
+    click_access_button(): void {
+        cy.react("p", { props: { "aria-label": "assess-application" } }).click();
+    }
 
     perform_assessment(
         risk,
