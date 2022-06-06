@@ -94,16 +94,16 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         preservecookies();
     });
 
-    // after("Perform test data clean up", function () {
-    //     // Prevent hook from running, if the tag is excluded from run
-    //     if (hasToBeSkipped("@tier2")) return;
-    //
-    //     // Delete the stakeholder
-    //     deleteAllStakeholders();
-    //     deleteAllBusinessServices();
-    //     deleteAllTagTypes();
-    //     deleteApplicationTableRows();
-    // });
+    after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
+        // Delete the stakeholder
+        deleteAllStakeholders();
+        deleteAllBusinessServices();
+        deleteAllTagTypes();
+        deleteApplicationTableRows();
+    });
 
     it("Name field validations", function () {
         // Navigate to reports
