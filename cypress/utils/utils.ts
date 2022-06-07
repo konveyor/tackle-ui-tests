@@ -821,7 +821,7 @@ export function selectUserPerspective(userType: string): void {
             if ($a.find('ul[title="Admin"]').length) {
                 // Workaround for a borwser issue when Admin menu is displayed for developer.
                 cy.contains("button", "Administrator").click({ force: true });
-                cy.wait(200);
+                cy.wait(100);
                 cy.get("@nav")
                     .react("SelectToggle", { props: { "aria-label": "Options menu" } })
                     .click();
