@@ -95,7 +95,7 @@ describe("Stakeholder validations", { tags: "@tier2" }, () => {
         cy.get(commonView.submitButton).should("not.be.disabled");
 
         // Close the form
-        cy.get(commonView.cancelButton).click();
+        cy.get(commonView.cancelButton).trigger("click");
     });
 
     it("Stakholder button validations", function () {
