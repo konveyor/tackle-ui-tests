@@ -809,9 +809,31 @@ export function deleteAllTagTypes(cancel = false): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    cy.waitForReact();
-    cy.react("Select", { props: { toggleAriaLabel: "Options menu" } }).click();
-    cy.contains("button", userType).click();
+    cy.get("div[class='pf-topology-side-bar__body'] > nav[id='nav-primary']").as("nav");
+
+    cy.get("@nav").then(($a) => {
+        cy.waitForReact();
+        cy.get("@nav")
+            .react("SelectToggle", { props: { "aria-label": "Options menu" } })
+            .click();
+        cy.wait(100);
+        if (userType == "Developer") {
+            if ($a.find('ul[title="Admin"]').length) {
+                // Workaround for a borwser issue when Admin menu is displayed for developer.
+                cy.contains("button", "Administrator").click({ force: true });
+                cy.wait(100);
+                cy.get("@nav")
+                    .react("SelectToggle", { props: { "aria-label": "Options menu" } })
+                    .click();
+                cy.contains("button", userType).click({ force: true });
+            } else {
+                cy.contains("button", userType).click({ force: true });
+                cy.wait(200);
+            }
+        }
+
+        cy.contains("button", userType).click({ force: true });
+    });
 }
 
 export function selectWithinModal(selector: string): void {
