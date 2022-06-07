@@ -347,7 +347,7 @@ export class ApplicationInventory {
         }
     }
 
-    click_access_button(): void {
+    click_assess_button(): void {
         cy.react("p", { props: { "aria-label": "assess-application" } }).click();
     }
 
@@ -365,7 +365,7 @@ export class ApplicationInventory {
             ApplicationInventory.clickApplicationInventory();
             selectItemsPerPage(100);
             this.selectApplication();
-            this.click_access_button();
+            this.click_assess_button();
             cy.wait(6000);
             if (stakeholders) this.selectStakeholders(stakeholders);
             if (stakeholdergroups) this.selectStakeholdergroups(stakeholdergroups);
