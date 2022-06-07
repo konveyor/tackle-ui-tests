@@ -807,7 +807,7 @@ export function deleteAllTagTypes(cancel = false): void {
             }
         });
 }
-//*//*[@id="nav-primary"]/ul
+
 export function selectUserPerspective(userType: string): void {
     cy.get("div[class='pf-topology-side-bar__body'] > nav[id='nav-primary']").as("nav");
 
