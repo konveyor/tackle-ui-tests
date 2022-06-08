@@ -40,8 +40,6 @@ import {
     confidence,
     deleteAction,
     applicationInventory,
-    optionMenu,
-    userPerspectiveMenu,
 } from "../integration/types/constants";
 import { actionButton, date } from "../integration/views/applicationinventory.view";
 
@@ -809,24 +807,16 @@ export function deleteAllTagTypes(cancel = false): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    cy.get("div[class='pf-topology-side-bar__body'] > nav[id='nav-primary']").as("firstnav");
-    cy.get("@firstnav").find('button[aria-label="Options menu"]').click();
-    if (userType == "Developer") {
-        cy.get("@firstnav").then(($a) => {
-            if ($a.find('ul[title="Admin"]').length) {
-                // Workaround for a borwser issue when Admin menu is displayed for developer.
-                cy.contains("button", "Administrator").click({ force: true });
-                cy.wait(100);
-                cy.get("@firstnav").find('button[aria-label="Options menu"]').click();
-                cy.contains("button", userType).click({ force: true });
-            } else {
-                cy.contains("button", userType).click({ force: true });
-                cy.wait(200);
+    cy.get(commonView.optionMenu)
+        .eq(0)
+        .then(($a) => {
+            $a.click();
+            if (userType == "Developer" && $a.find('ul[title="Admin"]').length) {
+                clickByText(commonView.userPerspectiveMenu, "Administrator");
+                $a.click();
             }
+            clickByText(commonView.userPerspectiveMenu, userType);
         });
-    } else {
-        cy.contains("button", userType).click({ force: true });
-    }
 }
 
 export function selectWithinModal(selector: string): void {
