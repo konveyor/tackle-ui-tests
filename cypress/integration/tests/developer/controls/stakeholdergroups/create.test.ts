@@ -82,7 +82,7 @@ describe("Stakeholder groups validations", { tags: "@tier2" }, () => {
         cy.get(commonView.descriptionHelper).should("contain", max250CharsMsg);
 
         // Close the form
-        cy.get(commonView.cancelButton).click();
+        cy.get(commonView.cancelButton).trigger("click");
     });
 
     it("Stakholder group button validations", function () {
