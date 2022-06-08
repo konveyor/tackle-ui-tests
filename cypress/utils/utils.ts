@@ -809,31 +809,25 @@ export function deleteAllTagTypes(cancel = false): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    cy.get("div[class='pf-topology-side-bar__body'] > nav[id='nav-primary']").as("nav");
-
-    cy.get("@nav").then(($a) => {
-        cy.waitForReact();
-        cy.get("@nav")
-            .react("SelectToggle", { props: { "aria-label": "Options menu" } })
-            .click();
-        cy.wait(100);
-        if (userType == "Developer") {
+    cy.get("div[class='pf-topology-side-bar__body'] > nav[id='nav-primary']").as("firstnav");
+    
+    cy.get("@firstnav").find('button[aria-label="Options menu"]').click();
+    if (userType == "Developer") {
+        cy.get("@firstnav").then(($a) => {
             if ($a.find('ul[title="Admin"]').length) {
                 // Workaround for a borwser issue when Admin menu is displayed for developer.
                 cy.contains("button", "Administrator").click({ force: true });
                 cy.wait(100);
-                cy.get("@nav")
-                    .react("SelectToggle", { props: { "aria-label": "Options menu" } })
-                    .click();
+                cy.get("@firstnav").find('button[aria-label="Options menu"]').click();
                 cy.contains("button", userType).click({ force: true });
             } else {
                 cy.contains("button", userType).click({ force: true });
                 cy.wait(200);
             }
-        }
-
+        });
+    }else{
         cy.contains("button", userType).click({ force: true });
-    });
+    }
 }
 
 export function selectWithinModal(selector: string): void {
