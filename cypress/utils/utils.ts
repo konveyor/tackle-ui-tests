@@ -810,7 +810,6 @@ export function deleteAllTagTypes(cancel = false): void {
 
 export function selectUserPerspective(userType: string): void {
     cy.get("div[class='pf-topology-side-bar__body'] > nav[id='nav-primary']").as("firstnav");
-    
     cy.get("@firstnav").find('button[aria-label="Options menu"]').click();
     if (userType == "Developer") {
         cy.get("@firstnav").then(($a) => {
@@ -825,7 +824,7 @@ export function selectUserPerspective(userType: string): void {
                 cy.wait(200);
             }
         });
-    }else{
+    } else {
         cy.contains("button", userType).click({ force: true });
     }
 }
