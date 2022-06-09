@@ -3,8 +3,8 @@
     "viewportHeight": 880,
     "video": false,
     "env": {
-        "user": "",
-        "pass": "",
+        "user": "admin",
+        "pass": "Dog8code",
         "tackleUrl": ""
     },
     "retries": {
