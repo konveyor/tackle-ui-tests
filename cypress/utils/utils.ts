@@ -56,13 +56,17 @@ export function inputText(fieldId: string, text: any): void {
     cy.get(fieldId).clear().type(text);
 }
 
+export function clearInput(fieldId: string): void {
+    cy.get(fieldId).click().focused().clear();
+}
+
 export function clickByText(fieldId: string, buttonText: string): void {
     // https://github.com/cypress-io/cypress/issues/2000#issuecomment-561468114
     cy.contains(fieldId, buttonText).click({ force: true });
 }
 
 export function click(fieldId: string): void {
-    cy.get(fieldId).click({ force: true });
+    cy.get(fieldId, { timeout: 5000 }).click({ force: true });
 }
 
 export function submitForm(): void {
@@ -332,7 +336,7 @@ export function closeRowDetails(rowIdentifier: string): void {
     // closes row details by clicking on the collapse button
     cy.get(tdTag)
         .contains(rowIdentifier)
-        .parent(trTag)
+        .closest(trTag)
         .within(() => {
             if (!button["aria-label=Details"]) {
                 return;
@@ -782,4 +786,16 @@ export function selectWithinModal(selector: string): void {
     cy.get("[id^=pf-modal-part-]").within(() => {
         click(selector);
     });
+}
+
+export function selectWithin(parent, selector: string): void {
+    cy.get(parent).within(() => {
+        click(selector);
+    });
+}
+
+export function clickReact(obgType, selector: string): void {
+    cy.waitForReact(5000, '#root');
+    // cy.get(`#${selector}`, { timeout: 2000 }).next('.pf-c-switch__toggle').should('be.visible');
+    cy.react(obgType, {props: {id: selector}}).click()
 }
