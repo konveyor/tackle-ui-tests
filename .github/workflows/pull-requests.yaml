@@ -58,7 +58,7 @@ jobs:
         run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle2-operator/main/tackle-k8s.yaml 
 
       - name: Create CRD
-        run: kubectl apply -f https://github.com/konveyor/tackle-ui-tests/blob/main/.github/crd.yaml 
+        run: kubectl apply -f https://github.com/konveyor/tackle-ui-tests/blob/main/.github/crd.yml 
 
       - name: Check pod status
         run: kubectl get pods -n konveyor-tackle
