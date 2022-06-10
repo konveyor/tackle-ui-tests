@@ -430,7 +430,9 @@ export function importApplication(fileName: string): void {
 export function uploadfile(fileName: string): void {
     // Uplaod any file
     cy.wait(500);
-    cy.get('input[id="file-filename"]').attachFile(fileName);
+    cy.get('input[type="file"]').attachFile(fileName, {
+        subjectType: "drag-n-drop",
+    });
     cy.wait(2000);
 }
 

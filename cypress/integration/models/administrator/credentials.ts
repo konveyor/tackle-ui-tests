@@ -72,35 +72,31 @@ export class Credentials {
         clickByText(navMenu, credentials);
     }
 
-    protected fillName(name: string): void {
+    public static fillName(name: string): void {
         inputText(credentialNameInput, name);
     }
 
-    protected fillDescription(description: string): void {
+    public static fillDescription(description: string): void {
         inputText(descriptionInput, description);
     }
 
-    protected selectType(type: string): void {
+    public static selectType(type: string): void {
         selectReactFormItems("kind", type);
     }
 
-    protected selectUserCrdentials(userCredentials: string): void {
+    public static selectUserCrdentials(userCredentials: string): void {
         selectReactFormItems("userCredentials", userCredentials);
     }
 
-    protected fillUsername(username: string): void {
+    public static fillUsername(username: string): void {
         inputText(usernameInput, username);
     }
 
-    protected fillPassword(password: string): void {
+    public static fillPassword(password: string): void {
         inputText(passwordInput, password);
     }
 
-    protected uploadSSHKey(fileName: string): void {
-        uploadfile(fileName);
-    }
-
-    protected fillPrivatePassphrase(privatePassphrase: string): void {
+    public static fillPrivatePassphrase(privatePassphrase: string): void {
         inputText(privatePassphraseInput, privatePassphrase);
     }
 
@@ -110,18 +106,20 @@ export class Credentials {
         if (cancel) {
             cancelForm();
         } else {
-            this.fillName(this.name);
-            this.fillDescription(this.description);
-            this.selectType(this.type);
+            Credentials.fillName(this.name);
+            Credentials.fillDescription(this.description);
+            Credentials.selectType(this.type);
             if (this.type == "Source Control") {
-                this.selectUserCrdentials(this.userCredentials);
+                Credentials.selectUserCrdentials(this.userCredentials);
                 if (this.userCredentials == "Username/Password") {
-                    this.fillUsername(this.username);
-                    this.fillPassword(this.password);
+                    Credentials.fillUsername(this.username);
+                    Credentials.fillPassword(this.password);
                 }
                 if (this.userCredentials == "Source Private Key/Passphrase") {
                     uploadfile(this.fileName);
-                    if (this.privatePassphrase) this.fillPrivatePassphrase(this.privatePassphrase);
+                    cy.wait(3000);
+                    if (this.privatePassphrase)
+                        Credentials.fillPrivatePassphrase(this.privatePassphrase);
                 }
             }
 
