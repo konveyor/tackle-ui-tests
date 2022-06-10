@@ -18,19 +18,17 @@ limitations under the License.
 import {
     login,
     exists,
-    notExists,
-    existsWithinRow,
-    expandRowDetails,
-    closeRowDetails,
+    submitForm,
+    clickByText,
     hasToBeSkipped,
     preservecookies,
-    selectUserPerspective,
+    uploadfile,
 } from "../../../../utils/utils";
 
-import { tdTag } from "../../../types/constants";
+import { createNewButton, button } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import { Credentials } from "../../../models/administrator/credentials";
-const filePath = "app_import/abcd.png";
+const filePath = "app_import/";
 
 describe("Credentials CRUD operations", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -48,7 +46,6 @@ describe("Credentials CRUD operations", { tags: "@tier1" }, () => {
         // Interceptors
         cy.intercept("POST", "/hub/identities*").as("postCredentials");
         cy.intercept("GET", "/hub/identities*").as("getCredentials");
-        // cy.intercept("DELETE", "/hub/stakeholder*/*").as("deleteStakeholder");
     });
 
     it("Credentials Source Control CRUD", function () {
@@ -57,8 +54,8 @@ describe("Credentials CRUD operations", { tags: "@tier1" }, () => {
             data.getDescription(),
             "Source Control",
             "Username/Password",
-            "xyz",
-            "abcde"
+            data.getRandomWord(6),
+            data.getRandomWord(6)
         );
         // Create new stakeholder
         credential.create();
@@ -67,17 +64,18 @@ describe("Credentials CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Credentials SSH CRUD", function () {
-        const credential = new Credentials(
-            "ssh_" + data.getFullName(),
-            data.getDescription(),
-            "Source Control",
-            "Source Private Key/Passphrase",
-            filePath,
-            "abcde"
-        );
-        // Create new stakeholder
-        credential.create();
-        cy.wait("@getCredentials");
-        exists(credential.name);
+        const fileName = "git_ssh_keys";
+        Credentials.clickCredentials();
+        var cred_name = data.getFullName();
+        clickByText(button, createNewButton);
+        Credentials.fillName(cred_name);
+        Credentials.fillDescription(data.getDescription());
+        Credentials.selectType("Source Control");
+        Credentials.selectUserCrdentials("Source Private Key/Passphrase");
+        uploadfile(filePath + fileName);
+        Credentials.fillPrivatePassphrase(data.getRandomWord(6));
+        cy.wait(200);
+        submitForm();
+        exists(cred_name);
     });
 });
