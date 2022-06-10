@@ -20,7 +20,8 @@ jobs:
         # Create event to generate ouput of comma separated test files only
       - id: event
         run: |
-          test_files=`python3 -c crud.test.ts"
+          test_files=`python3 -c 'crud.test.ts'"
+          echo "::set-output name=tests::$test_files"
 
   k8s:
     name: Run collected tests
@@ -60,7 +61,7 @@ jobs:
         run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle2-operator/main/tackle-k8s.yaml 
 
       - name: Create CRD
-        run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle-ui-tests/be906b1fdbc1025c5419a7b34bedddd67fa955ef/.github/crd.yml
+        run: kubectl apply -f https://raw.githubusercontent.com/sshveta/tackle-ui-tests/test_prt/.github/crd.yml
 
       - name: Check pod status
         run: kubectl get pods -n konveyor-tackle
