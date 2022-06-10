@@ -1,5 +1,8 @@
 name: Pull request test
-on: [pull_request]
+on:
+  push:
+    branches:
+    - test_prt
 
 jobs:
   k8s-tests:
@@ -58,15 +61,7 @@ jobs:
         run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle2-operator/main/tackle-k8s.yaml 
 
       - name: Create CRD
-        run: |
-          cat << EOF | kubectl apply -f -                                                                  
-          kind: Tackle
-          apiVersion: tackle.konveyor.io/v1alpha1
-          metadata:
-            name: tackle
-            namespace: konveyor-tackle
-          spec:
-          EOF
+        run: kubectl apply -f https://raw.githubusercontent.com/sshveta/tackle-ui-tests/main/.github/workflows/crd.yaml
 
       - name: Check pod status
         run: kubectl get pods -n konveyor-tackle

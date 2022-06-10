@@ -3,7 +3,4 @@ apiVersion: tackle.konveyor.io/v1alpha1
 metadata:
   name: tackle
   namespace: konveyor-tackle
-spec: {
-  hub_bucket_volume_size: 20Gi,
-  maven_data_volume_size: 20Gi  
-}
+spec: 
