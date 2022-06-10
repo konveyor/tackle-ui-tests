@@ -19,7 +19,6 @@ import {
     login,
     clickByText,
     inputText,
-    submitForm,
     click,
     preservecookies,
     hasToBeSkipped,
@@ -30,20 +29,20 @@ import {
     controls,
     tags,
     button,
-    duplicateErrMsg,
     max40CharMsg,
     fieldReqMsg,
     minCharsMsg,
+    duplicateName,
 } from "../../../../../types/constants";
 import {
     createTagtypeButton,
     nameInput,
     nameHelper,
-    dropdownMenuToggle,
     rankInput,
     rankHelper,
     positiveRankMsg,
     colorHelper,
+    dropdownMenu,
 } from "../../../../../views/tags.view";
 import { Tagtype } from "../../../../../models/developer/controls/tags";
 
@@ -91,7 +90,7 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
         // Validate the create button is enabled with valid inputs
         inputText(nameInput, data.getRandomWord(6));
         inputText(rankInput, data.getRandomNumber(5, 15));
-        click(dropdownMenuToggle);
+        click(dropdownMenu);
         clickByText(button, data.getColor());
         cy.get(commonView.submitButton).should("not.be.disabled");
 
@@ -134,7 +133,7 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
 
         // Create a new tag type
         tagtype.create();
-        cy.wait("@postTagtype");
+        cy.get("@postTagtype");
         cy.wait(2000);
 
         // Navigate to tags tab and click "Create tag type" button
@@ -142,10 +141,10 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
 
         // Check tag type name duplication
         inputText(nameInput, tagtype.name);
-        click(dropdownMenuToggle);
+        click(dropdownMenu);
         clickByText(button, data.getColor());
-        submitForm();
-        cy.get(commonView.duplicateNameWarning).should("contain.text", duplicateErrMsg);
+        cy.get(commonView.submitButton).should("be.disabled");
+        cy.get(commonView.nameHelper).should("contain.text", duplicateName);
         cy.get(commonView.closeButton).click();
         cy.wait(100);
 

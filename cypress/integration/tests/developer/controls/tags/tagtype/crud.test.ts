@@ -58,7 +58,7 @@ describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
             data.getRandomNumber(1, 30)
         );
         tagtype.create();
-        cy.wait("@postTagtype");
+        cy.get("@postTagtype");
         exists(tagtype.name);
 
         // Edit the tag type name, rank and color
@@ -66,7 +66,7 @@ describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
         var updatedRank = data.getRandomNumber(10, 30);
         var updatedColor = data.getColor();
         tagtype.edit({ name: updatedTagtype, rank: updatedRank, color: updatedColor });
-        cy.wait("@putTagtype");
+        cy.get("@putTagtype");
         cy.wait(2000);
 
         // Assert that tag type name got updated
@@ -80,7 +80,7 @@ describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
 
         // Delete tag type
         tagtype.delete();
-        cy.wait("@deleteTagtype");
+        cy.get("@deleteTagtype");
         cy.wait(2000);
 
         // Assert that tag type got deleted
@@ -97,7 +97,7 @@ describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
             data.getRandomNumber(1, 30)
         );
         tagtype.create();
-        cy.wait("@postTagtype");
+        cy.get("@postTagtype");
         exists(tagtype.name);
 
         var tagList: Array<Tag> = [];
@@ -121,7 +121,7 @@ describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
 
         // Delete tag type
         tagtype.delete();
-        cy.wait("@deleteTagtype");
+        cy.get("@deleteTagtype");
         cy.wait(2000);
 
         // Assert that tag type got deleted
