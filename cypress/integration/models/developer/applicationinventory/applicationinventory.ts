@@ -348,8 +348,8 @@ export class ApplicationInventory {
     }
 
     click_assess_button(): void {
-        cy.waitForReact()
-        cy.react("p", { props: { "aria-label": "assess-application" } }).click();
+        cy.waitForReact();
+        cy.react("p", { props: { "aria-label": "assess-application" } }).should('be.enabled').click();
     }
 
     perform_assessment(
