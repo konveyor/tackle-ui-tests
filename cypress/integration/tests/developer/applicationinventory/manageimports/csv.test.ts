@@ -20,8 +20,8 @@ import {
     openManageImportsPage,
     preservecookies,
     hasToBeSkipped,
-} from "../../../../utils/utils";
-import { actionButton } from "../../../views/applicationinventory.view";
+} from "../../../../../utils/utils";
+import { actionButton } from "../../../../views/applicationinventory.view";
 
 describe("Manage imports tests", { tags: "@newtest" }, function () {
     before("Login", function () {
@@ -44,9 +44,9 @@ describe("Manage imports tests", { tags: "@newtest" }, function () {
         // Click on option - Download CSV template
         cy.get("a.pf-c-dropdown__menu-item").contains("Download CSV template").click();
         // Check if file contains appropriate data
-        cy.readFile("cypress/downloads/sample_application_import.csv").should(
+        cy.readFile("cypress/downloads/template_application_import.csv").should(
             "contain",
-            "My application1"
+            "Customers"
         );
     });
 });
