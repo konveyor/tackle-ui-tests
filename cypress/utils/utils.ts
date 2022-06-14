@@ -232,6 +232,24 @@ export function applySearchFilter(
     cy.wait(4000);
 }
 
+// apply search filter function for tags
+export function applyFilterforTags(filterName: string, searchText: any): void {
+    cy.get("#tags-filter-value-select");
+    cy.get(commonView.filterToggleButton).eq(2).click({ force: true });
+    cy.get("ul[role=menu] > li").contains("a", filterName).click();
+    cy.get("#tags-filter-value-select").click();
+    cy.get(commonView.filterInput).click().focused().clear().type(searchText);
+}
+
+//function to select checkboxes
+export function selectCheckBox(selector: string): void {
+    cy.get(selector, { timeout: 1200 }).then(($checkbox) => {
+        if (!$checkbox.prop("checked")) {
+            click(selector);
+        }
+    });
+}
+
 export function sortAsc(sortCriteria: string): void {
     cy.get(`th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
         if (

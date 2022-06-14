@@ -25,3 +25,4 @@ export const tagTable = "table[aria-label='tag-table']";
 export const tagMenuButton = "button[aria-label='Actions']";
 export const tagTypeHelper = "div[id=tagType-helper]";
 export const positiveRankMsg = "This field must be greater than 1.";
+export const selectTag = "label.pf-c-check.pf-c-select__menu-item";

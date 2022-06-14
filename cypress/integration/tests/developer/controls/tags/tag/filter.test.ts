@@ -18,12 +18,13 @@ limitations under the License.
 import {
     login,
     clickByText,
-    applySearchFilter,
     expandRowDetails,
     existsWithinRow,
     closeRowDetails,
     hasToBeSkipped,
     selectUserPerspective,
+    applyFilterforTags,
+    selectCheckBox,
 } from "../../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../../views/menu.view";
 import {
@@ -31,12 +32,12 @@ import {
     button,
     clearAllFilters,
     tags,
-    tagName,
     tdTag,
+    name,
 } from "../../../../../types/constants";
 import { Tag } from "../../../../../models/developer/controls/tags";
-
 import * as data from "../../../../../../utils/data_utils";
+import { selectTag } from "../../../../../views/tags.view";
 
 describe("Tags filter validations", { tags: "@tier2" }, function () {
     before("Login", function () {
@@ -63,7 +64,8 @@ describe("Tags filter validations", { tags: "@tier2" }, function () {
 
         // Enter an existing tag name substring and apply it as search filter
         var validSearchInput = tag.name.substring(0, 3);
-        applySearchFilter(tagName, validSearchInput);
+        applyFilterforTags(name, validSearchInput);
+        selectCheckBox(selectTag);
 
         // Assert that tag type row(s) containing the search tag text is/are displayed
         expandRowDetails(tag.tagtype);
@@ -72,16 +74,14 @@ describe("Tags filter validations", { tags: "@tier2" }, function () {
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.wait("@getTagtypes");
+        cy.get("@getTagtypes");
 
         // Enter a non-existing tag name substring and apply it as search filter
         var invalidSearchInput = String(data.getRandomNumber(111111, 222222));
-        applySearchFilter(tagName, invalidSearchInput);
+        applyFilterforTags(name, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
-
-        clickByText(button, clearAllFilters);
+        cy.get("button.pf-c-select__menu-item.pf-m-disabled").contains("No results found");
 
         // Delete the tag
         tag.delete();
