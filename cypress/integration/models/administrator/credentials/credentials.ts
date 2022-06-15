@@ -8,15 +8,8 @@ import {
 } from "../../../../utils/utils";
 import { dropdownMenuToggle } from "../../../views/tags.view";
 import { administrator, button, credentials, deleteAction } from "../../../types/constants";
-import {
-    closeNotification,
-    confirmButton,
-    createBtn,
-    credentialNameInput,
-    descriptionInput,
-    modal,
-    navLink,
-} from "../../../views/credentials.view";
+import { createBtn, credentialNameInput, descriptionInput } from "../../../views/credentials.view";
+import { modal, navLink, closeNotification, confirmButton } from "../../../views/common.view";
 
 export class Credentials {
     name = "";
@@ -41,18 +34,18 @@ export class Credentials {
         clickByText(button, type);
     }
 
-    static open() {
+    static openList() {
         selectUserPerspective(administrator);
         clickByText(navLink, credentials);
     }
 
     create(): void {
-        Credentials.open();
+        Credentials.openList();
         click(createBtn);
     }
 
     delete(): void {
-        Credentials.open();
+        Credentials.openList();
         applyAction(this.name, deleteAction);
         click(confirmButton);
     }

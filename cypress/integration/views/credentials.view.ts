@@ -18,8 +18,4 @@ export const descriptionInput = "input[name='description']";
 export const usernameInput = "input[name=user]";
 export const passwordInput = "input[name=password]";
 export const privatePassphraseInput = "input[aria-label='Private Key Passphrase']";
-export const modal = "[id^=pf-modal-part-]";
-export const navLink = ".pf-c-nav__link";
 export const createBtn = "#create-credential-button";
-export const closeNotification = "button[aria-label='close-notification']";
-export const confirmButton = "button[aria-label='confirm']";
