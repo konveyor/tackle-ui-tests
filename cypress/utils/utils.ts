@@ -40,6 +40,7 @@ import {
     confidence,
     deleteAction,
     applicationInventory,
+    SEC,
 } from "../integration/types/constants";
 import { actionButton, date } from "../integration/views/applicationinventory.view";
 
@@ -60,7 +61,7 @@ export function clickByText(fieldId: string, buttonText: string): void {
 }
 
 export function click(fieldId: string): void {
-    cy.get(fieldId).click({ force: true });
+    cy.get(fieldId, { timeout: 120 * SEC }).click({ force: true });
 }
 
 export function submitForm(): void {
@@ -825,4 +826,38 @@ export function selectWithinModal(selector: string): void {
     cy.get("[id^=pf-modal-part-]").within(() => {
         click(selector);
     });
+}
+
+export function selectWithin(parent, selector: string): void {
+    cy.get(parent).within(() => {
+        click(selector);
+    });
+}
+
+//function to select checkboxes
+export function selectCheckBox(selector: string): void {
+    cy.get(selector, { timeout: 120 * SEC }).then(($checkbox) => {
+        if (!$checkbox.prop('checked')) {
+            click(selector);
+        }
+    });
+}
+
+//function to unselect checkboxes
+export function unSelectCheckBox(selector: string): void {
+    cy.get(selector, { timeout: 120 * SEC }).then(($checkbox) => {
+        if ($checkbox.prop('checked')) {
+            click(selector);
+        }
+    });
+}
+
+export function applyAction(itemName: string, action: string): void {
+    // itemName is text to be searched on the screen (like plan name, provider name, etc)
+    // Action is the name of the action to be applied
+    cy.contains(itemName, { timeout: 120 * SEC })
+        .closest(trTag)
+        .within(() => {
+            clickByText(button, action);
+        });
 }
