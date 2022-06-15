@@ -1,10 +1,10 @@
-import {hasToBeSkipped, login, preservecookies} from "../../../../utils/utils";
-import {CredentialsProxy} from "../../../models/administrator/credentials/credentialsProxy";
-import * as data from "../../../../utils/data_utils"
+import { hasToBeSkipped, login, preservecookies } from "../../../../utils/utils";
+import { CredentialsProxy } from "../../../models/administrator/credentials/credentialsProxy";
+import * as data from "../../../../utils/data_utils";
 
 describe("Validation of proxy credentials", () => {
     const proxyCredName = data.getRandomWord(8);
-    const proxyCreds = new CredentialsProxy(proxyCredName, 'redhat', 'redhat');
+    const proxyCreds = new CredentialsProxy(proxyCredName, "redhat", "redhat");
 
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
@@ -19,11 +19,11 @@ describe("Validation of proxy credentials", () => {
         preservecookies();
     });
 
-    it("Creating proxy credentials", ()=> {
+    it("Creating proxy credentials", () => {
         proxyCreds.create();
-    })
+    });
 
-    it("Delete proxy credentials", ()=> {
+    it("Delete proxy credentials", () => {
         proxyCreds.delete();
-    })
-})
+    });
+});

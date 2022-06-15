@@ -1,5 +1,5 @@
-import {Credentials} from "./credentials";
-import {clickByText, inputText, selectWithin, submitForm} from "../../../../utils/utils";
+import { Credentials } from "./credentials";
+import { clickByText, inputText, selectWithin, submitForm } from "../../../../utils/utils";
 
 export class CredentialsMaven extends Credentials {
     type = "Maven Settings File";
@@ -9,11 +9,11 @@ export class CredentialsMaven extends Credentials {
         super(name);
     }
 
-    fillSettingsFile(){
+    fillSettingsFile() {
         inputText("#file", this.settingsFile);
     }
 
-    create(){
+    create() {
         super.create();
         this.fillName();
         this.fillDescription();
@@ -22,5 +22,4 @@ export class CredentialsMaven extends Credentials {
         submitForm();
         this.closeSuccessNotification();
     }
-
 }

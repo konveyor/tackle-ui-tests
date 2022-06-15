@@ -1,5 +1,5 @@
-import {Credentials} from "./credentials";
-import {inputText, submitForm} from "../../../../utils/utils";
+import { Credentials } from "./credentials";
+import { inputText, submitForm } from "../../../../utils/utils";
 
 export class CredentialsProxy extends Credentials {
     type = "Proxy";
@@ -12,15 +12,15 @@ export class CredentialsProxy extends Credentials {
         this.password = password;
     }
 
-    fillUsername(){
+    fillUsername() {
         inputText("[aria-label='user']", this.username);
     }
 
-    fillPassword(){
+    fillPassword() {
         inputText("[aria-label='password']", this.password);
     }
 
-    create(){
+    create() {
         super.create();
         this.fillName();
         this.fillDescription();
@@ -30,5 +30,4 @@ export class CredentialsProxy extends Credentials {
         submitForm();
         this.closeSuccessNotification();
     }
-
 }

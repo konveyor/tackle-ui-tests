@@ -22,4 +22,4 @@ export const modal = "[id^=pf-modal-part-]";
 export const navLink = ".pf-c-nav__link";
 export const createBtn = "#create-credential-button";
 export const closeNotification = "button[aria-label='close-notification']";
-export const confirmButton = "button[aria-label='confirm']"
+export const confirmButton = "button[aria-label='confirm']";

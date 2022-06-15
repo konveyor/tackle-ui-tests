@@ -1,5 +1,5 @@
-import {Credentials} from "./credentials";
-import {clickByText, inputText, selectWithin, submitForm} from "../../../../utils/utils";
+import { Credentials } from "./credentials";
+import { clickByText, inputText, selectWithin, submitForm } from "../../../../utils/utils";
 
 export class CredentialsSourceControl extends Credentials {
     type = "Source Control";
@@ -12,35 +12,34 @@ export class CredentialsSourceControl extends Credentials {
         super(name);
     }
 
-    fillUsername(){
+    fillUsername() {
         inputText("[aria-label='user']", this.username);
     }
 
-    fillPassword(){
+    fillPassword() {
         inputText("[aria-label='password']", this.password);
     }
 
-    fillKey(){
+    fillKey() {
         inputText("#file", this.key);
     }
-    fillKeyPassphrase(){
+    fillKeyPassphrase() {
         inputText("[aria-label='Private Key Passphrase']", this.keyPassphrase);
     }
 
-    selectCredType(){
+    selectCredType() {
         if (this.key == "") {
             this.selectType("Username/Password");
             this.fillUsername();
             this.fillPassword();
-        }
-        else{
+        } else {
             this.selectType("Source Private Key/Passphrase");
             this.fillKey();
             this.fillKeyPassphrase();
         }
     }
 
-    create(){
+    create() {
         super.create();
         this.fillName();
         this.fillDescription();
@@ -49,5 +48,4 @@ export class CredentialsSourceControl extends Credentials {
         submitForm();
         this.closeSuccessNotification();
     }
-
 }
