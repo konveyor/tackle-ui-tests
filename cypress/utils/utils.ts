@@ -43,7 +43,7 @@ import {
     SEC,
 } from "../integration/types/constants";
 import { actionButton, date } from "../integration/views/applicationinventory.view";
-import {modal} from "../integration/views/common.view";
+import { modal } from "../integration/views/common.view";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");

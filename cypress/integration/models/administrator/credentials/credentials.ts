@@ -1,8 +1,8 @@
 import {
-    applyAction,
     click,
     clickByText,
     inputText,
+    performRowAction,
     selectUserPerspective,
     selectWithin,
 } from "../../../../utils/utils";
@@ -46,7 +46,7 @@ export class Credentials {
 
     delete(): void {
         Credentials.openList();
-        applyAction(this.name, deleteAction);
+        performRowAction(this.name, deleteAction);
         click(confirmButton);
     }
 
