@@ -18,3 +18,4 @@ export const descriptionInput = "input[name='description']";
 export const usernameInput = "input[name=user]";
 export const passwordInput = "input[name=password]";
 export const privatePassphraseInput = "input[aria-label='Private Key Passphrase']";
+export const createBtn = "#create-credential-button";

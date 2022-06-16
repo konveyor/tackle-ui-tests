@@ -28,7 +28,7 @@ import { ApplicationInventory } from "../../../../models/developer/applicationin
 
 import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
-import { BusinessServices } from "../../../models/businessservices";
+import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdersNameList: Array<string> = [];
