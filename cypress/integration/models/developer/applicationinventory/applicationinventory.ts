@@ -72,6 +72,8 @@ import {
     selectInput,
 } from "../../../views/review.view";
 
+import { AppDataForAnalysis } from '../../../types/type';
+
 export class ApplicationInventory {
     name: string;
     business: string;
@@ -92,6 +94,13 @@ export class ApplicationInventory {
         if (comment) this.comment = comment;
         if (tags) this.tags = tags;
     }
+
+    public static clickApplicationInventoryAnalysis(): void {
+        selectUserPerspective("Developer");
+        clickByText(navMenu, applicationInventory);
+        clickByText(navTab, "Analysis");
+    }
+
     public static clickApplicationInventory(): void {
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
@@ -257,8 +266,12 @@ export class ApplicationInventory {
             });
     }
 
-    create(cancel = false): void {
-        ApplicationInventory.clickApplicationInventory();
+    create({ cancel = false, AppDataForAnalysis }): void {
+        const { analysis, repoType, sourceRepo, branch, rootPath, group, artifact, version, packaging } = AppDataForAnalysis;
+        if (analysis)
+            ApplicationInventory.clickApplicationInventoryAnalysis();
+        else
+            ApplicationInventory.clickApplicationInventory();
         clickByText(button, createNewButton);
         if (cancel) {
             cancelForm();
@@ -274,6 +287,18 @@ export class ApplicationInventory {
             if (this.tags) {
                 this.selectTags(this.tags);
             }
+            if (sourceRepo)
+                inputText("input[name=sourceRepository]", sourceRepo);
+            if (branch)
+                inputText("input[name=branch]", branch);
+            if (group)
+                inputText("input[name=group]", group);
+            if (artifact)
+                inputText("input[name=artifact]", group);
+            if (version)
+                inputText("input[name=version]", group);
+            if (packaging)
+                inputText("input[name=packaging]", group);
             submitForm();
             checkSuccessAlert(
                 commonView.successAlertMessage,
@@ -290,9 +315,13 @@ export class ApplicationInventory {
             tags?: Array<string>;
             comment?: string;
         },
-        cancel = false
+        cancel = false, AppDataForAnalysis
     ): void {
-        ApplicationInventory.clickApplicationInventory();
+        const { analysis } = AppDataForAnalysis;
+        if (analysis)
+            ApplicationInventory.clickApplicationInventoryAnalysis();
+        else
+            ApplicationInventory.clickApplicationInventory();
         selectItemsPerPage(100);
         cy.wait(2000);
         performRowActionByIcon(this.name, editButton);
@@ -326,7 +355,10 @@ export class ApplicationInventory {
         }
     }
 
-    delete(cancel = false): void {
+    delete({ cancel = false, AppDataForAnalysis }): void {
+        const { analysis } = AppDataForAnalysis;
+        if (analysis)
+            ApplicationInventory.clickApplicationInventoryAnalysis();
         ApplicationInventory.clickApplicationInventory();
         selectItemsPerPage(100);
         cy.wait(2000);
