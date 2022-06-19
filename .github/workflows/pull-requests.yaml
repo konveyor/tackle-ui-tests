@@ -31,22 +31,26 @@ jobs:
         with:
           repository: konveyor/tackle
           path: tackle
-      - name: Setup Minikube
-        uses: manusa/actions-setup-minikube@v2.3.1
+      - name: start minikube
+        id: minikube
         with:
-          minikube version: v1.22.0
-          kubernetes version: v1.21.4
-          start args: "--addons=registry --addons=ingress"
+          minikube-version: 1.24.0
+          driver: docker
+          kubernetes-version: v1.23.3
+        uses: medyagh/setup-minikube@master
+    
+      - name: Kubectl enable addons ingress
+        run: minikube addons enable ingress
+      - name: Kubectl enable addons registry
+        run: minikube addons enable registry
       - name: Validate Minikube
         run: minikube status | grep Running
-      - name: Validate Cluster
-        run: kubectl get nodes
       - name: Validate enabled addon in arg
         run: minikube addons list -o json | jq '.registry.Status' | grep enabled
+      - name: Validate Cluster
+        run: kubectl get nodes
       - name: Kubectl enable addons
         run: minikube addons enable dashboard
-      - name: Kubectl enable ingress
-        run: minikube addons enable ingress
       - name: Kubectl enable olm
         run: minikube addons enable olm
 
@@ -57,16 +61,16 @@ jobs:
       - name: Deploy k8s
         run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle2-operator/main/tackle-k8s.yaml 
 
+      - name: Sleep 
+        run: sleep 150s
+        shell: bash
+
       - name: Create CRD
-        run: |
-          cat << EOF | kubectl apply -f -                                                                  
-          kind: Tackle
-          apiVersion: tackle.konveyor.io/v1alpha1
-          metadata:
-            name: tackle
-            namespace: konveyor-tackle
-          spec:
-          EOF
+        run: kubectl apply -f https://raw.githubusercontent.com/sshveta/tackle-ui-tests/test_prt/.github/install_tackle2_crd.yaml
+      
+      - name: Wait for pods to be ready. 
+        run: sleep 150s
+        shell: bash
 
       - name: Check pod status
         run: kubectl get pods -n konveyor-tackle
@@ -87,17 +91,21 @@ jobs:
         run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n konveyor-tackle
 
       - name: Wait for Ingress
+        shell: bash
         run: |
           bash -c 'external_ip="";
-          while [ -z $external_ip ];
-            do echo "Waiting for end point...";
-            external_ip=$(kubectl get ingress tackle --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}" -n konveyor-tackle);[ -z "$external_ip" ] &&
-            sleep 10;
-          done;
+          echo $external_ip;
+          while [[ -z $external_ip ]] 
+            do 
+              echo "Waiting for end point..."
+                external_ip=$(kubectl get ingress tackle --template="{{range.status.loadBalancer.ingress}}{{.ip}}{{end}}" -n konveyor-tackle);[[ -z $external_ip ]] &&
+                echo $external_ip;
+                sleep 10;
+            done
           echo "End point ready:" &&
           echo $external_ip;
-          export endpoint=$external_ip;
-          echo "CYPRESS_tackleUrl=https://$external_ip" >>$GITHUB_ENV'
+          export endpoint=$(minikube ip);
+          echo "CYPRESS_tackleUrl=https://$endpoint" >>$GITHUB_ENV'
 
       - name: Checkout to pull request branch
         uses: actions/checkout@v2
@@ -106,3 +114,9 @@ jobs:
         run: npm install .
       - name: Run cypress test cases
         run: npx cypress run --spec ${{ needs.k8s-tests.outputs.tests }} --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
+
+      - uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: minikube-tests-screenshots
+          path: cypress/screenshots

@@ -84,9 +84,9 @@ export function login(): void {
 
     // Change password screen.
     cy.get("h1").then(($a) => {
-        if ($a.find("Update Password").length) {
-            inputText(loginView.changePasswordInput, userPassword);
-            inputText(loginView.confirmPasswordInput, userPassword);
+        if ($a.text("Update password").length) {
+            inputText(loginView.changePasswordInput, "Dog8code");
+            inputText(loginView.confirmPasswordInput, "Dog8code");
             click(loginView.submitButton);
         }
     });
