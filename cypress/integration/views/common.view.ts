@@ -42,3 +42,6 @@ export const firstPageButton = "button[aria-label='Go to first page']";
 export const pageNumInput = "input[aria-label='Current page']";
 export const optionMenu = '[aria-label="Options menu"]';
 export const userPerspectiveMenu = ".pf-c-select__menu-item";
+export const modal = "[id^=pf-modal-part-]";
+export const navLink = ".pf-c-nav__link";
+export const closeNotification = "button[aria-label='close-notification']";

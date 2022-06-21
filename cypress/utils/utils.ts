@@ -40,8 +40,10 @@ import {
     confidence,
     deleteAction,
     applicationInventory,
+    SEC,
 } from "../integration/types/constants";
 import { actionButton, date } from "../integration/views/applicationinventory.view";
+import { modal } from "../integration/views/common.view";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
@@ -60,7 +62,7 @@ export function clickByText(fieldId: string, buttonText: string): void {
 }
 
 export function click(fieldId: string): void {
-    cy.get(fieldId).click({ force: true });
+    cy.get(fieldId, { timeout: 120 * SEC }).click({ force: true });
 }
 
 export function submitForm(): void {
@@ -82,9 +84,9 @@ export function login(): void {
 
     // Change password screen.
     cy.get("h1").then(($a) => {
-        if ($a.find("Update Password").length) {
-            inputText(loginView.changePasswordInput, userPassword);
-            inputText(loginView.confirmPasswordInput, userPassword);
+        if ($a.text("Update password").length) {
+            inputText(loginView.changePasswordInput, "Dog8code");
+            inputText(loginView.confirmPasswordInput, "Dog8code");
             click(loginView.submitButton);
         }
     });
@@ -239,15 +241,6 @@ export function applyFilterforTags(filterName: string, searchText: any): void {
     cy.get("ul[role=menu] > li").contains("a", filterName).click();
     cy.get("#tags-filter-value-select").click();
     cy.get(commonView.filterInput).click().focused().clear().type(searchText);
-}
-
-//function to select checkboxes
-export function selectCheckBox(selector: string): void {
-    cy.get(selector, { timeout: 1200 }).then(($checkbox) => {
-        if (!$checkbox.prop("checked")) {
-            click(selector);
-        }
-    });
 }
 
 export function sortAsc(sortCriteria: string): void {
@@ -546,16 +539,14 @@ export function hasToBeSkipped(tagName: string): boolean {
 }
 
 // Perform edit/delete action on the specified row selector
-export function performRowAction(
-    rowSelector: string,
-    buttonName: string,
-    hasParentTd = true
-): void {
-    if (hasParentTd) {
-        cy.get(tdTag).contains(rowSelector).parent(tdTag).siblings(tdTag).find(buttonName).click();
-    } else {
-        cy.get(tdTag).contains(rowSelector).siblings(tdTag).find(buttonName).click();
-    }
+export function performRowAction(itemName: string, action: string): void {
+    // itemName is text to be searched on the screen (like credentials name, stakeholder name, etc)
+    // Action is the name of the action to be applied (usually edit or delete)
+    cy.contains(itemName, { timeout: 120 * SEC })
+        .closest(trTag)
+        .within(() => {
+            clickByText(button, action);
+        });
 }
 
 export function createMultipleStakeholders(
@@ -840,7 +831,31 @@ export function selectUserPerspective(userType: string): void {
 }
 
 export function selectWithinModal(selector: string): void {
-    cy.get("[id^=pf-modal-part-]").within(() => {
+    cy.get(modal).within(() => {
         click(selector);
+    });
+}
+
+export function selectWithin(parent, selector: string): void {
+    cy.get(parent).within(() => {
+        click(selector);
+    });
+}
+
+//function to select checkboxes
+export function selectCheckBox(selector: string): void {
+    cy.get(selector, { timeout: 120 * SEC }).then(($checkbox) => {
+        if (!$checkbox.prop("checked")) {
+            click(selector);
+        }
+    });
+}
+
+//function to unselect checkboxes
+export function unSelectCheckBox(selector: string): void {
+    cy.get(selector, { timeout: 120 * SEC }).then(($checkbox) => {
+        if ($checkbox.prop("checked")) {
+            click(selector);
+        }
     });
 }
