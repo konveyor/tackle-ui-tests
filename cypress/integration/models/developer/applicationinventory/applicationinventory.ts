@@ -272,7 +272,8 @@ export class ApplicationInventory {
             ApplicationInventory.clickApplicationInventoryAnalysis();
         else
             ApplicationInventory.clickApplicationInventory();
-        clickByText(button, createNewButton);
+        cy.contains('button', createNewButton, { timeout: 20000 }).should('be.enabled').click();
+        //clickByText(button, createNewButton);
         if (cancel) {
             cancelForm();
         } else {
@@ -288,6 +289,8 @@ export class ApplicationInventory {
                 this.selectTags(this.tags);
             }
             if (sourceRepo)
+                cy.waitForReact();
+                cy.getReact("ExpandableSection", { props: { toggleText: "Source code" } })
                 inputText("input[name=sourceRepository]", sourceRepo);
             if (branch)
                 inputText("input[name=branch]", branch);
