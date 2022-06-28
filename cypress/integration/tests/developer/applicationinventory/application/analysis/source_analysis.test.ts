@@ -29,10 +29,7 @@ import {
     deleteApplicationTableRows,
     deleteAllBusinessServices,
 } from "../../../../../../utils/utils";
-import {
-    button,
-    createNewButton,
-} from "../../../../../types/constants";
+import { button, createNewButton } from "../../../../../types/constants";
 import {
     applicationDescriptionInput,
     applicationNameInput,
@@ -76,6 +73,4 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         ApplicationInventory.clickApplicationInventory();
         clickByText(button, createNewButton);
     });
-
-   
 });
