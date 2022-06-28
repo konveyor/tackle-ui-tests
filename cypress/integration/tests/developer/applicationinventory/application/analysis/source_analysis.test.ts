@@ -31,10 +31,6 @@ import {
 } from "../../../../../../utils/utils";
 import {
     button,
-    minCharsMsg,
-    max120CharsMsg,
-    max250CharsMsg,
-    duplicateName,
     createNewButton,
 } from "../../../../../types/constants";
 import {
@@ -79,28 +75,6 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         // Navigate to application inventory page and click "Create New" button
         ApplicationInventory.clickApplicationInventory();
         clickByText(button, createNewButton);
-
-        selectFormItems(applicationBusinessServiceSelect, businessservicesList[0].name);
-
-        // Name constraints
-        inputText(applicationNameInput, data.getRandomWord(2));
-        cy.get(commonView.nameHelper).should("contain", minCharsMsg);
-        inputText(applicationNameInput, data.getRandomWords(90));
-        cy.get(commonView.nameHelper).should("contain", max120CharsMsg);
-
-        // Description constraint
-        inputText(applicationDescriptionInput, data.getRandomWords(90));
-        cy.get(commonView.descriptionHelper).should("contain", max250CharsMsg);
-        // Clear description field to make it valid input
-        cy.get(applicationDescriptionInput).clear();
-
-        // Validate the create button is enabled with valid inputs
-        inputText(applicationNameInput, data.getFullName());
-        cy.get(commonView.submitButton).should("not.be.disabled");
-
-        // Close the form
-        cy.get(commonView.closeButton).click();
-        cy.wait(100);
     });
 
    
