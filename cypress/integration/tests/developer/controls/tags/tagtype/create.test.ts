@@ -19,21 +19,20 @@ import {
     login,
     clickByText,
     inputText,
-    submitForm,
-    click,
     preservecookies,
     hasToBeSkipped,
     selectUserPerspective,
+    clickWithin,
 } from "../../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../../views/menu.view";
 import {
     controls,
     tags,
     button,
-    duplicateErrMsg,
     max40CharMsg,
     fieldReqMsg,
     minCharsMsg,
+    duplicateName,
 } from "../../../../../types/constants";
 import {
     createTagtypeButton,
@@ -45,10 +44,11 @@ import {
     positiveRankMsg,
     colorHelper,
 } from "../../../../../views/tags.view";
-import { Tagtype } from "../../../../../models/developer/controls/tags";
+import { TagType } from "../../../../../models/developer/controls/tagtypes";
 
 import * as commonView from "../../../../../views/common.view";
 import * as data from "../../../../../../utils/data_utils";
+import { modal } from "../../../../../views/common.view";
 
 describe("Tag type validations", { tags: "@tier2" }, () => {
     before("Login", function () {
@@ -62,10 +62,6 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
         preservecookies();
-
-        // Interceptors
-        cy.intercept("POST", "/hub/tag-type*").as("postTagtype");
-        cy.intercept("GET", "/hub/tag-type*").as("getTagtypes");
     });
 
     it("Tag type field validations", function () {
@@ -91,7 +87,7 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
         // Validate the create button is enabled with valid inputs
         inputText(nameInput, data.getRandomWord(6));
         inputText(rankInput, data.getRandomNumber(5, 15));
-        click(dropdownMenuToggle);
+        clickWithin(modal, dropdownMenuToggle);
         clickByText(button, data.getColor());
         cy.get(commonView.submitButton).should("not.be.disabled");
 
@@ -126,31 +122,28 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
 
     it("Tag type unique constraint validation", function () {
         selectUserPerspective("Developer");
-        const tagtype = new Tagtype(
+        const tagType = new TagType(
             data.getRandomWord(5),
             data.getColor(),
             data.getRandomNumber(5, 15)
         );
 
         // Create a new tag type
-        tagtype.create();
-        cy.wait("@postTagtype");
+        tagType.create();
         cy.wait(2000);
 
-        // Navigate to tags tab and click "Create tag type" button
+        // Click "Create tag type" button
         clickByText(button, createTagtypeButton);
 
         // Check tag type name duplication
-        inputText(nameInput, tagtype.name);
-        click(dropdownMenuToggle);
+        inputText(nameInput, tagType.name);
+        clickWithin(modal, dropdownMenuToggle);
         clickByText(button, data.getColor());
-        submitForm();
-        cy.get(commonView.duplicateNameWarning).should("contain.text", duplicateErrMsg);
+        cy.get(nameHelper).should("contain.text", duplicateName);
         cy.get(commonView.closeButton).click();
-        cy.wait(100);
 
         // Delete created tag
-        tagtype.delete();
+        tagType.delete();
         cy.wait(2000);
     });
 });

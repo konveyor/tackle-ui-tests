@@ -1,20 +1,3 @@
-/*
-Copyright © 2021 the Konveyor Contributors (https://konveyor.io/)
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-/// <reference types="cypress" />
-
 import {
     login,
     clickByText,
@@ -78,7 +61,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
         // Validate the create button is enabled with valid inputs
         inputText(nameInput, data.getRandomWord(5));
         cy.get(dropdownMenuToggle).eq(2).click();
-        clickByText(button, data.getExistingTagtype());
+        clickByText(button, data.getRandomDefaultTagType());
         cy.get(commonView.submitButton).should("not.be.disabled");
 
         // Close the form
@@ -111,7 +94,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
     });
 
     it("Tag unique constraint validation", function () {
-        const tag = new Tag(data.getRandomWord(5), data.getExistingTagtype());
+        const tag = new Tag(data.getRandomWord(5), data.getRandomDefaultTagType());
 
         // Create a new tag
         selectUserPerspective("Developer");
@@ -125,7 +108,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
         // Check tag name duplication
         inputText(nameInput, tag.name);
         cy.get(dropdownMenuToggle).eq(2).click();
-        clickByText(button, tag.tagtype);
+        clickByText(button, tag.tagType);
         cy.get(commonView.submitButton).should("be.disabled");
         cy.get(commonView.nameHelper).should("contain.text", duplicateName);
         cy.get(commonView.closeButton).click();

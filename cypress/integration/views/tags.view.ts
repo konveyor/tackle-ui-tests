@@ -25,3 +25,8 @@ export const tagTable = "table[aria-label='tag-table']";
 export const tagMenuButton = "button[aria-label='Actions']";
 export const tagTypeHelper = "div[id=tagType-helper]";
 export const positiveRankMsg = "This field must be greater than 1.";
+export enum tagLabels {
+    name = 'td[data-label="Tag name"]',
+    type = 'td[data-label="Tag type"]',
+    count = 'td[data-label="Tag count"]',
+}

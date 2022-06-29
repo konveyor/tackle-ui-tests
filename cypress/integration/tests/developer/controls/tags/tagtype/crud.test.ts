@@ -23,7 +23,8 @@ import {
     preservecookies,
     selectUserPerspective,
 } from "../../../../../../utils/utils";
-import { Tagtype, Tag } from "../../../../../models/developer/controls/tags";
+import { Tag } from "../../../../../models/developer/controls/tags";
+import { TagType } from "../../../../../models/developer/controls/tagtypes";
 
 import * as data from "../../../../../../utils/data_utils";
 import { color, rank, tagCount } from "../../../../../types/constants";
@@ -40,91 +41,78 @@ describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
         preservecookies();
-
-        // Interceptors
-        cy.intercept("POST", "/hub/tag-type*").as("postTagtype");
-        cy.intercept("GET", "/hub/tag-type*").as("getTagtypes");
-        cy.intercept("PUT", "/hub/tag-type/*").as("putTagtype");
-        cy.intercept("DELETE", "/hub/tag-type/*").as("deleteTagtype");
     });
 
     it("Tag type CRUD", function () {
         selectUserPerspective("Developer");
 
         // Create new tag type
-        const tagtype = new Tagtype(
+        const tagType = new TagType(
             data.getRandomWord(8),
             data.getColor(),
             data.getRandomNumber(1, 30)
         );
-        tagtype.create();
-        cy.wait("@postTagtype");
-        exists(tagtype.name);
+        tagType.create();
+        exists(tagType.name);
 
         // Edit the tag type name, rank and color
-        var updatedTagtype = data.getRandomWord(8);
-        var updatedRank = data.getRandomNumber(10, 30);
-        var updatedColor = data.getColor();
-        tagtype.edit({ name: updatedTagtype, rank: updatedRank, color: updatedColor });
-        cy.wait("@putTagtype");
+        let updatedTagType = data.getRandomWord(8);
+        let updatedRank = data.getRandomNumber(10, 30);
+        let updatedColor = data.getColor();
+        tagType.edit({ name: updatedTagType, rank: updatedRank, color: updatedColor });
         cy.wait(2000);
 
         // Assert that tag type name got updated
-        exists(updatedTagtype);
+        exists(updatedTagType);
 
         // Assert that rank got updated
-        tagtype.assertColumnValue(rank, updatedRank);
+        tagType.assertColumnValue(rank, updatedRank);
 
         // Assert that color got updated
-        tagtype.assertColumnValue(color, updatedColor);
+        tagType.assertColumnValue(color, updatedColor);
 
         // Delete tag type
-        tagtype.delete();
-        cy.wait("@deleteTagtype");
+        tagType.delete();
         cy.wait(2000);
 
         // Assert that tag type got deleted
-        notExists(tagtype.name);
+        notExists(tagType.name);
     });
 
     it("Tag type CRUD with member (tags)", function () {
         selectUserPerspective("Developer");
 
         // Create new tag type
-        const tagtype = new Tagtype(
+        const tagType = new TagType(
             data.getRandomWord(8),
             data.getColor(),
             data.getRandomNumber(1, 30)
         );
-        tagtype.create();
-        cy.wait("@postTagtype");
-        exists(tagtype.name);
+        tagType.create();
+        exists(tagType.name);
 
-        var tagList: Array<Tag> = [];
+        let tagList: Array<Tag> = [];
 
         // Create multiple tags within the tag type created above
         for (let i = 0; i < 2; i++) {
-            const tag = new Tag(data.getRandomWord(6), tagtype.name);
+            const tag = new Tag(data.getRandomWord(6), tagType.name);
             tag.create();
             tagList.push(tag);
             cy.wait(2000);
         }
 
-        // Assert the current tag count in tag type
-        tagtype.assertColumnValue(tagCount, "2");
-
-        // Delete one of the tag
-        tagList[1].delete();
-
-        // Assert that tag count got updated for tag type
-        tagtype.assertColumnValue(tagCount, "1");
+        let tagAmount = tagList.length;
+        for (let currentTag of tagList) {
+            currentTag.delete();
+            tagAmount -= 1;
+            tagType.assertColumnValue(tagCount, tagAmount.toString());
+        }
 
         // Delete tag type
-        tagtype.delete();
-        cy.wait("@deleteTagtype");
+        tagType.delete();
         cy.wait(2000);
 
         // Assert that tag type got deleted
-        notExists(tagtype.name);
+        notExists(tagType.name);
     });
 });

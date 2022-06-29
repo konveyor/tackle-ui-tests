@@ -40,7 +40,7 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
         cy.intercept("GET", "/hub/tag-type*").as("getTagtypes");
     });
 
-    it("Tag type filter validations", function () {
+    it.skip("Tag type filter validations", function () {
         // Navigate to Tags tab
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);

@@ -17,7 +17,8 @@ import { BusinessServices } from "../integration/models/developer/controls/busin
 import { Stakeholders } from "../integration/models/developer/controls/stakeholders";
 import { Stakeholdergroups } from "../integration/models/developer/controls/stakeholdergroups";
 import { ApplicationInventory } from "../integration/models/developer/applicationinventory/applicationinventory";
-import { Tag, Tagtype, clickTags } from "../integration/models/developer/controls/tags";
+import { Tag } from "../integration/models/developer/controls/tags";
+import { TagType } from "../integration/models/developer/controls/tagtypes";
 import { Jobfunctions } from "../integration/models/developer/controls/jobfunctions";
 
 import * as loginView from "../integration/views/login.view";
@@ -43,7 +44,8 @@ import {
     SEC,
 } from "../integration/types/constants";
 import { actionButton, date } from "../integration/views/applicationinventory.view";
-import { modal } from "../integration/views/common.view";
+import { confirmButton, divHeader, modal, pageNumInput } from "../integration/views/common.view";
+import { tagLabels } from "../integration/views/tags.view";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
@@ -56,13 +58,13 @@ export function inputText(fieldId: string, text: any): void {
     cy.get(fieldId).clear().type(text);
 }
 
-export function clickByText(fieldId: string, buttonText: string): void {
+export function clickByText(fieldId: string, buttonText: string, isForced = false): void {
     // https://github.com/cypress-io/cypress/issues/2000#issuecomment-561468114
-    cy.contains(fieldId, buttonText).click({ force: true });
+    cy.contains(fieldId, buttonText).click({ force: isForced });
 }
 
-export function click(fieldId: string): void {
-    cy.get(fieldId, { timeout: 120 * SEC }).click({ force: true });
+export function click(fieldId: string, isForced = false): void {
+    cy.get(fieldId, { timeout: 120 * SEC }).click({ force: isForced });
 }
 
 export function submitForm(): void {
@@ -91,7 +93,7 @@ export function login(): void {
             click(loginView.submitButton);
         }
     });
-    cy.get("h1", { timeout: 15000 }).contains("Application inventory");
+    cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
 }
 
 export function logout(): void {
@@ -99,7 +101,7 @@ export function logout(): void {
     cy.wait(500);
     clickByText("a", "Logout");
     cy.wait(4000);
-    cy.get("h1", { timeout: 15000 }).contains("Log in to your account");
+    cy.get("h1", { timeout: 15 * SEC }).contains("Log in to your account");
 }
 
 export function selectItemsPerPage(items: number): void {
@@ -111,7 +113,7 @@ export function selectItemsPerPage(items: number): void {
                 $toggleBtn.eq(0).trigger("click");
                 cy.get(commonView.itemsPerPageMenuOptions);
                 cy.get(`li > button[data-action="per-page-${items}"]`).click({ force: true });
-                cy.wait(2000);
+                cy.wait(2 * SEC);
             }
         });
 }
@@ -148,46 +150,35 @@ export function removeMember(memberName: string): void {
 
 export function exists(value: string): void {
     // Wait for DOM to render table and sibling elements
-    cy.wait(2000);
-    cy.get(commonView.appTable)
+    cy.get(commonView.appTable, { timeout: 5 * SEC })
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
                 selectItemsPerPage(100);
-                cy.wait(2000);
-                cy.get("td").should("contain", value);
+                cy.get("td", { timeout: 5 * SEC }).should("contain", value);
             }
         });
 }
 
 export function notExists(value: string): void {
     // Wait for DOM to render table and sibling elements
-    cy.wait(2000);
-    cy.get(commonView.appTable)
+    cy.get(commonView.appTable, { timeout: 5 * SEC })
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
                 selectItemsPerPage(100);
-                cy.wait(2000);
-                cy.get("td").should("not.contain", value);
+                cy.get("td", { timeout: 5 * SEC }).should("not.contain", value);
             }
         });
 }
 
 export function selectFilter(filterName: string, identifiedRisk?: boolean): void {
-    cy.wait(4000);
-    if (identifiedRisk) {
-        cy.get("div.pf-c-input-group")
-            .find(commonView.filterToggleButton)
-            .eq(1)
-            .click({ force: true });
-    } else {
-        cy.get("div.pf-c-input-group")
-            .get(commonView.filterToggleButton)
-            .eq(2)
-            .click({ force: true });
-    }
-    cy.get("ul[role=menu] > li").contains("a", filterName).click();
+    cy.get("div.pf-c-toolbar__content-section").within(() => {
+        clickWithin("div.pf-c-dropdown", button);
+        cy.get("ul.pf-c-dropdown__menu").within(() => {
+            clickByText("a", filterName);
+        });
+    });
 }
 
 export function filterInputText(searchTextValue: string, value: number): void {
@@ -281,7 +272,7 @@ export function sortDescCopyAssessmentTable(sortCriteria: string): void {
 export function getColumnDataforCopyAssessmentTable(columnName: string): Array<string> {
     selectItemsPerPage(100);
     cy.wait(4000);
-    var itemList = [];
+    let itemList = [];
     cy.get(".pf-m-compact > tbody > tr")
         .not(".pf-c-table__expandable-row")
         .find(`td[data-label="${columnName}"]`)
@@ -293,9 +284,8 @@ export function getColumnDataforCopyAssessmentTable(columnName: string): Array<s
 
 export function getTableColumnData(columnName: string): Array<string> {
     selectItemsPerPage(100);
-    cy.wait(4000);
-    var itemList = [];
-    cy.get(".pf-c-table > tbody > tr")
+    let itemList = [];
+    cy.get(".pf-c-table > tbody > tr", { timeout: 5 * SEC })
         .not(".pf-c-table__expandable-row")
         .find(`td[data-label="${columnName}"]`)
         .each(($ele) => {
@@ -320,7 +310,7 @@ export function getTableColumnData(columnName: string): Array<string> {
 
 export function verifySortAsc(listToVerify: Array<any>, unsortedList: Array<any>): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        var sortedList = unsortedList.sort((a, b) =>
+        let sortedList = unsortedList.sort((a, b) =>
             a.toString().localeCompare(b, "en-us", {
                 ignorePunctuation: true,
                 numeric: !unsortedList.some(isNaN),
@@ -332,7 +322,7 @@ export function verifySortAsc(listToVerify: Array<any>, unsortedList: Array<any>
 
 export function verifySortDesc(listToVerify: Array<any>, unsortedList: Array<any>): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        var reverseSortedList = unsortedList.sort((a, b) =>
+        let reverseSortedList = unsortedList.sort((a, b) =>
             b.toString().localeCompare(a, "en-us", {
                 ignorePunctuation: true,
                 numeric: !unsortedList.some(isNaN),
@@ -420,19 +410,19 @@ export function importApplication(fileName: string): void {
     // Performs application import via csv file upload
     cy.get(actionButton).eq(1).click();
     clickByText(button, "Import");
-    cy.wait(500);
-    cy.get('input[type="file"]').attachFile(fileName, {
+    cy.get('input[type="file"]', { timeout: 2 * SEC }).attachFile(fileName, {
         subjectType: "drag-n-drop",
     });
-    cy.wait(2000);
-    cy.get("form.pf-c-form").find("button").contains("Import").click({ force: true });
+    cy.get("form.pf-c-form", { timeout: 5 * SEC })
+        .find("button")
+        .contains("Import")
+        .click({ force: true });
     checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
 }
 
 export function uploadfile(fileName: string): void {
     // Uplaod any file
-    cy.wait(500);
-    cy.get('input[type="file"]').attachFile(fileName, {
+    cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(fileName, {
         subjectType: "drag-n-drop",
     });
     cy.wait(2000);
@@ -442,8 +432,7 @@ export function openManageImportsPage(): void {
     // Opens the manage import applications page
     cy.get(actionButton).eq(1).click();
     cy.get("a.pf-c-dropdown__menu-item").contains("Manage imports").click();
-    cy.wait(2000);
-    cy.get("h1").contains("Application imports");
+    cy.get("h1", { timeout: 5 * SEC }).contains("Application imports");
 }
 
 export function openErrorReport(): void {
@@ -451,8 +440,7 @@ export function openErrorReport(): void {
     cy.get("table > tbody > tr").eq(0).as("firstRow");
     cy.get("@firstRow").find(actionButton).click();
     cy.get("@firstRow").find(button).contains("View error report").click();
-    cy.wait(2000);
-    cy.get("h1").contains("Error report");
+    cy.get("h1", { timeout: 5 * SEC }).contains("Error report");
 }
 
 export function verifyAppImport(
@@ -547,8 +535,8 @@ export function createMultipleStakeholders(
 ): Array<Stakeholders> {
     var stakeholdersList: Array<Stakeholders> = [];
     for (let i = 0; i < numberofstakeholder; i++) {
-        var jobfunction: string;
-        var stakeholderGroupNames: Array<string> = [];
+        let jobfunction: string;
+        let stakeholderGroupNames: Array<string> = [];
         if (jobfunctionList) jobfunction = jobfunctionList[i].name;
         if (stakeholdergroupsList) stakeholderGroupNames.push(stakeholdergroupsList[i].name);
         // Create new stakeholder
@@ -617,7 +605,7 @@ export function createMultipleTags(numberoftags: number): Array<Tag> {
     var tagList: Array<Tag> = [];
     for (let i = 0; i < numberoftags; i++) {
         //Create Tag type
-        const tagType = new Tagtype(data.getRandomWord(8), data.getColor(), data.getRandomNumber());
+        const tagType = new TagType(data.getRandomWord(8), data.getColor(), data.getRandomNumber());
         tagType.create();
 
         // Create new tag
@@ -779,10 +767,8 @@ export function deleteAllBusinessServices(cancel = false): void {
 }
 
 export function deleteAllTagTypes(cancel = false): void {
-    clickTags();
-    selectItemsPerPage(100);
-    cy.wait(2000);
-    cy.get(commonView.appTable)
+    TagType.openList();
+    cy.get(commonView.appTable, { timeout: 2 * SEC })
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
@@ -792,7 +778,7 @@ export function deleteAllTagTypes(cancel = false): void {
                     .each(($tableRow) => {
                         cy.wait(1000);
                         var name = $tableRow.find('td[data-label="Tag type"]').text();
-                        if (!(data.getExistingTagtypes().indexOf(name) > -1)) {
+                        if (!(data.getDefaultTagTypes().indexOf(name) > -1)) {
                             cy.get(tdTag)
                                 .contains(name)
                                 .parent(trTag)
@@ -806,6 +792,70 @@ export function deleteAllTagTypes(cancel = false): void {
                     });
             }
         });
+}
+
+export function deleteAllTagsAndTagTypes(): void {
+    const nonDefaultTagTypes = [];
+    TagType.openList();
+
+    cy.get(commonView.appTable, { timeout: 2 * SEC })
+        .find(trTag)
+        .not(commonView.expandableRow)
+        .each(($rowGroup) => {
+            let typeName = $rowGroup.find(tagLabels.type).text();
+            let isDefault = false;
+            for (let currentType of data.getDefaultTagTypes()) {
+                if (currentType == typeName) {
+                    isDefault = true;
+                    break; // Exiting from cycle if current tag type belongs to default
+                }
+            }
+            if (!isDefault && typeName !== "") {
+                if ($rowGroup.find(tagLabels.count).text() != "0") {
+                    nonDefaultTagTypes.push(typeName);
+                    expandRowDetails(typeName);
+                } else {
+                    let currentTagType = new TagType(typeName, data.getColor());
+                    currentTagType.delete();
+                }
+            }
+        })
+        .then(() => {
+            if (nonDefaultTagTypes.length > 0) {
+                for (let currentType of nonDefaultTagTypes) {
+                    let tagList = [];
+                    cy.contains(tdTag, currentType)
+                        .closest("tbody")
+                        .within(() => {
+                            cy.get(tagLabels.name).each(($tagRow) => {
+                                let tagName = $tagRow.text();
+                                tagList.push(new Tag(tagName, currentType));
+                            });
+                        })
+                        .then(() => {
+                            tagList.forEach((currentTag) => {
+                                currentTag.delete();
+                                tagList = deleteFromArray(tagList, currentTag);
+                            });
+                        });
+                    let currentTagType = new TagType(currentType, data.getColor());
+                    currentTagType.delete();
+                }
+            }
+        });
+}
+
+export const deleteFromArray = <T>(array: T[], el: T): T[] => {
+    return array.filter((item) => item !== el);
+};
+
+export function goToPage(page: number): void {
+    cy.get(divHeader).within(() => {
+        cy.get(pageNumInput, { timeout: 2 * SEC })
+            .clear()
+            .type(page.toString())
+            .type("{enter}");
+    });
 }
 
 export function selectUserPerspective(userType: string): void {
@@ -827,7 +877,7 @@ export function selectWithinModal(selector: string): void {
     });
 }
 
-export function selectWithin(parent, selector: string): void {
+export function clickWithin(parent, selector: string): void {
     cy.get(parent).within(() => {
         click(selector);
     });
@@ -849,4 +899,17 @@ export function unSelectCheckBox(selector: string): void {
             click(selector);
         }
     });
+}
+
+export function applyAction(itemName, action: string): void {
+    cy.contains(tdTag, itemName)
+        .closest(trTag)
+        .within(() => {
+            click('button[aria-label="Actions"]');
+            clickByText(button, action);
+        });
+}
+
+export function confirm(): void {
+    click(confirmButton);
 }

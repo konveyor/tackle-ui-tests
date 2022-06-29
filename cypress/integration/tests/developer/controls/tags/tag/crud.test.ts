@@ -48,29 +48,29 @@ describe("Tag CRUD operations", { tags: "@tier1" }, () => {
     it("Tag CRUD", function () {
         selectUserPerspective("Developer");
         // Create new tag
-        const tag = new Tag(data.getRandomWord(8), data.getExistingTagtype());
+        const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagType());
         tag.create();
         cy.wait("@postTag");
 
         // Assert that created tag exists
-        expandRowDetails(tag.tagtype);
-        existsWithinRow(tag.tagtype, tdTag, tag.name);
-        closeRowDetails(tag.tagtype);
+        expandRowDetails(tag.tagType);
+        existsWithinRow(tag.tagType, tdTag, tag.name);
+        closeRowDetails(tag.tagType);
 
         // Edit the tag and tag type name
-        var updatedTagName = data.getRandomWord(8);
-        var updatedTagtypeName = data.getExistingTagtype();
-        tag.edit({ name: updatedTagName, tagtype: updatedTagtypeName });
+        let updatedTagName = data.getRandomWord(8);
+        let updatedTagTypeName = data.getRandomDefaultTagType();
+        tag.edit({ name: updatedTagName, tagtype: updatedTagTypeName });
         cy.get("@putTag");
         cy.wait(2000);
 
         // Assert that tag type name got updated
-        exists(updatedTagtypeName);
+        exists(updatedTagTypeName);
 
         // Assert that tag name got updated
-        expandRowDetails(updatedTagtypeName);
-        existsWithinRow(updatedTagtypeName, tdTag, updatedTagName);
-        closeRowDetails(updatedTagtypeName);
+        expandRowDetails(updatedTagTypeName);
+        existsWithinRow(updatedTagTypeName, tdTag, updatedTagName);
+        closeRowDetails(updatedTagTypeName);
 
         // Delete tag
         tag.delete();
@@ -78,8 +78,8 @@ describe("Tag CRUD operations", { tags: "@tier1" }, () => {
         cy.wait(2000);
 
         // Assert that tag got deleted
-        expandRowDetails(tag.tagtype);
-        notExistsWithinRow(tag.tagtype, tdTag, tag.name);
-        closeRowDetails(tag.tagtype);
+        expandRowDetails(tag.tagType);
+        notExistsWithinRow(tag.tagType, tdTag, tag.name);
+        closeRowDetails(tag.tagType);
     });
 });
