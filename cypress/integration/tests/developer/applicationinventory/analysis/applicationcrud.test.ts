@@ -31,14 +31,7 @@ describe("Application crud operations from the Analysis tab", { tags: "@tier1" }
         // Perform login
         login();
 
-        // Navigate to stakeholders control tab and create new stakeholder
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-        stakeholder.create();
-        //cy.wait(2000);
-
-        //stakeholdersList.push(stakeholder);
-        //stakeholdersNameList.push(stakeholder.name);
-
+        // Navigate to Business service control tab and create a new business service
         businessservicesList = createMultipleBusinessServices(1);
     });
 
@@ -53,32 +46,36 @@ describe("Application crud operations from the Analysis tab", { tags: "@tier1" }
     after("Perform test data clean up", function () {
         if (hasToBeSkipped("@tier1")) return;
 
-        // Delete the stakeholders created before the tests
-        //deleteAllStakeholders();
+        // Delete the business service created before the tests
         deleteAllBusinessServices();
     });
 
     it("Application crud operations", function () {
         // Navigate to application inventory tab and create new application
+        //Create application
         const application = new ApplicationInventory(
             data.getAppName(),
             businessservicesList[0].name,
             data.getDescription(),
-            data.getDescription()
+            data.getDescription(),
+            undefined,
+            publicRepo.analysis,
+            publicRepo.repoType,
+            publicRepo.sourceRepo,
         );
-        application.create({AppDataForAnalysis: publicRepo});
+        application.create();
         exists(application.name);
         cy.wait("@getApplication");
         cy.wait(2000);
 
-        /*// Edit application's name
+        // Edit application's name
         var updatedApplicationName = data.getAppName();
         application.edit({ name: updatedApplicationName });
         exists(updatedApplicationName);
-        cy.wait("@getApplication");*/
+        cy.wait("@getApplication");
 
         // Delete application
-        application.delete({AppDataForAnalysis: publicRepo});
+        application.delete();
         cy.wait("@getApplication");
 
         // Assert that newly created application is deleted
