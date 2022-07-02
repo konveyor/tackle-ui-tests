@@ -78,11 +78,12 @@ export function login(): void {
     cy.visit(tackleUiUrl);
 
     inputText(loginView.userNameInput, userName);
-    inputText(loginView.userPasswordInput, "password");
+    inputText(loginView.userPasswordInput, userPassword);
     click(loginView.loginButton);
     cy.wait(5000);
 
-    // Change password screen.
+    // Change password screen which appears only for first login 
+    // This is used in PR tester and Jenkins jobs.
     cy.get("h1").then(($a) => {
         if ($a.text().toString().trim() == "Update password") {
             inputText(loginView.changePasswordInput, "Dog8code");
