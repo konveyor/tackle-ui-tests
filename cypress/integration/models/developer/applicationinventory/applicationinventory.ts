@@ -54,6 +54,7 @@ import {
     selectFormItems,
     checkSuccessAlert,
     performRowAction,
+    performRowActionByIcon,
     selectUserPerspective,
 } from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
@@ -294,7 +295,7 @@ export class ApplicationInventory {
         ApplicationInventory.clickApplicationInventory();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowAction(this.name, editButton);
+        performRowActionByIcon(this.name, editButton);
 
         if (cancel) {
             cancelForm();
