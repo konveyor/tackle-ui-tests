@@ -78,11 +78,10 @@ export function login(): void {
     cy.visit(tackleUiUrl);
 
     inputText(loginView.userNameInput, userName);
-    inputText(loginView.userPasswordInput, userPassword);
+    inputText(loginView.userPasswordInput, "password");
     click(loginView.loginButton);
     cy.wait(5000);
 
-    
     // Change password screen.
     cy.get("h1").then(($a) => {
         if ($a.text().toString().trim() == "Update password") {
@@ -91,7 +90,6 @@ export function login(): void {
             click(loginView.submitButton);
         }
     });
-    // cy.wait(5000);
     cy.get("h1", { timeout: 15000 }).contains("Application inventory");
 }
 
