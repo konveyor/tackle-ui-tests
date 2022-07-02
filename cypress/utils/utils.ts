@@ -82,15 +82,16 @@ export function login(): void {
     click(loginView.loginButton);
     cy.wait(5000);
 
+    
     // Change password screen.
     cy.get("h1").then(($a) => {
-        if ($a.text("Update password").length) {
+        if ($a.text().toString().trim() == "Update password") {
             inputText(loginView.changePasswordInput, "Dog8code");
             inputText(loginView.confirmPasswordInput, "Dog8code");
             click(loginView.submitButton);
         }
     });
-    cy.wait(5000);
+    // cy.wait(5000);
     cy.get("h1", { timeout: 15000 }).contains("Application inventory");
 }
 
