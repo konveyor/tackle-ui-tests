@@ -80,19 +80,46 @@ export class ApplicationInventory {
     description: string;
     tags: Array<string>;
     comment: string;
+    analysis?: boolean;
+    repoType?: string;
+    sourceRepo?: string;
+    branch?: string;
+    rootPath?: string;
+    group?: string;
+    artifact?: string;
+    version?: string;
+    packaging?: string;
 
     constructor(
         name: string,
         business: string,
         description?: string,
         comment?: string,
-        tags?: Array<string>
+        tags?: Array<string>,
+        analysis?: boolean,
+        repoType?: string,
+        sourceRepo?: string,
+        branch?: string,
+        rootPath?: string,
+        group?: string,
+        artifact?: string,
+        version?: string,
+        packaging?: string,
     ) {
         this.name = name;
         this.business = business;
         if (description) this.description = description;
         if (comment) this.comment = comment;
         if (tags) this.tags = tags;
+        if (analysis) this.analysis = analysis;
+        if (repoType) this.repoType = repoType;
+        if (sourceRepo) this.sourceRepo = sourceRepo;
+        if (branch) this.branch = branch;
+        if (rootPath) this.rootPath = rootPath;
+        if (group) this.group = group;
+        if (artifact) this.artifact = artifact;
+        if (version) this.version = version;
+        if (packaging) this.packaging = packaging;
     }
 
     public static clickApplicationInventoryAnalysis(): void {
@@ -266,14 +293,12 @@ export class ApplicationInventory {
             });
     }
 
-    create({ cancel = false, AppDataForAnalysis }): void {
-        const { analysis, repoType, sourceRepo, branch, rootPath, group, artifact, version, packaging } = AppDataForAnalysis;
-        if (analysis)
+    create(cancel = false): void {
+        if (this.analysis)
             ApplicationInventory.clickApplicationInventoryAnalysis();
         else
             ApplicationInventory.clickApplicationInventory();
         cy.contains('button', createNewButton, { timeout: 20000 }).should('be.enabled').click();
-        //clickByText(button, createNewButton);
         if (cancel) {
             cancelForm();
         } else {
@@ -288,20 +313,28 @@ export class ApplicationInventory {
             if (this.tags) {
                 this.selectTags(this.tags);
             }
-            if (sourceRepo)
-                cy.waitForReact();
-                cy.getReact("ExpandableSection", { props: { toggleText: "Source code" } })
-                inputText("input[name=sourceRepository]", sourceRepo);
-            if (branch)
-                inputText("input[name=branch]", branch);
-            if (group)
-                inputText("input[name=group]", group);
-            if (artifact)
-                inputText("input[name=artifact]", group);
-            if (version)
-                inputText("input[name=version]", group);
-            if (packaging)
-                inputText("input[name=packaging]", group);
+
+            //Fields relevant to source code analysis
+            if (this.sourceRepo) {
+                cy.contains("span", "Source code").click()
+                inputText("input[name=sourceRepository]", this.sourceRepo);
+                if (this.branch)
+                    inputText("input[name=branch]", this.branch);
+                if (this.rootPath)
+                    inputText("input[name=rootPath]", this.rootPath);
+            }
+
+            //Fileds relevant to binary mode analysis
+            if (this.group) {
+                cy.contains("span", "Binary").click()
+                inputText("input[name=group]", this.group);
+                if (this.artifact)
+                    inputText("input[name=artifact]", this.artifact);
+                if (this.version)
+                    inputText("input[name=version]", this.version);
+                if (this.packaging)
+                    inputText("input[name=packaging]", this.packaging);
+            }
             submitForm();
             checkSuccessAlert(
                 commonView.successAlertMessage,
@@ -318,10 +351,9 @@ export class ApplicationInventory {
             tags?: Array<string>;
             comment?: string;
         },
-        cancel = false, AppDataForAnalysis
+        cancel = false
     ): void {
-        const { analysis } = AppDataForAnalysis;
-        if (analysis)
+        if (this.analysis)
             ApplicationInventory.clickApplicationInventoryAnalysis();
         else
             ApplicationInventory.clickApplicationInventory();
@@ -358,11 +390,11 @@ export class ApplicationInventory {
         }
     }
 
-    delete({ cancel = false, AppDataForAnalysis }): void {
-        const { analysis } = AppDataForAnalysis;
-        if (analysis)
+    delete(cancel = false): void {
+        if (this.analysis)
             ApplicationInventory.clickApplicationInventoryAnalysis();
-        ApplicationInventory.clickApplicationInventory();
+        else
+            ApplicationInventory.clickApplicationInventory();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
