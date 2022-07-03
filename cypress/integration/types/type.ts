@@ -8,4 +8,4 @@ export type AppDataForAnalysis = {
     artifact?: string;
     version?: string;
     packaging?: string;
-}
+};

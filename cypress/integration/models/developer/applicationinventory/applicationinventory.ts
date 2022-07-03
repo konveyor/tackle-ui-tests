@@ -72,7 +72,7 @@ import {
     selectInput,
 } from "../../../views/review.view";
 
-import { AppDataForAnalysis } from '../../../types/type';
+import { AppDataForAnalysis } from "../../../types/type";
 
 export class ApplicationInventory {
     name: string;
@@ -104,7 +104,7 @@ export class ApplicationInventory {
         group?: string,
         artifact?: string,
         version?: string,
-        packaging?: string,
+        packaging?: string
     ) {
         this.name = name;
         this.business = business;
@@ -294,11 +294,9 @@ export class ApplicationInventory {
     }
 
     create(cancel = false): void {
-        if (this.analysis)
-            ApplicationInventory.clickApplicationInventoryAnalysis();
-        else
-            ApplicationInventory.clickApplicationInventory();
-        cy.contains('button', createNewButton, { timeout: 20000 }).should('be.enabled').click();
+        if (this.analysis) ApplicationInventory.clickApplicationInventoryAnalysis();
+        else ApplicationInventory.clickApplicationInventory();
+        cy.contains("button", createNewButton, { timeout: 20000 }).should("be.enabled").click();
         if (cancel) {
             cancelForm();
         } else {
@@ -316,24 +314,19 @@ export class ApplicationInventory {
 
             //Fields relevant to source code analysis
             if (this.sourceRepo) {
-                cy.contains("span", "Source code").click()
+                cy.contains("span", "Source code").click();
                 inputText("input[name=sourceRepository]", this.sourceRepo);
-                if (this.branch)
-                    inputText("input[name=branch]", this.branch);
-                if (this.rootPath)
-                    inputText("input[name=rootPath]", this.rootPath);
+                if (this.branch) inputText("input[name=branch]", this.branch);
+                if (this.rootPath) inputText("input[name=rootPath]", this.rootPath);
             }
 
             //Fileds relevant to binary mode analysis
             if (this.group) {
-                cy.contains("span", "Binary").click()
+                cy.contains("span", "Binary").click();
                 inputText("input[name=group]", this.group);
-                if (this.artifact)
-                    inputText("input[name=artifact]", this.artifact);
-                if (this.version)
-                    inputText("input[name=version]", this.version);
-                if (this.packaging)
-                    inputText("input[name=packaging]", this.packaging);
+                if (this.artifact) inputText("input[name=artifact]", this.artifact);
+                if (this.version) inputText("input[name=version]", this.version);
+                if (this.packaging) inputText("input[name=packaging]", this.packaging);
             }
             submitForm();
             checkSuccessAlert(
@@ -353,10 +346,8 @@ export class ApplicationInventory {
         },
         cancel = false
     ): void {
-        if (this.analysis)
-            ApplicationInventory.clickApplicationInventoryAnalysis();
-        else
-            ApplicationInventory.clickApplicationInventory();
+        if (this.analysis) ApplicationInventory.clickApplicationInventoryAnalysis();
+        else ApplicationInventory.clickApplicationInventory();
         selectItemsPerPage(100);
         cy.wait(2000);
         performRowActionByIcon(this.name, editButton);
@@ -391,10 +382,8 @@ export class ApplicationInventory {
     }
 
     delete(cancel = false): void {
-        if (this.analysis)
-            ApplicationInventory.clickApplicationInventoryAnalysis();
-        else
-            ApplicationInventory.clickApplicationInventory();
+        if (this.analysis) ApplicationInventory.clickApplicationInventoryAnalysis();
+        else ApplicationInventory.clickApplicationInventory();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)

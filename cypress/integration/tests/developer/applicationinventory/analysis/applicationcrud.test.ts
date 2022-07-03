@@ -61,7 +61,7 @@ describe("Application crud operations from the Analysis tab", { tags: "@tier1" }
             undefined,
             publicRepo.analysis,
             publicRepo.repoType,
-            publicRepo.sourceRepo,
+            publicRepo.sourceRepo
         );
         application.create();
         exists(application.name);
