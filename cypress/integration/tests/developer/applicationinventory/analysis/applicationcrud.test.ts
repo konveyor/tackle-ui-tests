@@ -68,11 +68,11 @@ describe("Application crud operations from the Analysis tab", { tags: "@tier1" }
         cy.wait("@getApplication");
         cy.wait(2000);
 
-        // Edit application's name
+        /*// Edit application's name
         var updatedApplicationName = data.getAppName();
         application.edit({ name: updatedApplicationName });
         exists(updatedApplicationName);
-        cy.wait("@getApplication");
+        cy.wait("@getApplication");*/
 
         // Delete application
         application.delete();

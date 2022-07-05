@@ -42,6 +42,13 @@ import {
     dependenciesDropdownBtn,
     closeForm,
     copy,
+    sourceRepository,
+    branch,
+    rootPath,
+    group,
+    artifact,
+    version,
+    packaging
 } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
@@ -122,13 +129,15 @@ export class ApplicationInventory {
         if (packaging) this.packaging = packaging;
     }
 
-    public static clickApplicationInventoryAnalysis(): void {
+    //Navigate to the Application inventory->Analysis tab
+    public static analysis(): void {
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         clickByText(navTab, "Analysis");
     }
 
-    public static clickApplicationInventory(): void {
+    //Navigate to the Application inventory->Assessment tab
+    public static assessment(): void {
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         clickByText(navTab, assessment);
@@ -294,8 +303,8 @@ export class ApplicationInventory {
     }
 
     create(cancel = false): void {
-        if (this.analysis) ApplicationInventory.clickApplicationInventoryAnalysis();
-        else ApplicationInventory.clickApplicationInventory();
+        if (this.analysis) ApplicationInventory.analysis();
+        else ApplicationInventory.assessment();
         cy.contains("button", createNewButton, { timeout: 20000 }).should("be.enabled").click();
         if (cancel) {
             cancelForm();
@@ -315,18 +324,18 @@ export class ApplicationInventory {
             //Fields relevant to source code analysis
             if (this.sourceRepo) {
                 cy.contains("span", "Source code").click();
-                inputText("input[name=sourceRepository]", this.sourceRepo);
-                if (this.branch) inputText("input[name=branch]", this.branch);
-                if (this.rootPath) inputText("input[name=rootPath]", this.rootPath);
+                inputText(sourceRepository, this.sourceRepo);
+                if (this.branch) inputText(branch, this.branch);
+                if (this.rootPath) inputText(rootPath, this.rootPath);
             }
 
             //Fileds relevant to binary mode analysis
             if (this.group) {
                 cy.contains("span", "Binary").click();
-                inputText("input[name=group]", this.group);
-                if (this.artifact) inputText("input[name=artifact]", this.artifact);
-                if (this.version) inputText("input[name=version]", this.version);
-                if (this.packaging) inputText("input[name=packaging]", this.packaging);
+                inputText(group, this.group);
+                if (this.artifact) inputText(artifact, this.artifact);
+                if (this.version) inputText(version, this.version);
+                if (this.packaging) inputText(packaging, this.packaging);
             }
             submitForm();
             checkSuccessAlert(
@@ -346,8 +355,8 @@ export class ApplicationInventory {
         },
         cancel = false
     ): void {
-        if (this.analysis) ApplicationInventory.clickApplicationInventoryAnalysis();
-        else ApplicationInventory.clickApplicationInventory();
+        if (this.analysis) ApplicationInventory.analysis();
+        else ApplicationInventory.assessment();
         selectItemsPerPage(100);
         cy.wait(2000);
         performRowActionByIcon(this.name, editButton);
@@ -382,8 +391,8 @@ export class ApplicationInventory {
     }
 
     delete(cancel = false): void {
-        if (this.analysis) ApplicationInventory.clickApplicationInventoryAnalysis();
-        else ApplicationInventory.clickApplicationInventory();
+        if (this.analysis) ApplicationInventory.analysis();
+        else ApplicationInventory.assessment();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
@@ -422,7 +431,7 @@ export class ApplicationInventory {
                 "Atleast one arg out of stakeholder or stakeholdergroups must be provided !"
             ).to.equal(true);
         } else {
-            ApplicationInventory.clickApplicationInventory();
+            ApplicationInventory.assessment();
             selectItemsPerPage(100);
             this.selectApplication();
             this.click_assess_button();
@@ -436,7 +445,7 @@ export class ApplicationInventory {
     }
 
     perform_review(risk): void {
-        ApplicationInventory.clickApplicationInventory();
+        ApplicationInventory.assessment();
         selectItemsPerPage(100);
         this.selectApplication();
         clickByText(button, review);
@@ -513,7 +522,7 @@ export class ApplicationInventory {
 
     // Opens the manage dependencies dialog from application inventory page
     openManageDependencies(): void {
-        ApplicationInventory.clickApplicationInventory();
+        ApplicationInventory.assessment();
         selectItemsPerPage(100);
         cy.wait(2000);
         performRowAction(this.name, actionButton);
@@ -576,7 +585,7 @@ export class ApplicationInventory {
 
     verifyTagCount(tagsCount: number): void {
         // Verify tag count for specific application
-        ApplicationInventory.clickApplicationInventory();
+        ApplicationInventory.assessment();
         selectItemsPerPage(100);
         cy.wait(4000);
         cy.get(".pf-c-table > tbody > tr")
@@ -591,7 +600,7 @@ export class ApplicationInventory {
     }
 
     verifyCopyAssessmentDisabled(): void {
-        ApplicationInventory.clickApplicationInventory();
+        ApplicationInventory.assessment();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
@@ -632,7 +641,7 @@ export class ApplicationInventory {
     }
 
     openCopyAssessmentModel(): void {
-        ApplicationInventory.clickApplicationInventory();
+        ApplicationInventory.assessment();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
