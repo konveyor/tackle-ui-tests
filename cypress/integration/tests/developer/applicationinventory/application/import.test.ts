@@ -33,8 +33,8 @@ import { BusinessServices } from "../../../../models/developer/controls/business
 import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory, button } from "../../../../types/constants";
 
-const businessService = new BusinessServices("Finance and HR");
-const filePath = "app_import/csv";
+const businessService = new BusinessServices("Retail");
+const filePath = "app_import/csv/";
 var applicationsList: Array<ApplicationInventory> = [];
 
 describe("Application import operations", () => {
@@ -75,16 +75,17 @@ describe("Application import operations", () => {
         cy.wait("@getApplication");
 
         // Import valid csv
-        const fileName = "valid_application_rows.csv";
+        const fileName = "template_application_import.csv";
         importApplication(filePath + fileName);
         cy.wait(2000);
 
         // Verify imported apps are visible in table
-        exists("Import-app-1");
-        exists("Import-app-2");
+        exists("Customers");
+        exists("Inventory");
+        exists("Gateway");
 
         // Create objects for imported apps
-        for (let i = 1; i <= 2; i++) {
+        for (let i = 1; i <= 3; i++) {
             const importedApp = new ApplicationInventory(`Import-app-${i}`, businessService.name);
             applicationsList.push(importedApp);
         }
@@ -93,7 +94,7 @@ describe("Application import operations", () => {
         openManageImportsPage();
 
         // Verify import applications page shows correct information
-        verifyAppImport(fileName, "Completed", 2, 0);
+        verifyAppImport(fileName, "Completed", 5, 0);
     });
 
     it("Duplicate applications import", { tags: "@tier1" }, function () {
@@ -101,7 +102,7 @@ describe("Application import operations", () => {
         cy.wait("@getApplication");
 
         // Import already imported valid csv file
-        const fileName = "valid_application_rows.csv";
+        const fileName = "template_application_import.csv";
         importApplication(filePath + fileName);
         cy.wait(2000);
 
@@ -114,8 +115,9 @@ describe("Application import operations", () => {
         // Verify the error report messages
         openErrorReport();
         var errorMsgs = [
-            "Duplicate ApplicationName in table: Import-app-1",
-            "Duplicate ApplicationName in table: Import-app-2",
+            "Duplicate ApplicationName in table: Customers",
+            "Duplicate ApplicationName in table: Inventory",
+            "Duplicate ApplicationName in table: Gateway"
         ];
         verifyImportErrorMsg(errorMsgs);
     });
