@@ -529,7 +529,7 @@ export function hasToBeSkipped(tagName: string): boolean {
     return false;
 }
 
-// Perform edit/delete action on the specified row selector
+// Perform edit/delete action on the specified row selector by clicking a text button
 export function performRowAction(itemName: string, action: string): void {
     // itemName is text to be searched on the screen (like credentials name, stakeholder name, etc)
     // Action is the name of the action to be applied (usually edit or delete)
@@ -537,6 +537,17 @@ export function performRowAction(itemName: string, action: string): void {
         .closest(trTag)
         .within(() => {
             clickByText(button, action);
+        });
+}
+
+// Perform edit/delete action on the specified row selector by clicking an icon button
+export function performRowActionByIcon(itemName: string, action: string): void {
+    // itemName is the text to be searched on the screen (For eg: application name, etc)
+    // Action is the name of the action to be applied (For eg: edit or delete)
+    cy.contains(itemName, { timeout: 120 * SEC })
+        .closest(trTag)
+        .within(() => {
+            click(action);
         });
 }
 
