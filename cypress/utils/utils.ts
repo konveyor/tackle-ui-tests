@@ -82,7 +82,7 @@ export function login(): void {
     click(loginView.loginButton);
     cy.wait(5000);
 
-    // Change password screen which appears only for first login 
+    // Change password screen which appears only for first login
     // This is used in PR tester and Jenkins jobs.
     cy.get("h1").then(($a) => {
         if ($a.text().toString().trim() == "Update password") {
