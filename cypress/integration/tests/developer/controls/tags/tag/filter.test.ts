@@ -14,7 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { hasToBeSkipped, login, applySelectFilter, clearAllFilters } from "../../../../../../utils/utils";
+import {
+    hasToBeSkipped,
+    login,
+    applySelectFilter,
+    clearAllFilters,
+} from "../../../../../../utils/utils";
 import { TagType } from "../../../../../models/developer/controls/tagtypes";
 import { Tag } from "../../../../../models/developer/controls/tags";
 import { name, SEC } from "../../../../../types/constants";

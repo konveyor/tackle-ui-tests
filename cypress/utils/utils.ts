@@ -194,14 +194,14 @@ export function clearAllFilters(): void {
 
 export function applySelectFilter(filterId, filterName, filterText, isValid = true): void {
     selectFilter(filterName);
-    click("#"+ filterId +"-filter-value-select");
+    click("#" + filterId + "-filter-value-select");
     inputText("input.pf-c-form-control.pf-m-search", filterText);
     if (isValid) {
         clickByText("span.pf-c-check__label", filterText);
     } else {
         cy.contains("div.pf-c-select__menu", "No results found");
     }
-    click("#"+ filterId +"-filter-value-select");
+    click("#" + filterId + "-filter-value-select");
 }
 
 export function applySearchFilter(
