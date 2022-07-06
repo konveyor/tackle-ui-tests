@@ -72,24 +72,6 @@ export class Tag {
         selectItemsPerPage(100);
     }
 
-    static applyFilter(filterName, filterText, isValid = true): void {
-        Tag.openList();
-        selectFilter(filterName);
-        click("#tags-filter-value-select");
-        inputText("input.pf-c-form-control.pf-m-search", filterText);
-        if (isValid) {
-            clickByText("span.pf-c-check__label", filterText);
-        } else {
-            cy.contains("div.pf-c-select__menu", "No results found");
-        }
-        click("#tags-filter-value-select");
-    }
-
-    static clearAllFilters(): void {
-        Tag.openList();
-        cy.contains(button, "Clear all filters").click({ force: true });
-    }
-
     protected selectTagType(tagType: string): void {
         selectWithinModal(dropdownMenuToggle);
         clickByText(button, tagType);

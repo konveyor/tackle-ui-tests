@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { hasToBeSkipped, login } from "../../../../../../utils/utils";
+import { hasToBeSkipped, login, applySelectFilter, clearAllFilters } from "../../../../../../utils/utils";
 import { TagType } from "../../../../../models/developer/controls/tagtypes";
 import { Tag } from "../../../../../models/developer/controls/tags";
 import { name, SEC } from "../../../../../types/constants";
@@ -40,14 +40,15 @@ describe("Tags filter validations", { tags: "@tier2" }, function () {
         let filterType = name;
 
         //Applying valid filter
-        Tag.applyFilter(filterType, validSearchInput);
+        Tag.openList();
+        applySelectFilter("tags", filterType, validSearchInput);
 
         //Clear all filters
-        Tag.clearAllFilters();
+        clearAllFilters();
 
         // Enter a non-existing tag name substring and apply it as search filter
         let invalidSearchInput = String(data.getRandomNumber(111111, 222222));
-        Tag.applyFilter(filterType, invalidSearchInput, false);
+        applySelectFilter("tags", filterType, invalidSearchInput, false);
     });
 
     after("Cleanup", function () {

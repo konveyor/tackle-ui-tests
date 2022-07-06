@@ -48,7 +48,7 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
         cy.wait("@getTagtypes");
 
         // Enter an existing tag type name substring and apply it as search filter
-        var validSearchInput = data.getExistingTagtype();
+        var validSearchInput = "Applications";
         applySearchFilter(tagType, validSearchInput);
 
         // Assert that tag type row(s) containing the search text is/are displayed
