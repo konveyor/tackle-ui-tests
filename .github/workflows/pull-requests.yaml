@@ -113,8 +113,10 @@ jobs:
        # Install NPM dependencies
       - name: Install NPM
         run: npm install .
+      - name: Run cypress login test
+        run: npx cypress run --spec "cypress/integration/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
       - name: Run cypress test cases
-        run: npx cypress run --spec ${{ needs.k8s-tests.outputs.tests }} --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
+        run: npx cypress run --spec ${{ needs.k8s-tests.outputs.tests }} --env user="admin",pass="Dog8code",tackleUrl=${{ env.CYPRESS_tackleUrl }}
 
       - uses: actions/upload-artifact@v1
         if: failure()
