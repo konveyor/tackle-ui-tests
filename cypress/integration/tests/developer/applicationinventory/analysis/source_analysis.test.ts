@@ -18,28 +18,16 @@ limitations under the License.
 import {
     login,
     clickByText,
-    inputText,
-    submitForm,
-    exists,
-    notExists,
     hasToBeSkipped,
     preservecookies,
     createMultipleBusinessServices,
-    selectFormItems,
     deleteApplicationTableRows,
     deleteAllBusinessServices,
-} from "../../../../../../utils/utils";
-import { button, createNewButton } from "../../../../../types/constants";
-import {
-    applicationDescriptionInput,
-    applicationNameInput,
-    applicationBusinessServiceSelect,
-} from "../../../../../views/applicationinventory.view";
-import { ApplicationInventory } from "../../../../../models/developer/applicationinventory/applicationinventory";
+} from "../../../../../utils/utils";
+import { button, createNewButton } from "../../../../types/constants";
+import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
 
-import * as commonView from "../../../../../views/common.view";
-import * as data from "../../../../../../utils/data_utils";
-import { BusinessServices } from "../../../../../models/developer/controls/businessservices";
+import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 
 var businessservicesList: Array<BusinessServices> = [];
 
@@ -68,7 +56,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         deleteApplicationTableRows();
     });
 
-    it("Application field validations", function () {
+    it("Source Analysis", function () {
         // Navigate to application inventory page and click "Create New" button
         ApplicationInventory.clickApplicationInventory();
         clickByText(button, createNewButton);
