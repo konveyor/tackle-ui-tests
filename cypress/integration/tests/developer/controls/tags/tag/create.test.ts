@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /// <reference types="cypress" />
-
 import {
     login,
     clickByText,
@@ -78,7 +77,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
         // Validate the create button is enabled with valid inputs
         inputText(nameInput, data.getRandomWord(5));
         cy.get(dropdownMenuToggle).eq(2).click();
-        clickByText(button, data.getExistingTagtype());
+        clickByText(button, data.getRandomDefaultTagType());
         cy.get(commonView.submitButton).should("not.be.disabled");
 
         // Close the form
@@ -111,7 +110,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
     });
 
     it("Tag unique constraint validation", function () {
-        const tag = new Tag(data.getRandomWord(5), data.getExistingTagtype());
+        const tag = new Tag(data.getRandomWord(5), data.getRandomDefaultTagType());
 
         // Create a new tag
         selectUserPerspective("Developer");
@@ -125,7 +124,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
         // Check tag name duplication
         inputText(nameInput, tag.name);
         cy.get(dropdownMenuToggle).eq(2).click();
-        clickByText(button, tag.tagtype);
+        clickByText(button, tag.tagType);
         cy.get(commonView.submitButton).should("be.disabled");
         cy.get(commonView.nameHelper).should("contain.text", duplicateName);
         cy.get(commonView.closeButton).click();

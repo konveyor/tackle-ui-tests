@@ -4,7 +4,7 @@ import {
     inputText,
     performRowAction,
     selectUserPerspective,
-    selectWithin,
+    clickWithin,
 } from "../../../../utils/utils";
 import { dropdownMenuToggle } from "../../../views/tags.view";
 import { administrator, button, credentials, deleteAction } from "../../../types/constants";
@@ -30,7 +30,7 @@ export class Credentials {
     }
 
     protected selectType(type): void {
-        selectWithin(modal, dropdownMenuToggle);
+        clickWithin(modal, dropdownMenuToggle);
         clickByText(button, type);
     }
 

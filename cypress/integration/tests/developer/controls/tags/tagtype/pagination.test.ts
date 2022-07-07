@@ -22,20 +22,21 @@ import {
     preservecookies,
     hasToBeSkipped,
     createMultipleTags,
-    deleteAllTagTypes,
+    deleteAllTagsAndTagTypes,
     selectUserPerspective,
+    goToPage,
 } from "../../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../../views/menu.view";
-import { controls, tags } from "../../../../../types/constants";
+import { controls, SEC, tags } from "../../../../../types/constants";
 
 import {
     firstPageButton,
     lastPageButton,
     nextPageButton,
-    pageNumInput,
     prevPageButton,
     appTable,
 } from "../../../../../views/common.view";
+import { TagType } from "../../../../../models/developer/controls/tagtypes";
 
 describe("Tag type pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
@@ -44,17 +45,16 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
 
         // Perform login
         login();
-        var rowsToCreate = 0;
+        TagType.openList();
+        let rowsToCreate = 0;
 
         // Get the current table row count for tag types and create appropriate test data rows
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(appTable)
+        cy.get(appTable, { timeout: 2 * SEC })
             .next()
             .then(($div) => {
                 if (!$div.hasClass("pf-c-empty-state")) {
                     cy.get("td[data-label='Tag type']").then(($rows) => {
-                        var rowCount = $rows.length;
+                        let rowCount = $rows.length;
                         if (rowCount <= 10) {
                             rowsToCreate = 11 - rowCount;
                         }
@@ -74,9 +74,6 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
         preservecookies();
-
-        // Interceptors
-        cy.intercept("GET", "/hub/tag-type*").as("getTagtypes");
     });
 
     after("Perform test data clean up", function () {
@@ -84,7 +81,7 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
         if (hasToBeSkipped("@tier3")) return;
 
         // Delete the tags created before the tests
-        deleteAllTagTypes();
+        deleteAllTagsAndTagTypes();
     });
 
     it("Navigation button validations", function () {
@@ -92,11 +89,9 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
-        cy.wait("@getTagtypes");
 
         // select 10 items per page
         selectItemsPerPage(10);
-        cy.wait("@getTagtypes");
 
         // Verify next buttons are enabled as there are more than 11 rows present
         cy.get(nextPageButton).each(($nextBtn) => {
@@ -116,7 +111,6 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
 
         // Navigate to next page
         cy.get(nextPageButton).eq(0).click();
-        cy.wait("@getTagtypes");
 
         // Verify that previous buttons are enabled after moving to next page
         cy.get(prevPageButton).each(($previousBtn) => {
@@ -132,40 +126,33 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
-        cy.wait("@getTagtypes");
 
         // Select 10 items per page
         selectItemsPerPage(10);
-        cy.wait(2000);
 
         // Verify that only 10 items are displayed
-        cy.get("td[data-label='Tag type']").then(($rows) => {
+        cy.get("td[data-label='Tag type']", { timeout: 2 * SEC }).then(($rows) => {
             cy.wrap($rows.length).should("eq", 10);
         });
 
         // Select 20 items per page
         selectItemsPerPage(20);
-        cy.wait(2000);
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
-        cy.get("td[data-label='Tag type']").then(($rows) => {
+        cy.get("td[data-label='Tag type']", { timeout: 2 * SEC }).then(($rows) => {
             cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
         });
     });
 
     it("Page number validations", function () {
         // Navigate to Tags tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
-        cy.wait("@getTagtypes");
+        TagType.openList();
 
         // Select 10 items per page
         selectItemsPerPage(10);
-        cy.wait(2000);
 
         // Go to page number 2
-        cy.get(pageNumInput).clear().type("2").type("{enter}");
+        goToPage(2);
 
         // Verify that page number has changed, as previous page nav button got enabled
         cy.get(prevPageButton).each(($previousBtn) => {

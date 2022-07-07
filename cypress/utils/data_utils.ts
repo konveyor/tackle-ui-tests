@@ -31,7 +31,7 @@ export function getCompanyName(): string {
 }
 
 export function getDescription(): string {
-    // returns a sentence with default word count randomly in between 3 to 10
+    // returns a sentence with default word count randomly in between 3 and 10
     return faker.lorem.sentence();
 }
 
@@ -61,29 +61,21 @@ export function getColor(): string {
     return colors[Math.floor(Math.random() * colors.length)];
 }
 
-export function getExistingTagtype(): string {
+export function getRandomDefaultTagType(): string {
     // returns a random tag type from the existing list
-    const tagtypes = [
-        "Application Type",
-        "Database",
-        "Data Center",
-        "Language",
-        "Operating System",
-        "Runtime",
-    ];
-    return tagtypes[Math.floor(Math.random() * tagtypes.length)];
+    const tagTypes = getDefaultTagTypes();
+    return tagTypes[Math.floor(Math.random() * tagTypes.length)];
 }
 
 export function getAppName(): string {
     // returns a new random application name
     let random_word = getRandomWords(1);
     let random_num = getRandomNumber(1, 200);
-    let app_name = "test-app-" + random_word + random_num;
-    return app_name;
+    return "test-app-" + random_word + random_num;
 }
 
 export function randomWordGenerator(length: number): string {
-    var generatedWord = "";
+    let generatedWord = "";
     const charsToUse = "aAbBcCdDeEfFgGhHiIjJkKlLmNnoOpPqQrRsStTuUvVwWxXyYzZ";
     for (let i = 0; i < length; i++) {
         generatedWord += charsToUse.charAt(Math.floor(Math.random() * charsToUse.length));
@@ -97,8 +89,8 @@ export function getRandomRisk(): string {
     return risk[Math.floor(Math.random() * risk.length)];
 }
 
-export function getExistingTagtypes(): string[] {
-    const tagtypes = [
+export function getDefaultTagTypes(): string[] {
+    return [
         "Application Type",
         "Database",
         "Data Center",
@@ -106,5 +98,4 @@ export function getExistingTagtypes(): string[] {
         "Operating System",
         "Runtime",
     ];
-    return tagtypes;
 }

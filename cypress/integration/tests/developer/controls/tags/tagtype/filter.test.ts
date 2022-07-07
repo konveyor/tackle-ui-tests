@@ -40,7 +40,7 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
         cy.intercept("GET", "/hub/tag-type*").as("getTagtypes");
     });
 
-    it("Tag type filter validations", function () {
+    it.skip("Tag type filter validations", function () {
         // Navigate to Tags tab
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
@@ -48,7 +48,7 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
         cy.wait("@getTagtypes");
 
         // Enter an existing tag type name substring and apply it as search filter
-        var validSearchInput = data.getExistingTagtype();
+        var validSearchInput = data.getRandomDefaultTagType();
         applySearchFilter(tagType, validSearchInput);
 
         // Assert that tag type row(s) containing the search text is/are displayed

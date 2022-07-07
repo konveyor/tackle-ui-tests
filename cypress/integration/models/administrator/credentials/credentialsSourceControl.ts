@@ -1,5 +1,5 @@
 import { Credentials } from "./credentials";
-import { clickByText, inputText, selectWithin, submitForm } from "../../../../utils/utils";
+import { inputText, submitForm } from "../../../../utils/utils";
 
 export class CredentialsSourceControl extends Credentials {
     type = "Source Control";

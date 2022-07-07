@@ -13,13 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { controls, tags, tdTag, trTag, button } from "../../../types/constants";
+import { controls, tags, tdTag, trTag, button, SEC } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 
 import {
     clickByText,
     inputText,
-    click,
     selectItemsPerPage,
     submitForm,
     cancelForm,
@@ -27,14 +26,18 @@ import {
     expandRowDetails,
     closeRowDetails,
     selectWithinModal,
+    selectUserPerspective,
+    applyAction,
+    confirm,
+    selectFilter,
+    click,
+    selectCheckBox,
 } from "../../../../utils/utils";
 import * as commonView from "../../../views/common.view";
 import {
     dropdownMenuToggle,
     createTagButton,
-    createTagtypeButton,
     nameInput,
-    rankInput,
     tagMenuButton,
 } from "../../../views/tags.view";
 
@@ -49,27 +52,39 @@ export function fillName(name: string): void {
 
 export class Tag {
     name: string;
-    tagtype: string;
+    tagType: string;
 
-    constructor(name: string, tagtype: string) {
+    constructor(name: string, tagType: string) {
         this.name = name;
-        this.tagtype = tagtype;
+        this.tagType = tagType;
     }
 
-    protected selectTagtype(tagtype: string): void {
+    static tagsUrl = Cypress.env("tackleUrl") + "/controls/tags";
+
+    static openList(): void {
+        cy.url().then(($url) => {
+            if ($url != Tag.tagsUrl) {
+                selectUserPerspective("Developer");
+                clickByText(navMenu, controls);
+                clickByText(navTab, tags);
+            }
+        });
+        selectItemsPerPage(100);
+    }
+
+    protected selectTagType(tagType: string): void {
         selectWithinModal(dropdownMenuToggle);
-        clickByText(button, tagtype);
+        clickByText(button, tagType);
     }
 
     protected clickTagAction(buttonName: string): void {
         // Performs action (edit and delete only) by clicking tag options menu for a specific tag
-        cy.get(tdTag)
-            .contains(this.tagtype)
-            .parent(trTag)
+        cy.contains(tdTag, this.tagType)
+            .closest(trTag)
             .next()
             .find(tdTag)
             .contains(this.name)
-            .siblings()
+            .closest(trTag)
             .find(tagMenuButton)
             .click()
             .next()
@@ -78,13 +93,13 @@ export class Tag {
     }
 
     create(cancel = false): void {
-        clickTags();
+        Tag.openList();
         clickByText(button, createTagButton);
         if (cancel) {
             cancelForm();
         } else {
             fillName(this.name);
-            this.selectTagtype(this.tagtype);
+            this.selectTagType(this.tagType);
             submitForm();
             checkSuccessAlert(
                 commonView.successAlertMessage,
@@ -94,10 +109,8 @@ export class Tag {
     }
 
     edit(updatedValue: { name?: string; tagtype?: string }, cancel = false): void {
-        clickTags();
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        expandRowDetails(this.tagtype);
+        Tag.openList();
+        expandRowDetails(this.tagType);
         this.clickTagAction("Edit");
         if (cancel) {
             cancelForm();
@@ -106,123 +119,24 @@ export class Tag {
                 fillName(updatedValue.name);
                 this.name = updatedValue.name;
             }
-            if (updatedValue.tagtype && updatedValue.tagtype != this.tagtype) {
-                this.selectTagtype(updatedValue.tagtype);
-                this.tagtype = updatedValue.tagtype;
+            if (updatedValue.tagtype && updatedValue.tagtype != this.tagType) {
+                this.selectTagType(updatedValue.tagtype);
+                this.tagType = updatedValue.tagtype;
             }
             if (updatedValue) submitForm();
         }
-        closeRowDetails(this.tagtype);
+        closeRowDetails(this.tagType);
     }
 
     delete(cancel = false): void {
-        clickTags();
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        expandRowDetails(this.tagtype);
-        this.clickTagAction("Delete");
-        cy.wait(1000);
+        Tag.openList();
+        expandRowDetails(this.tagType);
+        applyAction(this.name, "Delete");
         if (cancel) {
             cancelForm();
         } else {
-            click(commonView.confirmButton);
+            confirm();
         }
-        cy.wait(2000);
-        closeRowDetails(this.tagtype);
-    }
-}
-
-export class Tagtype {
-    name: string;
-    rank: number;
-    fieldId: "color";
-    color: string;
-
-    constructor(name: string, color: string, rank?: number) {
-        this.name = name;
-        this.color = color;
-        if (rank) this.rank = rank;
-    }
-
-    protected selectColor(color: string): void {
-        cy.waitForReact();
-        cy.react("FormGroup", { props: { fieldId: "color" } }).click();
-        clickByText(button, color);
-    }
-
-    protected fillRank(rank: number): void {
-        inputText(rankInput, rank);
-    }
-
-    assertColumnValue(columnName, columnVal) {
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(trTag)
-            .find(`td[data-label='${columnName}']`)
-            .should("contain", columnVal);
-    }
-
-    create(cancel = false): void {
-        clickTags();
-        clickByText(button, createTagtypeButton);
-        if (cancel) {
-            cancelForm();
-        } else {
-            fillName(this.name);
-            this.selectColor(this.color);
-            if (this.rank) this.fillRank(this.rank);
-            submitForm();
-            checkSuccessAlert(
-                commonView.successAlertMessage,
-                `Success! ${this.name} was added as a(n) tag type.`
-            );
-        }
-    }
-
-    edit(updatedValue: { name?: string; rank?: number; color?: string }, cancel = false): void {
-        clickTags();
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(trTag)
-            .within(() => {
-                click(commonView.editButton);
-            });
-        if (cancel) {
-            cancelForm();
-        } else {
-            if (updatedValue.name && updatedValue.name != this.name) {
-                fillName(updatedValue.name);
-                this.name = updatedValue.name;
-            }
-            if (updatedValue.rank && updatedValue.rank != this.rank) {
-                this.fillRank(updatedValue.rank);
-                this.rank = updatedValue.rank;
-            }
-            if (updatedValue.color && updatedValue.color != this.color) {
-                this.selectColor(updatedValue.color);
-                this.color = updatedValue.color;
-            }
-            if (updatedValue) submitForm();
-        }
-    }
-
-    delete(cancel = false): void {
-        clickTags();
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(trTag)
-            .within(() => {
-                click(commonView.deleteButton);
-                cy.wait(1000);
-            });
-        if (cancel) {
-            cancelForm();
-        } else {
-            click(commonView.confirmButton);
-        }
+        cy.wait(SEC);
     }
 }
