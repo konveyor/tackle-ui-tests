@@ -74,7 +74,7 @@ describe("Stakeholder groups sort validations", { tags: "@tier2" }, function () 
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholderGroups);
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(name);
@@ -101,7 +101,7 @@ describe("Stakeholder groups sort validations", { tags: "@tier2" }, function () 
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholderGroups);
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(memberCount);
