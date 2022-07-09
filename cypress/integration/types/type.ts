@@ -1,5 +1,5 @@
 export type AppDataForAnalysis = {
-    analysis: boolean;
+    analysis?: boolean;
     repoType?: string;
     sourceRepo?: string;
     branch?: string;
