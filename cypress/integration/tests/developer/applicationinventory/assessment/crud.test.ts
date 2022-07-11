@@ -70,11 +70,11 @@ describe("Application crud operations", { tags: "@tier1" }, () => {
         exists(application.name);
         cy.wait("@postApplication");
 
-        /*// Edit application's name
+        // Edit application name
         var updatedApplicationName = data.getAppName();
         application.edit({ name: updatedApplicationName });
         exists(updatedApplicationName);
-        cy.wait("@getApplication");*/
+        cy.wait("@getApplication");
 
         // Delete application
         application.delete();
@@ -100,13 +100,12 @@ describe("Application crud operations", { tags: "@tier1" }, () => {
         application.create();
         exists(application.name);
         cy.wait("@getApplication");
-        //cy.wait(2000);
 
-        /*// Edit application's name
+        // Edit application name
         var updatedApplicationName = data.getAppName();
         application.edit({ name: updatedApplicationName });
         exists(updatedApplicationName);
-        cy.wait("@getApplication");*/
+        cy.wait("@getApplication");
 
         // Delete application
         application.delete();
@@ -138,13 +137,12 @@ describe("Application crud operations", { tags: "@tier1" }, () => {
         application.create();
         exists(application.name);
         cy.wait("@getApplication");
-        //cy.wait(2000);
 
-        /*// Edit application's name
+        // Edit application name
         var updatedApplicationName = data.getAppName();
         application.edit({ name: updatedApplicationName });
         exists(updatedApplicationName);
-        cy.wait("@getApplication");*/
+        cy.wait("@getApplication");
 
         // Delete application
         application.delete();
