@@ -17,19 +17,16 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
     hasToBeSkipped,
     preservecookies,
-    createMultipleBusinessServices,
     deleteApplicationTableRows,
     deleteAllBusinessServices,
+    createMultipleApplications
 } from "../../../../../utils/utils";
-import { button, createNewButton } from "../../../../types/constants";
 import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
+import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
 
-import { BusinessServices } from "../../../../models/developer/controls/businessservices";
-
-var businessservicesList: Array<BusinessServices> = [];
+var applicationList: Array<ApplicationInventory> = [];
 
 describe("Source Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -37,8 +34,9 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         if (hasToBeSkipped("@tier1")) return;
 
         // Perform login
-        login();
-        businessservicesList = createMultipleBusinessServices(1);
+        login(); 
+        // Create data
+        applicationList = createMultipleApplications(1);
     });
 
     beforeEach("Persist session", function () {
@@ -57,8 +55,6 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
     });
 
     it("Source Analysis", function () {
-        // Navigate to application inventory page and click "Create New" button
-        ApplicationInventory.clickApplicationInventory();
-        clickByText(button, createNewButton);
+        Analysis.Open();
     });
 });
