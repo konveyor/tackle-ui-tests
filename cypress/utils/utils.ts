@@ -58,12 +58,12 @@ export function inputText(fieldId: string, text: any): void {
     cy.get(fieldId).clear().type(text);
 }
 
-export function clickByText(fieldId: string, buttonText: string, isForced = false): void {
+export function clickByText(fieldId: string, buttonText: string, isForced = true): void {
     // https://github.com/cypress-io/cypress/issues/2000#issuecomment-561468114
     cy.contains(fieldId, buttonText).click({ force: isForced });
 }
 
-export function click(fieldId: string, isForced = false): void {
+export function click(fieldId: string, isForced = true): void {
     cy.get(fieldId, { timeout: 120 * SEC }).click({ force: isForced });
 }
 
