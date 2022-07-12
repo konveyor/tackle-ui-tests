@@ -41,7 +41,7 @@ describe("Application crud operations", { tags: "@tier1" }, () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Application created for Assessment", function () {
+    it("Application crud", function () {
         const application = new ApplicationInventory(
             data.getAppName(),
             businessservicesList[0].name,
