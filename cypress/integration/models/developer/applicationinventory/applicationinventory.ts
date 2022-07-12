@@ -48,7 +48,7 @@ import {
     group,
     artifact,
     version,
-    packaging
+    packaging,
 } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
