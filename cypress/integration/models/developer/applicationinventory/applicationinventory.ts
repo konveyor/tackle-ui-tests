@@ -79,8 +79,6 @@ import {
     selectInput,
 } from "../../../views/review.view";
 
-import { AppDataForAnalysis } from "../../../types/type";
-
 export class ApplicationInventory {
     name: string;
     business: string;
@@ -329,7 +327,7 @@ export class ApplicationInventory {
                 if (this.rootPath) inputText(rootPath, this.rootPath);
             }
 
-            //Fileds relevant to binary mode analysis
+            //Fields relevant to binary mode analysis
             if (this.group) {
                 cy.contains("span", "Binary").click();
                 inputText(group, this.group);
