@@ -31,6 +31,7 @@ import {
     tags,
     tagType,
     color,
+    rank,
 } from "../../../../../types/constants";
 
 import * as data from "../../../../../../utils/data_utils";
@@ -94,6 +95,31 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
         // Enter a non-existing tag type color substring and apply it as search filter
         var invalidSearchInput = String(data.getRandomWord(3));
         applySearchFilter(color, invalidSearchInput);
+
+        // Assert that no search results are found
+        cy.get("h2").contains("No tag types available");
+
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Tag type rank filter validations", function () {
+        // Navigate to Tags tab
+        TagType.openList();
+
+        // Enter an existing tag type rank number and apply it as search filter
+        var validSearchInput = String(data.getRandomNumber(1, 6));
+        applySearchFilter(rank, validSearchInput);
+
+        // Assert that tag type row(s) containing the search text is/are displayed
+        exists(validSearchInput);
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+        cy.get("@getTagtypes");
+
+        // Enter a non-existing tag type rank number and apply it as search filter
+        var invalidSearchInput = String(data.getRandomNumber(1111, 2222));
+        applySearchFilter(rank, invalidSearchInput);
 
         // Assert that no search results are found
         cy.get("h2").contains("No tag types available");
