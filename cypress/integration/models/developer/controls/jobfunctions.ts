@@ -60,7 +60,7 @@ export class Jobfunctions {
         Jobfunctions.clickJobfunctions();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowAction(this.name, commonView.editButton);
+        performRowAction(this.name, "Edit");
 
         if (cancel) {
             cancelForm();
@@ -77,7 +77,7 @@ export class Jobfunctions {
         Jobfunctions.clickJobfunctions();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowAction(this.name, commonView.deleteButton);
+        performRowAction(this.name, "Delete");
         if (cancel) {
             cancelForm();
         } else {

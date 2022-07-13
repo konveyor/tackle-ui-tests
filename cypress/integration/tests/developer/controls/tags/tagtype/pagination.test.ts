@@ -158,5 +158,8 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
         cy.get(prevPageButton).each(($previousBtn) => {
             cy.wrap($previousBtn).should("not.be.disabled");
         });
+
+        // Go back to page number 1
+        goToPage(1);
     });
 });
