@@ -1,38 +1,49 @@
-import { Credentials } from "./credentials";
-import { cancelForm, exists, inputText, notExists, submitForm } from "../../../../utils/utils";
-import { CredentialsProxyData } from "../../../types/types";
+import { CredentialsSourceControl } from "./credentialsSourceControl";
+import {
+    cancelForm,
+    click,
+    clickByText,
+    exists,
+    inputText,
+    notExists,
+    submitForm,
+} from "../../../../utils/utils";
+import { button } from "../../../types/constants";
+import { CredentialsSourceControlData } from "../../../types/types";
 
-export class CredentialsProxy extends Credentials {
-    type = "Proxy";
+export class CredentialsSourceControlUsername extends CredentialsSourceControl {
     username = "";
     password = "";
 
-    constructor(credentialsProxyData: CredentialsProxyData) {
+    constructor(credentialsSourceControlData: CredentialsSourceControlData) {
         super();
-        this.init(credentialsProxyData);
+        this.init(credentialsSourceControlData);
     }
 
-    protected init(credentialsProxyData: CredentialsProxyData) {
-        const { name, description, username, password } = credentialsProxyData;
+    protected init(credentialsSourceControl: CredentialsSourceControlData) {
+        const { name, description, username, password } = credentialsSourceControl;
         this.name = name;
         this.description = description;
         this.username = username;
         this.password = password;
     }
 
-    fillUsername() {
+    protected fillUsername() {
         inputText("[aria-label='user']", this.username);
     }
 
-    fillPassword() {
+    protected fillPassword() {
         inputText("[aria-label='password']", this.password);
+    }
+
+    protected selectCredType() {
+        click("#user-credentials-select-toggle");
+        clickByText(button, "Username/Password");
     }
 
     create(toBeCanceled = false) {
         super.create();
-        this.fillName();
-        this.fillDescription();
-        this.selectType(this.type);
+        this.selectCredType();
         this.fillUsername();
         this.fillPassword();
         if (!toBeCanceled) {
@@ -45,10 +56,11 @@ export class CredentialsProxy extends Credentials {
         }
     }
 
-    edit(credentialsProxyData: CredentialsProxyData, toBeCanceled = false) {
+    // edit(toBeCanceled = false) {
+    edit(credentialsSourceControlData: CredentialsSourceControlData, toBeCanceled = false) {
         const oldValues = this.storeOldValues();
         super.edit(oldValues);
-        this.init(credentialsProxyData);
+        this.init(credentialsSourceControlData);
         this.fillName();
         this.fillDescription();
         this.fillUsername();
@@ -62,7 +74,7 @@ export class CredentialsProxy extends Credentials {
         exists(this.name);
     }
 
-    storeOldValues(): CredentialsProxyData {
+    storeOldValues(): CredentialsSourceControlData {
         return;
         {
             name: this.name;
