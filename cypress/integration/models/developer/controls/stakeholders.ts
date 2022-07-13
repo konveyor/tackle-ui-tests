@@ -141,7 +141,7 @@ export class Stakeholders {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowAction(this.email, commonView.deleteButton);
+        performRowAction(this.email, "Delete");
         if (cancel) {
             cancelForm();
         } else {

@@ -35,3 +35,14 @@ export const southboundHelper = "div[id=southbound-dependencies-helper]";
 export const selectBox = "input[type=checkbox]";
 export const tags = "span";
 export const user = "User";
+
+//Fields related to analysis - source mode
+export const sourceRepository = "input[name=sourceRepository]";
+export const branch = "input[name=branch]";
+export const rootPath = "input[name=rootPath]";
+
+//Fields related to analysis - binary mode
+export const group = "input[name=group]";
+export const artifact = "input[name=artifact]";
+export const version = "input[name=version]";
+export const packaging = "input[name=packaging]";

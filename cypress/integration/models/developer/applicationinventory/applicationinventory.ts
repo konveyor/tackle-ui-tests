@@ -42,6 +42,13 @@ import {
     dependenciesDropdownBtn,
     closeForm,
     copy,
+    sourceRepository,
+    branch,
+    rootPath,
+    group,
+    artifact,
+    version,
+    packaging,
 } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
@@ -78,21 +85,57 @@ export class ApplicationInventory {
     description: string;
     tags: Array<string>;
     comment: string;
+    analysis?: boolean;
+    repoType?: string;
+    sourceRepo?: string;
+    branch?: string;
+    rootPath?: string;
+    group?: string;
+    artifact?: string;
+    version?: string;
+    packaging?: string;
 
     constructor(
         name: string,
         business: string,
         description?: string,
         comment?: string,
-        tags?: Array<string>
+        tags?: Array<string>,
+        analysis?: boolean,
+        repoType?: string,
+        sourceRepo?: string,
+        branch?: string,
+        rootPath?: string,
+        group?: string,
+        artifact?: string,
+        version?: string,
+        packaging?: string
     ) {
         this.name = name;
         this.business = business;
         if (description) this.description = description;
         if (comment) this.comment = comment;
         if (tags) this.tags = tags;
+        if (analysis) this.analysis = analysis;
+        if (repoType) this.repoType = repoType;
+        if (sourceRepo) this.sourceRepo = sourceRepo;
+        if (branch) this.branch = branch;
+        if (rootPath) this.rootPath = rootPath;
+        if (group) this.group = group;
+        if (artifact) this.artifact = artifact;
+        if (version) this.version = version;
+        if (packaging) this.packaging = packaging;
     }
-    public static clickApplicationInventory(): void {
+
+    //Navigate to the Application inventory->Analysis tab
+    public static analysis(): void {
+        selectUserPerspective("Developer");
+        clickByText(navMenu, applicationInventory);
+        clickByText(navTab, "Analysis");
+    }
+
+    //Navigate to the Application inventory->Assessment tab
+    public static assessment(): void {
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         clickByText(navTab, assessment);
@@ -258,8 +301,9 @@ export class ApplicationInventory {
     }
 
     create(cancel = false): void {
-        ApplicationInventory.clickApplicationInventory();
-        clickByText(button, createNewButton);
+        if (this.analysis) ApplicationInventory.analysis();
+        else ApplicationInventory.assessment();
+        cy.contains("button", createNewButton, { timeout: 20000 }).should("be.enabled").click();
         if (cancel) {
             cancelForm();
         } else {
@@ -273,6 +317,23 @@ export class ApplicationInventory {
             }
             if (this.tags) {
                 this.selectTags(this.tags);
+            }
+
+            //Fields relevant to source code analysis
+            if (this.sourceRepo) {
+                cy.contains("span", "Source code").click();
+                inputText(sourceRepository, this.sourceRepo);
+                if (this.branch) inputText(branch, this.branch);
+                if (this.rootPath) inputText(rootPath, this.rootPath);
+            }
+
+            //Fields relevant to binary mode analysis
+            if (this.group) {
+                cy.contains("span", "Binary").click();
+                inputText(group, this.group);
+                if (this.artifact) inputText(artifact, this.artifact);
+                if (this.version) inputText(version, this.version);
+                if (this.packaging) inputText(packaging, this.packaging);
             }
             submitForm();
             checkSuccessAlert(
@@ -292,7 +353,8 @@ export class ApplicationInventory {
         },
         cancel = false
     ): void {
-        ApplicationInventory.clickApplicationInventory();
+        if (this.analysis) ApplicationInventory.analysis();
+        else ApplicationInventory.assessment();
         selectItemsPerPage(100);
         cy.wait(2000);
         performRowActionByIcon(this.name, editButton);
@@ -327,7 +389,8 @@ export class ApplicationInventory {
     }
 
     delete(cancel = false): void {
-        ApplicationInventory.clickApplicationInventory();
+        if (this.analysis) ApplicationInventory.analysis();
+        else ApplicationInventory.assessment();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
@@ -366,7 +429,7 @@ export class ApplicationInventory {
                 "Atleast one arg out of stakeholder or stakeholdergroups must be provided !"
             ).to.equal(true);
         } else {
-            ApplicationInventory.clickApplicationInventory();
+            ApplicationInventory.assessment();
             selectItemsPerPage(100);
             this.selectApplication();
             this.click_assess_button();
@@ -380,7 +443,7 @@ export class ApplicationInventory {
     }
 
     perform_review(risk): void {
-        ApplicationInventory.clickApplicationInventory();
+        ApplicationInventory.assessment();
         selectItemsPerPage(100);
         this.selectApplication();
         clickByText(button, review);
@@ -457,7 +520,7 @@ export class ApplicationInventory {
 
     // Opens the manage dependencies dialog from application inventory page
     openManageDependencies(): void {
-        ApplicationInventory.clickApplicationInventory();
+        ApplicationInventory.assessment();
         selectItemsPerPage(100);
         cy.wait(2000);
         performRowAction(this.name, actionButton);
@@ -520,7 +583,7 @@ export class ApplicationInventory {
 
     verifyTagCount(tagsCount: number): void {
         // Verify tag count for specific application
-        ApplicationInventory.clickApplicationInventory();
+        ApplicationInventory.assessment();
         selectItemsPerPage(100);
         cy.wait(4000);
         cy.get(".pf-c-table > tbody > tr")
@@ -535,7 +598,7 @@ export class ApplicationInventory {
     }
 
     verifyCopyAssessmentDisabled(): void {
-        ApplicationInventory.clickApplicationInventory();
+        ApplicationInventory.assessment();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
@@ -576,7 +639,7 @@ export class ApplicationInventory {
     }
 
     openCopyAssessmentModel(): void {
-        ApplicationInventory.clickApplicationInventory();
+        ApplicationInventory.assessment();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
