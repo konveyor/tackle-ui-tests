@@ -24,9 +24,18 @@ import {
     selectUserPerspective,
 } from "../../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../../views/menu.view";
-import { controls, button, clearAllFilters, tags, tagType } from "../../../../../types/constants";
+import {
+    controls,
+    button,
+    clearAllFilters,
+    tags,
+    tagType,
+    color,
+    rank,
+} from "../../../../../types/constants";
 
 import * as data from "../../../../../../utils/data_utils";
+import { TagType } from "../../../../../models/developer/controls/tagtypes";
 
 describe("Tag type filter validations", { tags: "@tier2" }, function () {
     before("Login", function () {
@@ -64,6 +73,31 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
+
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Tag type rank filter validations", function () {
+        // Navigate to Tags tab
+        TagType.openList();
+
+        // Enter an existing tag type rank number and apply it as search filter
+        var validSearchInput = String(data.getRandomNumber(1, 6));
+        applySearchFilter(rank, validSearchInput);
+
+        // Assert that tag type row(s) containing the search text is/are displayed
+        exists(validSearchInput);
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+        cy.get("@getTagtypes");
+
+        // Enter a non-existing tag type rank number and apply it as search filter
+        var invalidSearchInput = String(data.getRandomNumber(1111, 2222));
+        applySearchFilter(rank, invalidSearchInput);
+
+        // Assert that no search results are found
+        cy.get("h2").contains("No tag types available");
 
         clickByText(button, clearAllFilters);
     });
