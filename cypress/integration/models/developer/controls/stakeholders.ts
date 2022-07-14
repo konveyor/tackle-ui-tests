@@ -113,7 +113,7 @@ export class Stakeholders {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowAction(this.email, commonView.editButton);
+        performRowAction(this.email, "Edit");
         if (cancel) {
             cancelForm();
         } else {

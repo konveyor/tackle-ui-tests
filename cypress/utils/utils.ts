@@ -167,7 +167,10 @@ export function notExists(value: string): void {
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
                 selectItemsPerPage(100);
-                cy.get("td", { timeout: 5 * SEC }).should("not.contain", value);
+                cy.get("table[aria-label='main-table']", { timeout: 5 * SEC }).should(
+                    "not.contain",
+                    value
+                );
             }
         });
 }
