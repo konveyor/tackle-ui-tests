@@ -78,7 +78,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
 
     it("Application field validations", function () {
         // Navigate to application inventory page and click "Create New" button
-        ApplicationInventory.clickApplicationInventory();
+        ApplicationInventory.assessment();
         clickByText(button, createNewButton);
 
         selectFormItems(applicationBusinessServiceSelect, businessservicesList[0].name);
@@ -106,7 +106,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
 
     it("Application button validations", function () {
         // Navigate to application inventory page and click create new button
-        ApplicationInventory.clickApplicationInventory();
+        ApplicationInventory.assessment();
         clickByText(button, createNewButton);
 
         // Check "Create" and "Cancel" button status
@@ -128,7 +128,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
     });
 
     it("Application unique constraint validation", function () {
-        ApplicationInventory.clickApplicationInventory();
+        ApplicationInventory.assessment();
         const application = new ApplicationInventory(
             data.getFullName(),
             businessservicesList[0].name

@@ -58,7 +58,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
 
     it("Source Analysis", function () {
         // Navigate to application inventory page and click "Create New" button
-        ApplicationInventory.clickApplicationInventory();
+        ApplicationInventory.analysis();
         clickByText(button, createNewButton);
     });
 });
