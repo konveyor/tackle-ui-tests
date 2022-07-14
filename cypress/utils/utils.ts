@@ -47,9 +47,7 @@ import { actionButton, date } from "../integration/views/applicationinventory.vi
 import { confirmButton, divHeader, modal, pageNumInput } from "../integration/views/common.view";
 import { tagLabels } from "../integration/views/tags.view";
 import { Credentials } from "../integration/models/administrator/credentials/credentials";
-import { credLabels } from "../integration/views/credentials.view";
 import { Assessment } from "../integration/models/developer/applicationinventory/assessment";
-import { Application } from "../integration/models/developer/applicationinventory/application";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
