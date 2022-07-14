@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import * as faker from "faker";
+import { CredentialsData, CredentialsSourceControlData } from "../integration/types/types";
+import { CredentialType } from "../integration/types/constants";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
@@ -98,4 +100,23 @@ export function getDefaultTagTypes(): string[] {
         "Operating System",
         "Runtime",
     ];
+}
+
+export function getRandomCredentialsData(type: string): CredentialsData {
+    if (type === CredentialType.proxy || type === CredentialType.sourceControl) {
+        return {
+            type: type,
+            name: getRandomWord(6),
+            description: getDescription(),
+            username: getRandomWord(6),
+            password: getRandomWord(8),
+        };
+    } else {
+        return {
+            type: type,
+            name: getRandomWord(6),
+            description: getRandomWord(6),
+            settingFile: getRandomWord(6),
+        };
+    }
 }

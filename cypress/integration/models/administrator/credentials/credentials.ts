@@ -4,19 +4,36 @@ import {
     inputText,
     performRowAction,
     selectUserPerspective,
-    clickWithin,
+    selectItemsPerPage,
+    notExists,
 } from "../../../../utils/utils";
-import { dropdownMenuToggle } from "../../../views/tags.view";
-import { administrator, button, credentials, deleteAction } from "../../../types/constants";
-import { createBtn, credentialNameInput, descriptionInput } from "../../../views/credentials.view";
-import { modal, navLink, closeNotification, confirmButton } from "../../../views/common.view";
+import {
+    administrator,
+    button,
+    credentials,
+    deleteAction,
+    editAction,
+    SEC,
+    trTag,
+} from "../../../types/constants";
+import {
+    createBtn,
+    credentialNameInput,
+    credLabels,
+    descriptionInput,
+} from "../../../views/credentials.view";
+import { navLink, closeNotification, confirmButton } from "../../../views/common.view";
+import { selectType } from "../../../views/credentials.view";
+import * as commonView from "../../../views/common.view";
+import { CredentialsData } from "../../../types/types";
 
 export class Credentials {
     name = "";
     description = "";
+    static credUrl = Cypress.env("tackleUrl") + "/identities";
 
-    constructor(name) {
-        this.name = name;
+    constructor(name?) {
+        if (name) this.name = name;
     }
 
     protected fillName(): void {
@@ -30,13 +47,29 @@ export class Credentials {
     }
 
     protected selectType(type): void {
-        clickWithin(modal, dropdownMenuToggle);
+        click(selectType);
         clickByText(button, type);
     }
 
-    static openList() {
-        selectUserPerspective(administrator);
-        clickByText(navLink, credentials);
+    static openList(itemsPerPage = 100) {
+        cy.url().then(($url) => {
+            if ($url != Credentials.credUrl) {
+                selectUserPerspective(administrator);
+                clickByText(navLink, credentials);
+            }
+        });
+        selectItemsPerPage(itemsPerPage);
+    }
+
+    static getList() {
+        this.openList();
+        let list = [];
+        cy.get(commonView.appTable, { timeout: 2 * SEC })
+            .find(trTag)
+            .each(($row) => {
+                list.push(new Credentials($row.find(credLabels.name).text()));
+            });
+        return list;
     }
 
     create(): void {
@@ -48,9 +81,15 @@ export class Credentials {
         Credentials.openList();
         performRowAction(this.name, deleteAction);
         click(confirmButton);
+        notExists(this.name);
     }
 
-    closeSuccessNotification(): void {
+    edit(cred: CredentialsData): void {
+        Credentials.openList();
+        performRowAction(this.name, editAction);
+    }
+
+    protected closeSuccessNotification(): void {
         click(closeNotification);
     }
 }

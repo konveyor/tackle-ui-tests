@@ -19,3 +19,10 @@ export const usernameInput = "input[name=user]";
 export const passwordInput = "input[name=password]";
 export const privatePassphraseInput = "input[aria-label='Private Key Passphrase']";
 export const createBtn = "#create-credential-button";
+export const selectType = "#type-select-toggle";
+export enum credLabels {
+    name = 'td[data-label="Name"]',
+    description = 'td[data-label="Description"]',
+    type = 'td[data-label="Type"]',
+    createdBy = 'td[data-label="Created by"]',
+}

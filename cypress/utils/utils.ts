@@ -46,6 +46,8 @@ import {
 import { actionButton, date } from "../integration/views/applicationinventory.view";
 import { confirmButton, divHeader, modal, pageNumInput } from "../integration/views/common.view";
 import { tagLabels } from "../integration/views/tags.view";
+import { Credentials } from "../integration/models/administrator/credentials/credentials";
+import { credLabels } from "../integration/views/credentials.view";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
@@ -873,6 +875,13 @@ export function deleteAllTagsAndTagTypes(): void {
                 }
             }
         });
+}
+
+export function deleteAllCredentials(): void {
+    let list = Credentials.getList();
+    list.forEach((currentCred) => {
+        currentCred.delete();
+    });
 }
 
 export const deleteFromArray = <T>(array: T[], el: T): T[] => {

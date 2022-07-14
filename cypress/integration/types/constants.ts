@@ -31,6 +31,7 @@ export const createNewButton = "Create new";
 export const criticality = "Criticality";
 export const credentials = "Credentials";
 export const deleteAction = "Delete";
+export const editAction = "Edit";
 export const description = "Description";
 export const displayName = "Display name";
 export const effort = "Effort";
@@ -76,3 +77,9 @@ export const minCharsMsg = "This field must contain at least 3 characters.";
 export const SEC = 1000;
 export const administrator = "Administrator";
 export const developer = "Developer";
+
+export enum CredentialType {
+    proxy = "Proxy",
+    sourceControl = "Source Control",
+    maven = "Maven",
+}
