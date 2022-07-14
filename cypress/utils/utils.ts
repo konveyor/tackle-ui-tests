@@ -654,8 +654,8 @@ export function createMultipleApplication(
     numberofapplications: number,
     businessservice?: Array<BusinessServices>,
     tagList?: Array<Tag>
-): Array<Application> {
-    var applicationList: Array<Application> = [];
+): Array<Assessment> {
+    var applicationList: Array<Assessment> = [];
     var tags: string[];
     var business: string;
     for (let i = 0; i < numberofapplications; i++) {
@@ -664,12 +664,9 @@ export function createMultipleApplication(
         business = businessservice[i].name;
         if (tagList) tags = [tagList[i].name];
         // Navigate to application inventory tab and create new application
-        const application = new Application(
+        const application = new Assessment(
             data.getAppName(),
-            business,
-            data.getDescription(),
-            data.getDescription(),
-            tags
+            business
         );
         application.create();
         applicationList.push(application);
