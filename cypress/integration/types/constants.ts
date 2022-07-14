@@ -31,6 +31,7 @@ export const createNewButton = "Create new";
 export const criticality = "Criticality";
 export const credentials = "Credentials";
 export const deleteAction = "Delete";
+export const editAction = "Edit";
 export const description = "Description";
 export const displayName = "Display name";
 export const effort = "Effort";

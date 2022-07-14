@@ -108,7 +108,7 @@ describe("Business service linked to stakeholder", { tags: "@tier1" }, () => {
 
         // Delete business service
         businessservice.delete();
-        cy.wait("@getBusinessService");
+        cy.get("@getBusinessService");
 
         // Assert that created business service is deleted
         notExists(businessservice.name);

@@ -19,6 +19,8 @@ import {
     tdTag,
     button,
     createNewButton,
+    editAction,
+    deleteAction,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -103,7 +105,7 @@ export class BusinessServices {
         BusinessServices.clickBusinessservices();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowAction(this.name, commonView.editButton);
+        performRowAction(this.name, editAction);
 
         if (cancel) {
             cancelForm();
@@ -130,7 +132,7 @@ export class BusinessServices {
         BusinessServices.clickBusinessservices();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowAction(this.name, commonView.deleteButton);
+        performRowAction(this.name, deleteAction);
         if (cancel) {
             cancelForm();
         } else {
