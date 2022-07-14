@@ -22,13 +22,13 @@ import {
     deleteAllStakeholders,
     createMultipleBusinessServices,
     deleteAllBusinessServices,
+    deleteApplicationTableRows,
 } from "../../../../../utils/utils";
-
-import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
 
 import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
+import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdersNameList: Array<string> = [];
@@ -66,17 +66,13 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
 
         // Delete the stakeholders created before the tests
         deleteAllStakeholders();
+        deleteApplicationTableRows();
         deleteAllBusinessServices();
     });
 
     it("Application assessment and review with low risk", function () {
         // Navigate to application inventory tab and create new application
-        const application = new ApplicationInventory(
-            data.getAppName(),
-            businessservicesList[0].name,
-            data.getDescription(),
-            data.getDescription()
-        );
+        const application = new Assessment(data.getAppName(), businessservicesList[0].name);
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
@@ -98,12 +94,7 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
 
     it("Application assessment and review with medium risk", function () {
         // Navigate to application inventory tab and create new application
-        const application = new ApplicationInventory(
-            data.getAppName(),
-            businessservicesList[0].name,
-            data.getDescription(),
-            data.getDescription()
-        );
+        const application = new Assessment(data.getAppName(), businessservicesList[0].name);
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
@@ -125,12 +116,7 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
 
     it("Application assessment and review with high risk", function () {
         // Navigate to application inventory tab and create new application
-        const application = new ApplicationInventory(
-            data.getAppName(),
-            businessservicesList[0].name,
-            data.getDescription(),
-            data.getDescription()
-        );
+        const application = new Assessment(data.getAppName(), businessservicesList[0].name);
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
