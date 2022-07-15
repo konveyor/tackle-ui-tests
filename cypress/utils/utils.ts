@@ -47,7 +47,7 @@ import { actionButton, date } from "../integration/views/applicationinventory.vi
 import { confirmButton, divHeader, modal, pageNumInput } from "../integration/views/common.view";
 import { tagLabels } from "../integration/views/tags.view";
 import { Credentials } from "../integration/models/administrator/credentials/credentials";
-import { credLabels } from "../integration/views/credentials.view";
+import { Assessment } from "../integration/models/developer/applicationinventory/assessment";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
@@ -646,6 +646,28 @@ export function createMultipleTags(numberoftags: number): Array<Tag> {
         tagList.push(tag);
     }
     return tagList;
+}
+
+export function createMultipleApplication(
+    numberofapplications: number,
+    businessservice?: Array<BusinessServices>,
+    tagList?: Array<Tag>
+): Array<Assessment> {
+    var applicationList: Array<Assessment> = [];
+    var tags: string[];
+    var business: string;
+    for (let i = 0; i < numberofapplications; i++) {
+        if (!businessservice)
+            businessservice = createMultipleBusinessServices(numberofapplications);
+        business = businessservice[i].name;
+        if (tagList) tags = [tagList[i].name];
+        // Navigate to application inventory tab and create new application
+        const application = new Assessment(data.getAppName(), business);
+        application.create();
+        applicationList.push(application);
+        cy.wait(2000);
+    }
+    return applicationList;
 }
 
 export function createMultipleApplications(
