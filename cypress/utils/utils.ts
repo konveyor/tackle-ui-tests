@@ -662,10 +662,7 @@ export function createMultipleApplication(
         business = businessservice[i].name;
         if (tagList) tags = [tagList[i].name];
         // Navigate to application inventory tab and create new application
-        const application = new Assessment(
-            data.getAppName(),
-            business
-        );
+        const application = new Assessment(data.getAppName(), business);
         application.create();
         applicationList.push(application);
         cy.wait(2000);
