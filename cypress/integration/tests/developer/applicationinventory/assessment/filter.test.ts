@@ -24,7 +24,7 @@ import {
     hasToBeSkipped,
     createMultipleBusinessServices,
     createMultipleTags,
-    createMultipleApplications,
+    createMultipleApplication,
     deleteAllBusinessServices,
     deleteAllTagTypes,
     deleteApplicationTableRows,
@@ -45,8 +45,9 @@ import { BusinessServices } from "../../../../models/developer/controls/business
 import { Tag } from "../../../../models/developer/controls/tags";
 
 import * as data from "../../../../../utils/data_utils";
+import { Application } from "../../../../models/developer/applicationinventory/application";
 
-var applicationsList: Array<ApplicationInventory> = [];
+var applicationsList: Array<Application> = [];
 var businessserviceList: Array<BusinessServices> = [];
 var tagList: Array<Tag> = [];
 var invalidSearchInput = String(data.getRandomNumber());
@@ -61,7 +62,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
 
         businessserviceList = createMultipleBusinessServices(3);
         tagList = createMultipleTags(3);
-        applicationsList = createMultipleApplications(2, businessserviceList, tagList);
+        applicationsList = createMultipleApplication(2, businessserviceList, tagList);
     });
 
     beforeEach("Persist session", function () {

@@ -58,13 +58,14 @@ import {
     reviewColumnSelector,
     selectInput,
 } from "../../../views/review.view";
+import { applicationData } from "../../../types/types";
 
 export class Assessment extends Application {
-    name: string;
-    business: string;
+    // name: string;
+    // business: string;
 
-    constructor(name: string, business: string) {
-        super(name, business);
+    constructor(appData: applicationData) {
+        super(appData);
     }
 
     //Navigate to the Application inventory->Assessment tab
