@@ -336,10 +336,7 @@ export class Assessment extends Application {
     openManageDependencies(): void {
         Assessment.open();
         selectItemsPerPage(100);
-        cy.wait(2000);
-        performRowAction(this.name, actionButton);
-        cy.wait(500);
-        clickByText(button, "Manage dependencies");
+        performRowAction(this.name, "Manage dependencies");
     }
 
     // Selects the application as dependency from dropdown. Arg dropdownNum value 0 selects northbound, whereas value 1 selects southbound

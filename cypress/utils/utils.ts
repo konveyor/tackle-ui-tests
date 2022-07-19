@@ -543,9 +543,14 @@ export function hasToBeSkipped(tagName: string): boolean {
 export function performRowAction(itemName: string, action: string): void {
     // itemName is text to be searched on the screen (like credentials name, stakeholder name, etc)
     // Action is the name of the action to be applied (usually edit or delete)
-    cy.contains(itemName, { timeout: 120 * SEC })
-        .closest(trTag)
+
+    cy.get(tdTag)
+        .contains(itemName, { timeout: 120 * SEC })
+        .parent(tdTag)
+        .parent(trTag)
         .within(() => {
+            click(actionButton);
+            cy.wait(500);
             clickByText(button, action);
         });
 }

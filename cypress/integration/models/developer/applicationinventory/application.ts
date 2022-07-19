@@ -51,6 +51,7 @@ import {
     checkSuccessAlert,
     performRowActionByIcon,
     selectUserPerspective,
+    performRowAction,
 } from "../../../../utils/utils";
 import { applicationData } from "../../../types/types";
 
@@ -220,16 +221,7 @@ export class Application {
 
     delete(cancel = false): void {
         cy.wait(2000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(actionButton);
-                cy.wait(500);
-                clickByText(button, deleteAction);
-            });
-
+        performRowAction(this.name, deleteAction);
         if (cancel) {
             cancelForm();
         } else {

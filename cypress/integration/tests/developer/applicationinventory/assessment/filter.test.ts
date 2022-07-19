@@ -28,8 +28,9 @@ import {
     deleteAllBusinessServices,
     deleteAllTagTypes,
     deleteApplicationTableRows,
+    selectUserPerspective,
 } from "../../../../../utils/utils";
-import { navMenu } from "../../../../views/menu.view";
+import { navMenu, navTab } from "../../../../views/menu.view";
 import {
     applicationInventory,
     button,
@@ -38,6 +39,7 @@ import {
     description,
     businessService,
     tag,
+    assessment,
 } from "../../../../types/constants";
 
 import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
@@ -85,9 +87,10 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     });
 
     it("Name filter validations", function () {
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
-        cy.wait("@getApplication");
-
+        clickByText(navTab, assessment);
+    
         // Enter an existing name substring and assert
         var validSearchInput = applicationsList[0].name.substring(0, 11);
         applySearchFilter(name, validSearchInput);
@@ -118,8 +121,9 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     });
 
     it("Descriptions filter validations", function () {
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
-        cy.wait("@getApplication");
+        clickByText(navTab, assessment);
 
         // Enter an existing description substring and assert
         var validSearchInput = applicationsList[0].description.substring(0, 8);
@@ -151,8 +155,9 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     });
 
     it("Business service filter validations", function () {
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
-        cy.wait("@getApplication");
+        clickByText(navTab, assessment);
 
         // Enter an existing businessservice and assert
         var validSearchInput = applicationsList[0].business;
@@ -174,8 +179,9 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     });
 
     it("Tag filter validations", function () {
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
-        cy.wait("@getApplication");
+        clickByText(navTab, assessment);
 
         // Enter an existing tag and assert
         var validSearchInput = applicationsList[0].tags[0];
