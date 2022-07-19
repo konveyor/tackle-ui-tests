@@ -19,7 +19,6 @@ import {
     login,
     clickByText,
     inputText,
-    submitForm,
     exists,
     notExists,
     hasToBeSkipped,
@@ -28,6 +27,7 @@ import {
     selectFormItems,
     deleteApplicationTableRows,
     deleteAllBusinessServices,
+    getRandomApplicationData,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -42,11 +42,11 @@ import {
     applicationNameInput,
     applicationBusinessServiceSelect,
 } from "../../../../views/applicationinventory.view";
-import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
 
 import * as commonView from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
+import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
 var businessservicesList: Array<BusinessServices> = [];
 
@@ -78,7 +78,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
 
     it("Application field validations", function () {
         // Navigate to application inventory page and click "Create New" button
-        ApplicationInventory.assessment();
+        Assessment.open();
         clickByText(button, createNewButton);
 
         selectFormItems(applicationBusinessServiceSelect, businessservicesList[0].name);
@@ -106,7 +106,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
 
     it("Application button validations", function () {
         // Navigate to application inventory page and click create new button
-        ApplicationInventory.assessment();
+        Assessment.open();
         clickByText(button, createNewButton);
 
         // Check "Create" and "Cancel" button status
@@ -128,11 +128,8 @@ describe("Application validations", { tags: "@tier2" }, () => {
     });
 
     it("Application unique constraint validation", function () {
-        ApplicationInventory.assessment();
-        const application = new ApplicationInventory(
-            data.getFullName(),
-            businessservicesList[0].name
-        );
+        Assessment.open();
+        const application = new Assessment(getRandomApplicationData());
 
         // Create a new application
         application.create();

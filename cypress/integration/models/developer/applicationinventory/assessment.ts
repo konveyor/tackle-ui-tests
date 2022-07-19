@@ -58,13 +58,14 @@ import {
     reviewColumnSelector,
     selectInput,
 } from "../../../views/review.view";
+import { applicationData } from "../../../types/types";
 
 export class Assessment extends Application {
-    name: string;
-    business: string;
+    // name: string;
+    // business: string;
 
-    constructor(name: string, business: string) {
-        super(name, business);
+    constructor(appData: applicationData) {
+        super(appData);
     }
 
     //Navigate to the Application inventory->Assessment tab
@@ -335,10 +336,7 @@ export class Assessment extends Application {
     openManageDependencies(): void {
         Assessment.open();
         selectItemsPerPage(100);
-        cy.wait(2000);
-        performRowAction(this.name, actionButton);
-        cy.wait(500);
-        clickByText(button, "Manage dependencies");
+        performRowAction(this.name, "Manage dependencies");
     }
 
     // Selects the application as dependency from dropdown. Arg dropdownNum value 0 selects northbound, whereas value 1 selects southbound

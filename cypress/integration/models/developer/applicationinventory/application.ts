@@ -20,8 +20,9 @@ import {
     button,
     createNewButton,
     deleteAction,
+    assessment,
 } from "../../../types/constants";
-import { navMenu } from "../../../views/menu.view";
+import { navMenu, navTab } from "../../../views/menu.view";
 import {
     applicationNameInput,
     applicationDescriptionInput,
@@ -50,7 +51,10 @@ import {
     checkSuccessAlert,
     performRowActionByIcon,
     selectUserPerspective,
+    performRowAction,
 } from "../../../../utils/utils";
+import { applicationData } from "../../../types/types";
+
 export class Application {
     name: string;
     business: string;
@@ -67,22 +71,27 @@ export class Application {
     version?: string;
     packaging?: string;
 
-    constructor(
-        name: string,
-        business: string,
-        description?: string,
-        comment?: string,
-        tags?: Array<string>,
-        analysis?: boolean,
-        repoType?: string,
-        sourceRepo?: string,
-        branch?: string,
-        rootPath?: string,
-        group?: string,
-        artifact?: string,
-        version?: string,
-        packaging?: string
-    ) {
+    constructor(appData: applicationData) {
+        this.init(appData);
+    }
+
+    protected init(appData: applicationData) {
+        const {
+            name,
+            business,
+            description,
+            tags,
+            comment,
+            analysis,
+            repoType,
+            sourceRepo,
+            branch,
+            rootPath,
+            group,
+            artifact,
+            version,
+            packaging,
+        } = appData;
         this.name = name;
         this.business = business;
         if (description) this.description = description;
@@ -100,9 +109,10 @@ export class Application {
     }
 
     //Navigate to the Application inventory
-    open(): void {
+    public static open(): void {
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
+        clickByText(navTab, assessment);
     }
 
     protected fillName(name: string): void {
@@ -211,16 +221,7 @@ export class Application {
 
     delete(cancel = false): void {
         cy.wait(2000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(actionButton);
-                cy.wait(500);
-                clickByText(button, deleteAction);
-            });
-
+        performRowAction(this.name, deleteAction);
         if (cancel) {
             cancelForm();
         } else {

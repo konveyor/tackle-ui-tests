@@ -48,6 +48,7 @@ import { confirmButton, divHeader, modal, pageNumInput } from "../integration/vi
 import { tagLabels } from "../integration/views/tags.view";
 import { Credentials } from "../integration/models/administrator/credentials/credentials";
 import { Assessment } from "../integration/models/developer/applicationinventory/assessment";
+import { applicationData } from "../integration/types/types";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
@@ -542,9 +543,14 @@ export function hasToBeSkipped(tagName: string): boolean {
 export function performRowAction(itemName: string, action: string): void {
     // itemName is text to be searched on the screen (like credentials name, stakeholder name, etc)
     // Action is the name of the action to be applied (usually edit or delete)
-    cy.contains(itemName, { timeout: 120 * SEC })
-        .closest(trTag)
+
+    cy.get(tdTag)
+        .contains(itemName, { timeout: 120 * SEC })
+        .parent(tdTag)
+        .parent(trTag)
         .within(() => {
+            click(actionButton);
+            cy.wait(500);
             clickByText(button, action);
         });
 }
@@ -648,6 +654,16 @@ export function createMultipleTags(numberoftags: number): Array<Tag> {
     return tagList;
 }
 
+export function getRandomApplicationData(): applicationData {
+    var businessservicesList = createMultipleBusinessServices(1);
+    return {
+        name: data.getAppName(),
+        business: businessservicesList[0].name,
+        description: data.getDescription(),
+        comment: data.getDescription(),
+    };
+}
+
 export function createMultipleApplication(
     numberofapplications: number,
     businessservice?: Array<BusinessServices>,
@@ -662,7 +678,7 @@ export function createMultipleApplication(
         business = businessservice[i].name;
         if (tagList) tags = [tagList[i].name];
         // Navigate to application inventory tab and create new application
-        const application = new Assessment(data.getAppName(), business);
+        const application = new Assessment(getRandomApplicationData());
         application.create();
         applicationList.push(application);
         cy.wait(2000);

@@ -20,10 +20,10 @@ import {
     hasToBeSkipped,
     login,
     preservecookies,
-    createMultipleApplications,
+    createMultipleApplication,
     deleteApplicationTableRows,
 } from "../../../../../utils/utils";
-import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
+import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 import {
     closeForm,
     cyclicDependenciesErrorMsg,
@@ -31,7 +31,7 @@ import {
     southboundHelper,
 } from "../../../../views/applicationinventory.view";
 
-var applicationsList: Array<ApplicationInventory> = [];
+var applicationsList: Array<Assessment> = [];
 
 describe("Manage application dependencies", { tags: "@newtest" }, () => {
     before("Login and Create Test Data", function () {
@@ -45,7 +45,7 @@ describe("Manage application dependencies", { tags: "@newtest" }, () => {
         preservecookies();
 
         // Create new applications
-        applicationsList = createMultipleApplications(3);
+        applicationsList = createMultipleApplication(3);
     });
 
     after("Perform test data clean up", function () {

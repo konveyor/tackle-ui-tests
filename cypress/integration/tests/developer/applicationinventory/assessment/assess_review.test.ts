@@ -23,6 +23,7 @@ import {
     createMultipleBusinessServices,
     deleteAllBusinessServices,
     deleteApplicationTableRows,
+    getRandomApplicationData,
 } from "../../../../../utils/utils";
 
 import * as data from "../../../../../utils/data_utils";
@@ -32,7 +33,7 @@ import { Assessment } from "../../../../models/developer/applicationinventory/as
 
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdersNameList: Array<string> = [];
-var businessservicesList: Array<BusinessServices> = [];
+// var businessservicesList: Array<BusinessServices> = [];
 
 describe("Application assessment and review tests", { tags: "@tier1" }, () => {
     before("Login and Create Test Data", function () {
@@ -50,7 +51,7 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
         stakeholdersList.push(stakeholder);
         stakeholdersNameList.push(stakeholder.name);
 
-        businessservicesList = createMultipleBusinessServices(1);
+        // businessservicesList = createMultipleBusinessServices(1);
     });
 
     beforeEach("Persist session", function () {
@@ -72,7 +73,7 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
 
     it("Application assessment and review with low risk", function () {
         // Navigate to application inventory tab and create new application
-        const application = new Assessment(data.getAppName(), businessservicesList[0].name);
+        const application = new Assessment(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
@@ -94,7 +95,7 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
 
     it("Application assessment and review with medium risk", function () {
         // Navigate to application inventory tab and create new application
-        const application = new Assessment(data.getAppName(), businessservicesList[0].name);
+        const application = new Assessment(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
@@ -116,7 +117,7 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
 
     it("Application assessment and review with high risk", function () {
         // Navigate to application inventory tab and create new application
-        const application = new Assessment(data.getAppName(), businessservicesList[0].name);
+        const application = new Assessment(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);

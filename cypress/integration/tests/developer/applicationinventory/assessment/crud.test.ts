@@ -21,12 +21,13 @@ import {
     login,
     notExists,
     createMultipleBusinessServices,
+    getRandomApplicationData,
 } from "../../../../../utils/utils";
-import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
 import * as data from "../../../../../utils/data_utils";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
+import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
-var businessservicesList: Array<BusinessServices> = [];
+// var businessservicesList: Array<BusinessServices> = [];
 
 describe("Application crud operations", { tags: "@tier1" }, () => {
     beforeEach("Login", function () {
@@ -35,19 +36,14 @@ describe("Application crud operations", { tags: "@tier1" }, () => {
 
         // Perform login
         login();
-        businessservicesList = createMultipleBusinessServices(1);
+        // businessservicesList = createMultipleBusinessServices(1);
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     it("Application crud", function () {
-        const application = new ApplicationInventory(
-            data.getAppName(),
-            businessservicesList[0].name,
-            data.getDescription(),
-            data.getDescription() // refering description value as comment
-        );
+        const application = new Assessment(getRandomApplicationData());
 
         // Create new application
         application.create();
