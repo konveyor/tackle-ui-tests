@@ -90,7 +90,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         clickByText(navTab, assessment);
-    
+
         // Enter an existing name substring and assert
         var validSearchInput = applicationsList[0].name.substring(0, 11);
         applySearchFilter(name, validSearchInput);
