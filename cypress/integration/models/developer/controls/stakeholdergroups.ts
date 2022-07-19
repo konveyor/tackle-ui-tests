@@ -19,6 +19,8 @@ import {
     tdTag,
     button,
     createNewButton,
+    deleteAction,
+    editAction,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -101,7 +103,7 @@ export class Stakeholdergroups {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowAction(this.name, "Edit");
+        performRowAction(this.name, editAction);
         if (cancel) {
             cancelForm();
         } else {
@@ -125,7 +127,7 @@ export class Stakeholdergroups {
         Stakeholdergroups.clickStakeholdergroups();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowAction(this.name, "Delete");
+        performRowAction(this.name, deleteAction);
         if (cancel) {
             cancelForm();
         } else {

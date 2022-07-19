@@ -13,7 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { controls, stakeholders, button, createNewButton } from "../../../types/constants";
+import {
+    controls,
+    stakeholders,
+    button,
+    createNewButton,
+    editAction,
+    deleteAction,
+} from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
     stakeholderNameInput,
@@ -113,7 +120,7 @@ export class Stakeholders {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowAction(this.email, "Edit");
+        performRowAction(this.email, editAction);
         if (cancel) {
             cancelForm();
         } else {
@@ -141,7 +148,7 @@ export class Stakeholders {
         Stakeholders.clickStakeholders();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowAction(this.email, "Delete");
+        performRowAction(this.email, deleteAction);
         if (cancel) {
             cancelForm();
         } else {

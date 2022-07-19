@@ -13,7 +13,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { controls, tags, tdTag, trTag, button, SEC } from "../../../types/constants";
+import {
+    controls,
+    tags,
+    tdTag,
+    trTag,
+    button,
+    SEC,
+    editAction,
+    deleteAction,
+} from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 
 import {
@@ -111,7 +120,7 @@ export class Tag {
     edit(updatedValue: { name?: string; tagtype?: string }, cancel = false): void {
         Tag.openList();
         expandRowDetails(this.tagType);
-        this.clickTagAction("Edit");
+        this.clickTagAction(editAction);
         if (cancel) {
             cancelForm();
         } else {
@@ -131,7 +140,7 @@ export class Tag {
     delete(cancel = false): void {
         Tag.openList();
         expandRowDetails(this.tagType);
-        applyAction(this.name, "Delete");
+        applyAction(this.name, deleteAction);
         if (cancel) {
             cancelForm();
         } else {

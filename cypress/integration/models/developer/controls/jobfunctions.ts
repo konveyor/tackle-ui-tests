@@ -13,7 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { controls, jobFunctions, tdTag, button, createNewButton } from "../../../types/constants";
+import {
+    controls,
+    jobFunctions,
+    tdTag,
+    button,
+    createNewButton,
+    editAction,
+    deleteAction,
+} from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { jobfunctionNameInput } from "../../../views/jobfunctions.view";
 import {
@@ -60,7 +68,7 @@ export class Jobfunctions {
         Jobfunctions.clickJobfunctions();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowAction(this.name, "Edit");
+        performRowAction(this.name, editAction);
 
         if (cancel) {
             cancelForm();
@@ -77,7 +85,7 @@ export class Jobfunctions {
         Jobfunctions.clickJobfunctions();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowAction(this.name, "Delete");
+        performRowAction(this.name, deleteAction);
         if (cancel) {
             cancelForm();
         } else {
