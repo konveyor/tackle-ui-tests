@@ -29,7 +29,7 @@ import * as data from "../../../../../utils/data_utils";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
-import { sourceFields, binaryFields } from "./app_analysis_config";
+import { sourceFields, binaryFields } from "./app_analysis_data";
 
 var businessservicesList: Array<BusinessServices> = [];
 
@@ -53,6 +53,7 @@ describe("Application crud operations", { tags: "@tier1" }, () => {
     });
 
     after("Perform test data clean up", function () {
+
         // Delete the business service created before the tests
         deleteAllBusinessServices();
     });
