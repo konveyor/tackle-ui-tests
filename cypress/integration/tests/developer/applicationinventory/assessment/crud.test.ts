@@ -21,14 +21,17 @@ import {
     login,
     notExists,
     createMultipleBusinessServices,
+    deleteAllBusinessServices,
     getRandomApplicationData,
     preservecookies,
 } from "../../../../../utils/utils";
 import * as data from "../../../../../utils/data_utils";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
+import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
+import { sourceFields, binaryFields } from "./app_analysis_config";
 
-// var businessservicesList: Array<BusinessServices> = [];
+var businessservicesList: Array<BusinessServices> = [];
 
 describe("Application crud operations", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -37,9 +40,7 @@ describe("Application crud operations", { tags: "@tier1" }, () => {
 
         // Perform login
         login();
-        // businessservicesList = createMultipleBusinessServices(1);
-        cy.fixture('app_crud_for_analysis/analysis_testdata').then(function (testdata) {
-            this.testdata = testdata
+        businessservicesList = createMultipleBusinessServices(1);
     });
 
     beforeEach("Persist session", function () {
@@ -52,13 +53,12 @@ describe("Application crud operations", { tags: "@tier1" }, () => {
     });
 
     after("Perform test data clean up", function () {
-        const application = new Assessment(getRandomApplicationData());
-
         // Delete the business service created before the tests
         deleteAllBusinessServices();
     });
 
     it("Application created for Assessment", function () {
+        const application = new Assessment(getRandomApplicationData());
 
         // Create new application
         application.create();
