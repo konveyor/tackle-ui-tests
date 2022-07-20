@@ -22,6 +22,7 @@ import {
     notExists,
     createMultipleBusinessServices,
     getRandomApplicationData,
+    preservecookies,
 } from "../../../../../utils/utils";
 import * as data from "../../../../../utils/data_utils";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
@@ -30,27 +31,109 @@ import { Assessment } from "../../../../models/developer/applicationinventory/as
 // var businessservicesList: Array<BusinessServices> = [];
 
 describe("Application crud operations", { tags: "@tier1" }, () => {
-    beforeEach("Login", function () {
+    before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;
 
         // Perform login
         login();
         // businessservicesList = createMultipleBusinessServices(1);
+        cy.fixture('app_crud_for_analysis/analysis_testdata').then(function (testdata) {
+            this.testdata = testdata
+    });
+
+    beforeEach("Persist session", function () {
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
+
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Application crud", function () {
+    after("Perform test data clean up", function () {
         const application = new Assessment(getRandomApplicationData());
+
+        // Delete the business service created before the tests
+        deleteAllBusinessServices();
+    });
+
+    it("Application created for Assessment", function () {
 
         // Create new application
         application.create();
         exists(application.name);
         cy.wait("@postApplication");
 
-        // Edit application's name
+        // Edit application name
+        var updatedApplicationName = data.getAppName();
+        application.edit({ name: updatedApplicationName });
+        exists(updatedApplicationName);
+        cy.wait("@getApplication");
+
+        // Delete application
+        application.delete();
+        cy.wait("@getApplication");
+
+        // Assert that newly created application is deleted
+        notExists(application.name);
+    });
+
+    it("Application created for source mode analysis", function () {
+        // Navigate to application inventory tab and create new application
+        //Create application
+        const application = new ApplicationInventory(
+            data.getAppName(),
+            businessservicesList[0].name,
+            data.getDescription(),
+            data.getDescription(),
+            undefined,
+            undefined,
+            sourceFields.repoType,
+            sourceFields.sourceRepo
+        );
+        application.create();
+        exists(application.name);
+        cy.wait("@getApplication");
+
+        // Edit application name
+        var updatedApplicationName = data.getAppName();
+        application.edit({ name: updatedApplicationName });
+        exists(updatedApplicationName);
+        cy.wait("@getApplication");
+
+        // Delete application
+        application.delete();
+        cy.wait("@getApplication");
+
+        // Assert that newly created application is deleted
+        notExists(application.name);
+    });
+
+    it("Application created for binary mode analysis", function () {
+        // Navigate to application inventory tab and create new application
+        //Create application
+        const application = new ApplicationInventory(
+            data.getAppName(),
+            businessservicesList[0].name,
+            data.getDescription(),
+            data.getDescription(),
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            binaryFields.group,
+            binaryFields.artifact,
+            binaryFields.version,
+            binaryFields.packaging
+        );
+        application.create();
+        exists(application.name);
+        cy.wait("@getApplication");
+
+        // Edit application name
         var updatedApplicationName = data.getAppName();
         application.edit({ name: updatedApplicationName });
         exists(updatedApplicationName);
