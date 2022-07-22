@@ -20,16 +20,18 @@ import {
     clickByText,
     hasToBeSkipped,
     preservecookies,
-    createMultipleBusinessServices,
+    createMultipleApplications,
     deleteApplicationTableRows,
     deleteAllBusinessServices,
+    getRandomApplicationData,
 } from "../../../../../utils/utils";
 import { button, createNewButton } from "../../../../types/constants";
 import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
 
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
+import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
-var businessservicesList: Array<BusinessServices> = [];
+var applicationList: Array<ApplicationInventory> = [];
 
 describe("Source Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -38,12 +40,15 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
 
         // Perform login
         login();
-        businessservicesList = createMultipleBusinessServices(1);
+        applicationList = createMultipleApplications(1);
     });
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
         preservecookies();
+        cy.fixture("source_analysis").then(function (sourceData) {
+            this.sourceData = sourceData;
+        });
 
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
@@ -58,7 +63,10 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
 
     it("Source Analysis", function () {
         // Navigate to application inventory page and click "Create New" button
-        ApplicationInventory.analysis();
-        clickByText(button, createNewButton);
+
+        const application = new Assessment(getRandomApplicationData(this.sourceData));
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
     });
 });

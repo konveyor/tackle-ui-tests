@@ -28,7 +28,6 @@ import {
 
 import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
-import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
 var stakeholdersList: Array<Stakeholders> = [];
@@ -73,7 +72,7 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
 
     it("Application assessment and review with low risk", function () {
         // Navigate to application inventory tab and create new application
-        const application = new Assessment(getRandomApplicationData(true));
+        const application = new Assessment(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
