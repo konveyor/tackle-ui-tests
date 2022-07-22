@@ -49,7 +49,6 @@ import { tagLabels } from "../integration/views/tags.view";
 import { Credentials } from "../integration/models/administrator/credentials/credentials";
 import { Assessment } from "../integration/models/developer/applicationinventory/assessment";
 import { applicationData } from "../integration/types/types";
-import { values } from "cypress/types/lodash";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
