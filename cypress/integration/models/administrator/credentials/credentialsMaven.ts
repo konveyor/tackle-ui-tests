@@ -1,5 +1,5 @@
 import { Credentials } from "./credentials";
-import { cancelForm, exists, notExists, submitForm } from "../../../../utils/utils";
+import { cancelForm, exists, notExists, submitForm, uploadfile } from "../../../../utils/utils";
 import { CredentialsMavenData } from "../../../types/types";
 import {SEC} from "../../../types/constants";
 
@@ -29,7 +29,7 @@ export class CredentialsMaven extends Credentials {
         this.fillName();
         this.fillDescription();
         this.selectType(this.type);
-        this.fillSettingsFile();
+        uploadfile(this.settingsFile);
         if (!toBeCanceled) {
             submitForm();
             this.closeSuccessNotification();

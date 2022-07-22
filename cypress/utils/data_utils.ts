@@ -16,6 +16,7 @@ limitations under the License.
 import * as faker from "faker";
 import { CredentialsData, CredentialsSourceControlData } from "../integration/types/types";
 import { CredentialType } from "../integration/types/constants";
+const filePath = "app_import/xml/";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
@@ -116,7 +117,7 @@ export function getRandomCredentialsData(type: string): CredentialsData {
             type: type,
             name: getRandomWord(6),
             description: getRandomWord(6),
-            settingFile: '<?xml version="1.0" encoding="UTF-8"?><settings xmlns="http://maven.apache.org/SETTINGS/1.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 http://maven.apache.org/xsd/settings-1.2.0.xsd"> <pluginGroups> </pluginGroups> <proxies> </proxies> <servers> <server> <id>tackle-testapp</id> <username>GITHUB_USER</username> <password>GITHUB_TOKEN</password> </server> </servers> <mirrors> <mirror> <id>maven-default-http-blocker</id> <mirrorOf>external:http:*</mirrorOf> <name>Pseudo repository to mirror external repositories initially using HTTP.</name> <url>http://0.0.0.0/</url> <blocked>true</blocked> </mirror> </mirrors> <profiles> <profile> <id>github</id> <repositories> <repository> <id>central</id> <url>https://repo1.maven.org/maven2</url> </repository> <repository> <id>tackle-testapp</id> <url>https://maven.pkg.github.com/konveyor/tackle-testapp</url> <snapshots> <enabled>true</enabled> </snapshots> </repository> </repositories> </profile> </profiles> <activeProfiles> <activeProfile>github</activeProfile> </activeProfiles> </settings>',
+            settingFile: filePath + "settings.xml"
         };
     }
 }
