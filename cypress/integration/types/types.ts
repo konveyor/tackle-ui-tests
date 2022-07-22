@@ -27,8 +27,8 @@ export type CredentialsData =
     | CredentialsMavenData;
 
 export type applicationData = {
-    name: string;
-    business: string;
+    name?: string;
+    business?: string;
     description?: string;
     tags?: Array<string>;
     comment?: string;
