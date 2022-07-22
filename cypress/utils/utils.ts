@@ -49,6 +49,7 @@ import { tagLabels } from "../integration/views/tags.view";
 import { Credentials } from "../integration/models/administrator/credentials/credentials";
 import { Assessment } from "../integration/models/developer/applicationinventory/assessment";
 import { applicationData } from "../integration/types/types";
+import { values } from "cypress/types/lodash";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
@@ -654,14 +655,37 @@ export function createMultipleTags(numberoftags: number): Array<Tag> {
     return tagList;
 }
 
-export function getRandomApplicationData(): applicationData {
+export function getRandomApplicationData(sourceMode=false, binaryMode=false): applicationData {
     var businessservicesList = createMultipleBusinessServices(1);
-    return {
+    
+    cy.fixture('source_analysis').then(sourceData => {
+        this.sourceData = sourceData;
+    });
+    cy.fixture('source_analysis.json').as('sourcedata');
+    console.log('fixture is:', this.sourceData);
+    var appdata = {
         name: data.getAppName(),
         business: businessservicesList[0].name,
         description: data.getDescription(),
         comment: data.getDescription(),
-    };
+    }
+    
+    if(sourceMode){            
+        appdata["repoType"] = this.sourceData.repoType;
+        appdata["sourceRepo"] = this.sourceData.sourceRepo;          
+    }
+    
+    console.log('fixture is:', this.sourceData.repoType);
+    console.log('fixture is:', this.sourceData.sourceRepo);
+    console.log('appdata is:', appdata);
+
+    if(binaryMode){
+        appdata["group"]= "io.konveyor.demo";
+        appdata["artifact"]= "customers-tomcat";
+        
+    }
+    
+    return appdata
 }
 
 export function createMultipleApplication(
