@@ -18,7 +18,7 @@ export type CredentialsMavenData = {
     type: string;
     name?: string;
     description?: string;
-    settingFile?: string;
+    settingFile?: any;
 };
 
 export type CredentialsData =

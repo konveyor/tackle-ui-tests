@@ -16,6 +16,7 @@ limitations under the License.
 import * as faker from "faker";
 import { CredentialsData, CredentialsSourceControlData } from "../integration/types/types";
 import { CredentialType } from "../integration/types/constants";
+const filePath = "app_import/xml/";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
@@ -116,7 +117,7 @@ export function getRandomCredentialsData(type: string): CredentialsData {
             type: type,
             name: getRandomWord(6),
             description: getRandomWord(6),
-            settingFile: getRandomWord(6),
+            settingFile: filePath + "settings.xml"
         };
     }
 }
