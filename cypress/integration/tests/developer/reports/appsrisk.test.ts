@@ -36,7 +36,7 @@ import { BusinessServices } from "../../../models/developer/controls/businessser
 
 var stakeholdersList: Array<Stakeholders> = [];
 var applicationsList: Array<ApplicationInventory> = [];
-var businessservicelist: Array<BusinessServices> = [];
+var businessServiceList: Array<BusinessServices> = [];
 
 describe("Application risks tests", { tags: "@newtest" }, () => {
     var risktype = ["low", "medium", "high"];
@@ -50,9 +50,9 @@ describe("Application risks tests", { tags: "@newtest" }, () => {
 
         // Save the session and token cookie for maintaining one login session
         preservecookies();
-        businessservicelist = createMultipleBusinessServices(1);
+        businessServiceList = createMultipleBusinessServices(3);
         stakeholdersList = createMultipleStakeholders(1);
-        applicationsList = createMultipleApplications(3, businessservicelist);
+        applicationsList = createMultipleApplications(3, businessServiceList);
         for (let i = 0; i < applicationsList.length; i++) {
             // Perform assessment of application
             applicationsList[i].perform_assessment(risktype[i], [stakeholdersList[0].name]);
