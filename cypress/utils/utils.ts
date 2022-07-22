@@ -654,14 +654,27 @@ export function createMultipleTags(numberoftags: number): Array<Tag> {
     return tagList;
 }
 
-export function getRandomApplicationData(): applicationData {
+export function getRandomApplicationData(sourceData?, binaryData?): applicationData {
     var businessservicesList = createMultipleBusinessServices(1);
-    return {
+
+    var appdata = {
         name: data.getAppName(),
         business: businessservicesList[0].name,
         description: data.getDescription(),
         comment: data.getDescription(),
     };
+
+    if (sourceData) {
+        appdata["repoType"] = sourceData.repoType;
+        appdata["sourceRepo"] = sourceData.sourceRepo;
+    }
+
+    if (binaryData) {
+        appdata["group"] = sourceData.group;
+        appdata["artifact"] = sourceData.artifact;
+    }
+
+    return appdata;
 }
 
 export function createMultipleApplication(

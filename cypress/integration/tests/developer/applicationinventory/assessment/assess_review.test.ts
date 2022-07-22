@@ -28,7 +28,6 @@ import {
 
 import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
-import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
 var stakeholdersList: Array<Stakeholders> = [];

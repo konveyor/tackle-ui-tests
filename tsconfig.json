@@ -4,7 +4,8 @@
         "lib": ["es5", "dom"],
         "types": ["cypress", "cypress-xpath", "@testing-library/cypress", "cypress-react-selector"],
         "skipLibCheck": true,
-        "allowJs": true
+        "allowJs": true,
+        "resolveJsonModule": true
     },
     "include": [
         "**/*.ts",
