@@ -116,7 +116,7 @@ export function getRandomCredentialsData(type: string): CredentialsData {
             type: type,
             name: getRandomWord(6),
             description: getRandomWord(6),
-            settingFile: getRandomWord(6),
+            settingFile: "app_import/xml/settings.xml",
         };
     }
 }
