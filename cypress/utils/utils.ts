@@ -61,6 +61,10 @@ export function inputText(fieldId: string, text: any): void {
     cy.get(fieldId).clear().type(text);
 }
 
+export function clearInput(fieldID: string): void {
+    cy.get(fieldID).clear();
+}
+
 export function clickByText(fieldId: string, buttonText: string, isForced = true): void {
     // https://github.com/cypress-io/cypress/issues/2000#issuecomment-561468114
     cy.contains(fieldId, buttonText).click({ force: isForced });
@@ -549,7 +553,7 @@ export function performRowAction(itemName: string, action: string): void {
         .parent(tdTag)
         .parent(trTag)
         .within(() => {
-            click(actionButton);
+            clickByText(button, action);
             cy.wait(500);
             clickByText(button, action);
         });

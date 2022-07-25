@@ -1,3 +1,5 @@
+import { string } from "@oozcitak/infra";
+
 export type CredentialsSourceControlData = {
     type: string;
     name?: string;
@@ -41,4 +43,13 @@ export type applicationData = {
     artifact?: string;
     version?: string;
     packaging?: string;
+};
+
+export type ProxyData = {
+    hostname: string;
+    port: string;
+    httpEnabled: boolean;
+    credentials?: CredentialsProxyData;
+    httpsEnabled: boolean;
+    excludeList?: string[];
 };
