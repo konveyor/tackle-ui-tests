@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import * as faker from "faker";
-import { CredentialsData, CredentialsSourceControlData } from "../integration/types/types";
+import { CredentialsData, ProxyData } from "../integration/types/types";
 import { CredentialType } from "../integration/types/constants";
 
 export function getFullName(): string {
@@ -119,4 +119,15 @@ export function getRandomCredentialsData(type: string): CredentialsData {
             settingFile: getRandomWord(6),
         };
     }
+}
+
+export function getRandomProxyData(credentials?: CredentialsData): ProxyData {
+    return {
+        excludeList: ["127.0.0.1", "cnn.com"],
+        credentials: credentials,
+        httpEnabled: false,
+        hostname: getRandomWord(6),
+        port: getRandomNumber().toString(),
+        httpsEnabled: true,
+    };
 }
