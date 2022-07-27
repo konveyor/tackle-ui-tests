@@ -25,6 +25,7 @@ import {
     deleteAllTagsAndTagTypes,
     selectUserPerspective,
     goToPage,
+    validatePagination,
 } from "../../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../../views/menu.view";
 import { controls, SEC, tags } from "../../../../../types/constants";
@@ -93,32 +94,8 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
         // select 10 items per page
         selectItemsPerPage(10);
 
-        // Verify next buttons are enabled as there are more than 11 rows present
-        cy.get(nextPageButton).each(($nextBtn) => {
-            cy.wrap($nextBtn).should("not.be.disabled");
-        });
-
-        // Verify that previous buttons are disabled being on the first page
-        cy.get(prevPageButton).each(($previousBtn) => {
-            cy.wrap($previousBtn).should("be.disabled");
-        });
-
-        // Verify that navigation button to last page is enabled
-        cy.get(lastPageButton).should("not.be.disabled");
-
-        // Verify that navigation button to first page is disabled being on the first page
-        cy.get(firstPageButton).should("be.disabled");
-
-        // Navigate to next page
-        cy.get(nextPageButton).eq(0).click();
-
-        // Verify that previous buttons are enabled after moving to next page
-        cy.get(prevPageButton).each(($previousBtn) => {
-            cy.wrap($previousBtn).should("not.be.disabled");
-        });
-
-        // Verify that navigation button to first page is enabled after moving to next page
-        cy.get(firstPageButton).should("not.be.disabled");
+        // Run validation
+        validatePagination();
     });
 
     it("Items per page validations", function () {
