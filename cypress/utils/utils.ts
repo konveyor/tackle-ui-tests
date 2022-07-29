@@ -44,7 +44,16 @@ import {
     SEC,
 } from "../integration/types/constants";
 import { actionButton, date } from "../integration/views/applicationinventory.view";
-import { confirmButton, divHeader, modal, pageNumInput } from "../integration/views/common.view";
+import {
+    confirmButton,
+    divHeader,
+    firstPageButton,
+    lastPageButton,
+    modal,
+    nextPageButton,
+    pageNumInput,
+    prevPageButton,
+} from "../integration/views/common.view";
 import { tagLabels } from "../integration/views/tags.view";
 import { Credentials } from "../integration/models/administrator/credentials/credentials";
 import { Assessment } from "../integration/models/developer/applicationinventory/assessment";
@@ -112,15 +121,14 @@ export function logout(): void {
 }
 
 export function selectItemsPerPage(items: number): void {
-    cy.wait(2000);
-    cy.get(commonView.itemsPerPageMenu)
+    cy.get(commonView.itemsPerPageMenu, { timeout: 15 * SEC })
         .find(commonView.itemsPerPageToggleButton)
         .then(($toggleBtn) => {
             if (!$toggleBtn.eq(0).is(":disabled")) {
                 $toggleBtn.eq(0).trigger("click");
                 cy.get(commonView.itemsPerPageMenuOptions);
                 cy.get(`li > button[data-action="per-page-${items}"]`).click({ force: true });
-                cy.wait(2 * SEC);
+                cy.wait(0.5 * SEC);
             }
         });
 }
@@ -932,8 +940,8 @@ export function deleteAllTagsAndTagTypes(): void {
         });
 }
 
-export function deleteAllCredentials(): void {
-    let list = Credentials.getList();
+export async function deleteAllCredentials() {
+    let list = await Credentials.getList();
     list.forEach((currentCred) => {
         currentCred.delete();
     });
@@ -1006,4 +1014,36 @@ export function applyAction(itemName, action: string): void {
 
 export function confirm(): void {
     click(confirmButton);
+}
+
+export function validatePagination(): void {
+    // Verify next buttons are enabled as there are more than 11 rows present
+    cy.get(nextPageButton).each(($nextBtn) => {
+        cy.wrap($nextBtn).should("not.be.disabled");
+    });
+
+    // Verify that previous buttons are disabled being on the first page
+    cy.get(prevPageButton).each(($previousBtn) => {
+        cy.wrap($previousBtn).should("be.disabled");
+    });
+
+    // Verify that navigation button to last page is enabled
+    cy.get(lastPageButton).should("not.be.disabled");
+
+    // Verify that navigation button to first page is disabled being on the first page
+    cy.get(firstPageButton).should("be.disabled");
+
+    // Navigate to next page
+    cy.get(nextPageButton).eq(0).click();
+
+    // Verify that previous buttons are enabled after moving to next page
+    cy.get(prevPageButton).each(($previousBtn) => {
+        cy.wrap($previousBtn).should("not.be.disabled");
+    });
+
+    // Verify that navigation button to first page is enabled after moving to next page
+    cy.get(firstPageButton).should("not.be.disabled");
+
+    // Moving back to the first page
+    cy.get(firstPageButton).eq(0).click();
 }

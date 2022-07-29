@@ -62,14 +62,20 @@ export class Credentials {
     }
 
     static getList() {
-        this.openList();
-        let list = [];
-        cy.get(commonView.appTable, { timeout: 2 * SEC })
-            .find(trTag)
-            .each(($row) => {
-                list.push(new Credentials($row.find(credLabels.name).text()));
-            });
-        return list;
+        return new Promise<Credentials[]>((resolve) => {
+            this.openList();
+            let list = [];
+            cy.get(commonView.appTable, { timeout: 15 * SEC })
+                .find(trTag)
+                .each(($row) => {
+                    let name = $row.find(credLabels.name).text();
+                    list.push(new Credentials(name));
+                    cy.log(name);
+                })
+                .then(() => {
+                    resolve(list);
+                });
+        });
     }
 
     create(): void {
