@@ -5,7 +5,9 @@
     "env": {
         "user": "admin",
         "pass": "Dog8code",
-        "tackleUrl": ""
+        "git_user": "",
+        "git_password": "",
+        "tackleUrl": "https://tackle-konveyor-tackle.apps.mgn02.cnv-qe.rhcloud.com"
     },
     "retries": {
         "runMode": 2,

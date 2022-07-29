@@ -14,7 +14,7 @@ describe("Validation of Source Control Credentials", () => {
 
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
+        if (hasToBeSkipped("@tier1")) return;
 
         // Perform login
         login();

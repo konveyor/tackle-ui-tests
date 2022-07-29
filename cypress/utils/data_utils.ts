@@ -103,13 +103,18 @@ export function getDefaultTagTypes(): string[] {
 }
 
 export function getRandomCredentialsData(type: string): CredentialsData {
+    var git_password = Cypress.env('git_password');
+    var git_user = Cypress.env('git_user');
+    if (git_user == "") git_user = getRandomWord(6);
+    if (git_password == "") git_password = getRandomWord(6);
+
     if (type === CredentialType.proxy || type === CredentialType.sourceControl) {
         return {
             type: type,
             name: getRandomWord(6),
             description: getDescription(),
-            username: getRandomWord(6),
-            password: getRandomWord(8),
+            username: git_user,
+            password: git_password,
         };
     } else {
         return {
