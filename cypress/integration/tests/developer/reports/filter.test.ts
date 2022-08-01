@@ -29,9 +29,10 @@ import {
     createMultipleApplications,
     deleteAllStakeholders,
     deleteAllBusinessServices,
-    deleteAllTagTypes,
     deleteApplicationTableRows,
     selectUserPerspective,
+    click,
+    deleteAllTagsAndTagTypes,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import {
@@ -42,12 +43,14 @@ import {
     tag,
     button,
     clearAllFilters,
-    application,
     category,
     question,
     answer,
 } from "../../../types/constants";
-import { adoptionCandidateDistributionTable } from "../../../views/reports.view";
+import {
+    adoptionCandidateDistributionTable,
+    closeRowIdentifiedRisk,
+} from "../../../views/reports.view";
 import { ApplicationInventory } from "../../../models/developer/applicationinventory/applicationinventory";
 import * as data from "../../../../utils/data_utils";
 import { BusinessServices } from "../../../models/developer/controls/businessservices";
@@ -98,11 +101,11 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;
 
-        // Delete the stakeholder
+        // Delete the applications, stakeholders, business services and tag types
+        deleteApplicationTableRows();
         deleteAllStakeholders();
         deleteAllBusinessServices();
-        deleteAllTagTypes();
-        deleteApplicationTableRows();
+        deleteAllTagsAndTagTypes();
     });
 
     it("Name field validations", function () {
@@ -143,6 +146,9 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         // Clear all filters
         clickByText(button, clearAllFilters);
 
+        //close Row Details of Identified risks
+        click(closeRowIdentifiedRisk);
+
         // Enter a invalid substring and apply it as search filter
         applySearchFilter(name, invalidSearchInput);
 
@@ -156,20 +162,10 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         // Check for current landscape donut charts
         cy.get("div > h2").eq(0).contains("No data available");
 
-        // Check for Adoption candidate distribution table
-        cy.get("div > h2").eq(1).contains("No data available");
-
-        // Check for Suggested adoption plan graphs
-        cy.get("div > h2").eq(2).contains("No data available");
-
-        // Check for Identified risks table
-        cy.get("div > h2").eq(3).contains("No results found");
-
         // Clear all filters
         clickByText(button, clearAllFilters);
     });
-
-    it("Description field validations", function () {
+    it.skip("Description field validations", function () {
         // Navigate to reports
         selectUserPerspective("Developer");
         clickByText(navMenu, reports);
@@ -232,7 +228,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         clickByText(button, clearAllFilters);
     });
 
-    it("Business service field validations", function () {
+    it.skip("Business service field validations", function () {
         // Navigate to reports
         selectUserPerspective("Developer");
         clickByText(navMenu, reports);
@@ -270,7 +266,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         clickByText(button, clearAllFilters);
     });
 
-    it("Tag field validations", function () {
+    it.skip("Tag field validations", function () {
         // Navigate to reports
         selectUserPerspective("Developer");
         clickByText(navMenu, reports);
@@ -308,7 +304,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         clickByText(button, clearAllFilters);
     });
 
-    it("Identified risk - Application field validations", function () {
+    it("Identified risk - Application name field validations", function () {
         // Navigate to reports
         selectUserPerspective("Developer");
         clickByText(navMenu, reports);
@@ -328,7 +324,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
         selectItemsPerPageIdentifiedRisks(100);
 
-        applySearchFilter(application, validSearchInput, true);
+        applySearchFilter(name, validSearchInput, true, 1);
         cy.wait(3000);
 
         // Get list of filtered applications rows and varify
@@ -340,7 +336,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         // Clear all filters
         clickByText(button, clearAllFilters);
 
-        applySearchFilter(application, applicationsList[0].name, true);
+        applySearchFilter(name, applicationsList[0].name, true);
         cy.wait(3000);
 
         // Get list of filtered applications rows and varify
@@ -353,10 +349,10 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         clickByText(button, clearAllFilters);
 
         // Enter a invalid substring and apply it as search filter
-        applySearchFilter(application, invalidSearchInput, true);
+        applySearchFilter(name, invalidSearchInput, true, 1);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No data available");
 
         // Clear all filters
         clickByText(button, clearAllFilters);
@@ -378,7 +374,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         var categoryString = "Application details";
         var validSearchInput = categoryString.substring(0, 16);
 
-        applySearchFilter(category, validSearchInput, true);
+        applySearchFilter(category, validSearchInput, true, 1);
         cy.wait(3000);
 
         // Get list of filtered category rows and varify
@@ -390,7 +386,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         // Clear all filters
         clickByText(button, clearAllFilters);
 
-        applySearchFilter(category, categoryString, true);
+        applySearchFilter(category, categoryString, true, 1);
         cy.wait(3000);
 
         // Get list of filtered category rows and varify
@@ -403,10 +399,10 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         clickByText(button, clearAllFilters);
 
         // Enter a invalid substring and apply it as search filter
-        applySearchFilter(category, invalidSearchInput, true);
+        applySearchFilter(category, invalidSearchInput, true, 1);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No data available");
 
         // Clear all filters
         clickByText(button, clearAllFilters);
@@ -427,7 +423,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         // Get a question from assessment question's list and apply it as search filter
         var questionString = "How is the application tested?";
         var validSearchInput = questionString.substring(0, 27);
-        applySearchFilter(question, validSearchInput, true);
+        applySearchFilter(question, validSearchInput, true, 1);
         cy.wait(3000);
 
         // Get list of filtered questions rows and varify
@@ -439,7 +435,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         // Clear all filters
         clickByText(button, clearAllFilters);
 
-        applySearchFilter(question, questionString, true);
+        applySearchFilter(question, questionString, true, 1);
         cy.wait(3000);
 
         // Get list of filtered questions rows and varify
@@ -452,10 +448,10 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         clickByText(button, clearAllFilters);
 
         // Enter a invalid substring and apply it as search filter
-        applySearchFilter(question, invalidSearchInput, true);
+        applySearchFilter(question, invalidSearchInput, true, 1);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No data available");
 
         // Clear all filters
         clickByText(button, clearAllFilters);
@@ -476,7 +472,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         // select an answer input from existing answers and apply it as search filter
         var answerString = "Not tracked";
         var validSearchInput = answerString.substring(0, 7);
-        applySearchFilter(answer, validSearchInput, true);
+        applySearchFilter(answer, validSearchInput, true, 1);
         cy.wait(3000);
 
         // Get list of filtered answers rows and varify
@@ -488,7 +484,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         // Clear all filters
         clickByText(button, clearAllFilters);
 
-        applySearchFilter(answer, answerString, true);
+        applySearchFilter(answer, answerString, true, 1);
         cy.wait(3000);
 
         // Get list of filtered answers rows and varify
@@ -501,10 +497,10 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         clickByText(button, clearAllFilters);
 
         // Enter a invalid substring and apply it as search filter
-        applySearchFilter(answer, invalidSearchInput, true);
+        applySearchFilter(answer, invalidSearchInput, true, 1);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No data available");
 
         // Clear all filters
         clickByText(button, clearAllFilters);

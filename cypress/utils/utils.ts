@@ -190,9 +190,9 @@ export function notExists(value: string): void {
         });
 }
 
-export function selectFilter(filterName: string, identifiedRisk?: boolean): void {
-    cy.get("div.pf-c-toolbar__content-section").within(() => {
-        clickWithin("div.pf-c-dropdown", button);
+export function selectFilter(filterName: string, identifiedRisk?: boolean, value = 0): void {
+    cy.get("div.pf-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show").within(() => {
+        cy.get("div.pf-c-dropdown").eq(value).click();
         cy.get("ul.pf-c-dropdown__menu").within(() => {
             clickByText("a", filterName);
         });
@@ -225,9 +225,10 @@ export function applySelectFilter(filterId, filterName, filterText, isValid = tr
 export function applySearchFilter(
     filterName: string,
     searchText: any,
-    identifiedRisk?: boolean
+    identifiedRisk?: boolean,
+    value?: number
 ): void {
-    selectFilter(filterName, identifiedRisk);
+    selectFilter(filterName, identifiedRisk, value);
     if (filterName == businessService || filterName == tag) {
         cy.get("div.pf-c-input-group").find("div.pf-c-select > div > button").click();
         if (Array.isArray(searchText)) {
