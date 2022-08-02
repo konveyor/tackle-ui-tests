@@ -24,13 +24,11 @@ import {
     applySearchFilter,
     selectItemsPerPage,
     hasToBeSkipped,
-    deleteAllStakeholders,
-    deleteAllJobfunctions,
-    deleteAllStakeholderGroups,
-    createMultipleJobfunctions,
+    createMultipleJobFunctions,
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
     selectUserPerspective,
+    deleteByList,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import {
@@ -51,12 +49,11 @@ import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions
 import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
 
 import * as commonView from "../../../../views/common.view";
-import * as data from "../../../../../utils/data_utils";
 
-var stakeholdersList: Array<Stakeholders> = [];
-var jobfunctionsList: Array<Jobfunctions> = [];
-var stakeholdergroupsList: Array<Stakeholdergroups> = [];
-var invalidSearchInput = "qqqqq";
+let stakeholdersList: Array<Stakeholders> = [];
+let jobFunctionsList: Array<Jobfunctions> = [];
+let stakeholderGroupsList: Array<Stakeholdergroups> = [];
+let invalidSearchInput = "SomeInvalidInput";
 
 describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
@@ -67,9 +64,9 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
         login();
 
         // Create multiple job functions, stakeholder groups and stakeholders
-        jobfunctionsList = createMultipleJobfunctions(2);
-        stakeholdergroupsList = createMultipleStakeholderGroups(2);
-        stakeholdersList = createMultipleStakeholders(2, jobfunctionsList, stakeholdergroupsList);
+        jobFunctionsList = createMultipleJobFunctions(2);
+        stakeholderGroupsList = createMultipleStakeholderGroups(2);
+        stakeholdersList = createMultipleStakeholders(2, jobFunctionsList, stakeholderGroupsList);
     });
 
     beforeEach("Persist session", function () {
@@ -77,7 +74,6 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
         preservecookies();
 
         // Interceptors
-        cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
     });
 
     after("Perform test data clean up", function () {
@@ -85,9 +81,9 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
         if (hasToBeSkipped("@tier2")) return;
 
         // Delete the job functions, stakeholder groups and stakeholders created before the tests
-        deleteAllJobfunctions();
-        deleteAllStakeholders();
-        deleteAllStakeholderGroups();
+        deleteByList(jobFunctionsList);
+        deleteByList(stakeholdersList);
+        deleteByList(stakeholderGroupsList);
     });
 
     it("Email filter validations", function () {
@@ -96,10 +92,9 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
 
         // Enter an existing email substring and apply it as search filter
-        var validSearchInput = stakeholdersList[0].email.substring(0, 5);
+        let validSearchInput = stakeholdersList[0].email.substring(0, 5);
         applySearchFilter(email, validSearchInput);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
@@ -110,7 +105,6 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.wait("@getStakeholders");
 
         // Enter a non-existing email substring and apply it as search filter
         applySearchFilter(email, invalidSearchInput);
@@ -128,10 +122,9 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
 
         // Enter an existing display name substring and apply it as search filter
-        var validSearchInput = stakeholdersList[0].name.substring(0, 3);
+        let validSearchInput = stakeholdersList[0].name.substring(0, 3);
         applySearchFilter(name, validSearchInput);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
@@ -142,7 +135,6 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.get("@getStakeholders");
 
         // Enter a non-existing display name substring and apply it as search filter
         applySearchFilter(name, invalidSearchInput);
@@ -159,10 +151,9 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
 
         // Enter an existing job function substring and apply it as search filter
-        var validSearchInput = stakeholdersList[0].jobfunction.substring(0, 3);
+        let validSearchInput = stakeholdersList[0].jobfunction.substring(0, 3);
         applySearchFilter(jobFunction, validSearchInput);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
@@ -179,7 +170,6 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.get("@getStakeholders");
 
         // Enter a non-existing job function substring and apply it as search filter
         applySearchFilter(jobFunction, invalidSearchInput);
@@ -196,10 +186,9 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
 
         // Enter an existing group substring and apply it as search filter
-        var validSearchInput = stakeholdersList[0].groups[0].substring(0, 3);
+        let validSearchInput = stakeholdersList[0].groups[0].substring(0, 3);
         applySearchFilter(group, validSearchInput);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
@@ -219,7 +208,6 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.get("@getStakeholders");
 
         // Enter a non-existing group substring and apply it as search filter
         applySearchFilter(group, invalidSearchInput);

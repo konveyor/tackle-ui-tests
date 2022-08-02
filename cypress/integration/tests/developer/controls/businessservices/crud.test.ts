@@ -61,7 +61,7 @@ describe("Business service CRUD operations", { tags: "@tier1" }, () => {
         exists(businessService.name);
 
         // Edit Business service's name
-        var updatedBusinessServiceName = data.getCompanyName();
+        let updatedBusinessServiceName = data.getCompanyName();
         businessService.edit({ name: updatedBusinessServiceName });
         cy.wait("@getBusinessService");
         exists(updatedBusinessServiceName);
@@ -93,7 +93,7 @@ describe("Business service CRUD operations", { tags: "@tier1" }, () => {
         exists(businessService.name);
 
         // Edit Business service's name
-        var updatedBusinessServiceName = data.getCompanyName();
+        let updatedBusinessServiceName = data.getCompanyName();
         businessService.edit({ name: updatedBusinessServiceName });
         cy.wait("@getBusinessService");
         exists(updatedBusinessServiceName);

@@ -25,6 +25,7 @@ import {
     hasToBeSkipped,
     preservecookies,
     selectUserPerspective,
+    deleteByList,
 } from "../../../../../utils/utils";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
@@ -61,7 +62,7 @@ describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
         exists(stakeholder.email);
 
         // Edit the current stakeholder's name
-        var updatedStakeholderName = data.getFullName();
+        let updatedStakeholderName = data.getFullName();
         stakeholder.edit({ name: updatedStakeholderName });
         cy.wait("@getStakeholders");
 
@@ -79,9 +80,9 @@ describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
 
     it("Stakeholder CRUD cancel", function () {
         selectUserPerspective("Developer");
-        var initialStakeholderName = data.getFullName();
+        let initialStakeholderName = data.getFullName();
         const stakeholder = new Stakeholders(data.getEmail(), initialStakeholderName);
-        // Cancel the Create new stakeholder task
+        // Cancel the creation of new stakeholder task
         stakeholder.create(true);
         notExists(stakeholder.email);
 
@@ -111,31 +112,31 @@ describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
 
     it("Stakeholder CRUD operations with members (jobfunction and groups)", function () {
         selectUserPerspective("Developer");
-        var jobfunctions: Array<Jobfunctions> = [];
-        var stakeholdergroups: Array<Stakeholdergroups> = [];
-        var stakeholdergroupNames: Array<string> = [];
+        let jobFunctionsList: Array<Jobfunctions> = [];
+        let stakeholderGroupList: Array<Stakeholdergroups> = [];
+        let stakeHolderGroupNameList: Array<string> = [];
         for (let i = 0; i < 2; i++) {
             // Create new job functions
             const jobfunction = new Jobfunctions(data.getJobTitle());
             jobfunction.create();
-            jobfunctions.push(jobfunction);
+            jobFunctionsList.push(jobfunction);
 
             // Create new stakeholder groups
-            const stakeholdergroup = new Stakeholdergroups(
+            const stakeholderGroup = new Stakeholdergroups(
                 data.getCompanyName(),
                 data.getDescription()
             );
-            stakeholdergroup.create();
-            stakeholdergroups.push(stakeholdergroup);
-            stakeholdergroupNames.push(stakeholdergroup.name);
+            stakeholderGroup.create();
+            stakeholderGroupList.push(stakeholderGroup);
+            stakeHolderGroupNameList.push(stakeholderGroup.name);
         }
 
         // Create new object for stakeholder
         const stakeholder = new Stakeholders(
             data.getEmail(),
             data.getFullName(),
-            jobfunctions[0].name,
-            [stakeholdergroupNames[0]]
+            jobFunctionsList[0].name,
+            [stakeHolderGroupNameList[0]]
         );
 
         // Create new stakeholder with one of the job function and group created above
@@ -146,8 +147,8 @@ describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
         // Edit the current stakeholder's name, jobfunction and stakeholder group (by removing first one and adding second)
         stakeholder.edit({
             name: data.getFullName(),
-            jobfunction: jobfunctions[1].name,
-            groups: stakeholdergroupNames,
+            jobfunction: jobFunctionsList[1].name,
+            groups: stakeHolderGroupNameList,
         });
         cy.wait("@postStakeholder");
         cy.wait("@getStakeholders");
@@ -155,7 +156,7 @@ describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
 
         // Assert that edit operation has been done by checking number of groups and added group exists
         expandRowDetails(stakeholder.email);
-        existsWithinRow(stakeholder.email, "div > dd", stakeholdergroupNames[1]);
+        existsWithinRow(stakeholder.email, "div > dd", stakeHolderGroupNameList[1]);
         closeRowDetails(stakeholder.email);
 
         // Assert that previous stakeholder group was removed and only one member is present
@@ -170,11 +171,7 @@ describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
         notExists(stakeholder.email);
 
         // Perform clean up by deleting jobfunctions and groups created at the start of test
-        jobfunctions.forEach(function (jobfunction) {
-            jobfunction.delete();
-        });
-        stakeholdergroups.forEach(function (stakeholdergroup) {
-            stakeholdergroup.delete();
-        });
+        deleteByList(jobFunctionsList);
+        deleteByList(stakeholderGroupList);
     });
 });

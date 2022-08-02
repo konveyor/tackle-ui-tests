@@ -25,15 +25,12 @@ import {
     getTableColumnData,
     preservecookies,
     hasToBeSkipped,
-    createMultipleJobfunctions,
+    createMultipleJobFunctions,
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
-    deleteAllJobfunctions,
-    deleteAllStakeholders,
-    deleteAllStakeholderGroups,
     selectUserPerspective,
+    deleteByList,
 } from "../../../../../utils/utils";
-const { _ } = Cypress;
 import { navMenu, navTab } from "../../../../views/menu.view";
 import {
     controls,
@@ -48,9 +45,9 @@ import { Stakeholders } from "../../../../models/developer/controls/stakeholders
 import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
 import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
 
-var stakeholdersList: Array<Stakeholders> = [];
-var jobfunctionsList: Array<Jobfunctions> = [];
-var stakeholdergroupsList: Array<Stakeholdergroups> = [];
+let stakeholdersList: Array<Stakeholders> = [];
+let jobFunctionsList: Array<Jobfunctions> = [];
+let stakeholderGroupList: Array<Stakeholdergroups> = [];
 
 describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
@@ -61,9 +58,9 @@ describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
         login();
 
         // Create multiple job functions, stakeholder groups and stakeholders
-        jobfunctionsList = createMultipleJobfunctions(2);
-        stakeholdergroupsList = createMultipleStakeholderGroups(2);
-        stakeholdersList = createMultipleStakeholders(2, jobfunctionsList, stakeholdergroupsList);
+        jobFunctionsList = createMultipleJobFunctions(2);
+        stakeholderGroupList = createMultipleStakeholderGroups(2);
+        stakeholdersList = createMultipleStakeholders(2, jobFunctionsList, stakeholderGroupList);
     });
 
     beforeEach("Persist session", function () {
@@ -79,9 +76,9 @@ describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
         if (hasToBeSkipped("@tier2")) return;
 
         // Delete the job functions, stakeholder groups and stakeholders created before the tests
-        deleteAllJobfunctions();
-        deleteAllStakeholders();
-        deleteAllStakeholderGroups();
+        deleteByList(jobFunctionsList);
+        deleteByList(stakeholdersList);
+        deleteByList(stakeholderGroupList);
     });
 
     it("Email sort validations", function () {

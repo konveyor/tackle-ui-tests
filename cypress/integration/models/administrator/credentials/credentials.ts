@@ -58,6 +58,7 @@ export class Credentials {
                 clickByText(navLink, credentials);
             }
         });
+        cy.contains("h1", "Credentials", { timeout: 120 * SEC });
         selectItemsPerPage(itemsPerPage);
     }
 

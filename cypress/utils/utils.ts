@@ -76,7 +76,7 @@ export function clearInput(fieldID: string): void {
 
 export function clickByText(fieldId: string, buttonText: string, isForced = true): void {
     // https://github.com/cypress-io/cypress/issues/2000#issuecomment-561468114
-    cy.contains(fieldId, buttonText).click({ force: isForced });
+    cy.contains(fieldId, buttonText, { timeout: 30 * SEC }).click({ force: isForced });
 }
 
 export function click(fieldId: string, isForced = true): void {
@@ -93,16 +93,16 @@ export function cancelForm(): void {
 }
 
 export function login(): void {
-    cy.visit(tackleUiUrl);
+    cy.visit(tackleUiUrl, { timeout: 30 * SEC });
 
     inputText(loginView.userNameInput, userName);
     inputText(loginView.userPasswordInput, userPassword);
     click(loginView.loginButton);
-    cy.wait(5000);
+    // cy.wait(5000);
 
     // Change password screen which appears only for first login
     // This is used in PR tester and Jenkins jobs.
-    cy.get("h1").then(($a) => {
+    cy.get("h1", { timeout: 30 * SEC }).then(($a) => {
         if ($a.text().toString().trim() == "Update password") {
             inputText(loginView.changePasswordInput, "Dog8code");
             inputText(loginView.confirmPasswordInput, "Dog8code");
@@ -558,8 +558,8 @@ export function performRowAction(itemName: string, action: string): void {
 
     cy.get(tdTag)
         .contains(itemName, { timeout: 120 * SEC })
-        .parent(tdTag)
-        .parent(trTag)
+        // .closest(tdTag)
+        .closest(trTag)
         .within(() => {
             clickByText(button, action);
             cy.wait(500);
@@ -579,21 +579,21 @@ export function performRowActionByIcon(itemName: string, action: string): void {
 }
 
 export function createMultipleStakeholders(
-    numberofstakeholder: number,
-    jobfunctionList?: Array<Jobfunctions>,
-    stakeholdergroupsList?: Array<Stakeholdergroups>
+    numberOfStakeholders: number,
+    jobFunctionList?: Array<Jobfunctions>,
+    stakeholderGroupsList?: Array<Stakeholdergroups>
 ): Array<Stakeholders> {
-    var stakeholdersList: Array<Stakeholders> = [];
-    for (let i = 0; i < numberofstakeholder; i++) {
-        let jobfunction: string;
+    let stakeholdersList: Array<Stakeholders> = [];
+    for (let i = 0; i < numberOfStakeholders; i++) {
+        let jobFunction: string;
         let stakeholderGroupNames: Array<string> = [];
-        if (jobfunctionList) jobfunction = jobfunctionList[i].name;
-        if (stakeholdergroupsList) stakeholderGroupNames.push(stakeholdergroupsList[i].name);
+        if (jobFunctionList) jobFunction = jobFunctionList[i].name;
+        if (stakeholderGroupsList) stakeholderGroupNames.push(stakeholderGroupsList[i].name);
         // Create new stakeholder
         const stakeholder = new Stakeholders(
             data.getEmail(),
             data.getFullName(),
-            jobfunction,
+            jobFunction,
             stakeholderGroupNames
         );
         stakeholder.create();
@@ -601,14 +601,14 @@ export function createMultipleStakeholders(
     }
     return stakeholdersList;
 }
-export function createMultipleJobfunctions(num): Array<Jobfunctions> {
-    var jobfunctionsList: Array<Jobfunctions> = [];
+export function createMultipleJobFunctions(num): Array<Jobfunctions> {
+    let jobFunctionsList: Array<Jobfunctions> = [];
     for (let i = 0; i < num; i++) {
-        const jobfunction = new Jobfunctions(data.getFullName());
-        jobfunction.create();
-        jobfunctionsList.push(jobfunction);
+        const jobFunction = new Jobfunctions(data.getFullName());
+        jobFunction.create();
+        jobFunctionsList.push(jobFunction);
     }
-    return jobfunctionsList;
+    return jobFunctionsList;
 }
 
 export function createMultipleStakeholderGroups(
@@ -751,7 +751,7 @@ export function createApplicationObjects(numberOfObjects: number): Array<Applica
 }
 
 export function deleteAllJobfunctions(cancel = false): void {
-    Jobfunctions.clickJobfunctions();
+    Jobfunctions.openList();
     selectItemsPerPage(100);
     cy.wait(2000);
     cy.get(commonView.appTable)
@@ -778,6 +778,14 @@ export function deleteAllJobfunctions(cancel = false): void {
         });
 }
 
+type Deletable = { delete: () => void };
+
+export function deleteByList<T extends Deletable>(array: T[]): void {
+    array.forEach((element) => {
+        element.delete();
+    });
+}
+
 export function deleteAllStakeholders(cancel = false): void {
     Stakeholders.clickStakeholders();
     selectItemsPerPage(100);
@@ -790,7 +798,7 @@ export function deleteAllStakeholders(cancel = false): void {
                     .find(trTag)
                     .not(".pf-c-table__expandable-row")
                     .each(($tableRow) => {
-                        var name = $tableRow.find("td[data-label=Email]").text();
+                        let name = $tableRow.find("td[data-label=Email]").text();
                         cy.get(tdTag)
                             .contains(name)
                             .parent(trTag)
@@ -961,7 +969,7 @@ export function goToPage(page: number): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    cy.get(commonView.optionMenu)
+    cy.get(commonView.optionMenu, { timeout: 30 * SEC })
         .eq(0)
         .then(($a) => {
             $a.click();
@@ -980,7 +988,7 @@ export function selectWithinModal(selector: string): void {
 }
 
 export function clickWithin(parent, selector: string): void {
-    cy.get(parent).within(() => {
+    cy.get(parent, { timeout: 30 * SEC }).within(() => {
         click(selector);
     });
 }

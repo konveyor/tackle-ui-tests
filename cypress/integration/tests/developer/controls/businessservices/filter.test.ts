@@ -25,9 +25,8 @@ import {
     hasToBeSkipped,
     createMultipleStakeholders,
     createMultipleBusinessServices,
-    deleteAllBusinessServices,
-    deleteAllStakeholders,
     selectUserPerspective,
+    deleteByList,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import {
@@ -44,9 +43,9 @@ import { BusinessServices } from "../../../../models/developer/controls/business
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 import * as data from "../../../../../utils/data_utils";
 
-var businessservicesList: Array<BusinessServices> = [];
-var stakeholdersList: Array<Stakeholders> = [];
-var invalidSearchInput = String(data.getRandomNumber());
+let businessServicesList: Array<BusinessServices> = [];
+let stakeholdersList: Array<Stakeholders> = [];
+let invalidSearchInput = String(data.getRandomNumber());
 
 describe("Business services filter validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
@@ -60,7 +59,7 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
         stakeholdersList = createMultipleStakeholders(3);
 
         // Create multiple business services
-        businessservicesList = createMultipleBusinessServices(2, stakeholdersList);
+        businessServicesList = createMultipleBusinessServices(2, stakeholdersList);
     });
 
     after("Perform test data clean up", function () {
@@ -68,8 +67,8 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
         if (hasToBeSkipped("@tier2")) return;
 
         // Delete the business services
-        deleteAllBusinessServices();
-        deleteAllStakeholders();
+        deleteByList(businessServicesList);
+        deleteByList(stakeholdersList);
     });
 
     beforeEach("Persist session", function () {
@@ -83,19 +82,19 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
         clickByText(navTab, businessServices);
 
         // Enter an existing display name substring and assert
-        var validSearchInput = businessservicesList[0].name.substring(0, 3);
+        let validSearchInput = businessServicesList[0].name.substring(0, 3);
         applySearchFilter(name, validSearchInput);
-        exists(businessservicesList[0].name);
+        exists(businessServicesList[0].name);
 
-        if (businessservicesList[1].name.indexOf(validSearchInput) >= 0) {
-            exists(businessservicesList[1].name);
+        if (businessServicesList[1].name.indexOf(validSearchInput) >= 0) {
+            exists(businessServicesList[1].name);
         }
         clickByText(button, clearAllFilters);
 
         // Enter an existing exact name and assert
-        applySearchFilter(name, businessservicesList[1].name);
-        exists(businessservicesList[1].name);
-        notExists(businessservicesList[0].name);
+        applySearchFilter(name, businessServicesList[1].name);
+        exists(businessServicesList[1].name);
+        notExists(businessServicesList[0].name);
 
         clickByText(button, clearAllFilters);
 
@@ -114,19 +113,19 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
         clickByText(navTab, businessServices);
 
         // Enter an existing description substring and assert
-        var validSearchInput = businessservicesList[0].description.substring(0, 8);
+        let validSearchInput = businessServicesList[0].description.substring(0, 8);
         applySearchFilter(description, validSearchInput);
-        exists(businessservicesList[0].description);
+        exists(businessServicesList[0].description);
 
-        if (businessservicesList[1].description.indexOf(validSearchInput) >= 0) {
-            exists(businessservicesList[1].description);
+        if (businessServicesList[1].description.indexOf(validSearchInput) >= 0) {
+            exists(businessServicesList[1].description);
         }
         clickByText(button, clearAllFilters);
 
         // Enter an existing exact description and assert
-        applySearchFilter(description, businessservicesList[1].description);
-        exists(businessservicesList[1].description);
-        notExists(businessservicesList[0].description);
+        applySearchFilter(description, businessServicesList[1].description);
+        exists(businessServicesList[1].description);
+        notExists(businessServicesList[0].description);
 
         clickByText(button, clearAllFilters);
 
@@ -145,19 +144,19 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
         clickByText(navTab, businessServices);
 
         // Enter an existing owner substring and assert
-        var validSearchInput = businessservicesList[0].owner.substring(0, 3);
+        let validSearchInput = businessServicesList[0].owner.substring(0, 3);
         applySearchFilter(createdBy, validSearchInput);
-        exists(businessservicesList[0].owner);
+        exists(businessServicesList[0].owner);
 
-        if (businessservicesList[1].owner.indexOf(validSearchInput) >= 0) {
-            exists(businessservicesList[1].owner);
+        if (businessServicesList[1].owner.indexOf(validSearchInput) >= 0) {
+            exists(businessServicesList[1].owner);
         }
         clickByText(button, clearAllFilters);
 
         // Enter an existing exact owner and assert
-        applySearchFilter(createdBy, businessservicesList[1].owner);
-        exists(businessservicesList[1].owner);
-        notExists(businessservicesList[0].owner);
+        applySearchFilter(createdBy, businessServicesList[1].owner);
+        exists(businessServicesList[1].owner);
+        notExists(businessServicesList[0].owner);
 
         clickByText(button, clearAllFilters);
 
