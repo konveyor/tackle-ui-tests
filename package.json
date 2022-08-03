@@ -6,7 +6,6 @@
     "repository": "https://github.com/konveyor/tackle-ui-tests.git",
     "dependencies": {
         "@testing-library/cypress": "^7.0.5",
-        "cypress": "^7.1.0",
         "cypress-file-upload": "^5.0.8",
         "cypress-grep": "^2.5.3",
         "cypress-multi-reporters": "^1.5.0",
@@ -25,6 +24,7 @@
         "mergereports": "npx jrm ./cypress/reports/junitreport.xml ./cypress/reports/junit/*.xml"
     },
     "devDependencies": {
+        "cypress": "^6.9.1",
         "license-check-and-add": "^4.0.5"
     }
 }
