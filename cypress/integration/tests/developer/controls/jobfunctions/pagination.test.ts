@@ -17,16 +17,13 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
     selectItemsPerPage,
     preservecookies,
     hasToBeSkipped,
-    createMultipleJobfunctions,
+    createMultipleJobFunctions,
     deleteAllJobfunctions,
-    selectUserPerspective,
+    deleteByList,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, jobFunctions } from "../../../../types/constants";
 import {
     firstPageButton,
     lastPageButton,
@@ -34,8 +31,10 @@ import {
     pageNumInput,
     prevPageButton,
 } from "../../../../views/common.view";
+import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
 
 describe("Job functions pagination validations", { tags: "@tier3" }, function () {
+    let jobFunctionsList: Array<Jobfunctions> = [];
     before("Login and Create Test Data", function () {
         // Prevent before hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier3")) return;
@@ -47,8 +46,9 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
         cy.wait(2000);
         // Delete all pre-existing job functions
         deleteAllJobfunctions();
+        // TODO: Implement creation of missing amount of job functions instead of deleting all and then creating again
         // Create 11 Job functions
-        createMultipleJobfunctions(11);
+        jobFunctionsList = createMultipleJobFunctions(11);
     });
 
     beforeEach("Persist session", function () {
@@ -64,19 +64,14 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
         if (hasToBeSkipped("@tier3")) return;
 
         // Delete the Job functions created before the tests
-        deleteAllJobfunctions();
+        deleteByList(jobFunctionsList);
     });
 
     it("Navigation button validations", function () {
-        // Navigate to Job functions tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, jobFunctions);
-        cy.wait("@getJobfunctions");
+        Jobfunctions.openList();
 
         // select 10 items per page
         selectItemsPerPage(10);
-        cy.wait("@getJobfunctions");
 
         // Verify next buttons are enabled as there are more than 11 rows present
         cy.get(nextPageButton).each(($nextBtn) => {
@@ -109,9 +104,7 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
 
     it("Items per page validations", function () {
         // Navigate to Job functions tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, jobFunctions);
+        Jobfunctions.openList();
         cy.wait("@getJobfunctions");
 
         // Select 10 items per page
@@ -135,9 +128,7 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
 
     it("Page number validations", function () {
         // Navigate to Job functions tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, jobFunctions);
+        Jobfunctions.openList();
         cy.wait("@getJobfunctions");
 
         // Select 10 items per page

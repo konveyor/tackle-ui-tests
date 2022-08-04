@@ -21,9 +21,9 @@ import {
     exists,
     applySearchFilter,
     hasToBeSkipped,
-    createMultipleJobfunctions,
-    deleteAllJobfunctions,
+    createMultipleJobFunctions,
     selectUserPerspective,
+    deleteByList,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import { controls, jobFunctions, button, name, clearAllFilters } from "../../../../types/constants";
@@ -31,8 +31,8 @@ import { controls, jobFunctions, button, name, clearAllFilters } from "../../../
 import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
 import * as data from "../../../../../utils/data_utils";
 
-var jobfunctionsList: Array<Jobfunctions> = [];
-var invalidSearchInput = String(data.getRandomNumber());
+let jobFunctionsList: Array<Jobfunctions> = [];
+let invalidSearchInput = String(data.getRandomNumber());
 
 describe("Job function filter validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
@@ -42,7 +42,7 @@ describe("Job function filter validations", { tags: "@tier2" }, function () {
         login();
 
         // Create multiple job functions
-        jobfunctionsList = createMultipleJobfunctions(2);
+        jobFunctionsList = createMultipleJobFunctions(2);
     });
 
     after("Perform test data clean up", function () {
@@ -50,7 +50,7 @@ describe("Job function filter validations", { tags: "@tier2" }, function () {
         if (hasToBeSkipped("@tier2")) return;
 
         // Delete the job functions
-        deleteAllJobfunctions();
+        deleteByList(jobFunctionsList);
     });
 
     it("Name filter validations", function () {
@@ -59,13 +59,13 @@ describe("Job function filter validations", { tags: "@tier2" }, function () {
         clickByText(navTab, jobFunctions);
 
         // Enter an existing display name substring and assert
-        var validSearchInput = jobfunctionsList[0].name.substring(0, 3);
+        let validSearchInput = jobFunctionsList[0].name.substring(0, 3);
         applySearchFilter(name, validSearchInput);
-        exists(jobfunctionsList[0].name);
+        exists(jobFunctionsList[0].name);
         clickByText(button, clearAllFilters);
 
-        applySearchFilter(name, jobfunctionsList[1].name);
-        exists(jobfunctionsList[1].name);
+        applySearchFilter(name, jobFunctionsList[1].name);
+        exists(jobFunctionsList[1].name);
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing display name substring and apply it as search filter

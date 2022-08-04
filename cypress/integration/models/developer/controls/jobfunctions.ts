@@ -43,7 +43,7 @@ export class Jobfunctions {
         this.name = name;
     }
 
-    public static clickJobfunctions(): void {
+    public static openList(): void {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, jobFunctions);
@@ -54,7 +54,7 @@ export class Jobfunctions {
     }
 
     create(cancel = false): void {
-        Jobfunctions.clickJobfunctions();
+        Jobfunctions.openList();
         clickByText(button, createNewButton);
         if (cancel) {
             cancelForm();
@@ -65,7 +65,7 @@ export class Jobfunctions {
     }
 
     edit(updatedName: string, cancel = false): void {
-        Jobfunctions.clickJobfunctions();
+        Jobfunctions.openList();
         selectItemsPerPage(100);
         cy.wait(2000);
         performRowAction(this.name, editAction);
@@ -82,7 +82,7 @@ export class Jobfunctions {
     }
 
     delete(cancel = false): void {
-        Jobfunctions.clickJobfunctions();
+        Jobfunctions.openList();
         selectItemsPerPage(100);
         cy.wait(2000);
         performRowAction(this.name, deleteAction);

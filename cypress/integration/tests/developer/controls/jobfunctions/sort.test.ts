@@ -25,17 +25,15 @@ import {
     getTableColumnData,
     preservecookies,
     hasToBeSkipped,
-    createMultipleJobfunctions,
-    deleteAllJobfunctions,
+    createMultipleJobFunctions,
     selectUserPerspective,
+    deleteByList,
 } from "../../../../../utils/utils";
-const { _ } = Cypress;
 import { navMenu, navTab } from "../../../../views/menu.view";
 import { controls, name, jobFunctions } from "../../../../types/constants";
-
 import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
 
-var jobfunctionsList: Array<Jobfunctions> = [];
+let jobFunctionsList: Array<Jobfunctions> = [];
 
 describe("Job function sorting", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
@@ -46,7 +44,7 @@ describe("Job function sorting", { tags: "@tier2" }, function () {
         login();
 
         // Create multiple job functions
-        jobfunctionsList = createMultipleJobfunctions(2);
+        jobFunctionsList = createMultipleJobFunctions(2);
     });
 
     beforeEach("Persist session", function () {
@@ -62,7 +60,7 @@ describe("Job function sorting", { tags: "@tier2" }, function () {
         if (hasToBeSkipped("@tier2")) return;
 
         // Delete the job functions after before the tests
-        deleteAllJobfunctions();
+        deleteByList(jobFunctionsList);
     });
 
     it("Name sort validations", function () {
