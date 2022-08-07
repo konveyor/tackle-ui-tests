@@ -20,12 +20,15 @@ import {
     createNewButton,
     editAction,
     deleteAction,
+    SEC,
+    trTag,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
     businessServiceNameInput,
     businessServiceDescriptionInput,
     businessServiceOwnerSelect,
+    buzinessServiceLabels,
 } from "../../../views/businessservices.view";
 
 import * as commonView from "../../../views/common.view";
@@ -41,6 +44,8 @@ import {
     checkSuccessAlert,
     performRowAction,
     selectUserPerspective,
+    goToPage,
+    goToLastPage,
 } from "../../../../utils/utils";
 
 export class BusinessServices {
@@ -48,16 +53,62 @@ export class BusinessServices {
     description: string;
     owner: string;
 
-    constructor(name: string, description?: string, owner?: string) {
+    static bzsUrl = Cypress.env("tackleUrl") + "controls/business-services";
+
+    constructor(name, description?, owner?: string) {
         this.name = name;
         if (description) this.description = description;
         if (owner) this.owner = owner;
     }
 
-    public static clickBusinessservices(): void {
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, businessServices);
+    public static openList(amount = 100): void {
+        cy.url().then(($url) => {
+            if ($url != BusinessServices.bzsUrl) {
+                selectUserPerspective("Developer");
+                clickByText(navMenu, controls);
+                clickByText(navTab, businessServices);
+                selectItemsPerPage(amount);
+            }
+        });
+    }
+
+    // TODO: Refactor this method so that it will return list from particular page or full list, to take into account amount of items per page
+    public static getList(amountPerPage = 100, pageNumber = 1) {
+        this.openList(amountPerPage);
+        goToPage(pageNumber);
+        return new Promise<BusinessServices[]>((resolve) => {
+            let list = [];
+            cy.get(commonView.appTable, { timeout: 15 * SEC })
+                .find(trTag)
+                .each(($row) => {
+                    let name = $row.find(buzinessServiceLabels.name).text();
+                    list.push(new BusinessServices(name));
+                })
+                .then(() => {
+                    resolve(list);
+                });
+        });
+    }
+
+    public static getNamesListOnPage(amountPerPage = 10, pageNumber?: number, lastPage = false) {
+        this.openList(amountPerPage);
+        if (pageNumber) {
+            goToPage(pageNumber);
+        } else if (lastPage) {
+            goToLastPage();
+        }
+        return new Promise<string[]>((resolve) => {
+            let list = [];
+            cy.get(commonView.appTable, { timeout: 15 * SEC })
+                .find(trTag)
+                .each(($row) => {
+                    let name = $row.find(buzinessServiceLabels.name).text();
+                    list.push(new BusinessServices(name));
+                })
+                .then(() => {
+                    resolve(list);
+                });
+        });
     }
 
     protected fillName(name: string): void {
@@ -73,7 +124,7 @@ export class BusinessServices {
     }
 
     create(cancel = false): void {
-        BusinessServices.clickBusinessservices();
+        BusinessServices.openList();
         clickByText(button, createNewButton);
         if (cancel) {
             cancelForm();
@@ -101,8 +152,7 @@ export class BusinessServices {
         },
         cancel = false
     ): void {
-        BusinessServices.clickBusinessservices();
-        selectItemsPerPage(100);
+        BusinessServices.openList();
         cy.wait(2000);
         performRowAction(this.name, editAction);
 
@@ -128,9 +178,8 @@ export class BusinessServices {
     }
 
     delete(cancel = false): void {
-        BusinessServices.clickBusinessservices();
-        selectItemsPerPage(100);
-        cy.wait(2000);
+        BusinessServices.openList();
+        // cy.wait(2000);
         performRowAction(this.name, deleteAction);
         if (cancel) {
             cancelForm();
