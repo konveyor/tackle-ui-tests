@@ -17,7 +17,6 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
     hasToBeSkipped,
     preservecookies,
     createMultipleApplications,
@@ -25,10 +24,8 @@ import {
     deleteAllBusinessServices,
     getRandomApplicationData,
 } from "../../../../../utils/utils";
-import { button, createNewButton } from "../../../../types/constants";
 import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
 
-import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
 var applicationList: Array<ApplicationInventory> = [];
@@ -57,8 +54,8 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
 
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
-        deleteAllBusinessServices();
         deleteApplicationTableRows();
+        deleteAllBusinessServices();
     });
 
     it("Source Analysis", function () {
