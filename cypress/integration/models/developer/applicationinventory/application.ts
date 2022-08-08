@@ -51,7 +51,7 @@ import {
     checkSuccessAlert,
     performRowActionByIcon,
     selectUserPerspective,
-    performRowAction,
+    selectItemsPerPage,
     selectItemsPerPage,
 } from "../../../../utils/utils";
 import { applicationData } from "../../../types/types";
@@ -221,6 +221,27 @@ export class Application {
     }
 
     delete(cancel = false): void {
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                click(actionButton);
+                cy.wait(500);
+                clickByText(button, deleteAction);
+            });
+
+        if (cancel) {
+            cancelForm();
+        } else {
+            click(commonView.confirmButton);
+            cy.wait(2000);
+        }
+    }
+
+    /*delete(cancel = false): void {
         cy.wait(2000);
         performRowAction(this.name, deleteAction);
         if (cancel) {
@@ -229,7 +250,7 @@ export class Application {
             click(commonView.confirmButton);
             cy.wait(2000);
         }
-    }
+    }*/
 
     selectApplication(): void {
         cy.wait(4000);
