@@ -98,7 +98,6 @@ export function login(): void {
     inputText(loginView.userNameInput, userName);
     inputText(loginView.userPasswordInput, userPassword);
     click(loginView.loginButton);
-    // cy.wait(5000);
 
     // Change password screen which appears only for first login
     // This is used in PR tester and Jenkins jobs.
@@ -436,7 +435,7 @@ export function deleteTableRows(): void {
                     click(commonView.deleteButton);
                 });
             cy.get(commonView.confirmButton).click();
-            cy.wait(2000);
+            cy.wait(2 * SEC);
         }
     });
 }
@@ -519,7 +518,7 @@ export function deleteApplicationTableRows(lastPage = false): void {
                     .find(trTag)
                     .not(".pf-c-table__expandable-row")
                     .each(($tableRow) => {
-                        var name = $tableRow.find("td[data-label=Name]").text();
+                        let name = $tableRow.find("td[data-label=Name]").text();
                         cy.get(tdTag)
                             .contains(name)
                             .parent(tdTag)
@@ -616,9 +615,9 @@ export function createMultipleStakeholderGroups(
     numberofstakeholdergroup: number,
     stakeholdersList?: Array<Stakeholders>
 ): Array<Stakeholdergroups> {
-    var stakeholdergroupsList: Array<Stakeholdergroups> = [];
+    let stakeholdergroupsList: Array<Stakeholdergroups> = [];
     for (let i = 0; i < numberofstakeholdergroup; i++) {
-        var stakeholders: Array<string> = [];
+        let stakeholders: Array<string> = [];
         if (stakeholdersList) stakeholders.push(stakeholdersList[i].name);
         // Create new stakeholder group
         const stakeholdergroup = new Stakeholdergroups(
@@ -636,9 +635,9 @@ export function createMultipleBusinessServices(
     numberofbusinessservice: number,
     stakeholdersList?: Array<Stakeholders>
 ): Array<BusinessServices> {
-    var businessservicesList: Array<BusinessServices> = [];
+    let businessservicesList: Array<BusinessServices> = [];
     for (let i = 0; i < numberofbusinessservice; i++) {
-        var stakeholders: string;
+        let stakeholders: string;
         if (stakeholdersList) stakeholders = stakeholdersList[i].name;
         // Create new business service
         const businessservice = new BusinessServices(
@@ -653,7 +652,7 @@ export function createMultipleBusinessServices(
 }
 
 export function createMultipleTags(numberoftags: number): Array<Tag> {
-    var tagList: Array<Tag> = [];
+    let tagList: Array<Tag> = [];
     for (let i = 0; i < numberoftags; i++) {
         //Create Tag type
         const tagType = new TagType(data.getRandomWord(8), data.getColor(), data.getRandomNumber());
@@ -668,9 +667,9 @@ export function createMultipleTags(numberoftags: number): Array<Tag> {
 }
 
 export function getRandomApplicationData(sourceData?, binaryData?): applicationData {
-    var businessservicesList = createMultipleBusinessServices(1);
+    let businessservicesList = createMultipleBusinessServices(1);
 
-    var appdata = {
+    let appdata = {
         name: data.getAppName(),
         business: businessservicesList[0].name,
         description: data.getDescription(),
@@ -695,9 +694,9 @@ export function createMultipleApplication(
     businessservice?: Array<BusinessServices>,
     tagList?: Array<Tag>
 ): Array<Assessment> {
-    var applicationList: Array<Assessment> = [];
-    var tags: string[];
-    var business: string;
+    let applicationList: Array<Assessment> = [];
+    let tags: string[];
+    let business: string;
     for (let i = 0; i < numberofapplications; i++) {
         if (!businessservice)
             businessservice = createMultipleBusinessServices(numberofapplications);
@@ -717,9 +716,9 @@ export function createMultipleApplications(
     businessservice?: Array<BusinessServices>,
     tagList?: Array<Tag>
 ): Array<ApplicationInventory> {
-    var applicationList: Array<ApplicationInventory> = [];
-    var tags: string[];
-    var business: string;
+    let applicationList: Array<ApplicationInventory> = [];
+    let tags: string[];
+    let business: string;
     for (let i = 0; i < numberofapplications; i++) {
         if (!businessservice)
             businessservice = createMultipleBusinessServices(numberofapplications);
@@ -741,8 +740,8 @@ export function createMultipleApplications(
 }
 
 export function createApplicationObjects(numberOfObjects: number): Array<ApplicationInventory> {
-    var applicationObjectsList: Array<ApplicationInventory> = [];
-    var businessservice = createMultipleBusinessServices(1);
+    let applicationObjectsList: Array<ApplicationInventory> = [];
+    let businessservice = createMultipleBusinessServices(1);
     for (let i = 0; i < numberOfObjects; i++) {
         // Create an object of application
         const application = new ApplicationInventory(data.getAppName(), businessservice[0].name);
@@ -763,7 +762,7 @@ export function deleteAllJobfunctions(cancel = false): void {
                     .find(trTag)
                     .not(".pf-c-table__expandable-row")
                     .each(($tableRow) => {
-                        var name = $tableRow.find("td[data-label=Name]").text();
+                        let name = $tableRow.find("td[data-label=Name]").text();
                         cy.get(tdTag)
                             .contains(name)
                             .parent(tdTag)
@@ -783,6 +782,7 @@ type Deletable = { delete: () => void };
 
 export function deleteByList<T extends Deletable>(array: T[]): void {
     array.forEach((element) => {
+        cy.wait(0.5 * SEC);
         element.delete();
     });
 }
@@ -790,7 +790,7 @@ export function deleteByList<T extends Deletable>(array: T[]): void {
 export function deleteAllStakeholders(cancel = false): void {
     Stakeholders.clickStakeholders();
     selectItemsPerPage(100);
-    cy.wait(2000);
+    cy.wait(0.5 * SEC);
     cy.get(commonView.appTable)
         .next()
         .then(($div) => {
@@ -826,7 +826,7 @@ export function deleteAllStakeholderGroups(cancel = false): void {
                     .find(trTag)
                     .not(".pf-c-table__expandable-row")
                     .each(($tableRow) => {
-                        var name = $tableRow.find("td[data-label=Name]").text();
+                        let name = $tableRow.find("td[data-label=Name]").text();
                         cy.get(tdTag)
                             .contains(name)
                             .parent(tdTag)
@@ -842,32 +842,10 @@ export function deleteAllStakeholderGroups(cancel = false): void {
         });
 }
 
-export function deleteAllBusinessServices(cancel = false): void {
-    BusinessServices.clickBusinessservices();
-    selectItemsPerPage(100);
-    cy.wait(2000);
-    cy.get(commonView.appTable)
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
-                    .each(($tableRow) => {
-                        var name = $tableRow.find("td[data-label=Name]").text();
-                        cy.get(tdTag)
-                            .contains(name)
-                            .parent(tdTag)
-                            .siblings(tdTag)
-                            .within(() => {
-                                click(commonView.deleteButton);
-                                cy.wait(800);
-                            });
-                        click(commonView.confirmButton);
-                        cy.wait(4000);
-                    });
-            }
-        });
+// TODO: Review and refactor function below!
+export async function deleteAllBusinessServices(cancel = false) {
+    let list = await BusinessServices.getList();
+    deleteByList(list);
 }
 
 export function deleteAllTagTypes(cancel = false): void {
@@ -881,7 +859,7 @@ export function deleteAllTagTypes(cancel = false): void {
                     .not(".pf-c-table__expandable-row")
                     .each(($tableRow) => {
                         cy.wait(1000);
-                        var name = $tableRow.find('td[data-label="Tag type"]').text();
+                        let name = $tableRow.find('td[data-label="Tag type"]').text();
                         if (!(data.getDefaultTagTypes().indexOf(name) > -1)) {
                             cy.get(tdTag)
                                 .contains(name)
@@ -1055,4 +1033,10 @@ export function validatePagination(): void {
 
     // Moving back to the first page
     cy.get(firstPageButton).eq(0).click();
+}
+
+export function goToLastPage(): void {
+    cy.get(lastPageButton, { timeout: 10 * SEC })
+        .eq(0)
+        .click();
 }
