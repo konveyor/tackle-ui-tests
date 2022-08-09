@@ -166,7 +166,6 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
 
         // Go to page number 2
         goToPage(2);
-        // cy.get(commonView.pageNumInput).clear().type("2").type("{enter}");
 
         // Verify that page number has changed, as previous page nav button got enabled
         cy.get(commonView.prevPageButton).each(($previousBtn) => {

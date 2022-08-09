@@ -27,6 +27,7 @@ import {
     name,
     tagCount,
     assessment,
+    SEC,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -433,11 +434,11 @@ export class ApplicationInventory {
             selectItemsPerPage(100);
             this.selectApplication();
             this.click_assess_button();
-            cy.wait(6000);
+            cy.wait(6 * SEC);
             if (stakeholders) this.selectStakeholders(stakeholders);
             if (stakeholdergroups) this.selectStakeholdergroups(stakeholdergroups);
             clickByText(button, next);
-            cy.wait(1000);
+            cy.wait(1 * SEC);
             this.selectAnswers(risk);
         }
     }
@@ -447,7 +448,7 @@ export class ApplicationInventory {
         selectItemsPerPage(100);
         this.selectApplication();
         clickByText(button, review);
-        cy.wait(8000);
+        cy.wait(8 * SEC);
         this.selectMigrationAction(risk);
         this.selectEffortEstimate(risk);
         this.fillCriticality(risk);
