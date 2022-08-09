@@ -31,6 +31,7 @@ import {
     deleteApplicationTableRows,
     selectUserPerspective,
     createMultipleBusinessServices,
+    deleteAllBusinessServices,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import {
@@ -57,11 +58,11 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
         // Perform login
         login();
 
-        businessservicelist = createMultipleBusinessServices(1);
+        businessservicelist = createMultipleBusinessServices(2);
         stakeholdersList = createMultipleStakeholders(1);
         applicationsList = createMultipleApplications(2, businessservicelist);
 
-        var risks = ["low", "medium", "high"];
+        let risks = ["low", "medium", "high"];
         for (let i = 0; i < applicationsList.length; i++) {
             // Perform assessment of application
             applicationsList[i].perform_assessment(risks[i], [stakeholdersList[0].name]);
@@ -87,6 +88,7 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
         // Delete All
         deleteAllStakeholders();
         deleteApplicationTableRows();
+        deleteAllBusinessServices();
     });
 
     it("Adoption candidate distribution - Application name sort validations", function () {
@@ -169,6 +171,7 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
 
     it("Adoption candidate distribution - Confidence sort validations", function () {
         // Navigate to reports page
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -194,6 +197,7 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
 
     it("Adoption candidate distribution - Effort sort validations", function () {
         // Navigate to reports page
+        selectUserPerspective("Developer");
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -211,7 +215,6 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
         cy.wrap(afterAscSortList).each((value) => {
             let currentIndex = itemsList.indexOf(value.toString());
             expect(currentIndex >= prevAscIndex).to.be.true;
-            prevAscIndex = currentIndex;
         });
 
         // Sort the Adoption candidate distribution by effort in descending order
@@ -225,7 +228,6 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
         cy.wrap(afterDescSortList).each((value) => {
             let currentIndex = itemsList.indexOf(value.toString());
             expect(currentIndex <= prevDescIndex).to.be.true;
-            prevDescIndex = currentIndex;
         });
     });
 });
