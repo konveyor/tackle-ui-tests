@@ -84,7 +84,9 @@ export class BusinessServices {
                 .find(trTag)
                 .each(($row) => {
                     let name = $row.find(buzinessServiceLabels.name).text();
-                    list.push(new BusinessServices(name));
+                    if (name) {
+                        list.push(new BusinessServices(name));
+                    }
                 })
                 .then(() => {
                     resolve(list);
