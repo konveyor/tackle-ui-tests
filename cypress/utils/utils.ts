@@ -120,7 +120,7 @@ export function logout(): void {
 }
 
 export function selectItemsPerPage(items: number): void {
-    cy.get(commonView.itemsPerPageMenu, { timeout: 15 * SEC })
+    cy.get(commonView.itemsPerPageMenu, { timeout: 120 * SEC })
         .find(commonView.itemsPerPageToggleButton)
         .then(($toggleBtn) => {
             if (!$toggleBtn.eq(0).is(":disabled")) {
@@ -1039,4 +1039,16 @@ export function goToLastPage(): void {
     cy.get(lastPageButton, { timeout: 10 * SEC })
         .eq(0)
         .click();
+}
+
+export function validateValue(selector, value: string): void {
+    if (!value || value === "") {
+        cy.log("Value is not defined");
+    } else {
+        cy.get(selector)
+            .invoke("val")
+            .then(($input) => {
+                expect($input).eq(value);
+            });
+    }
 }

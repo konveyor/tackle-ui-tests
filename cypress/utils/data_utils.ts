@@ -136,3 +136,14 @@ export function getRandomProxyData(credentials?: CredentialsData): ProxyData {
         httpsEnabled: true,
     };
 }
+
+export function getRealProxyData(credentials?: CredentialsData): ProxyData {
+    return {
+        excludeList: ["127.0.0.1", "cnn.com"],
+        credentials: credentials,
+        httpEnabled: false,
+        hostname: "rhev-node-12.rdu2.scalelab.redhat.com",
+        port: (3128).toString(),
+        httpsEnabled: true,
+    };
+}

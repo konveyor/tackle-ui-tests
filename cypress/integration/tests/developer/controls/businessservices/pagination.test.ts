@@ -17,31 +17,17 @@ limitations under the License.
 
 import {
     login,
-    // clickByText,
     selectItemsPerPage,
-    deleteTableRows,
     preservecookies,
     hasToBeSkipped,
     createMultipleBusinessServices,
-    deleteAllBusinessServices,
-    // selectUserPerspective,
     deleteByList,
     goToLastPage,
     deleteFromArray,
     validatePagination,
 } from "../../../../../utils/utils";
-// import { navMenu, navTab } from "../../../../views/menu.view";
-import {
-    // controls, businessServices,
-    SEC,
-} from "../../../../types/constants";
-import {
-    firstPageButton,
-    lastPageButton,
-    nextPageButton,
-    pageNumInput,
-    prevPageButton,
-} from "../../../../views/common.view";
+import { SEC } from "../../../../types/constants";
+import { pageNumInput, prevPageButton } from "../../../../views/common.view";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 
 describe("Business services pagination validations", { tags: "@tier3" }, function () {
@@ -52,8 +38,6 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
 
         // Perform login
         login();
-        // Clear pre-existing data
-        // deleteAllBusinessServices();
         // Create 11 rows
         businessServiceList = createMultipleBusinessServices(11);
     });
@@ -61,15 +45,11 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
         preservecookies();
-
-        // Interceptors for business services
-        // cy.intercept("GET", "/hub/business-service*").as("getBusinessService");
     });
 
     it("Navigation button validations", function () {
         // Navigate to business services tab
         BusinessServices.openList(10);
-        // cy.get("@getBusinessService");
 
         validatePagination();
     });
@@ -77,7 +57,6 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
     it("Items per page validations", function () {
         // Navigate to business services tab
         BusinessServices.openList();
-        // cy.get("@getBusinessService");
 
         // Select 10 items per page
         selectItemsPerPage(10);
@@ -101,7 +80,6 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
     it("Page number validations", function () {
         // Navigate to business services tab and select 10 items per page
         BusinessServices.openList(10);
-        // cy.get("@getBusinessService");
         cy.wait(2 * SEC);
 
         // Go to page number 2
@@ -116,7 +94,6 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
     it("Last page item(s) deletion, impact on page reload validation", async () => {
         // Navigate to business services tab and select 10 items per page
         BusinessServices.openList(10);
-        // cy.get("@getBusinessService");
 
         cy.wait(2 * SEC);
 
@@ -125,16 +102,13 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
         cy.wait(2 * SEC);
 
         // Delete all items of last page
-        // deleteTableRows();
 
-        // This will not work as getting list on current page will return ANOTHER objects
         let listNamesOnLastPage = await BusinessServices.getNamesListOnPage();
         let listOnLastPage = [];
         businessServiceList.forEach(($element) => {
             for (let currentName of listNamesOnLastPage) {
                 if ($element.name === currentName) {
                     listOnLastPage.push($element);
-                    cy.log(`<<<<<<<<<<<<-------- ${currentName}`);
                 }
             }
         });
