@@ -73,9 +73,11 @@ export class BusinessServices {
     }
 
     // TODO: Refactor this method so that it will return list from particular page or full list, to take into account amount of items per page
-    public static getList(amountPerPage = 100, pageNumber = 1) {
+    public static getList(amountPerPage = 100, pageNumber?: number) {
         this.openList(amountPerPage);
-        goToPage(pageNumber);
+        if (pageNumber) {
+            goToPage(pageNumber);
+        }
         return new Promise<BusinessServices[]>((resolve) => {
             let list = [];
             cy.get(commonView.appTable, { timeout: 15 * SEC })
