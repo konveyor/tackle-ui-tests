@@ -782,7 +782,7 @@ type Deletable = { delete: () => void };
 
 export function deleteByList<T extends Deletable>(array: T[]): void {
     array.forEach((element) => {
-        cy.wait(0.5 * SEC);
+        cy.wait(0.8 * SEC);
         element.delete();
     });
 }
@@ -940,10 +940,19 @@ export const deleteFromArray = <T>(array: T[], el: T): T[] => {
 
 export function goToPage(page: number): void {
     cy.get(divHeader).within(() => {
-        cy.get(pageNumInput, { timeout: 2 * SEC })
-            .clear()
-            .type(page.toString())
-            .type("{enter}");
+        cy.get(firstPageButton).then(($firstPageButton) => {
+            cy.get(lastPageButton).then(($lastPageButton) => {
+                if (
+                    !$firstPageButton.hasClass(".pf-m-disabled") ||
+                    !$lastPageButton.hasClass(".pf-m-disabled")
+                ) {
+                    cy.get(pageNumInput, { timeout: 2 * SEC })
+                        .clear()
+                        .type(page.toString())
+                        .type("{enter}");
+                }
+            });
+        });
     });
 }
 
@@ -1038,7 +1047,11 @@ export function validatePagination(): void {
 export function goToLastPage(): void {
     cy.get(lastPageButton, { timeout: 10 * SEC })
         .eq(0)
-        .click();
+        .then(($button) => {
+            if (!$button.hasClass(".pf-m-disabled")) {
+                clickWithin(divHeader, lastPageButton);
+            }
+        });
 }
 
 export function validateValue(selector, value: string): void {
