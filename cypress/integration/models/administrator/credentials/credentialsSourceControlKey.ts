@@ -74,12 +74,12 @@ export class CredentialsSourceControlKey extends CredentialsSourceControl {
     }
 
     storeOldValues(): CredentialsSourceControlData {
-        return;
-        {
-            name: this.name;
-            description: this.description;
-            username: this.key;
-            password: this.keyPassphrase;
-        }
+        return {
+            name: this.name,
+            type: this.type,
+            description: this.description,
+            username: this.key,
+            password: this.keyPassphrase,
+        };
     }
 }

@@ -34,7 +34,7 @@ describe("Validation of Source Control Credentials", () => {
         scCredsUsername.create();
     });
 
-    it.skip("Editing source control credentials with username/password and cancelling without saving", () => {
+    it("Editing source control credentials with username/password and cancelling without saving", () => {
         scCredsUsername.edit(getRandomCredentialsData(CredentialType.sourceControl), toBeCanceled);
     });
 
@@ -50,7 +50,7 @@ describe("Validation of Source Control Credentials", () => {
         scCredsKey.create();
     });
 
-    it.skip("Editing source control credentials with source private key and cancelling without saving", () => {
+    it("Editing source control credentials with source private key and cancelling without saving", () => {
         scCredsKey.edit(getRandomCredentialsData(CredentialType.sourceControl), toBeCanceled);
     });
 
