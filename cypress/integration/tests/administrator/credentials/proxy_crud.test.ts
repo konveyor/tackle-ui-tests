@@ -35,7 +35,7 @@ describe("Validation of proxy credentials", () => {
         proxyCreds.create();
     });
 
-    it.skip("Editing proxy credentials and cancelling without saving", () => {
+    it("Editing proxy credentials and cancelling without saving", () => {
         proxyCreds.edit(validConfiguration, toBeCanceled);
     });
 
