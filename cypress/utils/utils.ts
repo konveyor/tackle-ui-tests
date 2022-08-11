@@ -43,7 +43,7 @@ import {
     applicationInventory,
     SEC,
 } from "../integration/types/constants";
-import { actionButton, date } from "../integration/views/applicationinventory.view";
+import { actionButton, date, selectBox } from "../integration/views/applicationinventory.view";
 import {
     confirmButton,
     divHeader,
@@ -57,7 +57,7 @@ import {
 import { tagLabels } from "../integration/views/tags.view";
 import { Credentials } from "../integration/models/administrator/credentials/credentials";
 import { Assessment } from "../integration/models/developer/applicationinventory/assessment";
-import { applicationData } from "../integration/types/types";
+import { analysisData, applicationData } from "../integration/types/types";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
@@ -77,6 +77,7 @@ export function clearInput(fieldID: string): void {
 export function clickByText(fieldId: string, buttonText: string, isForced = true): void {
     // https://github.com/cypress-io/cypress/issues/2000#issuecomment-561468114
     cy.contains(fieldId, buttonText, { timeout: 120 * SEC }).click({ force: isForced });
+    cy.wait(1000);
 }
 
 export function click(fieldId: string, isForced = true): void {
@@ -689,6 +690,13 @@ export function getRandomApplicationData(sourceData?, binaryData?): applicationD
     return appdata;
 }
 
+export function getRandomAnalysisData(sourceData): analysisData {
+    var analysisData = {
+        source: sourceData.source,
+        target: sourceData.target,
+    };
+    return analysisData;
+}
 export function createMultipleApplication(
     numberofapplications: number,
     businessservice?: Array<BusinessServices>,
@@ -1064,4 +1072,16 @@ export function validateValue(selector, value: string): void {
                 expect($input).eq(value);
             });
     }
+}
+
+export function selectApplication(name: string): void {
+    cy.wait(8000);
+    cy.get(tdTag)
+        .contains(name)
+        .parent(tdTag)
+        .parent(trTag)
+        .within(() => {
+            click(selectBox);
+            cy.wait(2000);
+        });
 }

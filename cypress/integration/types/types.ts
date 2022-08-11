@@ -53,3 +53,14 @@ export type ProxyData = {
     httpsEnabled: boolean;
     excludeList?: string[];
 };
+
+export type analysisData = {
+    source: string;
+    target: string;
+    binary?: string;
+    scope?: string;
+    customRule?: string;
+    sources?: string;
+    excludeRuleTags?: string;
+    enableTransaction?: boolean;
+};

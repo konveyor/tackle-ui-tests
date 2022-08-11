@@ -19,16 +19,12 @@ import {
     login,
     hasToBeSkipped,
     preservecookies,
-    createMultipleApplications,
     deleteApplicationTableRows,
     deleteAllBusinessServices,
     getRandomApplicationData,
+    getRandomAnalysisData,
 } from "../../../../../utils/utils";
-import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
-
-import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
-
-var applicationList: Array<ApplicationInventory> = [];
+import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
 
 describe("Source Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -37,14 +33,17 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
 
         // Perform login
         login();
-        applicationList = createMultipleApplications(1);
+        // deleteApplicationTableRows();
     });
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
         preservecookies();
-        cy.fixture("source_analysis").then(function (sourceData) {
-            this.sourceData = sourceData;
+        cy.fixture("application").then(function (appData) {
+            this.appData = appData;
+        });
+        cy.fixture("analysis").then(function (analysisData) {
+            this.analysisData = analysisData;
         });
 
         // Interceptors
@@ -58,12 +57,15 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         deleteAllBusinessServices();
     });
 
-    it("Source Analysis", function () {
-        // Navigate to application inventory page and click "Create New" button
-
-        const application = new Assessment(getRandomApplicationData(this.sourceData));
+    it("Source Code Analysis", function () {
+        // For source code analysis application must have source code URL git or svn
+        const application = new Analysis(
+            getRandomApplicationData(this.appData[0]),
+            getRandomAnalysisData(this.analysisData[0])
+        );
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
+        application.analyze();
     });
 });
