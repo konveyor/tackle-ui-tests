@@ -10,39 +10,37 @@ import { Credentials } from "../../../models/administrator/credentials/credentia
 describe("Tag type pagination validations", { tags: "@tier3" }, function () {
     let newCredentialsList = [];
     let createdCredentialsList = [];
-    before("Login and Create Test Data", async () => {
+    before("Login and Create Test Data", () => {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier3")) return;
 
         // Perform login
         login();
         Credentials.openList();
-        let existingList = await Credentials.getList();
-
-        if (existingList.length <= 10) {
-            for (let i = 0; i < Math.ceil((10 - existingList.length) / 4); i++) {
-                newCredentialsList.push(
-                    new CredentialsProxy(getRandomCredentialsData(CredentialType.proxy))
-                );
-                newCredentialsList.push(
-                    new CredentialsMaven(getRandomCredentialsData(CredentialType.maven))
-                );
-                newCredentialsList.push(
-                    new CredentialsSourceControlUsername(
-                        getRandomCredentialsData(CredentialType.sourceControl)
-                    )
-                );
-                newCredentialsList.push(
-                    new CredentialsSourceControlKey(
-                        getRandomCredentialsData(CredentialType.sourceControl)
-                    )
-                );
-            }
-            newCredentialsList.forEach((currentCredential) => {
-                currentCredential.create();
-                createdCredentialsList.push(currentCredential);
-            });
+        // Create 12 extra credentials of all types
+        for (let i = 0; i <= 3; i++) {
+            newCredentialsList.push(
+                new CredentialsProxy(getRandomCredentialsData(CredentialType.proxy))
+            );
+            newCredentialsList.push(
+                new CredentialsMaven(getRandomCredentialsData(CredentialType.maven))
+            );
+            newCredentialsList.push(
+                new CredentialsSourceControlUsername(
+                    getRandomCredentialsData(CredentialType.sourceControl)
+                )
+            );
+            newCredentialsList.push(
+                new CredentialsSourceControlKey(
+                    getRandomCredentialsData(CredentialType.sourceControl)
+                )
+            );
         }
+        newCredentialsList.forEach((currentCredential) => {
+            currentCredential.create();
+            createdCredentialsList.push(currentCredential);
+        });
+        // }
     });
 
     it("Navigation button validations", function () {
