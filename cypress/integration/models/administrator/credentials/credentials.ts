@@ -6,6 +6,8 @@ import {
     selectUserPerspective,
     selectItemsPerPage,
     notExists,
+    exists,
+    validateValue,
 } from "../../../../utils/utils";
 import {
     administrator,
@@ -22,7 +24,12 @@ import {
     credLabels,
     descriptionInput,
 } from "../../../views/credentials.view";
-import { navLink, closeNotification, confirmButton } from "../../../views/common.view";
+import {
+    navLink,
+    closeNotification,
+    confirmButton,
+    cancelButton,
+} from "../../../views/common.view";
 import { selectType } from "../../../views/credentials.view";
 import * as commonView from "../../../views/common.view";
 import { CredentialsData } from "../../../types/types";
@@ -40,10 +47,18 @@ export class Credentials {
         inputText(credentialNameInput, this.name);
     }
 
+    protected validateName(name: string) {
+        validateValue(credentialNameInput, name);
+    }
+
     protected fillDescription(): void {
         if (this.description != "") {
             inputText(descriptionInput, this.description);
         }
+    }
+
+    protected validateDescription(description: string) {
+        validateValue(descriptionInput, description);
     }
 
     protected selectType(type): void {
@@ -84,11 +99,16 @@ export class Credentials {
         click(createBtn);
     }
 
-    delete(): void {
+    delete(toBeCanceled = false): void {
         Credentials.openList();
         performRowAction(this.name, deleteAction);
-        click(confirmButton);
-        notExists(this.name);
+        if (toBeCanceled) {
+            click(cancelButton);
+            exists(this.name);
+        } else {
+            click(confirmButton);
+            notExists(this.name);
+        }
     }
 
     edit(cred: CredentialsData): void {

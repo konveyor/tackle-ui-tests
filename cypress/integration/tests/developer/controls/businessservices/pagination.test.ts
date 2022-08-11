@@ -17,104 +17,50 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
     selectItemsPerPage,
-    deleteTableRows,
     preservecookies,
     hasToBeSkipped,
     createMultipleBusinessServices,
-    deleteAllBusinessServices,
-    selectUserPerspective,
+    deleteByList,
+    goToLastPage,
+    deleteFromArray,
+    validatePagination,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, businessServices } from "../../../../types/constants";
-import {
-    firstPageButton,
-    lastPageButton,
-    nextPageButton,
-    pageNumInput,
-    prevPageButton,
-} from "../../../../views/common.view";
+import { SEC } from "../../../../types/constants";
+import { pageNumInput, prevPageButton } from "../../../../views/common.view";
+import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 
 describe("Business services pagination validations", { tags: "@tier3" }, function () {
+    let businessServiceList = [];
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier3")) return;
 
         // Perform login
         login();
-        // Clear pre-existing data
-        deleteAllBusinessServices();
         // Create 11 rows
-        createMultipleBusinessServices(11);
+        businessServiceList = createMultipleBusinessServices(11);
     });
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
         preservecookies();
-
-        // Interceptors for business services
-        cy.intercept("GET", "/hub/business-service*").as("getBusinessService");
-    });
-
-    after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
-        // Delete the business services created before the tests
-        deleteAllBusinessServices();
     });
 
     it("Navigation button validations", function () {
         // Navigate to business services tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, businessServices);
-        cy.get("@getBusinessService");
+        BusinessServices.openList(10);
 
-        // select 10 items per page
-        selectItemsPerPage(10);
-        cy.get("@getBusinessService");
-
-        // Verify next buttons are enabled as there are more than 11 rows present
-        cy.get(nextPageButton).each(($nextBtn) => {
-            cy.wrap($nextBtn).should("not.be.disabled");
-        });
-
-        // Verify that previous buttons are disabled being on the first page
-        cy.get(prevPageButton).each(($previousBtn) => {
-            cy.wrap($previousBtn).should("be.disabled");
-        });
-
-        // Verify that navigation button to last page is enabled
-        cy.get(lastPageButton).should("not.be.disabled");
-
-        // Verify that navigation button to first page is disabled being on the first page
-        cy.get(firstPageButton).should("be.disabled");
-
-        // Navigate to next page
-        cy.get(nextPageButton).eq(0).click();
-        cy.get("@getBusinessService");
-
-        // Verify that previous buttons are enabled after moving to next page
-        cy.get(prevPageButton).each(($previousBtn) => {
-            cy.wrap($previousBtn).should("not.be.disabled");
-        });
-
-        // Verify that navigation button to first page is enabled after moving to next page
-        cy.get(firstPageButton).should("not.be.disabled");
+        validatePagination();
     });
 
     it("Items per page validations", function () {
         // Navigate to business services tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, businessServices);
-        cy.get("@getBusinessService");
+        BusinessServices.openList();
 
         // Select 10 items per page
         selectItemsPerPage(10);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that only 10 items are displayed
         cy.get("td[data-label=Name]").then(($rows) => {
@@ -123,7 +69,7 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
 
         // Select 20 items per page
         selectItemsPerPage(20);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
         cy.get("td[data-label=Name]").then(($rows) => {
@@ -132,15 +78,9 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
     });
 
     it("Page number validations", function () {
-        // Navigate to business services tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, businessServices);
-        cy.get("@getBusinessService");
-
-        // Select 10 items per page
-        selectItemsPerPage(10);
-        cy.wait(2000);
+        // Navigate to business services tab and select 10 items per page
+        BusinessServices.openList(10);
+        cy.wait(2 * SEC);
 
         // Go to page number 2
         cy.get(pageNumInput).eq(0).clear().type("2").type("{enter}");
@@ -151,27 +91,43 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
         });
     });
 
-    it("Last page item(s) deletion, impact on page reload validation", function () {
-        // Navigate to business services tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, businessServices);
-        cy.get("@getBusinessService");
+    it("Last page item(s) deletion, impact on page reload validation", async () => {
+        // Navigate to business services tab and select 10 items per page
+        BusinessServices.openList(10);
 
-        // Select 10 items per page
-        selectItemsPerPage(10);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Navigate to last page
-        cy.get(lastPageButton).eq(0).click();
-        cy.wait(2000);
+        goToLastPage();
+        cy.wait(2 * SEC);
 
         // Delete all items of last page
-        deleteTableRows();
+
+        let listNamesOnLastPage = await BusinessServices.getNamesListOnPage();
+        let listOnLastPage = [];
+        businessServiceList.forEach(($element) => {
+            for (let currentName of listNamesOnLastPage) {
+                if ($element.name === currentName) {
+                    listOnLastPage.push($element);
+                }
+            }
+        });
+        deleteByList(listOnLastPage);
+        listOnLastPage.forEach(($current) => {
+            deleteFromArray(businessServiceList, $current);
+        });
 
         // Verify that page is re-directed to previous page
         cy.get("td[data-label=Name]").then(($rows) => {
             cy.wrap($rows.length).should("eq", 10);
         });
+    });
+
+    after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
+
+        // Delete the business services created before the tests
+        deleteByList(businessServiceList);
     });
 });
