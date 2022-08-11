@@ -76,7 +76,7 @@ export function clearInput(fieldID: string): void {
 
 export function clickByText(fieldId: string, buttonText: string, isForced = true): void {
     // https://github.com/cypress-io/cypress/issues/2000#issuecomment-561468114
-    cy.contains(fieldId, buttonText, { timeout: 30 * SEC }).click({ force: isForced });
+    cy.contains(fieldId, buttonText, { timeout: 120 * SEC }).click({ force: isForced });
     cy.wait(1000);
 }
 
@@ -94,7 +94,7 @@ export function cancelForm(): void {
 }
 
 export function login(): void {
-    cy.visit(tackleUiUrl, { timeout: 30 * SEC });
+    cy.visit(tackleUiUrl, { timeout: 120 * SEC });
 
     inputText(loginView.userNameInput, userName);
     inputText(loginView.userPasswordInput, userPassword);
@@ -102,7 +102,7 @@ export function login(): void {
 
     // Change password screen which appears only for first login
     // This is used in PR tester and Jenkins jobs.
-    cy.get("h1", { timeout: 30 * SEC }).then(($a) => {
+    cy.get("h1", { timeout: 120 * SEC }).then(($a) => {
         if ($a.text().toString().trim() == "Update password") {
             inputText(loginView.changePasswordInput, "Dog8code");
             inputText(loginView.confirmPasswordInput, "Dog8code");
