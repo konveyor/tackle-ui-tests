@@ -42,6 +42,7 @@ import {
     deleteAction,
     applicationInventory,
     SEC,
+    CredentialType,
 } from "../integration/types/constants";
 import { actionButton, date, selectBox } from "../integration/views/applicationinventory.view";
 import {
@@ -58,6 +59,11 @@ import { tagLabels } from "../integration/views/tags.view";
 import { Credentials } from "../integration/models/administrator/credentials/credentials";
 import { Assessment } from "../integration/models/developer/applicationinventory/assessment";
 import { analysisData, applicationData } from "../integration/types/types";
+import { CredentialsProxy } from "../integration/models/administrator/credentials/credentialsProxy";
+import { getRandomCredentialsData } from "../utils/data_utils";
+import { CredentialsMaven } from "../integration/models/administrator/credentials/credentialsMaven";
+import { CredentialsSourceControlUsername } from "../integration/models/administrator/credentials/credentialsSourceControlUsername";
+import { CredentialsSourceControlKey } from "../integration/models/administrator/credentials/credentialsSourceControlKey";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
@@ -665,6 +671,44 @@ export function createMultipleTags(numberoftags: number): Array<Tag> {
         tagList.push(tag);
     }
     return tagList;
+}
+
+export function generateMultipleCredentials(amount: number): Credentials[] {
+    cy.pause();
+    let newCredentialsList = [];
+    let createdCredentialsList = [];
+    for (let i = 0; i < Math.ceil((10 - amount) / 4); i++) {
+        newCredentialsList.push(
+            new CredentialsProxy(getRandomCredentialsData(CredentialType.proxy))
+        );
+        newCredentialsList.push(
+            new CredentialsMaven(getRandomCredentialsData(CredentialType.maven))
+        );
+        newCredentialsList.push(
+            new CredentialsSourceControlUsername(
+                getRandomCredentialsData(CredentialType.sourceControl)
+            )
+        );
+        newCredentialsList.push(
+            new CredentialsSourceControlKey(getRandomCredentialsData(CredentialType.sourceControl))
+        );
+    }
+    cy.pause();
+    newCredentialsList.forEach((currentCredential) => {
+        currentCredential.create();
+        createdCredentialsList.push(currentCredential);
+    });
+    cy.pause();
+    return createdCredentialsList;
+}
+
+export function getRowsAmount(): number {
+    let amount: number;
+    cy.get(commonView.appTable).get("tbody").find(trTag).as("rowsIdentifier");
+    cy.get("@rowsIdentifier").then(($tableRows) => {
+        amount = $tableRows.length;
+    });
+    return amount;
 }
 
 export function getRandomApplicationData(sourceData?, binaryData?): applicationData {
