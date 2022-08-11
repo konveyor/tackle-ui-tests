@@ -27,6 +27,9 @@ import {
     deleteApplicationTableRows,
     selectUserPerspective,
     createMultipleBusinessServices,
+    goToPage,
+    deleteAllBusinessServices,
+    deleteAllTagsAndTagTypes,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import { reports } from "../../../types/constants";
@@ -54,11 +57,10 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
         stakeholdersList = createMultipleStakeholders(1);
         var rowsToCreate = 11;
 
-        // Create 1 Business Service
-        businessservicelist = createMultipleBusinessServices(1);
+        // Create 11 Business Service
+        businessservicelist = createMultipleBusinessServices(11);
 
         // Create 11 applications
-        deleteApplicationTableRows();
         applicationsList = createMultipleApplications(rowsToCreate, businessservicelist);
 
         // Get the last extra application created
@@ -84,8 +86,10 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
         if (hasToBeSkipped("@tier3")) return;
 
         // Delete All
-        deleteAllStakeholders();
         deleteApplicationTableRows();
+        deleteAllStakeholders();
+        deleteAllBusinessServices();
+        deleteAllTagsAndTagTypes();
     });
 
     it("Adoption candidate distribution - Navigation button validations", function () {
@@ -161,7 +165,7 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
         cy.wait(2000);
 
         // Go to page number 2
-        cy.get(commonView.pageNumInput).clear().type("2").type("{enter}");
+        goToPage(2);
 
         // Verify that page number has changed, as previous page nav button got enabled
         cy.get(commonView.prevPageButton).each(($previousBtn) => {
@@ -204,7 +208,7 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
         cy.get(commonView.prevPageButton).eq(3).should("not.be.disabled");
 
         // Verify that navigation button to first page is enabled after moving to next page
-        cy.get(commonView.firstPageButton).eq(1).should("not.be.disabled");
+        cy.get(commonView.firstPageButton).eq(2).should("not.be.disabled");
     });
 
     it("Identified risks - Items per page validations", function () {
