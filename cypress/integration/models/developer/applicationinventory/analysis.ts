@@ -112,7 +112,7 @@ export class Analysis extends Application {
         }
     }
 
-    verifyAnalysisStatusComplete() {
+    verifyAnalysisStatus(status) {
         cy.get(tdTag)
             .contains(this.name)
             .parent(tdTag)
@@ -121,7 +121,7 @@ export class Analysis extends Application {
                 cy.get(analysisColumn)
                     .find("div")
                     .then(() => {
-                        cy.contains("div", "Completed", { timeout: 80000 });
+                        cy.contains("div", status, { timeout: 80000 });
                     });
             });
     }

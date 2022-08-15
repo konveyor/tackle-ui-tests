@@ -66,6 +66,6 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
-        application.verifyAnalysisStatusComplete();
+        application.verifyAnalysisStatus("Completed");
     });
 });
