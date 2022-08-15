@@ -124,7 +124,7 @@ describe("Application import operations", () => {
         var errorMsgs = [
             "Duplicate ApplicationName in table: Customers",
             "Duplicate ApplicationName in table: Inventory",
-            "Duplicate ApplicationName in table: Gateway"
+            "Duplicate ApplicationName in table: Gateway",
         ];
         verifyImportErrorMsg(errorMsgs);
     });
