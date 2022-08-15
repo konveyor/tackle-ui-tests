@@ -121,7 +121,7 @@ export class Analysis extends Application {
                 cy.get(analysisColumn)
                     .find("div")
                     .then(() => {
-                        cy.contains("div", status, { timeout: 80000 });
+                        cy.contains("div", status, { timeout: 100000 });
                     });
             });
     }
