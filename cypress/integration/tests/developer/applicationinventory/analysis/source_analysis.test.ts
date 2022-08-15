@@ -53,8 +53,8 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
 
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
-        // deleteApplicationTableRows();
-        // deleteAllBusinessServices();
+        deleteApplicationTableRows();
+        deleteAllBusinessServices();
     });
 
     it("Source Code Analysis", function () {
@@ -67,23 +67,6 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
-        // cy.waitUntil(function() {
-        //     return cy.wrap(application.getAnalysisStatus()).should('eq', 'Completed')
-        //    })
         application.verifyAnalysisStatusComplete();
-
-        // application.getAnalysisStatus();
-        // cy.wait(10000);
-        // cy.log(application.getAnalysisStatus4()[0]);
-
-        //     cy.waitUntil(() => application.getAnalysisStatus()[0] == "Completed", {
-        //         //optional timeouts and error messages
-        //         errorMsg: "was expeting some other Value but got : " + "",
-        //         timeout: 10000,
-        //         interval: 500
-        //       }).then(() => {
-        //         cy.log("Foudn a difference in values")
-        //     });
-        //
     });
 });
