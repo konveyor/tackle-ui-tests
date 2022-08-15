@@ -1117,15 +1117,3 @@ export function validateValue(selector, value: string): void {
             });
     }
 }
-
-export function selectApplication(name: string): void {
-    cy.wait(8000);
-    cy.get(tdTag)
-        .contains(name)
-        .parent(tdTag)
-        .parent(trTag)
-        .within(() => {
-            click(selectBox);
-            cy.wait(2000);
-        });
-}

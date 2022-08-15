@@ -15,48 +15,24 @@ limitations under the License.
 */
 import {
     applicationInventory,
+    analyzeButton,
+    analysis,
     tdTag,
     trTag,
-    button,
-    analyzeButton,
-    deleteAction,
-    analysis,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
-import {
-    applicationNameInput,
-    applicationDescriptionInput,
-    applicationBusinessServiceSelect,
-    applicationTagsSelect,
-    applicationCommentInput,
-    editButton,
-    actionButton,
-    selectBox,
-    sourceRepository,
-    branch,
-    rootPath,
-    group,
-    artifact,
-    version,
-    packaging,
-} from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
     clickByText,
-    inputText,
-    click,
-    submitForm,
     cancelForm,
     selectFormItems,
     checkSuccessAlert,
-    performRowActionByIcon,
     selectUserPerspective,
-    performRowAction,
-    selectApplication,
 } from "../../../../utils/utils";
 import { analysisData, applicationData } from "../../../types/types";
 import { Application } from "./application";
-import { sourceDropdown } from "../../../views/analysis.view";
+import { analysisColumn, sourceDropdown } from "../../../views/analysis.view";
+import { List } from "cypress/types/lodash";
 
 export class Analysis extends Application {
     name: string;
@@ -119,7 +95,7 @@ export class Analysis extends Application {
 
     analyze(cancel = false): void {
         Analysis.open();
-        selectApplication(this.name);
+        this.selectApplication(this.name);
         cy.contains("button", analyzeButton, { timeout: 20000 }).should("be.enabled").click();
         if (cancel) {
             cancelForm();
@@ -134,6 +110,20 @@ export class Analysis extends Application {
             cy.contains("button", "Run", { timeout: 200 }).click();
             checkSuccessAlert(commonView.successAlertMessage, `Submitted for analysis`);
         }
+    }
+
+    verifyAnalysisStatusComplete() {
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                cy.get(analysisColumn)
+                    .find("div")
+                    .then(() => {
+                        cy.contains("div", "Completed", { timeout: 80000 });
+                    });
+            });
     }
 
     delete(cancel = false): void {

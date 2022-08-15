@@ -19,3 +19,4 @@ export const applicationDescriptionInput = "input[name=description]";
 export const sourceofAnalysiSelect = "[placeholder='Select a business service']";
 export const sourceDropdown =
     "main[aria-label='Application analysis content'] > div > div > div > div";
+export const analysisColumn = "td[data-label='Analysis']";
