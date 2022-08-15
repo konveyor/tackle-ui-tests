@@ -464,6 +464,8 @@ export function uploadfile(fileName: string): void {
 
 export function openManageImportsPage(): void {
     // Opens the manage import applications page
+    clickByText(navMenu, applicationInventory);
+    cy.wait("@getApplication");
     cy.get(actionButton).eq(1).click();
     cy.get("a.pf-c-dropdown__menu-item").contains("Manage imports").click();
     cy.get("h1", { timeout: 5 * SEC }).contains("Application imports");
@@ -522,6 +524,40 @@ export function deleteApplicationTableRows(lastPage = false): void {
                         cy.get(tdTag)
                             .contains(name)
                             .parent(tdTag)
+                            .parent(trTag)
+                            .within(() => {
+                                click(actionButton);
+                                cy.wait(800);
+                            })
+                            .contains(button, deleteAction)
+                            .click();
+                        cy.wait(800);
+                        click(commonView.confirmButton);
+                        cy.wait(4000);
+                    });
+            }
+        });
+}
+
+export function deleteAppImportsTableRows(lastPage = false): void {
+    if (!lastPage) {
+        openManageImportsPage();
+        // Select 100 items per page
+        selectItemsPerPage(100);
+        cy.wait(2000);
+    }
+
+    cy.get(commonView.appTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        var date = $tableRow.find("td[data-label=Date]").text();
+                        cy.get(tdTag)
+                            .contains(date)
                             .parent(trTag)
                             .within(() => {
                                 click(actionButton);
