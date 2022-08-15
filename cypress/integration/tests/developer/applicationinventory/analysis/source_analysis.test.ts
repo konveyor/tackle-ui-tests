@@ -33,7 +33,6 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
 
         // Perform login
         login();
-        // deleteApplicationTableRows();
     });
 
     beforeEach("Persist session", function () {

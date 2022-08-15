@@ -52,6 +52,7 @@ import {
     performRowActionByIcon,
     selectUserPerspective,
     performRowAction,
+    selectItemsPerPage,
 } from "../../../../utils/utils";
 import { applicationData } from "../../../types/types";
 
@@ -239,6 +240,17 @@ export class Application {
             .within(() => {
                 click(selectBox);
                 cy.wait(2000);
+            });
+    }
+
+    getColumnText(columnSelector, columnText: string): void {
+        selectItemsPerPage(100);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                cy.get(columnSelector).find("span").should("contain", columnText);
             });
     }
 }

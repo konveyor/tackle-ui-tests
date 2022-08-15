@@ -95,7 +95,7 @@ export class Analysis extends Application {
 
     analyze(cancel = false): void {
         Analysis.open();
-        this.selectApplication(this.name);
+        this.selectApplication();
         cy.contains("button", analyzeButton, { timeout: 20000 }).should("be.enabled").click();
         if (cancel) {
             cancelForm();
