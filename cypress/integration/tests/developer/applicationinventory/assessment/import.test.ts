@@ -27,6 +27,9 @@ import {
     deleteApplicationTableRows,
     preservecookies,
     hasToBeSkipped,
+    selectUserPerspective,
+    deleteAllBusinessServices,
+    deleteAppImportsTableRows,
 } from "../../../../../utils/utils";
 import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
@@ -47,6 +50,7 @@ describe("Application import operations", () => {
 
         // Delete the existing application rows
         deleteApplicationTableRows();
+        deleteAllBusinessServices();
         // Create business service
         businessService.create();
     });
@@ -57,20 +61,22 @@ describe("Application import operations", () => {
 
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplication");
+        deleteAppImportsTableRows();
     });
 
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
 
+        // Delete the existing application rows before deleting business service(s)
+        deleteApplicationTableRows();
+
         // Delete the business service
         businessService.delete();
-
-        // Delete the existing application rows
-        deleteApplicationTableRows();
     });
 
     it("Valid applications import", { tags: "@tier1" }, function () {
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
 
@@ -98,6 +104,7 @@ describe("Application import operations", () => {
     });
 
     it("Duplicate applications import", { tags: "@tier1" }, function () {
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
 
@@ -108,6 +115,7 @@ describe("Application import operations", () => {
 
         // Open application imports page
         openManageImportsPage();
+        cy.wait(3000);
 
         // Verify import applications page shows correct information
         verifyAppImport(fileName, "Completed", 0, 2);
@@ -126,6 +134,7 @@ describe("Application import operations", () => {
         "Applications import for non existing tags and business service",
         { tags: "@tier1" },
         function () {
+            selectUserPerspective("Developer");
             clickByText(navMenu, applicationInventory);
             cy.wait("@getApplication");
 
@@ -154,6 +163,7 @@ describe("Application import operations", () => {
         "Applications import with minimum required field(s) and empty row",
         { tags: "@tier1" },
         function () {
+            selectUserPerspective("Developer");
             clickByText(navMenu, applicationInventory);
             cy.wait("@getApplication");
 
@@ -188,6 +198,7 @@ describe("Application import operations", () => {
     );
 
     it("Applications import having same name with spaces", { tags: "@tier1" }, function () {
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
 
@@ -215,6 +226,7 @@ describe("Application import operations", () => {
         "Applications import having description and comments exceeding allowed limits",
         { tags: "@tier1" },
         function () {
+            selectUserPerspective("Developer");
             clickByText(navMenu, applicationInventory);
             cy.wait("@getApplication");
 
@@ -233,6 +245,7 @@ describe("Application import operations", () => {
 
     it("Applications import for invalid csv schema", { tags: "@newtest" }, function () {
         // Impacted by bug - https://issues.redhat.com/browse/TACKLE-320
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
 
