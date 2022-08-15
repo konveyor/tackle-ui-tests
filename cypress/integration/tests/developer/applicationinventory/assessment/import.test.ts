@@ -115,7 +115,6 @@ describe("Application import operations", () => {
 
         // Open application imports page
         openManageImportsPage();
-        cy.wait(3000);
 
         // Verify import applications page shows correct information
         verifyAppImport(fileName, "Completed", 0, 2);

@@ -1,0 +1,6 @@
+Record Type 1,Application Name,Description,Comments,Business Service,Dependency,Dependency Direction,Binary Group,Binary Artifact,Binary Version,Binary Packaging,Repository Type,Repository URL,Repository Branch,Repository Path,Tag Type 1,Tag 1,Tag Type 2,Tag 2,Tag Type 3,Tag 3,Tag Type 4,Tag 4,Tag Type 5,Tag 5,Tag Type 6,Tag 6,Tag Type 7,Tag 7,Tag Type 8,Tag 8,Tag Type 9,Tag 9,Tag Type 10,Tag 10,Tag Type 11,Tag 11,Tag Type 12,Tag 12,Tag Type 13,Tag 13,Tag Type 14,Tag 14,Tag Type 15,Tag 15,Tag Type 16,Tag 16,Tag Type 17,Tag 17,Tag Type 18,Tag 18,Tag Type 19,Tag 19,Tag Type 20,Tag 20
+1,Customers,Legacy Customers management service,,Retail,,,corp.acme.demo,customers-tomcat,0.0.1-SNAPSHOT,war,git,https://git-acme.local/customers.git,,,Operating System,RHEL 8,Database,Oracle,Language,Java,Runtime,Tomcat,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+1,Inventory,Inventory service,,Retail,,,corp.acme.demo,inventory,0.1.1-SNAPSHOT,war,git,https://git-acme.local/inventory.git,,,Operating System,RHEL 8,Database,Postgresql,Language,Java,Runtime,Quarkus,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+1,Gateway,API Gateway,,Retail,,,corp.acme.demo,gateway,0.1.1-SNAPSHOT,war,git,https://git-acme.local/gateway.git,,,Operating System,RHEL 8,,,Language,Java,Runtime,Spring Boot,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+2,Gateway,,,,Inventory,southbound
+2,Gateway,,,,Customers,southbound
