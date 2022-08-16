@@ -33,7 +33,6 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
 
         // Perform login
         login();
-        // deleteApplicationTableRows();
     });
 
     beforeEach("Persist session", function () {
@@ -67,5 +66,6 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
+        application.verifyAnalysisStatus("Completed");
     });
 });
