@@ -117,14 +117,14 @@ describe("Application import operations", () => {
         openManageImportsPage();
 
         // Verify import applications page shows correct information
-        verifyAppImport(fileName, "Completed", 0, 2);
+        verifyAppImport(fileName, "Completed", 2, 3);
 
         // Verify the error report messages
         openErrorReport();
         var errorMsgs = [
-            "Duplicate ApplicationName in table: Customers",
-            "Duplicate ApplicationName in table: Inventory",
-            "Duplicate ApplicationName in table: Gateway",
+            "UNIQUE constraint failed: Application.Name",
+            "UNIQUE constraint failed: Application.Name",
+            "UNIQUE constraint failed: Application.Name",
         ];
         verifyImportErrorMsg(errorMsgs);
     });

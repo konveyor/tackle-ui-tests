@@ -170,7 +170,7 @@ export function exists(value: string): void {
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
                 selectItemsPerPage(100);
-                cy.get("td", { timeout: 5 * SEC }).should("contain", value);
+                cy.get("td", { timeout: 10 * SEC }).should("contain", value);
             }
         });
 }
@@ -464,6 +464,7 @@ export function uploadfile(fileName: string): void {
 
 export function openManageImportsPage(): void {
     // Opens the manage import applications page
+    selectUserPerspective("Developer");
     clickByText(navMenu, applicationInventory);
     cy.wait("@getApplication");
     cy.get(actionButton).eq(1).click();
