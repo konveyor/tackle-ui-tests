@@ -44,7 +44,6 @@ export class Analysis extends Application {
     sources?: string;
     excludeRuleTags?: string;
     enableTransaction?: boolean;
-    static Url = Cypress.env("tackleUrl")
 
     constructor(appData: applicationData, analysisData: analysisData) {
         super(appData);
@@ -122,15 +121,15 @@ export class Analysis extends Application {
                 cy.get(analysisColumn)
                     .find("div > div")
                     .then(($a) => {
-                        if ($a.text().toString() != status){
+                        if ($a.text().toString() != status) {
                             cy.wait(10000);
                             this.verifyAnalysisStatus(status);
-                        }           
+                        }
                     });
             });
     }
 
-    openreport(){
+    openreport() {
         super.expandApplicationRow();
         cy.wait(2000);
         cy.get(tdTag)
