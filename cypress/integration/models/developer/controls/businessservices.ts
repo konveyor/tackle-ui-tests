@@ -183,12 +183,12 @@ export class BusinessServices {
 
     delete(cancel = false): void {
         BusinessServices.openList();
-        // cy.wait(2000);
         performRowAction(this.name, deleteAction);
         if (cancel) {
             cancelForm();
         } else {
             click(commonView.confirmButton);
         }
+        cy.wait(2000);
     }
 }
