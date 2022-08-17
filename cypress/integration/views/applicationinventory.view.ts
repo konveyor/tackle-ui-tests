@@ -36,6 +36,9 @@ export const selectBox = "input[type=checkbox]";
 export const tags = "span";
 export const user = "User";
 
+//Fields related to application inventory
+export const kebabMenu = "div > button[aria-label='Actions']";
+
 //Fields related to analysis - source mode
 export const sourceRepository = "input[name=sourceRepository]";
 export const branch = "input[name=branch]";
