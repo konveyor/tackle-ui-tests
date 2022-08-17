@@ -288,21 +288,6 @@ export class Assessment extends Application {
             });
     }
 
-    expandApplicationRow(): void {
-        // displays row details by clicking on the expand button
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                cy.get(commonView.expandRow).then(($btn) => {
-                    if ($btn.attr("aria-expanded") === "false") {
-                        $btn.trigger("click");
-                    }
-                });
-            });
-    }
-
     closeApplicationRow(): void {
         // closes row details by clicking on the collapse button
         cy.get(tdTag)

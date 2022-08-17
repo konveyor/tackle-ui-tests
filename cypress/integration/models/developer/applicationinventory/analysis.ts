@@ -44,6 +44,7 @@ export class Analysis extends Application {
     sources?: string;
     excludeRuleTags?: string;
     enableTransaction?: boolean;
+    static Url = Cypress.env("tackleUrl")
 
     constructor(appData: applicationData, analysisData: analysisData) {
         super(appData);
@@ -119,10 +120,30 @@ export class Analysis extends Application {
             .parent(trTag)
             .within(() => {
                 cy.get(analysisColumn)
-                    .find("div")
-                    .then(() => {
-                        cy.contains("div", status, { timeout: 100000 });
+                    .find("div > div")
+                    .then(($a) => {
+                        if ($a.text().toString() != status){
+                            cy.wait(10000);
+                            this.verifyAnalysisStatus(status);
+                        }           
                     });
+            });
+    }
+
+    openreport(){
+        super.expandApplicationRow();
+        cy.wait(2000);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .next()
+            .find("span")
+            .contains("Analysis")
+            .parent("dt")
+            .next()
+            .within(() => {
+                cy.get("button").should("contain", "Report").click();
             });
     }
 
