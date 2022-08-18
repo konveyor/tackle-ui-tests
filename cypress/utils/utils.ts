@@ -490,8 +490,8 @@ export function verifyAppImport(
     cy.get("table > tbody > tr").eq(0).as("firstRow");
     cy.get("@firstRow").find("td[data-label='File name']").should("contain", fileName);
     cy.get("@firstRow").find("td[data-label='Status']").find("div").should("contain", status);
-    cy.get("@firstRow").find("td[data-label='Accepted']").should("contain", accepted);
-    cy.get("@firstRow").find("td[data-label='Rejected']").should("contain", rejected);
+    cy.get("@firstRow").find("td[data-label='column-4']").should("contain", accepted);
+    cy.get("@firstRow").find("td[data-label='column-5']").should("contain", rejected);
 }
 
 export function verifyImportErrorMsg(errorMsg: any): void {
