@@ -2,5 +2,9 @@
     {
         "source": "Source code",
         "target": "Containerization"
+    },
+    {
+        "source": "Source code + dependencies",
+        "target": "Containerization"
     }
 ]

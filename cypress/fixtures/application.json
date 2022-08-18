@@ -2,5 +2,9 @@
     {
         "repoType": "git",
         "sourceRepo": "https://github.com/ibraginsky/book-server"
+    },
+    {
+        "repoType": "git",
+        "sourceRepo": "https://github.com/WASdev/sample.daytrader7"
     }
 ]
