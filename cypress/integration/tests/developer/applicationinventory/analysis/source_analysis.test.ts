@@ -71,4 +71,17 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.verifyAnalysisStatus("Completed");
         application.openreport();
     });
+
+    it("Source Code + dependencies analysis on daytrader app", function () {
+        // Automate bug https://issues.redhat.com/browse/TACKLE-721
+        const application = new Analysis(
+            getRandomApplicationData(this.appData[1]),
+            getRandomAnalysisData(this.analysisData[1])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+    });
 });
