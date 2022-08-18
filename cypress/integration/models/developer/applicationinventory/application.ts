@@ -39,6 +39,7 @@ import {
     artifact,
     version,
     packaging,
+    kebabMenu,
 } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
@@ -51,7 +52,6 @@ import {
     checkSuccessAlert,
     performRowActionByIcon,
     selectUserPerspective,
-    performRowAction,
     selectItemsPerPage,
 } from "../../../../utils/utils";
 import { applicationData } from "../../../types/types";
@@ -222,7 +222,8 @@ export class Application {
 
     delete(cancel = false): void {
         cy.wait(2000);
-        performRowAction(this.name, deleteAction);
+        performRowActionByIcon(this.name, kebabMenu);
+        clickByText(button, deleteAction);
         if (cancel) {
             cancelForm();
         } else {

@@ -35,6 +35,7 @@ export const southboundHelper = "div[id=southbound-dependencies-helper]";
 export const selectBox = "input[type=checkbox]";
 export const tags = "span";
 export const user = "User";
+export const kebabMenu = "div > button[aria-label='Actions']";
 
 //Fields related to analysis - source mode
 export const sourceRepository = "input[name=sourceRepository]";

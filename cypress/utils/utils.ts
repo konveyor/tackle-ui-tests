@@ -575,9 +575,11 @@ export function performRowAction(itemName: string, action: string): void {
 }
 
 // Perform edit/delete action on the specified row selector by clicking an icon button
+/* As of Tackle 2.1, this function can be used to click the update button and kebab menu for
+   applications on the Application Inventory page */
 export function performRowActionByIcon(itemName: string, action: string): void {
     // itemName is the text to be searched on the screen (For eg: application name, etc)
-    // Action is the name of the action to be applied (For eg: edit or delete)
+    // Action is the name of the action to be applied (For eg: edit or click kebab menu)
     cy.contains(itemName, { timeout: 120 * SEC })
         .closest(trTag)
         .within(() => {
