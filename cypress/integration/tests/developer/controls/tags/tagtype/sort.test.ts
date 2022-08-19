@@ -52,7 +52,7 @@ describe("Tag type sort validations", { tags: "@tier2" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
-        cy.wait("@getTagtypes");
+        cy.get("@getTagtypes");
 
         // Get unsorted list when page loads
         const unsortedList = getTableColumnData(tagType);
@@ -79,7 +79,7 @@ describe("Tag type sort validations", { tags: "@tier2" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
-        cy.wait("@getTagtypes");
+        cy.get("@getTagtypes");
 
         // Get unsorted list when page loads
         const unsortedList = getTableColumnData(rank);
@@ -106,7 +106,7 @@ describe("Tag type sort validations", { tags: "@tier2" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, tags);
-        cy.wait("@getTagtypes");
+        cy.get("@getTagtypes");
 
         // Get unsorted list when page loads
         const unsortedList = getTableColumnData(tagCount);
