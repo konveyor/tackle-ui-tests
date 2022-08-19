@@ -176,7 +176,7 @@ export function exists(value: string): void {
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
                 selectItemsPerPage(100);
-                cy.get("td", { timeout: 5 * SEC }).should("contain", value);
+                cy.get("td", { timeout: 10 * SEC }).should("contain", value);
             }
         });
 }
@@ -471,6 +471,9 @@ export function uploadfile(fileName: string): void {
 
 export function openManageImportsPage(): void {
     // Opens the manage import applications page
+    selectUserPerspective("Developer");
+    clickByText(navMenu, applicationInventory);
+    cy.wait("@getApplication");
     cy.get(actionButton).eq(1).click();
     cy.get("a.pf-c-dropdown__menu-item").contains("Manage imports").click();
     cy.get("h1", { timeout: 5 * SEC }).contains("Application imports");
@@ -494,8 +497,8 @@ export function verifyAppImport(
     cy.get("table > tbody > tr").eq(0).as("firstRow");
     cy.get("@firstRow").find("td[data-label='File name']").should("contain", fileName);
     cy.get("@firstRow").find("td[data-label='Status']").find("div").should("contain", status);
-    cy.get("@firstRow").find("td[data-label='Accepted']").should("contain", accepted);
-    cy.get("@firstRow").find("td[data-label='Rejected']").should("contain", rejected);
+    cy.get("@firstRow").find("td[data-label='column-4']").should("contain", accepted);
+    cy.get("@firstRow").find("td[data-label='column-5']").should("contain", rejected);
 }
 
 export function verifyImportErrorMsg(errorMsg: any): void {
@@ -529,6 +532,40 @@ export function deleteApplicationTableRows(lastPage = false): void {
                         cy.get(tdTag)
                             .contains(name)
                             .parent(tdTag)
+                            .parent(trTag)
+                            .within(() => {
+                                click(actionButton);
+                                cy.wait(800);
+                            })
+                            .contains(button, deleteAction)
+                            .click();
+                        cy.wait(800);
+                        click(commonView.confirmButton);
+                        cy.wait(4000);
+                    });
+            }
+        });
+}
+
+export function deleteAppImportsTableRows(lastPage = false): void {
+    if (!lastPage) {
+        openManageImportsPage();
+        // Select 100 items per page
+        selectItemsPerPage(100);
+        cy.wait(2000);
+    }
+
+    cy.get(commonView.appTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        var date = $tableRow.find("td[data-label=Date]").text();
+                        cy.get(tdTag)
+                            .contains(date)
                             .parent(trTag)
                             .within(() => {
                                 click(actionButton);
