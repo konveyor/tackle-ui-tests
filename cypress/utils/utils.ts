@@ -713,7 +713,7 @@ export function getRowsAmount(): number {
     return amount;
 }
 
-export function getRandomApplicationData(sourceData?, binaryData?): applicationData {
+export function getRandomApplicationData(options?:{sourceData?, binaryData?}): applicationData {
     let businessservicesList = createMultipleBusinessServices(1);
 
     let appdata = {
@@ -723,16 +723,17 @@ export function getRandomApplicationData(sourceData?, binaryData?): applicationD
         comment: data.getDescription(),
     };
 
-    if (sourceData) {
-        appdata["repoType"] = sourceData.repoType;
-        appdata["sourceRepo"] = sourceData.sourceRepo;
+    if (options.sourceData) {
+        appdata["repoType"] = options.sourceData.repoType;
+        appdata["sourceRepo"] = options.sourceData.sourceRepo;
     }
 
-    if (binaryData) {
-        appdata["group"] = sourceData.group;
-        appdata["artifact"] = sourceData.artifact;
+    if (options.binaryData) {
+        appdata["group"] = options.binaryData.group;
+        appdata["artifact"] = options.binaryData.artifact;
+        appdata["version"] = options.binaryData.version;
+        appdata["packaging"] = options.binaryData.packaging;
     }
-
     return appdata;
 }
 

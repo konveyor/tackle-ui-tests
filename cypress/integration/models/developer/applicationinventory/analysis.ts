@@ -19,6 +19,9 @@ import {
     analysis,
     tdTag,
     trTag,
+    button,
+    save,
+    CredentialType,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import * as commonView from "../../../views/common.view";
@@ -28,11 +31,20 @@ import {
     selectFormItems,
     checkSuccessAlert,
     selectUserPerspective,
+    performRowActionByIcon,
+    click,
 } from "../../../../utils/utils";
 import { analysisData, applicationData } from "../../../types/types";
 import { Application } from "./application";
-import { analysisColumn, sourceDropdown } from "../../../views/analysis.view";
+import {
+    analysisColumn,
+    manageCredentials,
+    sourceDropdown,
+    sourceCredential,
+    mavenCredential,
+} from "../../../views/analysis.view";
 import { List } from "cypress/types/lodash";
+import { kebabMenu } from "../../../views/applicationinventory.view";
 
 export class Analysis extends Application {
     name: string;
@@ -149,5 +161,19 @@ export class Analysis extends Application {
     delete(cancel = false): void {
         Analysis.open();
         super.delete();
+    }
+
+    manageCredentials(sourceCred?: string, mavenCred?: string): void {
+        cy.wait(2000);
+        performRowActionByIcon(this.name, kebabMenu);
+        clickByText(button, manageCredentials);
+        if (sourceCred) {
+            selectFormItems(sourceCredential, sourceCred);
+        }
+        if (mavenCred) {
+            selectFormItems(mavenCredential, mavenCred);
+        }
+        clickByText(button, save);
+        cy.wait(2000);
     }
 }

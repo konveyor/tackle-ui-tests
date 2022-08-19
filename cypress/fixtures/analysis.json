@@ -6,5 +6,9 @@
     {
         "source": "Source code + dependencies",
         "target": "Containerization"
+    },
+    {
+        "source": "Binary",
+        "target": "Containerization"
     }
 ]
