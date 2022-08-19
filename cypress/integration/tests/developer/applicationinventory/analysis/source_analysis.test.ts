@@ -61,7 +61,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
     it("Source Code Analysis", function () {
         // For source code analysis application must have source code URL git or svn
         const application = new Analysis(
-            getRandomApplicationData(this.appData[0]),
+            getRandomApplicationData({ sourceData: this.appData[0] }),
             getRandomAnalysisData(this.analysisData[0])
         );
         application.create();
@@ -75,7 +75,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
     it("Source Code + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
         const application = new Analysis(
-            getRandomApplicationData(this.appData[1]),
+            getRandomApplicationData({ sourceData: this.appData[1] }),
             getRandomAnalysisData(this.analysisData[1])
         );
         application.create();
