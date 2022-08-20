@@ -103,6 +103,7 @@ export function getDefaultTagTypes(): string[] {
 }
 
 export function getRandomCredentialsData(type: string): CredentialsData {
+    //Created a dummy github account for testing.
     let git_password = Cypress.env("git_password");
     let git_user = Cypress.env("git_user");
     if (git_user == "") git_user = getRandomWord(6);

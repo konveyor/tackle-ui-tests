@@ -134,8 +134,15 @@ export class Analysis extends Application {
                     .find("div > div")
                     .then(($a) => {
                         if ($a.text().toString() != status) {
+                            // If analysis failed and is not expected then test fails.
+                            if ($a.text().toString() == "Failed" && status != "Failed") {
+                                expect($a.text().toString()).to.eq("Completed");
+                            }
                             cy.wait(10000);
                             this.verifyAnalysisStatus(status);
+                        } else {
+                            expect($a.text().toString()).to.eq(status);
+                            cy.wait(2000);
                         }
                     });
             });

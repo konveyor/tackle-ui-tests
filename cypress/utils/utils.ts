@@ -713,7 +713,7 @@ export function getRowsAmount(): number {
     return amount;
 }
 
-export function getRandomApplicationData(options?:{sourceData?, binaryData?}): applicationData {
+export function getRandomApplicationData(options?: { sourceData?; binaryData? }): applicationData {
     let businessservicesList = createMultipleBusinessServices(1);
 
     let appdata = {
