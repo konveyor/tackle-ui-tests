@@ -24,9 +24,16 @@ import {
     getRandomApplicationData,
     getRandomAnalysisData,
 } from "../../../../../utils/utils";
+import { Credentials } from "../../../../models/administrator/credentials";
+import * as data from "../../../../../utils/data_utils";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
+import { CredentialType } from "../../../../types/constants";
+import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
+import { CredentialsMaven } from "../../../../models/administrator/credentials/credentialsMaven";
+let source_credential;
+let maven_credential;
 
-describe("Source Analysis", { tags: "@tier1" }, () => {
+describe("Binary Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;
@@ -35,6 +42,14 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         login();
         deleteApplicationTableRows();
         deleteAllBusinessServices();
+        source_credential = new CredentialsSourceControlUsername(
+            data.getRandomCredentialsData(CredentialType.sourceControl)
+        );
+        source_credential.create();
+        maven_credential = new CredentialsMaven(
+            data.getRandomCredentialsData(CredentialType.maven)
+        );
+        maven_credential.create();
     });
 
     beforeEach("Persist session", function () {
@@ -56,32 +71,23 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         // Prevent hook from running, if the tag is excluded from run
         deleteApplicationTableRows();
         deleteAllBusinessServices();
+        source_credential.delete();
+        maven_credential.delete();
     });
 
-    it("Source Code Analysis", function () {
-        // For source code analysis application must have source code URL git or svn
+    it("Binary Analysis", function () {
+        // For binary analysis application must have group,artifcat and version.
         const application = new Analysis(
-            getRandomApplicationData({ sourceData: this.appData[0] }),
-            getRandomAnalysisData(this.analysisData[0])
+            getRandomApplicationData({ binaryData: this.appData[2] }),
+            getRandomAnalysisData(this.analysisData[2])
         );
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
+        // Both source and maven credentials required for binary.
+        application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
-    });
-
-    it("Source Code + dependencies analysis on daytrader app", function () {
-        // Automate bug https://issues.redhat.com/browse/TACKLE-721
-        const application = new Analysis(
-            getRandomApplicationData({ sourceData: this.appData[1] }),
-            getRandomAnalysisData(this.analysisData[1])
-        );
-        application.create();
-        cy.wait("@getApplication");
-        cy.wait(2000);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
     });
 });

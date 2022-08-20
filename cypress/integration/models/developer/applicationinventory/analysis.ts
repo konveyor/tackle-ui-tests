@@ -19,6 +19,9 @@ import {
     analysis,
     tdTag,
     trTag,
+    button,
+    save,
+    CredentialType,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import * as commonView from "../../../views/common.view";
@@ -28,11 +31,20 @@ import {
     selectFormItems,
     checkSuccessAlert,
     selectUserPerspective,
+    performRowActionByIcon,
+    click,
 } from "../../../../utils/utils";
 import { analysisData, applicationData } from "../../../types/types";
 import { Application } from "./application";
-import { analysisColumn, sourceDropdown } from "../../../views/analysis.view";
+import {
+    analysisColumn,
+    manageCredentials,
+    sourceDropdown,
+    sourceCredential,
+    mavenCredential,
+} from "../../../views/analysis.view";
 import { List } from "cypress/types/lodash";
+import { kebabMenu } from "../../../views/applicationinventory.view";
 
 export class Analysis extends Application {
     name: string;
@@ -122,8 +134,15 @@ export class Analysis extends Application {
                     .find("div > div")
                     .then(($a) => {
                         if ($a.text().toString() != status) {
+                            // If analysis failed and is not expected then test fails.
+                            if ($a.text().toString() == "Failed" && status != "Failed") {
+                                expect($a.text().toString()).to.eq("Completed");
+                            }
                             cy.wait(10000);
                             this.verifyAnalysisStatus(status);
+                        } else {
+                            expect($a.text().toString()).to.eq(status);
+                            cy.wait(2000);
                         }
                     });
             });
@@ -149,5 +168,19 @@ export class Analysis extends Application {
     delete(cancel = false): void {
         Analysis.open();
         super.delete();
+    }
+
+    manageCredentials(sourceCred?: string, mavenCred?: string): void {
+        cy.wait(2000);
+        performRowActionByIcon(this.name, kebabMenu);
+        clickByText(button, manageCredentials);
+        if (sourceCred) {
+            selectFormItems(sourceCredential, sourceCred);
+        }
+        if (mavenCred) {
+            selectFormItems(mavenCredential, mavenCred);
+        }
+        clickByText(button, save);
+        cy.wait(2000);
     }
 }

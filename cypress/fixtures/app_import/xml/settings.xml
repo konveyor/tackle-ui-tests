@@ -13,8 +13,8 @@
   <servers>
     <server>
        <id>tackle-testapp</id>
-       <username>GITHUB_USER</username>
-       <password>GITHUB_TOKEN</password>
+       <username>Shveta22</username>
+       <password>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</password>
      </server>
   </servers>
   <mirrors>
@@ -48,4 +48,3 @@
     <activeProfile>github</activeProfile>
   </activeProfiles>
 </settings>
-

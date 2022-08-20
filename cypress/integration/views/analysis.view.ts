@@ -20,3 +20,6 @@ export const sourceofAnalysiSelect = "[placeholder='Select a business service']"
 export const sourceDropdown =
     "main[aria-label='Application analysis content'] > div > div > div > div";
 export const analysisColumn = "td[data-label='Analysis']";
+export const manageCredentials = "Manage credentials";
+export const sourceCredential = "input[aria-label='sourceCredentials']";
+export const mavenCredential = "input[aria-label='mavenSettings']";

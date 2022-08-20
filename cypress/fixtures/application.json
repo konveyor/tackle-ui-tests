@@ -6,5 +6,11 @@
     {
         "repoType": "git",
         "sourceRepo": "https://github.com/WASdev/sample.daytrader7"
+    },
+    {
+        "group": "io.konveyor.demo",
+        "artifact": "customers-tomcat",
+        "version": "0.0.1-SNAPSHOT",
+        "packaging": "war"
     }
 ]
