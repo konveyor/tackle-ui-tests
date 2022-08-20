@@ -71,6 +71,8 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         // Prevent hook from running, if the tag is excluded from run
         deleteApplicationTableRows();
         deleteAllBusinessServices();
+        source_credential.delete();
+        maven_credential.delete();
     });
 
     it("Binary Analysis", function () {
@@ -82,6 +84,7 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
+        // Both source and maven credentials required for binary.
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
