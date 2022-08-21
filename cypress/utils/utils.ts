@@ -624,6 +624,32 @@ export function performRowActionByIcon(itemName: string, action: string): void {
         });
 }
 
+export function createMultipleCredentials(numberOfCredentials: number): Array<Credentials> {
+    let newCredentialsList: Array<Credentials> = [];
+    let createdCredentialsList: Array<Credentials> = [];
+    for (let i = 0; i <= Math.ceil(numberOfCredentials / 4); i++) {
+        newCredentialsList.push(
+            new CredentialsProxy(getRandomCredentialsData(CredentialType.proxy))
+        );
+        newCredentialsList.push(
+            new CredentialsMaven(getRandomCredentialsData(CredentialType.maven))
+        );
+        newCredentialsList.push(
+            new CredentialsSourceControlUsername(
+                getRandomCredentialsData(CredentialType.sourceControl)
+            )
+        );
+        newCredentialsList.push(
+            new CredentialsSourceControlKey(getRandomCredentialsData(CredentialType.sourceControl))
+        );
+    }
+    newCredentialsList.forEach((currentCredential) => {
+        currentCredential.create();
+        createdCredentialsList.push(currentCredential);
+    });
+    return createdCredentialsList;
+}
+
 export function createMultipleStakeholders(
     numberOfStakeholders: number,
     jobFunctionList?: Array<Jobfunctions>,
