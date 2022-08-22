@@ -24,7 +24,6 @@ import {
     getRandomApplicationData,
     getRandomAnalysisData,
 } from "../../../../../utils/utils";
-import { Credentials } from "../../../../models/administrator/credentials";
 import * as data from "../../../../../utils/data_utils";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
 import { CredentialType } from "../../../../types/constants";

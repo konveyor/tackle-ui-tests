@@ -32,7 +32,7 @@ import {
     checkSuccessAlert,
     selectUserPerspective,
     performRowActionByIcon,
-    click,
+    uploadFile,
 } from "../../../../utils/utils";
 import { analysisData, applicationData } from "../../../types/types";
 import { Application } from "./application";
@@ -105,6 +105,13 @@ export class Analysis extends Application {
         cy.get("div.pf-c-empty-state__content").children("h4").contains(target).click();
     }
 
+    protected uploadBinary() {
+        cy.log("here hu main");
+        uploadFile(this.binary);
+        cy.get("span.pf-c-progress__measure", { timeout: 15000 }).should("contain", "100%");
+        cy.wait(5000);
+    }
+
     analyze(cancel = false): void {
         Analysis.open();
         this.selectApplication();
@@ -113,7 +120,13 @@ export class Analysis extends Application {
             cancelForm();
         } else {
             this.selectSourceofAnalysis(this.source);
-            cy.contains("button", "Next", { timeout: 200 }).click();
+            if (this.binary) this.uploadBinary();
+            // cy.get("button").contains("Next", { timeout: 5000 }).should("not.be.disabled", { timeout: 5000 });
+            cy.get("button", { timeout: 5000 })
+                .should("contain", "Next", { timeout: 5000 })
+                .click();
+            // cy.contains("button", "Next", { timeout: 5000 }).should("not.be.disabled").click();
+            // cy.contains("button", "Next", { timeout: 5000 }).click();
             this.selectTarget(this.target);
             cy.contains("button", "Next", { timeout: 200 }).click();
             if (!this.scope) cy.contains("button", "Next", { timeout: 200 }).click();

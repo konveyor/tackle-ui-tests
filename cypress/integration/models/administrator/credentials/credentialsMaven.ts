@@ -5,7 +5,7 @@ import {
     exists,
     notExists,
     submitForm,
-    uploadfile,
+    uploadFile,
 } from "../../../../utils/utils";
 import { CredentialsMavenData } from "../../../types/types";
 import { button } from "../../../types/constants";
@@ -27,7 +27,7 @@ export class CredentialsMaven extends Credentials {
     }
 
     protected fillSettingsFile() {
-        uploadfile(this.settingsFile);
+        uploadFile(this.settingsFile);
     }
 
     create(toBeCanceled = false) {

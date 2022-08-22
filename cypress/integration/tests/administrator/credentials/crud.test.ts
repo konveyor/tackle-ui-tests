@@ -22,7 +22,7 @@ import {
     clickByText,
     hasToBeSkipped,
     preservecookies,
-    uploadfile,
+    uploadFile,
 } from "../../../../utils/utils";
 
 import { createNewButton, button } from "../../../types/constants";
@@ -73,7 +73,7 @@ describe("Credentials CRUD operations", { tags: "@tier1" }, () => {
         Credentials.fillDescription(data.getDescription());
         Credentials.selectType("Source Control");
         Credentials.selectUserCrdentials("Source Private Key/Passphrase");
-        uploadfile(filePath + fileName);
+        uploadFile(filePath + fileName);
         Credentials.fillPrivatePassphrase(data.getRandomWord(6));
         cy.wait(200);
         submitForm();
