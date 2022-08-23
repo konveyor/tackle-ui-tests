@@ -107,7 +107,6 @@ export class Analysis extends Application {
     }
 
     protected uploadBinary() {
-        cy.log("here hu main");
         uploadFile(this.binary);
         cy.get("span.pf-c-progress__measure", { timeout: 15000 }).should("contain", "100%");
     }
