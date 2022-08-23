@@ -461,7 +461,7 @@ export function importApplication(fileName: string): void {
     checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
 }
 
-export function uploadfile(fileName: string): void {
+export function uploadFile(fileName: string): void {
     // Uplaod any file
     cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(fileName, {
         subjectType: "drag-n-drop",
@@ -786,12 +786,12 @@ export function getRandomApplicationData(options?: { sourceData?; binaryData? })
         comment: data.getDescription(),
     };
 
-    if (options.sourceData) {
+    if (options) {
         appdata["repoType"] = options.sourceData.repoType;
         appdata["sourceRepo"] = options.sourceData.sourceRepo;
     }
 
-    if (options.binaryData) {
+    if (options) {
         appdata["group"] = options.binaryData.group;
         appdata["artifact"] = options.binaryData.artifact;
         appdata["version"] = options.binaryData.version;
@@ -804,6 +804,7 @@ export function getRandomAnalysisData(sourceData): analysisData {
     var analysisData = {
         source: sourceData.source,
         target: sourceData.target,
+        binary: sourceData.binary,
     };
     return analysisData;
 }

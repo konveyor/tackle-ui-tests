@@ -29,7 +29,7 @@ import {
     selectItemsPerPage,
     submitForm,
     selectFormItems,
-    uploadfile,
+    uploadFile,
     cancelForm,
     checkSuccessAlert,
     selectReactFormItems,
@@ -116,7 +116,7 @@ export class Credentials {
                     Credentials.fillPassword(this.password);
                 }
                 if (this.userCredentials == "Source Private Key/Passphrase") {
-                    uploadfile(this.fileName);
+                    uploadFile(this.fileName);
                     cy.wait(3000);
                     if (this.privatePassphrase)
                         Credentials.fillPrivatePassphrase(this.privatePassphrase);

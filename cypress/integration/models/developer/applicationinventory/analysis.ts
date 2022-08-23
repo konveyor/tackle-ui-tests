@@ -32,7 +32,7 @@ import {
     checkSuccessAlert,
     selectUserPerspective,
     performRowActionByIcon,
-    click,
+    uploadFile,
 } from "../../../../utils/utils";
 import { analysisData, applicationData } from "../../../types/types";
 import { Application } from "./application";
@@ -42,6 +42,7 @@ import {
     sourceDropdown,
     sourceCredential,
     mavenCredential,
+    nextButton,
 } from "../../../views/analysis.view";
 import { List } from "cypress/types/lodash";
 import { kebabMenu } from "../../../views/applicationinventory.view";
@@ -105,6 +106,19 @@ export class Analysis extends Application {
         cy.get("div.pf-c-empty-state__content").children("h4").contains(target).click();
     }
 
+    protected uploadBinary() {
+        uploadFile(this.binary);
+        cy.get("span.pf-c-progress__measure", { timeout: 15000 }).should("contain", "100%");
+    }
+
+    protected isNextEnabled() {
+        cy.get(nextButton).then(($a) => {
+            if ($a.hasClass("pf-m-disabled")) {
+                cy.wait(2000);
+                this.isNextEnabled();
+            }
+        });
+    }
     analyze(cancel = false): void {
         Analysis.open();
         this.selectApplication();
@@ -113,6 +127,8 @@ export class Analysis extends Application {
             cancelForm();
         } else {
             this.selectSourceofAnalysis(this.source);
+            if (this.binary) this.uploadBinary();
+            this.isNextEnabled();
             cy.contains("button", "Next", { timeout: 200 }).click();
             this.selectTarget(this.target);
             cy.contains("button", "Next", { timeout: 200 }).click();
