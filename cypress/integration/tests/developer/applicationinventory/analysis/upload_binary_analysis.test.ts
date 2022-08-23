@@ -24,13 +24,7 @@ import {
     getRandomApplicationData,
     getRandomAnalysisData,
 } from "../../../../../utils/utils";
-import * as data from "../../../../../utils/data_utils";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
-import { CredentialType } from "../../../../types/constants";
-import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
-import { CredentialsMaven } from "../../../../models/administrator/credentials/credentialsMaven";
-let source_credential;
-let maven_credential;
 
 describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -39,8 +33,8 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
 
         // Perform login
         login();
-        // deleteApplicationTableRows();
-        // deleteAllBusinessServices();
+        deleteApplicationTableRows();
+        deleteAllBusinessServices();
     });
 
     beforeEach("Persist session", function () {
@@ -65,7 +59,6 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
     });
 
     it("Upload Binary Analysis", function () {
-        // For binary analysis application must have group,artifcat and version.
         const application = new Analysis(
             getRandomApplicationData(),
             getRandomAnalysisData(this.analysisData[3])
@@ -73,7 +66,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        // Both source and maven credentials required for binary.
+        // No credentials required for uploaded binary.
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();

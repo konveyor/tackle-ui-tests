@@ -42,6 +42,7 @@ import {
     sourceDropdown,
     sourceCredential,
     mavenCredential,
+    nextButton,
 } from "../../../views/analysis.view";
 import { List } from "cypress/types/lodash";
 import { kebabMenu } from "../../../views/applicationinventory.view";
@@ -109,9 +110,16 @@ export class Analysis extends Application {
         cy.log("here hu main");
         uploadFile(this.binary);
         cy.get("span.pf-c-progress__measure", { timeout: 15000 }).should("contain", "100%");
-        cy.wait(5000);
     }
 
+    protected isNextEnabled() {
+        cy.get(nextButton).then(($a) => {
+            if ($a.hasClass("pf-m-disabled")) {
+                cy.wait(2000);
+                this.isNextEnabled();
+            }
+        });
+    }
     analyze(cancel = false): void {
         Analysis.open();
         this.selectApplication();
@@ -121,12 +129,8 @@ export class Analysis extends Application {
         } else {
             this.selectSourceofAnalysis(this.source);
             if (this.binary) this.uploadBinary();
-            // cy.get("button").contains("Next", { timeout: 5000 }).should("not.be.disabled", { timeout: 5000 });
-            cy.get("button", { timeout: 5000 })
-                .should("contain", "Next", { timeout: 5000 })
-                .click();
-            // cy.contains("button", "Next", { timeout: 5000 }).should("not.be.disabled").click();
-            // cy.contains("button", "Next", { timeout: 5000 }).click();
+            this.isNextEnabled();
+            cy.contains("button", "Next", { timeout: 200 }).click();
             this.selectTarget(this.target);
             cy.contains("button", "Next", { timeout: 200 }).click();
             if (!this.scope) cy.contains("button", "Next", { timeout: 200 }).click();
