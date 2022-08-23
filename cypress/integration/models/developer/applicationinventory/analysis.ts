@@ -166,7 +166,7 @@ export class Analysis extends Application {
 
     openreport() {
         super.expandApplicationRow();
-        cy.wait(2000);
+        cy.wait(10000);
         cy.get(tdTag)
             .contains(this.name)
             .parent(tdTag)

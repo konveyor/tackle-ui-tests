@@ -787,15 +787,19 @@ export function getRandomApplicationData(options?: { sourceData?; binaryData? })
     };
 
     if (options) {
-        appdata["repoType"] = options.sourceData.repoType;
-        appdata["sourceRepo"] = options.sourceData.sourceRepo;
+        if (options.sourceData) {
+            appdata["repoType"] = options.sourceData.repoType;
+            appdata["sourceRepo"] = options.sourceData.sourceRepo;
+        }
     }
 
     if (options) {
-        appdata["group"] = options.binaryData.group;
-        appdata["artifact"] = options.binaryData.artifact;
-        appdata["version"] = options.binaryData.version;
-        appdata["packaging"] = options.binaryData.packaging;
+        if (options.binaryData) {
+            appdata["group"] = options.binaryData.group;
+            appdata["artifact"] = options.binaryData.artifact;
+            appdata["version"] = options.binaryData.version;
+            appdata["packaging"] = options.binaryData.packaging;
+        }
     }
     return appdata;
 }
