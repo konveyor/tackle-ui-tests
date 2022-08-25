@@ -22,7 +22,7 @@ import {
     preservecookies,
     deleteApplicationTableRows,
     hasToBeSkipped,
-    createMultipleApplication,
+    createMultipleApplications,
     createMultipleBusinessServices,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
@@ -45,7 +45,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
         // Navigate to Application inventory tab, delete all and create 11 applications
         deleteApplicationTableRows();
         businessservicesList = createMultipleBusinessServices(1);
-        applicationsList = createMultipleApplication(11);
+        applicationsList = createMultipleApplications(11);
     });
 
     beforeEach("Persist session", function () {

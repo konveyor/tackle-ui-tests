@@ -59,7 +59,6 @@ import {
     selectInput,
 } from "../../../views/review.view";
 import { applicationData } from "../../../types/types";
-import { Tag } from "../controls/tags";
 
 export class Assessment extends Application {
     // name: string;

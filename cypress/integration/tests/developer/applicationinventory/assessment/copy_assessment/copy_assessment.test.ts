@@ -24,7 +24,7 @@ import {
     deleteAllStakeholders,
     deleteApplicationTableRows,
     deleteAllStakeholderGroups,
-    createMultipleApplication,
+    createMultipleApplications,
 } from "../../../../../../utils/utils";
 
 import { Stakeholders } from "../../../../../models/developer/controls/stakeholders";
@@ -51,7 +51,7 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
         // Create data
         stakeholdersList = createMultipleStakeholders(1);
         stakeholdergroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
-        applicationList = createMultipleApplication(4);
+        applicationList = createMultipleApplications(4);
 
         // Verify copy assessment is not enabled untill assessment is done
         applicationList[0].verifyCopyAssessmentDisabled();

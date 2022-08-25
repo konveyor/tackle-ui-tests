@@ -31,9 +31,9 @@ import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory, name, tagCount, review } from "../../../../types/constants";
 
 import * as data from "../../../../../utils/data_utils";
-import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
+import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
-var applicationsList: Array<ApplicationInventory> = [];
+var applicationsList: Array<Assessment> = [];
 
 describe("Application inventory sort validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
@@ -45,8 +45,12 @@ describe("Application inventory sort validations", { tags: "@tier2" }, function 
         var tagsList = ["C++", "COBOL", "Java"];
         // Create multiple applications with tags
         for (let i = 0; i < 3; i++) {
+            let appdata = {
+                name: data.getFullName(),
+                tags: tagsList,
+            };
             // Create new application
-            const application = new ApplicationInventory(data.getFullName(), "", "", "", tagsList);
+            const application = new Assessment(appdata);
             application.create();
             applicationsList.push(application);
             tagsList.pop();

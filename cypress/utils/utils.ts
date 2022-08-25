@@ -818,7 +818,7 @@ export function getRandomAnalysisData(sourceData): analysisData {
     };
     return analysisData;
 }
-export function createMultipleApplication(numberofapplications: number): Array<Assessment> {
+export function createMultipleApplications(numberofapplications: number): Array<Assessment> {
     let applicationList: Array<Assessment> = [];
     for (let i = 0; i < numberofapplications; i++) {
         // Navigate to application inventory tab and create new application

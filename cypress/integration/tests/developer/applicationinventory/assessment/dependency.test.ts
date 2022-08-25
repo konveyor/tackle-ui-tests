@@ -20,7 +20,7 @@ import {
     hasToBeSkipped,
     login,
     preservecookies,
-    createMultipleApplication,
+    createMultipleApplications,
     deleteApplicationTableRows,
 } from "../../../../../utils/utils";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
@@ -45,7 +45,7 @@ describe("Manage application dependencies", { tags: "@newtest" }, () => {
         preservecookies();
 
         // Create new applications
-        applicationsList = createMultipleApplication(3);
+        applicationsList = createMultipleApplications(3);
     });
 
     after("Perform test data clean up", function () {
