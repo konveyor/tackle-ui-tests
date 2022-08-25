@@ -21,7 +21,6 @@ import {
     createNewButton,
     deleteAction,
     assessment,
-    tags,
     tagCount,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
@@ -32,7 +31,6 @@ import {
     applicationTagsSelect,
     applicationCommentInput,
     editButton,
-    actionButton,
     selectBox,
     sourceRepository,
     branch,
@@ -55,10 +53,8 @@ import {
     performRowActionByIcon,
     selectUserPerspective,
     selectItemsPerPage,
-    removeMember,
 } from "../../../../utils/utils";
 import { applicationData } from "../../../types/types";
-import { Tag } from "../controls/tags";
 
 export class Application {
     name: string;
