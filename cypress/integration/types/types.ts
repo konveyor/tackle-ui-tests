@@ -1,4 +1,5 @@
 import { string } from "@oozcitak/infra";
+import { Tag } from "../models/developer/controls/tags";
 
 export type CredentialsSourceControlData = {
     type: string;
@@ -30,7 +31,7 @@ export type CredentialsData =
 
 export type applicationData = {
     name: string;
-    business: string;
+    business?: string;
     description?: string;
     tags?: Array<string>;
     comment?: string;

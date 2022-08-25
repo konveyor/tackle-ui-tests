@@ -21,22 +21,24 @@ import {
     preservecookies,
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
-    createMultipleApplications,
+    
     deleteAllStakeholders,
     deleteApplicationTableRows,
     deleteAllStakeholderGroups,
+    createMultipleApplication,
 } from "../../../../../../utils/utils";
-import { ApplicationInventory } from "../../../../../models/developer/applicationinventory/applicationinventory";
 
 import { Stakeholders } from "../../../../../models/developer/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../../models/developer/controls/stakeholdergroups";
 import { trTag } from "../../../../../types/constants";
 import { copy, selectBox } from "../../../../../views/applicationinventory.view";
+import { Assessment } from "../../../../../models/developer/applicationinventory/assessment";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
-var applicationList: Array<ApplicationInventory> = [];
+var applicationList: Array<Assessment> = [];
+
 
 describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
     before("Login and Create Test Data", function () {
@@ -51,7 +53,7 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
         // Create data
         stakeholdersList = createMultipleStakeholders(1);
         stakeholdergroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
-        applicationList = createMultipleApplications(4);
+        applicationList = createMultipleApplication(4);
 
         // Verify copy assessment is not enabled untill assessment is done
         applicationList[0].verifyCopyAssessmentDisabled();

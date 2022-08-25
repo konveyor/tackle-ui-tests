@@ -59,6 +59,7 @@ import {
     selectInput,
 } from "../../../views/review.view";
 import { applicationData } from "../../../types/types";
+import { Tag } from "../controls/tags";
 
 export class Assessment extends Application {
     // name: string;
@@ -286,35 +287,6 @@ export class Assessment extends Application {
             .within(() => {
                 cy.get(columnSelector).find("span").should("contain", columnText);
             });
-    }
-
-    closeApplicationRow(): void {
-        // closes row details by clicking on the collapse button
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                cy.get(commonView.expandRow).then(($btn) => {
-                    if ($btn.attr("aria-expanded") === "true") {
-                        $btn.trigger("click");
-                    }
-                });
-            });
-    }
-
-    existsWithinRow(rowIdentifier: string, fieldId: string, valueToSearch: string): void {
-        // Verifies if the valueToSearch exists within the row
-        cy.get(tdTag)
-            .contains(rowIdentifier)
-            .parent(tdTag)
-            .parent(trTag)
-            .next()
-            .find(tags)
-            .contains(fieldId)
-            .parent("dt")
-            .next()
-            .should("contain", valueToSearch);
     }
 
     // Opens the manage dependencies dialog from application inventory page

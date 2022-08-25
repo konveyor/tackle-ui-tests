@@ -27,18 +27,15 @@ import {
     deleteApplicationTableRows,
     preservecookies,
     hasToBeSkipped,
-    selectUserPerspective,
-    deleteAllBusinessServices,
-    deleteAppImportsTableRows,
 } from "../../../../../utils/utils";
-import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory, button } from "../../../../types/constants";
+import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
-const businessService = new BusinessServices("Retail");
-const filePath = "app_import/csv/";
-var applicationsList: Array<ApplicationInventory> = [];
+const businessService = new BusinessServices("Finance and HR");
+const filePath = "app_import/csv";
+var applicationsList: Array<Assessment> = [];
 
 describe("Application import operations", () => {
     before("Login and create test data", function () {
@@ -50,7 +47,6 @@ describe("Application import operations", () => {
 
         // Delete the existing application rows
         deleteApplicationTableRows();
-        deleteAllBusinessServices();
         // Create business service
         businessService.create();
     });
@@ -61,38 +57,40 @@ describe("Application import operations", () => {
 
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplication");
-        deleteAppImportsTableRows();
     });
 
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
 
-        // Delete the existing application rows before deleting business service(s)
-        deleteApplicationTableRows();
-
         // Delete the business service
         businessService.delete();
+
+        // Delete the existing application rows
+        deleteApplicationTableRows();
     });
 
     it("Valid applications import", { tags: "@tier1" }, function () {
-        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
 
         // Import valid csv
-        const fileName = "template_application_import.csv";
+        const fileName = "valid_application_rows.csv";
         importApplication(filePath + fileName);
         cy.wait(2000);
 
         // Verify imported apps are visible in table
-        exists("Customers");
-        exists("Inventory");
-        exists("Gateway");
+        exists("Import-app-1");
+        exists("Import-app-2");
+
 
         // Create objects for imported apps
-        for (let i = 1; i <= 3; i++) {
-            const importedApp = new ApplicationInventory(`Import-app-${i}`, businessService.name);
+        for (let i = 1; i <= 2; i++) {
+            let appdata = {
+                name: `Import-app-${i}`,
+                business: businessService.name,
+            };
+            const importedApp = new Assessment(appdata);
             applicationsList.push(importedApp);
         }
 
@@ -100,16 +98,15 @@ describe("Application import operations", () => {
         openManageImportsPage();
 
         // Verify import applications page shows correct information
-        verifyAppImport(fileName, "Completed", 5, 0);
+        verifyAppImport(fileName, "Completed", 2, 0);
     });
 
     it("Duplicate applications import", { tags: "@tier1" }, function () {
-        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
 
         // Import already imported valid csv file
-        const fileName = "template_application_import.csv";
+        const fileName = "valid_application_rows.csv";
         importApplication(filePath + fileName);
         cy.wait(2000);
 
@@ -117,14 +114,13 @@ describe("Application import operations", () => {
         openManageImportsPage();
 
         // Verify import applications page shows correct information
-        verifyAppImport(fileName, "Completed", 2, 3);
+        verifyAppImport(fileName, "Completed", 0, 2);
 
         // Verify the error report messages
         openErrorReport();
         var errorMsgs = [
-            "UNIQUE constraint failed: Application.Name",
-            "UNIQUE constraint failed: Application.Name",
-            "UNIQUE constraint failed: Application.Name",
+            "Duplicate ApplicationName in table: Import-app-1",
+            "Duplicate ApplicationName in table: Import-app-2",
         ];
         verifyImportErrorMsg(errorMsgs);
     });
@@ -133,7 +129,6 @@ describe("Application import operations", () => {
         "Applications import for non existing tags and business service",
         { tags: "@tier1" },
         function () {
-            selectUserPerspective("Developer");
             clickByText(navMenu, applicationInventory);
             cy.wait("@getApplication");
 
@@ -162,7 +157,6 @@ describe("Application import operations", () => {
         "Applications import with minimum required field(s) and empty row",
         { tags: "@tier1" },
         function () {
-            selectUserPerspective("Developer");
             clickByText(navMenu, applicationInventory);
             cy.wait("@getApplication");
 
@@ -177,10 +171,11 @@ describe("Application import operations", () => {
 
             // Create objects for imported apps
             for (let i = 5; i <= 6; i++) {
-                const importedApp = new ApplicationInventory(
-                    `Import-app-${i}`,
-                    businessService.name
-                );
+                let appdata = {
+                    name: `Import-app-${i}`,
+                    business: businessService.name,
+                };
+                const importedApp = new Assessment(appdata);
                 applicationsList.push(importedApp);
             }
 
@@ -197,7 +192,6 @@ describe("Application import operations", () => {
     );
 
     it("Applications import having same name with spaces", { tags: "@tier1" }, function () {
-        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
 
@@ -225,7 +219,6 @@ describe("Application import operations", () => {
         "Applications import having description and comments exceeding allowed limits",
         { tags: "@tier1" },
         function () {
-            selectUserPerspective("Developer");
             clickByText(navMenu, applicationInventory);
             cy.wait("@getApplication");
 
@@ -244,7 +237,6 @@ describe("Application import operations", () => {
 
     it("Applications import for invalid csv schema", { tags: "@newtest" }, function () {
         // Impacted by bug - https://issues.redhat.com/browse/TACKLE-320
-        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
 

@@ -21,6 +21,8 @@ import {
     createNewButton,
     deleteAction,
     assessment,
+    tags,
+    tagCount,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -53,12 +55,14 @@ import {
     performRowActionByIcon,
     selectUserPerspective,
     selectItemsPerPage,
+    removeMember,
 } from "../../../../utils/utils";
 import { applicationData } from "../../../types/types";
+import { Tag } from "../controls/tags";
 
 export class Application {
     name: string;
-    business: string;
+    business?: string;
     description?: string;
     tags?: Array<string>;
     comment?: string;
@@ -94,7 +98,7 @@ export class Application {
             packaging,
         } = appData;
         this.name = name;
-        this.business = business;
+        if (business) this.business = business;
         if (description) this.description = description;
         if (comment) this.comment = comment;
         if (tags) this.tags = tags;
@@ -143,7 +147,7 @@ export class Application {
             cancelForm();
         } else {
             this.fillName(this.name);
-            this.selectBusinessService(this.business);
+            if (this.business) this.selectBusinessService(this.business);
             if (this.description) {
                 this.fillDescription(this.description);
             }
@@ -220,6 +224,18 @@ export class Application {
         }
     }
 
+    removeBusinessService(): void {
+        cy.wait(2000);
+        performRowActionByIcon(this.name, editButton);
+        cy.get(applicationBusinessServiceSelect)
+        .parent('div')
+        .next('button').then(($a)=>{
+            if($a.hasClass('pf-c-select__toggle-clear'))
+            $a.click();
+        });
+        submitForm();
+    }
+
     delete(cancel = false): void {
         cy.wait(2000);
         performRowActionByIcon(this.name, kebabMenu);
@@ -267,6 +283,50 @@ export class Application {
                         $btn.trigger("click");
                     }
                 });
+            });
+    }
+
+    existsWithinRow(rowIdentifier: string, fieldId: string, valueToSearch: string): void {
+        // Verifies if the valueToSearch exists within the row
+        cy.get(tdTag)
+            .contains(rowIdentifier)
+            .parent(tdTag)
+            .parent(trTag)
+            .next()
+            .contains(fieldId)
+            .parent("dt")
+            .next()
+            .should("contain", valueToSearch);
+    }
+
+    closeApplicationRow(): void {
+        // closes row details by clicking on the collapse button
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                cy.get(commonView.expandRow).then(($btn) => {
+                    if ($btn.attr("aria-expanded") === "true") {
+                        $btn.trigger("click");
+                    }
+                });
+            });
+    }
+
+    verifyTagCount(tagsCount: number): void {
+        // Verify tag count for specific application
+        Application.open();
+        selectItemsPerPage(100);
+        cy.wait(4000);
+        cy.get(".pf-c-table > tbody > tr")
+            .not(".pf-c-table__expandable-row")
+            .each(($ele) => {
+                if ($ele.find(`td[data-label="${name}"]`).text() == this.name) {
+                    expect(parseInt($ele.find(`td[data-label="${tagCount}"]`).text())).to.equal(
+                        tagsCount
+                    );
+                }
             });
     }
 }
