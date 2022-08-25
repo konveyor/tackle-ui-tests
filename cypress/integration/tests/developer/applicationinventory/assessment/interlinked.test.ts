@@ -18,7 +18,6 @@ limitations under the License.
 import {
     login,
     clickByText,
-    notExists,
     preservecookies,
     hasToBeSkipped,
     click,
@@ -104,10 +103,6 @@ describe("Applications interlinked to tags and business service", () => {
             application.verifyTagCount(1);
             // Remove the BS and tags
             application.removeBusinessService();
-
-            // businessservicesList[0].delete();
-            // notExists(businessservicesList[0].name);
-
             tagList[0].delete();
 
             // Navigate to application inventory
