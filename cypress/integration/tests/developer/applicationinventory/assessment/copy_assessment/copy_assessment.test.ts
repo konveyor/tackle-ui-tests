@@ -21,7 +21,6 @@ import {
     preservecookies,
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
-    
     deleteAllStakeholders,
     deleteApplicationTableRows,
     deleteAllStakeholderGroups,
@@ -38,7 +37,6 @@ var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var applicationList: Array<Assessment> = [];
-
 
 describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
     before("Login and Create Test Data", function () {

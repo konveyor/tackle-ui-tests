@@ -83,7 +83,6 @@ describe("Application import operations", () => {
         exists("Import-app-1");
         exists("Import-app-2");
 
-
         // Create objects for imported apps
         for (let i = 1; i <= 2; i++) {
             let appdata = {

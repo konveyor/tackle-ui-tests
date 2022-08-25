@@ -43,7 +43,12 @@ import {
     SEC,
     CredentialType,
 } from "../integration/types/constants";
-import { actionButton, applicationBusinessServiceSelect, date, selectBox } from "../integration/views/applicationinventory.view";
+import {
+    actionButton,
+    applicationBusinessServiceSelect,
+    date,
+    selectBox,
+} from "../integration/views/applicationinventory.view";
 import {
     confirmButton,
     divHeader,
@@ -813,9 +818,7 @@ export function getRandomAnalysisData(sourceData): analysisData {
     };
     return analysisData;
 }
-export function createMultipleApplication(
-    numberofapplications: number
-): Array<Assessment> {
+export function createMultipleApplication(numberofapplications: number): Array<Assessment> {
     let applicationList: Array<Assessment> = [];
     for (let i = 0; i < numberofapplications; i++) {
         // Navigate to application inventory tab and create new application

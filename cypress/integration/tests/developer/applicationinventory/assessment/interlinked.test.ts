@@ -41,11 +41,7 @@ import {
 import { navMenu } from "../../../../views/menu.view";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
-import {
-    applicationInventory,
-    button,
-    assess,
-} from "../../../../types/constants";
+import { applicationInventory, button, assess } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
@@ -66,7 +62,6 @@ describe("Applications interlinked to tags and business service", () => {
         // Create data
         stakeholdersList = createMultipleStakeholders(1);
         stakeholdergroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
-      
     });
 
     beforeEach("Define interceptors", function () {
@@ -109,7 +104,7 @@ describe("Applications interlinked to tags and business service", () => {
             application.verifyTagCount(1);
             // Remove the BS and tags
             application.removeBusinessService();
-            
+
             // businessservicesList[0].delete();
             // notExists(businessservicesList[0].name);
 
@@ -146,7 +141,6 @@ describe("Applications interlinked to tags and business service", () => {
             application.closeApplicationRow();
             application.verifyTagCount(1);
             cy.wait(1000);
-
         }
     );
 
@@ -171,9 +165,9 @@ describe("Applications interlinked to tags and business service", () => {
                 [stakeholdergroupsList[0].name]
             );
             cy.wait(2000);
-            application.is_assessed();      
-        
-            // Delete the stakeholders, group 
+            application.is_assessed();
+
+            // Delete the stakeholders, group
             stakeholdersList[0].delete;
             stakeholdergroupsList[0].delete();
 

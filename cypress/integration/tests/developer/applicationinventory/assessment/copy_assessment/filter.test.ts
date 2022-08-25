@@ -59,7 +59,7 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         if (hasToBeSkipped("@newtest")) return;
 
         // Perform login
-        login();  
+        login();
 
         // Create data
         stakeholdersList = createMultipleStakeholders(1);
