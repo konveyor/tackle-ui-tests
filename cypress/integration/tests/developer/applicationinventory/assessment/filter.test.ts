@@ -60,9 +60,6 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
 
         // Perform login
         login();
-
-        businessserviceList = createMultipleBusinessServices(3);
-        tagList = createMultipleTags(3);
         applicationsList = createMultipleApplications(2);
     });
 
@@ -113,7 +110,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         cy.wait(3000);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No applications available");
 
         // Clear all filters
         clickByText(button, clearAllFilters);
@@ -147,7 +144,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         cy.wait(3000);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No applications available");
 
         // Clear all filters
         clickByText(button, clearAllFilters);
@@ -167,11 +164,11 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing business service and apply it as search filter
-        applySearchFilter(businessService, businessserviceList[2].name);
+        applySearchFilter(businessService, data.getRandomWord(5));
         cy.wait(3000);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No applications available");
 
         // Clear all filters
         clickByText(button, clearAllFilters);
@@ -192,11 +189,11 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing tag and apply it as search filter
-        applySearchFilter(tag, tagList[2].name);
+        applySearchFilter(tag, data.getRandomWord(5));
         cy.wait(3000);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No applications available");
 
         // Clear all filters
         clickByText(button, clearAllFilters);
