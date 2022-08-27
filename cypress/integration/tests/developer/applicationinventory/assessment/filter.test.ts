@@ -42,15 +42,10 @@ import {
     assessment,
 } from "../../../../types/constants";
 
-import { BusinessServices } from "../../../../models/developer/controls/businessservices";
-import { Tag } from "../../../../models/developer/controls/tags";
-
 import * as data from "../../../../../utils/data_utils";
 import { Application } from "../../../../models/developer/applicationinventory/application";
 
 var applicationsList: Array<Application> = [];
-var businessserviceList: Array<BusinessServices> = [];
-var tagList: Array<Tag> = [];
 var invalidSearchInput = String(data.getRandomNumber());
 
 describe("Application inventory filter validations", { tags: "@tier2" }, function () {
@@ -75,11 +70,9 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     after("Perform test data clean up", function () {
         if (hasToBeSkipped("@tier2")) return;
 
-        // Delete the business services
-        deleteAllBusinessServices();
-
         deleteAllTagTypes();
         deleteApplicationTableRows();
+        deleteAllBusinessServices();
     });
 
     it("Name filter validations", function () {

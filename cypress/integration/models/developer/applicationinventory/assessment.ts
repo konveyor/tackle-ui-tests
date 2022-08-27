@@ -29,9 +29,11 @@ import {
     actionButton,
     selectBox,
     tags,
-    dependenciesDropdownBtn,
     closeForm,
     copy,
+    kebabMenu,
+    northdependenciesDropdownBtn,
+    southdependenciesDropdownBtn,
 } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
@@ -43,6 +45,7 @@ import {
     selectFormItems,
     performRowAction,
     selectUserPerspective,
+    performRowActionByIcon,
 } from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import {
@@ -292,33 +295,70 @@ export class Assessment extends Application {
     openManageDependencies(): void {
         Assessment.open();
         selectItemsPerPage(100);
-        performRowAction(this.name, "Manage dependencies");
+        performRowActionByIcon(this.name, kebabMenu);
+        clickByText(button, "Manage dependencies");
     }
 
     // Selects the application as dependency from dropdown. Arg dropdownNum value 0 selects northbound, whereas value 1 selects southbound
-    selectDependency(dropdownNum: number, appNameList: Array<string>): void {
+    selectnorthDependency(appNameList: Array<string>): void {
         appNameList.forEach(function (app) {
-            cy.get(dependenciesDropdownBtn).eq(dropdownNum).click();
+            cy.get(northdependenciesDropdownBtn).click();
             cy.contains("button", app).click();
         });
     }
 
-    // Add/Remove north or south bound dependency for an application
+    // Selects the application as dependency from dropdown. Arg dropdownNum value 0 selects northbound, whereas value 1 selects southbound
+    selectDependency(dropdownLocator: string, appNameList: Array<string>): void {
+        appNameList.forEach(function (app) {
+            cy.get(dropdownLocator).click();
+            cy.contains("button", app).click();
+        });
+    }
+
+    // Add north or south bound dependency for an application
     addDependencies(northbound?: Array<string>, southbound?: Array<string>): void {
         if (northbound || southbound) {
             this.openManageDependencies();
-            cy.wait(1000);
+            // cy.wait(1000);
             if (northbound.length > 0) {
-                this.selectDependency(0, northbound);
+                this.selectDependency(northdependenciesDropdownBtn, northbound);
+                cy.wait(1000);
             }
             if (southbound.length > 0) {
-                this.selectDependency(1, southbound);
+                this.selectDependency(southdependenciesDropdownBtn, southbound);
+                cy.wait(1000);
             }
             cy.wait(2000);
             click(closeForm);
         }
     }
 
+    removeDep(dependency) {
+        cy.get("div")
+            .contains(dependency)
+            //.parent("div")
+            .next("button")
+            .then(($a) => {
+                if ($a.hasClass("pf-m-plain")) $a.click();
+            });
+    }
+
+    // Remove north or south bound dependency for an application
+    removeDependencies(northbound?: Array<string>, southbound?: Array<string>): void {
+        if (northbound || southbound) {
+            this.openManageDependencies();
+            if (northbound.length > 0) {
+                this.removeDep(northbound[0]);
+                cy.wait(1000);
+            }
+            if (southbound.length > 0) {
+                this.removeDep(southbound[0]);
+                cy.wait(1000);
+            }
+            cy.wait(2000);
+            click(closeForm);
+        }
+    }
     // Verifies if the north or south bound dependencies exist for an application
     verifyDependencies(northboundApps?: Array<string>, southboundApps?: Array<string>): void {
         if (northboundApps || southboundApps) {

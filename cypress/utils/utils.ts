@@ -782,13 +782,9 @@ export function getRowsAmount(): number {
 }
 
 export function getRandomApplicationData(options?: { sourceData?; binaryData? }): applicationData {
-    let businessservicesList = createMultipleBusinessServices(1);
-    let tagList = createMultipleTags(1);
     let appdata = {
         name: data.getAppName(),
-        business: businessservicesList[0].name,
         description: data.getDescription(),
-        tags: [tagList[0].name],
         comment: data.getDescription(),
     };
 

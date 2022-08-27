@@ -32,7 +32,6 @@ import * as commonView from "../../../../views/common.view";
 import { Application } from "../../../../models/developer/applicationinventory/application";
 
 var applicationsList: Array<Application> = [];
-var businessservicesList: Array<BusinessServices> = [];
 
 describe("Application inventory pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
@@ -44,7 +43,6 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
 
         // Navigate to Application inventory tab, delete all and create 11 applications
         deleteApplicationTableRows();
-        businessservicesList = createMultipleBusinessServices(1);
         applicationsList = createMultipleApplications(11);
     });
 
