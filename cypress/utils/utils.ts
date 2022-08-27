@@ -16,7 +16,6 @@ limitations under the License.
 import { BusinessServices } from "../integration/models/developer/controls/businessservices";
 import { Stakeholders } from "../integration/models/developer/controls/stakeholders";
 import { Stakeholdergroups } from "../integration/models/developer/controls/stakeholdergroups";
-import { ApplicationInventory } from "../integration/models/developer/applicationinventory/applicationinventory";
 import { Tag } from "../integration/models/developer/controls/tags";
 import { TagType } from "../integration/models/developer/controls/tagtypes";
 import { Jobfunctions } from "../integration/models/developer/controls/jobfunctions";
@@ -44,7 +43,12 @@ import {
     SEC,
     CredentialType,
 } from "../integration/types/constants";
-import { actionButton, date, selectBox } from "../integration/views/applicationinventory.view";
+import {
+    actionButton,
+    applicationBusinessServiceSelect,
+    date,
+    selectBox,
+} from "../integration/views/applicationinventory.view";
 import {
     confirmButton,
     divHeader,
@@ -64,6 +68,7 @@ import { getRandomCredentialsData } from "../utils/data_utils";
 import { CredentialsMaven } from "../integration/models/administrator/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../integration/models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../integration/models/administrator/credentials/credentialsSourceControlKey";
+import { Application } from "../integration/models/developer/applicationinventory/application";
 
 const userName = Cypress.env("user");
 const userPassword = Cypress.env("pass");
@@ -777,11 +782,8 @@ export function getRowsAmount(): number {
 }
 
 export function getRandomApplicationData(options?: { sourceData?; binaryData? }): applicationData {
-    let businessservicesList = createMultipleBusinessServices(1);
-
     let appdata = {
         name: data.getAppName(),
-        business: businessservicesList[0].name,
         description: data.getDescription(),
         comment: data.getDescription(),
     };
@@ -812,19 +814,9 @@ export function getRandomAnalysisData(sourceData): analysisData {
     };
     return analysisData;
 }
-export function createMultipleApplication(
-    numberofapplications: number,
-    businessservice?: Array<BusinessServices>,
-    tagList?: Array<Tag>
-): Array<Assessment> {
+export function createMultipleApplications(numberofapplications: number): Array<Assessment> {
     let applicationList: Array<Assessment> = [];
-    let tags: string[];
-    let business: string;
     for (let i = 0; i < numberofapplications; i++) {
-        if (!businessservice)
-            businessservice = createMultipleBusinessServices(numberofapplications);
-        business = businessservice[i].name;
-        if (tagList) tags = [tagList[i].name];
         // Navigate to application inventory tab and create new application
         const application = new Assessment(getRandomApplicationData());
         application.create();
@@ -834,40 +826,11 @@ export function createMultipleApplication(
     return applicationList;
 }
 
-export function createMultipleApplications(
-    numberofapplications: number,
-    businessservice?: Array<BusinessServices>,
-    tagList?: Array<Tag>
-): Array<ApplicationInventory> {
-    let applicationList: Array<ApplicationInventory> = [];
-    let tags: string[];
-    let business: string;
-    for (let i = 0; i < numberofapplications; i++) {
-        if (!businessservice)
-            businessservice = createMultipleBusinessServices(numberofapplications);
-        business = businessservice[i].name;
-        if (tagList) tags = [tagList[i].name];
-        // Navigate to application inventory tab and create new application
-        const application = new ApplicationInventory(
-            data.getAppName(),
-            business,
-            data.getDescription(),
-            data.getDescription(),
-            tags
-        );
-        application.create();
-        applicationList.push(application);
-        cy.wait(2000);
-    }
-    return applicationList;
-}
-
-export function createApplicationObjects(numberOfObjects: number): Array<ApplicationInventory> {
-    let applicationObjectsList: Array<ApplicationInventory> = [];
-    let businessservice = createMultipleBusinessServices(1);
+export function createApplicationObjects(numberOfObjects: number): Array<Assessment> {
+    let applicationObjectsList: Array<Assessment> = [];
     for (let i = 0; i < numberOfObjects; i++) {
         // Create an object of application
-        const application = new ApplicationInventory(data.getAppName(), businessservice[0].name);
+        const application = new Assessment(getRandomApplicationData());
         applicationObjectsList.push(application);
     }
     return applicationObjectsList;

@@ -24,13 +24,13 @@ import {
     createMultipleApplications,
     deleteAllStakeholders,
 } from "../../../../../../utils/utils";
-import { ApplicationInventory } from "../../../../../models/developer/applicationinventory/applicationinventory";
 import { copyAssessmentTableTr } from "../../../../../views/applicationinventory.view";
 import * as commonView from "../../../../../views/common.view";
 import { Stakeholders } from "../../../../../models/developer/controls/stakeholders";
+import { Assessment } from "../../../../../models/developer/applicationinventory/assessment";
 
 var stakeholdersList: Array<Stakeholders> = [];
-var applicationList: Array<ApplicationInventory> = [];
+var applicationList: Array<Assessment> = [];
 
 describe("Assessment pagination validations", { tags: "@newtest" }, function () {
     before("Login and Create Test Data", function () {

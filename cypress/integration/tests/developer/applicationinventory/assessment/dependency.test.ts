@@ -20,7 +20,7 @@ import {
     hasToBeSkipped,
     login,
     preservecookies,
-    createMultipleApplication,
+    createMultipleApplications,
     deleteApplicationTableRows,
 } from "../../../../../utils/utils";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
@@ -28,7 +28,9 @@ import {
     closeForm,
     cyclicDependenciesErrorMsg,
     northboundHelper,
+    northdependenciesDropdownBtn,
     southboundHelper,
+    southdependenciesDropdownBtn,
 } from "../../../../views/applicationinventory.view";
 
 var applicationsList: Array<Assessment> = [];
@@ -45,7 +47,7 @@ describe("Manage application dependencies", { tags: "@newtest" }, () => {
         preservecookies();
 
         // Create new applications
-        applicationsList = createMultipleApplication(3);
+        applicationsList = createMultipleApplications(3);
     });
 
     after("Perform test data clean up", function () {
@@ -69,7 +71,7 @@ describe("Manage application dependencies", { tags: "@newtest" }, () => {
         applicationsList[2].verifyDependencies([applicationsList[1].name]);
 
         // Remove the dependencies as part of cleanup for next test
-        applicationsList[1].addDependencies(northboundApps, southboundApps);
+        applicationsList[1].removeDependencies(northboundApps, southboundApps);
     });
 
     it("Cyclic dependencies", function () {
@@ -81,14 +83,18 @@ describe("Manage application dependencies", { tags: "@newtest" }, () => {
 
         // Adding app 2 as northbound dependency for 1st app should yield cyclic error
         applicationsList[0].openManageDependencies();
-        applicationsList[0].selectDependency(0, [applicationsList[1].name]);
+        applicationsList[0].selectDependency(northdependenciesDropdownBtn, [
+            applicationsList[1].name,
+        ]);
         cy.wait(500);
         cy.get(northboundHelper).should("contain.text", cyclicDependenciesErrorMsg);
         click(closeForm);
 
         // Adding app 2 as southbound dependency for 3rd app should yield cyclic error
         applicationsList[2].openManageDependencies();
-        applicationsList[2].selectDependency(1, [applicationsList[1].name]);
+        applicationsList[2].selectDependency(southdependenciesDropdownBtn, [
+            applicationsList[1].name,
+        ]);
         cy.wait(500);
         cy.get(southboundHelper).should("contain.text", cyclicDependenciesErrorMsg);
         click(closeForm);

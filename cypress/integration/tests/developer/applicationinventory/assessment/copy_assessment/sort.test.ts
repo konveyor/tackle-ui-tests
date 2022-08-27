@@ -32,15 +32,13 @@ import {
     deleteAllStakeholderGroups,
 } from "../../../../../../utils/utils";
 import { name } from "../../../../../types/constants";
-import { ApplicationInventory } from "../../../../../models/developer/applicationinventory/applicationinventory";
-
 import { Stakeholders } from "../../../../../models/developer/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../../models/developer/controls/stakeholdergroups";
+import { Assessment } from "../../../../../models/developer/applicationinventory/assessment";
 
 var stakeholdersList: Array<Stakeholders> = [];
-var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
-var applicationList: Array<ApplicationInventory> = [];
+var applicationList: Array<Assessment> = [];
 
 describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
     before("Login and Create Test Data", function () {

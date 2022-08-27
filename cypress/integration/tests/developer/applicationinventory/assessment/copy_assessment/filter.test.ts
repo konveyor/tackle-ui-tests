@@ -30,7 +30,6 @@ import {
     deleteAllBusinessServices,
     deleteAllTagTypes,
 } from "../../../../../../utils/utils";
-import { ApplicationInventory } from "../../../../../models/developer/applicationinventory/applicationinventory";
 
 import { Stakeholders } from "../../../../../models/developer/controls/stakeholders";
 import {
@@ -45,11 +44,12 @@ import { BusinessServices } from "../../../../../models/developer/controls/busin
 import { Tag } from "../../../../../models/developer/controls/tags";
 import { closeButton } from "../../../../../views/common.view";
 import { copyAssessmentTableTd } from "../../../../../views/applicationinventory.view";
+import { Assessment } from "../../../../../models/developer/applicationinventory/assessment";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 var businessservicesList: Array<BusinessServices> = [];
-var applicationList: Array<ApplicationInventory> = [];
+var applicationList: Array<Assessment> = [];
 var tagList: Array<Tag> = [];
 var invalidSearchInput = "11111";
 
@@ -60,9 +60,6 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
 
         // Perform login
         login();
-
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
 
         // Create data
         stakeholdersList = createMultipleStakeholders(1);
@@ -88,6 +85,14 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         applicationList[0].perform_assessment("low", [stakeholdersList[0].name]);
         cy.wait(2000);
         applicationList[0].is_assessed();
+    });
+
+    beforeEach("Persist session", function () {
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
+
+        // Interceptors
+        cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     after("Perform test data clean up", function () {

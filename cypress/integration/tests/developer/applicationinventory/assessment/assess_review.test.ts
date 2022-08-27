@@ -20,8 +20,6 @@ import {
     login,
     preservecookies,
     deleteAllStakeholders,
-    createMultipleBusinessServices,
-    deleteAllBusinessServices,
     deleteApplicationTableRows,
     getRandomApplicationData,
 } from "../../../../../utils/utils";
@@ -32,7 +30,6 @@ import { Assessment } from "../../../../models/developer/applicationinventory/as
 
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdersNameList: Array<string> = [];
-// var businessservicesList: Array<BusinessServices> = [];
 
 describe("Application assessment and review tests", { tags: "@tier1" }, () => {
     before("Login and Create Test Data", function () {
@@ -49,8 +46,6 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
 
         stakeholdersList.push(stakeholder);
         stakeholdersNameList.push(stakeholder.name);
-
-        // businessservicesList = createMultipleBusinessServices(1);
     });
 
     beforeEach("Persist session", function () {
@@ -67,7 +62,6 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
         // Delete the stakeholders created before the tests
         deleteAllStakeholders();
         deleteApplicationTableRows();
-        deleteAllBusinessServices();
     });
 
     it("Application assessment and review with low risk", function () {

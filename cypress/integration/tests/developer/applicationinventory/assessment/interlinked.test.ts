@@ -18,7 +18,6 @@ limitations under the License.
 import {
     login,
     clickByText,
-    notExists,
     preservecookies,
     hasToBeSkipped,
     click,
@@ -31,10 +30,7 @@ import {
     createMultipleStakeholderGroups,
     createMultipleBusinessServices,
     createMultipleTags,
-    createMultipleApplications,
 } from "../../../../../utils/utils";
-import { Tag } from "../../../../models/developer/controls/tags";
-import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
 import { businessColumnSelector } from "../../../../views/applicationinventory.view";
 import {
     continueButton,
@@ -42,26 +38,16 @@ import {
     stakeholderSelect,
 } from "../../../../views/assessment.view";
 import { navMenu } from "../../../../views/menu.view";
-import { navTab } from "../../../../views/menu.view";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
-import {
-    applicationInventory,
-    controls,
-    businessServices,
-    tags,
-    button,
-    assess,
-} from "../../../../types/constants";
-import { BusinessServices } from "../../../../models/developer/controls/businessservices";
+import { applicationInventory, button, assess } from "../../../../types/constants";
+import * as data from "../../../../../utils/data_utils";
+import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
-var businessservicesList: Array<BusinessServices> = [];
-var tagList: Array<Tag> = [];
-var applicationList: Array<ApplicationInventory> = [];
 
-describe("Application inventory interlinked to tags and business service", () => {
+describe("Applications interlinked to tags and business service", () => {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
@@ -73,11 +59,8 @@ describe("Application inventory interlinked to tags and business service", () =>
         preservecookies();
 
         // Create data
-        stakeholdersList = createMultipleStakeholders(2);
-        stakeholdergroupsList = createMultipleStakeholderGroups(2, stakeholdersList);
-        businessservicesList = createMultipleBusinessServices(2, stakeholdersList);
-        tagList = createMultipleTags(2);
-        applicationList = createMultipleApplications(2, businessservicesList, tagList);
+        stakeholdersList = createMultipleStakeholders(1);
+        stakeholdergroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
     });
 
     beforeEach("Define interceptors", function () {
@@ -94,25 +77,32 @@ describe("Application inventory interlinked to tags and business service", () =>
 
         deleteAllStakeholders();
         deleteAllStakeholderGroups();
+        deleteApplicationTableRows();
         deleteAllBusinessServices();
         deleteAllTagTypes();
-        deleteApplicationTableRows();
     });
 
     it(
-        "Business Service update and delete dependency on application inventory",
+        "businessservice, tag update and delete dependency on application",
         { tags: "@tier1" },
         function () {
-            // Navigate to Business Service and delete
-            clickByText(navMenu, controls);
-            clickByText(navTab, businessServices);
+            let businessservicesList = createMultipleBusinessServices(2);
+            let tagList = createMultipleTags(2);
+            let appdata = {
+                name: data.getAppName(),
+                business: businessservicesList[0].name,
+                description: data.getDescription(),
+                tags: [tagList[0].name],
+                comment: data.getDescription(),
+            };
+            const application = new Assessment(appdata);
+            application.create();
+            cy.wait("@getApplication");
+            cy.wait(2000);
 
-            //Delete associated business service
-            businessservicesList[0].delete();
-            notExists(businessservicesList[0].name);
-
-            // Navigate to tags and delete
-            clickByText(navTab, tags);
+            application.verifyTagCount(1);
+            // Remove the BS and tags
+            application.removeBusinessService();
             tagList[0].delete();
 
             // Navigate to application inventory
@@ -121,68 +111,62 @@ describe("Application inventory interlinked to tags and business service", () =>
             cy.wait("@getApplication");
 
             // Assert that deleted business service is removed from application
-            applicationList[0].getColumnText(businessColumnSelector, "");
+            application.getColumnText(businessColumnSelector, "");
             cy.wait(100);
 
             // Assert that deleted tag is removed
-            applicationList[0].expandApplicationRow();
-            applicationList[0].existsWithinRow(applicationList[0].name, "Tags", "");
-            applicationList[0].closeApplicationRow();
+            application.expandApplicationRow();
+            application.existsWithinRow(application.name, "Tags", "");
+            application.closeApplicationRow();
+            application.verifyTagCount(0);
 
-            applicationList[0].edit({
+            application.edit({
                 business: businessservicesList[1].name,
                 tags: [tagList[1].name],
             });
             cy.wait("@getApplication");
 
             // Assert that business service is updated
-            applicationList[0].getColumnText(businessColumnSelector, businessservicesList[1].name);
+            application.getColumnText(businessColumnSelector, businessservicesList[1].name);
             cy.wait(1000);
 
             // Assert that created tag exists
-            applicationList[0].expandApplicationRow();
-            applicationList[0].existsWithinRow(applicationList[0].name, "Tags", tagList[1].name);
-            applicationList[0].closeApplicationRow();
+            application.expandApplicationRow();
+            application.existsWithinRow(application.name, "Tags", tagList[1].name);
+            application.closeApplicationRow();
+            application.verifyTagCount(1);
             cy.wait(1000);
         }
     );
 
     it(
-        "Stakeholder, businessservice, tag and stakeholdergroup delete dependency on application inventory",
+        "Stakeholder and stakeholdergroup delete dependency on application",
         { tags: "@newtest" },
         function () {
+            //Create application
+            let appdata = {
+                name: data.getAppName(),
+                description: data.getDescription(),
+                comment: data.getDescription(),
+            };
+            const application = new Assessment(appdata);
+            application.create();
+            cy.wait("@getApplication");
+            cy.wait(2000);
             // Perform assessment of application
-            applicationList[1].perform_assessment(
+            application.perform_assessment(
                 "low",
-                [stakeholdersList[1].name],
-                [stakeholdergroupsList[1].name]
+                [stakeholdersList[0].name],
+                [stakeholdergroupsList[0].name]
             );
             cy.wait(2000);
-            applicationList[1].is_assessed();
-            //check the tag count on the application
-            applicationList[1].verifyTagCount(1);
+            application.is_assessed();
 
-            // Delete the stakeholders, group , BS and tags
-            stakeholdersList[1].delete;
-            stakeholdergroupsList[1].delete();
-            businessservicesList[1].delete();
-            tagList[1].delete();
+            // Delete the stakeholders, group
+            stakeholdersList[0].delete;
+            stakeholdergroupsList[0].delete();
 
-            clickByText(navMenu, applicationInventory);
-            cy.wait("@getApplication");
-
-            // Assert that business service is updated
-            applicationList[1].getColumnText(businessColumnSelector, "");
-            cy.wait(100);
-
-            // Assert that created tag exists
-            applicationList[1].expandApplicationRow();
-            applicationList[1].existsWithinRow(applicationList[1].name, "Tags", "");
-            applicationList[1].closeApplicationRow();
-            // Verify that tag count is updated once the tag is deleted.
-            applicationList[1].verifyTagCount(0);
-
-            applicationList[1].selectApplication();
+            application.selectApplication();
             clickByText(button, assess);
             click(continueButton);
             cy.wait(6000);

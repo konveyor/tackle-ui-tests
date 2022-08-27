@@ -27,8 +27,6 @@ import * as data from "../../../../../utils/data_utils";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
-// var businessservicesList: Array<BusinessServices> = [];
-
 describe("Application crud operations", { tags: "@tier1" }, () => {
     beforeEach("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
@@ -36,7 +34,6 @@ describe("Application crud operations", { tags: "@tier1" }, () => {
 
         // Perform login
         login();
-        // businessservicesList = createMultipleBusinessServices(1);
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");

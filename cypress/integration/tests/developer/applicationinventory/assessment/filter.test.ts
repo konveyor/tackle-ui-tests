@@ -24,7 +24,7 @@ import {
     hasToBeSkipped,
     createMultipleBusinessServices,
     createMultipleTags,
-    createMultipleApplication,
+    createMultipleApplications,
     deleteAllBusinessServices,
     deleteAllTagTypes,
     deleteApplicationTableRows,
@@ -42,16 +42,10 @@ import {
     assessment,
 } from "../../../../types/constants";
 
-import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
-import { BusinessServices } from "../../../../models/developer/controls/businessservices";
-import { Tag } from "../../../../models/developer/controls/tags";
-
 import * as data from "../../../../../utils/data_utils";
 import { Application } from "../../../../models/developer/applicationinventory/application";
 
 var applicationsList: Array<Application> = [];
-var businessserviceList: Array<BusinessServices> = [];
-var tagList: Array<Tag> = [];
 var invalidSearchInput = String(data.getRandomNumber());
 
 describe("Application inventory filter validations", { tags: "@tier2" }, function () {
@@ -61,10 +55,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
 
         // Perform login
         login();
-
-        businessserviceList = createMultipleBusinessServices(3);
-        tagList = createMultipleTags(3);
-        applicationsList = createMultipleApplication(2, businessserviceList, tagList);
+        applicationsList = createMultipleApplications(2);
     });
 
     beforeEach("Persist session", function () {
@@ -79,11 +70,9 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     after("Perform test data clean up", function () {
         if (hasToBeSkipped("@tier2")) return;
 
-        // Delete the business services
-        deleteAllBusinessServices();
-
         deleteAllTagTypes();
         deleteApplicationTableRows();
+        deleteAllBusinessServices();
     });
 
     it("Name filter validations", function () {
@@ -114,7 +103,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         cy.wait(3000);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No applications available");
 
         // Clear all filters
         clickByText(button, clearAllFilters);
@@ -148,7 +137,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         cy.wait(3000);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No applications available");
 
         // Clear all filters
         clickByText(button, clearAllFilters);
@@ -168,11 +157,11 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing business service and apply it as search filter
-        applySearchFilter(businessService, businessserviceList[2].name);
+        applySearchFilter(businessService, data.getRandomWord(5));
         cy.wait(3000);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No applications available");
 
         // Clear all filters
         clickByText(button, clearAllFilters);
@@ -193,11 +182,11 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing tag and apply it as search filter
-        applySearchFilter(tag, tagList[2].name);
+        applySearchFilter(tag, data.getRandomWord(5));
         cy.wait(3000);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No applications available");
 
         // Clear all filters
         clickByText(button, clearAllFilters);

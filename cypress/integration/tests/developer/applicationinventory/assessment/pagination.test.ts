@@ -28,11 +28,10 @@ import {
 import { navMenu } from "../../../../views/menu.view";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { applicationInventory } from "../../../../types/constants";
-import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
 import * as commonView from "../../../../views/common.view";
+import { Application } from "../../../../models/developer/applicationinventory/application";
 
-var applicationsList: Array<ApplicationInventory> = [];
-var businessservicesList: Array<BusinessServices> = [];
+var applicationsList: Array<Application> = [];
 
 describe("Application inventory pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
@@ -44,8 +43,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
 
         // Navigate to Application inventory tab, delete all and create 11 applications
         deleteApplicationTableRows();
-        businessservicesList = createMultipleBusinessServices(1);
-        applicationsList = createMultipleApplications(11, businessservicesList);
+        applicationsList = createMultipleApplications(11);
     });
 
     beforeEach("Persist session", function () {

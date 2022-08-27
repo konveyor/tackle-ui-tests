@@ -31,14 +31,14 @@ import {
     deleteAllBusinessServices,
     deleteAppImportsTableRows,
 } from "../../../../../utils/utils";
-import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory, button } from "../../../../types/constants";
+import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
 const businessService = new BusinessServices("Retail");
 const filePath = "app_import/csv/";
-var applicationsList: Array<ApplicationInventory> = [];
+var applicationsList: Array<Assessment> = [];
 
 describe("Application import operations", () => {
     before("Login and create test data", function () {
@@ -92,7 +92,11 @@ describe("Application import operations", () => {
 
         // Create objects for imported apps
         for (let i = 1; i <= 3; i++) {
-            const importedApp = new ApplicationInventory(`Import-app-${i}`, businessService.name);
+            let appdata = {
+                name: `Import-app-${i}`,
+                business: businessService.name,
+            };
+            const importedApp = new Assessment(appdata);
             applicationsList.push(importedApp);
         }
 
@@ -177,10 +181,11 @@ describe("Application import operations", () => {
 
             // Create objects for imported apps
             for (let i = 5; i <= 6; i++) {
-                const importedApp = new ApplicationInventory(
-                    `Import-app-${i}`,
-                    businessService.name
-                );
+                let appdata = {
+                    name: `Import-app-${i}`,
+                    business: businessService.name,
+                };
+                const importedApp = new Assessment(appdata);
                 applicationsList.push(importedApp);
             }
 
