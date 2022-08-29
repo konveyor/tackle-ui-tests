@@ -3,16 +3,22 @@
     "viewportHeight": 1080,
     "video": false,
     "env": {
-        "user": "",
-        "pass": "",
-        "tackleUrl": ""
+        "user": "admin",
+	"pass": "Dog8code"
     },
     "reporter": "cypress-multi-reporters",
     "reporterOptions": {
-        "reporterEnabled": "mocha-junit-reporter",
-        "mochaJunitReporterReporterOptions": {
-            "mochaFile": "cypress/reports/junit/results-[hash].xml"
-        }
+    	"reporterEnabled": "cypress-mochawesome-reporter, mocha-junit-reporter",
+	    "cypressMochawesomeReporterReporterOptions": {
+		"reportDir": "cypress/reports",
+		"charts": true,
+		"reportPageTitle": "Tackle test report",
+		"embeddedScreenshots": true,
+		"inlineAssets": true
+	    },
+	    "mochaJunitReporterReporterOptions": {
+		    "mochaFile": "cypress/reports/junit/results-[hash].xml"
+	    }
     },
     "defaultCommandTimeout": 8000
 }
