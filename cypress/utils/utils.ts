@@ -462,7 +462,7 @@ export function importApplication(fileName: string): void {
     cy.get("form.pf-c-form", { timeout: 5 * SEC })
         .find("button")
         .contains("Import")
-        .click({ force: true });
+        .trigger("click");
     checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
 }
 
