@@ -42,6 +42,10 @@ describe("Application inventory sort validations", { tags: "@tier2" }, function 
 
         // Perform login
         login();
+
+        // Delete the existing applications
+        deleteApplicationTableRows();
+
         var tagsList = ["C++", "COBOL", "Java"];
         // Create multiple applications with tags
         for (let i = 0; i < 3; i++) {
@@ -75,7 +79,7 @@ describe("Application inventory sort validations", { tags: "@tier2" }, function 
 
     it("Name sort validations", function () {
         // Navigate to application inventory page
-        clickByText(navMenu, applicationInventory);
+        Assessment.open();
         cy.wait("@getApplications");
 
         // get unsorted list when page loads
@@ -100,7 +104,7 @@ describe("Application inventory sort validations", { tags: "@tier2" }, function 
 
     it("Review sort validations", function () {
         // Navigate to application inventory page
-        clickByText(navMenu, applicationInventory);
+        Assessment.open();
         cy.wait("@getApplications");
 
         // get unsorted list when page loads
@@ -125,7 +129,7 @@ describe("Application inventory sort validations", { tags: "@tier2" }, function 
 
     it("Tag count sort validations", function () {
         // Navigate to application inventory page
-        clickByText(navMenu, applicationInventory);
+        Assessment.open();
         cy.wait("@getApplications");
 
         // get unsorted list when page loads
