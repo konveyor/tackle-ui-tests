@@ -24,7 +24,10 @@ import {
     getRandomApplicationData,
     getRandomAnalysisData,
 } from "../../../../../utils/utils";
+import { CredentialsMaven } from "../../../../models/administrator/credentials/credentialsMaven";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
+import { CredentialType } from "../../../../types/constants";
+import * as data from "../../../../../utils/data_utils";
 
 describe("Source Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -81,6 +84,25 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
+    });
+
+    it("Analysis on daytrader app with maven credentials", function () {
+        // Automate bug https://issues.redhat.com/browse/TACKLE-751
+        let maven_credential = new CredentialsMaven(
+            data.getRandomCredentialsData(CredentialType.maven)
+        );
+        maven_credential.create();
+        const application = new Analysis(
+            getRandomApplicationData({ sourceData: this.appData[1] }),
+            getRandomAnalysisData(this.analysisData[1])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.manageCredentials("None", maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
