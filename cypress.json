@@ -16,7 +16,6 @@
     "reporter": "cypress-multi-reporters",
     "reporterOptions": {
         "reporterEnabled": "cypress-mochawesome-reporter, mocha-junit-reporter",
-<<<<<<< HEAD
             "cypressMochawesomeReporterReporterOptions": {
                 "reportDir": "cypress/reports",
                 "charts": true,
@@ -27,18 +26,6 @@
             "mochaJunitReporterReporterOptions": {
                     "mochaFile": "cypress/reports/junit/results-[hash].xml"
             }
-=======
-        "cypressMochawesomeReporterReporterOptions": {
-            "reportDir": "cypress/reports",
-            "charts": true,
-            "reportPageTitle": "Tackle test report",
-            "embeddedScreenshots": true,
-            "inlineAssets": true
-        },
-        "mochaJunitReporterReporterOptions": {
-            "mochaFile": "cypress/reports/junit/results-[hash].xml"
-        }
->>>>>>> c92f5cf (Automate bug 751)
     },
     "defaultCommandTimeout": 8000
 }
