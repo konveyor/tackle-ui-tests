@@ -102,20 +102,25 @@ export function getDefaultTagTypes(): string[] {
     ];
 }
 
-export function getRandomCredentialsData(type: string): CredentialsData {
+export function getRandomCredentialsData(type: string, gitTestingUser?: boolean): CredentialsData {
     //Created a dummy github account for testing.
-    let git_password = Cypress.env("git_password");
-    let git_user = Cypress.env("git_user");
-    if (git_user == "") git_user = getRandomWord(6);
-    if (git_password == "") git_password = getRandomWord(6);
+    let password;
+    let user;
+    if (gitTestingUser) {
+        user = Cypress.env("git_user");
+        password = Cypress.env("git_password");
+    } else {
+        user = getRandomWord(6);
+        password = getRandomWord(6);
+    }
 
     if (type === CredentialType.proxy || type === CredentialType.sourceControl) {
         return {
             type: type,
             name: getRandomWord(6),
             description: getDescription(),
-            username: git_user,
-            password: git_password,
+            username: user,
+            password: password,
         };
     } else {
         return {

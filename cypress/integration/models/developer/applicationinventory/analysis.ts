@@ -90,7 +90,7 @@ export class Analysis extends Application {
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         clickByText(navTab, analysis);
-        cy.wait(7000);
+        cy.wait(30000);
     }
 
     create(): void {

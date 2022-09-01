@@ -5,9 +5,9 @@
     "env": {
         "user": "admin",
         "pass": "Dog8code",
-        "git_user": "",
-        "git_password": "",
-        "tackleUrl": "https://tackle-konveyor-tackle.apps.mgn02.cnv-qe.rhcloud.com"
+        "git_user": "Shveta22",
+        "git_password": "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",
+        "tackleUrl": "https://tackle-konveyor-tackle.apps.mig01.cnv-qe.rhcloud.com/"
     },
     "retries": {
         "runMode": 2,
@@ -16,16 +16,16 @@
     "reporter": "cypress-multi-reporters",
     "reporterOptions": {
         "reporterEnabled": "cypress-mochawesome-reporter, mocha-junit-reporter",
-            "cypressMochawesomeReporterReporterOptions": {
-                "reportDir": "cypress/reports",
-                "charts": true,
-                "reportPageTitle": "Tackle test report",
-                "embeddedScreenshots": true,
-                "inlineAssets": true
-            },
-            "mochaJunitReporterReporterOptions": {
-                    "mochaFile": "cypress/reports/junit/results-[hash].xml"
-            }
+        "cypressMochawesomeReporterReporterOptions": {
+            "reportDir": "cypress/reports",
+            "charts": true,
+            "reportPageTitle": "Tackle test report",
+            "embeddedScreenshots": true,
+            "inlineAssets": true
+        },
+        "mochaJunitReporterReporterOptions": {
+            "mochaFile": "cypress/reports/junit/results-[hash].xml"
+        }
     },
     "defaultCommandTimeout": 8000
 }
