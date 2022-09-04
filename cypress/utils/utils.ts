@@ -144,6 +144,16 @@ export function selectItemsPerPage(items: number): void {
         });
 }
 
+export function selectFromDropList(dropList, item: string) {
+    click(dropList);
+    click(item);
+}
+
+export function selectFromDropListByText(droplist, item: string) {
+    click(droplist);
+    clickByText(button, item);
+}
+
 export function selectFormItems(fieldId: string, item: string): void {
     cy.get(fieldId).click();
     cy.contains("button", item).click();
@@ -632,7 +642,7 @@ export function performRowActionByIcon(itemName: string, action: string): void {
 export function createMultipleCredentials(numberOfCredentials: number): Array<Credentials> {
     let newCredentialsList: Array<Credentials> = [];
     let createdCredentialsList: Array<Credentials> = [];
-    for (let i = 0; i <= Math.ceil(numberOfCredentials / 4); i++) {
+    while (newCredentialsList.length < numberOfCredentials) {
         newCredentialsList.push(
             new CredentialsProxy(getRandomCredentialsData(CredentialType.proxy))
         );
