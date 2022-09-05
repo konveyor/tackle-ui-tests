@@ -39,7 +39,7 @@ describe("Credentials filter validations", { tags: "@tier2" }, function () {
         let firstName = credentialsList[0].name;
         let secondName = credentialsList[1].name;
         let validSearchInput = firstName.substring(0, 3);
-        applySearchFilter(name, validSearchInput);
+        Credentials.filterByName(validSearchInput);
         exists(firstName);
 
         if (secondName.indexOf(validSearchInput) >= 0) {
@@ -48,18 +48,28 @@ describe("Credentials filter validations", { tags: "@tier2" }, function () {
         clearAllFilters();
 
         // Searching by full name:
-        applySearchFilter(name, secondName);
+        Credentials.filterByName(secondName);
         exists(secondName);
         notExists(firstName);
         clearAllFilters();
 
         // Searching for invalid name:
-        applySearchFilter(name, invalidSearchInput);
+        Credentials.filterByName(invalidSearchInput);
 
         // Assert that no search results are found
         cy.get("h2").contains("No credentials available");
 
         clearAllFilters();
+    });
+
+    it("Type filter validations", () => {
+        Credentials.openList(100);
+
+        credentialsList.forEach((currentCredential) => {
+            Credentials.filterByType(currentCredential.type);
+            exists(currentCredential.name);
+            clearAllFilters();
+        });
     });
 
     after("Perform test data clean up", function () {

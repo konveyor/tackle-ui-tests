@@ -8,6 +8,8 @@ import {
     notExists,
     exists,
     validateValue,
+    selectFromDropList,
+    selectFromDropListByText,
 } from "../../../../utils/utils";
 import {
     administrator,
@@ -37,6 +39,7 @@ import { CredentialsData } from "../../../types/types";
 export class Credentials {
     name = "";
     description = "";
+    type = "";
     static credUrl = Cypress.env("tackleUrl") + "/identities";
 
     constructor(name?) {
@@ -92,6 +95,17 @@ export class Credentials {
                     resolve(list);
                 });
         });
+    }
+
+    static filterByName(value: string) {
+        selectFromDropList("#filtered-by", "#filter-category-name");
+        inputText("#name-input", value);
+        click("button.pf-c-button.pf-m-control");
+    }
+
+    static filterByType(type: string) {
+        selectFromDropList("#filtered-by", "#filter-category-type");
+        selectFromDropListByText("#type-filter-value-select", type);
     }
 
     create(): void {
