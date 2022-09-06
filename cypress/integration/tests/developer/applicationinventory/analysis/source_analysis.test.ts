@@ -28,6 +28,7 @@ import { CredentialsMaven } from "../../../../models/administrator/credentials/c
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
 import { CredentialType } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
+import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
 
 describe("Source Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -70,6 +71,25 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
+    });
+
+    it("Source Code Analysis on tackle testapp", function () {
+        // For tackle test app source credentials are required.
+        let source_credential = new CredentialsSourceControlUsername(
+            data.getRandomCredentialsData(CredentialType.sourceControl, true)
+        );
+        source_credential.create();
+        const application = new Analysis(
+            getRandomApplicationData({ sourceData: this.appData[3] }),
+            getRandomAnalysisData(this.analysisData[0])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.manageCredentials(source_credential.name, "None");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();

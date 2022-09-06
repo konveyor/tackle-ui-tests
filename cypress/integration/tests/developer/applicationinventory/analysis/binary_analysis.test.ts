@@ -42,7 +42,7 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         deleteApplicationTableRows();
         deleteAllBusinessServices();
         source_credential = new CredentialsSourceControlUsername(
-            data.getRandomCredentialsData(CredentialType.sourceControl)
+            data.getRandomCredentialsData(CredentialType.sourceControl, true)
         );
         source_credential.create();
         maven_credential = new CredentialsMaven(
