@@ -171,23 +171,13 @@ describe("Application import operations", () => {
             cy.wait("@getApplication");
 
             // Import csv with an empty row between two valid rows having minimum required field(s)
-            const fileName = "mandatory_and_empty_rows.csv";
+            const fileName = "mandatory_and_empty_row_21.csv";
             importApplication(filePath + fileName);
             cy.wait(2000);
 
             // Verify imported apps are visible in table
             exists("Import-app-5");
             exists("Import-app-6");
-
-            // Create objects for imported apps
-            for (let i = 5; i <= 6; i++) {
-                let appdata = {
-                    name: `Import-app-${i}`,
-                    business: businessService.name,
-                };
-                const importedApp = new Assessment(appdata);
-                applicationsList.push(importedApp);
-            }
 
             // Open application imports page
             openManageImportsPage();
@@ -197,7 +187,7 @@ describe("Application import operations", () => {
 
             // Verify the error report message
             openErrorReport();
-            verifyImportErrorMsg("Invalid Record Type");
+            verifyImportErrorMsg("Empty Record Type");
         }
     );
 
@@ -207,7 +197,7 @@ describe("Application import operations", () => {
         cy.wait("@getApplication");
 
         // Import csv having applications with same name, differentiated by whitespaces
-        const fileName = "app_name_with_spaces.csv";
+        const fileName = "app_name_with_spaces_21.csv";
         importApplication(filePath + fileName);
         cy.wait(2000);
 
@@ -215,15 +205,11 @@ describe("Application import operations", () => {
         openManageImportsPage();
 
         // Verify import applications page shows correct information
-        verifyAppImport(fileName, "Completed", 0, 2);
+        verifyAppImport(fileName, "Completed", 1, 1);
 
         // Verify the error report message
         openErrorReport();
-        const errorMsgs = [
-            "Duplicate Application Name within file: Import-app-7",
-            "Duplicate Application Name within file: Import-app-7",
-        ];
-        verifyImportErrorMsg(errorMsgs);
+        verifyImportErrorMsg("UNIQUE constraint failed: Application.Name");
     });
 
     it(
@@ -254,7 +240,7 @@ describe("Application import operations", () => {
         cy.wait("@getApplication");
 
         // Import csv invalid schema
-        const fileName = "invalid_column_schema.csv";
+        const fileName = "invalid_schema_21.csv";
         importApplication(filePath + fileName);
         cy.wait(2000);
 
@@ -262,24 +248,12 @@ describe("Application import operations", () => {
         openManageImportsPage();
 
         // Verify import applications page shows correct information
-        verifyAppImport(fileName, "Error", 0, 2);
+        verifyAppImport(fileName, "Completed", 0, 2);
 
-        // Verify if error is reported and link to documentation is present and working
-        cy.get("table > tbody > tr")
-            .eq(0)
-            .find("td[data-label='Status']")
-            .find("div")
-            .contains("button", "Error")
-            .click();
-        cy.wait(500);
-        cy.get("div.pf-c-popover__content")
-            .find("footer")
-            .find("a")
-            .then(($anchor) => {
-                var doc_link = $anchor.attr("href").toString();
-                cy.request(doc_link).then((resp) => {
-                    expect(resp.status).to.eq(200);
-                });
-            });
+        var errorMsgs = ["Invalid or unknown Record Type", "Invalid or unknown Record Type"];
+
+        // Verify the error report message
+        openErrorReport();
+        verifyImportErrorMsg(errorMsgs);
     });
 });
