@@ -7,29 +7,30 @@ import {
     inputText,
     notExists,
     submitForm,
+    uploadFile,
 } from "../../../../utils/utils";
 import { button } from "../../../types/constants";
-import { CredentialsSourceControlData } from "../../../types/types";
+import { CredentialsSourceControlPrivateKeyData } from "../../../types/types";
 
 export class CredentialsSourceControlKey extends CredentialsSourceControl {
     key = "";
     keyPassphrase = "";
 
-    constructor(credentialsSourceControl: CredentialsSourceControlData) {
+    constructor(credentialsSourceControl: CredentialsSourceControlPrivateKeyData) {
         super();
         this.init(credentialsSourceControl);
     }
 
-    protected init(credentialsSourceControl: CredentialsSourceControlData) {
-        const { name, description, username, password } = credentialsSourceControl;
+    protected init(credentialsSourceControl: CredentialsSourceControlPrivateKeyData) {
+        const { name, description, key, passphrase } = credentialsSourceControl;
         this.name = name;
         this.description = description;
-        this.key = username;
-        this.keyPassphrase = password;
+        this.key = key;
+        this.keyPassphrase = passphrase;
     }
 
     fillKey() {
-        inputText("#file", this.key);
+        uploadFile(this.key);
     }
 
     protected fillKeyPassphrase() {
@@ -45,7 +46,7 @@ export class CredentialsSourceControlKey extends CredentialsSourceControl {
         super.create();
         this.selectCredType();
         this.fillKey();
-        this.fillKeyPassphrase();
+        if (this.keyPassphrase) this.fillKeyPassphrase();
         if (!toBeCanceled) {
             submitForm();
             this.closeSuccessNotification();
@@ -56,7 +57,10 @@ export class CredentialsSourceControlKey extends CredentialsSourceControl {
         }
     }
 
-    edit(credentialsSourceControlData: CredentialsSourceControlData, toBeCanceled = false) {
+    edit(
+        credentialsSourceControlData: CredentialsSourceControlPrivateKeyData,
+        toBeCanceled = false
+    ) {
         const oldValues = this.storeOldValues();
         super.edit(oldValues);
         this.init(credentialsSourceControlData);
@@ -73,13 +77,13 @@ export class CredentialsSourceControlKey extends CredentialsSourceControl {
         exists(this.name);
     }
 
-    storeOldValues(): CredentialsSourceControlData {
+    storeOldValues(): CredentialsSourceControlPrivateKeyData {
         return {
             name: this.name,
             type: this.type,
             description: this.description,
-            username: this.key,
-            password: this.keyPassphrase,
+            key: this.key,
+            passphrase: this.keyPassphrase,
         };
     }
 }

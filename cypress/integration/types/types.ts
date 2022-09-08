@@ -9,6 +9,14 @@ export type CredentialsSourceControlData = {
     password?: string;
 };
 
+export type CredentialsSourceControlPrivateKeyData = {
+    type: string;
+    name?: string;
+    description?: string;
+    key?: any;
+    passphrase?: string;
+};
+
 export type CredentialsProxyData = {
     type: string;
     name?: string;
@@ -27,7 +35,8 @@ export type CredentialsMavenData = {
 export type CredentialsData =
     | CredentialsProxyData
     | CredentialsSourceControlData
-    | CredentialsMavenData;
+    | CredentialsMavenData
+    | CredentialsSourceControlPrivateKeyData;
 
 export type applicationData = {
     name: string;
