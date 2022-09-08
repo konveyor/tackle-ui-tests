@@ -100,3 +100,7 @@ To add the license's header to all eligible files, execute:
 ```shell
 yarn license-check-and-add add
 ```
+
+
+## Code of Conduct
+Refer to Konveyor's Code of Conduct [here](https://github.com/konveyor/community/blob/main/CODE_OF_CONDUCT.md).
