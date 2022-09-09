@@ -23,10 +23,11 @@ import {
     deleteApplicationTableRows,
     hasToBeSkipped,
     createMultipleApplications,
-    createMultipleBusinessServices,
+    selectUserPerspective,
+    goToPage,
+    goToLastPage,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
-import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { applicationInventory } from "../../../../types/constants";
 import * as commonView from "../../../../views/common.view";
 import { Application } from "../../../../models/developer/applicationinventory/application";
@@ -64,12 +65,13 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
 
     it("Navigation button validations", function () {
         // Navigate to Application inventory tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
 
         // select 10 items per page
         selectItemsPerPage(10);
-        cy.wait("@getApplications");
+        cy.get("@getApplications");
 
         // Verify next buttons are enabled as there are more than 11 rows present
         cy.get(commonView.nextPageButton).each(($nextBtn) => {
@@ -89,7 +91,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
 
         // Navigate to next page
         cy.get(commonView.nextPageButton).eq(0).click();
-        cy.wait("@getApplications");
+        cy.get("@getApplications");
 
         // Verify that previous buttons are enabled after moving to next page
         cy.get(commonView.prevPageButton).each(($previousBtn) => {
@@ -102,6 +104,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
 
     it("Items per page validations", function () {
         // Navigate to Application inventory tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
 
@@ -132,6 +135,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
 
     it("Page number validations", function () {
         // Navigate to Application inventory tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
 
@@ -140,16 +144,20 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
         cy.wait(2000);
 
         // Go to page number 2
-        cy.get(commonView.pageNumInput).clear().type("2").type("{enter}");
+        goToPage(2);
 
         // Verify that page number has changed, as previous page nav button got enabled
         cy.get(commonView.prevPageButton).each(($previousBtn) => {
             cy.wrap($previousBtn).should("not.be.disabled");
         });
+
+        // Go back to page number 1
+        goToPage(1);
     });
 
     it("Last page item(s) deletion, impact on page reload validation", function () {
         // Navigate to Application inventory tab
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
 
@@ -158,7 +166,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
         cy.wait(2000);
 
         // Navigate to last page
-        cy.get(commonView.lastPageButton).click({ force: true });
+        goToLastPage();
         cy.wait(2000);
 
         // Delete all items of last page
