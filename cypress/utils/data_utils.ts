@@ -114,13 +114,22 @@ export function getRandomCredentialsData(type: string, gitTestingUser?: boolean)
         password = getRandomWord(6);
     }
 
-    if (type === CredentialType.proxy || type === CredentialType.sourceControl) {
+    if (type === CredentialType.proxy) {
         return {
             type: type,
             name: getRandomWord(6),
             description: getDescription(),
             username: user,
             password: password,
+        };
+    }
+    if (type === CredentialType.sourceControl) {
+        return {
+            type: type,
+            name: getRandomWord(6),
+            description: getDescription(),
+            key: "app_import/git_ssh_keys",
+            passphrase: "",
         };
     } else {
         return {

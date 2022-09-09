@@ -29,6 +29,7 @@ import { Analysis } from "../../../../models/developer/applicationinventory/anal
 import { CredentialType } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
+import { CredentialsSourceControlKey } from "../../../../models/administrator/credentials/credentialsSourceControlKey";
 
 describe("Source Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -62,7 +63,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         deleteAllBusinessServices();
     });
 
-    it("Source Code Analysis", function () {
+    it("Source Code Analysis on bookserver app without credentials", function () {
         // For source code analysis application must have source code URL git or svn
         const application = new Analysis(
             getRandomApplicationData({ sourceData: this.appData[0] }),
@@ -123,6 +124,25 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         application.manageCredentials("None", maven_credential.name);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
+    });
+
+    it("Analysis on tackle test app with ssh credentials", function () {
+        // Automate bug https://issues.redhat.com/browse/TACKLE-707
+        const scCredsKey = new CredentialsSourceControlKey(
+            data.getRandomCredentialsData(CredentialType.sourceControl)
+        );
+        scCredsKey.create();
+        const application = new Analysis(
+            getRandomApplicationData({ sourceData: this.appData[4] }),
+            getRandomAnalysisData(this.analysisData[0])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.manageCredentials(scCredsKey.name, "None");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
