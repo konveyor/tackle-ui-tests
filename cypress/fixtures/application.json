@@ -16,5 +16,9 @@
     {
         "repoType": "git",
         "sourceRepo": "https://github.com/konveyor/tackle-testapp"
+    },
+    {
+        "repoType": "git",
+        "sourceRepo": "git@github.com:konveyor/tackle-testapp.git"
     }
 ]
