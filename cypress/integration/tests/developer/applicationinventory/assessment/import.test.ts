@@ -51,8 +51,6 @@ describe("Application import operations", () => {
         // Delete the existing application rows
         deleteApplicationTableRows();
         deleteAllBusinessServices();
-        // Create business service
-        businessService.create();
     });
 
     beforeEach("Persist session", function () {
@@ -70,9 +68,6 @@ describe("Application import operations", () => {
 
         // Delete the existing application rows before deleting business service(s)
         deleteApplicationTableRows();
-
-        // Delete the business service
-        businessService.delete();
     });
 
     it("Valid applications import", { tags: "@tier1" }, function () {
@@ -89,16 +84,6 @@ describe("Application import operations", () => {
         exists("Customers");
         exists("Inventory");
         exists("Gateway");
-
-        // Create objects for imported apps
-        for (let i = 1; i <= 3; i++) {
-            let appdata = {
-                name: `Import-app-${i}`,
-                business: businessService.name,
-            };
-            const importedApp = new Assessment(appdata);
-            applicationsList.push(importedApp);
-        }
 
         // Open application imports page
         openManageImportsPage();
@@ -142,23 +127,24 @@ describe("Application import operations", () => {
             cy.wait("@getApplication");
 
             // Import csv with non-existent businsess service and tag rows
-            const fileName = "non_existing_tags_business_service_rows.csv";
-            importApplication(filePath + fileName);
+            const fileName = "missing_tags_21.csv";
+            importApplication(filePath + fileName, true);
             cy.wait(2000);
 
             // Open application imports page
             openManageImportsPage();
 
             // Verify import applications page shows correct information
-            verifyAppImport(fileName, "Completed", 0, 2);
+            verifyAppImport(fileName, "Completed", 0, 1);
 
             // Verify the error report messages
             openErrorReport();
+
             var errorMsgs = [
-                "Business Service: Finance does not exist",
+                "BusinessService 'Retail' could not be found",
                 "Tag Type Database and Tag H2O combination does not exist",
             ];
-            verifyImportErrorMsg(errorMsgs);
+            verifyImportErrorMsg("Tag 'TypeScript' could not be found.");
         }
     );
 
