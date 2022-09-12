@@ -24,11 +24,12 @@ import {
     hasToBeSkipped,
     createMultipleBusinessServices,
     createMultipleTags,
-    createMultipleApplications,
     deleteAllBusinessServices,
-    deleteAllTagTypes,
     deleteApplicationTableRows,
     selectUserPerspective,
+    createMultipleApplicationsWithBSandTags,
+    applySelectFilter,
+    deleteAllTagsAndTagTypes,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import {
@@ -55,7 +56,15 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
 
         // Perform login
         login();
-        applicationsList = createMultipleApplications(2);
+
+        //Create Multiple Application with Business service and Tags
+        let businessservicesList = createMultipleBusinessServices(2);
+        let tagList = createMultipleTags(2);
+        applicationsList = createMultipleApplicationsWithBSandTags(
+            2,
+            businessservicesList,
+            tagList
+        );
     });
 
     beforeEach("Persist session", function () {
@@ -70,9 +79,9 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     after("Perform test data clean up", function () {
         if (hasToBeSkipped("@tier2")) return;
 
-        deleteAllTagTypes();
-        deleteApplicationTableRows();
+        deleteAllTagsAndTagTypes();
         deleteAllBusinessServices();
+        deleteApplicationTableRows();
     });
 
     it("Name filter validations", function () {
@@ -152,18 +161,9 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         var validSearchInput = applicationsList[0].business;
         applySearchFilter(businessService, validSearchInput);
         cy.wait(2000);
+
         exists(applicationsList[0].business);
 
-        clickByText(button, clearAllFilters);
-
-        // Enter a non-existing business service and apply it as search filter
-        applySearchFilter(businessService, data.getRandomWord(5));
-        cy.wait(3000);
-
-        // Assert that no search results are found
-        cy.get("h2").contains("No applications available");
-
-        // Clear all filters
         clickByText(button, clearAllFilters);
     });
 
@@ -182,13 +182,6 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing tag and apply it as search filter
-        applySearchFilter(tag, data.getRandomWord(5));
-        cy.wait(3000);
-
-        // Assert that no search results are found
-        cy.get("h2").contains("No applications available");
-
-        // Clear all filters
-        clickByText(button, clearAllFilters);
+        applySelectFilter("tags", tag, data.getRandomWord(5), false);
     });
 });
