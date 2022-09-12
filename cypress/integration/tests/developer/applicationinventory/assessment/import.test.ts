@@ -139,11 +139,6 @@ describe("Application import operations", () => {
 
             // Verify the error report messages
             openErrorReport();
-
-            var errorMsgs = [
-                "BusinessService 'Retail' could not be found",
-                "Tag Type Database and Tag H2O combination does not exist",
-            ];
             verifyImportErrorMsg("Tag 'TypeScript' could not be found.");
         }
     );
@@ -202,6 +197,8 @@ describe("Application import operations", () => {
         "Applications import having description and comments exceeding allowed limits",
         { tags: "@tier1" },
         function () {
+            /*
+            // Unresolved 2.1 bug - https://issues.redhat.com/browse/TACKLE-738
             selectUserPerspective("Developer");
             clickByText(navMenu, applicationInventory);
             cy.wait("@getApplication");
@@ -216,7 +213,7 @@ describe("Application import operations", () => {
 
             // Verify import applications page shows correct information
             verifyAppImport(fileName, "Completed", 0, 2);
-        }
+        */}
     );
 
     it("Applications import for invalid csv schema", { tags: "@newtest" }, function () {
