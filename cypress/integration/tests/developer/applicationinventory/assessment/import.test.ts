@@ -127,7 +127,7 @@ describe("Application import operations", () => {
             cy.wait("@getApplication");
 
             // Import csv with non-existent businsess service and tag rows
-            const fileName = "missing_tags_21.csv";
+            const fileName = "missing_business_tags_21.csv";
             importApplication(filePath + fileName, true);
             cy.wait(2000);
 
@@ -139,7 +139,11 @@ describe("Application import operations", () => {
 
             // Verify the error report messages
             openErrorReport();
-            verifyImportErrorMsg("Tag 'TypeScript' could not be found.");
+            var errorMsgs = [
+                "BusinessService: Finance does not exist",
+                "Tag 'TypeScript' could not be found.",
+            ];
+            verifyImportErrorMsg(errorMsgs);
         }
     );
 
