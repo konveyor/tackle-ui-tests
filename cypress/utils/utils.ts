@@ -461,7 +461,7 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
         subjectType: "drag-n-drop",
     });
 
-    //Uncheck reateEntitiesCheckbox if auto creation of entities is disabled
+    //Uncheck createEntitiesCheckbox if auto creation of entities is disabled
     if (disableAutoCreation)
         cy.get(createEntitiesCheckbox)
             .invoke("attr", "enabled")

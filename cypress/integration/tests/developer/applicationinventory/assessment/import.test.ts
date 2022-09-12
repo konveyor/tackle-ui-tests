@@ -213,7 +213,8 @@ describe("Application import operations", () => {
 
             // Verify import applications page shows correct information
             verifyAppImport(fileName, "Completed", 0, 2);
-        */}
+        */
+        }
     );
 
     it("Applications import for invalid csv schema", { tags: "@newtest" }, function () {
