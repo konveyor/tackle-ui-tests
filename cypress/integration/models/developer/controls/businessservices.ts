@@ -53,7 +53,7 @@ export class BusinessServices {
     description: string;
     owner: string;
 
-    static bzsUrl = Cypress.env("tackleUrl") + "controls/business-services";
+    static bzsUrl = Cypress.env("tackleUrl") + "/controls/business-services";
 
     constructor(name, description?, owner?: string) {
         this.name = name;
