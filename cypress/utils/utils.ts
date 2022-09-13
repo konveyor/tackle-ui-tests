@@ -48,6 +48,7 @@ import {
     applicationBusinessServiceSelect,
     date,
     selectBox,
+    createEntitiesCheckbox,
 } from "../integration/views/applicationinventory.view";
 import {
     confirmButton,
@@ -462,17 +463,26 @@ export function deleteTableRows(): void {
     });
 }
 
-export function importApplication(fileName: string): void {
+export function importApplication(fileName: string, disableAutoCreation?: boolean): void {
     // Performs application import via csv file upload
     cy.get(actionButton).eq(1).click();
     clickByText(button, "Import");
     cy.get('input[type="file"]', { timeout: 2 * SEC }).attachFile(fileName, {
         subjectType: "drag-n-drop",
     });
+
+    //Uncheck createEntitiesCheckbox if auto creation of entities is disabled
+    if (disableAutoCreation)
+        cy.get(createEntitiesCheckbox)
+            .invoke("attr", "enabled")
+            .then((enabled) => {
+                enabled ? cy.log("Button is disabled") : cy.get(createEntitiesCheckbox).uncheck();
+            });
+
     cy.get("form.pf-c-form", { timeout: 5 * SEC })
         .find("button")
         .contains("Import")
-        .click({ force: true });
+        .trigger("click");
     checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
 }
 

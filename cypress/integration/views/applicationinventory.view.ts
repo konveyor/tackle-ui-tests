@@ -48,3 +48,6 @@ export const group = "input[name=group]";
 export const artifact = "input[name=artifact]";
 export const version = "input[name=version]";
 export const packaging = "input[name=packaging]";
+
+//Fields related to application imports
+export const createEntitiesCheckbox = "#create-entities-checkbox";
