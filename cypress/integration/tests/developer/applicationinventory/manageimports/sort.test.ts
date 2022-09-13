@@ -28,17 +28,19 @@ import {
     deleteApplicationTableRows,
     preservecookies,
     hasToBeSkipped,
+    selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory } from "../../../../types/constants";
 
-import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
+import { Application } from "../../../../models/developer/applicationinventory/application";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { csvFileName, date, importStatus, user } from "../../../../views/applicationinventory.view";
+import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
 const businessService = new BusinessServices("Finance and HR");
-const filePath = "app_import/csv";
-var applicationsList: Array<ApplicationInventory> = [];
+const filePath = "app_import/csv/";
+var applicationsList: Array<Assessment> = [];
 
 describe("Manage applications import sort validations", { tags: "@tier2" }, function () {
     before("Login and create test data", function () {
@@ -67,13 +69,6 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
             importApplication(filePath + csvFile);
             cy.wait(2000);
         });
-
-        // Create objects for imported apps
-        const appsImported = ["Import-app-1", "Import-app-2", "Import-app-5", "Import-app-6"];
-        appsImported.forEach(function (appName) {
-            const importedApp = new ApplicationInventory(appName, businessService.name);
-            applicationsList.push(importedApp);
-        });
     });
 
     beforeEach("Persist session", function () {
@@ -90,16 +85,17 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
         if (hasToBeSkipped("@tier2")) return;
 
         // Delete the business service
-        businessService.delete();
         deleteApplicationTableRows();
+        businessService.delete();
     });
 
     it("Date sort validations", function () {
         // Navigate to application inventory page and open manage imports
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
-        cy.wait("@getImportApplications");
+        cy.get("@getImportApplications");
 
         // Get unsorted list when page loads
         const unsortedList = getTableColumnData(date);
@@ -123,6 +119,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
 
     it("User sort validations", function () {
         // Navigate to application inventory page and open manage imports
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
@@ -149,6 +146,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
 
     it("File name sort validations", function () {
         // Navigate to application inventory page and open manage imports
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
@@ -175,6 +173,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
 
     it("Import status sort validations", function () {
         // Navigate to application inventory page and open manage imports
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
