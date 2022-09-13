@@ -135,7 +135,7 @@ describe("Application import operations", () => {
             openManageImportsPage();
 
             // Verify import applications page shows correct information
-            verifyAppImport(fileName, "Completed", 0, 1);
+            verifyAppImport(fileName, "Completed", 0, 2);
 
             // Verify the error report messages
             openErrorReport();
