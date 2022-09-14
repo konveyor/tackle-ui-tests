@@ -25,6 +25,10 @@ import {
     deleteApplicationTableRows,
     preservecookies,
     hasToBeSkipped,
+    selectUserPerspective,
+    goToPage,
+    goToLastPage,
+    deleteAppImportsTableRows,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import {
@@ -35,14 +39,13 @@ import {
     deleteAction,
 } from "../../../../types/constants";
 import { actionButton } from "../../../../views/applicationinventory.view";
-import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
 
 import * as commonView from "../../../../views/common.view";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 
 const businessService = new BusinessServices("Finance and HR");
-const filePath = "app_import/csv";
-var applicationsList: Array<ApplicationInventory> = [];
+const filePath = "app_import/csv/";
+
 const filesToImport = [
     "valid_application_rows.csv",
     "mandatory_and_empty_rows.csv",
@@ -101,13 +104,6 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
                     importMultipleFiles(rowsToCreate);
                 }
             });
-
-        // Create objects for imported apps
-        const appsImported = ["Import-app-1", "Import-app-2", "Import-app-5", "Import-app-6"];
-        appsImported.forEach(function (appName) {
-            const importedApp = new ApplicationInventory(appName, businessService.name);
-            applicationsList.push(importedApp);
-        });
     });
 
     beforeEach("Persist session", function () {
@@ -122,14 +118,15 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier3")) return;
 
-        businessService.delete();
-
-        // Delete all applications
+        // Delete all Data
         deleteApplicationTableRows();
+        deleteAppImportsTableRows();
+        businessService.delete();
     });
 
     it("Navigation button validations", function () {
         // Navigate to Application inventory tab and open manage imports page
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
@@ -169,6 +166,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
 
     it("Items per page validations", function () {
         // Navigate to Application inventory tab and open manage imports page
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
@@ -200,6 +198,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
 
     it("Page number validations", function () {
         // Navigate to Application inventory tab and open manage imports page
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
@@ -209,16 +208,20 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
         cy.wait(2000);
 
         // Go to page number 2
-        cy.get(commonView.pageNumInput).clear().type("2").type("{enter}");
+        goToPage(2);
 
         // Verify that page number has changed, as previous page nav button got enabled
         cy.get(commonView.prevPageButton).each(($previousBtn) => {
             cy.wrap($previousBtn).should("not.be.disabled");
         });
+
+        // Back to page 1
+        goToPage(1);
     });
 
     it("Last page item(s) deletion, impact on page reload validation", function () {
         // Navigate to Application inventory tab and open manage imports page
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
@@ -228,7 +231,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
         cy.wait(2000);
 
         // Navigate to last page
-        cy.get(commonView.lastPageButton).click({ force: true });
+        goToLastPage();
         cy.wait(2000);
 
         // Delete all items of last page
