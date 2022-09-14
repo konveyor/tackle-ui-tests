@@ -341,11 +341,10 @@ export class Assessment extends Application {
             .find("span")
             .should("contain.text", dependency)
             .parent("div")
-            .find("button").trigger("click");
-            if (dependencyType === 'northbound')
-                cy.get(northdependenciesDropdownBtn).click();
-            else
-                cy.get(southdependenciesDropdownBtn).click();
+            .find("button")
+            .trigger("click");
+        if (dependencyType === "northbound") cy.get(northdependenciesDropdownBtn).click();
+        else cy.get(southdependenciesDropdownBtn).click();
     }
 
     // Remove north or south bound dependency for an application

@@ -75,6 +75,8 @@ describe("Manage application dependencies", { tags: "@newtest" }, () => {
     });
 
     it("Cyclic dependencies", function () {
+        //This fails because of this 2.1 issue - https://issues.redhat.com/browse/TACKLE-814
+
         var northboundApps: Array<string> = [applicationsList[0].name];
         var southboundApps: Array<string> = [applicationsList[2].name];
 
