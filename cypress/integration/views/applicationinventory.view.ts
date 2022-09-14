@@ -21,6 +21,7 @@ export const applicationTagsSelect = "[placeholder='Select a tag(s)']";
 export const applicationCommentInput = "textarea[name=comments]";
 export const businessColumnSelector = "td[data-label='Business service']";
 export const csvFileName = "File name";
+export const FileName = "File Name";
 export const closeForm = "button[aria-label='close']";
 export const copy = "button[aria-label='copy']";
 export const copyAssessmentTableTd = ".pf-m-compact> tbody > tr > td";
