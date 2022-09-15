@@ -22,7 +22,7 @@ import { Jobfunctions } from "../integration/models/developer/controls/jobfuncti
 
 import * as loginView from "../integration/views/login.view";
 import * as commonView from "../integration/views/common.view";
-import { navMenu } from "../integration/views/menu.view";
+import { navMenu, navTab } from "../integration/views/menu.view";
 import * as data from "../utils/data_utils";
 import "cypress-file-upload";
 import {
@@ -42,6 +42,7 @@ import {
     applicationInventory,
     SEC,
     CredentialType,
+    assessment,
 } from "../integration/types/constants";
 import {
     actionButton,
@@ -252,15 +253,22 @@ export function applySearchFilter(
 ): void {
     selectFilter(filterName, identifiedRisk, value);
     if (filterName == businessService || filterName == tag) {
-        cy.get("div.pf-c-input-group").find("div.pf-c-select > div > button").click();
-        if (Array.isArray(searchText)) {
-            searchText.forEach(function (searchTextValue) {
-                cy.get("div.pf-c-select__menu > fieldset > label > span")
-                    .contains(searchTextValue)
-                    .click();
-            });
-        } else {
-            cy.get("div.pf-c-select__menu > fieldset > label > span").contains(searchText).click();
+        cy.get("div.pf-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show")
+            .find("div.pf-c-select")
+            .click();
+        if (filterName == businessService) {
+            cy.get("ul.pf-c-select__menu").contains(searchText).click();
+        }
+        if (filterName == tag) {
+            if (Array.isArray(searchText)) {
+                searchText.forEach(function (searchTextValue) {
+                    cy.get("div.pf-c-select__menu > fieldset > label > span")
+                        .contains(searchTextValue)
+                        .click();
+                });
+            } else {
+                cy.get("div.pf-c-select__menu").contains(searchText).click();
+            }
         }
     } else {
         if (Array.isArray(searchText)) {
@@ -838,6 +846,33 @@ export function createMultipleApplications(numberofapplications: number): Array<
     for (let i = 0; i < numberofapplications; i++) {
         // Navigate to application inventory tab and create new application
         const application = new Assessment(getRandomApplicationData());
+        application.create();
+        applicationList.push(application);
+        cy.wait(2000);
+    }
+    return applicationList;
+}
+
+export function createMultipleApplicationsWithBSandTags(
+    numberofapplications: number,
+    businessservice?: Array<BusinessServices>,
+    tagList?: Array<Tag>
+): Array<Application> {
+    var applicationList: Array<Application> = [];
+    var tags: string[];
+    var business: string;
+    clickByText(navMenu, applicationInventory);
+    for (let i = 0; i < numberofapplications; i++) {
+        if (!businessservice) business = businessservice[i].name;
+        if (tagList) tags = [tagList[i].name];
+        let appdata = {
+            name: data.getAppName(),
+            business: businessservice[i].name,
+            description: data.getDescription(),
+            tags: [tagList[i].name],
+            comment: data.getDescription(),
+        };
+        const application = new Application(appdata);
         application.create();
         applicationList.push(application);
         cy.wait(2000);
