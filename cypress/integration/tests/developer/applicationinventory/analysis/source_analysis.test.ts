@@ -23,10 +23,11 @@ import {
     deleteAllBusinessServices,
     getRandomApplicationData,
     getRandomAnalysisData,
+    writeMavenSettingsFile,
 } from "../../../../../utils/utils";
 import { CredentialsMaven } from "../../../../models/administrator/credentials/credentialsMaven";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
-import { CredentialType } from "../../../../types/constants";
+import { CredentialType, UserCredentials } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../../models/administrator/credentials/credentialsSourceControlKey";
@@ -61,6 +62,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         // Prevent hook from running, if the tag is excluded from run
         deleteApplicationTableRows();
         deleteAllBusinessServices();
+        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 
     it("Source Code Analysis on bookserver app without credentials", function () {
@@ -80,7 +82,11 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
     it("Source Code Analysis on tackle testapp", function () {
         // For tackle test app source credentials are required.
         let source_credential = new CredentialsSourceControlUsername(
-            data.getRandomCredentialsData(CredentialType.sourceControl, true)
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                true
+            )
         );
         source_credential.create();
         const application = new Analysis(
@@ -132,7 +138,10 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
     it("Analysis on tackle test app with ssh credentials", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-707
         const scCredsKey = new CredentialsSourceControlKey(
-            data.getRandomCredentialsData(CredentialType.sourceControl)
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword
+            )
         );
         scCredsKey.create();
         const application = new Analysis(

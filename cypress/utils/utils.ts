@@ -488,6 +488,7 @@ export function openManageImportsPage(): void {
     // Opens the manage import applications page
     selectUserPerspective("Developer");
     clickByText(navMenu, applicationInventory);
+    cy.wait("@getApplication");
     cy.get(actionButton).eq(1).click();
     cy.get("a.pf-c-dropdown__menu-item").contains("Manage imports").click();
     cy.get("h1", { timeout: 5 * SEC }).contains("Application imports");
@@ -1159,4 +1160,17 @@ export function validateValue(selector, value: string): void {
                 expect($input).eq(value);
             });
     }
+}
+
+export function writeMavenSettingsFile(username: string, password: string): void {
+    cy.readFile("cypress/fixtures/xml/settings.xml").then((data) => {
+        var xml = data.toString();
+        const parser = new DOMParser();
+        const xmlDOM = parser.parseFromString(xml, "text/xml");
+        xmlDOM.getElementsByTagName("username")[0].childNodes[0].nodeValue = username;
+        xmlDOM.getElementsByTagName("password")[0].childNodes[0].nodeValue = password;
+        var serializer = new XMLSerializer();
+        var writetofile = serializer.serializeToString(xmlDOM);
+        cy.writeFile("cypress/fixtures/xml/settings.xml", writetofile);
+    });
 }

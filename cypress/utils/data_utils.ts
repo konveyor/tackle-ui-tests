@@ -15,7 +15,8 @@ limitations under the License.
 */
 import * as faker from "faker";
 import { CredentialsData, ProxyData } from "../integration/types/types";
-import { CredentialType } from "../integration/types/constants";
+import { CredentialType, UserCredentials } from "../integration/types/constants";
+import { writeMavenSettingsFile } from "./utils";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
@@ -102,10 +103,14 @@ export function getDefaultTagTypes(): string[] {
     ];
 }
 
-export function getRandomCredentialsData(type: string, gitTestingUser?: boolean): CredentialsData {
-    //Created a dummy github account for testing.
+export function getRandomCredentialsData(
+    type: string,
+    userCred?: string,
+    gitTestingUser?: boolean
+): CredentialsData {
     let password;
     let user;
+
     if (gitTestingUser) {
         user = Cypress.env("git_user");
         password = Cypress.env("git_password");
@@ -124,19 +129,30 @@ export function getRandomCredentialsData(type: string, gitTestingUser?: boolean)
         };
     }
     if (type === CredentialType.sourceControl) {
-        return {
-            type: type,
-            name: getRandomWord(6),
-            description: getDescription(),
-            key: "app_import/git_ssh_keys",
-            passphrase: "",
-        };
+        if (userCred === UserCredentials.sourcePrivateKey) {
+            return {
+                type: type,
+                name: getRandomWord(6),
+                description: getDescription(),
+                key: "app_import/git_ssh_keys",
+                passphrase: "",
+            };
+        } else {
+            return {
+                type: type,
+                name: getRandomWord(6),
+                description: getDescription(),
+                username: user,
+                password: password,
+            };
+        }
     } else {
+        writeMavenSettingsFile(Cypress.env("git_user"), Cypress.env("git_password"));
         return {
             type: type,
             name: getRandomWord(6),
             description: getRandomWord(6),
-            settingFile: "app_import/xml/settings.xml",
+            settingFile: "xml/settings.xml",
         };
     }
 }
