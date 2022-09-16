@@ -25,18 +25,18 @@ import {
     deleteApplicationTableRows,
     preservecookies,
     hasToBeSkipped,
+    selectUserPerspective,
+    deleteAppImportsTableRows,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory, button, clearAllFilters } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 
-import { ApplicationInventory } from "../../../../models/developer/applicationinventory/applicationinventory";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
-import { csvFileName } from "../../../../views/applicationinventory.view";
+import { FileName } from "../../../../views/applicationinventory.view";
 
 const businessService = new BusinessServices("Finance and HR");
-const filePath = "app_import/csv";
-var applicationsList: Array<ApplicationInventory> = [];
+const filePath = "app_import/csv/";
 const filesToImport = [
     "valid_application_rows.csv",
     "mandatory_and_empty_rows.csv",
@@ -66,13 +66,6 @@ describe("Manage applications import filter validations", { tags: "@tier2" }, fu
             importApplication(filePath + csvFile);
             cy.wait(2000);
         });
-
-        // Create objects for imported apps
-        const appsImported = ["Import-app-1", "Import-app-2", "Import-app-5", "Import-app-6"];
-        appsImported.forEach(function (appName) {
-            const importedApp = new ApplicationInventory(appName, businessService.name);
-            applicationsList.push(importedApp);
-        });
     });
 
     beforeEach("Persist session", function () {
@@ -88,19 +81,21 @@ describe("Manage applications import filter validations", { tags: "@tier2" }, fu
         if (hasToBeSkipped("@tier2")) return;
 
         // Delete the business service
-        businessService.delete();
         deleteApplicationTableRows();
+        deleteAppImportsTableRows();
+        businessService.delete();
     });
 
     it("File name filter validations", function () {
         // Navigate to application inventory page and open manage imports
+        selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplications");
         openManageImportsPage();
 
         // Enter an existing file name substring and apply it as search filter
         var validSearchInput = filesToImport[0].substring(0, 5);
-        applySearchFilter(csvFileName, validSearchInput);
+        applySearchFilter(FileName, validSearchInput);
 
         // Assert that application import row(s) containing the search text is/are displayed
         exists(filesToImport[0]);
@@ -113,9 +108,9 @@ describe("Manage applications import filter validations", { tags: "@tier2" }, fu
         cy.wait(2000);
 
         // Enter a non-existing file name substring and apply it as search filter
-        applySearchFilter(csvFileName, invalidSearchInput);
+        applySearchFilter(FileName, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No data available");
     });
 });

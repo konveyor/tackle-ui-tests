@@ -29,6 +29,7 @@ import {
     preservecookies,
     hasToBeSkipped,
     selectUserPerspective,
+    deleteAppImportsTableRows,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory } from "../../../../types/constants";
@@ -86,6 +87,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
 
         // Delete the business service
         deleteApplicationTableRows();
+        deleteAppImportsTableRows();
         businessService.delete();
     });
 
