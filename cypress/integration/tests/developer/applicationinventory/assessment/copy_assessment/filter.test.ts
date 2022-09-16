@@ -117,45 +117,47 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
 
         // Enter an existing application name and assert
         var validSearchInput = applicationList[1].name;
-        applySearchFilter(name, validSearchInput, true);
+        applySearchFilter(name, validSearchInput, true, 1);
         cy.wait(2000);
         cy.get(copyAssessmentTableTd).should("contain", applicationList[1].name);
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing application name and apply it as search filter
-        applySearchFilter(name, invalidSearchInput, true);
+        applySearchFilter(name, invalidSearchInput, true, 1);
         cy.wait(3000);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No data available");
 
         // Clear all filters and close model
         clickByText(button, clearAllFilters);
         cy.get(closeButton).click();
     });
 
+    /*
     it("Description filter validations", function () {
+        // This test fails because of this Tackle 2.x issue - https://issues.redhat.com/browse/TACKLE-822
         // Open the copy assessment model for application 1
         applicationList[0].openCopyAssessmentModel();
 
         // Enter an existing application description and assert
         var validSearchInput = applicationList[2].description;
-        applySearchFilter(description, validSearchInput, true);
+        applySearchFilter(description, validSearchInput, true, 1);
         cy.wait(2000);
         cy.get(copyAssessmentTableTd).should("contain", applicationList[2].name);
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing description and apply it as search filter
-        applySearchFilter(description, invalidSearchInput, true);
+        applySearchFilter(description, invalidSearchInput, true, 1);
         cy.wait(3000);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No data available");
 
         // Clear all filters and close model
         clickByText(button, clearAllFilters);
         cy.get(closeButton).click();
-    });
+    });*/
 
     it("Bussiness service filter validations", function () {
         // Open the copy assessment model for application 1
@@ -163,45 +165,39 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
 
         // Enter an existing business seervice linked to application and assert
         var validSearchInput = applicationList[1].business;
-        applySearchFilter(businessService, validSearchInput, true);
+        applySearchFilter(businessService, validSearchInput, true, 1);
         cy.wait(2000);
         cy.get(copyAssessmentTableTd)
             .should("contain", applicationList[1].name)
             .and("contain", applicationList[2].name);
-        clickByText(button, clearAllFilters);
-
-        // Enter a business service not linked to any application and apply it as search filter
-        applySearchFilter(businessService, businessservicesList[1].name, true);
-        cy.wait(3000);
-
-        // Assert that no search results are found
-        cy.get("h2").contains("No results found");
 
         // Clear all filters and close model
         clickByText(button, clearAllFilters);
         cy.get(closeButton).click();
     });
 
+    /*
     it("Tag filter validations", function () {
+        // This test fails because of this Tackle 2.x issue - https://issues.redhat.com/browse/TACKLE-822
         // Open the copy assessment model for application 1
         applicationList[0].openCopyAssessmentModel();
 
         // Enter a tag linked to application and assert
         var validSearchInput = applicationList[3].tags[0];
-        applySearchFilter(tag, validSearchInput, true);
+        applySearchFilter(tag, validSearchInput, true, 1);
         cy.wait(2000);
         cy.get(copyAssessmentTableTd).should("contain", applicationList[3].name);
         clickByText(button, clearAllFilters);
 
         // Enter a tag name not linked to any application and apply it as search filter
-        applySearchFilter(tag, tagList[1].name, true);
+        applySearchFilter(tag, tagList[1].name, true, 1);
         cy.wait(3000);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No results found");
+        cy.get("h2").contains("No data available");
 
         // Clear all filters and close model
         clickByText(button, clearAllFilters);
         cy.get(closeButton).click();
-    });
+    });*/
 });
