@@ -140,7 +140,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         const scCredsKey = new CredentialsSourceControlKey(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
-                UserCredentials.usernamePassword
+                UserCredentials.sourcePrivateKey
             )
         );
         scCredsKey.create();

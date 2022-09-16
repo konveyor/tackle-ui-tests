@@ -2,14 +2,14 @@ import { hasToBeSkipped, login, preservecookies } from "../../../../utils/utils"
 import { CredentialsSourceControlUsername } from "../../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../models/administrator/credentials/credentialsSourceControlKey";
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
-import { CredentialType } from "../../../types/constants";
+import { CredentialType, UserCredentials } from "../../../types/constants";
 
 describe("Validation of Source Control Credentials", () => {
     const scCredsUsername = new CredentialsSourceControlUsername(
-        getRandomCredentialsData(CredentialType.sourceControl)
+        getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.usernamePassword)
     );
     const scCredsKey = new CredentialsSourceControlKey(
-        getRandomCredentialsData(CredentialType.sourceControl)
+        getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.sourcePrivateKey)
     );
     const toBeCanceled = true;
 
@@ -51,11 +51,19 @@ describe("Validation of Source Control Credentials", () => {
     });
 
     it("Editing source control credentials with source private key and cancelling without saving", () => {
-        scCredsKey.edit(getRandomCredentialsData(CredentialType.sourceControl), toBeCanceled);
+        scCredsKey.edit(
+            getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.sourcePrivateKey
+            ),
+            toBeCanceled
+        );
     });
 
     it("Editing source control credentials with source private key", () => {
-        scCredsKey.edit(getRandomCredentialsData(CredentialType.sourceControl));
+        scCredsKey.edit(
+            getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.sourcePrivateKey)
+        );
     });
 
     it("Deleting source control credentials with username/password with cancellation", () => {
