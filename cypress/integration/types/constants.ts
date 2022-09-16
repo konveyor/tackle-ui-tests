@@ -85,3 +85,8 @@ export enum CredentialType {
     sourceControl = "Source Control",
     maven = "Maven",
 }
+
+export enum UserCredentials {
+    usernamePassword = "Username/Password",
+    sourcePrivateKey = "Source PrivateKey",
+}

@@ -1,8 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 http://maven.apache.org/xsd/settings-1.2.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?><settings xmlns="http://maven.apache.org/SETTINGS/1.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 http://maven.apache.org/xsd/settings-1.2.0.xsd">
 
   <pluginGroups>
   </pluginGroups>
@@ -13,8 +9,8 @@
   <servers>
     <server>
        <id>tackle-testapp</id>
-       <username>Shveta22</username>
-       <password>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</password>
+       <username>IqKXH</username>
+       <password>NUjkX</password>
      </server>
   </servers>
   <mirrors>

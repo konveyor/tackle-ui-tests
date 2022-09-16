@@ -23,10 +23,11 @@ import {
     deleteAllBusinessServices,
     getRandomApplicationData,
     getRandomAnalysisData,
+    writeMavenSettingsFile,
 } from "../../../../../utils/utils";
 import * as data from "../../../../../utils/data_utils";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
-import { CredentialType } from "../../../../types/constants";
+import { CredentialType, UserCredentials } from "../../../../types/constants";
 import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsMaven } from "../../../../models/administrator/credentials/credentialsMaven";
 let source_credential;
@@ -42,7 +43,11 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         deleteApplicationTableRows();
         deleteAllBusinessServices();
         source_credential = new CredentialsSourceControlUsername(
-            data.getRandomCredentialsData(CredentialType.sourceControl, true)
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                true
+            )
         );
         source_credential.create();
         maven_credential = new CredentialsMaven(
@@ -72,6 +77,7 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         deleteAllBusinessServices();
         source_credential.delete();
         maven_credential.delete();
+        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 
     it("Binary Analysis", function () {
