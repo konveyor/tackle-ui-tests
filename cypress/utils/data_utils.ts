@@ -135,7 +135,7 @@ export function getRandomCredentialsData(
                 name: getRandomWord(6),
                 description: getDescription(),
                 key: "app_import/git_ssh_keys",
-                passphrase: "",
+                passphrase: getRandomWord(6),
             };
         } else {
             return {
