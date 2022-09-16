@@ -47,6 +47,7 @@ describe("Manage application dependencies", { tags: "@newtest" }, () => {
         preservecookies();
 
         // Create new applications
+        deleteApplicationTableRows();
         applicationsList = createMultipleApplications(3);
     });
 
