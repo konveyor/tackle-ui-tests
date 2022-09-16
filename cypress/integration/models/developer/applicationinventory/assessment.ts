@@ -333,14 +333,18 @@ export class Assessment extends Application {
         }
     }
 
-    removeDep(dependency) {
+    removeDep(dependency, dependencyType) {
         cy.get("div")
-            .contains(dependency)
-            //.parent("div")
-            .next("button")
-            .then(($a) => {
-                if ($a.hasClass("pf-m-plain")) $a.click();
-            });
+            .contains(`Add ${dependencyType} dependencies`)
+            .parent("div")
+            .siblings()
+            .find("span")
+            .should("contain.text", dependency)
+            .parent("div")
+            .find("button")
+            .trigger("click");
+        if (dependencyType === "northbound") cy.get(northdependenciesDropdownBtn).click();
+        else cy.get(southdependenciesDropdownBtn).click();
     }
 
     // Remove north or south bound dependency for an application
@@ -348,11 +352,11 @@ export class Assessment extends Application {
         if (northbound || southbound) {
             this.openManageDependencies();
             if (northbound.length > 0) {
-                this.removeDep(northbound[0]);
+                this.removeDep(northbound[0], "northbound");
                 cy.wait(1000);
             }
             if (southbound.length > 0) {
-                this.removeDep(southbound[0]);
+                this.removeDep(southbound[0], "southbound");
                 cy.wait(1000);
             }
             cy.wait(2000);
