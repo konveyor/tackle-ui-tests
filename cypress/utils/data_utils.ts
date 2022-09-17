@@ -106,7 +106,7 @@ export function getDefaultTagTypes(): string[] {
 export function getRandomCredentialsData(
     type: string,
     userCred?: string,
-    gitTestingUser?: boolean
+    gitTestingUser = false
 ): CredentialsData {
     let password;
     let user;
@@ -147,7 +147,9 @@ export function getRandomCredentialsData(
             };
         }
     } else {
-        writeMavenSettingsFile(Cypress.env("git_user"), Cypress.env("git_password"));
+        if (gitTestingUser) {
+            writeMavenSettingsFile(user, password);
+        }
         return {
             type: type,
             name: getRandomWord(6),
