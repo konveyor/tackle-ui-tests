@@ -43,6 +43,7 @@ import {
     SEC,
     CredentialType,
     assessment,
+    UserCredentials,
 } from "../integration/types/constants";
 import {
     actionButton,
@@ -673,7 +674,12 @@ export function createMultipleCredentials(numberOfCredentials: number): Array<Cr
             )
         );
         newCredentialsList.push(
-            new CredentialsSourceControlKey(getRandomCredentialsData(CredentialType.sourceControl))
+            new CredentialsSourceControlKey(
+                getRandomCredentialsData(
+                    CredentialType.sourceControl,
+                    UserCredentials.sourcePrivateKey
+                )
+            )
         );
     }
     newCredentialsList.forEach((currentCredential) => {
