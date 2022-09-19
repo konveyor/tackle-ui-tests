@@ -36,7 +36,7 @@ var stakeholdersList: Array<Stakeholders> = [];
 var applicationList: Array<Assessment> = [];
 
 describe("Assessment pagination validations", { tags: "@newtest" }, function () {
-    before("Login and Create Test Data", function () {
+    before("Login and create test data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@newtest")) return;
 
@@ -48,6 +48,7 @@ describe("Assessment pagination validations", { tags: "@newtest" }, function () 
 
         // Navigate to Application inventory tab, delete all and create 11 applications
         deleteApplicationTableRows();
+
         // Create data
         stakeholdersList = createMultipleStakeholders(1);
         applicationList = createMultipleApplications(11);
