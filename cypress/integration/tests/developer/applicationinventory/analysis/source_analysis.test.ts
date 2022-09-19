@@ -156,4 +156,27 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.verifyAnalysisStatus("Completed");
         application.openreport();
     });
+
+    it("Source Code Analysis on tackle testapp for svn repo type", function () {
+        // For tackle test app source credentials are required.
+        let source_credential = new CredentialsSourceControlUsername(
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                true
+            )
+        );
+        source_credential.create();
+        const application = new Analysis(
+            getRandomApplicationData({ sourceData: this.appData[5] }),
+            getRandomAnalysisData(this.analysisData[0])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.manageCredentials(source_credential.name, "None");
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
+    });
 });
