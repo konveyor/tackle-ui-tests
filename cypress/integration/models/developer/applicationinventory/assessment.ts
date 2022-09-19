@@ -34,6 +34,7 @@ import {
     kebabMenu,
     northdependenciesDropdownBtn,
     southdependenciesDropdownBtn,
+    copyAssessmentPagination,
 } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
@@ -450,8 +451,7 @@ export class Assessment extends Application {
 
     selectItemsPerPage(items: number): void {
         cy.wait(2000);
-        cy.get(".pf-m-compact")
-            .eq(1)
+        cy.get(copyAssessmentPagination)
             .find(commonView.itemsPerPageMenu)
             .find(commonView.itemsPerPageToggleButton)
             .then(($toggleBtn) => {
