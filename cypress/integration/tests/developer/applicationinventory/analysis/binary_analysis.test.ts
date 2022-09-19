@@ -51,7 +51,7 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         );
         source_credential.create();
         maven_credential = new CredentialsMaven(
-            data.getRandomCredentialsData(CredentialType.maven)
+            data.getRandomCredentialsData(CredentialType.maven, "None", true)
         );
         maven_credential.create();
     });
