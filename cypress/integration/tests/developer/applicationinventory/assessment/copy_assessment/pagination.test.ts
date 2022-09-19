@@ -24,7 +24,10 @@ import {
     createMultipleApplications,
     deleteAllStakeholders,
 } from "../../../../../../utils/utils";
-import { copyAssessmentTableTr, copyAssessmentPagination } from "../../../../../views/applicationinventory.view";
+import {
+    copyAssessmentTableTr,
+    copyAssessmentPagination,
+} from "../../../../../views/applicationinventory.view";
 import * as commonView from "../../../../../views/common.view";
 import { Stakeholders } from "../../../../../models/developer/controls/stakeholders";
 import { Assessment } from "../../../../../models/developer/applicationinventory/assessment";
