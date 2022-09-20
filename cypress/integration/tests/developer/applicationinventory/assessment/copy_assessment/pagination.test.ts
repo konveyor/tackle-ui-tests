@@ -24,7 +24,10 @@ import {
     createMultipleApplications,
     deleteAllStakeholders,
 } from "../../../../../../utils/utils";
-import { copyAssessmentTableTr } from "../../../../../views/applicationinventory.view";
+import {
+    copyAssessmentTableTr,
+    copyAssessmentPagination,
+} from "../../../../../views/applicationinventory.view";
 import * as commonView from "../../../../../views/common.view";
 import { Stakeholders } from "../../../../../models/developer/controls/stakeholders";
 import { Assessment } from "../../../../../models/developer/applicationinventory/assessment";
@@ -33,7 +36,7 @@ var stakeholdersList: Array<Stakeholders> = [];
 var applicationList: Array<Assessment> = [];
 
 describe("Assessment pagination validations", { tags: "@newtest" }, function () {
-    before("Login and Create Test Data", function () {
+    before("Login and create test data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@newtest")) return;
 
@@ -45,6 +48,7 @@ describe("Assessment pagination validations", { tags: "@newtest" }, function () 
 
         // Navigate to Application inventory tab, delete all and create 11 applications
         deleteApplicationTableRows();
+
         // Create data
         stakeholdersList = createMultipleStakeholders(1);
         applicationList = createMultipleApplications(11);
@@ -75,28 +79,25 @@ describe("Assessment pagination validations", { tags: "@newtest" }, function () 
         cy.wait(2000);
 
         // Verify next buttons are enabled as there are more than 10 rows present
-        cy.get(".pf-m-compact")
-            .eq(1)
+        cy.get(copyAssessmentPagination)
             .find(commonView.nextPageButton)
             .each(($nextBtn) => {
                 cy.wrap($nextBtn).should("not.be.disabled");
             });
 
         // Verify that previous buttons are disabled being on the first page
-        cy.get(".pf-m-compact")
-            .eq(1)
+        cy.get(copyAssessmentPagination)
             .find(commonView.prevPageButton)
             .each(($previousBtn) => {
                 cy.wrap($previousBtn).should("be.disabled");
             });
 
         // Navigate to next page
-        cy.get(".pf-m-compact").eq(1).find(commonView.nextPageButton).click();
+        cy.get(copyAssessmentPagination).find(commonView.nextPageButton).click();
         cy.wait(2000);
 
         // Verify that previous buttons are enabled after moving to next page
-        cy.get(".pf-m-compact")
-            .eq(1)
+        cy.get(copyAssessmentPagination)
             .find(commonView.prevPageButton)
             .each(($previousBtn) => {
                 cy.wrap($previousBtn).should("not.be.disabled");
