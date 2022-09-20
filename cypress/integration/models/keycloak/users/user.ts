@@ -1,12 +1,6 @@
 import { UserData } from "../../../types/types";
 import { button, SEC, tdTag, trTag } from "../../../types/constants";
-import {
-    click,
-    clickByText,
-    clickWithin,
-    inputText,
-    performRowAction,
-} from "../../../../utils/utils";
+import { click, clickByText, inputText } from "../../../../utils/utils";
 import * as loginView from "../../../views/login.view";
 const tackleUiUrl = Cypress.env("tackleUrl");
 const adminPassword = Cypress.env("adminPassword");
@@ -53,17 +47,16 @@ export class User {
     protected static applyAction(itemName, action: string): void {
         cy.get(tdTag, { timeout: 120 * SEC })
             .contains(itemName, { timeout: 120 * SEC })
-            // .closest(tdTag)
             .closest(trTag)
             .within(() => {
                 clickByText(tdTag, action);
                 cy.wait(500);
-                // clickByText(button, action);
-                // clickWithin('.modal-content', action);
-                click(
-                    "body > div.modal.fade.ng-isolate-scope.in > div > div > div.modal-footer.ng-scope > button.ng-binding.btn.btn-danger"
-                );
             });
+        if (action.toLowerCase() === "delete") {
+            click(
+                "body > div.modal.fade.ng-isolate-scope.in > div > div > div.modal-footer.ng-scope > button.ng-binding.btn.btn-danger"
+            );
+        }
     }
 
     protected inputUsername(username: string) {
