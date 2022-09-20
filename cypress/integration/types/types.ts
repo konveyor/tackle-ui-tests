@@ -74,3 +74,13 @@ export type analysisData = {
     excludeRuleTags?: string;
     enableTransaction?: boolean;
 };
+
+export type UserData = {
+    username: string;
+    password: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    userEnabled: boolean;
+    role?: string[];
+};

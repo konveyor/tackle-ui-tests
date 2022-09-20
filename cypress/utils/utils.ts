@@ -633,7 +633,7 @@ export function performRowAction(itemName: string, action: string): void {
     // itemName is text to be searched on the screen (like credentials name, stakeholder name, etc)
     // Action is the name of the action to be applied (usually edit or delete)
 
-    cy.get(tdTag)
+    cy.get(tdTag, { timeout: 120 * SEC })
         .contains(itemName, { timeout: 120 * SEC })
         // .closest(tdTag)
         .closest(trTag)
