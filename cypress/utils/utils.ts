@@ -142,7 +142,7 @@ export function selectItemsPerPage(items: number): void {
                 $toggleBtn.eq(0).trigger("click");
                 cy.get(commonView.itemsPerPageMenuOptions);
                 cy.get(`li > button[data-action="per-page-${items}"]`).click({ force: true });
-                cy.wait(0.5 * SEC);
+                cy.wait(2 * SEC);
             }
         });
 }
@@ -1160,7 +1160,7 @@ export function confirm(): void {
 
 export function validatePagination(): void {
     // Verify next buttons are enabled as there are more than 11 rows present
-    cy.get(nextPageButton).each(($nextBtn) => {
+    cy.get(nextPageButton, { timeout: 10 * SEC }).each(($nextBtn) => {
         cy.wrap($nextBtn).should("not.be.disabled");
     });
 
