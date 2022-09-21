@@ -128,7 +128,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
         // Navigate to Application inventory tab and open manage imports page
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
-        cy.wait("@getApplications");
+        cy.get("@getApplications");
         openManageImportsPage();
 
         // select 10 items per page
@@ -168,7 +168,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
         // Navigate to Application inventory tab and open manage imports page
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
-        cy.wait("@getApplications");
+        cy.get("@getApplications");
         openManageImportsPage();
 
         // Select 10 items per page
@@ -200,7 +200,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
         // Navigate to Application inventory tab and open manage imports page
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
-        cy.wait("@getApplications");
+        cy.get("@getApplications");
         openManageImportsPage();
 
         // Select 10 items per page
@@ -223,7 +223,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
         // Navigate to Application inventory tab and open manage imports page
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
-        cy.wait("@getApplications");
+        cy.get("@getApplications");
         openManageImportsPage();
 
         // Select 10 items per page
