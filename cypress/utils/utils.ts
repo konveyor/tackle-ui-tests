@@ -507,7 +507,6 @@ export function openManageImportsPage(): void {
     // Opens the manage import applications page
     selectUserPerspective("Developer");
     clickByText(navMenu, applicationInventory);
-    cy.wait("@getApplication");
     cy.get(actionButton).eq(1).click();
     cy.get("a.pf-c-dropdown__menu-item").contains("Manage imports").click();
     cy.get("h1", { timeout: 5 * SEC }).contains("Application imports");
