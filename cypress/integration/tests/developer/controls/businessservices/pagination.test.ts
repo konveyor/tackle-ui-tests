@@ -25,6 +25,7 @@ import {
     goToLastPage,
     deleteFromArray,
     validatePagination,
+    goToPage,
 } from "../../../../../utils/utils";
 import { SEC } from "../../../../types/constants";
 import { pageNumInput, prevPageButton } from "../../../../views/common.view";
@@ -83,7 +84,7 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
         cy.wait(2 * SEC);
 
         // Go to page number 2
-        cy.get(pageNumInput).eq(0).clear().type("2").type("{enter}");
+        goToPage(2);
 
         // Verify that page number has changed, as previous page nav button got enabled
         cy.get(prevPageButton).each(($previousBtn) => {
