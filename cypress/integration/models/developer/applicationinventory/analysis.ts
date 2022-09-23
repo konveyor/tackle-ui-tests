@@ -43,8 +43,8 @@ import {
     sourceCredential,
     mavenCredential,
     nextButton,
+    addRules,
 } from "../../../views/analysis.view";
-import { List } from "cypress/types/lodash";
 import { kebabMenu } from "../../../views/applicationinventory.view";
 
 export class Analysis extends Application {
@@ -90,7 +90,7 @@ export class Analysis extends Application {
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         clickByText(navTab, analysis);
-        cy.wait(30000);
+        cy.wait(10000);
     }
 
     create(): void {
@@ -109,6 +109,15 @@ export class Analysis extends Application {
     protected uploadBinary() {
         uploadFile(this.binary);
         cy.get("span.pf-c-progress__measure", { timeout: 15000 }).should("contain", "100%");
+    }
+
+    protected uploadCustomRule() {
+        cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
+        uploadFile(this.customRule);
+        cy.wait(2000);
+        cy.get("span.pf-c-progress__measure", { timeout: 15000 }).should("contain", "100%");
+        cy.wait(2000);
+        cy.contains(addRules, "Add", { timeout: 2000 }).click();
     }
 
     protected isNextEnabled() {
@@ -133,7 +142,8 @@ export class Analysis extends Application {
             this.selectTarget(this.target);
             cy.contains("button", "Next", { timeout: 200 }).click();
             if (!this.scope) cy.contains("button", "Next", { timeout: 200 }).click();
-            if (!this.customRule) cy.contains("button", "Next", { timeout: 200 }).click();
+            if (this.customRule) this.uploadCustomRule();
+            cy.contains("button", "Next", { timeout: 200 }).click();
             if (!this.sources) cy.contains("button", "Next", { timeout: 200 }).click();
             cy.contains("button", "Run", { timeout: 200 }).click();
             checkSuccessAlert(commonView.successAlertMessage, `Submitted for analysis`);

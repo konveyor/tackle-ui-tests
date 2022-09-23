@@ -15,5 +15,11 @@
         "source": "Upload a local binary",
         "target": "Containerization",
         "binary": "acmeair-webapp-1.0-SNAPSHOT.war"
+    },
+    {
+        "source": "Upload a local binary",
+        "target": "Containerization",
+        "binary": "customers-tomcat-0.0.1-SNAPSHOT.war",
+        "customRule": "javax-package-custom-target.windup.xml"
     }
 ]

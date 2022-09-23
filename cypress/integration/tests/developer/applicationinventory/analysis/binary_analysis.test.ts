@@ -30,6 +30,7 @@ import { Analysis } from "../../../../models/developer/applicationinventory/anal
 import { CredentialType, UserCredentials } from "../../../../types/constants";
 import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsMaven } from "../../../../models/administrator/credentials/credentialsMaven";
+import { Proxy } from "../../../../models/administrator/proxy/proxy";
 let source_credential;
 let maven_credential;
 
@@ -42,6 +43,12 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         login();
         deleteApplicationTableRows();
         deleteAllBusinessServices();
+
+        //Disable all proxy settings
+        let proxy = new Proxy(data.getRandomProxyData());
+        proxy.disableProxy();
+
+        //Create source and maven credentials required for analysis
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
