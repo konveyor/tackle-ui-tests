@@ -16,7 +16,7 @@ limitations under the License.
 import * as faker from "faker";
 import { CredentialsData, ProxyData } from "../integration/types/types";
 import { CredentialType, UserCredentials } from "../integration/types/constants";
-import { writeMavenSettingsFile } from "./utils";
+import { writeGpgKey, writeMavenSettingsFile } from "./utils";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
@@ -130,11 +130,12 @@ export function getRandomCredentialsData(
     }
     if (type === CredentialType.sourceControl) {
         if (userCred === UserCredentials.sourcePrivateKey) {
+            if (Cypress.env("git_key")) writeGpgKey(Cypress.env("git_key"));
             return {
                 type: type,
                 name: getRandomWord(6),
                 description: getDescription(),
-                key: "app_import/git_ssh_keys",
+                key: "gpgkey",
                 passphrase: getRandomWord(6),
             };
         } else {

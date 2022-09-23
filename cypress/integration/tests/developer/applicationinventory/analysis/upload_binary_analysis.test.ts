@@ -23,8 +23,11 @@ import {
     deleteAllBusinessServices,
     getRandomApplicationData,
     getRandomAnalysisData,
+    writeGpgKey,
 } from "../../../../../utils/utils";
+import { Proxy } from "../../../../models/administrator/proxy/proxy";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
+import * as data from "../../../../../utils/data_utils";
 
 describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -35,6 +38,10 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         login();
         deleteApplicationTableRows();
         deleteAllBusinessServices();
+
+        //Disable all proxy settings
+        let proxy = new Proxy(data.getRandomProxyData());
+        proxy.disableProxy();
     });
 
     beforeEach("Persist session", function () {
@@ -56,12 +63,27 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         // Prevent hook from running, if the tag is excluded from run
         deleteApplicationTableRows();
         deleteAllBusinessServices();
+        writeGpgKey("abcde");
     });
 
     it("Upload Binary Analysis", function () {
         const application = new Analysis(
             getRandomApplicationData(),
             getRandomAnalysisData(this.analysisData[3])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        // No credentials required for uploaded binary.
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
+    });
+
+    it("Custom rules with custom targets", function () {
+        const application = new Analysis(
+            getRandomApplicationData(),
+            getRandomAnalysisData(this.analysisData[4])
         );
         application.create();
         cy.wait("@getApplication");

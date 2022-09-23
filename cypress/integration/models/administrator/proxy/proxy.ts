@@ -2,6 +2,7 @@ import {
     clearInput,
     click,
     clickByText,
+    disableProxy,
     inputText,
     selectCheckBox,
     selectUserPerspective,
@@ -89,6 +90,16 @@ export class Proxy {
         if (this.httpsEnabled) {
             this.unConfigureProxy("https");
         }
+    }
+
+    disableProxy(): void {
+        // If proxy is enabled just switches it off
+        Proxy.open();
+        cy.wait(5000);
+        disableProxy(`#${"http"}Proxy`);
+        cy.wait(2000);
+        disableProxy(`#${"https"}Proxy`);
+        cy.wait(2000);
     }
 
     //TODO: Write disable method that will clear all fields and disable proxy
