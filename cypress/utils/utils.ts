@@ -258,7 +258,7 @@ export function applySearchFilter(
             .find("div.pf-c-select")
             .click();
         if (filterName == businessService) {
-            cy.get("ul.pf-c-select__menu").contains(searchText).click();
+            cy.get("span.pf-c-check__label").contains(searchText).click();
         }
         if (filterName == tag) {
             if (Array.isArray(searchText)) {
