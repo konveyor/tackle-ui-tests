@@ -31,6 +31,7 @@ import { CredentialType, UserCredentials } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../../models/administrator/credentials/credentialsSourceControlKey";
+import { Proxy } from "../../../../models/administrator/proxy/proxy";
 
 describe("Source Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -41,6 +42,10 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         login();
         deleteApplicationTableRows();
         deleteAllBusinessServices();
+
+        //Disable all proxy settings
+        let proxy = new Proxy(data.getRandomProxyData());
+        proxy.disableProxy();
     });
 
     beforeEach("Persist session", function () {

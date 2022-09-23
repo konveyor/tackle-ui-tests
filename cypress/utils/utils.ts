@@ -497,9 +497,10 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
 
 export function uploadFile(fileName: string): void {
     // Uplaod any file
-    cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(fileName, {
-        subjectType: "drag-n-drop",
-    });
+    cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(
+        { filePath: fileName, mimeType: "text/xml", encoding: "utf-8" },
+        { subjectType: "drag-n-drop" }
+    );
     cy.wait(2000);
 }
 
@@ -844,6 +845,7 @@ export function getRandomAnalysisData(sourceData): analysisData {
         source: sourceData.source,
         target: sourceData.target,
         binary: sourceData.binary,
+        customRule: sourceData.customRule,
     };
     return analysisData;
 }
@@ -1130,8 +1132,18 @@ export function clickWithin(parent, selector: string): void {
 //function to select checkboxes
 export function selectCheckBox(selector: string): void {
     cy.get(selector, { timeout: 120 * SEC }).then(($checkbox) => {
-        if (!$checkbox.prop("checked")) {
+        if ($checkbox.prop("unchecked")) {
             click(selector);
+        }
+    });
+}
+
+//function to unselect checkboxes
+export function disableProxy(selector: string): void {
+    cy.get(selector, { timeout: 120 * SEC }).then(($checkbox) => {
+        if ($checkbox.prop("checked")) {
+            click(selector);
+            submitForm();
         }
     });
 }
@@ -1223,4 +1235,13 @@ export function writeMavenSettingsFile(username: string, password: string): void
         var writetofile = serializer.serializeToString(xmlDOM);
         cy.writeFile("cypress/fixtures/xml/settings.xml", writetofile);
     });
+}
+
+export function writeGpgKey(git_key): void {
+    var beginningKey: string = "-----BEGIN RSA PRIVATE KEY-----";
+    var endingKey: string = "-----END RSA PRIVATE KEY-----";
+    var key = git_key;
+    var keystring = key.toString().split(" ").join("\n");
+    var gpgkey = beginningKey + "\n" + keystring + "\n" + endingKey;
+    cy.writeFile("cypress/fixtures/gpgkey", gpgkey);
 }
