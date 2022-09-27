@@ -495,12 +495,29 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
     checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
 }
 
-export function uploadFile(fileName: string): void {
+export function uploadXml(fileName: string): void {
     // Uplaod any file
     cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(
         { filePath: fileName, mimeType: "text/xml", encoding: "utf-8" },
         { subjectType: "drag-n-drop" }
     );
+    cy.wait(2000);
+}
+
+export function uploadApplications(fileName: string): void {
+    // Uplaod any file
+    cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(
+        { filePath: fileName, encoding: "binary" },
+        { subjectType: "drag-n-drop" }
+    );
+    cy.wait(2000);
+}
+
+export function uploadFile(fileName: string): void {
+    // Uplaod any file
+    cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(fileName, {
+        subjectType: "drag-n-drop",
+    });
     cy.wait(2000);
 }
 
@@ -815,9 +832,16 @@ export function getRowsAmount(): number {
     return amount;
 }
 
-export function getRandomApplicationData(options?: { sourceData?; binaryData? }): applicationData {
+export function getRandomApplicationData(
+    appName?,
+    options?: { sourceData?; binaryData? }
+): applicationData {
+    let name = data.getAppName();
+    if (appName) {
+        name = appName + "_" + data.getAppName();
+    }
     let appdata = {
-        name: data.getAppName(),
+        name: name,
         description: data.getDescription(),
         comment: data.getDescription(),
     };

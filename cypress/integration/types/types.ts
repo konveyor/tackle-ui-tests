@@ -66,7 +66,7 @@ export type ProxyData = {
 
 export type analysisData = {
     source: string;
-    target: string;
+    target: string[];
     binary?: string;
     scope?: string;
     customRule?: string;

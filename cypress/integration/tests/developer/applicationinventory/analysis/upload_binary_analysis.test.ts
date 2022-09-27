@@ -37,7 +37,6 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         // Perform login
         login();
         deleteApplicationTableRows();
-        deleteAllBusinessServices();
 
         //Disable all proxy settings
         let proxy = new Proxy(data.getRandomProxyData());
@@ -68,7 +67,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
 
     it("Upload Binary Analysis", function () {
         const application = new Analysis(
-            getRandomApplicationData(),
+            getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData[3])
         );
         application.create();
@@ -81,8 +80,9 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
     });
 
     it("Custom rules with custom targets", function () {
+        // Automated https://issues.redhat.com/browse/TACKLE-561
         const application = new Analysis(
-            getRandomApplicationData(),
+            getRandomApplicationData("customRule_customTarget"),
             getRandomAnalysisData(this.analysisData[4])
         );
         application.create();
