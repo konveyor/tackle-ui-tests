@@ -141,7 +141,7 @@ describe("Application import operations", () => {
             // Verify the error report messages
             openErrorReport();
             var errorMsgs = [
-                "Tag 'TypeScript' could not be found.",
+                "Tag 'TypeScript' could not be found",
                 "BusinessService 'Finance' could not be found",
             ];
             verifyImportErrorMsg(errorMsgs);
