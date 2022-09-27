@@ -30,13 +30,14 @@ import {
     selectUserPerspective,
     deleteAllBusinessServices,
     deleteAppImportsTableRows,
+    notExists,
 } from "../../../../../utils/utils";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory, button } from "../../../../types/constants";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
-const businessService = new BusinessServices("Retail");
+const businessService = new BusinessServices("BS_tag_test");
 const filePath = "app_import/csv/";
 var applicationsList: Array<Assessment> = [];
 
@@ -119,16 +120,17 @@ describe("Application import operations", () => {
     });
 
     it(
-        "Applications import for non existing tags and business service",
+        "Applications import for non existing tags",
         { tags: "@tier1" },
         function () {
             businessService.create();
+            exists(businessService.name);
             selectUserPerspective("Developer");
             clickByText(navMenu, applicationInventory);
             cy.wait("@getApplication");
 
-            // Import csv with non-existent businsess service and tag rows
-            const fileName = "missing_business_tags_21.csv";
+            // Import csv with non-existent tags
+            const fileName = "missing_tags_21.csv";
             importApplication(filePath + fileName, true);
             cy.wait(2000);
 
@@ -136,16 +138,39 @@ describe("Application import operations", () => {
             openManageImportsPage();
 
             // Verify import applications page shows correct information
-            verifyAppImport(fileName, "Completed", 0, 2);
+            verifyAppImport(fileName, "Completed", 0, 1);
 
             // Verify the error report messages
             openErrorReport();
-            var errorMsgs = [
-                "Tag 'TypeScript' could not be found",
-                "BusinessService 'Finance' could not be found",
-            ];
-            verifyImportErrorMsg(errorMsgs);
+            verifyImportErrorMsg("Tag 'TypeScript' could not be found");
+
             businessService.delete();
+            notExists(businessService.name);
+        }
+    );
+
+    it(
+        "Applications import for non existing business service",
+        { tags: "@tier1" },
+        function () {
+            selectUserPerspective("Developer");
+            clickByText(navMenu, applicationInventory);
+            cy.wait("@getApplication");
+
+            // Import csv with non-existent businsess service
+            const fileName = "missing_business_21.csv";
+            importApplication(filePath + fileName, true);
+            cy.wait(2000);
+
+            // Open application imports page
+            openManageImportsPage();
+
+            // Verify import applications page shows correct information
+            verifyAppImport(fileName, "Completed", 0, 1);
+
+            // Verify the error report messages
+            openErrorReport();
+            verifyImportErrorMsg("BusinessService 'Finance' could not be found");
         }
     );
 
