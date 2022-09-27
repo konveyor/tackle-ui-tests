@@ -21,7 +21,6 @@ import {
     trTag,
     button,
     save,
-    CredentialType,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import * as commonView from "../../../views/common.view";
@@ -32,7 +31,8 @@ import {
     checkSuccessAlert,
     selectUserPerspective,
     performRowActionByIcon,
-    uploadFile,
+    uploadXml,
+    uploadApplications,
 } from "../../../../utils/utils";
 import { analysisData, applicationData } from "../../../types/types";
 import { Application } from "./application";
@@ -50,7 +50,7 @@ import { kebabMenu } from "../../../views/applicationinventory.view";
 export class Analysis extends Application {
     name: string;
     source: string;
-    target: string;
+    target: string[];
     binary?: string;
     scope?: string;
     customRule?: string;
@@ -102,18 +102,20 @@ export class Analysis extends Application {
         selectFormItems(sourceDropdown, source);
     }
 
-    protected selectTarget(target: string): void {
-        cy.get("div.pf-c-empty-state__content").children("h4").contains(target).click();
+    protected selectTarget(target: string[]): void {
+        for (let i = 0; i < target.length; i++) {
+            cy.get("div.pf-c-empty-state__content").children("h4").contains(target[i]).click();
+        }
     }
 
     protected uploadBinary() {
-        uploadFile(this.binary);
+        uploadApplications(this.binary);
         cy.get("span.pf-c-progress__measure", { timeout: 15000 }).should("contain", "100%");
     }
 
     protected uploadCustomRule() {
         cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
-        uploadFile(this.customRule);
+        uploadXml("xml/" + this.customRule);
         cy.wait(2000);
         cy.get("span.pf-c-progress__measure", { timeout: 15000 }).should("contain", "100%");
         cy.wait(2000);
