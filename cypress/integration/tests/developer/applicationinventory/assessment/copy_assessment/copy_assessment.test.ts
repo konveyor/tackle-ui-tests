@@ -121,7 +121,7 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
     });
 
     it("Copy assessment select options validations", function () {
-        // Open copy assessment and review page
+        // Open copy assessment page
         applicationList[0].openCopyAssessmentModel();
 
         // select 10 items per page
@@ -132,7 +132,7 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
         clickWithin(modal, "button[aria-label='Select']");
         if (applicationList.length < 11) {
             cy.get("ul[role=menu] > li")
-                .contains(`Select page (${applicationList.length}) items`)
+                .contains(`Select page (${applicationList.length} items)`)
                 .click();
         } else {
             cy.get("ul[role=menu] > li").contains("Select page (10 items)").click();
