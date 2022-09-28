@@ -138,20 +138,18 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
             cy.get("ul[role=menu] > li").contains("Select page (10 items)").click();
         }
         cy.get("input[name='confirm']").check();
-        cy.get(copy).should('be.visible').should("not.be.disabled");
+        cy.get(copy).should("be.visible").should("not.be.disabled");
 
         // Select all applications
         clickWithin(modal, "button[aria-label='Select']");
-        cy.get("ul[role=menu] > li")
-            .contains(`Select all (${applicationList.length}`)
-            .click();
+        cy.get("ul[role=menu] > li").contains(`Select all (${applicationList.length}`).click();
         cy.get("input[name='confirm']").check();
-        cy.get(copy).should('be.visible').should("not.be.disabled");
+        cy.get(copy).should("be.visible").should("not.be.disabled");
         clickWithin(modal, "button[aria-label='Select']");
 
         // Deselect all applications
         clickWithin(modal, "button[aria-label='Select']");
         cy.get("ul[role=menu] > li").contains("Select none (0 items)").click();
-        cy.get(copy).should('be.visible').should("be.disabled");
+        cy.get(copy).should("be.visible").should("be.disabled");
     });
 });
