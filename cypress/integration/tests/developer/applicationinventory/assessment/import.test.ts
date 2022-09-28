@@ -119,60 +119,52 @@ describe("Application import operations", () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it(
-        "Applications import for non existing tags",
-        { tags: "@tier1" },
-        function () {
-            businessService.create();
-            exists(businessService.name);
-            selectUserPerspective("Developer");
-            clickByText(navMenu, applicationInventory);
-            cy.wait("@getApplication");
+    it("Applications import for non existing tags", { tags: "@tier1" }, function () {
+        businessService.create();
+        exists(businessService.name);
+        selectUserPerspective("Developer");
+        clickByText(navMenu, applicationInventory);
+        cy.wait("@getApplication");
 
-            // Import csv with non-existent tags
-            const fileName = "missing_tags_21.csv";
-            importApplication(filePath + fileName, true);
-            cy.wait(2000);
+        // Import csv with non-existent tags
+        const fileName = "missing_tags_21.csv";
+        importApplication(filePath + fileName, true);
+        cy.wait(2000);
 
-            // Open application imports page
-            openManageImportsPage();
+        // Open application imports page
+        openManageImportsPage();
 
-            // Verify import applications page shows correct information
-            verifyAppImport(fileName, "Completed", 0, 1);
+        // Verify import applications page shows correct information
+        verifyAppImport(fileName, "Completed", 0, 1);
 
-            // Verify the error report messages
-            openErrorReport();
-            verifyImportErrorMsg("Tag 'TypeScript' could not be found");
+        // Verify the error report messages
+        openErrorReport();
+        verifyImportErrorMsg("Tag 'TypeScript' could not be found");
 
-            businessService.delete();
-            notExists(businessService.name);
-        }
-    );
+        businessService.delete();
+        notExists(businessService.name);
+    });
 
-    it(
-        "Applications import for non existing business service",
-        { tags: "@tier1" },
-        function () {
-            selectUserPerspective("Developer");
-            clickByText(navMenu, applicationInventory);
-            cy.wait("@getApplication");
+    it("Applications import for non existing business service", { tags: "@tier1" }, function () {
+        selectUserPerspective("Developer");
+        clickByText(navMenu, applicationInventory);
+        cy.wait("@getApplication");
 
-            // Import csv with non-existent businsess service
-            const fileName = "missing_business_21.csv";
-            importApplication(filePath + fileName, true);
-            cy.wait(2000);
+        // Import csv with non-existent businsess service
+        const fileName = "missing_business_21.csv";
+        importApplication(filePath + fileName, true);
+        cy.wait(2000);
 
-            // Open application imports page
-            openManageImportsPage();
+        // Open application imports page
+        openManageImportsPage();
 
-            // Verify import applications page shows correct information
-            verifyAppImport(fileName, "Completed", 0, 1);
+        // Verify import applications page shows correct information
+        verifyAppImport(fileName, "Completed", 0, 1);
 
-            // Verify the error report messages
-            openErrorReport();
-            verifyImportErrorMsg("BusinessService 'Finance' could not be found");
-        }
-    );
+        // Verify the error report messages
+        openErrorReport();
+        verifyImportErrorMsg("BusinessService 'Finance' could not be found");
+    });
 
     it(
         "Applications import with minimum required field(s) and empty row",
