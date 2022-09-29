@@ -1156,7 +1156,7 @@ export function clickWithin(parent, selector: string): void {
 //function to select checkboxes
 export function selectCheckBox(selector: string): void {
     cy.get(selector, { timeout: 120 * SEC }).then(($checkbox) => {
-        if ($checkbox.prop("unchecked")) {
+        if (!$checkbox.prop("checked")) {
             click(selector);
         }
     });
