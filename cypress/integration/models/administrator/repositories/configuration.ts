@@ -1,9 +1,7 @@
-import {click, selectUserPerspective} from "../../../../utils/utils";
-import {enableInsecureRepository} from "../../../views/configuration.view";
-
+import { click, selectUserPerspective } from "../../../../utils/utils";
+import { enableInsecureRepository } from "../../../views/configuration.view";
 
 export class Configuration {
-
     static open() {
         selectUserPerspective("Administrator");
     }

@@ -2,13 +2,14 @@ import {
     deleteAllStakeholders,
     getRandomApplicationData,
     hasToBeSkipped,
-    login, preservecookies
+    login,
+    preservecookies,
 } from "../../../../../utils/utils";
-import {Assessment} from "../../../../models/developer/applicationinventory/assessment";
-import {Stakeholders} from "../../../../models/developer/controls/stakeholders";
+import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
+import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 import * as data from "../../../../../utils/data_utils";
-import {GitConfiguration} from "../../../../models/administrator/repositories/git_configuration";
-import {SubversionConfiguration} from "../../../../models/administrator/repositories/subversion_configuration";
+import { GitConfiguration } from "../../../../models/administrator/repositories/git_configuration";
+import { SubversionConfiguration } from "../../../../models/administrator/repositories/subversion_configuration";
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
@@ -16,7 +17,7 @@ let gitConfiguration = new GitConfiguration();
 let subversionConfiguration = new SubversionConfiguration();
 let application;
 
-describe('Create an application form an insecure Git source', () => {
+describe("Create an application form an insecure Git source", () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;
@@ -31,9 +32,7 @@ describe('Create an application form an insecure Git source', () => {
 
         stakeholdersList.push(stakeholder);
         stakeholdersNameList.push(stakeholder.name);
-
     });
-
 
     beforeEach("Persist session", () => {
         // Save the session and token cookie for maintaining one login session
@@ -50,22 +49,22 @@ describe('Create an application form an insecure Git source', () => {
         subversionConfiguration.disableInsecureSubversionRepositories();
     });
 
-    it('Enable Insecure git Repository', () => {
+    it("Enable Insecure git Repository", () => {
         GitConfiguration.open();
-        gitConfiguration.enableInsecureGitRepositories()
+        gitConfiguration.enableInsecureGitRepositories();
     });
 
     it("Insecure git application assessment with low risk", () => {
         // Navigate to application inventory tab and create new application
         // create a new application
-        application = new Assessment(getRandomApplicationData(
-            {
+        application = new Assessment(
+            getRandomApplicationData({
                 sourceData: {
-                    repoType: 'Git',
-                    sourceRepo: 'http://github.com/main/test',
-                }
-            }
-        ));
+                    repoType: "Git",
+                    sourceRepo: "http://github.com/main/test",
+                },
+            })
+        );
 
         application.create();
         cy.wait(2000);
@@ -80,7 +79,7 @@ describe('Create an application form an insecure Git source', () => {
         cy.wait(2000);
     });
 
-    it('Enable Insecure subversion Repository', () => {
+    it("Enable Insecure subversion Repository", () => {
         SubversionConfiguration.open();
         subversionConfiguration.enableInsecureSubversionRepositories();
     });
@@ -88,14 +87,14 @@ describe('Create an application form an insecure Git source', () => {
     it("Insecure subversion application assessment with low risk", () => {
         // Navigate to application inventory tab and create new application
         // create a new application
-        application = new Assessment(getRandomApplicationData(
-            {
+        application = new Assessment(
+            getRandomApplicationData({
                 sourceData: {
-                    repoType: 'Subversion',
-                    sourceRepo: 'http://github.com/main/test',
-                }
-            }
-        ));
+                    repoType: "Subversion",
+                    sourceRepo: "http://github.com/main/test",
+                },
+            })
+        );
 
         application.create();
         cy.wait(2000);
