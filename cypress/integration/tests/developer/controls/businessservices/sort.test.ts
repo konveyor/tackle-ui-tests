@@ -47,6 +47,8 @@ describe("Business services sort validations", { tags: "@tier2" }, function () {
 
         // Perform login
         login();
+        //Delete pre-existing data
+        deleteAllBusinessServices();
         // Create data
         stakeholdersList = createMultipleStakeholders(2);
         businessservicesList = createMultipleBusinessServices(2, stakeholdersList);
