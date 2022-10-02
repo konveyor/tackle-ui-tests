@@ -1,5 +1,6 @@
 import {
-    deleteAllStakeholders, deleteApplicationTableRows,
+    deleteAllStakeholders,
+    deleteApplicationTableRows,
     getRandomApplicationData,
     hasToBeSkipped,
     login,
