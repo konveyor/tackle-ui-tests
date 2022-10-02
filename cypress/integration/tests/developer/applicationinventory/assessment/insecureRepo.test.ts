@@ -1,5 +1,5 @@
 import {
-    deleteAllStakeholders,
+    deleteAllStakeholders, deleteApplicationTableRows,
     getRandomApplicationData,
     hasToBeSkipped,
     login,
@@ -24,7 +24,7 @@ describe("Create an application form an insecure Git source", () => {
 
         // Perform login
         login();
-
+        deleteApplicationTableRows();
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
@@ -61,7 +61,7 @@ describe("Create an application form an insecure Git source", () => {
             getRandomApplicationData({
                 sourceData: {
                     repoType: "Git",
-                    sourceRepo: "http://github.com/main/test",
+                    sourceRepo: "http://github.com/konveyor/tackle-testapp",
                 },
             })
         );
@@ -91,7 +91,7 @@ describe("Create an application form an insecure Git source", () => {
             getRandomApplicationData({
                 sourceData: {
                     repoType: "Subversion",
-                    sourceRepo: "http://github.com/main/test",
+                    sourceRepo: "http://github.com/konveyor/tackle-testapp",
                 },
             })
         );
