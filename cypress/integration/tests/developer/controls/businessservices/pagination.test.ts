@@ -23,12 +23,13 @@ import {
     createMultipleBusinessServices,
     deleteByList,
     goToLastPage,
-    deleteFromArray,
     validatePagination,
     goToPage,
+    deleteTableRows,
+    deleteAllBusinessServices,
 } from "../../../../../utils/utils";
 import { SEC } from "../../../../types/constants";
-import { pageNumInput, prevPageButton } from "../../../../views/common.view";
+import { prevPageButton } from "../../../../views/common.view";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 
 describe("Business services pagination validations", { tags: "@tier3" }, function () {
@@ -50,7 +51,9 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
 
     it("Navigation button validations", function () {
         // Navigate to business services tab
-        BusinessServices.openList(10);
+        BusinessServices.openList();
+
+        selectItemsPerPage(10);
 
         validatePagination();
     });
@@ -59,9 +62,7 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
         // Navigate to business services tab
         BusinessServices.openList();
 
-        // Select 10 items per page
         selectItemsPerPage(10);
-        cy.wait(2 * SEC);
 
         // Verify that only 10 items are displayed
         cy.get("td[data-label=Name]").then(($rows) => {
@@ -80,7 +81,9 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
 
     it("Page number validations", function () {
         // Navigate to business services tab and select 10 items per page
-        BusinessServices.openList(10);
+        BusinessServices.openList();
+
+        selectItemsPerPage(10);
         cy.wait(2 * SEC);
 
         // Go to page number 2
@@ -94,29 +97,16 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
 
     it("Last page item(s) deletion, impact on page reload validation", async () => {
         // Navigate to business services tab and select 10 items per page
-        BusinessServices.openList(10);
+        BusinessServices.openList();
 
+        selectItemsPerPage(10);
         cy.wait(2 * SEC);
 
         // Navigate to last page
         goToLastPage();
-        cy.wait(2 * SEC);
 
         // Delete all items of last page
-
-        let listNamesOnLastPage = await BusinessServices.getNamesListOnPage();
-        let listOnLastPage = [];
-        businessServiceList.forEach(($element) => {
-            for (let currentName of listNamesOnLastPage) {
-                if ($element.name === currentName) {
-                    listOnLastPage.push($element);
-                }
-            }
-        });
-        deleteByList(listOnLastPage);
-        listOnLastPage.forEach(($current) => {
-            deleteFromArray(businessServiceList, $current);
-        });
+        deleteTableRows();
 
         // Verify that page is re-directed to previous page
         cy.get("td[data-label=Name]").then(($rows) => {
@@ -129,6 +119,6 @@ describe("Business services pagination validations", { tags: "@tier3" }, functio
         if (hasToBeSkipped("@tier3")) return;
 
         // Delete the business services created before the tests
-        deleteByList(businessServiceList);
+        deleteAllBusinessServices();
     });
 });
