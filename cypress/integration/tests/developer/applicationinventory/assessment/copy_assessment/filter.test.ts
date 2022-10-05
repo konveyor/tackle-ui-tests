@@ -134,7 +134,8 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         cy.get(closeButton).click();
     });
 
-    it.skip("Description filter validations", function () {
+    /*
+    it("Description filter validations", function () {
         // This test fails because of this Tackle 2.x issue - https://issues.redhat.com/browse/TACKLE-822
         // Open the copy assessment model for application 1
         applicationList[0].openCopyAssessmentModel();
@@ -156,7 +157,7 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         // Clear all filters and close model
         clickByText(button, clearAllFilters);
         cy.get(closeButton).click();
-    });
+    });*/
 
     it("Bussiness service filter validations", function () {
         // Open the copy assessment model for application 1
@@ -175,7 +176,8 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         cy.get(closeButton).click();
     });
 
-    it.skip("Tag filter validations", function () {
+    /*
+    it("Tag filter validations", function () {
         // This test fails because of this Tackle 2.x issue - https://issues.redhat.com/browse/TACKLE-822
         // Open the copy assessment model for application 1
         applicationList[0].openCopyAssessmentModel();
@@ -197,5 +199,5 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         // Clear all filters and close model
         clickByText(button, clearAllFilters);
         cy.get(closeButton).click();
-    });
+    });*/
 });
