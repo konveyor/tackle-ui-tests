@@ -258,7 +258,9 @@ export function applySearchFilter(
             .find("div.pf-c-select")
             .click();
         if (filterName == businessService) {
-            cy.get("span.pf-c-check__label").contains(searchText).click();
+            // ul[role=listbox] > li is for the Application Inventory page.
+            // span.pf-c-check__label is for the Copy assessment page.
+            cy.get("ul[role=listbox] > li, span.pf-c-check__label").contains(searchText).click();
         }
         if (filterName == tag) {
             if (Array.isArray(searchText)) {

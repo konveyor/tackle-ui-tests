@@ -153,6 +153,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     });
 
     it("Business service filter validations", function () {
+        // This is impacted by https://issues.redhat.com/browse/TACKLE-820
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         clickByText(navTab, assessment);
