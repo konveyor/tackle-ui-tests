@@ -147,9 +147,6 @@ export class Analysis extends Application {
             cancelForm();
         } else {
             this.selectSourceofAnalysis(this.source);
-            console.log(this.appName);
-            cy.log(this.appName);
-            console.log(this.storyPoints);
             if (this.binary) this.uploadBinary();
             this.isNextEnabled();
             cy.contains("button", "Next", { timeout: 200 }).click();

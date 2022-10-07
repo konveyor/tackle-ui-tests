@@ -110,7 +110,6 @@ export function cancelForm(): void {
 export function login(): void {
     cy.visit(tackleUiUrl, { timeout: 120 * SEC });
     cy.wait(5000);
-    // cy.get("h1", { timeout: 15 * SEC }).contains("Log in to your account");
     cy.get("h1", { timeout: 120 * SEC }).then(($b) => {
         if ($b.text().toString().trim() == "Log in to your account") {
             inputText(loginView.userNameInput, userName);
