@@ -24,6 +24,7 @@ import {
     getRandomApplicationData,
     getRandomAnalysisData,
     writeMavenSettingsFile,
+    resetURL,
 } from "../../../../../utils/utils";
 import * as data from "../../../../../utils/data_utils";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
@@ -77,6 +78,11 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
+    afterEach("Persist session", function () {
+        // Reset URL from report page to web UI
+        resetURL();
+    });
+
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
         deleteApplicationTableRows();
@@ -90,7 +96,7 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         // For binary analysis application must have group,artifcat and version.
         const application = new Analysis(
             getRandomApplicationData("tackletestApp_binary", { binaryData: this.appData[2] }),
-            getRandomAnalysisData(this.analysisData[2])
+            getRandomAnalysisData(this.analysisData[3])
         );
         application.create();
         cy.wait("@getApplication");
@@ -100,5 +106,6 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
+        application.validateStoryPoints();
     });
 });

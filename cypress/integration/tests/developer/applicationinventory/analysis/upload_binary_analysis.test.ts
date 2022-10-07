@@ -24,6 +24,7 @@ import {
     getRandomApplicationData,
     getRandomAnalysisData,
     writeGpgKey,
+    resetURL,
 } from "../../../../../utils/utils";
 import { Proxy } from "../../../../models/administrator/proxy/proxy";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
@@ -58,6 +59,11 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
+    afterEach("Persist session", function () {
+        // Reset URL from report page to web UI
+        resetURL();
+    });
+
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
         deleteApplicationTableRows();
@@ -68,21 +74,6 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
     it("Upload Binary Analysis", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData[3])
-        );
-        application.create();
-        cy.wait("@getApplication");
-        cy.wait(2000);
-        // No credentials required for uploaded binary.
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.openreport();
-    });
-
-    it("Custom rules with custom targets", function () {
-        // Automated https://issues.redhat.com/browse/TACKLE-561
-        const application = new Analysis(
-            getRandomApplicationData("customRule_customTarget"),
             getRandomAnalysisData(this.analysisData[4])
         );
         application.create();
@@ -92,5 +83,22 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
+        application.validateStoryPoints();
+    });
+
+    it("Custom rules with custom targets", function () {
+        // Automated https://issues.redhat.com/browse/TACKLE-561
+        const application = new Analysis(
+            getRandomApplicationData("customRule_customTarget"),
+            getRandomAnalysisData(this.analysisData[5])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        // No credentials required for uploaded binary.
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
+        application.validateStoryPoints();
     });
 });
