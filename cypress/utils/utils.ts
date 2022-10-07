@@ -109,10 +109,15 @@ export function cancelForm(): void {
 
 export function login(): void {
     cy.visit(tackleUiUrl, { timeout: 120 * SEC });
-
-    inputText(loginView.userNameInput, userName);
-    inputText(loginView.userPasswordInput, userPassword);
-    click(loginView.loginButton);
+    cy.wait(5000);
+    // cy.get("h1", { timeout: 15 * SEC }).contains("Log in to your account");
+    cy.get("h1", { timeout: 120 * SEC }).then(($b) => {
+        if ($b.text().toString().trim() == "Log in to your account") {
+            inputText(loginView.userNameInput, userName);
+            inputText(loginView.userPasswordInput, userPassword);
+            click(loginView.loginButton);
+        }
+    });
 
     // Change password screen which appears only for first login
     // This is used in PR tester and Jenkins jobs.
@@ -132,6 +137,14 @@ export function logout(): void {
     clickByText("a", "Logout");
     cy.wait(4000);
     cy.get("h1", { timeout: 15 * SEC }).contains("Log in to your account");
+}
+
+export function resetURL(): void {
+    cy.url().then(($url) => {
+        if ($url.includes("report")) {
+            login();
+        }
+    });
 }
 
 export function selectItemsPerPage(items: number): void {
@@ -864,12 +877,14 @@ export function getRandomApplicationData(
     return appdata;
 }
 
-export function getRandomAnalysisData(sourceData): analysisData {
+export function getRandomAnalysisData(analysisdata): analysisData {
     var analysisData = {
-        source: sourceData.source,
-        target: sourceData.target,
-        binary: sourceData.binary,
-        customRule: sourceData.customRule,
+        source: analysisdata.source,
+        target: analysisdata.target,
+        binary: analysisdata.binary,
+        customRule: analysisdata.customRule,
+        appName: analysisdata.appName,
+        storyPoints: analysisdata.storyPoints,
     };
     return analysisData;
 }

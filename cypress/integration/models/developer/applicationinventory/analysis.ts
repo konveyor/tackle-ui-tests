@@ -21,6 +21,7 @@ import {
     trTag,
     button,
     save,
+    SEC,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import * as commonView from "../../../views/common.view";
@@ -44,6 +45,8 @@ import {
     mavenCredential,
     nextButton,
     addRules,
+    fileName,
+    reportStoryPoints,
 } from "../../../views/analysis.view";
 import { kebabMenu } from "../../../views/applicationinventory.view";
 
@@ -57,6 +60,8 @@ export class Analysis extends Application {
     sources?: string;
     excludeRuleTags?: string;
     enableTransaction?: boolean;
+    appName?: string;
+    storyPoints?: number;
 
     constructor(appData: applicationData, analysisData: analysisData) {
         super(appData);
@@ -73,6 +78,8 @@ export class Analysis extends Application {
             sources,
             excludeRuleTags,
             enableTransaction,
+            appName,
+            storyPoints,
         } = analysisData;
         this.name = appData.name;
         this.source = source;
@@ -83,6 +90,8 @@ export class Analysis extends Application {
         if (sources) this.sources = sources;
         if (excludeRuleTags) this.excludeRuleTags = excludeRuleTags;
         if (enableTransaction) this.enableTransaction = enableTransaction;
+        if (appName) this.appName = appName;
+        if (storyPoints) this.storyPoints = storyPoints;
     }
 
     //Navigate to the Application inventory
@@ -138,6 +147,9 @@ export class Analysis extends Application {
             cancelForm();
         } else {
             this.selectSourceofAnalysis(this.source);
+            console.log(this.appName);
+            cy.log(this.appName);
+            console.log(this.storyPoints);
             if (this.binary) this.uploadBinary();
             this.isNextEnabled();
             cy.contains("button", "Next", { timeout: 200 }).click();
@@ -189,7 +201,13 @@ export class Analysis extends Application {
             .parent("dt")
             .next()
             .within(() => {
-                cy.get("button").should("contain", "Report").click();
+                cy.get("button > a")
+                    .should("contain", "Report")
+                    .then(($a) => {
+                        // Removing target from html so that report opens in same tab
+                        $a.attr("target", "_self");
+                    })
+                    .click();
             });
     }
 
@@ -210,5 +228,10 @@ export class Analysis extends Application {
         }
         clickByText(button, save);
         cy.wait(2000);
+    }
+
+    validateStoryPoints(): void {
+        cy.get(fileName).should("contain", this.appName);
+        cy.get(reportStoryPoints).should("contain", this.storyPoints);
     }
 }
