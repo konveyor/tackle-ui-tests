@@ -101,4 +101,20 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         application.openreport();
         application.validateStoryPoints();
     });
+
+    it("DIVA report generation", function () {
+        const application = new Analysis(
+            getRandomApplicationData("DIVA"),
+            getRandomAnalysisData(this.analysisData[7])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        // No credentials required for uploaded binary.
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
+        application.validateStoryPoints();
+        application.validateTransactionReport();
+    });
 });

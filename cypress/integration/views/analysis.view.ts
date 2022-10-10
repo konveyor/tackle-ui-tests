@@ -27,3 +27,4 @@ export const nextButton = "button[type=submit]";
 export const addRules = "div > footer[class='pf-c-modal-box__footer'] > button";
 export const fileName = "div[class='fileName']";
 export const reportStoryPoints = "div[class='effortPoints total'] > span[class='points']";
+export const enableTransactionAnalysis = "input[name=enableTransactionReport]";
