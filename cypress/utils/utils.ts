@@ -884,6 +884,7 @@ export function getRandomAnalysisData(analysisdata): analysisData {
         target: analysisdata.target,
         binary: analysisdata.binary,
         customRule: analysisdata.customRule,
+        enableTransaction: analysisdata.enableTransaction,
         appName: analysisdata.appName,
         storyPoints: analysisdata.storyPoints,
     };

@@ -47,6 +47,7 @@ import {
     addRules,
     fileName,
     reportStoryPoints,
+    enableTransactionAnalysis,
 } from "../../../views/analysis.view";
 import { kebabMenu } from "../../../views/applicationinventory.view";
 
@@ -122,6 +123,10 @@ export class Analysis extends Application {
         cy.get("span.pf-c-progress__measure", { timeout: 15000 }).should("contain", "100%");
     }
 
+    protected enableTransactionAnalysis() {
+        cy.get(enableTransactionAnalysis).click();
+    }
+
     protected uploadCustomRule() {
         cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
         uploadXml("xml/" + this.customRule);
@@ -155,6 +160,7 @@ export class Analysis extends Application {
             if (!this.scope) cy.contains("button", "Next", { timeout: 200 }).click();
             if (this.customRule) this.uploadCustomRule();
             cy.contains("button", "Next", { timeout: 200 }).click();
+            if (this.enableTransaction) this.enableTransactionAnalysis();
             if (!this.sources) cy.contains("button", "Next", { timeout: 200 }).click();
             cy.contains("button", "Run", { timeout: 200 }).click();
             checkSuccessAlert(commonView.successAlertMessage, `Submitted for analysis`);
@@ -230,5 +236,13 @@ export class Analysis extends Application {
     validateStoryPoints(): void {
         cy.get(fileName).should("contain", this.appName);
         cy.get(reportStoryPoints).should("contain", this.storyPoints);
+    }
+
+    validateTransactionReport(): void {
+        cy.get(fileName + " > a")
+            .should("contain", this.appName)
+            .click();
+        cy.get("ul > li > a").contains("Transactions").click();
+        cy.get("div[class='main']").should("contain", "Transactions Report");
     }
 }
