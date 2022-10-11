@@ -36,8 +36,6 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
     });
 
     after("Removing credentials, created earlier", () => {
-        createdCredentialsList.forEach((currentCredential) => {
-            currentCredential.delete();
-        });
+        deleteAllCredentials();
     });
 });

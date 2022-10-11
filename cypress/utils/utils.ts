@@ -1117,10 +1117,57 @@ export function deleteAllTagsAndTagTypes(): void {
 }
 
 export async function deleteAllCredentials() {
-    let list = await Credentials.getList();
-    list.forEach((currentCred) => {
-        currentCred.delete();
+    Credentials.openList();
+    deleteAllItems();
+}
+
+export function deleteAllItems(amountPerPage = 100, pageNumber?: number) {
+    selectItemsPerPage(amountPerPage);
+    if (pageNumber) {
+        goToPage(pageNumber);
+    }
+    cy.get(commonView.appTable)
+    .next()
+    .then(($div) => {
+        if (!$div.hasClass("pf-c-empty-state")) {
+            cy.get("tbody")
+                .find(trTag)
+                .not(".pf-c-table__expandable-row")
+                .each(($tableRow) => {
+                    cy.get(tdTag)
+                        .siblings(tdTag)
+                        .within(() => {
+                            click(commonView.deleteButton);
+                            cy.wait(800);
+                        });
+                        click(commonView.confirmButton);
+                        cy.wait(4000);
+                });
+        }
     });
+
+    cy.get(commonView.appTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        let name = $tableRow.find("td[data-label=Name]").text();
+                        cy.get(tdTag)
+                            .contains(name)
+                            .parent(tdTag)
+                            .siblings(tdTag)
+                            .within(() => {
+                                click(commonView.deleteButton);
+                                cy.wait(800);
+                            });
+                        click(commonView.confirmButton);
+                        cy.wait(4000);
+                    });
+            }
+        });
 }
 
 export const deleteFromArray = <T>(array: T[], el: T): T[] => {
@@ -1279,12 +1326,10 @@ export function writeMavenSettingsFile(username: string, password: string): void
 }
 
 export function writeGpgKey(git_key): void {
-    cy.readFile("cypress/fixtures/gpgkey").then((data) => {
-        var key = git_key;
-        var beginningKey: string = "-----BEGIN RSA PRIVATE KEY-----";
-        var endingKey: string = "-----END RSA PRIVATE KEY-----";
-        var keystring = key.toString().split(" ").join("\n");
-        var gpgkey = beginningKey + "\n" + keystring + "\n" + endingKey;
-        cy.writeFile("cypress/fixtures/gpgkey", gpgkey);
-    });
+    var beginningKey: string = "-----BEGIN RSA PRIVATE KEY-----";
+    var endingKey: string = "-----END RSA PRIVATE KEY-----";
+    var key = git_key;
+    var keystring = key.toString().split(" ").join("\n");
+    var gpgkey = beginningKey + "\n" + keystring + "\n" + endingKey;
+    cy.writeFile("cypress/fixtures/gpgkey", gpgkey);
 }

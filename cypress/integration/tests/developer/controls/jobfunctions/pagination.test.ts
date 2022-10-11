@@ -22,7 +22,6 @@ import {
     hasToBeSkipped,
     createMultipleJobFunctions,
     deleteAllJobfunctions,
-    deleteByList,
 } from "../../../../../utils/utils";
 import {
     firstPageButton,
@@ -64,7 +63,7 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
         if (hasToBeSkipped("@tier3")) return;
 
         // Delete the Job functions created before the tests
-        deleteByList(jobFunctionsList);
+        deleteAllJobfunctions();
     });
 
     it("Navigation button validations", function () {
