@@ -1279,10 +1279,12 @@ export function writeMavenSettingsFile(username: string, password: string): void
 }
 
 export function writeGpgKey(git_key): void {
-    var beginningKey: string = "-----BEGIN RSA PRIVATE KEY-----";
-    var endingKey: string = "-----END RSA PRIVATE KEY-----";
-    var key = git_key;
-    var keystring = key.toString().split(" ").join("\n");
-    var gpgkey = beginningKey + "\n" + keystring + "\n" + endingKey;
-    cy.writeFile("cypress/fixtures/gpgkey", gpgkey);
+    cy.readFile("cypress/fixtures/gpgkey").then((data) => {
+        var key = git_key;
+        var beginningKey: string = "-----BEGIN RSA PRIVATE KEY-----";
+        var endingKey: string = "-----END RSA PRIVATE KEY-----";
+        var keystring = key.toString().split(" ").join("\n");
+        var gpgkey = beginningKey + "\n" + keystring + "\n" + endingKey;
+        cy.writeFile("cypress/fixtures/gpgkey", gpgkey);
+    });
 }

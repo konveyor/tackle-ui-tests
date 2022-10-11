@@ -1,5 +1,6 @@
 import {
     createMultipleCredentials,
+    deleteAllCredentials,
     hasToBeSkipped,
     login,
     validatePagination,
@@ -21,6 +22,7 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
 
         // Perform login
         login();
+        deleteAllCredentials();
         // Create 12 extra credentials, 3 of each type
         createdCredentialsList = createMultipleCredentials(12);
     });
