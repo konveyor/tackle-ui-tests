@@ -30,6 +30,7 @@ import {
     createMultipleStakeholderGroups,
     createMultipleBusinessServices,
     createMultipleTags,
+    deleteAllTagsAndTagTypes,
 } from "../../../../../utils/utils";
 import { businessColumnSelector } from "../../../../views/applicationinventory.view";
 import {
@@ -40,7 +41,7 @@ import {
 import { navMenu } from "../../../../views/menu.view";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
-import { applicationInventory, button, assess } from "../../../../types/constants";
+import { applicationInventory } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
@@ -79,7 +80,7 @@ describe("Applications interlinked to tags and business service", () => {
         deleteAllStakeholderGroups();
         deleteApplicationTableRows();
         deleteAllBusinessServices();
-        deleteAllTagTypes();
+        deleteAllTagsAndTagTypes();
     });
 
     it(
@@ -163,11 +164,12 @@ describe("Applications interlinked to tags and business service", () => {
             application.is_assessed();
 
             // Delete the stakeholders, group
-            stakeholdersList[0].delete;
+            stakeholdersList[0].delete();
             stakeholdergroupsList[0].delete();
 
+            clickByText(navMenu, applicationInventory);
             application.selectApplication();
-            clickByText(button, assess);
+            application.click_assess_button();
             click(continueButton);
             cy.wait(6000);
 
