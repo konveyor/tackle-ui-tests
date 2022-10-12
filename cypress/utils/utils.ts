@@ -941,30 +941,7 @@ export function createApplicationObjects(numberOfObjects: number): Array<Assessm
 
 export function deleteAllJobfunctions(cancel = false): void {
     Jobfunctions.openList();
-    selectItemsPerPage(100);
-    cy.wait(2000);
-    cy.get(commonView.appTable)
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
-                    .each(($tableRow) => {
-                        let name = $tableRow.find("td[data-label=Name]").text();
-                        cy.get(tdTag)
-                            .contains(name)
-                            .parent(tdTag)
-                            .siblings(tdTag)
-                            .within(() => {
-                                click(commonView.deleteButton);
-                                cy.wait(800);
-                            });
-                        click(commonView.confirmButton);
-                        cy.wait(4000);
-                    });
-            }
-        });
+    deleteAllItems();
 }
 
 type Deletable = { delete: () => void };
@@ -1005,30 +982,7 @@ export function deleteAllStakeholders(cancel = false): void {
 
 export function deleteAllStakeholderGroups(cancel = false): void {
     Stakeholdergroups.clickStakeholdergroups();
-    selectItemsPerPage(100);
-    cy.wait(2000);
-    cy.get(commonView.appTable)
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
-                    .each(($tableRow) => {
-                        let name = $tableRow.find("td[data-label=Name]").text();
-                        cy.get(tdTag)
-                            .contains(name)
-                            .parent(tdTag)
-                            .siblings(tdTag)
-                            .within(() => {
-                                click(commonView.deleteButton);
-                                cy.wait(1000);
-                            });
-                        click(commonView.confirmButton);
-                        cy.wait(4000);
-                    });
-            }
-        });
+    deleteAllItems();
 }
 
 // TODO: Review and refactor function below!
@@ -1117,10 +1071,37 @@ export function deleteAllTagsAndTagTypes(): void {
 }
 
 export async function deleteAllCredentials() {
-    let list = await Credentials.getList();
-    list.forEach((currentCred) => {
-        currentCred.delete();
-    });
+    Credentials.openList();
+    deleteAllItems();
+}
+
+export function deleteAllItems(amountPerPage = 100, pageNumber?: number) {
+    selectItemsPerPage(amountPerPage);
+    if (pageNumber) {
+        goToPage(pageNumber);
+    }
+    cy.get(commonView.appTable, { timeout: 15 * SEC })
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        let name = $tableRow.find("td[data-label=Name]").text();
+                        cy.get(tdTag)
+                            .contains(name)
+                            .parent(tdTag)
+                            .siblings(tdTag)
+                            .within(() => {
+                                click(commonView.deleteButton);
+                                cy.wait(1000);
+                            });
+                        click(commonView.confirmButton);
+                        cy.wait(4000);
+                    });
+            }
+        });
 }
 
 export const deleteFromArray = <T>(array: T[], el: T): T[] => {
