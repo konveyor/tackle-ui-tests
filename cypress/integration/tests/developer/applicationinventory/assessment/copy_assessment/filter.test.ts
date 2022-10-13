@@ -28,7 +28,7 @@ import {
     applySearchFilter,
     clickByText,
     deleteAllBusinessServices,
-    deleteAllTagTypes,
+    deleteAllTagsAndTagTypes,
 } from "../../../../../../utils/utils";
 
 import { Stakeholders } from "../../../../../models/developer/controls/stakeholders";
@@ -46,7 +46,6 @@ import { closeButton } from "../../../../../views/common.view";
 import { copyAssessmentTableTd } from "../../../../../views/applicationinventory.view";
 import { Assessment } from "../../../../../models/developer/applicationinventory/assessment";
 
-var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 var businessservicesList: Array<BusinessServices> = [];
 var applicationList: Array<Assessment> = [];
@@ -101,14 +100,14 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         // Delete the stakeholders created before the tests
         deleteAllStakeholders();
 
+        // Delete the applications created at the start of test
+        deleteApplicationTableRows();
+
         // Delete the business services created before the test
         deleteAllBusinessServices();
 
         // Delete the tags created before the tests
-        deleteAllTagTypes();
-
-        // Delete the applications created at the start of test
-        deleteApplicationTableRows();
+        deleteAllTagsAndTagTypes();
     });
 
     it("Name filter validations", function () {
@@ -134,7 +133,6 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         cy.get(closeButton).click();
     });
 
-    /*
     it("Description filter validations", function () {
         // This test fails because of this Tackle 2.x issue - https://issues.redhat.com/browse/TACKLE-822
         // Open the copy assessment model for application 1
@@ -157,7 +155,7 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         // Clear all filters and close model
         clickByText(button, clearAllFilters);
         cy.get(closeButton).click();
-    });*/
+    });
 
     it("Bussiness service filter validations", function () {
         // Open the copy assessment model for application 1
@@ -176,7 +174,6 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         cy.get(closeButton).click();
     });
 
-    /*
     it("Tag filter validations", function () {
         // This test fails because of this Tackle 2.x issue - https://issues.redhat.com/browse/TACKLE-822
         // Open the copy assessment model for application 1
@@ -199,5 +196,5 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         // Clear all filters and close model
         clickByText(button, clearAllFilters);
         cy.get(closeButton).click();
-    });*/
+    });
 });
