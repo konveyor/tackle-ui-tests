@@ -130,6 +130,7 @@ export function getRandomCredentialsData(
     }
     if (type === CredentialType.sourceControl) {
         if (userCred === UserCredentials.sourcePrivateKey) {
+            // Source control - gpg key and passphrase
             if (Cypress.env("git_key")) writeGpgKey(Cypress.env("git_key"));
             return {
                 type: type,
@@ -139,6 +140,7 @@ export function getRandomCredentialsData(
                 passphrase: getRandomWord(6),
             };
         } else {
+            // Source Control - username and password
             return {
                 type: type,
                 name: getRandomWord(6),
@@ -148,6 +150,7 @@ export function getRandomCredentialsData(
             };
         }
     } else {
+        // Maven credentials
         if (gitTestingUser) {
             writeMavenSettingsFile(user, password);
         }
