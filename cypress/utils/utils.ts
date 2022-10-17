@@ -135,7 +135,7 @@ export function logout(): void {
     cy.wait(500);
     clickByText("a", "Logout");
     cy.wait(4000);
-    cy.get("h1", { timeout: 15 * SEC }).contains("Log in to your account");
+    cy.get("h1", { timeout: 15 * SEC }).contains("Sign in to your account");
 }
 
 export function resetURL(): void {
