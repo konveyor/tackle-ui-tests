@@ -111,7 +111,7 @@ export function login(): void {
     cy.visit(tackleUiUrl, { timeout: 120 * SEC });
     cy.wait(5000);
     cy.get("h1", { timeout: 120 * SEC }).then(($b) => {
-        if ($b.text().toString().trim() == "Log in to your account") {
+        if ($b.text().toString().trim() == "Sign in to your account") {
             inputText(loginView.userNameInput, userName);
             inputText(loginView.userPasswordInput, userPassword);
             click(loginView.loginButton);

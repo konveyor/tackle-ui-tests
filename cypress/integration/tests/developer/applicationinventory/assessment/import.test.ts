@@ -34,7 +34,7 @@ import {
 } from "../../../../../utils/utils";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { navMenu } from "../../../../views/menu.view";
-import { applicationInventory, button } from "../../../../types/constants";
+import { applicationInventory, button, SEC } from "../../../../types/constants";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
 const businessService = new BusinessServices("BS_tag_test");
@@ -177,7 +177,7 @@ describe("Application import operations", () => {
             // Import csv with an empty row between two valid rows having minimum required field(s)
             const fileName = "mandatory_and_empty_row_21.csv";
             importApplication(filePath + fileName);
-            cy.wait(2000);
+            cy.wait(4 * SEC);
 
             // Verify imported apps are visible in table
             exists("Import-app-5");
