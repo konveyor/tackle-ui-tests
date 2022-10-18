@@ -59,6 +59,10 @@ export class User {
         }
     }
 
+    protected navigateToSection(section: string) {
+        clickByText("a", section);
+    }
+
     protected inputUsername(username: string) {
         inputText(loginView.userNameInput, username);
     }
@@ -73,6 +77,11 @@ export class User {
 
     protected inputEmail(email: string) {
         inputText("#email", email);
+    }
+
+    protected inputPassword(password: string) {
+        inputText("#newPas", password);
+        inputText("#confirmPas", password);
     }
 
     create(): void {
@@ -90,9 +99,13 @@ export class User {
         User.applyAction(this.username, "Delete");
     }
 
-    updatePassword(): void {
+    definePassword(): void {
         User.openList();
-        User.applyAction(this.username, "Edit ");
+        User.applyAction(this.username, "Edit");
+        this.navigateToSection("Credentials");
+        this.inputPassword(this.password);
+        clickByText(button, "Set Password");
+        clickByText(button, "Set password");
     }
 
     addRole(): void {}

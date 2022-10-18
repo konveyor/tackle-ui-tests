@@ -6,6 +6,7 @@ describe("", () => {
         User.loginAdmin();
         let user = new User(getRandomUserData());
         user.create();
+        user.definePassword();
         user.delete();
     });
 });
