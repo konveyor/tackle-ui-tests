@@ -3,7 +3,7 @@ import { button, SEC, tdTag, trTag } from "../../../types/constants";
 import { click, clickByText, inputText } from "../../../../utils/utils";
 import * as loginView from "../../../views/login.view";
 const tackleUiUrl = Cypress.env("tackleUrl");
-const adminPassword = Cypress.env("adminPassword");
+const keycloakAdminPassword = Cypress.env("keycloakAdminPassword");
 
 export class User {
     username: string;
@@ -34,7 +34,7 @@ export class User {
         cy.get("#kc-page-title", { timeout: 120 * SEC }); // Make sure that login page opened and loaded
 
         inputText(loginView.userNameInput, "admin");
-        inputText(loginView.userPasswordInput, adminPassword);
+        inputText(loginView.userPasswordInput, keycloakAdminPassword);
         click(loginView.loginButton);
     }
 
