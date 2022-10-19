@@ -90,3 +90,9 @@ export enum UserCredentials {
     usernamePassword = "Username/Password",
     sourcePrivateKey = "Source PrivateKey",
 }
+
+export enum UserRoles {
+    admin = "tackle-admin",
+    architect = "tackle-architect",
+    migrator = "tackle-migrator",
+}

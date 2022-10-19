@@ -1,6 +1,6 @@
 import { UserData } from "../../../types/types";
 import { button, SEC, tdTag, trTag } from "../../../types/constants";
-import { click, clickByText, inputText } from "../../../../utils/utils";
+import { click, clickByText, deleteFromArray, inputText } from "../../../../utils/utils";
 import * as loginView from "../../../views/login.view";
 const tackleUiUrl = Cypress.env("tackleUrl");
 const keycloakAdminPassword = Cypress.env("keycloakAdminPassword");
@@ -12,17 +12,16 @@ export class User {
     lastName: string;
     email: string;
     userEnabled: boolean;
-    role: string[];
+    roles = [""];
 
     constructor(userData: UserData) {
-        const { username, password, firstName, lastName, email, userEnabled, role } = userData;
+        const { username, password, firstName, lastName, email, userEnabled } = userData;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.userEnabled = userEnabled;
-        this.role = role;
     }
 
     static keycloakUrl = tackleUiUrl + "/auth/";
@@ -108,7 +107,25 @@ export class User {
         clickByText(button, "Set password");
     }
 
-    addRole(): void {}
+    addRole(role: string): void {
+        User.openList();
+        User.applyAction(this.username, "Edit");
+        this.navigateToSection("Role Mappings");
+        cy.get("#available").select(role);
+        clickByText(button, "Add selected");
+        cy.wait(SEC);
+        cy.get("#assigned").select(role);
+        this.roles.push(role);
+    }
 
-    removeRole(): void {}
+    removeRole(role: string): void {
+        User.openList();
+        User.applyAction(this.username, "Edit");
+        this.navigateToSection("Role Mappings");
+        cy.get("#assigned").select(role);
+        clickByText(button, "Remove selected");
+        cy.wait(SEC);
+        cy.get("#available").select(role);
+        deleteFromArray(this.roles, role);
+    }
 }

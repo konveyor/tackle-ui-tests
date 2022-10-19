@@ -84,5 +84,5 @@ export type UserData = {
     lastName?: string;
     email?: string;
     userEnabled: boolean;
-    role?: string[];
+    roles?: string[];
 };
