@@ -127,7 +127,9 @@ export function login(): void {
             click(loginView.submitButton);
         }
     });
-    cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
+    cy.get('#main-content-page-layout-horizontal-nav').within(()=> {
+        cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
+    })
 }
 
 export function logout(): void {
