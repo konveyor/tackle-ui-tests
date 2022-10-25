@@ -6,11 +6,11 @@ import {
     login,
     preservecookies,
 } from "../../../../../utils/utils";
-import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
-import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
+import {Assessment} from "../../../../models/developer/applicationinventory/assessment";
+import {Stakeholders} from "../../../../models/developer/controls/stakeholders";
 import * as data from "../../../../../utils/data_utils";
-import { GitConfiguration } from "../../../../models/administrator/repositories/git_configuration";
-import { SubversionConfiguration } from "../../../../models/administrator/repositories/subversion_configuration";
+import {GitConfiguration} from "../../../../models/administrator/repositories/git_configuration";
+import {SubversionConfiguration} from "../../../../models/administrator/repositories/subversion_configuration";
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
@@ -18,7 +18,7 @@ let gitConfiguration = new GitConfiguration();
 let subversionConfiguration = new SubversionConfiguration();
 let application;
 
-describe("Create an application form an insecure Git source", () => {
+describe("Create an application form an insecure Git source", {tags: "@tier1"}, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;
@@ -35,10 +35,14 @@ describe("Create an application form an insecure Git source", () => {
         stakeholdersNameList.push(stakeholder.name);
     });
 
-    beforeEach("Persist session", () => {
+    beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
         preservecookies();
+        cy.fixture("application").then(function (appData) {
+            this.appData = appData;
+        });
     });
+
 
     after("Perform test data clean up", () => {
         if (hasToBeSkipped("@tier1")) return;
@@ -55,16 +59,11 @@ describe("Create an application form an insecure Git source", () => {
         gitConfiguration.enableInsecureGitRepositories();
     });
 
-    it("Insecure git application assessment with low risk", () => {
+    it("Insecure git application assessment with low risk", function () {
         // Navigate to application inventory tab and create new application
         // create a new application
         application = new Assessment(
-            getRandomApplicationData({
-                sourceData: {
-                    repoType: "Git",
-                    sourceRepo: "http://github.com/konveyor/tackle-testapp",
-                },
-            })
+            getRandomApplicationData({sourceData: this.appData[6]})
         );
 
         application.create();
@@ -85,16 +84,11 @@ describe("Create an application form an insecure Git source", () => {
         subversionConfiguration.enableInsecureSubversionRepositories();
     });
 
-    it("Insecure subversion application assessment with low risk", () => {
+    it("Insecure subversion application assessment with low risk", function () {
         // Navigate to application inventory tab and create new application
         // create a new application
         application = new Assessment(
-            getRandomApplicationData({
-                sourceData: {
-                    repoType: "Subversion",
-                    sourceRepo: "http://github.com/konveyor/tackle-testapp",
-                },
-            })
+            getRandomApplicationData({sourceData: this.appData[7]})
         );
 
         application.create();
