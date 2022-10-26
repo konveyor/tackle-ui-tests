@@ -65,7 +65,7 @@ import {
 import { tagLabels } from "../integration/views/tags.view";
 import { Credentials } from "../integration/models/administrator/credentials/credentials";
 import { Assessment } from "../integration/models/developer/applicationinventory/assessment";
-import { analysisData, applicationData } from "../integration/types/types";
+import { analysisData, applicationData, UserData } from "../integration/types/types";
 import { CredentialsProxy } from "../integration/models/administrator/credentials/credentialsProxy";
 import { getRandomCredentialsData } from "../utils/data_utils";
 import { CredentialsMaven } from "../integration/models/administrator/credentials/credentialsMaven";
@@ -73,8 +73,8 @@ import { CredentialsSourceControlUsername } from "../integration/models/administ
 import { CredentialsSourceControlKey } from "../integration/models/administrator/credentials/credentialsSourceControlKey";
 import { Application } from "../integration/models/developer/applicationinventory/application";
 
-const userName = Cypress.env("user");
-const userPassword = Cypress.env("pass");
+let userName = Cypress.env("user");
+let userPassword = Cypress.env("pass");
 const tackleUiUrl = Cypress.env("tackleUrl");
 const { _ } = Cypress;
 
@@ -107,11 +107,15 @@ export function cancelForm(): void {
     cy.get(commonView.cancelButton).click();
 }
 
-export function login(): void {
+export function login(username?, password?: string): void {
     cy.visit(tackleUiUrl, { timeout: 120 * SEC });
     cy.wait(5000);
     cy.get("h1", { timeout: 120 * SEC }).then(($b) => {
         if ($b.text().toString().trim() == "Sign in to your account") {
+            if (username && password) {
+                userName = username;
+                userPassword = password;
+            }
             inputText(loginView.userNameInput, userName);
             inputText(loginView.userPasswordInput, userPassword);
             click(loginView.loginButton);
@@ -127,7 +131,9 @@ export function login(): void {
             click(loginView.submitButton);
         }
     });
-    cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
+    cy.get("#main-content-page-layout-horizontal-nav").within(() => {
+        cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
+    });
 }
 
 export function logout(): void {
