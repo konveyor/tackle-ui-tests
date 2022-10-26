@@ -4,13 +4,15 @@ import { UserRoles } from "../../types/constants";
 
 describe("Keycloak operations", () => {
     it("Create user, define password, add and remove roles, remove user", () => {
-        User.loginAdmin();
+        User.loginKeycloakAdmin();
         let user = new User(getRandomUserData());
         user.create();
         user.definePassword();
         user.addRole(UserRoles.migrator);
         user.addRole(UserRoles.architect);
         user.removeRole(UserRoles.migrator);
+        user.login();
+        User.loginKeycloakAdmin(true);
         user.delete();
     });
 });
