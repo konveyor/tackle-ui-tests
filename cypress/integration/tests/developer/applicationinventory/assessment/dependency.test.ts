@@ -58,7 +58,7 @@ describe("Manage application dependencies", { tags: "@newtest" }, () => {
         deleteApplicationTableRows();
     });
 
-    it("Non-cyclic dependencies", function () {
+    it("Non-cyclic dependencies for applications", function () {
         var northboundApps: Array<string> = [applicationsList[0].name];
         var southboundApps: Array<string> = [applicationsList[2].name];
 
@@ -75,28 +75,26 @@ describe("Manage application dependencies", { tags: "@newtest" }, () => {
         applicationsList[1].removeDependencies(northboundApps, southboundApps);
     });
 
-    it("Cyclic dependencies", function () {
-        //This fails because of this 2.1 issue - https://issues.redhat.com/browse/TACKLE-814
-
+    it("Cyclic dependencies for applications", function () {
         var northboundApps: Array<string> = [applicationsList[0].name];
         var southboundApps: Array<string> = [applicationsList[2].name];
 
         // Add northbound and southbound dependencies for 2nd app from list
         applicationsList[1].addDependencies(northboundApps, southboundApps);
 
-        // Adding app 2 as northbound dependency for 1st app should yield cyclic error
+        // Adding app[2] as northbound dependency for app[0] should yield cyclic error
         applicationsList[0].openManageDependencies();
         applicationsList[0].selectDependency(northdependenciesDropdownBtn, [
-            applicationsList[1].name,
+            applicationsList[2].name,
         ]);
         cy.wait(500);
         cy.get(northboundHelper).should("contain.text", cyclicDependenciesErrorMsg);
         click(closeForm);
 
-        // Adding app 2 as southbound dependency for 3rd app should yield cyclic error
+        // Adding app[0] as southbound dependency for app[2] should yield cyclic error
         applicationsList[2].openManageDependencies();
         applicationsList[2].selectDependency(southdependenciesDropdownBtn, [
-            applicationsList[1].name,
+            applicationsList[0].name,
         ]);
         cy.wait(500);
         cy.get(southboundHelper).should("contain.text", cyclicDependenciesErrorMsg);
