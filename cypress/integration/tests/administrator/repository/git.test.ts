@@ -5,20 +5,18 @@ import {
     hasToBeSkipped,
     login,
     preservecookies,
-} from "../../../../../utils/utils";
-import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
-import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
-import * as data from "../../../../../utils/data_utils";
-import { GitConfiguration } from "../../../../models/administrator/repositories/git_configuration";
-import { SubversionConfiguration } from "../../../../models/administrator/repositories/subversion_configuration";
+} from "../../../../utils/utils";
+import { Assessment } from "../../../models/developer/applicationinventory/assessment";
+import { Stakeholders } from "../../../models/developer/controls/stakeholders";
+import * as data from "../../../../utils/data_utils";
+import { GitConfiguration } from "../../../models/administrator/repositories/git_configuration";
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
 let gitConfiguration = new GitConfiguration();
-let subversionConfiguration = new SubversionConfiguration();
 let application;
 
-describe("Create an application form an insecure Git source", { tags: "@tier1" }, () => {
+describe("Test an application form a Git source", { tags: "@tier1" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;
@@ -45,20 +43,16 @@ describe("Create an application form an insecure Git source", { tags: "@tier1" }
 
     after("Perform test data clean up", () => {
         if (hasToBeSkipped("@tier1")) return;
-
         // Delete the stakeholders created before the tests
         deleteAllStakeholders();
-        GitConfiguration.open();
-        gitConfiguration.disableInsecureGitRepositories();
-        subversionConfiguration.disableInsecureSubversionRepositories();
     });
 
     it("Enable Insecure git Repository", () => {
         GitConfiguration.open();
-        gitConfiguration.enableInsecureGitRepositories();
+        gitConfiguration.toggleInsecureGitRepositories();
     });
 
-    it("Insecure git application assessment with low risk", function () {
+    it("Perform insecure git application assessment with low risk", function () {
         // Navigate to application inventory tab and create new application
         // create a new application
         application = new Assessment(getRandomApplicationData({ sourceData: this.appData[6] }));
@@ -76,15 +70,15 @@ describe("Create an application form an insecure Git source", { tags: "@tier1" }
         cy.wait(2000);
     });
 
-    it("Enable Insecure subversion Repository", () => {
-        SubversionConfiguration.open();
-        subversionConfiguration.enableInsecureSubversionRepositories();
+    it("Disable insecure git Repository", () => {
+        GitConfiguration.open();
+        gitConfiguration.toggleInsecureGitRepositories();
     });
 
-    it("Insecure subversion application assessment with low risk", function () {
+    it("Perform secure git application assessment with low risk", function () {
         // Navigate to application inventory tab and create new application
         // create a new application
-        application = new Assessment(getRandomApplicationData({ sourceData: this.appData[7] }));
+        application = new Assessment(getRandomApplicationData({ sourceData: this.appData[3] }));
 
         application.create();
         cy.wait(2000);

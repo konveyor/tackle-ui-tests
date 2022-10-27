@@ -1,18 +1,14 @@
-import { Configuration } from "./configuration";
-import { clickByText } from "../../../../utils/utils";
+import { click, clickByText, selectUserPerspective } from "../../../../utils/utils";
+import { enableInsecureRepository } from "../../../views/repository.view";
 
-export class SubversionConfiguration extends Configuration {
+export class SubversionConfiguration {
     static open() {
-        super.open();
+        selectUserPerspective("Administrator");
         clickByText("a.pf-c-nav__link", "Subversion");
         cy.contains("h1", "Subversion configuration", { timeout: 5000 });
     }
 
-    enableInsecureSubversionRepositories() {
-        super.enableInsecureRepository();
-    }
-
-    disableInsecureSubversionRepositories() {
-        super.enableInsecureRepository();
+    toggleInsecureSubversionRepositories() {
+        click(enableInsecureRepository);
     }
 }
