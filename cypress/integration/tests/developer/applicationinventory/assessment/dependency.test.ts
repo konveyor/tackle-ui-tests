@@ -58,7 +58,7 @@ describe("Manage application dependencies", { tags: "@newtest" }, () => {
         deleteApplicationTableRows();
     });
 
-    it("Non-cyclic dependencies", function () {
+    it("Non-cyclic dependencies for applications", function () {
         var northboundApps: Array<string> = [applicationsList[0].name];
         var southboundApps: Array<string> = [applicationsList[2].name];
 
@@ -75,7 +75,7 @@ describe("Manage application dependencies", { tags: "@newtest" }, () => {
         applicationsList[1].removeDependencies(northboundApps, southboundApps);
     });
 
-    it("Cyclic dependencies", function () {
+    it("Cyclic dependencies for applications", function () {
         var northboundApps: Array<string> = [applicationsList[0].name];
         var southboundApps: Array<string> = [applicationsList[2].name];
 
