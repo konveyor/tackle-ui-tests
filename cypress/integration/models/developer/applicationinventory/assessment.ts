@@ -273,24 +273,30 @@ export class Assessment extends Application {
         clickByText(button, "Submit review");
     }
 
-    is_assessed(): void {
-        this.verifyCompleteStatus(assessmentColumnSelector);
-    }
-
-    is_reviewed(): void {
-        this.verifyCompleteStatus(reviewColumnSelector);
-    }
-
-    is_notStarted(): void {
+    // Method to verify the value of various fields like Assessment, Review
+    protected verifyFieldValue(columnSelector, value): void {
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(this.name)
             .parent(tdTag)
             .parent(trTag)
             .within(() => {
-                cy.get(assessmentColumnSelector).find("div").should("contain", "Not started");
+                cy.get(columnSelector).find("div").should("contain", value);
             });
     }
+
+    is_assessed(): void {
+        this.verifyFieldValue(assessmentColumnSelector, "Completed");
+    }
+
+    is_reviewed(): void {
+        this.verifyFieldValue(reviewColumnSelector, "Completed");
+    }
+
+    is_notStarted(): void {
+        this.verifyFieldValue(assessmentColumnSelector, "Not started");
+    }
+
     getColumnText(columnSelector, columnText: string): void {
         selectItemsPerPage(100);
         cy.get(tdTag)

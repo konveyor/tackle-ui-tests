@@ -121,9 +121,6 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
     });
 
     it("Copy assessment and discard assessment", function () {
-        // Verify copy assessment is not enabled untill assessment is done
-        applicationList[1].verifyCopyAssessmentDisabled();
-
         // Perform copy assessment of all the applications
         applicationList[0].copy_assessment(applicationList);
         cy.wait(4000);
@@ -136,7 +133,7 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
         applicationList[1].discard_assessment();
         applicationList[1].is_notStarted();
     });
-    
+
     it("Copy assessment select options validations", function () {
         // Open copy assessment page
         applicationList[0].openCopyAssessmentModel();
