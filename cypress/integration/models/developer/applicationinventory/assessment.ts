@@ -281,6 +281,16 @@ export class Assessment extends Application {
         this.verifyCompleteStatus(reviewColumnSelector);
     }
 
+    is_notStarted(): void {
+        selectItemsPerPage(100);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                cy.get(assessmentColumnSelector).find("div").should("contain", "Not started");
+            });
+    }
     getColumnText(columnSelector, columnText: string): void {
         selectItemsPerPage(100);
         cy.get(tdTag)
@@ -417,6 +427,22 @@ export class Assessment extends Application {
             click(copy);
             cy.wait(2000);
         }
+    }
+
+    discard_assessment(): void {
+        Assessment.open();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                click(actionButton);
+                cy.wait(500);
+                clickByText(button, "Discard assessment");
+            });
+        cy.get("button[aria-label=confirm]").click();
     }
 
     selectApps(applicationList: Array<Application>): void {
