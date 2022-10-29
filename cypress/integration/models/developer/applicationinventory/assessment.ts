@@ -55,6 +55,7 @@ import {
     radioInput,
     stakeholdergroupsSelect,
     stakeholderSelect,
+    continueButton,
 } from "../../../views/assessment.view";
 import {
     criticalityInput,
@@ -192,17 +193,6 @@ export class Assessment extends Application {
                 clickByText(button, next);
             }
         }
-    }
-
-    protected verifyCompleteStatus(columnSelector): void {
-        selectItemsPerPage(100);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                cy.get(columnSelector).find("div").should("contain", "Completed");
-            });
     }
 
     create(): void {
@@ -448,7 +438,7 @@ export class Assessment extends Application {
                 cy.wait(500);
                 clickByText(button, "Discard assessment");
             });
-        cy.get("button[aria-label=confirm]").click();
+        cy.get(continueButton).click();
     }
 
     selectApps(applicationList: Array<Application>): void {
