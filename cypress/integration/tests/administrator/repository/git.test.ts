@@ -1,36 +1,54 @@
+/*
+Copyright © 2021 the Konveyor Contributors (https://konveyor.io/)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+/// <reference types="cypress" />
+
 import {
-    deleteAllStakeholders,
+    deleteAllBusinessServices,
     deleteApplicationTableRows,
+    getRandomAnalysisData,
     getRandomApplicationData,
     hasToBeSkipped,
     login,
     preservecookies,
+    writeMavenSettingsFile,
 } from "../../../../utils/utils";
-import { Assessment } from "../../../models/developer/applicationinventory/assessment";
-import { Stakeholders } from "../../../models/developer/controls/stakeholders";
 import * as data from "../../../../utils/data_utils";
-import { GitConfiguration } from "../../../models/administrator/repositories/git_configuration";
+import { GitConfiguration } from "../../../models/administrator/repositories/git";
+import { Analysis } from "../../../models/developer/applicationinventory/analysis";
+import { CredentialsSourceControlUsername } from "../../../models/administrator/credentials/credentialsSourceControlUsername";
+import { CredentialType, UserCredentials } from "../../../types/constants";
 
-const stakeholdersList: Array<Stakeholders> = [];
-const stakeholdersNameList: Array<string> = [];
 let gitConfiguration = new GitConfiguration();
-let application;
+let source_credential;
 
 describe("Test an application form a Git source", { tags: "@tier1" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;
 
-        // Perform login
         login();
         deleteApplicationTableRows();
-        // Navigate to stakeholders control tab and create new stakeholder
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-        stakeholder.create();
-        cy.wait(2000);
-
-        stakeholdersList.push(stakeholder);
-        stakeholdersNameList.push(stakeholder.name);
+        source_credential = new CredentialsSourceControlUsername(
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                true
+            )
+        );
+        source_credential.create();
     });
 
     beforeEach("Persist session", function () {
@@ -39,12 +57,22 @@ describe("Test an application form a Git source", { tags: "@tier1" }, () => {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
+        cy.fixture("analysis").then(function (analysisData) {
+            this.analysisData = analysisData;
+        });
+
+        // Interceptors
+        cy.intercept("POST", "/hub/application*").as("postApplication");
+        cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     after("Perform test data clean up", () => {
         if (hasToBeSkipped("@tier1")) return;
         // Delete the stakeholders created before the tests
-        deleteAllStakeholders();
+        deleteApplicationTableRows();
+        deleteAllBusinessServices();
+        source_credential.delete();
+        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 
     it("Enable Insecure git Repository", () => {
@@ -52,22 +80,19 @@ describe("Test an application form a Git source", { tags: "@tier1" }, () => {
         gitConfiguration.toggleInsecureGitRepositories();
     });
 
-    it("Perform insecure git application assessment with low risk", function () {
-        // Navigate to application inventory tab and create new application
-        // create a new application
-        application = new Assessment(getRandomApplicationData({ sourceData: this.appData[6] }));
-
+    it("Source code analysis on tackle testapp", function () {
+        // For tackle test app source credentials are required.
+        const application = new Analysis(
+            getRandomApplicationData({ sourceData: this.appData[3] }),
+            getRandomAnalysisData(this.analysisData[0])
+        );
         application.create();
+        cy.wait("@getApplication");
         cy.wait(2000);
-
-        // Perform assessment of application
-        application.perform_assessment("low", stakeholdersNameList);
-        cy.wait(2000);
-        application.is_assessed();
-
-        // Delete application
-        application.delete();
-        cy.wait(2000);
+        application.manageCredentials(source_credential.name, "None");
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
     });
 
     it("Disable insecure git Repository", () => {
@@ -75,21 +100,18 @@ describe("Test an application form a Git source", { tags: "@tier1" }, () => {
         gitConfiguration.toggleInsecureGitRepositories();
     });
 
-    it("Perform secure git application assessment with low risk", function () {
-        // Navigate to application inventory tab and create new application
-        // create a new application
-        application = new Assessment(getRandomApplicationData({ sourceData: this.appData[3] }));
-
+    it("Source code analysis on tackle testapp", function () {
+        // For tackle test app source credentials are required.
+        const application = new Analysis(
+            getRandomApplicationData({ sourceData: this.appData[3] }),
+            getRandomAnalysisData(this.analysisData[0])
+        );
         application.create();
+        cy.wait("@getApplication");
         cy.wait(2000);
-
-        // Perform assessment of application
-        application.perform_assessment("low", stakeholdersNameList);
-        cy.wait(2000);
-        application.is_assessed();
-
-        // Delete application
-        application.delete();
-        cy.wait(2000);
+        application.manageCredentials(source_credential.name, "None");
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
     });
 });

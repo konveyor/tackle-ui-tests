@@ -1,20 +1,37 @@
+/*
+Copyright © 2021 the Konveyor Contributors (https://konveyor.io/)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+/// <reference types="cypress" />
+
 import {
     deleteAllStakeholders,
     deleteApplicationTableRows,
+    getRandomAnalysisData,
     getRandomApplicationData,
     hasToBeSkipped,
     login,
     preservecookies,
 } from "../../../../utils/utils";
-import { Assessment } from "../../../models/developer/applicationinventory/assessment";
-import { Stakeholders } from "../../../models/developer/controls/stakeholders";
 import * as data from "../../../../utils/data_utils";
-import { SubversionConfiguration } from "../../../models/administrator/repositories/subversion_configuration";
+import { SubversionConfiguration } from "../../../models/administrator/repositories/subversion";
+import { CredentialsSourceControlUsername } from "../../../models/administrator/credentials/credentialsSourceControlUsername";
+import { CredentialType, UserCredentials } from "../../../types/constants";
+import { Analysis } from "../../../models/developer/applicationinventory/analysis";
 
-const stakeholdersList: Array<Stakeholders> = [];
-const stakeholdersNameList: Array<string> = [];
 let subversionConfiguration = new SubversionConfiguration();
-let application;
+let source_credential;
 
 describe("Test an application form a subversion source", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -24,13 +41,14 @@ describe("Test an application form a subversion source", { tags: "@tier1" }, () 
         // Perform login
         login();
         deleteApplicationTableRows();
-        // Navigate to stakeholders control tab and create new stakeholder
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-        stakeholder.create();
-        cy.wait(2000);
-
-        stakeholdersList.push(stakeholder);
-        stakeholdersNameList.push(stakeholder.name);
+        source_credential = new CredentialsSourceControlUsername(
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                true
+            )
+        );
+        source_credential.create();
     });
 
     beforeEach("Persist session", function () {
@@ -39,6 +57,13 @@ describe("Test an application form a subversion source", { tags: "@tier1" }, () 
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
+        cy.fixture("analysis").then(function (analysisData) {
+            this.analysisData = analysisData;
+        });
+
+        // Interceptors
+        cy.intercept("POST", "/hub/application*").as("postApplication");
+        cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     after("Perform test data clean up", () => {
@@ -52,22 +77,18 @@ describe("Test an application form a subversion source", { tags: "@tier1" }, () 
         subversionConfiguration.toggleInsecureSubversionRepositories();
     });
 
-    it("Perform insecure subversion application assessment with low risk", function () {
-        // Navigate to application inventory tab and create new application
-        // create a new application
-        application = new Assessment(getRandomApplicationData({ sourceData: this.appData[7] }));
-
+    it("Source code analysis on tackle testapp for svn repo type", function () {
+        const application = new Analysis(
+            getRandomApplicationData({ sourceData: this.appData[5] }),
+            getRandomAnalysisData(this.analysisData[0])
+        );
         application.create();
+        cy.wait("@getApplication");
         cy.wait(2000);
-
-        // Perform assessment of application
-        application.perform_assessment("low", stakeholdersNameList);
-        cy.wait(2000);
-        application.is_assessed();
-
-        // Delete application
-        application.delete();
-        cy.wait(2000);
+        application.manageCredentials(source_credential.name, "None");
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
     });
 
     it("Disable insecure subversion Repository", () => {
@@ -75,21 +96,17 @@ describe("Test an application form a subversion source", { tags: "@tier1" }, () 
         subversionConfiguration.toggleInsecureSubversionRepositories();
     });
 
-    it("Perform secure subversion application assessment with low risk", function () {
-        // Navigate to application inventory tab and create new application
-        // create a new application
-        application = new Assessment(getRandomApplicationData({ sourceData: this.appData[5] }));
-
+    it("Source code analysis on tackle testapp for svn repo type", function () {
+        const application = new Analysis(
+            getRandomApplicationData({ sourceData: this.appData[5] }),
+            getRandomAnalysisData(this.analysisData[0])
+        );
         application.create();
+        cy.wait("@getApplication");
         cy.wait(2000);
-
-        // Perform assessment of application
-        application.perform_assessment("low", stakeholdersNameList);
-        cy.wait(2000);
-        application.is_assessed();
-
-        // Delete application
-        application.delete();
-        cy.wait(2000);
+        application.manageCredentials(source_credential.name, "None");
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
     });
 });
