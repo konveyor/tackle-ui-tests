@@ -44,6 +44,7 @@ import {
     CredentialType,
     assessment,
     UserCredentials,
+    credentialType,
 } from "../integration/types/constants";
 import {
     actionButton,
@@ -271,7 +272,7 @@ export function applySearchFilter(
     value?: number
 ): void {
     selectFilter(filterName, identifiedRisk, value);
-    if (filterName == businessService || filterName == tag) {
+    if (filterName == businessService || filterName == tag || filterName == credentialType) {
         cy.get("div.pf-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show")
             .find("div.pf-c-select")
             .click();
@@ -280,7 +281,7 @@ export function applySearchFilter(
             // span.pf-c-check__label is for the Copy assessment page.
             cy.get("ul[role=listbox] > li, span.pf-c-check__label").contains(searchText).click();
         }
-        if (filterName == tag) {
+        if (filterName == tag || filterName == credentialType) {
             if (Array.isArray(searchText)) {
                 searchText.forEach(function (searchTextValue) {
                     cy.get("div.pf-c-select__menu > fieldset > label > span")

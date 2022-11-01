@@ -30,6 +30,8 @@ import {
     createMultipleApplicationsWithBSandTags,
     applySelectFilter,
     deleteAllTagsAndTagTypes,
+    getRandomApplicationData,
+    getRandomAnalysisData,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import {
@@ -41,13 +43,21 @@ import {
     businessService,
     tag,
     assessment,
+    CredentialType,
+    UserCredentials,
+    credentialType,
 } from "../../../../types/constants";
 
 import * as data from "../../../../../utils/data_utils";
 import { Application } from "../../../../models/developer/applicationinventory/application";
+import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
+import { CredentialsMaven } from "../../../../models/administrator/credentials/credentialsMaven";
+import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
 
 var applicationsList: Array<Application> = [];
 var invalidSearchInput = String(data.getRandomNumber());
+let source_credential;
+let maven_credential;
 
 describe("Application inventory filter validations", { tags: "@tier2" }, function () {
     before("Login and Create Test Data", function () {
@@ -65,11 +75,33 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
             businessservicesList,
             tagList
         );
+
+        // Create source Credentials
+        source_credential = new CredentialsSourceControlUsername(
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                true
+            )
+        );
+        source_credential.create();
+
+        // Create Maven credentials
+        maven_credential = new CredentialsMaven(
+            data.getRandomCredentialsData(CredentialType.maven, "None", true)
+        );
+        maven_credential.create();
     });
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
         preservecookies();
+        cy.fixture("application").then(function (appData) {
+            this.appData = appData;
+        });
+        cy.fixture("analysis").then(function (analysisData) {
+            this.analysisData = analysisData;
+        });
 
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
@@ -184,5 +216,39 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
 
         // Enter a non-existing tag and apply it as search filter
         applySelectFilter("tags", tag, data.getRandomWord(5), false);
+    });
+
+    it("Credential type filter validations", function () {
+        // For application must have source code URL git or svn and group,artifcat and version
+        const application1 = new Analysis(
+            getRandomApplicationData("tackleTestApp_Source", {
+                sourceData: this.appData[1],
+                binaryData: this.appData[2],
+            }),
+            getRandomAnalysisData(this.analysisData[3])
+        );
+        application1.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+
+        // Attach Maven credential
+        application1.manageCredentials("None", maven_credential.name);
+        exists(application1.name);
+
+        // Enter Maven and assert
+        applySearchFilter(credentialType, "Maven");
+        cy.wait(2000);
+        exists(application1.name);
+        clickByText(button, clearAllFilters);
+
+        // Change the credentials to Source and test
+        application1.manageCredentials(source_credential.name, "None");
+        exists(application1.name);
+
+        // Enter Source and assert
+        applySearchFilter(credentialType, "Source");
+        cy.wait(2000);
+        exists(application1.name);
+        clickByText(button, clearAllFilters);
     });
 });
