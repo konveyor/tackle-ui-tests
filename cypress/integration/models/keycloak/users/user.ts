@@ -2,6 +2,7 @@ import { UserData } from "../../../types/types";
 import { button, SEC, tdTag, trTag } from "../../../types/constants";
 import { click, clickByText, deleteFromArray, inputText, login } from "../../../../utils/utils";
 import * as loginView from "../../../views/login.view";
+import { Application } from "../../developer/applicationinventory/application";
 const tackleUiUrl = Cypress.env("tackleUrl");
 const keycloakAdminPassword = Cypress.env("keycloakAdminPassword");
 
@@ -13,6 +14,7 @@ export class User {
     email: string;
     userEnabled: boolean;
     roles = [""];
+    features = {};
 
     constructor(userData: UserData) {
         const { username, password, firstName, lastName, email, userEnabled } = userData;
@@ -134,5 +136,27 @@ export class User {
 
     login(): void {
         login(this.username, this.password);
+    }
+
+    protected validatePresence(selector: string) {
+        cy.get(selector).should("exist");
+    }
+
+    protected validateAbsence(selector: string) {
+        cy.get(selector).should("not.exist");
+    }
+
+    validateCreateAppButton(toBePresent: boolean) {
+        Application.open();
+        if (toBePresent) {
+            this.validatePresence("button[aria-label=create-application]");
+        } else {
+            this.validateAbsence("button[aria-label=create-application]");
+        }
+    }
+
+    logout() {
+        clickByText(button, this.username);
+        clickByText("a", "Logout");
     }
 }
