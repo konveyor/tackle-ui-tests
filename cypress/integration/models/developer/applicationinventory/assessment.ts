@@ -55,6 +55,7 @@ import {
     radioInput,
     stakeholdergroupsSelect,
     stakeholderSelect,
+    continueButton,
 } from "../../../views/assessment.view";
 import {
     criticalityInput,
@@ -194,17 +195,6 @@ export class Assessment extends Application {
         }
     }
 
-    protected verifyCompleteStatus(columnSelector): void {
-        selectItemsPerPage(100);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                cy.get(columnSelector).find("div").should("contain", "Completed");
-            });
-    }
-
     create(): void {
         Assessment.open();
         super.create();
@@ -273,12 +263,28 @@ export class Assessment extends Application {
         clickByText(button, "Submit review");
     }
 
+    // Method to verify the value of various fields like Assessment, Review
+    protected verifyFieldValue(columnSelector, value): void {
+        selectItemsPerPage(100);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                cy.get(columnSelector).find("div").should("contain", value);
+            });
+    }
+
     is_assessed(): void {
-        this.verifyCompleteStatus(assessmentColumnSelector);
+        this.verifyFieldValue(assessmentColumnSelector, "Completed");
     }
 
     is_reviewed(): void {
-        this.verifyCompleteStatus(reviewColumnSelector);
+        this.verifyFieldValue(reviewColumnSelector, "Completed");
+    }
+
+    is_notStarted(): void {
+        this.verifyFieldValue(assessmentColumnSelector, "Not started");
     }
 
     getColumnText(columnSelector, columnText: string): void {
@@ -417,6 +423,22 @@ export class Assessment extends Application {
             click(copy);
             cy.wait(2000);
         }
+    }
+
+    discard_assessment(): void {
+        Assessment.open();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                click(actionButton);
+                cy.wait(500);
+                clickByText(button, "Discard assessment");
+            });
+        cy.get(continueButton).click();
     }
 
     selectApps(applicationList: Array<Application>): void {
