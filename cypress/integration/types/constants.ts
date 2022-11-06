@@ -65,6 +65,7 @@ export const tdTag = "td";
 export const trTag = "tr";
 export const tagType = "Tag type";
 export const tagName = "Tag name";
+export const credentialType = "Credential type";
 
 // Error helper messages general to all views
 export const duplicateErrMsg = "ERROR: duplicate key value violates unique constraint";
@@ -89,4 +90,10 @@ export enum CredentialType {
 export enum UserCredentials {
     usernamePassword = "Username/Password",
     sourcePrivateKey = "Source PrivateKey",
+}
+
+export enum UserRoles {
+    admin = "tackle-admin",
+    architect = "tackle-architect",
+    migrator = "tackle-migrator",
 }

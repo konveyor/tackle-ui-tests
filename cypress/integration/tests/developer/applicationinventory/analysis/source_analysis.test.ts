@@ -24,6 +24,7 @@ import {
     getRandomApplicationData,
     getRandomAnalysisData,
     writeMavenSettingsFile,
+    resetURL,
 } from "../../../../../utils/utils";
 import { CredentialsMaven } from "../../../../models/administrator/credentials/credentialsMaven";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
@@ -31,6 +32,9 @@ import { CredentialType, UserCredentials } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../../models/administrator/credentials/credentialsSourceControlKey";
+import { Proxy } from "../../../../models/administrator/proxy/proxy";
+let source_credential;
+let maven_credential;
 
 describe("Source Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -40,7 +44,26 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         // Perform login
         login();
         deleteApplicationTableRows();
-        deleteAllBusinessServices();
+
+        //Disable all proxy settings
+        let proxy = new Proxy(data.getRandomProxyData());
+        proxy.disableProxy();
+
+        // Create source Credentials
+        source_credential = new CredentialsSourceControlUsername(
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                true
+            )
+        );
+        source_credential.create();
+
+        // Create Maven credentials
+        maven_credential = new CredentialsMaven(
+            data.getRandomCredentialsData(CredentialType.maven, "None", true)
+        );
+        maven_credential.create();
     });
 
     beforeEach("Persist session", function () {
@@ -58,6 +81,11 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
+    afterEach("Persist session", function () {
+        // Reset URL from report page to web UI
+        resetURL();
+    });
+
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
         deleteApplicationTableRows();
@@ -65,10 +93,11 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 
-    it("Source Code Analysis on bookserver app without credentials", function () {
+    it("Source Analysis on bookserver app without credentials", function () {
         // For source code analysis application must have source code URL git or svn
+        cy.log(this.analysisData[0]);
         const application = new Analysis(
-            getRandomApplicationData({ sourceData: this.appData[0] }),
+            getRandomApplicationData("bookserverApp", { sourceData: this.appData[0] }),
             getRandomAnalysisData(this.analysisData[0])
         );
         application.create();
@@ -77,54 +106,49 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
+        application.validateStoryPoints();
     });
 
-    it("Source Code Analysis on tackle testapp", function () {
-        // For tackle test app source credentials are required.
-        let source_credential = new CredentialsSourceControlUsername(
-            data.getRandomCredentialsData(
-                CredentialType.sourceControl,
-                UserCredentials.usernamePassword,
-                true
-            )
-        );
-        source_credential.create();
+    it("Source + dependencies analysis on tackletest app", function () {
+        // Source code analysis require both source and maven credentials
         const application = new Analysis(
-            getRandomApplicationData({ sourceData: this.appData[3] }),
-            getRandomAnalysisData(this.analysisData[0])
-        );
-        application.create();
-        cy.wait("@getApplication");
-        cy.wait(2000);
-        application.manageCredentials(source_credential.name, "None");
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.openreport();
-    });
-
-    it("Source Code + dependencies analysis on daytrader app", function () {
-        // Automate bug https://issues.redhat.com/browse/TACKLE-721
-        const application = new Analysis(
-            getRandomApplicationData({ sourceData: this.appData[1] }),
+            getRandomApplicationData("tackleTestApp_Source+dependencies", {
+                sourceData: this.appData[3],
+            }),
             getRandomAnalysisData(this.analysisData[1])
         );
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
+        application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
+        application.validateStoryPoints();
+    });
+
+    it("Source + dependencies analysis on daytrader app", function () {
+        // Automate bug https://issues.redhat.com/browse/TACKLE-721
+        const application = new Analysis(
+            getRandomApplicationData("dayTraderApp_Source+dependencies", {
+                sourceData: this.appData[1],
+            }),
+            getRandomAnalysisData(this.analysisData[2])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
+        application.validateStoryPoints();
     });
 
     it("Analysis on daytrader app with maven credentials", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-751
-        let maven_credential = new CredentialsMaven(
-            data.getRandomCredentialsData(CredentialType.maven)
-        );
-        maven_credential.create();
         const application = new Analysis(
-            getRandomApplicationData({ sourceData: this.appData[1] }),
-            getRandomAnalysisData(this.analysisData[1])
+            getRandomApplicationData("dayTraderApp_MavenCreds", { sourceData: this.appData[1] }),
+            getRandomAnalysisData(this.analysisData[2])
         );
         application.create();
         cy.wait("@getApplication");
@@ -133,6 +157,23 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
+        application.validateStoryPoints();
+    });
+
+    it("Source Analysis on tackle testapp", function () {
+        // For tackle test app source credentials are required.
+        const application = new Analysis(
+            getRandomApplicationData("tackleTestApp_Source", { sourceData: this.appData[3] }),
+            getRandomAnalysisData(this.analysisData[6])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.manageCredentials(source_credential.name, "None");
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
+        application.validateStoryPoints();
     });
 
     it("Analysis on tackle test app with ssh credentials", function () {
@@ -145,8 +186,8 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         );
         scCredsKey.create();
         const application = new Analysis(
-            getRandomApplicationData({ sourceData: this.appData[4] }),
-            getRandomAnalysisData(this.analysisData[0])
+            getRandomApplicationData("tackleTestApp_sshCreds", { sourceData: this.appData[4] }),
+            getRandomAnalysisData(this.analysisData[6])
         );
         application.create();
         cy.wait("@getApplication");
@@ -155,21 +196,14 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
+        application.validateStoryPoints();
     });
 
-    it("Source Code Analysis on tackle testapp for svn repo type", function () {
+    it("Source Analysis on tackle testapp for svn repo type", function () {
         // For tackle test app source credentials are required.
-        let source_credential = new CredentialsSourceControlUsername(
-            data.getRandomCredentialsData(
-                CredentialType.sourceControl,
-                UserCredentials.usernamePassword,
-                true
-            )
-        );
-        source_credential.create();
         const application = new Analysis(
-            getRandomApplicationData({ sourceData: this.appData[5] }),
-            getRandomAnalysisData(this.analysisData[0])
+            getRandomApplicationData("tackleTestApp_svnRepo", { sourceData: this.appData[5] }),
+            getRandomAnalysisData(this.analysisData[6])
         );
         application.create();
         cy.wait("@getApplication");
@@ -178,5 +212,6 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
+        application.validateStoryPoints();
     });
 });

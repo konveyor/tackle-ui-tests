@@ -1,5 +1,6 @@
 import {
     createMultipleCredentials,
+    deleteAllCredentials,
     hasToBeSkipped,
     login,
     validatePagination,
@@ -21,6 +22,7 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
 
         // Perform login
         login();
+        deleteAllCredentials();
         // Create 12 extra credentials, 3 of each type
         createdCredentialsList = createMultipleCredentials(12);
     });
@@ -34,8 +36,6 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
     });
 
     after("Removing credentials, created earlier", () => {
-        createdCredentialsList.forEach((currentCredential) => {
-            currentCredential.delete();
-        });
+        deleteAllCredentials();
     });
 });

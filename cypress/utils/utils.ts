@@ -44,6 +44,7 @@ import {
     CredentialType,
     assessment,
     UserCredentials,
+    credentialType,
 } from "../integration/types/constants";
 import {
     actionButton,
@@ -65,7 +66,7 @@ import {
 import { tagLabels } from "../integration/views/tags.view";
 import { Credentials } from "../integration/models/administrator/credentials/credentials";
 import { Assessment } from "../integration/models/developer/applicationinventory/assessment";
-import { analysisData, applicationData } from "../integration/types/types";
+import { analysisData, applicationData, UserData } from "../integration/types/types";
 import { CredentialsProxy } from "../integration/models/administrator/credentials/credentialsProxy";
 import { getRandomCredentialsData } from "../utils/data_utils";
 import { CredentialsMaven } from "../integration/models/administrator/credentials/credentialsMaven";
@@ -73,8 +74,8 @@ import { CredentialsSourceControlUsername } from "../integration/models/administ
 import { CredentialsSourceControlKey } from "../integration/models/administrator/credentials/credentialsSourceControlKey";
 import { Application } from "../integration/models/developer/applicationinventory/application";
 
-const userName = Cypress.env("user");
-const userPassword = Cypress.env("pass");
+let userName = Cypress.env("user");
+let userPassword = Cypress.env("pass");
 const tackleUiUrl = Cypress.env("tackleUrl");
 const { _ } = Cypress;
 
@@ -107,12 +108,20 @@ export function cancelForm(): void {
     cy.get(commonView.cancelButton).click();
 }
 
-export function login(): void {
+export function login(username?, password?: string): void {
     cy.visit(tackleUiUrl, { timeout: 120 * SEC });
-
-    inputText(loginView.userNameInput, userName);
-    inputText(loginView.userPasswordInput, userPassword);
-    click(loginView.loginButton);
+    cy.wait(5000);
+    cy.get("h1", { timeout: 120 * SEC }).then(($b) => {
+        if ($b.text().toString().trim() == "Sign in to your account") {
+            if (username && password) {
+                userName = username;
+                userPassword = password;
+            }
+            inputText(loginView.userNameInput, userName);
+            inputText(loginView.userPasswordInput, userPassword);
+            click(loginView.loginButton);
+        }
+    });
 
     // Change password screen which appears only for first login
     // This is used in PR tester and Jenkins jobs.
@@ -123,7 +132,9 @@ export function login(): void {
             click(loginView.submitButton);
         }
     });
-    cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
+    cy.get("#main-content-page-layout-horizontal-nav").within(() => {
+        cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
+    });
 }
 
 export function logout(): void {
@@ -131,7 +142,15 @@ export function logout(): void {
     cy.wait(500);
     clickByText("a", "Logout");
     cy.wait(4000);
-    cy.get("h1", { timeout: 15 * SEC }).contains("Log in to your account");
+    cy.get("h1", { timeout: 15 * SEC }).contains("Sign in to your account");
+}
+
+export function resetURL(): void {
+    cy.url().then(($url) => {
+        if ($url.includes("report")) {
+            login();
+        }
+    });
 }
 
 export function selectItemsPerPage(items: number): void {
@@ -194,7 +213,7 @@ export function exists(value: string): void {
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
                 selectItemsPerPage(100);
-                cy.get("td", { timeout: 10 * SEC }).should("contain", value);
+                cy.get("td", { timeout: 120 * SEC }).should("contain", value);
             }
         });
 }
@@ -253,14 +272,16 @@ export function applySearchFilter(
     value?: number
 ): void {
     selectFilter(filterName, identifiedRisk, value);
-    if (filterName == businessService || filterName == tag) {
+    if (filterName == businessService || filterName == tag || filterName == credentialType) {
         cy.get("div.pf-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show")
             .find("div.pf-c-select")
             .click();
         if (filterName == businessService) {
-            cy.get("ul.pf-c-select__menu").contains(searchText).click();
+            // ul[role=listbox] > li is for the Application Inventory page.
+            // span.pf-c-check__label is for the Copy assessment page.
+            cy.get("ul[role=listbox] > li, span.pf-c-check__label").contains(searchText).click();
         }
-        if (filterName == tag) {
+        if (filterName == tag || filterName == credentialType) {
             if (Array.isArray(searchText)) {
                 searchText.forEach(function (searchTextValue) {
                     cy.get("div.pf-c-select__menu > fieldset > label > span")
@@ -495,6 +516,24 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
     checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
 }
 
+export function uploadXml(fileName: string): void {
+    // Uplaod any file
+    cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(
+        { filePath: fileName, mimeType: "text/xml", encoding: "utf-8" },
+        { subjectType: "drag-n-drop" }
+    );
+    cy.wait(2000);
+}
+
+export function uploadApplications(fileName: string): void {
+    // Uplaod any file
+    cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(
+        { filePath: fileName, encoding: "binary" },
+        { subjectType: "drag-n-drop" }
+    );
+    cy.wait(2000);
+}
+
 export function uploadFile(fileName: string): void {
     // Uplaod any file
     cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(fileName, {
@@ -633,7 +672,7 @@ export function performRowAction(itemName: string, action: string): void {
     // itemName is text to be searched on the screen (like credentials name, stakeholder name, etc)
     // Action is the name of the action to be applied (usually edit or delete)
 
-    cy.get(tdTag)
+    cy.get(tdTag, { timeout: 120 * SEC })
         .contains(itemName, { timeout: 120 * SEC })
         // .closest(tdTag)
         .closest(trTag)
@@ -814,9 +853,16 @@ export function getRowsAmount(): number {
     return amount;
 }
 
-export function getRandomApplicationData(options?: { sourceData?; binaryData? }): applicationData {
+export function getRandomApplicationData(
+    appName?,
+    options?: { sourceData?; binaryData? }
+): applicationData {
+    let name = data.getAppName();
+    if (appName) {
+        name = appName + "_" + data.getAppName();
+    }
     let appdata = {
-        name: data.getAppName(),
+        name: name,
         description: data.getDescription(),
         comment: data.getDescription(),
     };
@@ -839,11 +885,15 @@ export function getRandomApplicationData(options?: { sourceData?; binaryData? })
     return appdata;
 }
 
-export function getRandomAnalysisData(sourceData): analysisData {
+export function getRandomAnalysisData(analysisdata): analysisData {
     var analysisData = {
-        source: sourceData.source,
-        target: sourceData.target,
-        binary: sourceData.binary,
+        source: analysisdata.source,
+        target: analysisdata.target,
+        binary: analysisdata.binary,
+        customRule: analysisdata.customRule,
+        enableTransaction: analysisdata.enableTransaction,
+        appName: analysisdata.appName,
+        storyPoints: analysisdata.storyPoints,
     };
     return analysisData;
 }
@@ -898,30 +948,7 @@ export function createApplicationObjects(numberOfObjects: number): Array<Assessm
 
 export function deleteAllJobfunctions(cancel = false): void {
     Jobfunctions.openList();
-    selectItemsPerPage(100);
-    cy.wait(2000);
-    cy.get(commonView.appTable)
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
-                    .each(($tableRow) => {
-                        let name = $tableRow.find("td[data-label=Name]").text();
-                        cy.get(tdTag)
-                            .contains(name)
-                            .parent(tdTag)
-                            .siblings(tdTag)
-                            .within(() => {
-                                click(commonView.deleteButton);
-                                cy.wait(800);
-                            });
-                        click(commonView.confirmButton);
-                        cy.wait(4000);
-                    });
-            }
-        });
+    deleteAllItems();
 }
 
 type Deletable = { delete: () => void };
@@ -962,30 +989,7 @@ export function deleteAllStakeholders(cancel = false): void {
 
 export function deleteAllStakeholderGroups(cancel = false): void {
     Stakeholdergroups.clickStakeholdergroups();
-    selectItemsPerPage(100);
-    cy.wait(2000);
-    cy.get(commonView.appTable)
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
-                    .each(($tableRow) => {
-                        let name = $tableRow.find("td[data-label=Name]").text();
-                        cy.get(tdTag)
-                            .contains(name)
-                            .parent(tdTag)
-                            .siblings(tdTag)
-                            .within(() => {
-                                click(commonView.deleteButton);
-                                cy.wait(1000);
-                            });
-                        click(commonView.confirmButton);
-                        cy.wait(4000);
-                    });
-            }
-        });
+    deleteAllItems();
 }
 
 // TODO: Review and refactor function below!
@@ -1074,10 +1078,37 @@ export function deleteAllTagsAndTagTypes(): void {
 }
 
 export async function deleteAllCredentials() {
-    let list = await Credentials.getList();
-    list.forEach((currentCred) => {
-        currentCred.delete();
-    });
+    Credentials.openList();
+    deleteAllItems();
+}
+
+export function deleteAllItems(amountPerPage = 100, pageNumber?: number) {
+    selectItemsPerPage(amountPerPage);
+    if (pageNumber) {
+        goToPage(pageNumber);
+    }
+    cy.get(commonView.appTable, { timeout: 15 * SEC })
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        let name = $tableRow.find("td[data-label=Name]").text();
+                        cy.get(tdTag)
+                            .contains(name)
+                            .parent(tdTag)
+                            .siblings(tdTag)
+                            .within(() => {
+                                click(commonView.deleteButton);
+                                cy.wait(1000);
+                            });
+                        click(commonView.confirmButton);
+                        cy.wait(4000);
+                    });
+            }
+        });
 }
 
 export const deleteFromArray = <T>(array: T[], el: T): T[] => {
@@ -1132,6 +1163,16 @@ export function selectCheckBox(selector: string): void {
     cy.get(selector, { timeout: 120 * SEC }).then(($checkbox) => {
         if (!$checkbox.prop("checked")) {
             click(selector);
+        }
+    });
+}
+
+//function to unselect checkboxes
+export function disableProxy(selector: string): void {
+    cy.get(selector, { timeout: 120 * SEC }).then(($checkbox) => {
+        if ($checkbox.prop("checked")) {
+            click(selector);
+            submitForm();
         }
     });
 }
@@ -1222,5 +1263,16 @@ export function writeMavenSettingsFile(username: string, password: string): void
         var serializer = new XMLSerializer();
         var writetofile = serializer.serializeToString(xmlDOM);
         cy.writeFile("cypress/fixtures/xml/settings.xml", writetofile);
+    });
+}
+
+export function writeGpgKey(git_key): void {
+    cy.readFile("cypress/fixtures/gpgkey").then((data) => {
+        var key = git_key;
+        var beginningKey: string = "-----BEGIN RSA PRIVATE KEY-----";
+        var endingKey: string = "-----END RSA PRIVATE KEY-----";
+        var keystring = key.toString().split(" ").join("\n");
+        var gpgkey = beginningKey + "\n" + keystring + "\n" + endingKey;
+        cy.writeFile("cypress/fixtures/gpgkey", gpgkey);
     });
 }

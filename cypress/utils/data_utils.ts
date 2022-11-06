@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import * as faker from "faker";
-import { CredentialsData, ProxyData } from "../integration/types/types";
+import { CredentialsData, ProxyData, UserData } from "../integration/types/types";
 import { CredentialType, UserCredentials } from "../integration/types/constants";
-import { writeMavenSettingsFile } from "./utils";
+import { writeGpgKey, writeMavenSettingsFile } from "./utils";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
@@ -130,14 +130,17 @@ export function getRandomCredentialsData(
     }
     if (type === CredentialType.sourceControl) {
         if (userCred === UserCredentials.sourcePrivateKey) {
+            // Source control - gpg key and passphrase
+            if (Cypress.env("git_key")) writeGpgKey(Cypress.env("git_key"));
             return {
                 type: type,
                 name: getRandomWord(6),
                 description: getDescription(),
-                key: "app_import/git_ssh_keys",
+                key: "gpgkey",
                 passphrase: getRandomWord(6),
             };
         } else {
+            // Source Control - username and password
             return {
                 type: type,
                 name: getRandomWord(6),
@@ -147,6 +150,7 @@ export function getRandomCredentialsData(
             };
         }
     } else {
+        // Maven credentials
         if (gitTestingUser) {
             writeMavenSettingsFile(user, password);
         }
@@ -178,5 +182,19 @@ export function getRealProxyData(credentials?: CredentialsData): ProxyData {
         hostname: "rhev-node-12.rdu2.scalelab.redhat.com",
         port: (3128).toString(),
         httpsEnabled: true,
+    };
+}
+
+export function getRandomUserData(): UserData {
+    let fullName = getFullName();
+    let firstName = fullName.split(" ")[0];
+    let lastName = fullName.split(" ")[1];
+    return {
+        username: firstName.toLowerCase(),
+        password: getRandomWord(6),
+        firstName: firstName,
+        lastName: lastName,
+        email: getEmail(),
+        userEnabled: true,
     };
 }

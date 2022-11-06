@@ -21,7 +21,7 @@ import {
     trTag,
     button,
     save,
-    CredentialType,
+    SEC,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import * as commonView from "../../../views/common.view";
@@ -32,7 +32,8 @@ import {
     checkSuccessAlert,
     selectUserPerspective,
     performRowActionByIcon,
-    uploadFile,
+    uploadXml,
+    uploadApplications,
 } from "../../../../utils/utils";
 import { analysisData, applicationData } from "../../../types/types";
 import { Application } from "./application";
@@ -43,20 +44,25 @@ import {
     sourceCredential,
     mavenCredential,
     nextButton,
+    addRules,
+    fileName,
+    reportStoryPoints,
+    enableTransactionAnalysis,
 } from "../../../views/analysis.view";
-import { List } from "cypress/types/lodash";
 import { kebabMenu } from "../../../views/applicationinventory.view";
 
 export class Analysis extends Application {
     name: string;
     source: string;
-    target: string;
+    target: string[];
     binary?: string;
     scope?: string;
     customRule?: string;
     sources?: string;
     excludeRuleTags?: string;
     enableTransaction?: boolean;
+    appName?: string;
+    storyPoints?: number;
 
     constructor(appData: applicationData, analysisData: analysisData) {
         super(appData);
@@ -73,6 +79,8 @@ export class Analysis extends Application {
             sources,
             excludeRuleTags,
             enableTransaction,
+            appName,
+            storyPoints,
         } = analysisData;
         this.name = appData.name;
         this.source = source;
@@ -83,6 +91,8 @@ export class Analysis extends Application {
         if (sources) this.sources = sources;
         if (excludeRuleTags) this.excludeRuleTags = excludeRuleTags;
         if (enableTransaction) this.enableTransaction = enableTransaction;
+        if (appName) this.appName = appName;
+        if (storyPoints) this.storyPoints = storyPoints;
     }
 
     //Navigate to the Application inventory
@@ -90,7 +100,7 @@ export class Analysis extends Application {
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         clickByText(navTab, analysis);
-        cy.wait(30000);
+        cy.wait(10000);
     }
 
     create(): void {
@@ -102,13 +112,28 @@ export class Analysis extends Application {
         selectFormItems(sourceDropdown, source);
     }
 
-    protected selectTarget(target: string): void {
-        cy.get("div.pf-c-empty-state__content").children("h4").contains(target).click();
+    protected selectTarget(target: string[]): void {
+        for (let i = 0; i < target.length; i++) {
+            cy.get("div.pf-c-empty-state__content").children("h4").contains(target[i]).click();
+        }
     }
 
     protected uploadBinary() {
-        uploadFile(this.binary);
+        uploadApplications(this.binary);
         cy.get("span.pf-c-progress__measure", { timeout: 15000 }).should("contain", "100%");
+    }
+
+    protected enableTransactionAnalysis() {
+        cy.get(enableTransactionAnalysis).click();
+    }
+
+    protected uploadCustomRule() {
+        cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
+        uploadXml("xml/" + this.customRule);
+        cy.wait(2000);
+        cy.get("span.pf-c-progress__measure", { timeout: 15000 }).should("contain", "100%");
+        cy.wait(2000);
+        cy.contains(addRules, "Add", { timeout: 2000 }).click();
     }
 
     protected isNextEnabled() {
@@ -133,7 +158,9 @@ export class Analysis extends Application {
             this.selectTarget(this.target);
             cy.contains("button", "Next", { timeout: 200 }).click();
             if (!this.scope) cy.contains("button", "Next", { timeout: 200 }).click();
-            if (!this.customRule) cy.contains("button", "Next", { timeout: 200 }).click();
+            if (this.customRule) this.uploadCustomRule();
+            cy.contains("button", "Next", { timeout: 200 }).click();
+            if (this.enableTransaction) this.enableTransactionAnalysis();
             if (!this.sources) cy.contains("button", "Next", { timeout: 200 }).click();
             cy.contains("button", "Run", { timeout: 200 }).click();
             checkSuccessAlert(commonView.successAlertMessage, `Submitted for analysis`);
@@ -177,7 +204,13 @@ export class Analysis extends Application {
             .parent("dt")
             .next()
             .within(() => {
-                cy.get("button").should("contain", "Report").click();
+                cy.get("button > a")
+                    .should("contain", "Report")
+                    .then(($a) => {
+                        // Removing target from html so that report opens in same tab
+                        $a.attr("target", "_self");
+                    })
+                    .click();
             });
     }
 
@@ -198,5 +231,18 @@ export class Analysis extends Application {
         }
         clickByText(button, save);
         cy.wait(2000);
+    }
+
+    validateStoryPoints(): void {
+        cy.get(fileName).should("contain", this.appName);
+        cy.get(reportStoryPoints).should("contain", this.storyPoints);
+    }
+
+    validateTransactionReport(): void {
+        cy.get(fileName + " > a")
+            .should("contain", this.appName)
+            .click();
+        cy.get("ul > li > a").contains("Transactions").click();
+        cy.get("div[class='main']").should("contain", "Transactions Report");
     }
 }

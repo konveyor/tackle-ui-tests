@@ -24,6 +24,7 @@ import {
     createMultipleJobFunctions,
     selectUserPerspective,
     deleteByList,
+    deleteAllJobfunctions,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import { controls, jobFunctions, button, name, clearAllFilters } from "../../../../types/constants";
@@ -50,7 +51,7 @@ describe("Job function filter validations", { tags: "@tier2" }, function () {
         if (hasToBeSkipped("@tier2")) return;
 
         // Delete the job functions
-        deleteByList(jobFunctionsList);
+        deleteAllJobfunctions();
     });
 
     it("Name filter validations", function () {

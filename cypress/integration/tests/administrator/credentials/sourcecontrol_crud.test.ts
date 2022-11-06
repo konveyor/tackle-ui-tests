@@ -5,12 +5,8 @@ import { getRandomCredentialsData } from "../../../../utils/data_utils";
 import { CredentialType, UserCredentials } from "../../../types/constants";
 
 describe("Validation of Source Control Credentials", () => {
-    const scCredsUsername = new CredentialsSourceControlUsername(
-        getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.usernamePassword)
-    );
-    const scCredsKey = new CredentialsSourceControlKey(
-        getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.sourcePrivateKey)
-    );
+    let scCredsUsername;
+    let scCredsKey;
     const toBeCanceled = true;
 
     before("Login", function () {
@@ -19,6 +15,12 @@ describe("Validation of Source Control Credentials", () => {
 
         // Perform login
         login();
+        scCredsUsername = new CredentialsSourceControlUsername(
+            getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.usernamePassword)
+        );
+        scCredsKey = new CredentialsSourceControlKey(
+            getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.sourcePrivateKey)
+        );
     });
 
     beforeEach("Persist session", function () {

@@ -27,7 +27,7 @@ import {
     hasToBeSkipped,
     createMultipleJobFunctions,
     selectUserPerspective,
-    deleteByList,
+    deleteAllJobfunctions,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import { controls, name, jobFunctions } from "../../../../types/constants";
@@ -60,7 +60,7 @@ describe("Job function sorting", { tags: "@tier2" }, function () {
         if (hasToBeSkipped("@tier2")) return;
 
         // Delete the job functions after before the tests
-        deleteByList(jobFunctionsList);
+        deleteAllJobfunctions();
     });
 
     it("Name sort validations", function () {

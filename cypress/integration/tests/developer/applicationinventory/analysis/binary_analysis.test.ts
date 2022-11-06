@@ -24,12 +24,14 @@ import {
     getRandomApplicationData,
     getRandomAnalysisData,
     writeMavenSettingsFile,
+    resetURL,
 } from "../../../../../utils/utils";
 import * as data from "../../../../../utils/data_utils";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
 import { CredentialType, UserCredentials } from "../../../../types/constants";
 import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsMaven } from "../../../../models/administrator/credentials/credentialsMaven";
+import { Proxy } from "../../../../models/administrator/proxy/proxy";
 let source_credential;
 let maven_credential;
 
@@ -41,7 +43,12 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         // Perform login
         login();
         deleteApplicationTableRows();
-        deleteAllBusinessServices();
+
+        //Disable all proxy settings
+        let proxy = new Proxy(data.getRandomProxyData());
+        proxy.disableProxy();
+
+        //Create source and maven credentials required for analysis
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -71,6 +78,11 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
+    afterEach("Persist session", function () {
+        // Reset URL from report page to web UI
+        resetURL();
+    });
+
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
         deleteApplicationTableRows();
@@ -83,8 +95,8 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
     it("Binary Analysis", function () {
         // For binary analysis application must have group,artifcat and version.
         const application = new Analysis(
-            getRandomApplicationData({ binaryData: this.appData[2] }),
-            getRandomAnalysisData(this.analysisData[2])
+            getRandomApplicationData("tackletestApp_binary", { binaryData: this.appData[2] }),
+            getRandomAnalysisData(this.analysisData[3])
         );
         application.create();
         cy.wait("@getApplication");
@@ -94,5 +106,6 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
+        application.validateStoryPoints();
     });
 });

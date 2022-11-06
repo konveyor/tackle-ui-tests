@@ -23,8 +23,12 @@ import {
     deleteAllBusinessServices,
     getRandomApplicationData,
     getRandomAnalysisData,
+    writeGpgKey,
+    resetURL,
 } from "../../../../../utils/utils";
+import { Proxy } from "../../../../models/administrator/proxy/proxy";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
+import * as data from "../../../../../utils/data_utils";
 
 describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -34,7 +38,10 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         // Perform login
         login();
         deleteApplicationTableRows();
-        deleteAllBusinessServices();
+
+        //Disable all proxy settings
+        let proxy = new Proxy(data.getRandomProxyData());
+        proxy.disableProxy();
     });
 
     beforeEach("Persist session", function () {
@@ -52,16 +59,22 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
+    afterEach("Persist session", function () {
+        // Reset URL from report page to web UI
+        resetURL();
+    });
+
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
         deleteApplicationTableRows();
         deleteAllBusinessServices();
+        writeGpgKey("abcde");
     });
 
     it("Upload Binary Analysis", function () {
         const application = new Analysis(
-            getRandomApplicationData(),
-            getRandomAnalysisData(this.analysisData[3])
+            getRandomApplicationData("uploadBinary"),
+            getRandomAnalysisData(this.analysisData[4])
         );
         application.create();
         cy.wait("@getApplication");
@@ -70,5 +83,38 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
+        application.validateStoryPoints();
+    });
+
+    it("Custom rules with custom targets", function () {
+        // Automated https://issues.redhat.com/browse/TACKLE-561
+        const application = new Analysis(
+            getRandomApplicationData("customRule_customTarget"),
+            getRandomAnalysisData(this.analysisData[5])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        // No credentials required for uploaded binary.
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
+        application.validateStoryPoints();
+    });
+
+    it("DIVA report generation", function () {
+        const application = new Analysis(
+            getRandomApplicationData("DIVA"),
+            getRandomAnalysisData(this.analysisData[7])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        // No credentials required for uploaded binary.
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
+        application.validateStoryPoints();
+        application.validateTransactionReport();
     });
 });

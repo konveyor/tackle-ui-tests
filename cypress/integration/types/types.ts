@@ -66,11 +66,23 @@ export type ProxyData = {
 
 export type analysisData = {
     source: string;
-    target: string;
+    target: string[];
     binary?: string;
     scope?: string;
     customRule?: string;
     sources?: string;
     excludeRuleTags?: string;
     enableTransaction?: boolean;
+    appName?: string;
+    storyPoints?: number;
+};
+
+export type UserData = {
+    username: string;
+    password: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    userEnabled: boolean;
+    roles?: string[];
 };

@@ -30,13 +30,14 @@ import {
     selectUserPerspective,
     deleteAllBusinessServices,
     deleteAppImportsTableRows,
+    notExists,
 } from "../../../../../utils/utils";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { navMenu } from "../../../../views/menu.view";
-import { applicationInventory, button } from "../../../../types/constants";
+import { applicationInventory, button, SEC } from "../../../../types/constants";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
-const businessService = new BusinessServices("Retail");
+const businessService = new BusinessServices("BS_tag_test");
 const filePath = "app_import/csv/";
 var applicationsList: Array<Assessment> = [];
 
@@ -118,34 +119,52 @@ describe("Application import operations", () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it(
-        "Applications import for non existing tags and business service",
-        { tags: "@tier1" },
-        function () {
-            selectUserPerspective("Developer");
-            clickByText(navMenu, applicationInventory);
-            cy.wait("@getApplication");
+    it("Applications import for non existing tags", { tags: "@tier1" }, function () {
+        businessService.create();
+        exists(businessService.name);
+        selectUserPerspective("Developer");
+        clickByText(navMenu, applicationInventory);
+        cy.wait("@getApplication");
 
-            // Import csv with non-existent businsess service and tag rows
-            const fileName = "missing_business_tags_21.csv";
-            importApplication(filePath + fileName, true);
-            cy.wait(2000);
+        // Import csv with non-existent tags
+        const fileName = "missing_tags_21.csv";
+        importApplication(filePath + fileName, true);
+        cy.wait(2000);
 
-            // Open application imports page
-            openManageImportsPage();
+        // Open application imports page
+        openManageImportsPage();
 
-            // Verify import applications page shows correct information
-            verifyAppImport(fileName, "Completed", 0, 2);
+        // Verify import applications page shows correct information
+        verifyAppImport(fileName, "Completed", 0, 1);
 
-            // Verify the error report messages
-            openErrorReport();
-            var errorMsgs = [
-                "BusinessService: Finance does not exist",
-                "Tag 'TypeScript' could not be found.",
-            ];
-            verifyImportErrorMsg(errorMsgs);
-        }
-    );
+        // Verify the error report messages
+        openErrorReport();
+        verifyImportErrorMsg("Tag 'TypeScript' could not be found");
+
+        businessService.delete();
+        notExists(businessService.name);
+    });
+
+    it("Applications import for non existing business service", { tags: "@tier1" }, function () {
+        selectUserPerspective("Developer");
+        clickByText(navMenu, applicationInventory);
+        cy.wait("@getApplication");
+
+        // Import csv with non-existent businsess service
+        const fileName = "missing_business_21.csv";
+        importApplication(filePath + fileName, true);
+        cy.wait(2000);
+
+        // Open application imports page
+        openManageImportsPage();
+
+        // Verify import applications page shows correct information
+        verifyAppImport(fileName, "Completed", 0, 1);
+
+        // Verify the error report messages
+        openErrorReport();
+        verifyImportErrorMsg("BusinessService 'Finance' could not be found");
+    });
 
     it(
         "Applications import with minimum required field(s) and empty row",
@@ -158,7 +177,7 @@ describe("Application import operations", () => {
             // Import csv with an empty row between two valid rows having minimum required field(s)
             const fileName = "mandatory_and_empty_row_21.csv";
             importApplication(filePath + fileName);
-            cy.wait(2000);
+            cy.wait(4 * SEC);
 
             // Verify imported apps are visible in table
             exists("Import-app-5");
@@ -239,6 +258,35 @@ describe("Application import operations", () => {
         verifyAppImport(fileName, "Completed", 0, 2);
 
         var errorMsgs = ["Invalid or unknown Record Type", "Invalid or unknown Record Type"];
+
+        // Verify the error report message
+        openErrorReport();
+        verifyImportErrorMsg(errorMsgs);
+    });
+
+    it("Applications import for with inavlid record type", { tags: "@newtest" }, function () {
+        // The only valid record types for records in a CSV file are 1(application) or 2(dependency).
+        // In this test, we import a CSV file that has records with a record type that's neither 1 nor 2.
+        // Automates https://issues.redhat.com/browse/TACKLE-634
+        selectUserPerspective("Developer");
+        clickByText(navMenu, applicationInventory);
+        cy.wait("@getApplication");
+
+        // Import csv with invalid record type
+        const fileName = "invalid_record_type_21.csv";
+        importApplication(filePath + fileName);
+        cy.wait(2000);
+
+        // Open application imports page
+        openManageImportsPage();
+
+        // Verify import applications page shows correct information
+        verifyAppImport(fileName, "Completed", 0, 2);
+
+        var errorMsgs = [
+            "Invalid or unknown Record Type '3'. Must be '1' for Application or '2' for Dependency.",
+            "Invalid or unknown Record Type '100'. Must be '1' for Application or '2' for Dependency.",
+        ];
 
         // Verify the error report message
         openErrorReport();
