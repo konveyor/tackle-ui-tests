@@ -23,6 +23,7 @@ import {
     hasToBeSkipped,
     login,
     preservecookies,
+    resetURL,
     writeMavenSettingsFile,
 } from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
@@ -66,6 +67,11 @@ describe("Test an application form a Git source", { tags: "@tier1" }, () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
+    afterEach("Persist session", function () {
+        // Reset URL from report page to web UI
+        resetURL();
+    });
+
     after("Perform test data clean up", () => {
         if (hasToBeSkipped("@tier1")) return;
         // Delete the stakeholders created before the tests
@@ -83,7 +89,9 @@ describe("Test an application form a Git source", { tags: "@tier1" }, () => {
     it("Source code analysis on tackle testapp", function () {
         // For tackle test app source credentials are required.
         const application = new Analysis(
-            getRandomApplicationData({ sourceData: this.appData[3] }),
+            getRandomApplicationData("Secure_enabled_tackle_test_app", {
+                sourceData: this.appData[3],
+            }),
             getRandomAnalysisData(this.analysisData[0])
         );
         application.create();
@@ -103,7 +111,9 @@ describe("Test an application form a Git source", { tags: "@tier1" }, () => {
     it("Source code analysis on tackle testapp", function () {
         // For tackle test app source credentials are required.
         const application = new Analysis(
-            getRandomApplicationData({ sourceData: this.appData[3] }),
+            getRandomApplicationData("Secure_disabled_tackle_test_app", {
+                sourceData: this.appData[3],
+            }),
             getRandomAnalysisData(this.analysisData[0])
         );
         application.create();

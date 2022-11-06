@@ -23,6 +23,7 @@ import {
     hasToBeSkipped,
     login,
     preservecookies,
+    resetURL,
 } from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import { SubversionConfiguration } from "../../../models/administrator/repositories/subversion";
@@ -66,6 +67,11 @@ describe("Test an application form a subversion source", { tags: "@tier1" }, () 
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
+    afterEach("Persist session", function () {
+        // Reset URL from report page to web UI
+        resetURL();
+    });
+
     after("Perform test data clean up", () => {
         if (hasToBeSkipped("@tier1")) return;
         // Delete the stakeholders created before the tests
@@ -79,7 +85,9 @@ describe("Test an application form a subversion source", { tags: "@tier1" }, () 
 
     it("Source code analysis on tackle testapp for svn repo type", function () {
         const application = new Analysis(
-            getRandomApplicationData({ sourceData: this.appData[5] }),
+            getRandomApplicationData("Secure_enabled_tackle_test_app", {
+                sourceData: this.appData[5],
+            }),
             getRandomAnalysisData(this.analysisData[0])
         );
         application.create();
@@ -98,7 +106,9 @@ describe("Test an application form a subversion source", { tags: "@tier1" }, () 
 
     it("Source code analysis on tackle testapp for svn repo type", function () {
         const application = new Analysis(
-            getRandomApplicationData({ sourceData: this.appData[5] }),
+            getRandomApplicationData("Secure_disabled_tackle_test_app", {
+                sourceData: this.appData[5],
+            }),
             getRandomAnalysisData(this.analysisData[0])
         );
         application.create();
