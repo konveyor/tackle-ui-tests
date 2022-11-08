@@ -72,11 +72,11 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // select 10 items per page
         selectItemsPerPage(10);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // Verify next buttons are enabled as there are more than 11 rows present
         cy.get(nextPageButton).each(($nextBtn) => {
@@ -113,7 +113,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // Select 10 items per page
         selectItemsPerPage(10);
@@ -139,7 +139,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // Select 10 items per page
         selectItemsPerPage(10);
@@ -159,7 +159,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // Select 10 items per page
         selectItemsPerPage(10);
