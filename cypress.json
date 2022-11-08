@@ -5,9 +5,9 @@
     "env": {
         "user": "admin",
         "pass": "Dog8code",
-        "git_user": "",
-        "git_password": "",
-        "tackleUrl": "https://tackle-konveyor-tackle.apps.mig01.cnv-qe.rhcloud.com/"
+        "git_user": "midays",
+        "git_password": "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",
+        "tackleUrl": "https://mta-openshift-mta.apps.mig07.cnv-qe.rhcloud.com/"
     },
     "retries": {
         "runMode": 2,
