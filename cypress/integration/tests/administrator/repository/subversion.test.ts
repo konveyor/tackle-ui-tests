@@ -16,7 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    deleteAllStakeholders,
+    deleteAllBusinessServices,
     deleteApplicationTableRows,
     getRandomAnalysisData,
     getRandomApplicationData,
@@ -24,6 +24,7 @@ import {
     login,
     preservecookies,
     resetURL,
+    writeMavenSettingsFile,
 } from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import { SubversionConfiguration } from "../../../models/administrator/repositories/subversion";
@@ -74,8 +75,10 @@ describe("Test an application form a subversion source", { tags: "@tier1" }, () 
 
     after("Perform test data clean up", () => {
         if (hasToBeSkipped("@tier1")) return;
-        // Delete the stakeholders created before the tests
-        deleteAllStakeholders();
+        deleteApplicationTableRows();
+        deleteAllBusinessServices();
+        source_credential.delete();
+        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 
     it("Enable Insecure subversion Repository", () => {

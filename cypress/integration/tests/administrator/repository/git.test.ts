@@ -74,7 +74,6 @@ describe("Test an application form a Git source", { tags: "@tier1" }, () => {
 
     after("Perform test data clean up", () => {
         if (hasToBeSkipped("@tier1")) return;
-        // Delete the stakeholders created before the tests
         deleteApplicationTableRows();
         deleteAllBusinessServices();
         source_credential.delete();
