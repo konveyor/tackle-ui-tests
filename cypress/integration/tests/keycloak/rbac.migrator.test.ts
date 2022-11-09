@@ -1,6 +1,5 @@
 import { User } from "../../models/keycloak/users/user";
 import { getRandomUserData } from "../../../utils/data_utils";
-import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { preservecookies } from "../../../utils/utils";
 
@@ -20,6 +19,14 @@ describe("Keycloak operations", () => {
 
     it("Login as migrator and validate create application button", () => {
         userMigrator.validateCreateAppButton(false);
+    });
+
+    it("Login as migrator and validate assess application button", () => {
+        userMigrator.validateAssessButton(false);
+    });
+
+    it("Login as migrator and validate presence of import and manage imports", () => {
+        userMigrator.validateImport(true);
     });
 
     after("", () => {
