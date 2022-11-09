@@ -66,6 +66,7 @@ export const trTag = "tr";
 export const tagType = "Tag type";
 export const tagName = "Tag name";
 export const credentialType = "Credential type";
+export const artifact = "Artifact";
 
 export const createAppButton = "button[aria-label=create-application]";
 export const assessAppButton = "button[aria-label=assess-application]";
