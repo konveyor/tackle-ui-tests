@@ -1276,3 +1276,11 @@ export function writeGpgKey(git_key): void {
         cy.writeFile("cypress/fixtures/gpgkey", gpgkey);
     });
 }
+
+export function doesExist(selector: string, toBePresent: boolean): void {
+    if (toBePresent) {
+        cy.get(selector).should("exist");
+    } else {
+        cy.get(selector).should("not.exist");
+    }
+}
