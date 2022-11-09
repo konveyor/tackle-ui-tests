@@ -32,6 +32,7 @@ import {
     deleteAllTagsAndTagTypes,
     getRandomApplicationData,
     getRandomAnalysisData,
+    notExists,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import {
@@ -46,6 +47,7 @@ import {
     CredentialType,
     UserCredentials,
     credentialType,
+    artifact,
 } from "../../../../types/constants";
 
 import * as data from "../../../../../utils/data_utils";
@@ -249,6 +251,34 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         applySearchFilter(credentialType, "Source");
         cy.wait(2000);
         exists(application1.name);
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Artifact type filter validations", function () {
+        // For application must have Binary group,artifact and version
+        const application = new Application(
+            getRandomApplicationData("tackleTestApp_Source", {
+                binaryData: this.appData[2],
+            })
+        );
+        application.create();
+        cy.get("@getApplication");
+        cy.wait(2000);
+
+        // Check application exists on the page
+        exists(application.name);
+
+        // Apply artifact filter check with associated artifact field
+        applySearchFilter(artifact, "Associated artifact");
+        cy.wait(2000);
+        exists(application.name);
+        clickByText(button, clearAllFilters);
+
+        // Apply artifact filter check with not associated artifact field
+        applySearchFilter(artifact, "Not associated artifact");
+        cy.wait(2000);
+        exists(applicationsList[0].name);
+        notExists(application.name);
         clickByText(button, clearAllFilters);
     });
 });
