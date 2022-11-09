@@ -32,6 +32,7 @@ import {
     deleteAllTagsAndTagTypes,
     getRandomApplicationData,
     getRandomAnalysisData,
+    notExists,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import {
@@ -46,6 +47,7 @@ import {
     CredentialType,
     UserCredentials,
     credentialType,
+    repositoryType,
 } from "../../../../types/constants";
 
 import * as data from "../../../../../utils/data_utils";
@@ -220,35 +222,71 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
 
     it("Credential type filter validations", function () {
         // For application must have source code URL git or svn and group,artifcat and version
-        const application1 = new Analysis(
+        const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source", {
                 sourceData: this.appData[1],
                 binaryData: this.appData[2],
             }),
             getRandomAnalysisData(this.analysisData[3])
         );
-        application1.create();
+        application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
 
         // Attach Maven credential
-        application1.manageCredentials("None", maven_credential.name);
-        exists(application1.name);
+        application.manageCredentials("None", maven_credential.name);
+        exists(application.name);
 
         // Enter Maven and assert
         applySearchFilter(credentialType, "Maven");
         cy.wait(2000);
-        exists(application1.name);
+        exists(application.name);
         clickByText(button, clearAllFilters);
 
         // Change the credentials to Source and test
-        application1.manageCredentials(source_credential.name, "None");
-        exists(application1.name);
+        application.manageCredentials(source_credential.name, "None");
+        exists(application.name);
 
         // Enter Source and assert
         applySearchFilter(credentialType, "Source");
         cy.wait(2000);
+        exists(application.name);
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Repository type filter validations", function () {
+        // For application must have source code URL
+        const application = new Application(
+            getRandomApplicationData("tackleTestApp_Source", {
+                sourceData: this.appData[1],
+            })
+        );
+        const application1 = new Application(
+            getRandomApplicationData("tackleTestApp_svnRepo", {
+                sourceData: this.appData[5],
+            })
+        );
+
+        //Create two applications one with Git and another with svn as repository type
+        application.create();
+        application1.create(false, "Subversion");
+        cy.get("@getApplication");
+        cy.wait(2000);
+
+        // Apply repository type filter check with Git
+        // Check Application exists and application1 doesn't exist
+        applySearchFilter(repositoryType, "Git");
+        cy.wait(2000);
+        exists(application.name);
+        notExists(application1.name);
+        clickByText(button, clearAllFilters);
+
+        // Apply repository type filter check with Subversion
+        // Check Application1 exists and application doesn't exist
+        applySearchFilter(repositoryType, "Subversion");
+        cy.wait(2000);
         exists(application1.name);
+        notExists(application.name);
         clickByText(button, clearAllFilters);
     });
 });

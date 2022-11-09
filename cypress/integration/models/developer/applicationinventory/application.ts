@@ -22,6 +22,8 @@ import {
     deleteAction,
     assessment,
     tagCount,
+    git,
+    subversion,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -40,6 +42,7 @@ import {
     version,
     packaging,
     kebabMenu,
+    repoTypeSelect,
 } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
@@ -137,7 +140,19 @@ export class Application {
         });
     }
 
-    create(cancel = false): void {
+    protected selectSourceRepo(repo: string): void {
+        cy.contains("span", "Source code").click();
+        if (repo == subversion) {
+            selectFormItems(repoTypeSelect, repo);
+        } else {
+            selectFormItems(repoTypeSelect, git);
+        }
+        inputText(sourceRepository, this.sourceRepo);
+        if (this.branch) inputText(branch, this.branch);
+        if (this.rootPath) inputText(rootPath, this.rootPath);
+    }
+
+    create(cancel = false, repoType?: string): void {
         cy.contains("button", createNewButton, { timeout: 20000 }).should("be.enabled").click();
         if (cancel) {
             cancelForm();
@@ -153,13 +168,9 @@ export class Application {
             if (this.tags) {
                 this.selectTags(this.tags);
             }
-
             //Fields relevant to source code analysis
             if (this.sourceRepo) {
-                cy.contains("span", "Source code").click();
-                inputText(sourceRepository, this.sourceRepo);
-                if (this.branch) inputText(branch, this.branch);
-                if (this.rootPath) inputText(rootPath, this.rootPath);
+                this.selectSourceRepo(repoType);
             }
 
             //Fields relevant to binary mode analysis
@@ -185,6 +196,7 @@ export class Application {
             business?: string;
             tags?: Array<string>;
             comment?: string;
+            repoType?: string;
         },
         cancel = false
     ): void {
@@ -213,6 +225,10 @@ export class Application {
             if (updatedValues.comment && updatedValues.comment != this.comment) {
                 this.fillComment(updatedValues.comment);
                 this.comment = updatedValues.comment;
+            }
+            if (updatedValues.repoType && updatedValues.repoType != this.repoType) {
+                this.selectSourceRepo(updatedValues.repoType);
+                this.repoType = updatedValues.repoType;
             }
             if (updatedValues) {
                 submitForm();
