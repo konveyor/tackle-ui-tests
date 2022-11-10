@@ -47,6 +47,7 @@ import {
     performRowAction,
     selectUserPerspective,
     performRowActionByIcon,
+    checkSuccessAlert,
 } from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import {
@@ -271,7 +272,7 @@ export class Assessment extends Application {
             .parent(tdTag)
             .parent(trTag)
             .within(() => {
-                cy.get(columnSelector).find("div").should("contain", value);
+                cy.get(columnSelector).contains(value, { timeout: 10000 });
             });
     }
 
@@ -283,8 +284,12 @@ export class Assessment extends Application {
         this.verifyFieldValue(reviewColumnSelector, "Completed");
     }
 
-    is_notStarted(): void {
+    assessment_is_notStarted(): void {
         this.verifyFieldValue(assessmentColumnSelector, "Not started");
+    }
+
+    review_is_notStarted(): void {
+        this.verifyFieldValue(reviewColumnSelector, "Not started");
     }
 
     getColumnText(columnSelector, columnText: string): void {
@@ -422,6 +427,22 @@ export class Assessment extends Application {
         } else {
             click(copy);
             cy.wait(2000);
+            checkSuccessAlert(
+                commonView.successAlertMessage,
+                `Success! Assessment copied to selected applications`
+            );
+        }
+    }
+
+    copy_assessment_review(applicationList: Array<Application>, cancel = false): void {
+        this.openCopyAssessmentReviewModel();
+        this.selectApps(applicationList);
+
+        if (cancel) {
+            cancelForm();
+        } else {
+            click(copy);
+            cy.wait(2000);
         }
     }
 
@@ -439,6 +460,10 @@ export class Assessment extends Application {
                 clickByText(button, "Discard assessment");
             });
         cy.get(continueButton).click();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            `Success! Assessment discarded for ${this.name}.`
+        );
     }
 
     selectApps(applicationList: Array<Application>): void {
@@ -468,6 +493,21 @@ export class Assessment extends Application {
                 click(actionButton);
                 cy.wait(500);
                 clickByText(button, "Copy assessment");
+            });
+    }
+
+    openCopyAssessmentReviewModel(): void {
+        Assessment.open();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                click(actionButton);
+                cy.wait(500);
+                clickByText(button, "Copy assessment and review");
             });
     }
 
