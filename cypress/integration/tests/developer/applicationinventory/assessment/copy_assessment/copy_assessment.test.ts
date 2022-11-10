@@ -62,6 +62,11 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
         applicationList[0].perform_assessment("low", [stakeholdersList[0].name]);
         cy.wait(2000);
         applicationList[0].is_assessed();
+
+        // Perform application review
+        applicationList[0].perform_review("low");
+        cy.wait(2000);
+        applicationList[0].is_reviewed();
     });
 
     beforeEach("Persist session", function () {
@@ -106,32 +111,37 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
         cy.get(copy).should("not.be.disabled");
     });
 
-    it("Copy assessment to more than one application", function () {
+    it("Copy assessment to more than one application and discard assessment", function () {
         // Verify copy assessment is not enabled untill assessment is done
         applicationList[1].verifyCopyAssessmentDisabled();
 
         // Perform copy assessment of all the applications
         applicationList[0].copy_assessment(applicationList);
-        cy.wait(4000);
+        // cy.wait(4000);
 
         // Verify that all the applications were assessed
         for (let i = 1; i < applicationList.length; i++) {
             applicationList[i].is_assessed();
+            applicationList[i].discard_assessment();
+            applicationList[i].assessment_is_notStarted();
         }
     });
 
-    it("Copy assessment and discard assessment", function () {
-        // Perform copy assessment of all the applications
-        applicationList[0].copy_assessment(applicationList);
-        cy.wait(4000);
+    it("Copy assessment,review and discard assessment, review", function () {
+        // Perform copy assessment and review of all the applications
+        applicationList[0].copy_assessment_review(applicationList);
+        // cy.wait(4000);
 
         // Verify that all the applications were assessed
         for (let i = 1; i < applicationList.length; i++) {
             applicationList[i].is_assessed();
-        }
+            applicationList[i].is_reviewed();
 
-        applicationList[1].discard_assessment();
-        applicationList[1].is_notStarted();
+            // Discard assessment and review
+            applicationList[i].discard_assessment();
+            applicationList[i].assessment_is_notStarted();
+            applicationList[i].review_is_notStarted();
+        }
     });
 
     it("Copy assessment select options validations", function () {
