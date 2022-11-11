@@ -7,8 +7,4 @@ export class UserMigrator extends User {
         this.definePassword();
         this.addRole(UserRoles.migrator);
     }
-
-    validateRbac() {
-        this.validateCreateAppButton(false);
-    }
 }

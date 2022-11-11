@@ -3,7 +3,7 @@ import { getRandomUserData } from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { preservecookies } from "../../../utils/utils";
 
-describe("Keycloak operations", () => {
+describe("Architect RBAC operations", () => {
     let userArchitect = new UserArchitect(getRandomUserData());
 
     before("Creating RBAC users, adding roles for them", () => {
@@ -18,14 +18,17 @@ describe("Keycloak operations", () => {
     });
 
     it("Login as architect and validate create application button", () => {
+        //Architect is allowed to create applications
         userArchitect.validateCreateAppButton(true);
     });
 
     it("Login as architect and validate assess application button", () => {
+        //Architect is allowed to do assessments
         userArchitect.validateAssessButton(true);
     });
 
     it("Login as architect and validate presence of import and manage imports", () => {
+        //Architect is allowed to import applications
         userArchitect.validateImport(true);
     });
 
