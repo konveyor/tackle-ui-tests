@@ -1277,8 +1277,8 @@ export function writeGpgKey(git_key): void {
     });
 }
 
-export function doesExist(selector: string, toBePresent: boolean): void {
-    if (toBePresent) {
+export function doesExist(selector: string, isAccessible: boolean): void {
+    if (isAccessible) {
         cy.get(selector).should("exist");
     } else {
         cy.get(selector).should("not.exist");

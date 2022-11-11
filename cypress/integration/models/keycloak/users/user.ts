@@ -155,25 +155,25 @@ export class User {
         login(this.username, this.password);
     }
 
-    validateCreateAppButton(toBePresent: boolean) {
+    validateCreateAppButton(isAccessible: boolean) {
         Application.open();
-        doesExist(createAppButton, toBePresent);
+        doesExist(createAppButton, isAccessible);
     }
 
-    validateAssessButton(toBePresent: boolean) {
+    validateAssessButton(isAccessible: boolean) {
         Application.open();
-        doesExist(assessAppButton, toBePresent);
+        doesExist(assessAppButton, isAccessible);
     }
 
-    validateAnalyseButton(toBePresent: boolean) {
+    validateAnalyzeButton(isAccessible: boolean) {
         Application.open();
         clickByText(button, analysis);
-        doesExist(analyzeAppButton, toBePresent);
+        doesExist(analyzeAppButton, isAccessible);
     }
 
-    validateImport(toBePresent: boolean) {
+    validateImport(isAccessible: boolean) {
         Application.open();
-        doesExist(actionsButton, toBePresent);
+        doesExist(actionsButton, isAccessible);
     }
 
     logout() {
