@@ -40,6 +40,7 @@ import {
     version,
     packaging,
     kebabMenu,
+    repoTypeSelect,
 } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
@@ -127,6 +128,7 @@ export class Application {
     protected fillComment(comment: string): void {
         inputText(applicationCommentInput, comment);
     }
+
     protected selectBusinessService(service: string): void {
         selectFormItems(applicationBusinessServiceSelect, service);
     }
@@ -137,6 +139,28 @@ export class Application {
         });
     }
 
+    protected selectRepoType(repoType: string): void {
+        selectFormItems(repoTypeSelect, repoType);
+    }
+
+    protected fillSourceModeFields(): void {
+        //Fields relevant to source code analysis
+        cy.contains("span", "Source code").click();
+        if (this.repoType) this.selectRepoType(this.repoType);
+        inputText(sourceRepository, this.sourceRepo);
+        if (this.branch) inputText(branch, this.branch);
+        if (this.rootPath) inputText(rootPath, this.rootPath);
+    }
+
+    protected fillBinaryModeFields(): void {
+        //Fields relevant to binary mode analysis
+        cy.contains("span", "Binary").click();
+        inputText(group, this.group);
+        if (this.artifact) inputText(artifact, this.artifact);
+        if (this.version) inputText(version, this.version);
+        if (this.packaging) inputText(packaging, this.packaging);
+    }
+
     create(cancel = false): void {
         cy.contains("button", createNewButton, { timeout: 20000 }).should("be.enabled").click();
         if (cancel) {
@@ -144,32 +168,11 @@ export class Application {
         } else {
             this.fillName(this.name);
             if (this.business) this.selectBusinessService(this.business);
-            if (this.description) {
-                this.fillDescription(this.description);
-            }
-            if (this.comment) {
-                this.fillComment(this.comment);
-            }
-            if (this.tags) {
-                this.selectTags(this.tags);
-            }
-
-            //Fields relevant to source code analysis
-            if (this.sourceRepo) {
-                cy.contains("span", "Source code").click();
-                inputText(sourceRepository, this.sourceRepo);
-                if (this.branch) inputText(branch, this.branch);
-                if (this.rootPath) inputText(rootPath, this.rootPath);
-            }
-
-            //Fields relevant to binary mode analysis
-            if (this.group) {
-                cy.contains("span", "Binary").click();
-                inputText(group, this.group);
-                if (this.artifact) inputText(artifact, this.artifact);
-                if (this.version) inputText(version, this.version);
-                if (this.packaging) inputText(packaging, this.packaging);
-            }
+            if (this.description) this.fillDescription(this.description);
+            if (this.comment) this.fillComment(this.comment);
+            if (this.tags) this.selectTags(this.tags);
+            if (this.sourceRepo) this.fillSourceModeFields();
+            if (this.group) this.fillBinaryModeFields();
             submitForm();
             checkSuccessAlert(
                 commonView.successAlertMessage,
