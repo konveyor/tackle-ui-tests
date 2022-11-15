@@ -22,6 +22,27 @@ describe("Proxy operations", () => {
         preservecookies();
     });
 
+    it("Http Proxy validation", function () {
+        proxy.httpEnabled = true;
+        proxy.enableInvalidProxy();
+        proxy.disable();
+    });
+
+    it("Https Proxy validation", function () {
+        proxy.httpsEnabled = true;
+        proxy.enableInvalidProxy();
+        proxy.disable();
+    });
+
+    it("Enable HTTP proxy ", function () {
+        proxy.httpEnabled = true;
+        proxy.enable();
+    });
+
+    it("Disable HTTP proxy", function () {
+        proxy.disable();
+    });
+
     it("Enable HTTPS proxy", () => {
         proxy.httpsEnabled = true;
         proxy.excludeList = ["127.0.0.1", "github.com"];
