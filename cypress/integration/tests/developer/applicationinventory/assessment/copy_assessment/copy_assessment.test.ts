@@ -117,7 +117,6 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
 
         // Perform copy assessment of all the applications
         applicationList[0].copy_assessment(applicationList);
-        // cy.wait(4000);
 
         // Verify that all the applications were assessed
         for (let i = 1; i < applicationList.length; i++) {
@@ -130,7 +129,6 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
     it("Copy assessment,review and discard assessment, review", function () {
         // Perform copy assessment and review of all the applications
         applicationList[0].copy_assessment_review(applicationList);
-        // cy.wait(4000);
 
         // Verify that all the applications were assessed
         for (let i = 1; i < applicationList.length; i++) {
