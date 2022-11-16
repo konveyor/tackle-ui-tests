@@ -272,7 +272,7 @@ export class Assessment extends Application {
             .parent(tdTag)
             .parent(trTag)
             .within(() => {
-                cy.get(columnSelector).contains(value, { timeout: 10000 });
+                cy.get(columnSelector).contains(value, { timeout: 12000 });
             });
     }
 
