@@ -1,5 +1,3 @@
-import { inputText } from "../../utils/utils";
-
 export enum ProxyViewSelectors {
     httpHost = '[name="httpHost"]',
     httpPort = '[name="httpPort"]',
@@ -13,18 +11,4 @@ export enum ProxyViewSelectors {
 export enum ProxyType {
     http = "http",
     https = "https",
-}
-
-export function fillHost(type: ProxyType, host: string) {
-    inputText(
-        type === ProxyType.http ? ProxyViewSelectors.httpHost : ProxyViewSelectors.httpsHost,
-        host
-    );
-}
-
-export function fillPort(type: ProxyType, port: string) {
-    inputText(
-        type === ProxyType.http ? ProxyViewSelectors.httpPort : ProxyViewSelectors.httpsPort,
-        port
-    );
 }

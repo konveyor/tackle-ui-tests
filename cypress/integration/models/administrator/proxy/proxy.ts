@@ -11,6 +11,7 @@ import {
 } from "../../../../utils/utils";
 import { button } from "../../../types/constants";
 import { CredentialsProxyData, ProxyData } from "../../../types/types";
+import { ProxyType, ProxyViewSelectors } from "../../../views/proxy.view";
 
 export class Proxy {
     hostname;
@@ -69,6 +70,20 @@ export class Proxy {
         });
         cy.log(fullList);
         inputText('[aria-label="excluded"]', fullList);
+    }
+
+    fillHost(type: ProxyType, host: string): void {
+        inputText(
+            type === ProxyType.http ? ProxyViewSelectors.httpHost : ProxyViewSelectors.httpsHost,
+            host
+        );
+    }
+
+    fillPort(type: ProxyType, port: string): void {
+        inputText(
+            type === ProxyType.http ? ProxyViewSelectors.httpPort : ProxyViewSelectors.httpsPort,
+            port
+        );
     }
 
     enable(): void {
