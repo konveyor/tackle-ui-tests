@@ -144,6 +144,7 @@ export class Analysis extends Application {
             }
         });
     }
+
     analyze(cancel = false): void {
         Analysis.open();
         this.selectApplication();
@@ -204,9 +205,10 @@ export class Analysis extends Application {
             .parent("dt")
             .next()
             .within(() => {
-                cy.get("button > a")
-                    .should("contain", "Report")
+                cy.get(".pf-c-button.pf-m-link")
+                    .last()
                     .then(($a) => {
+                        expect($a.text()).to.be.oneOf(["Report", "Analysis details"]);
                         // Removing target from html so that report opens in same tab
                         $a.attr("target", "_self");
                     })

@@ -1,5 +1,10 @@
-import { click, clickByText, selectUserPerspective } from "../../../../utils/utils";
-import { enableInsecureRepository } from "../../../views/repository.view";
+import {
+    checkInsecureRepository,
+    clickByText,
+    selectUserPerspective,
+    uncheckSecureRepository,
+} from "../../../../utils/utils";
+import { InsecureRepositoryToggle } from "../../../views/repository.view";
 
 export class GitConfiguration {
     static open() {
@@ -8,7 +13,11 @@ export class GitConfiguration {
         cy.contains("h1", "Git configuration", { timeout: 5000 });
     }
 
-    toggleInsecureGitRepositories() {
-        click(enableInsecureRepository);
+    enableInsecureGitRepositories() {
+        checkInsecureRepository(InsecureRepositoryToggle);
+    }
+
+    disableInsecureGitRepositories() {
+        uncheckSecureRepository(InsecureRepositoryToggle);
     }
 }

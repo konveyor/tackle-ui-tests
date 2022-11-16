@@ -35,7 +35,7 @@ import { CredentialType, UserCredentials } from "../../../types/constants";
 let gitConfiguration = new GitConfiguration();
 let source_credential;
 
-describe("Test an application form a Git source", { tags: "@tier1" }, () => {
+describe("Test secure and insecure git repository analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;
@@ -80,19 +80,18 @@ describe("Test an application form a Git source", { tags: "@tier1" }, () => {
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 
-    it("Enable Insecure git Repository", () => {
+    it("Analysis on insecure git Repository(http) for tackle test app", function () {
         GitConfiguration.open();
-        gitConfiguration.toggleInsecureGitRepositories();
-    });
+        gitConfiguration.enableInsecureGitRepositories();
 
-    it("Source code analysis on tackle testapp", function () {
         // For tackle test app source credentials are required.
         const application = new Analysis(
-            getRandomApplicationData("Secure_enabled_tackle_test_app", {
-                sourceData: this.appData[3],
+            getRandomApplicationData("Insecure_enabled_tackle_test_app", {
+                sourceData: this.appData[6],
             }),
             getRandomAnalysisData(this.analysisData[0])
         );
+
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
@@ -102,25 +101,24 @@ describe("Test an application form a Git source", { tags: "@tier1" }, () => {
         application.openreport();
     });
 
-    it("Disable insecure git Repository", () => {
+    it("Analysis on insecure git Repository(http) for tackle test app", function () {
         GitConfiguration.open();
-        gitConfiguration.toggleInsecureGitRepositories();
-    });
+        gitConfiguration.disableInsecureGitRepositories();
 
-    it("Source code analysis on tackle testapp", function () {
         // For tackle test app source credentials are required.
         const application = new Analysis(
-            getRandomApplicationData("Secure_disabled_tackle_test_app", {
-                sourceData: this.appData[3],
+            getRandomApplicationData("Insecure_disabled_tackle_test_app", {
+                sourceData: this.appData[6],
             }),
             getRandomAnalysisData(this.analysisData[0])
         );
+
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
         application.manageCredentials(source_credential.name, "None");
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus("Failed");
         application.openreport();
     });
 });

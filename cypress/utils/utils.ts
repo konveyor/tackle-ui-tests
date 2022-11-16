@@ -607,10 +607,10 @@ export function deleteApplicationTableRows(lastPage = false): void {
                             .parent(trTag)
                             .within(() => {
                                 click(actionButton);
-                                cy.wait(800);
+                                cy.wait(2000);
                             })
                             .contains(button, deleteAction)
-                            .click();
+                            .click({ force: true });
                         cy.wait(800);
                         click(commonView.confirmButton);
                         cy.wait(4000);
@@ -750,6 +750,7 @@ export function createMultipleStakeholders(
     }
     return stakeholdersList;
 }
+
 export function createMultipleJobFunctions(num): Array<Jobfunctions> {
     let jobFunctionsList: Array<Jobfunctions> = [];
     for (let i = 0; i < num; i++) {
@@ -897,6 +898,7 @@ export function getRandomAnalysisData(analysisdata): analysisData {
     };
     return analysisData;
 }
+
 export function createMultipleApplications(numberofapplications: number): Array<Assessment> {
     let applicationList: Array<Assessment> = [];
     for (let i = 0; i < numberofapplications; i++) {
@@ -1275,4 +1277,26 @@ export function writeGpgKey(git_key): void {
         var gpgkey = beginningKey + "\n" + keystring + "\n" + endingKey;
         cy.writeFile("cypress/fixtures/gpgkey", gpgkey);
     });
+}
+
+export function checkInsecureRepository(selector: string): void {
+    cy.wait(1000);
+    cy.get(".pf-m-on")
+        .invoke("css", "display")
+        .then((display) => {
+            if (display.toString() == "none") {
+                click(selector);
+            }
+        });
+}
+
+export function uncheckSecureRepository(selector: string): void {
+    cy.wait(1000);
+    cy.get(".pf-m-off")
+        .invoke("css", "display")
+        .then((display) => {
+            if (display.toString() == "none") {
+                click(selector);
+            }
+        });
 }

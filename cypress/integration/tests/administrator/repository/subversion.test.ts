@@ -35,7 +35,7 @@ import { Analysis } from "../../../models/developer/applicationinventory/analysi
 let subversionConfiguration = new SubversionConfiguration();
 let source_credential;
 
-describe("Test an application form a subversion source", { tags: "@tier1" }, () => {
+describe("Test secure and insecure svn repository analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;
@@ -81,15 +81,13 @@ describe("Test an application form a subversion source", { tags: "@tier1" }, () 
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 
-    it("Enable Insecure subversion Repository", () => {
+    it("Analysis on insecure svn Repository(http) for tackle test app type", function () {
         SubversionConfiguration.open();
-        subversionConfiguration.toggleInsecureSubversionRepositories();
-    });
+        subversionConfiguration.enableInsecureSubversionRepositories();
 
-    it("Source code analysis on tackle testapp for svn repo type", function () {
         const application = new Analysis(
             getRandomApplicationData("Secure_enabled_tackle_test_app", {
-                sourceData: this.appData[5],
+                sourceData: this.appData[7],
             }),
             getRandomAnalysisData(this.analysisData[0])
         );
@@ -102,15 +100,13 @@ describe("Test an application form a subversion source", { tags: "@tier1" }, () 
         application.openreport();
     });
 
-    it("Disable insecure subversion Repository", () => {
+    it("Analysis on insecure svn Repository(http) for tackle test app type", function () {
         SubversionConfiguration.open();
-        subversionConfiguration.toggleInsecureSubversionRepositories();
-    });
+        subversionConfiguration.disableInsecureSubversionRepositories();
 
-    it("Source code analysis on tackle testapp for svn repo type", function () {
         const application = new Analysis(
             getRandomApplicationData("Secure_disabled_tackle_test_app", {
-                sourceData: this.appData[5],
+                sourceData: this.appData[7],
             }),
             getRandomAnalysisData(this.analysisData[0])
         );
@@ -119,7 +115,7 @@ describe("Test an application form a subversion source", { tags: "@tier1" }, () 
         cy.wait(2000);
         application.manageCredentials(source_credential.name, "None");
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus("Failed");
         application.openreport();
     });
 });

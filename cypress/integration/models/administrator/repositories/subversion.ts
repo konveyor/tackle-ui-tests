@@ -1,5 +1,10 @@
-import { click, clickByText, selectUserPerspective } from "../../../../utils/utils";
-import { enableInsecureRepository } from "../../../views/repository.view";
+import {
+    checkInsecureRepository,
+    clickByText,
+    selectUserPerspective,
+    uncheckSecureRepository,
+} from "../../../../utils/utils";
+import { InsecureRepositoryToggle } from "../../../views/repository.view";
 
 export class SubversionConfiguration {
     static open() {
@@ -8,7 +13,11 @@ export class SubversionConfiguration {
         cy.contains("h1", "Subversion configuration", { timeout: 5000 });
     }
 
-    toggleInsecureSubversionRepositories() {
-        click(enableInsecureRepository);
+    enableInsecureSubversionRepositories() {
+        checkInsecureRepository(InsecureRepositoryToggle);
+    }
+
+    disableInsecureSubversionRepositories() {
+        uncheckSecureRepository(InsecureRepositoryToggle);
     }
 }

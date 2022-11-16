@@ -40,6 +40,7 @@ import {
     version,
     packaging,
     kebabMenu,
+    repoType,
 } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
@@ -53,6 +54,8 @@ import {
     performRowActionByIcon,
     selectUserPerspective,
     selectItemsPerPage,
+    selectFromDropList,
+    selectFromDropListByText,
 } from "../../../../utils/utils";
 import { applicationData } from "../../../types/types";
 
@@ -157,6 +160,7 @@ export class Application {
             //Fields relevant to source code analysis
             if (this.sourceRepo) {
                 cy.contains("span", "Source code").click();
+                selectFromDropListByText(repoType, this.repoType);
                 inputText(sourceRepository, this.sourceRepo);
                 if (this.branch) inputText(branch, this.branch);
                 if (this.rootPath) inputText(rootPath, this.rootPath);
