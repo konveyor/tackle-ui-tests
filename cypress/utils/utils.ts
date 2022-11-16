@@ -122,9 +122,24 @@ export function login(username?, password?: string): void {
             inputText(loginView.userNameInput, userName);
             inputText(loginView.userPasswordInput, userPassword);
             click(loginView.loginButton);
+            // Change default password on first login.
+            cy.get("span").then(($inputErr) => {
+                if ($inputErr.text().toString().trim() == "Invalid username or password.") {
+                    inputText(loginView.userPasswordInput, "Passw0rd!");
+                    click(loginView.loginButton);
+                    updatePassword();
+                }
+            });
         }
     });
 
+    updatePassword();
+    cy.get("#main-content-page-layout-horizontal-nav").within(() => {
+        cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
+    });
+}
+
+export function updatePassword(): void {
     // Change password screen which appears only for first login
     // This is used in PR tester and Jenkins jobs.
     cy.get("h1", { timeout: 120 * SEC }).then(($a) => {
@@ -133,9 +148,6 @@ export function login(username?, password?: string): void {
             inputText(loginView.confirmPasswordInput, "Dog8code");
             click(loginView.submitButton);
         }
-    });
-    cy.get("#main-content-page-layout-horizontal-nav").within(() => {
-        cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
     });
 }
 
@@ -1283,4 +1295,12 @@ export function writeGpgKey(git_key): void {
         var gpgkey = beginningKey + "\n" + keystring + "\n" + endingKey;
         cy.writeFile("cypress/fixtures/gpgkey", gpgkey);
     });
+}
+
+export function doesExist(selector: string, isAccessible: boolean): void {
+    if (isAccessible) {
+        cy.get(selector).should("exist");
+    } else {
+        cy.get(selector).should("not.exist");
+    }
 }

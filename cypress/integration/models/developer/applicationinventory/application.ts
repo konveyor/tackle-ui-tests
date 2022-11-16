@@ -22,8 +22,6 @@ import {
     deleteAction,
     assessment,
     tagCount,
-    git,
-    subversion,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -130,6 +128,7 @@ export class Application {
     protected fillComment(comment: string): void {
         inputText(applicationCommentInput, comment);
     }
+
     protected selectBusinessService(service: string): void {
         selectFormItems(applicationBusinessServiceSelect, service);
     }
@@ -140,47 +139,40 @@ export class Application {
         });
     }
 
-    protected selectSourceRepo(repo: string): void {
+    protected selectRepoType(repoType: string): void {
+        selectFormItems(repoTypeSelect, repoType);
+    }
+
+    protected fillSourceModeFields(): void {
+        //Fields relevant to source code analysis
         cy.contains("span", "Source code").click();
-        if (repo == subversion) {
-            selectFormItems(repoTypeSelect, repo);
-        } else {
-            selectFormItems(repoTypeSelect, git);
-        }
+        if (this.repoType) this.selectRepoType(this.repoType);
         inputText(sourceRepository, this.sourceRepo);
         if (this.branch) inputText(branch, this.branch);
         if (this.rootPath) inputText(rootPath, this.rootPath);
     }
 
-    create(cancel = false, repoType?: string): void {
+    protected fillBinaryModeFields(): void {
+        //Fields relevant to binary mode analysis
+        cy.contains("span", "Binary").click();
+        inputText(group, this.group);
+        if (this.artifact) inputText(artifact, this.artifact);
+        if (this.version) inputText(version, this.version);
+        if (this.packaging) inputText(packaging, this.packaging);
+    }
+
+    create(cancel = false): void {
         cy.contains("button", createNewButton, { timeout: 20000 }).should("be.enabled").click();
         if (cancel) {
             cancelForm();
         } else {
             this.fillName(this.name);
             if (this.business) this.selectBusinessService(this.business);
-            if (this.description) {
-                this.fillDescription(this.description);
-            }
-            if (this.comment) {
-                this.fillComment(this.comment);
-            }
-            if (this.tags) {
-                this.selectTags(this.tags);
-            }
-            //Fields relevant to source code analysis
-            if (this.sourceRepo) {
-                this.selectSourceRepo(repoType);
-            }
-
-            //Fields relevant to binary mode analysis
-            if (this.group) {
-                cy.contains("span", "Binary").click();
-                inputText(group, this.group);
-                if (this.artifact) inputText(artifact, this.artifact);
-                if (this.version) inputText(version, this.version);
-                if (this.packaging) inputText(packaging, this.packaging);
-            }
+            if (this.description) this.fillDescription(this.description);
+            if (this.comment) this.fillComment(this.comment);
+            if (this.tags) this.selectTags(this.tags);
+            if (this.sourceRepo) this.fillSourceModeFields();
+            if (this.group) this.fillBinaryModeFields();
             submitForm();
             checkSuccessAlert(
                 commonView.successAlertMessage,
@@ -227,7 +219,7 @@ export class Application {
                 this.comment = updatedValues.comment;
             }
             if (updatedValues.repoType && updatedValues.repoType != this.repoType) {
-                this.selectSourceRepo(updatedValues.repoType);
+                this.selectRepoType(updatedValues.repoType);
                 this.repoType = updatedValues.repoType;
             }
             if (updatedValues) {

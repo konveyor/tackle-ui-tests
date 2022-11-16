@@ -1,6 +1,23 @@
 import { UserData } from "../../../types/types";
-import { button, SEC, tdTag, trTag } from "../../../types/constants";
-import { click, clickByText, deleteFromArray, inputText, login } from "../../../../utils/utils";
+import {
+    actionsButton,
+    analysis,
+    analyzeAppButton,
+    assessAppButton,
+    button,
+    createAppButton,
+    SEC,
+    tdTag,
+    trTag,
+} from "../../../types/constants";
+import {
+    click,
+    clickByText,
+    deleteFromArray,
+    doesExist,
+    inputText,
+    login,
+} from "../../../../utils/utils";
 import * as loginView from "../../../views/login.view";
 import { Application } from "../../developer/applicationinventory/application";
 const tackleUiUrl = Cypress.env("tackleUrl");
@@ -138,21 +155,25 @@ export class User {
         login(this.username, this.password);
     }
 
-    protected validatePresence(selector: string) {
-        cy.get(selector).should("exist");
-    }
-
-    protected validateAbsence(selector: string) {
-        cy.get(selector).should("not.exist");
-    }
-
-    validateCreateAppButton(toBePresent: boolean) {
+    validateCreateAppButton(isAccessible: boolean) {
         Application.open();
-        if (toBePresent) {
-            this.validatePresence("button[aria-label=create-application]");
-        } else {
-            this.validateAbsence("button[aria-label=create-application]");
-        }
+        doesExist(createAppButton, isAccessible);
+    }
+
+    validateAssessButton(isAccessible: boolean) {
+        Application.open();
+        doesExist(assessAppButton, isAccessible);
+    }
+
+    validateAnalyzeButton(isAccessible: boolean) {
+        Application.open();
+        clickByText(button, analysis);
+        doesExist(analyzeAppButton, isAccessible);
+    }
+
+    validateImport(isAccessible: boolean) {
+        Application.open();
+        doesExist(actionsButton, isAccessible);
     }
 
     logout() {

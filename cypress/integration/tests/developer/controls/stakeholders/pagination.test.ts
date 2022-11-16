@@ -27,7 +27,7 @@ import {
     selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, stakeholders } from "../../../../types/constants";
+import { controls, developer, stakeholders } from "../../../../types/constants";
 
 import {
     firstPageButton,
@@ -109,8 +109,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
 
     it("Items per page validations", function () {
         // Navigate to stakeholder tab
-        selectUserPerspective("Developer");
-        selectUserPerspective("Developer");
+        selectUserPerspective(developer);
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
         cy.get("@getStakeholders");

@@ -71,6 +71,11 @@ export const trTag = "tr";
 export const tagType = "Tag type";
 export const tagName = "Tag name";
 
+export const createAppButton = "button[aria-label=create-application]";
+export const assessAppButton = "button[aria-label=assess-application]";
+export const analyzeAppButton = "button[aria-label=analyze-application]";
+export const actionsButton = "button[aria-label=Actions]";
+
 // Error helper messages general to all views
 export const duplicateErrMsg = "ERROR: duplicate key value violates unique constraint";
 export const duplicateEmail = "Please use a different email address.";

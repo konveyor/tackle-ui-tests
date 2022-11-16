@@ -48,6 +48,8 @@ import {
     UserCredentials,
     credentialType,
     repositoryType,
+    subversion,
+    git,
 } from "../../../../types/constants";
 
 import * as data from "../../../../../utils/data_utils";
@@ -269,13 +271,13 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
 
         //Create two applications one with Git and another with svn as repository type
         application.create();
-        application1.create(false, "Subversion");
+        application1.create();
         cy.get("@getApplication");
         cy.wait(2000);
 
         // Apply repository type filter check with Git
         // Check Application exists and application1 doesn't exist
-        applySearchFilter(repositoryType, "Git");
+        applySearchFilter(repositoryType, git);
         cy.wait(2000);
         exists(application.name);
         notExists(application1.name);
@@ -283,7 +285,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
 
         // Apply repository type filter check with Subversion
         // Check Application1 exists and application doesn't exist
-        applySearchFilter(repositoryType, "Subversion");
+        applySearchFilter(repositoryType, subversion);
         cy.wait(2000);
         exists(application1.name);
         notExists(application.name);
