@@ -188,6 +188,7 @@ export class Application {
             business?: string;
             tags?: Array<string>;
             comment?: string;
+            repoType?: string;
         },
         cancel = false
     ): void {
@@ -216,6 +217,10 @@ export class Application {
             if (updatedValues.comment && updatedValues.comment != this.comment) {
                 this.fillComment(updatedValues.comment);
                 this.comment = updatedValues.comment;
+            }
+            if (updatedValues.repoType && updatedValues.repoType != this.repoType) {
+                this.selectRepoType(updatedValues.repoType);
+                this.repoType = updatedValues.repoType;
             }
             if (updatedValues) {
                 submitForm();
