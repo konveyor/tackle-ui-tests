@@ -11,7 +11,6 @@ import {
 } from "../../../../utils/utils";
 import { button } from "../../../types/constants";
 import { CredentialsProxyData, ProxyData } from "../../../types/types";
-import { submitButton } from "../../../../integration/views/common.view";
 
 export class Proxy {
     hostname;
@@ -57,15 +56,6 @@ export class Proxy {
         submitForm();
     }
 
-    protected configureInvalidProxy(type: string): void {
-        cy.wait(5000);
-        this.enableSwitch(`#${type}Proxy`);
-        inputText(`[name="${type}Host"]`, this.hostname);
-        inputText(`[name="${type}Port"]`, "Invalid port");
-        cy.get("#port-helper").contains("This field is required");
-        cy.get(submitButton).should("be.disabled");
-    }
-
     protected unConfigureProxy(type: string): void {
         clearInput(`[name="${type}Host"]`);
         clearInput(`[name="${type}Port"]`);
@@ -88,16 +78,6 @@ export class Proxy {
         }
         if (this.httpsEnabled) {
             this.configureProxy("https");
-        }
-    }
-
-    enableInvalidProxy(): void {
-        Proxy.open();
-        if (this.httpEnabled) {
-            this.configureInvalidProxy("http");
-        }
-        if (this.httpsEnabled) {
-            this.configureInvalidProxy("https");
         }
     }
 
