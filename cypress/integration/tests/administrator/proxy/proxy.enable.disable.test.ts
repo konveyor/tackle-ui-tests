@@ -1,8 +1,16 @@
-import { hasToBeSkipped, login, preservecookies } from "../../../../utils/utils";
+import {
+    hasToBeSkipped,
+    login,
+    preservecookies,
+    selectCheckBox,
+    unSelectCheckBox,
+} from "../../../../utils/utils";
 import { Proxy } from "../../../models/administrator/proxy/proxy";
 import { CredentialsProxy } from "../../../models/administrator/credentials/credentialsProxy";
 import { getRandomCredentialsData, getRandomProxyData } from "../../../../utils/data_utils";
 import { CredentialType } from "../../../types/constants";
+import { fillHost, fillPort, ProxyType, ProxyViewSelectors } from "../../../views/proxy.view";
+import { submitButton } from "../../../../integration/views/common.view";
 
 describe("Proxy operations", () => {
     let proxy = new Proxy(getRandomProxyData());
@@ -22,16 +30,24 @@ describe("Proxy operations", () => {
         preservecookies();
     });
 
-    it("Http Proxy validation", function () {
-        proxy.httpEnabled = true;
-        proxy.enableInvalidProxy();
-        proxy.disable();
+    it("Http Proxy port and host field validation", function () {
+        Proxy.open();
+        selectCheckBox(ProxyViewSelectors.httpSwitch);
+        fillHost(ProxyType.http, proxy.hostname);
+        fillPort(ProxyType.http, "Invalid port");
+        cy.get(ProxyViewSelectors.portHelper).contains("This field is required");
+        cy.get(submitButton).should("be.disabled");
+        unSelectCheckBox(ProxyViewSelectors.httpSwitch);
     });
 
-    it("Https Proxy validation", function () {
-        proxy.httpsEnabled = true;
-        proxy.enableInvalidProxy();
-        proxy.disable();
+    it("Https Proxy port and host field validation", function () {
+        Proxy.open();
+        selectCheckBox(ProxyViewSelectors.httpsSwitch);
+        fillHost(ProxyType.https, proxy.hostname);
+        fillPort(ProxyType.https, "Invalid port");
+        cy.get(ProxyViewSelectors.portHelper).contains("This field is required");
+        cy.get(submitButton).should("be.disabled");
+        unSelectCheckBox(ProxyViewSelectors.httpsSwitch);
     });
 
     it("Enable HTTP proxy ", function () {
