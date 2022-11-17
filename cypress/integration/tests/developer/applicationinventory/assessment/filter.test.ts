@@ -50,6 +50,7 @@ import {
     repositoryType,
     subversion,
     git,
+    artifact,
 } from "../../../../types/constants";
 
 import * as data from "../../../../../utils/data_utils";
@@ -288,6 +289,37 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         applySearchFilter(repositoryType, subversion);
         cy.wait(2000);
         exists(application1.name);
+        notExists(application.name);
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Artifact type filter validations", function () {
+        // For application must have Binary group,artifact and version
+        const application = new Application(
+            getRandomApplicationData("tackleTestApp_Source", {
+                binaryData: this.appData[2],
+            })
+        );
+        application.create();
+        cy.get("@getApplication");
+        cy.wait(2000);
+
+        // Check application exists on the page
+        exists(application.name);
+
+        // Apply artifact filter check with associated artifact field
+        // Check application exists and applicationList[0] doesn't exist
+        applySearchFilter(artifact, "Associated artifact");
+        cy.wait(2000);
+        exists(application.name);
+        notExists(applicationsList[0].name);
+        clickByText(button, clearAllFilters);
+
+        // Apply artifact filter check with not associated artifact field
+        // Check applicationList[0] exists and application doesn't exist
+        applySearchFilter(artifact, "Not associated artifact");
+        cy.wait(2000);
+        exists(applicationsList[0].name);
         notExists(application.name);
         clickByText(button, clearAllFilters);
     });
