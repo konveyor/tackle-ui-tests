@@ -28,6 +28,8 @@ import {
     deleteApplicationTableRows,
     deleteAllBusinessServices,
     getRandomApplicationData,
+    click,
+    createMultipleApplications,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -41,6 +43,7 @@ import {
     applicationDescriptionInput,
     applicationNameInput,
     applicationBusinessServiceSelect,
+    actionButton,
 } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
@@ -49,6 +52,7 @@ import { BusinessServices } from "../../../../models/developer/controls/business
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
 var businessservicesList: Array<BusinessServices> = [];
+var applicationList: Array<Assessment> = [];
 
 describe("Application validations", { tags: "@tier2" }, () => {
     before("Login", function () {
@@ -57,6 +61,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
 
         // Perform login
         login();
+        applicationList = createMultipleApplications(4);
         businessservicesList = createMultipleBusinessServices(1);
     });
 
@@ -149,5 +154,22 @@ describe("Application validations", { tags: "@tier2" }, () => {
         application.delete();
         cy.wait("@getApplication");
         notExists(application.name);
+    });
+
+    it("Bulk deletion of applications", function () {
+        // cy.get('input#bulk-selected-apps-checkbox').click();
+        cy.get("button[aria-label='Select']").click();
+        // Select all the applications on page
+        if (applicationList.length < 11) {
+            cy.get("ul[role=menu] > li")
+                .contains("Select page")
+                .click();
+        } else {
+            cy.get("ul[role=menu] > li").contains("Select page (10 items)").click();
+        }
+
+        cy.get(actionButton).eq(1).click();
+        cy.get("a.pf-c-dropdown__menu-item").contains("Delete").click();
+        click(commonView.deleteButton);
     });
 });
