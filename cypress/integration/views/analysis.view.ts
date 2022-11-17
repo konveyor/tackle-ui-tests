@@ -28,3 +28,7 @@ export const addRules = "div > footer[class='pf-c-modal-box__footer'] > button";
 export const fileName = "div[class='fileName']";
 export const reportStoryPoints = "div[class='effortPoints total'] > span[class='points']";
 export const enableTransactionAnalysis = "input[name=enableTransactionReport]";
+export const excludePackagesSwitch = "#excludedPackages";
+export const tabsPanel = "ul > li > a";
+export const expandAll = "#expandAll";
+export const panelBody = "div.panel-body";
