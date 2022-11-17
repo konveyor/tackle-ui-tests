@@ -73,6 +73,7 @@ import { CredentialsMaven } from "../integration/models/administrator/credential
 import { CredentialsSourceControlUsername } from "../integration/models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../integration/models/administrator/credentials/credentialsSourceControlKey";
 import { Application } from "../integration/models/developer/applicationinventory/application";
+import { InsecureRepositoryToggle } from "../integration/views/repository.view";
 
 let userName = Cypress.env("user");
 let userPassword = Cypress.env("pass");
@@ -1286,7 +1287,7 @@ export function checkInsecureRepository(): void {
         .invoke("css", "display")
         .then((display) => {
             if (display.toString() == "none") {
-                click(".pf-c-switch__toggle");
+                click(InsecureRepositoryToggle);
             }
         });
 }
@@ -1298,7 +1299,7 @@ export function uncheckInsecureRepository(): void {
         .invoke("css", "display")
         .then((display) => {
             if (display.toString() == "none") {
-                click(".pf-c-switch__toggle");
+                click(InsecureRepositoryToggle);
             }
         });
 }
