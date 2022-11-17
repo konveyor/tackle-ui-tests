@@ -107,8 +107,8 @@ jobs:
           echo $external_ip;
           export endpoint=$(minikube ip);
           echo "CYPRESS_tackleUrl=https://$endpoint" >>$GITHUB_ENV
-          export cypress_keycloakAdminPassword=$(oc get secret tackle-keycloak-sso -nkonveyor-tackle -o json|grep password|cut -d "\"" -f 4 |base64 -d; echo);
-          echo "CYPRESS_keycloakAdminPassword=cypress_keycloakAdminPassword" >>$GITHUB_ENV'
+          export keycloakAdminPassword=$(oc get secret tackle-keycloak-sso -nkonveyor-tackle -o json|grep password|cut -d "\"" -f 4 |base64 -d; echo);
+          echo "CYPRESS_keycloakAdminPassword=$keycloakAdminPassword" >>$GITHUB_ENV'
 
       - name: Checkout to pull request branch
         uses: actions/checkout@v2
