@@ -11,6 +11,7 @@ import {
 } from "../../../../utils/utils";
 import { button } from "../../../types/constants";
 import { CredentialsProxyData, ProxyData } from "../../../types/types";
+import { ProxyType, ProxyViewSelectors } from "../../../views/proxy.view";
 
 export class Proxy {
     hostname;
@@ -40,6 +41,10 @@ export class Proxy {
         selectCheckBox(selector);
     }
 
+    disableSwitch(selector): void {
+        unSelectCheckBox(selector);
+    }
+
     protected configureProxy(type: string): void {
         cy.wait(5000); // This wait is required because of problems with page rendering, will be fixed later
         this.enableSwitch(`#${type}Proxy`);
@@ -59,7 +64,7 @@ export class Proxy {
     protected unConfigureProxy(type: string): void {
         clearInput(`[name="${type}Host"]`);
         clearInput(`[name="${type}Port"]`);
-        unSelectCheckBox(`#${type}Proxy`);
+        this.disableSwitch(`#${type}Proxy`);
     }
 
     fillExcludeList(): void {
@@ -69,6 +74,20 @@ export class Proxy {
         });
         cy.log(fullList);
         inputText('[aria-label="excluded"]', fullList);
+    }
+
+    fillHost(type: ProxyType, host: string): void {
+        inputText(
+            type === ProxyType.http ? ProxyViewSelectors.httpHost : ProxyViewSelectors.httpsHost,
+            host
+        );
+    }
+
+    fillPort(type: ProxyType, port: string): void {
+        inputText(
+            type === ProxyType.http ? ProxyViewSelectors.httpPort : ProxyViewSelectors.httpsPort,
+            port
+        );
     }
 
     enable(): void {
@@ -86,9 +105,11 @@ export class Proxy {
         clearInput('[aria-label="excluded"]');
         if (this.httpEnabled) {
             this.unConfigureProxy("http");
+            this.httpEnabled = false;
         }
         if (this.httpsEnabled) {
             this.unConfigureProxy("https");
+            this.httpsEnabled = false;
         }
     }
 
