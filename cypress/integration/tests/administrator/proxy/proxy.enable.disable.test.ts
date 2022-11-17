@@ -32,22 +32,22 @@ describe("Proxy operations", () => {
 
     it("Http Proxy port and host field validation", function () {
         Proxy.open();
-        selectCheckBox(ProxyViewSelectors.httpSwitch);
+        proxy.enableSwitch(ProxyViewSelectors.httpSwitch);
         proxy.fillHost(ProxyType.http, proxy.hostname);
         proxy.fillPort(ProxyType.http, "Invalid port");
         cy.get(ProxyViewSelectors.portHelper).contains("This field is required");
         cy.get(submitButton).should("be.disabled");
-        unSelectCheckBox(ProxyViewSelectors.httpSwitch);
+        proxy.disableSwitch(ProxyViewSelectors.httpSwitch);
     });
 
     it("Https Proxy port and host field validation", function () {
         Proxy.open();
-        selectCheckBox(ProxyViewSelectors.httpsSwitch);
+        proxy.enableSwitch(ProxyViewSelectors.httpsSwitch);
         proxy.fillHost(ProxyType.https, proxy.hostname);
         proxy.fillPort(ProxyType.https, "Invalid port");
         cy.get(ProxyViewSelectors.portHelper).contains("This field is required");
         cy.get(submitButton).should("be.disabled");
-        unSelectCheckBox(ProxyViewSelectors.httpsSwitch);
+        proxy.disableSwitch(ProxyViewSelectors.httpsSwitch);
     });
 
     it("Enable HTTP proxy ", function () {

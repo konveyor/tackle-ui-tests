@@ -41,6 +41,10 @@ export class Proxy {
         selectCheckBox(selector);
     }
 
+    disableSwitch(selector): void {
+        unSelectCheckBox(selector);
+    }
+
     protected configureProxy(type: string): void {
         cy.wait(5000); // This wait is required because of problems with page rendering, will be fixed later
         this.enableSwitch(`#${type}Proxy`);
@@ -60,7 +64,7 @@ export class Proxy {
     protected unConfigureProxy(type: string): void {
         clearInput(`[name="${type}Host"]`);
         clearInput(`[name="${type}Port"]`);
-        unSelectCheckBox(`#${type}Proxy`);
+        this.disableSwitch(`#${type}Proxy`);
     }
 
     fillExcludeList(): void {
