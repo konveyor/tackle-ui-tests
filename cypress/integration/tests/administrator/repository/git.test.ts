@@ -80,6 +80,7 @@ describe("Test secure and insecure git repository analysis", { tags: "@tier1" },
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 
+    // test that when the insecure repository is enabled the analysis on a http repo should be completed successfully
     it("Analysis on insecure git Repository(http) for tackle test app when insecure repository is allowed", function () {
         // open the configuration page for git and enable insecure repo
         gitConfiguration.enableInsecureGitRepositories();
@@ -101,6 +102,7 @@ describe("Test secure and insecure git repository analysis", { tags: "@tier1" },
         application.openreport();
     });
 
+    // Negative test case, when the insecure repository is disabled the analysis on a http repo should fail
     it("Analysis on insecure git Repository(http) for tackle test app when insecure repository is not allowed", function () {
         // open the configuration page for git and disable insecure repo
         gitConfiguration.disableInsecureGitRepositories();
