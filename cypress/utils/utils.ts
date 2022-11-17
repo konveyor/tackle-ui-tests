@@ -1279,24 +1279,26 @@ export function writeGpgKey(git_key): void {
     });
 }
 
-export function checkInsecureRepository(selector: string): void {
+export function checkInsecureRepository(): void {
     cy.wait(1000);
+    // get the text object beside the switch to check the status of the toggle if it's enabled or not, then check the switch only if it is not already checked
     cy.get(".pf-m-on")
         .invoke("css", "display")
         .then((display) => {
             if (display.toString() == "none") {
-                click(selector);
+                click(".pf-c-switch__toggle");
             }
         });
 }
 
-export function uncheckSecureRepository(selector: string): void {
+export function uncheckInsecureRepository(): void {
     cy.wait(1000);
+    // get the text object beside the switch to check the status of the toggle if it's enabled or not, then uncheck the switch only if it is not already unchecked
     cy.get(".pf-m-off")
         .invoke("css", "display")
         .then((display) => {
             if (display.toString() == "none") {
-                click(selector);
+                click(".pf-c-switch__toggle");
             }
         });
 }

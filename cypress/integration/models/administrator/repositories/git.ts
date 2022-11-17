@@ -2,10 +2,12 @@ import {
     checkInsecureRepository,
     clickByText,
     selectUserPerspective,
-    uncheckSecureRepository,
+    uncheckInsecureRepository,
 } from "../../../../utils/utils";
-import { InsecureRepositoryToggle } from "../../../views/repository.view";
 
+/**
+ * static method used to navigate to the git configuration page
+ */
 export class GitConfiguration {
     static open() {
         selectUserPerspective("Administrator");
@@ -13,11 +15,19 @@ export class GitConfiguration {
         cy.contains("h1", "Git configuration", { timeout: 5000 });
     }
 
+    /**
+     *  this functions used to navigate to the git configuration page under the administrator view and enable the insecure repo
+     */
     enableInsecureGitRepositories() {
-        checkInsecureRepository(InsecureRepositoryToggle);
+        GitConfiguration.open();
+        checkInsecureRepository();
     }
 
+    /**
+     *  this functions used to navigate to the git configuration page under the administrator view and disable the insecure repo
+     */
     disableInsecureGitRepositories() {
-        uncheckSecureRepository(InsecureRepositoryToggle);
+        GitConfiguration.open();
+        uncheckInsecureRepository();
     }
 }

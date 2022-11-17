@@ -1,9 +1,11 @@
-import { click, clickByText, selectUserPerspective } from "../../../../utils/utils";
 import {
-    clearRepository,
-    confirmClear,
-    enableInsecureRepository,
-} from "../../../views/repository.view";
+    checkInsecureRepository,
+    click,
+    clickByText,
+    selectUserPerspective,
+    uncheckInsecureRepository,
+} from "../../../../utils/utils";
+import { clearRepository, confirmClear } from "../../../views/repository.view";
 
 export class MavenConfiguration {
     static open() {
@@ -12,8 +14,12 @@ export class MavenConfiguration {
         cy.contains("h1", "Maven configuration", { timeout: 5000 });
     }
 
-    protected toggleInsecureMavenRepositories() {
-        click(enableInsecureRepository);
+    protected enableInsecureMavenRepositories() {
+        checkInsecureRepository();
+    }
+
+    protected disableInsecureMavenRepositories() {
+        uncheckInsecureRepository();
     }
 
     protected clearRepository() {
