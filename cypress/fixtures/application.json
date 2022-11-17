@@ -1,10 +1,10 @@
 [
     {
-        "repoType": "git",
+        "repoType": "Git",
         "sourceRepo": "https://github.com/ibraginsky/book-server"
     },
     {
-        "repoType": "git",
+        "repoType": "Git",
         "sourceRepo": "https://github.com/WASdev/sample.daytrader7"
     },
     {
@@ -14,11 +14,11 @@
         "packaging": "war"
     },
     {
-        "repoType": "git",
+        "repoType": "Git",
         "sourceRepo": "https://github.com/konveyor/tackle-testapp"
     },
     {
-        "repoType": "git",
+        "repoType": "Git",
         "sourceRepo": "git@github.com:konveyor/tackle-testapp.git"
     },
     {

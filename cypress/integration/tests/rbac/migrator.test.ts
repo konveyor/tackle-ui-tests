@@ -1,10 +1,9 @@
 import { User } from "../../models/keycloak/users/user";
 import { getRandomUserData } from "../../../utils/data_utils";
-import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { preservecookies } from "../../../utils/utils";
 
-describe("Keycloak operations", () => {
+describe("Migrator RBAC operations", () => {
     let userMigrator = new UserMigrator(getRandomUserData());
 
     before("Creating RBAC users, adding roles for them", () => {
@@ -19,7 +18,18 @@ describe("Keycloak operations", () => {
     });
 
     it("Login as migrator and validate create application button", () => {
+        //Migrator is not allowed to create applications
         userMigrator.validateCreateAppButton(false);
+    });
+
+    it("Login as migrator and validate assess application button", () => {
+        //Mirator is not allowed to create applications
+        userMigrator.validateAssessButton(false);
+    });
+
+    it("Login as migrator and validate presence of import and manage imports", () => {
+        //migrator is allowed to import applications
+        userMigrator.validateImport(true);
     });
 
     after("", () => {
