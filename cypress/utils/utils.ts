@@ -213,7 +213,7 @@ export function selectReactFormItems(
 }
 
 export function checkSuccessAlert(fieldId: string, message: string): void {
-    cy.get(fieldId).should("contain.text", message);
+    cy.get(fieldId, { timeout: 120 * SEC }).should("contain.text", message);
 }
 
 export function removeMember(memberName: string): void {

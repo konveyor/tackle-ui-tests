@@ -67,13 +67,11 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
         var newApplication = applicationsList[applicationsList.length - 1];
         // Perform assessment of application
         newApplication.perform_assessment("high", [stakeholdersList[0].name]);
-        cy.wait(4000);
-        newApplication.is_assessed();
+        newApplication.verifyStatus("assessment", "Completed");
         cy.wait(4000);
         // Perform application review
         newApplication.perform_review("high");
-        cy.wait(4000);
-        newApplication.is_reviewed();
+        newApplication.verifyStatus("review", "Completed");
     });
 
     beforeEach("Persist session", function () {

@@ -55,8 +55,7 @@ describe("Assessment pagination validations", { tags: "@newtest" }, function () 
 
         // Perform assessment of application
         applicationList[0].perform_assessment("low", [stakeholdersList[0].name]);
-        cy.wait(2000);
-        applicationList[0].is_assessed();
+        applicationList[0].verifyStatus("assessment", "Completed");
     });
 
     after("Perform test data clean up", function () {

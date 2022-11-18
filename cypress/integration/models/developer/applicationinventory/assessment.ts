@@ -47,6 +47,7 @@ import {
     performRowAction,
     selectUserPerspective,
     performRowActionByIcon,
+    checkSuccessAlert,
 } from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import {
@@ -263,38 +264,20 @@ export class Assessment extends Application {
         clickByText(button, "Submit review");
     }
 
-    // Method to verify the value of various fields like Assessment, Review
-    protected verifyFieldValue(columnSelector, value): void {
+    // Method to verify the status of Assessment and Review
+    verifyStatus(column, status): void {
+        var columnSelector: string;
+
+        if (column === "assessment") columnSelector = assessmentColumnSelector;
+        else columnSelector = reviewColumnSelector;
+
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(this.name)
             .parent(tdTag)
             .parent(trTag)
             .within(() => {
-                cy.get(columnSelector).find("div").should("contain", value);
-            });
-    }
-
-    is_assessed(): void {
-        this.verifyFieldValue(assessmentColumnSelector, "Completed");
-    }
-
-    is_reviewed(): void {
-        this.verifyFieldValue(reviewColumnSelector, "Completed");
-    }
-
-    is_notStarted(): void {
-        this.verifyFieldValue(assessmentColumnSelector, "Not started");
-    }
-
-    getColumnText(columnSelector, columnText: string): void {
-        selectItemsPerPage(100);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                cy.get(columnSelector).find("span").should("contain", columnText);
+                cy.get(columnSelector).contains(status, { timeout: 12000 });
             });
     }
 
@@ -421,6 +404,21 @@ export class Assessment extends Application {
             cancelForm();
         } else {
             click(copy);
+            checkSuccessAlert(
+                commonView.successAlertMessage,
+                `Success! Assessment copied to selected applications`
+            );
+        }
+    }
+
+    copy_assessment_review(applicationList: Array<Application>, cancel = false): void {
+        this.openCopyAssessmentReviewModel();
+        this.selectApps(applicationList);
+
+        if (cancel) {
+            cancelForm();
+        } else {
+            click(copy);
             cy.wait(2000);
         }
     }
@@ -439,6 +437,10 @@ export class Assessment extends Application {
                 clickByText(button, "Discard assessment");
             });
         cy.get(continueButton).click();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            `Success! Assessment discarded for ${this.name}.`
+        );
     }
 
     selectApps(applicationList: Array<Application>): void {
@@ -468,6 +470,21 @@ export class Assessment extends Application {
                 click(actionButton);
                 cy.wait(500);
                 clickByText(button, "Copy assessment");
+            });
+    }
+
+    openCopyAssessmentReviewModel(): void {
+        Assessment.open();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                click(actionButton);
+                cy.wait(500);
+                clickByText(button, "Copy assessment and review");
             });
     }
 
