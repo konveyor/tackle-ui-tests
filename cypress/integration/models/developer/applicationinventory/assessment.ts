@@ -264,8 +264,15 @@ export class Assessment extends Application {
         clickByText(button, "Submit review");
     }
 
-    // Method to verify the value of various fields like Assessment, Review
-    protected verifyFieldValue(columnSelector, value): void {
+    // Method to verify the value of Assessment and Review columns
+    verifyStatus(column, value): void {
+        var columnSelector: string
+
+        if (column === 'assessment')
+            columnSelector = assessmentColumnSelector;
+        else
+            columnSelector = reviewColumnSelector;
+
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(this.name)
@@ -273,33 +280,6 @@ export class Assessment extends Application {
             .parent(trTag)
             .within(() => {
                 cy.get(columnSelector).contains(value, { timeout: 12000 });
-            });
-    }
-
-    is_assessed(): void {
-        this.verifyFieldValue(assessmentColumnSelector, "Completed");
-    }
-
-    is_reviewed(): void {
-        this.verifyFieldValue(reviewColumnSelector, "Completed");
-    }
-
-    assessment_is_notStarted(): void {
-        this.verifyFieldValue(assessmentColumnSelector, "Not started");
-    }
-
-    review_is_notStarted(): void {
-        this.verifyFieldValue(reviewColumnSelector, "Not started");
-    }
-
-    getColumnText(columnSelector, columnText: string): void {
-        selectItemsPerPage(100);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                cy.get(columnSelector).find("span").should("contain", columnText);
             });
     }
 
