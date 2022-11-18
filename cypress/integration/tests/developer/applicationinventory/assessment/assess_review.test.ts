@@ -74,12 +74,12 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
         // Perform assessment of application
         application.perform_assessment("low", stakeholdersNameList);
         cy.wait(2000);
-        application.is_assessed();
+        application.verifyStatus('assessment', 'Completed');
 
         // Perform application review
         application.perform_review("low");
         cy.wait(2000);
-        application.is_reviewed();
+        application.verifyStatus('review', 'Completed'); 
 
         // Delete application
         application.delete();
@@ -96,12 +96,12 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
         // Perform assessment of application
         application.perform_assessment("medium", stakeholdersNameList);
         cy.wait(2000);
-        application.is_assessed();
+        application.verifyStatus('assessment', 'Completed');
 
         // Perform application review
         application.perform_review("medium");
         cy.wait(2000);
-        application.is_reviewed();
+        application.verifyStatus('review', 'Completed');        
 
         // Delete application
         application.delete();
@@ -118,12 +118,12 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
         // Perform assessment of application
         application.perform_assessment("high", stakeholdersNameList);
         cy.wait(2000);
-        application.is_assessed();
+        application.verifyStatus('assessment', 'Completed');
 
         // Perform application review
         application.perform_review("high");
         cy.wait(2000);
-        application.is_reviewed();
+        application.verifyStatus('review', 'Completed'); 
 
         // Delete application
         application.delete();

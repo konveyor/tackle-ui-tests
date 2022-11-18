@@ -58,7 +58,7 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
         // Perform assessment of application
         applicationList[0].perform_assessment("low", [stakeholdersList[0].name]);
         cy.wait(2000);
-        applicationList[0].is_assessed();
+        applicationList[0].verifyStatus('assessment', 'Completed');
     });
 
     beforeEach("Persist session", function () {
