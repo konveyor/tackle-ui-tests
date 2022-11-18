@@ -264,14 +264,12 @@ export class Assessment extends Application {
         clickByText(button, "Submit review");
     }
 
-    // Method to verify the value of Assessment and Review columns
-    verifyStatus(column, value): void {
-        var columnSelector: string
+    // Method to verify the status of Assessment and Review
+    verifyStatus(column, status): void {
+        var columnSelector: string;
 
-        if (column === 'assessment')
-            columnSelector = assessmentColumnSelector;
-        else
-            columnSelector = reviewColumnSelector;
+        if (column === "assessment") columnSelector = assessmentColumnSelector;
+        else columnSelector = reviewColumnSelector;
 
         selectItemsPerPage(100);
         cy.get(tdTag)
@@ -279,7 +277,7 @@ export class Assessment extends Application {
             .parent(tdTag)
             .parent(trTag)
             .within(() => {
-                cy.get(columnSelector).contains(value, { timeout: 12000 });
+                cy.get(columnSelector).contains(status, { timeout: 12000 });
             });
     }
 
@@ -406,7 +404,6 @@ export class Assessment extends Application {
             cancelForm();
         } else {
             click(copy);
-            cy.wait(2000);
             checkSuccessAlert(
                 commonView.successAlertMessage,
                 `Success! Assessment copied to selected applications`

@@ -83,13 +83,11 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
         // Perform assessment of application
         applicationsList[0].perform_assessment("high", [stakeholdersList[0].name]);
-        cy.wait(4000);
-        applicationsList[0].verifyStatus('assessment', 'Completed');
+        applicationsList[0].verifyStatus("assessment", "Completed");
         cy.wait(4000);
         // Perform application review
         applicationsList[0].perform_review("high");
-        cy.wait(4000);
-        applicationsList[0].verifyStatus('review', 'Completed'); 
+        applicationsList[0].verifyStatus("review", "Completed");
     });
 
     beforeEach("Persist session", function () {

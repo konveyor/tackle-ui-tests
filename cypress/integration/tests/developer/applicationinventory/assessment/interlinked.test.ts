@@ -160,8 +160,7 @@ describe("Applications interlinked to tags and business service", () => {
                 [stakeholdersList[0].name],
                 [stakeholdergroupsList[0].name]
             );
-            cy.wait(2000);
-            application.verifyStatus('assessment', 'Completed');
+            application.verifyStatus("assessment", "Completed");
 
             // Delete the stakeholders, group
             stakeholdersList[0].delete();
