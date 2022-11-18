@@ -60,13 +60,11 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
 
         // Perform assessment of application
         applicationList[0].perform_assessment("low", [stakeholdersList[0].name]);
-        cy.wait(2000);
-        applicationList[0].verifyStatus('assessment', 'Completed');
+        applicationList[0].verifyStatus("assessment", "Completed");
 
         // Perform application review
         applicationList[0].perform_review("low");
-        cy.wait(2000);
-        applicationList[0].verifyStatus('review', 'Completed');
+        applicationList[0].verifyStatus("review", "Completed");
     });
 
     beforeEach("Persist session", function () {
@@ -120,9 +118,9 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
 
         // Verify that all the applications were assessed
         for (let i = 1; i < applicationList.length; i++) {
-            applicationList[i].verifyStatus('assessment', 'Completed');
+            applicationList[i].verifyStatus("assessment", "Completed");
             applicationList[i].discard_assessment();
-            applicationList[i].verifyStatus('assessment', 'Not started');
+            applicationList[i].verifyStatus("assessment", "Not started");
         }
     });
 
@@ -132,13 +130,13 @@ describe("Copy assessment and review tests", { tags: "@newtest" }, () => {
 
         // Verify that all the applications were assessed
         for (let i = 1; i < applicationList.length; i++) {
-            applicationList[i].verifyStatus('assessment', 'Completed');
-            applicationList[i].verifyStatus('review', 'Completed');
+            applicationList[i].verifyStatus("assessment", "Completed");
+            applicationList[i].verifyStatus("review", "Completed");
 
             // Discard assessment and review
             applicationList[i].discard_assessment();
-            applicationList[i].assessment_is_notStarted();
-            applicationList[i].review_is_notStarted();
+            applicationList[i].verifyStatus("assessment", "Not started");
+            applicationList[i].verifyStatus("review", "Not started");
         }
     });
 

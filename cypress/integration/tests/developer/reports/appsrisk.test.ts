@@ -56,13 +56,11 @@ describe("Application risks tests", { tags: "@newtest" }, () => {
         for (let i = 0; i < applicationsList.length; i++) {
             // Perform assessment of application
             applicationsList[i].perform_assessment(risktype[i], [stakeholdersList[0].name]);
-            cy.wait(2000);
-            applicationsList[i].verifyStatus('assessment', 'Completed');
+            applicationsList[i].verifyStatus("assessment", "Completed");
 
             // Perform application review
             applicationsList[i].perform_review(risktype[i]);
-            cy.wait(2000);
-            applicationsList[i].verifyStatus('review', 'Completed'); 
+            applicationsList[i].verifyStatus("review", "Completed");
         }
     });
 
