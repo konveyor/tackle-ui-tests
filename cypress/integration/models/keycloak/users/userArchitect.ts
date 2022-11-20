@@ -7,8 +7,4 @@ export class UserArchitect extends User {
         this.definePassword();
         this.addRole(UserRoles.architect);
     }
-
-    validateRbac() {
-        this.validateCreateAppButton(true);
-    }
 }

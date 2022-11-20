@@ -45,6 +45,8 @@ import {
     assessment,
     UserCredentials,
     credentialType,
+    artifact,
+    repositoryType,
 } from "../integration/types/constants";
 import {
     actionButton,
@@ -121,9 +123,24 @@ export function login(username?, password?: string): void {
             inputText(loginView.userNameInput, userName);
             inputText(loginView.userPasswordInput, userPassword);
             click(loginView.loginButton);
+            // Change default password on first login.
+            cy.get("span").then(($inputErr) => {
+                if ($inputErr.text().toString().trim() == "Invalid username or password.") {
+                    inputText(loginView.userPasswordInput, "Passw0rd!");
+                    click(loginView.loginButton);
+                    updatePassword();
+                }
+            });
         }
     });
 
+    updatePassword();
+    cy.get("#main-content-page-layout-horizontal-nav").within(() => {
+        cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
+    });
+}
+
+export function updatePassword(): void {
     // Change password screen which appears only for first login
     // This is used in PR tester and Jenkins jobs.
     cy.get("h1", { timeout: 120 * SEC }).then(($a) => {
@@ -132,9 +149,6 @@ export function login(username?, password?: string): void {
             inputText(loginView.confirmPasswordInput, "Dog8code");
             click(loginView.submitButton);
         }
-    });
-    cy.get("#main-content-page-layout-horizontal-nav").within(() => {
-        cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
     });
 }
 
@@ -200,7 +214,7 @@ export function selectReactFormItems(
 }
 
 export function checkSuccessAlert(fieldId: string, message: string): void {
-    cy.get(fieldId).should("contain.text", message);
+    cy.get(fieldId, { timeout: 120 * SEC }).should("contain.text", message);
 }
 
 export function removeMember(memberName: string): void {
@@ -273,11 +287,21 @@ export function applySearchFilter(
     value?: number
 ): void {
     selectFilter(filterName, identifiedRisk, value);
-    if (filterName == businessService || filterName == tag || filterName == credentialType) {
+    if (
+        filterName == businessService ||
+        filterName == tag ||
+        filterName == credentialType ||
+        filterName == artifact ||
+        filterName == repositoryType
+    ) {
         cy.get("div.pf-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show")
             .find("div.pf-c-select")
             .click();
-        if (filterName == businessService) {
+        if (
+            filterName == businessService ||
+            filterName == repositoryType ||
+            filterName == artifact
+        ) {
             // ul[role=listbox] > li is for the Application Inventory page.
             // span.pf-c-check__label is for the Copy assessment page.
             cy.get("ul[role=listbox] > li, span.pf-c-check__label").contains(searchText).click();
@@ -751,7 +775,6 @@ export function createMultipleStakeholders(
     }
     return stakeholdersList;
 }
-
 export function createMultipleJobFunctions(num): Array<Jobfunctions> {
     let jobFunctionsList: Array<Jobfunctions> = [];
     for (let i = 0; i < num; i++) {
@@ -899,7 +922,6 @@ export function getRandomAnalysisData(analysisdata): analysisData {
     };
     return analysisData;
 }
-
 export function createMultipleApplications(numberofapplications: number): Array<Assessment> {
     let applicationList: Array<Assessment> = [];
     for (let i = 0; i < numberofapplications; i++) {
@@ -1278,6 +1300,14 @@ export function writeGpgKey(git_key): void {
         var gpgkey = beginningKey + "\n" + keystring + "\n" + endingKey;
         cy.writeFile("cypress/fixtures/gpgkey", gpgkey);
     });
+}
+
+export function doesExist(selector: string, isAccessible: boolean): void {
+    if (isAccessible) {
+        cy.get(selector).should("exist");
+    } else {
+        cy.get(selector).should("not.exist");
+    }
 }
 
 export function checkInsecureRepository(): void {

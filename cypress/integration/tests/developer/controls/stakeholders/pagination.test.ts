@@ -27,7 +27,7 @@ import {
     selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, stakeholders } from "../../../../types/constants";
+import { controls, developer, stakeholders } from "../../../../types/constants";
 
 import {
     firstPageButton,
@@ -72,11 +72,11 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // select 10 items per page
         selectItemsPerPage(10);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // Verify next buttons are enabled as there are more than 11 rows present
         cy.get(nextPageButton).each(($nextBtn) => {
@@ -109,11 +109,10 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
 
     it("Items per page validations", function () {
         // Navigate to stakeholder tab
-        selectUserPerspective("Developer");
-        selectUserPerspective("Developer");
+        selectUserPerspective(developer);
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // Select 10 items per page
         selectItemsPerPage(10);
@@ -139,7 +138,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // Select 10 items per page
         selectItemsPerPage(10);
@@ -159,7 +158,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // Select 10 items per page
         selectItemsPerPage(10);
