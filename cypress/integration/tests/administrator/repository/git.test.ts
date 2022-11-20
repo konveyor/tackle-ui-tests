@@ -80,7 +80,6 @@ describe("Test secure and insecure git repository analysis", { tags: "@tier1" },
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 
-
     it("Analysis on insecure git Repository(http) for tackle test app when insecure repository is allowed", function () {
         // test that when the insecure repository is enabled the analysis on a http repo should be completed successfully
 

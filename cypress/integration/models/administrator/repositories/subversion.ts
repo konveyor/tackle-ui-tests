@@ -6,7 +6,6 @@ import {
 } from "../../../../utils/utils";
 
 export class SubversionConfiguration {
-
     static open() {
         // used to navigate to the subversion configuration page
         selectUserPerspective("Administrator");
