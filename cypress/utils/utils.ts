@@ -46,6 +46,7 @@ import {
     UserCredentials,
     credentialType,
     artifact,
+    repositoryType,
 } from "../integration/types/constants";
 import {
     actionButton,
@@ -289,12 +290,17 @@ export function applySearchFilter(
         filterName == businessService ||
         filterName == tag ||
         filterName == credentialType ||
-        filterName == artifact
+        filterName == artifact ||
+        filterName == repositoryType
     ) {
         cy.get("div.pf-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show")
             .find("div.pf-c-select")
             .click();
-        if (filterName == businessService || filterName == artifact) {
+        if (
+            filterName == businessService ||
+            filterName == repositoryType ||
+            filterName == artifact
+        ) {
             // ul[role=listbox] > li is for the Application Inventory page.
             // span.pf-c-check__label is for the Copy assessment page.
             cy.get("ul[role=listbox] > li, span.pf-c-check__label").contains(searchText).click();

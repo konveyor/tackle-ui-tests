@@ -62,7 +62,7 @@ describe("Source Analysis", { tags: "@tier2" }, () => {
         deleteAllCredentials();
     });
 
-    it("Source Analysis on bookserver app without credentials", function () {
+    it("Exclude a package in analysis", function () {
         // For source code analysis application must have source code URL git or svn
         const application = new Analysis(
             getRandomApplicationData("testapp-excludePackages", { sourceData: this.appData[3] }),
@@ -75,6 +75,8 @@ describe("Source Analysis", { tags: "@tier2" }, () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
+        // Customer package is provided in excludePackage option in analysis
+        // and report should exclude customer package in analysis .
         application.validateExcludedPackages("Customer");
     });
 });
