@@ -1,19 +1,18 @@
-import {
-    hasToBeSkipped,
-    login,
-    preservecookies,
-    selectCheckBox,
-    unSelectCheckBox,
-} from "../../../../utils/utils";
+import { hasToBeSkipped, login, preservecookies } from "../../../../utils/utils";
 import { Proxy } from "../../../models/administrator/proxy/proxy";
 import { CredentialsProxy } from "../../../models/administrator/credentials/credentialsProxy";
-import { getRandomCredentialsData, getRandomProxyData } from "../../../../utils/data_utils";
+import {
+    getRandomCredentialsData,
+    getRandomProxyData,
+    getRandomWord,
+} from "../../../../utils/data_utils";
 import { CredentialType } from "../../../types/constants";
-import { ProxyType, ProxyViewSelectors } from "../../../views/proxy.view";
+import { ProxyType, ProxyViewSelectors, ProxyViewSelectorsByType } from "../../../views/proxy.view";
 import { submitButton } from "../../../../integration/views/common.view";
 
 describe("Proxy operations", () => {
-    let proxy = new Proxy(getRandomProxyData());
+    let httpsProxy = new Proxy(getRandomProxyData(), ProxyType.https);
+    let httpProxy = new Proxy(getRandomProxyData(), ProxyType.http);
     const proxyCreds = new CredentialsProxy(getRandomCredentialsData(CredentialType.proxy));
 
     before("Login", function () {
@@ -32,42 +31,55 @@ describe("Proxy operations", () => {
 
     it("Http Proxy port and host field validation", function () {
         Proxy.open();
-        proxy.enableSwitch(ProxyViewSelectors.httpSwitch);
-        proxy.fillHost(ProxyType.http, proxy.hostname);
-        proxy.fillPort(ProxyType.http, "Invalid port");
+        httpProxy.enable();
+        httpProxy.fillHost(getRandomWord(121));
+        httpProxy.fillPort("Invalid port");
         cy.get(ProxyViewSelectors.portHelper).contains("This field is required");
+        cy.get(ProxyViewSelectorsByType[httpProxy.type].hostHelper).contains(
+            "This field must contain fewer than 120 characters."
+        );
         cy.get(submitButton).should("be.disabled");
-        proxy.disableSwitch(ProxyViewSelectors.httpSwitch);
+        httpProxy.unConfigureProxy();
+        httpProxy.disable();
     });
 
     it("Https Proxy port and host field validation", function () {
         Proxy.open();
-        proxy.enableSwitch(ProxyViewSelectors.httpsSwitch);
-        proxy.fillHost(ProxyType.https, proxy.hostname);
-        proxy.fillPort(ProxyType.https, "Invalid port");
+        httpsProxy.enable();
+        httpsProxy.fillHost(getRandomWord(121));
+        httpsProxy.fillPort("Invalid port");
         cy.get(ProxyViewSelectors.portHelper).contains("This field is required");
+        cy.get(ProxyViewSelectorsByType[httpsProxy.type].hostHelper).contains(
+            "This field must contain fewer than 120 characters."
+        );
         cy.get(submitButton).should("be.disabled");
-        proxy.disableSwitch(ProxyViewSelectors.httpsSwitch);
+        httpsProxy.unConfigureProxy();
+        httpsProxy.disable();
     });
 
     it("Enable HTTP proxy ", function () {
-        proxy.httpEnabled = true;
-        proxy.enable();
+        httpProxy.enable();
+        httpProxy.excludeList = ["127.0.0.1", "github.com"];
+        httpProxy.credentials = proxyCreds;
+        httpProxy.configureProxy();
     });
 
     it("Disable HTTP proxy", function () {
-        proxy.disable();
+        httpProxy.unConfigureProxy();
+        httpProxy.disable();
     });
 
     it("Enable HTTPS proxy", () => {
-        proxy.httpsEnabled = true;
-        proxy.excludeList = ["127.0.0.1", "github.com"];
-        proxy.credentials = proxyCreds;
-        proxy.enable();
+        httpsProxy.httpsEnabled = true;
+        httpsProxy.excludeList = ["127.0.0.1", "github.com"];
+        httpsProxy.credentials = proxyCreds;
+        httpsProxy.enable();
+        httpsProxy.configureProxy();
     });
 
     it("Disable HTTPS proxy", () => {
-        proxy.disable();
+        httpsProxy.unConfigureProxy();
+        httpsProxy.disable();
         proxyCreds.delete();
     });
 });
