@@ -1303,7 +1303,7 @@ export function writeGpgKey(git_key): void {
     });
 }
 
-export function doesExist(selector: string, isAccessible: boolean): void {
+export function doesExistSelector(selector: string, isAccessible: boolean): void {
     if (isAccessible) {
         cy.get(selector).should("exist");
     } else {
@@ -1333,4 +1333,11 @@ export function uncheckInsecureRepository(): void {
                 click(InsecureRepositoryToggle);
             }
         });
+}
+export function doesExistText(str: string, toBePresent: boolean): void {
+    if (toBePresent) {
+        cy.contains(str, { timeout: 120 * SEC }).should("exist");
+    } else {
+        cy.contains(str).should("not.exist");
+    }
 }
