@@ -13,7 +13,8 @@ import { submitButton } from "../../../../integration/views/common.view";
 describe("Proxy operations", () => {
     let httpsProxy = new Proxy(getRandomProxyData(), ProxyType.https);
     let httpProxy = new Proxy(getRandomProxyData(), ProxyType.http);
-    const proxyCreds = new CredentialsProxy(getRandomCredentialsData(CredentialType.proxy));
+    const httpProxyCreds = new CredentialsProxy(getRandomCredentialsData(CredentialType.proxy));
+    const httpsProxyCreds = new CredentialsProxy(getRandomCredentialsData(CredentialType.proxy));
 
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
@@ -21,7 +22,8 @@ describe("Proxy operations", () => {
 
         // Perform login
         login();
-        proxyCreds.create();
+        httpProxyCreds.create();
+        httpsProxyCreds.create();
     });
 
     beforeEach("Persist session", function () {
@@ -40,7 +42,6 @@ describe("Proxy operations", () => {
         );
         cy.get(submitButton).should("be.disabled");
         httpProxy.unConfigureProxy();
-        httpProxy.disable();
     });
 
     it("Https Proxy port and host field validation", function () {
@@ -54,32 +55,27 @@ describe("Proxy operations", () => {
         );
         cy.get(submitButton).should("be.disabled");
         httpsProxy.unConfigureProxy();
-        httpsProxy.disable();
     });
 
     it("Enable HTTP proxy ", function () {
-        httpProxy.enable();
         httpProxy.excludeList = ["127.0.0.1", "github.com"];
-        httpProxy.credentials = proxyCreds;
+        httpProxy.credentials = httpProxyCreds;
         httpProxy.configureProxy();
     });
 
     it("Disable HTTP proxy", function () {
-        httpProxy.unConfigureProxy();
         httpProxy.disable();
+        httpProxyCreds.delete();
     });
 
     it("Enable HTTPS proxy", () => {
-        httpsProxy.httpsEnabled = true;
         httpsProxy.excludeList = ["127.0.0.1", "github.com"];
-        httpsProxy.credentials = proxyCreds;
-        httpsProxy.enable();
+        httpsProxy.credentials = httpsProxyCreds;
         httpsProxy.configureProxy();
     });
 
     it("Disable HTTPS proxy", () => {
-        httpsProxy.unConfigureProxy();
         httpsProxy.disable();
-        proxyCreds.delete();
+        httpsProxyCreds.delete();
     });
 });

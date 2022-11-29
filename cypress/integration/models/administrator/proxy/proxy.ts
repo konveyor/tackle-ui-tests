@@ -21,6 +21,7 @@ export class Proxy {
     httpsEnabled = false;
     excludeList = [];
     type: ProxyType;
+    static url: string = Cypress.env("tackleUrl") + "/proxies";
 
     constructor(proxyData: ProxyData, type: ProxyType) {
         const { hostname, port, httpEnabled, credentials, httpsEnabled, excludeList } = proxyData;
@@ -80,11 +81,21 @@ export class Proxy {
     }
 
     enable(): void {
-        selectCheckBox(ProxyViewSelectorsByType[this.type].enabledSwitch);
+        cy.url().then((url) => {
+            if (url !== Proxy.url) {
+                Proxy.open();
+            }
+            selectCheckBox(ProxyViewSelectorsByType[this.type].enabledSwitch);
+        });
     }
 
     disable(): void {
-        unSelectCheckBox(ProxyViewSelectorsByType[this.type].enabledSwitch);
+        cy.url().then((url) => {
+            if (url !== Proxy.url) {
+                Proxy.open();
+            }
+            unSelectCheckBox(ProxyViewSelectorsByType[this.type].enabledSwitch);
+        });
     }
 
     //TODO: Write disable method that will clear all fields and disable proxy
