@@ -35,9 +35,13 @@ export class Proxy {
     }
 
     static open() {
-        selectUserPerspective("Administrator");
-        clickByText("a.pf-c-nav__link", "Proxy");
-        cy.contains("h1", "Proxy configuration", { timeout: 5000 });
+        cy.url().then((url) => {
+            if (url !== Proxy.url) {
+                selectUserPerspective("Administrator");
+                clickByText("a.pf-c-nav__link", "Proxy");
+                cy.contains("h1", "Proxy configuration", { timeout: 5000 });
+            }
+        });
     }
 
     configureProxy(): void {
@@ -81,21 +85,13 @@ export class Proxy {
     }
 
     enable(): void {
-        cy.url().then((url) => {
-            if (url !== Proxy.url) {
-                Proxy.open();
-            }
-            selectCheckBox(ProxyViewSelectorsByType[this.type].enabledSwitch);
-        });
+        Proxy.open();
+        selectCheckBox(ProxyViewSelectorsByType[this.type].enabledSwitch);
     }
 
     disable(): void {
-        cy.url().then((url) => {
-            if (url !== Proxy.url) {
-                Proxy.open();
-            }
-            unSelectCheckBox(ProxyViewSelectorsByType[this.type].enabledSwitch);
-        });
+        Proxy.open();
+        unSelectCheckBox(ProxyViewSelectorsByType[this.type].enabledSwitch);
     }
 
     //TODO: Write disable method that will clear all fields and disable proxy
