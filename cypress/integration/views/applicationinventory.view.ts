@@ -42,7 +42,6 @@ export const kebabMenu = "div > button[aria-label='Actions']";
 export const copyAssessmentPagination = "#bulk-copy-assessment-review-pagination-top";
 
 //Fields related to analysis - source mode
-export const repoType = "#repo-type-toggle";
 export const sourceRepository = "input[name=sourceRepository]";
 export const branch = "input[name=branch]";
 export const rootPath = "input[name=rootPath]";
