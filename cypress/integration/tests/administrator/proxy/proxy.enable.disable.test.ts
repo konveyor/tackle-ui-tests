@@ -32,7 +32,6 @@ describe("Proxy operations", () => {
     });
 
     it("Http Proxy port and host field validation", function () {
-        Proxy.open();
         httpProxy.enable();
         httpProxy.fillHost(getRandomWord(121));
         httpProxy.fillPort("Invalid port");
@@ -45,7 +44,6 @@ describe("Proxy operations", () => {
     });
 
     it("Https Proxy port and host field validation", function () {
-        Proxy.open();
         httpsProxy.enable();
         httpsProxy.fillHost(getRandomWord(121));
         httpsProxy.fillPort("Invalid port");
