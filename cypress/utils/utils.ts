@@ -75,6 +75,7 @@ import { CredentialsMaven } from "../integration/models/administrator/credential
 import { CredentialsSourceControlUsername } from "../integration/models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../integration/models/administrator/credentials/credentialsSourceControlKey";
 import { Application } from "../integration/models/developer/applicationinventory/application";
+import { InsecureRepositoryToggle } from "../integration/views/repository.view";
 
 let userName = Cypress.env("user");
 let userPassword = Cypress.env("pass");
@@ -631,10 +632,10 @@ export function deleteApplicationTableRows(lastPage = false): void {
                             .parent(trTag)
                             .within(() => {
                                 click(actionButton);
-                                cy.wait(800);
+                                cy.wait(2000);
                             })
                             .contains(button, deleteAction)
-                            .click();
+                            .click({ force: true });
                         cy.wait(800);
                         click(commonView.confirmButton);
                         cy.wait(4000);
@@ -1308,4 +1309,28 @@ export function doesExist(selector: string, isAccessible: boolean): void {
     } else {
         cy.get(selector).should("not.exist");
     }
+}
+
+export function checkInsecureRepository(): void {
+    cy.wait(1000);
+    // get the text object beside the switch to check the status of the toggle if it's enabled or not, then check the switch only if it is not already checked
+    cy.get(".pf-m-on")
+        .invoke("css", "display")
+        .then((display) => {
+            if (display.toString() == "none") {
+                click(InsecureRepositoryToggle);
+            }
+        });
+}
+
+export function uncheckInsecureRepository(): void {
+    cy.wait(1000);
+    // get the text object beside the switch to check the status of the toggle if it's enabled or not, then uncheck the switch only if it is not already unchecked
+    cy.get(".pf-m-off")
+        .invoke("css", "display")
+        .then((display) => {
+            if (display.toString() == "none") {
+                click(InsecureRepositoryToggle);
+            }
+        });
 }
