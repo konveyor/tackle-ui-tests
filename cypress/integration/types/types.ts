@@ -75,6 +75,7 @@ export type analysisData = {
     enableTransaction?: boolean;
     appName?: string;
     storyPoints?: number;
+    excludePackages?: string[];
 };
 
 export type UserData = {

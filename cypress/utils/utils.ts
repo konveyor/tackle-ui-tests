@@ -918,6 +918,7 @@ export function getRandomAnalysisData(analysisdata): analysisData {
         enableTransaction: analysisdata.enableTransaction,
         appName: analysisdata.appName,
         storyPoints: analysisdata.storyPoints,
+        excludePackages: analysisdata.excludePackages,
     };
 }
 

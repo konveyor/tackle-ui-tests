@@ -51,5 +51,13 @@
         "enableTransaction": true,
         "appName": "spring-petclinic-2.4.0.BUILD-SNAPSHOT.jar",
         "storyPoints": 44
+    },
+
+    {
+        "source": "Source code",
+        "target": ["Containerization"],
+        "appName": "tackle-testapp",
+        "excludePackages": "io.konveyor.demo.ordermanagement.model",
+        "storyPoints": 1
     }
 ]
