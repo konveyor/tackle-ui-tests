@@ -29,11 +29,11 @@ export class CredentialsSourceControlUsername extends CredentialsSourceControl {
     }
 
     protected fillUsername() {
-        inputText("[aria-label='user']", this.username);
+        inputText("#user", this.username);
     }
 
     protected fillPassword() {
-        inputText("[aria-label='password']", this.password);
+        inputText("#password", this.password);
     }
 
     protected selectCredType() {
@@ -48,7 +48,7 @@ export class CredentialsSourceControlUsername extends CredentialsSourceControl {
         this.fillPassword();
         if (!toBeCanceled) {
             submitForm();
-            this.closeSuccessNotification();
+            // this.closeSuccessNotification();
             exists(this.name);
         } else {
             cancelForm();

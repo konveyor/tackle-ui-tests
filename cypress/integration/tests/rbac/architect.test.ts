@@ -32,6 +32,11 @@ describe("Architect RBAC operations", () => {
         userArchitect.validateImport(true);
     });
 
+    it("Login as architect and validate presence of analyse button", () => {
+        //Architect is allowed to analyse applications
+        userArchitect.validateAnalyzeButton(true);
+    });
+
     after("", () => {
         userArchitect.logout();
         User.loginKeycloakAdmin();

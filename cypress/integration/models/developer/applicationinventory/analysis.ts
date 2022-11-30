@@ -34,6 +34,8 @@ import {
     performRowActionByIcon,
     uploadXml,
     uploadApplications,
+    inputText,
+    click,
 } from "../../../../utils/utils";
 import { analysisData, applicationData } from "../../../types/types";
 import { Application } from "./application";
@@ -48,6 +50,10 @@ import {
     fileName,
     reportStoryPoints,
     enableTransactionAnalysis,
+    excludePackagesSwitch,
+    tabsPanel,
+    expandAll,
+    panelBody,
 } from "../../../views/analysis.view";
 import { kebabMenu } from "../../../views/applicationinventory.view";
 
@@ -57,6 +63,7 @@ export class Analysis extends Application {
     target: string[];
     binary?: string;
     scope?: string;
+    excludePackages?: string[];
     customRule?: string;
     sources?: string;
     excludeRuleTags?: string;
@@ -75,6 +82,7 @@ export class Analysis extends Application {
             target,
             binary,
             scope,
+            excludePackages,
             customRule,
             sources,
             excludeRuleTags,
@@ -93,6 +101,7 @@ export class Analysis extends Application {
         if (enableTransaction) this.enableTransaction = enableTransaction;
         if (appName) this.appName = appName;
         if (storyPoints) this.storyPoints = storyPoints;
+        if (excludePackages) this.excludePackages = excludePackages;
     }
 
     //Navigate to the Application inventory
@@ -145,6 +154,15 @@ export class Analysis extends Application {
         });
     }
 
+    protected scopeSelect() {
+        if (this.excludePackages) {
+            click(excludePackagesSwitch);
+            inputText(`[name="packageToExclude"]`, this.excludePackages);
+            clickByText("#add-to-excluded-packages-list", "Add");
+        }
+        cy.contains("button", "Next", { timeout: 200 }).click();
+    }
+
     analyze(cancel = false): void {
         Analysis.open();
         this.selectApplication();
@@ -158,7 +176,7 @@ export class Analysis extends Application {
             cy.contains("button", "Next", { timeout: 200 }).click();
             this.selectTarget(this.target);
             cy.contains("button", "Next", { timeout: 200 }).click();
-            if (!this.scope) cy.contains("button", "Next", { timeout: 200 }).click();
+            this.scopeSelect();
             if (this.customRule) this.uploadCustomRule();
             cy.contains("button", "Next", { timeout: 200 }).click();
             if (this.enableTransaction) this.enableTransactionAnalysis();
@@ -244,7 +262,19 @@ export class Analysis extends Application {
         cy.get(fileName + " > a")
             .should("contain", this.appName)
             .click();
-        cy.get("ul > li > a").contains("Transactions").click();
+        cy.get(tabsPanel).contains("Transactions").click();
         cy.get("div[class='main']").should("contain", "Transactions Report");
+    }
+
+    validateExcludedPackages(text: string): void {
+        // Click on App name
+        // then Application Details tab
+        // and the html link to exclude packages should not be present
+        cy.get(fileName + " > a")
+            .should("contain", this.appName)
+            .click();
+        cy.get(tabsPanel).contains("Application Details").click();
+        click(expandAll);
+        cy.get(panelBody).should("not.contain.html", `${this.excludePackages}.${text}`);
     }
 }

@@ -95,7 +95,7 @@ export function clearInput(fieldID: string): void {
 export function clickByText(fieldId: string, buttonText: string, isForced = true): void {
     // https://github.com/cypress-io/cypress/issues/2000#issuecomment-561468114
     cy.contains(fieldId, buttonText, { timeout: 120 * SEC }).click({ force: isForced });
-    cy.wait(1000);
+    cy.wait(SEC);
 }
 
 export function click(fieldId: string, isForced = true): void {
@@ -152,11 +152,11 @@ export function updatePassword(): void {
     });
 }
 
-export function logout(): void {
+export function logout(userName?: string): void {
     clickByText(button, userName);
-    cy.wait(500);
+    cy.wait(0.5 * SEC);
     clickByText("a", "Logout");
-    cy.wait(4000);
+    // cy.wait(4000);
     cy.get("h1", { timeout: 15 * SEC }).contains("Sign in to your account");
 }
 
@@ -911,7 +911,7 @@ export function getRandomApplicationData(
 }
 
 export function getRandomAnalysisData(analysisdata): analysisData {
-    var analysisData = {
+    return {
         source: analysisdata.source,
         target: analysisdata.target,
         binary: analysisdata.binary,
@@ -919,9 +919,10 @@ export function getRandomAnalysisData(analysisdata): analysisData {
         enableTransaction: analysisdata.enableTransaction,
         appName: analysisdata.appName,
         storyPoints: analysisdata.storyPoints,
+        excludePackages: analysisdata.excludePackages,
     };
-    return analysisData;
 }
+
 export function createMultipleApplications(numberofapplications: number): Array<Assessment> {
     let applicationList: Array<Assessment> = [];
     for (let i = 0; i < numberofapplications; i++) {
