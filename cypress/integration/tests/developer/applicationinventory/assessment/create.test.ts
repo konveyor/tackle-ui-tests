@@ -157,19 +157,20 @@ describe("Application validations", { tags: "@tier2" }, () => {
     });
 
     it("Bulk deletion of applications", function () {
-        // cy.get('input#bulk-selected-apps-checkbox').click();
         cy.get("button[aria-label='Select']").click();
-        // Select all the applications on page
-        if (applicationList.length < 11) {
-            cy.get("ul[role=menu] > li")
-                .contains("Select page")
-                .click();
-        } else {
-            cy.get("ul[role=menu] > li").contains("Select page (10 items)").click();
-        }
 
+        // Select all the applications on the current page
+        cy.get("ul[role=menu] > li").contains("Select page").click();
         cy.get(actionButton).eq(1).click();
         cy.get("a.pf-c-dropdown__menu-item").contains("Delete").click();
-        click(commonView.deleteButton);
+        click(commonView.confirmButton);
+
+        // Select all applications
+        applicationList = createMultipleApplications(12);
+
+        cy.get("ul[role=menu] > li").contains("Select all").click();
+        cy.get(actionButton).eq(1).click();
+        cy.get("a.pf-c-dropdown__menu-item").contains("Delete").click();
+        clickByText(button, 'Delete');
     });
 });
