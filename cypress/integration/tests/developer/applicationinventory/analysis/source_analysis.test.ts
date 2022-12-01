@@ -46,8 +46,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         deleteApplicationTableRows();
 
         //Disable all proxy settings
-        let proxy = new Proxy(data.getRandomProxyData());
-        proxy.disableProxy();
+        Proxy.disableAllProxies();
 
         // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(

@@ -16,19 +16,18 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    hasToBeSkipped,
-    preservecookies,
-    deleteApplicationTableRows,
     deleteAllBusinessServices,
-    getRandomApplicationData,
+    deleteApplicationTableRows,
     getRandomAnalysisData,
-    writeGpgKey,
+    getRandomApplicationData,
+    hasToBeSkipped,
+    login,
+    preservecookies,
     resetURL,
+    writeGpgKey,
 } from "../../../../../utils/utils";
 import { Proxy } from "../../../../models/administrator/proxy/proxy";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
-import * as data from "../../../../../utils/data_utils";
 
 describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -40,8 +39,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         deleteApplicationTableRows();
 
         //Disable all proxy settings
-        let proxy = new Proxy(data.getRandomProxyData());
-        proxy.disableProxy();
+        Proxy.disableAllProxies();
     });
 
     beforeEach("Persist session", function () {

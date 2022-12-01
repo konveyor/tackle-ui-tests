@@ -2,34 +2,28 @@ import {
     clearInput,
     click,
     clickByText,
-    disableProxy,
     inputText,
-    selectCheckBox,
     selectUserPerspective,
     submitForm,
-    unSelectCheckBox,
 } from "../../../../utils/utils";
-import { button } from "../../../types/constants";
+import { button, SEC } from "../../../types/constants";
 import { CredentialsProxyData, ProxyData } from "../../../types/types";
 import { ProxyType, ProxyViewSelectors, ProxyViewSelectorsByType } from "../../../views/proxy.view";
+import { getRandomProxyData } from "../../../../utils/data_utils";
 
 export class Proxy {
     hostname;
     port;
     credentials: CredentialsProxyData;
-    httpEnabled = false;
-    httpsEnabled = false;
     excludeList = [];
     type: ProxyType;
     static url: string = Cypress.env("tackleUrl") + "/proxies";
 
     constructor(proxyData: ProxyData, type: ProxyType) {
-        const { hostname, port, httpEnabled, credentials, httpsEnabled, excludeList } = proxyData;
+        const { hostname, port, credentials, excludeList } = proxyData;
         this.hostname = hostname;
         this.port = port;
-        this.httpEnabled = httpEnabled;
         this.credentials = credentials;
-        this.httpsEnabled = httpsEnabled;
         this.excludeList = excludeList;
         this.type = type;
     }
@@ -40,17 +34,32 @@ export class Proxy {
                 selectUserPerspective("Administrator");
                 clickByText("a.pf-c-nav__link", "Proxy");
                 cy.contains("h1", "Proxy configuration", { timeout: 5000 });
+                cy.wait(5000); // This wait is required because of problems with page rendering, will be fixed later
             }
         });
     }
 
+    static disableAllProxies() {
+        const proxy = new Proxy(getRandomProxyData(), ProxyType.http);
+        // Right now a proxy must have a valid configuration to disable it
+        proxy.configureProxy();
+        proxy.disable();
+        proxy.type = ProxyType.https;
+        proxy.configureProxy();
+        proxy.disable();
+    }
+
     configureProxy(): void {
-        cy.wait(5000); // This wait is required because of problems with page rendering, will be fixed later
         this.enable();
         this.fillHost();
         this.fillPort();
         if (this.credentials) {
-            click(ProxyViewSelectorsByType[this.type].identityRequired);
+            const identityRequiredSelector = ProxyViewSelectorsByType[this.type].identityRequired;
+            cy.get(identityRequiredSelector).then(($checkbox) => {
+                if (!$checkbox.prop("checked")) {
+                    click(identityRequiredSelector);
+                }
+            });
             click(ProxyViewSelectorsByType[this.type].credentialsSelectToggle);
             clickByText(button, this.credentials.name);
         }
@@ -58,6 +67,7 @@ export class Proxy {
             this.fillExcludeList();
         }
         submitForm();
+        cy.wait(5000);
     }
 
     unConfigureProxy(): void {
@@ -86,15 +96,23 @@ export class Proxy {
 
     enable(): void {
         Proxy.open();
-        selectCheckBox(ProxyViewSelectorsByType[this.type].enabledSwitch);
+        const selector = ProxyViewSelectorsByType[this.type].enabledSwitch;
+        cy.get(selector, { timeout: 120 * SEC }).then(($checkbox) => {
+            if (!$checkbox.prop("checked")) {
+                click(selector);
+            }
+        });
     }
 
     disable(): void {
         Proxy.open();
-        unSelectCheckBox(ProxyViewSelectorsByType[this.type].enabledSwitch);
+        const selector = ProxyViewSelectorsByType[this.type].enabledSwitch;
+        cy.get(selector, { timeout: 120 * SEC }).then(($checkbox) => {
+            if ($checkbox.prop("checked")) {
+                click(selector);
+                submitForm();
+                cy.wait(5000);
+            }
+        });
     }
-
-    //TODO: Write disable method that will clear all fields and disable proxy
-    //TODO: Try to validate current status of switch before clicking
-    //TODO: Add filling in exclude list
 }
