@@ -63,8 +63,8 @@ describe("Proxy operations", () => {
     });
 
     it("Disable HTTPs proxy with invalid configuration", function () {
-        httpProxy.configureProxy();
-        httpProxy.unConfigureProxy();
+        httpsProxy.configureProxy();
+        httpsProxy.unConfigureProxy();
     });
 
     it("Enable HTTP proxy ", function () {
@@ -73,17 +73,17 @@ describe("Proxy operations", () => {
         httpProxy.configureProxy();
     });
 
-    it("Disable HTTP proxy", function () {
+    it("Disable HTTP proxy with valid configuration", function () {
         httpProxy.disable();
     });
 
-    it("Enable HTTPS proxy", () => {
+    it("Enable HTTPS proxy with valid configuration", () => {
         httpsProxy.excludeList = ["127.0.0.1", "github.com"];
         httpsProxy.credentials = httpsProxyCreds;
         httpsProxy.configureProxy();
     });
 
-    it("Disable HTTPS proxy", () => {
+    it("Disable HTTPS proxy with valid configuration", () => {
         httpsProxy.disable();
     });
 
