@@ -11,7 +11,7 @@ import {
 } from "../../../../utils/utils";
 import { button } from "../../../types/constants";
 import { CredentialsProxyData, ProxyData } from "../../../types/types";
-import { ProxyType, ProxyViewSelectors } from "../../../views/proxy.view";
+import { ProxyType, ProxyViewSelectors, ProxyViewSelectorsByType } from "../../../views/proxy.view";
 
 export class Proxy {
     hostname;
@@ -20,8 +20,10 @@ export class Proxy {
     httpEnabled = false;
     httpsEnabled = false;
     excludeList = [];
+    type: ProxyType;
+    static url: string = Cypress.env("tackleUrl") + "/proxies";
 
-    constructor(proxyData: ProxyData) {
+    constructor(proxyData: ProxyData, type: ProxyType) {
         const { hostname, port, httpEnabled, credentials, httpsEnabled, excludeList } = proxyData;
         this.hostname = hostname;
         this.port = port;
@@ -29,30 +31,27 @@ export class Proxy {
         this.credentials = credentials;
         this.httpsEnabled = httpsEnabled;
         this.excludeList = excludeList;
+        this.type = type;
     }
 
     static open() {
-        selectUserPerspective("Administrator");
-        clickByText("a.pf-c-nav__link", "Proxy");
-        cy.contains("h1", "Proxy configuration", { timeout: 5000 });
+        cy.url().then((url) => {
+            if (url !== Proxy.url) {
+                selectUserPerspective("Administrator");
+                clickByText("a.pf-c-nav__link", "Proxy");
+                cy.contains("h1", "Proxy configuration", { timeout: 5000 });
+            }
+        });
     }
 
-    enableSwitch(selector): void {
-        selectCheckBox(selector);
-    }
-
-    disableSwitch(selector): void {
-        unSelectCheckBox(selector);
-    }
-
-    protected configureProxy(type: string): void {
+    configureProxy(): void {
         cy.wait(5000); // This wait is required because of problems with page rendering, will be fixed later
-        this.enableSwitch(`#${type}Proxy`);
-        inputText(`[name="${type}Host"]`, this.hostname);
-        inputText(`[name="${type}Port"]`, this.port);
+        this.enable();
+        this.fillHost();
+        this.fillPort();
         if (this.credentials) {
-            click(`#${type}-identity-required`);
-            click(`#${type}-proxy-credentials-select-toggle`);
+            click(ProxyViewSelectorsByType[this.type].identityRequired);
+            click(ProxyViewSelectorsByType[this.type].credentialsSelectToggle);
             clickByText(button, this.credentials.name);
         }
         if (this.excludeList) {
@@ -61,10 +60,11 @@ export class Proxy {
         submitForm();
     }
 
-    protected unConfigureProxy(type: string): void {
-        clearInput(`[name="${type}Host"]`);
-        clearInput(`[name="${type}Port"]`);
-        this.disableSwitch(`#${type}Proxy`);
+    unConfigureProxy(): void {
+        clearInput(ProxyViewSelectorsByType[this.type].host);
+        clearInput(ProxyViewSelectorsByType[this.type].port);
+        clearInput(ProxyViewSelectors.excludedList);
+        this.disable();
     }
 
     fillExcludeList(): void {
@@ -73,54 +73,25 @@ export class Proxy {
             fullList = fullList + current + ", ";
         });
         cy.log(fullList);
-        inputText('[aria-label="excluded"]', fullList);
+        inputText(ProxyViewSelectors.excludedList, fullList);
     }
 
-    fillHost(type: ProxyType, host: string): void {
-        inputText(
-            type === ProxyType.http ? ProxyViewSelectors.httpHost : ProxyViewSelectors.httpsHost,
-            host
-        );
+    fillHost(host?: string): void {
+        inputText(ProxyViewSelectorsByType[this.type].host, host ?? this.hostname);
     }
 
-    fillPort(type: ProxyType, port: string): void {
-        inputText(
-            type === ProxyType.http ? ProxyViewSelectors.httpPort : ProxyViewSelectors.httpsPort,
-            port
-        );
+    fillPort(port?: string): void {
+        inputText(ProxyViewSelectorsByType[this.type].port, port ?? this.port);
     }
 
     enable(): void {
         Proxy.open();
-        if (this.httpEnabled) {
-            this.configureProxy("http");
-        }
-        if (this.httpsEnabled) {
-            this.configureProxy("https");
-        }
+        selectCheckBox(ProxyViewSelectorsByType[this.type].enabledSwitch);
     }
 
     disable(): void {
         Proxy.open();
-        clearInput('[aria-label="excluded"]');
-        if (this.httpEnabled) {
-            this.unConfigureProxy("http");
-            this.httpEnabled = false;
-        }
-        if (this.httpsEnabled) {
-            this.unConfigureProxy("https");
-            this.httpsEnabled = false;
-        }
-    }
-
-    disableProxy(): void {
-        // If proxy is enabled just switches it off
-        Proxy.open();
-        cy.wait(5000);
-        disableProxy(`#${"http"}Proxy`);
-        cy.wait(2000);
-        disableProxy(`#${"https"}Proxy`);
-        cy.wait(2000);
+        unSelectCheckBox(ProxyViewSelectorsByType[this.type].enabledSwitch);
     }
 
     //TODO: Write disable method that will clear all fields and disable proxy

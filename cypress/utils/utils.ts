@@ -75,6 +75,7 @@ import { CredentialsMaven } from "../integration/models/administrator/credential
 import { CredentialsSourceControlUsername } from "../integration/models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../integration/models/administrator/credentials/credentialsSourceControlKey";
 import { Application } from "../integration/models/developer/applicationinventory/application";
+import { InsecureRepositoryToggle } from "../integration/views/repository.view";
 
 let userName = Cypress.env("user");
 let userPassword = Cypress.env("pass");
@@ -94,7 +95,7 @@ export function clearInput(fieldID: string): void {
 export function clickByText(fieldId: string, buttonText: string, isForced = true): void {
     // https://github.com/cypress-io/cypress/issues/2000#issuecomment-561468114
     cy.contains(fieldId, buttonText, { timeout: 120 * SEC }).click({ force: isForced });
-    cy.wait(1000);
+    cy.wait(SEC);
 }
 
 export function click(fieldId: string, isForced = true): void {
@@ -151,11 +152,11 @@ export function updatePassword(): void {
     });
 }
 
-export function logout(): void {
+export function logout(userName?: string): void {
     clickByText(button, userName);
-    cy.wait(500);
+    cy.wait(0.5 * SEC);
     clickByText("a", "Logout");
-    cy.wait(4000);
+    // cy.wait(4000);
     cy.get("h1", { timeout: 15 * SEC }).contains("Sign in to your account");
 }
 
@@ -631,10 +632,10 @@ export function deleteApplicationTableRows(lastPage = false): void {
                             .parent(trTag)
                             .within(() => {
                                 click(actionButton);
-                                cy.wait(800);
+                                cy.wait(2000);
                             })
                             .contains(button, deleteAction)
-                            .click();
+                            .click({ force: true });
                         cy.wait(800);
                         click(commonView.confirmButton);
                         cy.wait(4000);
@@ -910,7 +911,7 @@ export function getRandomApplicationData(
 }
 
 export function getRandomAnalysisData(analysisdata): analysisData {
-    var analysisData = {
+    return {
         source: analysisdata.source,
         target: analysisdata.target,
         binary: analysisdata.binary,
@@ -920,8 +921,8 @@ export function getRandomAnalysisData(analysisdata): analysisData {
         storyPoints: analysisdata.storyPoints,
         excludePackages: analysisdata.excludePackages,
     };
-    return analysisData;
 }
+
 export function createMultipleApplications(numberofapplications: number): Array<Assessment> {
     let applicationList: Array<Assessment> = [];
     for (let i = 0; i < numberofapplications; i++) {
@@ -1308,4 +1309,28 @@ export function doesExist(selector: string, isAccessible: boolean): void {
     } else {
         cy.get(selector).should("not.exist");
     }
+}
+
+export function checkInsecureRepository(): void {
+    cy.wait(1000);
+    // get the text object beside the switch to check the status of the toggle if it's enabled or not, then check the switch only if it is not already checked
+    cy.get(".pf-m-on")
+        .invoke("css", "display")
+        .then((display) => {
+            if (display.toString() == "none") {
+                click(InsecureRepositoryToggle);
+            }
+        });
+}
+
+export function uncheckInsecureRepository(): void {
+    cy.wait(1000);
+    // get the text object beside the switch to check the status of the toggle if it's enabled or not, then uncheck the switch only if it is not already unchecked
+    cy.get(".pf-m-off")
+        .invoke("css", "display")
+        .then((display) => {
+            if (display.toString() == "none") {
+                click(InsecureRepositoryToggle);
+            }
+        });
 }
