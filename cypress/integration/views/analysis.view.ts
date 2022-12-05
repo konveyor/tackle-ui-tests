@@ -17,8 +17,7 @@ export const actionButton = "div > button[aria-label='Actions']";
 export const applicationNameInput = "input[name=name]";
 export const applicationDescriptionInput = "input[name=description]";
 export const sourceofAnalysiSelect = "[placeholder='Select a business service']";
-export const sourceDropdown =
-    "main[aria-label='Application analysis content'] > div > div > div > div";
+export const sourceDropdown = "#analysis-mode-toggle";
 export const analysisColumn = "td[data-label='Analysis']";
 export const manageCredentials = "Manage credentials";
 export const sourceCredential = "input[aria-label='sourceCredentials']";
