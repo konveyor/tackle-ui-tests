@@ -45,8 +45,7 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         deleteApplicationTableRows();
 
         //Disable all proxy settings
-        let proxy = new Proxy(data.getRandomProxyData());
-        proxy.disableProxy();
+        Proxy.disableAllProxies();
 
         //Create source and maven credentials required for analysis
         source_credential = new CredentialsSourceControlUsername(

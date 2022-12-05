@@ -40,7 +40,8 @@ describe("Proxy operations", () => {
             "This field must contain fewer than 120 characters."
         );
         cy.get(submitButton).should("be.disabled");
-        httpProxy.unConfigureProxy();
+        httpProxy.configureProxy();
+        httpProxy.disable();
     });
 
     it("Https Proxy port and host field validation", function () {
@@ -52,6 +53,17 @@ describe("Proxy operations", () => {
             "This field must contain fewer than 120 characters."
         );
         cy.get(submitButton).should("be.disabled");
+        httpsProxy.configureProxy();
+        httpsProxy.disable();
+    });
+
+    it("Disable HTTP proxy with invalid configuration", function () {
+        httpProxy.configureProxy();
+        httpProxy.unConfigureProxy();
+    });
+
+    it("Disable HTTPs proxy with invalid configuration", function () {
+        httpsProxy.configureProxy();
         httpsProxy.unConfigureProxy();
     });
 
@@ -61,19 +73,22 @@ describe("Proxy operations", () => {
         httpProxy.configureProxy();
     });
 
-    it("Disable HTTP proxy", function () {
+    it("Disable HTTP proxy with valid configuration", function () {
         httpProxy.disable();
-        httpProxyCreds.delete();
     });
 
-    it("Enable HTTPS proxy", () => {
+    it("Enable HTTPS proxy with valid configuration", () => {
         httpsProxy.excludeList = ["127.0.0.1", "github.com"];
         httpsProxy.credentials = httpsProxyCreds;
         httpsProxy.configureProxy();
     });
 
-    it("Disable HTTPS proxy", () => {
+    it("Disable HTTPS proxy with valid configuration", () => {
         httpsProxy.disable();
+    });
+
+    after("Perform test data clean up", function () {
         httpsProxyCreds.delete();
+        httpProxyCreds.delete();
     });
 });
