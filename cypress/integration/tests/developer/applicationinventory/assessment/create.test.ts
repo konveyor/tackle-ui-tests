@@ -61,7 +61,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
 
         // Perform login
         login();
-        applicationList = createMultipleApplications(4);
+        applicationList = createMultipleApplications(11);
         businessservicesList = createMultipleBusinessServices(1);
     });
 
@@ -156,25 +156,32 @@ describe("Application validations", { tags: "@tier2" }, () => {
         notExists(application.name);
     });
 
-    it("Bulk deletion of applications", function () {
+    it("Bulk deletion of applications - Select page ", function () {
         // Click dropdown toggle button to make 'Select page' selection.
         cy.get("button[aria-label='Select']").click();
-        cy.get("ul[role=menu] > li").contains("Select all").click();
 
-        // Select all the applications on the current page and delete the applications
         cy.get("ul[role=menu] > li").contains("Select page").click();
         cy.get(actionButton).eq(1).click();
         cy.get("a.pf-c-dropdown__menu-item").contains("Delete").click();
         clickByText(button, "Delete");
+        // Assert that all applications except the one(s) on the next page have been deleted.
+        for (let i = 0; i < applicationList.length - 1; i++) {
+            notExists(applicationList[i].name);
+        }
+        exists(applicationList[applicationList.length - 1].name);
+    });
 
-        applicationList = createMultipleApplications(2);
+    it("Bulk deletion of applications - Select all ", function () {
+        applicationList = createMultipleApplications(11);
         // Click dropdown toggle button to make 'Select all' selection.
         cy.get("button[aria-label='Select']").click();
 
-        // Select all applications and delete them
         cy.get("ul[role=menu] > li").contains("Select all").click();
         cy.get(actionButton).eq(1).click();
         cy.get("a.pf-c-dropdown__menu-item").contains("Delete").click();
         clickByText(button, "Delete");
+        for (let i = 0; i < applicationList.length; i++) {
+            notExists(applicationList[i].name);
+        }
     });
 });
