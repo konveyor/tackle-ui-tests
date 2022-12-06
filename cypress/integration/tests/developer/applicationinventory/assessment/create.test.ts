@@ -157,20 +157,24 @@ describe("Application validations", { tags: "@tier2" }, () => {
     });
 
     it("Bulk deletion of applications", function () {
+        // Click dropdown toggle button to make 'Select page' selection.
         cy.get("button[aria-label='Select']").click();
+        cy.get("ul[role=menu] > li").contains("Select all").click();
 
-        // Select all the applications on the current page
+        // Select all the applications on the current page and delete the applications
         cy.get("ul[role=menu] > li").contains("Select page").click();
         cy.get(actionButton).eq(1).click();
         cy.get("a.pf-c-dropdown__menu-item").contains("Delete").click();
-        click(commonView.confirmButton);
+        clickByText(button, "Delete");
 
-        // Select all applications
-        applicationList = createMultipleApplications(12);
+        applicationList = createMultipleApplications(2);
+        // Click dropdown toggle button to make 'Select all' selection.
+        cy.get("button[aria-label='Select']").click();
 
+        // Select all applications and delete them
         cy.get("ul[role=menu] > li").contains("Select all").click();
         cy.get(actionButton).eq(1).click();
         cy.get("a.pf-c-dropdown__menu-item").contains("Delete").click();
-        clickByText(button, 'Delete');
+        clickByText(button, "Delete");
     });
 });
