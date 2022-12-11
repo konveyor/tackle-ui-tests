@@ -10,6 +10,7 @@ import {
 } from "../../../../utils/utils";
 import { button } from "../../../types/constants";
 import { CredentialsSourceControlData } from "../../../types/types";
+import {passwordInput, usernameInput} from "../../../views/credentials.view";
 
 export class CredentialsSourceControlUsername extends CredentialsSourceControl {
     username = "";
@@ -29,11 +30,11 @@ export class CredentialsSourceControlUsername extends CredentialsSourceControl {
     }
 
     protected fillUsername() {
-        inputText("#user", this.username);
+        inputText(usernameInput, this.username);
     }
 
     protected fillPassword() {
-        inputText("#password", this.password);
+        inputText(passwordInput, this.password);
     }
 
     protected selectCredType() {
