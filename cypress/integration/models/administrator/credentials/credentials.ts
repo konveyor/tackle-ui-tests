@@ -10,6 +10,8 @@ import {
     validateValue,
     selectFromDropList,
     selectFromDropListByText,
+    validateShortInput,
+    validateTooLongInput,
 } from "../../../../utils/utils";
 import {
     administrator,
@@ -44,6 +46,21 @@ export class Credentials {
 
     constructor(name?) {
         if (name) this.name = name;
+    }
+
+    static validateFields() {
+        Credentials.openList();
+        click(createBtn);
+        Credentials.fillNameTooShort();
+        Credentials.fillNameTooLong();
+    }
+
+    protected static fillNameTooShort(): void {
+        validateShortInput(credentialNameInput, descriptionInput);
+    }
+
+    protected static fillNameTooLong(): void {
+        validateTooLongInput(credentialNameInput);
     }
 
     protected fillName(): void {
