@@ -70,7 +70,7 @@ import { Credentials } from "../integration/models/administrator/credentials/cre
 import { Assessment } from "../integration/models/developer/applicationinventory/assessment";
 import { analysisData, applicationData, UserData } from "../integration/types/types";
 import { CredentialsProxy } from "../integration/models/administrator/credentials/credentialsProxy";
-import { getRandomCredentialsData } from "../utils/data_utils";
+import { getRandomCredentialsData, randomWordGenerator } from "../utils/data_utils";
 import { CredentialsMaven } from "../integration/models/administrator/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../integration/models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../integration/models/administrator/credentials/credentialsSourceControlKey";
@@ -1330,4 +1330,16 @@ export function doesExistText(str: string, toBePresent: boolean): void {
     } else {
         cy.contains(str).should("not.exist");
     }
+}
+
+export function validateShortInput(selector, anotherSelector?: string): void {
+    inputText(selector, "ab");
+    if (anotherSelector) click(anotherSelector);
+    doesExistText("This field must contain at least 3 characters.", true);
+}
+
+export function validateTooLongInput(selector, anotherSelector?: string): void {
+    inputText(selector, randomWordGenerator(121));
+    if (anotherSelector) click(anotherSelector);
+    doesExistText("This field must contain fewer than 120 characters.", true);
 }
