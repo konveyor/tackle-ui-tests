@@ -10,7 +10,7 @@ import {
 } from "../../../../utils/utils";
 import { button } from "../../../types/constants";
 import { CredentialsSourceControlData } from "../../../types/types";
-import {passwordInput, usernameInput} from "../../../views/credentials.view";
+import { passwordInput, usernameInput } from "../../../views/credentials.view";
 
 export class CredentialsSourceControlUsername extends CredentialsSourceControl {
     username = "";
