@@ -11,6 +11,8 @@ import {
 import { Analysis } from "../../models/developer/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialType } from "../../types/constants";
+import { RbacValidationRules } from "../../types/types";
+import { Application } from "../../models/developer/applicationinventory/application";
 
 describe("Migrator RBAC operations", () => {
     let userMigrator = new UserMigrator(getRandomUserData());
@@ -30,6 +32,27 @@ describe("Migrator RBAC operations", () => {
         getRandomCredentialsData(CredentialType.sourceControl)
     );
 
+    const rbacRules: RbacValidationRules = {
+        "Create new": false,
+        Analyze: true,
+        "Upload binary": true,
+        Assess: false,
+        Review: false,
+        "Action menu": {
+            "Not available": true,
+            Import: false,
+            "Manage imports": false,
+            "Manage credentials": false,
+            Delete: false,
+        },
+        "applicable options": {
+            "Analysis details": true,
+            "Cancel analysis": true,
+            "Manage credentials": false,
+            Delete: false,
+        },
+    };
+
     before("Creating RBAC users, adding roles for them", () => {
         //Need to log in as admin and create simple app with known name to use it for tests
         login();
@@ -45,31 +68,33 @@ describe("Migrator RBAC operations", () => {
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
         preservecookies();
-        cy.pause();
     });
 
     it("Login as migrator and validate create application button", () => {
         //Migrator is not allowed to create applications
-        userMigrator.validateCreateAppButton(false);
+        Application.validateCreateAppButton(rbacRules);
     });
 
     it("Login as migrator and validate assess application button", () => {
         //Migrator is not allowed to create applications
-        userMigrator.validateAssessButton(false);
+        Application.validateAssessButton(rbacRules);
     });
 
     it("Login as migrator and validate presence of import and manage imports", () => {
         //migrator is allowed to import applications
-        userMigrator.validateImport(true);
+        Analysis.validateTopActionMenu(rbacRules);
     });
 
-    it("Login as architect and validate presence of analyse button", () => {
+    it("Login as migrator and validate presence of analyse button", () => {
         //Migrator is allowed to analyse applications
-        userMigrator.validateAnalyzeButton(true);
+        Analysis.validateAnalyzeButton(rbacRules);
+    });
+
+    it("Login as migrator and validate analysis details and cancel analysis buttons presence", () => {
+        application.validateAvailableActions(rbacRules);
     });
 
     after("", () => {
-        cy.pause();
         userMigrator.logout();
         login(adminUserName, adminUserPassword);
         appCredentials.delete();
