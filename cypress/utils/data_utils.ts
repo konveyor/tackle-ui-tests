@@ -106,7 +106,8 @@ export function getDefaultTagTypes(): string[] {
 export function getRandomCredentialsData(
     type: string,
     userCred?: string,
-    gitTestingUser = false
+    gitTestingUser = false,
+    url?: string
 ): CredentialsData {
     let password;
     let user;
@@ -152,7 +153,11 @@ export function getRandomCredentialsData(
     } else {
         // Maven credentials
         if (gitTestingUser) {
-            writeMavenSettingsFile(user, password);
+            if (url) {
+                writeMavenSettingsFile(user, password, url);
+            } else {
+                writeMavenSettingsFile(user, password);
+            }
         }
         return {
             type: type,
