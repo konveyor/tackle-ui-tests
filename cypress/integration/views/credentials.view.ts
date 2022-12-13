@@ -15,8 +15,8 @@ limitations under the License.
 */
 export const credentialNameInput = "input[name=name]";
 export const descriptionInput = "input[name='description']";
-export const usernameInput = "input[name=user]";
-export const passwordInput = "input[name=password]";
+export const usernameInput = "#user";
+export const passwordInput = "#password";
 export const privatePassphraseInput = "input[aria-label='Private Key Passphrase']";
 export const createBtn = "#create-credential-button";
 export const selectType = "#type-select-toggle";
