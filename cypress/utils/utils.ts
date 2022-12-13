@@ -610,19 +610,13 @@ export function verifyImportErrorMsg(errorMsg: any): void {
 }
 
 export function deleteApplicationTableRows(lastPage = false): void {
-    if (!lastPage) {
-        clickByText(navMenu, applicationInventory);
-        cy.wait(800);
-        // Select 100 items per page
-        selectItemsPerPage(100);
-        cy.wait(2000);
-    }
     cy.get(commonView.appTable)
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get('input#bulk-selected-apps-checkbox').check()
                 cy.get(actionButton).eq(1).click();
-                cy.get("a.pf-c-dropdown__menu-item").contains("Delete").click();
+                cy.get("a.pf-c-dropdown__menu-item").contains("Delete").trigger("click");
                 clickByText(button, "Delete");
             }
         });
