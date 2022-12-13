@@ -61,6 +61,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
 
         // Perform login
         login();
+        deleteApplicationTableRows();
         applicationList = createMultipleApplications(11);
         businessservicesList = createMultipleBusinessServices(1);
     });

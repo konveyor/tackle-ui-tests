@@ -709,6 +709,7 @@ export function performRowAction(itemName: string, action: string): void {
 export function performRowActionByIcon(itemName: string, action: string): void {
     // itemName is the text to be searched on the screen (For eg: application name, etc)
     // Action is the name of the action to be applied (For eg: edit or click kebab menu)
+    selectItemsPerPage(100);
     cy.contains(itemName, { timeout: 120 * SEC })
         .closest(trTag)
         .within(() => {
