@@ -621,25 +621,9 @@ export function deleteApplicationTableRows(lastPage = false): void {
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
-                    .each(($tableRow) => {
-                        let name = $tableRow.find("td[data-label=Name]").text();
-                        cy.get(tdTag)
-                            .contains(name)
-                            .parent(tdTag)
-                            .parent(trTag)
-                            .within(() => {
-                                click(actionButton);
-                                cy.wait(2000);
-                            })
-                            .contains(button, deleteAction)
-                            .click({ force: true });
-                        cy.wait(800);
-                        click(commonView.confirmButton);
-                        cy.wait(4000);
-                    });
+                cy.get(actionButton).eq(1).click();
+                cy.get("a.pf-c-dropdown__menu-item").contains("Delete").click();
+                clickByText(button, "Delete");
             }
         });
 }
