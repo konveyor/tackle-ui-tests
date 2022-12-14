@@ -118,6 +118,6 @@ describe("Test secure and insecure svn repository analysis", { tags: "@tier1" },
         application.manageCredentials(source_credential.name, "None");
         application.analyze();
         application.verifyAnalysisStatus("Failed");
-        application.openreport();
+        application.openAnalysisDetails();
     });
 });

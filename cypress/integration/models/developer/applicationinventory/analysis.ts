@@ -26,12 +26,10 @@ import {
     actionsButton,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
-import * as commonView from "../../../views/common.view";
 import {
     clickByText,
     cancelForm,
     selectFormItems,
-    checkSuccessAlert,
     selectUserPerspective,
     performRowActionByIcon,
     uploadXml,
@@ -262,6 +260,29 @@ export class Analysis extends Application {
             .within(() => {
                 cy.get("button > a")
                     .should("contain", "Report")
+                    .then(($a) => {
+                        // Removing target from html so that report opens in same tab
+                        $a.attr("target", "_self");
+                    })
+                    .click();
+            });
+    }
+
+    openAnalysisDetails() {
+        super.expandApplicationRow();
+        cy.wait(10000);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .next()
+            .find("span")
+            .contains("Analysis")
+            .parent("dt")
+            .next()
+            .within(() => {
+                cy.get("button.pf-c-button.pf-m-link.pf-u-ml-0")
+                    .should("contain", "Analysis details")
                     .then(($a) => {
                         // Removing target from html so that report opens in same tab
                         $a.attr("target", "_self");

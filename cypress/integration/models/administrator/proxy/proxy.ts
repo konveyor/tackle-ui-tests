@@ -41,6 +41,7 @@ export class Proxy {
 
     static disableAllProxies() {
         const proxy = new Proxy(getRandomProxyData(), ProxyType.http);
+        proxy.excludeList = null;
         // Right now a proxy must have a valid configuration to disable it
         proxy.configureProxy();
         proxy.disable();
