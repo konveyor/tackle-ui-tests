@@ -615,14 +615,18 @@ export function deleteApplicationTableRows(): void {
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
                 cy.wait(1000);
-                cy.get("span.pf-c-options-menu__toggle-text").then(($body) => {
-                    if (!$body.text().includes("of 0")) {
-                        cy.get("input#bulk-selected-apps-checkbox").check();
-                        cy.get(actionButton).eq(1).click();
-                        cy.get("a.pf-c-dropdown__menu-item").contains("Delete").trigger("click");
-                        clickByText(button, "Delete");
-                    }
-                });
+                cy.get("span.pf-c-options-menu__toggle-text")
+                    .eq(0)
+                    .then(($body) => {
+                        if (!$body.text().includes("of 0")) {
+                            cy.get("input#bulk-selected-apps-checkbox").check();
+                            cy.get(actionButton).eq(1).click();
+                            cy.get("a.pf-c-dropdown__menu-item")
+                                .contains("Delete")
+                                .trigger("click");
+                            clickByText(button, "Delete");
+                        }
+                    });
             }
         });
 }
