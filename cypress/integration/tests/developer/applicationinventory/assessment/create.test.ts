@@ -62,7 +62,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
         // Perform login
         login();
         deleteApplicationTableRows();
-        applicationList = createMultipleApplications(11);
+        // applicationList = createMultipleApplications(11);
         businessservicesList = createMultipleBusinessServices(1);
     });
 
@@ -78,8 +78,8 @@ describe("Application validations", { tags: "@tier2" }, () => {
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier3")) return;
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
+        // deleteApplicationTableRows();
+        // deleteAllBusinessServices();
     });
 
     it("Application field validations", function () {
@@ -132,7 +132,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
         // Assert that application inventory page is opened
         cy.contains(button, createNewButton).should("exist");
     });
-
+    /*
     it("Application unique constraint validation", function () {
         Assessment.open();
         const application = new Assessment(getRandomApplicationData());
@@ -184,5 +184,5 @@ describe("Application validations", { tags: "@tier2" }, () => {
         for (let i = 0; i < applicationList.length; i++) {
             notExists(applicationList[i].name);
         }
-    });
+    }); */
 });
