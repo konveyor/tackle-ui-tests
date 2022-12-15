@@ -1320,7 +1320,7 @@ export function doesExistText(str: string, toBePresent: boolean): void {
     }
 }
 
-export function validateShortInput(selector, anotherSelector?: string): void {
+export function validateTooShortInput(selector, anotherSelector?: string): void {
     inputText(selector, "ab");
     if (anotherSelector) click(anotherSelector);
     doesExistText("This field must contain at least 3 characters.", true);

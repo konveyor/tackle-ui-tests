@@ -10,7 +10,7 @@ import {
     validateValue,
     selectFromDropList,
     selectFromDropListByText,
-    validateShortInput,
+    validateTooShortInput,
     validateTooLongInput,
 } from "../../../../utils/utils";
 import {
@@ -27,6 +27,8 @@ import {
     credentialNameInput,
     credLabels,
     descriptionInput,
+    passwordInput,
+    usernameInput,
 } from "../../../views/credentials.view";
 import {
     navLink,
@@ -56,11 +58,27 @@ export class Credentials {
     }
 
     protected static fillNameTooShort(): void {
-        validateShortInput(credentialNameInput, descriptionInput);
+        validateTooShortInput(credentialNameInput, descriptionInput);
     }
 
     protected static fillNameTooLong(): void {
         validateTooLongInput(credentialNameInput);
+    }
+
+    protected static fillUsernameTooShort(): void {
+        validateTooShortInput(usernameInput, passwordInput);
+    }
+
+    protected static fillUsernameTooLong(): void {
+        validateTooLongInput(usernameInput);
+    }
+
+    protected static fillPasswordTooShort(): void {
+        validateTooShortInput(passwordInput, usernameInput);
+    }
+
+    protected static fillPasswordTooLong(): void {
+        validateTooLongInput(passwordInput);
     }
 
     protected fillName(): void {
