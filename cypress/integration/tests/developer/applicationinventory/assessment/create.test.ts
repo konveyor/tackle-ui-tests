@@ -28,6 +28,8 @@ import {
     deleteApplicationTableRows,
     deleteAllBusinessServices,
     getRandomApplicationData,
+    click,
+    createMultipleApplications,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -41,6 +43,7 @@ import {
     applicationDescriptionInput,
     applicationNameInput,
     applicationBusinessServiceSelect,
+    actionButton,
 } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
@@ -49,6 +52,7 @@ import { BusinessServices } from "../../../../models/developer/controls/business
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
 var businessservicesList: Array<BusinessServices> = [];
+var applicationList: Array<Assessment> = [];
 
 describe("Application validations", { tags: "@tier2" }, () => {
     before("Login", function () {
@@ -57,6 +61,8 @@ describe("Application validations", { tags: "@tier2" }, () => {
 
         // Perform login
         login();
+        deleteApplicationTableRows();
+        applicationList = createMultipleApplications(11);
         businessservicesList = createMultipleBusinessServices(1);
     });
 
@@ -149,5 +155,34 @@ describe("Application validations", { tags: "@tier2" }, () => {
         application.delete();
         cy.wait("@getApplication");
         notExists(application.name);
+    });
+
+    it("Bulk deletion of applications - Select page ", function () {
+        // Click dropdown toggle button to make 'Select page' selection.
+        cy.get("button[aria-label='Select']").click();
+
+        cy.get("ul[role=menu] > li").contains("Select page").click();
+        cy.get(actionButton).eq(1).click();
+        cy.get("a.pf-c-dropdown__menu-item").contains("Delete").click();
+        clickByText(button, "Delete");
+        // Assert that all applications except the one(s) on the next page have been deleted.
+        for (let i = 0; i < applicationList.length - 1; i++) {
+            notExists(applicationList[i].name);
+        }
+        exists(applicationList[applicationList.length - 1].name);
+    });
+
+    it("Bulk deletion of applications - Select all ", function () {
+        applicationList = createMultipleApplications(11);
+        // Click dropdown toggle button to make 'Select all' selection.
+        cy.get("button[aria-label='Select']").click();
+
+        cy.get("ul[role=menu] > li").contains("Select all").click();
+        cy.get(actionButton).eq(1).click();
+        cy.get("a.pf-c-dropdown__menu-item").contains("Delete").click();
+        clickByText(button, "Delete");
+        for (let i = 0; i < applicationList.length; i++) {
+            notExists(applicationList[i].name);
+        }
     });
 });

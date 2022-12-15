@@ -23,14 +23,11 @@ import {
     getRandomApplicationData,
     getRandomAnalysisData,
     resetURL,
-    clickByText,
     verifySortAsc,
     verifySortDesc,
-} from "../../../utils/utils";
-import { Analysis } from "../../models/developer/applicationinventory/analysis";
-import { analysis } from "../../types/constants";
-import { navTab } from "../../views/menu.view";
-import { Report } from "../../models/developer/applicationinventory/reportPage";
+} from "../../../../../utils/utils";
+import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
+import { Report } from "../../../../models/developer/applicationinventory/reportPage";
 
 describe("Report Page's Sort Validation", { tags: "@tier2" }, () => {
     const report = new Report();

@@ -21,11 +21,11 @@ export class Report {
         cy.wait(2 * SEC);
     }
 
-    applySortAction(sortbySelector: string) {
+    applySortAction(sortbyName: string) {
         // Select the sort-by options
         cy.get(selectSortBy).click();
         cy.get(dropdownMenu).within(() => {
-            clickByText("a", sortbySelector);
+            clickByText("a", sortbyName);
         });
     }
 
