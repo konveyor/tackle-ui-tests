@@ -1,30 +1,21 @@
 import { User } from "../../models/keycloak/users/user";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
-import {
-    getRandomAnalysisData,
-    getRandomApplicationData,
-    login,
-    logout,
-    preservecookies,
-} from "../../../utils/utils";
+import { getRandomApplicationData, login, logout, preservecookies } from "../../../utils/utils";
 import { Analysis } from "../../models/developer/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialType } from "../../types/constants";
 import { RbacValidationRules } from "../../types/types";
 import { Application } from "../../models/developer/applicationinventory/application";
+import { Assessment } from "../../models/developer/applicationinventory/assessment";
+import { Stakeholders } from "../../models/developer/controls/stakeholders";
+import * as data from "../../../utils/data_utils";
 
 describe("Migrator RBAC operations", () => {
     let userMigrator = new UserMigrator(getRandomUserData());
-    const application = new Analysis(
-        getRandomApplicationData("bookServerApp"),
-        getRandomAnalysisData({
-            source: "Source code",
-            target: ["Containerization"],
-            appName: "book-server",
-            storyPoints: 5,
-        })
-    );
+    const application = new Assessment(getRandomApplicationData());
+    let stakeholdersList: Array<Stakeholders> = [];
+    let stakeholderNameList: Array<string> = [];
     let adminUserName = Cypress.env("user");
     let adminUserPassword = Cypress.env("pass");
 
@@ -45,19 +36,31 @@ describe("Migrator RBAC operations", () => {
             "Manage credentials": false,
             Delete: false,
         },
-        "applicable options": {
+        "analysis applicable options": {
             "Analysis details": true,
             "Cancel analysis": true,
             "Manage credentials": false,
             Delete: false,
+        },
+        "assessment applicable options": {
+            "Discard assessment": false,
+            "Copy assessment": false,
+            "Manage dependencies": true,
         },
     };
 
     before("Creating RBAC users, adding roles for them", () => {
         //Need to log in as admin and create simple app with known name to use it for tests
         login();
+        // Navigate to stakeholders control tab and create new stakeholder
+        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
+        stakeholder.create();
+        stakeholdersList.push(stakeholder);
+        stakeholderNameList.push(stakeholder.name);
+
         appCredentials.create();
         application.create();
+        application.perform_assessment("low", stakeholderNameList);
         logout("admin");
         //Logging in as keycloak admin to create migrator user and test it
         User.loginKeycloakAdmin();
@@ -91,7 +94,11 @@ describe("Migrator RBAC operations", () => {
     });
 
     it("Login as migrator and validate analysis details and cancel analysis buttons presence", () => {
-        application.validateAvailableActions(rbacRules);
+        application.validateAnalysisAvailableActions(rbacRules);
+    });
+
+    it("Login as migrator and validate assessment context menu buttons presence", () => {
+        application.validateAssessmentAvailableOptions(rbacRules);
     });
 
     after("", () => {
@@ -99,6 +106,9 @@ describe("Migrator RBAC operations", () => {
         login(adminUserName, adminUserPassword);
         appCredentials.delete();
         application.delete();
+        stakeholdersList.forEach((stakeholder) => {
+            stakeholder.delete();
+        });
         logout("admin");
         User.loginKeycloakAdmin();
         userMigrator.delete();

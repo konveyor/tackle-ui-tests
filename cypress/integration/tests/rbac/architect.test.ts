@@ -1,30 +1,21 @@
 import { User } from "../../models/keycloak/users/user";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
-import {
-    getRandomAnalysisData,
-    getRandomApplicationData,
-    login,
-    logout,
-    preservecookies,
-} from "../../../utils/utils";
+import { getRandomApplicationData, login, logout, preservecookies } from "../../../utils/utils";
 import { Analysis } from "../../models/developer/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialType } from "../../types/constants";
 import { Application } from "../../models/developer/applicationinventory/application";
 import { RbacValidationRules } from "../../types/types";
+import { Stakeholders } from "../../models/developer/controls/stakeholders";
+import { Assessment } from "../../models/developer/applicationinventory/assessment";
+import * as data from "../../../utils/data_utils";
 
 describe("Architect RBAC operations", () => {
     let userArchitect = new UserArchitect(getRandomUserData());
-    const application = new Analysis(
-        getRandomApplicationData("bookServerApp"),
-        getRandomAnalysisData({
-            source: "Source code",
-            target: ["Containerization"],
-            appName: "book-server",
-            storyPoints: 5,
-        })
-    );
+    const application = new Assessment(getRandomApplicationData());
+    let stakeholdersList: Array<Stakeholders> = [];
+    let stakeholderNameList: Array<string> = [];
     let adminUserName = Cypress.env("user");
     let adminUserPassword = Cypress.env("pass");
 
@@ -45,18 +36,30 @@ describe("Architect RBAC operations", () => {
             "Manage credentials": true,
             Delete: true,
         },
-        "applicable options": {
+        "analysis applicable options": {
             "Analysis details": true,
             "Cancel analysis": true,
             "Manage credentials": true,
             Delete: true,
         },
+        "assessment applicable options": {
+            "Discard assessment": true,
+            "Copy assessment": true,
+            "Manage dependencies": true,
+        },
     };
 
     before("Creating RBAC users, adding roles for them", () => {
         login();
+        // Navigate to stakeholders control tab and create new stakeholder
+        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
+        stakeholder.create();
+        stakeholdersList.push(stakeholder);
+        stakeholderNameList.push(stakeholder.name);
+
         appCredentials.create();
         application.create();
+        application.perform_assessment("low", stakeholderNameList);
         logout("admin");
         User.loginKeycloakAdmin();
         userArchitect.create();
@@ -89,7 +92,11 @@ describe("Architect RBAC operations", () => {
     });
 
     it("Login as architect and validate analysis details and cancel analysis buttons presence", () => {
-        application.validateAvailableActions(rbacRules);
+        application.validateAnalysisAvailableActions(rbacRules);
+    });
+
+    it("Login as architect and validate assessment context menu buttons presence", () => {
+        application.validateAssessmentAvailableOptions(rbacRules);
     });
 
     after("", () => {
@@ -97,6 +104,9 @@ describe("Architect RBAC operations", () => {
         login(adminUserName, adminUserPassword);
         appCredentials.delete();
         application.delete();
+        stakeholdersList.forEach((stakeholder) => {
+            stakeholder.delete();
+        });
         logout("admin");
         User.loginKeycloakAdmin();
         userArchitect.delete();

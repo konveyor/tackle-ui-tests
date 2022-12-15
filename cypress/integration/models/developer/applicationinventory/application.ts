@@ -26,6 +26,7 @@ import {
     createAppButton,
     actionsButton,
     SEC,
+    analysis,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -349,5 +350,56 @@ export class Application {
     static validateCreateAppButton(rbacRules: RbacValidationRules) {
         Application.open();
         doesExistSelector(createAppButton, rbacRules["Create new"]);
+    }
+
+    validateAnalysisAvailableActions(rbacRules: RbacValidationRules): void {
+        Application.open();
+        clickByText(navTab, analysis);
+        cy.wait(5 * SEC);
+        cy.get(tdTag)
+            .contains(this.name)
+            .closest(trTag)
+            .within(() => {
+                click(selectBox);
+                cy.wait(SEC);
+                click('button[aria-label="Actions"]');
+                doesExistText(
+                    "Analysis details",
+                    rbacRules["analysis applicable options"]["Analysis details"]
+                );
+                doesExistText(
+                    "Cancel analysis",
+                    rbacRules["analysis applicable options"]["Cancel analysis"]
+                );
+                doesExistText(
+                    "Manage credentials",
+                    rbacRules["analysis applicable options"]["Manage credentials"]
+                );
+                doesExistText("Delete", rbacRules["analysis applicable options"]["Delete"]);
+            });
+    }
+
+    validateAssessmentAvailableOptions(rbacRules: RbacValidationRules): void {
+        Application.open();
+        cy.get(tdTag)
+            .contains(this.name)
+            .closest(trTag)
+            .within(() => {
+                click(selectBox);
+                cy.wait(SEC);
+                click('button[aria-label="Actions"]');
+                doesExistText(
+                    "Discard assessment",
+                    rbacRules["assessment applicable options"]["Discard assessment"]
+                );
+                doesExistText(
+                    "Copy assessment",
+                    rbacRules["assessment applicable options"]["Copy assessment"]
+                );
+                doesExistText(
+                    "Manage dependencies",
+                    rbacRules["assessment applicable options"]["Manage dependencies"]
+                );
+            });
     }
 }
