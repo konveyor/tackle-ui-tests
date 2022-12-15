@@ -47,6 +47,7 @@ import {
     credentialType,
     artifact,
     repositoryType,
+    analysis,
 } from "../integration/types/constants";
 import {
     actionButton,
@@ -565,6 +566,14 @@ export function uploadFile(fileName: string): void {
         subjectType: "drag-n-drop",
     });
     cy.wait(2000);
+}
+
+export function application_inventory_kebab_menu(tab, menu): void {
+    selectUserPerspective("Developer");
+    clickByText(navMenu, applicationInventory);
+    if (tab == 'Analysis') clickByText(navTab, analysis);
+    cy.get(actionButton).eq(1).click();
+    cy.get("a.pf-c-dropdown__menu-item").contains(menu).click();
 }
 
 export function openManageImportsPage(): void {
