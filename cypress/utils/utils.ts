@@ -521,8 +521,7 @@ export function deleteTableRows(): void {
 
 export function importApplication(fileName: string, disableAutoCreation?: boolean): void {
     // Performs application import via csv file upload
-    cy.get(actionButton).eq(1).click();
-    clickByText(button, "Import");
+    application_inventory_kebab_menu("Import");
     cy.get('input[type="file"]', { timeout: 2 * SEC }).attachFile(fileName, {
         subjectType: "drag-n-drop",
     });
@@ -568,9 +567,20 @@ export function uploadFile(fileName: string): void {
     cy.wait(2000);
 }
 
-export function application_inventory_kebab_menu(tab, menu): void {
-    selectUserPerspective("Developer");
-    clickByText(navMenu, applicationInventory);
+export function navigate_to_application_inventory(tab?): void {
+    cy.get("h1", { timeout: 5 * SEC })
+    .then(($header) => {
+        if (!$header.text().includes("Application inventory")) {
+            selectUserPerspective("Developer");
+            clickByText(navMenu, applicationInventory);
+        }
+    });
+    if (tab == 'Analysis') clickByText(navTab, analysis);
+}
+
+export function application_inventory_kebab_menu(menu, tab?): void {
+    // The value for menu could be one of {Import, Manage imports, Delete, Manage credentials}
+    navigate_to_application_inventory();
     if (tab == 'Analysis') clickByText(navTab, analysis);
     cy.get(actionButton).eq(1).click();
     cy.get("a.pf-c-dropdown__menu-item").contains(menu).click();
@@ -578,10 +588,11 @@ export function application_inventory_kebab_menu(tab, menu): void {
 
 export function openManageImportsPage(): void {
     // Opens the manage import applications page
-    selectUserPerspective("Developer");
+    /*selectUserPerspective("Developer");
     clickByText(navMenu, applicationInventory);
     cy.get(actionButton).eq(1).click();
-    cy.get("a.pf-c-dropdown__menu-item").contains("Manage imports").click();
+    cy.get("a.pf-c-dropdown__menu-item").contains("Manage imports").click(); */
+    application_inventory_kebab_menu("Manage imports");
     cy.get("h1", { timeout: 5 * SEC }).contains("Application imports");
 }
 
