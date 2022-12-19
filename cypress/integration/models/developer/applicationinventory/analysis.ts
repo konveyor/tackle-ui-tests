@@ -162,8 +162,8 @@ export class Analysis extends Application {
     protected scopeSelect() {
         if (this.excludePackages) {
             click(excludePackagesSwitch);
-            inputText(`[name="packageToExclude"]`, this.excludePackages);
-            clickByText("#add-to-excluded-packages-list", "Add");
+            inputText("#packageToExclude", this.excludePackages);
+            clickByText("#add-package-to-include", "Add");
         }
         cy.contains("button", "Next", { timeout: 200 }).click();
     }
