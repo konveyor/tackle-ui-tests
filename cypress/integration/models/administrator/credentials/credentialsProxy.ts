@@ -1,6 +1,8 @@
 import { Credentials } from "./credentials";
 import {
     cancelForm,
+    click,
+    clickByText,
     exists,
     inputText,
     notExists,
@@ -8,6 +10,9 @@ import {
     validateValue,
 } from "../../../../utils/utils";
 import { CredentialsProxyData } from "../../../types/types";
+import { button } from "../../../types/constants";
+import { selectType, usernameInput } from "../../../views/credentials.view";
+import { userPasswordInput } from "../../../views/login.view";
 
 export class CredentialsProxy extends Credentials {
     type = "Proxy";
@@ -28,15 +33,15 @@ export class CredentialsProxy extends Credentials {
     }
 
     protected fillUsername() {
-        inputText("[aria-label='proxy-user']", this.username);
+        inputText(usernameInput, this.username);
     }
 
     protected validateUsername(username: string) {
-        validateValue("[aria-label='proxy-user']", username);
+        validateValue(usernameInput, username);
     }
 
     protected fillPassword() {
-        inputText("[aria-label='proxy-password']", this.password);
+        inputText(userPasswordInput, this.password);
     }
 
     create(toBeCanceled = false) {
@@ -103,5 +108,16 @@ export class CredentialsProxy extends Credentials {
             username: this.username,
             password: this.password,
         };
+    }
+
+    static validateFields() {
+        super.validateFields();
+        click(selectType);
+        clickByText(button, "Proxy");
+        this.fillUsernameTooShort();
+        this.fillUsernameTooLong();
+        this.fillPasswordTooShort();
+        this.fillPasswordTooLong();
+        cancelForm();
     }
 }

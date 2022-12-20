@@ -70,7 +70,7 @@ import { Credentials } from "../integration/models/administrator/credentials/cre
 import { Assessment } from "../integration/models/developer/applicationinventory/assessment";
 import { analysisData, applicationData, UserData } from "../integration/types/types";
 import { CredentialsProxy } from "../integration/models/administrator/credentials/credentialsProxy";
-import { getRandomCredentialsData } from "../utils/data_utils";
+import { getRandomCredentialsData, randomWordGenerator } from "../utils/data_utils";
 import { CredentialsMaven } from "../integration/models/administrator/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../integration/models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../integration/models/administrator/credentials/credentialsSourceControlKey";
@@ -609,36 +609,23 @@ export function verifyImportErrorMsg(errorMsg: any): void {
     }
 }
 
-export function deleteApplicationTableRows(lastPage = false): void {
-    if (!lastPage) {
-        clickByText(navMenu, applicationInventory);
-        cy.wait(800);
-        // Select 100 items per page
-        selectItemsPerPage(100);
-        cy.wait(2000);
-    }
+export function deleteApplicationTableRows(): void {
     cy.get(commonView.appTable)
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
-                    .each(($tableRow) => {
-                        let name = $tableRow.find("td[data-label=Name]").text();
-                        cy.get(tdTag)
-                            .contains(name)
-                            .parent(tdTag)
-                            .parent(trTag)
-                            .within(() => {
-                                click(actionButton);
-                                cy.wait(2000);
-                            })
-                            .contains(button, deleteAction)
-                            .click({ force: true });
-                        cy.wait(800);
-                        click(commonView.confirmButton);
-                        cy.wait(4000);
+                cy.wait(1000);
+                cy.get("span.pf-c-options-menu__toggle-text")
+                    .eq(0)
+                    .then(($body) => {
+                        if (!$body.text().includes("of 0")) {
+                            cy.get("input#bulk-selected-apps-checkbox").check();
+                            cy.get(actionButton).eq(1).click();
+                            cy.get("a.pf-c-dropdown__menu-item")
+                                .contains("Delete")
+                                .trigger("click");
+                            clickByText(button, "Delete");
+                        }
                     });
             }
         });
@@ -714,6 +701,7 @@ export function performRowAction(itemName: string, action: string): void {
 export function performRowActionByIcon(itemName: string, action: string): void {
     // itemName is the text to be searched on the screen (For eg: application name, etc)
     // Action is the name of the action to be applied (For eg: edit or click kebab menu)
+    selectItemsPerPage(100);
     cy.contains(itemName, { timeout: 120 * SEC })
         .closest(trTag)
         .within(() => {
@@ -1299,7 +1287,7 @@ export function writeGpgKey(git_key): void {
     });
 }
 
-export function doesExist(selector: string, isAccessible: boolean): void {
+export function doesExistSelector(selector: string, isAccessible: boolean): void {
     if (isAccessible) {
         cy.get(selector).should("exist");
     } else {
@@ -1329,4 +1317,23 @@ export function uncheckInsecureRepository(): void {
                 click(InsecureRepositoryToggle);
             }
         });
+}
+export function doesExistText(str: string, toBePresent: boolean): void {
+    if (toBePresent) {
+        cy.contains(str, { timeout: 120 * SEC }).should("exist");
+    } else {
+        cy.contains(str).should("not.exist");
+    }
+}
+
+export function validateTooShortInput(selector, anotherSelector?: string): void {
+    inputText(selector, "ab");
+    if (anotherSelector) click(anotherSelector);
+    doesExistText("This field must contain at least 3 characters.", true);
+}
+
+export function validateTooLongInput(selector, anotherSelector?: string): void {
+    inputText(selector, randomWordGenerator(121));
+    if (anotherSelector) click(anotherSelector);
+    doesExistText("This field must contain fewer than 120 characters.", true);
 }

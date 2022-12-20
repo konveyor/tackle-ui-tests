@@ -14,12 +14,13 @@ import {
     click,
     clickByText,
     deleteFromArray,
-    doesExist,
+    doesExistSelector,
     inputText,
     login,
 } from "../../../../utils/utils";
 import * as loginView from "../../../views/login.view";
 import { Application } from "../../developer/applicationinventory/application";
+import { Analysis } from "../../developer/applicationinventory/analysis";
 const tackleUiUrl = Cypress.env("tackleUrl");
 const keycloakAdminPassword = Cypress.env("keycloakAdminPassword");
 
@@ -153,27 +154,6 @@ export class User {
 
     login(): void {
         login(this.username, this.password);
-    }
-
-    validateCreateAppButton(isAccessible: boolean) {
-        Application.open();
-        doesExist(createAppButton, isAccessible);
-    }
-
-    validateAssessButton(isAccessible: boolean) {
-        Application.open();
-        doesExist(assessAppButton, isAccessible);
-    }
-
-    validateAnalyzeButton(isAccessible: boolean) {
-        Application.open();
-        clickByText(button, analysis);
-        doesExist(analyzeAppButton, isAccessible);
-    }
-
-    validateImport(isAccessible: boolean) {
-        Application.open();
-        doesExist(actionsButton, isAccessible);
     }
 
     logout() {

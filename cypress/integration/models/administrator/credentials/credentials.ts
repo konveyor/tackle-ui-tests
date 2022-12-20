@@ -10,6 +10,8 @@ import {
     validateValue,
     selectFromDropList,
     selectFromDropListByText,
+    validateTooShortInput,
+    validateTooLongInput,
 } from "../../../../utils/utils";
 import {
     administrator,
@@ -25,6 +27,8 @@ import {
     credentialNameInput,
     credLabels,
     descriptionInput,
+    passwordInput,
+    usernameInput,
 } from "../../../views/credentials.view";
 import {
     navLink,
@@ -44,6 +48,37 @@ export class Credentials {
 
     constructor(name?) {
         if (name) this.name = name;
+    }
+
+    static validateFields() {
+        Credentials.openList();
+        click(createBtn);
+        Credentials.fillNameTooShort();
+        Credentials.fillNameTooLong();
+    }
+
+    protected static fillNameTooShort(): void {
+        validateTooShortInput(credentialNameInput, descriptionInput);
+    }
+
+    protected static fillNameTooLong(): void {
+        validateTooLongInput(credentialNameInput);
+    }
+
+    protected static fillUsernameTooShort(): void {
+        validateTooShortInput(usernameInput, passwordInput);
+    }
+
+    protected static fillUsernameTooLong(): void {
+        validateTooLongInput(usernameInput);
+    }
+
+    protected static fillPasswordTooShort(): void {
+        validateTooShortInput(passwordInput, usernameInput);
+    }
+
+    protected static fillPasswordTooLong(): void {
+        validateTooLongInput(passwordInput);
     }
 
     protected fillName(): void {

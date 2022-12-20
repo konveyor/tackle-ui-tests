@@ -22,22 +22,25 @@ import {
     button,
     save,
     SEC,
+    analyzeAppButton,
+    actionsButton,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
-import * as commonView from "../../../views/common.view";
 import {
     clickByText,
     cancelForm,
     selectFormItems,
-    checkSuccessAlert,
     selectUserPerspective,
     performRowActionByIcon,
     uploadXml,
     uploadApplications,
     inputText,
     click,
+    doesExistSelector,
+    doesExistText,
+    clickWithin,
 } from "../../../../utils/utils";
-import { analysisData, applicationData } from "../../../types/types";
+import { analysisData, applicationData, RbacValidationRules } from "../../../types/types";
 import { Application } from "./application";
 import {
     analysisColumn,
@@ -55,13 +58,13 @@ import {
     expandAll,
     panelBody,
 } from "../../../views/analysis.view";
-import { kebabMenu } from "../../../views/applicationinventory.view";
+import { kebabMenu, selectBox } from "../../../views/applicationinventory.view";
 
 export class Analysis extends Application {
     name: string;
     source: string;
     target: string[];
-    binary?: string;
+    binary?: string[];
     scope?: string;
     excludePackages?: string[];
     customRule?: string;
@@ -128,8 +131,10 @@ export class Analysis extends Application {
     }
 
     protected uploadBinary() {
-        uploadApplications(this.binary);
-        cy.get("span.pf-c-progress__measure", { timeout: 15000 }).should("contain", "100%");
+        this.binary.forEach((binaryList) => {
+            uploadApplications(binaryList);
+            cy.get("span.pf-c-progress__measure", { timeout: 50 * SEC }).should("contain", "100%");
+        });
     }
 
     protected enableTransactionAnalysis() {
@@ -182,15 +187,45 @@ export class Analysis extends Application {
             if (this.enableTransaction) this.enableTransactionAnalysis();
             if (!this.sources) cy.contains("button", "Next", { timeout: 200 }).click();
             cy.contains("button", "Run", { timeout: 200 }).click();
-            checkSuccessAlert(commonView.successAlertMessage, `Submitted for analysis`);
+            // checkSuccessAlert(commonView.successAlertMessage, `Submitted for analysis`);
+            // Commented the line because of the BZ https://issues.redhat.com/browse/TACKLE-890
         }
+    }
+
+    validateAvailableActions(rbacRules: RbacValidationRules): void {
+        Analysis.open();
+        cy.get(tdTag)
+            .contains(this.name)
+            .closest(trTag)
+            .within(() => {
+                click(selectBox);
+                cy.wait(SEC);
+                click('button[aria-label="Actions"]');
+                doesExistText(
+                    "Analysis details",
+                    rbacRules["applicable options"]["Analysis details"]
+                );
+                doesExistText(
+                    "Cancel analysis",
+                    rbacRules["applicable options"]["Cancel analysis"]
+                );
+                doesExistText(
+                    "Manage credentials",
+                    rbacRules["applicable options"]["Manage credentials"]
+                );
+                doesExistText("Delete", rbacRules["applicable options"]["Delete"]);
+            });
+    }
+
+    static validateAnalyzeButton(rbacRules: RbacValidationRules) {
+        Analysis.open();
+        doesExistSelector(analyzeAppButton, rbacRules["Analyze"]);
     }
 
     verifyAnalysisStatus(status) {
         cy.get(tdTag)
             .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
+            .closest(trTag)
             .within(() => {
                 cy.get(analysisColumn)
                     .find("div > div")
@@ -223,10 +258,32 @@ export class Analysis extends Application {
             .parent("dt")
             .next()
             .within(() => {
-                cy.get(".pf-c-button.pf-m-link")
-                    .last()
+                cy.get("button > a")
+                    .should("contain", "Report")
                     .then(($a) => {
-                        expect($a.text()).to.be.oneOf(["Report", "Analysis details"]);
+                        // Removing target from html so that report opens in same tab
+                        $a.attr("target", "_self");
+                    })
+                    .click();
+            });
+    }
+
+    openAnalysisDetails() {
+        super.expandApplicationRow();
+        cy.wait(10000);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .next()
+            .find("span")
+            .contains("Analysis")
+            .parent("dt")
+            .next()
+            .within(() => {
+                cy.get("button.pf-c-button.pf-m-link.pf-u-ml-0")
+                    .should("contain", "Analysis details")
+                    .then(($a) => {
                         // Removing target from html so that report opens in same tab
                         $a.attr("target", "_self");
                     })
@@ -276,5 +333,20 @@ export class Analysis extends Application {
         cy.get(tabsPanel).contains("Application Details").click();
         click(expandAll);
         cy.get(panelBody).should("not.contain.html", `${this.excludePackages}.${text}`);
+    }
+
+    static validateTopActionMenu(rbacRules: RbacValidationRules) {
+        Analysis.open();
+        if (rbacRules["Action menu"]["Not available"]) {
+            cy.get(".pf-c-toolbar__content-section").within(() => {
+                doesExistSelector(actionsButton, false);
+            });
+        } else {
+            clickWithin(".pf-c-toolbar__content-section", actionsButton);
+            doesExistText("Import", rbacRules["Action menu"]["Import"]);
+            doesExistText("Manage imports", rbacRules["Action menu"]["Manage imports"]);
+            doesExistText("Manage credentials", rbacRules["Action menu"]["Manage credentials"]);
+            doesExistText("Delete", rbacRules["Action menu"]["Delete"]);
+        }
     }
 }

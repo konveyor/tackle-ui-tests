@@ -10,7 +10,7 @@ import {
 } from "../../../../utils/utils";
 import { button } from "../../../types/constants";
 import { CredentialsSourceControlData } from "../../../types/types";
-import { passwordInput, usernameInput } from "../../../views/credentials.view";
+import { passwordInput, selectType, usernameInput } from "../../../views/credentials.view";
 
 export class CredentialsSourceControlUsername extends CredentialsSourceControl {
     username = "";
@@ -83,5 +83,18 @@ export class CredentialsSourceControlUsername extends CredentialsSourceControl {
             username: this.username,
             password: this.password,
         };
+    }
+
+    static validateFields() {
+        super.validateFields();
+        click(selectType);
+        clickByText(button, "Source Control");
+        click("#user-credentials-select-toggle");
+        clickByText(button, "Username/Password");
+        this.fillUsernameTooShort();
+        this.fillUsernameTooLong();
+        this.fillPasswordTooShort();
+        this.fillPasswordTooLong();
+        cancelForm();
     }
 }

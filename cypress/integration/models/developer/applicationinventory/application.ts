@@ -22,6 +22,10 @@ import {
     deleteAction,
     assessment,
     tagCount,
+    assessAppButton,
+    createAppButton,
+    actionsButton,
+    SEC,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -54,8 +58,11 @@ import {
     performRowActionByIcon,
     selectUserPerspective,
     selectItemsPerPage,
+    doesExistSelector,
+    doesExistText,
+    clickWithin,
 } from "../../../../utils/utils";
-import { applicationData } from "../../../types/types";
+import { applicationData, RbacValidationRules } from "../../../types/types";
 
 export class Application {
     name: string;
@@ -256,8 +263,8 @@ export class Application {
         cy.wait(4000);
         cy.get(tdTag)
             .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
+            // .parent(tdTag)
+            .closest(trTag)
             .within(() => {
                 click(selectBox);
                 cy.wait(2000);
@@ -332,5 +339,15 @@ export class Application {
                     );
                 }
             });
+    }
+
+    static validateAssessButton(rbacRules: RbacValidationRules) {
+        Application.open();
+        doesExistSelector(assessAppButton, rbacRules["Assess"]);
+    }
+
+    static validateCreateAppButton(rbacRules: RbacValidationRules) {
+        Application.open();
+        doesExistSelector(createAppButton, rbacRules["Create new"]);
     }
 }

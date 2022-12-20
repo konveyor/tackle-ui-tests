@@ -67,7 +67,7 @@ export type ProxyData = {
 export type analysisData = {
     source: string;
     target: string[];
-    binary?: string;
+    binary?: string[];
     scope?: string;
     customRule?: string;
     sources?: string;
@@ -86,4 +86,26 @@ export type UserData = {
     email?: string;
     userEnabled: boolean;
     roles?: string[];
+};
+
+export type RbacValidationRules = {
+    "Create new"?: boolean;
+    Analyze?: boolean;
+    "Upload binary"?: boolean;
+    Assess?: boolean;
+    Review?: boolean;
+    Import?: boolean;
+    "Action menu"?: {
+        "Not available": boolean;
+        Import?: boolean;
+        "Manage imports"?: boolean;
+        "Manage credentials"?: boolean;
+        Delete?: boolean;
+    };
+    "applicable options"?: {
+        "Analysis details"?: boolean;
+        "Cancel analysis"?: boolean;
+        "Manage credentials"?: boolean;
+        Delete?: boolean;
+    };
 };
