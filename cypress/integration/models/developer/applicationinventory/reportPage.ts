@@ -28,4 +28,17 @@ export class Report {
             clickByText("a", sortbyName);
         });
     }
+
+    getTableColumnData(itemList: any[]): Array<string> {
+        cy.get(".real", { timeout: 5 * SEC })
+            .not(".pf-c-table__expandable-row")
+            .each(($ele) => {
+                if ($ele.text() !== "") {
+                    itemList.push(Number($ele.text()));
+                } else {
+                    itemList.push($ele.text().toString().toLowerCase());
+                }
+            });
+        return itemList;
+    }
 }
