@@ -34,7 +34,7 @@ describe("Proxy operations", () => {
     it("Http Proxy port and host field validation", function () {
         httpProxy.enable();
         httpProxy.fillHost(getRandomWord(121));
-        httpProxy.fillPort("Invalid port");
+        httpProxy.fillPort("Invalid port test");
         cy.get(ProxyViewSelectors.portHelper).contains("This field is required");
         cy.get(ProxyViewSelectorsByType[httpProxy.type].hostHelper).contains(
             "This field must contain fewer than 120 characters."
@@ -47,7 +47,7 @@ describe("Proxy operations", () => {
     it("Https Proxy port and host field validation", function () {
         httpsProxy.enable();
         httpsProxy.fillHost(getRandomWord(121));
-        httpsProxy.fillPort("Invalid port");
+        httpsProxy.fillPort("Invalid port test");
         cy.get(ProxyViewSelectors.portHelper).contains("This field is required");
         cy.get(ProxyViewSelectorsByType[httpsProxy.type].hostHelper).contains(
             "This field must contain fewer than 120 characters."
@@ -88,6 +88,7 @@ describe("Proxy operations", () => {
     });
 
     after("Perform test data clean up", function () {
+        if (hasToBeSkipped("@tier2")) return;
         httpsProxyCreds.delete();
         httpProxyCreds.delete();
     });

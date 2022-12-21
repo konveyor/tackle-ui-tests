@@ -1,5 +1,5 @@
 export enum ProxyViewSelectors {
-    excludedList = '[aria-label="excluded"]',
+    excludedList = "#excluded",
     portHelper = "#port-helper",
 }
 

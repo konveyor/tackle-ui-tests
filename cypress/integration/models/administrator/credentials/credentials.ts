@@ -32,9 +32,9 @@ import {
 } from "../../../views/credentials.view";
 import {
     navLink,
-    closeNotification,
     confirmButton,
     cancelButton,
+    closeSuccessNotification,
 } from "../../../views/common.view";
 import { selectType } from "../../../views/credentials.view";
 import * as commonView from "../../../views/common.view";
@@ -166,6 +166,6 @@ export class Credentials {
     }
 
     protected closeSuccessNotification(): void {
-        click(closeNotification);
+        click(closeSuccessNotification);
     }
 }

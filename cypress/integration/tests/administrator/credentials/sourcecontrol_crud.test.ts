@@ -77,6 +77,7 @@ describe("Validation of Source Control Credentials", () => {
     });
 
     after("Cleaning up", () => {
+        if (hasToBeSkipped("@tier1")) return;
         scCredsUsername.delete();
         scCredsKey.delete();
     });

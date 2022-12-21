@@ -34,7 +34,7 @@ export class CredentialsSourceControlKey extends CredentialsSourceControl {
     }
 
     protected fillKeyPassphrase() {
-        inputText("[aria-label='private-key-passphrase']", this.keyPassphrase);
+        inputText("#password", this.keyPassphrase);
     }
 
     protected selectCredType() {

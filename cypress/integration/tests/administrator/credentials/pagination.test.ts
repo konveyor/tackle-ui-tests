@@ -36,6 +36,7 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
     });
 
     after("Removing credentials, created earlier", () => {
+        if (hasToBeSkipped("@tier3")) return;
         deleteAllCredentials();
     });
 });

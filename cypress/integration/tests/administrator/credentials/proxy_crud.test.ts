@@ -48,6 +48,7 @@ describe("Validation of proxy credentials", () => {
     });
 
     after("Delete proxy credentials", () => {
+        if (hasToBeSkipped("@tier2")) return;
         proxyCreds.delete();
     });
 });
