@@ -102,10 +102,15 @@ export type RbacValidationRules = {
         "Manage credentials"?: boolean;
         Delete?: boolean;
     };
-    "applicable options"?: {
+    "analysis applicable options"?: {
         "Analysis details"?: boolean;
         "Cancel analysis"?: boolean;
         "Manage credentials"?: boolean;
         Delete?: boolean;
+    };
+    "assessment applicable options"?: {
+        "Discard assessment"?: boolean;
+        "Copy assessment"?: boolean;
+        "Manage dependencies"?: boolean;
     };
 };

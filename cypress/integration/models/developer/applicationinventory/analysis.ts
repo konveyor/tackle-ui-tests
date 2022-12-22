@@ -58,7 +58,7 @@ import {
     expandAll,
     panelBody,
 } from "../../../views/analysis.view";
-import { kebabMenu, selectBox } from "../../../views/applicationinventory.view";
+import { kebabMenu } from "../../../views/applicationinventory.view";
 
 export class Analysis extends Application {
     name: string;
@@ -190,31 +190,6 @@ export class Analysis extends Application {
             // checkSuccessAlert(commonView.successAlertMessage, `Submitted for analysis`);
             // Commented the line because of the BZ https://issues.redhat.com/browse/TACKLE-890
         }
-    }
-
-    validateAvailableActions(rbacRules: RbacValidationRules): void {
-        Analysis.open();
-        cy.get(tdTag)
-            .contains(this.name)
-            .closest(trTag)
-            .within(() => {
-                click(selectBox);
-                cy.wait(SEC);
-                click('button[aria-label="Actions"]');
-                doesExistText(
-                    "Analysis details",
-                    rbacRules["applicable options"]["Analysis details"]
-                );
-                doesExistText(
-                    "Cancel analysis",
-                    rbacRules["applicable options"]["Cancel analysis"]
-                );
-                doesExistText(
-                    "Manage credentials",
-                    rbacRules["applicable options"]["Manage credentials"]
-                );
-                doesExistText("Delete", rbacRules["applicable options"]["Delete"]);
-            });
     }
 
     static validateAnalyzeButton(rbacRules: RbacValidationRules) {
