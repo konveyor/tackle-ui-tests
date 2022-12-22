@@ -93,6 +93,7 @@ export class Proxy {
 
     fillPort(port?: string): void {
         inputText(ProxyViewSelectorsByType[this.type].port, port ?? this.port);
+        cy.get(ProxyViewSelectorsByType[this.type].port).blur();
     }
 
     enable(): void {

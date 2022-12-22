@@ -45,6 +45,6 @@ export const optionMenu = '[aria-label="Options menu"]';
 export const userPerspectiveMenu = ".pf-c-select__menu-item";
 export const modal = "[id^=pf-modal-part-]";
 export const navLink = ".pf-c-nav__link";
-export const closeNotification = "button[aria-label='close-notification']";
+export const closeSuccessNotification = "button[aria-label^='Close Success alert:']";
 export const divHeader = "[id^=pf-random-id-]";
 export const divBottom = "#tags-pagination-bottom";
