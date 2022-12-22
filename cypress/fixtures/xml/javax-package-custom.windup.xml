@@ -1,0 +1,25 @@
+<ruleset xmlns="http://windup.jboss.org/schema/jboss-ruleset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="javax-package" xsi:schemaLocation="http://windup.jboss.org/schema/jboss-ruleset http://windup.jboss.org/schema/jboss-ruleset/windup-jboss-ruleset.xsd">
+    <metadata>
+        <description> This ruleset provides analysis of applications that use RESTEasy 3.0 and may require individual attention when migrating to RESTEasy 3.6. </description>
+        <dependencies>
+            <addon id="org.jboss.windup.rules,windup-rules-javaee,3.0.0.Final"/>
+            <addon id="org.jboss.windup.rules,windup-rules-java,3.0.0.Final"/>
+        </dependencies>
+    </metadata>
+    <rules>
+        <rule id="javax-package-00001">
+            <when>
+                <javaclass references="javax.{*}">
+                    <location>IMPORT</location>
+                </javaclass>
+            </when>
+            <perform>
+                <hint title="CUSTOM RULE for javax.* package import" effort="1" category-id="potential">
+                    <message>`javax.*` packages must be renamed to `jakarta.*` for Jakarta EE9 compatibility.</message>
+                    <link title="Renamed Packages" href="https://github.com/wildfly-extras/batavia/blob/master/impl/ecl/src/main/resources/org/wildfly/extras/transformer/eclipse/jakarta-renames.properties"/>
+                    <tag>tag</tag>
+                </hint>
+            </perform>
+        </rule>
+    </rules>
+</ruleset>

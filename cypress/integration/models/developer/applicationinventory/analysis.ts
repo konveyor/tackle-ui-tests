@@ -168,6 +168,11 @@ export class Analysis extends Application {
         cy.contains("button", "Next", { timeout: 200 }).click();
     }
 
+    protected tagsToExclude() {
+        inputText("#ruleTagToExclude", this.excludeRuleTags);
+        clickByText("#add-package-to-include", "Add");
+    }
+
     analyze(cancel = false): void {
         Analysis.open();
         this.selectApplication();
@@ -184,6 +189,7 @@ export class Analysis extends Application {
             this.scopeSelect();
             if (this.customRule) this.uploadCustomRule();
             cy.contains("button", "Next", { timeout: 200 }).click();
+            if (this.excludeRuleTags) this.tagsToExclude();
             if (this.enableTransaction) this.enableTransactionAnalysis();
             if (!this.sources) cy.contains("button", "Next", { timeout: 200 }).click();
             cy.contains("button", "Run", { timeout: 200 }).click();
@@ -348,5 +354,17 @@ export class Analysis extends Application {
             doesExistText("Manage credentials", rbacRules["Action menu"]["Manage credentials"]);
             doesExistText("Delete", rbacRules["Action menu"]["Delete"]);
         }
+    }
+
+    validateExcludedTags(): void {
+        // Click on App name
+        // then Application Details tab
+        // Excluded Tags should not be present
+        cy.get(fileName + " > a")
+            .should("contain", this.appName)
+            .click();
+        cy.get(tabsPanel).contains("Application Details").click();
+        click(expandAll);
+        cy.get(panelBody).should("not.contain.text", this.excludeRuleTags);
     }
 }
