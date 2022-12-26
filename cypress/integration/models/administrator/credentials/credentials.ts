@@ -12,23 +12,33 @@ import {
     selectFromDropListByText,
     validateTooShortInput,
     validateTooLongInput,
+    enumKeys,
+    clearAllFilters,
 } from "../../../../utils/utils";
 import {
     administrator,
     button,
     credentials,
+    CredentialType,
     deleteAction,
     editAction,
     SEC,
     trTag,
+    UserCredentials,
 } from "../../../types/constants";
 import {
     createBtn,
     credentialNameInput,
     credLabels,
     descriptionInput,
+    filterCatType,
+    filterCatName,
+    filteredBy,
     passwordInput,
     usernameInput,
+    filterNameInput,
+    filterSelectType,
+    filterSubmitButton,
 } from "../../../views/credentials.view";
 import {
     navLink,
@@ -132,15 +142,36 @@ export class Credentials {
         });
     }
 
-    static filterByName(value: string) {
-        selectFromDropList("#filtered-by", "#filter-category-name");
-        inputText("#name-input", value);
-        click("button.pf-c-button.pf-m-control");
+    static ApplyFilterByName(value: string) {
+        selectFromDropList(filteredBy, filterCatName);
+        inputText(filterNameInput, value);
+        click(filterSubmitButton);
     }
 
-    static filterByType(type: string) {
-        selectFromDropList("#filtered-by", "#filter-category-type");
-        selectFromDropListByText("#type-filter-value-select", type);
+    static applyFilterByType(type: string) {
+        selectFromDropList(filteredBy, filterCatType);
+        selectFromDropListByText(filterSelectType, type);
+    }
+
+    static filterByType(): void {
+        Credentials.openList();
+        /*
+        CredentialType is enum, here we are getting list of keys from it and iterating this list
+        So if more keys and values will be added - there will be no need to put any change here.
+        */
+        for (const type of enumKeys(CredentialType)) {
+            Credentials.applyFilterByType(CredentialType[type]);
+            /*
+            Applied filter by one of the types and iterate through the whole table comparing
+            current filter name with type of each credential in the table
+            */
+            cy.get(commonView.appTable, { timeout: 15 * SEC })
+                .find(trTag)
+                .each(($row) => {
+                    assert($row.find(credLabels.type), CredentialType[type]);
+                });
+        }
+        clearAllFilters();
     }
 
     create(): void {
