@@ -20,6 +20,12 @@ export const passwordInput = "#password";
 export const privatePassphraseInput = "input[aria-label='Private Key Passphrase']";
 export const createBtn = "#create-credential-button";
 export const selectType = "#type-select-toggle";
+export const filteredBy = "#filtered-by";
+export const filterCatName = "#filter-category-name";
+export const filterCatType = "#filter-category-type";
+export const filterNameInput = "#name-input";
+export const filterSelectType = "#type-filter-value-select";
+export const filterSubmitButton = "button.pf-c-button.pf-m-control";
 export enum credLabels {
     name = 'td[data-label="Name"]',
     description = 'td[data-label="Description"]',

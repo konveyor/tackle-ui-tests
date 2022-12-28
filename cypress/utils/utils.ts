@@ -1331,3 +1331,8 @@ export function validateTooLongInput(selector, anotherSelector?: string): void {
     if (anotherSelector) click(anotherSelector);
     doesExistText("This field must contain fewer than 120 characters.", true);
 }
+
+// This method accepts enums or maps and returns list of keys, so you can iterate by keys
+export function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
+    return Object.keys(obj).filter((k) => Number.isNaN(+k)) as K[];
+}
