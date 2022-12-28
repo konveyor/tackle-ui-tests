@@ -1,7 +1,13 @@
 import { User } from "../../models/keycloak/users/user";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
-import { getRandomApplicationData, login, logout, preservecookies } from "../../../utils/utils";
+import {
+    getRandomApplicationData,
+    hasToBeSkipped,
+    login,
+    logout,
+    preservecookies,
+} from "../../../utils/utils";
 import { Analysis } from "../../models/developer/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialType } from "../../types/constants";
@@ -11,7 +17,7 @@ import { Stakeholders } from "../../models/developer/controls/stakeholders";
 import { Assessment } from "../../models/developer/applicationinventory/assessment";
 import * as data from "../../../utils/data_utils";
 
-describe("Architect RBAC operations", () => {
+describe("Architect RBAC operations", { tags: "@tier2" }, () => {
     let userArchitect = new UserArchitect(getRandomUserData());
     const application = new Assessment(getRandomApplicationData());
     let stakeholdersList: Array<Stakeholders> = [];
@@ -50,6 +56,8 @@ describe("Architect RBAC operations", () => {
     };
 
     before("Creating RBAC users, adding roles for them", () => {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
         login();
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
@@ -100,6 +108,7 @@ describe("Architect RBAC operations", () => {
     });
 
     after("", () => {
+        if (hasToBeSkipped("@tier2")) return;
         userArchitect.logout();
         login(adminUserName, adminUserPassword);
         appCredentials.delete();

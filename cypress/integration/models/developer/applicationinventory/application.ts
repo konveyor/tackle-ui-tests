@@ -355,6 +355,7 @@ export class Application {
     validateAnalysisAvailableActions(rbacRules: RbacValidationRules): void {
         Application.open();
         clickByText(navTab, analysis);
+        selectItemsPerPage(100);
         cy.wait(5 * SEC);
         cy.get(tdTag)
             .contains(this.name)
@@ -381,6 +382,7 @@ export class Application {
 
     validateAssessmentAvailableOptions(rbacRules: RbacValidationRules): void {
         Application.open();
+        selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(this.name)
             .closest(trTag)

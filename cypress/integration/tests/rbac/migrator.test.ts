@@ -1,7 +1,13 @@
 import { User } from "../../models/keycloak/users/user";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
-import { getRandomApplicationData, login, logout, preservecookies } from "../../../utils/utils";
+import {
+    getRandomApplicationData,
+    hasToBeSkipped,
+    login,
+    logout,
+    preservecookies,
+} from "../../../utils/utils";
 import { Analysis } from "../../models/developer/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialType } from "../../types/constants";
@@ -11,7 +17,7 @@ import { Assessment } from "../../models/developer/applicationinventory/assessme
 import { Stakeholders } from "../../models/developer/controls/stakeholders";
 import * as data from "../../../utils/data_utils";
 
-describe("Migrator RBAC operations", () => {
+describe("Migrator RBAC operations", { tags: "@tier2" }, () => {
     let userMigrator = new UserMigrator(getRandomUserData());
     const application = new Assessment(getRandomApplicationData());
     let stakeholdersList: Array<Stakeholders> = [];
@@ -50,6 +56,8 @@ describe("Migrator RBAC operations", () => {
     };
 
     before("Creating RBAC users, adding roles for them", () => {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
         //Need to log in as admin and create simple app with known name to use it for tests
         login();
         // Navigate to stakeholders control tab and create new stakeholder
@@ -102,6 +110,7 @@ describe("Migrator RBAC operations", () => {
     });
 
     after("", () => {
+        if (hasToBeSkipped("@tier2")) return;
         userMigrator.logout();
         login(adminUserName, adminUserPassword);
         appCredentials.delete();
