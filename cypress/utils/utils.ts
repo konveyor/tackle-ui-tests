@@ -1148,7 +1148,7 @@ export function goToPage(page: number): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    cy.get(commonView.optionMenu, { timeout: 30 * SEC })
+    cy.get(commonView.optionMenu, { timeout: 100 * SEC })
         .eq(0)
         .then(($a) => {
             $a.click();

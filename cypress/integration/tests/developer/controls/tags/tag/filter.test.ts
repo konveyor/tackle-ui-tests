@@ -58,7 +58,7 @@ describe("Tags filter validations", { tags: "@tier2" }, function () {
 
     after("Cleanup", function () {
         tag.delete();
-        cy.wait(SEC);
+        cy.wait(2 * SEC);
         tagType.delete();
     });
 });
