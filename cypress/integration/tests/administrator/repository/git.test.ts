@@ -74,6 +74,7 @@ describe("Test secure and insecure git repository analysis", { tags: "@tier1" },
 
     after("Perform test data clean up", () => {
         if (hasToBeSkipped("@tier1")) return;
+        login();
         deleteApplicationTableRows();
         deleteAllBusinessServices();
         source_credential.delete();
