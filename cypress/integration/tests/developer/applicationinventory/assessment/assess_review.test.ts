@@ -28,8 +28,8 @@ import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
-var stakeholdersList: Array<Stakeholders> = [];
-var stakeholdersNameList: Array<string> = [];
+const stakeholdersList: Array<Stakeholders> = [];
+const stakeholdersNameList: Array<string> = [];
 
 describe("Application assessment and review tests", { tags: "@tier1" }, () => {
     before("Login and Create Test Data", function () {
