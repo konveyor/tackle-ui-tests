@@ -57,6 +57,7 @@ describe("Source Analysis", { tags: "@tier2" }, () => {
     });
 
     after("Perform test data clean up", function () {
+        if (hasToBeSkipped("@tier2")) return;
         // Prevent hook from running, if the tag is excluded from run
         deleteApplicationTableRows();
         deleteAllCredentials();

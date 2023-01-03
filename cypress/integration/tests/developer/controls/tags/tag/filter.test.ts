@@ -57,6 +57,7 @@ describe("Tags filter validations", { tags: "@tier2" }, function () {
     });
 
     after("Cleanup", function () {
+        if (hasToBeSkipped("@tier2")) return;
         tag.delete();
         cy.wait(2 * SEC);
         tagType.delete();
