@@ -908,6 +908,7 @@ export function getRandomAnalysisData(analysisdata): analysisData {
         appName: analysisdata.appName,
         storyPoints: analysisdata.storyPoints,
         excludePackages: analysisdata.excludePackages,
+        excludeRuleTags: analysisdata.excludeRuleTags,
     };
 }
 
