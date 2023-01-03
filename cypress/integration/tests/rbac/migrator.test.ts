@@ -81,32 +81,35 @@ describe("Migrator RBAC operations", { tags: "@tier2" }, () => {
         preservecookies();
     });
 
-    it("Login as migrator and validate create application button", () => {
+    it("Migrator, validate create application button", () => {
         //Migrator is not allowed to create applications
         Application.validateCreateAppButton(rbacRules);
     });
 
-    it("Login as migrator and validate assess application button", () => {
+    it("Migrator, validate assess application button", () => {
         //Migrator is not allowed to create applications
         Application.validateAssessButton(rbacRules);
     });
 
-    it("Login as migrator and validate presence of import and manage imports", () => {
+    it("Migrator, validate presence of import and manage imports", () => {
         //migrator is allowed to import applications
         Analysis.validateTopActionMenu(rbacRules);
     });
 
-    it("Login as migrator and validate presence of analyse button", () => {
+    it("Migrator, validate presence of analyse button", () => {
         //Migrator is allowed to analyse applications
         Analysis.validateAnalyzeButton(rbacRules);
     });
 
-    it("Login as migrator and validate analysis details and cancel analysis buttons presence", () => {
+    it("Migrator, validate analysis details and cancel analysis buttons presence", () => {
         application.validateAnalysisAvailableActions(rbacRules);
     });
 
-    it("Login as migrator and validate assessment context menu buttons presence", () => {
+    it("Migrator, validate assessment context menu buttons presence", () => {
         application.validateAssessmentAvailableOptions(rbacRules);
+    });
+    it("Migrator, validate availability of binary upload functionality", () => {
+        application.validateUploadBinary(rbacRules);
     });
 
     after("", () => {
