@@ -2,6 +2,7 @@ import { User } from "../../models/keycloak/users/user";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import {
+    deleteByList,
     getRandomApplicationData,
     hasToBeSkipped,
     login,
@@ -91,6 +92,11 @@ describe("Migrator RBAC operations", { tags: "@tier2" }, () => {
         Application.validateAssessButton(rbacRules);
     });
 
+    it("Migrator, validate review application button", () => {
+        //Migrator is not allowed to review applications
+        Application.validateReviewButton(rbacRules);
+    });
+
     it("Migrator, validate presence of import and manage imports", () => {
         //migrator is allowed to import applications
         Analysis.validateTopActionMenu(rbacRules);
@@ -118,9 +124,7 @@ describe("Migrator RBAC operations", { tags: "@tier2" }, () => {
         login(adminUserName, adminUserPassword);
         appCredentials.delete();
         application.delete();
-        stakeholdersList.forEach((stakeholder) => {
-            stakeholder.delete();
-        });
+        deleteByList(stakeholdersList);
         logout("admin");
         User.loginKeycloakAdmin();
         userMigrator.delete();
