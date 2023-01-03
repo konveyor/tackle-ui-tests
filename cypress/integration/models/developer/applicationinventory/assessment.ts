@@ -23,12 +23,12 @@ import {
     review,
     save,
     assessment,
+    SEC,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
     actionButton,
     selectBox,
-    tags,
     closeForm,
     copy,
     kebabMenu,
@@ -39,12 +39,10 @@ import {
 import * as commonView from "../../../views/common.view";
 import {
     clickByText,
-    inputText,
     click,
     selectItemsPerPage,
     cancelForm,
     selectFormItems,
-    performRowAction,
     selectUserPerspective,
     performRowActionByIcon,
     checkSuccessAlert,
@@ -136,13 +134,15 @@ export class Assessment extends Application {
     }
 
     protected fillCriticality(risk: string): void {
-        var criticality = this.getNumByRisk(risk);
-        inputText(criticalityInput, criticality);
+        const criticality = this.getNumByRisk(risk);
+        cy.get(criticalityInput).type(`{selectAll}${criticality}`).blur();
+        cy.wait(SEC);
     }
 
     protected fillPriority(risk: string): void {
-        var priority = this.getNumByRisk(risk);
-        inputText(priorityInput, priority);
+        const priority = this.getNumByRisk(risk);
+        cy.get(priorityInput).type(`{selectAll}${priority}`).blur();
+        cy.wait(SEC);
     }
 
     protected clickRadioOption(questionSelector, optionToSelect) {
