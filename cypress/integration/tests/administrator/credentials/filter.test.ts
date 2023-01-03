@@ -1,30 +1,50 @@
 import {
-    applySearchFilter,
     clearAllFilters,
     createMultipleCredentials,
     deleteByList,
     exists,
     hasToBeSkipped,
     login,
+    logout,
     notExists,
     preservecookies,
 } from "../../../../utils/utils";
 import { Credentials } from "../../../models/administrator/credentials/credentials";
-import { name } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
+import { UserAdmin } from "../../../models/keycloak/users/userAdmin";
+import { getRandomUserData } from "../../../../utils/data_utils";
+import { User } from "../../../models/keycloak/users/user";
 
 describe("Credentials filter validations", { tags: "@tier2" }, function () {
-    let credentialsList: Array<Credentials> = [];
+    let adminUserName = Cypress.env("user");
+    let adminUserPassword = Cypress.env("pass");
+    let credentialsListByDefaultAdmin: Array<Credentials> = [];
+    let credentialsListByNewAdmin: Array<Credentials> = [];
     let invalidSearchInput = String(data.getRandomNumber());
+
+    const newAdminUser = new UserAdmin(getRandomUserData());
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;
+        /*
+        1. Login to RBAC and create new admin user because only admins can create credentials.
+        2. Logout from RBAC and login to Tackle as user created in step 1
+        3. Create several credentials
+        4. Logout from Tackle and login as default admin
+        5. Create few more credentials
+        6. Apply filtering
+        */
+        User.loginKeycloakAdmin();
+        newAdminUser.create();
+        newAdminUser.login();
+        credentialsListByNewAdmin = createMultipleCredentials(4);
+        newAdminUser.logout();
 
         // Perform login
-        login();
+        login(adminUserName, adminUserPassword);
 
         // Create multiple credentials of all types
-        credentialsList = createMultipleCredentials(4);
+        credentialsListByDefaultAdmin = createMultipleCredentials(4);
     });
 
     beforeEach("Persist session", function () {
@@ -36,8 +56,8 @@ describe("Credentials filter validations", { tags: "@tier2" }, function () {
         Credentials.openList(100);
 
         // Searching by first letters of name:
-        let firstName = credentialsList[0].name;
-        let secondName = credentialsList[1].name;
+        let firstName = credentialsListByDefaultAdmin[0].name;
+        let secondName = credentialsListByDefaultAdmin[1].name;
         let validSearchInput = firstName.substring(0, 3);
         Credentials.ApplyFilterByName(validSearchInput);
         exists(firstName);
@@ -66,11 +86,20 @@ describe("Credentials filter validations", { tags: "@tier2" }, function () {
         Credentials.filterByType();
     });
 
+    it("Creator filter validations", () => {
+        Credentials.filterByCreator(adminUserName);
+        Credentials.filterByCreator(newAdminUser.username);
+    });
+
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;
 
         // Deleting all credentials created before test
-        deleteByList(credentialsList);
+        deleteByList(credentialsListByDefaultAdmin);
+        deleteByList(credentialsListByNewAdmin);
+        logout(adminUserName);
+        User.loginKeycloakAdmin();
+        newAdminUser.delete();
     });
 });
