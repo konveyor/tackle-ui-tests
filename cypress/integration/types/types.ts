@@ -76,6 +76,8 @@ export type analysisData = {
     appName?: string;
     storyPoints?: number;
     excludePackages?: string[];
+    manuallyAnalyzePackages?: string[];
+    excludedPackagesList?: string[];
 };
 
 export type UserData = {

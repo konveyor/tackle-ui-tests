@@ -39,6 +39,8 @@ import {
     filterNameInput,
     filterSelectType,
     filterSubmitButton,
+    filterCatCreatedBy,
+    filterCreatedByInput,
 } from "../../../views/credentials.view";
 import {
     navLink,
@@ -153,6 +155,12 @@ export class Credentials {
         selectFromDropListByText(filterSelectType, type);
     }
 
+    static applyFilterCreatedBy(value: string) {
+        selectFromDropList(filteredBy, filterCatCreatedBy);
+        inputText(filterCreatedByInput, value);
+        click(filterSubmitButton);
+    }
+
     static filterByType(): void {
         Credentials.openList();
         /*
@@ -171,6 +179,17 @@ export class Credentials {
                     assert($row.find(credLabels.type), CredentialType[type]);
                 });
         }
+        clearAllFilters();
+    }
+
+    static filterByCreator(name: string): void {
+        Credentials.openList();
+        Credentials.applyFilterCreatedBy(name);
+        cy.get(commonView.appTable, { timeout: 15 * SEC })
+            .find(trTag)
+            .each(($row) => {
+                assert($row.find(credLabels.createdBy), name);
+            });
         clearAllFilters();
     }
 

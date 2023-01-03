@@ -57,6 +57,9 @@ import {
     tabsPanel,
     expandAll,
     panelBody,
+    enterPackageName,
+    addButton,
+    analyzeManuallyButton,
 } from "../../../views/analysis.view";
 import { kebabMenu } from "../../../views/applicationinventory.view";
 
@@ -73,6 +76,8 @@ export class Analysis extends Application {
     enableTransaction?: boolean;
     appName?: string;
     storyPoints?: number;
+    manuallyAnalyzePackages?: string[];
+    excludedPackagesList?: string[];
 
     constructor(appData: applicationData, analysisData: analysisData) {
         super(appData);
@@ -92,6 +97,8 @@ export class Analysis extends Application {
             enableTransaction,
             appName,
             storyPoints,
+            manuallyAnalyzePackages,
+            excludedPackagesList,
         } = analysisData;
         this.name = appData.name;
         this.source = source;
@@ -105,6 +112,8 @@ export class Analysis extends Application {
         if (appName) this.appName = appName;
         if (storyPoints) this.storyPoints = storyPoints;
         if (excludePackages) this.excludePackages = excludePackages;
+        if (manuallyAnalyzePackages) this.manuallyAnalyzePackages = manuallyAnalyzePackages;
+        if (excludedPackagesList) this.excludedPackagesList = excludedPackagesList;
     }
 
     //Navigate to the Application inventory
@@ -160,10 +169,19 @@ export class Analysis extends Application {
     }
 
     protected scopeSelect() {
+        if (this.manuallyAnalyzePackages) {
+            // for Scope's "Select the list of packages to be analyzed manually" option
+            click(analyzeManuallyButton);
+            inputText(enterPackageName, this.manuallyAnalyzePackages);
+            clickByText(addButton, "Add");
+            click(excludePackagesSwitch);
+            inputText(enterPackageName, this.manuallyAnalyzePackages);
+            clickByText(addButton, "Add");
+        }
         if (this.excludePackages) {
             click(excludePackagesSwitch);
-            inputText("#packageToExclude", this.excludePackages);
-            clickByText("#add-package-to-include", "Add");
+            inputText(enterPackageName, this.excludePackages);
+            clickByText(addButton, "Add");
         }
         cy.contains("button", "Next", { timeout: 200 }).click();
     }
@@ -304,7 +322,7 @@ export class Analysis extends Application {
         cy.get("div[class='main']").should("contain", "Transactions Report");
     }
 
-    validateExcludedPackages(text: string): void {
+    validateExcludedPackages(text?: string): void {
         // Click on App name
         // then Application Details tab
         // and the html link to exclude packages should not be present
@@ -313,7 +331,13 @@ export class Analysis extends Application {
             .click();
         cy.get(tabsPanel).contains("Application Details").click();
         click(expandAll);
-        cy.get(panelBody).should("not.contain.html", `${this.excludePackages}.${text}`);
+        if (this.excludePackages) {
+            cy.get(panelBody).should("not.contain.html", `${this.excludePackages}.${text}`);
+        }
+        if (this.manuallyAnalyzePackages) {
+            // for "Select the list of packages to be analyzed manually" option
+            cy.get(panelBody).should("not.contain.html", this.excludedPackagesList);
+        }
     }
 
     static validateTopActionMenu(rbacRules: RbacValidationRules) {
