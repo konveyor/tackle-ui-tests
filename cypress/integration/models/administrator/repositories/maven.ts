@@ -14,16 +14,22 @@ export class MavenConfiguration {
         cy.contains("h1", "Maven configuration", { timeout: 5000 });
     }
 
-    protected enableInsecureMavenRepositories() {
+    enableInsecureMavenRepositories() {
+        MavenConfiguration.open();
         checkInsecureRepository();
     }
 
-    protected disableInsecureMavenRepositories() {
+    disableInsecureMavenRepositories() {
+        MavenConfiguration.open();
         uncheckInsecureRepository();
     }
 
-    protected clearRepository() {
+    clearRepository() {
+        MavenConfiguration.open();
         clickByText(clearRepository, "Clear repository");
+
+        cy.get("#pf-modal-part-1 > span").contains("Clear repository");
+
         click(confirmClear);
     }
 }

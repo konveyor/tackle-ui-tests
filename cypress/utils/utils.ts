@@ -763,6 +763,7 @@ export function createMultipleStakeholders(
     }
     return stakeholdersList;
 }
+
 export function createMultipleJobFunctions(num): Array<Jobfunctions> {
     let jobFunctionsList: Array<Jobfunctions> = [];
     for (let i = 0; i < num; i++) {
@@ -1258,13 +1259,18 @@ export function validateValue(selector, value: string): void {
     }
 }
 
-export function writeMavenSettingsFile(username: string, password: string): void {
+export function writeMavenSettingsFile(username: string, password: string, url?: string): void {
     cy.readFile("cypress/fixtures/xml/settings.xml").then((data) => {
         var xml = data.toString();
         const parser = new DOMParser();
         const xmlDOM = parser.parseFromString(xml, "text/xml");
         xmlDOM.getElementsByTagName("username")[0].childNodes[0].nodeValue = username;
         xmlDOM.getElementsByTagName("password")[0].childNodes[0].nodeValue = password;
+        if (url) {
+            xmlDOM
+                .getElementsByTagName("repository")[1]
+                .getElementsByTagName("url")[0].childNodes[0].nodeValue = url;
+        }
         var serializer = new XMLSerializer();
         var writetofile = serializer.serializeToString(xmlDOM);
         cy.writeFile("cypress/fixtures/xml/settings.xml", writetofile);
