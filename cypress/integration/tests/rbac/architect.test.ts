@@ -79,32 +79,36 @@ describe("Architect RBAC operations", { tags: "@tier2" }, () => {
         preservecookies();
     });
 
-    it("Login as architect and validate create application button", () => {
+    it("Architect, validate create application button", () => {
         //Architect is allowed to create applications
         Application.validateCreateAppButton(rbacRules);
     });
 
-    it("Login as architect and validate assess application button", () => {
+    it("Architect, validate assess application button", () => {
         //Architect is allowed to create applications
         Application.validateAssessButton(rbacRules);
     });
 
-    it("Login as architect and validate presence of import and manage imports", () => {
+    it("Architect, validate presence of import and manage imports", () => {
         //Architect is allowed to import applications
         Analysis.validateTopActionMenu(rbacRules);
     });
 
-    it("Login as architect and validate presence of analyse button", () => {
+    it("Architect, validate presence of analyse button", () => {
         //Architect is allowed to analyse applications
         Analysis.validateAnalyzeButton(rbacRules);
     });
 
-    it("Login as architect and validate analysis details and cancel analysis buttons presence", () => {
+    it("Architect, validate analysis details and cancel analysis buttons presence", () => {
         application.validateAnalysisAvailableActions(rbacRules);
     });
 
-    it("Login as architect and validate assessment context menu buttons presence", () => {
+    it("Architect, validate assessment context menu buttons presence", () => {
         application.validateAssessmentAvailableOptions(rbacRules);
+    });
+
+    it("Architect, validate availability of binary upload functionality", () => {
+        application.validateUploadBinary(rbacRules);
     });
 
     after("", () => {

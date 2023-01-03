@@ -24,9 +24,9 @@ import {
     tagCount,
     assessAppButton,
     createAppButton,
-    actionsButton,
     SEC,
     analysis,
+    analyzeButton,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -61,9 +61,9 @@ import {
     selectItemsPerPage,
     doesExistSelector,
     doesExistText,
-    clickWithin,
 } from "../../../../utils/utils";
 import { applicationData, RbacValidationRules } from "../../../types/types";
+import { sourceDropdown } from "../../../views/analysis.view";
 
 export class Application {
     name: string;
@@ -403,5 +403,17 @@ export class Application {
                     rbacRules["assessment applicable options"]["Manage dependencies"]
                 );
             });
+    }
+    validateUploadBinary(rbacRules: RbacValidationRules): void {
+        Application.open();
+        clickByText(button, analysis);
+        selectItemsPerPage(100);
+        this.selectApplication();
+        cy.contains("button", analyzeButton, { timeout: 20 * SEC })
+            .should("be.enabled")
+            .click();
+        cy.get(sourceDropdown).click();
+        doesExistText("Upload a local binary", rbacRules["Upload binary"]);
+        clickByText(button, "Cancel");
     }
 }
