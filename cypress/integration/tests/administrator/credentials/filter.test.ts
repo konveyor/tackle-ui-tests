@@ -1,4 +1,5 @@
 import {
+    applySearchFilter,
     clearAllFilters,
     createMultipleCredentials,
     deleteByList,
@@ -11,13 +12,10 @@ import {
 import { Credentials } from "../../../models/administrator/credentials/credentials";
 import { name } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
-import { getRandomUserData } from "../../../../utils/data_utils";
-import { User } from "../../../models/keycloak/users/user";
 
 describe("Credentials filter validations", { tags: "@tier2" }, function () {
     let credentialsList: Array<Credentials> = [];
     let invalidSearchInput = String(data.getRandomNumber());
-
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

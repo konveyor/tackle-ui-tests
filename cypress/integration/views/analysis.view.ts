@@ -31,3 +31,6 @@ export const excludePackagesSwitch = "#excludedPackages";
 export const tabsPanel = "ul > li > a";
 export const expandAll = "#expandAll";
 export const panelBody = "div.panel-body";
+export const analyzeManuallyButton = "#select";
+export const addButton = "#add-package-to-include";
+export const enterPackageName = "#packageToInclude";
