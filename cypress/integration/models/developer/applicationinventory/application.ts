@@ -27,6 +27,7 @@ import {
     SEC,
     analysis,
     analyzeButton,
+    reviewAppButton,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -345,6 +346,11 @@ export class Application {
     static validateAssessButton(rbacRules: RbacValidationRules) {
         Application.open();
         doesExistSelector(assessAppButton, rbacRules["Assess"]);
+    }
+
+    static validateReviewButton(rbacRules: RbacValidationRules) {
+        Application.open();
+        doesExistSelector(reviewAppButton, rbacRules["Review"]);
     }
 
     static validateCreateAppButton(rbacRules: RbacValidationRules) {

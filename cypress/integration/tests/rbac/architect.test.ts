@@ -2,6 +2,7 @@ import { User } from "../../models/keycloak/users/user";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import {
+    deleteByList,
     getRandomApplicationData,
     hasToBeSkipped,
     login,
@@ -89,6 +90,11 @@ describe("Architect RBAC operations", { tags: "@tier2" }, () => {
         Application.validateAssessButton(rbacRules);
     });
 
+    it("Architect, validate review application button", () => {
+        //Architect is allowed to review applications
+        Application.validateReviewButton(rbacRules);
+    });
+
     it("Architect, validate presence of import and manage imports", () => {
         //Architect is allowed to import applications
         Analysis.validateTopActionMenu(rbacRules);
@@ -117,9 +123,7 @@ describe("Architect RBAC operations", { tags: "@tier2" }, () => {
         login(adminUserName, adminUserPassword);
         appCredentials.delete();
         application.delete();
-        stakeholdersList.forEach((stakeholder) => {
-            stakeholder.delete();
-        });
+        deleteByList(stakeholdersList);
         logout("admin");
         User.loginKeycloakAdmin();
         userArchitect.delete();

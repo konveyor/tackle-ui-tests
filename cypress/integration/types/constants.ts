@@ -73,6 +73,7 @@ export const tagName = "Tag name";
 
 export const createAppButton = "button[aria-label=create-application]";
 export const assessAppButton = "button[aria-label=assess-application]";
+export const reviewAppButton = "button[aria-label=review-application]";
 export const analyzeAppButton = "button[aria-label=analyze-application]";
 export const actionsButton = "button[aria-label=Actions]";
 
