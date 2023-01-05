@@ -113,12 +113,12 @@ describe("Test secure and insecure maven repository analysis", () => {
         application.openreport();
     });
 
-    // The following test case should verify if the analysis is failed rather than completed,
-    // but due to how maven structure works it will always pick the ( http ) link as ( https )
-    // which means, it will always pass regardless if the insecure toggle is disabled or not
-    // todo: find a workaround to this
-
     it("Binary analysis with maven containing http url when insecure repository is not allowed", function () {
+        // The following test case should verify if the analysis is failed rather than completed,
+        // but due to how maven structure works it will always pick the ( http ) link as ( https )
+        // which means, it will always pass regardless if the insecure toggle is disabled or not
+        // todo: find a workaround to this
+
         mavenConfiguration.disableInsecureMavenRepositories();
 
         // For tackle test app source credentials are required.
