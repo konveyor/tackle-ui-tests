@@ -59,6 +59,7 @@ describe("Exclude Tags", { tags: "@tier2" }, () => {
 
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
         deleteApplicationTableRows();
         deleteAllCredentials();
     });
