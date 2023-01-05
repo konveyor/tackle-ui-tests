@@ -910,6 +910,8 @@ export function getRandomAnalysisData(analysisdata): analysisData {
         storyPoints: analysisdata.storyPoints,
         excludePackages: analysisdata.excludePackages,
         excludeRuleTags: analysisdata.excludeRuleTags,
+        manuallyAnalyzePackages: analysisdata.manuallyAnalyzePackages,
+        excludedPackagesList: analysisdata.excludedPackagesList,
     };
 }
 

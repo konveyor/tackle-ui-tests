@@ -83,5 +83,17 @@
         "customRule": "javax-package-custom.windup.xml",
         "excludeRuleTags": "tag",
         "storyPoints": 1
+    },
+
+    {
+        "source": "Source code",
+        "target": ["Quarkus"],
+        "appName": "tackle-testapp",
+        "manuallyAnalyzePackages": "io.konveyor.demo.ordermanagement",
+        "excludedPackagesList": [
+            " io.konveyor.demo.ordermanagement.OrderManagementAppInitializer",
+            " io.konveyor.demo.ordermanagement.model.Customer "
+        ],
+        "storyPoints": 1
     }
 ]
