@@ -32,8 +32,6 @@ import * as data from "../../../../utils/data_utils";
 import { CredentialType, UserCredentials } from "../../../types/constants";
 import { Analysis } from "../../../models/developer/applicationinventory/analysis";
 import { CredentialsMaven } from "../../../models/administrator/credentials/credentialsMaven";
-import { Proxy } from "../../../models/administrator/proxy/proxy";
-import { getByTitle } from "@testing-library/dom";
 
 let mavenConfiguration = new MavenConfiguration();
 let source_credential;
@@ -90,6 +88,7 @@ describe("Test secure and insecure maven repository analysis", () => {
 
     after("Perform test data clean up", () => {
         if (hasToBeSkipped("@tier1")) return;
+        login();
         deleteApplicationTableRows();
         deleteAllBusinessServices();
         source_credential.delete();
