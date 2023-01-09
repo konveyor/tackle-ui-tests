@@ -88,6 +88,7 @@ describe("Test secure and insecure maven repository analysis", () => {
 
     after("Perform test data clean up", () => {
         if (hasToBeSkipped("@tier1")) return;
+        login();
         deleteApplicationTableRows();
         deleteAllBusinessServices();
         source_credential.delete();
