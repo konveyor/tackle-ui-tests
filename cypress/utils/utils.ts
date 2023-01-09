@@ -568,22 +568,22 @@ export function uploadFile(fileName: string): void {
 }
 
 export function navigate_to_application_inventory(tab?): void {
-    cy.get("h1", { timeout: 5 * SEC })
-    .then(($header) => {
+    cy.get("h1", { timeout: 5 * SEC }).then(($header) => {
         if (!$header.text().includes("Application inventory")) {
             selectUserPerspective("Developer");
             clickByText(navMenu, applicationInventory);
         }
     });
-    if (tab == 'Analysis') clickByText(navTab, analysis);
+    if (tab == "Analysis") clickByText(navTab, analysis);
 }
 
 export function application_inventory_kebab_menu(menu, tab?): void {
     // The value for menu could be one of {Import, Manage imports, Delete, Manage credentials}
-    navigate_to_application_inventory();
-    if (tab == 'Analysis') clickByText(navTab, analysis);
+    if (tab == "Analysis") navigate_to_application_inventory("Analysis");
+    else navigate_to_application_inventory();
     cy.get(actionButton).eq(1).click();
-    cy.get("a.pf-c-dropdown__menu-item").contains(menu).click();
+    if (menu == "Import") clickByText(button, "Import");
+    else cy.get("a.pf-c-dropdown__menu-item").contains(menu).click();
 }
 
 export function openManageImportsPage(): void {
@@ -640,10 +640,7 @@ export function deleteApplicationTableRows(): void {
                     .then(($body) => {
                         if (!$body.text().includes("of 0")) {
                             cy.get("input#bulk-selected-apps-checkbox").check();
-                            cy.get(actionButton).eq(1).click();
-                            cy.get("a.pf-c-dropdown__menu-item")
-                                .contains("Delete")
-                                .trigger("click");
+                            application_inventory_kebab_menu("Delete");
                             clickByText(button, "Delete");
                         }
                     });
