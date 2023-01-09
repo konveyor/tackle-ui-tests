@@ -30,6 +30,8 @@ import {
     getRandomApplicationData,
     click,
     createMultipleApplications,
+    application_inventory_kebab_menu,
+    navigate_to_application_inventory,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -158,13 +160,14 @@ describe("Application validations", { tags: "@tier2" }, () => {
     });
 
     it("Bulk deletion of applications - Select page ", function () {
+        navigate_to_application_inventory();
         // Click dropdown toggle button to make 'Select page' selection.
         cy.get("button[aria-label='Select']").click();
-
         cy.get("ul[role=menu] > li").contains("Select page").click();
-        cy.get(actionButton).eq(1).click();
-        cy.get("a.pf-c-dropdown__menu-item").contains("Delete").click();
+
+        application_inventory_kebab_menu("Delete");
         clickByText(button, "Delete");
+
         // Assert that all applications except the one(s) on the next page have been deleted.
         for (let i = 0; i < applicationList.length - 1; i++) {
             notExists(applicationList[i].name);
@@ -174,12 +177,12 @@ describe("Application validations", { tags: "@tier2" }, () => {
 
     it("Bulk deletion of applications - Select all ", function () {
         applicationList = createMultipleApplications(11);
+        navigate_to_application_inventory();
         // Click dropdown toggle button to make 'Select all' selection.
         cy.get("button[aria-label='Select']").click();
-
         cy.get("ul[role=menu] > li").contains("Select all").click();
-        cy.get(actionButton).eq(1).click();
-        cy.get("a.pf-c-dropdown__menu-item").contains("Delete").click();
+
+        application_inventory_kebab_menu("Delete");
         clickByText(button, "Delete");
         for (let i = 0; i < applicationList.length; i++) {
             notExists(applicationList[i].name);
