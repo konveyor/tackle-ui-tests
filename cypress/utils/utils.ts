@@ -539,6 +539,7 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
         .contains("Import")
         .trigger("click");
     checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
+    // unresolved bug https://issues.redhat.com/browse/TACKLE-927
 }
 
 export function uploadXml(fileName: string): void {
@@ -610,6 +611,8 @@ export function verifyImportErrorMsg(errorMsg: any): void {
 }
 
 export function deleteApplicationTableRows(): void {
+    selectUserPerspective("Developer");
+    clickByText(navMenu, applicationInventory);
     cy.get(commonView.appTable)
         .next()
         .then(($div) => {
