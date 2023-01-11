@@ -113,14 +113,6 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@tier2")) return;
-
-        deleteAllTagsAndTagTypes();
-        deleteAllBusinessServices();
-        deleteApplicationTableRows();
-    });
-
     it("Name filter validations", function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
@@ -322,5 +314,13 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         exists(applicationsList[0].name);
         notExists(application.name);
         clickByText(button, clearAllFilters);
+    });
+
+    after("Perform test data clean up", function () {
+        if (hasToBeSkipped("@tier2")) return;
+
+        deleteApplicationTableRows();
+        deleteAllTagsAndTagTypes();
+        deleteAllBusinessServices();
     });
 });
