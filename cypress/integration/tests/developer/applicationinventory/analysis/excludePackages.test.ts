@@ -51,18 +51,6 @@ describe("Source Analysis", { tags: "@tier2" }, () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    afterEach("Persist session", function () {
-        // Reset URL from report page to web UI
-        resetURL();
-    });
-
-    after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@tier2")) return;
-        // Prevent hook from running, if the tag is excluded from run
-        deleteApplicationTableRows();
-        deleteAllCredentials();
-    });
-
     it("Exclude a package in analysis", function () {
         // For source code analysis application must have source code URL git or svn
         const application = new Analysis(
@@ -79,5 +67,17 @@ describe("Source Analysis", { tags: "@tier2" }, () => {
         // Customer package is provided in excludePackage option in analysis
         // and report should exclude customer package in analysis .
         application.validateExcludedPackages("Customer");
+    });
+
+    afterEach("Persist session", function () {
+        // Reset URL from report page to web UI
+        resetURL();
+    });
+
+    after("Perform test data clean up", function () {
+        if (hasToBeSkipped("@tier2")) return;
+        // Prevent hook from running, if the tag is excluded from run
+        deleteApplicationTableRows();
+        deleteAllCredentials();
     });
 });
