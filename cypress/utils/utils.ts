@@ -590,7 +590,9 @@ export function application_inventory_kebab_menu(menu, tab?): void {
 export function openManageImportsPage(): void {
     // Opens the manage import applications page
     application_inventory_kebab_menu("Manage imports");
-    cy.get("h1", { timeout: 5 * SEC }).contains("Application imports");
+    cy.wait(5 * SEC)
+        .get("h1", { timeout: 5 * SEC })
+        .contains("Application imports");
 }
 
 export function openErrorReport(): void {
