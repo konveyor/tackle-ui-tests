@@ -29,7 +29,7 @@ import {
     button,
     fieldReqMsg,
     max120CharsMsg,
-    duplicateApplication,
+    duplicateTagName,
 } from "../../../../../types/constants";
 import {
     createTagButton,
@@ -126,7 +126,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
         cy.get(dropdownMenuToggle).eq(2).click();
         clickByText(button, tag.tagType);
         cy.get(commonView.submitButton).should("be.disabled");
-        cy.get(commonView.nameHelper).should("contain.text", duplicateApplication);
+        cy.get(commonView.nameHelper).should("contain.text", duplicateTagName);
         cy.get(commonView.closeButton).click();
         cy.wait(100);
 

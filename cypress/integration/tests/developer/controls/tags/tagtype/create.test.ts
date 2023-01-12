@@ -32,7 +32,7 @@ import {
     max40CharMsg,
     fieldReqMsg,
     minCharsMsg,
-    duplicateApplication,
+    duplicateTagTypeName,
 } from "../../../../../types/constants";
 import {
     createTagtypeButton,
@@ -139,7 +139,7 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
         inputText(nameInput, tagType.name);
         clickWithin(modal, dropdownMenuToggle);
         clickByText(button, data.getColor());
-        cy.get(nameHelper).should("contain.text", duplicateApplication);
+        cy.get(nameHelper).should("contain.text", duplicateTagTypeName);
         cy.get(commonView.closeButton).click();
 
         // Delete created tag
