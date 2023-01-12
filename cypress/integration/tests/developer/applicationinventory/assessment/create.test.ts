@@ -38,7 +38,7 @@ import {
     minCharsMsg,
     max120CharsMsg,
     max250CharsMsg,
-    duplicateName,
+    duplicateApplication,
     createNewButton,
 } from "../../../../types/constants";
 import {
@@ -150,7 +150,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
         // Check name duplication
         inputText(applicationNameInput, application.name);
         selectFormItems(applicationBusinessServiceSelect, businessservicesList[0].name);
-        cy.get(commonView.nameHelper).should("contain.text", duplicateName);
+        cy.get(commonView.nameHelper).should("contain.text", duplicateApplication);
 
         // Delete created application
         cy.get(commonView.closeButton).click();

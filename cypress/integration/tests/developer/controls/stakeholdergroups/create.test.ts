@@ -36,7 +36,7 @@ import {
     max120CharsMsg,
     max250CharsMsg,
     createNewButton,
-    duplicateName,
+    duplicateApplication,
 } from "../../../../types/constants";
 import {
     stakeholdergroupNameInput,
@@ -123,7 +123,7 @@ describe("Stakeholder groups validations", { tags: "@tier2" }, () => {
         // Check name duplication
         inputText(stakeholdergroupNameInput, stakeholdergroup.name);
         cy.get(commonView.submitButton).should("be.disabled");
-        cy.get(commonView.nameHelper).should("contain.text", duplicateName);
+        cy.get(commonView.nameHelper).should("contain.text", duplicateApplication);
 
         // Delete created stakeholder group
         cy.get(commonView.closeButton).click();
