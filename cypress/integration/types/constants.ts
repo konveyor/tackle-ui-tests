@@ -82,7 +82,13 @@ export const duplicateErrMsg = "ERROR: duplicate key value violates unique const
 export const duplicateEmail = "Please use a different email address.";
 export const duplicateName =
     "An application with this name already exists. Please use a different name.";
-
+export const duplicateTagTypeName =
+    "A tag type with this name already exists. Please use a different name.";
+export const duplicateTagName = "A tag with this name already exists. Please use a different name.";
+export const duplicateJobFunctionName =
+    "A job function with this name already exists. Please use a different name.";
+export const duplicateStakeholderGroupName =
+    "An stakeholder group with this name already exists. Please use a different name.";
 export const fieldReqMsg = "This field is required.";
 export const max40CharMsg = "This field must contain fewer than 40 characters.";
 export const max120CharsMsg = "This field must contain fewer than 120 characters.";
