@@ -34,3 +34,4 @@ export const panelBody = "div.panel-body";
 export const analyzeManuallyButton = "#select";
 export const addButton = "#add-package-to-include";
 export const enterPackageName = "#packageToInclude";
+export const enterPackageNameToExclude = "#packageToExclude";

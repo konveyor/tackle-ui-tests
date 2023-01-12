@@ -60,6 +60,7 @@ import {
     enterPackageName,
     addButton,
     analyzeManuallyButton,
+    enterPackageNameToExclude,
 } from "../../../views/analysis.view";
 import { kebabMenu } from "../../../views/applicationinventory.view";
 
@@ -180,7 +181,7 @@ export class Analysis extends Application {
         }
         if (this.excludePackages) {
             click(excludePackagesSwitch);
-            inputText(enterPackageName, this.excludePackages);
+            inputText(enterPackageNameToExclude, this.excludePackages);
             clickByText(addButton, "Add");
         }
         cy.contains("button", "Next", { timeout: 200 }).click();
