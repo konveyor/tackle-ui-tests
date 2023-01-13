@@ -121,7 +121,7 @@ jobs:
         env:
           GIT_USER_SECRET: ${{ secrets.GithubUserSecret}}
           GIT_TOKEN_SECRET: ${{ secrets.GithubTokenSecret}}
-        run: npx cypress run --spec ${{ needs.k8s-tests.outputs.tests }} --env user="admin",pass="Dog8code",tackleUrl=${{ env.CYPRESS_tackleUrl }},git_user=$GIT_USER_SECRET,git_password=$GIT_TOKEN_SECRET
+        run: npx cypress run --spec ${{ needs.k8s-tests.outputs.tests }} --env user="admin",pass="Dog8code",tackleUrl=${{ env.CYPRESS_tackleUrl }},git_user="test1",git_password=${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/upload-artifact@v1
         if: failure()
