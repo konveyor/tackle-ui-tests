@@ -12,6 +12,7 @@ import { Analysis } from "../../../../models/developer/applicationinventory/anal
 import { analysis, CredentialType, UserCredentials } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
+
 let source_credential;
 
 describe("Source Analysis", { tags: "@tier2" }, () => {
