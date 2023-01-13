@@ -36,7 +36,7 @@ import {
     max120CharsMsg,
     max250CharsMsg,
     createNewButton,
-    duplicateName,
+    duplicateBusinessService,
 } from "../../../../types/constants";
 import {
     businessServiceNameInput,
@@ -124,7 +124,7 @@ describe("Business service validations", { tags: "@tier2" }, () => {
         // Check name duplication
         inputText(businessServiceNameInput, businessService.name);
         cy.get(commonView.submitButton).should("be.disabled");
-        cy.get(commonView.nameHelper).should("contain.text", duplicateName);
+        cy.get(commonView.nameHelper).should("contain.text", duplicateBusinessService);
 
         // Delete created business service
         cy.get(commonView.closeButton).click();

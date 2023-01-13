@@ -80,7 +80,7 @@ export const actionsButton = "button[aria-label=Actions]";
 // Error helper messages general to all views
 export const duplicateErrMsg = "ERROR: duplicate key value violates unique constraint";
 export const duplicateEmail = "Please use a different email address.";
-export const duplicateName =
+export const duplicateApplication =
     "An application with this name already exists. Please use a different name.";
 export const duplicateTagTypeName =
     "A tag type with this name already exists. Please use a different name.";
@@ -89,6 +89,9 @@ export const duplicateJobFunctionName =
     "A job function with this name already exists. Please use a different name.";
 export const duplicateStakeholderGroupName =
     "An stakeholder group with this name already exists. Please use a different name.";
+export const duplicateBusinessService =
+    "A business service with this name already exists. Please use a different name.";
+
 export const fieldReqMsg = "This field is required.";
 export const max40CharMsg = "This field must contain fewer than 40 characters.";
 export const max120CharsMsg = "This field must contain fewer than 120 characters.";
