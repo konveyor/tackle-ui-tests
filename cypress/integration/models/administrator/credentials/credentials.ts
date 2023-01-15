@@ -25,7 +25,6 @@ import {
     editAction,
     SEC,
     trTag,
-    UserCredentials,
 } from "../../../types/constants";
 import {
     createBtn,
@@ -42,6 +41,7 @@ import {
     filterSubmitButton,
     filterCatCreatedBy,
     filterCreatedByInput,
+    modalBoxBody,
 } from "../../../views/credentials.view";
 import {
     navLink,
@@ -52,7 +52,6 @@ import {
 import { selectType } from "../../../views/credentials.view";
 import * as commonView from "../../../views/common.view";
 import { CredentialsData } from "../../../types/types";
-import { continueButton } from "../../../views/assessment.view";
 
 export class Credentials {
     name = "";
@@ -208,7 +207,7 @@ export class Credentials {
             click(cancelButton);
             exists(this.name);
         } else {
-            cy.get('div[aria-label="confirm-dialog"').within(() => {
+            cy.get(modalBoxBody).within(() => {
                 if (this.inUse) {
                     doesExistText("The credentials are being used by", true);
                 }

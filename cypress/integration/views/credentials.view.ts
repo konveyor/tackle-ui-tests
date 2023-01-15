@@ -28,6 +28,7 @@ export const filterNameInput = "#name-input";
 export const filterCreatedByInput = "#createdBy-input";
 export const filterSelectType = "#type-filter-value-select";
 export const filterSubmitButton = "button.pf-c-button.pf-m-control";
+export const modalBoxBody = "div.pf-c-modal-box__body";
 export enum credLabels {
     name = 'td[data-label="Name"]',
     description = 'td[data-label="Description"]',
