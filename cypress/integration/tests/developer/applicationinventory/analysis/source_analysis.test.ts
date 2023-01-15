@@ -119,7 +119,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, maven_credential.name);
+        application.manageCredentials(source_credential, maven_credential);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
@@ -152,7 +152,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials("None", maven_credential.name);
+        application.manageCredentials(maven_credential);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
@@ -168,7 +168,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, "None");
+        application.manageCredentials(source_credential);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
@@ -191,7 +191,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(scCredsKey.name, "None");
+        application.manageCredentials(scCredsKey);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
@@ -207,7 +207,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, "None");
+        application.manageCredentials(source_credential);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();

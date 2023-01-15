@@ -101,7 +101,7 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         // Both source and maven credentials required for binary.
-        application.manageCredentials(source_credential.name, maven_credential.name);
+        application.manageCredentials(source_credential, maven_credential);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();

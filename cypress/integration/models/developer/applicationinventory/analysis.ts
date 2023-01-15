@@ -63,6 +63,8 @@ import {
     enterPackageNameToExclude,
 } from "../../../views/analysis.view";
 import { kebabMenu } from "../../../views/applicationinventory.view";
+import { CredentialsSourceControl } from "../../administrator/credentials/credentialsSourceControl";
+import { CredentialsMaven } from "../../administrator/credentials/credentialsMaven";
 
 export class Analysis extends Application {
     name: string;
@@ -296,15 +298,15 @@ export class Analysis extends Application {
         super.delete();
     }
 
-    manageCredentials(sourceCred?: string, mavenCred?: string): void {
+    manageCredentials(sourceCred?: CredentialsSourceControl, mavenCred?: CredentialsMaven): void {
         cy.wait(2000);
         performRowActionByIcon(this.name, kebabMenu);
         clickByText(button, manageCredentials);
         if (sourceCred) {
-            selectFormItems(sourceCredential, sourceCred);
+            selectFormItems(sourceCredential, sourceCred.name);
         }
         if (mavenCred) {
-            selectFormItems(mavenCredential, mavenCred);
+            selectFormItems(mavenCredential, mavenCred.name);
         }
         clickByText(button, save);
         cy.wait(2000);

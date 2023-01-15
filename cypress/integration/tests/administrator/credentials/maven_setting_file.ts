@@ -5,12 +5,12 @@ import {
     login,
     preservecookies,
 } from "../../../../utils/utils";
-import { CredentialsSourceControlUsername } from "../../../models/administrator/credentials/credentialsSourceControlUsername";
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
-import { CredentialType, UserCredentials } from "../../../types/constants";
+import { CredentialType } from "../../../types/constants";
 import { Analysis } from "../../../models/developer/applicationinventory/analysis";
-let source_credential;
-let application;
+import { CredentialsMaven } from "../../../models/administrator/credentials/credentialsMaven";
+let maven_credential: CredentialsMaven;
+let application: Analysis;
 
 describe("Validation of Source Control Credentials", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -19,12 +19,10 @@ describe("Validation of Source Control Credentials", { tags: "@tier1" }, () => {
 
         // Perform login
         login();
-        source_credential = new CredentialsSourceControlUsername(
-            getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.usernamePassword)
-        );
+        maven_credential = new CredentialsMaven(getRandomCredentialsData(CredentialType.maven));
 
-        source_credential.create();
-        source_credential.inUse = true;
+        maven_credential.create();
+        maven_credential.inUse = true;
     });
 
     beforeEach("Persist session", function () {
@@ -41,11 +39,12 @@ describe("Validation of Source Control Credentials", { tags: "@tier1" }, () => {
             getRandomAnalysisData(this.analysisData)
         );
         application.create();
-        application.manageCredentials(source_credential);
-        source_credential.delete();
+        application.manageCredentials(maven_credential);
+        application.analyze();
     });
 
     after("Cleanup", () => {
+        maven_credential.delete();
         application.delete();
     });
 });

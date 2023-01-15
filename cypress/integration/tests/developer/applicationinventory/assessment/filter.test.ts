@@ -229,7 +229,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         cy.wait(2000);
 
         // Attach Maven credential
-        application.manageCredentials("None", maven_credential.name);
+        application.manageCredentials(maven_credential);
         exists(application.name);
 
         // Enter Maven and assert
@@ -239,7 +239,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         clickByText(button, clearAllFilters);
 
         // Change the credentials to Source and test
-        application.manageCredentials(source_credential.name, "None");
+        application.manageCredentials(source_credential);
         exists(application.name);
 
         // Enter Source and assert

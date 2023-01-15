@@ -58,7 +58,7 @@ describe("Source Analysis", { tags: "@tier2" }, () => {
             getRandomAnalysisData(this.analysisData[8])
         );
         application.create();
-        application.manageCredentials(source_credential.name);
+        application.manageCredentials(source_credential);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();

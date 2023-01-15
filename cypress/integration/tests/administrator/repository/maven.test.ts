@@ -108,7 +108,7 @@ describe("Test secure and insecure maven repository analysis", () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, maven_credential.name);
+        application.manageCredentials(source_credential, maven_credential);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
@@ -131,7 +131,7 @@ describe("Test secure and insecure maven repository analysis", () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, maven_credential.name);
+        application.manageCredentials(source_credential, maven_credential);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();

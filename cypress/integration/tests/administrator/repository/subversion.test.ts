@@ -96,7 +96,7 @@ describe("Test secure and insecure svn repository analysis", { tags: "@tier1" },
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, "None");
+        application.manageCredentials(source_credential);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openreport();
@@ -116,7 +116,7 @@ describe("Test secure and insecure svn repository analysis", { tags: "@tier1" },
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, "None");
+        application.manageCredentials(source_credential);
         application.analyze();
         application.verifyAnalysisStatus("Failed");
         application.openAnalysisDetails();
