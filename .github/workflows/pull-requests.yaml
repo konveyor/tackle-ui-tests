@@ -118,7 +118,7 @@ jobs:
       - name: Run cypress login test
         run: npx cypress run --spec "cypress/integration/tests/login.test.ts" --env user="admin",pass="Passw0rd!",tackleUrl=${{ env.CYPRESS_tackleUrl }}
       - name: Run cypress test cases
-        run: npx cypress run --spec ${{ needs.k8s-tests.outputs.tests }} --env user="admin",pass="Dog8code",tackleUrl=${{ env.CYPRESS_tackleUrl }},git_user="test1",git_password=${{ secrets.GITHUB_TOKEN }}
+        run: npx cypress run --spec ${{ needs.k8s-tests.outputs.tests }} --env user="admin",pass="Dog8code",tackleUrl=${{ env.CYPRESS_tackleUrl }},git_user="abrugaro",git_password="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"
 
       - uses: actions/upload-artifact@v1
         if: failure()
