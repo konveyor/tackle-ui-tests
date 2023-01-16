@@ -629,8 +629,6 @@ export function verifyImportErrorMsg(errorMsg: any): void {
 }
 
 export function deleteApplicationTableRows(): void {
-    selectUserPerspective("Developer");
-    clickByText(navMenu, applicationInventory);
     cy.get(commonView.appTable)
         .next()
         .then(($div) => {

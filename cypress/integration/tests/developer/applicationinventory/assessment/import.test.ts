@@ -68,6 +68,7 @@ describe("Application import operations", () => {
         if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
 
         // Delete the existing application rows before deleting business service(s)
+        clickByText(navMenu, applicationInventory);
         deleteApplicationTableRows();
     });
 
