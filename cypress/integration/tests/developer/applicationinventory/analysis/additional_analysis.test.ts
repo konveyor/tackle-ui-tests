@@ -33,7 +33,7 @@ describe("Running analysis with incorrect proxy configuration", { tags: "@tier2"
         });
     });
 
-    it("Negative: Enable HTTP and HTTPS proxy, create an application and run application analysis ", function () {
+    it("Negative: Enable HTTP and HTTPS proxy, create an application and run application analysis", function () {
         httpProxy.excludeList = ["127.0.0.1", "github.com"];
         httpProxy.configureProxy();
 
