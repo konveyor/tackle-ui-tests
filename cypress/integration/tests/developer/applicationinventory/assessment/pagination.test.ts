@@ -26,13 +26,14 @@ import {
     selectUserPerspective,
     goToPage,
     goToLastPage,
+    deletePageApplicationTableRows,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory } from "../../../../types/constants";
 import * as commonView from "../../../../views/common.view";
 import { Application } from "../../../../models/developer/applicationinventory/application";
 
-var applicationsList: Array<Application> = [];
+let applicationsList: Array<Application> = [];
 
 describe("Application inventory pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
@@ -170,7 +171,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
         cy.wait(2000);
 
         // Delete all items of last page
-        deleteApplicationTableRows(true);
+        deletePageApplicationTableRows();
 
         // Verify that page is re-directed to previous page
         cy.get(".pf-c-table > tbody > tr")

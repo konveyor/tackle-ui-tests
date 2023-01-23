@@ -647,6 +647,26 @@ export function deleteApplicationTableRows(): void {
         });
 }
 
+export function deletePageApplicationTableRows(): void {
+    cy.get(commonView.appTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.wait(1000);
+                cy.get("span.pf-c-options-menu__toggle-text")
+                    .eq(0)
+                    .then(($body) => {
+                        if (!$body.text().includes("of 0")) {
+                            cy.get(".pf-c-dropdown__toggle-button").click();
+                            clickByText(button, "Select page");
+                            application_inventory_kebab_menu("Delete");
+                            clickByText(button, "Delete");
+                        }
+                    });
+            }
+        });
+}
+
 export function deleteAppImportsTableRows(lastPage = false): void {
     if (!lastPage) {
         openManageImportsPage();
