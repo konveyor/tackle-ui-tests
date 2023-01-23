@@ -23,7 +23,6 @@ import {
     deleteApplicationTableRows,
     getRandomApplicationData,
 } from "../../../../../utils/utils";
-
 import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
