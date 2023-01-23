@@ -120,6 +120,9 @@ export function login(username?, password?: string): void {
             if (username && password) {
                 userName = username;
                 userPassword = password;
+            } else {
+                userName = Cypress.env("user");
+                userPassword = Cypress.env("pass");
             }
             inputText(loginView.userNameInput, userName);
             inputText(loginView.userPasswordInput, userPassword);
@@ -154,6 +157,9 @@ export function updatePassword(): void {
 }
 
 export function logout(userName?: string): void {
+    if (!userName) {
+        userName = "admin";
+    }
     clickByText(button, userName);
     cy.wait(0.5 * SEC);
     clickByText("a", "Logout");
