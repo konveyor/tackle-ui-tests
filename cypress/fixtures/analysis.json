@@ -95,5 +95,65 @@
             " io.konveyor.demo.ordermanagement.model.Customer "
         ],
         "storyPoints": 1
+    },
+    {
+        "source": "Upload a local binary",
+        "appsName": ["jee-example-app-1.0.0.ear"],
+        "target": ["Quarkus"],
+        "storyPoints": [89],
+        "incidents": [
+            {
+                "mandatory": 53,
+                "optional": 0,
+                "potential": 38,
+                "information": 11,
+                "total": 102
+            }
+        ]
+    },
+    {
+        "source": "Upload a local binary",
+        "appName": ["camunda-bpm-spring-boot-starter-example-war-2.0.0.war"],
+        "target": ["Quarkus"],
+        "storyPoints": [132, 178, 140],
+        "incidents": [
+            {
+                "mandatory": 5,
+                "optional": 9,
+                "potential": 26,
+                "information": 105,
+                "total": 145
+            }
+        ]
+    },
+    {
+        "source": "Upload a local binary",
+        "appName": ["complete-duke"],
+        "targets": ["Jakarta EE 9"],
+        "storyPoints": [29],
+        "incidents": [
+            {
+                "mandatory": 29,
+                "optional": 0,
+                "potential": 0,
+                "information": 1,
+                "total": 30
+            }
+        ]
+    },
+    {
+        "source": "Upload a local binary",
+        "appName": ["kafka-clients-sb-sample.jar"],
+        "target": ["Quarkus"],
+        "storyPoints": [178],
+        "incidents": [
+            {
+                "mandatory": 14,
+                "optional": 0,
+                "potential": 31,
+                "information": 58,
+                "total": 103
+            }
+        ]
     }
 ]

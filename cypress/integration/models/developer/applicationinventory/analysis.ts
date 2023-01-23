@@ -63,6 +63,7 @@ import {
     enterPackageNameToExclude,
 } from "../../../views/analysis.view";
 import { kebabMenu } from "../../../views/applicationinventory.view";
+import * as commonView from "../../../views/common.view";
 
 export class Analysis extends Application {
     name: string;
@@ -79,6 +80,13 @@ export class Analysis extends Application {
     storyPoints?: number;
     manuallyAnalyzePackages?: string[];
     excludedPackagesList?: string[];
+    incidents?: {
+        mandatory?: number;
+        optional?: number;
+        potential?: number;
+        information?: number;
+        total?: number;
+    };
 
     constructor(appData: applicationData, analysisData: analysisData) {
         super(appData);
@@ -100,6 +108,7 @@ export class Analysis extends Application {
             storyPoints,
             manuallyAnalyzePackages,
             excludedPackagesList,
+            incidents,
         } = analysisData;
         this.name = appData.name;
         this.source = source;
@@ -115,6 +124,7 @@ export class Analysis extends Application {
         if (excludePackages) this.excludePackages = excludePackages;
         if (manuallyAnalyzePackages) this.manuallyAnalyzePackages = manuallyAnalyzePackages;
         if (excludedPackagesList) this.excludedPackagesList = excludedPackagesList;
+        if (incidents) this.incidents = incidents;
     }
 
     //Navigate to the Application inventory
@@ -366,5 +376,31 @@ export class Analysis extends Application {
         cy.get(tabsPanel).contains("Application Details").click();
         click(expandAll);
         cy.get(panelBody).should("not.contain.text", this.excludeRuleTags);
+    }
+
+    // Method to validate Incidents on report page
+    validateIncidents(): void {
+        cy.get("div[class='incidentsCount'] > table > tbody").as("incidentTable");
+        cy.get("@incidentTable")
+            .find("tr")
+            .each(($row) => {
+                const label = $row.find("td.label_").text();
+                const count = $row.find("td.count").text();
+                let index = 0;
+                if (label.includes("Mandatory")) {
+                    expect(this.incidents[index].mandatory).equal(Number(count));
+                }
+                if ($row.children("td.label_").text().includes("Optional")) {
+                    expect(this.incidents[index].optional).equal(
+                        Number($row.children("td.count").text())
+                    );
+                }
+                if (label.includes("Potential")) {
+                    expect(this.incidents[index].potential).equal(Number(count));
+                }
+                if (label.includes("Information")) {
+                    expect(this.incidents[index].information).equal(Number(count));
+                }
+            });
     }
 }

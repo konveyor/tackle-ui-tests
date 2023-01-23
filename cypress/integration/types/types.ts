@@ -78,6 +78,13 @@ export type analysisData = {
     excludePackages?: string[];
     manuallyAnalyzePackages?: string[];
     excludedPackagesList?: string[];
+    incidents?: {
+        mandatory?: number;
+        optional?: number;
+        potential?: number;
+        information?: number;
+        total?: number;
+    };
 };
 
 export type UserData = {
