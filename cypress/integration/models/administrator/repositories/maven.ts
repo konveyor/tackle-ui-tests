@@ -28,7 +28,7 @@ export class MavenConfiguration {
         MavenConfiguration.open();
         clickByText(clearRepository, "Clear repository");
 
-        cy.get("#pf-modal-part-1 > span").contains("Clear repository");
+        cy.get(".pf-c-modal-box__title-text").contains("Clear repository");
 
         click(confirmClear);
     }
