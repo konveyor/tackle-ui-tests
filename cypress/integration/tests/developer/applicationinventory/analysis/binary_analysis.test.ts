@@ -32,8 +32,10 @@ import { CredentialType, UserCredentials } from "../../../../types/constants";
 import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsMaven } from "../../../../models/administrator/credentials/credentialsMaven";
 import { Proxy } from "../../../../models/administrator/proxy/proxy";
+import { MavenConfiguration } from "../../../../models/administrator/repositories/maven";
 let source_credential;
 let maven_credential;
+const mavenConfiguration = new MavenConfiguration();
 
 describe("Binary Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -46,6 +48,9 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
 
         //Disable all proxy settings
         Proxy.disableAllProxies();
+
+        // Clears artifact repository
+        mavenConfiguration.clearRepository();
 
         //Create source and maven credentials required for analysis
         source_credential = new CredentialsSourceControlUsername(

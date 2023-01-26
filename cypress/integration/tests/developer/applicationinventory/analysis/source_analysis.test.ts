@@ -33,8 +33,10 @@ import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../../models/administrator/credentials/credentialsSourceControlKey";
 import { Proxy } from "../../../../models/administrator/proxy/proxy";
+import { MavenConfiguration } from "../../../../models/administrator/repositories/maven";
 let source_credential;
 let maven_credential;
+const mavenConfiguration = new MavenConfiguration();
 
 describe("Source Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -47,6 +49,9 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
 
         //Disable all proxy settings
         Proxy.disableAllProxies();
+
+        // Clears artifact repository
+        mavenConfiguration.clearRepository();
 
         // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
