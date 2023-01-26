@@ -222,7 +222,7 @@ export class Assessment extends Application {
 
     click_assess_button(): void {
         cy.waitForReact();
-        cy.react("p", { props: { "aria-label": "assess-application" } })
+        cy.react("p", { props: { id: "assess-application" } })
             .should("be.enabled")
             .click();
     }
