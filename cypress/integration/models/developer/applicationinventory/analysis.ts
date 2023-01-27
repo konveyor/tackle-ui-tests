@@ -222,13 +222,13 @@ export class Analysis extends Application {
         doesExistSelector(analyzeAppButton, rbacRules["Analyze"]);
     }
 
-    verifyAnalysisStatus(status) {
-        cy.get(tdTag)
-            .contains(this.name)
-            .closest(trTag)
+    verifyAnalysisStatus(status, log = true) {
+        cy.get(tdTag, { log })
+            .contains(this.name, { log })
+            .closest(trTag, { log })
             .within(() => {
-                cy.get(analysisColumn)
-                    .find("div > div")
+                cy.get(analysisColumn, { log })
+                    .find("div > div", { log })
                     .then(($a) => {
                         if ($a.text().toString() != status) {
                             // If analysis failed and is not expected then test fails.
@@ -236,7 +236,7 @@ export class Analysis extends Application {
                                 expect($a.text().toString()).to.eq("Completed");
                             }
                             cy.wait(10000);
-                            this.verifyAnalysisStatus(status);
+                            this.verifyAnalysisStatus(status, false);
                         } else {
                             expect($a.text().toString()).to.eq(status);
                             cy.wait(2000);
