@@ -131,7 +131,8 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.validateStoryPoints();
     });
 
-    it("Source + dependencies analysis on daytrader app", function () {
+    // Temporary skipped due to memory consumption
+    xit("Source + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies", {

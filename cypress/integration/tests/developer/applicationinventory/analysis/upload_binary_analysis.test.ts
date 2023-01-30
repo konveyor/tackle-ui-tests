@@ -100,7 +100,8 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         application.validateStoryPoints();
     });
 
-    it("DIVA report generation", function () {
+    // Temporary skipped due to memory consumption
+    xit("DIVA report generation", function () {
         const application = new Analysis(
             getRandomApplicationData("DIVA"),
             getRandomAnalysisData(this.analysisData[7])
