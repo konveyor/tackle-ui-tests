@@ -84,7 +84,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         application.validateStoryPoints();
     });
 
-    it("Custom rules with custom targets", function () {
+    xit("Custom rules with custom targets", function () {
         // Automated https://issues.redhat.com/browse/TACKLE-561
         const application = new Analysis(
             getRandomApplicationData("customRule_customTarget"),

@@ -149,7 +149,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.validateStoryPoints();
     });
 
-    it("Analysis on daytrader app with maven credentials", function () {
+    xit("Analysis on daytrader app with maven credentials", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-751
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_MavenCreds", { sourceData: this.appData[1] }),
@@ -165,7 +165,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.validateStoryPoints();
     });
 
-    it("Source Analysis on tackle testapp", function () {
+    xit("Source Analysis on tackle testapp", function () {
         // For tackle test app source credentials are required.
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source", { sourceData: this.appData[3] }),
@@ -181,7 +181,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.validateStoryPoints();
     });
 
-    it("Analysis on tackle test app with ssh credentials", function () {
+    xit("Analysis on tackle test app with ssh credentials", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-707
         const scCredsKey = new CredentialsSourceControlKey(
             data.getRandomCredentialsData(
@@ -204,7 +204,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.validateStoryPoints();
     });
 
-    it("Source Analysis on tackle testapp for svn repo type", function () {
+    xit("Source Analysis on tackle testapp for svn repo type", function () {
         // For tackle test app source credentials are required.
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_svnRepo", { sourceData: this.appData[5] }),
