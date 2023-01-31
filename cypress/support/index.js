@@ -43,6 +43,8 @@ require("cypress-xpath"); // Refer - https://www.npmjs.com/package/cypress-xpath
 require("cypress-grep")();
 
 beforeEach(() => {
+    // This wait makes sure that every promise is completed before calling cy.window
+    cy.wait(2000);
     cy.window().then((win) => {
         // window.gc is enabled with --js-flags=--expose-gc chrome flag or ELECTRON_EXTRA_LAUNCH_ARGS=--js-flags=--expose_gc
         if (typeof win.gc === "function") {
@@ -57,6 +59,8 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+    // This wait makes sure that every promise is completed before calling cy.window
+    cy.wait(2000);
     cy.window().then((win) => {
         // window.gc is enabled with --js-flags=--expose-gc chrome flag or ELECTRON_EXTRA_LAUNCH_ARGS=--js-flags=--expose_gc
         if (typeof win.gc === "function") {
