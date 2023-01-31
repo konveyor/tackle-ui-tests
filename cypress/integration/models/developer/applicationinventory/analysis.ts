@@ -235,7 +235,7 @@ export class Analysis extends Application {
                             if ($a.text().toString() == "Failed" && status != "Failed") {
                                 expect($a.text().toString()).to.eq("Completed");
                             }
-                            cy.wait(10000);
+                            cy.wait(20000);
                             this.verifyAnalysisStatus(status, false);
                         } else {
                             expect($a.text().toString()).to.eq(status);
