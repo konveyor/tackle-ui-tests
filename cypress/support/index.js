@@ -42,22 +42,6 @@ require("cypress-xpath"); // Refer - https://www.npmjs.com/package/cypress-xpath
 // https://github.com/bahmutov/cypress-grep
 require("cypress-grep")();
 
-beforeEach(() => {
-    // This wait makes sure that every promise is completed before calling cy.window
-    cy.wait(2000);
-    cy.window().then((win) => {
-        // window.gc is enabled with --js-flags=--expose-gc chrome flag or ELECTRON_EXTRA_LAUNCH_ARGS=--js-flags=--expose_gc
-        if (typeof win.gc === "function") {
-            // run gc multiple times in an attempt to force a major GC between tests
-            win.gc();
-            win.gc();
-            win.gc();
-            win.gc();
-            win.gc();
-        }
-    });
-});
-
 afterEach(() => {
     // This wait makes sure that every promise is completed before calling cy.window
     cy.wait(2000);
