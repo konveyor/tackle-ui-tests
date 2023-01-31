@@ -628,7 +628,7 @@ export function verifyImportErrorMsg(errorMsg: any): void {
     }
 }
 
-export function deleteApplicationTableRows(): void {
+export function deleteApplicationTableRows(currentPage = false): void {
     cy.get(commonView.appTable)
         .next()
         .then(($div) => {
@@ -638,7 +638,13 @@ export function deleteApplicationTableRows(): void {
                     .eq(0)
                     .then(($body) => {
                         if (!$body.text().includes("of 0")) {
-                            cy.get("input#bulk-selected-apps-checkbox").check();
+                            if (currentPage) {
+                                cy.get(".pf-c-dropdown__toggle-button").click();
+                                clickByText(button, "Select page");
+                            } else {
+                                cy.get("input#bulk-selected-apps-checkbox").check();
+                            }
+
                             application_inventory_kebab_menu("Delete");
                             clickByText(button, "Delete");
                         }
