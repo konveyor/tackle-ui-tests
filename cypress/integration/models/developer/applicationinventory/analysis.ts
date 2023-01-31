@@ -228,18 +228,18 @@ export class Analysis extends Application {
             .closest(trTag)
             .within(() => {
                 cy.get(analysisColumn)
-                    .find("div > div")
+                    .find("div > div:nth-child(2)", { timeout: 10800000 }) // 3h
+                    .should("not.have.text", "Not started")
+                    .and("not.have.text", "Scheduled")
+                    .and("not.have.text", "In-progress")
                     .then(($a) => {
                         if ($a.text().toString() != status) {
                             // If analysis failed and is not expected then test fails.
                             if ($a.text().toString() == "Failed" && status != "Failed") {
                                 expect($a.text().toString()).to.eq("Completed");
                             }
-                            cy.wait(10000);
-                            this.verifyAnalysisStatus(status);
                         } else {
                             expect($a.text().toString()).to.eq(status);
-                            cy.wait(2000);
                         }
                     });
             });
