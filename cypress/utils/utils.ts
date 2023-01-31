@@ -628,7 +628,7 @@ export function verifyImportErrorMsg(errorMsg: any): void {
     }
 }
 
-export function deleteApplicationTableRows(): void {
+export function deleteApplicationTableRows(currentPage = false): void {
     cy.get(commonView.appTable)
         .next()
         .then(($div) => {
@@ -638,27 +638,13 @@ export function deleteApplicationTableRows(): void {
                     .eq(0)
                     .then(($body) => {
                         if (!$body.text().includes("of 0")) {
-                            cy.get("input#bulk-selected-apps-checkbox").check();
-                            application_inventory_kebab_menu("Delete");
-                            clickByText(button, "Delete");
-                        }
-                    });
-            }
-        });
-}
+                            if (currentPage) {
+                                cy.get(".pf-c-dropdown__toggle-button").click();
+                                clickByText(button, "Select page");
+                            } else {
+                                cy.get("input#bulk-selected-apps-checkbox").check();
+                            }
 
-export function deletePageApplicationTableRows(): void {
-    cy.get(commonView.appTable)
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.wait(1000);
-                cy.get("span.pf-c-options-menu__toggle-text")
-                    .eq(0)
-                    .then(($body) => {
-                        if (!$body.text().includes("of 0")) {
-                            cy.get(".pf-c-dropdown__toggle-button").click();
-                            clickByText(button, "Select page");
                             application_inventory_kebab_menu("Delete");
                             clickByText(button, "Delete");
                         }
