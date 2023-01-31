@@ -41,3 +41,15 @@ module.exports = (on, config) => {
     // register cypress-grep plugin code
     require("cypress-grep/src/plugin")(config);
 };
+
+// enables win.gc() for chrome
+module.exports = (on, config) => {
+    on("before:browser:launch", (browser, launchOptions) => {
+        if (browser.name === "chrome") {
+            // exposes window.gc() function that will manually force garbage collection
+            launchOptions.args.push("--js-flags=--expose-gc");
+        }
+
+        return launchOptions;
+    });
+};
