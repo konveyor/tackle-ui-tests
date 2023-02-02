@@ -32,7 +32,7 @@ import { applicationInventory } from "../../../../types/constants";
 import * as commonView from "../../../../views/common.view";
 import { Application } from "../../../../models/developer/applicationinventory/application";
 
-var applicationsList: Array<Application> = [];
+let applicationsList: Array<Application> = [];
 
 describe("Application inventory pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {

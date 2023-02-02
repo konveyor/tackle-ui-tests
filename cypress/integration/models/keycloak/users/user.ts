@@ -1,26 +1,14 @@
 import { UserData } from "../../../types/types";
-import {
-    actionsButton,
-    analysis,
-    analyzeAppButton,
-    assessAppButton,
-    button,
-    createAppButton,
-    SEC,
-    tdTag,
-    trTag,
-} from "../../../types/constants";
+import { button, SEC, tdTag, trTag } from "../../../types/constants";
 import {
     click,
     clickByText,
     deleteFromArray,
-    doesExistSelector,
     inputText,
     login,
+    logout,
 } from "../../../../utils/utils";
 import * as loginView from "../../../views/login.view";
-import { Application } from "../../developer/applicationinventory/application";
-import { Analysis } from "../../developer/applicationinventory/analysis";
 const tackleUiUrl = Cypress.env("tackleUrl");
 const keycloakAdminPassword = Cypress.env("keycloakAdminPassword");
 
@@ -32,7 +20,7 @@ export class User {
     email: string;
     userEnabled: boolean;
     roles = [""];
-    features = {};
+    firstLogin: boolean;
 
     constructor(userData: UserData) {
         const { username, password, firstName, lastName, email, userEnabled } = userData;
@@ -42,6 +30,7 @@ export class User {
         this.lastName = lastName;
         this.email = email;
         this.userEnabled = userEnabled;
+        this.firstLogin = true;
     }
 
     static keycloakUrl = tackleUiUrl + "/auth/";
@@ -154,10 +143,13 @@ export class User {
 
     login(): void {
         login(this.username, this.password);
+        if (this.firstLogin) {
+            this.password = Cypress.env("pass");
+            this.firstLogin = false;
+        }
     }
 
     logout() {
-        clickByText(button, this.username);
-        clickByText("a", "Logout");
+        logout(this.username);
     }
 }
