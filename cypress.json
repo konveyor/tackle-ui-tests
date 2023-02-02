@@ -2,12 +2,13 @@
     "viewportWidth": 1920,
     "viewportHeight": 1080,
     "video": false,
+    "numTestsKeptInMemory": 0,
     "env": {
         "user": "admin",
         "pass": "Dog8code",
         "git_user": "",
         "git_password": "",
-        "tackleUrl": "https://tackle-konveyor-tackle.apps.mig01.cnv-qe.rhcloud.com/"
+        "tackleUrl": "https://mta-openshift-mta.apps.mig09.cnv-qe.rhcloud.com/"
     },
     "retries": {
         "runMode": 2,
