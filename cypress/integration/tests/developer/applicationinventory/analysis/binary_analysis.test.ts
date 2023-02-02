@@ -63,8 +63,8 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+
+        login();
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
