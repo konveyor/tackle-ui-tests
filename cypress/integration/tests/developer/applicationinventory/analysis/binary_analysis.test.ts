@@ -37,10 +37,10 @@ let source_credential;
 let maven_credential;
 const mavenConfiguration = new MavenConfiguration();
 
-describe("Binary Analysis", { tags: "@tier1" }, () => {
+describe("Binary Analysis", { tags: "@tier4" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
+        if (hasToBeSkipped("@tier4")) return;
 
         // Perform login
         login();
@@ -89,6 +89,7 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
 
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier4")) return;
         deleteApplicationTableRows();
         deleteAllBusinessServices();
         source_credential.delete();
