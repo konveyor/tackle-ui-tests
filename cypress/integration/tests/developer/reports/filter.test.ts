@@ -46,6 +46,7 @@ import {
     category,
     question,
     answer,
+    applicationInventory,
 } from "../../../types/constants";
 import {
     adoptionCandidateDistributionTable,
@@ -98,6 +99,10 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;
+
+        selectUserPerspective("Developer");
+        clickByText(navMenu, applicationInventory);
+        cy.wait(2000);
 
         // Delete the applications, stakeholders, business services and tag types
         deleteApplicationTableRows();

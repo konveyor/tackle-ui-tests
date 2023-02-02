@@ -33,13 +33,15 @@ import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../../models/administrator/credentials/credentialsSourceControlKey";
 import { Proxy } from "../../../../models/administrator/proxy/proxy";
+import { MavenConfiguration } from "../../../../models/administrator/repositories/maven";
 let source_credential;
 let maven_credential;
+const mavenConfiguration = new MavenConfiguration();
 
-describe("Source Analysis", { tags: "@tier1" }, () => {
+describe("Source Analysis", { tags: "@tier4" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
+        if (hasToBeSkipped("@tier4")) return;
 
         // Perform login
         login();
@@ -47,6 +49,9 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
 
         //Disable all proxy settings
         Proxy.disableAllProxies();
+
+        // Clears artifact repository
+        mavenConfiguration.clearRepository();
 
         // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
@@ -66,8 +71,9 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
     });
 
     beforeEach("Persist session", function () {
-        // Login required before each test to avoid memory issue
-        login();
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
+
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -86,6 +92,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
     });
 
     after("Perform test data clean up", function () {
+        if (hasToBeSkipped("@tier4")) return;
         // Prevent hook from running, if the tag is excluded from run
         deleteApplicationTableRows();
         deleteAllBusinessServices();

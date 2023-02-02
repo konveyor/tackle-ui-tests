@@ -1291,6 +1291,12 @@ export function validateValue(selector, value: string): void {
 
 export function writeMavenSettingsFile(username: string, password: string, url?: string): void {
     cy.readFile("cypress/fixtures/xml/settings.xml").then((data) => {
+        // Sometimes the data will be undefined due to access problems in pipelines
+        // When no access, data will be strictly undefined, not an empty string
+        if (data === undefined) {
+            cy.writeFile("cypress/fixtures/xml/settings.xml", "");
+            return;
+        }
         var xml = data.toString();
         const parser = new DOMParser();
         const xmlDOM = parser.parseFromString(xml, "text/xml");
