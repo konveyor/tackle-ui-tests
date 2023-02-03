@@ -46,6 +46,9 @@ describe("Validation of Source Control Credentials", { tags: "@tier1" }, () => {
     });
 
     after("Cleanup", () => {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1")) return;
+
         application.delete();
     });
 });
