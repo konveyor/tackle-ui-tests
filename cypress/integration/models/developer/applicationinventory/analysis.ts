@@ -229,7 +229,7 @@ export class Analysis extends Application {
             .closest(trTag)
             .within(() => {
                 cy.get(analysisColumn)
-                    .find("div > div:nth-child(2)", { timeout: 10800000 }) // 3h
+                    .find("div > div:nth-child(2)", { timeout: 3600000 }) // 1h
                     .should("not.have.text", AnalysisStatuses.notStarted)
                     .and("not.have.text", AnalysisStatuses.scheduled)
                     .and("not.have.text", AnalysisStatuses.inProgress)

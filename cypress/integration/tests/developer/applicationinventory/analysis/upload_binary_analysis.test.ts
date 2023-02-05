@@ -43,7 +43,9 @@ describe("Upload Binary Analysis", { tags: "@tier4" }, () => {
     });
 
     beforeEach("Persist session", function () {
-        login();
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
+
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
