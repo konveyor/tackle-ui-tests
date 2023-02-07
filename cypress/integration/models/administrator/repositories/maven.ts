@@ -28,15 +28,13 @@ export class MavenConfiguration {
         MavenConfiguration.open();
         cy.wait(2000);
 
-        cy.get("#clear-repository")
+        cy.get(clearRepository)
             .invoke("attr", "aria-disabled")
             .then((disabled) => {
                 cy.log(disabled);
                 if (disabled == "false") {
                     clickByText(clearRepository, "Clear repository");
-
                     cy.get(".pf-c-modal-box__title-text").contains("Clear repository");
-
                     click(confirmClear);
                 }
             });
