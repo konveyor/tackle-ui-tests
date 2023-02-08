@@ -42,11 +42,8 @@ export class Proxy {
     static disableAllProxies() {
         const proxy = new Proxy(getRandomProxyData(), ProxyType.http);
         proxy.excludeList = null;
-        // Right now a proxy must have a valid configuration to disable it
-        proxy.configureProxy();
         proxy.disable();
         proxy.type = ProxyType.https;
-        proxy.configureProxy();
         proxy.disable();
     }
 
@@ -68,7 +65,7 @@ export class Proxy {
             this.fillExcludeList();
         }
         submitForm();
-        cy.wait(5000);
+        cy.wait(2500);
     }
 
     unConfigureProxy(): void {
@@ -113,7 +110,7 @@ export class Proxy {
             if ($checkbox.prop("checked")) {
                 click(selector);
                 submitForm();
-                cy.wait(5000);
+                cy.wait(2500);
             }
         });
     }
