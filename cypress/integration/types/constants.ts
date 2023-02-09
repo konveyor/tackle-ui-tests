@@ -84,7 +84,7 @@ export const duplicateApplication =
     "An application with this name already exists. Please use a different name.";
 export const duplicateTagTypeName =
     "A tag type with this name already exists. Please use a different name.";
-export const duplicateTagName = "A tag with this name already exists. Please use a different name.";
+export const duplicateTagName = "A tag with this name already exists. Use a different name.";
 export const duplicateJobFunctionName =
     "A job function with this name already exists. Please use a different name.";
 export const duplicateStakeholderGroupName =
