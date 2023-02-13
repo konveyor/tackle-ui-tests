@@ -14,7 +14,7 @@
     {
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization"],
-        "appName": "dependencies",
+        "appName": "deps",
         "storyPoints": 24
     },
     {
@@ -98,7 +98,8 @@
     },
     {
         "source": "Upload a local binary",
-        "appsName": ["jee-example-app-1.0.0.ear"],
+        "binary": ["jee-example-app-1.0.0.ear"],
+        "appsName": "jee-example-app-1.0.0.ear",
         "target": ["Quarkus"],
         "storyPoints": [89],
         "incidents": [
@@ -113,9 +114,10 @@
     },
     {
         "source": "Upload a local binary",
-        "appName": ["camunda-bpm-spring-boot-starter-example-war-2.0.0.war"],
+        "binary": ["camunda-bpm-spring-boot-starter-example-war-2.0.0.war"],
+        "appName": "camunda-bpm-spring-boot-starter-example-war-2.0.0.war",
         "target": ["Quarkus"],
-        "storyPoints": [132, 178, 140],
+        "storyPoints": [132],
         "incidents": [
             {
                 "mandatory": 5,
@@ -128,7 +130,8 @@
     },
     {
         "source": "Upload a local binary",
-        "appName": ["complete-duke"],
+        "binary": ["complete-duke"],
+        "appName": "complete-duke",
         "targets": ["Jakarta EE 9"],
         "storyPoints": [29],
         "incidents": [
@@ -143,7 +146,8 @@
     },
     {
         "source": "Upload a local binary",
-        "appName": ["kafka-clients-sb-sample.jar"],
+        "binary": ["kafka-clients-sb-sample.jar"],
+        "appName": "kafka-clients-sb-sample.jar",
         "target": ["Quarkus"],
         "storyPoints": [178],
         "incidents": [

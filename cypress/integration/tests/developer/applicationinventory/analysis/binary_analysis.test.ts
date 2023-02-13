@@ -32,13 +32,15 @@ import { CredentialType, UserCredentials } from "../../../../types/constants";
 import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsMaven } from "../../../../models/administrator/credentials/credentialsMaven";
 import { Proxy } from "../../../../models/administrator/proxy/proxy";
+import { MavenConfiguration } from "../../../../models/administrator/repositories/maven";
 let source_credential;
 let maven_credential;
+const mavenConfiguration = new MavenConfiguration();
 
-describe("Binary Analysis", { tags: "@tier1" }, () => {
+describe("Binary Analysis", { tags: "@tier4" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
+        if (hasToBeSkipped("@tier4")) return;
 
         // Perform login
         login();
@@ -46,6 +48,9 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
 
         //Disable all proxy settings
         Proxy.disableAllProxies();
+
+        // Clears artifact repository
+        mavenConfiguration.clearRepository();
 
         //Create source and maven credentials required for analysis
         source_credential = new CredentialsSourceControlUsername(
@@ -84,6 +89,7 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
 
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier4")) return;
         deleteApplicationTableRows();
         deleteAllBusinessServices();
         source_credential.delete();

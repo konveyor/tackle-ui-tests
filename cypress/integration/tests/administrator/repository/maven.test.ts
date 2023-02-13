@@ -60,7 +60,7 @@ describe("Test secure and insecure maven repository analysis", () => {
                 CredentialType.maven,
                 "None",
                 true,
-                "http://github.com/konveyor/tackle-testapp"
+                "http://maven.pkg.github.com/konveyor/tackle-testapp"
             )
         );
         maven_credential.create();

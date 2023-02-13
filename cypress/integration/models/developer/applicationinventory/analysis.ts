@@ -14,56 +14,56 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {
-    applicationInventory,
-    analyzeButton,
+    actionsButton,
     analysis,
-    tdTag,
-    trTag,
+    analyzeAppButton,
+    analyzeButton,
+    applicationInventory,
     button,
     save,
     SEC,
-    analyzeAppButton,
-    actionsButton,
+    tdTag,
+    trTag,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
-    clickByText,
     cancelForm,
-    selectFormItems,
-    selectUserPerspective,
-    performRowActionByIcon,
-    uploadXml,
-    uploadApplications,
-    inputText,
     click,
+    clickByText,
+    clickWithin,
     doesExistSelector,
     doesExistText,
-    clickWithin,
+    inputText,
+    performRowActionByIcon,
+    selectFormItems,
+    selectUserPerspective,
+    uploadApplications,
+    uploadXml,
 } from "../../../../utils/utils";
 import { analysisData, applicationData, RbacValidationRules } from "../../../types/types";
 import { Application } from "./application";
 import {
+    addButton,
+    addRules,
     analysisColumn,
+    analyzeManuallyButton,
+    enableTransactionAnalysis,
+    enterPackageName,
+    enterPackageNameToExclude,
+    excludePackagesSwitch,
+    expandAll,
+    fileName,
     manageCredentials,
-    sourceDropdown,
-    sourceCredential,
     mavenCredential,
     nextButton,
-    addRules,
-    fileName,
-    reportStoryPoints,
-    enableTransactionAnalysis,
-    excludePackagesSwitch,
-    tabsPanel,
-    expandAll,
     panelBody,
-    enterPackageName,
-    addButton,
-    analyzeManuallyButton,
-    enterPackageNameToExclude,
+    reportStoryPoints,
+    sourceCredential,
+    sourceDropdown,
+    tabsPanel,
 } from "../../../views/analysis.view";
 import { kebabMenu } from "../../../views/applicationinventory.view";
-import * as commonView from "../../../views/common.view";
+import { AnalysisStatuses } from "../../../enums/analysisStatuses.enum";
 
 export class Analysis extends Application {
     name: string;
@@ -165,7 +165,7 @@ export class Analysis extends Application {
         cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
         uploadXml("xml/" + this.customRule);
         cy.wait(2000);
-        cy.get("span.pf-c-progress__measure", { timeout: 15000 }).should("contain", "100%");
+        cy.get("span.pf-c-progress__measure", { timeout: 150000 }).should("contain", "100%");
         cy.wait(2000);
         cy.contains(addRules, "Add", { timeout: 2000 }).click();
     }
@@ -238,18 +238,22 @@ export class Analysis extends Application {
             .closest(trTag)
             .within(() => {
                 cy.get(analysisColumn)
-                    .find("div > div")
+                    .find("div > div:nth-child(2)", { timeout: 10800000 }) // 3h
+                    .should("not.have.text", AnalysisStatuses.notStarted)
+                    .and("not.have.text", AnalysisStatuses.scheduled)
+                    .and("not.have.text", AnalysisStatuses.inProgress)
                     .then(($a) => {
-                        if ($a.text().toString() != status) {
+                        const currentStatus = $a.text().toString() as AnalysisStatuses;
+                        if (currentStatus != status) {
                             // If analysis failed and is not expected then test fails.
-                            if ($a.text().toString() == "Failed" && status != "Failed") {
-                                expect($a.text().toString()).to.eq("Completed");
+                            if (
+                                currentStatus == AnalysisStatuses.failed &&
+                                status != AnalysisStatuses.failed
+                            ) {
+                                expect(currentStatus).to.eq(AnalysisStatuses.completed);
                             }
-                            cy.wait(10000);
-                            this.verifyAnalysisStatus(status);
                         } else {
-                            expect($a.text().toString()).to.eq(status);
-                            cy.wait(2000);
+                            expect(currentStatus).to.eq(status);
                         }
                     });
             });

@@ -71,10 +71,10 @@ export const trTag = "tr";
 export const tagType = "Tag type";
 export const tagName = "Tag name";
 
-export const createAppButton = "button[aria-label=create-application]";
-export const assessAppButton = "button[aria-label=assess-application]";
-export const reviewAppButton = "button[aria-label=review-application]";
-export const analyzeAppButton = "button[aria-label=analyze-application]";
+export const createAppButton = "#create-application";
+export const assessAppButton = "#assess-application";
+export const reviewAppButton = "#review-application";
+export const analyzeAppButton = "#analyze-application";
 export const actionsButton = "button[aria-label=Actions]";
 
 // Error helper messages general to all views
@@ -84,7 +84,7 @@ export const duplicateApplication =
     "An application with this name already exists. Please use a different name.";
 export const duplicateTagTypeName =
     "A tag type with this name already exists. Please use a different name.";
-export const duplicateTagName = "A tag with this name already exists. Please use a different name.";
+export const duplicateTagName = "A tag with this name already exists. Use a different name.";
 export const duplicateJobFunctionName =
     "A job function with this name already exists. Please use a different name.";
 export const duplicateStakeholderGroupName =

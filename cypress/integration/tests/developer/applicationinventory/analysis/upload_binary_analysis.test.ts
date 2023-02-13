@@ -33,10 +33,10 @@ import { Analysis } from "../../../../models/developer/applicationinventory/anal
 import { navMenu, navTab } from "../../../../views/menu.view";
 import { analysis, applicationInventory } from "../../../../types/constants";
 
-describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
+describe("Upload Binary Analysis", { tags: "@tier4" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
+        if (hasToBeSkipped("@tier4")) return;
 
         // Perform login
         login();
@@ -69,6 +69,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
 
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier4")) return;
         deleteApplicationTableRows();
         deleteAllBusinessServices();
         writeGpgKey("abcde");

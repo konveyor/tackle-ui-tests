@@ -24,6 +24,7 @@ import {
     save,
     assessment,
     SEC,
+    assessAppButton,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -221,10 +222,7 @@ export class Assessment extends Application {
     }
 
     click_assess_button(): void {
-        cy.waitForReact();
-        cy.react("p", { props: { "aria-label": "assess-application" } })
-            .should("be.enabled")
-            .click();
+        click(assessAppButton);
     }
 
     perform_assessment(
@@ -266,7 +264,7 @@ export class Assessment extends Application {
 
     // Method to verify the status of Assessment and Review
     verifyStatus(column, status): void {
-        var columnSelector: string;
+        let columnSelector: string;
 
         if (column === "assessment") columnSelector = assessmentColumnSelector;
         else columnSelector = reviewColumnSelector;
