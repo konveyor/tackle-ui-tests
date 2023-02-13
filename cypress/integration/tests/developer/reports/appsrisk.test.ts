@@ -28,14 +28,14 @@ import {
     createMultipleBusinessServices,
 } from "../../../../utils/utils";
 import { verifyApplicationRisk } from "../../../models/developer/reports/reports";
-import { ApplicationInventory } from "../../../models/developer/applicationinventory/applicationinventory";
+import { Assessment } from "../../../models/developer/applicationinventory/assessment";
 import { navMenu } from "../../../views/menu.view";
 import { businessService, reports } from "../../../types/constants";
 import { Stakeholders } from "../../../models/developer/controls/stakeholders";
 import { BusinessServices } from "../../../models/developer/controls/businessservices";
 
 var stakeholdersList: Array<Stakeholders> = [];
-var applicationsList: Array<ApplicationInventory> = [];
+var applicationsList: Array<Assessment> = [];
 var businessServiceList: Array<BusinessServices> = [];
 
 describe("Application risks tests", { tags: "@newtest" }, () => {
@@ -50,9 +50,8 @@ describe("Application risks tests", { tags: "@newtest" }, () => {
 
         // Save the session and token cookie for maintaining one login session
         preservecookies();
-        businessServiceList = createMultipleBusinessServices(3);
         stakeholdersList = createMultipleStakeholders(1);
-        applicationsList = createMultipleApplications(3, businessServiceList);
+        applicationsList = createMultipleApplications(3);
         for (let i = 0; i < applicationsList.length; i++) {
             // Perform assessment of application
             applicationsList[i].perform_assessment(risktype[i], [stakeholdersList[0].name]);

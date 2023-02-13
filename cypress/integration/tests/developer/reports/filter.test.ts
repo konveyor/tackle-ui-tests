@@ -52,7 +52,7 @@ import {
     adoptionCandidateDistributionTable,
     closeRowIdentifiedRisk,
 } from "../../../views/reports.view";
-import { ApplicationInventory } from "../../../models/developer/applicationinventory/applicationinventory";
+import { Assessment } from "../../../models/developer/applicationinventory/assessment";
 import * as data from "../../../../utils/data_utils";
 import { BusinessServices } from "../../../models/developer/controls/businessservices";
 import {
@@ -63,7 +63,7 @@ import {
 import { Tag } from "../../../models/developer/controls/tags";
 import { Stakeholders } from "../../../models/developer/controls/stakeholders";
 
-var applicationsList: Array<ApplicationInventory> = [];
+var applicationsList: Array<Assessment> = [];
 var businessServiceList: Array<BusinessServices> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 var tagList: Array<Tag> = [];
@@ -78,9 +78,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         login();
 
         stakeholdersList = createMultipleStakeholders(1);
-        businessServiceList = createMultipleBusinessServices(2);
-        tagList = createMultipleTags(3);
-        applicationsList = createMultipleApplications(2, businessServiceList, tagList);
+        applicationsList = createMultipleApplications(2);
 
         // Perform assessment of application
         applicationsList[0].perform_assessment("high", [stakeholdersList[0].name]);
@@ -107,8 +105,6 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         // Delete the applications, stakeholders, business services and tag types
         deleteApplicationTableRows();
         deleteAllStakeholders();
-        deleteAllBusinessServices();
-        deleteAllTagsAndTagTypes();
     });
 
     it("Name field validations", function () {
