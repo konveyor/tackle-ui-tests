@@ -79,7 +79,7 @@ describe("Exclude Tags", { tags: "@tier2" }, () => {
         application.openreport();
 
         // Validate the report exclude Tags .
-        // Commented because we have a bug https://issues.redhat.com/browse/TACKLE-906
-        // application.validateExcludedTags();
+        // TC expected to fail due to bug https://issues.redhat.com/browse/MTA-40
+        application.validateExcludedTags();
     });
 });
