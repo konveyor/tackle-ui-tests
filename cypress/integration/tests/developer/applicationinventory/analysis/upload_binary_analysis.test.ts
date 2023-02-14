@@ -16,6 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    clickByText,
     deleteAllBusinessServices,
     deleteApplicationTableRows,
     getRandomAnalysisData,
@@ -25,9 +26,12 @@ import {
     preservecookies,
     resetURL,
     writeGpgKey,
+    selectUserPerspective,
 } from "../../../../../utils/utils";
 import { Proxy } from "../../../../models/administrator/proxy/proxy";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
+import { navMenu, navTab } from "../../../../views/menu.view";
+import { analysis, applicationInventory } from "../../../../types/constants";
 
 describe("Upload Binary Analysis", { tags: "@tier4" }, () => {
     before("Login", function () {
@@ -36,6 +40,7 @@ describe("Upload Binary Analysis", { tags: "@tier4" }, () => {
 
         // Perform login
         login();
+
         deleteApplicationTableRows();
 
         //Disable all proxy settings
@@ -115,5 +120,64 @@ describe("Upload Binary Analysis", { tags: "@tier4" }, () => {
         application.openreport();
         application.validateStoryPoints();
         application.validateTransactionReport();
+    });
+
+    it("Analysis for jee-example-app upload binary ", function () {
+        const application = new Analysis(
+            getRandomApplicationData("uploadBinary"),
+            getRandomAnalysisData(this.analysisData[12])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
+        application.validateIncidents();
+    });
+
+    it("Analysis for camunda-bpm-spring-boot-starer", function () {
+        const application = new Analysis(
+            getRandomApplicationData("uploadBinary"),
+            getRandomAnalysisData(this.analysisData[13])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
+        application.validateStoryPoints();
+        application.validateIncidents();
+    });
+
+    it("Analysis for complete-duke app upload binary ", function () {
+        const application = new Analysis(
+            getRandomApplicationData("uploadBinary"),
+            getRandomAnalysisData(this.analysisData[14])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
+        application.validateStoryPoints();
+        application.validateIncidents();
+    });
+
+    it("Analysis for kafka-clients-sb app ", function () {
+        const application = new Analysis(
+            getRandomApplicationData("uploadBinary"),
+            getRandomAnalysisData(this.analysisData[15])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
+        application.validateStoryPoints();
+        application.validateIncidents();
     });
 });
