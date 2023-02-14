@@ -55,7 +55,7 @@ import {
     selectUserPerspective,
     selectItemsPerPage,
 } from "../../../../utils/utils";
-import { applicationData } from "../../../types/types";
+import { ApplicationData } from "../../../types/types";
 
 export class Application {
     name: string;
@@ -73,11 +73,11 @@ export class Application {
     version?: string;
     packaging?: string;
 
-    constructor(appData: applicationData) {
+    constructor(appData: ApplicationData) {
         this.init(appData);
     }
 
-    protected init(appData: applicationData) {
+    protected init(appData: ApplicationData) {
         const {
             name,
             business,
@@ -154,7 +154,7 @@ export class Application {
 
     protected fillBinaryModeFields(): void {
         //Fields relevant to binary mode analysis
-        cy.contains("span", "Binary").click();
+        clickByText(button, "Binary");
         inputText(group, this.group);
         if (this.artifact) inputText(artifact, this.artifact);
         if (this.version) inputText(version, this.version);

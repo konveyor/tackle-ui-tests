@@ -32,7 +32,6 @@ import { CredentialType, UserCredentials } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../../models/administrator/credentials/credentialsSourceControlKey";
-import { Proxy } from "../../../../models/administrator/proxy/proxy";
 let source_credential;
 let maven_credential;
 
@@ -44,10 +43,6 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         // Perform login
         login();
         deleteApplicationTableRows();
-
-        //Disable all proxy settings
-        let proxy = new Proxy(data.getRandomProxyData());
-        proxy.disableProxy();
 
         // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(

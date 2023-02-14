@@ -64,13 +64,13 @@ import {
     reviewColumnSelector,
     selectInput,
 } from "../../../views/review.view";
-import { applicationData } from "../../../types/types";
+import { ApplicationData } from "../../../types/types";
 
 export class Assessment extends Application {
     // name: string;
     // business: string;
 
-    constructor(appData: applicationData) {
+    constructor(appData: ApplicationData) {
         super(appData);
     }
 

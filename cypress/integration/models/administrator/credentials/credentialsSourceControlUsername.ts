@@ -29,11 +29,11 @@ export class CredentialsSourceControlUsername extends CredentialsSourceControl {
     }
 
     protected fillUsername() {
-        inputText("#user", this.username);
+        inputText("input[aria-label=user]", this.username);
     }
 
     protected fillPassword() {
-        inputText("#password", this.password);
+        inputText("input[aria-label=password]", this.password);
     }
 
     protected selectCredType() {

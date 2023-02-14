@@ -68,7 +68,7 @@ import {
 import { tagLabels } from "../integration/views/tags.view";
 import { Credentials } from "../integration/models/administrator/credentials/credentials";
 import { Assessment } from "../integration/models/developer/applicationinventory/assessment";
-import { analysisData, applicationData, UserData } from "../integration/types/types";
+import { AnalysisData, ApplicationData, UserData } from "../integration/types/types";
 import { CredentialsProxy } from "../integration/models/administrator/credentials/credentialsProxy";
 import { getRandomCredentialsData } from "../utils/data_utils";
 import { CredentialsMaven } from "../integration/models/administrator/credentials/credentialsMaven";
@@ -881,7 +881,7 @@ export function getRowsAmount(): number {
 export function getRandomApplicationData(
     appName?,
     options?: { sourceData?; binaryData? }
-): applicationData {
+): ApplicationData {
     let name = data.getAppName();
     if (appName) {
         name = appName + "_" + data.getAppName();
@@ -910,7 +910,7 @@ export function getRandomApplicationData(
     return appdata;
 }
 
-export function getRandomAnalysisData(analysisdata): analysisData {
+export function getRandomAnalysisData(analysisdata): AnalysisData {
     return {
         source: analysisdata.source,
         target: analysisdata.target,
