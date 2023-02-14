@@ -38,10 +38,10 @@ let source_credential;
 let maven_credential;
 const mavenConfiguration = new MavenConfiguration();
 
-describe("Source Analysis", { tags: "@tier4" }, () => {
+describe("Source Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier4")) return;
+        if (hasToBeSkipped("@tier1")) return;
 
         // Perform login
         login();
@@ -92,7 +92,7 @@ describe("Source Analysis", { tags: "@tier4" }, () => {
     });
 
     after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@tier4")) return;
+        if (hasToBeSkipped("@tier1")) return;
         // Prevent hook from running, if the tag is excluded from run
         deleteApplicationTableRows();
         deleteAllBusinessServices();
