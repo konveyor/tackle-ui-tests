@@ -635,6 +635,7 @@ export function verifyImportErrorMsg(errorMsg: any): void {
 }
 
 export function deleteApplicationTableRows(currentPage = false): void {
+    navigate_to_application_inventory();
     cy.get(commonView.appTable)
         .next()
         .then(($div) => {
