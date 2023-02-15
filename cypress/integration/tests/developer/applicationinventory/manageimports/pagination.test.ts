@@ -29,7 +29,6 @@ import {
     goToPage,
     goToLastPage,
     deleteAppImportsTableRows,
-    deleteAllBusinessServices,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import {
@@ -44,7 +43,7 @@ import { actionButton } from "../../../../views/applicationinventory.view";
 import * as commonView from "../../../../views/common.view";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 
-const businessService = new BusinessServices("XYZ");
+const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/csv/";
 
 const filesToImport = [
