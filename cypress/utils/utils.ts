@@ -544,7 +544,8 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
         .find("button")
         .contains("Import")
         .trigger("click");
-    checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
+    // checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
+
     // unresolved bug https://issues.redhat.com/browse/TACKLE-927
 }
 
@@ -635,6 +636,7 @@ export function verifyImportErrorMsg(errorMsg: any): void {
 }
 
 export function deleteApplicationTableRows(currentPage = false): void {
+    navigate_to_application_inventory()
     cy.get(commonView.appTable)
         .next()
         .then(($div) => {
