@@ -32,8 +32,8 @@ import {
     deleteAllTagsAndTagTypes,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
-import { reports } from "../../../types/constants";
-import { ApplicationInventory } from "../../../models/developer/applicationinventory/applicationinventory";
+import { applicationInventory, reports } from "../../../types/constants";
+import { Assessment } from "../../../models/developer/applicationinventory/assessment";
 import {
     selectItemsPerPageAdoptionCandidate,
     selectItemsPerPageIdentifiedRisks,
@@ -43,7 +43,7 @@ import { Stakeholders } from "../../../models/developer/controls/stakeholders";
 import * as commonView from "../../../views/common.view";
 import { BusinessServices } from "../../../models/developer/controls/businessservices";
 
-var applicationsList: Array<ApplicationInventory> = [];
+var applicationsList: Array<Assessment> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 var businessservicelist: Array<BusinessServices> = [];
 
@@ -57,11 +57,8 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
         stakeholdersList = createMultipleStakeholders(1);
         var rowsToCreate = 11;
 
-        // Create 11 Business Service
-        businessservicelist = createMultipleBusinessServices(11);
-
         // Create 11 applications
-        applicationsList = createMultipleApplications(rowsToCreate, businessservicelist);
+        applicationsList = createMultipleApplications(rowsToCreate);
 
         // Get the last extra application created
         var newApplication = applicationsList[applicationsList.length - 1];
@@ -84,10 +81,9 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
         if (hasToBeSkipped("@tier3")) return;
 
         // Delete All
+        clickByText(navMenu, applicationInventory);
         deleteApplicationTableRows();
         deleteAllStakeholders();
-        deleteAllBusinessServices();
-        deleteAllTagsAndTagTypes();
     });
 
     it("Adoption candidate distribution - Navigation button validations", function () {

@@ -254,12 +254,13 @@ export class Assessment extends Application {
         selectItemsPerPage(100);
         this.selectApplication();
         clickByText(button, review);
-        cy.wait(8000);
+        cy.wait(8 * SEC);
         this.selectMigrationAction(risk);
         this.selectEffortEstimate(risk);
         this.fillCriticality(risk);
         this.fillPriority(risk);
         clickByText(button, "Submit review");
+        cy.wait(2 * SEC);
     }
 
     // Method to verify the status of Assessment and Review
