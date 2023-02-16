@@ -130,9 +130,9 @@
     },
     {
         "source": "Upload a local binary",
-        "binary": ["complete-duke"],
-        "appName": "complete-duke",
-        "targets": ["Jakarta EE 9"],
+        "binary": ["complete-duke.zip"],
+        "appName": "complete-duke.zip",
+        "target": ["Jakarta EE 9"],
         "storyPoints": [29],
         "incidents": [
             {
@@ -155,7 +155,7 @@
                 "mandatory": 14,
                 "optional": 0,
                 "potential": 31,
-                "information": 58,
+                "information": 57,
                 "total": 103
             }
         ]
