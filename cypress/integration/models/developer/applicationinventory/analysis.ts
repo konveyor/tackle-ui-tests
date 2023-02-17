@@ -37,7 +37,7 @@ import {
     inputText,
     click,
 } from "../../../../utils/utils";
-import { analysisData, applicationData } from "../../../types/types";
+import { AnalysisData, ApplicationData } from "../../../types/types";
 import { Application } from "./application";
 import {
     analysisColumn,
@@ -71,12 +71,12 @@ export class Analysis extends Application {
     appName?: string;
     storyPoints?: number;
 
-    constructor(appData: applicationData, analysisData: analysisData) {
+    constructor(appData: ApplicationData, analysisData: AnalysisData) {
         super(appData);
         this.initAnalysis(appData, analysisData);
     }
 
-    protected initAnalysis(appData: applicationData, analysisData: analysisData) {
+    protected initAnalysis(appData: ApplicationData, analysisData: AnalysisData) {
         const {
             source,
             target,
