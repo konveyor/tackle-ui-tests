@@ -81,7 +81,6 @@ describe("Manage applications import filter validations", { tags: "@tier2" }, fu
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;
-
         // Delete the business service
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
