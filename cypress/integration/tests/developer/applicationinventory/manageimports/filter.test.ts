@@ -27,6 +27,7 @@ import {
     hasToBeSkipped,
     selectUserPerspective,
     deleteAppImportsTableRows,
+    deleteAllBusinessServices,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory, button, clearAllFilters } from "../../../../types/constants";
@@ -53,6 +54,7 @@ describe("Manage applications import filter validations", { tags: "@tier2" }, fu
         login();
         // Delete all items of page
         deleteApplicationTableRows();
+        deleteAllBusinessServices();
 
         // Create business service
         businessService.create();
@@ -83,7 +85,7 @@ describe("Manage applications import filter validations", { tags: "@tier2" }, fu
         // Delete the business service
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
-        businessService.delete();
+        deleteAllBusinessServices();
     });
 
     it("File name filter validations", function () {
