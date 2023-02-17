@@ -38,7 +38,7 @@ export type CredentialsData =
     | CredentialsMavenData
     | CredentialsSourceControlPrivateKeyData;
 
-export type applicationData = {
+export type ApplicationData = {
     name: string;
     business?: string;
     description?: string;
@@ -64,7 +64,7 @@ export type ProxyData = {
     excludeList?: string[];
 };
 
-export type analysisData = {
+export type AnalysisData = {
     source: string;
     target: string[];
     binary?: string;
@@ -86,4 +86,14 @@ export type UserData = {
     email?: string;
     userEnabled: boolean;
     roles?: string[];
+};
+
+export type UpgradeData = {
+    jobFunctionName: string;
+    stakeHolderGroupName: string;
+    stakeHolderName: string;
+    businessServiceName: string;
+    tagTypeName: string;
+    tagName: string;
+    sourceControlUsernameCredentialsName: string;
 };

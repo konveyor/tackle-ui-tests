@@ -7,7 +7,7 @@
         "pass": "Dog8code",
         "git_user": "",
         "git_password": "",
-        "tackleUrl": "https://tackle-konveyor-tackle.apps.mig01.cnv-qe.rhcloud.com/"
+        "tackleUrl": ""
     },
     "retries": {
         "runMode": 2,
