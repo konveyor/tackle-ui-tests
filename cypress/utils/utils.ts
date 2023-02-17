@@ -898,12 +898,17 @@ export function getRowsAmount(): number {
 
 export function getRandomApplicationData(
     appName?,
-    options?: { sourceData?; binaryData? }
+    noSuffix?,
+    options?: { sourceData?; binaryData? },
 ): applicationData {
     let name = data.getAppName();
     if (appName) {
-        name = appName + "_" + data.getAppName();
+        if (noSuffix)
+            name = appName
+        else
+            name = appName + "_" + data.getAppName();
     }
+
     let appdata = {
         name: name,
         description: data.getDescription(),
