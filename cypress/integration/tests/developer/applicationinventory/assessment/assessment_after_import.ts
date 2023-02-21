@@ -60,6 +60,16 @@ describe("Operations after application import", () => {
         // Delete the existing application rows
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
+
+        // Import applications through valid .CSV file
+        const fileName = "template_application_import.csv";
+        importApplication(filePath + fileName);
+        cy.wait(2000);
+
+        // Verify imported apps are visible in table
+        exists("Customers");
+        exists("Inventory");
+        exists("Gateway");
     });
 
     after("Perform test data clean up", function () {
@@ -72,28 +82,25 @@ describe("Operations after application import", () => {
     });
 
     it(
-        "Perform assessment and review after a successful application import",
+        "Perform application assessment after a successful application import",
         { tags: "@tier1" },
         function () {
-            selectUserPerspective("Developer");
-            clickByText(navMenu, applicationInventory);
-            cy.wait(2000);
-
-            // Import valid csv
-            const fileName = "template_application_import.csv";
-            importApplication(filePath + fileName);
-            cy.wait(2000);
-
-            // Verify imported apps are visible in table
-            exists("Customers");
-            exists("Inventory");
-            exists("Gateway");
-
+            // Automates https://polarion.engineering.redhat.com/polarion/redirect/project/MTAPathfinder/workitem?id=MTA-294
             const application = new Assessment(getRandomApplicationData("Customers", true));
+
             // Perform assessment of application
             application.perform_assessment("low", stakeholdersNameList);
             cy.wait(2000);
             application.verifyStatus("assessment", "Completed");
+        }
+    );
+
+    it(
+        "Perform application review after a successful application import",
+        { tags: "@tier1" },
+        function () {
+            // Automates https://polarion.engineering.redhat.com/polarion/redirect/project/MTAPathfinder/workitem?id=MTA-295
+            const application = new Assessment(getRandomApplicationData("Customers", true));
 
             // Perform application review
             application.perform_review("low");
