@@ -16,7 +16,6 @@ limitations under the License.
 import {
     controls,
     stakeholderGroups,
-    tdTag,
     button,
     createNewButton,
     deleteAction,
@@ -108,7 +107,6 @@ export class Stakeholdergroups {
         cancel = false
     ): void {
         Stakeholdergroups.openList();
-        selectItemsPerPage(100);
         cy.wait(2000);
         performRowAction(this.name, editAction);
         if (cancel) {

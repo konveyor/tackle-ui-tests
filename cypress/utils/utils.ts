@@ -1382,3 +1382,13 @@ export function validateTooLongInput(selector, anotherSelector?: string): void {
 export function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
     return Object.keys(obj).filter((k) => Number.isNaN(+k)) as K[];
 }
+
+// This method is patching
+export function configureRWX(isEnabled = true): void {
+    let value = "";
+    isEnabled ? (value = "true") : "false";
+    cy.exec(`oc patch tackle 
+    $(oc get tackle -nopenshift-mta|grep -v -i name|cut -d " " -f 1) 
+    --type merge 
+    --patch '{spec:{"rwx_supported"}: ${value}'`);
+}

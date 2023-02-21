@@ -58,7 +58,7 @@ export class Credentials {
     description = "";
     type = "";
     inUse = false;
-    static credUrl = Cypress.env("tackleUrl") + "/identities";
+    static fullUrl = Cypress.env("tackleUrl") + "/identities";
 
     constructor(name?) {
         if (name) this.name = name;
@@ -120,7 +120,7 @@ export class Credentials {
 
     static openList(itemsPerPage = 100) {
         cy.url().then(($url) => {
-            if ($url != Credentials.credUrl) {
+            if ($url != Credentials.fullUrl) {
                 selectUserPerspective(administrator);
                 clickByText(navLink, credentials);
             }
