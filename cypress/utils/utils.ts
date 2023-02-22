@@ -1012,7 +1012,7 @@ export function deleteByList<T extends Deletable>(array: T[]): void {
 }
 
 export function deleteAllStakeholders(cancel = false): void {
-    Stakeholders.clickStakeholders();
+    Stakeholders.openList();
     selectItemsPerPage(100);
     cy.wait(0.5 * SEC);
     cy.get(commonView.appTable)
@@ -1039,7 +1039,7 @@ export function deleteAllStakeholders(cancel = false): void {
 }
 
 export function deleteAllStakeholderGroups(cancel = false): void {
-    Stakeholdergroups.clickStakeholdergroups();
+    Stakeholdergroups.openList();
     deleteAllItems();
 }
 

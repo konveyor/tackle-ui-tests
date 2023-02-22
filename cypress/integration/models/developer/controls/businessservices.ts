@@ -53,7 +53,7 @@ export class BusinessServices {
     description: string;
     owner: string;
 
-    static bzsUrl = Cypress.env("tackleUrl") + "/controls/business-services";
+    static fullUrl = Cypress.env("tackleUrl") + "/controls/business-services";
 
     constructor(name, description?, owner?: string) {
         this.name = name;
@@ -61,15 +61,15 @@ export class BusinessServices {
         if (owner) this.owner = owner;
     }
 
-    public static openList(amount = 100): void {
+    public static openList(itemsPerPage = 100): void {
         cy.url().then(($url) => {
-            if ($url != BusinessServices.bzsUrl) {
+            if ($url != BusinessServices.fullUrl) {
                 selectUserPerspective("Developer");
                 clickByText(navMenu, controls);
                 clickByText(navTab, businessServices);
-                selectItemsPerPage(amount);
             }
         });
+        selectItemsPerPage(itemsPerPage);
     }
 
     // TODO: Refactor this method so that it will return list from particular page or full list, to take into account amount of items per page

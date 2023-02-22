@@ -26,7 +26,7 @@ import {
     submitForm,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
-import { button, controls, SEC, tags, tdTag, trTag } from "../../../types/constants";
+import { button, controls, developer, SEC, tags, tdTag, trTag } from "../../../types/constants";
 import { createTagtypeButton, rankInput } from "../../../views/tags.view";
 import * as commonView from "../../../views/common.view";
 import { clickTags, fillName } from "./tags";
@@ -43,17 +43,17 @@ export class TagType {
         if (rank) this.rank = rank;
     }
 
-    static tagsUrl = Cypress.env("tackleUrl") + "/controls/tags";
+    static fullUrl = Cypress.env("tackleUrl") + "/controls/tags";
 
-    static openList(): void {
+    static openList(itemsPerPage = 100): void {
         cy.url().then(($url) => {
-            if ($url != TagType.tagsUrl) {
-                selectUserPerspective("Developer");
+            if ($url != TagType.fullUrl) {
+                selectUserPerspective(developer);
                 clickByText(navMenu, controls);
                 clickByText(navTab, tags);
             }
         });
-        selectItemsPerPage(100);
+        selectItemsPerPage(itemsPerPage);
     }
 
     protected selectColor(color: string): void {

@@ -21,6 +21,7 @@ import {
     createNewButton,
     deleteAction,
     editAction,
+    developer,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -46,6 +47,7 @@ export class Stakeholdergroups {
     name: string;
     description: string;
     members: Array<string>;
+    static fullUrl = Cypress.env("tackleUrl") + "/controls/stakeholder-groups";
 
     constructor(name: string, description?: string, members?: Array<string>) {
         this.name = name;
@@ -53,10 +55,15 @@ export class Stakeholdergroups {
         if (members) this.members = members;
     }
 
-    public static clickStakeholdergroups(): void {
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholderGroups);
+    public static openList(itemsPerPage = 100): void {
+        cy.url().then(($url) => {
+            if ($url != Stakeholdergroups.fullUrl) {
+                selectUserPerspective(developer);
+                clickByText(navMenu, controls);
+                clickByText(navTab, stakeholderGroups);
+            }
+        });
+        selectItemsPerPage(itemsPerPage);
     }
 
     protected fillName(name: string): void {
@@ -74,7 +81,7 @@ export class Stakeholdergroups {
     }
 
     create(cancel = false): void {
-        Stakeholdergroups.clickStakeholdergroups();
+        Stakeholdergroups.openList();
         clickByText(button, createNewButton);
         if (cancel) {
             cancelForm();
@@ -100,7 +107,7 @@ export class Stakeholdergroups {
         },
         cancel = false
     ): void {
-        Stakeholdergroups.clickStakeholdergroups();
+        Stakeholdergroups.openList();
         selectItemsPerPage(100);
         cy.wait(2000);
         performRowAction(this.name, editAction);
@@ -124,7 +131,7 @@ export class Stakeholdergroups {
     }
 
     delete(cancel = false): void {
-        Stakeholdergroups.clickStakeholdergroups();
+        Stakeholdergroups.openList();
         selectItemsPerPage(100);
         cy.wait(2000);
         performRowAction(this.name, deleteAction);

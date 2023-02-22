@@ -22,6 +22,7 @@ import {
     SEC,
     editAction,
     deleteAction,
+    developer,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 
@@ -68,17 +69,17 @@ export class Tag {
         this.tagType = tagType;
     }
 
-    static tagsUrl = Cypress.env("tackleUrl") + "/controls/tags";
+    static fullUrl = Cypress.env("tackleUrl") + "/controls/tags";
 
-    static openList(): void {
+    static openList(itemsPerPage = 100): void {
         cy.url().then(($url) => {
-            if ($url != Tag.tagsUrl) {
-                selectUserPerspective("Developer");
+            if ($url != Tag.fullUrl) {
+                selectUserPerspective(developer);
                 clickByText(navMenu, controls);
                 clickByText(navTab, tags);
             }
         });
-        selectItemsPerPage(100);
+        selectItemsPerPage(itemsPerPage);
     }
 
     protected selectTagType(tagType: string): void {
