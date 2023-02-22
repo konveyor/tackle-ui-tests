@@ -63,7 +63,7 @@ import {
     tabsPanel,
 } from "../../../views/analysis.view";
 import { kebabMenu } from "../../../views/applicationinventory.view";
-import { AnalysisStatuses } from "../../../enums/analysisStatuses.enum";
+import { AnalysisStatuses } from "../../../types/constants";
 
 export class Analysis extends Application {
     name: string;
