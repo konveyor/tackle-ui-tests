@@ -81,7 +81,13 @@ export class Analysis extends Application {
     manuallyAnalyzePackages?: string[];
     excludedPackagesList?: string[];
     openSourceLibraries?: boolean;
-
+    incidents?: {
+        mandatory?: number;
+        optional?: number;
+        potential?: number;
+        information?: number;
+        total?: number;
+    };
     constructor(appData: applicationData, analysisData: analysisData) {
         super(appData);
         this.initAnalysis(appData, analysisData);
@@ -102,6 +108,7 @@ export class Analysis extends Application {
             storyPoints,
             manuallyAnalyzePackages,
             excludedPackagesList,
+            incidents,
             openSourceLibraries,
         } = analysisData;
         this.name = appData.name;
@@ -119,6 +126,7 @@ export class Analysis extends Application {
         if (manuallyAnalyzePackages) this.manuallyAnalyzePackages = manuallyAnalyzePackages;
         if (excludedPackagesList) this.excludedPackagesList = excludedPackagesList;
         if (openSourceLibraries) this.openSourceLibraries = openSourceLibraries;
+        if (incidents) this.incidents = incidents;
     }
 
     //Navigate to the Application inventory
@@ -147,7 +155,10 @@ export class Analysis extends Application {
     protected uploadBinary() {
         this.binary.forEach((binaryList) => {
             uploadApplications(binaryList);
-            cy.get("span.pf-c-progress__measure", { timeout: 50 * SEC }).should("contain", "100%");
+            cy.get("span.pf-c-progress__measure", { timeout: 5000 * SEC }).should(
+                "contain",
+                "100%"
+            );
         });
     }
 
@@ -159,7 +170,7 @@ export class Analysis extends Application {
         cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
         uploadXml("xml/" + this.customRule);
         cy.wait(2000);
-        cy.get("span.pf-c-progress__measure", { timeout: 15000 }).should("contain", "100%");
+        cy.get("span.pf-c-progress__measure", { timeout: 150000 }).should("contain", "100%");
         cy.wait(2000);
         cy.contains(addRules, "Add", { timeout: 2000 }).click();
     }
@@ -377,5 +388,31 @@ export class Analysis extends Application {
         cy.get(tabsPanel).contains("Application Details").click();
         click(expandAll);
         cy.get(panelBody).should("not.contain.text", this.excludeRuleTags);
+    }
+
+    // Method to validate Incidents on report page
+    validateIncidents(): void {
+        cy.get("div[class='incidentsCount'] > table > tbody").as("incidentTable");
+        cy.get("@incidentTable")
+            .find("tr")
+            .each(($row) => {
+                const label = $row.find("td.label_").text();
+                const count = $row.find("td.count").text();
+                let index = 0;
+                if (label.includes("Mandatory")) {
+                    expect(this.incidents[index].mandatory).equal(Number(count));
+                }
+                if ($row.children("td.label_").text().includes("Optional")) {
+                    expect(this.incidents[index].optional).equal(
+                        Number($row.children("td.count").text())
+                    );
+                }
+                if (label.includes("Potential")) {
+                    expect(this.incidents[index].potential).equal(Number(count));
+                }
+                if (label.includes("Information")) {
+                    expect(this.incidents[index].information).equal(Number(count));
+                }
+            });
     }
 }

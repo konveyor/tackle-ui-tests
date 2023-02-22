@@ -24,7 +24,7 @@ export const businessColumnSelector = "td[data-label='Business service']";
 export const csvFileName = "File name";
 export const FileName = "File Name";
 export const closeForm = "button[aria-label='close']";
-export const copy = "button[aria-label='copy']";
+export const copy = "button[aria-label='Copy']";
 export const copyAssessmentTableTd = ".pf-m-compact> tbody > tr > td";
 export const copyAssessmentTableTr = ".pf-m-compact> tbody > tr";
 export const cyclicDependenciesErrorMsg = "cyclic dependencies are not allowed";

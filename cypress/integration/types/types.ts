@@ -79,6 +79,13 @@ export type analysisData = {
     manuallyAnalyzePackages?: string[];
     excludedPackagesList?: string[];
     openSourceLibraries?: boolean;
+    incidents?: {
+        mandatory?: number;
+        optional?: number;
+        potential?: number;
+        information?: number;
+        total?: number;
+    };
 };
 
 export type UserData = {

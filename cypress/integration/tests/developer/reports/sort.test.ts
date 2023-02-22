@@ -42,11 +42,11 @@ import {
     priority,
     confidence,
 } from "../../../types/constants";
-import { ApplicationInventory } from "../../../models/developer/applicationinventory/applicationinventory";
+import { Assessment } from "../../../models/developer/applicationinventory/assessment";
 import { Stakeholders } from "../../../models/developer/controls/stakeholders";
 import { BusinessServices } from "../../../models/developer/controls/businessservices";
 
-var applicationsList: Array<ApplicationInventory> = [];
+var applicationsList: Array<Assessment> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 var businessservicelist: Array<BusinessServices> = [];
 
@@ -58,9 +58,8 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
         // Perform login
         login();
 
-        businessservicelist = createMultipleBusinessServices(2);
         stakeholdersList = createMultipleStakeholders(1);
-        applicationsList = createMultipleApplications(2, businessservicelist);
+        applicationsList = createMultipleApplications(2);
 
         let risks = ["low", "medium", "high"];
         for (let i = 0; i < applicationsList.length; i++) {
@@ -86,7 +85,6 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
         // Delete All
         deleteAllStakeholders();
         deleteApplicationTableRows();
-        deleteAllBusinessServices();
     });
 
     it("Adoption candidate distribution - Application name sort validations", function () {

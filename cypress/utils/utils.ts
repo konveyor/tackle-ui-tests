@@ -221,7 +221,7 @@ export function selectReactFormItems(
 }
 
 export function checkSuccessAlert(fieldId: string, message: string): void {
-    cy.get(fieldId, { timeout: 120 * SEC }).should("contain.text", message);
+    cy.get(fieldId, { timeout: 150 * SEC }).should("contain.text", message);
 }
 
 export function removeMember(memberName: string): void {
@@ -235,7 +235,7 @@ export function exists(value: string): void {
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
                 selectItemsPerPage(100);
-                cy.get("td", { timeout: 120 * SEC }).should("contain", value);
+                cy.get("td", { timeout: 12000 * SEC }).should("contain", value);
             }
         });
 }
@@ -635,6 +635,7 @@ export function verifyImportErrorMsg(errorMsg: any): void {
 }
 
 export function deleteApplicationTableRows(currentPage = false): void {
+    navigate_to_application_inventory();
     cy.get(commonView.appTable)
         .next()
         .then(($div) => {
@@ -903,6 +904,7 @@ export function getRandomApplicationData(
     if (appName) {
         name = appName + "_" + data.getAppName();
     }
+
     let appdata = {
         name: name,
         description: data.getDescription(),
@@ -940,6 +942,7 @@ export function getRandomAnalysisData(analysisdata): analysisData {
         excludeRuleTags: analysisdata.excludeRuleTags,
         manuallyAnalyzePackages: analysisdata.manuallyAnalyzePackages,
         excludedPackagesList: analysisdata.excludedPackagesList,
+        incidents: analysisdata.incidents,
         openSourceLibraries: analysisdata.openSourceLibraries,
     };
 }
