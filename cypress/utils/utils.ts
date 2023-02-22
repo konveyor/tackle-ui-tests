@@ -940,6 +940,7 @@ export function getRandomAnalysisData(analysisdata): analysisData {
         excludeRuleTags: analysisdata.excludeRuleTags,
         manuallyAnalyzePackages: analysisdata.manuallyAnalyzePackages,
         excludedPackagesList: analysisdata.excludedPackagesList,
+        openSourceLibraries: analysisdata.openSourceLibraries,
     };
 }
 

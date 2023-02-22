@@ -220,4 +220,22 @@ describe("Source Analysis", { tags: "@tier4" }, () => {
         application.openreport();
         application.validateStoryPoints();
     });
+
+    it(" Analysis for known Open Source libraries on tackleTest app", function () {
+        // Source code analysis require both source and maven credentials
+        const application = new Analysis(
+            getRandomApplicationData("tackleTestApp_Source+dependencies", {
+                sourceData: this.appData[3],
+            }),
+            getRandomAnalysisData(this.analysisData[12])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.manageCredentials(source_credential.name, maven_credential.name);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openreport();
+        application.validateStoryPoints();
+    });
 });

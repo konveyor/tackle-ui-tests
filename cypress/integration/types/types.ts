@@ -78,6 +78,7 @@ export type analysisData = {
     excludePackages?: string[];
     manuallyAnalyzePackages?: string[];
     excludedPackagesList?: string[];
+    openSourceLibraries?: boolean;
 };
 
 export type UserData = {
