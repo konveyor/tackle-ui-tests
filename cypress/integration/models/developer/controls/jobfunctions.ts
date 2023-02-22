@@ -21,6 +21,7 @@ import {
     createNewButton,
     editAction,
     deleteAction,
+    developer,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { jobfunctionNameInput } from "../../../views/jobfunctions.view";
@@ -38,15 +39,21 @@ import * as commonView from "../../../views/common.view";
 
 export class Jobfunctions {
     name: string;
+    static fullUrl = Cypress.env("tackleUrl") + "/controls/job-functions";
 
     constructor(name: string) {
         this.name = name;
     }
 
-    public static openList(): void {
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, jobFunctions);
+    public static openList(itemsPerPage = 100): void {
+        cy.url().then(($url) => {
+            if ($url != Jobfunctions.fullUrl) {
+                selectUserPerspective(developer);
+                clickByText(navMenu, controls);
+                clickByText(navTab, jobFunctions);
+            }
+        });
+        selectItemsPerPage(itemsPerPage);
     }
 
     protected fillName(name: string): void {

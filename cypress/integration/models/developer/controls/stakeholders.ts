@@ -20,6 +20,7 @@ import {
     createNewButton,
     editAction,
     deleteAction,
+    developer,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -48,6 +49,7 @@ export class Stakeholders {
     email: string;
     jobfunction: string;
     groups: Array<string>;
+    static fullUrl = Cypress.env("tackleUrl") + "/controls/stakeholders";
 
     constructor(email: string, name: string, jobfunction?: string, groups?: Array<string>) {
         this.email = email;
@@ -56,10 +58,15 @@ export class Stakeholders {
         if (groups) this.groups = groups;
     }
 
-    public static clickStakeholders(): void {
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholders);
+    public static openList(itemsPerPage = 100): void {
+        cy.url().then(($url) => {
+            if ($url != Stakeholders.fullUrl) {
+                selectUserPerspective(developer);
+                clickByText(navMenu, controls);
+                clickByText(navTab, stakeholders);
+            }
+        });
+        selectItemsPerPage(itemsPerPage);
     }
 
     protected fillName(name: string): void {
@@ -87,7 +94,7 @@ export class Stakeholders {
     }
 
     create(cancel = false): void {
-        Stakeholders.clickStakeholders();
+        Stakeholders.openList();
         clickByText(button, createNewButton);
         if (cancel) {
             cancelForm();
@@ -117,7 +124,7 @@ export class Stakeholders {
         },
         cancel = false
     ): void {
-        Stakeholders.clickStakeholders();
+        Stakeholders.openList();
         selectItemsPerPage(100);
         cy.wait(2000);
         performRowAction(this.email, editAction);
@@ -145,7 +152,7 @@ export class Stakeholders {
     }
 
     delete(cancel = false): void {
-        Stakeholders.clickStakeholders();
+        Stakeholders.openList();
         selectItemsPerPage(100);
         cy.wait(2000);
         performRowAction(this.email, deleteAction);
