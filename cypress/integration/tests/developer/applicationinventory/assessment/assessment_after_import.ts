@@ -85,7 +85,7 @@ describe("Operations after application import", () => {
         "Perform application assessment after a successful application import",
         { tags: "@tier1" },
         function () {
-            const application = new Assessment(getRandomApplicationData("Customers", true));
+            const application = new Assessment(getRandomApplicationData("Customers"));
 
             // Perform assessment of application
             application.perform_assessment("low", stakeholdersNameList);
@@ -99,7 +99,7 @@ describe("Operations after application import", () => {
         { tags: "@tier1" },
         function () {
             // Automates https://polarion.engineering.redhat.com/polarion/redirect/project/MTAPathfinder/workitem?id=MTA-295
-            const application = new Assessment(getRandomApplicationData("Customers", true));
+            const application = new Assessment(getRandomApplicationData("Customers"));
 
             // Perform application review
             application.perform_review("low");
