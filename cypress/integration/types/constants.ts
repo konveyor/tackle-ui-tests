@@ -118,3 +118,12 @@ export enum UserRoles {
     architect = "tackle-architect",
     migrator = "tackle-migrator",
 }
+
+export enum AnalysisStatuses {
+    notStarted = "Not started",
+    scheduled = "Scheduled",
+    inProgress = "In-progress",
+    completed = "Completed",
+    failed = "Failed",
+    canceled = "Canceled",
+}
