@@ -16,35 +16,29 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    clickByText,
-    getRandomApplicationData,
     exists,
     importApplication,
     login,
     deleteApplicationTableRows,
     hasToBeSkipped,
-    selectUserPerspective,
     deleteAppImportsTableRows,
     notExists,
+    preservecookies,
 } from "../../../../../utils/utils";
 
 import * as data from "../../../../../utils/data_utils";
-import { BusinessServices } from "../../../../models/developer/controls/businessservices";
-import { navMenu } from "../../../../views/menu.view";
-import { applicationInventory, button, SEC } from "../../../../types/constants";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
-const businessService = new BusinessServices("BS_tag_test");
 const filePath = "app_import/csv/";
-var applicationsList: Array<Assessment> = [];
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
+let appdata = { name: "Customers" };
 
 describe("Operations after application import", () => {
     before("Login and create test data", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
+        if (hasToBeSkipped("@tier2")) return;
 
         // Perform login
         login();
@@ -72,20 +66,16 @@ describe("Operations after application import", () => {
         exists("Gateway");
     });
 
-    after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
-
-        // Delete the existing application rows before deleting business service(s)
-        deleteApplicationTableRows();
-        deleteAppImportsTableRows();
+    beforeEach("Persist session", function () {
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
     });
 
     it(
         "Perform application assessment after a successful application import",
-        { tags: "@tier1" },
+        { tags: "@tier2" },
         function () {
-            const application = new Assessment(getRandomApplicationData("Customers"));
+            const application = new Assessment(appdata);
 
             // Perform assessment of application
             application.perform_assessment("low", stakeholdersNameList);
@@ -96,10 +86,10 @@ describe("Operations after application import", () => {
 
     it(
         "Perform application review after a successful application import",
-        { tags: "@tier1" },
+        { tags: "@tier2" },
         function () {
             // Automates https://polarion.engineering.redhat.com/polarion/redirect/project/MTAPathfinder/workitem?id=MTA-295
-            const application = new Assessment(getRandomApplicationData("Customers"));
+            const application = new Assessment(appdata);
 
             // Perform application review
             application.perform_review("low");
@@ -112,4 +102,13 @@ describe("Operations after application import", () => {
             notExists(application.name);
         }
     );
+
+    after("Perform test data clean up", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier2")) return;
+
+        // Delete the existing application rows before deleting business service(s)
+        deleteApplicationTableRows();
+        deleteAppImportsTableRows();
+    });
 });
