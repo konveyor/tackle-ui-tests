@@ -159,5 +159,13 @@
                 "total": 103
             }
         ]
+    },
+
+    {
+        "source": "Source code + dependencies",
+        "target": ["Containerization"],
+        "appName": "deps",
+        "openSourceLibraries": true,
+        "storyPoints": [2602]
     }
 ]

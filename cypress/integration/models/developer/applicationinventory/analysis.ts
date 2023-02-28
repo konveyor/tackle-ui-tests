@@ -82,6 +82,7 @@ export class Analysis extends Application {
     storyPoints?: number;
     manuallyAnalyzePackages?: string[];
     excludedPackagesList?: string[];
+    openSourceLibraries?: boolean;
     incidents?: {
         mandatory?: number;
         optional?: number;
@@ -111,6 +112,7 @@ export class Analysis extends Application {
             manuallyAnalyzePackages,
             excludedPackagesList,
             incidents,
+            openSourceLibraries,
         } = analysisData;
         this.name = appData.name;
         this.source = source;
@@ -127,6 +129,7 @@ export class Analysis extends Application {
         if (manuallyAnalyzePackages) this.manuallyAnalyzePackages = manuallyAnalyzePackages;
         if (excludedPackagesList) this.excludedPackagesList = excludedPackagesList;
         if (incidents) this.incidents = incidents;
+        if (openSourceLibraries) this.openSourceLibraries = openSourceLibraries;
     }
 
     //Navigate to the Application inventory
@@ -198,6 +201,9 @@ export class Analysis extends Application {
             click(excludePackagesSwitch);
             inputText(enterPackageNameToExclude, this.excludePackages);
             clickByText(addButton, "Add");
+        }
+        if (this.openSourceLibraries) {
+            click("#oss");
         }
         cy.contains("button", "Next", { timeout: 200 }).click();
     }
