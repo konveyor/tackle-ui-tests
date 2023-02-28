@@ -123,3 +123,16 @@ export type RbacValidationRules = {
         "Manage dependencies"?: boolean;
     };
 };
+
+export type UpgradeData = {
+    jobFunctionName?: string;
+    stakeHolderGroupName?: string;
+    stakeHolderName?: string;
+    businessServiceName?: string;
+    tagTypeName?: string;
+    tagName?: string;
+    sourceControlUsernameCredentialsName?: string;
+    sourceApplicationName?: string;
+    binaryApplicationName?: string;
+    uploadBinaryApplicationName?: string;
+};

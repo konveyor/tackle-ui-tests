@@ -154,7 +154,7 @@ export class Application {
 
     protected fillSourceModeFields(): void {
         //Fields relevant to source code analysis
-        cy.contains("span", "Source code").click();
+        clickByText(button, "Source code");
         if (this.repoType) this.selectRepoType(this.repoType);
         inputText(sourceRepository, this.sourceRepo);
         if (this.branch) inputText(branch, this.branch);
@@ -163,7 +163,7 @@ export class Application {
 
     protected fillBinaryModeFields(): void {
         //Fields relevant to binary mode analysis
-        cy.contains("span", "Binary").click();
+        clickByText(button, "Binary");
         inputText(group, this.group);
         if (this.artifact) inputText(artifact, this.artifact);
         if (this.version) inputText(version, this.version);

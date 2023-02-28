@@ -1,0 +1,13 @@
+{
+    "jobFunctionName": "upgrade-jobFunction",
+    "stakeHolderGroupName": "upgrade-stakeHolderGroup",
+    "stakeHolderName": "upgrade-stakeHolder",
+    "businessServiceName": "upgrade-businessService",
+    "tagTypeName": "upgrade-tagType",
+    "tagName": "upgrade-tag",
+    "sourceControlUsernameCredentialsName": "upgrade-srcUsername",
+    "mavenUsernameCredentialName": "upgrade-mavenUsername",
+    "sourceApplicationName": "upgrade-sourceApp",
+    "binaryApplicationName": "upgrade-binaryApp",
+    "uploadBinaryApplicationName": "upgrade-uploadBinaryApp"
+}
