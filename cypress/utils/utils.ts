@@ -943,6 +943,7 @@ export function getRandomAnalysisData(analysisdata): analysisData {
         manuallyAnalyzePackages: analysisdata.manuallyAnalyzePackages,
         excludedPackagesList: analysisdata.excludedPackagesList,
         incidents: analysisdata.incidents,
+        openSourceLibraries: analysisdata.openSourceLibraries,
     };
 }
 
