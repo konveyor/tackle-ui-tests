@@ -26,7 +26,7 @@ import {
     submitForm,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
-import { button, controls, developer, SEC, tags, tdTag, trTag } from "../../../types/constants";
+import { button, controls, migration, SEC, tags, tdTag, trTag } from "../../../types/constants";
 import { createTagtypeButton, rankInput } from "../../../views/tags.view";
 import * as commonView from "../../../views/common.view";
 import { clickTags, fillName } from "./tags";
@@ -48,7 +48,7 @@ export class TagType {
     static openList(itemsPerPage = 100): void {
         cy.url().then(($url) => {
             if ($url != TagType.fullUrl) {
-                selectUserPerspective(developer);
+                selectUserPerspective(migration);
                 clickByText(navMenu, controls);
                 clickByText(navTab, tags);
             }

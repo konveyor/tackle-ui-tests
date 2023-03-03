@@ -4,11 +4,12 @@ import {
     selectUserPerspective,
     uncheckInsecureRepository,
 } from "../../../../utils/utils";
+import { administration } from "../../../types/constants";
 
 export class GitConfiguration {
     static open() {
         // used to navigate to the git configuration page
-        selectUserPerspective("Administrator");
+        selectUserPerspective(administration);
         clickByText("a.pf-c-nav__link", "Git");
         cy.contains("h1", "Git configuration", { timeout: 5000 });
     }

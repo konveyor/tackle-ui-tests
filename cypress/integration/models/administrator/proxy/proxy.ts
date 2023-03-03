@@ -6,7 +6,7 @@ import {
     selectUserPerspective,
     submitForm,
 } from "../../../../utils/utils";
-import { button, SEC } from "../../../types/constants";
+import { administration, button, SEC } from "../../../types/constants";
 import { CredentialsProxyData, ProxyData } from "../../../types/types";
 import { ProxyType, ProxyViewSelectors, ProxyViewSelectorsByType } from "../../../views/proxy.view";
 import { getRandomProxyData } from "../../../../utils/data_utils";
@@ -31,7 +31,7 @@ export class Proxy {
     static open() {
         cy.url().then((url) => {
             if (url !== Proxy.url) {
-                selectUserPerspective("Administrator");
+                selectUserPerspective(administration);
                 clickByText("a.pf-c-nav__link", "Proxy");
                 cy.contains("h1", "Proxy configuration", { timeout: 5000 });
                 cy.wait(5000); // This wait is required because of problems with page rendering, will be fixed later

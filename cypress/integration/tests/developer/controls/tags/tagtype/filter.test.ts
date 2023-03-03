@@ -51,9 +51,7 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
 
     it.skip("Tag type filter validations", function () {
         // Navigate to Tags tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
+        TagType.openList();
         cy.wait("@getTagtypes");
 
         // Enter an existing tag type name substring and apply it as search filter

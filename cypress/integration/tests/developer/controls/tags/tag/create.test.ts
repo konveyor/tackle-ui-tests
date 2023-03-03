@@ -62,9 +62,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
 
     it("Tag field validations", function () {
         // Navigate to Tags tab and click "Create tag" button
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
+        Tag.openList();
         clickByText(button, createTagButton);
 
         // Name constraints
@@ -86,9 +84,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
 
     it("Tag button validations", function () {
         // Navigate to Tags tab and click "Create tag" button
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
+        Tag.openList();
         clickByText(button, createTagButton);
 
         // Check "Create" and "Cancel" button status
@@ -113,7 +109,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
         const tag = new Tag(data.getRandomWord(5), data.getRandomDefaultTagType());
 
         // Create a new tag
-        selectUserPerspective("Developer");
+        selectUserPerspective("Migration");
         tag.create();
         cy.wait("@postTag");
         cy.wait(2000);

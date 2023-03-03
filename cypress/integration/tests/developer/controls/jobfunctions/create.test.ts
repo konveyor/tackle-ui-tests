@@ -32,6 +32,7 @@ import {
     max120CharsMsg,
     createNewButton,
     duplicateJobFunctionName,
+    migration,
 } from "../../../../types/constants";
 import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
 import { navMenu, navTab } from "../../../../views/menu.view";
@@ -60,9 +61,7 @@ describe("Job Function Validations", { tags: "@tier2" }, () => {
 
     it("Job function field validations", function () {
         // Create new job function
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, jobFunctions);
+        Jobfunctions.openList();
         clickByText(button, createNewButton);
 
         // Name constraints
@@ -78,7 +77,7 @@ describe("Job Function Validations", { tags: "@tier2" }, () => {
     });
 
     it("Job function unique name constraint validation", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
 
         // Create new job function
         jobfunction.create();
@@ -98,9 +97,7 @@ describe("Job Function Validations", { tags: "@tier2" }, () => {
 
     it("Job function button validations", function () {
         // Navigate to job function tab and click create new button
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, jobFunctions);
+        Jobfunctions.openList();
         clickByText(button, createNewButton);
 
         // Check "Create" and "Cancel" button status

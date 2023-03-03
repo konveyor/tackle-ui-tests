@@ -27,7 +27,7 @@ import {
 import { navTab } from "../../../../views/menu.view";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
-import { tdTag, businessServices } from "../../../../types/constants";
+import { tdTag, businessServices, migration } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 
 describe("Business service linked to stakeholder", { tags: "@tier1" }, () => {
@@ -48,7 +48,7 @@ describe("Business service linked to stakeholder", { tags: "@tier1" }, () => {
     });
 
     it("stakeholder attach, update and delete dependency on business service", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
 
         // Create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());

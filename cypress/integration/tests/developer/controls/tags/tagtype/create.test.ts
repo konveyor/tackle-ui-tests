@@ -33,6 +33,7 @@ import {
     fieldReqMsg,
     minCharsMsg,
     duplicateTagTypeName,
+    migration,
 } from "../../../../../types/constants";
 import {
     createTagtypeButton,
@@ -66,9 +67,7 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
 
     it("Tag type field validations", function () {
         // Navigate to Tags tab and click "Create tag type" button
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
+        TagType.openList();
         clickByText(button, createTagtypeButton);
 
         // Name constraints
@@ -97,9 +96,7 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
 
     it("Tag type button validations", function () {
         // Navigate to Tags tab and click "Create tag type" button
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
+        TagType.openList();
         clickByText(button, createTagtypeButton);
 
         // Check "Create" and "Cancel" button status
@@ -121,7 +118,7 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
     });
 
     it("Tag type unique constraint validation", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         const tagType = new TagType(
             data.getRandomWord(5),
             data.getColor(),

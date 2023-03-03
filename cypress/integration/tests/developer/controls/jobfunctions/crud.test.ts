@@ -24,6 +24,7 @@ import {
 } from "../../../../../utils/utils";
 import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
 import * as data from "../../../../../utils/data_utils";
+import { migration } from "../../../../types/constants";
 
 describe("Job Function CRUD operations", { tags: "@tier1" }, () => {
     const jobfunction = new Jobfunctions(data.getJobTitle());
@@ -41,7 +42,7 @@ describe("Job Function CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Jobfunction CRUD", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
 
         // Create new job function
         jobfunction.create();

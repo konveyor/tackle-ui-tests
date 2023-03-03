@@ -6,10 +6,11 @@ import {
     uncheckInsecureRepository,
 } from "../../../../utils/utils";
 import { clearRepository, confirmClear } from "../../../views/repository.view";
+import { administration } from "../../../types/constants";
 
 export class MavenConfiguration {
     static open() {
-        selectUserPerspective("Administrator");
+        selectUserPerspective(administration);
         clickByText("a.pf-c-nav__link", "Maven");
         cy.contains("h1", "Maven configuration", { timeout: 5000 });
     }

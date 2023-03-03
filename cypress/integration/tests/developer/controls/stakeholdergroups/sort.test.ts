@@ -71,9 +71,7 @@ describe("Stakeholder groups sort validations", { tags: "@tier2" }, function () 
 
     it("Name sort validations", function () {
         // Navigate to stakeholder groups tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholderGroups);
+        Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
 
         // get unsorted list when page loads
@@ -98,9 +96,7 @@ describe("Stakeholder groups sort validations", { tags: "@tier2" }, function () 
 
     it("Member(s) sort validations", function () {
         // Navigate to stakeholder groups tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholderGroups);
+        Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
 
         // get unsorted list when page loads

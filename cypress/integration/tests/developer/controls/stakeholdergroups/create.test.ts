@@ -35,6 +35,7 @@ import {
     max250CharsMsg,
     createNewButton,
     duplicateStakeholderGroupName,
+    migration,
 } from "../../../../types/constants";
 import {
     stakeholdergroupNameInput,
@@ -62,9 +63,7 @@ describe("Stakeholder groups validations", { tags: "@tier2" }, () => {
 
     it("Stakeholder group field validations", function () {
         // Navigate to stakeholder group tab and click "Create New" button
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholderGroups);
+        Stakeholdergroups.openList();
         clickByText(button, createNewButton);
 
         // Name constraints
@@ -85,9 +84,7 @@ describe("Stakeholder groups validations", { tags: "@tier2" }, () => {
 
     it("Stakholder group button validations", function () {
         // Navigate to stakeholder group tab and click "Create New" button
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholderGroups);
+        Stakeholdergroups.openList();
         clickByText(button, createNewButton);
 
         // Check "Create" and "Cancel" button status
@@ -109,7 +106,7 @@ describe("Stakeholder groups validations", { tags: "@tier2" }, () => {
     });
 
     it("Stakeholder group unique constraint validation", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
 
         // Create new stakeholder group
         stakeholdergroup.create();

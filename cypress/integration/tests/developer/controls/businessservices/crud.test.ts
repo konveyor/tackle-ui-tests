@@ -27,6 +27,7 @@ import { BusinessServices } from "../../../../models/developer/controls/business
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 
 import * as data from "../../../../../utils/data_utils";
+import { migration } from "../../../../types/constants";
 
 describe("Business service CRUD operations", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -53,7 +54,7 @@ describe("Business service CRUD operations", { tags: "@tier1" }, () => {
     it("Business service CRUD", function () {
         const businessService = new BusinessServices(data.getCompanyName(), data.getDescription());
 
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
 
         // Create new Business service
         businessService.create();
@@ -75,7 +76,7 @@ describe("Business service CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Business service CRUD with owner", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
 
         // Create owner - stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());

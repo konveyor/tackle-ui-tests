@@ -27,7 +27,7 @@ import {
     selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, developer, stakeholders } from "../../../../types/constants";
+import { controls, migration, stakeholders } from "../../../../types/constants";
 
 import {
     firstPageButton,
@@ -36,6 +36,7 @@ import {
     pageNumInput,
     prevPageButton,
 } from "../../../../views/common.view";
+import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 
 describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
@@ -69,9 +70,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
 
     it("Navigation button validations", function () {
         // Navigate to stakeholder tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholders);
+        Stakeholders.openList();
         cy.get("@getStakeholders");
 
         // select 10 items per page
@@ -109,9 +108,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
 
     it("Items per page validations", function () {
         // Navigate to stakeholder tab
-        selectUserPerspective(developer);
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholders);
+        Stakeholders.openList();
         cy.get("@getStakeholders");
 
         // Select 10 items per page
@@ -135,9 +132,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
 
     it("Page number validations", function () {
         // Navigate to stakeholder tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholders);
+        Stakeholders.openList();
         cy.get("@getStakeholders");
 
         // Select 10 items per page
@@ -155,9 +150,7 @@ describe("Stakeholder pagination validations", { tags: "@tier3" }, function () {
 
     it("Last page item(s) deletion, impact on page reload validation", function () {
         // Navigate to stakeholder tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholders);
+        Stakeholders.openList();
         cy.get("@getStakeholders");
 
         // Select 10 items per page

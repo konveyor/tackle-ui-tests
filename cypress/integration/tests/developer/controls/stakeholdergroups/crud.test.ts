@@ -27,7 +27,7 @@ import {
 } from "../../../../../utils/utils";
 import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
-import { tdTag, trTag } from "../../../../types/constants";
+import { migration, tdTag, trTag } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { expandRow } from "../../../../views/common.view";
 
@@ -52,7 +52,7 @@ describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Stakeholder group CRUD", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective("Migration");
 
         const stakeholdergroup = new Stakeholdergroups(
             data.getCompanyName(),
@@ -80,7 +80,7 @@ describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Stakeholder group CRUD with stakeholder member attached", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
 
         // Create stakeholder
         stakeholder.create();

@@ -65,9 +65,7 @@ describe("Job function sorting", { tags: "@tier2" }, function () {
 
     it("Name sort validations", function () {
         // Navigate to job functions tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, jobFunctions);
+        Jobfunctions.openList();
         cy.wait("@getJobfunctions");
 
         // get unsorted list when page loads

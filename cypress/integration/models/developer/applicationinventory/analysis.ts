@@ -20,6 +20,7 @@ import {
     analyzeButton,
     applicationInventory,
     button,
+    migration,
     save,
     SEC,
     tdTag,
@@ -129,7 +130,7 @@ export class Analysis extends Application {
 
     //Navigate to the Application inventory
     public static open(): void {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, applicationInventory);
         clickByText(navTab, analysis);
         cy.wait(10000);
