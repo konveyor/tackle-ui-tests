@@ -577,7 +577,7 @@ export function uploadFile(fileName: string): void {
 export function navigate_to_application_inventory(tab?): void {
     cy.get("h1", { timeout: 5 * SEC }).then(($header) => {
         if (!$header.text().includes("Application inventory")) {
-            selectUserPerspective("Developer");
+            selectUserPerspective("Migration");
             clickByText(navMenu, applicationInventory);
         }
     });
@@ -1187,8 +1187,8 @@ export function selectUserPerspective(userType: string): void {
         .eq(0)
         .then(($a) => {
             $a.click();
-            if (userType == "Developer" && $a.find('ul[title="Admin"]').length) {
-                clickByText(commonView.userPerspectiveMenu, "Administrator");
+            if (userType == "Migration" && $a.find('ul[title="Admin"]').length) {
+                clickByText(commonView.userPerspectiveMenu, "Administration");
                 $a.click();
             }
             clickByText(commonView.userPerspectiveMenu, userType);

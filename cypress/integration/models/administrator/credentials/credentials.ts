@@ -17,7 +17,6 @@ import {
     doesExistText,
 } from "../../../../utils/utils";
 import {
-    administrator,
     button,
     credentials,
     CredentialType,
@@ -25,6 +24,7 @@ import {
     editAction,
     SEC,
     trTag,
+    administration,
 } from "../../../types/constants";
 import {
     createBtn,
@@ -121,7 +121,7 @@ export class Credentials {
     static openList(itemsPerPage = 100) {
         cy.url().then(($url) => {
             if ($url != Credentials.fullUrl) {
-                selectUserPerspective(administrator);
+                selectUserPerspective(administration);
                 clickByText(navLink, credentials);
             }
         });

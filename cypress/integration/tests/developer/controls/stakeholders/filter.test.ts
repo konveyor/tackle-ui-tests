@@ -42,7 +42,7 @@ import {
     jobFunction,
     group,
     clearAllFilters,
-    developer,
+    migration,
 } from "../../../../types/constants";
 
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
@@ -89,9 +89,7 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
     it("Email filter validations", function () {
         // Navigate to stakeholder tab
-        selectUserPerspective(developer);
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholders);
+        Stakeholders.openList();
 
         // Enter an existing email substring and apply it as search filter
         let validSearchInput = stakeholdersList[0].email.substring(0, 5);
@@ -117,9 +115,7 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
     it("Display name filter validations", function () {
         // Navigate to stakeholder tab
-        selectUserPerspective(developer);
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholders);
+        Stakeholders.openList();
 
         // Enter an existing display name substring and apply it as search filter
         let validSearchInput = stakeholdersList[0].name.substring(0, 3);
@@ -145,9 +141,7 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
     it("Job function filter validations", function () {
         // Navigate to stakeholder tab
-        selectUserPerspective(developer);
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholders);
+        Stakeholders.openList();
 
         // Enter an existing job function substring and apply it as search filter
         let validSearchInput = stakeholdersList[0].jobfunction.substring(0, 3);
@@ -179,9 +173,7 @@ describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
 
     it("Group filter validations", function () {
         // Navigate to stakeholder tab
-        selectUserPerspective(developer);
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholders);
+        Stakeholders.openList();
 
         // Enter an existing group substring and apply it as search filter
         let validSearchInput = stakeholdersList[0].groups[0].substring(0, 3);

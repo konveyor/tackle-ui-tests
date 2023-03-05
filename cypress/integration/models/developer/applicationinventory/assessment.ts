@@ -25,6 +25,7 @@ import {
     assessment,
     SEC,
     assessAppButton,
+    migration,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -75,7 +76,7 @@ export class Assessment extends Application {
 
     //Navigate to the Application inventory->Assessment tab
     public static open(): void {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, applicationInventory);
         clickByText(navTab, assessment);
     }

@@ -29,6 +29,7 @@ import {
 } from "../../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../../views/menu.view";
 import { controls, tags, tagType, rank, tagCount } from "../../../../../types/constants";
+import { TagType } from "../../../../../models/developer/controls/tagtypes";
 
 describe("Tag type sort validations", { tags: "@tier2" }, function () {
     before("Login", function () {
@@ -49,9 +50,7 @@ describe("Tag type sort validations", { tags: "@tier2" }, function () {
 
     it("Tag type name sort validations", function () {
         // Navigate to Tags tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
+        TagType.openList();
         cy.get("@getTagtypes");
 
         // Get unsorted list when page loads
@@ -76,9 +75,7 @@ describe("Tag type sort validations", { tags: "@tier2" }, function () {
 
     it("Rank sort validations", function () {
         // Navigate to Tags tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
+        TagType.openList();
         cy.get("@getTagtypes");
 
         // Get unsorted list when page loads
@@ -103,9 +100,7 @@ describe("Tag type sort validations", { tags: "@tier2" }, function () {
 
     it("Tag count sort validations", function () {
         // Navigate to Tags tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
+        TagType.openList();
         cy.get("@getTagtypes");
 
         // Get unsorted list when page loads

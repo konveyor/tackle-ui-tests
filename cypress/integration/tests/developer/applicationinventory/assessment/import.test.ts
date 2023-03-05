@@ -36,6 +36,7 @@ import { BusinessServices } from "../../../../models/developer/controls/business
 import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory, button, SEC } from "../../../../types/constants";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
+import { Application } from "../../../../models/developer/applicationinventory/application";
 
 const businessService = new BusinessServices("BS_tag_test");
 const filePath = "app_import/csv/";
@@ -73,9 +74,7 @@ describe("Application import operations", () => {
     });
 
     it("Valid applications import", { tags: "@tier1" }, function () {
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
-        cy.wait("@getApplication");
+        Application.open();
 
         // Import valid csv
         const fileName = "template_application_import.csv";
@@ -95,8 +94,7 @@ describe("Application import operations", () => {
     });
 
     it("Duplicate applications import", { tags: "@tier1" }, function () {
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.wait("@getApplication");
 
         // Import already imported valid csv file
@@ -123,8 +121,7 @@ describe("Application import operations", () => {
     it("Applications import for non existing tags", { tags: "@tier1" }, function () {
         businessService.create();
         exists(businessService.name);
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.wait("@getApplication");
 
         // Import csv with non-existent tags
@@ -147,8 +144,7 @@ describe("Application import operations", () => {
     });
 
     it("Applications import for non existing business service", { tags: "@tier1" }, function () {
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.wait("@getApplication");
 
         // Import csv with non-existent businsess service
@@ -171,8 +167,7 @@ describe("Application import operations", () => {
         "Applications import with minimum required field(s) and empty row",
         { tags: "@tier1" },
         function () {
-            selectUserPerspective("Developer");
-            clickByText(navMenu, applicationInventory);
+            Application.open();
             cy.wait("@getApplication");
 
             // Import csv with an empty row between two valid rows having minimum required field(s)
@@ -199,8 +194,7 @@ describe("Application import operations", () => {
     );
 
     it("Applications import having same name with spaces", { tags: "@tier1" }, function () {
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.wait("@getApplication");
 
         // Import csv having applications with same name, differentiated by whitespaces
@@ -245,8 +239,7 @@ describe("Application import operations", () => {
 
     it("Applications import for invalid csv schema", { tags: "@newtest" }, function () {
         // Impacted by bug - https://issues.redhat.com/browse/TACKLE-320
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.wait("@getApplication");
 
         // Import csv invalid schema
@@ -271,8 +264,7 @@ describe("Application import operations", () => {
         // The only valid record types for records in a CSV file are 1(application) or 2(dependency).
         // In this test, we import a CSV file that has records with a record type that's neither 1 nor 2.
         // Automates https://issues.redhat.com/browse/TACKLE-634
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.wait("@getApplication");
 
         // Import csv with invalid record type

@@ -65,8 +65,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
 
     it("Navigation button validations", function () {
         // Navigate to Application inventory tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.wait("@getApplications");
 
         // select 10 items per page
@@ -104,8 +103,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
 
     it("Items per page validations", function () {
         // Navigate to Application inventory tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.wait("@getApplications");
 
         // Select 10 items per page
@@ -135,8 +133,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
 
     it("Page number validations", function () {
         // Navigate to Application inventory tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.wait("@getApplications");
 
         // Select 10 items per page
@@ -157,8 +154,7 @@ describe("Application inventory pagination validations", { tags: "@tier3" }, fun
 
     it("Last page item(s) deletion, impact on page reload validation", function () {
         // Navigate to Application inventory tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.wait("@getApplications");
 
         // Select 10 items per page

@@ -55,9 +55,7 @@ describe("Job function filter validations", { tags: "@tier2" }, function () {
     });
 
     it("Name filter validations", function () {
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, jobFunctions);
+        Jobfunctions.openList();
 
         // Enter an existing display name substring and assert
         let validSearchInput = jobFunctionsList[0].name.substring(0, 3);

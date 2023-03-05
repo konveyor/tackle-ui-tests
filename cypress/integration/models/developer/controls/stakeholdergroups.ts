@@ -20,7 +20,7 @@ import {
     createNewButton,
     deleteAction,
     editAction,
-    developer,
+    migration,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -57,7 +57,7 @@ export class Stakeholdergroups {
     public static openList(itemsPerPage = 100): void {
         cy.url().then(($url) => {
             if ($url != Stakeholdergroups.fullUrl) {
-                selectUserPerspective(developer);
+                selectUserPerspective(migration);
                 clickByText(navMenu, controls);
                 clickByText(navTab, stakeholderGroups);
             }

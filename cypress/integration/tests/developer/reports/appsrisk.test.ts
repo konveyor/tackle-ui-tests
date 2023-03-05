@@ -30,7 +30,7 @@ import {
 import { verifyApplicationRisk } from "../../../models/developer/reports/reports";
 import { Assessment } from "../../../models/developer/applicationinventory/assessment";
 import { navMenu } from "../../../views/menu.view";
-import { businessService, reports } from "../../../types/constants";
+import { businessService, migration, reports } from "../../../types/constants";
 import { Stakeholders } from "../../../models/developer/controls/stakeholders";
 import { BusinessServices } from "../../../models/developer/controls/businessservices";
 
@@ -74,7 +74,7 @@ describe("Application risks tests", { tags: "@newtest" }, () => {
 
     it("Application risk validation", function () {
         // Navigate to reports page
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(3000);
 

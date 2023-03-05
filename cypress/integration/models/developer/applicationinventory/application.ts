@@ -28,6 +28,7 @@ import {
     analysis,
     analyzeButton,
     reviewAppButton,
+    migration,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -121,7 +122,7 @@ export class Application {
 
     //Navigate to the Application inventory
     public static open(): void {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, applicationInventory);
         clickByText(navTab, assessment);
     }

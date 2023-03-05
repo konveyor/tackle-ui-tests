@@ -27,7 +27,7 @@ import {
 } from "../../../../../../utils/utils";
 import { Tag } from "../../../../../models/developer/controls/tags";
 
-import { tdTag } from "../../../../../types/constants";
+import { migration, tdTag } from "../../../../../types/constants";
 import * as data from "../../../../../../utils/data_utils";
 
 describe("Tag CRUD operations", { tags: "@tier1" }, () => {
@@ -46,7 +46,7 @@ describe("Tag CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Tag CRUD", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         // Create new tag
         const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagType());
         tag.create();

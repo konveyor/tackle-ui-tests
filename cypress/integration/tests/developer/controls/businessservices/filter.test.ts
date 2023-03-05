@@ -1,12 +1,9 @@
 /*
 Copyright © 2021 the Konveyor Contributors (https://konveyor.io/)
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
     http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -77,9 +74,7 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
     });
 
     it("Name filter validations", function () {
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, businessServices);
+        BusinessServices.openList();
 
         // Enter an existing display name substring and assert
         let validSearchInput = businessServicesList[0].name.substring(0, 3);
@@ -108,9 +103,7 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
     });
 
     it("Description filter validations", function () {
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, businessServices);
+        BusinessServices.openList();
 
         // Enter an existing description substring and assert
         let validSearchInput = businessServicesList[0].description.substring(0, 8);
@@ -139,9 +132,7 @@ describe("Business services filter validations", { tags: "@tier2" }, function ()
     });
 
     it("Owner filter validations", function () {
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, businessServices);
+        BusinessServices.openList();
 
         // Enter an existing owner substring and assert
         let validSearchInput = businessServicesList[0].owner.substring(0, 3);

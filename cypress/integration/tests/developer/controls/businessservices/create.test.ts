@@ -37,6 +37,7 @@ import {
     max250CharsMsg,
     createNewButton,
     duplicateBusinessService,
+    migration,
 } from "../../../../types/constants";
 import {
     businessServiceNameInput,
@@ -63,9 +64,7 @@ describe("Business service validations", { tags: "@tier2" }, () => {
 
     it("Business service field validations", function () {
         // Navigate to business service tab and click "Create New" button
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, businessServices);
+        BusinessServices.openList();
         clickByText(button, createNewButton);
 
         // Name constraints
@@ -86,9 +85,7 @@ describe("Business service validations", { tags: "@tier2" }, () => {
 
     it("Business service button validations", function () {
         // Navigate to business service tab and click "Create New" button
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, businessServices);
+        BusinessServices.openList();
         clickByText(button, createNewButton);
 
         // Check "Create" and "Cancel" button status
@@ -112,7 +109,7 @@ describe("Business service validations", { tags: "@tier2" }, () => {
     it("Business service unique constraint validation", function () {
         const businessService = new BusinessServices(data.getCompanyName());
 
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
 
         // Create new business service
         businessService.create();

@@ -4,11 +4,12 @@ import {
     selectUserPerspective,
     uncheckInsecureRepository,
 } from "../../../../utils/utils";
+import { administration } from "../../../types/constants";
 
 export class SubversionConfiguration {
     static open() {
         // used to navigate to the subversion configuration page
-        selectUserPerspective("Administrator");
+        selectUserPerspective(administration);
         clickByText("a.pf-c-nav__link", "Subversion");
         cy.contains("h1", "Subversion configuration", { timeout: 5000 });
     }

@@ -70,9 +70,7 @@ describe("Stakeholder validations", { tags: "@tier2" }, () => {
 
     it("Stakeholder field validations", function () {
         // Navigate to stakeholder tab and click "Create New" button
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholders);
+        Stakeholders.openList();
         clickByText(button, createNewButton);
 
         // Email constraints
@@ -100,9 +98,7 @@ describe("Stakeholder validations", { tags: "@tier2" }, () => {
 
     it("Stakholder button validations", function () {
         // Navigate to stakeholder tab and click create new button
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholders);
+        Stakeholders.openList();
         clickByText(button, createNewButton);
 
         // Check "Create" and "Cancel" button status

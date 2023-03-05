@@ -22,7 +22,7 @@ import {
     SEC,
     editAction,
     deleteAction,
-    developer,
+    migration,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 
@@ -74,7 +74,7 @@ export class Tag {
     static openList(itemsPerPage = 100): void {
         cy.url().then(($url) => {
             if ($url != Tag.fullUrl) {
-                selectUserPerspective(developer);
+                selectUserPerspective(migration);
                 clickByText(navMenu, controls);
                 clickByText(navTab, tags);
             }

@@ -41,6 +41,7 @@ import {
     effort,
     priority,
     confidence,
+    migration,
 } from "../../../types/constants";
 import { Assessment } from "../../../models/developer/applicationinventory/assessment";
 import { Stakeholders } from "../../../models/developer/controls/stakeholders";
@@ -89,7 +90,7 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
 
     it("Adoption candidate distribution - Application name sort validations", function () {
         // Navigate to reports page
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -115,7 +116,7 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
 
     it("Adoption candidate distribution - Criticality sort validations", function () {
         // Navigate to reports page
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -141,7 +142,7 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
 
     it("Adoption candidate distribution - Priority sort validations", function () {
         // Navigate to reports page
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -167,7 +168,7 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
 
     it("Adoption candidate distribution - Confidence sort validations", function () {
         // Navigate to reports page
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -193,7 +194,7 @@ describe("Reports sort validations", { tags: "@tier2" }, () => {
 
     it("Adoption candidate distribution - Effort sort validations", function () {
         // Navigate to reports page
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(3000);
 

@@ -27,7 +27,7 @@ import { Tag } from "../../../../../models/developer/controls/tags";
 import { TagType } from "../../../../../models/developer/controls/tagtypes";
 
 import * as data from "../../../../../../utils/data_utils";
-import { color, rank, tagCount } from "../../../../../types/constants";
+import { color, migration, rank, tagCount } from "../../../../../types/constants";
 
 describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -44,7 +44,7 @@ describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Tag type CRUD", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective("Migration");
 
         // Create new tag type
         const tagType = new TagType(
@@ -80,7 +80,7 @@ describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Tag type CRUD with member (tags)", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
 
         // Create new tag type
         const tagType = new TagType(

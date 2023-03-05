@@ -87,9 +87,7 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
 
     it("Navigation button validations", function () {
         // Navigate to Tags tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
+        TagType.openList();
 
         // select 10 items per page
         selectItemsPerPage(10);
@@ -100,9 +98,7 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
 
     it("Items per page validations", function () {
         // Navigate to Tags tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
+        TagType.openList();
 
         // Select 10 items per page
         selectItemsPerPage(10);

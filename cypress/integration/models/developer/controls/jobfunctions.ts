@@ -21,7 +21,7 @@ import {
     createNewButton,
     editAction,
     deleteAction,
-    developer,
+    migration,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { jobfunctionNameInput } from "../../../views/jobfunctions.view";
@@ -48,7 +48,7 @@ export class Jobfunctions {
     public static openList(itemsPerPage = 100): void {
         cy.url().then(($url) => {
             if ($url != Jobfunctions.fullUrl) {
-                selectUserPerspective(developer);
+                selectUserPerspective(migration);
                 clickByText(navMenu, controls);
                 clickByText(navTab, jobFunctions);
             }

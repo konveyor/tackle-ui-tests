@@ -58,6 +58,7 @@ import { Application } from "../../../../models/developer/applicationinventory/a
 import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsMaven } from "../../../../models/administrator/credentials/credentialsMaven";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
+import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
 var applicationsList: Array<Application> = [];
 var invalidSearchInput = String(data.getRandomNumber());
@@ -114,9 +115,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     });
 
     it("Name filter validations", function () {
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
-        clickByText(navTab, assessment);
+        Assessment.open();
 
         // Enter an existing name substring and assert
         var validSearchInput = applicationsList[0].name.substring(0, 11);
@@ -148,9 +147,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     });
 
     it("Descriptions filter validations", function () {
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
-        clickByText(navTab, assessment);
+        Assessment.open();
 
         // Enter an existing description substring and assert
         var validSearchInput = applicationsList[0].description.substring(0, 8);
@@ -183,9 +180,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
 
     it("Business service filter validations", function () {
         // This is impacted by https://issues.redhat.com/browse/TACKLE-820
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
-        clickByText(navTab, assessment);
+        Assessment.open();
 
         // Enter an existing businessservice and assert
         var validSearchInput = applicationsList[0].business;
@@ -198,9 +193,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     });
 
     it("Tag filter validations", function () {
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
-        clickByText(navTab, assessment);
+        Assessment.open();
 
         // Enter an existing tag and assert
         var validSearchInput = applicationsList[0].tags[0];
