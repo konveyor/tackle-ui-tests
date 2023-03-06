@@ -32,7 +32,7 @@ import {
     deleteApplicationTableRows,
     selectUserPerspective,
     click,
-    deleteAllTagsAndTagTypes,
+    deleteAllTagsAndTagCategories,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import {

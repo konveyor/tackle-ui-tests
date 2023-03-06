@@ -64,10 +64,10 @@ export function getColor(): string {
     return colors[Math.floor(Math.random() * colors.length)];
 }
 
-export function getRandomDefaultTagType(): string {
+export function getRandomDefaultTagCategory(): string {
     // returns a random tag type from the existing list
-    const tagTypes = getDefaultTagTypes();
-    return tagTypes[Math.floor(Math.random() * tagTypes.length)];
+    const tagCategories = getDefaultTagCategories();
+    return tagCategories[Math.floor(Math.random() * tagCategories.length)];
 }
 
 export function getAppName(): string {
@@ -92,7 +92,7 @@ export function getRandomRisk(): string {
     return risk[Math.floor(Math.random() * risk.length)];
 }
 
-export function getDefaultTagTypes(): string[] {
+export function getDefaultTagCategories(): string[] {
     return [
         "Application Type",
         "Database",

@@ -46,16 +46,16 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
         login();
 
         // Interceptors
-        cy.intercept("GET", "/hub/tag-type*").as("getTagtypes");
+        cy.intercept("GET", "/hub/tag-category*").as("getTagCategories");
     });
 
     it.skip("Tag type filter validations", function () {
         // Navigate to Tags tab
         TagType.openList();
-        cy.wait("@getTagtypes");
+        cy.wait("@getTagCategories");
 
         // Enter an existing tag type name substring and apply it as search filter
-        var validSearchInput = data.getRandomDefaultTagType();
+        var validSearchInput = data.getRandomDefaultTagCategory();
         applySearchFilter(tagType, validSearchInput);
 
         // Assert that tag type row(s) containing the search text is/are displayed
@@ -63,7 +63,7 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.wait("@getTagtypes");
+        cy.wait("@getTagCategories");
 
         // Enter a non-existing tag type name substring and apply it as search filter
         var invalidSearchInput = String(data.getRandomNumber(111111, 222222));
@@ -88,14 +88,14 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.get("@getTagtypes");
+        cy.get("@getTagCategories");
 
         // Enter a non-existing tag type color substring and apply it as search filter
         var invalidSearchInput = String(data.getRandomWord(3));
         applySearchFilter(color, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No tag types available");
+        cy.get("h2").contains("No tag categories available");
 
         clickByText(button, clearAllFilters);
     });
@@ -113,14 +113,14 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
 
         // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.get("@getTagtypes");
+        cy.get("@getTagCategories");
 
         // Enter a non-existing tag type rank number and apply it as search filter
         var invalidSearchInput = String(data.getRandomNumber(1111, 2222));
         applySearchFilter(rank, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No tag types available");
+        cy.get("h2").contains("No tag categories available");
 
         clickByText(button, clearAllFilters);
     });

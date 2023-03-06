@@ -29,7 +29,7 @@ import {
     selectUserPerspective,
     createMultipleApplicationsWithBSandTags,
     applySelectFilter,
-    deleteAllTagsAndTagTypes,
+    deleteAllTagsAndTagCategories,
     getRandomApplicationData,
     getRandomAnalysisData,
     notExists,
@@ -313,7 +313,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         if (hasToBeSkipped("@tier2")) return;
 
         deleteApplicationTableRows();
-        deleteAllTagsAndTagTypes();
+        deleteAllTagsAndTagCategories();
         deleteAllBusinessServices();
     });
 });

@@ -26,8 +26,8 @@ import { name, SEC } from "../../../../../types/constants";
 import * as data from "../../../../../../utils/data_utils";
 
 describe("Tags filter validations", { tags: "@tier2" }, function () {
-    const tagType = new TagType(data.getRandomWord(5), data.getColor());
-    const tag = new Tag(data.getRandomWord(5), tagType.name);
+    const tagCategory = new TagType(data.getRandomWord(5), data.getColor());
+    const tag = new Tag(data.getRandomWord(5), tagCategory.name);
 
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
@@ -35,7 +35,7 @@ describe("Tags filter validations", { tags: "@tier2" }, function () {
 
         // Perform login
         login();
-        tagType.create();
+        tagCategory.create();
         tag.create();
     });
 
@@ -60,6 +60,6 @@ describe("Tags filter validations", { tags: "@tier2" }, function () {
         if (hasToBeSkipped("@tier2")) return;
         tag.delete();
         cy.wait(2 * SEC);
-        tagType.delete();
+        tagCategory.delete();
     });
 });
