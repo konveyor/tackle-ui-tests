@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 export const createTagButton = "Create tag";
-export const createTagtypeButton = "Create tag type";
+export const createTagCategoryButton = "Create tag category";
 export const colorHelper = "div[id=color-helper]";
 export const dropdownMenuToggle = "button[aria-label='Options menu']";
 export const nameHelper = "div[id=name-helper]";
@@ -23,8 +23,9 @@ export const rankInput = "input[aria-label='rank']";
 export const rankHelper = "div[id=rank-helper]";
 export const tagTable = "table[aria-label='tag-table']";
 export const tagMenuButton = "button[aria-label='Actions']";
-export const tagTypeHelper = "div[id=tagType-helper]";
+export const tagCategoryHelper = "div[id=tagCategory-helper]";
 export const positiveRankMsg = "This field must be greater than 1.";
+export const tagCategory = "td[data-label='Tag category']";
 export enum tagLabels {
     name = 'td[data-label="Tag name"]',
     type = 'td[data-label="Tag type"]',

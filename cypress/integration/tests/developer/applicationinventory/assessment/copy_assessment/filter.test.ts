@@ -28,7 +28,7 @@ import {
     applySearchFilter,
     clickByText,
     deleteAllBusinessServices,
-    deleteAllTagsAndTagTypes,
+    deleteAllTagsAndTagCategories,
 } from "../../../../../../utils/utils";
 
 import { Stakeholders } from "../../../../../models/developer/controls/stakeholders";
@@ -106,7 +106,7 @@ describe("Copy assessment filter tests", { tags: "@newtest" }, () => {
         deleteAllBusinessServices();
 
         // Delete the tags created before the tests
-        deleteAllTagsAndTagTypes();
+        deleteAllTagsAndTagCategories();
     });
 
     it("Name filter validations", function () {

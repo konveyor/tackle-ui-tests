@@ -68,7 +68,7 @@ export const tagCount = "Tag count";
 export const tags = "Tags";
 export const tdTag = "td";
 export const trTag = "tr";
-export const tagType = "Tag type";
+export const tagCategory = "Tag category";
 export const tagName = "Tag name";
 
 export const createAppButton = "#create-application";

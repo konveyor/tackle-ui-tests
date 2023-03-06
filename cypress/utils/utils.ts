@@ -1059,7 +1059,7 @@ export function deleteAllTagTypes(cancel = false): void {
                     .each(($tableRow) => {
                         cy.wait(1000);
                         let name = $tableRow.find('td[data-label="Tag type"]').text();
-                        if (!(data.getDefaultTagTypes().indexOf(name) > -1)) {
+                        if (!(data.getDefaultTagCategories().indexOf(name) > -1)) {
                             cy.get(tdTag)
                                 .contains(name)
                                 .parent(trTag)
@@ -1075,7 +1075,7 @@ export function deleteAllTagTypes(cancel = false): void {
         });
 }
 
-export function deleteAllTagsAndTagTypes(): void {
+export function deleteAllTagsAndTagCategories(): void {
     const nonDefaultTagTypes = [];
     TagType.openList();
 
@@ -1085,7 +1085,7 @@ export function deleteAllTagsAndTagTypes(): void {
         .each(($rowGroup) => {
             let typeName = $rowGroup.find(tagLabels.type).text();
             let isDefault = false;
-            for (let currentType of data.getDefaultTagTypes()) {
+            for (let currentType of data.getDefaultTagCategories()) {
                 if (currentType == typeName) {
                     isDefault = true;
                     break; // Exiting from cycle if current tag type belongs to default

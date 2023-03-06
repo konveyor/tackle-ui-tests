@@ -29,7 +29,7 @@ import {
     createMultipleBusinessServices,
     goToPage,
     deleteAllBusinessServices,
-    deleteAllTagsAndTagTypes,
+    deleteAllTagsAndTagCategories,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import { applicationInventory, migration, reports } from "../../../types/constants";
