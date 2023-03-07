@@ -285,6 +285,21 @@ export class Application {
             });
     }
 
+    expandApplicationRow(): void {
+        // displays row details by clicking on the expand button
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                cy.get(commonView.expandRow).then(($btn) => {
+                    if ($btn.attr("aria-expanded") === "false") {
+                        $btn.trigger("click");
+                    }
+                });
+            });
+    }
+
     selectApplicationRow(): void {
         cy.wait(4000);
         cy.get(tdTag).contains(this.name).closest(trTag).click();
