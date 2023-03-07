@@ -1384,27 +1384,7 @@ export function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O):
 }
 
 export function isRwxEnabled(): boolean {
-    /**
-     * @remarks
-     * This method is detecting if `rwx_supported` feature is enabled in tackle CR or not
-     * This functionality works starting from MTA 6.0.1 and for next versions
-     *
-     * It is detecting in which namespace does tackle CR exist and what is its name
-     * Then it runs `oc` command to get CR in JSON format and returns its value.
-     */
-    cy.exec("oc get tackle --all-namespaces|grep -vi name")
-        .then((result) => {
-            return result.stdout.split(" ");
-        })
-        .then((output) => {
-            const nameSpace = output[0];
-            const cr = output[1];
-            cy.exec(`oc get tackle ${cr} -n${nameSpace} -o json`).then((output) => {
-                let json = JSON.parse(output.stdout);
-                if (json["spec"]["rwx_supported"]) return true;
-            });
-        });
-    return false;
+    return Cypress.env("rwx_enabled");
 }
 
 // This method is patching
