@@ -263,7 +263,6 @@ export class Analysis extends Application {
             });
     }
 
-    
     openreport() {
         super.selectApplicationRow();
         cy.wait(10000);
