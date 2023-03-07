@@ -264,19 +264,14 @@ export class Analysis extends Application {
     }
 
     openreport() {
-        super.expandApplicationRow();
+        super.selectApplicationRow();
         cy.wait(10000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .next()
-            .find("span")
+        clickByText(navTab, "Reports");
+        cy.get("h3")
             .contains("Analysis")
-            .parent("dt")
             .next()
             .within(() => {
-                cy.get("button > a")
+                cy.get("a")
                     .should("contain", "Report")
                     .then(($a) => {
                         // Removing target from html so that report opens in same tab
