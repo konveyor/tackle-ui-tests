@@ -300,6 +300,12 @@ export class Application {
             });
     }
 
+    selectApplicationRow(): void {
+        cy.wait(4000);
+        cy.get(tdTag).contains(this.name).closest(trTag).click();
+        cy.wait(2000);
+    }
+
     existsWithinRow(rowIdentifier: string, fieldId: string, valueToSearch: string): void {
         // Verifies if the valueToSearch exists within the row
         cy.get(tdTag)
