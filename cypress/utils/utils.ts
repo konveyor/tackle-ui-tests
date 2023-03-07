@@ -548,9 +548,13 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
     // unresolved bug https://issues.redhat.com/browse/TACKLE-927
 }
 
-export function uploadXml(fileName: string): void {
+export function uploadXml(fileName: string, customSelector?: string): void {
+    let selector = 'input[type="file"]';
+    if (customSelector) {
+        selector = customSelector;
+    }
     // Uplaod any file
-    cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(
+    cy.get(selector, { timeout: 5 * SEC }).attachFile(
         { filePath: fileName, mimeType: "text/xml", encoding: "utf-8" },
         { subjectType: "drag-n-drop" }
     );
