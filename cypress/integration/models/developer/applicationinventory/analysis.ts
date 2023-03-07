@@ -47,6 +47,7 @@ import {
     addButton,
     addRules,
     analysisColumn,
+    analysisDetails,
     analyzeManuallyButton,
     enableTransactionAnalysis,
     enterPackageName,
@@ -282,26 +283,10 @@ export class Analysis extends Application {
     }
 
     openAnalysisDetails() {
-        super.expandApplicationRow();
-        cy.wait(10000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .next()
-            .find("span")
-            .contains("Analysis")
-            .parent("dt")
-            .next()
-            .within(() => {
-                cy.get("button.pf-c-button.pf-m-link.pf-u-ml-0")
-                    .should("contain", "Analysis details")
-                    .then(($a) => {
-                        // Removing target from html so that report opens in same tab
-                        $a.attr("target", "_self");
-                    })
-                    .click();
-            });
+        cy.wait(2000);
+        performRowActionByIcon(this.name, kebabMenu);
+        clickByText(button, analysisDetails);
+        cy.wait(2000);
     }
 
     delete(cancel = false): void {
