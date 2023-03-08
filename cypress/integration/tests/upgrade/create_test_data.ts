@@ -25,7 +25,7 @@ import {
 import { TagType } from "../../models/developer/controls/tagtypes";
 import * as data from "../../../utils/data_utils";
 import { Tag } from "../../models/developer/controls/tags";
-import { CredentialType, SEC } from "../../types/constants";
+import { CredentialType, SEC, UserCredentials } from "../../types/constants";
 import { Stakeholders } from "../../models/developer/controls/stakeholders";
 import { Jobfunctions } from "../../models/developer/controls/jobfunctions";
 import { BusinessServices } from "../../models/developer/controls/businessservices";
@@ -66,18 +66,18 @@ describe("Creating pre-requisites before an upgrade", { tags: "@pre-upgrade" }, 
     it("Creating credentials", function () {
         const { sourceControlUsernameCredentialsName, mavenUsernameCredentialName } =
             this.upgradeData;
-        sourceControlUsernameCredentials = new CredentialsSourceControlUsername({
-            type: CredentialType.sourceControl,
-            name: sourceControlUsernameCredentialsName,
-            description: "Created for upgrade testing",
-            username: Cypress.env("git_user"),
-            password: Cypress.env("git_password"),
-        });
+        sourceControlUsernameCredentials = new CredentialsSourceControlUsername(
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                true
+            )
+        );
         sourceControlUsernameCredentials.name = sourceControlUsernameCredentialsName;
         sourceControlUsernameCredentials.create();
 
         mavenCredentialsUsername = new CredentialsMaven(
-            getRandomCredentialsData(CredentialType.maven)
+            getRandomCredentialsData(CredentialType.maven, "None", true)
         );
         mavenCredentialsUsername.name = mavenUsernameCredentialName;
         mavenCredentialsUsername.create();
@@ -125,6 +125,7 @@ describe("Creating pre-requisites before an upgrade", { tags: "@pre-upgrade" }, 
         sourceApplication.create();
         cy.wait(2 * SEC);
         sourceApplication.analyze();
+        sourceApplication.verifyAnalysisStatus("Completed");
     });
 
     it("Creating Upload Binary Analysis", function () {
@@ -137,6 +138,7 @@ describe("Creating pre-requisites before an upgrade", { tags: "@pre-upgrade" }, 
         cy.wait(2 * SEC);
         // No credentials required for uploaded binary.
         uploadBinaryApplication.analyze();
+        uploadBinaryApplication.verifyAnalysisStatus("Completed");
     });
 
     it("Binary Analysis", function () {
@@ -156,5 +158,6 @@ describe("Creating pre-requisites before an upgrade", { tags: "@pre-upgrade" }, 
             mavenCredentialsUsername.name
         );
         binaryApplication.analyze();
+        binaryApplication.verifyAnalysisStatus("Completed");
     });
 });
