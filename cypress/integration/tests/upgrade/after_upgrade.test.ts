@@ -20,10 +20,10 @@ import { Analysis } from "../../models/developer/applicationinventory/analysis";
 import { MavenConfiguration } from "../../models/administrator/repositories/maven";
 import { clearRepository } from "../../views/repository.view";
 
-describe("Creating pre-requisites before an upgrade", { tags: "@after-upgrade" }, () => {
+describe("Creating pre-requisites before an upgrade", { tags: "@post-upgrade" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@after-upgrade")) return;
+        if (hasToBeSkipped("@post-upgrade")) return;
 
         // Perform login
         login();
