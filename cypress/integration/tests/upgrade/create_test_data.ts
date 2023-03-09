@@ -36,14 +36,13 @@ import { Analysis } from "../../models/developer/applicationinventory/analysis";
 import { UpgradeData } from "../../types/types";
 import { CredentialsMaven } from "../../models/administrator/credentials/credentialsMaven";
 
-describe("Creating pre-requisites before an upgrade", { tags: "@upgrade" }, () => {
-    // let source_credential;
-    let mavenCredsUsername: CredentialsMaven;
+describe("Creating pre-requisites before an upgrade", { tags: "@pre-upgrade" }, () => {
+    let mavenCredentialsUsername: CredentialsMaven;
     let sourceControlUsernameCredentials: CredentialsSourceControlUsername;
 
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
+        if (hasToBeSkipped("@pre-upgrade")) return;
 
         // Perform login
         login();
@@ -64,21 +63,27 @@ describe("Creating pre-requisites before an upgrade", { tags: "@upgrade" }, () =
         });
     });
 
-    it("Creating credentials", { tags: "@upgrade" }, function () {
+    it("Creating credentials", function () {
         const { sourceControlUsernameCredentialsName, mavenUsernameCredentialName } =
             this.upgradeData;
         sourceControlUsernameCredentials = new CredentialsSourceControlUsername(
-            getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.usernamePassword)
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                true
+            )
         );
         sourceControlUsernameCredentials.name = sourceControlUsernameCredentialsName;
         sourceControlUsernameCredentials.create();
 
-        mavenCredsUsername = new CredentialsMaven(getRandomCredentialsData(CredentialType.maven));
-        mavenCredsUsername.name = mavenUsernameCredentialName;
-        mavenCredsUsername.create();
+        mavenCredentialsUsername = new CredentialsMaven(
+            getRandomCredentialsData(CredentialType.maven, "None", true)
+        );
+        mavenCredentialsUsername.name = mavenUsernameCredentialName;
+        mavenCredentialsUsername.create();
     });
 
-    it("Creating Controls instances", { tags: "@upgrade" }, function () {
+    it("Creating Controls instances", function () {
         const {
             jobFunctionName,
             stakeHolderGroupName,
@@ -109,41 +114,50 @@ describe("Creating pre-requisites before an upgrade", { tags: "@upgrade" }, () =
         tag.create();
     });
 
-    it("Creating source applications", { tags: "@upgrade" }, function () {
+    it("Creating source applications", function () {
         const sourceApplication = new Analysis(
-            getRandomApplicationData("bookServerApp", { sourceData: this.appData[0] }),
+            getRandomApplicationData(this.upgradeData.sourceApplicationName, {
+                sourceData: this.appData[0],
+            }),
             getRandomAnalysisData(this.analysisData[0])
         );
+        sourceApplication.name = this.upgradeData.sourceApplicationName;
         sourceApplication.create();
-        // cy.wait("@getApplication");
         cy.wait(2 * SEC);
         sourceApplication.analyze();
+        sourceApplication.verifyAnalysisStatus("Completed");
     });
 
     it("Creating Upload Binary Analysis", function () {
         const uploadBinaryApplication = new Analysis(
-            getRandomApplicationData("uploadBinary"),
+            getRandomApplicationData(this.upgradeData.uploadBinaryApplicationName),
             getRandomAnalysisData(this.analysisData[4])
         );
+        uploadBinaryApplication.name = this.upgradeData.uploadBinaryApplicationName;
         uploadBinaryApplication.create();
         cy.wait(2 * SEC);
         // No credentials required for uploaded binary.
         uploadBinaryApplication.analyze();
+        uploadBinaryApplication.verifyAnalysisStatus("Completed");
     });
 
     it("Binary Analysis", function () {
-        // For binary analysis application must have group,artifcat and version.
-        const application = new Analysis(
-            getRandomApplicationData("tackletestApp_binary", { binaryData: this.appData[2] }),
+        // For binary analysis application must have group,artifact and version.
+        const binaryApplication = new Analysis(
+            getRandomApplicationData(this.upgradeData.binaryApplicationName, {
+                binaryData: this.appData[2],
+            }),
             getRandomAnalysisData(this.analysisData[3])
         );
-        application.create();
+        binaryApplication.name = this.upgradeData.binaryApplicationName;
+        binaryApplication.create();
         cy.wait(2 * SEC);
         // Both source and maven credentials required for binary.
-        application.manageCredentials(
+        binaryApplication.manageCredentials(
             sourceControlUsernameCredentials.name,
-            mavenCredsUsername.name
+            mavenCredentialsUsername.name
         );
-        application.analyze();
+        binaryApplication.analyze();
+        binaryApplication.verifyAnalysisStatus("Completed");
     });
 });
