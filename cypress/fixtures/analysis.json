@@ -123,8 +123,8 @@
                 "mandatory": 5,
                 "optional": 9,
                 "potential": 26,
-                "information": 105,
-                "total": 145
+                "information": 104,
+                "total": 144
             }
         ]
     },
@@ -155,7 +155,7 @@
                 "mandatory": 14,
                 "optional": 0,
                 "potential": 31,
-                "information": 57,
+                "information": 54,
                 "total": 103
             }
         ]
