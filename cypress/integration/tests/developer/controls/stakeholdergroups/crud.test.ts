@@ -21,12 +21,10 @@ import {
     notExists,
     hasToBeSkipped,
     preservecookies,
-    selectUserPerspective,
     expandRowDetails,
 } from "../../../../../utils/utils";
 import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
-import { migration } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 
 describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
@@ -93,7 +91,7 @@ describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
         cy.wait("@postStakeholdergroups");
         exists(stakeholdergroup.name);
 
-        // Check if stakeholder member is attached to a stakeholder group
+        // Check if stakeholder member is attached to stakeholder group
         expandRowDetails(stakeholdergroup.name);
         exists(memberStakeholderName);
 
