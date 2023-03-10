@@ -37,6 +37,7 @@ import {
     applicationBusinessServiceSelect,
     applicationTagsSelect,
     applicationCommentInput,
+    applicationTag,
     editButton,
     selectBox,
     sourceRepository,
@@ -285,10 +286,21 @@ export class Application {
             });
     }
 
+    applicationDetailsTab(tab: string): void {
+        // Navigate to the application details page and click desired tab
+        this.selectApplicationRow();
+        clickByText(button, tab);
+    }
+
     selectApplicationRow(): void {
         cy.wait(4000);
         cy.get(tdTag).contains(this.name).closest(trTag).click();
         cy.wait(2000);
+    }
+
+    tagExists(tagName: string): void {
+        // Verifies if tag exists on application details -> Tags page
+        cy.get(applicationTag).should("contain", tagName);
     }
 
     existsWithinRow(rowIdentifier: string, fieldId: string, valueToSearch: string): void {

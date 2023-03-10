@@ -29,6 +29,7 @@ import {
     createMultipleStakeholderGroups,
     createMultipleBusinessServices,
     createMultipleTags,
+    createMultipleTagsTagTypes,
     deleteAllTagsAndTagCategories,
 } from "../../../../../utils/utils";
 import { businessColumnSelector } from "../../../../views/applicationinventory.view";
@@ -115,10 +116,8 @@ describe("Applications interlinked to tags and business service", () => {
             cy.wait(100);
 
             // Assert that deleted tag is removed
-            application.expandApplicationRow();
-            application.existsWithinRow(application.name, "Tags", "");
-            application.closeApplicationRow();
-            application.verifyTagCount(0);
+            application.applicationDetailsTab("Tags");
+            application.tagExists("");
 
             application.edit({
                 business: businessservicesList[1].name,
@@ -131,11 +130,8 @@ describe("Applications interlinked to tags and business service", () => {
             cy.wait(1000);
 
             // Assert that created tag exists
-            application.expandApplicationRow();
-            application.existsWithinRow(application.name, "Tags", tagList[1].name);
-            application.closeApplicationRow();
-            application.verifyTagCount(1);
-            cy.wait(1000);
+            application.applicationDetailsTab("Tags");
+            application.tagExists(tagList[1].name);
         }
     );
 

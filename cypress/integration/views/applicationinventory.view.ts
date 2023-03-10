@@ -54,3 +54,6 @@ export const packaging = "input[name=packaging]";
 
 //Fields related to application imports
 export const createEntitiesCheckbox = "#create-entities-checkbox";
+
+//Fields related to application details page
+export const applicationTag = "span.pf-c-label__content";
