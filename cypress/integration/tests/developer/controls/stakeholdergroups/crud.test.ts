@@ -93,7 +93,7 @@ describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
         cy.wait("@postStakeholdergroups");
         exists(stakeholdergroup.name);
 
-        // Check if stakeholder member is attached to stakeholder group
+        // Check if stakeholder member is attached to a stakeholder group
         expandRowDetails(stakeholdergroup.name);
         exists(memberStakeholderName);
 
