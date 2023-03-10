@@ -29,7 +29,6 @@ import {
     createMultipleStakeholderGroups,
     createMultipleBusinessServices,
     createMultipleTags,
-    createMultipleTagsTagTypes,
     deleteAllTagsAndTagCategories,
 } from "../../../../../utils/utils";
 import { businessColumnSelector } from "../../../../views/applicationinventory.view";
