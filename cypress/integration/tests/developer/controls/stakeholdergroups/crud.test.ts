@@ -24,10 +24,11 @@ import {
     hasToBeSkipped,
     preservecookies,
     selectUserPerspective,
+    deleteAllStakeholders,
 } from "../../../../../utils/utils";
 import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
-import { migration, tdTag, trTag } from "../../../../types/constants";
+import { migration, SEC, tdTag, trTag } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { expandRow } from "../../../../views/common.view";
 
@@ -104,12 +105,15 @@ describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
         cy.wait(2000);
         cy.get(tdTag)
             .contains(stakeholdergroup.name)
-            .parent(tdTag)
-            .parent(trTag)
+            .closest(tdTag)
+            .closest(trTag)
             .within(() => {
-                click(expandRow);
+                cy.get(expandRow).click();
+                cy.wait(2 * SEC);
             })
-            .get("div > dd")
+            .get("div > dd", {
+                timeout: 2 * SEC,
+            })
             .should("contain", memberStakeholderName);
 
         // Edit the current stakeholder group's name, description and member
@@ -128,9 +132,12 @@ describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
             .parent(tdTag)
             .parent(trTag)
             .within(() => {
-                click(expandRow);
+                cy.get(expandRow).click();
+                cy.wait(4 * SEC);
             })
-            .get("div > dd")
+            .get("div > dd", {
+                timeout: 2 * SEC,
+            })
             .should("not.contain", memberStakeholderName);
 
         // Delete stakeholder group

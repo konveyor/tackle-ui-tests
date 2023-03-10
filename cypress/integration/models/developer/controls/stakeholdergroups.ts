@@ -21,6 +21,9 @@ import {
     deleteAction,
     editAction,
     migration,
+    tdTag,
+    trTag,
+    SEC,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -41,6 +44,7 @@ import {
     performRowAction,
     selectUserPerspective,
 } from "../../../../utils/utils";
+import { expandRow } from "../../../views/common.view";
 
 export class Stakeholdergroups {
     name: string;
