@@ -24,6 +24,7 @@ import {
     hasToBeSkipped,
     preservecookies,
     selectUserPerspective,
+    deleteAllStakeholders,
 } from "../../../../../utils/utils";
 import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
@@ -40,6 +41,7 @@ describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
 
         // Perform login
         login();
+        deleteAllStakeholders();
     });
 
     beforeEach("Persist session", function () {
