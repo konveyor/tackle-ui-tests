@@ -455,7 +455,7 @@ export function expandRowDetails(rowIdentifier: string): void {
     // displays row details by clicking on the expand button
     cy.get(tdTag)
         .contains(rowIdentifier)
-        .parent(trTag)
+        .closest(trTag)
         .within(() => {
             cy.get(commonView.expandRow).then(($btn) => {
                 if ($btn.attr("aria-expanded") === "false") {
