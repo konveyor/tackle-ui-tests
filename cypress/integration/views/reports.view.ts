@@ -20,3 +20,6 @@ export const itemsPerPageMenu = "div.pf-m-bottom > div.pf-c-options-menu";
 export const itemsPerPageToggleButton = "div > button[aria-label='Items per page']";
 export const closeRowIdentifiedRisk =
     ":nth-child(4) > .pf-c-card > .pf-c-card__header > .pf-c-card__header-toggle > .pf-c-button > .pf-c-card__header-toggle-icon > svg";
+export const switchToggle = ".pf-c-switch__toggle";
+export const downloadHTML = "#downloadHTML";
+export const downloadCSV = "#downloadCSV";
