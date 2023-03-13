@@ -293,7 +293,7 @@ export class Application {
         clickByText(navTab, tab);
     }
 
-    closeApplicationDeatils(): void {
+    closeApplicationDetails(): void {
         // closes application details page
         click(closeDetailsPage);
     }
@@ -308,7 +308,7 @@ export class Application {
         // Verifies if tag exists on application details -> Tags page
         this.applicationDetailsTab("Tags");
         cy.get(applicationTag).should("contain", tagName);
-        this.closeApplicationDeatils();
+        this.closeApplicationDetails();
     }
 
     static validateAssessButton(rbacRules: RbacValidationRules) {
