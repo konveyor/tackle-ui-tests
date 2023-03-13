@@ -28,7 +28,6 @@ import {
     deleteApplicationTableRows,
     preservecookies,
     hasToBeSkipped,
-    selectUserPerspective,
     deleteAppImportsTableRows,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
@@ -37,11 +36,9 @@ import { applicationInventory } from "../../../../types/constants";
 import { Application } from "../../../../models/developer/applicationinventory/application";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { csvFileName, date, importStatus, user } from "../../../../views/applicationinventory.view";
-import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
 const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/csv/";
-var applicationsList: Array<Assessment> = [];
 
 describe("Manage applications import sort validations", { tags: "@tier2" }, function () {
     before("Login and create test data", function () {
@@ -54,8 +51,13 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
         // Delete all applications
         deleteApplicationTableRows();
 
-        // Create business service
-        businessService.create();
+        // Create business service if not exists
+        BusinessServices.getNamesListOnPage(100).then((list) => {
+            if (!list.find((listItem) => listItem.name === businessService.name)) {
+                businessService.create();
+            }
+        });
+
         // Open the application inventory page
         clickByText(navMenu, applicationInventory);
         cy.wait(2000);
