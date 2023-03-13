@@ -78,6 +78,7 @@ export type analysisData = {
     excludePackages?: string[];
     manuallyAnalyzePackages?: string[];
     excludedPackagesList?: string[];
+    openSourceLibraries?: boolean;
     incidents?: {
         mandatory?: number;
         optional?: number;

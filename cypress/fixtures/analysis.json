@@ -101,7 +101,7 @@
         "binary": ["jee-example-app-1.0.0.ear"],
         "appsName": "jee-example-app-1.0.0.ear",
         "target": ["Quarkus"],
-        "storyPoints": [89],
+        "storyPoints": 89,
         "incidents": [
             {
                 "mandatory": 53,
@@ -117,7 +117,7 @@
         "binary": ["camunda-bpm-spring-boot-starter-example-war-2.0.0.war"],
         "appName": "camunda-bpm-spring-boot-starter-example-war-2.0.0.war",
         "target": ["Quarkus"],
-        "storyPoints": [132],
+        "storyPoints": 132,
         "incidents": [
             {
                 "mandatory": 5,
@@ -133,7 +133,7 @@
         "binary": ["complete-duke.zip"],
         "appName": "complete-duke.zip",
         "target": ["Jakarta EE 9"],
-        "storyPoints": [29],
+        "storyPoints": 29,
         "incidents": [
             {
                 "mandatory": 29,
@@ -149,7 +149,7 @@
         "binary": ["kafka-clients-sb-sample.jar"],
         "appName": "kafka-clients-sb-sample.jar",
         "target": ["Quarkus"],
-        "storyPoints": [178],
+        "storyPoints": 178,
         "incidents": [
             {
                 "mandatory": 14,
@@ -159,5 +159,13 @@
                 "total": 103
             }
         ]
+    },
+
+    {
+        "source": "Source code + dependencies",
+        "target": ["Containerization"],
+        "appName": "deps",
+        "openSourceLibraries": true,
+        "storyPoints": 2601
     }
 ]
