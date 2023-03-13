@@ -101,6 +101,7 @@ export const minCharsMsg = "This field must contain at least 3 characters.";
 export const SEC = 1000;
 export const administration = "Administration";
 export const migration = "Migration";
+export const general = "General";
 
 export enum CredentialType {
     proxy = "Proxy",

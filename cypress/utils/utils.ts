@@ -77,6 +77,7 @@ import { CredentialsSourceControlUsername } from "../integration/models/administ
 import { CredentialsSourceControlKey } from "../integration/models/administrator/credentials/credentialsSourceControlKey";
 import { Application } from "../integration/models/developer/applicationinventory/application";
 import { InsecureRepositoryToggle } from "../integration/views/repository.view";
+import { switchToggle } from "../integration/views/reports.view";
 
 let userName = Cypress.env("user");
 let userPassword = Cypress.env("pass");
@@ -1365,6 +1366,34 @@ export function doesExistText(str: string, toBePresent: boolean): void {
     } else {
         cy.contains(str).should("not.exist");
     }
+}
+
+export function enableSwitch(selector: string): void {
+    cy.get(selector)
+        .parent("label")
+        .within(() => {
+            cy.get(".pf-m-on")
+                .invoke("css", "display")
+                .then((display) => {
+                    if (display.toString() == "none") {
+                        click(switchToggle);
+                    }
+                });
+        });
+}
+
+export function disableSwitch(selector: string): void {
+    cy.get(selector)
+        .parent("label")
+        .within(() => {
+            cy.get(".pf-m-off")
+                .invoke("css", "display")
+                .then((display) => {
+                    if (display.toString() == "none") {
+                        click(switchToggle);
+                    }
+                });
+        });
 }
 
 export function validateTooShortInput(selector, anotherSelector?: string): void {
