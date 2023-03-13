@@ -66,7 +66,7 @@ describe("Report Page Filter Validation", { tags: "@tier2" }, () => {
     it("Filter Name validation test using Upload Binary Analysis", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData[9])
+            getRandomAnalysisData(this.analysisData[7])
         );
         application.create();
         cy.wait("@getApplication");
@@ -76,26 +76,26 @@ describe("Report Page Filter Validation", { tags: "@tier2" }, () => {
         application.openreport();
 
         // Enter an existing display name substring and assert appName0 exist
-        report.applyFilter(name, application.appName[0].substring(0, 5));
-        cy.get("[role=main]").should("contain.text", application.appName[0]);
+        report.applyFilter(name, application.appName.substring(0, 6));
+        cy.get("[role=main]").should("contain.text", application.appName);
         cy.get(clearAllFilters).click();
         // Enter an existing display exact name and assert appName1 exist
-        report.applyFilter(name, application.appName[1]);
-        cy.get("[role=main]").should("contain.text", application.appName[1]);
+        report.applyFilter(name, application.appName);
+        cy.get("[role=main]").should("contain.text", application.appName);
         cy.get(clearAllFilters).click();
 
         // Enter a non-existing Name and apply it as search filter
         // Assert that no search results are found
         let invalidSearchInput = "SomeInvalidInput";
         report.applyFilter(name, invalidSearchInput);
-        cy.get("[role=main]").should("not.contain.text", application.appName);
+        cy.get("span[id=count-results]").should("have.text", "0");
         cy.get(clearAllFilters).click();
     });
 
     it("Tag Name validation test using Upload Binary Analysis", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData[9])
+            getRandomAnalysisData(this.analysisData[7])
         );
         application.create();
         cy.wait("@getApplication");
@@ -105,20 +105,15 @@ describe("Report Page Filter Validation", { tags: "@tier2" }, () => {
         application.openreport();
 
         // Enter an existing Tag and assert appName"acmeair-webapp-1.0-SNAPSHOT.war" is displayed
-        report.applyFilter(tag, "web xml");
-        cy.get("[role=main]").should("contain.text", application.appName[0]);
-        cy.get(clearAllFilters).click();
-
-        // Enter an existing Tag and assert appName "customers-tomcat-0.0.1-SNAPSHOT.war" is displayed
-        report.applyFilter(tag, "tomcat");
-        cy.get("[role=main]").should("contain.text", application.appName[1]);
+        report.applyFilter(tag, "Spring Boot");
+        cy.get("[role=main]").should("contain.text", application.appName);
         cy.get(clearAllFilters).click();
 
         // Enter a non-existing tag and apply it as search filter
         // Assert that no search results are found
         let invalidSearchInput = "SomeInvalidInput0";
         report.applyFilter(tag, invalidSearchInput);
-        cy.get("[role=main]").should("not.contain.text", application.appName);
+        cy.get("span[id=count-results]").should("have.text", "0");
         cy.get(clearAllFilters).click();
     });
 });
