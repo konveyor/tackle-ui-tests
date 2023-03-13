@@ -6,5 +6,8 @@
     "tagTypeName": "upgrade-tagType",
     "tagName": "upgrade-tag",
     "sourceControlUsernameCredentialsName": "upgrade-srcUsername",
-    "mavenUsernameCredentialName": "upgrade-mavenUsername"
+    "mavenUsernameCredentialName": "upgrade-mavenUsername",
+    "sourceApplicationName": "upgrade-sourceApp",
+    "binaryApplicationName": "upgrade-binaryApp",
+    "uploadBinaryApplicationName": "upgrade-uploadBinaryApp"
 }
