@@ -100,7 +100,7 @@ describe("Applications interlinked to tags and business service", () => {
             cy.wait("@getApplication");
             cy.wait(2000);
 
-            application.verifyTagCount(1);
+            application.tagExists(tagList[0].name);
             // Remove the BS and tags
             application.removeBusinessService();
             tagList[0].delete();
@@ -115,7 +115,6 @@ describe("Applications interlinked to tags and business service", () => {
             cy.wait(100);
 
             // Assert that deleted tag is removed
-            application.applicationDetailsTab("Tags");
             application.tagExists("");
 
             application.edit({
@@ -129,7 +128,6 @@ describe("Applications interlinked to tags and business service", () => {
             cy.wait(1000);
 
             // Assert that created tag exists
-            application.applicationDetailsTab("Tags");
             application.tagExists(tagList[1].name);
         }
     );

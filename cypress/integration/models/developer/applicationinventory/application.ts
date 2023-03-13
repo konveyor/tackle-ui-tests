@@ -38,6 +38,7 @@ import {
     applicationTagsSelect,
     applicationCommentInput,
     applicationTag,
+    closeDetailsPage,
     editButton,
     selectBox,
     sourceRepository,
@@ -289,7 +290,12 @@ export class Application {
     applicationDetailsTab(tab: string): void {
         // Navigate to the application details page and click desired tab
         this.selectApplicationRow();
-        clickByText(button, tab);
+        clickByText(navTab, tab);
+    }
+
+    closeApplicationDeatils(): void {
+        // closes application details page
+        click(closeDetailsPage);
     }
 
     selectApplicationRow(): void {
@@ -300,51 +306,9 @@ export class Application {
 
     tagExists(tagName: string): void {
         // Verifies if tag exists on application details -> Tags page
+        this.applicationDetailsTab('Tags')
         cy.get(applicationTag).should("contain", tagName);
-    }
-
-    existsWithinRow(rowIdentifier: string, fieldId: string, valueToSearch: string): void {
-        // Verifies if the valueToSearch exists within the row
-        cy.get(tdTag)
-            .contains(rowIdentifier)
-            .parent(tdTag)
-            .parent(trTag)
-            .next()
-            .contains(fieldId)
-            .parent("dt")
-            .next()
-            .should("contain", valueToSearch);
-    }
-
-    closeApplicationRow(): void {
-        // closes row details by clicking on the collapse button
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                cy.get(commonView.expandRow).then(($btn) => {
-                    if ($btn.attr("aria-expanded") === "true") {
-                        $btn.trigger("click");
-                    }
-                });
-            });
-    }
-
-    verifyTagCount(tagsCount: number): void {
-        // Verify tag count for specific application
-        Application.open();
-        selectItemsPerPage(100);
-        cy.wait(4000);
-        cy.get(".pf-c-table > tbody > tr")
-            .not(".pf-c-table__expandable-row")
-            .each(($ele) => {
-                if ($ele.find(`td[data-label="${name}"]`).text() == this.name) {
-                    expect(parseInt($ele.find(`td[data-label="${tagCount}"]`).text())).to.equal(
-                        tagsCount
-                    );
-                }
-            });
+        this.closeApplicationDeatils();
     }
 
     static validateAssessButton(rbacRules: RbacValidationRules) {
