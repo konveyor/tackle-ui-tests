@@ -306,7 +306,7 @@ export class Application {
 
     tagExists(tagName: string): void {
         // Verifies if tag exists on application details -> Tags page
-        this.applicationDetailsTab('Tags')
+        this.applicationDetailsTab("Tags");
         cy.get(applicationTag).should("contain", tagName);
         this.closeApplicationDeatils();
     }
