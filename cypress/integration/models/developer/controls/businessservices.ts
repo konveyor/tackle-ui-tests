@@ -95,14 +95,18 @@ export class BusinessServices {
         });
     }
 
-    public static getNamesListOnPage(amountPerPage = 10, pageNumber?: number, lastPage = false) {
+    public static getNamesListOnPage(
+        amountPerPage = 10,
+        pageNumber?: number,
+        lastPage = false
+    ): Promise<BusinessServices[]> {
         this.openList(amountPerPage);
         if (pageNumber) {
             goToPage(pageNumber);
         } else if (lastPage) {
             goToLastPage();
         }
-        return new Promise<string[]>((resolve) => {
+        return new Promise<BusinessServices[]>((resolve) => {
             let list = [];
             cy.get(commonView.appTable, { timeout: 15 * SEC })
                 .find(trTag)
