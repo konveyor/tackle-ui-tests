@@ -28,7 +28,7 @@ describe("Custom Migration Targets CRUD operations", { tags: "@tier1" }, () => {
 
         cy.intercept("POST", "/hub/rulebundles*").as("postRule");
         cy.intercept("GET", "/hub/rulebundles*").as("getRule");
-        cy.intercept("PUT", "/hub/rulebundles*").as("putRule");
+        cy.intercept("PUT", "/hub/rulebundles*/*").as("putRule");
         cy.intercept("DELETE", "/hub/rulebundles*/*").as("deleteRule");
     });
 
@@ -47,10 +47,12 @@ describe("Custom Migration Targets CRUD operations", { tags: "@tier1" }, () => {
         const newName = data.getRandomWord(8);
         target.edit({
             name: newName,
+            rulesetPath: "xml/javax-package-custom.windup.xml",
         });
         cy.wait("@putRule");
         cy.get("article", { timeout: 12 * SEC }).should("contain", newName);
         target.name = newName;
+        target.rulesetPath = "xml/javax-package-custom.windup.xml";
 
         target.delete();
         cy.wait("@deleteRule");

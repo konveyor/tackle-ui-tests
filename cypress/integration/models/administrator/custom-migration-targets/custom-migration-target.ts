@@ -35,7 +35,7 @@ export class CustomMigrationTarget {
 
         this.fillForm(this);
 
-        cy.get(CustomMigrationTargetView.submitButton, { timeout: 10 * SEC })
+        cy.get(CustomMigrationTargetView.createSubmitButton, { timeout: 10 * SEC })
             .should("be.enabled")
             .click();
     }
@@ -47,9 +47,9 @@ export class CustomMigrationTarget {
 
         this.fillForm(updateValues);
 
-        cy.get(CustomMigrationTargetView.submitButton, { timeout: 10 * SEC })
+        cy.get(CustomMigrationTargetView.editSubmitButton, { timeout: 10 * SEC })
             .should("be.enabled")
-            .click();
+            .click({ force: true });
     }
 
     public delete() {
@@ -60,22 +60,22 @@ export class CustomMigrationTarget {
 
     private fillForm(values: Partial<CustomMigrationTarget>) {
         if (values.name) {
-            inputText(CustomMigrationTargetView.nameInput, this.name);
+            inputText(CustomMigrationTargetView.nameInput, values.name);
         }
 
         if (values.description) {
-            inputText(CustomMigrationTargetView.descriptionInput, this.description);
+            inputText(CustomMigrationTargetView.descriptionInput, values.description);
         }
 
         if (values.imagePath) {
             cy.get(CustomMigrationTargetView.imageInput).attachFile(
-                { filePath: this.imagePath },
+                { filePath: values.imagePath },
                 { subjectType: "drag-n-drop" }
             );
         }
 
         if (values.rulesetPath) {
-            uploadXml(this.rulesetPath, CustomMigrationTargetView.ruleInput);
+            uploadXml(values.rulesetPath, CustomMigrationTargetView.ruleInput);
         }
     }
 
