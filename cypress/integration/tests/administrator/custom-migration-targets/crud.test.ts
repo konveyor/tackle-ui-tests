@@ -19,6 +19,7 @@ import { login, hasToBeSkipped } from "../../../../utils/utils";
 import { SEC } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import { CustomMigrationTarget } from "../../../models/administrator/custom-migration-targets/custom-migration-target";
+import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 
 describe("Custom Migration Targets CRUD operations", { tags: "@tier1" }, () => {
     beforeEach("Login", function () {
@@ -42,6 +43,7 @@ describe("Custom Migration Targets CRUD operations", { tags: "@tier1" }, () => {
         );
         target.create();
         cy.wait("@postRule");
+        cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
         cy.get("article", { timeout: 12 * SEC }).should("contain", target.name);
 
         const newName = data.getRandomWord(8);
