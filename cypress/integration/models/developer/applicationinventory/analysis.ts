@@ -271,9 +271,7 @@ export class Analysis extends Application {
     }
 
     openreport() {
-        super.selectApplicationRow();
-        cy.wait(10000);
-        clickByText(navTab, "Reports");
+        super.applicationDetailsTab("Reports");
         cy.get("h3")
             .contains("Analysis")
             .next()
