@@ -1,9 +1,12 @@
 import {
+    configureRWX,
     exists,
     expandRowDetails,
     getRandomAnalysisData,
     getRandomApplicationData,
     hasToBeSkipped,
+    isEnabled,
+    isRwxEnabled,
     login,
     preservecookies,
 } from "../../../utils/utils";
@@ -15,6 +18,8 @@ import { Stakeholdergroups } from "../../models/developer/controls/stakeholdergr
 import { BusinessServices } from "../../models/developer/controls/businessservices";
 import { TagType } from "../../models/developer/controls/tagtypes";
 import { Analysis } from "../../models/developer/applicationinventory/analysis";
+import { MavenConfiguration } from "../../models/administrator/repositories/maven";
+import { clearRepository } from "../../views/repository.view";
 
 describe("Creating pre-requisites before an upgrade", { tags: "@after-upgrade" }, () => {
     before("Login", function () {
@@ -102,5 +107,17 @@ describe("Creating pre-requisites before an upgrade", { tags: "@after-upgrade" }
         sourceApplication.analyze();
         binaryApplication.analyze();
         uploadBinaryApplication.analyze();
+
+        sourceApplication.verifyAnalysisStatus("Completed");
+        binaryApplication.verifyAnalysisStatus("Completed");
+        uploadBinaryApplication.verifyAnalysisStatus("Completed");
+
+        MavenConfiguration.open();
+        let rwxEnabled = isRwxEnabled();
+        isEnabled(clearRepository, rwxEnabled);
+
+        rwxEnabled = false;
+        configureRWX(rwxEnabled);
+        isEnabled(clearRepository, rwxEnabled);
     });
 });
