@@ -1410,11 +1410,33 @@ export function isRwxEnabled(): boolean {
 // This method is patching
 export function configureRWX(isEnabled = true): void {
     let value = "";
-    isEnabled ? (value = "true") : "false";
-    cy.exec(`oc patch tackle 
-    $(oc get tackle -nopenshift-mta|grep -v -i name|cut -d " " -f 1) 
-    --type merge 
-    --patch '{spec:{"rwx_supported"}: ${value}'`);
+    if (isEnabled) {
+        value = "true";
+    } else {
+        value = "false";
+    }
+    let command = "";
+    let tackleCr = "tackle=$(oc get tackle --all-namespaces|grep -iv name|awk '{print $2}'); ";
+    let namespace = 'namespace=$(oc get tackle --all-namespaces|grep tackle|cut -d " " -f 1); ';
+    command += tackleCr;
+    command += namespace;
+    command += "oc patch tackle ";
+    command += "$tackle ";
+    command += "-n$namespace ";
+    command += "--type merge ";
+    command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
+    cy.exec(command);
+
+    // Timeout as it takes time until pods are starting to reboot
+    cy.wait(120 * SEC);
+
+    // Waiting until amount of running pods will return to 8
+    cy.exec(
+        "while [ $(oc get pods --all-namespaces |egrep 'openshift-mta|tackle'|grep -i running| wc -l) != 8 ]; " +
+            "do echo 'waiting'; " +
+            "sleep 5s; " +
+            "done"
+    );
 }
 
 export function isEnabled(selector: string, toBeEnabled?: boolean): void {
