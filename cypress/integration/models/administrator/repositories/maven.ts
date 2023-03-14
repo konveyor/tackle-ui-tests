@@ -1,11 +1,11 @@
 import {
-    checkInsecureRepository,
     click,
     clickByText,
+    disableSwitch,
+    enableSwitch,
     selectUserPerspective,
-    uncheckInsecureRepository,
 } from "../../../../utils/utils";
-import { clearRepository, confirmClear } from "../../../views/repository.view";
+import { clearRepository, confirmClear, mavenSecure } from "../../../views/repository.view";
 import { administration } from "../../../types/constants";
 
 export class MavenConfiguration {
@@ -17,12 +17,12 @@ export class MavenConfiguration {
 
     enableInsecureMavenRepositories() {
         MavenConfiguration.open();
-        checkInsecureRepository();
+        enableSwitch(mavenSecure);
     }
 
     disableInsecureMavenRepositories() {
         MavenConfiguration.open();
-        uncheckInsecureRepository();
+        disableSwitch(mavenSecure);
     }
 
     clearRepository() {

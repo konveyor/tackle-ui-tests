@@ -1,3 +1,5 @@
 export const clearRepository = "#clear-repository";
 export const confirmClear = 'button[aria-label="confirm"]';
-export const InsecureRepositoryToggle = ".pf-c-switch__toggle";
+export const gitSecure = "#git";
+export const subversionSecure = "#svn";
+export const mavenSecure = "#maven-secure";

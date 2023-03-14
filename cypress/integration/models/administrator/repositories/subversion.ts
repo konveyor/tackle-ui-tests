@@ -1,10 +1,11 @@
 import {
-    checkInsecureRepository,
     clickByText,
+    disableSwitch,
+    enableSwitch,
     selectUserPerspective,
-    uncheckInsecureRepository,
 } from "../../../../utils/utils";
 import { administration } from "../../../types/constants";
+import { subversionSecure } from "../../../views/repository.view";
 
 export class SubversionConfiguration {
     static open() {
@@ -17,12 +18,12 @@ export class SubversionConfiguration {
     enableInsecureSubversionRepositories() {
         // navigate to the subversion configuration page under the administrator view and enable the insecure repo
         SubversionConfiguration.open();
-        checkInsecureRepository();
+        enableSwitch(subversionSecure);
     }
 
     disableInsecureSubversionRepositories() {
         // navigate to the subversion configuration page under the administrator view and disable the insecure repo
         SubversionConfiguration.open();
-        uncheckInsecureRepository();
+        disableSwitch(subversionSecure);
     }
 }
