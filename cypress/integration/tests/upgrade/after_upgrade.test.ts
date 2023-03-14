@@ -1,4 +1,5 @@
 import {
+    configureRWX,
     exists,
     expandRowDetails,
     getRandomAnalysisData,
@@ -113,6 +114,11 @@ describe("Creating pre-requisites before an upgrade", { tags: "@post-upgrade" },
         uploadBinaryApplication.verifyAnalysisStatus("Completed");
 
         MavenConfiguration.open();
-        isEnabled(clearRepository, isRwxEnabled());
+        let rwxEnabled = isRwxEnabled();
+        isEnabled(clearRepository, rwxEnabled);
+
+        rwxEnabled = false;
+        configureRWX(rwxEnabled);
+        isEnabled(clearRepository, rwxEnabled);
     });
 });
