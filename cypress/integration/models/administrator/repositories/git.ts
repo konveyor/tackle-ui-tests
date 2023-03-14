@@ -1,10 +1,11 @@
 import {
-    checkInsecureRepository,
     clickByText,
+    disableSwitch,
+    enableSwitch,
     selectUserPerspective,
-    uncheckInsecureRepository,
 } from "../../../../utils/utils";
 import { administration } from "../../../types/constants";
+import { gitSecure } from "../../../views/repository.view";
 
 export class GitConfiguration {
     static open() {
@@ -17,12 +18,12 @@ export class GitConfiguration {
     enableInsecureGitRepositories() {
         // navigate to the git configuration page under the administrator view and enable the insecure repo
         GitConfiguration.open();
-        checkInsecureRepository();
+        enableSwitch(gitSecure);
     }
 
     disableInsecureGitRepositories() {
         // navigate to the git configuration page under the administrator view and disable the insecure repo
         GitConfiguration.open();
-        uncheckInsecureRepository();
+        disableSwitch(gitSecure);
     }
 }
