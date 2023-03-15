@@ -235,7 +235,7 @@ export function exists(value: string): void {
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
                 selectItemsPerPage(100);
-                cy.get("td", { timeout: 12000 * SEC }).should("contain", value);
+                cy.get("td", { timeout: 120 * SEC }).should("contain", value);
             }
         });
 }
