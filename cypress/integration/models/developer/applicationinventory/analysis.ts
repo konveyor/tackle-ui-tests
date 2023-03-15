@@ -26,12 +26,13 @@ import {
     tdTag,
     trTag,
 } from "../../../types/constants";
-import { navMenu, navTab } from "../../../views/menu.view";
+import { navMenu } from "../../../views/menu.view";
 import {
     cancelForm,
     checkSuccessAlert,
     click,
     clickByText,
+    clickTab,
     clickWithin,
     doesExistSelector,
     doesExistText,
@@ -61,6 +62,7 @@ import {
     nextButton,
     panelBody,
     reportStoryPoints,
+    rightSideMenu,
     sourceCredential,
     sourceDropdown,
     tabsPanel,
@@ -138,8 +140,8 @@ export class Analysis extends Application {
     public static open(): void {
         selectUserPerspective(migration);
         clickByText(navMenu, applicationInventory);
-        clickByText(navTab, analysis);
-        cy.wait(10000);
+        clickTab(analysis);
+        cy.wait(2 * SEC);
     }
 
     create(): void {
@@ -271,22 +273,17 @@ export class Analysis extends Application {
             });
     }
 
-    openreport() {
-        super.selectApplicationRow();
-        cy.wait(10000);
-        clickByText(navTab, "Reports");
-        cy.get("h3")
-            .contains("Analysis")
-            .next()
-            .within(() => {
-                cy.get("a")
-                    .should("contain", "Report")
-                    .then(($a) => {
-                        // Removing target from html so that report opens in same tab
-                        $a.attr("target", "_self");
-                    })
-                    .click();
-            });
+    openReport() {
+        this.selectApplicationRow();
+        cy.get(rightSideMenu, { timeout: 30 * SEC }).within(() => {
+            clickTab("Reports");
+            cy.contains("a", "Report", { timeout: 30 * SEC })
+                .then(($a) => {
+                    // Removing target from html so that report opens in same tab
+                    $a.attr("target", "_self");
+                })
+                .click();
+        });
     }
 
     openAnalysisDetails() {

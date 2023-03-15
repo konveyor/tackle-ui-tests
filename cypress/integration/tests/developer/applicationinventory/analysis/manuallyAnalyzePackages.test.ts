@@ -76,7 +76,7 @@ describe("Select the list of packages to be analyzed manually", { tags: "@tier2"
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         // Verify in report all packages are excluded mention in excludedPackagesList.
         application.validateExcludedPackages();
     });

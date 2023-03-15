@@ -110,7 +110,7 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
     });
 });

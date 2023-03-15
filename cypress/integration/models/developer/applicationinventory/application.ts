@@ -65,9 +65,10 @@ import {
     selectItemsPerPage,
     doesExistSelector,
     doesExistText,
+    clickTab,
 } from "../../../../utils/utils";
 import { applicationData, RbacValidationRules } from "../../../types/types";
-import { sourceDropdown } from "../../../views/analysis.view";
+import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
 
 export class Application {
     name: string;
@@ -290,7 +291,9 @@ export class Application {
     applicationDetailsTab(tab: string): void {
         // Navigate to the application details page and click desired tab
         this.selectApplicationRow();
-        clickByText(navTab, tab);
+        cy.get(rightSideMenu).within(() => {
+            clickTab(tab);
+        });
     }
 
     closeApplicationDetails(): void {
@@ -299,9 +302,10 @@ export class Application {
     }
 
     selectApplicationRow(): void {
-        cy.wait(4000);
-        cy.get(tdTag).contains(this.name).closest(trTag).click();
-        cy.wait(2000);
+        cy.get(tdTag, { timeout: 10 * SEC })
+            .contains(this.name)
+            .closest(trTag)
+            .click();
     }
 
     tagExists(tagName: string): void {

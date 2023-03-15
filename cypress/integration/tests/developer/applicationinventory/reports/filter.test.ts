@@ -73,7 +73,7 @@ describe("Report Page Filter Validation", { tags: "@tier2" }, () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
 
         // Enter an existing display name substring and assert appName0 exist
         report.applyFilter(name, application.appName[0].substring(0, 5));
@@ -102,7 +102,7 @@ describe("Report Page Filter Validation", { tags: "@tier2" }, () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
 
         // Enter an existing Tag and assert appName"acmeair-webapp-1.0-SNAPSHOT.war" is displayed
         report.applyFilter(tag, "web xml");
