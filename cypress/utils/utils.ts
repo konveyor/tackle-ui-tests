@@ -455,7 +455,7 @@ export function expandRowDetails(rowIdentifier: string): void {
     // displays row details by clicking on the expand button
     cy.get(tdTag)
         .contains(rowIdentifier)
-        .parent(trTag)
+        .closest(trTag)
         .within(() => {
             cy.get(commonView.expandRow).then(($btn) => {
                 if ($btn.attr("aria-expanded") === "false") {
@@ -581,7 +581,7 @@ export function uploadFile(fileName: string): void {
 export function navigate_to_application_inventory(tab?): void {
     cy.get("h1", { timeout: 5 * SEC }).then(($header) => {
         if (!$header.text().includes("Application inventory")) {
-            selectUserPerspective("Developer");
+            selectUserPerspective("Migration");
             clickByText(navMenu, applicationInventory);
         }
     });
@@ -1063,7 +1063,7 @@ export function deleteAllTagTypes(cancel = false): void {
                     .each(($tableRow) => {
                         cy.wait(1000);
                         let name = $tableRow.find('td[data-label="Tag type"]').text();
-                        if (!(data.getDefaultTagTypes().indexOf(name) > -1)) {
+                        if (!(data.getDefaultTagCategories().indexOf(name) > -1)) {
                             cy.get(tdTag)
                                 .contains(name)
                                 .parent(trTag)
@@ -1079,7 +1079,7 @@ export function deleteAllTagTypes(cancel = false): void {
         });
 }
 
-export function deleteAllTagsAndTagTypes(): void {
+export function deleteAllTagsAndTagCategories(): void {
     const nonDefaultTagTypes = [];
     TagType.openList();
 
@@ -1089,7 +1089,7 @@ export function deleteAllTagsAndTagTypes(): void {
         .each(($rowGroup) => {
             let typeName = $rowGroup.find(tagLabels.type).text();
             let isDefault = false;
-            for (let currentType of data.getDefaultTagTypes()) {
+            for (let currentType of data.getDefaultTagCategories()) {
                 if (currentType == typeName) {
                     isDefault = true;
                     break; // Exiting from cycle if current tag type belongs to default
@@ -1191,8 +1191,8 @@ export function selectUserPerspective(userType: string): void {
         .eq(0)
         .then(($a) => {
             $a.click();
-            if (userType == "Developer" && $a.find('ul[title="Admin"]').length) {
-                clickByText(commonView.userPerspectiveMenu, "Administrator");
+            if (userType == "Migration" && $a.find('ul[title="Admin"]').length) {
+                clickByText(commonView.userPerspectiveMenu, "Administration");
                 $a.click();
             }
             clickByText(commonView.userPerspectiveMenu, userType);
@@ -1388,27 +1388,7 @@ export function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O):
 }
 
 export function isRwxEnabled(): boolean {
-    /**
-     * @remarks
-     * This method is detecting if `rwx_supported` feature is enabled in tackle CR or not
-     * This functionality works starting from MTA 6.0.1 and for next versions
-     *
-     * It is detecting in which namespace does tackle CR exist and what is its name
-     * Then it runs `oc` command to get CR in JSON format and returns its value.
-     */
-    cy.exec("oc get tackle --all-namespaces|grep -vi name")
-        .then((result) => {
-            return result.stdout.split(" ");
-        })
-        .then((output) => {
-            const nameSpace = output[0];
-            const cr = output[1];
-            cy.exec(`oc get tackle ${cr} -n${nameSpace} -o json`).then((output) => {
-                let json = JSON.parse(output.stdout);
-                if (json["spec"]["rwx_supported"]) return true;
-            });
-        });
-    return false;
+    return Cypress.env("rwx_enabled");
 }
 
 // This method is patching

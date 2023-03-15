@@ -33,9 +33,10 @@ import {
     fieldReqMsg,
     minCharsMsg,
     duplicateTagTypeName,
+    migration,
 } from "../../../../../types/constants";
 import {
-    createTagtypeButton,
+    createTagCategoryButton,
     nameInput,
     nameHelper,
     dropdownMenuToggle,
@@ -66,10 +67,8 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
 
     it("Tag type field validations", function () {
         // Navigate to Tags tab and click "Create tag type" button
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
-        clickByText(button, createTagtypeButton);
+        TagType.openList();
+        clickByText(button, createTagCategoryButton);
 
         // Name constraints
         inputText(nameInput, data.getRandomWord(2));
@@ -97,10 +96,8 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
 
     it("Tag type button validations", function () {
         // Navigate to Tags tab and click "Create tag type" button
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
-        clickByText(button, createTagtypeButton);
+        TagType.openList();
+        clickByText(button, createTagCategoryButton);
 
         // Check "Create" and "Cancel" button status
         cy.get(commonView.submitButton).should("be.disabled");
@@ -110,18 +107,18 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
         cy.get(commonView.cancelButton).click();
         cy.wait(100);
 
-        clickByText(button, createTagtypeButton);
+        clickByText(button, createTagCategoryButton);
 
         // Close the "Create tag type" form
         cy.get(commonView.closeButton).click();
         cy.wait(100);
 
         // Assert that Tags tab is opened
-        cy.contains(button, createTagtypeButton).should("exist");
+        cy.contains(button, createTagCategoryButton).should("exist");
     });
 
     it("Tag type unique constraint validation", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         const tagType = new TagType(
             data.getRandomWord(5),
             data.getColor(),
@@ -133,7 +130,7 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
         cy.wait(2000);
 
         // Click "Create tag type" button
-        clickByText(button, createTagtypeButton);
+        clickByText(button, createTagCategoryButton);
 
         // Check tag type name duplication
         inputText(nameInput, tagType.name);

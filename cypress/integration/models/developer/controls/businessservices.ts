@@ -22,6 +22,7 @@ import {
     deleteAction,
     SEC,
     trTag,
+    migration,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -64,7 +65,7 @@ export class BusinessServices {
     public static openList(itemsPerPage = 100): void {
         cy.url().then(($url) => {
             if ($url != BusinessServices.fullUrl) {
-                selectUserPerspective("Developer");
+                selectUserPerspective(migration);
                 clickByText(navMenu, controls);
                 clickByText(navTab, businessServices);
             }

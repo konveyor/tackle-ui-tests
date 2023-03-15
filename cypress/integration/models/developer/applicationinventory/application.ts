@@ -28,6 +28,7 @@ import {
     analysis,
     analyzeButton,
     reviewAppButton,
+    migration,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -121,7 +122,7 @@ export class Application {
 
     //Navigate to the Application inventory
     public static open(): void {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, applicationInventory);
         clickByText(navTab, assessment);
     }
@@ -284,19 +285,10 @@ export class Application {
             });
     }
 
-    expandApplicationRow(): void {
-        // displays row details by clicking on the expand button
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                cy.get(commonView.expandRow).then(($btn) => {
-                    if ($btn.attr("aria-expanded") === "false") {
-                        $btn.trigger("click");
-                    }
-                });
-            });
+    selectApplicationRow(): void {
+        cy.wait(4000);
+        cy.get(tdTag).contains(this.name).closest(trTag).click();
+        cy.wait(2000);
     }
 
     existsWithinRow(rowIdentifier: string, fieldId: string, valueToSearch: string): void {

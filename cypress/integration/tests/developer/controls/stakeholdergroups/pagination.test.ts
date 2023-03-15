@@ -74,9 +74,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
 
     it("Navigation button validations", function () {
         // Navigate to stakeholder groups tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholderGroups);
+        Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
 
         // select 10 items per page
@@ -114,9 +112,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
 
     it("Items per page validations", function () {
         // Navigate to stakeholder groups tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholderGroups);
+        Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
 
         // Select 10 items per page
@@ -140,9 +136,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
 
     it("Page number validations", function () {
         // Navigate to stakeholder groups tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholderGroups);
+        Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
 
         // Select 10 items per page
@@ -161,9 +155,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
     it("Last page item(s) deletion, impact on page reload validation", function () {
         // Issue - https://issues.redhat.com/browse/TACKLE-155
         // Navigate to stakeholder groups tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholderGroups);
+        Stakeholdergroups.openList();
         cy.wait("@getStakeholdergroups");
 
         // Select 10 items per page

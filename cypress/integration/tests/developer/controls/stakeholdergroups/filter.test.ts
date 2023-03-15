@@ -86,9 +86,7 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
 
     it("Name filter validations", function () {
         // Navigate to stakeholder groups tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholderGroups);
+        Stakeholdergroups.openList();
         cy.wait("@getStakeholdergroups");
 
         // Enter an existing name substring and apply it as search filter
@@ -118,9 +116,7 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
 
     it("Description filter validations", function () {
         // Navigate to stakeholder groups tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholderGroups);
+        Stakeholdergroups.openList();
         cy.wait("@getStakeholdergroups");
 
         // Enter an existing description substring and apply it as search filter
@@ -150,9 +146,7 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
 
     it("Member filter validations", function () {
         // Navigate to stakeholder groups tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, stakeholderGroups);
+        Stakeholdergroups.openList();
         cy.wait("@getStakeholdergroups");
 
         // Enter an existing member substring and apply it as search filter

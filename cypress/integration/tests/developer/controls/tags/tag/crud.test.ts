@@ -27,7 +27,7 @@ import {
 } from "../../../../../../utils/utils";
 import { Tag } from "../../../../../models/developer/controls/tags";
 
-import { tdTag } from "../../../../../types/constants";
+import { migration, tdTag } from "../../../../../types/constants";
 import * as data from "../../../../../../utils/data_utils";
 
 describe("Tag CRUD operations", { tags: "@tier1" }, () => {
@@ -46,20 +46,20 @@ describe("Tag CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Tag CRUD", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         // Create new tag
-        const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagType());
+        const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagCategory());
         tag.create();
         cy.wait("@postTag");
 
         // Assert that created tag exists
-        expandRowDetails(tag.tagType);
-        existsWithinRow(tag.tagType, tdTag, tag.name);
-        closeRowDetails(tag.tagType);
+        expandRowDetails(tag.tagCategory);
+        existsWithinRow(tag.tagCategory, tdTag, tag.name);
+        closeRowDetails(tag.tagCategory);
 
         // Edit the tag and tag type name
         let updatedTagName = data.getRandomWord(8);
-        let updatedTagTypeName = data.getRandomDefaultTagType();
+        let updatedTagTypeName = data.getRandomDefaultTagCategory();
         tag.edit({ name: updatedTagName, tagtype: updatedTagTypeName });
         cy.get("@putTag");
         cy.wait(2000);
@@ -78,8 +78,8 @@ describe("Tag CRUD operations", { tags: "@tier1" }, () => {
         cy.wait(2000);
 
         // Assert that tag got deleted
-        expandRowDetails(tag.tagType);
-        notExistsWithinRow(tag.tagType, tdTag, tag.name);
-        closeRowDetails(tag.tagType);
+        expandRowDetails(tag.tagCategory);
+        notExistsWithinRow(tag.tagCategory, tdTag, tag.name);
+        closeRowDetails(tag.tagCategory);
     });
 });

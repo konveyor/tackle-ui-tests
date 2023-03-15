@@ -22,7 +22,7 @@ import {
     SEC,
     editAction,
     deleteAction,
-    developer,
+    migration,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 
@@ -62,11 +62,11 @@ export function fillName(name: string): void {
 
 export class Tag {
     name: string;
-    tagType: string;
+    tagCategory: string;
 
     constructor(name: string, tagType: string) {
         this.name = name;
-        this.tagType = tagType;
+        this.tagCategory = tagType;
     }
 
     static fullUrl = Cypress.env("tackleUrl") + "/controls/tags";
@@ -74,7 +74,7 @@ export class Tag {
     static openList(itemsPerPage = 100): void {
         cy.url().then(($url) => {
             if ($url != Tag.fullUrl) {
-                selectUserPerspective(developer);
+                selectUserPerspective(migration);
                 clickByText(navMenu, controls);
                 clickByText(navTab, tags);
             }
@@ -89,7 +89,7 @@ export class Tag {
 
     protected clickTagAction(buttonName: string): void {
         // Performs action (edit and delete only) by clicking tag options menu for a specific tag
-        cy.contains(tdTag, this.tagType)
+        cy.contains(tdTag, this.tagCategory)
             .closest(trTag)
             .next()
             .find(tdTag)
@@ -109,7 +109,7 @@ export class Tag {
             cancelForm();
         } else {
             fillName(this.name);
-            this.selectTagType(this.tagType);
+            this.selectTagType(this.tagCategory);
             submitForm();
             checkSuccessAlert(
                 commonView.successAlertMessage,
@@ -120,7 +120,7 @@ export class Tag {
 
     edit(updatedValue: { name?: string; tagtype?: string }, cancel = false): void {
         Tag.openList();
-        expandRowDetails(this.tagType);
+        expandRowDetails(this.tagCategory);
         this.clickTagAction(editAction);
         if (cancel) {
             cancelForm();
@@ -129,18 +129,18 @@ export class Tag {
                 fillName(updatedValue.name);
                 this.name = updatedValue.name;
             }
-            if (updatedValue.tagtype && updatedValue.tagtype != this.tagType) {
+            if (updatedValue.tagtype && updatedValue.tagtype != this.tagCategory) {
                 this.selectTagType(updatedValue.tagtype);
-                this.tagType = updatedValue.tagtype;
+                this.tagCategory = updatedValue.tagtype;
             }
             if (updatedValue) submitForm();
         }
-        closeRowDetails(this.tagType);
+        closeRowDetails(this.tagCategory);
     }
 
     delete(cancel = false): void {
         Tag.openList();
-        expandRowDetails(this.tagType);
+        expandRowDetails(this.tagCategory);
         applyAction(this.name, deleteAction);
         if (cancel) {
             cancelForm();

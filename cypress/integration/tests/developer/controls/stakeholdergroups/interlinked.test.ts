@@ -30,7 +30,7 @@ import {
 import { navTab } from "../../../../views/menu.view";
 import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
-import { tdTag, trTag, stakeholderGroups } from "../../../../types/constants";
+import { tdTag, trTag, stakeholderGroups, migration } from "../../../../types/constants";
 import { expandRow } from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
 
@@ -66,7 +66,7 @@ describe("Stakeholder group linked to stakeholder members", { tags: "@tier1" }, 
     });
 
     it("stakeholders attach, update and delete dependency on stakeholder group", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
 
         // Create new stakeholder group and attach two stakeholder members
         const stakeholdergroup = new Stakeholdergroups(

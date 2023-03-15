@@ -22,7 +22,7 @@ import {
     preservecookies,
     hasToBeSkipped,
     createMultipleTags,
-    deleteAllTagsAndTagTypes,
+    deleteAllTagsAndTagCategories,
     selectUserPerspective,
     goToPage,
     validatePagination,
@@ -38,6 +38,7 @@ import {
     appTable,
 } from "../../../../../views/common.view";
 import { TagType } from "../../../../../models/developer/controls/tagtypes";
+import { tagCategory } from "../../../../../views/tags.view";
 
 describe("Tag type pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
@@ -54,7 +55,7 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
             .next()
             .then(($div) => {
                 if (!$div.hasClass("pf-c-empty-state")) {
-                    cy.get("td[data-label='Tag type']").then(($rows) => {
+                    cy.get(tagCategory).then(($rows) => {
                         let rowCount = $rows.length;
                         if (rowCount <= 10) {
                             rowsToCreate = 11 - rowCount;
@@ -82,14 +83,12 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
         if (hasToBeSkipped("@tier3")) return;
 
         // Delete the tags created before the tests
-        deleteAllTagsAndTagTypes();
+        deleteAllTagsAndTagCategories();
     });
 
     it("Navigation button validations", function () {
         // Navigate to Tags tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
+        TagType.openList();
 
         // select 10 items per page
         selectItemsPerPage(10);
@@ -100,15 +99,13 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
 
     it("Items per page validations", function () {
         // Navigate to Tags tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
+        TagType.openList();
 
         // Select 10 items per page
         selectItemsPerPage(10);
 
         // Verify that only 10 items are displayed
-        cy.get("td[data-label='Tag type']", { timeout: 2 * SEC }).then(($rows) => {
+        cy.get(tagCategory, { timeout: 2 * SEC }).then(($rows) => {
             cy.wrap($rows.length).should("eq", 10);
         });
 
@@ -116,7 +113,7 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
         selectItemsPerPage(20);
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
-        cy.get("td[data-label='Tag type']", { timeout: 2 * SEC }).then(($rows) => {
+        cy.get(tagCategory, { timeout: 2 * SEC }).then(($rows) => {
             cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
         });
     });

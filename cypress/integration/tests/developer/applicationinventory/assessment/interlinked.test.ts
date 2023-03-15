@@ -25,12 +25,11 @@ import {
     deleteAllStakeholders,
     deleteAllStakeholderGroups,
     deleteApplicationTableRows,
-    deleteAllTagTypes,
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
     createMultipleBusinessServices,
     createMultipleTags,
-    deleteAllTagsAndTagTypes,
+    deleteAllTagsAndTagCategories,
 } from "../../../../../utils/utils";
 import { businessColumnSelector } from "../../../../views/applicationinventory.view";
 import {
@@ -80,7 +79,7 @@ describe("Applications interlinked to tags and business service", () => {
         deleteAllStakeholderGroups();
         deleteApplicationTableRows();
         deleteAllBusinessServices();
-        deleteAllTagsAndTagTypes();
+        deleteAllTagsAndTagCategories();
     });
 
     it(

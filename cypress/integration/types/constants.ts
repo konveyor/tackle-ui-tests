@@ -69,7 +69,7 @@ export const tagCount = "Tag count";
 export const tags = "Tags";
 export const tdTag = "td";
 export const trTag = "tr";
-export const tagType = "Tag type";
+export const tagCategory = "Tag category";
 export const tagName = "Tag name";
 
 export const createAppButton = "#create-application";
@@ -100,8 +100,8 @@ export const max250CharsMsg = "This field must contain fewer than 250 characters
 export const minCharsMsg = "This field must contain at least 3 characters.";
 
 export const SEC = 1000;
-export const administrator = "Administrator";
-export const developer = "Developer";
+export const administration = "Administration";
+export const migration = "Migration";
 
 export enum CredentialType {
     proxy = "Proxy",

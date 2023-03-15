@@ -35,6 +35,7 @@ import * as data from "../../../../../utils/data_utils";
 
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { FileName } from "../../../../views/applicationinventory.view";
+import { Application } from "../../../../models/developer/applicationinventory/application";
 
 const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/csv/";
@@ -89,8 +90,7 @@ describe("Manage applications import filter validations", { tags: "@tier2" }, fu
 
     it("File name filter validations", function () {
         // Navigate to application inventory page and open manage imports
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.wait("@getApplications");
         openManageImportsPage();
 

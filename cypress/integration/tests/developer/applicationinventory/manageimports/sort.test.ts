@@ -93,8 +93,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
 
     it("Date sort validations", function () {
         // Navigate to application inventory page and open manage imports
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.wait("@getApplications");
         openManageImportsPage();
         cy.get("@getImportApplications");
@@ -121,8 +120,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
 
     it("User sort validations", function () {
         // Navigate to application inventory page and open manage imports
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.wait("@getApplications");
         openManageImportsPage();
 
@@ -148,8 +146,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
 
     it("File name sort validations", function () {
         // Navigate to application inventory page and open manage imports
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.wait("@getApplications");
         openManageImportsPage();
 
@@ -175,8 +172,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
 
     it("Import status sort validations", function () {
         // Navigate to application inventory page and open manage imports
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.wait("@getApplications");
         openManageImportsPage();
 

@@ -42,6 +42,7 @@ import { actionButton } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
+import { Application } from "../../../../models/developer/applicationinventory/application";
 
 const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/csv/";
@@ -126,8 +127,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
 
     it("Navigation button validations", function () {
         // Navigate to Application inventory tab and open manage imports page
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
 
@@ -166,8 +166,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
 
     it("Items per page validations", function () {
         // Navigate to Application inventory tab and open manage imports page
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
 
@@ -198,8 +197,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
 
     it("Page number validations", function () {
         // Navigate to Application inventory tab and open manage imports page
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
 
@@ -221,8 +219,7 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
 
     it("Last page item(s) deletion, impact on page reload validation", function () {
         // Navigate to Application inventory tab and open manage imports page
-        selectUserPerspective("Developer");
-        clickByText(navMenu, applicationInventory);
+        Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
 

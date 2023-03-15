@@ -28,7 +28,8 @@ import {
     selectUserPerspective,
 } from "../../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../../views/menu.view";
-import { controls, tags, tagType, rank, tagCount } from "../../../../../types/constants";
+import { controls, tags, tagCategory, rank, tagCount } from "../../../../../types/constants";
+import { TagType } from "../../../../../models/developer/controls/tagtypes";
 
 describe("Tag type sort validations", { tags: "@tier2" }, function () {
     before("Login", function () {
@@ -44,42 +45,38 @@ describe("Tag type sort validations", { tags: "@tier2" }, function () {
         preservecookies();
 
         // Interceptors
-        cy.intercept("GET", "/hub/tag-type*").as("getTagtypes");
+        cy.intercept("GET", "/hub/tag-category*").as("getTagCategories");
     });
 
     it("Tag type name sort validations", function () {
         // Navigate to Tags tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
-        cy.get("@getTagtypes");
+        TagType.openList();
+        cy.get("@getTagCategories");
 
         // Get unsorted list when page loads
-        const unsortedList = getTableColumnData(tagType);
+        const unsortedList = getTableColumnData(tagCategory);
 
         // Sort the tag type by name in ascending order
-        sortAsc(tagType);
+        sortAsc(tagCategory);
         cy.wait(2000);
 
         // Verify that the tag type rows are displayed in ascending order
-        const afterAscSortList = getTableColumnData(tagType);
+        const afterAscSortList = getTableColumnData(tagCategory);
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the tag type by name in descending order
-        sortDesc(tagType);
+        sortDesc(tagCategory);
         cy.wait(2000);
 
         // Verify that the tag type rows are displayed in descending order
-        const afterDescSortList = getTableColumnData(tagType);
+        const afterDescSortList = getTableColumnData(tagCategory);
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
     it("Rank sort validations", function () {
         // Navigate to Tags tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
-        cy.get("@getTagtypes");
+        TagType.openList();
+        cy.get("@getTagCategories");
 
         // Get unsorted list when page loads
         const unsortedList = getTableColumnData(rank);
@@ -103,10 +100,8 @@ describe("Tag type sort validations", { tags: "@tier2" }, function () {
 
     it("Tag count sort validations", function () {
         // Navigate to Tags tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
-        cy.get("@getTagtypes");
+        TagType.openList();
+        cy.get("@getTagCategories");
 
         // Get unsorted list when page loads
         const unsortedList = getTableColumnData(tagCount);

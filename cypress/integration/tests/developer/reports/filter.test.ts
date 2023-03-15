@@ -32,7 +32,7 @@ import {
     deleteApplicationTableRows,
     selectUserPerspective,
     click,
-    deleteAllTagsAndTagTypes,
+    deleteAllTagsAndTagCategories,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import {
@@ -47,6 +47,7 @@ import {
     question,
     answer,
     applicationInventory,
+    migration,
 } from "../../../types/constants";
 import {
     adoptionCandidateDistributionTable,
@@ -98,7 +99,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;
 
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, applicationInventory);
         cy.wait(2000);
 
@@ -109,7 +110,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
     it("Name field validations", function () {
         // Navigate to reports
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(2000);
 
@@ -166,7 +167,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
     });
     it.skip("Description field validations", function () {
         // Navigate to reports
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(2000);
 
@@ -229,7 +230,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
     it.skip("Business service field validations", function () {
         // Navigate to reports
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(2000);
 
@@ -267,7 +268,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
     it.skip("Tag field validations", function () {
         // Navigate to reports
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(2000);
 
@@ -305,7 +306,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
     it("Identified risk - Application name field validations", function () {
         // Navigate to reports
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(2000);
 
@@ -359,7 +360,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
     it("Identified risk - Category field validations", function () {
         // Navigate to reports
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(2000);
 
@@ -409,7 +410,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
     it("Identified risk - Question field validations", function () {
         // Navigate to reports
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(2000);
 
@@ -458,7 +459,7 @@ describe("Reports filter validations", { tags: "@tier2" }, () => {
 
     it("Identified risk - Answer field validations", function () {
         // Navigate to reports
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(2000);
 

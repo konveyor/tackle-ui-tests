@@ -30,7 +30,7 @@ import {
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
 import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
-import { tdTag } from "../../../../types/constants";
+import { migration, tdTag } from "../../../../types/constants";
 import { groupsCount } from "../../../../views/stakeholders.view";
 import * as data from "../../../../../utils/data_utils";
 
@@ -54,7 +54,7 @@ describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Stakeholder CRUD", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         // Create new stakeholder
         stakeholder.create();
@@ -79,7 +79,7 @@ describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Stakeholder CRUD cancel", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         let initialStakeholderName = data.getFullName();
         const stakeholder = new Stakeholders(data.getEmail(), initialStakeholderName);
         // Cancel the creation of new stakeholder task
@@ -111,7 +111,7 @@ describe("Stakeholder CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Stakeholder CRUD operations with members (jobfunction and groups)", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         let jobFunctionsList: Array<Jobfunctions> = [];
         let stakeholderGroupList: Array<Stakeholdergroups> = [];
         let stakeHolderGroupNameList: Array<string> = [];

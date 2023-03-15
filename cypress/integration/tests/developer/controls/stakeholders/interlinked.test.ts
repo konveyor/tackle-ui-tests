@@ -30,7 +30,7 @@ import { navTab } from "../../../../views/menu.view";
 import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
-import { tdTag, trTag, stakeholders } from "../../../../types/constants";
+import { tdTag, trTag, stakeholders, migration } from "../../../../types/constants";
 import { expandRow } from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
 
@@ -64,7 +64,7 @@ describe("Stakeholder linked to stakeholder groups and job function", { tags: "@
     });
 
     it("Stakeholder group attach, update and delete dependency on stakeholder", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
 
         // Create two stakeholder groups
         for (let i = 0; i < 2; i++) {
@@ -161,7 +161,7 @@ describe("Stakeholder linked to stakeholder groups and job function", { tags: "@
     });
 
     it("Job function attach, update and delete dependency on stakeholder", function () {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
 
         // Create new job function
         const jobfunction = new Jobfunctions(data.getJobTitle());

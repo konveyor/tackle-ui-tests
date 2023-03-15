@@ -35,7 +35,7 @@ import {
     createTagButton,
     nameInput,
     nameHelper,
-    tagTypeHelper,
+    tagCategoryHelper,
     dropdownMenuToggle,
 } from "../../../../../views/tags.view";
 import { Tag } from "../../../../../models/developer/controls/tags";
@@ -62,9 +62,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
 
     it("Tag field validations", function () {
         // Navigate to Tags tab and click "Create tag" button
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
+        Tag.openList();
         clickByText(button, createTagButton);
 
         // Name constraints
@@ -72,12 +70,12 @@ describe("Tag validations", { tags: "@tier2" }, () => {
         cy.get(nameHelper).should("contain", max120CharsMsg);
 
         // Tag Type constraints
-        cy.get(tagTypeHelper).should("contain", fieldReqMsg);
+        cy.get(tagCategoryHelper).should("contain", fieldReqMsg);
 
         // Validate the create button is enabled with valid inputs
         inputText(nameInput, data.getRandomWord(5));
         cy.get(dropdownMenuToggle).eq(2).click();
-        clickByText(button, data.getRandomDefaultTagType());
+        clickByText(button, data.getRandomDefaultTagCategory());
         cy.get(commonView.submitButton).should("not.be.disabled");
 
         // Close the form
@@ -86,9 +84,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
 
     it("Tag button validations", function () {
         // Navigate to Tags tab and click "Create tag" button
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, tags);
+        Tag.openList();
         clickByText(button, createTagButton);
 
         // Check "Create" and "Cancel" button status
@@ -110,10 +106,10 @@ describe("Tag validations", { tags: "@tier2" }, () => {
     });
 
     it("Tag unique constraint validation", function () {
-        const tag = new Tag(data.getRandomWord(5), data.getRandomDefaultTagType());
+        const tag = new Tag(data.getRandomWord(5), data.getRandomDefaultTagCategory());
 
         // Create a new tag
-        selectUserPerspective("Developer");
+        selectUserPerspective("Migration");
         tag.create();
         cy.wait("@postTag");
         cy.wait(2000);
@@ -124,7 +120,7 @@ describe("Tag validations", { tags: "@tier2" }, () => {
         // Check tag name duplication
         inputText(nameInput, tag.name);
         cy.get(dropdownMenuToggle).eq(2).click();
-        clickByText(button, tag.tagType);
+        clickByText(button, tag.tagCategory);
         cy.get(commonView.submitButton).should("be.disabled");
         cy.get(commonView.nameHelper).should("contain.text", duplicateTagName);
         cy.get(commonView.closeButton).click();

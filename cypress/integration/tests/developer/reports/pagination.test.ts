@@ -29,10 +29,10 @@ import {
     createMultipleBusinessServices,
     goToPage,
     deleteAllBusinessServices,
-    deleteAllTagsAndTagTypes,
+    deleteAllTagsAndTagCategories,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
-import { applicationInventory, reports } from "../../../types/constants";
+import { applicationInventory, migration, reports } from "../../../types/constants";
 import { Assessment } from "../../../models/developer/applicationinventory/assessment";
 import {
     selectItemsPerPageAdoptionCandidate,
@@ -88,7 +88,7 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
 
     it("Adoption candidate distribution - Navigation button validations", function () {
         // Navigate to reports page
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -125,7 +125,7 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
 
     it("Adoption candidate distribution - Items per page validations", function () {
         // Navigate to reports page
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -150,7 +150,7 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
 
     it("Adoption candidate distribution - Page number validations", function () {
         // Navigate to reports page
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -169,7 +169,7 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
 
     it("Identified risks - Navigation button validations", function () {
         // Navigate to reports page
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -207,7 +207,7 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
 
     it("Identified risks - Items per page validations", function () {
         // Navigate to reports page
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(3000);
 
@@ -236,7 +236,7 @@ describe("Reports pagination validations", { tags: "@tier3" }, () => {
 
     it("Identified risks - Page number validations", function () {
         // Navigate to reports page
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(3000);
 

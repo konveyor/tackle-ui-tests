@@ -20,6 +20,7 @@ import {
     analyzeButton,
     applicationInventory,
     button,
+    migration,
     save,
     SEC,
     tdTag,
@@ -46,6 +47,7 @@ import {
     addButton,
     addRules,
     analysisColumn,
+    analysisDetails,
     analyzeManuallyButton,
     enableTransactionAnalysis,
     enterPackageName,
@@ -129,7 +131,7 @@ export class Analysis extends Application {
 
     //Navigate to the Application inventory
     public static open(): void {
-        selectUserPerspective("Developer");
+        selectUserPerspective(migration);
         clickByText(navMenu, applicationInventory);
         clickByText(navTab, analysis);
         cy.wait(10000);
@@ -263,19 +265,14 @@ export class Analysis extends Application {
     }
 
     openreport() {
-        super.expandApplicationRow();
+        super.selectApplicationRow();
         cy.wait(10000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .next()
-            .find("span")
+        clickByText(navTab, "Reports");
+        cy.get("h3")
             .contains("Analysis")
-            .parent("dt")
             .next()
             .within(() => {
-                cy.get("button > a")
+                cy.get("a")
                     .should("contain", "Report")
                     .then(($a) => {
                         // Removing target from html so that report opens in same tab
@@ -286,26 +283,10 @@ export class Analysis extends Application {
     }
 
     openAnalysisDetails() {
-        super.expandApplicationRow();
-        cy.wait(10000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .next()
-            .find("span")
-            .contains("Analysis")
-            .parent("dt")
-            .next()
-            .within(() => {
-                cy.get("button.pf-c-button.pf-m-link.pf-u-ml-0")
-                    .should("contain", "Analysis details")
-                    .then(($a) => {
-                        // Removing target from html so that report opens in same tab
-                        $a.attr("target", "_self");
-                    })
-                    .click();
-            });
+        cy.wait(2000);
+        performRowActionByIcon(this.name, kebabMenu);
+        clickByText(button, analysisDetails);
+        cy.wait(2000);
     }
 
     delete(cancel = false): void {

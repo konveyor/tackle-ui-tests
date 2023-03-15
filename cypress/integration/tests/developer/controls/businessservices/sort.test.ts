@@ -74,9 +74,7 @@ describe("Business services sort validations", { tags: "@tier2" }, function () {
 
     it("Name sort validations", function () {
         // Navigate to business services tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, businessServices);
+        BusinessServices.openList();
         cy.get("@getBusinessService");
 
         // get unsorted list when page loads
@@ -101,9 +99,7 @@ describe("Business services sort validations", { tags: "@tier2" }, function () {
 
     it("Owner sort validations", function () {
         // Navigate to business services tab
-        selectUserPerspective("Developer");
-        clickByText(navMenu, controls);
-        clickByText(navTab, businessServices);
+        BusinessServices.openList();
         cy.get("@getBusinessService");
 
         // get unsorted list when page loads
