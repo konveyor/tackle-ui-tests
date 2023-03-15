@@ -87,7 +87,7 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
     it("Name filter validations", function () {
         // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
 
         // Enter an existing name substring and apply it as search filter
         var validSearchInput = stakeholdergroupsList[0].name.substring(0, 5);
@@ -117,7 +117,7 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
     it("Description filter validations", function () {
         // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
 
         // Enter an existing description substring and apply it as search filter
         var validSearchInput = stakeholdergroupsList[0].description.substring(0, 3);
@@ -147,7 +147,7 @@ describe("Stakeholder groups filter validations", { tags: "@tier2" }, function (
     it("Member filter validations", function () {
         // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
 
         // Enter an existing member substring and apply it as search filter
         var validSearchInput = stakeholdergroupsList[0].members[0].substring(0, 3);

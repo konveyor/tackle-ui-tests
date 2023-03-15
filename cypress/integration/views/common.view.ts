@@ -27,6 +27,7 @@ export const itemsPerPageMenu = "div.pf-c-options-menu";
 export const itemsPerPageMenuOptions = "ul.pf-c-options-menu__menu";
 export const expandRow = "button[aria-label=Details]";
 export const successAlertMessage = "div[aria-label='Success Alert']";
+export const infoAlertMessage = "div[aria-label='Info Alert']";
 export const duplicateNameWarning = "div[aria-label='Danger Alert']";
 export const appTable = "table[aria-label='main-table']";
 export const expandableRow = ".pf-c-expandable-row";
