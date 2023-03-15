@@ -29,6 +29,7 @@ import {
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
     cancelForm,
+    checkSuccessAlert,
     click,
     clickByText,
     clickWithin,
@@ -65,6 +66,7 @@ import {
     tabsPanel,
 } from "../../../views/analysis.view";
 import { kebabMenu } from "../../../views/applicationinventory.view";
+import * as commonView from "../../../views/common.view";
 import { AnalysisStatuses } from "../../../types/constants";
 
 export class Analysis extends Application {
@@ -233,8 +235,7 @@ export class Analysis extends Application {
             if (this.enableTransaction) this.enableTransactionAnalysis();
             if (!this.sources) cy.contains("button", "Next", { timeout: 200 }).click();
             cy.contains("button", "Run", { timeout: 200 }).click();
-            // checkSuccessAlert(commonView.successAlertMessage, `Submitted for analysis`);
-            // Commented the line because of the BZ https://issues.redhat.com/browse/TACKLE-890
+            checkSuccessAlert(commonView.infoAlertMessage, `Submitted for analysis`);
         }
     }
 
