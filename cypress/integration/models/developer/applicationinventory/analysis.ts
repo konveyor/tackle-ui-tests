@@ -273,17 +273,20 @@ export class Analysis extends Application {
             });
     }
 
-    openReport() {
-        this.selectApplicationRow();
-        cy.get(rightSideMenu, { timeout: 30 * SEC }).within(() => {
-            clickTab("Reports");
-            cy.contains("a", "Report", { timeout: 30 * SEC })
-                .then(($a) => {
-                    // Removing target from html so that report opens in same tab
-                    $a.attr("target", "_self");
-                })
-                .click();
-        });
+    openreport() {
+        super.applicationDetailsTab("Reports");
+        cy.get("h3")
+            .contains("Analysis")
+            .next()
+            .within(() => {
+                cy.get("a")
+                    .should("contain", "Report")
+                    .then(($a) => {
+                        // Removing target from html so that report opens in same tab
+                        $a.attr("target", "_self");
+                    })
+                    .click();
+            });
     }
 
     openAnalysisDetails() {

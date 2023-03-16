@@ -21,10 +21,17 @@ import {
     getRandomAnalysisData,
     resetURL,
 } from "../../../../../utils/utils";
+import * as data from "../../../../../utils/data_utils";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
+import { CredentialsMaven } from "../../../../models/administrator/credentials/credentialsMaven";
+import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
+import { CredentialType, UserCredentials } from "../../../../types/constants";
 import { Report } from "../../../../models/developer/applicationinventory/reportPage";
 import { name, tag } from "../../../../types/constants";
 import { clearAllFilters } from "../../../../views/reportPage.view";
+let source_credential;
+let maven_credential;
+const dependencies = "deps";
 
 describe("Report Page Filter Validation", { tags: "@tier2" }, () => {
     const report = new Report();
@@ -35,6 +42,22 @@ describe("Report Page Filter Validation", { tags: "@tier2" }, () => {
         // Perform login
         login();
         deleteApplicationTableRows();
+
+        // Create source Credentials
+        source_credential = new CredentialsSourceControlUsername(
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                true
+            )
+        );
+        source_credential.create();
+
+        // Create Maven credentials
+        maven_credential = new CredentialsMaven(
+            data.getRandomCredentialsData(CredentialType.maven, "None", true)
+        );
+        maven_credential.create();
     });
 
     beforeEach("Persist session", function () {
@@ -63,62 +86,68 @@ describe("Report Page Filter Validation", { tags: "@tier2" }, () => {
         deleteApplicationTableRows();
     });
 
-    it("Filter Name validation test using Upload Binary Analysis", function () {
+    it("Filter by application/dependency name on anaysis report page", function () {
         const application = new Analysis(
-            getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData[9])
+            getRandomApplicationData("tackleTestApp_Source+dependencies", {
+                sourceData: this.appData[3],
+            }),
+            getRandomAnalysisData(this.analysisData[1])
         );
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
+        application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
 
-        // Enter an existing display name substring and assert appName0 exist
-        report.applyFilter(name, application.appName[0].substring(0, 5));
-        cy.get("[role=main]").should("contain.text", application.appName[0]);
+        // Enter an existing display name substring and assert that appName is listed in filter results
+        report.applyFilter(name, application.appName.substring(0, 6));
+        cy.get("[role=main]").should("contain.text", application.appName);
         cy.get(clearAllFilters).click();
-        // Enter an existing display exact name and assert appName1 exist
-        report.applyFilter(name, application.appName[1]);
-        cy.get("[role=main]").should("contain.text", application.appName[1]);
+        // Enter an existing display exact name and assert that application dependency is listed in filter results
+        report.applyFilter(name, "deps");
+        cy.get("[role=main]").should("contain.text", dependencies);
         cy.get(clearAllFilters).click();
 
         // Enter a non-existing Name and apply it as search filter
         // Assert that no search results are found
         let invalidSearchInput = "SomeInvalidInput";
         report.applyFilter(name, invalidSearchInput);
-        cy.get("[role=main]").should("not.contain.text", application.appName);
+        cy.get("span[id=count-results]").should("have.text", "0");
         cy.get(clearAllFilters).click();
     });
 
-    it("Tag Name validation test using Upload Binary Analysis", function () {
+    it("Filter by application tag on analysis report page", function () {
         const application = new Analysis(
-            getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData[9])
+            getRandomApplicationData("tackleTestApp_Source+dependencies", {
+                sourceData: this.appData[3],
+            }),
+            getRandomAnalysisData(this.analysisData[1])
         );
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
+        application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
 
-        // Enter an existing Tag and assert appName"acmeair-webapp-1.0-SNAPSHOT.war" is displayed
-        report.applyFilter(tag, "web xml");
-        cy.get("[role=main]").should("contain.text", application.appName[0]);
+        // Enter an existing Tag and assert appName is listed in filter results
+        report.applyFilter(tag, "Servlet");
+        cy.get("[role=main]").should("contain.text", application.appName);
         cy.get(clearAllFilters).click();
 
-        // Enter an existing Tag and assert appName "customers-tomcat-0.0.1-SNAPSHOT.war" is displayed
-        report.applyFilter(tag, "tomcat");
-        cy.get("[role=main]").should("contain.text", application.appName[1]);
+        // Enter an existing Tag and assert that application dependency is listed in filter results
+        report.applyFilter(tag, "JDBC");
+        cy.get("[role=main]").should("contain.text", dependencies);
         cy.get(clearAllFilters).click();
 
         // Enter a non-existing tag and apply it as search filter
         // Assert that no search results are found
         let invalidSearchInput = "SomeInvalidInput0";
         report.applyFilter(tag, invalidSearchInput);
-        cy.get("[role=main]").should("not.contain.text", application.appName);
+        cy.get("span[id=count-results]").should("have.text", "0");
         cy.get(clearAllFilters).click();
     });
 });
