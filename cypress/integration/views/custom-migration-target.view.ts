@@ -2,8 +2,6 @@ export enum CustomMigrationTargetView {
     createSubmitButton = "button[id='identity-form-submit']:contains('Create')",
     editSubmitButton = "button[id='identity-form-submit']:contains('Save')",
     actionsButton = "button[aria-label=Actions]",
-    editAction = "Edit",
-    deleteAction = "Delete",
     nameInput = "input[name='name']:not(:hidden)",
     descriptionInput = "input[name='description']:not(:hidden)",
     imageInput = "div[name='imageID']:not(:hidden) > input[type='file']",

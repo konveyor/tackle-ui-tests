@@ -1,5 +1,12 @@
 import { clickByText, inputText, selectUserPerspective, uploadXml } from "../../../../utils/utils";
-import { createNewButton, customMigrationTargets, button, SEC } from "../../../types/constants";
+import {
+    createNewButton,
+    customMigrationTargets,
+    button,
+    SEC,
+    deleteAction,
+    editAction,
+} from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 
@@ -43,7 +50,7 @@ export class CustomMigrationTarget {
     public edit(updateValues: Partial<CustomMigrationTarget>) {
         CustomMigrationTarget.open();
         this.expandActionsMenu();
-        cy.contains("a", CustomMigrationTargetView.editAction).click();
+        cy.contains("a", editAction).click();
 
         this.fillForm(updateValues);
 
@@ -55,7 +62,7 @@ export class CustomMigrationTarget {
     public delete() {
         CustomMigrationTarget.open();
         this.expandActionsMenu();
-        cy.contains("a", CustomMigrationTargetView.deleteAction).click();
+        cy.contains("a", deleteAction).click();
     }
 
     private fillForm(values: Partial<CustomMigrationTarget>) {
