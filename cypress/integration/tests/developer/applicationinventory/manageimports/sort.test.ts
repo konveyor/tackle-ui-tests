@@ -30,6 +30,7 @@ import {
     hasToBeSkipped,
     selectUserPerspective,
     deleteAppImportsTableRows,
+    deleteAllBusinessServices,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory } from "../../../../types/constants";
@@ -53,6 +54,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
 
         // Delete all applications
         deleteApplicationTableRows();
+        deleteAllBusinessServices();
 
         // Create business service
         businessService.create();
