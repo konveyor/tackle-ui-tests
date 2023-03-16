@@ -1395,18 +1395,34 @@ export function isRwxEnabled(): boolean {
 
 // This method is patching
 export function configureRWX(isEnabled = true): void {
+    // Patching CR to set value
     let value = "";
-    isEnabled ? (value = "true") : "false";
-    cy.exec(`oc patch tackle 
-    $(oc get tackle -nopenshift-mta|grep -v -i name|cut -d " " -f 1) 
-    --type merge 
-    --patch '{spec:{"rwx_supported"}: ${value}'`);
+    if (isEnabled) {
+        value = "true";
+    } else {
+        value = "false";
+    }
+    let command = "";
+    let tackleCr = "tackle=$(oc get tackle --all-namespaces|grep -iv name|awk '{print $2}'); ";
+    let namespace = 'namespace=$(oc get tackle --all-namespaces|grep tackle|cut -d " " -f 1); ';
+    command += tackleCr;
+    command += namespace;
+    command += "oc patch tackle ";
+    command += "$tackle ";
+    command += "-n$namespace ";
+    command += "--type merge ";
+    command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
+    cy.exec(command);
+
+    // Timeout as it takes time until pods are starting to reboot
+    cy.wait(180 * SEC);
+    cy.reload();
 }
 
 export function isEnabled(selector: string, toBeEnabled?: boolean): void {
     if (toBeEnabled) {
-        cy.get(selector).should("be.enabled");
+        cy.get(selector).should("not.have.class", "pf-m-aria-disabled");
     } else {
-        cy.get(selector).should("not.be.enabled");
+        cy.get(selector).should("have.class", "pf-m-aria-disabled");
     }
 }
