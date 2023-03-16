@@ -34,7 +34,7 @@ describe("Custom Migration Targets CRUD operations", { tags: "@tier1" }, () => {
     });
 
     it("Custom Migration Targets CRUD", function () {
-        CustomMigrationTarget.openMenu();
+        CustomMigrationTarget.open();
         const target = new CustomMigrationTarget(
             data.getRandomWord(8),
             data.getDescription(),

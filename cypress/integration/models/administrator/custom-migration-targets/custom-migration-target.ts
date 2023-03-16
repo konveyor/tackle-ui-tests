@@ -20,7 +20,7 @@ export class CustomMigrationTarget {
 
     public static fullUrl = Cypress.env("tackleUrl") + "/migration-targets";
 
-    public static openMenu() {
+    public static open() {
         cy.url().then(($url) => {
             if ($url != CustomMigrationTarget.fullUrl) {
                 selectUserPerspective("Administration");
@@ -30,7 +30,7 @@ export class CustomMigrationTarget {
     }
 
     public create() {
-        CustomMigrationTarget.openMenu();
+        CustomMigrationTarget.open();
         clickByText(button, createNewButton);
 
         this.fillForm(this);
@@ -41,7 +41,7 @@ export class CustomMigrationTarget {
     }
 
     public edit(updateValues: Partial<CustomMigrationTarget>) {
-        CustomMigrationTarget.openMenu();
+        CustomMigrationTarget.open();
         this.expandActionsMenu();
         cy.contains("a", CustomMigrationTargetView.editAction).click();
 
@@ -53,7 +53,7 @@ export class CustomMigrationTarget {
     }
 
     public delete() {
-        CustomMigrationTarget.openMenu();
+        CustomMigrationTarget.open();
         this.expandActionsMenu();
         cy.contains("a", CustomMigrationTargetView.deleteAction).click();
     }
