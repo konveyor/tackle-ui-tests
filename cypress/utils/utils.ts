@@ -77,6 +77,7 @@ import { CredentialsSourceControlUsername } from "../integration/models/administ
 import { CredentialsSourceControlKey } from "../integration/models/administrator/credentials/credentialsSourceControlKey";
 import { Application } from "../integration/models/developer/applicationinventory/application";
 import { switchToggle } from "../integration/views/reports.view";
+import { rightSideMenu } from "../integration/views/analysis.view";
 
 let userName = Cypress.env("user");
 let userPassword = Cypress.env("pass");
@@ -1429,4 +1430,8 @@ export function isEnabled(selector: string, toBeEnabled?: boolean): void {
     } else {
         cy.get(selector).should("have.class", "pf-m-aria-disabled");
     }
+}
+
+export function clickTab(name: string): void {
+    clickByText(navTab, name);
 }

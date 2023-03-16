@@ -100,7 +100,7 @@ describe("Test secure and insecure git repository analysis", { tags: "@tier1" },
         application.manageCredentials(source_credential.name, "None");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
     });
 
     it("Analysis on insecure git Repository(http) for tackle test app when insecure repository is not allowed", function () {

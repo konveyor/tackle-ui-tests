@@ -111,7 +111,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
     });
 
@@ -129,7 +129,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
     });
 
@@ -146,7 +146,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
     });
 
@@ -162,7 +162,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.manageCredentials("None", maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
     });
 
@@ -178,7 +178,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.manageCredentials(source_credential.name, "None");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
     });
 
@@ -201,7 +201,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.manageCredentials(scCredsKey.name, "None");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
     });
 
@@ -217,7 +217,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.manageCredentials(source_credential.name, "None");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
     });
 
@@ -235,7 +235,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
     });
 });

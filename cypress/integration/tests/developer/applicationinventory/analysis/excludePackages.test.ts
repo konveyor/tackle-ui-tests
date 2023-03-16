@@ -63,7 +63,7 @@ describe("Source Analysis", { tags: "@tier2" }, () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         // Customer package is provided in excludePackage option in analysis
         // and report should exclude customer package in analysis .
         application.validateExcludedPackages("Customer");

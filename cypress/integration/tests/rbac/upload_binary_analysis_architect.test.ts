@@ -75,7 +75,7 @@ describe("Upload Binary Analysis", { tags: "@tier3" }, () => {
         // No credentials required for uploaded binary.
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
         // userArchitect.logout();
     });
@@ -96,7 +96,7 @@ describe("Upload Binary Analysis", { tags: "@tier3" }, () => {
         // No credentials required for uploaded binary.
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
     });
 
@@ -115,7 +115,7 @@ describe("Upload Binary Analysis", { tags: "@tier3" }, () => {
         // No credentials required for uploaded binary.
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
         application.validateTransactionReport();
     });

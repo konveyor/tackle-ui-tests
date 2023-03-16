@@ -26,12 +26,13 @@ import {
     tdTag,
     trTag,
 } from "../../../types/constants";
-import { navMenu, navTab } from "../../../views/menu.view";
+import { navMenu } from "../../../views/menu.view";
 import {
     cancelForm,
     checkSuccessAlert,
     click,
     clickByText,
+    clickTab,
     clickWithin,
     doesExistSelector,
     doesExistText,
@@ -61,6 +62,7 @@ import {
     nextButton,
     panelBody,
     reportStoryPoints,
+    rightSideMenu,
     sourceCredential,
     sourceDropdown,
     tabsPanel,
@@ -138,8 +140,8 @@ export class Analysis extends Application {
     public static open(): void {
         selectUserPerspective(migration);
         clickByText(navMenu, applicationInventory);
-        clickByText(navTab, analysis);
-        cy.wait(10000);
+        clickTab(analysis);
+        cy.wait(2 * SEC);
     }
 
     create(): void {

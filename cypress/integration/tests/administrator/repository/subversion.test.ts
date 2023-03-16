@@ -99,7 +99,7 @@ describe("Test secure and insecure svn repository analysis", { tags: "@tier1" },
         application.manageCredentials(source_credential.name, "None");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
     });
 
     // Negative test case, when the insecure repository is disabled, then the analysis on a http repo should fail

@@ -86,7 +86,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         // No credentials required for uploaded binary.
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
     });
 
@@ -102,7 +102,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         // No credentials required for uploaded binary.
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
     });
 
@@ -117,7 +117,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         // No credentials required for uploaded binary.
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
         application.validateTransactionReport();
     });
@@ -132,7 +132,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateIncidents();
     });
 
@@ -146,7 +146,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
         application.validateIncidents();
     });
@@ -161,7 +161,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
         application.validateIncidents();
     });
@@ -176,7 +176,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
         application.validateStoryPoints();
         application.validateIncidents();
     });

@@ -76,7 +76,7 @@ describe("Exclude Tags", { tags: "@tier2" }, () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
 
         // Validate the report exclude Tags .
         // TC expected to fail due to bug https://issues.redhat.com/browse/MTA-40

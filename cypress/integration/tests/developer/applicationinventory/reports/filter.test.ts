@@ -99,7 +99,7 @@ describe("Report Page Filter Validation", { tags: "@tier2" }, () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
 
         // Enter an existing display name substring and assert that appName is listed in filter results
         report.applyFilter(name, application.appName.substring(0, 6));
@@ -131,7 +131,7 @@ describe("Report Page Filter Validation", { tags: "@tier2" }, () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
 
         // Enter an existing Tag and assert appName is listed in filter results
         report.applyFilter(tag, "Servlet");

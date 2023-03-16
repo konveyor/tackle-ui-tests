@@ -111,7 +111,7 @@ describe("Test secure and insecure maven repository analysis", () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
     });
 
     it("Binary analysis with maven containing http url when insecure repository is not allowed", function () {
@@ -134,7 +134,7 @@ describe("Test secure and insecure maven repository analysis", () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
     });
 
     it("Perform clear repository", function () {
