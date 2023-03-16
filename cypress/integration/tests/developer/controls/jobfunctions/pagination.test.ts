@@ -22,7 +22,6 @@ import {
     hasToBeSkipped,
     createMultipleJobFunctions,
     deleteAllJobfunctions,
-    resetURL,
 } from "../../../../../utils/utils";
 import {
     firstPageButton,
