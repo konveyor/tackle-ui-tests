@@ -104,7 +104,7 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
     it("Items per page validations", function () {
         // Navigate to Job functions tab
         Jobfunctions.openList();
-        cy.wait("@getJobfunctions");
+        cy.get("@getJobfunctions");
 
         // Select 10 items per page
         selectItemsPerPage(10);
@@ -128,7 +128,7 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
     it("Page number validations", function () {
         // Navigate to Job functions tab
         Jobfunctions.openList();
-        cy.wait("@getJobfunctions");
+        cy.get("@getJobfunctions");
 
         // Select 10 items per page
         selectItemsPerPage(10);

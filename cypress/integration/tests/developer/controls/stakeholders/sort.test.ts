@@ -86,7 +86,7 @@ describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(email);
@@ -113,7 +113,7 @@ describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(displayName);
@@ -140,7 +140,7 @@ describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(jobFunction);
@@ -167,7 +167,7 @@ describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, controls);
         clickByText(navTab, stakeholders);
-        cy.wait("@getStakeholders");
+        cy.get("@getStakeholders");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(groupCount);
