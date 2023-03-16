@@ -20,7 +20,7 @@ import { writeGpgKey, writeMavenSettingsFile } from "./utils";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
-    return faker.name.findName();
+    return faker.name.findName().trim();
 }
 
 export function getEmail(): string {
@@ -30,7 +30,7 @@ export function getEmail(): string {
 
 export function getCompanyName(): string {
     // returns a random company name
-    return faker.company.companyName();
+    return faker.company.companyName().trim();
 }
 
 export function getDescription(): string {

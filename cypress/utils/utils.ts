@@ -235,7 +235,7 @@ export function exists(value: string): void {
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
                 selectItemsPerPage(100);
-                cy.get("td", { timeout: 12000 * SEC }).should("contain", value);
+                cy.get("td", { timeout: 120 * SEC }).should("contain", value);
             }
         });
 }
@@ -455,7 +455,7 @@ export function expandRowDetails(rowIdentifier: string): void {
     // displays row details by clicking on the expand button
     cy.get(tdTag)
         .contains(rowIdentifier)
-        .parent(trTag)
+        .closest(trTag)
         .within(() => {
             cy.get(commonView.expandRow).then(($btn) => {
                 if ($btn.attr("aria-expanded") === "false") {

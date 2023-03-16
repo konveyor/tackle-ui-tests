@@ -24,6 +24,7 @@ import {
     hasToBeSkipped,
     preservecookies,
     selectUserPerspective,
+    expandRowDetails,
 } from "../../../../../utils/utils";
 import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
@@ -100,17 +101,8 @@ describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
         exists(stakeholdergroup.name);
 
         // Check if stakeholder member is attached to stakeholder group
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(tdTag)
-            .contains(stakeholdergroup.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(expandRow);
-            })
-            .get("div > dd")
-            .should("contain", memberStakeholderName);
+        expandRowDetails(stakeholdergroup.name);
+        exists(memberStakeholderName);
 
         // Edit the current stakeholder group's name, description and member
         stakeholdergroup.edit({
@@ -121,17 +113,8 @@ describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
         cy.wait("@getStakeholdergroups");
 
         // Check if stakeholder group's member is removed
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(tdTag)
-            .contains(stakeholdergroup.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(expandRow);
-            })
-            .get("div > dd")
-            .should("not.contain", memberStakeholderName);
+        expandRowDetails(stakeholdergroup.name);
+        notExists(memberStakeholderName);
 
         // Delete stakeholder group
         stakeholdergroup.delete();
