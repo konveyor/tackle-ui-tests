@@ -29,6 +29,7 @@ import {
     preservecookies,
     hasToBeSkipped,
     deleteAppImportsTableRows,
+    deleteAllBusinessServices,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory } from "../../../../types/constants";
@@ -50,6 +51,7 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
 
         // Delete all applications
         deleteApplicationTableRows();
+        deleteAllBusinessServices();
 
         // Create business service if not exists
         BusinessServices.getNamesListOnPage(100).then((list) => {
