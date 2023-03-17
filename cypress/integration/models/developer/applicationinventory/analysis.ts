@@ -273,7 +273,7 @@ export class Analysis extends Application {
             });
     }
 
-    openreport() {
+    openReport() {
         super.applicationDetailsTab("Reports");
         cy.get("h3")
             .contains("Analysis")

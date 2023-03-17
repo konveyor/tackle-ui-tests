@@ -77,7 +77,7 @@ describe("Report Page's Sort Validation", { tags: "@tier2" }, () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
 
         // Sort the Application by Name in Ascending order
         const unsortedList = report.getTableColumnData(application.appName);
@@ -105,7 +105,7 @@ describe("Report Page's Sort Validation", { tags: "@tier2" }, () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openreport();
+        application.openReport();
 
         // Sort the Application by Story points in Ascending order
         const unsortedList = report.getTableColumnData(application.storyPoints);
