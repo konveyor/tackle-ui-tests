@@ -17,11 +17,14 @@ limitations under the License.
 
 import { MavenConfiguration } from "../../../models/administrator/repositories/maven";
 import {
+    configureRWX,
     deleteAllBusinessServices,
     deleteApplicationTableRows,
     getRandomAnalysisData,
     getRandomApplicationData,
     hasToBeSkipped,
+    isEnabled,
+    isRwxEnabled,
     login,
     preservecookies,
     resetURL,
@@ -32,6 +35,7 @@ import * as data from "../../../../utils/data_utils";
 import { CredentialType, UserCredentials } from "../../../types/constants";
 import { Analysis } from "../../../models/developer/applicationinventory/analysis";
 import { CredentialsMaven } from "../../../models/administrator/credentials/credentialsMaven";
+import { clearRepository } from "../../../views/repository.view";
 
 let mavenConfiguration = new MavenConfiguration();
 let source_credential;
@@ -139,5 +143,15 @@ describe("Test secure and insecure maven repository analysis", () => {
 
     it("Perform clear repository", function () {
         mavenConfiguration.clearRepository();
+    });
+
+    it("Perform RWX=false and validate that repository can't be cleaned", function () {
+        MavenConfiguration.open();
+        let rwxEnabled = isRwxEnabled();
+        isEnabled(clearRepository, rwxEnabled);
+
+        rwxEnabled = false;
+        configureRWX(rwxEnabled);
+        isEnabled(clearRepository, rwxEnabled);
     });
 });
