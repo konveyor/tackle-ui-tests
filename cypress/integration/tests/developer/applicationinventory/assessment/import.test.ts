@@ -68,8 +68,6 @@ describe("Application import operations", () => {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
 
-        // Delete the existing application rows before deleting business service(s)
-        clickByText(navMenu, applicationInventory);
         deleteApplicationTableRows();
     });
 
