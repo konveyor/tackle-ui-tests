@@ -33,7 +33,6 @@ import {
 import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
 
 describe("Job functions pagination validations", { tags: "@tier3" }, function () {
-    let jobFunctionsList: Array<Jobfunctions> = [];
     before("Login and Create Test Data", function () {
         // Prevent before hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier3")) return;
@@ -47,7 +46,7 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
         deleteAllJobfunctions();
         // TODO: Implement creation of missing amount of job functions instead of deleting all and then creating again
         // Create 11 Job functions
-        jobFunctionsList = createMultipleJobFunctions(11);
+        createMultipleJobFunctions(11);
     });
 
     beforeEach("Persist session", function () {
@@ -58,16 +57,9 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
         cy.intercept("GET", "/hub/jobfunctions*").as("getJobfunctions");
     });
 
-    after("Perform test data clean up", function () {
-        // Prevent before hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
-        // Delete the Job functions created before the tests
-        deleteAllJobfunctions();
-    });
-
     it("Navigation button validations", function () {
         Jobfunctions.openList();
+        cy.wait("@getJobfunctions");
 
         // select 10 items per page
         selectItemsPerPage(10);
@@ -104,7 +96,6 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
     it("Items per page validations", function () {
         // Navigate to Job functions tab
         Jobfunctions.openList();
-        cy.wait("@getJobfunctions");
 
         // Select 10 items per page
         selectItemsPerPage(10);
@@ -128,7 +119,6 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
     it("Page number validations", function () {
         // Navigate to Job functions tab
         Jobfunctions.openList();
-        cy.wait("@getJobfunctions");
 
         // Select 10 items per page
         selectItemsPerPage(10);
@@ -141,5 +131,13 @@ describe("Job functions pagination validations", { tags: "@tier3" }, function ()
         cy.get(prevPageButton).each(($previousBtn) => {
             cy.wrap($previousBtn).should("not.be.disabled");
         });
+    });
+
+    after("Perform test data clean up", function () {
+        // Prevent before hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier3")) return;
+
+        // Delete the Job functions created before the tests
+        deleteAllJobfunctions();
     });
 });
