@@ -302,7 +302,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
 
         // Apply artifact filter check with not associated artifact field
         // Check applicationList[0] exists and application doesn't exist
-        applySearchFilter(artifact, "Not associated artifact");
+        applySearchFilter(artifact, "No associated artifact");
         cy.wait(2000);
         exists(applicationsList[0].name);
         notExists(application.name);
