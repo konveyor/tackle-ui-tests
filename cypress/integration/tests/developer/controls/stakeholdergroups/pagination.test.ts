@@ -79,7 +79,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
 
         // select 10 items per page
         selectItemsPerPage(10);
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
 
         // Verify next buttons are enabled as there are more than 11 rows present
         cy.get(nextPageButton).each(($nextBtn) => {
@@ -156,7 +156,7 @@ describe("Stakeholder groups pagination validations", { tags: "@tier3" }, functi
         // Issue - https://issues.redhat.com/browse/TACKLE-155
         // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
-        cy.wait("@getStakeholdergroups");
+        cy.get("@getStakeholdergroups");
 
         // Select 10 items per page
         selectItemsPerPage(10);
