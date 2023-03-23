@@ -50,7 +50,7 @@ var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 describe("Applications interlinked to tags and business service", () => {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
+        if (hasToBeSkipped("@tier3")) return;
 
         // Perform login
         login();
@@ -73,7 +73,7 @@ describe("Applications interlinked to tags and business service", () => {
 
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
+        if (hasToBeSkipped("@tier3")) return;
 
         deleteAllStakeholders();
         deleteAllStakeholderGroups();
@@ -84,7 +84,7 @@ describe("Applications interlinked to tags and business service", () => {
 
     it(
         "businessservice, tag update and delete dependency on application",
-        { tags: "@tier1" },
+        { tags: "@tier3" },
         function () {
             let businessservicesList = createMultipleBusinessServices(2);
             let tagList = createMultipleTags(2);
@@ -97,7 +97,7 @@ describe("Applications interlinked to tags and business service", () => {
             };
             const application = new Assessment(appdata);
             application.create();
-            cy.wait("@getApplication");
+            cy.get("@getApplication");
             cy.wait(2000);
 
             application.tagExists(tagList[0].name);
@@ -108,7 +108,7 @@ describe("Applications interlinked to tags and business service", () => {
             // Navigate to application inventory
             clickByText(navMenu, applicationInventory);
             cy.wait(100);
-            cy.wait("@getApplication");
+            cy.get("@getApplication");
 
             // Assert that deleted business service is removed from application
             application.getColumnText(businessColumnSelector, "");
@@ -121,7 +121,7 @@ describe("Applications interlinked to tags and business service", () => {
                 business: businessservicesList[1].name,
                 tags: [tagList[1].name],
             });
-            cy.wait("@getApplication");
+            cy.get("@getApplication");
 
             // Assert that business service is updated
             application.getColumnText(businessColumnSelector, businessservicesList[1].name);
@@ -134,7 +134,7 @@ describe("Applications interlinked to tags and business service", () => {
 
     it(
         "Stakeholder and stakeholdergroup delete dependency on application",
-        { tags: "@newtest" },
+        { tags: "@tier3" },
         function () {
             //Create application
             let appdata = {
@@ -144,7 +144,7 @@ describe("Applications interlinked to tags and business service", () => {
             };
             const application = new Assessment(appdata);
             application.create();
-            cy.wait("@getApplication");
+            cy.get("@getApplication");
             cy.wait(2000);
             // Perform assessment of application
             application.perform_assessment(
