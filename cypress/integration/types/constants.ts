@@ -83,7 +83,7 @@ export const duplicateErrMsg = "ERROR: duplicate key value violates unique const
 export const duplicateEmail =
     "A stakeholder with this email address already exists. Use a different email address.";
 export const duplicateApplication =
-    "An application with this name already exists. Please use a different name.";
+    "An application with this name already exists. Use a different name.";
 export const duplicateTagTypeName =
     "A tag type with this name already exists. Use a different name.";
 export const duplicateTagName = "A tag with this name already exists. Use a different name.";

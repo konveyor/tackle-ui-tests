@@ -151,12 +151,7 @@ describe("Application validations", { tags: "@tier2" }, () => {
         inputText(applicationNameInput, application.name);
         selectFormItems(applicationBusinessServiceSelect, businessservicesList[0].name);
         cy.get(commonView.nameHelper).should("contain.text", duplicateApplication);
-
-        // Delete created application
         cy.get(commonView.closeButton).click();
-        application.delete();
-        cy.wait("@getApplication");
-        notExists(application.name);
     });
 
     it("Bulk deletion of applications - Select page ", function () {
