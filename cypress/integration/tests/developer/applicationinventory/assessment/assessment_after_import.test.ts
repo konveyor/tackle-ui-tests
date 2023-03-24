@@ -38,7 +38,7 @@ let appdata = { name: "Customers" };
 describe("Operations after application import", () => {
     before("Login and create test data", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
+        if (hasToBeSkipped("@tier2") && hasToBeSkipped("@dc")) return;
 
         // Perform login
         login();
@@ -73,7 +73,7 @@ describe("Operations after application import", () => {
 
     it(
         "Perform application assessment after a successful application import",
-        { tags: "@tier2" },
+        { tags: ["@tier2", "@dc"] },
         function () {
             const application = new Assessment(appdata);
 
@@ -86,7 +86,7 @@ describe("Operations after application import", () => {
 
     it(
         "Perform application review after a successful application import",
-        { tags: "@tier2" },
+        { tags: ["@tier2"] },
         function () {
             // Automates https://polarion.engineering.redhat.com/polarion/redirect/project/MTAPathfinder/workitem?id=MTA-295
             const application = new Assessment(appdata);
@@ -105,7 +105,7 @@ describe("Operations after application import", () => {
 
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
+        if (hasToBeSkipped("@tier2") && hasToBeSkipped("@dc")) return;
 
         // Delete the existing application rows before deleting business service(s)
         deleteApplicationTableRows();

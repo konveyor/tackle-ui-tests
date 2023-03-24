@@ -21,9 +21,9 @@ import * as data from "../../../../utils/data_utils";
 import { CustomMigrationTarget } from "../../../models/administrator/custom-migration-targets/custom-migration-target";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 
-describe("Custom Migration Targets CRUD operations", { tags: "@tier1" }, () => {
+describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }, () => {
     beforeEach("Login", function () {
-        if (hasToBeSkipped("@tier1")) return;
+        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@dc")) return;
 
         login();
 
@@ -33,7 +33,7 @@ describe("Custom Migration Targets CRUD operations", { tags: "@tier1" }, () => {
         cy.intercept("DELETE", "/hub/rulebundles*/*").as("deleteRule");
     });
 
-    it("Custom Migration Targets CRUD", function () {
+    it("Custom Migration Targets CRUD", { tags: ["@tier1", "@dc"] }, function () {
         CustomMigrationTarget.open();
         const target = new CustomMigrationTarget(
             data.getRandomWord(8),

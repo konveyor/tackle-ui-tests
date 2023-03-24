@@ -35,10 +35,10 @@ import {
 
 var applicationsList: Array<Assessment> = [];
 
-describe("Manage application dependencies", { tags: "@newtest" }, () => {
+describe("Manage application dependencies", { tags: "@tier1" }, () => {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@newtest")) return;
+        if (hasToBeSkipped("@tier1")) return;
 
         // Perform login
         login();
@@ -52,7 +52,7 @@ describe("Manage application dependencies", { tags: "@newtest" }, () => {
     });
 
     after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@newtest")) return;
+        if (hasToBeSkipped("@tier1")) return;
 
         // Delete the applications
         deleteApplicationTableRows();
