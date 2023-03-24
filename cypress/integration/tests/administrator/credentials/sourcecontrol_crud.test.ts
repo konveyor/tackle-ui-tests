@@ -11,7 +11,7 @@ describe("Validation of Source Control Credentials", { tags: "@tier1" }, () => {
 
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
+        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@dc")) return;
 
         // Perform login
         login();
@@ -28,9 +28,13 @@ describe("Validation of Source Control Credentials", { tags: "@tier1" }, () => {
         preservecookies();
     });
 
-    it("Creating source control credentials with username/password and cancelling without saving", () => {
-        scCredsUsername.create(toBeCanceled);
-    });
+    it(
+        "Creating source control credentials with username/password and cancelling without saving",
+        { tags: ["@tier1", "@dc"] },
+        () => {
+            scCredsUsername.create(toBeCanceled);
+        }
+    );
 
     it("Creating source control credentials with username/password", () => {
         scCredsUsername.create();
