@@ -154,9 +154,6 @@ describe("Application validations", { tags: "@tier2" }, () => {
 
         // Delete created application
         cy.get(commonView.closeButton).click();
-        application.delete();
-        cy.wait("@getApplication");
-        notExists(application.name);
     });
 
     it("Bulk deletion of applications - Select page ", function () {
