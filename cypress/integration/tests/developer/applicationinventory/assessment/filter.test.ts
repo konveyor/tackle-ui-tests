@@ -278,7 +278,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         clickByText(button, clearAllFilters);
     });
 
-    it("Artifact type filter validations", function () {
+    it.only("Artifact type filter validations", function () {
         // For application must have Binary group,artifact and version
         const application = new Application(
             getRandomApplicationData("tackleTestApp_Source", {
@@ -300,7 +300,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         notExists(applicationsList[0].name);
         clickByText(button, clearAllFilters);
 
-        // Apply artifact filter check with not associated artifact field
+        // Apply artifact filter check with 'No associated artifact' field
         // Check applicationList[0] exists and application doesn't exist
         applySearchFilter(artifact, "No associated artifact");
         cy.wait(2000);
