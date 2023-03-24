@@ -38,12 +38,12 @@ var stakeholdersList: Array<Stakeholders> = [];
 var applicationsList: Array<Assessment> = [];
 var businessServiceList: Array<BusinessServices> = [];
 
-describe("Application risks tests", { tags: "@newtest" }, () => {
+describe("Application risks tests", { tags: "@tier2" }, () => {
     var risktype = ["low", "medium", "high"];
 
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@newtest")) return;
+        if (hasToBeSkipped("@tier2")) return;
 
         // Perform login
         login();
@@ -65,7 +65,7 @@ describe("Application risks tests", { tags: "@newtest" }, () => {
 
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@newtest")) return;
+        if (hasToBeSkipped("@tier2")) return;
 
         // Delete the stakeholders created before the tests
         deleteAllStakeholders();

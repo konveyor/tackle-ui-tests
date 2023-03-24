@@ -45,7 +45,7 @@ var applicationsList: Array<Assessment> = [];
 describe("Application import operations", () => {
     before("Login and create test data", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
+        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@tier2")) return;
 
         // Perform login
         login();
@@ -66,7 +66,7 @@ describe("Application import operations", () => {
 
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
+        if (hasToBeSkipped("@tier1")) return;
 
         deleteApplicationTableRows();
     });
@@ -91,7 +91,7 @@ describe("Application import operations", () => {
         verifyAppImport(fileName, "Completed", 5, 0);
     });
 
-    it("Duplicate applications import", { tags: "@tier1" }, function () {
+    it("Duplicate applications import", { tags: "@tier2" }, function () {
         Application.open();
         cy.wait("@getApplication");
 
@@ -116,7 +116,7 @@ describe("Application import operations", () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Applications import for non existing tags", { tags: "@tier1" }, function () {
+    it("Applications import for non existing tags", { tags: "@tier2" }, function () {
         businessService.create();
         exists(businessService.name);
         Application.open();
@@ -141,7 +141,7 @@ describe("Application import operations", () => {
         notExists(businessService.name);
     });
 
-    it("Applications import for non existing business service", { tags: "@tier1" }, function () {
+    it("Applications import for non existing business service", { tags: "@tier2" }, function () {
         Application.open();
         cy.wait("@getApplication");
 
@@ -163,7 +163,7 @@ describe("Application import operations", () => {
 
     it(
         "Applications import with minimum required field(s) and empty row",
-        { tags: "@tier1" },
+        { tags: "@tier2" },
         function () {
             Application.open();
             cy.wait("@getApplication");
@@ -191,7 +191,7 @@ describe("Application import operations", () => {
         }
     );
 
-    it("Applications import having same name with spaces", { tags: "@tier1" }, function () {
+    it("Applications import having same name with spaces", { tags: "@tier2" }, function () {
         Application.open();
         cy.wait("@getApplication");
 
@@ -213,7 +213,7 @@ describe("Application import operations", () => {
 
     it(
         "Applications import having description and comments exceeding allowed limits",
-        { tags: "@tier1" },
+        { tags: "@tier2" },
         function () {
             /*
             // Unresolved 2.1 bug - https://issues.redhat.com/browse/TACKLE-738
@@ -235,7 +235,7 @@ describe("Application import operations", () => {
         }
     );
 
-    it("Applications import for invalid csv schema", { tags: "@newtest" }, function () {
+    it("Applications import for invalid csv schema", { tags: "@tier2" }, function () {
         // Impacted by bug - https://issues.redhat.com/browse/TACKLE-320
         Application.open();
         cy.wait("@getApplication");
@@ -258,7 +258,7 @@ describe("Application import operations", () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Applications import for with inavlid record type", { tags: "@newtest" }, function () {
+    it("Applications import for with inavlid record type", { tags: "@tier2" }, function () {
         // The only valid record types for records in a CSV file are 1(application) or 2(dependency).
         // In this test, we import a CSV file that has records with a record type that's neither 1 nor 2.
         // Automates https://issues.redhat.com/browse/TACKLE-634
