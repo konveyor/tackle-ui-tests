@@ -278,7 +278,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         clickByText(button, clearAllFilters);
     });
 
-    it.only("Artifact type filter validations", function () {
+    it("Artifact type filter validations", function () {
         // For application must have Binary group,artifact and version
         const application = new Application(
             getRandomApplicationData("tackleTestApp_Source", {
