@@ -83,13 +83,29 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
         "Create Custom Migration Target with repository fetching",
         { tags: ["@tier1", "@dc"] },
         function () {
-            const sourceCredential = new CredentialsSourceControlUsername(
+            let sourceCredential = new CredentialsSourceControlUsername(
                 data.getRandomCredentialsData(
                     CredentialType.sourceControl,
                     UserCredentials.usernamePassword,
                     true
                 )
             );
+
+            if (!sourceCredential.name || !sourceCredential.password) {
+                /**
+                 * If code reaches this point is because this test is running inside an environment
+                 * without user & password configured, most likely in a GitHub PR hook
+                 * In that case, providing random credentials will prevent the test from failing
+                 */
+                sourceCredential = new CredentialsSourceControlUsername(
+                    data.getRandomCredentialsData(
+                        CredentialType.sourceControl,
+                        UserCredentials.usernamePassword,
+                        false
+                    )
+                );
+            }
+
             sourceCredential.create();
 
             const repositoryData: CMTRepositoryOrigin = {
