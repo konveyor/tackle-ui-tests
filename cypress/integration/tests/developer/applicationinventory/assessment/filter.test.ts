@@ -195,17 +195,22 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     it("Tag filter validations", function () {
         Assessment.open();
 
-        // Enter an existing tag and assert
+        // Filter on a tag applied to applicationsList[0] and verify that only that application is listed
+        // in the results
         var validSearchInput = applicationsList[0].tags[0];
         applySearchFilter(tag, validSearchInput);
         cy.wait(2000);
 
-        exists(applicationsList[0].tags[0]);
+        exists(applicationsList[0].name);
+        notExists(applicationsList[1].name);
 
         clickByText(button, clearAllFilters);
 
-        // Enter a non-existing tag and apply it as search filter
-        applySelectFilter("tags", tag, data.getRandomWord(5), false);
+        // Filter on a tag applied to applicationsList[1] and verify that only that application is listed
+        // in the results
+        applySearchFilter(tag, applicationsList[1].tags[0]);
+        exists(applicationsList[1].name);
+        notExists(applicationsList[0].name);
     });
 
     it("Credential type filter validations", function () {
