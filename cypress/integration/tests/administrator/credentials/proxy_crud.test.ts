@@ -3,7 +3,7 @@ import { CredentialsProxy } from "../../../models/administrator/credentials/cred
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
 import { CredentialType } from "../../../types/constants";
 
-describe("Validation of proxy credentials", () => {
+describe("Validation of proxy credentials", { tags: "@tier2" }, () => {
     const proxyCreds = new CredentialsProxy(getRandomCredentialsData(CredentialType.proxy));
     const toBeCanceled = true;
     const validConfiguration = {
