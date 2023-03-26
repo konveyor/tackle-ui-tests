@@ -41,3 +41,13 @@ module.exports = (on, config) => {
     // register cypress-grep plugin code
     require("cypress-grep/src/plugin")(config);
 };
+
+const { downloadFile } = require("cypress-downloadfile/lib/addPlugin");
+module.exports = (on, config) => {
+    on("task", { downloadFile });
+};
+
+const { isFileExist, findFiles } = require("cy-verify-downloads");
+module.exports = (on, config) => {
+    on("task", { isFileExist, findFiles });
+};

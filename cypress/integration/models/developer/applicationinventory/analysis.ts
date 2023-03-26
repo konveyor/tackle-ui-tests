@@ -289,6 +289,19 @@ export class Analysis extends Application {
             });
     }
 
+    downloadReport(type: string) {
+        this.selectApplicationRow();
+        cy.get(rightSideMenu).within(() => {
+            clickTab("Reports");
+            cy.downloadFile(
+                "https://mta-openshift-mta.apps.mta02.rhos-psi.cnv-qe.rhood.us/hub/applications/1/bucket/windup/report/?filter=",
+                "cypress/downloads",
+                "report.tar.gz"
+            );
+            cy.verifyDownload("report.tar.gz");
+        });
+    }
+
     openAnalysisDetails() {
         cy.wait(2000);
         performRowActionByIcon(this.name, kebabMenu);
