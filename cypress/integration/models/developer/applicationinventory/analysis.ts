@@ -274,30 +274,23 @@ export class Analysis extends Application {
     }
 
     openReport() {
-        super.applicationDetailsTab("Reports");
-        cy.get("h3")
-            .contains("Analysis")
-            .next()
-            .within(() => {
-                cy.get("a")
-                    .should("contain", "Report")
-                    .then(($a) => {
-                        // Removing target from html so that report opens in same tab
-                        $a.attr("target", "_self");
-                    })
-                    .click();
-            });
+        this.selectApplicationRow();
+        cy.get(rightSideMenu, { timeout: 30 * SEC }).within(() => {
+            clickTab("Reports");
+            cy.contains("a", "Report", { timeout: 30 * SEC })
+                .then(($a) => {
+                    // Removing target from html so that report opens in same tab
+                    $a.attr("target", "_self");
+                })
+                .click();
+        });
     }
 
     downloadReport(type: string) {
         this.selectApplicationRow();
-        cy.get(rightSideMenu).within(() => {
+        cy.get(rightSideMenu, { timeout: 30 * SEC }).within(() => {
             clickTab("Reports");
-            cy.downloadFile(
-                "https://mta-openshift-mta.apps.mta02.rhos-psi.cnv-qe.rhood.us/hub/applications/1/bucket/windup/report/?filter=",
-                "cypress/downloads",
-                "report.tar.gz"
-            );
+            clickByText("a", type);
             cy.verifyDownload("report.tar.gz");
         });
     }
