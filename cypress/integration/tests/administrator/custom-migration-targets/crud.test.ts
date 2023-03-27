@@ -40,7 +40,7 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
     });
 
     it(
-        "Custom Migration Targets CRUD with manual upload",
+        "Custom Migration Targets CRUD with rules uploaded manually",
         { tags: ["@tier1", "@dc"] },
         function () {
             CustomMigrationTarget.open();
@@ -80,7 +80,7 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
     );
 
     it(
-        "Create Custom Migration Target with repository fetching",
+        "Create Custom Migration Target with rules from repository",
         { tags: ["@tier1", "@dc"] },
         function () {
             let sourceCredential = new CredentialsSourceControlUsername(
