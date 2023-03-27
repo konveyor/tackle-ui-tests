@@ -18,13 +18,13 @@ import { navMenu } from "../../../views/menu.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { CredentialsSourceControl } from "../../../models/administrator/credentials/credentialsSourceControl";
 
-export enum CustomMigrationTargetOriginType {
+export enum CustomRuleType {
     Repository = "Repository",
     Manual = "Manual",
 }
 
-export type CMTRepositoryOrigin = {
-    type: CustomMigrationTargetOriginType.Repository;
+export type RulesRepositoryFields = {
+    type: CustomRuleType.Repository;
     repositoryType: RepositoryType;
     repositoryUrl: string;
     branch?: string;
@@ -32,8 +32,8 @@ export type CMTRepositoryOrigin = {
     credentials?: CredentialsSourceControl;
 };
 
-export type CMTManualOrigin = {
-    type: CustomMigrationTargetOriginType.Manual;
+export type RulesManualFields = {
+    type: CustomRuleType.Manual;
     imagePath?: string;
     rulesetPath: string;
 };
@@ -41,7 +41,7 @@ export type CMTManualOrigin = {
 export interface CustomMigrationTarget {
     name: string;
     description?: string;
-    rulesOrigin: CMTRepositoryOrigin | CMTManualOrigin;
+    ruleType: RulesRepositoryFields | RulesManualFields;
 }
 
 export class CustomMigrationTarget {
@@ -49,11 +49,11 @@ export class CustomMigrationTarget {
         name: string,
         description: string,
         imagePath: string,
-        rulesOrigin: CMTRepositoryOrigin | CMTManualOrigin
+        rulesOrigin: RulesRepositoryFields | RulesManualFields
     ) {
         this.name = name;
         this.description = description;
-        this.rulesOrigin = rulesOrigin;
+        this.ruleType = rulesOrigin;
     }
 
     public static fullUrl = Cypress.env("tackleUrl") + "/migration-targets";
@@ -105,19 +105,19 @@ export class CustomMigrationTarget {
             inputText(CustomMigrationTargetView.descriptionInput, values.description);
         }
 
-        if (values.rulesOrigin) {
-            if (values.rulesOrigin.type === CustomMigrationTargetOriginType.Manual) {
-                this.fillManualOriginForm(values.rulesOrigin);
+        if (values.ruleType) {
+            if (values.ruleType.type === CustomRuleType.Manual) {
+                this.fillManualForm(values.ruleType);
             }
 
-            if (values.rulesOrigin.type === CustomMigrationTargetOriginType.Repository) {
+            if (values.ruleType.type === CustomRuleType.Repository) {
                 click(CustomMigrationTargetView.retrieveFromARepositoryRadio);
-                this.fillRepositoryOriginForm(values.rulesOrigin);
+                this.fillRepositoryForm(values.ruleType);
             }
         }
     }
 
-    private fillManualOriginForm(values: Partial<CMTManualOrigin>) {
+    private fillManualForm(values: Partial<RulesManualFields>) {
         if (values.imagePath) {
             cy.get(CustomMigrationTargetView.imageInput).attachFile(
                 { filePath: values.imagePath },
@@ -130,7 +130,7 @@ export class CustomMigrationTarget {
         }
     }
 
-    private fillRepositoryOriginForm(values: Partial<CMTRepositoryOrigin>) {
+    private fillRepositoryForm(values: Partial<RulesRepositoryFields>) {
         if (values.repositoryType) {
             click(CustomMigrationTargetView.repositoryTypeDropdown);
             clickByText(button, RepositoryType.git);

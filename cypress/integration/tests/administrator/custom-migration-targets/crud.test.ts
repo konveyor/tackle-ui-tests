@@ -19,10 +19,10 @@ import { hasToBeSkipped, login } from "../../../../utils/utils";
 import { CredentialType, RepositoryType, SEC, UserCredentials } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import {
-    CMTManualOrigin,
-    CMTRepositoryOrigin,
+    RulesManualFields,
+    RulesRepositoryFields,
     CustomMigrationTarget,
-    CustomMigrationTargetOriginType,
+    CustomRuleType,
 } from "../../../models/administrator/custom-migration-targets/custom-migration-target";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { CredentialsSourceControlUsername } from "../../../models/administrator/credentials/credentialsSourceControlUsername";
@@ -49,7 +49,7 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
                 data.getDescription(),
                 "img/cloud.png",
                 {
-                    type: CustomMigrationTargetOriginType.Manual,
+                    type: CustomRuleType.Manual,
                     rulesetPath: "xml/javax-package-custom-target.windup.xml",
                 }
             );
@@ -59,19 +59,19 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
             cy.get("article", { timeout: 12 * SEC }).should("contain", target.name);
 
             const newName = data.getRandomWord(8);
-            const newRules: CMTManualOrigin = {
-                type: CustomMigrationTargetOriginType.Manual,
+            const newRules: RulesManualFields = {
+                type: CustomRuleType.Manual,
                 rulesetPath: "xml/javax-package-custom.windup.xml",
             };
 
             target.edit({
                 name: newName,
-                rulesOrigin: newRules,
+                ruleType: newRules,
             });
             cy.wait("@putRule");
             cy.get("article", { timeout: 12 * SEC }).should("contain", newName);
             target.name = newName;
-            target.rulesOrigin = newRules;
+            target.ruleType = newRules;
 
             target.delete();
             cy.wait("@deleteRule");
@@ -108,8 +108,8 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
 
             sourceCredential.create();
 
-            const repositoryData: CMTRepositoryOrigin = {
-                type: CustomMigrationTargetOriginType.Repository,
+            const repositoryData: RulesRepositoryFields = {
+                type: CustomRuleType.Repository,
                 repositoryType: RepositoryType.git,
                 repositoryUrl: "https://github.com/konveyor/tackle-testapp",
                 rootPath: "rules",
