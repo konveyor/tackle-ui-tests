@@ -16,7 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { hasToBeSkipped, login } from "../../../../utils/utils";
-import { CredentialType, RepositoryType, SEC, UserCredentials } from "../../../types/constants";
+import { CredentialType, SEC, UserCredentials } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import {
     RulesManualFields,
@@ -33,6 +33,10 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
 
         login();
 
+        cy.fixture("custom-migration-targets").then(function (customMigrationTargets) {
+            this.customMigrationTargets = customMigrationTargets;
+        });
+
         cy.intercept("POST", "/hub/rulebundles*").as("postRule");
         cy.intercept("GET", "/hub/rulebundles*").as("getRule");
         cy.intercept("PUT", "/hub/rulebundles*/*").as("putRule");
@@ -44,13 +48,15 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
         { tags: ["@tier1", "@dc"] },
         function () {
             CustomMigrationTarget.open();
+
+            const targetData = this.customMigrationTargets.manual_rules;
             const target = new CustomMigrationTarget(
                 data.getRandomWord(8),
                 data.getDescription(),
-                "img/cloud.png",
+                targetData.image,
                 {
                     type: CustomRuleType.Manual,
-                    rulesetPath: "xml/javax-package-custom-target.windup.xml",
+                    rulesetPaths: targetData.rulesFiles,
                 }
             );
             target.create();
@@ -61,7 +67,7 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
             const newName = data.getRandomWord(8);
             const newRules: RulesManualFields = {
                 type: CustomRuleType.Manual,
-                rulesetPath: "xml/javax-package-custom.windup.xml",
+                rulesetPaths: ["xml/javax-package-custom.windup.xml"],
             };
 
             target.edit({
@@ -80,39 +86,22 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
     );
 
     it(
-        "Create Custom Migration Target with rules from repository",
+        "Create Custom Migration Target with rules from repository with credentials",
         { tags: ["@tier1", "@dc"] },
         function () {
-            let sourceCredential = new CredentialsSourceControlUsername(
+            const sourceCredential = new CredentialsSourceControlUsername(
                 data.getRandomCredentialsData(
                     CredentialType.sourceControl,
                     UserCredentials.usernamePassword,
-                    true
+                    Cypress.env("git_password") && Cypress.env("git_user")
                 )
             );
 
-            if (!sourceCredential.name || !sourceCredential.password) {
-                /**
-                 * If code reaches this point is because this test is running inside an environment
-                 * without user & password configured, most likely in a GitHub PR hook
-                 * In that case, providing random credentials will prevent the test from failing
-                 */
-                sourceCredential = new CredentialsSourceControlUsername(
-                    data.getRandomCredentialsData(
-                        CredentialType.sourceControl,
-                        UserCredentials.usernamePassword,
-                        false
-                    )
-                );
-            }
-
             sourceCredential.create();
-
+            const targetData = this.customMigrationTargets.rules_from_tackle_testApp;
             const repositoryData: RulesRepositoryFields = {
+                ...targetData.repository,
                 type: CustomRuleType.Repository,
-                repositoryType: RepositoryType.git,
-                repositoryUrl: "https://github.com/konveyor/tackle-testapp",
-                rootPath: "rules",
                 credentials: sourceCredential,
             };
 
@@ -120,7 +109,7 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
             const target = new CustomMigrationTarget(
                 data.getRandomWord(8),
                 data.getDescription(),
-                "img/cloud.png",
+                targetData.image,
                 repositoryData
             );
             target.create();
@@ -133,6 +122,35 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
             cy.get("article", { timeout: 12 * SEC }).should("not.contain", target.name);
 
             sourceCredential.delete();
+        }
+    );
+
+    it(
+        "Create Custom Migration Target with rules from repository without credentials",
+        { tags: ["@tier1", "@dc"] },
+        function () {
+            const targetData = this.customMigrationTargets.rules_from_bookServerApp;
+            const repositoryData: RulesRepositoryFields = {
+                ...targetData.repository,
+                type: CustomRuleType.Repository,
+            };
+
+            CustomMigrationTarget.open();
+            const target = new CustomMigrationTarget(
+                data.getRandomWord(8),
+                data.getDescription(),
+                targetData.image,
+                repositoryData
+            );
+
+            target.create();
+            cy.wait("@postRule");
+            cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
+            cy.get("article", { timeout: 12 * SEC }).should("contain", target.name);
+
+            target.delete();
+            cy.wait("@deleteRule");
+            cy.get("article", { timeout: 12 * SEC }).should("not.contain", target.name);
         }
     );
 });

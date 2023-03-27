@@ -35,7 +35,7 @@ export type RulesRepositoryFields = {
 export type RulesManualFields = {
     type: CustomRuleType.Manual;
     imagePath?: string;
-    rulesetPath: string;
+    rulesetPaths: string[];
 };
 
 export interface CustomMigrationTarget {
@@ -49,11 +49,11 @@ export class CustomMigrationTarget {
         name: string,
         description: string,
         imagePath: string,
-        rulesOrigin: RulesRepositoryFields | RulesManualFields
+        ruleTypeData: RulesRepositoryFields | RulesManualFields
     ) {
         this.name = name;
         this.description = description;
-        this.ruleType = rulesOrigin;
+        this.ruleType = ruleTypeData;
     }
 
     public static fullUrl = Cypress.env("tackleUrl") + "/migration-targets";
@@ -125,8 +125,10 @@ export class CustomMigrationTarget {
             );
         }
 
-        if (values.rulesetPath) {
-            uploadXml(values.rulesetPath, CustomMigrationTargetView.ruleInput);
+        if (values.rulesetPaths && values.rulesetPaths.length) {
+            values.rulesetPaths.forEach((path) =>
+                uploadXml(path, CustomMigrationTargetView.ruleInput)
+            );
         }
     }
 
