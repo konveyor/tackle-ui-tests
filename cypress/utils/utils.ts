@@ -593,9 +593,9 @@ export function application_inventory_kebab_menu(menu, tab?): void {
     // The value for menu could be one of {Import, Manage imports, Delete, Manage credentials}
     if (tab == "Analysis") navigate_to_application_inventory("Analysis");
     else navigate_to_application_inventory();
-    cy.get(actionButton).eq(1).click();
+    cy.get(actionButton).eq(1).click({ force: true });
     if (menu == "Import") clickByText(button, "Import");
-    else cy.get("a.pf-c-dropdown__menu-item").contains(menu).click();
+    else cy.get("a.pf-c-dropdown__menu-item").contains(menu).click({ force: true });
 }
 
 export function openManageImportsPage(): void {
@@ -651,14 +651,14 @@ export function deleteApplicationTableRows(currentPage = false): void {
                     .then(($body) => {
                         if (!$body.text().includes("of 0")) {
                             if (currentPage) {
-                                cy.get(".pf-c-dropdown__toggle-button").click();
+                                cy.get(".pf-c-dropdown__toggle-button").click({ force: true });
                                 clickByText(button, "Select page");
                             } else {
-                                cy.get("input#bulk-selected-apps-checkbox").check();
+                                cy.get("input#bulk-selected-apps-checkbox").check({ force: true });
                             }
 
                             application_inventory_kebab_menu("Delete");
-                            clickByText(button, "Delete");
+                            clickByText(button, "Delete", true);
                         }
                     });
             }
