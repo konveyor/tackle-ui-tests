@@ -26,24 +26,19 @@ import {
     createMultipleTags,
     deleteAllBusinessServices,
     deleteApplicationTableRows,
-    selectUserPerspective,
     createMultipleApplicationsWithBSandTags,
-    applySelectFilter,
     deleteAllTagsAndTagCategories,
     getRandomApplicationData,
     getRandomAnalysisData,
     notExists,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
 import {
-    applicationInventory,
     button,
     name,
     clearAllFilters,
     description,
     businessService,
     tag,
-    assessment,
     CredentialType,
     UserCredentials,
     credentialType,
@@ -188,7 +183,6 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         cy.wait(2000);
 
         exists(applicationsList[0].business);
-
         clickByText(button, clearAllFilters);
     });
 
@@ -203,7 +197,6 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
 
         exists(applicationsList[0].name);
         notExists(applicationsList[1].name);
-
         clickByText(button, clearAllFilters);
 
         // Filter on a tag applied to applicationsList[1] and verify that only that application is listed
@@ -211,6 +204,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         applySearchFilter(tag, applicationsList[1].tags[0]);
         exists(applicationsList[1].name);
         notExists(applicationsList[0].name);
+        clickByText(button, clearAllFilters);
     });
 
     it("Credential type filter validations", function () {
