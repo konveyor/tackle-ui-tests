@@ -30,6 +30,7 @@ import { navMenu } from "../../../views/menu.view";
 import {
     cancelForm,
     checkSuccessAlert,
+    cleanupDownloads,
     click,
     clickByText,
     clickTab,
@@ -286,12 +287,18 @@ export class Analysis extends Application {
         });
     }
 
-    downloadReport(type: string) {
+    downloadReport(type: string, isEnabled = true) {
         this.selectApplicationRow();
         cy.get(rightSideMenu, { timeout: 30 * SEC }).within(() => {
             clickTab("Reports");
-            clickByText("a", type);
-            cy.verifyDownload("report.tar.gz");
+            if (isEnabled) {
+                clickByText("a", type);
+                cy.verifyDownload("report.tar.gz");
+                // Removing downloaded file after verifying it
+                cleanupDownloads();
+            } else {
+                doesExistText(type, isEnabled);
+            }
         });
     }
 
