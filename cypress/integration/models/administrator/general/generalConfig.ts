@@ -4,28 +4,28 @@ import {
     enableSwitch,
     selectUserPerspective,
 } from "../../../../utils/utils";
-import { downloadCSV, downloadHTML } from "../../../views/reports.view";
+import { downloadCSV, downloadHTML, reviewAssessment } from "../../../views/general.view";
 import { administration, general } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 
-export class ReportConfig {
-    private static instance: ReportConfig;
+export class GeneralConfig {
+    private static instance: GeneralConfig;
     static downloadHtml: boolean;
     static downloadCsv: boolean;
     static fullUrl = Cypress.env("tackleUrl") + "/general";
 
     // ReportConfig class is singleton, which means that only one object of this class can be created
     // This function is required to get ReportConfig instance in any part of the code
-    public static getInstance(): ReportConfig {
-        if (!ReportConfig.instance) {
-            ReportConfig.instance = new ReportConfig();
+    public static getInstance(): GeneralConfig {
+        if (!GeneralConfig.instance) {
+            GeneralConfig.instance = new GeneralConfig();
         }
-        return ReportConfig.instance;
+        return GeneralConfig.instance;
     }
 
-    static openConfig(): void {
+    static open(): void {
         cy.url().then(($url) => {
-            if ($url != ReportConfig.fullUrl) {
+            if ($url != GeneralConfig.fullUrl) {
                 selectUserPerspective(administration);
                 clickByText(navMenu, general);
             }
@@ -33,26 +33,36 @@ export class ReportConfig {
     }
 
     enableDownloadHtml(): void {
-        ReportConfig.openConfig();
+        GeneralConfig.open();
         enableSwitch(downloadHTML);
-        ReportConfig.downloadHtml = true;
+        GeneralConfig.downloadHtml = true;
     }
 
     disableDownloadHtml(): void {
-        ReportConfig.openConfig();
+        GeneralConfig.open();
         disableSwitch(downloadHTML);
-        ReportConfig.downloadHtml = false;
+        GeneralConfig.downloadHtml = false;
     }
 
     enableDownloadCsv(): void {
-        ReportConfig.openConfig();
+        GeneralConfig.open();
         enableSwitch(downloadCSV);
-        ReportConfig.downloadCsv = true;
+        GeneralConfig.downloadCsv = true;
     }
 
     disableDownloadCsv(): void {
-        ReportConfig.openConfig();
+        GeneralConfig.open();
         disableSwitch(downloadCSV);
-        ReportConfig.downloadCsv = false;
+        GeneralConfig.downloadCsv = false;
+    }
+
+    enableReviewAssessment(): void {
+        GeneralConfig.open();
+        enableSwitch(reviewAssessment);
+    }
+
+    disableReviewAssessment(): void {
+        GeneralConfig.open();
+        disableSwitch(reviewAssessment);
     }
 }

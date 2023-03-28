@@ -502,4 +502,13 @@ export class Assessment extends Application {
                 }
             });
     }
+
+    // Method to verify review button is disabled
+    verifyReviewButtonDisabled(): void {
+        Assessment.open();
+        selectItemsPerPage(100);
+        cy.wait(2000);
+        this.selectApplication();
+        cy.get(button).contains(review).should("be.disabled");
+    }
 }
