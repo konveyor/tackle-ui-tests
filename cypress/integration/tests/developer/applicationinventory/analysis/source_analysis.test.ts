@@ -34,7 +34,6 @@ import { CredentialsSourceControlUsername } from "../../../../models/administrat
 import { CredentialsSourceControlKey } from "../../../../models/administrator/credentials/credentialsSourceControlKey";
 import { Proxy } from "../../../../models/administrator/proxy/proxy";
 import { MavenConfiguration } from "../../../../models/administrator/repositories/maven";
-import { ReportConfig } from "../../../../models/developer/reports/reportConfig";
 let source_credential;
 let maven_credential;
 const mavenConfiguration = new MavenConfiguration();
@@ -53,12 +52,6 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
 
         // Clears artifact repository
         mavenConfiguration.clearRepository();
-
-        // Enable HTML anc CSV report downloading
-        let reportConfig = ReportConfig.getInstance();
-        reportConfig.enableDownloadHtml();
-        reportConfig.enableDownloadCsv();
-
         // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
@@ -102,12 +95,6 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         // Prevent hook from running, if the tag is excluded from run
         deleteApplicationTableRows();
         deleteAllBusinessServices();
-
-        // Disable HTML anc CSV report downloading
-        let reportConfig = ReportConfig.getInstance();
-        reportConfig.disableDownloadHtml();
-        reportConfig.disableDownloadCsv();
-
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 
@@ -125,7 +112,6 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.verifyAnalysisStatus("Completed");
         application.openReport();
         application.validateStoryPoints();
-        application.downloadReport("HTML");
     });
 
     it("Source + dependencies analysis on tackletest app", function () {
@@ -144,7 +130,6 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.verifyAnalysisStatus("Completed");
         application.openReport();
         application.validateStoryPoints();
-        application.downloadReport("CSV");
     });
 
     it("Source + dependencies analysis on daytrader app", function () {

@@ -288,6 +288,7 @@ export class Analysis extends Application {
     }
 
     downloadReport(type: string, isEnabled = true) {
+        Analysis.open();
         this.selectApplicationRow();
         cy.get(rightSideMenu, { timeout: 30 * SEC }).within(() => {
             clickTab("Reports");
