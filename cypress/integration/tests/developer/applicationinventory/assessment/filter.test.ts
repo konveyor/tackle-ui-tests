@@ -27,7 +27,6 @@ import {
     deleteAllBusinessServices,
     deleteApplicationTableRows,
     createMultipleApplicationsWithBSandTags,
-    applySelectFilter,
     deleteAllTagsAndTagCategories,
     getRandomApplicationData,
     getRandomAnalysisData,
@@ -160,6 +159,7 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         applySearchFilter(description, applicationsList[1].description);
         cy.wait(2000);
         exists(applicationsList[1].description);
+
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing description substring and apply it as search filter
@@ -183,23 +183,27 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         cy.wait(2000);
 
         exists(applicationsList[0].business);
-
         clickByText(button, clearAllFilters);
     });
 
     it("Tag filter validations", function () {
         Assessment.open();
 
-        // Enter an existing tag and assert
+        // Filter on a tag applied to applicationsList[0] and verify that only that application is listed
+        // in the results
         var validSearchInput = applicationsList[0].tags[0];
         applySearchFilter(tag, validSearchInput);
         cy.wait(2000);
 
-        exists(applicationsList[0].tags[0]);
+        exists(applicationsList[0].name);
+        notExists(applicationsList[1].name);
         clickByText(button, clearAllFilters);
 
-        // Enter a non-existing tag and apply it as search filter
-        applySelectFilter("tags", tag, data.getRandomWord(5), false);
+        // Filter on a tag applied to applicationsList[1] and verify that only that application is listed
+        // in the results
+        applySearchFilter(tag, applicationsList[1].tags[0]);
+        exists(applicationsList[1].name);
+        notExists(applicationsList[0].name);
         clickByText(button, clearAllFilters);
     });
 
@@ -295,9 +299,9 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         notExists(applicationsList[0].name);
         clickByText(button, clearAllFilters);
 
-        // Apply artifact filter check with not associated artifact field
+        // Apply artifact filter check with 'No associated artifact' field
         // Check applicationList[0] exists and application doesn't exist
-        applySearchFilter(artifact, "Not associated artifact");
+        applySearchFilter(artifact, "No associated artifact");
         cy.wait(2000);
         exists(applicationsList[0].name);
         notExists(application.name);
