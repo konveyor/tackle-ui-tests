@@ -24,7 +24,9 @@
         "mergereports": "npx jrm ./cypress/reports/junitreport.xml ./cypress/reports/junit/*.xml"
     },
     "devDependencies": {
+        "cy-verify-downloads": "^0.1.13",
         "cypress": "^6.9.1",
+        "cypress-downloadfile": "^1.2.3",
         "cypress-mochawesome-reporter": "^3.2.2",
         "license-check-and-add": "^4.0.5"
     }

@@ -16,7 +16,6 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    clickByText,
     deleteAllBusinessServices,
     deleteApplicationTableRows,
     getRandomAnalysisData,
@@ -26,12 +25,11 @@ import {
     preservecookies,
     resetURL,
     writeGpgKey,
-    selectUserPerspective,
 } from "../../../../../utils/utils";
 import { Proxy } from "../../../../models/administrator/proxy/proxy";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
-import { navMenu, navTab } from "../../../../views/menu.view";
-import { analysis, applicationInventory } from "../../../../types/constants";
+import { analysis } from "../../../../types/constants";
+import { ReportConfig } from "../../../../models/developer/reports/reportConfig";
 
 describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -40,6 +38,11 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
 
         // Perform login
         login();
+
+        // Enable HTML anc CSV report downloading
+        let reportConfig = ReportConfig.getInstance();
+        reportConfig.enableDownloadHtml();
+        reportConfig.enableDownloadCsv();
 
         deleteApplicationTableRows();
 
@@ -72,6 +75,12 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         if (hasToBeSkipped("@tier1")) return;
         deleteApplicationTableRows();
         deleteAllBusinessServices();
+
+        // Disable HTML anc CSV report downloading
+        let reportConfig = ReportConfig.getInstance();
+        reportConfig.disableDownloadHtml();
+        reportConfig.disableDownloadCsv();
+
         writeGpgKey("abcde");
     });
 
@@ -88,6 +97,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         application.verifyAnalysisStatus("Completed");
         application.openReport();
         application.validateStoryPoints();
+        application.downloadReport("HTML");
     });
 
     it("Custom rules with custom targets", function () {
@@ -104,6 +114,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         application.verifyAnalysisStatus("Completed");
         application.openReport();
         application.validateStoryPoints();
+        application.downloadReport("CSV");
     });
 
     it("DIVA report generation", function () {

@@ -33,6 +33,7 @@ import { CredentialsSourceControlUsername } from "../../../../models/administrat
 import { CredentialsMaven } from "../../../../models/administrator/credentials/credentialsMaven";
 import { Proxy } from "../../../../models/administrator/proxy/proxy";
 import { MavenConfiguration } from "../../../../models/administrator/repositories/maven";
+import { ReportConfig } from "../../../../models/developer/reports/reportConfig";
 let source_credential;
 let maven_credential;
 const mavenConfiguration = new MavenConfiguration();
@@ -48,6 +49,11 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
 
         //Disable all proxy settings
         Proxy.disableAllProxies();
+
+        // Enable HTML anc CSV report downloading
+        let reportConfig = ReportConfig.getInstance();
+        reportConfig.enableDownloadHtml();
+        reportConfig.enableDownloadCsv();
 
         // Clears artifact repository
         mavenConfiguration.clearRepository();
@@ -94,6 +100,12 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         deleteAllBusinessServices();
         source_credential.delete();
         maven_credential.delete();
+
+        // Disable HTML anc CSV report downloading
+        let reportConfig = ReportConfig.getInstance();
+        reportConfig.disableDownloadHtml();
+        reportConfig.disableDownloadCsv();
+
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 
@@ -111,6 +123,8 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
+        application.downloadReport("HTML");
+        application.downloadReport("CSV");
         application.validateStoryPoints();
     });
 });

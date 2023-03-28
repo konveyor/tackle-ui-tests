@@ -52,7 +52,6 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
 
         // Clears artifact repository
         mavenConfiguration.clearRepository();
-
         // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(

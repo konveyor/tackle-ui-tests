@@ -1435,3 +1435,10 @@ export function isEnabled(selector: string, toBeEnabled?: boolean): void {
 export function clickTab(name: string): void {
     clickByText(navTab, name);
 }
+
+export function cleanupDownloads(): void {
+    // This will eliminate content of `cypress/downloads` folder
+    cy.exec("cd cypress/downloads; rm -rf ./*").then((result) => {
+        cy.log(result.stdout);
+    });
+}

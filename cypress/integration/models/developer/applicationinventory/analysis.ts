@@ -30,6 +30,7 @@ import { navMenu } from "../../../views/menu.view";
 import {
     cancelForm,
     checkSuccessAlert,
+    cleanupDownloads,
     click,
     clickByText,
     clickTab,
@@ -274,19 +275,32 @@ export class Analysis extends Application {
     }
 
     openReport() {
-        super.applicationDetailsTab("Reports");
-        cy.get("h3")
-            .contains("Analysis")
-            .next()
-            .within(() => {
-                cy.get("a")
-                    .should("contain", "Report")
-                    .then(($a) => {
-                        // Removing target from html so that report opens in same tab
-                        $a.attr("target", "_self");
-                    })
-                    .click();
-            });
+        this.selectApplicationRow();
+        cy.get(rightSideMenu, { timeout: 30 * SEC }).within(() => {
+            clickTab("Reports");
+            cy.contains("a", "Report", { timeout: 30 * SEC })
+                .then(($a) => {
+                    // Removing target from html so that report opens in same tab
+                    $a.attr("target", "_self");
+                })
+                .click();
+        });
+    }
+
+    downloadReport(type: string, isEnabled = true) {
+        Analysis.open();
+        this.selectApplicationRow();
+        cy.get(rightSideMenu, { timeout: 30 * SEC }).within(() => {
+            clickTab("Reports");
+            if (isEnabled) {
+                clickByText("a", type);
+                cy.verifyDownload("report.tar.gz");
+                // Removing downloaded file after verifying it
+                cleanupDownloads();
+            } else {
+                doesExistText(type, isEnabled);
+            }
+        });
     }
 
     openAnalysisDetails() {
