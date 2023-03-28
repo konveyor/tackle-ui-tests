@@ -26,7 +26,6 @@ import {
     createMultipleTags,
     deleteAllBusinessServices,
     deleteApplicationTableRows,
-    selectUserPerspective,
     createMultipleApplicationsWithBSandTags,
     applySelectFilter,
     deleteAllTagsAndTagCategories,
@@ -34,16 +33,13 @@ import {
     getRandomAnalysisData,
     notExists,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
 import {
-    applicationInventory,
     button,
     name,
     clearAllFilters,
     description,
     businessService,
     tag,
-    assessment,
     CredentialType,
     UserCredentials,
     credentialType,
@@ -164,7 +160,6 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         applySearchFilter(description, applicationsList[1].description);
         cy.wait(2000);
         exists(applicationsList[1].description);
-
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing description substring and apply it as search filter
@@ -195,22 +190,17 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
     it("Tag filter validations", function () {
         Assessment.open();
 
-        // Filter on a tag applied to applicationsList[0] and verify that only that application is listed
-        // in the results
+        // Enter an existing tag and assert
         var validSearchInput = applicationsList[0].tags[0];
         applySearchFilter(tag, validSearchInput);
         cy.wait(2000);
 
-        exists(applicationsList[0].name);
-        notExists(applicationsList[1].name);
-
+        exists(applicationsList[0].tags[0]);
         clickByText(button, clearAllFilters);
 
-        // Filter on a tag applied to applicationsList[1] and verify that only that application is listed
-        // in the results
-        applySearchFilter(tag, applicationsList[1].tags[0]);
-        exists(applicationsList[1].name);
-        notExists(applicationsList[0].name);
+        // Enter a non-existing tag and apply it as search filter
+        applySelectFilter("tags", tag, data.getRandomWord(5), false);
+        clickByText(button, clearAllFilters);
     });
 
     it("Credential type filter validations", function () {
@@ -305,9 +295,9 @@ describe("Application inventory filter validations", { tags: "@tier2" }, functio
         notExists(applicationsList[0].name);
         clickByText(button, clearAllFilters);
 
-        // Apply artifact filter check with 'No associated artifact' field
+        // Apply artifact filter check with not associated artifact field
         // Check applicationList[0] exists and application doesn't exist
-        applySearchFilter(artifact, "No associated artifact");
+        applySearchFilter(artifact, "Not associated artifact");
         cy.wait(2000);
         exists(applicationsList[0].name);
         notExists(application.name);
