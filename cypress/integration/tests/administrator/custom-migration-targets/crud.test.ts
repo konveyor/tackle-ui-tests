@@ -29,8 +29,6 @@ import { CredentialsSourceControlUsername } from "../../../models/administrator/
 
 describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }, () => {
     beforeEach("Login", function () {
-        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@dc")) return;
-
         login();
 
         cy.fixture("custom-migration-targets").then(function (customMigrationTargets) {
@@ -43,114 +41,102 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
         cy.intercept("DELETE", "/hub/rulebundles*/*").as("deleteRule");
     });
 
-    it(
-        "Custom Migration Targets CRUD with rules uploaded manually",
-        { tags: ["@tier1", "@dc"] },
-        function () {
-            CustomMigrationTarget.open();
+    it("Custom Migration Targets CRUD with rules uploaded manually", function () {
+        CustomMigrationTarget.open();
 
-            const targetData = this.customMigrationTargets.manual_rules;
-            const target = new CustomMigrationTarget(
-                data.getRandomWord(8),
-                data.getDescription(),
-                targetData.image,
-                {
-                    type: CustomRuleType.Manual,
-                    rulesetPaths: targetData.rulesFiles,
-                }
-            );
-            target.create();
-            cy.wait("@postRule");
-            cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
-            cy.get("article", { timeout: 12 * SEC }).should("contain", target.name);
-
-            const newName = data.getRandomWord(8);
-            const newRules: RulesManualFields = {
+        const targetData = this.customMigrationTargets.manual_rules;
+        const target = new CustomMigrationTarget(
+            data.getRandomWord(8),
+            data.getDescription(),
+            targetData.image,
+            {
                 type: CustomRuleType.Manual,
-                rulesetPaths: ["xml/javax-package-custom.windup.xml"],
-            };
+                rulesetPaths: targetData.rulesFiles,
+            }
+        );
+        target.create();
+        cy.wait("@postRule");
+        cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
+        cy.get("article", { timeout: 12 * SEC }).should("contain", target.name);
 
-            target.edit({
-                name: newName,
-                ruleType: newRules,
-            });
-            cy.wait("@putRule");
-            cy.get("article", { timeout: 12 * SEC }).should("contain", newName);
-            target.name = newName;
-            target.ruleType = newRules;
+        const newName = data.getRandomWord(8);
+        const newRules: RulesManualFields = {
+            type: CustomRuleType.Manual,
+            rulesetPaths: ["xml/javax-package-custom.windup.xml"],
+        };
 
-            target.delete();
-            cy.wait("@deleteRule");
-            cy.get("article", { timeout: 12 * SEC }).should("not.contain", target.name);
-        }
-    );
+        target.edit({
+            name: newName,
+            ruleType: newRules,
+        });
+        cy.wait("@putRule");
+        cy.get("article", { timeout: 12 * SEC }).should("contain", newName);
+        target.name = newName;
+        target.ruleType = newRules;
 
-    it(
-        "Create Custom Migration Target with rules from repository with credentials",
-        { tags: ["@tier1", "@dc"] },
-        function () {
-            const sourceCredential = new CredentialsSourceControlUsername(
-                data.getRandomCredentialsData(
-                    CredentialType.sourceControl,
-                    UserCredentials.usernamePassword,
-                    Cypress.env("git_password") && Cypress.env("git_user")
-                )
-            );
+        target.delete();
+        cy.wait("@deleteRule");
+        cy.get("article", { timeout: 12 * SEC }).should("not.contain", target.name);
+    });
 
-            sourceCredential.create();
-            const targetData = this.customMigrationTargets.rules_from_tackle_testApp;
-            const repositoryData: RulesRepositoryFields = {
-                ...targetData.repository,
-                type: CustomRuleType.Repository,
-                credentials: sourceCredential,
-            };
+    it("Create Custom Migration Target with rules from repository with credentials", function () {
+        const sourceCredential = new CredentialsSourceControlUsername(
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                Cypress.env("git_password") && Cypress.env("git_user")
+            )
+        );
 
-            CustomMigrationTarget.open();
-            const target = new CustomMigrationTarget(
-                data.getRandomWord(8),
-                data.getDescription(),
-                targetData.image,
-                repositoryData
-            );
-            target.create();
-            cy.wait("@postRule");
-            cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
-            cy.get("article", { timeout: 12 * SEC }).should("contain", target.name);
+        sourceCredential.create();
+        const targetData = this.customMigrationTargets.rules_from_tackle_testApp;
+        const repositoryData: RulesRepositoryFields = {
+            ...targetData.repository,
+            type: CustomRuleType.Repository,
+            credentials: sourceCredential,
+        };
 
-            target.delete();
-            cy.wait("@deleteRule");
-            cy.get("article", { timeout: 12 * SEC }).should("not.contain", target.name);
+        CustomMigrationTarget.open();
+        const target = new CustomMigrationTarget(
+            data.getRandomWord(8),
+            data.getDescription(),
+            targetData.image,
+            repositoryData
+        );
+        target.create();
+        cy.wait("@postRule");
+        cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
+        cy.get("article", { timeout: 12 * SEC }).should("contain", target.name);
 
-            sourceCredential.delete();
-        }
-    );
+        target.delete();
+        cy.wait("@deleteRule");
+        cy.get("article", { timeout: 12 * SEC }).should("not.contain", target.name);
 
-    it(
-        "Create Custom Migration Target with rules from repository without credentials",
-        { tags: ["@tier1", "@dc"] },
-        function () {
-            const targetData = this.customMigrationTargets.rules_from_bookServerApp;
-            const repositoryData: RulesRepositoryFields = {
-                ...targetData.repository,
-                type: CustomRuleType.Repository,
-            };
+        sourceCredential.delete();
+    });
 
-            CustomMigrationTarget.open();
-            const target = new CustomMigrationTarget(
-                data.getRandomWord(8),
-                data.getDescription(),
-                targetData.image,
-                repositoryData
-            );
+    it("Create Custom Migration Target with rules from repository without credentials", function () {
+        const targetData = this.customMigrationTargets.rules_from_bookServerApp;
+        const repositoryData: RulesRepositoryFields = {
+            ...targetData.repository,
+            type: CustomRuleType.Repository,
+        };
 
-            target.create();
-            cy.wait("@postRule");
-            cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
-            cy.get("article", { timeout: 12 * SEC }).should("contain", target.name);
+        CustomMigrationTarget.open();
+        const target = new CustomMigrationTarget(
+            data.getRandomWord(8),
+            data.getDescription(),
+            targetData.image,
+            repositoryData
+        );
 
-            target.delete();
-            cy.wait("@deleteRule");
-            cy.get("article", { timeout: 12 * SEC }).should("not.contain", target.name);
-        }
-    );
+        target.create();
+        cy.wait("@postRule");
+        cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
+        cy.get("article", { timeout: 12 * SEC }).should("contain", target.name);
+
+        target.delete();
+        cy.wait("@deleteRule");
+        cy.get("article", { timeout: 12 * SEC }).should("not.contain", target.name);
+    });
 });
