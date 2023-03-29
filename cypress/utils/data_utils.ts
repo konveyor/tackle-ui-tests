@@ -17,6 +17,11 @@ import * as faker from "faker";
 import { CredentialsData, ProxyData, UserData } from "../integration/types/types";
 import { CredentialType, UserCredentials } from "../integration/types/constants";
 import { writeGpgKey, writeMavenSettingsFile } from "./utils";
+import {
+    CustomRuleType,
+    RulesManualFields,
+    RulesRepositoryFields,
+} from "../integration/models/administrator/custom-migration-targets/custom-migration-target";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
@@ -201,5 +206,19 @@ export function getRandomUserData(): UserData {
         lastName: lastName,
         email: getEmail(),
         userEnabled: true,
+    };
+}
+
+export function getRulesData(targetData): RulesRepositoryFields | RulesManualFields {
+    if (targetData.repository) {
+        return {
+            ...targetData.repository,
+            type: CustomRuleType.Repository,
+        };
+    }
+
+    return {
+        type: CustomRuleType.Manual,
+        rulesetPaths: targetData.rulesFiles,
     };
 }

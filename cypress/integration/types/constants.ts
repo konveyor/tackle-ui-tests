@@ -130,3 +130,8 @@ export enum AnalysisStatuses {
     failed = "Failed",
     canceled = "Canceled",
 }
+
+export enum RepositoryType {
+    git = "Git",
+    subversion = "Subversion",
+}
