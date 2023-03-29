@@ -64,7 +64,8 @@ describe("Exclude Tags", { tags: "@tier2" }, () => {
         deleteAllCredentials();
     });
 
-    it("Exclude Tags from report using source analysis", function () {
+    it.skip("Exclude Tags from report using source analysis", function () {
+        // skipping until bug https://issues.redhat.com/browse/MTA-40 is fixed.
         // For source code analysis application must have source code URL git or svn
         const application = new Analysis(
             getRandomApplicationData("testapp-excludePackages", { sourceData: this.appData[3] }),
