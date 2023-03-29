@@ -4,7 +4,7 @@
         "rulesFiles": ["xml/javax-package-custom-target.windup.xml"]
     },
     "rules_from_tackle_testApp": {
-        "image": "",
+        "image": "img/cloud.png",
         "repository": {
             "repositoryType": "git",
             "repositoryUrl": "https://github.com/konveyor/tackle-testapp",
@@ -13,7 +13,7 @@
         }
     },
     "rules_from_bookServerApp": {
-        "image": "",
+        "image": "img/cloud.png",
         "repository": {
             "repositoryType": "git",
             "repositoryUrl": "https://github.com/ibraginsky/book-server",

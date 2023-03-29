@@ -41,7 +41,7 @@ export type RulesManualFields = {
 export interface CustomMigrationTarget {
     name: string;
     description?: string;
-    ruleType: RulesRepositoryFields | RulesManualFields;
+    ruleTypeData: RulesRepositoryFields | RulesManualFields;
 }
 
 export class CustomMigrationTarget {
@@ -53,7 +53,7 @@ export class CustomMigrationTarget {
     ) {
         this.name = name;
         this.description = description;
-        this.ruleType = ruleTypeData;
+        this.ruleTypeData = ruleTypeData;
     }
 
     public static fullUrl = Cypress.env("tackleUrl") + "/migration-targets";
@@ -105,14 +105,14 @@ export class CustomMigrationTarget {
             inputText(CustomMigrationTargetView.descriptionInput, values.description);
         }
 
-        if (values.ruleType) {
-            if (values.ruleType.type === CustomRuleType.Manual) {
-                this.fillManualForm(values.ruleType);
+        if (values.ruleTypeData) {
+            if (values.ruleTypeData.type === CustomRuleType.Manual) {
+                this.fillManualForm(values.ruleTypeData);
             }
 
-            if (values.ruleType.type === CustomRuleType.Repository) {
+            if (values.ruleTypeData.type === CustomRuleType.Repository) {
                 click(CustomMigrationTargetView.retrieveFromARepositoryRadio);
-                this.fillRepositoryForm(values.ruleType);
+                this.fillRepositoryForm(values.ruleTypeData);
             }
         }
     }

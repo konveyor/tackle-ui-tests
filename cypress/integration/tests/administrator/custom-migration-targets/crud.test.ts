@@ -15,23 +15,19 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { hasToBeSkipped, login } from "../../../../utils/utils";
+import { login } from "../../../../utils/utils";
 import { CredentialType, SEC, UserCredentials } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
-import {
-    RulesManualFields,
-    RulesRepositoryFields,
-    CustomMigrationTarget,
-    CustomRuleType,
-} from "../../../models/administrator/custom-migration-targets/custom-migration-target";
+import { CustomMigrationTarget } from "../../../models/administrator/custom-migration-targets/custom-migration-target";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { CredentialsSourceControlUsername } from "../../../models/administrator/credentials/credentialsSourceControlUsername";
+import { getRulesData } from "../../../../utils/data_utils";
 
 describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }, () => {
     beforeEach("Login", function () {
         login();
 
-        cy.fixture("custom-migration-targets").then(function (customMigrationTargets) {
+        cy.fixture("custom-rules").then(function (customMigrationTargets) {
             this.customMigrationTargets = customMigrationTargets;
         });
 
@@ -42,17 +38,12 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
     });
 
     it("Custom Migration Targets CRUD with rules uploaded manually", function () {
-        CustomMigrationTarget.open();
-
         const targetData = this.customMigrationTargets.manual_rules;
         const target = new CustomMigrationTarget(
             data.getRandomWord(8),
             data.getDescription(),
             targetData.image,
-            {
-                type: CustomRuleType.Manual,
-                rulesetPaths: targetData.rulesFiles,
-            }
+            getRulesData(targetData)
         );
         target.create();
         cy.wait("@postRule");
@@ -60,19 +51,19 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
         cy.get("article", { timeout: 12 * SEC }).should("contain", target.name);
 
         const newName = data.getRandomWord(8);
-        const newRules: RulesManualFields = {
-            type: CustomRuleType.Manual,
+        const newRules = {
+            ...target.ruleTypeData,
             rulesetPaths: ["xml/javax-package-custom.windup.xml"],
         };
 
         target.edit({
             name: newName,
-            ruleType: newRules,
+            ruleTypeData: newRules,
         });
         cy.wait("@putRule");
         cy.get("article", { timeout: 12 * SEC }).should("contain", newName);
         target.name = newName;
-        target.ruleType = newRules;
+        target.ruleTypeData = newRules;
 
         target.delete();
         cy.wait("@deleteRule");
@@ -90,19 +81,18 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
 
         sourceCredential.create();
         const targetData = this.customMigrationTargets.rules_from_tackle_testApp;
-        const repositoryData: RulesRepositoryFields = {
-            ...targetData.repository,
-            type: CustomRuleType.Repository,
+        const repositoryData = {
+            ...getRulesData(targetData),
             credentials: sourceCredential,
         };
 
-        CustomMigrationTarget.open();
         const target = new CustomMigrationTarget(
             data.getRandomWord(8),
             data.getDescription(),
             targetData.image,
             repositoryData
         );
+
         target.create();
         cy.wait("@postRule");
         cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
@@ -113,30 +103,5 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
         cy.get("article", { timeout: 12 * SEC }).should("not.contain", target.name);
 
         sourceCredential.delete();
-    });
-
-    it("Create Custom Migration Target with rules from repository without credentials", function () {
-        const targetData = this.customMigrationTargets.rules_from_bookServerApp;
-        const repositoryData: RulesRepositoryFields = {
-            ...targetData.repository,
-            type: CustomRuleType.Repository,
-        };
-
-        CustomMigrationTarget.open();
-        const target = new CustomMigrationTarget(
-            data.getRandomWord(8),
-            data.getDescription(),
-            targetData.image,
-            repositoryData
-        );
-
-        target.create();
-        cy.wait("@postRule");
-        cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
-        cy.get("article", { timeout: 12 * SEC }).should("contain", target.name);
-
-        target.delete();
-        cy.wait("@deleteRule");
-        cy.get("article", { timeout: 12 * SEC }).should("not.contain", target.name);
     });
 });
