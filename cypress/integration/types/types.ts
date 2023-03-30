@@ -73,6 +73,7 @@ export type analysisData = {
     sources?: string;
     excludeRuleTags?: string;
     enableTransaction?: boolean;
+    enableTagging?; boolean;
     appName?: string;
     storyPoints?: number;
     excludePackages?: string[];

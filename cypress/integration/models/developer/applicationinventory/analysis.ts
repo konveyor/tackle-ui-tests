@@ -53,6 +53,7 @@ import {
     analysisDetails,
     analyzeManuallyButton,
     enableTransactionAnalysis,
+    enableAutomatedTagging,
     enterPackageName,
     enterPackageNameToExclude,
     excludePackagesSwitch,
@@ -83,6 +84,7 @@ export class Analysis extends Application {
     sources?: string;
     excludeRuleTags?: string;
     enableTransaction?: boolean;
+    enableTagging?: boolean;
     appName?: string;
     storyPoints?: number;
     manuallyAnalyzePackages?: string[];
@@ -112,6 +114,7 @@ export class Analysis extends Application {
             sources,
             excludeRuleTags,
             enableTransaction,
+            enableTagging,
             appName,
             storyPoints,
             manuallyAnalyzePackages,
@@ -128,6 +131,7 @@ export class Analysis extends Application {
         if (sources) this.sources = sources;
         if (excludeRuleTags) this.excludeRuleTags = excludeRuleTags;
         if (enableTransaction) this.enableTransaction = enableTransaction;
+        if (enableTagging) this.enableTagging = enableTagging;
         if (appName) this.appName = appName;
         if (storyPoints) this.storyPoints = storyPoints;
         if (excludePackages) this.excludePackages = excludePackages;
@@ -172,6 +176,10 @@ export class Analysis extends Application {
 
     protected enableTransactionAnalysis() {
         cy.get(enableTransactionAnalysis).click();
+    }
+
+    protected enableAutomatedTagging() {
+        cy.get(enableAutomatedTagging).click();
     }
 
     protected uploadCustomRule() {
@@ -236,6 +244,7 @@ export class Analysis extends Application {
             cy.contains("button", "Next", { timeout: 200 }).click();
             if (this.excludeRuleTags) this.tagsToExclude();
             if (this.enableTransaction) this.enableTransactionAnalysis();
+            if (this.enableTagging) this.enableAutomatedTagging();
             if (!this.sources) cy.contains("button", "Next", { timeout: 200 }).click();
             cy.contains("button", "Run", { timeout: 200 }).click();
             checkSuccessAlert(commonView.infoAlertMessage, `Submitted for analysis`);
