@@ -95,9 +95,9 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         // No credentials required for uploaded binary.
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        application.downloadReport("HTML");
         application.openReport();
         application.validateStoryPoints();
-        application.downloadReport("HTML");
     });
 
     it("Custom rules with custom targets", function () {
@@ -112,9 +112,9 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         // No credentials required for uploaded binary.
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        application.downloadReport("CSV");
         application.openReport();
         application.validateStoryPoints();
-        application.downloadReport("CSV");
     });
 
     it("DIVA report generation", function () {
