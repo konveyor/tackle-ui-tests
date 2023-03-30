@@ -65,9 +65,6 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
         deleteApplicationTableRows();
         deleteAllBusinessServices();
 
-        // Create business service
-        businessService.create();
-
         // Navigate to Application inventory tab
         clickByText(navMenu, applicationInventory);
         cy.wait(5000);
