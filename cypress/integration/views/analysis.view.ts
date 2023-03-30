@@ -37,3 +37,4 @@ export const enterPackageName = "#packageToInclude";
 export const enterPackageNameToExclude = "#packageToExclude";
 export const analysisDetails = "Analysis details";
 export const rightSideMenu = "#page-drawer-content";
+export const enableAutomatedTagging = "input[name=autoTaggingEnabled]";
