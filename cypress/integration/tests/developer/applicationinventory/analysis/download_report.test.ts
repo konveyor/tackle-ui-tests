@@ -5,13 +5,13 @@ import {
     login,
     preservecookies,
 } from "../../../../../utils/utils";
-import { ReportConfig } from "../../../../models/developer/reports/reportConfig";
+import { GeneralConfig } from "../../../../models/administrator/general/generalConfig";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
 import { SEC } from "../../../../types/constants";
 
 describe("Enable and Download HTML and CSV Reports", { tags: "@tier1" }, function () {
     let sourceApplication: Analysis;
-    let reportConfig = ReportConfig.getInstance();
+    let generalConfig = GeneralConfig.getInstance();
 
     before("Login and enable download of HTML and CSV reports", function () {
         // Prevent hook from running, if the tag is excluded from run
@@ -20,8 +20,8 @@ describe("Enable and Download HTML and CSV Reports", { tags: "@tier1" }, functio
         login();
 
         // Enable HTML anc CSV report downloading
-        reportConfig.enableDownloadHtml();
-        reportConfig.enableDownloadCsv();
+        generalConfig.enableDownloadHtml();
+        generalConfig.enableDownloadCsv();
     });
 
     beforeEach("Persist session", function () {
@@ -54,8 +54,8 @@ describe("Enable and Download HTML and CSV Reports", { tags: "@tier1" }, functio
 
     it("Disable HTML/CSV reports and validate they are disabled", function () {
         // Disabling download of HTML and CSV reports
-        reportConfig.disableDownloadHtml();
-        reportConfig.disableDownloadCsv();
+        generalConfig.disableDownloadHtml();
+        generalConfig.disableDownloadCsv();
 
         // Validating that existing reports do not have HTML/CSV links anymore
         sourceApplication.downloadReport("HTML", false);
