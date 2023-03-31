@@ -27,6 +27,7 @@ import {
 import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/developer/controls/stakeholders";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
+import { GeneralConfig } from "../../../../models/administrator/general/generalConfig";
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
@@ -124,6 +125,32 @@ describe("Application assessment and review tests", { tags: "@tier1" }, () => {
         application.perform_review("high");
         cy.wait(2000);
         application.verifyStatus("review", "Completed");
+
+        // Delete application
+        application.delete();
+        cy.wait(2000);
+    });
+    it("Enable and Disable Review without assessment", function () {
+        // Enable allow review without running assessment
+        const generalConfig = GeneralConfig.getInstance();
+        generalConfig.enableReviewAssessment();
+
+        // Navigate to application inventory tab and create new application
+        const application = new Assessment(getRandomApplicationData());
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+
+        // Perform application review
+        application.perform_review("medium");
+        cy.wait(2000);
+        application.verifyStatus("review", "Completed");
+
+        // Disable allow review without running assessment
+        generalConfig.disableReviewAssessment();
+
+        // Verify review button is disabled for the application
+        application.verifyReviewButtonDisabled();
 
         // Delete application
         application.delete();
