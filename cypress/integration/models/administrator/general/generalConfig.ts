@@ -14,8 +14,8 @@ export class GeneralConfig {
     static downloadCsv: boolean;
     static fullUrl = Cypress.env("tackleUrl") + "/general";
 
-    // ReportConfig class is singleton, which means that only one object of this class can be created
-    // This function is required to get ReportConfig instance in any part of the code
+    // GeneralConfig class is singleton, which means that only one object of this class can be created
+    // This function is required to get GeneralConfig instance in any part of the code
     public static getInstance(): GeneralConfig {
         if (!GeneralConfig.instance) {
             GeneralConfig.instance = new GeneralConfig();
