@@ -20,6 +20,7 @@ import { TagType } from "../../models/developer/controls/tagtypes";
 import { Analysis } from "../../models/developer/applicationinventory/analysis";
 import { MavenConfiguration } from "../../models/administrator/repositories/maven";
 import { clearRepository } from "../../views/repository.view";
+import { GeneralConfig } from "../../models/administrator/general/generalConfig";
 
 describe("Performing post-upgrade validations", { tags: "@post-upgrade" }, () => {
     before("Login", function () {
@@ -28,6 +29,9 @@ describe("Performing post-upgrade validations", { tags: "@post-upgrade" }, () =>
 
         // Perform login
         login();
+
+        const generalConfig = GeneralConfig.getInstance();
+        generalConfig.enableDownloadCsv();
     });
 
     beforeEach("Persist session", function () {
@@ -101,8 +105,11 @@ describe("Performing post-upgrade validations", { tags: "@post-upgrade" }, () =>
 
         Analysis.open();
         exists(sourceApplicationName);
+        sourceApplication.downloadReport("CSV", false);
         exists(binaryApplicationName);
+        binaryApplication.downloadReport("CSV", false);
         exists(uploadBinaryApplicationName);
+        uploadBinaryApplication.downloadReport("CSV", false);
 
         sourceApplication.analyze();
         sourceApplication.verifyAnalysisStatus("Completed");
