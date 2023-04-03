@@ -29,7 +29,7 @@ import {
 import { Proxy } from "../../../../models/administrator/proxy/proxy";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
 import { analysis } from "../../../../types/constants";
-import { ReportConfig } from "../../../../models/developer/reports/reportConfig";
+import { GeneralConfig } from "../../../../models/administrator/general/generalConfig";
 
 describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
@@ -40,9 +40,9 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         login();
 
         // Enable HTML anc CSV report downloading
-        let reportConfig = ReportConfig.getInstance();
-        reportConfig.enableDownloadHtml();
-        reportConfig.enableDownloadCsv();
+        let generalConfig = GeneralConfig.getInstance();
+        generalConfig.enableDownloadHtml();
+        generalConfig.enableDownloadCsv();
 
         deleteApplicationTableRows();
 
@@ -77,9 +77,9 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         deleteAllBusinessServices();
 
         // Disable HTML anc CSV report downloading
-        let reportConfig = ReportConfig.getInstance();
-        reportConfig.disableDownloadHtml();
-        reportConfig.disableDownloadCsv();
+        let generalConfig = GeneralConfig.getInstance();
+        generalConfig.disableDownloadHtml();
+        generalConfig.disableDownloadCsv();
 
         writeGpgKey("abcde");
     });

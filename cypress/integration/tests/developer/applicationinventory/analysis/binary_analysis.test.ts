@@ -33,7 +33,7 @@ import { CredentialsSourceControlUsername } from "../../../../models/administrat
 import { CredentialsMaven } from "../../../../models/administrator/credentials/credentialsMaven";
 import { Proxy } from "../../../../models/administrator/proxy/proxy";
 import { MavenConfiguration } from "../../../../models/administrator/repositories/maven";
-import { ReportConfig } from "../../../../models/developer/reports/reportConfig";
+import { GeneralConfig } from "../../../../models/administrator/general/generalConfig";
 let source_credential;
 let maven_credential;
 const mavenConfiguration = new MavenConfiguration();
@@ -51,9 +51,9 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         Proxy.disableAllProxies();
 
         // Enable HTML anc CSV report downloading
-        let reportConfig = ReportConfig.getInstance();
-        reportConfig.enableDownloadHtml();
-        reportConfig.enableDownloadCsv();
+        let generalConfig = GeneralConfig.getInstance();
+        generalConfig.enableDownloadHtml();
+        generalConfig.enableDownloadCsv();
 
         // Clears artifact repository
         mavenConfiguration.clearRepository();
@@ -102,9 +102,9 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
         maven_credential.delete();
 
         // Disable HTML anc CSV report downloading
-        let reportConfig = ReportConfig.getInstance();
-        reportConfig.disableDownloadHtml();
-        reportConfig.disableDownloadCsv();
+        let generalConfig = GeneralConfig.getInstance();
+        generalConfig.disableDownloadHtml();
+        generalConfig.disableDownloadCsv();
 
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
