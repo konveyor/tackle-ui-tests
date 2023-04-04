@@ -154,7 +154,7 @@ export class Analysis extends Application {
         super.create();
     }
 
-    protected selectSourceofAnalysis(source: string): void {
+    public selectSourceofAnalysis(source: string): void {
         selectFormItems(sourceDropdown, source);
     }
 
