@@ -179,7 +179,11 @@ export class Analysis extends Application {
     }
 
     protected enableAutomatedTagging() {
-        cy.get(enableAutomatedTagging).click();
+        cy.get(enableAutomatedTagging).then(($ele) => {
+            if ($ele.is(":unchecked")) {
+                $ele.click();
+            }
+        });
     }
 
     protected uploadCustomRule() {

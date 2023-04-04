@@ -60,13 +60,13 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
                 true
             )
         );
-        source_credential.create();
+        /*source_credential.create();
 
         // Create Maven credentials
         maven_credential = new CredentialsMaven(
             data.getRandomCredentialsData(CredentialType.maven, "None", true)
         );
-        maven_credential.create();
+        maven_credential.create();*/
     });
 
     beforeEach("Persist session", function () {
@@ -232,6 +232,22 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         application.manageCredentials(source_credential.name, maven_credential.name);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.openReport();
+        application.validateStoryPoints();
+    });
+
+    it.only("Automated tagging using Source Analysis on tackle testapp", function () {
+        // For tackle test app source credentials are required.
+        const application = new Analysis(
+            getRandomApplicationData("tackleTestApp_Source", { sourceData: this.appData[3] }),
+            getRandomAnalysisData(this.analysisData[6])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        // application.manageCredentials(source_credential.name, "None");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
