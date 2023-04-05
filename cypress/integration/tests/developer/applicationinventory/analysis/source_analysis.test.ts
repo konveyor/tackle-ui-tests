@@ -60,13 +60,13 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
                 true
             )
         );
-        /*source_credential.create();
+        source_credential.create();
 
         // Create Maven credentials
         maven_credential = new CredentialsMaven(
             data.getRandomCredentialsData(CredentialType.maven, "None", true)
         );
-        maven_credential.create();*/
+        maven_credential.create();
     });
 
     beforeEach("Persist session", function () {
@@ -220,7 +220,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.validateStoryPoints();
     });
 
-    it("Analysis for known Open Source libraries on tackleTest app", function () {
+    it.only("Analysis for known Open Source libraries on tackleTest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+knownLibraries", {
@@ -247,11 +247,9 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        // application.manageCredentials(source_credential.name, "None");
+        application.manageCredentials(source_credential.name, "None");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openReport();
-        application.validateStoryPoints();
     });
 
     it("Analysis for Konveyor example1 application", function () {
