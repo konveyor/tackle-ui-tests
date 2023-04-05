@@ -135,3 +135,8 @@ export enum RepositoryType {
     git = "Git",
     subversion = "Subversion",
 }
+
+export enum CustomRuleType {
+    Repository = "Repository",
+    Manual = "Manual",
+}

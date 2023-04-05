@@ -1,5 +1,5 @@
-import { string } from "@oozcitak/infra";
-import { Tag } from "../models/developer/controls/tags";
+import { RepositoryType, CustomRuleType } from "./constants";
+import { CredentialsSourceControl } from "../models/administrator/credentials/credentialsSourceControl";
 
 export type CredentialsSourceControlData = {
     type: string;
@@ -70,6 +70,7 @@ export type analysisData = {
     binary?: string[];
     scope?: string;
     customRule?: string;
+    customRuleRepository?: RulesRepositoryFields;
     sources?: string;
     excludeRuleTags?: string;
     enableTransaction?: boolean;
@@ -137,4 +138,19 @@ export type UpgradeData = {
     sourceApplicationName?: string;
     binaryApplicationName?: string;
     uploadBinaryApplicationName?: string;
+};
+
+export type RulesRepositoryFields = {
+    type: CustomRuleType.Repository;
+    repositoryType: RepositoryType;
+    repositoryUrl: string;
+    branch?: string;
+    rootPath?: string;
+    credentials?: CredentialsSourceControl;
+};
+
+export type RulesManualFields = {
+    type: CustomRuleType.Manual;
+    imagePath?: string;
+    rulesetPaths: string[];
 };

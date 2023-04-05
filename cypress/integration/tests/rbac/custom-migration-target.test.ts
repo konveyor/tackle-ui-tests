@@ -25,13 +25,10 @@ import {
     preservecookies,
     selectItemsPerPage,
 } from "../../../utils/utils";
-import { analyzeButton, application, button, SEC } from "../../types/constants";
+import { analyzeButton, application, button, SEC, CustomRuleType } from "../../types/constants";
+import { RulesRepositoryFields } from "../../types/types";
 import * as data from "../../../utils/data_utils";
-import {
-    RulesRepositoryFields,
-    CustomMigrationTarget,
-    CustomRuleType,
-} from "../../models/administrator/custom-migration-targets/custom-migration-target";
+import { CustomMigrationTarget } from "../../models/administrator/custom-migration-targets/custom-migration-target";
 import { Analysis } from "../../models/developer/applicationinventory/analysis";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";

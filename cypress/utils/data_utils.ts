@@ -14,14 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import * as faker from "faker";
-import { CredentialsData, ProxyData, UserData } from "../integration/types/types";
-import { CredentialType, UserCredentials } from "../integration/types/constants";
-import { writeGpgKey, writeMavenSettingsFile } from "./utils";
 import {
-    CustomRuleType,
+    CredentialsData,
+    ProxyData,
+    UserData,
     RulesManualFields,
     RulesRepositoryFields,
-} from "../integration/models/administrator/custom-migration-targets/custom-migration-target";
+} from "../integration/types/types";
+import { CredentialType, UserCredentials, CustomRuleType } from "../integration/types/constants";
+import { writeGpgKey, writeMavenSettingsFile } from "./utils";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
