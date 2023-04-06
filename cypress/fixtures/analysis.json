@@ -160,12 +160,17 @@
             }
         ]
     },
-
     {
         "source": "Source code + dependencies",
         "target": ["Containerization"],
         "appName": "deps",
         "openSourceLibraries": true,
         "storyPoints": "2,602"
+    },
+    {
+        "source": "Source code",
+        "target": ["Containerization"],
+        "appName": "example-1",
+        "storyPoints": 1
     }
 ]

@@ -28,7 +28,7 @@ import {
 } from "../../../../../utils/utils";
 import { CredentialsMaven } from "../../../../models/administrator/credentials/credentialsMaven";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
-import { CredentialType, UserCredentials } from "../../../../types/constants";
+import { AnalysisStatuses, CredentialType, UserCredentials } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administrator/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../../models/administrator/credentials/credentialsSourceControlKey";
@@ -234,6 +234,23 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        application.openReport();
+        application.validateStoryPoints();
+    });
+
+    it("Analysis for Konveyor example1 application", function () {
+        // Automates https://github.com/konveyor/example-applications/tree/main/example-1
+        const application = new Analysis(
+            getRandomApplicationData("Example 1", {
+                sourceData: this.appData[8],
+            }),
+            getRandomAnalysisData(this.analysisData[17])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
         application.openReport();
         application.validateStoryPoints();
     });

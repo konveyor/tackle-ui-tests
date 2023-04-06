@@ -32,5 +32,11 @@
     {
         "repoType": "Subversion",
         "sourceRepo": "http://github.com/konveyor/tackle-testapp"
+    },
+    {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/konveyor/example-applications",
+        "branch": "main",
+        "rootPath": "example-1"
     }
 ]

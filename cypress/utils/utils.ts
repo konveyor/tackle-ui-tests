@@ -920,6 +920,8 @@ export function getRandomApplicationData(
         if (options.sourceData) {
             appdata["repoType"] = options.sourceData.repoType;
             appdata["sourceRepo"] = options.sourceData.sourceRepo;
+            appdata["branch"] = options.sourceData.branch;
+            appdata["rootPath"] = options.sourceData.rootPath;
         }
     }
 
