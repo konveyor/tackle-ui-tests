@@ -654,7 +654,8 @@ export function deleteApplicationTableRows(currentPage = false): void {
                                 cy.get(".pf-c-dropdown__toggle-button").click({ force: true });
                                 clickByText(button, "Select page");
                             } else {
-                                cy.get("input#bulk-selected-apps-checkbox").check({ force: true });
+                                cy.get("button[aria-label='Select']").click({ force: true });
+                                cy.get("ul[role=menu] > li").contains("Select all").click({ force: true });
                             }
 
                             application_inventory_kebab_menu("Delete");

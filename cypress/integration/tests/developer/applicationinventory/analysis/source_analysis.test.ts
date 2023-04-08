@@ -220,7 +220,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.validateStoryPoints();
     });
 
-    it.only("Analysis for known Open Source libraries on tackleTest app", function () {
+    it("Analysis for known Open Source libraries on tackleTest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+knownLibraries", {
@@ -238,10 +238,10 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.validateStoryPoints();
     });
 
-    it.only("Automated tagging using Source Analysis on tackle testapp", function () {
+    it("Automated tagging using Source Analysis on tackle testapp", function () {
         // For tackle test app source credentials are required.
         const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_Source", { sourceData: this.appData[3] }),
+            getRandomApplicationData("tackleTestApp_Source_autoTagging", { sourceData: this.appData[3] }),
             getRandomAnalysisData(this.analysisData[6])
         );
         application.create();
