@@ -241,7 +241,9 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
     it("Automated tagging using Source Analysis on tackle testapp", function () {
         // For tackle test app source credentials are required.
         const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_Source_autoTagging", { sourceData: this.appData[3] }),
+            getRandomApplicationData("tackleTestApp_Source_autoTagging", {
+                sourceData: this.appData[3],
+            }),
             getRandomAnalysisData(this.analysisData[6])
         );
         application.create();
