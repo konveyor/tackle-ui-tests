@@ -42,6 +42,7 @@
         "source": "Source code",
         "target": ["Containerization"],
         "appName": "tackle-testapp",
+        "enableTagging": true,
         "storyPoints": 1
     },
     {

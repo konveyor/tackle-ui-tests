@@ -175,11 +175,21 @@ export class Analysis extends Application {
     }
 
     protected enableTransactionAnalysis() {
-        cy.get(enableTransactionAnalysis).click();
+        cy.get(enableTransactionAnalysis)
+            .invoke("is", ":checked")
+            .then((checked) => {
+                checked
+                    ? cy.log("Box is already checked")
+                    : cy.get(enableTransactionAnalysis).check();
+            });
     }
 
     protected enableAutomatedTagging() {
-        cy.get(enableAutomatedTagging).click();
+        cy.get(enableAutomatedTagging)
+            .invoke("is", ":checked")
+            .then((checked) => {
+                checked ? cy.log("Box is already checked") : cy.get(enableAutomatedTagging).check();
+            });
     }
 
     protected uploadCustomRule() {
