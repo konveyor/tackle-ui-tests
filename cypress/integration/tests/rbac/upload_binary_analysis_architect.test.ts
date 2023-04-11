@@ -26,7 +26,7 @@ import {
     resetURL,
     writeGpgKey,
 } from "../../../utils/utils";
-import { Analysis } from "../../models/developer/applicationinventory/analysis";
+import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { SEC } from "../../types/constants";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { getRandomUserData } from "../../../utils/data_utils";

@@ -31,8 +31,8 @@ import {
     RulesRepositoryFields,
     CustomMigrationTarget,
     CustomRuleType,
-} from "../../models/administrator/custom-migration-targets/custom-migration-target";
-import { Analysis } from "../../models/developer/applicationinventory/analysis";
+} from "../../models/administration/custom-migration-targets/custom-migration-target";
+import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { User } from "../../models/keycloak/users/user";

@@ -21,7 +21,7 @@ import {
     CustomRuleType,
     RulesManualFields,
     RulesRepositoryFields,
-} from "../integration/models/administrator/custom-migration-targets/custom-migration-target";
+} from "../integration/models/administration/custom-migration-targets/custom-migration-target";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title

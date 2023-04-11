@@ -9,13 +9,13 @@ import {
     logout,
     preservecookies,
 } from "../../../utils/utils";
-import { Analysis } from "../../models/developer/applicationinventory/analysis";
-import { CredentialsSourceControlUsername } from "../../models/administrator/credentials/credentialsSourceControlUsername";
+import { Analysis } from "../../models/migration/applicationinventory/analysis";
+import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType } from "../../types/constants";
-import { Application } from "../../models/developer/applicationinventory/application";
+import { Application } from "../../models/migration/applicationinventory/application";
 import { RbacValidationRules } from "../../types/types";
-import { Stakeholders } from "../../models/developer/controls/stakeholders";
-import { Assessment } from "../../models/developer/applicationinventory/assessment";
+import { Stakeholders } from "../../models/migration/controls/stakeholders";
+import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import * as data from "../../../utils/data_utils";
 
 describe("Architect RBAC operations", { tags: "@tier2" }, () => {

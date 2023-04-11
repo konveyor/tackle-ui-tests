@@ -1,5 +1,5 @@
 import { string } from "@oozcitak/infra";
-import { Tag } from "../models/developer/controls/tags";
+import { Tag } from "../models/migration/controls/tags";
 
 export type CredentialsSourceControlData = {
     type: string;
