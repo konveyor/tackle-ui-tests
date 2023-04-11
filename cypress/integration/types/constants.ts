@@ -62,6 +62,7 @@ export const reports = "Reports";
 export const repositoryType = "Repository type";
 export const save = "Save";
 export const stakeholders = "Stakeholders";
+
 export const stakeholderGroups = "Stakeholder groups";
 export const subversion = "Subversion";
 export const tag = "Tag";
