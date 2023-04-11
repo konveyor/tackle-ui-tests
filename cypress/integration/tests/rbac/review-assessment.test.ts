@@ -25,8 +25,8 @@ import {
 import * as data from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { User } from "../../models/keycloak/users/user";
-import { GeneralConfig } from "../../models/administrator/general/generalConfig";
-import { Assessment } from "../../models/developer/applicationinventory/assessment";
+import { GeneralConfig } from "../../models/administration/general/generalConfig";
+import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import { SEC } from "../../types/constants";
 
 describe("Assess review with RBAC operations", { tags: ["@tier2"] }, function () {

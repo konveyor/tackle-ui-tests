@@ -22,19 +22,19 @@ import {
     login,
     preservecookies,
 } from "../../../utils/utils";
-import { TagType } from "../../models/developer/controls/tagtypes";
+import { TagType } from "../../models/migration/controls/tagtypes";
 import * as data from "../../../utils/data_utils";
-import { Tag } from "../../models/developer/controls/tags";
+import { Tag } from "../../models/migration/controls/tags";
 import { CredentialType, SEC, UserCredentials } from "../../types/constants";
-import { Stakeholders } from "../../models/developer/controls/stakeholders";
-import { Jobfunctions } from "../../models/developer/controls/jobfunctions";
-import { BusinessServices } from "../../models/developer/controls/businessservices";
-import { Stakeholdergroups } from "../../models/developer/controls/stakeholdergroups";
-import { CredentialsSourceControlUsername } from "../../models/administrator/credentials/credentialsSourceControlUsername";
+import { Stakeholders } from "../../models/migration/controls/stakeholders";
+import { Jobfunctions } from "../../models/migration/controls/jobfunctions";
+import { BusinessServices } from "../../models/migration/controls/businessservices";
+import { Stakeholdergroups } from "../../models/migration/controls/stakeholdergroups";
+import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { getRandomCredentialsData } from "../../../utils/data_utils";
-import { Analysis } from "../../models/developer/applicationinventory/analysis";
+import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { UpgradeData } from "../../types/types";
-import { CredentialsMaven } from "../../models/administrator/credentials/credentialsMaven";
+import { CredentialsMaven } from "../../models/administration/credentials/credentialsMaven";
 
 describe("Creating pre-requisites before an upgrade", { tags: "@pre-upgrade" }, () => {
     let mavenCredentialsUsername: CredentialsMaven;

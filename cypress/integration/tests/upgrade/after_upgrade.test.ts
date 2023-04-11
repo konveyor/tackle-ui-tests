@@ -11,16 +11,16 @@ import {
     preservecookies,
 } from "../../../utils/utils";
 import { UpgradeData } from "../../types/types";
-import { Credentials } from "../../models/administrator/credentials/credentials";
-import { Jobfunctions } from "../../models/developer/controls/jobfunctions";
-import { Stakeholders } from "../../models/developer/controls/stakeholders";
-import { Stakeholdergroups } from "../../models/developer/controls/stakeholdergroups";
-import { BusinessServices } from "../../models/developer/controls/businessservices";
-import { TagType } from "../../models/developer/controls/tagtypes";
-import { Analysis } from "../../models/developer/applicationinventory/analysis";
-import { MavenConfiguration } from "../../models/administrator/repositories/maven";
+import { Credentials } from "../../models/administration/credentials/credentials";
+import { Jobfunctions } from "../../models/migration/controls/jobfunctions";
+import { Stakeholders } from "../../models/migration/controls/stakeholders";
+import { Stakeholdergroups } from "../../models/migration/controls/stakeholdergroups";
+import { BusinessServices } from "../../models/migration/controls/businessservices";
+import { TagType } from "../../models/migration/controls/tagtypes";
+import { Analysis } from "../../models/migration/applicationinventory/analysis";
+import { MavenConfiguration } from "../../models/administration/repositories/maven";
 import { clearRepository } from "../../views/repository.view";
-import { GeneralConfig } from "../../models/administrator/general/generalConfig";
+import { GeneralConfig } from "../../models/administration/general/generalConfig";
 
 describe("Performing post-upgrade validations", { tags: "@post-upgrade" }, () => {
     before("Login", function () {
