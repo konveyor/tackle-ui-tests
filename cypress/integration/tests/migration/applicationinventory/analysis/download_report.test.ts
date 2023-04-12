@@ -39,9 +39,9 @@ describe("Enable and Download HTML and CSV Reports", { tags: "@tier1" }, functio
     it("Download HTML and CSV Reports - Source App", function () {
         sourceApplication = new Analysis(
             getRandomApplicationData("SourceApp", {
-                sourceData: this.appData[0],
+                sourceData: this.appData["bookserver-app"],
             }),
-            getRandomAnalysisData(this.analysisData[0])
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         sourceApplication.create();
         // applicationList.push(sourceApplication);

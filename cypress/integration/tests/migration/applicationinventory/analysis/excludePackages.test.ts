@@ -54,8 +54,10 @@ describe("Source Analysis", { tags: "@tier2" }, () => {
     it("Exclude a package in analysis", function () {
         // For source code analysis application must have source code URL git or svn
         const application = new Analysis(
-            getRandomApplicationData("testapp-excludePackages", { sourceData: this.appData[3] }),
-            getRandomAnalysisData(this.analysisData[8])
+            getRandomApplicationData("testapp-excludePackages", {
+                sourceData: this.appData["tackle-testapp-git"],
+            }),
+            getRandomAnalysisData(this.analysisData["analysis_for_exclude_packages"])
         );
         application.create();
         application.manageCredentials(source_credential.name);

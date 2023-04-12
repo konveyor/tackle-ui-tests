@@ -81,8 +81,10 @@ describe("Custom Migration Targets RBAC operations", { tags: ["@tier2", "@dc"] }
 
     it("Create custom migration target, then look for it on an analysis as admin user", function () {
         analysis = new Analysis(
-            getRandomApplicationData("bookServerApp", { sourceData: this.appData[0] }),
-            getRandomAnalysisData(this.analysisData[0])
+            getRandomApplicationData("bookServerApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         analysis.create();
 

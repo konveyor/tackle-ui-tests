@@ -89,9 +89,9 @@ describe("Test secure and insecure git repository analysis", { tags: "@tier1" },
         // For tackle test app source credentials are required.
         const application = new Analysis(
             getRandomApplicationData("Insecure_enabled_tackle_test_app", {
-                sourceData: this.appData[6],
+                sourceData: this.appData["tackle-testapp"],
             }),
-            getRandomAnalysisData(this.analysisData[0])
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
 
         application.create();
@@ -111,9 +111,9 @@ describe("Test secure and insecure git repository analysis", { tags: "@tier1" },
         // For tackle test app source credentials are required.
         const application = new Analysis(
             getRandomApplicationData("Insecure_disabled_tackle_test_app", {
-                sourceData: this.appData[6],
+                sourceData: this.appData["tackle-testapp"],
             }),
-            getRandomAnalysisData(this.analysisData[0])
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
 
         application.create();

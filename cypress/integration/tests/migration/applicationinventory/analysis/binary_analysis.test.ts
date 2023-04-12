@@ -112,8 +112,10 @@ describe("Binary Analysis", { tags: "@tier1" }, () => {
     it("Binary Analysis", function () {
         // For binary analysis application must have group,artifcat and version.
         const application = new Analysis(
-            getRandomApplicationData("tackletestApp_binary", { binaryData: this.appData[2] }),
-            getRandomAnalysisData(this.analysisData[3])
+            getRandomApplicationData("tackletestApp_binary", {
+                binaryData: this.appData["tackle-testapp-binary"],
+            }),
+            getRandomAnalysisData(this.analysisData["binary_analysis_on_tackletestapp"])
         );
         application.create();
         cy.wait("@getApplication");

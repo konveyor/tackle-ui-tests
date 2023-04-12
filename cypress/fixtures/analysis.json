@@ -1,36 +1,41 @@
-[
-    {
+{
+    "source_analysis_on_bookserverapp": {
         "source": "Source code",
         "target": ["Containerization"],
         "appName": "book-server",
         "storyPoints": 5
     },
-    {
+
+    "source+dep_analysis_on_tackletestapp": {
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "tackle-testapp",
         "storyPoints": 1
     },
-    {
+
+    "source+dep_analysis_on_daytrader-app": {
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "deps",
         "storyPoints": 24
     },
-    {
+
+    "binary_analysis_on_tackletestapp": {
         "source": "Binary",
         "target": ["Containerization"],
         "appName": "customers-tomcat-0.0.1-SNAPSHOT.war",
         "storyPoints": 2
     },
-    {
+
+    "uploadbinary_analysis_on_acmeair": {
         "source": "Upload a local binary",
         "target": ["Jakarta EE 9"],
         "binary": ["acmeair-webapp-1.0-SNAPSHOT.war"],
         "appName": "acmeair-webapp-1.0-SNAPSHOT.war",
         "storyPoints": 78
     },
-    {
+
+    "uploadbinary_analysis_with_customrule": {
         "source": "Upload a local binary",
         "target": ["Jakarta EE 9"],
         "binary": ["customers-tomcat-0.0.1-SNAPSHOT.war"],
@@ -38,14 +43,16 @@
         "appName": "customers-tomcat-0.0.1-SNAPSHOT.war",
         "storyPoints": 21
     },
-    {
+
+    "analysis_for_enableTagging": {
         "source": "Source code",
-        "target": ["Containerization"],
+        "target": ["Jakarta EE 9", "Containerization"],
         "appName": "tackle-testapp",
         "enableTagging": true,
         "storyPoints": 1
     },
-    {
+
+    "analysis_for_DIVA-report": {
         "source": "Upload a local binary",
         "target": ["Jakarta EE 9"],
         "binary": ["spring-petclinic-2.4.0.BUILD-SNAPSHOT.jar"],
@@ -54,7 +61,7 @@
         "storyPoints": 42
     },
 
-    {
+    "analysis_for_exclude_packages": {
         "source": "Source code",
         "target": ["Containerization"],
         "appName": "tackle-testapp",
@@ -62,22 +69,7 @@
         "storyPoints": 1
     },
 
-    {
-        "source": "Upload a local binary",
-        "target": ["Jakarta EE 9"],
-        "binary": [
-            "acmeair-webapp-1.0-SNAPSHOT.war",
-            "customers-tomcat-0.0.1-SNAPSHOT.war",
-            "spring-petclinic-2.4.0.BUILD-SNAPSHOT.jar"
-        ],
-        "appName": [
-            "acmeair-webapp-1.0-SNAPSHOT.war",
-            "customers-tomcat-0.0.1-SNAPSHOT.war",
-            "spring-petclinic-2.4.0.BUILD-SNAPSHOT.jar"
-        ],
-        "storyPoints": [78, 10, 44]
-    },
-    {
+    "analysis_for_excludeRuleTags": {
         "source": "Source code",
         "target": ["Linux"],
         "appName": "tackle-testapp",
@@ -86,7 +78,7 @@
         "storyPoints": 1
     },
 
-    {
+    "analysis_for_manuallyAnalyzePackages": {
         "source": "Source code",
         "target": ["Quarkus"],
         "appName": "tackle-testapp",
@@ -97,7 +89,8 @@
         ],
         "storyPoints": 1
     },
-    {
+
+    "analysis_and_incident_validation_jeeExample_app": {
         "source": "Upload a local binary",
         "binary": ["jee-example-app-1.0.0.ear"],
         "appsName": "jee-example-app-1.0.0.ear",
@@ -113,7 +106,8 @@
             }
         ]
     },
-    {
+
+    "analysis_and_incident_validation_camunda_app": {
         "source": "Upload a local binary",
         "binary": ["camunda-bpm-spring-boot-starter-example-war-2.0.0.war"],
         "appName": "camunda-bpm-spring-boot-starter-example-war-2.0.0.war",
@@ -129,7 +123,8 @@
             }
         ]
     },
-    {
+
+    "analysis_and_incident_validation_complete-duke": {
         "source": "Upload a local binary",
         "binary": ["complete-duke.zip"],
         "appName": "complete-duke.zip",
@@ -145,7 +140,8 @@
             }
         ]
     },
-    {
+
+    "analysis_and_incident_validation_kafka-app": {
         "source": "Upload a local binary",
         "binary": ["kafka-clients-sb-sample.jar"],
         "appName": "kafka-clients-sb-sample.jar",
@@ -161,17 +157,19 @@
             }
         ]
     },
-    {
+
+    "analysis_for_openSourceLibraries": {
         "source": "Source code + dependencies",
         "target": ["Containerization"],
         "appName": "deps",
         "openSourceLibraries": true,
         "storyPoints": "2,602"
     },
-    {
+
+    "analysis_on_example-1-app": {
         "source": "Source code",
         "target": ["Containerization"],
         "appName": "example-1",
         "storyPoints": 1
     }
-]
+}

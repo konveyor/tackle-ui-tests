@@ -28,9 +28,15 @@ import {
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Report } from "../../../../models/migration/applicationinventory/reportPage";
+import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
+import * as data from "../../../../../utils/data_utils";
+import { CredentialType, UserCredentials } from "../../../../types/constants";
+import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 
 describe("Report Page's Sort Validation", { tags: "@tier2" }, () => {
     const report = new Report();
+    let source_credential;
+    let maven_credential;
 
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
@@ -39,6 +45,22 @@ describe("Report Page's Sort Validation", { tags: "@tier2" }, () => {
         // Perform login
         login();
         deleteApplicationTableRows();
+
+        // Create source Credentials
+        source_credential = new CredentialsSourceControlUsername(
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                true
+            )
+        );
+        source_credential.create();
+
+        // Create Maven credentials
+        maven_credential = new CredentialsMaven(
+            data.getRandomCredentialsData(CredentialType.maven, "None", true)
+        );
+        maven_credential.create();
     });
 
     beforeEach("Persist session", function () {
@@ -70,7 +92,7 @@ describe("Report Page's Sort Validation", { tags: "@tier2" }, () => {
     it("Sort by Name validation test using Upload Binary Analysis", function () {
         const application: any = new Analysis(
             getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData[9])
+            getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_camunda_app"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -98,7 +120,7 @@ describe("Report Page's Sort Validation", { tags: "@tier2" }, () => {
     it("Sort by Story points test using Upload Binary Analysis", function () {
         const application: any = new Analysis(
             getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData[9])
+            getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_camunda_app"])
         );
         application.create();
         cy.wait("@getApplication");
