@@ -157,13 +157,12 @@ describe("Copy assessment and review tests", { tags: "@tier2" }, () => {
         } else {
             cy.get("ul[role=menu] > li").contains("Select page (10 items)").click();
         }
-        cy.get("input[name='confirm']").check();
         cy.get(copy).should("be.visible").should("not.be.disabled");
+        clickWithin(modal, "button[aria-label='Select']");
 
         // Select all applications
         clickWithin(modal, "button[aria-label='Select']");
         cy.get("ul[role=menu] > li").contains(`Select all (${applicationList.length}`).click();
-        cy.get("input[name='confirm']").check();
         cy.get(copy).should("be.visible").should("not.be.disabled");
         clickWithin(modal, "button[aria-label='Select']");
 
