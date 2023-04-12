@@ -158,6 +158,7 @@ describe("Copy assessment and review tests", { tags: "@tier2" }, () => {
             cy.get("ul[role=menu] > li").contains("Select page (10 items)").click();
         }
         cy.get(copy).should("be.visible").should("not.be.disabled");
+        clickWithin(modal, "button[aria-label='Select']");
 
         // Select all applications
         clickWithin(modal, "button[aria-label='Select']");
