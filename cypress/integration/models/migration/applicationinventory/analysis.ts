@@ -40,6 +40,7 @@ import {
     inputText,
     performRowActionByIcon,
     selectFormItems,
+    selectItemsPerPage,
     selectUserPerspective,
     uploadApplications,
     uploadXml,
@@ -147,6 +148,7 @@ export class Analysis extends Application {
         clickByText(navMenu, applicationInventory);
         clickTab(analysis);
         cy.wait(2 * SEC);
+        selectItemsPerPage(100);
     }
 
     create(): void {
