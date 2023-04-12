@@ -323,6 +323,17 @@ export class Analysis extends Application {
             });
     }
 
+    verifyAutoTags(tags) {
+        // Navigate to the application details page and verify that tags are present
+        this.selectApplicationRow();
+        cy.get(rightSideMenu).within(() => {
+            clickTab("Tags");
+            for (var tagIndex = 0; tagIndex < tags[index].length; tagIndex++) {
+                this.tagExists(tags[tagIndex]);
+            }
+        });
+    }
+
     openReport() {
         this.selectApplicationRow();
         cy.get(rightSideMenu, { timeout: 30 * SEC }).within(() => {
