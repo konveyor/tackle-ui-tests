@@ -142,6 +142,8 @@ describe("Test secure and insecure maven repository analysis", () => {
     });
 
     it("Perform clear repository", function () {
+        login();
+        MavenConfiguration.open();
         mavenConfiguration.clearRepository();
     });
 
@@ -152,6 +154,8 @@ describe("Test secure and insecure maven repository analysis", () => {
 
         rwxEnabled = false;
         configureRWX(rwxEnabled);
+        login();
+        MavenConfiguration.open();
         isEnabled(clearRepository, rwxEnabled);
     });
 });
