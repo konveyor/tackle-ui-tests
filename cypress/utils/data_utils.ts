@@ -20,9 +20,7 @@ import {
     UserData,
     RulesManualFields,
     RulesRepositoryFields,
-} from "../integration/types/types";
-import { CredentialType, UserCredentials, CustomRuleType } from "../integration/types/constants";
-import { writeGpgKey, writeMavenSettingsFile } from "./utils";
+} from "../integration/models/administration/custom-migration-targets/custom-migration-target";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title

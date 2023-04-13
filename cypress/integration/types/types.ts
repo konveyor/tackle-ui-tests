@@ -1,5 +1,5 @@
-import { RepositoryType, CustomRuleType } from "./constants";
-import { CredentialsSourceControl } from "../models/administrator/credentials/credentialsSourceControl";
+import { string } from "@oozcitak/infra";
+import { Tag } from "../models/migration/controls/tags";
 
 export type CredentialsSourceControlData = {
     type: string;

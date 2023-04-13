@@ -13,12 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { BusinessServices } from "../integration/models/developer/controls/businessservices";
-import { Stakeholders } from "../integration/models/developer/controls/stakeholders";
-import { Stakeholdergroups } from "../integration/models/developer/controls/stakeholdergroups";
-import { Tag } from "../integration/models/developer/controls/tags";
-import { TagType } from "../integration/models/developer/controls/tagtypes";
-import { Jobfunctions } from "../integration/models/developer/controls/jobfunctions";
+import { BusinessServices } from "../integration/models/migration/controls/businessservices";
+import { Stakeholders } from "../integration/models/migration/controls/stakeholders";
+import { Stakeholdergroups } from "../integration/models/migration/controls/stakeholdergroups";
+import { Tag } from "../integration/models/migration/controls/tags";
+import { TagType } from "../integration/models/migration/controls/tagtypes";
+import { Jobfunctions } from "../integration/models/migration/controls/jobfunctions";
 
 import * as loginView from "../integration/views/login.view";
 import * as commonView from "../integration/views/common.view";
@@ -67,15 +67,15 @@ import {
     prevPageButton,
 } from "../integration/views/common.view";
 import { tagLabels } from "../integration/views/tags.view";
-import { Credentials } from "../integration/models/administrator/credentials/credentials";
-import { Assessment } from "../integration/models/developer/applicationinventory/assessment";
+import { Credentials } from "../integration/models/administration/credentials/credentials";
+import { Assessment } from "../integration/models/migration/applicationinventory/assessment";
 import { analysisData, applicationData, UserData } from "../integration/types/types";
-import { CredentialsProxy } from "../integration/models/administrator/credentials/credentialsProxy";
+import { CredentialsProxy } from "../integration/models/administration/credentials/credentialsProxy";
 import { getRandomCredentialsData, randomWordGenerator } from "../utils/data_utils";
-import { CredentialsMaven } from "../integration/models/administrator/credentials/credentialsMaven";
-import { CredentialsSourceControlUsername } from "../integration/models/administrator/credentials/credentialsSourceControlUsername";
-import { CredentialsSourceControlKey } from "../integration/models/administrator/credentials/credentialsSourceControlKey";
-import { Application } from "../integration/models/developer/applicationinventory/application";
+import { CredentialsMaven } from "../integration/models/administration/credentials/credentialsMaven";
+import { CredentialsSourceControlUsername } from "../integration/models/administration/credentials/credentialsSourceControlUsername";
+import { CredentialsSourceControlKey } from "../integration/models/administration/credentials/credentialsSourceControlKey";
+import { Application } from "../integration/models/migration/applicationinventory/application";
 import { switchToggle } from "../integration/views/reports.view";
 import { rightSideMenu } from "../integration/views/analysis.view";
 
@@ -654,7 +654,9 @@ export function deleteApplicationTableRows(currentPage = false): void {
                                 cy.get(".pf-c-dropdown__toggle-button").click({ force: true });
                                 clickByText(button, "Select page");
                             } else {
-                                cy.get("input#bulk-selected-apps-checkbox").check({ force: true });
+                                cy.get("input#bulk-selected-apps-checkbox", {
+                                    timeout: 10 * SEC,
+                                }).check({ force: true });
                             }
 
                             application_inventory_kebab_menu("Delete");
@@ -920,6 +922,8 @@ export function getRandomApplicationData(
         if (options.sourceData) {
             appdata["repoType"] = options.sourceData.repoType;
             appdata["sourceRepo"] = options.sourceData.sourceRepo;
+            appdata["branch"] = options.sourceData.branch;
+            appdata["rootPath"] = options.sourceData.rootPath;
         }
     }
 
@@ -941,6 +945,7 @@ export function getRandomAnalysisData(analysisdata): analysisData {
         binary: analysisdata.binary,
         customRule: analysisdata.customRule,
         enableTransaction: analysisdata.enableTransaction,
+        enableTagging: analysisdata.enableTagging,
         appName: analysisdata.appName,
         storyPoints: analysisdata.storyPoints,
         excludePackages: analysisdata.excludePackages,

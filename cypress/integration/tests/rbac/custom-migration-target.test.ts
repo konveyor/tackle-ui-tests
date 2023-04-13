@@ -28,8 +28,12 @@ import {
 import { analyzeButton, application, button, SEC, CustomRuleType } from "../../types/constants";
 import { RulesRepositoryFields } from "../../types/types";
 import * as data from "../../../utils/data_utils";
-import { CustomMigrationTarget } from "../../models/administrator/custom-migration-targets/custom-migration-target";
-import { Analysis } from "../../models/developer/applicationinventory/analysis";
+import {
+    RulesRepositoryFields,
+    CustomMigrationTarget,
+    CustomRuleType,
+} from "../../models/administration/custom-migration-targets/custom-migration-target";
+import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { User } from "../../models/keycloak/users/user";

@@ -28,6 +28,7 @@
         "cypress": "^6.9.1",
         "cypress-downloadfile": "^1.2.3",
         "cypress-mochawesome-reporter": "^3.2.2",
-        "license-check-and-add": "^4.0.5"
+        "license-check-and-add": "^4.0.5",
+        "typedoc": "^0.23.28"
     }
 }
