@@ -172,6 +172,7 @@ describe("Custom Rules RBAC operations", { tags: ["@tier2"] }, function () {
         sourceCredential.delete();
         analysisWithPublicRules.delete();
         analysisWithPrivateRules.delete();
+        analysisWithPrivateRulesNoCred.delete();
         User.loginKeycloakAdmin();
         architect.delete();
         migrator.delete();
