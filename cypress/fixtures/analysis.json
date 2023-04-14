@@ -44,16 +44,14 @@
         "appName": "tackle-testapp",
         "enableTagging": true,
         "storyPoints": 1,
-        "tags": [
-            [
-                ["HTTP", "Servlet"],
-                ["MVC", "Spring MVC"],
-                ["Observability", "Spring Boot Actuator"],
-                ["Other", "Properties"],
-                ["Persistence", "JPA entities"],
-                ["Persistence", "Spring Data JPA"],
-                ["Web", "Spring Web"]
-            ]
+        "autoTags": [
+            ["HTTP", "Servlet"],
+            ["MVC", "Spring MVC"],
+            ["Observability", "Spring Boot Actuator"],
+            ["Other", "Properties"],
+            ["Persistence", "JPA entities"],
+            ["Persistence", "Spring Data JPA"],
+            ["Web", "Spring Web"]
         ]
     },
 

@@ -102,6 +102,7 @@ export class Analysis extends Application {
         information?: number;
         total?: number;
     };
+    autoTags?: string[][];
 
     constructor(appData: applicationData, analysisData: analysisData) {
         super(appData);
@@ -127,6 +128,7 @@ export class Analysis extends Application {
             incidents,
             openSourceLibraries,
             customRuleRepository,
+            autoTags,
         } = analysisData;
         this.name = appData.name;
         this.source = source;
@@ -146,6 +148,7 @@ export class Analysis extends Application {
         if (excludedPackagesList) this.excludedPackagesList = excludedPackagesList;
         if (incidents) this.incidents = incidents;
         if (openSourceLibraries) this.openSourceLibraries = openSourceLibraries;
+        if (autoTags) this.autoTags = autoTags;
     }
 
     //Navigate to the Application inventory
@@ -323,15 +326,11 @@ export class Analysis extends Application {
             });
     }
 
-    verifyAutoTags(tags) {
+    verifyAutoTags(tags: string[][]) {
         // Navigate to the application details page and verify that tags are present
-        this.selectApplicationRow();
-        cy.get(rightSideMenu).within(() => {
-            clickTab("Tags");
-            for (var tagIndex = 0; tagIndex < tags[index].length; tagIndex++) {
-                this.tagExists(tags[tagIndex]);
-            }
-        });
+        for (var tagIndex = 0; tagIndex < tags.length; tagIndex++) {
+            this.tagExists(tags[tagIndex][1]);
+        }
     }
 
     openReport() {
