@@ -90,6 +90,7 @@ export type analysisData = {
         information?: number;
         total?: number;
     };
+    autoTags?: string[][];
 };
 
 export type UserData = {
