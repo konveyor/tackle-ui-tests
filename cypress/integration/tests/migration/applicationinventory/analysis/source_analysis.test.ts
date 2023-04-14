@@ -252,7 +252,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.manageCredentials(source_credential.name, "None");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.verifyAutoTags(this.appData[6]["tags"]);
+        application.verifyAutoTags(this.analysisData[6]["autoTags"]);
     });
 
     it("Analysis for Konveyor example1 application", function () {
