@@ -73,7 +73,7 @@ import {
 import { kebabMenu } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import { AnalysisStatuses } from "../../../types/constants";
-import { RulesRepositoryFields } from "../../../models/administrator/custom-migration-targets/custom-migration-target";
+import { RulesRepositoryFields } from "../../../types/types";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 
 export class Analysis extends Application {

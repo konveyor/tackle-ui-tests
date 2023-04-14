@@ -32,11 +32,12 @@ import {
 import { RulesRepositoryFields } from "../../types/types";
 import * as data from "../../../utils/data_utils";
 import { getRulesData } from "../../../utils/data_utils";
-import { CustomMigrationTarget } from "../../models/administrator/custom-migration-targets/custom-migration-target";
-import { Analysis } from "../../models/developer/applicationinventory/analysis";
+import { CustomMigrationTarget } from "../../models/administration/custom-migration-targets/custom-migration-target";
+import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
-import { CredentialsSourceControlUsername } from "../../models/administrator/credentials/credentialsSourceControlUsername";
+import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
+import { User } from "../../models/keycloak/users/user";
 
 describe("Custom Rules RBAC operations", { tags: ["@tier2"] }, function () {
     // Polarion TC 318
@@ -57,9 +58,9 @@ describe("Custom Rules RBAC operations", { tags: ["@tier2"] }, function () {
 
     before("Create test data", function () {
         if (hasToBeSkipped("@tier2")) return;
-        /*User.loginKeycloakAdmin();
-    architect.create();
-    migrator.create();*/
+        User.loginKeycloakAdmin();
+        architect.create();
+        migrator.create();
 
         login();
 
@@ -96,20 +97,12 @@ describe("Custom Rules RBAC operations", { tags: ["@tier2"] }, function () {
         );
         analysisWithPublicRules.customRule = null;
         analysisWithPublicRules.customRuleRepository = getRulesData(
-            this.customRules.rules_from_bookServerApp
+            this.customRules.rules_from_bookServerApp // TODO change repo after MTA-458 is fixed
         ) as RulesRepositoryFields;
         analysisWithPublicRules.target = [];
 
         analysisWithPublicRules.create();
         analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
-
-        /*analysisWithPrivateRules = new Analysis(
-      getRandomApplicationData("tackleTestApp_Source", { sourceData: this.appData[3] }),
-      getRandomAnalysisData(this.analysisData[6])
-    );
-    analysisWithPrivateRules.create();
-    cy.wait(2000);
-    analysisWithPrivateRules.manageCredentials(sourceCredential.name);*/
     });
 
     it("Admin, Rules from private repository with credentials", function () {
@@ -122,7 +115,7 @@ describe("Custom Rules RBAC operations", { tags: ["@tier2"] }, function () {
             credentials: sourceCredential,
         };
         analysisWithPrivateRules.customRule = null;
-        analysisWithPrivateRules.customRuleRepository = repositoryData;
+        analysisWithPrivateRules.customRuleRepository = repositoryData as RulesRepositoryFields;
         analysisWithPrivateRules.target = [];
 
         analysisWithPrivateRules.create();
@@ -145,15 +138,43 @@ describe("Custom Rules RBAC operations", { tags: ["@tier2"] }, function () {
         logout();
     });
 
+    it("Architect, Rules from public repository", function () {
+        architect.login();
+        analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
+    });
+
+    it("Architect, Rules from private repository with credentials", function () {
+        analyzeAndVerify(analysisWithPrivateRules, AnalysisStatuses.completed);
+    });
+
+    it("Architect, Rules from private repository without credentials", function () {
+        analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
+        architect.logout();
+    });
+
+    it("Migrator, Rules from public repository", function () {
+        migrator.login();
+        analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
+    });
+
+    it("Migrator, Rules from private repository with credentials", function () {
+        analyzeAndVerify(analysisWithPrivateRules, AnalysisStatuses.completed);
+    });
+
+    it("Migrator, Rules from private repository without credentials", function () {
+        analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
+        migrator.logout();
+    });
+
     after("Clear test data", () => {
         if (hasToBeSkipped("@tier2")) return;
         login();
         sourceCredential.delete();
-        //analysisWithPublicRules.delete();
-        //analysisWithPrivateRules.delete();
-        /*User.loginKeycloakAdmin();
-    architect.delete();
-    migrator.delete();*/
+        analysisWithPublicRules.delete();
+        analysisWithPrivateRules.delete();
+        User.loginKeycloakAdmin();
+        architect.delete();
+        migrator.delete();
     });
 
     const analyzeAndVerify = (analysis: Analysis, expectedStatus: AnalysisStatuses) => {
