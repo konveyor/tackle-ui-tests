@@ -4,6 +4,7 @@ metadata:
   name: tackle
   namespace: konveyor-tackle
 spec: {
+  feature_auth_required: true,
   hub_bucket_volume_size: 20Gi,
   maven_data_volume_size: 20Gi  
 }
