@@ -13,30 +13,11 @@ import {
     deleteAction,
     editAction,
     RepositoryType,
+    CustomRuleType,
 } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
-import { CredentialsSourceControl } from "../credentials/credentialsSourceControl";
-
-export enum CustomRuleType {
-    Repository = "Repository",
-    Manual = "Manual",
-}
-
-export type RulesRepositoryFields = {
-    type: CustomRuleType.Repository;
-    repositoryType: RepositoryType;
-    repositoryUrl: string;
-    branch?: string;
-    rootPath?: string;
-    credentials?: CredentialsSourceControl;
-};
-
-export type RulesManualFields = {
-    type: CustomRuleType.Manual;
-    imagePath?: string;
-    rulesetPaths: string[];
-};
+import { RulesManualFields, RulesRepositoryFields } from "../../../types/types";
 
 export interface CustomMigrationTarget {
     name: string;

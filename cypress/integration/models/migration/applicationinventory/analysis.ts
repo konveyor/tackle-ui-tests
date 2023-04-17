@@ -21,6 +21,7 @@ import {
     applicationInventory,
     button,
     migration,
+    RepositoryType,
     save,
     SEC,
     tdTag,
@@ -73,6 +74,8 @@ import {
 import { kebabMenu } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import { AnalysisStatuses } from "../../../types/constants";
+import { RulesRepositoryFields } from "../../../types/types";
+import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 
 export class Analysis extends Application {
     name: string;
@@ -82,6 +85,7 @@ export class Analysis extends Application {
     scope?: string;
     excludePackages?: string[];
     customRule?: string;
+    customRuleRepository?: RulesRepositoryFields;
     sources?: string;
     excludeRuleTags?: string;
     enableTransaction?: boolean;
@@ -122,6 +126,7 @@ export class Analysis extends Application {
             excludedPackagesList,
             incidents,
             openSourceLibraries,
+            customRuleRepository,
         } = analysisData;
         this.name = appData.name;
         this.source = source;
@@ -129,6 +134,7 @@ export class Analysis extends Application {
         if (binary) this.binary = binary;
         if (scope) this.scope = scope;
         if (customRule) this.customRule = customRule;
+        if (customRuleRepository) this.customRuleRepository = customRuleRepository;
         if (sources) this.sources = sources;
         if (excludeRuleTags) this.excludeRuleTags = excludeRuleTags;
         if (enableTransaction) this.enableTransaction = enableTransaction;
@@ -203,6 +209,27 @@ export class Analysis extends Application {
         cy.contains(addRules, "Add", { timeout: 2000 }).click();
     }
 
+    protected fetchCustomRules() {
+        cy.contains("button", "Repository", { timeout: 2000 }).should("be.enabled").click();
+        click(CustomMigrationTargetView.repositoryTypeDropdown);
+        clickByText(button, RepositoryType.git);
+
+        inputText(CustomMigrationTargetView.repositoryUrl, this.customRuleRepository.repositoryUrl);
+
+        if (this.customRuleRepository.branch) {
+            inputText(CustomMigrationTargetView.branch, this.customRuleRepository.branch);
+        }
+
+        if (this.customRuleRepository.rootPath) {
+            inputText(CustomMigrationTargetView.rootPath, this.customRuleRepository.rootPath);
+        }
+
+        if (this.customRuleRepository.credentials) {
+            click(CustomMigrationTargetView.credentialsDropdown);
+            clickByText(button, this.customRuleRepository.credentials.name);
+        }
+    }
+
     protected isNextEnabled() {
         cy.get(nextButton).then(($a) => {
             if ($a.hasClass("pf-m-disabled")) {
@@ -253,6 +280,7 @@ export class Analysis extends Application {
             cy.contains("button", "Next", { timeout: 200 }).click();
             this.scopeSelect();
             if (this.customRule) this.uploadCustomRule();
+            if (this.customRuleRepository) this.fetchCustomRules();
             cy.contains("button", "Next", { timeout: 200 }).click();
             if (this.excludeRuleTags) this.tagsToExclude();
             if (this.enableTransaction) this.enableTransactionAnalysis();
