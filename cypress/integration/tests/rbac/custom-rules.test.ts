@@ -97,7 +97,7 @@ describe("Custom Rules RBAC operations", { tags: ["@tier2"] }, function () {
         );
         analysisWithPublicRules.customRule = null;
         analysisWithPublicRules.customRuleRepository = getRulesData(
-            this.customRules.rules_from_bookServerApp // TODO change repo after MTA-458 is fixed
+            this.customRules.rules_from_bookServerApp
         ) as RulesRepositoryFields;
         analysisWithPublicRules.target = [];
 
