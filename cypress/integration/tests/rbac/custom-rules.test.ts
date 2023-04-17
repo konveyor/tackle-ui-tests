@@ -95,7 +95,6 @@ describe("Custom Rules RBAC operations", { tags: ["@tier2"] }, function () {
             getRandomApplicationData("bookServerApp", { sourceData: this.appData[0] }),
             getRandomAnalysisData(this.analysisData[0])
         );
-        analysisWithPublicRules.customRule = null;
         analysisWithPublicRules.customRuleRepository = getRulesData(
             this.customRules.rules_from_bookServerApp
         ) as RulesRepositoryFields;
@@ -114,7 +113,6 @@ describe("Custom Rules RBAC operations", { tags: ["@tier2"] }, function () {
             ...getRulesData(this.customRules.rules_from_tackle_testApp),
             credentials: sourceCredential,
         };
-        analysisWithPrivateRules.customRule = null;
         analysisWithPrivateRules.customRuleRepository = repositoryData as RulesRepositoryFields;
         analysisWithPrivateRules.target = [];
 
@@ -127,7 +125,6 @@ describe("Custom Rules RBAC operations", { tags: ["@tier2"] }, function () {
             getRandomApplicationData("bookServerApp", { sourceData: this.appData[0] }),
             getRandomAnalysisData(this.analysisData[0])
         );
-        analysisWithPrivateRulesNoCred.customRule = null;
         analysisWithPrivateRulesNoCred.customRuleRepository = getRulesData(
             this.customRules.rules_from_tackle_testApp
         ) as RulesRepositoryFields;
