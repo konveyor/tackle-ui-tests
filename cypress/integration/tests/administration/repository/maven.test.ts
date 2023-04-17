@@ -41,7 +41,7 @@ let mavenConfiguration = new MavenConfiguration();
 let source_credential;
 let maven_credential;
 
-describe("Test secure and insecure maven repository analysis", () => {
+describe("Test secure and insecure maven repository analysis", { tags: "@tier1" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;
@@ -92,6 +92,7 @@ describe("Test secure and insecure maven repository analysis", () => {
 
     after("Perform test data clean up", () => {
         if (hasToBeSkipped("@tier1")) return;
+        configureRWX(true);
         login();
         deleteApplicationTableRows();
         deleteAllBusinessServices();
@@ -142,6 +143,8 @@ describe("Test secure and insecure maven repository analysis", () => {
     });
 
     it("Perform clear repository", function () {
+        login();
+        MavenConfiguration.open();
         mavenConfiguration.clearRepository();
     });
 
@@ -152,6 +155,8 @@ describe("Test secure and insecure maven repository analysis", () => {
 
         rwxEnabled = false;
         configureRWX(rwxEnabled);
+        login();
+        MavenConfiguration.open();
         isEnabled(clearRepository, rwxEnabled);
     });
 });
