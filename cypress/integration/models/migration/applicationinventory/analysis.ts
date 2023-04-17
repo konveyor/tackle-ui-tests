@@ -326,10 +326,10 @@ export class Analysis extends Application {
             });
     }
 
-    verifyAutoTags(tags: string[][]) {
-        // Navigate to the application details page and verify that tags are present
-        for (var tagIndex = 0; tagIndex < tags.length; tagIndex++) {
-            this.tagExists(tags[tagIndex][1]);
+    verifyAutoTags() {
+        // Navigate to the application details page and verify that technology tags are present post analysis
+        for (var tagIndex = 0; tagIndex < this.autoTags.length; tagIndex++) {
+            this.tagExists(this.autoTags[tagIndex][1]);
         }
     }
 

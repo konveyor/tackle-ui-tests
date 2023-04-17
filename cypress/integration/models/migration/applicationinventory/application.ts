@@ -312,6 +312,7 @@ export class Application {
         // Verifies if tag exists on application details -> Tags page
         this.applicationDetailsTab("Tags");
         cy.get(applicationTag, { timeout: 10 * SEC }).should("contain", tagName);
+        this.closeApplicationDetails();
     }
 
     static validateAssessButton(rbacRules: RbacValidationRules) {

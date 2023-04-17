@@ -240,6 +240,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
 
     it("Automated tagging using Source Analysis on tackle testapp", function () {
         // For tackle test app source credentials are required.
+        // Automates https://polarion.engineering.redhat.com/polarion/#/project/MTAPathfinder/workitem?id=MTA-298
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source_autoTagging", {
                 sourceData: this.appData[3],
@@ -252,7 +253,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.manageCredentials(source_credential.name, "None");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.verifyAutoTags(this.analysisData[6]["autoTags"]);
+        application.verifyAutoTags();
     });
 
     it("Analysis for Konveyor example1 application", function () {
