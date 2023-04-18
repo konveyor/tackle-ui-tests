@@ -238,7 +238,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.validateStoryPoints();
     });
 
-    it.only("Automated tagging using Source Analysis on tackle testapp", function () {
+    it("Automated tagging using Source Analysis on tackle testapp", function () {
         // For tackle test app source credentials are required.
         // Automates https://polarion.engineering.redhat.com/polarion/#/project/MTAPathfinder/workitem?id=MTA-298
         const application = new Analysis(
