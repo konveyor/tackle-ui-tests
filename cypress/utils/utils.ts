@@ -954,7 +954,6 @@ export function getRandomAnalysisData(analysisdata): analysisData {
         excludedPackagesList: analysisdata.excludedPackagesList,
         incidents: analysisdata.incidents,
         openSourceLibraries: analysisdata.openSourceLibraries,
-        autoTags: analysisdata.autoTags,
     };
 }
 

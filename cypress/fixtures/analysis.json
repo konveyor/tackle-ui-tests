@@ -44,7 +44,7 @@
         "appName": "tackle-testapp",
         "enableTagging": true,
         "storyPoints": 1,
-        "autoTags": [
+        "techTags": [
             ["HTTP", "Servlet"],
             ["MVC", "Spring MVC"],
             ["Observability", "Spring Boot Actuator"],
@@ -54,7 +54,6 @@
             ["Web", "Spring Web"]
         ]
     },
-
     {
         "source": "Upload a local binary",
         "target": ["Jakarta EE 9"],

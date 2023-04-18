@@ -102,7 +102,6 @@ export class Analysis extends Application {
         information?: number;
         total?: number;
     };
-    autoTags?: string[][];
 
     constructor(appData: applicationData, analysisData: analysisData) {
         super(appData);
@@ -128,7 +127,6 @@ export class Analysis extends Application {
             incidents,
             openSourceLibraries,
             customRuleRepository,
-            autoTags,
         } = analysisData;
         this.name = appData.name;
         this.source = source;
@@ -148,7 +146,6 @@ export class Analysis extends Application {
         if (excludedPackagesList) this.excludedPackagesList = excludedPackagesList;
         if (incidents) this.incidents = incidents;
         if (openSourceLibraries) this.openSourceLibraries = openSourceLibraries;
-        if (autoTags) this.autoTags = autoTags;
     }
 
     //Navigate to the Application inventory
@@ -324,13 +321,6 @@ export class Analysis extends Application {
                         }
                     });
             });
-    }
-
-    verifyAutoTags() {
-        // Navigate to the application details page and verify that technology tags are present post analysis
-        for (var tagIndex = 0; tagIndex < this.autoTags.length; tagIndex++) {
-            this.tagExists(this.autoTags[tagIndex][1]);
-        }
     }
 
     openReport() {
