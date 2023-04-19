@@ -43,7 +43,16 @@
         "target": ["Containerization"],
         "appName": "tackle-testapp",
         "enableTagging": true,
-        "storyPoints": 1
+        "storyPoints": 1,
+        "techTags": [
+            ["HTTP", "Servlet"],
+            ["MVC", "Spring MVC"],
+            ["Observability", "Spring Boot Actuator"],
+            ["Other", "Properties"],
+            ["Persistence", "JPA entities"],
+            ["Persistence", "Spring Data JPA"],
+            ["Web", "Spring Web"]
+        ]
     },
     {
         "source": "Upload a local binary",

@@ -308,10 +308,18 @@ export class Application {
             .click();
     }
 
-    tagExists(tagName: string): void {
-        // Verifies if tag exists on application details -> Tags page
+    tagAndCategoryExists(tags: string | string[][]): void {
+        // Verify that tags and categories are present on Application details -> Tags page
         this.applicationDetailsTab("Tags");
-        cy.get(applicationTag).should("contain", tagName);
+        if (Array.isArray(tags)) {
+            // For Tags and Categories
+            for (var tagIndex = 0; tagIndex < tags.length; tagIndex++) {
+                cy.get(applicationTag, { timeout: 10 * SEC }).should("contain", tags[tagIndex][1]);
+                cy.get("div[class='pf-c-content'] > h4").should("contain", tags[tagIndex][0]);
+            }
+        }
+        // For Tags
+        else cy.get(applicationTag).should("contain", tags);
         this.closeApplicationDetails();
     }
 
