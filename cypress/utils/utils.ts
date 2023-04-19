@@ -13,16 +13,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { BusinessServices } from "../integration/models/migration/controls/businessservices";
-import { Stakeholders } from "../integration/models/migration/controls/stakeholders";
-import { Stakeholdergroups } from "../integration/models/migration/controls/stakeholdergroups";
-import { Tag } from "../integration/models/migration/controls/tags";
-import { TagType } from "../integration/models/migration/controls/tagtypes";
-import { Jobfunctions } from "../integration/models/migration/controls/jobfunctions";
+import { BusinessServices } from "../e2e/models/migration/controls/businessservices";
+import { Stakeholders } from "../e2e/models/migration/controls/stakeholders";
+import { Stakeholdergroups } from "../e2e/models/migration/controls/stakeholdergroups";
+import { Tag } from "../e2e/models/migration/controls/tags";
+import { TagType } from "../e2e/models/migration/controls/tagtypes";
+import { Jobfunctions } from "../e2e/models/migration/controls/jobfunctions";
 
-import * as loginView from "../integration/views/login.view";
-import * as commonView from "../integration/views/common.view";
-import { navMenu, navTab } from "../integration/views/menu.view";
+import * as loginView from "../e2e/views/login.view";
+import * as commonView from "../e2e/views/common.view";
+import { navMenu, navTab } from "../e2e/views/menu.view";
 import * as data from "../utils/data_utils";
 import "cypress-file-upload";
 import {
@@ -48,14 +48,14 @@ import {
     artifact,
     repositoryType,
     analysis,
-} from "../integration/types/constants";
+} from "../e2e/types/constants";
 import {
     actionButton,
     applicationBusinessServiceSelect,
     date,
     selectBox,
     createEntitiesCheckbox,
-} from "../integration/views/applicationinventory.view";
+} from "../e2e/views/applicationinventory.view";
 import {
     confirmButton,
     divHeader,
@@ -65,19 +65,19 @@ import {
     nextPageButton,
     pageNumInput,
     prevPageButton,
-} from "../integration/views/common.view";
-import { tagLabels } from "../integration/views/tags.view";
-import { Credentials } from "../integration/models/administration/credentials/credentials";
-import { Assessment } from "../integration/models/migration/applicationinventory/assessment";
-import { analysisData, applicationData, UserData } from "../integration/types/types";
-import { CredentialsProxy } from "../integration/models/administration/credentials/credentialsProxy";
+} from "../e2e/views/common.view";
+import { tagLabels } from "../e2e/views/tags.view";
+import { Credentials } from "../e2e/models/administration/credentials/credentials";
+import { Assessment } from "../e2e/models/migration/applicationinventory/assessment";
+import { analysisData, applicationData, UserData } from "../e2e/types/types";
+import { CredentialsProxy } from "../e2e/models/administration/credentials/credentialsProxy";
 import { getRandomCredentialsData, randomWordGenerator } from "../utils/data_utils";
-import { CredentialsMaven } from "../integration/models/administration/credentials/credentialsMaven";
-import { CredentialsSourceControlUsername } from "../integration/models/administration/credentials/credentialsSourceControlUsername";
-import { CredentialsSourceControlKey } from "../integration/models/administration/credentials/credentialsSourceControlKey";
-import { Application } from "../integration/models/migration/applicationinventory/application";
-import { switchToggle } from "../integration/views/reports.view";
-import { rightSideMenu } from "../integration/views/analysis.view";
+import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
+import { CredentialsSourceControlUsername } from "../e2e/models/administration/credentials/credentialsSourceControlUsername";
+import { CredentialsSourceControlKey } from "../e2e/models/administration/credentials/credentialsSourceControlKey";
+import { Application } from "../e2e/models/migration/applicationinventory/application";
+import { switchToggle } from "../e2e/views/reports.view";
+import { rightSideMenu } from "../e2e/views/analysis.view";
 
 let userName = Cypress.env("user");
 let userPassword = Cypress.env("pass");
@@ -114,35 +114,68 @@ export function cancelForm(): void {
 }
 
 export function login(username?, password?: string): void {
-    cy.visit(tackleUiUrl, { timeout: 120 * SEC });
-    cy.wait(5000);
-    cy.get("h1", { timeout: 120 * SEC }).then(($b) => {
-        if ($b.text().toString().trim() == "Sign in to your account") {
-            if (username && password) {
-                userName = username;
-                userPassword = password;
-            } else {
-                userName = Cypress.env("user");
-                userPassword = Cypress.env("pass");
-            }
-            inputText(loginView.userNameInput, userName);
-            inputText(loginView.userPasswordInput, userPassword);
-            click(loginView.loginButton);
-            // Change default password on first login.
-            cy.get("span").then(($inputErr) => {
-                if ($inputErr.text().toString().trim() == "Invalid username or password.") {
-                    inputText(loginView.userPasswordInput, "Passw0rd!");
-                    click(loginView.loginButton);
-                    updatePassword();
+    cy.session({ username, password }, () => {
+        cy.visit(tackleUiUrl, { timeout: 120 * SEC });
+        // cy.wait(2 * SEC);
+        cy.get("h1", { timeout: 120 * SEC }).then(($b) => {
+            if ($b.text().toString().trim() == "Sign in to your account") {
+                if (username && password) {
+                    userName = username;
+                    userPassword = password;
+                } else {
+                    userName = Cypress.env("user");
+                    userPassword = Cypress.env("pass");
                 }
-            });
-        }
-    });
+                inputText(loginView.userNameInput, userName);
+                inputText(loginView.userPasswordInput, userPassword);
+                click(loginView.loginButton);
+                // Change default password on first login.
+                cy.get("span").then(($inputErr) => {
+                    if ($inputErr.text().toString().trim() == "Invalid username or password.") {
+                        inputText(loginView.userPasswordInput, "Passw0rd!");
+                        click(loginView.loginButton);
+                        updatePassword();
+                    }
+                });
+            }
+        });
 
-    updatePassword();
-    cy.get("#main-content-page-layout-horizontal-nav").within(() => {
-        cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
+        updatePassword();
+        cy.get("#main-content-page-layout-horizontal-nav").within(() => {
+            cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
+        });
     });
+    cy.visit(tackleUiUrl, { timeout: 120 * SEC });
+
+    // cy.visit(tackleUiUrl, { timeout: 120 * SEC });
+    // cy.wait(2 * SEC);
+    // cy.get("h1", { timeout: 120 * SEC }).then(($b) => {
+    //     if ($b.text().toString().trim() == "Sign in to your account") {
+    //         if (username && password) {
+    //             userName = username;
+    //             userPassword = password;
+    //         } else {
+    //             userName = Cypress.env("user");
+    //             userPassword = Cypress.env("pass");
+    //         }
+    //         inputText(loginView.userNameInput, userName);
+    //         inputText(loginView.userPasswordInput, userPassword);
+    //         click(loginView.loginButton);
+    //         // Change default password on first login.
+    //         cy.get("span").then(($inputErr) => {
+    //             if ($inputErr.text().toString().trim() == "Invalid username or password.") {
+    //                 inputText(loginView.userPasswordInput, "Passw0rd!");
+    //                 click(loginView.loginButton);
+    //                 updatePassword();
+    //             }
+    //         });
+    //     }
+    // });
+    //
+    // updatePassword();
+    // cy.get("#main-content-page-layout-horizontal-nav").within(() => {
+    //     cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
+    // });
 }
 
 export function updatePassword(): void {
@@ -702,8 +735,11 @@ export function deleteAppImportsTableRows(lastPage = false): void {
 }
 
 export function preservecookies(): void {
-    Cypress.Cookies.defaults({
-        preserve: /SESSION/,
+    // Cypress.Cookies.defaults({
+    //     preserve: /SESSION/,
+    // });
+    cy.session({}, () => {
+        login();
     });
 }
 
