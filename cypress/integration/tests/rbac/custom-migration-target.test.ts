@@ -23,9 +23,17 @@ import {
     login,
     logout,
     preservecookies,
+    resetURL,
     selectItemsPerPage,
 } from "../../../utils/utils";
-import { analyzeButton, application, button, SEC, CustomRuleType } from "../../types/constants";
+import {
+    analyzeButton,
+    application,
+    button,
+    SEC,
+    CustomRuleType,
+    AnalysisStatuses,
+} from "../../types/constants";
 import { RulesRepositoryFields } from "../../types/types";
 import * as data from "../../../utils/data_utils";
 import { CustomMigrationTarget } from "../../models/administration/custom-migration-targets/custom-migration-target";
@@ -35,7 +43,7 @@ import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { User } from "../../models/keycloak/users/user";
 
 describe("Custom Migration Targets RBAC operations", { tags: ["@tier2", "@dc"] }, function () {
-    // Polarion TC 317
+    // Polarion TC 317 & 319
     let analysis: Analysis;
     let target: CustomMigrationTarget;
     const architect = new UserArchitect(data.getRandomUserData());
@@ -88,7 +96,10 @@ describe("Custom Migration Targets RBAC operations", { tags: ["@tier2", "@dc"] }
         cy.wait("@postRule");
         cy.get("article", { timeout: 12 * SEC })
             .should("contain", target.name)
-            .then((_) => assertTargetIsVisible(analysis, target));
+            .then((_) => {
+                assertTargetIsVisible(analysis, target);
+                analyzeAndVerify(analysis);
+            });
 
         logout();
     });
@@ -96,12 +107,14 @@ describe("Custom Migration Targets RBAC operations", { tags: ["@tier2", "@dc"] }
     it("Look for created target on an analysis as architect user", function () {
         architect.login();
         assertTargetIsVisible(analysis, target);
+        analyzeAndVerify(analysis);
         architect.logout();
     });
 
     it("Look for created target on an analysis as migrator user", function () {
         migrator.login();
         assertTargetIsVisible(analysis, target);
+        analyzeAndVerify(analysis);
         migrator.logout();
     });
 
@@ -135,5 +148,13 @@ describe("Custom Migration Targets RBAC operations", { tags: ["@tier2", "@dc"] }
             .and("contain", "Custom");
 
         clickByText(button, "Cancel");
+    };
+
+    const analyzeAndVerify = (analysis: Analysis) => {
+        analysis.analyze();
+        cy.wait(10 * SEC);
+        analysis.verifyAnalysisStatus(AnalysisStatuses.completed);
+        analysis.openReport();
+        resetURL();
     };
 });
