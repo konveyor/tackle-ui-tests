@@ -154,6 +154,5 @@ export type RulesRepositoryFields = {
 
 export type RulesManualFields = {
     type: CustomRuleType.Manual;
-    imagePath?: string;
     rulesetPaths: string[];
 };
