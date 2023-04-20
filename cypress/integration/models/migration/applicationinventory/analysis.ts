@@ -350,7 +350,7 @@ export class Analysis extends Application {
                 doesExistText(type, isEnabled);
             }
         });
-        this.selectApplicationRow();
+        this.closeApplicationDetails();
     }
 
     openAnalysisDetails() {
