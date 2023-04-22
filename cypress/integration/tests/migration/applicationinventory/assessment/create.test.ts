@@ -183,4 +183,17 @@ describe("Application validations", { tags: "@tier2" }, () => {
             notExists(applicationList[i].name);
         }
     });
+
+    it("Bulk deletion of applications - Delete all apps by selecting checkbox ", function () {
+        applicationList = createMultipleApplications(11);
+        navigate_to_application_inventory();
+        // Click 'bulk-selected-apps-checkbox'.
+        cy.get("input#bulk-selected-apps-checkbox").check({ force: true });
+
+        application_inventory_kebab_menu("Delete");
+        clickByText(button, "Delete");
+        for (let i = 0; i < applicationList.length; i++) {
+            notExists(applicationList[i].name);
+        }
+    });
 });
