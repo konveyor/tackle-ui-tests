@@ -22,6 +22,7 @@ import { RulesManualFields, RulesRepositoryFields } from "../../../types/types";
 export interface CustomMigrationTarget {
     name: string;
     description?: string;
+    imagePath?: string;
     ruleTypeData: RulesRepositoryFields | RulesManualFields;
 }
 
@@ -48,11 +49,14 @@ export class CustomMigrationTarget {
         });
     }
 
-    public create() {
+    public static openNewForm() {
         CustomMigrationTarget.open();
         clickByText(button, createNewButton);
+    }
 
-        this.fillForm(this);
+    public create() {
+        CustomMigrationTarget.openNewForm();
+        CustomMigrationTarget.fillForm(this);
 
         cy.get(CustomMigrationTargetView.createSubmitButton, { timeout: 10 * SEC })
             .should("be.enabled")
@@ -64,7 +68,7 @@ export class CustomMigrationTarget {
         this.expandActionsMenu();
         cy.contains("a", editAction).click();
 
-        this.fillForm(updateValues);
+        CustomMigrationTarget.fillForm(updateValues);
 
         cy.get(CustomMigrationTargetView.editSubmitButton, { timeout: 10 * SEC })
             .should("be.enabled")
@@ -77,43 +81,53 @@ export class CustomMigrationTarget {
         cy.contains("a", deleteAction).click();
     }
 
-    private fillForm(values: Partial<CustomMigrationTarget>) {
+    public static fillName(name: string) {
+        inputText(CustomMigrationTargetView.nameInput, name);
+    }
+
+    public static uploadImage(imagePath: string, input = false) {
+        cy.get(CustomMigrationTargetView.imageInput).attachFile(
+            { filePath: imagePath },
+            { subjectType: input ? "input" : "drag-n-drop" }
+        );
+    }
+
+    private static fillForm(values: Partial<CustomMigrationTarget>) {
         if (values.name) {
-            inputText(CustomMigrationTargetView.nameInput, values.name);
+            CustomMigrationTarget.fillName(values.name);
         }
 
         if (values.description) {
             inputText(CustomMigrationTargetView.descriptionInput, values.description);
         }
 
+        if (values.imagePath) {
+            CustomMigrationTarget.uploadImage(values.imagePath);
+        }
+
         if (values.ruleTypeData) {
             if (values.ruleTypeData.type === CustomRuleType.Manual) {
-                this.fillManualForm(values.ruleTypeData);
+                CustomMigrationTarget.fillManualForm(values.ruleTypeData);
             }
 
             if (values.ruleTypeData.type === CustomRuleType.Repository) {
                 click(CustomMigrationTargetView.retrieveFromARepositoryRadio);
-                this.fillRepositoryForm(values.ruleTypeData);
+                CustomMigrationTarget.fillRepositoryForm(values.ruleTypeData);
             }
         }
     }
 
-    private fillManualForm(values: Partial<RulesManualFields>) {
-        if (values.imagePath) {
-            cy.get(CustomMigrationTargetView.imageInput).attachFile(
-                { filePath: values.imagePath },
-                { subjectType: "drag-n-drop" }
-            );
-        }
+    public static uploadRules(rulePaths: string[]) {
+        rulePaths.forEach((path) => uploadXml(path, CustomMigrationTargetView.ruleInput));
+    }
 
+    private static fillManualForm(values: Partial<RulesManualFields>) {
         if (values.rulesetPaths && values.rulesetPaths.length) {
-            values.rulesetPaths.forEach((path) =>
-                uploadXml(path, CustomMigrationTargetView.ruleInput)
-            );
+            CustomMigrationTarget.uploadRules(values.rulesetPaths);
         }
     }
 
-    private fillRepositoryForm(values: Partial<RulesRepositoryFields>) {
+    private static fillRepositoryForm(values: Partial<RulesRepositoryFields>) {
         if (values.repositoryType) {
             click(CustomMigrationTargetView.repositoryTypeDropdown);
             clickByText(button, RepositoryType.git);
