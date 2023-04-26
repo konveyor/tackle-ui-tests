@@ -13,6 +13,7 @@ export enum CustomMigrationTargetView {
     takeMeThereNotification = "Take me there",
     repositoryTypeDropdown = "#repo-type-select-toggle",
     repositoryUrl = "#sourceRepository",
+    repositoryUrlHelper = "#sourceRepository-helper",
     branch = "#branch",
     rootPath = "#rootPath",
     credentialsDropdown = "#associated-credentials-select-toggle",
