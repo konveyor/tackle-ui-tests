@@ -45,13 +45,13 @@ import {
     positiveRankMsg,
     colorHelper,
 } from "../../../../../views/tags.view";
-import { TagType } from "../../../../../models/migration/controls/tagtypes";
+import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 
 import * as commonView from "../../../../../views/common.view";
 import * as data from "../../../../../../utils/data_utils";
 import { modal } from "../../../../../views/common.view";
 
-describe("Tag type validations", { tags: "@tier2" }, () => {
+describe("Tag category validations", { tags: "@tier2" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;
@@ -67,7 +67,7 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
 
     it("Tag type field validations", function () {
         // Navigate to Tags tab and click "Create tag type" button
-        TagType.openList();
+        TagCategory.openList();
         clickByText(button, createTagCategoryButton);
 
         // Name constraints
@@ -94,16 +94,16 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
         cy.get(commonView.cancelButton).click();
     });
 
-    it("Tag type button validations", function () {
-        // Navigate to Tags tab and click "Create tag type" button
-        TagType.openList();
+    it("Tag category button validations", function () {
+        // Navigate to Tags tab and click "Create tag category" button
+        TagCategory.openList();
         clickByText(button, createTagCategoryButton);
 
         // Check "Create" and "Cancel" button status
         cy.get(commonView.submitButton).should("be.disabled");
         cy.get(commonView.cancelButton).should("not.be.disabled");
 
-        // Cancel creating new tag type
+        // Cancel creating new tag category
         cy.get(commonView.cancelButton).click();
         cy.wait(100);
 
@@ -117,30 +117,30 @@ describe("Tag type validations", { tags: "@tier2" }, () => {
         cy.contains(button, createTagCategoryButton).should("exist");
     });
 
-    it("Tag type unique constraint validation", function () {
+    it("Tag category unique constraint validation", function () {
         selectUserPerspective(migration);
-        const tagType = new TagType(
+        const tagCategory = new TagCategory(
             data.getRandomWord(5),
             data.getColor(),
             data.getRandomNumber(5, 15)
         );
 
         // Create a new tag type
-        tagType.create();
+        tagCategory.create();
         cy.wait(2000);
 
-        // Click "Create tag type" button
+        // Click "Create tag category" button
         clickByText(button, createTagCategoryButton);
 
-        // Check tag type name duplication
-        inputText(nameInput, tagType.name);
+        // Check tag category name duplication
+        inputText(nameInput, tagCategory.name);
         clickWithin(modal, dropdownMenuToggle);
         clickByText(button, data.getColor());
         cy.get(nameHelper).should("contain.text", duplicateTagTypeName);
         cy.get(commonView.closeButton).click();
 
         // Delete created tag
-        tagType.delete();
+        tagCategory.delete();
         cy.wait(2000);
     });
 });

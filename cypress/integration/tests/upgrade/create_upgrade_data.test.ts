@@ -22,7 +22,7 @@ import {
     login,
     preservecookies,
 } from "../../../utils/utils";
-import { TagType } from "../../models/migration/controls/tagtypes";
+import { TagCategory } from "../../models/migration/controls/tagcategory";
 import * as data from "../../../utils/data_utils";
 import { Tag } from "../../models/migration/controls/tags";
 import { CredentialType, SEC, UserCredentials } from "../../types/constants";
@@ -101,8 +101,8 @@ describe("Creating pre-requisites before an upgrade", { tags: "@pre-upgrade" }, 
         ]);
         // Defining business Service
         const businessService = new BusinessServices(businessServiceName);
-        // Defining tag type
-        const tagType = new TagType(tagTypeName, data.getColor(), data.getRandomNumber(5, 15));
+        // Defining tag category
+        const tagType = new TagCategory(tagTypeName, data.getColor(), data.getRandomNumber(5, 15));
         // Defining tag
         const tag = new Tag(tagName, tagTypeName);
 

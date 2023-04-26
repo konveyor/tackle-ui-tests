@@ -20,13 +20,13 @@ import {
     applySelectFilter,
     clearAllFilters,
 } from "../../../../../../utils/utils";
-import { TagType } from "../../../../../models/migration/controls/tagtypes";
+import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 import { Tag } from "../../../../../models/migration/controls/tags";
 import { name, SEC } from "../../../../../types/constants";
 import * as data from "../../../../../../utils/data_utils";
 
 describe("Tags filter validations", { tags: "@tier2" }, function () {
-    const tagCategory = new TagType(data.getRandomWord(5), data.getColor());
+    const tagCategory = new TagCategory(data.getRandomWord(5), data.getColor());
     const tag = new Tag(data.getRandomWord(5), tagCategory.name);
 
     before("Login", function () {
