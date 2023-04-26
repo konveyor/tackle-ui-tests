@@ -107,8 +107,6 @@ describe("Custom Migration Target Validations", { tags: ["@tier1"] }, () => {
         click(CustomMigrationTargetView.retrieveFromARepositoryRadio);
         CustomMigrationTarget.selectRepositoryType(RepositoryType.git);
 
-        cy.get(CustomMigrationTargetView.repositoryUrl).focus();
-
         CustomMigrationTarget.fillRepositoryUrl("   ");
         cy.get(CustomMigrationTargetView.repositoryUrlHelper).should(
             "contain",
