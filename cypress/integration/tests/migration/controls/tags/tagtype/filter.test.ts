@@ -49,32 +49,6 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
         cy.intercept("GET", "/hub/tag-category*").as("getTagCategories");
     });
 
-    it.skip("Tag type filter validations", function () {
-        // Navigate to Tags tab
-        TagType.openList();
-        cy.wait("@getTagCategories");
-
-        // Enter an existing tag type name substring and apply it as search filter
-        var validSearchInput = data.getRandomDefaultTagCategory();
-        applySearchFilter(tagType, validSearchInput);
-
-        // Assert that tag type row(s) containing the search text is/are displayed
-        exists(validSearchInput);
-
-        // Clear all filters
-        clickByText(button, clearAllFilters);
-        cy.wait("@getTagCategories");
-
-        // Enter a non-existing tag type name substring and apply it as search filter
-        var invalidSearchInput = String(data.getRandomNumber(111111, 222222));
-        applySearchFilter(tagType, invalidSearchInput);
-
-        // Assert that no search results are found
-        cy.get("h2").contains("No results found");
-
-        clickByText(button, clearAllFilters);
-    });
-
     it("Tag type color filter validations", function () {
         // Navigate to Tags tab
         TagType.openList();
