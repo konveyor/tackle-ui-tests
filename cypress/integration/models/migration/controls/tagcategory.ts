@@ -31,7 +31,7 @@ import { createTagCategoryButton, rankInput } from "../../../views/tags.view";
 import * as commonView from "../../../views/common.view";
 import { clickTags, fillName } from "./tags";
 
-export class TagType {
+export class TagCategory {
     name: string;
     rank: number;
     fieldId: "color";
@@ -47,7 +47,7 @@ export class TagType {
 
     static openList(itemsPerPage = 100): void {
         cy.url().then(($url) => {
-            if ($url != TagType.fullUrl) {
+            if ($url != TagCategory.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, controls);
                 clickByText(navTab, tags);
@@ -92,7 +92,7 @@ export class TagType {
     }
 
     edit(updatedValue: { name?: string; rank?: number; color?: string }, cancel = false): void {
-        TagType.openList();
+        TagCategory.openList();
         cy.get(tdTag)
             .contains(this.name)
             .parent(trTag)
@@ -120,7 +120,7 @@ export class TagType {
 
     delete(cancel = false): void {
         // Opening tags list only if another tab is opened
-        TagType.openList();
+        TagCategory.openList();
         cy.get(tdTag, { timeout: 2 * SEC })
             .contains(this.name)
             .parent(trTag)

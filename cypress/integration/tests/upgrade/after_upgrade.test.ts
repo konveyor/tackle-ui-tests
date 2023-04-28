@@ -16,7 +16,7 @@ import { Jobfunctions } from "../../models/migration/controls/jobfunctions";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Stakeholdergroups } from "../../models/migration/controls/stakeholdergroups";
 import { BusinessServices } from "../../models/migration/controls/businessservices";
-import { TagType } from "../../models/migration/controls/tagtypes";
+import { TagCategory } from "../../models/migration/controls/tagcategory";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { MavenConfiguration } from "../../models/administration/repositories/maven";
 import { clearRepository } from "../../views/repository.view";
@@ -79,7 +79,7 @@ describe("Performing post-upgrade validations", { tags: "@post-upgrade" }, () =>
         BusinessServices.openList();
         exists(businessServiceName);
 
-        TagType.openList();
+        TagCategory.openList();
         exists(tagTypeName);
 
         expandRowDetails(tagTypeName);

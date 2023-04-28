@@ -21,23 +21,13 @@ import {
     exists,
     applySearchFilter,
     hasToBeSkipped,
-    selectUserPerspective,
 } from "../../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../../views/menu.view";
-import {
-    controls,
-    button,
-    clearAllFilters,
-    tags,
-    tagType,
-    color,
-    rank,
-} from "../../../../../types/constants";
+import { button, clearAllFilters, color, rank } from "../../../../../types/constants";
 
 import * as data from "../../../../../../utils/data_utils";
-import { TagType } from "../../../../../models/migration/controls/tagtypes";
+import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 
-describe("Tag type filter validations", { tags: "@tier2" }, function () {
+describe("Tag tagCategory filter validations", { tags: "@tier2" }, function () {
     beforeEach("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;
@@ -49,15 +39,41 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
         cy.intercept("GET", "/hub/tag-category*").as("getTagCategories");
     });
 
-    it("Tag type color filter validations", function () {
+    it.skip("Tag type filter validations", function () {
         // Navigate to Tags tab
-        TagType.openList();
+        TagCategory.openList();
+        cy.wait("@getTagCategories");
 
-        // Enter an existing tag type color substring and apply it as search filter
+        // Enter an existing tag type name substring and apply it as search filter
+        var validSearchInput = data.getRandomDefaultTagCategory();
+        applySearchFilter(tagType, validSearchInput);
+
+        // Assert that tag type row(s) containing the search text is/are displayed
+        exists(validSearchInput);
+
+        // Clear all filters
+        clickByText(button, clearAllFilters);
+        cy.wait("@getTagCategories");
+
+        // Enter a non-existing tag type name substring and apply it as search filter
+        var invalidSearchInput = String(data.getRandomNumber(111111, 222222));
+        applySearchFilter(tagType, invalidSearchInput);
+
+        // Assert that no search results are found
+        cy.get("h2").contains("No results found");
+
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Tag category color filter validations", function () {
+        // Navigate to Tags tab
+        TagCategory.openList();
+
+        // Enter an existing tag category color substring and apply it as search filter
         var validSearchInput = data.getColor();
         applySearchFilter(color, validSearchInput);
 
-        // Assert that tag type row(s) containing the search text is/are displayed
+        // Assert that tag category row(s) containing the search text is/are displayed
         exists(validSearchInput);
 
         // Clear all filters
@@ -74,22 +90,22 @@ describe("Tag type filter validations", { tags: "@tier2" }, function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Tag type rank filter validations", function () {
+    it("Tag category rank filter validations", function () {
         // Navigate to Tags tab
-        TagType.openList();
+        TagCategory.openList();
 
-        // Enter an existing tag type rank number and apply it as search filter
+        // Enter an existing tag category rank number and apply it as search filter
         var validSearchInput = String(data.getRandomNumber(1, 6));
         applySearchFilter(rank, validSearchInput);
 
-        // Assert that tag type row(s) containing the search text is/are displayed
+        // Assert that tag category row(s) containing the search text is/are displayed
         exists(validSearchInput);
 
         // Clear all filters
         clickByText(button, clearAllFilters);
         cy.get("@getTagCategories");
 
-        // Enter a non-existing tag type rank number and apply it as search filter
+        // Enter a non-existing tag category rank number and apply it as search filter
         var invalidSearchInput = String(data.getRandomNumber(1111, 2222));
         applySearchFilter(rank, invalidSearchInput);
 

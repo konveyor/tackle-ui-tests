@@ -24,12 +24,12 @@ import {
     selectUserPerspective,
 } from "../../../../../../utils/utils";
 import { Tag } from "../../../../../models/migration/controls/tags";
-import { TagType } from "../../../../../models/migration/controls/tagtypes";
+import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 
 import * as data from "../../../../../../utils/data_utils";
-import { color, migration, rank, tagCount } from "../../../../../types/constants";
+import { color, migration, rank, tagCategory, tagCount } from "../../../../../types/constants";
 
-describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
+describe("Tag tagCategory CRUD operations", { tags: "@tier1" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;
@@ -43,59 +43,59 @@ describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
         preservecookies();
     });
 
-    it("Tag type CRUD", function () {
+    it("Tag Category CRUD", function () {
         selectUserPerspective("Migration");
 
-        // Create new tag type
-        const tagType = new TagType(
+        // Create new tag category
+        const tagCategory = new TagCategory(
             data.getRandomWord(8),
             data.getColor(),
             data.getRandomNumber(1, 30)
         );
-        tagType.create();
-        exists(tagType.name);
+        tagCategory.create();
+        exists(tagCategory.name);
 
-        // Edit the tag type name, rank and color
+        // Edit the tag category name, rank and color
         let updatedTagType = data.getRandomWord(8);
         let updatedRank = data.getRandomNumber(10, 30);
         let updatedColor = data.getColor();
-        tagType.edit({ name: updatedTagType, rank: updatedRank, color: updatedColor });
+        tagCategory.edit({ name: updatedTagType, rank: updatedRank, color: updatedColor });
         cy.wait(2000);
 
-        // Assert that tag type name got updated
+        // Assert that tag category name got updated
         exists(updatedTagType);
 
         // Assert that rank got updated
-        tagType.assertColumnValue(rank, updatedRank);
+        tagCategory.assertColumnValue(rank, updatedRank);
 
         // Assert that color got updated
-        tagType.assertColumnValue(color, updatedColor);
+        tagCategory.assertColumnValue(color, updatedColor);
 
-        // Delete tag type
-        tagType.delete();
+        // Delete tag category
+        tagCategory.delete();
         cy.wait(2000);
 
-        // Assert that tag type got deleted
-        notExists(tagType.name);
+        // Assert that tag category got deleted
+        notExists(tagCategory.name);
     });
 
-    it("Tag type CRUD with member (tags)", function () {
+    it("Tag category CRUD with member (tags)", function () {
         selectUserPerspective(migration);
 
-        // Create new tag type
-        const tagType = new TagType(
+        // Create new tag category
+        const tagCategory = new TagCategory(
             data.getRandomWord(8),
             data.getColor(),
             data.getRandomNumber(1, 30)
         );
-        tagType.create();
-        exists(tagType.name);
+        tagCategory.create();
+        exists(tagCategory.name);
 
         let tagList: Array<Tag> = [];
 
-        // Create multiple tags within the tag type created above
+        // Create multiple tags within the tag category created above
         for (let i = 0; i < 2; i++) {
-            const tag = new Tag(data.getRandomWord(6), tagType.name);
+            const tag = new Tag(data.getRandomWord(6), tagCategory.name);
             tag.create();
             tagList.push(tag);
             cy.wait(2000);
@@ -105,14 +105,14 @@ describe("Tag Type CRUD operations", { tags: "@tier1" }, () => {
         for (let currentTag of tagList) {
             currentTag.delete();
             tagAmount -= 1;
-            tagType.assertColumnValue(tagCount, tagAmount.toString());
+            tagCategory.assertColumnValue(tagCount, tagAmount.toString());
         }
 
-        // Delete tag type
-        tagType.delete();
+        // Delete tag category
+        tagCategory.delete();
         cy.wait(2000);
 
-        // Assert that tag type got deleted
-        notExists(tagType.name);
+        // Assert that tag category got deleted
+        notExists(tagCategory.name);
     });
 });

@@ -17,7 +17,7 @@ import { BusinessServices } from "../integration/models/migration/controls/busin
 import { Stakeholders } from "../integration/models/migration/controls/stakeholders";
 import { Stakeholdergroups } from "../integration/models/migration/controls/stakeholdergroups";
 import { Tag } from "../integration/models/migration/controls/tags";
-import { TagType } from "../integration/models/migration/controls/tagtypes";
+import { TagCategory } from "../integration/models/migration/controls/tagcategory";
 import { Jobfunctions } from "../integration/models/migration/controls/jobfunctions";
 
 import * as loginView from "../integration/views/login.view";
@@ -853,12 +853,16 @@ export function createMultipleBusinessServices(
 export function createMultipleTags(numberoftags: number): Array<Tag> {
     let tagList: Array<Tag> = [];
     for (let i = 0; i < numberoftags; i++) {
-        //Create Tag type
-        const tagType = new TagType(data.getRandomWord(8), data.getColor(), data.getRandomNumber());
-        tagType.create();
+        //Create Tag category
+        const tagCategory = new TagCategory(
+            data.getRandomWord(8),
+            data.getColor(),
+            data.getRandomNumber()
+        );
+        tagCategory.create();
 
         // Create new tag
-        const tag = new Tag(data.getRandomWord(6), tagType.name);
+        const tag = new Tag(data.getRandomWord(6), tagCategory.name);
         tag.create();
         tagList.push(tag);
     }
@@ -1058,8 +1062,8 @@ export async function deleteAllBusinessServices(cancel = false) {
     deleteByList(list);
 }
 
-export function deleteAllTagTypes(cancel = false): void {
-    TagType.openList();
+export function deleteAllTagCategory(cancel = false): void {
+    TagCategory.openList();
     cy.get(commonView.appTable, { timeout: 2 * SEC })
         .next()
         .then(($div) => {
@@ -1088,7 +1092,7 @@ export function deleteAllTagTypes(cancel = false): void {
 
 export function deleteAllTagsAndTagCategories(): void {
     const nonDefaultTagTypes = [];
-    TagType.openList();
+    TagCategory.openList();
 
     cy.get(commonView.appTable, { timeout: 2 * SEC })
         .find(trTag)
@@ -1099,7 +1103,7 @@ export function deleteAllTagsAndTagCategories(): void {
             for (let currentType of data.getDefaultTagCategories()) {
                 if (currentType == typeName) {
                     isDefault = true;
-                    break; // Exiting from cycle if current tag type belongs to default
+                    break; // Exiting from cycle if current tag category belongs to default
                 }
             }
             if (!isDefault && typeName !== "") {
@@ -1107,7 +1111,7 @@ export function deleteAllTagsAndTagCategories(): void {
                     nonDefaultTagTypes.push(typeName);
                     expandRowDetails(typeName);
                 } else {
-                    let currentTagType = new TagType(typeName, data.getColor());
+                    let currentTagType = new TagCategory(typeName, data.getColor());
                     currentTagType.delete();
                 }
             }
@@ -1130,7 +1134,7 @@ export function deleteAllTagsAndTagCategories(): void {
                                 tagList = deleteFromArray(tagList, currentTag);
                             });
                         });
-                    let currentTagType = new TagType(currentType, data.getColor());
+                    let currentTagType = new TagCategory(currentType, data.getColor());
                     currentTagType.delete();
                 }
             }

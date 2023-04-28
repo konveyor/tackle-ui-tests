@@ -37,20 +37,20 @@ import {
     prevPageButton,
     appTable,
 } from "../../../../../views/common.view";
-import { TagType } from "../../../../../models/migration/controls/tagtypes";
+import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 import { tagCategory } from "../../../../../views/tags.view";
 
-describe("Tag type pagination validations", { tags: "@tier3" }, function () {
+describe("Tag category pagination validations", { tags: "@tier3" }, function () {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier3")) return;
 
         // Perform login
         login();
-        TagType.openList();
+        TagCategory.openList();
         let rowsToCreate = 0;
 
-        // Get the current table row count for tag types and create appropriate test data rows
+        // Get the current table row count for tag category and create appropriate test data rows
         cy.get(appTable, { timeout: 2 * SEC })
             .next()
             .then(($div) => {
@@ -61,13 +61,13 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
                             rowsToCreate = 11 - rowCount;
                         }
                         if (rowsToCreate > 0) {
-                            // Create multiple tag types
+                            // Create multiple tag categories
                             createMultipleTags(rowsToCreate);
                         }
                     });
                 } else {
                     rowsToCreate = 11;
-                    // Create multiple tag types
+                    // Create multiple tag categories
                     createMultipleTags(rowsToCreate);
                 }
             });
@@ -88,7 +88,7 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
 
     it("Navigation button validations", function () {
         // Navigate to Tags tab
-        TagType.openList();
+        TagCategory.openList();
 
         // select 10 items per page
         selectItemsPerPage(10);
@@ -99,7 +99,7 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
 
     it("Items per page validations", function () {
         // Navigate to Tags tab
-        TagType.openList();
+        TagCategory.openList();
 
         // Select 10 items per page
         selectItemsPerPage(10);
@@ -120,7 +120,7 @@ describe("Tag type pagination validations", { tags: "@tier3" }, function () {
 
     it("Page number validations", function () {
         // Navigate to Tags tab
-        TagType.openList();
+        TagCategory.openList();
 
         // Select 10 items per page
         selectItemsPerPage(10);
