@@ -89,9 +89,9 @@ describe("Report Page Filter Validation", { tags: "@tier2" }, () => {
     it("Filter by application/dependency name on anaysis report page", function () {
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies", {
-                sourceData: this.appData[3],
+                sourceData: this.appData["tackle-testapp-git"],
             }),
-            getRandomAnalysisData(this.analysisData[1])
+            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -121,9 +121,9 @@ describe("Report Page Filter Validation", { tags: "@tier2" }, () => {
     it("Filter by application tag on analysis report page", function () {
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies", {
-                sourceData: this.appData[3],
+                sourceData: this.appData["tackle-testapp-git"],
             }),
-            getRandomAnalysisData(this.analysisData[1])
+            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
         );
         application.create();
         cy.wait("@getApplication");

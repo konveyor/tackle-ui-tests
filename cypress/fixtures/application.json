@@ -1,42 +1,42 @@
-[
-    {
+{
+    "bookserver-app": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/ibraginsky/book-server"
     },
-    {
+    "daytrader-app": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/WASdev/sample.daytrader7"
     },
-    {
+    "tackle-testapp-binary": {
         "group": "io.konveyor.demo",
         "artifact": "customers-tomcat",
         "version": "0.0.1-SNAPSHOT",
         "packaging": "war"
     },
-    {
+    "tackle-testapp-git": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/konveyor/tackle-testapp"
     },
-    {
+    "tackle-testapp-ssh": {
         "repoType": "Git",
         "sourceRepo": "git@github.com:konveyor/tackle-testapp.git"
     },
-    {
+    "tackle-testapp-svn": {
         "repoType": "Subversion",
         "sourceRepo": "https://github.com/konveyor/tackle-testapp"
     },
-    {
+    "tackle-testapp": {
         "repoType": "Git",
         "sourceRepo": "http://github.com/konveyor/tackle-testapp"
     },
-    {
+    "tackle-testapp-svn-insecure": {
         "repoType": "Subversion",
         "sourceRepo": "http://github.com/konveyor/tackle-testapp"
     },
-    {
+    "konveyor-exampleapp": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/konveyor/example-applications",
         "branch": "main",
         "rootPath": "example-1"
     }
-]
+}

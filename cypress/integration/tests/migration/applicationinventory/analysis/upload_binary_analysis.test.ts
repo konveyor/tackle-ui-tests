@@ -87,7 +87,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
     it("Upload Binary Analysis", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData[4])
+            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -104,7 +104,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
         // Automated https://issues.redhat.com/browse/TACKLE-561
         const application = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
-            getRandomAnalysisData(this.analysisData[5])
+            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_with_customrule"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -120,7 +120,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
     it("DIVA report generation", function () {
         const application = new Analysis(
             getRandomApplicationData("DIVA"),
-            getRandomAnalysisData(this.analysisData[7])
+            getRandomAnalysisData(this.analysisData["analysis_for_DIVA-report"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -136,7 +136,9 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
     it("Analysis for jee-example-app upload binary ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData[12])
+            getRandomAnalysisData(
+                this.analysisData["analysis_and_incident_validation_jeeExample_app"]
+            )
         );
         application.create();
         cy.wait("@getApplication");
@@ -150,7 +152,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
     it("Analysis for camunda-bpm-spring-boot-starer", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData[13])
+            getRandomAnalysisData(this.analysisData["Camunda-bpm-spring-boot-starter-app"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -165,7 +167,9 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
     it("Analysis for complete-duke app upload binary ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData[14])
+            getRandomAnalysisData(
+                this.analysisData["analysis_and_incident_validation_complete-duke"]
+            )
         );
         application.create();
         cy.wait("@getApplication");
@@ -180,7 +184,7 @@ describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
     it("Analysis for kafka-clients-sb app ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData[15])
+            getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_kafka-app"])
         );
         application.create();
         cy.wait("@getApplication");

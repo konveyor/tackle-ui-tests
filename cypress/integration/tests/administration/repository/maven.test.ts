@@ -107,7 +107,7 @@ describe("Test secure and insecure maven repository analysis", { tags: "@tier1" 
         // For tackle test app source credentials are required.
         const application = new Analysis(
             getRandomApplicationData("binary_test_app", { binaryData: this.appData[2] }),
-            getRandomAnalysisData(this.analysisData[3])
+            getRandomAnalysisData(this.analysisData["binary_analysis_on_tackletestapp"])
         );
 
         application.create();
@@ -129,8 +129,10 @@ describe("Test secure and insecure maven repository analysis", { tags: "@tier1" 
 
         // For tackle test app source credentials are required.
         const application = new Analysis(
-            getRandomApplicationData("binary_test_app", { binaryData: this.appData[2] }),
-            getRandomAnalysisData(this.analysisData[3])
+            getRandomApplicationData("binary_test_app", {
+                binaryData: this.appData["tackle-testapp-binary"],
+            }),
+            getRandomAnalysisData(this.analysisData["binary_analysis_on_tackletestapp"])
         );
 
         application.create();

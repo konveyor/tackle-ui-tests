@@ -63,7 +63,7 @@ describe("Upload Binary Analysis", { tags: "@tier3" }, () => {
     it("Upload Binary Analysis", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData[4])
+            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -84,7 +84,7 @@ describe("Upload Binary Analysis", { tags: "@tier3" }, () => {
         // Automated https://issues.redhat.com/browse/TACKLE-561
         const application = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
-            getRandomAnalysisData(this.analysisData[5])
+            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_with_customrule"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -103,7 +103,7 @@ describe("Upload Binary Analysis", { tags: "@tier3" }, () => {
     it("DIVA report generation", function () {
         const application = new Analysis(
             getRandomApplicationData("DIVA"),
-            getRandomAnalysisData(this.analysisData[7])
+            getRandomAnalysisData(this.analysisData["analysis_for_DIVA-report"])
         );
         application.create();
         cy.wait("@getApplication");

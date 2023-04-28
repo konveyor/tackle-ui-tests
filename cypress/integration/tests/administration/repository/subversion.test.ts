@@ -89,9 +89,9 @@ describe("Test secure and insecure svn repository analysis", { tags: "@tier1" },
 
         const application = new Analysis(
             getRandomApplicationData("Secure_enabled_tackle_test_app", {
-                sourceData: this.appData[7],
+                sourceData: this.appData["tackle-testapp-svn-insecure"],
             }),
-            getRandomAnalysisData(this.analysisData[0])
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -109,9 +109,9 @@ describe("Test secure and insecure svn repository analysis", { tags: "@tier1" },
 
         const application = new Analysis(
             getRandomApplicationData("Secure_disabled_tackle_test_app", {
-                sourceData: this.appData[7],
+                sourceData: this.appData["tackle-testapp-svn-insecure"],
             }),
-            getRandomAnalysisData(this.analysisData[0])
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         application.create();
         cy.wait("@getApplication");

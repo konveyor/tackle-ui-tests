@@ -41,8 +41,10 @@ describe("Running analysis with incorrect proxy configuration", { tags: "@tier2"
         httpsProxy.configureProxy();
 
         const application = new Analysis(
-            getRandomApplicationData("bookServerApp", { sourceData: this.appData[0] }),
-            getRandomAnalysisData(this.analysisData[0])
+            getRandomApplicationData("bookServerApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         application.create();
         application.analyze();

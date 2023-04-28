@@ -102,8 +102,10 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         // For source code analysis application must have source code URL git or svn
         cy.log(this.analysisData[0]);
         const application = new Analysis(
-            getRandomApplicationData("bookserverApp", { sourceData: this.appData[0] }),
-            getRandomAnalysisData(this.analysisData[0])
+            getRandomApplicationData("bookserverApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -118,9 +120,9 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies", {
-                sourceData: this.appData[3],
+                sourceData: this.appData["tackle-testapp-git"],
             }),
-            getRandomAnalysisData(this.analysisData[1])
+            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -136,9 +138,9 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies", {
-                sourceData: this.appData[1],
+                sourceData: this.appData["daytrader-app"],
             }),
-            getRandomAnalysisData(this.analysisData[2])
+            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -152,8 +154,10 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
     it("Analysis on daytrader app with maven credentials", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-751
         const application = new Analysis(
-            getRandomApplicationData("dayTraderApp_MavenCreds", { sourceData: this.appData[1] }),
-            getRandomAnalysisData(this.analysisData[2])
+            getRandomApplicationData("dayTraderApp_MavenCreds", {
+                sourceData: this.appData["daytrader-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -168,8 +172,10 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
     it("Source Analysis on tackle testapp", function () {
         // For tackle test app source credentials are required.
         const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_Source", { sourceData: this.appData[3] }),
-            getRandomAnalysisData(this.analysisData[6])
+            getRandomApplicationData("tackleTestApp_Source", {
+                sourceData: this.appData["tackle-testapp-git"],
+            }),
+            getRandomAnalysisData(this.analysisData["tackleTestApp_Source_autoTagging"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -191,8 +197,10 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         );
         scCredsKey.create();
         const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_sshCreds", { sourceData: this.appData[4] }),
-            getRandomAnalysisData(this.analysisData[6])
+            getRandomApplicationData("tackleTestApp_sshCreds", {
+                sourceData: this.appData["tackle-testapp-ssh"],
+            }),
+            getRandomAnalysisData(this.analysisData["tackleTestApp_Source_autoTagging"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -207,8 +215,10 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
     it("Source Analysis on tackle testapp for svn repo type", function () {
         // For tackle test app source credentials are required.
         const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_svnRepo", { sourceData: this.appData[5] }),
-            getRandomAnalysisData(this.analysisData[6])
+            getRandomApplicationData("tackleTestApp_svnRepo", {
+                sourceData: this.appData["tackle-testapp-svn"],
+            }),
+            getRandomAnalysisData(this.analysisData["tackleTestApp_Source_autoTagging"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -224,9 +234,9 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+knownLibraries", {
-                sourceData: this.appData[3],
+                sourceData: this.appData["tackle-testapp-git"],
             }),
-            getRandomAnalysisData(this.analysisData[16])
+            getRandomAnalysisData(this.analysisData["analysis_for_openSourceLibraries"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -243,9 +253,9 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         // Automates https://polarion.engineering.redhat.com/polarion/#/project/MTAPathfinder/workitem?id=MTA-298
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source_autoTagging", {
-                sourceData: this.appData[3],
+                sourceData: this.appData["tackle-testapp-git"],
             }),
-            getRandomAnalysisData(this.analysisData[6])
+            getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -260,9 +270,9 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         // Automates https://github.com/konveyor/example-applications/tree/main/example-1
         const application = new Analysis(
             getRandomApplicationData("Example 1", {
-                sourceData: this.appData[8],
+                sourceData: this.appData["konveyor-exampleapp"],
             }),
-            getRandomAnalysisData(this.analysisData[17])
+            getRandomAnalysisData(this.analysisData["analysis_on_example-1-app"])
         );
         application.create();
         cy.wait("@getApplication");

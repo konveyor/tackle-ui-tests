@@ -68,8 +68,10 @@ describe.skip("Exclude Tags", { tags: "@tier2" }, () => {
         // skipping until bug https://issues.redhat.com/browse/MTA-40 is fixed.
         // For source code analysis application must have source code URL git or svn
         const application = new Analysis(
-            getRandomApplicationData("testapp-excludePackages", { sourceData: this.appData[3] }),
-            getRandomAnalysisData(this.analysisData[10])
+            getRandomApplicationData("testapp-excludePackages", {
+                sourceData: this.appData["tackle-testapp-git"],
+            }),
+            getRandomAnalysisData(this.analysisData["analysis_for_excludeRuleTags"])
         );
         application.create();
         application.manageCredentials(source_credential.name);

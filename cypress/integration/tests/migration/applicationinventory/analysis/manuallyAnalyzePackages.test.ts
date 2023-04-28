@@ -67,8 +67,10 @@ describe("Select the list of packages to be analyzed manually", { tags: "@tier2"
     it("Analyze the packages manually with excluded packages", function () {
         // For source code analysis application must have source code URL git or svn
         const application = new Analysis(
-            getRandomApplicationData("testapp-excludePackages", { sourceData: this.appData[3] }),
-            getRandomAnalysisData(this.analysisData[10])
+            getRandomApplicationData("testapp-excludePackages", {
+                sourceData: this.appData["tackle-testapp-git"],
+            }),
+            getRandomAnalysisData(this.analysisData["analysis_for_manuallyAnalyzePackages"])
         );
         application.create();
         application.manageCredentials(source_credential.name);
