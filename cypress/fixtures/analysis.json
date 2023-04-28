@@ -10,7 +10,8 @@
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "tackle-testapp",
-        "storyPoints": 1
+        "storyPoints": 1,
+        "disableTagging": true
     },
 
     "source+dep_analysis_on_daytrader-app": {
@@ -48,7 +49,6 @@
         "source": "Source code",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "tackle-testapp",
-        "enableTagging": true,
         "storyPoints": 1,
         "techTags": [
             ["HTTP", "Servlet"],
