@@ -127,14 +127,22 @@ export class CustomMigrationTarget {
         }
     }
 
+    public static fillRepositoryUrl(url: string) {
+        inputText(CustomMigrationTargetView.repositoryUrl, url);
+    }
+
+    public static selectRepositoryType(repositoryType: RepositoryType) {
+        click(CustomMigrationTargetView.repositoryTypeDropdown);
+        clickByText(button, repositoryType);
+    }
+
     private static fillRepositoryForm(values: Partial<RulesRepositoryFields>) {
         if (values.repositoryType) {
-            click(CustomMigrationTargetView.repositoryTypeDropdown);
-            clickByText(button, RepositoryType.git);
+            CustomMigrationTarget.selectRepositoryType(RepositoryType.git);
         }
 
         if (values.repositoryUrl) {
-            inputText(CustomMigrationTargetView.repositoryUrl, values.repositoryUrl);
+            CustomMigrationTarget.fillRepositoryUrl(values.repositoryUrl);
         }
 
         if (values.branch) {

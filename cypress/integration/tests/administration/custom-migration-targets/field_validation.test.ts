@@ -16,6 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    click,
     hasToBeSkipped,
     login,
     preservecookies,
@@ -24,6 +25,7 @@ import {
 import * as data from "../../../../utils/data_utils";
 import { CustomMigrationTarget } from "../../../models/administration/custom-migration-targets/custom-migration-target";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
+import { RepositoryType } from "../../../types/constants";
 
 describe("Custom Migration Target Validations", { tags: ["@tier1"] }, () => {
     let target: CustomMigrationTarget;
@@ -96,6 +98,31 @@ describe("Custom Migration Target Validations", { tags: ["@tier1"] }, () => {
         cy.get(CustomMigrationTargetView.imageHelper).should(
             "contain",
             "Max image file size of 1 MB exceeded."
+        );
+    });
+
+    it("Rule repository URL validation", function () {
+        // Fails due to bug 484
+        CustomMigrationTarget.openNewForm();
+        click(CustomMigrationTargetView.retrieveFromARepositoryRadio);
+        CustomMigrationTarget.selectRepositoryType(RepositoryType.git);
+
+        CustomMigrationTarget.fillRepositoryUrl("   ");
+        cy.get(CustomMigrationTargetView.repositoryUrlHelper).should(
+            "contain",
+            "Must be a valid URL."
+        );
+
+        CustomMigrationTarget.fillRepositoryUrl("Invalid url");
+        cy.get(CustomMigrationTargetView.repositoryUrlHelper).should(
+            "contain",
+            "Must be a valid URL."
+        );
+
+        CustomMigrationTarget.fillRepositoryUrl("https://github.com/konveyor/tackle-testapp");
+        cy.get(CustomMigrationTargetView.repositoryUrlHelper).should(
+            "not.contain",
+            "Must be a valid URL."
         );
     });
 });
