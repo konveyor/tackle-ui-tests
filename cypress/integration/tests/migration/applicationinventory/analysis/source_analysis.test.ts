@@ -175,7 +175,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
             getRandomApplicationData("tackleTestApp_Source", {
                 sourceData: this.appData["tackle-testapp-git"],
             }),
-            getRandomAnalysisData(this.analysisData["tackleTestApp_Source_autoTagging"])
+            getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -200,7 +200,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
             getRandomApplicationData("tackleTestApp_sshCreds", {
                 sourceData: this.appData["tackle-testapp-ssh"],
             }),
-            getRandomAnalysisData(this.analysisData["tackleTestApp_Source_autoTagging"])
+            getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -218,7 +218,7 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
             getRandomApplicationData("tackleTestApp_svnRepo", {
                 sourceData: this.appData["tackle-testapp-svn"],
             }),
-            getRandomAnalysisData(this.analysisData["tackleTestApp_Source_autoTagging"])
+            getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -263,7 +263,9 @@ describe("Source Analysis", { tags: "@tier1" }, () => {
         application.manageCredentials(source_credential.name, "None");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.tagAndCategoryExists(this.analysisData[6]["techTags"]);
+        application.tagAndCategoryExists(
+            this.analysisData["analysis_for_enableTagging"]["techTags"]
+        );
     });
 
     it("Analysis for Konveyor example1 application", function () {
