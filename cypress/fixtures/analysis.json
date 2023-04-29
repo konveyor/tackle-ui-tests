@@ -3,15 +3,15 @@
         "source": "Source code",
         "target": ["Containerization"],
         "appName": "book-server",
-        "storyPoints": 5
+        "storyPoints": 5,
+        "disableTagging": true
     },
 
     "source+dep_analysis_on_tackletestapp": {
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "tackle-testapp",
-        "storyPoints": 1,
-        "disableTagging": true
+        "storyPoints": 1
     },
 
     "source+dep_analysis_on_daytrader-app": {
