@@ -111,5 +111,8 @@ cypress/videos/
 cypress/screenshots/
 cypress/downloads/
 
+# Documentation folder
+docs/
+
 # Configuration folder of web storm
 .idea/
