@@ -34,13 +34,9 @@ import {
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory } from "../../../../types/constants";
-
-import { Application } from "../../../../models/developer/applicationinventory/application";
-import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { csvFileName, date, importStatus, user } from "../../../../views/applicationinventory.view";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
-const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/csv/";
 var applicationsList: Array<Assessment> = [];
 
@@ -56,8 +52,6 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
         deleteApplicationTableRows();
         deleteAllBusinessServices();
 
-        // Create business service
-        businessService.create();
         // Open the application inventory page
         clickByText(navMenu, applicationInventory);
         cy.wait(2000);
@@ -87,10 +81,8 @@ describe("Manage applications import sort validations", { tags: "@tier2" }, func
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;
 
-        // Delete the business service
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
-        businessService.delete();
     });
 
     it("Date sort validations", function () {
