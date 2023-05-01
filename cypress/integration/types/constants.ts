@@ -99,7 +99,7 @@ export const max250CharsMsg = "This field must contain fewer than 250 characters
 export const minCharsMsg = "This field must contain at least 3 characters.";
 
 export const SEC = 1000;
-export const administrator = "Administrator";
+export const administrator = "Admin";
 export const developer = "Developer";
 
 export enum CredentialType {
