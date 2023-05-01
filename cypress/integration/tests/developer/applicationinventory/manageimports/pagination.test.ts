@@ -42,9 +42,7 @@ import {
 import { actionButton } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
-import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 
-const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/csv/";
 
 const filesToImport = [
@@ -64,9 +62,6 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
         // Delete all items of page
         deleteApplicationTableRows();
         deleteAllBusinessServices();
-
-        // Create business service
-        businessService.create();
 
         // Navigate to Application inventory tab
         clickByText(navMenu, applicationInventory);
@@ -124,7 +119,6 @@ describe("Manage imports pagination validations", { tags: "@tier3" }, function (
         // Delete all Data
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
-        businessService.delete();
     });
 
     it("Navigation button validations", function () {

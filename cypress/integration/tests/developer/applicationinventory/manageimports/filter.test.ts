@@ -33,10 +33,8 @@ import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory, button, clearAllFilters } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 
-import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { FileName } from "../../../../views/applicationinventory.view";
 
-const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/csv/";
 const filesToImport = [
     "valid_application_rows.csv",
@@ -55,9 +53,6 @@ describe("Manage applications import filter validations", { tags: "@tier2" }, fu
         // Delete all items of page
         deleteApplicationTableRows();
         deleteAllBusinessServices();
-
-        // Create business service
-        businessService.create();
 
         // Open the application inventory page
         clickByText(navMenu, applicationInventory);
