@@ -53,17 +53,31 @@ import { selectType } from "../../../views/credentials.view";
 import * as commonView from "../../../views/common.view";
 import { CredentialsData } from "../../../types/types";
 
+/**
+ * Base class for credentials
+ *
+ */
 export class Credentials {
+    /** The name of the credential */
     name = "";
+
+    /** Description of the credential */
     description = "";
+
+    /** Shows the credential type, fields further depend on it */
     type = "";
+
+    /** Keeps state if credential is in use or not */
     inUse = false;
+
+    /** Contains URL of credentials web page */
     static fullUrl = Cypress.env("tackleUrl") + "/identities";
 
     constructor(name?) {
         if (name) this.name = name;
     }
 
+    /** This method is validating minimum and maximum length of text fields where it is applicable */
     static validateFields() {
         Credentials.openList();
         click(createBtn);
@@ -71,10 +85,16 @@ export class Credentials {
         Credentials.fillNameTooLong();
     }
 
+    /**
+     * This method validates error message that `Name` field value is too short
+     */
     protected static fillNameTooShort(): void {
         validateTooShortInput(credentialNameInput, descriptionInput);
     }
 
+    /**
+     * This method validates error message that `Name` field value is too long
+     */
     protected static fillNameTooLong(): void {
         validateTooLongInput(credentialNameInput);
     }
@@ -109,6 +129,9 @@ export class Credentials {
         }
     }
 
+    /** Validates if description field contains same value as sent parameter
+     * @param description is the value to compare with existing description
+     */
     protected validateDescription(description: string) {
         validateValue(descriptionInput, description);
     }
@@ -118,6 +141,11 @@ export class Credentials {
         clickByText(button, type);
     }
 
+    /**
+     * This method opens list of credentials
+     *
+     * @param itemsPerPage is optional parameter how many items should be shown on page
+     */
     static openList(itemsPerPage = 100) {
         cy.url().then(($url) => {
             if ($url != Credentials.fullUrl) {

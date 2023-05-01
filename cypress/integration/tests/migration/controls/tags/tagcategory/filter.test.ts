@@ -26,6 +26,7 @@ import { button, clearAllFilters, color, rank } from "../../../../../types/const
 
 import * as data from "../../../../../../utils/data_utils";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
+import { tagCategory } from "../../../../../views/tags.view";
 
 describe("Tag tagCategory filter validations", { tags: "@tier2" }, function () {
     beforeEach("Login", function () {
@@ -46,7 +47,7 @@ describe("Tag tagCategory filter validations", { tags: "@tier2" }, function () {
 
         // Enter an existing tag type name substring and apply it as search filter
         var validSearchInput = data.getRandomDefaultTagCategory();
-        applySearchFilter(tagType, validSearchInput);
+        applySearchFilter(tagCategory, validSearchInput);
 
         // Assert that tag type row(s) containing the search text is/are displayed
         exists(validSearchInput);
@@ -57,7 +58,7 @@ describe("Tag tagCategory filter validations", { tags: "@tier2" }, function () {
 
         // Enter a non-existing tag type name substring and apply it as search filter
         var invalidSearchInput = String(data.getRandomNumber(111111, 222222));
-        applySearchFilter(tagType, invalidSearchInput);
+        applySearchFilter(tagCategory, invalidSearchInput);
 
         // Assert that no search results are found
         cy.get("h2").contains("No results found");
