@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import * as faker from "faker";
-import { CredentialType, CustomRuleType, UserCredentials } from "../integration/types/constants";
+import { CredentialType, CustomRuleType, UserCredentials } from "../e2e/types/constants";
 import { writeGpgKey, writeMavenSettingsFile } from "./utils";
 import {
     CredentialsData,
@@ -22,7 +22,7 @@ import {
     UserData,
     RulesManualFields,
     RulesRepositoryFields,
-} from "../integration/types/types";
+} from "../e2e/types/types";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
