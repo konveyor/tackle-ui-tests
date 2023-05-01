@@ -8,7 +8,7 @@ import {
 } from "../../../../utils/data_utils";
 import { CredentialType } from "../../../types/constants";
 import { ProxyType, ProxyViewSelectors, ProxyViewSelectorsByType } from "../../../views/proxy.view";
-import { submitButton } from "../../../../integration/views/common.view";
+import { submitButton } from "../../../views/common.view";
 
 describe("Proxy operations", { tags: "@tier2" }, () => {
     let httpsProxy = new Proxy(getRandomProxyData(), ProxyType.https);

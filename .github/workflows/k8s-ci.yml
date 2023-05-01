@@ -103,7 +103,7 @@ jobs:
       - name: Install NPM
         run: npm install .
       - name: Run cypress login test
-        run: npx cypress run --spec "cypress/integration/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
+        run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
       - name: Run Tier1 test cases
         run: |
           npx cypress run --spec **/*.test.ts --env grepTags=@tier1,user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
@@ -204,7 +204,7 @@ jobs:
       - name: Install NPM
         run: npm install .
       - name: Run cypress login test
-        run: npx cypress run --spec "cypress/integration/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
+        run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
       - name: Run Tier2 test cases
         run: |
           npx cypress run --spec **/*.test.ts --env grepTags=@tier2,user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
@@ -306,7 +306,7 @@ jobs:
       - name: Install NPM
         run: npm install .
       - name: Run cypress login test
-        run: npx cypress run --spec "cypress/integration/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
+        run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
       - name: Run Tier3 test cases
         run: |
           npx cypress run --spec **/*.test.ts --env grepTags=@tier3,user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
