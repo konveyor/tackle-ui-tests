@@ -89,7 +89,7 @@ export class Analysis extends Application {
     sources?: string;
     excludeRuleTags?: string;
     enableTransaction?: boolean;
-    enableTagging?: boolean;
+    disableTagging?: boolean;
     appName?: string;
     storyPoints?: number;
     manuallyAnalyzePackages?: string[];
@@ -119,7 +119,7 @@ export class Analysis extends Application {
             sources,
             excludeRuleTags,
             enableTransaction,
-            enableTagging,
+            disableTagging,
             appName,
             storyPoints,
             manuallyAnalyzePackages,
@@ -138,7 +138,7 @@ export class Analysis extends Application {
         if (sources) this.sources = sources;
         if (excludeRuleTags) this.excludeRuleTags = excludeRuleTags;
         if (enableTransaction) this.enableTransaction = enableTransaction;
-        if (enableTagging) this.enableTagging = enableTagging;
+        if (disableTagging) this.disableTagging = disableTagging;
         if (appName) this.appName = appName;
         if (storyPoints) this.storyPoints = storyPoints;
         if (excludePackages) this.excludePackages = excludePackages;
@@ -192,11 +192,13 @@ export class Analysis extends Application {
             });
     }
 
-    protected enableAutomatedTagging() {
+    protected disableAutomatedTagging() {
         cy.get(enableAutomatedTagging)
             .invoke("is", ":checked")
             .then((checked) => {
-                checked ? cy.log("Box is already checked") : cy.get(enableAutomatedTagging).check();
+                checked
+                    ? cy.get(enableAutomatedTagging).uncheck()
+                    : cy.log("Box is already unchecked");
             });
     }
 
@@ -284,7 +286,7 @@ export class Analysis extends Application {
             cy.contains("button", "Next", { timeout: 200 }).click();
             if (this.excludeRuleTags) this.tagsToExclude();
             if (this.enableTransaction) this.enableTransactionAnalysis();
-            if (this.enableTagging) this.enableAutomatedTagging();
+            if (this.disableTagging) this.disableAutomatedTagging();
             if (!this.sources) cy.contains("button", "Next", { timeout: 200 }).click();
             cy.contains("button", "Run", { timeout: 200 }).click();
             checkSuccessAlert(commonView.infoAlertMessage, `Submitted for analysis`);
