@@ -3,8 +3,8 @@
         "source": "Source code",
         "target": ["Containerization"],
         "appName": "book-server",
-        "storyPoints": 5,
-        "disableTagging": true
+        "disableTagging": true,
+        "storyPoints": 5
     },
 
     "source+dep_analysis_on_tackletestapp": {
