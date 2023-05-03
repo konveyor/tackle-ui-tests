@@ -22,7 +22,7 @@ import { MavenConfiguration } from "../../models/administration/repositories/mav
 import { clearRepository } from "../../views/repository.view";
 import { GeneralConfig } from "../../models/administration/general/generalConfig";
 
-describe("Performing post-upgrade validations", { tags: "@post-upgrade" }, () => {
+describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@post-upgrade")) return;

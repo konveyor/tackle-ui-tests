@@ -38,7 +38,7 @@ let source_credential;
 let maven_credential;
 const mavenConfiguration = new MavenConfiguration();
 
-describe("Binary Analysis", { tags: "@tier1" }, () => {
+describe(["@tier1"], "Binary Analysis", () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;

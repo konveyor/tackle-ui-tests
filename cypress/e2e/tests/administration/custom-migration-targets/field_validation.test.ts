@@ -27,7 +27,7 @@ import { CustomMigrationTarget } from "../../../models/administration/custom-mig
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { RepositoryType } from "../../../types/constants";
 
-describe("Custom Migration Target Validations", { tags: ["@tier1"] }, () => {
+describe(["@tier1"], "Custom Migration Target Validations", () => {
     let target: CustomMigrationTarget;
     /**
      * Validations for Polarion TCs 299, 301, 303, 304 & 305

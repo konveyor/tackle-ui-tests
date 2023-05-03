@@ -30,7 +30,7 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 import { tdTag, businessServices, migration } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 
-describe("Business service linked to stakeholder", { tags: "@tier1" }, () => {
+describe(["tier1"], "Business service linked to stakeholder", () => {
     beforeEach("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;

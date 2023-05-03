@@ -5,15 +5,9 @@ import {
     login,
     validatePagination,
 } from "../../../../utils/utils";
-import { CredentialsProxy } from "../../../models/administration/credentials/credentialsProxy";
-import { getRandomCredentialsData } from "../../../../utils/data_utils";
-import { CredentialType } from "../../../types/constants";
-import { CredentialsMaven } from "../../../models/administration/credentials/credentialsMaven";
-import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
-import { CredentialsSourceControlKey } from "../../../models/administration/credentials/credentialsSourceControlKey";
 import { Credentials } from "../../../models/administration/credentials/credentials";
 
-describe("Tag type pagination validations", { tags: "@tier3" }, function () {
+describe(["@tier3"], "Tag type pagination validations", function () {
     // let newCredentialsList: Array<Credentials> = [];
     let createdCredentialsList: Array<Credentials> = [];
     before("Login and Create Test Data", () => {

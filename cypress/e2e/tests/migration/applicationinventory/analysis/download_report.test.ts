@@ -9,7 +9,7 @@ import { GeneralConfig } from "../../../../models/administration/general/general
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { SEC } from "../../../../types/constants";
 
-describe("Enable and Download HTML and CSV Reports", { tags: "@tier1" }, function () {
+describe(["@tier2"], "Enable and Download HTML and CSV Reports", function () {
     let sourceApplication: Analysis;
     let generalConfig = GeneralConfig.getInstance();
 

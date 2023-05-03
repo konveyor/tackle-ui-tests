@@ -31,7 +31,7 @@ import { Analysis } from "../../../../models/migration/applicationinventory/anal
 import { analysis } from "../../../../types/constants";
 import { GeneralConfig } from "../../../../models/administration/general/generalConfig";
 
-describe("Upload Binary Analysis", { tags: "@tier1" }, () => {
+describe(["tier1"], "Upload Binary Analysis", () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;

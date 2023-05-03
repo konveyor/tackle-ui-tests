@@ -2,7 +2,7 @@ import { hasToBeSkipped, login, preservecookies } from "../../../../utils/utils"
 import { CredentialsProxy } from "../../../models/administration/credentials/credentialsProxy";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 
-describe("Credentials fields validations", { tags: "@tier2" }, function () {
+describe(["@tier2"], "Credentials fields validations", function () {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;
