@@ -52,7 +52,7 @@ var applicationList: Array<Assessment> = [];
 var tagList: Array<Tag> = [];
 var invalidSearchInput = "11111";
 
-describe("Copy assessment filter tests", { tags: "@tier2" }, () => {
+describe(["tier2"], "Copy assessment filter tests", () => {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

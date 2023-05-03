@@ -40,7 +40,7 @@ import { jobfunctionNameInput } from "../../../../views/jobfunctions.view";
 import * as commonView from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
 
-describe("Job Function Validations", { tags: "@tier2" }, () => {
+describe(["tier2"], "Job Function Validations", () => {
     const jobfunction = new Jobfunctions(data.getJobTitle());
 
     before("Login", function () {

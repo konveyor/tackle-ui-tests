@@ -31,7 +31,7 @@ import { navMenu, navTab } from "../../../../../views/menu.view";
 import { controls, tags, tagCategory, rank, tagCount } from "../../../../../types/constants";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 
-describe("Tag category sort validations", { tags: "@tier2" }, function () {
+describe(["@tier2"], "Tag category sort validations", function () {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

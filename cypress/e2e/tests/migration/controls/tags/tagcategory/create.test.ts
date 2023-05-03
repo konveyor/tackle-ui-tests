@@ -51,7 +51,7 @@ import * as commonView from "../../../../../views/common.view";
 import * as data from "../../../../../../utils/data_utils";
 import { modal } from "../../../../../views/common.view";
 
-describe("Tag category validations", { tags: "@tier2" }, () => {
+describe(["tier2"], "Tag category validations", () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

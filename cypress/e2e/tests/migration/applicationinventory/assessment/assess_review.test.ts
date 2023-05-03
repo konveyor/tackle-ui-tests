@@ -32,7 +32,7 @@ import { GeneralConfig } from "../../../../models/administration/general/general
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
 
-describe("Application assessment and review tests", { tags: "@tier1" }, () => {
+describe(["tier1"], "Application assessment and review tests", () => {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;

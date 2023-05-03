@@ -40,7 +40,7 @@ import {
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 import { tagCategory } from "../../../../../views/tags.view";
 
-describe("Tag category pagination validations", { tags: "@tier3" }, function () {
+describe(["@tier3"], "Tag category pagination validations", function () {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier3")) return;
