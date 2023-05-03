@@ -15,21 +15,42 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { login } from "../../../../utils/utils";
-import { CredentialType, SEC, UserCredentials } from "../../../types/constants";
+import {
+    clickByText,
+    getRandomAnalysisData,
+    getRandomApplicationData,
+    login,
+    selectItemsPerPage,
+} from "../../../../utils/utils";
+import {
+    analyzeButton,
+    button,
+    CredentialType,
+    SEC,
+    UserCredentials,
+} from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import { CustomMigrationTarget } from "../../../models/administration/custom-migration-targets/custom-migration-target";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { getRulesData } from "../../../../utils/data_utils";
+import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 
 describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }, () => {
-    // Automates Polarion TC 305
+    // Automates Polarion TC 300 & 305
     beforeEach("Login", function () {
         login();
 
         cy.fixture("custom-rules").then(function (customMigrationTargets) {
             this.customMigrationTargets = customMigrationTargets;
+        });
+
+        cy.fixture("application").then(function (appData) {
+            this.appData = appData;
+        });
+
+        cy.fixture("analysis").then(function (analysisData) {
+            this.analysisData = analysisData;
         });
 
         cy.intercept("POST", "/hub/rulebundles*").as("postRule");
@@ -104,5 +125,54 @@ describe("Custom Migration Targets CRUD operations", { tags: ["@tier1", "@dc"] }
         cy.get("article", { timeout: 12 * SEC }).should("not.contain", target.name);
 
         sourceCredential.delete();
+    });
+
+    it("Change layout", function () {
+        const targetData = this.customMigrationTargets.manual_rules;
+        const target = new CustomMigrationTarget(
+            data.getRandomWord(8),
+            data.getDescription(),
+            targetData.image,
+            getRulesData(targetData)
+        );
+        target.create();
+        cy.wait("@postRule");
+
+        const dragButton = cy
+            .get("article", { timeout: 12 * SEC })
+            .contains(target.name)
+            .parents("article")
+            .find(CustomMigrationTargetView.dragButton);
+
+        // Moves the custom migration target to the first place
+        dragButton.move({
+            deltaX: -10000,
+            deltaY: -10000,
+        });
+
+        const application = new Analysis(
+            getRandomApplicationData("bookserverApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+        );
+        application.create();
+
+        Analysis.open();
+        selectItemsPerPage(100);
+        application.selectApplication();
+        cy.contains("button", analyzeButton, { timeout: 20000 }).should("be.enabled").click();
+
+        application.selectSourceofAnalysis(application.source);
+        cy.contains("button", "Next", { timeout: 200 }).click();
+
+        cy.get("form article", { timeout: 12 * SEC })
+            .children()
+            .first()
+            .should("contain", target.name);
+        clickByText(button, "Cancel");
+
+        target.delete();
+        application.delete();
     });
 });

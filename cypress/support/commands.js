@@ -41,3 +41,4 @@
 
 require("cy-verify-downloads").addCustomCommand();
 require("cypress-downloadfile/lib/downloadFileCommand");
+require("@4tw/cypress-drag-drop");
