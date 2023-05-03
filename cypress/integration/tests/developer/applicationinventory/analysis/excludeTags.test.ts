@@ -15,7 +15,7 @@ import { CredentialsSourceControlUsername } from "../../../../models/administrat
 
 let source_credential;
 
-describe("Exclude Tags", { tags: "@tier2" }, () => {
+describe.skip("Exclude Tags", { tags: "@tier2" }, () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;
@@ -65,6 +65,7 @@ describe("Exclude Tags", { tags: "@tier2" }, () => {
     });
 
     it("Exclude Tags from report using source analysis", function () {
+        // skipping this test because bug https://issues.redhat.com/browse/MTA-40 won't be backported to 6.0.x
         // For source code analysis application must have source code URL git or svn
         const application = new Analysis(
             getRandomApplicationData("testapp-excludePackages", { sourceData: this.appData[3] }),
