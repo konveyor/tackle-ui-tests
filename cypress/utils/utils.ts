@@ -544,8 +544,8 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
         .find("button")
         .contains("Import")
         .trigger("click");
-    checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
-    // unresolved bug https://issues.redhat.com/browse/TACKLE-927
+    // Skipping alert check on 6.0.x because of https://issues.redhat.com/browse/MTA-38
+    // checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
 }
 
 export function uploadXml(fileName: string): void {
