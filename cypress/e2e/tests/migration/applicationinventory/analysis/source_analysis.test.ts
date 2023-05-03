@@ -274,7 +274,7 @@ describe(["tier1"], "Source Analysis", () => {
     });
 
     it("Disable Automated tagging using Source Analysis on tackle testapp", function () {
-        // Automates https://polarion.engineering.redhat.com/polarion/#/project/MTAPathfinder/workitem?id=MTA-307
+        // Automates Polarion MTA-307
         const application = new Analysis(
             getRandomApplicationData("bookserverApp_Disable_autoTagging", {
                 sourceData: this.appData["bookserver-app"],
