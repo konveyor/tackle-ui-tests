@@ -279,7 +279,7 @@ describe(["tier1"], "Source Analysis", () => {
             getRandomApplicationData("bookserverApp_Disable_autoTagging", {
                 sourceData: this.appData["bookserver-app"],
             }),
-            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+            getRandomAnalysisData(this.analysisData["analysis_for_disableTagging"])
         );
         application.create();
         cy.wait("@getApplication");

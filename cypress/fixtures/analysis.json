@@ -3,7 +3,6 @@
         "source": "Source code",
         "target": ["Containerization"],
         "appName": "book-server",
-        "disableTagging": true,
         "storyPoints": 5
     },
 
@@ -59,6 +58,14 @@
             ["Persistence", "Spring Data JPA"],
             ["Web", "Spring Web"]
         ]
+    },
+
+    "analysis_for_disableTagging": {
+        "source": "Source code",
+        "target": ["Containerization"],
+        "appName": "book-server",
+        "disableTagging": true,
+        "storyPoints": 5
     },
 
     "analysis_for_DIVA-report": {
