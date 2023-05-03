@@ -28,7 +28,12 @@ import {
 } from "../../../../../utils/utils";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { AnalysisStatuses, CredentialType, UserCredentials } from "../../../../types/constants";
+import {
+    AnalysisStatuses,
+    CredentialType,
+    UserCredentials,
+    SEC,
+} from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../../models/administration/credentials/credentialsSourceControlKey";
@@ -266,6 +271,22 @@ describe(["tier1"], "Source Analysis", () => {
         application.tagAndCategoryExists(
             this.analysisData["analysis_for_enableTagging"]["techTags"]
         );
+    });
+
+    it("Disable Automated tagging using Source Analysis on tackle testapp", function () {
+        // Automates Polarion MTA-307
+        const application = new Analysis(
+            getRandomApplicationData("bookserverApp_Disable_autoTagging", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["analysis_for_disableTagging"])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.applicationDetailsTab("Tags");
+        cy.get("h2", { timeout: 5 * SEC }).should("contain", "No tags available");
     });
 
     it("Analysis for Konveyor example1 application", function () {
