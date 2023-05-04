@@ -18,4 +18,5 @@ export enum CustomMigrationTargetView {
     rootPath = "#rootPath",
     credentialsDropdown = "#associated-credentials-select-toggle",
     retrieveFromARepositoryRadio = "#repository",
+    dragButton = "#drag-button",
 }
