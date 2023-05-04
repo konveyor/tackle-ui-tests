@@ -42,7 +42,7 @@ import { Tag } from "../../../../../models/migration/controls/tags";
 import * as commonView from "../../../../../../e2e/views/common.view";
 import * as data from "../../../../../../utils/data_utils";
 
-describe(["tier2"], "Tag validations", () => {
+describe(["@tier2"], "Tag validations", () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

@@ -40,7 +40,7 @@ import { BusinessServices } from "../../../../models/migration/controls/business
 var stakeholdersList: Array<Stakeholders> = [];
 var businessservicesList: Array<BusinessServices> = [];
 
-describe(["tier2"], "Business services sort validations", function () {
+describe(["@tier2"], "Business services sort validations", function () {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

@@ -43,7 +43,7 @@ let source_credential;
 let maven_credential;
 const mavenConfiguration = new MavenConfiguration();
 
-describe(["tier1"], "Source Analysis", () => {
+describe(["@tier1"], "Source Analysis", () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;

@@ -60,7 +60,7 @@ var invalidSearchInput = String(data.getRandomNumber());
 let source_credential;
 let maven_credential;
 
-describe(["tier2"], "Application inventory filter validations", function () {
+describe(["@tier2"], "Application inventory filter validations", function () {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

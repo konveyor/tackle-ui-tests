@@ -15,7 +15,7 @@ import { CredentialsSourceControlUsername } from "../../../../models/administrat
 
 let source_credential;
 
-describe.skip(["tier2"], "Exclude Tags", () => {
+describe.skip(["@tier2"], "Exclude Tags", () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

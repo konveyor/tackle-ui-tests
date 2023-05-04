@@ -27,7 +27,7 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import * as data from "../../../../../utils/data_utils";
 
-describe(["tier1"], "Stakeholder group CRUD operations", () => {
+describe(["@tier1"], "Stakeholder group CRUD operations", () => {
     const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
 
     before("Login", function () {

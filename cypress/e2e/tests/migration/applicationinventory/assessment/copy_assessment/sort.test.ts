@@ -40,7 +40,7 @@ var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var applicationList: Array<Assessment> = [];
 
-describe(["tier2"], "Copy assessment and review tests", () => {
+describe(["@tier2"], "Copy assessment and review tests", () => {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

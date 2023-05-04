@@ -48,7 +48,7 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 import * as commonView from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
 
-describe(["tier2"], "Stakeholder validations", () => {
+describe(["@tier2"], "Stakeholder validations", () => {
     const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
 
     before("Login", function () {

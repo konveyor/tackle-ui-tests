@@ -35,7 +35,7 @@ import { Assessment } from "../../../../models/migration/applicationinventory/as
 
 var applicationsList: Array<Assessment> = [];
 
-describe(["tier2"], "Application inventory sort validations", function () {
+describe(["@tier2"], "Application inventory sort validations", function () {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

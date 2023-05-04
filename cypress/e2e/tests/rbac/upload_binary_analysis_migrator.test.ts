@@ -32,7 +32,7 @@ import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { getRandomUserData } from "../../../utils/data_utils";
 import { User } from "../../models/keycloak/users/user";
 
-describe(["tier3"], "Upload Binary Analysis", () => {
+describe(["@tier3"], "Upload Binary Analysis", () => {
     let userMigrator = new UserMigrator(getRandomUserData());
 
     before("Login", function () {

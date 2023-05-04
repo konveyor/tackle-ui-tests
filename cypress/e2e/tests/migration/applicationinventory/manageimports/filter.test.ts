@@ -46,7 +46,7 @@ const filesToImport = [
 ];
 var invalidSearchInput = String(data.getRandomNumber());
 
-describe(["tier2"], "Manage applications import filter validations", function () {
+describe(["@tier2"], "Manage applications import filter validations", function () {
     before("Login and create test data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

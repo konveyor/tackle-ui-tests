@@ -54,7 +54,7 @@ var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var invalidSearchInput = data.getRandomNumber();
 
-describe(["tier2"], "Stakeholder groups filter validations", function () {
+describe(["@tier2"], "Stakeholder groups filter validations", function () {
     before("Login and Create Test Data", function () {
         // Prevent before hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

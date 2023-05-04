@@ -18,7 +18,7 @@ import { Assessment } from "../../models/migration/applicationinventory/assessme
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import * as data from "../../../utils/data_utils";
 
-describe(["tier2"], "Migrator RBAC operations", () => {
+describe(["@tier2"], "Migrator RBAC operations", () => {
     let userMigrator = new UserMigrator(getRandomUserData());
     const application = new Assessment(getRandomApplicationData());
     let stakeholdersList: Array<Stakeholders> = [];

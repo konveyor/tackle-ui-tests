@@ -38,7 +38,7 @@ var stakeholdersList: Array<Stakeholders> = [];
 var applicationsList: Array<Assessment> = [];
 var businessServiceList: Array<BusinessServices> = [];
 
-describe(["tier2"], "Application risks tests", () => {
+describe(["@tier2"], "Application risks tests", () => {
     var risktype = ["low", "medium", "high"];
 
     before("Login and Create Test Data", function () {
