@@ -15,7 +15,7 @@ import { CredentialsSourceControlUsername } from "../../../../models/administrat
 
 let source_credential;
 
-describe("Select the list of packages to be analyzed manually", { tags: "@tier2" }, () => {
+describe(["tier2"], "Select the list of packages to be analyzed manually", () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

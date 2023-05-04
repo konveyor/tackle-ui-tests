@@ -26,7 +26,7 @@ import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions
 import * as data from "../../../../../utils/data_utils";
 import { migration } from "../../../../types/constants";
 
-describe("Job Function CRUD operations", { tags: "@tier1" }, () => {
+describe(["tier1"], "Job Function CRUD operations", () => {
     const jobfunction = new Jobfunctions(data.getJobTitle());
 
     before("Login", () => {

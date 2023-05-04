@@ -28,7 +28,7 @@ import * as data from "../../../../../../utils/data_utils";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 import { tagCategory } from "../../../../../views/tags.view";
 
-describe("Tag tagCategory filter validations", { tags: "@tier2" }, function () {
+describe(["@tier2"], "Tag tagCategory filter validations", function () {
     beforeEach("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

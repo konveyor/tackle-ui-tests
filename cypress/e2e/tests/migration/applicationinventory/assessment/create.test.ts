@@ -56,7 +56,7 @@ import { Assessment } from "../../../../models/migration/applicationinventory/as
 var businessservicesList: Array<BusinessServices> = [];
 var applicationList: Array<Assessment> = [];
 
-describe("Application validations", { tags: "@tier2" }, () => {
+describe(["tier2"], "Application validations", () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

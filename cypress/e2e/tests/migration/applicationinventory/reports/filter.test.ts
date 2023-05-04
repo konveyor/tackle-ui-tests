@@ -33,7 +33,7 @@ let source_credential;
 let maven_credential;
 const dependencies = "deps";
 
-describe("Report Page Filter Validation", { tags: "@tier2" }, () => {
+describe(["tier2"], "Report Page Filter Validation", () => {
     const report = new Report();
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run

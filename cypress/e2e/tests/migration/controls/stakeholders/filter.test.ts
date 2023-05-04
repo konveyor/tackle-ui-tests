@@ -56,7 +56,7 @@ let jobFunctionsList: Array<Jobfunctions> = [];
 let stakeholderGroupsList: Array<Stakeholdergroups> = [];
 let invalidSearchInput = "SomeInvalidInput";
 
-describe("Stakeholder filter validations", { tags: "@tier2" }, function () {
+describe(["@tier2"], "Stakeholder filter validations", function () {
     before("Login and Create Test Data", function () {
         // Prevent before hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

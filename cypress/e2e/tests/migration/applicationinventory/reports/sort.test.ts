@@ -33,7 +33,7 @@ import * as data from "../../../../../utils/data_utils";
 import { CredentialType, UserCredentials } from "../../../../types/constants";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 
-describe("Report Page's Sort Validation", { tags: "@tier2" }, () => {
+describe(["tier2"], "Report Page's Sort Validation", () => {
     const report = new Report();
     let source_credential;
     let maven_credential;

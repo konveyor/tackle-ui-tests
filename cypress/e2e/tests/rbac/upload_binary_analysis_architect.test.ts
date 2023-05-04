@@ -32,7 +32,7 @@ import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { getRandomUserData } from "../../../utils/data_utils";
 import { User } from "../../models/keycloak/users/user";
 
-describe("Upload Binary Analysis", { tags: "@tier3" }, () => {
+describe(["tier3"], "Upload Binary Analysis", () => {
     let userArchitect = new UserArchitect(getRandomUserData());
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run

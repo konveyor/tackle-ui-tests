@@ -14,7 +14,7 @@ import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 let source_credential;
 
-describe("Source Analysis", { tags: "@tier2" }, () => {
+describe(["tier2"], "Source Analysis", () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

@@ -32,7 +32,7 @@ import { SEC } from "../../../../types/constants";
 import { prevPageButton } from "../../../../views/common.view";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 
-describe("Business services pagination validations", { tags: "@tier3" }, function () {
+describe(["tier3"], "Business services pagination validations", function () {
     let businessServiceList = [];
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run

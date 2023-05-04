@@ -48,7 +48,6 @@
         "source": "Source code",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "tackle-testapp",
-        "enableTagging": true,
         "storyPoints": 1,
         "techTags": [
             ["HTTP", "Servlet"],
@@ -59,6 +58,14 @@
             ["Persistence", "Spring Data JPA"],
             ["Web", "Spring Web"]
         ]
+    },
+
+    "analysis_for_disableTagging": {
+        "source": "Source code",
+        "target": ["Containerization"],
+        "appName": "book-server",
+        "disableTagging": true,
+        "storyPoints": 5
     },
 
     "analysis_for_DIVA-report": {
