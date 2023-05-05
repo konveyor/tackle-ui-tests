@@ -37,9 +37,6 @@ let source_credential;
 
 describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
-
         login();
         deleteApplicationTableRows();
         source_credential = new CredentialsSourceControlUsername(
@@ -73,7 +70,6 @@ describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
     });
 
     after("Perform test data clean up", () => {
-        if (hasToBeSkipped("@tier1")) return;
         login();
         deleteApplicationTableRows();
         deleteAllBusinessServices();

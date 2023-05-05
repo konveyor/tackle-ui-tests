@@ -15,9 +15,6 @@ describe(["@tier2"], "Running analysis with incorrect proxy configuration", () =
     let httpProxy = new Proxy(getRandomProxyData(), ProxyType.http);
 
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
     });
@@ -52,7 +49,6 @@ describe(["@tier2"], "Running analysis with incorrect proxy configuration", () =
     });
 
     after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@tier2")) return;
         httpProxy.disable();
         httpsProxy.disable();
     });

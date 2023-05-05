@@ -36,7 +36,6 @@ describe(["@tier2"], "Assess review with RBAC operations", function () {
     const generalConfig = GeneralConfig.getInstance();
 
     before("Create test data", function () {
-        if (hasToBeSkipped("@tier2")) return;
         User.loginKeycloakAdmin();
         architect.create();
 
@@ -98,7 +97,6 @@ describe(["@tier2"], "Assess review with RBAC operations", function () {
     });
 
     after("Clear test data", () => {
-        if (hasToBeSkipped("@tier2")) return;
         login();
         User.loginKeycloakAdmin();
         architect.delete();

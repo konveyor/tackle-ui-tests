@@ -14,9 +14,6 @@ describe(["@tier2"], "Enable and Download HTML and CSV Reports", function () {
     let generalConfig = GeneralConfig.getInstance();
 
     before("Login and enable download of HTML and CSV reports", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
-
         login();
 
         // Enable HTML anc CSV report downloading
@@ -63,7 +60,6 @@ describe(["@tier2"], "Enable and Download HTML and CSV Reports", function () {
     });
 
     after("Cleaning up", function () {
-        if (hasToBeSkipped("@tier1")) return;
         sourceApplication.delete();
     });
 });

@@ -39,9 +39,6 @@ var stakeholdergroupNames: Array<string> = [];
 
 describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function", () => {
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
-
         // Perform login
         login();
     });

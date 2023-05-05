@@ -62,9 +62,6 @@ let maven_credential;
 
 describe(["@tier2"], "Application inventory filter validations", function () {
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
 
@@ -309,8 +306,6 @@ describe(["@tier2"], "Application inventory filter validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@tier2")) return;
-
         deleteApplicationTableRows();
         deleteAllTagsAndTagCategories();
         deleteAllBusinessServices();

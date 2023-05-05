@@ -31,9 +31,6 @@ import { migration } from "../../../../types/constants";
 
 describe(["@tier1"], "Business service CRUD operations", () => {
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
-
         // Perform login
         login();
     });

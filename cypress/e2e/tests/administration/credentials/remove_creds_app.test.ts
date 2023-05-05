@@ -14,9 +14,6 @@ let application;
 
 describe(["@tier1"], "Validation of Source Control Credentials", () => {
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
-
         // Perform login
         login();
         source_credential = new CredentialsSourceControlUsername(
@@ -46,9 +43,6 @@ describe(["@tier1"], "Validation of Source Control Credentials", () => {
     });
 
     after("Cleanup", () => {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
-
         application.delete();
     });
 });

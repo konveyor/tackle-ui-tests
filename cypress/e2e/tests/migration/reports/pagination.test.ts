@@ -49,9 +49,6 @@ var businessservicelist: Array<BusinessServices> = [];
 
 describe(["@tier3"], "Reports pagination validations", () => {
     before("Login and create test data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
         // Perform login
         login();
         stakeholdersList = createMultipleStakeholders(1);
@@ -77,9 +74,6 @@ describe(["@tier3"], "Reports pagination validations", () => {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
         // Delete All
         clickByText(navMenu, applicationInventory);
         deleteApplicationTableRows();

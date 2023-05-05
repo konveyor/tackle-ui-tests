@@ -4,9 +4,6 @@ import { CredentialsSourceControlUsername } from "../../../models/administration
 
 describe(["@tier2"], "Credentials fields validations", function () {
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
     });

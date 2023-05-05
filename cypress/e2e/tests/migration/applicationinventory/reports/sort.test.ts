@@ -39,9 +39,6 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
     let maven_credential;
 
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
         deleteApplicationTableRows();
@@ -84,8 +81,6 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
         deleteApplicationTableRows();
     });
 

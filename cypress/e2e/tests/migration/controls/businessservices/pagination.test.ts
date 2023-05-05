@@ -35,9 +35,6 @@ import { BusinessServices } from "../../../../models/migration/controls/business
 describe(["@tier3"], "Business services pagination validations", function () {
     let businessServiceList = [];
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
         // Perform login
         login();
         // Create 11 rows
@@ -115,9 +112,6 @@ describe(["@tier3"], "Business services pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
         // Delete the business services created before the tests
         deleteAllBusinessServices();
     });

@@ -44,9 +44,6 @@ describe(["@tier2"], "Job Function Validations", () => {
     const jobfunction = new Jobfunctions(data.getJobTitle());
 
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
     });

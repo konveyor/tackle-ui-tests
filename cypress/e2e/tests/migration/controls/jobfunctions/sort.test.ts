@@ -37,9 +37,6 @@ let jobFunctionsList: Array<Jobfunctions> = [];
 
 describe(["@tier2"], "Job function sorting", function () {
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
 
@@ -56,9 +53,6 @@ describe(["@tier2"], "Job function sorting", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Delete the job functions after before the tests
         deleteAllJobfunctions();
     });

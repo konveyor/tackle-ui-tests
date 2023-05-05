@@ -17,9 +17,6 @@ describe(["@tier2"], "Proxy operations", () => {
     const httpsProxyCreds = new CredentialsProxy(getRandomCredentialsData(CredentialType.proxy));
 
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
         httpProxyCreds.create();
@@ -88,7 +85,6 @@ describe(["@tier2"], "Proxy operations", () => {
     });
 
     after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@tier2")) return;
         httpsProxyCreds.delete();
         httpProxyCreds.delete();
     });

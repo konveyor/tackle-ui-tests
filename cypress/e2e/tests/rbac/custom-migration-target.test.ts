@@ -50,7 +50,6 @@ describe(["tier2", "@dc"], "Custom Migration Targets RBAC operations", function 
     const migrator = new UserMigrator(data.getRandomUserData());
 
     before("Create test data", function () {
-        if (hasToBeSkipped("@tier2") && hasToBeSkipped("@dc")) return;
         User.loginKeycloakAdmin();
         architect.create();
         migrator.create();
@@ -121,7 +120,6 @@ describe(["tier2", "@dc"], "Custom Migration Targets RBAC operations", function 
     });
 
     after("Clear test data", () => {
-        if (hasToBeSkipped("@tier2") && hasToBeSkipped("@dc")) return;
         login();
         analysis.delete();
         target.delete();

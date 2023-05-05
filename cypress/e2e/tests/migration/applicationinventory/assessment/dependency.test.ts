@@ -37,9 +37,6 @@ var applicationsList: Array<Assessment> = [];
 
 describe(["@tier1"], "Manage application dependencies", () => {
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
-
         // Perform login
         login();
 
@@ -52,8 +49,6 @@ describe(["@tier1"], "Manage application dependencies", () => {
     });
 
     after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@tier1")) return;
-
         // Delete the applications
         deleteApplicationTableRows();
     });

@@ -57,8 +57,6 @@ describe(["@tier2"], "Architect RBAC operations", () => {
     };
 
     before("Creating RBAC users, adding roles for them", () => {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
         login();
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
@@ -118,7 +116,6 @@ describe(["@tier2"], "Architect RBAC operations", () => {
     });
 
     after("", () => {
-        if (hasToBeSkipped("@tier2")) return;
         userArchitect.logout();
         login(adminUserName, adminUserPassword);
         appCredentials.delete();

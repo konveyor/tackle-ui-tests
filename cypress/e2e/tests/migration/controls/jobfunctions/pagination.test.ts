@@ -35,7 +35,6 @@ import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions
 describe(["@tier3"], "Job functions pagination validations", function () {
     before("Login and Create Test Data", function () {
         // Prevent before hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
 
         // Perform login
         login();
@@ -135,7 +134,6 @@ describe(["@tier3"], "Job functions pagination validations", function () {
 
     after("Perform test data clean up", function () {
         // Prevent before hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
 
         // Delete the Job functions created before the tests
         deleteAllJobfunctions();

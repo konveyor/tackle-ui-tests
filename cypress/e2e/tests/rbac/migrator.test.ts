@@ -57,8 +57,6 @@ describe(["@tier2"], "Migrator RBAC operations", () => {
     };
 
     before("Creating RBAC users, adding roles for them", () => {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
         //Need to log in as admin and create simple app with known name to use it for tests
         login();
         // Navigate to stakeholders control tab and create new stakeholder
@@ -119,7 +117,6 @@ describe(["@tier2"], "Migrator RBAC operations", () => {
     });
 
     after("", () => {
-        if (hasToBeSkipped("@tier2")) return;
         userMigrator.logout();
         login(adminUserName, adminUserPassword);
         appCredentials.delete();

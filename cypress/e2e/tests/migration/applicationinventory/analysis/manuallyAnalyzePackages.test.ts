@@ -17,9 +17,6 @@ let source_credential;
 
 describe(["@tier2"], "Select the list of packages to be analyzed manually", () => {
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
 
@@ -58,8 +55,6 @@ describe(["@tier2"], "Select the list of packages to be analyzed manually", () =
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
         deleteApplicationTableRows();
         deleteAllCredentials();
     });

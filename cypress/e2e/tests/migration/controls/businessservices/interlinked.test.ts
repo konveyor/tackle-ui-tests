@@ -32,9 +32,6 @@ import * as data from "../../../../../utils/data_utils";
 
 describe(["@tier1"], "Business service linked to stakeholder", () => {
     beforeEach("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
-
         // Perform login
         login();
 

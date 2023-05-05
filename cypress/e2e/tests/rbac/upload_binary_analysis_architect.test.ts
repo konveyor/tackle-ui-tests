@@ -35,9 +35,6 @@ import { User } from "../../models/keycloak/users/user";
 describe(["@tier3"], "Upload Binary Analysis", () => {
     let userArchitect = new UserArchitect(getRandomUserData());
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
         User.loginKeycloakAdmin();
         userArchitect.create();
     });
@@ -126,8 +123,6 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
     });
 
     after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@tier3")) return;
-        // Prevent hook from running, if the tag is excluded from run
         deleteApplicationTableRows();
         deleteAllBusinessServices();
         writeGpgKey("abcde");

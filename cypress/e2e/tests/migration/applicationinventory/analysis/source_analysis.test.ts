@@ -45,9 +45,6 @@ const mavenConfiguration = new MavenConfiguration();
 
 describe(["@tier1"], "Source Analysis", () => {
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
-
         // Perform login
         login();
         deleteApplicationTableRows();
@@ -96,8 +93,6 @@ describe(["@tier1"], "Source Analysis", () => {
     });
 
     after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@tier1")) return;
-        // Prevent hook from running, if the tag is excluded from run
         deleteApplicationTableRows();
         deleteAllBusinessServices();
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));

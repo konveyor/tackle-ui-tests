@@ -46,9 +46,6 @@ let invalidSearchInput = String(data.getRandomNumber());
 
 describe(["@tier2"], "Business services filter validations", function () {
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Peform login
         login();
 
@@ -60,9 +57,6 @@ describe(["@tier2"], "Business services filter validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Delete the business services
         deleteByList(businessServicesList);
         deleteByList(stakeholdersList);

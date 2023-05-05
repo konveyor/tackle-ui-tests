@@ -42,9 +42,6 @@ describe(["@tier2"], "Application risks tests", () => {
     var risktype = ["low", "medium", "high"];
 
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
 
@@ -64,9 +61,6 @@ describe(["@tier2"], "Application risks tests", () => {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Delete the stakeholders created before the tests
         deleteAllStakeholders();
         deleteApplicationTableRows();

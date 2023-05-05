@@ -72,9 +72,6 @@ var invalidSearchInput = String(data.getRandomNumber());
 
 describe(["@tier2"], "Reports filter validations", () => {
     before("Login and create test data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
 
@@ -96,9 +93,6 @@ describe(["@tier2"], "Reports filter validations", () => {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         selectUserPerspective(migration);
         clickByText(navMenu, applicationInventory);
         cy.wait(2000);

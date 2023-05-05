@@ -8,9 +8,6 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         getRandomCredentialsData(CredentialType.maven)
     );
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
     });
@@ -29,7 +26,6 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
     });
 
     after("Cleaning up", () => {
-        if (hasToBeSkipped("@tier2")) return;
         mavenCredentialsUsername.delete();
     });
 });

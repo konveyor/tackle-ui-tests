@@ -34,7 +34,6 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
      * This suite is only for fields validations, see crud.test.ts for CRUD operations
      */
     before("Login", function () {
-        if (hasToBeSkipped("@tier1")) return;
         login();
     });
 

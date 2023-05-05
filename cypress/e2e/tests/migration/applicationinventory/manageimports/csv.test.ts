@@ -25,9 +25,6 @@ import { actionButton } from "../../../../views/applicationinventory.view";
 
 describe(["@tier2"], "Manage imports tests", function () {
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
 

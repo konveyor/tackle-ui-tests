@@ -24,8 +24,6 @@ describe(["@tier2"], "Credentials filter validations", function () {
 
     const newAdminUser = new UserAdmin(getRandomUserData());
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
         /*
         1. Login to RBAC and create new admin user because only admins can create credentials.
         2. Logout from RBAC and login to Tackle as user created in step 1
@@ -92,9 +90,6 @@ describe(["@tier2"], "Credentials filter validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Deleting all credentials created before test
         deleteByList(credentialsListByDefaultAdmin);
         deleteByList(credentialsListByNewAdmin);

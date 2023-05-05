@@ -36,9 +36,6 @@ let applicationsList: Array<Application> = [];
 
 describe(["@tier3"], "Application inventory pagination validations", function () {
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
         // Perform login
         login();
 
@@ -56,9 +53,6 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
         // Delete the Applications created before the tests
         deleteApplicationTableRows();
     });

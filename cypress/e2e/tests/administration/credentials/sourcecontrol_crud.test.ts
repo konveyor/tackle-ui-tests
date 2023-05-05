@@ -10,9 +10,6 @@ describe(["@tier1"], "Validation of Source Control Credentials", () => {
     const toBeCanceled = true;
 
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@dc")) return;
-
         // Perform login
         login();
         scCredsUsername = new CredentialsSourceControlUsername(
@@ -81,7 +78,6 @@ describe(["@tier1"], "Validation of Source Control Credentials", () => {
     });
 
     after("Cleaning up", () => {
-        if (hasToBeSkipped("@tier1")) return;
         scCredsUsername.delete();
         scCredsKey.delete();
     });
