@@ -39,7 +39,7 @@ import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { User } from "../../models/keycloak/users/user";
 
-describe(["tier2"], "Custom Rules RBAC operations", function () {
+describe(["@tier2"], "Custom Rules RBAC operations", function () {
     // Polarion TC 318
 
     /**
@@ -57,7 +57,6 @@ describe(["tier2"], "Custom Rules RBAC operations", function () {
     const migrator = new UserMigrator(data.getRandomUserData());
 
     before("Create test data", function () {
-        if (hasToBeSkipped("@tier2")) return;
         User.loginKeycloakAdmin();
         architect.create();
         migrator.create();
@@ -164,7 +163,6 @@ describe(["tier2"], "Custom Rules RBAC operations", function () {
     });
 
     after("Clear test data", () => {
-        if (hasToBeSkipped("@tier2")) return;
         login();
         sourceCredential.delete();
         analysisWithPublicRules.delete();

@@ -52,11 +52,8 @@ var applicationList: Array<Assessment> = [];
 var tagList: Array<Tag> = [];
 var invalidSearchInput = "11111";
 
-describe(["tier2"], "Copy assessment filter tests", () => {
+describe(["@tier2"], "Copy assessment filter tests", () => {
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
 
@@ -94,8 +91,6 @@ describe(["tier2"], "Copy assessment filter tests", () => {
     });
 
     after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@tier2")) return;
-
         // Delete the stakeholders created before the tests
         deleteAllStakeholders();
 

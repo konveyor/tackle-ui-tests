@@ -45,13 +45,10 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import * as data from "../../../../../utils/data_utils";
 import * as commonView from "../../../../../e2e/views/common.view";
 
-describe(["tier2"], "Stakeholder groups validations", () => {
+describe(["@tier2"], "Stakeholder groups validations", () => {
     const stakeholdergroup = new Stakeholdergroups(data.getCompanyName(), data.getDescription());
 
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
     });

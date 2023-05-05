@@ -35,11 +35,8 @@ import { Assessment } from "../../../../../models/migration/applicationinventory
 var stakeholdersList: Array<Stakeholders> = [];
 var applicationList: Array<Assessment> = [];
 
-describe(["tier2"], "Assessment pagination validations", function () {
+describe(["@tier2"], "Assessment pagination validations", function () {
     before("Login and create test data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
 
@@ -59,8 +56,6 @@ describe(["tier2"], "Assessment pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@tier2")) return;
-
         // Delete the stakeholders created before the tests
         deleteAllStakeholders();
 

@@ -24,9 +24,6 @@ import { GeneralConfig } from "../../models/administration/general/generalConfig
 
 describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@post-upgrade")) return;
-
         // Perform login
         login();
 

@@ -32,11 +32,8 @@ import { GeneralConfig } from "../../../../models/administration/general/general
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
 
-describe(["tier1"], "Application assessment and review tests", () => {
+describe(["@tier1"], "Application assessment and review tests", () => {
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
-
         // Perform login
         login();
 
@@ -58,8 +55,6 @@ describe(["tier1"], "Application assessment and review tests", () => {
     });
 
     after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@tier1")) return;
-
         // Delete the stakeholders created before the tests
         deleteAllStakeholders();
         deleteApplicationTableRows();

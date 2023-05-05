@@ -32,13 +32,10 @@ import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { getRandomUserData } from "../../../utils/data_utils";
 import { User } from "../../models/keycloak/users/user";
 
-describe(["tier3"], "Upload Binary Analysis", () => {
+describe(["@tier3"], "Upload Binary Analysis", () => {
     let userMigrator = new UserMigrator(getRandomUserData());
 
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
         User.loginKeycloakAdmin();
         userMigrator.create();
     });
@@ -126,8 +123,6 @@ describe(["tier3"], "Upload Binary Analysis", () => {
     });
 
     after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@tier3")) return;
-        // Prevent hook from running, if the tag is excluded from run
         userMigrator.logout();
         login();
         deleteApplicationTableRows();

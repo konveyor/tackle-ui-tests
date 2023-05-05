@@ -11,9 +11,6 @@ describe(["@tier3"], "Tag type pagination validations", function () {
     // let newCredentialsList: Array<Credentials> = [];
     let createdCredentialsList: Array<Credentials> = [];
     before("Login and Create Test Data", () => {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
         // Perform login
         login();
         deleteAllCredentials();
@@ -30,7 +27,6 @@ describe(["@tier3"], "Tag type pagination validations", function () {
     });
 
     after("Removing credentials, created earlier", () => {
-        if (hasToBeSkipped("@tier3")) return;
         deleteAllCredentials();
     });
 });

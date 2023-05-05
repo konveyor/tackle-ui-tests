@@ -42,9 +42,6 @@ import { tagCategory } from "../../../../../views/tags.view";
 
 describe(["@tier3"], "Tag category pagination validations", function () {
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
         // Perform login
         login();
         TagCategory.openList();
@@ -79,9 +76,6 @@ describe(["@tier3"], "Tag category pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
         // Delete the tags created before the tests
         deleteAllTagsAndTagCategories();
     });

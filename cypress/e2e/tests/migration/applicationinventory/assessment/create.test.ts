@@ -56,11 +56,8 @@ import { Assessment } from "../../../../models/migration/applicationinventory/as
 var businessservicesList: Array<BusinessServices> = [];
 var applicationList: Array<Assessment> = [];
 
-describe(["tier2"], "Application validations", () => {
+describe(["@tier2"], "Application validations", () => {
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
         deleteApplicationTableRows();
@@ -78,8 +75,6 @@ describe(["tier2"], "Application validations", () => {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
         deleteApplicationTableRows();
         deleteAllBusinessServices();
     });

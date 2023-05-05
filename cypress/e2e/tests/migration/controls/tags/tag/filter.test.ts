@@ -30,9 +30,6 @@ describe(["@tier2"], "Tags filter validations", function () {
     const tag = new Tag(data.getRandomWord(5), tagCategory.name);
 
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
         tagCategory.create();
@@ -57,7 +54,6 @@ describe(["@tier2"], "Tags filter validations", function () {
     });
 
     after("Cleanup", function () {
-        if (hasToBeSkipped("@tier2")) return;
         tag.delete();
         cy.wait(2 * SEC);
         tagCategory.delete();

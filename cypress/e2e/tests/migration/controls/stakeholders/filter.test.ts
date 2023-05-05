@@ -59,7 +59,6 @@ let invalidSearchInput = "SomeInvalidInput";
 describe(["@tier2"], "Stakeholder filter validations", function () {
     before("Login and Create Test Data", function () {
         // Prevent before hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
 
         // Perform login
         login();
@@ -79,7 +78,6 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
 
     after("Perform test data clean up", function () {
         // Prevent before hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
 
         // Delete the job functions, stakeholder groups and stakeholders created before the tests
         deleteByList(jobFunctionsList);

@@ -29,14 +29,13 @@ import { GeneralConfig } from "../../models/administration/general/generalConfig
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import { SEC } from "../../types/constants";
 
-describe(["tier2"], "Assess review with RBAC operations", function () {
+describe(["@tier2"], "Assess review with RBAC operations", function () {
     // Polarion TC 312
     const architect = new UserArchitect(data.getRandomUserData());
     const application = new Assessment(getRandomApplicationData());
     const generalConfig = GeneralConfig.getInstance();
 
     before("Create test data", function () {
-        if (hasToBeSkipped("@tier2")) return;
         User.loginKeycloakAdmin();
         architect.create();
 
@@ -98,7 +97,6 @@ describe(["tier2"], "Assess review with RBAC operations", function () {
     });
 
     after("Clear test data", () => {
-        if (hasToBeSkipped("@tier2")) return;
         login();
         User.loginKeycloakAdmin();
         architect.delete();

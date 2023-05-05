@@ -15,9 +15,6 @@ describe(["@tier2"], "Validation of proxy credentials", () => {
     };
 
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
     });
@@ -48,7 +45,6 @@ describe(["@tier2"], "Validation of proxy credentials", () => {
     });
 
     after("Delete proxy credentials", () => {
-        if (hasToBeSkipped("@tier2")) return;
         proxyCreds.delete();
     });
 });

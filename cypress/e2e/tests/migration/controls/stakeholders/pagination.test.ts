@@ -40,9 +40,6 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 
 describe(["@tier3"], "Stakeholder pagination validations", function () {
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
         // Perform login
         login();
 
@@ -61,9 +58,6 @@ describe(["@tier3"], "Stakeholder pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
         // Delete the stakeholders created before the tests
         deleteAllStakeholders();
     });

@@ -33,12 +33,9 @@ let source_credential;
 let maven_credential;
 const dependencies = "deps";
 
-describe(["tier2"], "Report Page Filter Validation", () => {
+describe(["@tier2"], "Report Page Filter Validation", () => {
     const report = new Report();
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
         deleteApplicationTableRows();
@@ -81,8 +78,6 @@ describe(["tier2"], "Report Page Filter Validation", () => {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
         deleteApplicationTableRows();
     });
 

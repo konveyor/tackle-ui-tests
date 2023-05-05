@@ -34,11 +34,8 @@ import { migration, tdTag } from "../../../../types/constants";
 import { groupsCount } from "../../../../views/stakeholders.view";
 import * as data from "../../../../../utils/data_utils";
 
-describe(["tier1"], "Stakeholder CRUD operations", () => {
+describe(["@tier1"], "Stakeholder CRUD operations", () => {
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
-
         // Perform login
         login();
     });

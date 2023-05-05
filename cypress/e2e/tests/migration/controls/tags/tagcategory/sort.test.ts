@@ -33,9 +33,6 @@ import { TagCategory } from "../../../../../models/migration/controls/tagcategor
 
 describe(["@tier2"], "Tag category sort validations", function () {
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
     });

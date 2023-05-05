@@ -26,13 +26,10 @@ import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions
 import * as data from "../../../../../utils/data_utils";
 import { migration } from "../../../../types/constants";
 
-describe(["tier1"], "Job Function CRUD operations", () => {
+describe(["@tier1"], "Job Function CRUD operations", () => {
     const jobfunction = new Jobfunctions(data.getJobTitle());
 
     before("Login", () => {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
-
         // Perform login
         login();
 

@@ -35,10 +35,9 @@ import * as data from "../../../../../utils/data_utils";
 let jobFunctionsList: Array<Jobfunctions> = [];
 let invalidSearchInput = String(data.getRandomNumber());
 
-describe(["tier2"], "Job function filter validations", function () {
+describe(["@tier2"], "Job function filter validations", function () {
     before("Login and Create Test Data", function () {
         // Prevent before hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
 
         login();
 
@@ -48,7 +47,6 @@ describe(["tier2"], "Job function filter validations", function () {
 
     after("Perform test data clean up", function () {
         // Prevent before hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
 
         // Delete the job functions
         deleteAllJobfunctions();

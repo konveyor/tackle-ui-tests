@@ -49,9 +49,6 @@ var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 
 describe("Applications interlinked to tags and business service", () => {
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
         // Perform login
         login();
 
@@ -72,9 +69,6 @@ describe("Applications interlinked to tags and business service", () => {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
         deleteAllStakeholders();
         deleteAllStakeholderGroups();
         deleteApplicationTableRows();

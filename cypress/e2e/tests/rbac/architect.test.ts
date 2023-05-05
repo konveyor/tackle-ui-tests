@@ -18,7 +18,7 @@ import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import * as data from "../../../utils/data_utils";
 
-describe(["tier2"], "Architect RBAC operations", () => {
+describe(["@tier2"], "Architect RBAC operations", () => {
     let userArchitect = new UserArchitect(getRandomUserData());
     const application = new Assessment(getRandomApplicationData());
     let stakeholdersList: Array<Stakeholders> = [];
@@ -57,8 +57,6 @@ describe(["tier2"], "Architect RBAC operations", () => {
     };
 
     before("Creating RBAC users, adding roles for them", () => {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
         login();
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
@@ -118,7 +116,6 @@ describe(["tier2"], "Architect RBAC operations", () => {
     });
 
     after("", () => {
-        if (hasToBeSkipped("@tier2")) return;
         userArchitect.logout();
         login(adminUserName, adminUserPassword);
         appCredentials.delete();

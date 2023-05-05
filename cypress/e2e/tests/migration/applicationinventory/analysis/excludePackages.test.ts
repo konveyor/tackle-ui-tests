@@ -14,11 +14,8 @@ import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 let source_credential;
 
-describe(["tier2"], "Source Analysis", () => {
+describe(["@tier2"], "Source Analysis", () => {
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
 
@@ -77,8 +74,6 @@ describe(["tier2"], "Source Analysis", () => {
     });
 
     after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@tier2")) return;
-        // Prevent hook from running, if the tag is excluded from run
         deleteApplicationTableRows();
         deleteAllCredentials();
     });

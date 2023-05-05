@@ -29,11 +29,8 @@ import { TagCategory } from "../../../../../models/migration/controls/tagcategor
 import * as data from "../../../../../../utils/data_utils";
 import { color, migration, rank, tagCategory, tagCount } from "../../../../../types/constants";
 
-describe(["tier1"], "Tag tagCategory CRUD operations", () => {
+describe(["@tier1"], "Tag tagCategory CRUD operations", () => {
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
-
         // Perform login
         login();
     });

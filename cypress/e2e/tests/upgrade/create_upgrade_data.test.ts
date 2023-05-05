@@ -41,9 +41,6 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     let sourceControlUsernameCredentials: CredentialsSourceControlUsername;
 
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@pre-upgrade")) return;
-
         // Perform login
         login();
     });

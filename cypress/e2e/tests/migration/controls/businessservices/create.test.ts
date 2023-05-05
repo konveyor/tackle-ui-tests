@@ -48,11 +48,8 @@ import * as commonView from "../../../../views/common.view";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import * as data from "../../../../../utils/data_utils";
 
-describe(["tier2"], "Business service validations", () => {
+describe(["@tier2"], "Business service validations", () => {
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
     });

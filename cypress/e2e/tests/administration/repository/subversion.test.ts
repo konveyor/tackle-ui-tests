@@ -37,9 +37,6 @@ let source_credential;
 
 describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
-
         // Perform login
         login();
         deleteApplicationTableRows();
@@ -74,7 +71,6 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
     });
 
     after("Perform test data clean up", () => {
-        if (hasToBeSkipped("@tier1")) return;
         login();
         deleteApplicationTableRows();
         deleteAllBusinessServices();

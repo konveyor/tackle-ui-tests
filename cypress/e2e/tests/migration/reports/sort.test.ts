@@ -51,11 +51,8 @@ var applicationsList: Array<Assessment> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 var businessservicelist: Array<BusinessServices> = [];
 
-describe(["tier2"], "Reports sort validations", () => {
+describe(["@tier2"], "Reports sort validations", () => {
     before("Login and create test data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
 
@@ -80,9 +77,6 @@ describe(["tier2"], "Reports sort validations", () => {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Delete All
         deleteAllStakeholders();
         deleteApplicationTableRows();

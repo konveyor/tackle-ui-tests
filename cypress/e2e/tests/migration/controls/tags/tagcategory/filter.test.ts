@@ -30,9 +30,6 @@ import { tagCategory } from "../../../../../views/tags.view";
 
 describe(["@tier2"], "Tag tagCategory filter validations", function () {
     beforeEach("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
 

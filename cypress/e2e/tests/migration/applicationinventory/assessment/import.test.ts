@@ -44,9 +44,6 @@ var applicationsList: Array<Assessment> = [];
 
 describe("Application import operations", () => {
     before("Login and create test data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
 
@@ -65,9 +62,6 @@ describe("Application import operations", () => {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
-
         deleteApplicationTableRows();
     });
 

@@ -39,11 +39,8 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 
-describe(["tier2"], "Stakeholder groups sort validations", function () {
+describe(["@tier2"], "Stakeholder groups sort validations", function () {
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
 
@@ -61,9 +58,6 @@ describe(["tier2"], "Stakeholder groups sort validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Delete the stakeholder groups and stakeholders created before the tests
         deleteAllStakeholders();
         deleteAllStakeholderGroups();

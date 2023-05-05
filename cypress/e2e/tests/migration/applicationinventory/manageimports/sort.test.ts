@@ -41,11 +41,8 @@ import { csvFileName, date, importStatus, user } from "../../../../views/applica
 const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/csv/";
 
-describe(["tier2"], "Manage applications import sort validations", function () {
+describe(["@tier2"], "Manage applications import sort validations", function () {
     before("Login and create test data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Perform login
         login();
 
@@ -86,9 +83,6 @@ describe(["tier2"], "Manage applications import sort validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
-
         // Delete the business service
         deleteApplicationTableRows();
         deleteAppImportsTableRows();

@@ -37,11 +37,8 @@ import * as data from "../../../../../utils/data_utils";
 var stakeholdersList: Array<Stakeholders> = [];
 var membersList: Array<string> = [];
 
-describe(["tier1"], "Stakeholder group linked to stakeholder members", () => {
+describe(["@tier1"], "Stakeholder group linked to stakeholder members", () => {
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1")) return;
-
         // Perform login
         login();
 
