@@ -23,7 +23,7 @@ import { Jobfunctions } from "../e2e/models/migration/controls/jobfunctions";
 import * as loginView from "../e2e/views/login.view";
 import * as commonView from "../e2e/views/common.view";
 import { navMenu, navTab } from "../e2e/views/menu.view";
-import * as data from "../utils/data_utils";
+import * as data from "./data_utils";
 import "cypress-file-upload";
 import {
     businessService,
@@ -42,20 +42,13 @@ import {
     applicationInventory,
     SEC,
     CredentialType,
-    assessment,
     UserCredentials,
     credentialType,
     artifact,
     repositoryType,
     analysis,
 } from "../e2e/types/constants";
-import {
-    actionButton,
-    applicationBusinessServiceSelect,
-    date,
-    selectBox,
-    createEntitiesCheckbox,
-} from "../e2e/views/applicationinventory.view";
+import { actionButton, date, createEntitiesCheckbox } from "../e2e/views/applicationinventory.view";
 import {
     confirmButton,
     divHeader,
@@ -69,15 +62,14 @@ import {
 import { tagLabels } from "../e2e/views/tags.view";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
 import { Assessment } from "../e2e/models/migration/applicationinventory/assessment";
-import { analysisData, applicationData, UserData } from "../e2e/types/types";
+import { analysisData, applicationData } from "../e2e/types/types";
 import { CredentialsProxy } from "../e2e/models/administration/credentials/credentialsProxy";
-import { getRandomCredentialsData, randomWordGenerator } from "../utils/data_utils";
+import { getRandomCredentialsData, randomWordGenerator } from "./data_utils";
 import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../e2e/models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../e2e/models/administration/credentials/credentialsSourceControlKey";
 import { Application } from "../e2e/models/migration/applicationinventory/application";
 import { switchToggle } from "../e2e/views/reports.view";
-import { rightSideMenu } from "../e2e/views/analysis.view";
 
 let userName = Cypress.env("user");
 let userPassword = Cypress.env("pass");
@@ -148,13 +140,15 @@ export function login(username?, password?: string): void {
     cy.visit(tackleUiUrl, { timeout: 120 * SEC });
 }
 
+/**
+ * Change password screen which appears only for first login,
+ * for example PR tester and Jenkins jobs.
+ */
 export function updatePassword(): void {
-    // Change password screen which appears only for first login
-    // This is used in PR tester and Jenkins jobs.
     cy.get("h1", { timeout: 120 * SEC }).then(($a) => {
         if ($a.text().toString().trim() == "Update password") {
-            inputText(loginView.changePasswordInput, "Dog8code");
-            inputText(loginView.confirmPasswordInput, "Dog8code");
+            inputText(loginView.changePasswordInput, userPassword);
+            inputText(loginView.confirmPasswordInput, userPassword);
             click(loginView.submitButton);
         }
     });
