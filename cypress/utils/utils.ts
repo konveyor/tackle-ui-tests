@@ -1163,14 +1163,13 @@ export function deleteAllItems(amountPerPage = 100, pageNumber?: number) {
                         let name = $tableRow.find("td[data-label=Name]").text();
                         cy.get(tdTag)
                             .contains(name)
-                            .parent(tdTag)
-                            .siblings(tdTag)
+                            .closest(trTag)
                             .within(() => {
                                 click(commonView.deleteButton);
-                                cy.wait(1000);
+                                cy.wait(SEC);
                             });
                         click(commonView.confirmButton);
-                        cy.wait(4000);
+                        cy.wait(SEC);
                     });
             }
         });

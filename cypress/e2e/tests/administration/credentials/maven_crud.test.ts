@@ -21,11 +21,8 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         mavenCredentialsUsername.create();
     });
 
-    it.skip("Editing Maven credentials", () => {
-        mavenCredentialsUsername.edit(getRandomCredentialsData(CredentialType.sourceControl));
-    });
-
     after("Cleaning up", () => {
+        login();
         mavenCredentialsUsername.delete();
     });
 });
