@@ -4,10 +4,10 @@ import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import {
     deleteByList,
     getRandomApplicationData,
-    hasToBeSkipped,
+    // hasToBeSkipped,
     login,
     logout,
-    preservecookies,
+    // preservecookies,
 } from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
@@ -19,12 +19,12 @@ import { Assessment } from "../../models/migration/applicationinventory/assessme
 import * as data from "../../../utils/data_utils";
 
 describe(["@tier2"], "Architect RBAC operations", () => {
+    let adminUserName = Cypress.env("user");
+    let adminUserPassword = Cypress.env("pass");
     let userArchitect = new UserArchitect(getRandomUserData());
     const application = new Assessment(getRandomApplicationData());
     let stakeholdersList: Array<Stakeholders> = [];
     let stakeholderNameList: Array<string> = [];
-    let adminUserName = Cypress.env("user");
-    let adminUserPassword = Cypress.env("pass");
 
     let appCredentials = new CredentialsSourceControlUsername(
         getRandomCredentialsData(CredentialType.sourceControl)
@@ -57,7 +57,8 @@ describe(["@tier2"], "Architect RBAC operations", () => {
     };
 
     before("Creating RBAC users, adding roles for them", () => {
-        login();
+        cy.clearLocalStorage();
+        login(adminUserName, adminUserPassword);
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
@@ -75,7 +76,8 @@ describe(["@tier2"], "Architect RBAC operations", () => {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        userArchitect.login();
+        // preservecookies();
     });
 
     it("Architect, validate create application button", () => {

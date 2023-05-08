@@ -106,18 +106,23 @@ export function cancelForm(): void {
 }
 
 export function login(username?, password?: string): void {
+    if (!username && !password) {
+        userName = Cypress.env("user");
+        userPassword = Cypress.env("pass");
+        cy.log("Using admin credentials");
+    } else {
+        userName = username;
+        userPassword = password;
+        cy.log("Using custom credentials");
+    }
+    cy.log("Username " + userName + "; Password: " + userPassword);
+    // cy.wait(20 * SEC);
     cy.session({ username, password }, () => {
+        cy.log("Username " + userName + "; Password: " + userPassword);
         cy.visit(tackleUiUrl, { timeout: 120 * SEC });
         // cy.wait(2 * SEC);
         cy.get("h1", { timeout: 120 * SEC }).then(($b) => {
             if ($b.text().toString().trim() == "Sign in to your account") {
-                if (username && password) {
-                    userName = username;
-                    userPassword = password;
-                } else {
-                    userName = Cypress.env("user");
-                    userPassword = Cypress.env("pass");
-                }
                 inputText(loginView.userNameInput, userName);
                 inputText(loginView.userPasswordInput, userPassword);
                 click(loginView.loginButton);
@@ -163,6 +168,7 @@ export function logout(userName?: string): void {
     clickByText("a", "Logout");
     // cy.wait(4000);
     cy.get("h1", { timeout: 15 * SEC }).contains("Sign in to your account");
+    cy.clearLocalStorage();
 }
 
 export function resetURL(): void {
@@ -698,8 +704,16 @@ export function deleteAppImportsTableRows(lastPage = false): void {
         });
 }
 
-export function preservecookies(): void {
-    login();
+export function preservecookies(username?, password?: string): void {
+    if (username && password) {
+        userName = username;
+        userPassword = password;
+    } else {
+        userName = Cypress.env("user");
+        userPassword = Cypress.env("pass");
+    }
+
+    login(username, password);
 }
 
 // Checks if the hook has to be skipped, if the tag is not mentioned during test run
