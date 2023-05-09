@@ -1057,9 +1057,22 @@ export function deleteAllStakeholderGroups(cancel = false): void {
     deleteAllItems();
 }
 
-export async function deleteAllBusinessServices() {
+export function deleteAllBusinessServices() {
     BusinessServices.openList();
-    deleteAllItems();
+    selectItemsPerPage(100);
+    cy.get(commonView.deleteButton).then(($elems) => {
+        const elemsLength = $elems.length;
+        for (let i = 0; i < elemsLength; i++) {
+            cy.get(commonView.deleteButton)
+                .first()
+                .click()
+                .then((_) => {
+                    cy.wait(0.5 * SEC);
+                    click(commonView.confirmButton);
+                    cy.wait(SEC);
+                });
+        }
+    });
 }
 
 export function deleteAllTagCategory(cancel = false): void {
