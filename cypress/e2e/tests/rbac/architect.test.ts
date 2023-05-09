@@ -1,7 +1,13 @@
 import { User } from "../../models/keycloak/users/user";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
-import { deleteByList, getRandomApplicationData, login, logout } from "../../../utils/utils";
+import {
+    deleteByList,
+    getRandomApplicationData,
+    login,
+    logout,
+    loginSimple,
+} from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType } from "../../types/constants";
@@ -69,13 +75,11 @@ describe(["@tier2"], "Architect RBAC operations", () => {
         User.loginKeycloakAdmin();
         userArchitect = new UserArchitect(getRandomUserData());
         userArchitect.create();
-        // userArchitect.login();
     });
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
         userArchitect.login();
-        // preservecookies();
     });
 
     it("Architect, validate create application button", () => {
@@ -116,13 +120,11 @@ describe(["@tier2"], "Architect RBAC operations", () => {
     });
 
     after("", () => {
-        userArchitect.logout();
         User.loginKeycloakAdmin();
         userArchitect.delete();
-        login(adminUserName, adminUserPassword);
+        loginSimple(adminUserName, adminUserPassword);
         appCredentials.delete();
         application.delete();
         deleteByList(stakeholdersList);
-        logout("admin");
     });
 });

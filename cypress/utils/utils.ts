@@ -118,31 +118,35 @@ export function login(username?, password?: string): void {
     cy.log("Username " + userName + "; Password: " + userPassword);
     // cy.wait(20 * SEC);
     cy.session({ userName }, () => {
-        cy.log("Username " + userName + "; Password: " + userPassword);
-        cy.visit(tackleUiUrl, { timeout: 120 * SEC });
-        // cy.wait(2 * SEC);
-        cy.get("h1", { timeout: 120 * SEC }).then(($b) => {
-            if ($b.text().toString().trim() == "Sign in to your account") {
-                inputText(loginView.userNameInput, userName);
-                inputText(loginView.userPasswordInput, userPassword);
-                click(loginView.loginButton);
-                // Change default password on first login.
-                cy.get("span").then(($inputErr) => {
-                    if ($inputErr.text().toString().trim() == "Invalid username or password.") {
-                        inputText(loginView.userPasswordInput, "Passw0rd!");
-                        click(loginView.loginButton);
-                        updatePassword();
-                    }
-                });
-            }
-        });
-
-        updatePassword();
-        cy.get("#main-content-page-layout-horizontal-nav").within(() => {
-            cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
-        });
+        loginSimple(userName, userPassword);
     });
     cy.visit(tackleUiUrl, { timeout: 120 * SEC });
+}
+
+export function loginSimple(login, pass: string) {
+    cy.log("Username " + login + "; Password: " + pass);
+    cy.visit(tackleUiUrl, { timeout: 120 * SEC });
+    // cy.wait(2 * SEC);
+    cy.get("h1", { timeout: 120 * SEC }).then(($b) => {
+        if ($b.text().toString().trim() == "Sign in to your account") {
+            inputText(loginView.userNameInput, login);
+            inputText(loginView.userPasswordInput, pass);
+            click(loginView.loginButton);
+            // Change default password on first login.
+            cy.get("span").then(($inputErr) => {
+                if ($inputErr.text().toString().trim() == "Invalid username or password.") {
+                    inputText(loginView.userPasswordInput, "Passw0rd!");
+                    click(loginView.loginButton);
+                    updatePassword();
+                }
+            });
+        }
+    });
+
+    updatePassword();
+    cy.get("#main-content-page-layout-horizontal-nav").within(() => {
+        cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
+    });
 }
 
 /**

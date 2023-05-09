@@ -4,10 +4,9 @@ import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import {
     deleteByList,
     getRandomApplicationData,
-    hasToBeSkipped,
     login,
+    loginSimple,
     logout,
-    preservecookies,
 } from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
@@ -18,13 +17,16 @@ import { Assessment } from "../../models/migration/applicationinventory/assessme
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import * as data from "../../../utils/data_utils";
 
+/**
+ * This test set covers validation of different permissions for user with Migrator role.
+ */
 describe(["@tier2"], "Migrator RBAC operations", () => {
+    let adminUserName = Cypress.env("user");
+    let adminUserPassword = Cypress.env("pass");
     let userMigrator = new UserMigrator(getRandomUserData());
     const application = new Assessment(getRandomApplicationData());
     let stakeholdersList: Array<Stakeholders> = [];
     let stakeholderNameList: Array<string> = [];
-    let adminUserName = Cypress.env("user");
-    let adminUserPassword = Cypress.env("pass");
 
     let appCredentials = new CredentialsSourceControlUsername(
         getRandomCredentialsData(CredentialType.sourceControl)
@@ -58,7 +60,8 @@ describe(["@tier2"], "Migrator RBAC operations", () => {
 
     before("Creating RBAC users, adding roles for them", () => {
         //Need to log in as admin and create simple app with known name to use it for tests
-        login();
+        cy.clearLocalStorage();
+        login(adminUserName, adminUserPassword);
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
@@ -70,14 +73,14 @@ describe(["@tier2"], "Migrator RBAC operations", () => {
         application.perform_assessment("low", stakeholderNameList);
         logout("admin");
         //Logging in as keycloak admin to create migrator user and test it
+        cy.clearLocalStorage();
         User.loginKeycloakAdmin();
         userMigrator.create();
-        userMigrator.login();
     });
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        userMigrator.login();
     });
 
     it("Migrator, validate create application button", () => {
@@ -117,13 +120,11 @@ describe(["@tier2"], "Migrator RBAC operations", () => {
     });
 
     after("", () => {
-        userMigrator.logout();
-        login(adminUserName, adminUserPassword);
+        User.loginKeycloakAdmin();
+        userMigrator.delete();
+        loginSimple(adminUserName, adminUserPassword);
         appCredentials.delete();
         application.delete();
         deleteByList(stakeholdersList);
-        logout("admin");
-        User.loginKeycloakAdmin();
-        userMigrator.delete();
     });
 });
