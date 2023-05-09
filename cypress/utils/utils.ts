@@ -1216,9 +1216,9 @@ export function selectWithinModal(selector: string): void {
     });
 }
 
-export function clickWithin(parent, selector: string, nth = 0): void {
+export function clickWithin(parent, selector: string): void {
     cy.get(parent, { timeout: 30 * SEC })
-        .eq(nth)
+        .eq(0)
         .within(() => {
             click(selector);
         });
@@ -1432,7 +1432,6 @@ export function configureRWX(isEnabled = true): void {
 
     // Timeout as it takes time until pods are starting to reboot
     cy.wait(180 * SEC);
-    // cy.reload();
 }
 
 export function isEnabled(selector: string, toBeEnabled?: boolean): void {
