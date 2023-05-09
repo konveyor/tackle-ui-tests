@@ -144,10 +144,10 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.validateIncidents();
     });
 
-    it("Analysis for camunda-bpm-spring-boot-starer", function () {
+    it("Analysis for camunda-bpm-spring-boot-starter", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData["Camunda-bpm-spring-boot-starter-app"])
+            getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_camunda_app"])
         );
         application.create();
         cy.wait("@getApplication");
