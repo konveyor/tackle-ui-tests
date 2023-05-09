@@ -30,6 +30,7 @@ import {
     deleteAllBusinessServices,
     deleteAllStakeholders,
     selectUserPerspective,
+    deleteByList,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
 import { controls, businessServices, name, owner } from "../../../../types/constants";
@@ -38,7 +39,7 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 
 var stakeholdersList: Array<Stakeholders> = [];
-var businessservicesList: Array<BusinessServices> = [];
+var businessServicesList: Array<BusinessServices> = [];
 
 describe(["@tier2"], "Business services sort validations", function () {
     before("Login and Create Test Data", function () {
@@ -48,7 +49,7 @@ describe(["@tier2"], "Business services sort validations", function () {
         deleteAllBusinessServices();
         // Create data
         stakeholdersList = createMultipleStakeholders(2);
-        businessservicesList = createMultipleBusinessServices(2, stakeholdersList);
+        businessServicesList = createMultipleBusinessServices(2, stakeholdersList);
     });
 
     beforeEach("Persist session", function () {
@@ -62,7 +63,7 @@ describe(["@tier2"], "Business services sort validations", function () {
 
     after("Perform test data clean up", function () {
         // Delete the bussiness services and stakeholders created before the tests
-        deleteAllBusinessServices();
+        deleteByList(businessServicesList);
         deleteAllStakeholders();
     });
 
