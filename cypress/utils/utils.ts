@@ -1217,9 +1217,11 @@ export function selectWithinModal(selector: string): void {
 }
 
 export function clickWithin(parent, selector: string, nth = 0): void {
-    cy.get(parent, { timeout: 30 * SEC }).eq(nth).within(() => {
-        click(selector);
-    });
+    cy.get(parent, { timeout: 30 * SEC })
+        .eq(nth)
+        .within(() => {
+            click(selector);
+        });
 }
 
 //function to select checkboxes
