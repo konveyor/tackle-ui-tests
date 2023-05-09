@@ -247,9 +247,6 @@ export class Analysis extends Application {
             click(analyzeManuallyButton);
             inputText(enterPackageName, this.manuallyAnalyzePackages);
             clickByText(addButton, "Add");
-            click(excludePackagesSwitch);
-            inputText(enterPackageName, this.manuallyAnalyzePackages);
-            clickByText(addButton, "Add");
         }
         if (this.excludePackages) {
             click(excludePackagesSwitch);
