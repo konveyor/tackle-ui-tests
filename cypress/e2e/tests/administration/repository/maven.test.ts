@@ -160,8 +160,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         rwxEnabled = !rwxEnabled;
 
         configureRWX(rwxEnabled);
-        login();
-        MavenConfiguration.open();
+        cy.reload()
         isEnabled(clearRepository, rwxEnabled);
     });
 });
