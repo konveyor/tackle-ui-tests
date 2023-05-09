@@ -1216,8 +1216,8 @@ export function selectWithinModal(selector: string): void {
     });
 }
 
-export function clickWithin(parent, selector: string): void {
-    cy.get(parent, { timeout: 30 * SEC }).within(() => {
+export function clickWithin(parent, selector: string, nth = 0): void {
+    cy.get(parent, { timeout: 30 * SEC }).eq(nth).within(() => {
         click(selector);
     });
 }
