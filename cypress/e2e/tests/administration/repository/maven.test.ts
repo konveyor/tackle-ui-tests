@@ -149,7 +149,6 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
     });
 
     it("Perform RWX=false and validate that repository can't be cleaned", function () {
-
         let rwxEnabled = isRwxEnabled();
 
         configureRWX(rwxEnabled);
@@ -160,7 +159,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         rwxEnabled = !rwxEnabled;
 
         configureRWX(rwxEnabled);
-        cy.reload()
+        cy.reload();
         isEnabled(clearRepository, rwxEnabled);
     });
 });
