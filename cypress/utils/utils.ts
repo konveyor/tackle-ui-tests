@@ -173,7 +173,7 @@ export function logout(userName?: string): void {
 
 export function resetURL(): void {
     cy.url().then(($url) => {
-        if ($url.includes("report")) {
+        if ($url.includes("report") || $url.includes("tasks")) {
             login();
         }
     });
