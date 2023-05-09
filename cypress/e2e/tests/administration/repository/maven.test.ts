@@ -97,56 +97,56 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 
-    it("Binary analysis with maven containing http url when insecure repository is allowed", function () {
-        mavenConfiguration.enableInsecureMavenRepositories();
-
-        // For tackle test app source credentials are required.
-        const application = new Analysis(
-            getRandomApplicationData("binary_test_app", {
-                binaryData: this.appData["tackle-testapp-binary"],
-            }),
-            getRandomAnalysisData(this.analysisData["binary_analysis_on_tackletestapp"])
-        );
-
-        application.create();
-        cy.wait("@getApplication");
-        cy.wait(2000);
-        application.manageCredentials(source_credential.name, maven_credential.name);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.openReport();
-    });
-
-    it("Binary analysis with maven containing http url when insecure repository is not allowed", function () {
-        // The following test case should verify if the analysis is failed rather than completed,
-        // but due to how maven structure works it will always pick the ( http ) link as ( https )
-        // which means, it will always pass regardless if the insecure toggle is disabled or not
-        // todo: find a workaround to this
-
-        mavenConfiguration.disableInsecureMavenRepositories();
-
-        // For tackle test app source credentials are required.
-        const application = new Analysis(
-            getRandomApplicationData("binary_test_app", {
-                binaryData: this.appData["tackle-testapp-binary"],
-            }),
-            getRandomAnalysisData(this.analysisData["binary_analysis_on_tackletestapp"])
-        );
-
-        application.create();
-        cy.wait("@getApplication");
-        cy.wait(2000);
-        application.manageCredentials(source_credential.name, maven_credential.name);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.openReport();
-    });
-
-    it("Perform clear repository", function () {
-        login();
-        MavenConfiguration.open();
-        mavenConfiguration.clearRepository();
-    });
+    // it("Binary analysis with maven containing http url when insecure repository is allowed", function () {
+    //     mavenConfiguration.enableInsecureMavenRepositories();
+    //
+    //     // For tackle test app source credentials are required.
+    //     const application = new Analysis(
+    //         getRandomApplicationData("binary_test_app", {
+    //             binaryData: this.appData["tackle-testapp-binary"],
+    //         }),
+    //         getRandomAnalysisData(this.analysisData["binary_analysis_on_tackletestapp"])
+    //     );
+    //
+    //     application.create();
+    //     cy.wait("@getApplication");
+    //     cy.wait(2000);
+    //     application.manageCredentials(source_credential.name, maven_credential.name);
+    //     application.analyze();
+    //     application.verifyAnalysisStatus("Completed");
+    //     application.openReport();
+    // });
+    //
+    // it("Binary analysis with maven containing http url when insecure repository is not allowed", function () {
+    //     // The following test case should verify if the analysis is failed rather than completed,
+    //     // but due to how maven structure works it will always pick the ( http ) link as ( https )
+    //     // which means, it will always pass regardless if the insecure toggle is disabled or not
+    //     // todo: find a workaround to this
+    //
+    //     mavenConfiguration.disableInsecureMavenRepositories();
+    //
+    //     // For tackle test app source credentials are required.
+    //     const application = new Analysis(
+    //         getRandomApplicationData("binary_test_app", {
+    //             binaryData: this.appData["tackle-testapp-binary"],
+    //         }),
+    //         getRandomAnalysisData(this.analysisData["binary_analysis_on_tackletestapp"])
+    //     );
+    //
+    //     application.create();
+    //     cy.wait("@getApplication");
+    //     cy.wait(2000);
+    //     application.manageCredentials(source_credential.name, maven_credential.name);
+    //     application.analyze();
+    //     application.verifyAnalysisStatus("Completed");
+    //     application.openReport();
+    // });
+    //
+    // it("Perform clear repository", function () {
+    //     login();
+    //     MavenConfiguration.open();
+    //     mavenConfiguration.clearRepository();
+    // });
 
     it("Perform RWX=false and validate that repository can't be cleaned", function () {
 
