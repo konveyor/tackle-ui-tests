@@ -1,14 +1,7 @@
 import { User } from "../../models/keycloak/users/user";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
-import {
-    deleteByList,
-    getRandomApplicationData,
-    // hasToBeSkipped,
-    login,
-    logout,
-    // preservecookies,
-} from "../../../utils/utils";
+import { deleteByList, getRandomApplicationData, login, logout } from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType } from "../../types/constants";
@@ -18,10 +11,13 @@ import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import * as data from "../../../utils/data_utils";
 
+/**
+ * This test set covers validation of different permissions for user with Architect role.
+ */
 describe(["@tier2"], "Architect RBAC operations", () => {
     let adminUserName = Cypress.env("user");
     let adminUserPassword = Cypress.env("pass");
-    let userArchitect = new UserArchitect(getRandomUserData());
+    let userArchitect: UserArchitect; // = new UserArchitect(getRandomUserData());
     const application = new Assessment(getRandomApplicationData());
     let stakeholdersList: Array<Stakeholders> = [];
     let stakeholderNameList: Array<string> = [];
@@ -69,9 +65,11 @@ describe(["@tier2"], "Architect RBAC operations", () => {
         application.create();
         application.perform_assessment("low", stakeholderNameList);
         logout("admin");
+        cy.clearLocalStorage();
         User.loginKeycloakAdmin();
+        userArchitect = new UserArchitect(getRandomUserData());
         userArchitect.create();
-        userArchitect.login();
+        // userArchitect.login();
     });
 
     beforeEach("Persist session", function () {
@@ -119,12 +117,12 @@ describe(["@tier2"], "Architect RBAC operations", () => {
 
     after("", () => {
         userArchitect.logout();
+        User.loginKeycloakAdmin();
+        userArchitect.delete();
         login(adminUserName, adminUserPassword);
         appCredentials.delete();
         application.delete();
         deleteByList(stakeholdersList);
         logout("admin");
-        User.loginKeycloakAdmin();
-        userArchitect.delete();
     });
 });

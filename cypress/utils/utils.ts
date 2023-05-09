@@ -117,7 +117,7 @@ export function login(username?, password?: string): void {
     }
     cy.log("Username " + userName + "; Password: " + userPassword);
     // cy.wait(20 * SEC);
-    cy.session({ username, password }, () => {
+    cy.session({ userName }, () => {
         cy.log("Username " + userName + "; Password: " + userPassword);
         cy.visit(tackleUiUrl, { timeout: 120 * SEC });
         // cy.wait(2 * SEC);
