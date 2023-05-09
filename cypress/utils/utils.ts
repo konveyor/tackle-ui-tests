@@ -1057,10 +1057,9 @@ export function deleteAllStakeholderGroups(cancel = false): void {
     deleteAllItems();
 }
 
-// TODO: Review and refactor function below!
-export async function deleteAllBusinessServices(cancel = false) {
-    let list = await BusinessServices.getList();
-    deleteByList(list);
+export async function deleteAllBusinessServices() {
+    BusinessServices.openList();
+    deleteAllItems();
 }
 
 export function deleteAllTagCategory(cancel = false): void {
