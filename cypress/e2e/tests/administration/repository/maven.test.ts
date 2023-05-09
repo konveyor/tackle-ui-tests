@@ -151,6 +151,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
     it("Perform RWX=false and validate that repository can't be cleaned", function () {
         MavenConfiguration.open();
         let rwxEnabled = isRwxEnabled();
+        configureRWX(rwxEnabled);
         isEnabled(clearRepository, rwxEnabled);
 
         rwxEnabled = false;
