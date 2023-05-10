@@ -18,7 +18,7 @@ import {
     exists,
     notExists,
     applySearchFilter,
-    preservecookies,
+    
     hasToBeSkipped,
     createMultipleStakeholders,
     createMultipleBusinessServices,
@@ -63,8 +63,7 @@ describe(["@tier2"], "Business services filter validations", function () {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
     });
 
     it("Name filter validations", function () {

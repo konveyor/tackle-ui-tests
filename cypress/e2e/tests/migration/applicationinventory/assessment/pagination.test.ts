@@ -19,7 +19,7 @@ import {
     login,
     clickByText,
     selectItemsPerPage,
-    preservecookies,
+    
     deleteApplicationTableRows,
     hasToBeSkipped,
     createMultipleApplications,
@@ -45,8 +45,7 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors for Applications
         cy.intercept("GET", "/hub/application*").as("getApplications");

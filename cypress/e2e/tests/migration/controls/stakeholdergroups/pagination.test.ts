@@ -20,7 +20,7 @@ import {
     clickByText,
     selectItemsPerPage,
     deleteTableRows,
-    preservecookies,
+    
     hasToBeSkipped,
     createMultipleStakeholderGroups,
     deleteAllStakeholderGroups,
@@ -54,8 +54,7 @@ describe(["@tier3"], "Stakeholder groups pagination validations", function () {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
         cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");

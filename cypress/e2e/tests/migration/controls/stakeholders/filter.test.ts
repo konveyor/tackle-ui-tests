@@ -19,7 +19,7 @@ import {
     login,
     clickByText,
     exists,
-    preservecookies,
+    
     click,
     applySearchFilter,
     selectItemsPerPage,
@@ -70,8 +70,7 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
     });

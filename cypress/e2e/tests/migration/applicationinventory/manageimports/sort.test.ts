@@ -26,7 +26,7 @@ import {
     importApplication,
     openManageImportsPage,
     deleteApplicationTableRows,
-    preservecookies,
+    
     hasToBeSkipped,
     deleteAppImportsTableRows,
     deleteAllBusinessServices,
@@ -74,8 +74,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplications");

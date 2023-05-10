@@ -20,7 +20,7 @@ import {
     hasToBeSkipped,
     login,
     notExists,
-    preservecookies,
+    
     selectUserPerspective,
 } from "../../../../../utils/utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
@@ -36,8 +36,7 @@ describe(["@tier1"], "Business service CRUD operations", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors for business services
         cy.intercept("POST", "/hub/businessservices*").as("postBusinessService");

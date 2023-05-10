@@ -20,7 +20,7 @@ import {
     exists,
     notExists,
     hasToBeSkipped,
-    preservecookies,
+    
     expandRowDetails,
 } from "../../../../../utils/utils";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
@@ -36,8 +36,7 @@ describe(["@tier1"], "Stakeholder group CRUD operations", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
         cy.intercept("POST", "/hub/stakeholdergroups*").as("postStakeholdergroups");

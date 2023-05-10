@@ -23,7 +23,7 @@ import {
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
-    preservecookies,
+    
     hasToBeSkipped,
     createMultipleJobFunctions,
     createMultipleStakeholderGroups,
@@ -61,8 +61,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
         cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");

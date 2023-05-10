@@ -26,7 +26,7 @@ import {
     isEnabled,
     isRwxEnabled,
     login,
-    preservecookies,
+    
     resetURL,
     writeMavenSettingsFile,
 } from "../../../../utils/utils";
@@ -68,8 +68,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });

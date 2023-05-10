@@ -18,7 +18,7 @@ limitations under the License.
 import {
     login,
     openManageImportsPage,
-    preservecookies,
+    
     hasToBeSkipped,
 } from "../../../../../utils/utils";
 import { actionButton } from "../../../../views/applicationinventory.view";
@@ -28,8 +28,8 @@ describe(["@tier2"], "Manage imports tests", function () {
         // Perform login
         login();
 
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        
+        login();
 
         // Go to application import page
         openManageImportsPage();

@@ -15,7 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { getRandomApplicationData, login, logout, preservecookies } from "../../../utils/utils";
+import { getRandomApplicationData, login, logout } from "../../../utils/utils";
 import * as data from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { User } from "../../models/keycloak/users/user";
@@ -42,9 +42,6 @@ describe(["@tier2"], "Assess review with RBAC operations", function () {
 
     beforeEach("Persist session", function () {
         login();
-
-        preservecookies();
-
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });

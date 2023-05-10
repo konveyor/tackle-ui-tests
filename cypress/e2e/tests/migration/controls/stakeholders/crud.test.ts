@@ -23,7 +23,7 @@ import {
     expandRowDetails,
     closeRowDetails,
     hasToBeSkipped,
-    preservecookies,
+    
     selectUserPerspective,
     deleteByList,
 } from "../../../../../utils/utils";
@@ -41,8 +41,7 @@ describe(["@tier1"], "Stakeholder CRUD operations", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
         cy.intercept("POST", "/hub/stakeholder*").as("postStakeholder");

@@ -18,7 +18,7 @@ limitations under the License.
 import {
     login,
     clickByText,
-    preservecookies,
+    
     hasToBeSkipped,
     click,
     deleteAllBusinessServices,
@@ -51,10 +51,6 @@ describe("Applications interlinked to tags and business service", () => {
     before("Login and Create Test Data", function () {
         // Perform login
         login();
-
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
         // Create data
         stakeholdersList = createMultipleStakeholders(1);
         stakeholdergroupsList = createMultipleStakeholderGroups(1, stakeholdersList);

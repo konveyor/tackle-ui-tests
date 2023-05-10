@@ -18,7 +18,7 @@ limitations under the License.
 import {
     login,
     selectItemsPerPage,
-    preservecookies,
+    
     hasToBeSkipped,
     createMultipleJobFunctions,
     deleteAllJobfunctions,
@@ -49,8 +49,7 @@ describe(["@tier3"], "Job functions pagination validations", function () {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors for Job functions
         cy.intercept("GET", "/hub/jobfunctions*").as("getJobfunctions");

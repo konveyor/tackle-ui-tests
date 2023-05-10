@@ -23,7 +23,7 @@ import {
     exists,
     notExists,
     hasToBeSkipped,
-    preservecookies,
+    
     selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";
@@ -57,8 +57,7 @@ describe(["@tier2"], "Stakeholder validations", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
         cy.intercept("POST", "/hub/stakeholder*").as("postStakeholder");

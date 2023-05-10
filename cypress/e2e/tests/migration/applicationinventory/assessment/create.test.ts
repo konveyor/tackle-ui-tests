@@ -22,7 +22,7 @@ import {
     exists,
     notExists,
     hasToBeSkipped,
-    preservecookies,
+    
     createMultipleBusinessServices,
     selectFormItems,
     deleteApplicationTableRows,
@@ -66,8 +66,7 @@ describe(["@tier2"], "Application validations", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");

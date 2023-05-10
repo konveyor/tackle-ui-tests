@@ -23,7 +23,7 @@ import {
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
-    preservecookies,
+    
     hasToBeSkipped,
     createMultipleStakeholders,
     createMultipleBusinessServices,
@@ -53,8 +53,7 @@ describe(["@tier2"], "Business services sort validations", function () {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
         cy.intercept("POST", "/hub/business-service*").as("postBusinessService");

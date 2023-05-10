@@ -1,4 +1,4 @@
-import { hasToBeSkipped, login, preservecookies } from "../../../../utils/utils";
+import { hasToBeSkipped, login } from "../../../../utils/utils";
 import { CredentialsProxy } from "../../../models/administration/credentials/credentialsProxy";
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
 import { CredentialType } from "../../../types/constants";
@@ -20,8 +20,7 @@ describe(["@tier2"], "Validation of proxy credentials", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
     });
 
     it("Creating proxy credentials and cancelling without saving", () => {

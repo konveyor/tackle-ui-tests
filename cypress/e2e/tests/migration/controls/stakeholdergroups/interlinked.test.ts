@@ -22,7 +22,7 @@ import {
     clickByText,
     exists,
     notExists,
-    preservecookies,
+    
     hasToBeSkipped,
     createMultipleStakeholders,
     selectUserPerspective,
@@ -50,8 +50,8 @@ describe(["@tier1"], "Stakeholder group linked to stakeholder members", () => {
     });
 
     beforeEach("Login", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        
+        login();
 
         // Interceptors for stakeholder groups
         cy.intercept("POST", "/hub/stakeholdergroups*").as("postStakeholdergroups");

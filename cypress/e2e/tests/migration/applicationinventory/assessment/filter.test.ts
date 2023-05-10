@@ -19,7 +19,7 @@ import {
     login,
     clickByText,
     exists,
-    preservecookies,
+    
     applySearchFilter,
     hasToBeSkipped,
     createMultipleBusinessServices,
@@ -92,8 +92,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });

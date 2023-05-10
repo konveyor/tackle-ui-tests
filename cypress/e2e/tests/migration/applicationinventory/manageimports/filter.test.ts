@@ -23,7 +23,7 @@ import {
     applySearchFilter,
     exists,
     deleteApplicationTableRows,
-    preservecookies,
+    
     hasToBeSkipped,
     selectUserPerspective,
     deleteAppImportsTableRows,
@@ -69,8 +69,7 @@ describe(["@tier2"], "Manage applications import filter validations", function (
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplications");

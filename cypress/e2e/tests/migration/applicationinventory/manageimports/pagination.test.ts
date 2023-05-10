@@ -23,7 +23,7 @@ import {
     importApplication,
     openManageImportsPage,
     deleteApplicationTableRows,
-    preservecookies,
+    
     hasToBeSkipped,
     goToPage,
     goToLastPage,
@@ -104,8 +104,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors for Applications
         cy.intercept("GET", "/hub/application*").as("getApplications");

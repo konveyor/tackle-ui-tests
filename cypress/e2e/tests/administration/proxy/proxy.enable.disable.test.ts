@@ -1,4 +1,4 @@
-import { hasToBeSkipped, login, preservecookies } from "../../../../utils/utils";
+import { hasToBeSkipped, login } from "../../../../utils/utils";
 import { Proxy } from "../../../models/administration/proxy/proxy";
 import { CredentialsProxy } from "../../../models/administration/credentials/credentialsProxy";
 import {
@@ -24,8 +24,7 @@ describe(["@tier2"], "Proxy operations", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
     });
 
     it("Http Proxy port and host field validation", function () {

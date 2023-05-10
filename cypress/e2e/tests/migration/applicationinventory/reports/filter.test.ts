@@ -15,7 +15,7 @@ limitations under the License.
 import {
     login,
     hasToBeSkipped,
-    preservecookies,
+    
     deleteApplicationTableRows,
     getRandomApplicationData,
     getRandomAnalysisData,
@@ -58,8 +58,7 @@ describe(["@tier2"], "Report Page Filter Validation", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });

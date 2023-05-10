@@ -17,7 +17,7 @@ limitations under the License.
 
 import {
     login,
-    preservecookies,
+    
     deleteApplicationTableRows,
     hasToBeSkipped,
     createMultipleStakeholders,
@@ -39,10 +39,6 @@ describe(["@tier2"], "Assessment pagination validations", function () {
     before("Login and create test data", function () {
         // Perform login
         login();
-
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
         // Navigate to Application inventory tab, delete all and create 11 applications
         deleteApplicationTableRows();
 
@@ -53,6 +49,10 @@ describe(["@tier2"], "Assessment pagination validations", function () {
         // Perform assessment of application
         applicationList[0].perform_assessment("low", [stakeholdersList[0].name]);
         applicationList[0].verifyStatus("assessment", "Completed");
+    });
+
+    beforeEach("Persist session", function () {
+        login();
     });
 
     after("Perform test data clean up", function () {

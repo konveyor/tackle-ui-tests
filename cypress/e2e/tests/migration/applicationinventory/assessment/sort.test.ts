@@ -23,7 +23,7 @@ import {
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
-    preservecookies,
+    
     hasToBeSkipped,
     deleteApplicationTableRows,
 } from "../../../../../utils/utils";
@@ -59,8 +59,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplications");

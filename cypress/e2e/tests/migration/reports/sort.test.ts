@@ -23,7 +23,7 @@ import {
     sortDesc,
     getTableColumnData,
     sortAsc,
-    preservecookies,
+    
     hasToBeSkipped,
     createMultipleApplications,
     createMultipleStakeholders,
@@ -72,8 +72,7 @@ describe(["@tier2"], "Reports sort validations", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
     });
 
     after("Perform test data clean up", function () {

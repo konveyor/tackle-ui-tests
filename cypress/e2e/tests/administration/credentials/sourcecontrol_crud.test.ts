@@ -1,4 +1,4 @@
-import { hasToBeSkipped, login, preservecookies } from "../../../../utils/utils";
+import { hasToBeSkipped, login } from "../../../../utils/utils";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../models/administration/credentials/credentialsSourceControlKey";
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
@@ -21,8 +21,7 @@ describe(["@tier1"], "Validation of Source Control Credentials", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
     });
 
     it(

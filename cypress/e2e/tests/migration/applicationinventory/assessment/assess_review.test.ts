@@ -18,7 +18,7 @@ limitations under the License.
 import {
     hasToBeSkipped,
     login,
-    preservecookies,
+    
     deleteAllStakeholders,
     deleteApplicationTableRows,
     getRandomApplicationData,
@@ -47,8 +47,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplication");

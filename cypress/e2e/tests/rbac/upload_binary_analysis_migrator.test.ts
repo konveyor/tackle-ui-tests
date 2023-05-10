@@ -40,7 +40,7 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
+        
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });

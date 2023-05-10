@@ -18,7 +18,7 @@ limitations under the License.
 import {
     login,
     selectItemsPerPage,
-    preservecookies,
+    
     hasToBeSkipped,
     createMultipleBusinessServices,
     deleteByList,
@@ -42,8 +42,7 @@ describe(["@tier3"], "Business services pagination validations", function () {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
     });
 
     it("Navigation button validations", function () {

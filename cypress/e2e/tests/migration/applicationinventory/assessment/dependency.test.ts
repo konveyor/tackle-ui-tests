@@ -19,7 +19,7 @@ import {
     click,
     hasToBeSkipped,
     login,
-    preservecookies,
+    
     createMultipleApplications,
     deleteApplicationTableRows,
 } from "../../../../../utils/utils";
@@ -39,13 +39,13 @@ describe(["@tier1"], "Manage application dependencies", () => {
     before("Login and Create Test Data", function () {
         // Perform login
         login();
-
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
         // Create new applications
         deleteApplicationTableRows();
         applicationsList = createMultipleApplications(3);
+    });
+
+    beforeEach("Persist session", function () {
+        login();
     });
 
     after("Perform test data clean up", function () {

@@ -19,7 +19,7 @@ import {
     login,
     clickByText,
     selectItemsPerPage,
-    preservecookies,
+    
     hasToBeSkipped,
     createMultipleStakeholders,
     createMultipleApplications,
@@ -69,8 +69,7 @@ describe(["@tier3"], "Reports pagination validations", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
     });
 
     after("Perform test data clean up", function () {

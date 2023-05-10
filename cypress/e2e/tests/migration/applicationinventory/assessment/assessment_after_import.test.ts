@@ -23,7 +23,7 @@ import {
     hasToBeSkipped,
     deleteAppImportsTableRows,
     notExists,
-    preservecookies,
+    
 } from "../../../../../utils/utils";
 
 import * as data from "../../../../../utils/data_utils";
@@ -64,8 +64,7 @@ describe("Operations after application import", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
     });
 
     it(

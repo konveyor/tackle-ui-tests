@@ -21,7 +21,7 @@ import {
     exists,
     notExists,
     hasToBeSkipped,
-    preservecookies,
+    
     selectUserPerspective,
 } from "../../../../../utils/utils";
 import {
@@ -49,8 +49,7 @@ describe(["@tier2"], "Job Function Validations", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
         cy.intercept("POST", "/hub/jobfunctions*").as("postJobfunctions");

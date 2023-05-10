@@ -18,7 +18,7 @@ import {
     login,
     clickByText,
     inputText,
-    preservecookies,
+    
     hasToBeSkipped,
     selectUserPerspective,
 } from "../../../../../../utils/utils";
@@ -49,8 +49,7 @@ describe(["@tier2"], "Tag validations", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
         cy.intercept("POST", "/hub/tag*").as("postTag");

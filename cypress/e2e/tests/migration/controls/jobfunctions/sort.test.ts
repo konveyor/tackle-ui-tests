@@ -23,7 +23,7 @@ import {
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
-    preservecookies,
+    
     hasToBeSkipped,
     createMultipleJobFunctions,
     selectUserPerspective,
@@ -45,8 +45,7 @@ describe(["@tier2"], "Job function sorting", function () {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
         cy.intercept("GET", "/hub/jobfunctions*").as("getJobfunctions");

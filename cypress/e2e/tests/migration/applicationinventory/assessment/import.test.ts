@@ -25,7 +25,7 @@ import {
     verifyAppImport,
     verifyImportErrorMsg,
     deleteApplicationTableRows,
-    preservecookies,
+    
     hasToBeSkipped,
     selectUserPerspective,
     deleteAllBusinessServices,
@@ -53,8 +53,7 @@ describe("Application import operations", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplication");

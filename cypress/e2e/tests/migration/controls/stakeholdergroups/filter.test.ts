@@ -22,7 +22,7 @@ import {
     click,
     applySearchFilter,
     selectItemsPerPage,
-    preservecookies,
+    
     hasToBeSkipped,
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
@@ -67,8 +67,7 @@ describe(["@tier2"], "Stakeholder groups filter validations", function () {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        login();
 
         // Interceptors
         cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");
