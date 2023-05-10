@@ -22,11 +22,7 @@ import {
     logout,
     preservecookies,
 } from "../../../utils/utils";
-import {
-    AnalysisStatuses,
-    CredentialType,
-    UserCredentials,
-} from "../../types/constants";
+import { AnalysisStatuses, CredentialType, UserCredentials } from "../../types/constants";
 import { RulesRepositoryFields } from "../../types/types";
 import * as data from "../../../utils/data_utils";
 import { getRulesData } from "../../../utils/data_utils";
@@ -87,7 +83,9 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
 
     it("Admin, Rules from public repository", function () {
         analysisWithPublicRules = new Analysis(
-            getRandomApplicationData("bookServerApp", { sourceData: this.appData["bookserver-app"] }),
+            getRandomApplicationData("bookServerApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         analysisWithPublicRules.customRuleRepository = getRulesData(
@@ -101,7 +99,9 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
 
     it("Admin, Rules from private repository with credentials", function () {
         analysisWithPrivateRules = new Analysis(
-            getRandomApplicationData("bookServerApp", { sourceData: this.appData["bookserver-app"] }),
+            getRandomApplicationData("bookServerApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         const repositoryData = {
@@ -117,7 +117,9 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
 
     it("Admin, Rules from private repository without credentials", function () {
         analysisWithPrivateRulesNoCred = new Analysis(
-            getRandomApplicationData("bookServerApp", { sourceData: this.appData["bookserver-app"] }),
+            getRandomApplicationData("bookServerApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         analysisWithPrivateRulesNoCred.customRuleRepository = getRulesData(
