@@ -15,12 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    getRandomApplicationData,
-    login,
-    logout,
-    preservecookies,
-} from "../../../utils/utils";
+import { getRandomApplicationData, login, logout, preservecookies } from "../../../utils/utils";
 import * as data from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { User } from "../../models/keycloak/users/user";

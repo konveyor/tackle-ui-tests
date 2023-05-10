@@ -18,21 +18,14 @@ limitations under the License.
 import {
     getRandomAnalysisData,
     getRandomApplicationData,
-    hasToBeSkipped,
     login,
     logout,
     preservecookies,
 } from "../../../utils/utils";
-import {
-    AnalysisStatuses,
-    application,
-    CredentialType,
-    UserCredentials,
-} from "../../types/constants";
+import { AnalysisStatuses, CredentialType, UserCredentials } from "../../types/constants";
 import { RulesRepositoryFields } from "../../types/types";
 import * as data from "../../../utils/data_utils";
 import { getRulesData } from "../../../utils/data_utils";
-import { CustomMigrationTarget } from "../../models/administration/custom-migration-targets/custom-migration-target";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
@@ -52,7 +45,6 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
     let analysisWithPrivateRulesNoCred: Analysis;
 
     let sourceCredential: CredentialsSourceControlUsername;
-    let target: CustomMigrationTarget;
     const architect = new UserArchitect(data.getRandomUserData());
     const migrator = new UserMigrator(data.getRandomUserData());
 
@@ -91,8 +83,10 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
 
     it("Admin, Rules from public repository", function () {
         analysisWithPublicRules = new Analysis(
-            getRandomApplicationData("bookServerApp", { sourceData: this.appData[0] }),
-            getRandomAnalysisData(this.analysisData[0])
+            getRandomApplicationData("bookServerApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         analysisWithPublicRules.customRuleRepository = getRulesData(
             this.customRules.rules_from_bookServerApp
@@ -105,8 +99,10 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
 
     it("Admin, Rules from private repository with credentials", function () {
         analysisWithPrivateRules = new Analysis(
-            getRandomApplicationData("bookServerApp", { sourceData: this.appData[0] }),
-            getRandomAnalysisData(this.analysisData[0])
+            getRandomApplicationData("bookServerApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         const repositoryData = {
             ...getRulesData(this.customRules.rules_from_tackle_testApp),
@@ -121,8 +117,10 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
 
     it("Admin, Rules from private repository without credentials", function () {
         analysisWithPrivateRulesNoCred = new Analysis(
-            getRandomApplicationData("bookServerApp", { sourceData: this.appData[0] }),
-            getRandomAnalysisData(this.analysisData[0])
+            getRandomApplicationData("bookServerApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         analysisWithPrivateRulesNoCred.customRuleRepository = getRulesData(
             this.customRules.rules_from_tackle_testApp
