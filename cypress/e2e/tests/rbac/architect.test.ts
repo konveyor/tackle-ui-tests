@@ -70,12 +70,11 @@ describe(["@tier2"], "Architect RBAC operations", () => {
         logout("admin");
         User.loginKeycloakAdmin();
         userArchitect.create();
-        userArchitect.login();
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        // login as architect
+        userArchitect.login();
     });
 
     it("Architect, validate create application button", () => {
@@ -117,11 +116,11 @@ describe(["@tier2"], "Architect RBAC operations", () => {
 
     after("", () => {
         userArchitect.logout();
-        login(adminUserName, adminUserPassword);
+        login();
         appCredentials.delete();
         application.delete();
         deleteByList(stakeholdersList);
-        logout("admin");
+        logout();
         User.loginKeycloakAdmin();
         userArchitect.delete();
     });

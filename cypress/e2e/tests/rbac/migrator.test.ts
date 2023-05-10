@@ -72,12 +72,11 @@ describe(["@tier2"], "Migrator RBAC operations", () => {
         //Logging in as keycloak admin to create migrator user and test it
         User.loginKeycloakAdmin();
         userMigrator.create();
-        userMigrator.login();
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        // Login as Migrator
+        userMigrator.login();
     });
 
     it("Migrator, validate create application button", () => {
@@ -118,11 +117,11 @@ describe(["@tier2"], "Migrator RBAC operations", () => {
 
     after("", () => {
         userMigrator.logout();
-        login(adminUserName, adminUserPassword);
+        login();
         appCredentials.delete();
         application.delete();
         deleteByList(stakeholdersList);
-        logout("admin");
+        logout();
         User.loginKeycloakAdmin();
         userMigrator.delete();
     });
