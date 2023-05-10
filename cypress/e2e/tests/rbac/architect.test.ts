@@ -1,12 +1,7 @@
 import { User } from "../../models/keycloak/users/user";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
-import {
-    deleteByList,
-    getRandomApplicationData,
-    login,
-    logout,
-} from "../../../utils/utils";
+import { deleteByList, getRandomApplicationData, login, logout } from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType } from "../../types/constants";
