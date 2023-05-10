@@ -1189,21 +1189,23 @@ export const deleteFromArray = <T>(array: T[], el: T): T[] => {
 };
 
 export function goToPage(page: number): void {
-    cy.get(divHeader).within(() => {
-        cy.get(firstPageButton).then(($firstPageButton) => {
-            cy.get(lastPageButton).then(($lastPageButton) => {
-                if (
-                    !$firstPageButton.hasClass(".pf-m-disabled") ||
-                    !$lastPageButton.hasClass(".pf-m-disabled")
-                ) {
-                    cy.get(pageNumInput, { timeout: 2 * SEC })
-                        .clear()
-                        .type(page.toString())
-                        .type("{enter}");
-                }
+    cy.get(divHeader)
+        .eq(0)
+        .within(() => {
+            cy.get(firstPageButton).then(($firstPageButton) => {
+                cy.get(lastPageButton).then(($lastPageButton) => {
+                    if (
+                        !$firstPageButton.hasClass(".pf-m-disabled") ||
+                        !$lastPageButton.hasClass(".pf-m-disabled")
+                    ) {
+                        cy.get(pageNumInput, { timeout: 2 * SEC })
+                            .clear()
+                            .type(page.toString())
+                            .type("{enter}");
+                    }
+                });
             });
         });
-    });
 }
 
 export function selectUserPerspective(userType: string): void {
@@ -1220,15 +1222,15 @@ export function selectUserPerspective(userType: string): void {
 }
 
 export function selectWithinModal(selector: string): void {
-    cy.get(modal).within(() => {
-        click(selector);
-    });
+    clickWithin(modal, selector);
 }
 
 export function clickWithin(parent, selector: string): void {
-    cy.get(parent, { timeout: 30 * SEC }).within(() => {
-        click(selector);
-    });
+    cy.get(parent, { timeout: 30 * SEC })
+        .eq(0)
+        .within(() => {
+            click(selector);
+        });
 }
 
 //function to select checkboxes

@@ -113,6 +113,6 @@ describe(["@tier3"], "Business services pagination validations", function () {
 
     after("Perform test data clean up", function () {
         // Delete the business services created before the tests
-        deleteAllBusinessServices();
+        deleteByList(businessServiceList);
     });
 });
