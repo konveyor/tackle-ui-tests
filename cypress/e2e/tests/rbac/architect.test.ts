@@ -4,10 +4,8 @@ import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import {
     deleteByList,
     getRandomApplicationData,
-    hasToBeSkipped,
     login,
     logout,
-    preservecookies,
 } from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
@@ -23,8 +21,6 @@ describe(["@tier2"], "Architect RBAC operations", () => {
     const application = new Assessment(getRandomApplicationData());
     let stakeholdersList: Array<Stakeholders> = [];
     let stakeholderNameList: Array<string> = [];
-    let adminUserName = Cypress.env("user");
-    let adminUserPassword = Cypress.env("pass");
 
     let appCredentials = new CredentialsSourceControlUsername(
         getRandomCredentialsData(CredentialType.sourceControl)
@@ -67,15 +63,14 @@ describe(["@tier2"], "Architect RBAC operations", () => {
         appCredentials.create();
         application.create();
         application.perform_assessment("low", stakeholderNameList);
-        logout("admin");
+        logout();
         User.loginKeycloakAdmin();
         userArchitect.create();
-        userArchitect.login();
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        // login as architect
+        userArchitect.login();
     });
 
     it("Architect, validate create application button", () => {
@@ -117,11 +112,11 @@ describe(["@tier2"], "Architect RBAC operations", () => {
 
     after("", () => {
         userArchitect.logout();
-        login(adminUserName, adminUserPassword);
+        login();
         appCredentials.delete();
         application.delete();
         deleteByList(stakeholdersList);
-        logout("admin");
+        logout();
         User.loginKeycloakAdmin();
         userArchitect.delete();
     });

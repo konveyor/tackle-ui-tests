@@ -20,7 +20,6 @@ import {
     deleteApplicationTableRows,
     getRandomAnalysisData,
     getRandomApplicationData,
-    hasToBeSkipped,
     login,
     logout,
     resetURL,

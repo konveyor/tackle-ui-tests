@@ -4,10 +4,8 @@ import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import {
     deleteByList,
     getRandomApplicationData,
-    hasToBeSkipped,
     login,
     logout,
-    preservecookies,
 } from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
@@ -23,8 +21,6 @@ describe(["@tier2"], "Migrator RBAC operations", () => {
     const application = new Assessment(getRandomApplicationData());
     let stakeholdersList: Array<Stakeholders> = [];
     let stakeholderNameList: Array<string> = [];
-    let adminUserName = Cypress.env("user");
-    let adminUserPassword = Cypress.env("pass");
 
     let appCredentials = new CredentialsSourceControlUsername(
         getRandomCredentialsData(CredentialType.sourceControl)
@@ -68,16 +64,15 @@ describe(["@tier2"], "Migrator RBAC operations", () => {
         appCredentials.create();
         application.create();
         application.perform_assessment("low", stakeholderNameList);
-        logout("admin");
+        logout();
         //Logging in as keycloak admin to create migrator user and test it
         User.loginKeycloakAdmin();
         userMigrator.create();
-        userMigrator.login();
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+        // Login as Migrator
+        userMigrator.login();
     });
 
     it("Migrator, validate create application button", () => {
@@ -118,11 +113,11 @@ describe(["@tier2"], "Migrator RBAC operations", () => {
 
     after("", () => {
         userMigrator.logout();
-        login(adminUserName, adminUserPassword);
+        login();
         appCredentials.delete();
         application.delete();
         deleteByList(stakeholdersList);
-        logout("admin");
+        logout();
         User.loginKeycloakAdmin();
         userMigrator.delete();
     });
