@@ -17,7 +17,6 @@ limitations under the License.
 
 import {
     getRandomApplicationData,
-    hasToBeSkipped,
     login,
     logout,
     preservecookies,
