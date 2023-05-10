@@ -1223,9 +1223,11 @@ export function selectUserPerspective(userType: string): void {
 }
 
 export function selectWithinModal(selector: string): void {
-    cy.get(modal).within(() => {
-        click(selector);
-    });
+    cy.get(modal)
+        .eq(0)
+        .within(() => {
+            click(selector);
+        });
 }
 
 export function clickWithin(parent, selector: string): void {
