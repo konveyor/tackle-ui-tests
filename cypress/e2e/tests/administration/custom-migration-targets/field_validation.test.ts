@@ -15,17 +15,11 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    click,
-    hasToBeSkipped,
-    login,
-    preservecookies,
-    validateTooShortInput,
-} from "../../../../utils/utils";
+import { click, login, preservecookies, validateTooShortInput } from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import { CustomMigrationTarget } from "../../../models/administration/custom-migration-targets/custom-migration-target";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
-import { RepositoryType } from "../../../types/constants";
+import { RepositoryType, SEC } from "../../../types/constants";
 
 describe(["@tier1"], "Custom Migration Target Validations", () => {
     let target: CustomMigrationTarget;
@@ -92,12 +86,23 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
     it("Image Validations", function () {
         CustomMigrationTarget.openNewForm();
         cy.get(CustomMigrationTargetView.imageInput).focus();
+        cy.on("uncaught:exception", (err, runnable) => {
+            /**
+             * This error is expected because if the image size is greater than 1MB, the UI will
+             * reject the upload and the attachFile method won't complete because it can't verify
+             * that the image was uploaded successfully
+             */
+            expect(err.message).to.include("File Not Found");
+            cy.get(CustomMigrationTargetView.imageHelper).should(
+                "contain",
+                "Max image file size of 1 MB exceeded."
+            );
+
+            return false;
+        });
         CustomMigrationTarget.uploadImage("img/big-image.jpg");
         cy.get(CustomMigrationTargetView.imageInput).blur();
-        cy.get(CustomMigrationTargetView.imageHelper).should(
-            "contain",
-            "Max image file size of 1 MB exceeded."
-        );
+        cy.wait(2 * SEC);
     });
 
     it("Rule repository URL validation", function () {
