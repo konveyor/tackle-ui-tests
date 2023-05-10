@@ -19,7 +19,6 @@ import {
     login,
     clickByText,
     exists,
-    
     click,
     applySearchFilter,
     selectItemsPerPage,

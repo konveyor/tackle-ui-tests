@@ -18,7 +18,6 @@ import {
     exists,
     notExists,
     applySearchFilter,
-    
     hasToBeSkipped,
     createMultipleStakeholders,
     createMultipleBusinessServices,

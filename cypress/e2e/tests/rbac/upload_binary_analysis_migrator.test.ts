@@ -40,7 +40,6 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
     });
 
     beforeEach("Persist session", function () {
-        
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });

@@ -23,7 +23,6 @@ import {
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
-    
     hasToBeSkipped,
     createMultipleJobFunctions,
     createMultipleStakeholderGroups,

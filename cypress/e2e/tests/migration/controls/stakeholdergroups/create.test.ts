@@ -22,7 +22,6 @@ import {
     exists,
     notExists,
     hasToBeSkipped,
-    
     selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../views/menu.view";

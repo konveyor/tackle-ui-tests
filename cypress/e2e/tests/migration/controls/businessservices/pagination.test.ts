@@ -18,7 +18,6 @@ limitations under the License.
 import {
     login,
     selectItemsPerPage,
-    
     hasToBeSkipped,
     createMultipleBusinessServices,
     deleteByList,

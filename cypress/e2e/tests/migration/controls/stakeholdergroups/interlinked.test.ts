@@ -22,7 +22,6 @@ import {
     clickByText,
     exists,
     notExists,
-    
     hasToBeSkipped,
     createMultipleStakeholders,
     selectUserPerspective,
@@ -50,7 +49,6 @@ describe(["@tier1"], "Stakeholder group linked to stakeholder members", () => {
     });
 
     beforeEach("Login", function () {
-        
         login();
 
         // Interceptors for stakeholder groups

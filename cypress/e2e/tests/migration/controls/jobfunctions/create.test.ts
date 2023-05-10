@@ -21,7 +21,6 @@ import {
     exists,
     notExists,
     hasToBeSkipped,
-    
     selectUserPerspective,
 } from "../../../../../utils/utils";
 import {

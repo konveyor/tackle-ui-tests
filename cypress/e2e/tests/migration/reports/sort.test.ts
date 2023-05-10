@@ -23,7 +23,6 @@ import {
     sortDesc,
     getTableColumnData,
     sortAsc,
-    
     hasToBeSkipped,
     createMultipleApplications,
     createMultipleStakeholders,

@@ -23,7 +23,6 @@ import {
     applySearchFilter,
     exists,
     deleteApplicationTableRows,
-    
     hasToBeSkipped,
     selectUserPerspective,
     deleteAppImportsTableRows,

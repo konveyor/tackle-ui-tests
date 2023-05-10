@@ -26,7 +26,6 @@ import {
     importApplication,
     openManageImportsPage,
     deleteApplicationTableRows,
-    
     hasToBeSkipped,
     deleteAppImportsTableRows,
     deleteAllBusinessServices,

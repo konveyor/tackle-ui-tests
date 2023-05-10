@@ -19,7 +19,6 @@ import {
     login,
     clickByText,
     selectItemsPerPage,
-    
     hasToBeSkipped,
     createMultipleStakeholders,
     createMultipleApplications,

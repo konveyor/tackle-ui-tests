@@ -19,7 +19,6 @@ import {
     click,
     hasToBeSkipped,
     login,
-    
     createMultipleApplications,
     deleteApplicationTableRows,
 } from "../../../../../utils/utils";

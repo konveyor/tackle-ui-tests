@@ -26,7 +26,6 @@ import {
     isEnabled,
     isRwxEnabled,
     login,
-    
     resetURL,
     writeMavenSettingsFile,
 } from "../../../../utils/utils";

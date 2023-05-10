@@ -23,7 +23,6 @@ import {
     expandRowDetails,
     closeRowDetails,
     hasToBeSkipped,
-    
     selectUserPerspective,
     deleteByList,
 } from "../../../../../utils/utils";

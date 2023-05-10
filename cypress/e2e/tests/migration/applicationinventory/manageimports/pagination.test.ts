@@ -23,7 +23,6 @@ import {
     importApplication,
     openManageImportsPage,
     deleteApplicationTableRows,
-    
     hasToBeSkipped,
     goToPage,
     goToLastPage,

@@ -22,7 +22,6 @@ import {
     exists,
     notExists,
     hasToBeSkipped,
-    
     createMultipleBusinessServices,
     selectFormItems,
     deleteApplicationTableRows,

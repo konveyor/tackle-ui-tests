@@ -23,7 +23,6 @@ import {
     hasToBeSkipped,
     deleteAppImportsTableRows,
     notExists,
-    
 } from "../../../../../utils/utils";
 
 import * as data from "../../../../../utils/data_utils";

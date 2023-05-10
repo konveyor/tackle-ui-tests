@@ -18,7 +18,6 @@ import {
     login,
     clickByText,
     inputText,
-    
     hasToBeSkipped,
     selectUserPerspective,
 } from "../../../../../../utils/utils";

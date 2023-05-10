@@ -20,7 +20,6 @@ import {
     exists,
     notExists,
     hasToBeSkipped,
-    
     expandRowDetails,
 } from "../../../../../utils/utils";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";

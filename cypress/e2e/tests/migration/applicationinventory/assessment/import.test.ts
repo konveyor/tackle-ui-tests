@@ -25,7 +25,6 @@ import {
     verifyAppImport,
     verifyImportErrorMsg,
     deleteApplicationTableRows,
-    
     hasToBeSkipped,
     selectUserPerspective,
     deleteAllBusinessServices,

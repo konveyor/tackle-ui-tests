@@ -22,7 +22,6 @@ import {
     click,
     applySearchFilter,
     selectItemsPerPage,
-    
     hasToBeSkipped,
     createMultipleStakeholders,
     createMultipleStakeholderGroups,

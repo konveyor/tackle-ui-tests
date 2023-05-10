@@ -20,7 +20,6 @@ import {
     clickByText,
     selectItemsPerPage,
     deleteTableRows,
-    
     hasToBeSkipped,
     createMultipleStakeholders,
     deleteAllStakeholders,

@@ -15,12 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    login,
-    openManageImportsPage,
-    
-    hasToBeSkipped,
-} from "../../../../../utils/utils";
+import { login, openManageImportsPage, hasToBeSkipped } from "../../../../../utils/utils";
 import { actionButton } from "../../../../views/applicationinventory.view";
 
 describe(["@tier2"], "Manage imports tests", function () {
@@ -28,7 +23,6 @@ describe(["@tier2"], "Manage imports tests", function () {
         // Perform login
         login();
 
-        
         login();
 
         // Go to application import page

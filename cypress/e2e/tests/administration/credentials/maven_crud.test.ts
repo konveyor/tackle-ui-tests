@@ -13,7 +13,6 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
     });
 
     beforeEach("Persist session", function () {
-        
         login();
     });
 

@@ -114,7 +114,7 @@ export function cancelForm(): void {
 }
 
 export function login(username?, password?: string): void {
-    cy.session('MTA Login', () => {
+    cy.session("MTA Login", () => {
         cy.visit(tackleUiUrl, { timeout: 120 * SEC });
         // cy.wait(2 * SEC);
         cy.get("h1", { timeout: 120 * SEC }).then(($b) => {
