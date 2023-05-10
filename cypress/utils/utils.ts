@@ -257,12 +257,14 @@ export function notExists(value: string): void {
 }
 
 export function selectFilter(filterName: string, identifiedRisk?: boolean, value = 0): void {
-    cy.get("div.pf-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show").within(() => {
-        cy.get("div.pf-c-dropdown").eq(value).click();
-        cy.get("ul.pf-c-dropdown__menu").within(() => {
-            clickByText("a", filterName);
+    cy.get(commonView.selectFilter)
+        .eq(value)
+        .within(() => {
+            cy.get("div.pf-c-dropdown").click();
+            cy.get("ul.pf-c-dropdown__menu").within(() => {
+                clickByText("a", filterName);
+            });
         });
-    });
 }
 
 export function filterInputText(searchTextValue: string, value: number): void {
