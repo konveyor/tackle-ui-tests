@@ -18,10 +18,7 @@ limitations under the License.
 import {
     login,
     selectItemsPerPage,
-    preservecookies,
-    hasToBeSkipped,
     createMultipleBusinessServices,
-    deleteByList,
     goToLastPage,
     validatePagination,
     goToPage,
@@ -37,35 +34,26 @@ describe(["@tier3"], "Business services pagination validations", function () {
     before("Login and Create Test Data", function () {
         // Perform login
         login();
+        deleteAllBusinessServices();
         // Create 11 rows
         businessServiceList = createMultipleBusinessServices(11);
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
     });
 
     it("Navigation button validations", function () {
         // Navigate to business services tab
         BusinessServices.openList();
-
         selectItemsPerPage(10);
-
         validatePagination();
     });
 
     it("Items per page validations", function () {
         // Navigate to business services tab
         BusinessServices.openList();
-
         selectItemsPerPage(10);
-
         // Verify that only 10 items are displayed
         cy.get("td[data-label=Name]").then(($rows) => {
             cy.wrap($rows.length).should("eq", 10);
         });
-
         // Select 20 items per page
         selectItemsPerPage(20);
         cy.wait(2 * SEC);
@@ -79,10 +67,8 @@ describe(["@tier3"], "Business services pagination validations", function () {
     it("Page number validations", function () {
         // Navigate to business services tab and select 10 items per page
         BusinessServices.openList();
-
         selectItemsPerPage(10);
         cy.wait(2 * SEC);
-
         // Go to page number 2
         goToPage(2);
 
@@ -92,19 +78,15 @@ describe(["@tier3"], "Business services pagination validations", function () {
         });
     });
 
-    it("Last page item(s) deletion, impact on page reload validation", async () => {
+    it("Last page item(s) deletion, impact on page reload validation", function () {
         // Navigate to business services tab and select 10 items per page
         BusinessServices.openList();
-
         selectItemsPerPage(10);
         cy.wait(2 * SEC);
-
         // Navigate to last page
         goToLastPage();
-
         // Delete all items of last page
         deleteTableRows();
-
         // Verify that page is re-directed to previous page
         cy.get("td[data-label=Name]").then(($rows) => {
             cy.wrap($rows.length).should("eq", 10);
@@ -113,6 +95,6 @@ describe(["@tier3"], "Business services pagination validations", function () {
 
     after("Perform test data clean up", function () {
         // Delete the business services created before the tests
-        deleteByList(businessServiceList);
+        deleteAllBusinessServices();
     });
 });
