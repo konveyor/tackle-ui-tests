@@ -17,14 +17,10 @@ limitations under the License.
 
 import {
     login,
-    hasToBeSkipped,
-    preservecookies,
     deleteApplicationTableRows,
     getRandomApplicationData,
     getRandomAnalysisData,
     resetURL,
-    verifySortAsc,
-    verifySortDesc,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Report } from "../../../../models/migration/applicationinventory/reportPage";
@@ -62,7 +58,6 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        preservecookies();
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -86,8 +81,10 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
 
     it("Sort by Name validation test using Upload Binary Analysis", function () {
         const application: any = new Analysis(
-            getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_camunda_app"])
+            getRandomApplicationData("Source+dependencies", {
+                sourceData: this.appData["daytrader-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -95,27 +92,18 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-
-        // Sort the Application by Name in Ascending order
-        const unsortedList = report.getTableColumnData(application.appName);
+        // Sort the Application by Name
         report.applySortAction("Name");
         cy.wait(2000);
-        const afterAscSortList = report.getTableColumnData(application.appName);
-        // verify that the application name rows are displayed in ascending order
-        verifySortAsc(afterAscSortList, unsortedList);
-
-        // Sort the Application by Name in descending order
-        report.applySortAction("Name");
-        cy.wait(2000);
-        const afterDescSortList = report.getTableColumnData(application.appName);
-        // verify that the application name rows are displayed in descending order
-        verifySortDesc(afterDescSortList, unsortedList);
+        report.matchAppsOrder();
     });
 
     it("Sort by Story points test using Upload Binary Analysis", function () {
         const application: any = new Analysis(
-            getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_camunda_app"])
+            getRandomApplicationData("sort_Source+dependencies", {
+                sourceData: this.appData["daytrader-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -124,19 +112,9 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
         application.verifyAnalysisStatus("Completed");
         application.openReport();
 
-        // Sort the Application by Story points in Ascending order
-        const unsortedList = report.getTableColumnData(application.storyPoints);
+        // Sort the Application by Story points
         report.applySortAction("Story Points");
         cy.wait(2000);
-        const afterAscSortList = report.getTableColumnData(application.storyPoints);
-        // verify that the application with story points rows are displayed in ascending order
-        verifySortAsc(afterAscSortList, unsortedList);
-
-        // Sort the Application by Story points in descending order
-        report.applySortAction("Story Points");
-        cy.wait(2000);
-        const afterDescSortList = report.getTableColumnData(application.storyPoints);
-        // verify that the application with story points rows are displayed in descending order
-        verifySortDesc(afterDescSortList, unsortedList);
+        report.matchStoryPointsOrder();
     });
 });
