@@ -49,3 +49,4 @@ export const navLink = ".pf-c-nav__link";
 export const closeSuccessNotification = "button[aria-label^='Close Success alert:']";
 export const divHeader = "[id^=pf-random-id-]";
 export const divBottom = "#tags-pagination-bottom";
+export const selectFilter = "div.pf-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show";
