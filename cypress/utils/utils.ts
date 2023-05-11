@@ -78,6 +78,7 @@ import { CredentialsSourceControlKey } from "../e2e/models/administration/creden
 import { Application } from "../e2e/models/migration/applicationinventory/application";
 import { switchToggle } from "../e2e/views/reports.view";
 import { rightSideMenu } from "../e2e/views/analysis.view";
+import Chainable = Cypress.Chainable;
 
 let userName = Cypress.env("user");
 let userPassword = Cypress.env("pass");
@@ -113,35 +114,46 @@ export function cancelForm(): void {
     cy.get(commonView.cancelButton).click();
 }
 
-export function login(username?, password?: string): void {
-    cy.visit(tackleUiUrl, { timeout: 120 * SEC });
-    cy.wait(5000);
-    cy.get("h1", { timeout: 120 * SEC }).then(($b) => {
-        if ($b.text().toString().trim() == "Sign in to your account") {
-            if (username && password) {
-                userName = username;
-                userPassword = password;
-            } else {
-                userName = Cypress.env("user");
-                userPassword = Cypress.env("pass");
+export function login(username?, password?: string, firstLogin = false): Chainable<null> {
+    /**
+     *  If the login method is explicitly called, it means that previous sessions are no longer required
+     */
+    Cypress.session.clearAllSavedSessions();
+
+    /**
+     * The sessionId is used to create a new session or to try to recover a previous one
+     */
+    const sessionId = (username ?? "login") + (firstLogin ? "FirstLogin" : "");
+
+    return cy.session(sessionId, () => {
+        cy.visit(Cypress.env("tackleUrl"), { timeout: 120 * SEC });
+        cy.wait(5000);
+        cy.get("h1", { timeout: 120 * SEC }).then(($title) => {
+            if ($title.text().toString().trim() !== "Sign in to your account") {
+                return;
             }
+
+            const userName = username ?? Cypress.env("user");
+            const userPassword = password ?? Cypress.env("pass");
+
             inputText(loginView.userNameInput, userName);
             inputText(loginView.userPasswordInput, userPassword);
             click(loginView.loginButton);
+
             // Change default password on first login.
             cy.get("span").then(($inputErr) => {
-                if ($inputErr.text().toString().trim() == "Invalid username or password.") {
+                if ($inputErr.text().toString().trim() === "Invalid username or password.") {
                     inputText(loginView.userPasswordInput, "Passw0rd!");
                     click(loginView.loginButton);
                     updatePassword();
                 }
             });
-        }
-    });
+        });
 
-    updatePassword();
-    cy.get("#main-content-page-layout-horizontal-nav").within(() => {
-        cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
+        updatePassword();
+        cy.get("#main-content-page-layout-horizontal-nav").within(() => {
+            cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
+        });
     });
 }
 
@@ -703,9 +715,8 @@ export function deleteAppImportsTableRows(lastPage = false): void {
         });
 }
 
-export function preservecookies(): void {
-    login();
-}
+// TODO: Delete calls to this method and then remove it
+export function preservecookies(): void {}
 
 // Checks if the hook has to be skipped, if the tag is not mentioned during test run
 export function hasToBeSkipped(tagName: string): boolean {
