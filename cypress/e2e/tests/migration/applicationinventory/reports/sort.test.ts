@@ -111,8 +111,8 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        
-        // Sort the Application by Story points 
+
+        // Sort the Application by Story points
         report.applySortAction("Story Points");
         cy.wait(2000);
         report.matchStoryPointsOrder();
