@@ -29,16 +29,17 @@ export class Report {
         });
     }
 
-    getTableColumnData(itemList: any[]): Array<string> {
-        cy.get(".real", { timeout: 5 * SEC })
-            .not(".pf-c-table__expandable-row")
-            .each(($ele) => {
-                if ($ele.text() !== "") {
-                    itemList.push(Number($ele.text()));
-                } else {
-                    itemList.push($ele.text().toString().toLowerCase());
-                }
-            });
-        return itemList;
+    matchAppsOrder(): void {
+        cy.get("div[class='fileName'] > a").then(($elements) => {
+            const apps = Array.from($elements, (element) => element.innerText);
+            expect(apps).to.deep.eq(apps.sort());
+        });
+    }
+
+    matchStoryPointsOrder(): void {
+        cy.get("span[class='points']").then(($elements) => {
+            const points = Array.from($elements, (element) => element.innerText);
+            expect(points).to.deep.eq(points.sort());
+        });
     }
 }
