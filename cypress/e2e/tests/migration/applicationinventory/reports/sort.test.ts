@@ -99,7 +99,6 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
     });
 
     it("Sort by Story points test using Upload Binary Analysis", function () {
-        const report = new Report();
         const application: any = new Analysis(
             getRandomApplicationData("sort_Source+dependencies", {
                 sourceData: this.appData["daytrader-app"],
@@ -115,7 +114,7 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
         
         // Sort the Application by Story points 
         report.applySortAction("Story Points");
-        report.matchStoryPointsOrder();
         cy.wait(2000);
+        report.matchStoryPointsOrder();
     });
 });
