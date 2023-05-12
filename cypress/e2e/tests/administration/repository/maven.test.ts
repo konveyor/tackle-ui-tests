@@ -22,8 +22,11 @@ import {
     deleteApplicationTableRows,
     getRandomAnalysisData,
     getRandomApplicationData,
+    hasToBeSkipped,
     isEnabled,
+    isRwxEnabled,
     login,
+    preservecookies,
     resetURL,
     writeMavenSettingsFile,
 } from "../../../../utils/utils";
@@ -65,6 +68,8 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
     });
 
     beforeEach("Persist session", function () {
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -80,6 +85,16 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
     afterEach("Persist session", function () {
         // Reset URL from report page to web UI
         resetURL();
+    });
+
+    after("Perform test data clean up", () => {
+        configureRWX(true);
+        login();
+        deleteApplicationTableRows();
+        deleteAllBusinessServices();
+        source_credential.delete();
+        maven_credential.delete();
+        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 
     it("Binary analysis with maven containing http url when insecure repository is allowed", function () {
@@ -127,27 +142,21 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         application.openReport();
     });
 
-    it("Perform RWX=true and clear repository", function () {
-        // By default RWX is set to false
+    it("Perform clear repository", function () {
+        login();
         MavenConfiguration.open();
-        let rwxEnabled = false;
+        mavenConfiguration.clearRepository();
+    });
+
+    it("Perform RWX=false and validate that repository can't be cleaned", function () {
+        MavenConfiguration.open();
+        let rwxEnabled = isRwxEnabled();
         isEnabled(clearRepository, rwxEnabled);
 
-        rwxEnabled = true;
+        rwxEnabled = false;
         configureRWX(rwxEnabled);
         login();
         MavenConfiguration.open();
         isEnabled(clearRepository, rwxEnabled);
-        mavenConfiguration.clearRepository();
-    });
-
-    after("Perform test data clean up", () => {
-        configureRWX(false);
-        login();
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
-        source_credential.delete();
-        maven_credential.delete();
-        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 });
