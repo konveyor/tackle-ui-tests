@@ -125,7 +125,6 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
         deleteApplicationTableRows();
         deleteAllBusinessServices();
         writeGpgKey("abcde");
-        userArchitect.logout();
         User.loginKeycloakAdmin();
         userArchitect.delete();
     });
