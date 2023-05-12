@@ -122,12 +122,9 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
     });
 
     after("Perform test data clean up", function () {
-        userMigrator.logout();
-        login();
         deleteApplicationTableRows();
         deleteAllBusinessServices();
         writeGpgKey("abcde");
-        logout();
         User.loginKeycloakAdmin();
         userMigrator.delete();
     });
