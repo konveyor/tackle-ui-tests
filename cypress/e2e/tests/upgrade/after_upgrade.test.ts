@@ -8,6 +8,7 @@ import {
     isEnabled,
     isRwxEnabled,
     login,
+    preservecookies,
 } from "../../../utils/utils";
 import { UpgradeData } from "../../types/types";
 import { Credentials } from "../../models/administration/credentials/credentials";
@@ -31,6 +32,9 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     });
 
     beforeEach("Persist session", function () {
+        // Save the session and token cookie for maintaining one login session
+        preservecookies();
+
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -114,10 +118,10 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         uploadBinaryApplication.verifyAnalysisStatus("Completed");
 
         MavenConfiguration.open();
-        let rwxEnabled = false;
+        let rwxEnabled = isRwxEnabled();
         isEnabled(clearRepository, rwxEnabled);
 
-        rwxEnabled = true;
+        rwxEnabled = false;
         configureRWX(rwxEnabled);
         isEnabled(clearRepository, rwxEnabled);
     });
