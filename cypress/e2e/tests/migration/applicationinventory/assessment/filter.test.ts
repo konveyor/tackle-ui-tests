@@ -207,11 +207,11 @@ describe(["@tier2"], "Application inventory filter validations", function () {
     it("Credential type filter validations", function () {
         // For application must have source code URL git or svn and group,artifcat and version
         const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_Source", {
-                sourceData: this.appData[1],
-                binaryData: this.appData[2],
+            getRandomApplicationData("tackleTestApp_Source_Binary", {
+                sourceData: this.appData["tackle-testapp"],
+                binaryData: this.appData["tackle-testapp-binary"],
             }),
-            getRandomAnalysisData(this.analysisData[3])
+            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
         );
         application.create();
         cy.wait("@getApplication");
@@ -242,12 +242,12 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         // For application must have source code URL
         const application = new Application(
             getRandomApplicationData("tackleTestApp_Source", {
-                sourceData: this.appData[1],
+                sourceData: this.appData["tackle-testapp-git"],
             })
         );
         const application1 = new Application(
             getRandomApplicationData("tackleTestApp_svnRepo", {
-                sourceData: this.appData[5],
+                sourceData: this.appData["tackle-testapp-svn"],
             })
         );
 
@@ -277,8 +277,8 @@ describe(["@tier2"], "Application inventory filter validations", function () {
     it("Artifact type filter validations", function () {
         // For application must have Binary group,artifact and version
         const application = new Application(
-            getRandomApplicationData("tackleTestApp_Source", {
-                binaryData: this.appData[2],
+            getRandomApplicationData("tackleTestApp_Binary", {
+                binaryData: this.appData["tackle-testapp-binary"],
             })
         );
         application.create();
