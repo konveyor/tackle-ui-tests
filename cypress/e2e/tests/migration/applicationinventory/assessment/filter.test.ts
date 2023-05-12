@@ -242,12 +242,12 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         // For application must have source code URL
         const application = new Application(
             getRandomApplicationData("tackleTestApp_Source", {
-                sourceData: this.appData[1],
+                sourceData: this.appData["tackle-testapp-git"],
             })
         );
         const application1 = new Application(
             getRandomApplicationData("tackleTestApp_svnRepo", {
-                sourceData: this.appData[5],
+                sourceData: this.appData["tackle-testapp-svn"],
             })
         );
 
