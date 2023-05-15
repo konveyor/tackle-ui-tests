@@ -27,7 +27,6 @@ import {
     openManageImportsPage,
     deleteApplicationTableRows,
     preservecookies,
-    hasToBeSkipped,
     deleteAppImportsTableRows,
     deleteAllBusinessServices,
 } from "../../../../../utils/utils";
@@ -50,12 +49,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
         deleteApplicationTableRows();
         deleteAllBusinessServices();
 
-        // Create business service if not exists
-        BusinessServices.getNamesListOnPage(100).then((list) => {
-            if (!list.find((listItem) => listItem.name === businessService.name)) {
-                businessService.create();
-            }
-        });
+        businessService.create();
 
         // Open the application inventory page
         clickByText(navMenu, applicationInventory);
