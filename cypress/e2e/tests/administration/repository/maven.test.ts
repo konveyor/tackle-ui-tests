@@ -26,6 +26,7 @@ import {
     login,
     resetURL,
     writeMavenSettingsFile,
+    getRWXStatus,
 } from "../../../../utils/utils";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import * as data from "../../../../utils/data_utils";
@@ -139,6 +140,22 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         MavenConfiguration.open();
         isEnabled(clearRepository, rwxEnabled);
         mavenConfiguration.clearRepository();
+    });
+
+    it("Perform RWX=true and clear repository", function () {
+        MavenConfiguration.open();
+        getRWXStatus().then((result) => {
+            const rwxDisabled = result.stdout === "false";
+            isEnabled(clearRepository, !rwxDisabled);
+
+            if (rwxDisabled) {
+                configureRWX(true);
+            }
+        });
+
+        login();
+        MavenConfiguration.open();
+        isEnabled(clearRepository, true);
     });
 
     after("Perform test data clean up", () => {

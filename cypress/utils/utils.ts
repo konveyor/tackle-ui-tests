@@ -79,6 +79,7 @@ import { Application } from "../e2e/models/migration/applicationinventory/applic
 import { switchToggle } from "../e2e/views/reports.view";
 import { rightSideMenu } from "../e2e/views/analysis.view";
 import Chainable = Cypress.Chainable;
+import Exec = Cypress.Exec;
 
 let userName = Cypress.env("user");
 let userPassword = Cypress.env("pass");
@@ -1431,6 +1432,13 @@ export function validateTooLongInput(selector, anotherSelector?: string): void {
 // This method accepts enums or maps and returns list of keys, so you can iterate by keys
 export function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
     return Object.keys(obj).filter((k) => Number.isNaN(+k)) as K[];
+}
+
+export function getRWXStatus(): Chainable<Exec> {
+    const tackleCr = "tackle=$(oc get tackle --all-namespaces|grep -iv name|awk '{print $2}'); ";
+    const namespace = 'namespace=$(oc get tackle --all-namespaces|grep tackle|cut -d " " -f 1); ';
+    const command = `${tackleCr} ${namespace} oc get tackle -n$namespace -o jsonpath='{.items[0].spec.rwx_supported}'`;
+    return cy.exec(command);
 }
 
 export function isRwxEnabled(): boolean {
