@@ -129,20 +129,6 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
     });
 
     it("Perform RWX=true and clear repository", function () {
-        // By default RWX is set to false
-        MavenConfiguration.open();
-        let rwxEnabled = false;
-        isEnabled(clearRepository, rwxEnabled);
-
-        rwxEnabled = true;
-        configureRWX(rwxEnabled);
-        login();
-        MavenConfiguration.open();
-        isEnabled(clearRepository, rwxEnabled);
-        mavenConfiguration.clearRepository();
-    });
-
-    it("Perform RWX=true and clear repository", function () {
         MavenConfiguration.open();
         getRWXStatus().then((result) => {
             const rwxDisabled = result.stdout === "false";
