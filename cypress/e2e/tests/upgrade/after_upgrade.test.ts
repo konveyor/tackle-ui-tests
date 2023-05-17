@@ -28,6 +28,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
 
         const generalConfig = GeneralConfig.getInstance();
         generalConfig.enableDownloadCsv();
+        generalConfig.enableDownloadHtml();
     });
 
     beforeEach("Persist session", function () {
@@ -96,7 +97,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
 
         const uploadBinaryApplication = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
-            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_with_customrule"])
+            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
         );
         uploadBinaryApplication.name = uploadBinaryApplicationName;
 

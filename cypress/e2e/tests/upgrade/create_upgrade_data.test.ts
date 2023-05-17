@@ -127,7 +127,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     it("Creating Upload Binary Analysis", function () {
         const uploadBinaryApplication = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
-            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_with_customrule"])
+            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
         );
         uploadBinaryApplication.name = this.upgradeData.uploadBinaryApplicationName;
         uploadBinaryApplication.create();
