@@ -32,7 +32,7 @@ import * as data from "../../../../utils/data_utils";
 import { CredentialType, UserCredentials } from "../../../types/constants";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { CredentialsMaven } from "../../../models/administration/credentials/credentialsMaven";
-import { clearRepository } from "../../../views/repository.view";
+import { clearRepository, repoSize } from "../../../views/repository.view";
 
 let mavenConfiguration = new MavenConfiguration();
 let source_credential;
@@ -128,17 +128,25 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
     });
 
     it("Perform RWX=true and clear repository", function () {
-        // By default RWX is set to false
         MavenConfiguration.open();
-        let rwxEnabled = false;
-        isEnabled(clearRepository, rwxEnabled);
+        let rwxEnabled;
 
-        rwxEnabled = true;
-        configureRWX(rwxEnabled);
+        cy.get(repoSize).then(($btn) => {
+            // In UI if $btn.is(':disabled'), RWX = false
+            rwxEnabled = !$btn.is(":disabled");
+            isEnabled(clearRepository, rwxEnabled);
+            // If rwx = true , clear Repo
+            if (rwxEnabled) mavenConfiguration.clearRepository();
+            configureRWX(!rwxEnabled);
+        });
         login();
         MavenConfiguration.open();
-        isEnabled(clearRepository, rwxEnabled);
-        mavenConfiguration.clearRepository();
+
+        cy.get(repoSize).then(($btn) => {
+            rwxEnabled = !$btn.is(":disabled");
+            isEnabled(clearRepository, rwxEnabled);
+            if (rwxEnabled) mavenConfiguration.clearRepository();
+        });
     });
 
     after("Perform test data clean up", () => {
