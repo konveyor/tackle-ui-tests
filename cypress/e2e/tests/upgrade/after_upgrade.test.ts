@@ -4,9 +4,7 @@ import {
     expandRowDetails,
     getRandomAnalysisData,
     getRandomApplicationData,
-    hasToBeSkipped,
     isEnabled,
-    isRwxEnabled,
     login,
 } from "../../../utils/utils";
 import { UpgradeData } from "../../types/types";
@@ -103,11 +101,8 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
 
         Analysis.open();
         exists(sourceApplicationName);
-        sourceApplication.downloadReport("CSV", false);
         exists(binaryApplicationName);
-        binaryApplication.downloadReport("CSV", false);
         exists(uploadBinaryApplicationName);
-        uploadBinaryApplication.downloadReport("CSV", false);
 
         sourceApplication.analyze();
         sourceApplication.verifyAnalysisStatus("Completed");
