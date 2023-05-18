@@ -1448,7 +1448,8 @@ export function configureRWX(isEnabled = true): void {
     }
     let command = "";
     let tackleCr = "tackle=$(oc get tackle --all-namespaces|grep -iv name|awk '{print $2}'); ";
-    let namespace = 'namespace=$(oc get tackle --all-namespaces|grep tackle|cut -d " " -f 1); ';
+    let namespace =
+        'namespace=$(oc get tackle --all-namespaces|egrep "tackle|mta"|cut -d " " -f 1); ';
     command += tackleCr;
     command += namespace;
     command += "oc patch tackle ";
@@ -1456,7 +1457,10 @@ export function configureRWX(isEnabled = true): void {
     command += "-n$namespace ";
     command += "--type merge ";
     command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
-    cy.exec(command);
+    cy.log(command);
+    cy.exec(command).then((result) => {
+        cy.log(result.stderr);
+    });
 
     // Timeout as it takes time until pods are starting to reboot
     cy.wait(180 * SEC);

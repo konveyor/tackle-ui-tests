@@ -4,9 +4,7 @@ import {
     expandRowDetails,
     getRandomAnalysisData,
     getRandomApplicationData,
-    hasToBeSkipped,
     isEnabled,
-    isRwxEnabled,
     login,
 } from "../../../utils/utils";
 import { UpgradeData } from "../../types/types";
@@ -19,15 +17,11 @@ import { TagCategory } from "../../models/migration/controls/tagcategory";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { MavenConfiguration } from "../../models/administration/repositories/maven";
 import { clearRepository } from "../../views/repository.view";
-import { GeneralConfig } from "../../models/administration/general/generalConfig";
 
 describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     before("Login", function () {
         // Perform login
         login();
-
-        const generalConfig = GeneralConfig.getInstance();
-        generalConfig.enableDownloadCsv();
     });
 
     beforeEach("Persist session", function () {
@@ -42,7 +36,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         });
     });
 
-    it("Testing existence of instances created before upgrade", function () {
+    it("Controls - testing existence of instances created before upgrade", function () {
         const {
             sourceControlUsernameCredentialsName,
             mavenUsernameCredentialName,
@@ -52,10 +46,8 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
             businessServiceName,
             tagTypeName,
             tagName,
-            sourceApplicationName,
-            binaryApplicationName,
-            uploadBinaryApplicationName,
         } = this.upgradeData;
+
         Credentials.openList();
         exists(sourceControlUsernameCredentialsName);
         exists(mavenUsernameCredentialName);
@@ -77,32 +69,38 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
 
         expandRowDetails(tagTypeName);
         exists(tagName);
+    });
+
+    it("Applications - testing existence of instances created before upgrade", function () {
+        const { sourceApplicationName, binaryApplicationName, uploadBinaryApplicationName } =
+            this.upgradeData;
 
         const sourceApplication = new Analysis(
-            getRandomApplicationData(sourceApplicationName, { sourceData: this.appData[0] }),
-            getRandomAnalysisData(this.analysisData[0])
+            getRandomApplicationData("bookserverApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         sourceApplication.name = sourceApplicationName;
 
         const binaryApplication = new Analysis(
-            getRandomApplicationData(binaryApplicationName, { binaryData: this.appData[2] }),
-            getRandomAnalysisData(this.analysisData[3])
+            getRandomApplicationData("tackletestApp_binary", {
+                binaryData: this.appData["tackle-testapp-binary"],
+            }),
+            getRandomAnalysisData(this.analysisData["binary_analysis_on_tackletestapp"])
         );
         binaryApplication.name = binaryApplicationName;
 
         const uploadBinaryApplication = new Analysis(
-            getRandomApplicationData(uploadBinaryApplicationName),
-            getRandomAnalysisData(this.analysisData[4])
+            getRandomApplicationData("customRule_customTarget"),
+            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
         );
         uploadBinaryApplication.name = uploadBinaryApplicationName;
 
         Analysis.open();
         exists(sourceApplicationName);
-        sourceApplication.downloadReport("CSV", false);
         exists(binaryApplicationName);
-        binaryApplication.downloadReport("CSV", false);
         exists(uploadBinaryApplicationName);
-        uploadBinaryApplication.downloadReport("CSV", false);
 
         sourceApplication.analyze();
         sourceApplication.verifyAnalysisStatus("Completed");
@@ -112,12 +110,18 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
 
         uploadBinaryApplication.analyze();
         uploadBinaryApplication.verifyAnalysisStatus("Completed");
+    });
 
+    it("Enabling RWX, validating it works, disabling it", function () {
         MavenConfiguration.open();
         let rwxEnabled = false;
         isEnabled(clearRepository, rwxEnabled);
 
         rwxEnabled = true;
+        configureRWX(rwxEnabled);
+        isEnabled(clearRepository, rwxEnabled);
+
+        rwxEnabled = false;
         configureRWX(rwxEnabled);
         isEnabled(clearRepository, rwxEnabled);
     });

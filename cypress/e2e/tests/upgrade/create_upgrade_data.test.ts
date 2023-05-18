@@ -18,7 +18,6 @@ limitations under the License.
 import {
     getRandomAnalysisData,
     getRandomApplicationData,
-    hasToBeSkipped,
     login,
     preservecookies,
 } from "../../../utils/utils";
@@ -113,10 +112,10 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
 
     it("Creating source applications", function () {
         const sourceApplication = new Analysis(
-            getRandomApplicationData(this.upgradeData.sourceApplicationName, {
-                sourceData: this.appData[0],
+            getRandomApplicationData("bookserverApp", {
+                sourceData: this.appData["bookserver-app"],
             }),
-            getRandomAnalysisData(this.analysisData[0])
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         sourceApplication.name = this.upgradeData.sourceApplicationName;
         sourceApplication.create();
@@ -127,8 +126,8 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
 
     it("Creating Upload Binary Analysis", function () {
         const uploadBinaryApplication = new Analysis(
-            getRandomApplicationData(this.upgradeData.uploadBinaryApplicationName),
-            getRandomAnalysisData(this.analysisData[4])
+            getRandomApplicationData("customRule_customTarget"),
+            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
         );
         uploadBinaryApplication.name = this.upgradeData.uploadBinaryApplicationName;
         uploadBinaryApplication.create();
@@ -141,10 +140,10 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     it("Binary Analysis", function () {
         // For binary analysis application must have group,artifact and version.
         const binaryApplication = new Analysis(
-            getRandomApplicationData(this.upgradeData.binaryApplicationName, {
-                binaryData: this.appData[2],
+            getRandomApplicationData("tackletestApp_binary", {
+                binaryData: this.appData["tackle-testapp-binary"],
             }),
-            getRandomAnalysisData(this.analysisData[3])
+            getRandomAnalysisData(this.analysisData["binary_analysis_on_tackletestapp"])
         );
         binaryApplication.name = this.upgradeData.binaryApplicationName;
         binaryApplication.create();
