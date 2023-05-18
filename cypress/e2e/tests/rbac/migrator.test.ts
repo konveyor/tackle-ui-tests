@@ -21,32 +21,6 @@ describe(["@tier2"], "Migrator RBAC operations", () => {
         getRandomCredentialsData(CredentialType.sourceControl)
     );
 
-    const rbacRules: RbacValidationRules = {
-        "Create new": false,
-        Analyze: true,
-        "Upload binary": true,
-        Assess: false,
-        Review: false,
-        "Action menu": {
-            "Not available": true,
-            Import: false,
-            "Manage imports": false,
-            "Manage credentials": false,
-            Delete: false,
-        },
-        "analysis applicable options": {
-            "Analysis details": true,
-            "Cancel analysis": true,
-            "Manage credentials": false,
-            Delete: false,
-        },
-        "assessment applicable options": {
-            "Discard assessment": false,
-            "Copy assessment": false,
-            "Manage dependencies": true,
-        },
-    };
-
     before("Creating RBAC users, adding roles for them", () => {
         //Need to log in as admin and create simple app with known name to use it for tests
         login();
@@ -68,42 +42,46 @@ describe(["@tier2"], "Migrator RBAC operations", () => {
     beforeEach("Persist session", function () {
         // Login as Migrator
         userMigrator.login();
+
+        cy.fixture("rbac").then(function (rbacRules) {
+            this.rbacRules = rbacRules["migrator"];
+        });
     });
 
-    it("Migrator, validate create application button", () => {
+    it("Migrator, validate create application button", function () {
         //Migrator is not allowed to create applications
-        Application.validateCreateAppButton(rbacRules);
+        Application.validateCreateAppButton(this.rbacRules);
     });
 
-    it("Migrator, validate assess application button", () => {
+    it("Migrator, validate assess application button", function () {
         //Migrator is not allowed to create applications
-        Application.validateAssessButton(rbacRules);
+        Application.validateAssessButton(this.rbacRules);
     });
 
-    it("Migrator, validate review application button", () => {
+    it("Migrator, validate review application button", function () {
         //Migrator is not allowed to review applications
-        Application.validateReviewButton(rbacRules);
+        Application.validateReviewButton(this.rbacRules);
     });
 
-    it("Migrator, validate presence of import and manage imports", () => {
+    it("Migrator, validate presence of import and manage imports", function () {
         //migrator is allowed to import applications
-        Analysis.validateTopActionMenu(rbacRules);
+        Analysis.validateTopActionMenu(this.rbacRules);
     });
 
-    it("Migrator, validate presence of analyse button", () => {
+    it("Migrator, validate presence of analyse button", function () {
         //Migrator is allowed to analyse applications
-        Analysis.validateAnalyzeButton(rbacRules);
+        Analysis.validateAnalyzeButton(this.rbacRules);
     });
 
-    it("Migrator, validate analysis details and cancel analysis buttons presence", () => {
-        application.validateAnalysisAvailableActions(rbacRules);
+    it("Migrator, validate analysis details and cancel analysis buttons presence", function () {
+        application.validateAnalysisAvailableActions(this.rbacRules);
     });
 
-    it("Migrator, validate assessment context menu buttons presence", () => {
-        application.validateAssessmentAvailableOptions(rbacRules);
+    it("Migrator, validate assessment context menu buttons presence", function () {
+        application.validateAssessmentAvailableOptions(this.rbacRules);
     });
-    it("Migrator, validate availability of binary upload functionality", () => {
-        application.validateUploadBinary(rbacRules);
+    it("Migrator, validate availability of binary upload functionality", function () {
+        application.validateUploadBinary(this.rbacRules);
     });
 
     after("", () => {

@@ -1,0 +1,52 @@
+{
+    "architect": {
+        "Create new": true,
+        "Analyze": true,
+        "Upload binary": true,
+        "Assess": true,
+        "Review": true,
+        "Action menu": {
+            "Not available": false,
+            "Import": true,
+            "Manage imports": true,
+            "Manage credentials": true,
+            "Delete": true
+        },
+        "analysis applicable options": {
+            "Analysis details": true,
+            "Cancel analysis": true,
+            "Manage credentials": true,
+            "Delete": true
+        },
+        "assessment applicable options": {
+            "Discard assessment": true,
+            "Copy assessment": true,
+            "Manage dependencies": true
+        }
+    },
+    "migrator": {
+        "Create new": false,
+        "Analyze": true,
+        "Upload binary": true,
+        "Assess": false,
+        "Review": false,
+        "Action menu": {
+            "Not available": true,
+            "Import": false,
+            "Manage imports": false,
+            "Manage credentials": false,
+            "Delete": false
+        },
+        "analysis applicable options": {
+            "Analysis details": true,
+            "Cancel analysis": true,
+            "Manage credentials": false,
+            "Delete": false
+        },
+        "assessment applicable options": {
+            "Discard assessment": false,
+            "Copy assessment": false,
+            "Manage dependencies": true
+        }
+    }
+}

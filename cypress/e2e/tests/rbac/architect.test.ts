@@ -11,7 +11,7 @@ import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import * as data from "../../../utils/data_utils";
 
-describe(["@tier2"], "Architect RBAC operations", () => {
+describe(["@tier2"], "Architect RBAC operations", function () {
     let userArchitect = new UserArchitect(getRandomUserData());
     const application = new Assessment(getRandomApplicationData());
     let stakeholdersList: Array<Stakeholders> = [];
@@ -21,33 +21,7 @@ describe(["@tier2"], "Architect RBAC operations", () => {
         getRandomCredentialsData(CredentialType.sourceControl)
     );
 
-    const rbacRules: RbacValidationRules = {
-        "Create new": true,
-        Analyze: true,
-        "Upload binary": true,
-        Assess: true,
-        Review: true,
-        "Action menu": {
-            "Not available": false,
-            Import: true,
-            "Manage imports": true,
-            "Manage credentials": true,
-            Delete: true,
-        },
-        "analysis applicable options": {
-            "Analysis details": true,
-            "Cancel analysis": true,
-            "Manage credentials": true,
-            Delete: true,
-        },
-        "assessment applicable options": {
-            "Discard assessment": true,
-            "Copy assessment": true,
-            "Manage dependencies": true,
-        },
-    };
-
-    before("Creating RBAC users, adding roles for them", () => {
+    before("Creating RBAC users, adding roles for them", function () {
         login();
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
@@ -66,46 +40,50 @@ describe(["@tier2"], "Architect RBAC operations", () => {
     beforeEach("Persist session", function () {
         // login as architect
         userArchitect.login();
+
+        cy.fixture("rbac").then(function (rbacRules) {
+            this.rbacRules = rbacRules["architect"];
+        });
     });
 
-    it("Architect, validate create application button", () => {
+    it("Architect, validate create application button", function () {
         //Architect is allowed to create applications
-        Application.validateCreateAppButton(rbacRules);
+        Application.validateCreateAppButton(this.rbacRules);
     });
 
-    it("Architect, validate assess application button", () => {
+    it("Architect, validate assess application button", function () {
         //Architect is allowed to create applications
-        Application.validateAssessButton(rbacRules);
+        Application.validateAssessButton(this.rbacRules);
     });
 
-    it("Architect, validate review application button", () => {
+    it("Architect, validate review application button", function () {
         //Architect is allowed to review applications
-        Application.validateReviewButton(rbacRules);
+        Application.validateReviewButton(this.rbacRules);
     });
 
-    it("Architect, validate presence of import and manage imports", () => {
+    it("Architect, validate presence of import and manage imports", function () {
         //Architect is allowed to import applications
-        Analysis.validateTopActionMenu(rbacRules);
+        Analysis.validateTopActionMenu(this.rbacRules);
     });
 
-    it("Architect, validate presence of analyse button", () => {
+    it("Architect, validate presence of analyse button", function () {
         //Architect is allowed to analyse applications
-        Analysis.validateAnalyzeButton(rbacRules);
+        Analysis.validateAnalyzeButton(this.rbacRules);
     });
 
-    it("Architect, validate analysis details and cancel analysis buttons presence", () => {
-        application.validateAnalysisAvailableActions(rbacRules);
+    it("Architect, validate analysis details and cancel analysis buttons presence", function () {
+        application.validateAnalysisAvailableActions(this.rbacRules);
     });
 
-    it("Architect, validate assessment context menu buttons presence", () => {
-        application.validateAssessmentAvailableOptions(rbacRules);
+    it("Architect, validate assessment context menu buttons presence", function () {
+        application.validateAssessmentAvailableOptions(this.rbacRules);
     });
 
-    it("Architect, validate availability of binary upload functionality", () => {
-        application.validateUploadBinary(rbacRules);
+    it("Architect, validate availability of binary upload functionality", function () {
+        application.validateUploadBinary(this.rbacRules);
     });
 
-    after("", () => {
+    after("", function () {
         userArchitect.logout();
         login();
         appCredentials.delete();
