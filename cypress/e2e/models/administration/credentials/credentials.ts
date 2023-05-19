@@ -252,6 +252,8 @@ export class Credentials {
     }
 
     protected closeSuccessNotification(): void {
-        click(closeSuccessNotification);
+        cy.get(closeSuccessNotification, { timeout: 10 * SEC })
+            .first()
+            .click({ force: true });
     }
 }
