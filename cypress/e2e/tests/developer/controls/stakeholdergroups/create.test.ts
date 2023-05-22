@@ -42,7 +42,7 @@ import {
 } from "../../../../views/stakeholdergroups.view";
 import { Stakeholdergroups } from "../../../../models/developer/controls/stakeholdergroups";
 import * as data from "../../../../../utils/data_utils";
-import * as commonView from "../../../../../integration/views/common.view";
+import * as commonView from "../../../../../e2e/views/common.view";
 
 describe("Stakeholder groups validations", { tags: "@tier2" }, () => {
     const stakeholdergroup = new Stakeholdergroups(data.getCompanyName(), data.getDescription());

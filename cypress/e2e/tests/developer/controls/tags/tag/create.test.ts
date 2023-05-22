@@ -39,7 +39,7 @@ import {
     dropdownMenuToggle,
 } from "../../../../../views/tags.view";
 import { Tag } from "../../../../../models/developer/controls/tags";
-import * as commonView from "../../../../../../integration/views/common.view";
+import * as commonView from "../../../../../../e2e/views/common.view";
 import * as data from "../../../../../../utils/data_utils";
 
 describe("Tag validations", { tags: "@tier2" }, () => {

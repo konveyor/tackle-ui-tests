@@ -13,16 +13,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { BusinessServices } from "../integration/models/developer/controls/businessservices";
-import { Stakeholders } from "../integration/models/developer/controls/stakeholders";
-import { Stakeholdergroups } from "../integration/models/developer/controls/stakeholdergroups";
-import { Tag } from "../integration/models/developer/controls/tags";
-import { TagType } from "../integration/models/developer/controls/tagtypes";
-import { Jobfunctions } from "../integration/models/developer/controls/jobfunctions";
+import { BusinessServices } from "../e2e/models/developer/controls/businessservices";
+import { Stakeholders } from "../e2e/models/developer/controls/stakeholders";
+import { Stakeholdergroups } from "../e2e/models/developer/controls/stakeholdergroups";
+import { Tag } from "../e2e/models/developer/controls/tags";
+import { TagType } from "../e2e/models/developer/controls/tagtypes";
+import { Jobfunctions } from "../e2e/models/developer/controls/jobfunctions";
 
-import * as loginView from "../integration/views/login.view";
-import * as commonView from "../integration/views/common.view";
-import { navMenu, navTab } from "../integration/views/menu.view";
+import * as loginView from "../e2e/views/login.view";
+import * as commonView from "../e2e/views/common.view";
+import { navMenu, navTab } from "../e2e/views/menu.view";
 import * as data from "../utils/data_utils";
 import "cypress-file-upload";
 import {
@@ -48,14 +48,14 @@ import {
     artifact,
     repositoryType,
     analysis,
-} from "../integration/types/constants";
+} from "../e2e/types/constants";
 import {
     actionButton,
     applicationBusinessServiceSelect,
     date,
     selectBox,
     createEntitiesCheckbox,
-} from "../integration/views/applicationinventory.view";
+} from "../e2e/views/applicationinventory.view";
 import {
     confirmButton,
     divHeader,
@@ -65,18 +65,19 @@ import {
     nextPageButton,
     pageNumInput,
     prevPageButton,
-} from "../integration/views/common.view";
-import { tagLabels } from "../integration/views/tags.view";
-import { Credentials } from "../integration/models/administrator/credentials/credentials";
-import { Assessment } from "../integration/models/developer/applicationinventory/assessment";
-import { analysisData, applicationData, UserData } from "../integration/types/types";
-import { CredentialsProxy } from "../integration/models/administrator/credentials/credentialsProxy";
+} from "../e2e/views/common.view";
+import { tagLabels } from "../e2e/views/tags.view";
+import { Credentials } from "../e2e/models/administrator/credentials/credentials";
+import { Assessment } from "../e2e/models/developer/applicationinventory/assessment";
+import { analysisData, applicationData, UserData } from "../e2e/types/types";
+import { CredentialsProxy } from "../e2e/models/administrator/credentials/credentialsProxy";
 import { getRandomCredentialsData, randomWordGenerator } from "../utils/data_utils";
-import { CredentialsMaven } from "../integration/models/administrator/credentials/credentialsMaven";
-import { CredentialsSourceControlUsername } from "../integration/models/administrator/credentials/credentialsSourceControlUsername";
-import { CredentialsSourceControlKey } from "../integration/models/administrator/credentials/credentialsSourceControlKey";
-import { Application } from "../integration/models/developer/applicationinventory/application";
-import { InsecureRepositoryToggle } from "../integration/views/repository.view";
+import { CredentialsMaven } from "../e2e/models/administrator/credentials/credentialsMaven";
+import { CredentialsSourceControlUsername } from "../e2e/models/administrator/credentials/credentialsSourceControlUsername";
+import { CredentialsSourceControlKey } from "../e2e/models/administrator/credentials/credentialsSourceControlKey";
+import { Application } from "../e2e/models/developer/applicationinventory/application";
+import { InsecureRepositoryToggle } from "../e2e/views/repository.view";
+import Chainable = Cypress.Chainable;
 
 let userName = Cypress.env("user");
 let userPassword = Cypress.env("pass");
