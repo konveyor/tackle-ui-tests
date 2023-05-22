@@ -10,7 +10,7 @@ import { CredentialType } from "../../../types/constants";
 import { ProxyType, ProxyViewSelectors, ProxyViewSelectorsByType } from "../../../views/proxy.view";
 import { submitButton } from "../../../../e2e/views/common.view";
 
-describe("Proxy operations", { tags: "@tier2" }, () => {
+describe(["@tier2"], "Proxy operations", () => {
     let httpsProxy = new Proxy(getRandomProxyData(), ProxyType.https);
     let httpProxy = new Proxy(getRandomProxyData(), ProxyType.http);
     const httpProxyCreds = new CredentialsProxy(getRandomCredentialsData(CredentialType.proxy));

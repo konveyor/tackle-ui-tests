@@ -32,7 +32,7 @@ import { tdTag, trTag } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { expandRow } from "../../../../views/common.view";
 
-describe("Stakeholder group CRUD operations", { tags: "@tier1" }, () => {
+describe(["@tier1"], "Stakeholder group CRUD operations", () => {
     const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
 
     before("Login", function () {

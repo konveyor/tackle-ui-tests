@@ -47,7 +47,7 @@ var applicationsList: Array<Assessment> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 var businessservicelist: Array<BusinessServices> = [];
 
-describe("Reports pagination validations", { tags: "@tier3" }, () => {
+describe(["@tier3"], "Reports pagination validations", () => {
     before("Login and create test data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier3")) return;

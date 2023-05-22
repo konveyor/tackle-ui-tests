@@ -3,7 +3,7 @@ import { CredentialsProxy } from "../../../models/administrator/credentials/cred
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
 import { CredentialType } from "../../../types/constants";
 
-describe("Validation of proxy credentials", () => {
+describe(["@tier2"], "Validation of proxy credentials", () => {
     const proxyCreds = new CredentialsProxy(getRandomCredentialsData(CredentialType.proxy));
     const toBeCanceled = true;
     const validConfiguration = {
@@ -48,7 +48,6 @@ describe("Validation of proxy credentials", () => {
     });
 
     after("Delete proxy credentials", () => {
-        if (hasToBeSkipped("@tier2")) return;
         proxyCreds.delete();
     });
 });

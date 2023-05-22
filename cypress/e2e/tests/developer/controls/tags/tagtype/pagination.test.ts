@@ -39,7 +39,7 @@ import {
 } from "../../../../../views/common.view";
 import { TagType } from "../../../../../models/developer/controls/tagtypes";
 
-describe("Tag type pagination validations", { tags: "@tier3" }, function () {
+describe(["@tier3"], "Tag type pagination validations", function () {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier3")) return;

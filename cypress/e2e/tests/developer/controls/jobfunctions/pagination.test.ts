@@ -32,11 +32,10 @@ import {
 } from "../../../../views/common.view";
 import { Jobfunctions } from "../../../../models/developer/controls/jobfunctions";
 
-describe("Job functions pagination validations", { tags: "@tier3" }, function () {
+describe(["@tier3"], "Job functions pagination validations", function () {
     let jobFunctionsList: Array<Jobfunctions> = [];
     before("Login and Create Test Data", function () {
         // Prevent before hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
 
         // Perform login
         login();

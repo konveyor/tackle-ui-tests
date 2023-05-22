@@ -35,7 +35,7 @@ import { CredentialType, UserCredentials } from "../../../types/constants";
 let gitConfiguration = new GitConfiguration();
 let source_credential;
 
-describe("Test secure and insecure git repository analysis", { tags: "@tier1" }, () => {
+describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;

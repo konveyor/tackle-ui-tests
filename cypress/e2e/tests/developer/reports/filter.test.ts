@@ -69,7 +69,7 @@ var stakeholdersList: Array<Stakeholders> = [];
 var tagList: Array<Tag> = [];
 var invalidSearchInput = String(data.getRandomNumber());
 
-describe("Reports filter validations", { tags: "@tier2" }, () => {
+describe(["@tier2"], "Reports filter validations", () => {
     before("Login and create test data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

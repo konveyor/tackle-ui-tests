@@ -20,7 +20,6 @@ import {
     importApplication,
     login,
     deleteApplicationTableRows,
-    hasToBeSkipped,
     deleteAppImportsTableRows,
     notExists,
     preservecookies,
@@ -35,10 +34,9 @@ const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
 let appdata = { name: "Customers" };
 
-describe("Operations after application import", () => {
+describe(["@tier2"], "Operations after application import", () => {
     before("Login and create test data", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
 
         // Perform login
         login();
@@ -71,41 +69,32 @@ describe("Operations after application import", () => {
         preservecookies();
     });
 
-    it(
-        "Perform application assessment after a successful application import",
-        { tags: "@tier2" },
-        function () {
-            const application = new Assessment(appdata);
+    it("Perform application assessment after a successful application import", function () {
+        const application = new Assessment(appdata);
 
-            // Perform assessment of application
-            application.perform_assessment("low", stakeholdersNameList);
-            cy.wait(2000);
-            application.verifyStatus("assessment", "Completed");
-        }
-    );
+        // Perform assessment of application
+        application.perform_assessment("low", stakeholdersNameList);
+        cy.wait(2000);
+        application.verifyStatus("assessment", "Completed");
+    });
 
-    it(
-        "Perform application review after a successful application import",
-        { tags: "@tier2" },
-        function () {
-            // Automates https://polarion.engineering.redhat.com/polarion/redirect/project/MTAPathfinder/workitem?id=MTA-295
-            const application = new Assessment(appdata);
+    it("Perform application review after a successful application import", function () {
+        // Automates https://polarion.engineering.redhat.com/polarion/redirect/project/MTAPathfinder/workitem?id=MTA-295
+        const application = new Assessment(appdata);
 
-            // Perform application review
-            application.perform_review("low");
-            cy.wait(2000);
-            application.verifyStatus("review", "Completed");
+        // Perform application review
+        application.perform_review("low");
+        cy.wait(2000);
+        application.verifyStatus("review", "Completed");
 
-            // Delete application
-            application.delete();
-            cy.wait(2000);
-            notExists(application.name);
-        }
-    );
+        // Delete application
+        application.delete();
+        cy.wait(2000);
+        notExists(application.name);
+    });
 
     after("Perform test data clean up", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier2")) return;
 
         // Delete the existing application rows before deleting business service(s)
         deleteApplicationTableRows();

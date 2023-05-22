@@ -37,7 +37,7 @@ let mavenConfiguration = new MavenConfiguration();
 let source_credential;
 let maven_credential;
 
-describe("Test secure and insecure maven repository analysis", () => {
+describe(["@tier2"], "Test secure and insecure maven repository analysis", () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;

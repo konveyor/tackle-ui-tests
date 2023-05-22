@@ -18,7 +18,7 @@ limitations under the License.
 import { login, selectUserPerspective } from "../../utils/utils";
 
 describe("Log In", () => {
-    it("Login to Pathfinder", { tags: "@tier1" }, () => {
+    it(["@tier1"], "Login to Pathfinder", () => {
         // Login
         login();
         selectUserPerspective("Developer");

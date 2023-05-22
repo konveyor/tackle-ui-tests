@@ -29,7 +29,7 @@ import {
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
 import { Report } from "../../../../models/developer/applicationinventory/reportPage";
 
-describe("Report Page's Sort Validation", { tags: "@tier2" }, () => {
+describe(["@tier2"], "Report Page's Sort Validation", () => {
     const report = new Report();
 
     before("Login", function () {

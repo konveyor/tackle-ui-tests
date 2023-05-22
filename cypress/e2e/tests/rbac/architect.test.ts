@@ -18,7 +18,7 @@ import { Stakeholders } from "../../models/developer/controls/stakeholders";
 import { Assessment } from "../../models/developer/applicationinventory/assessment";
 import * as data from "../../../utils/data_utils";
 
-describe("Architect RBAC operations", { tags: "@tier2" }, () => {
+describe(["@tier2"], "Architect RBAC operations", () => {
     let userArchitect = new UserArchitect(getRandomUserData());
     const application = new Assessment(getRandomApplicationData());
     let stakeholdersList: Array<Stakeholders> = [];

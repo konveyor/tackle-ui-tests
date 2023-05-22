@@ -40,7 +40,7 @@ import { Assessment } from "../../../../models/developer/applicationinventory/as
 const filePath = "app_import/csv/";
 var applicationsList: Array<Assessment> = [];
 
-describe("Manage applications import sort validations", { tags: "@tier2" }, function () {
+describe(["@tier2"], "Manage applications import sort validations", function () {
     before("Login and create test data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

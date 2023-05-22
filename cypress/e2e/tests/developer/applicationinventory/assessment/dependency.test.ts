@@ -35,7 +35,7 @@ import {
 
 var applicationsList: Array<Assessment> = [];
 
-describe("Manage application dependencies", { tags: "@newtest" }, () => {
+describe(["@newtest"], "Manage application dependencies", () => {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@newtest")) return;

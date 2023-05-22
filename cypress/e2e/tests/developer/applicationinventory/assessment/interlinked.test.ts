@@ -48,10 +48,9 @@ import { Assessment } from "../../../../models/developer/applicationinventory/as
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 
-describe("Applications interlinked to tags and business service", () => {
+describe(["@tier2"], "Applications interlinked to tags and business service", () => {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
 
         // Perform login
         login();
@@ -73,9 +72,6 @@ describe("Applications interlinked to tags and business service", () => {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
-
         deleteAllStakeholders();
         deleteAllStakeholderGroups();
         deleteApplicationTableRows();
@@ -83,66 +79,62 @@ describe("Applications interlinked to tags and business service", () => {
         deleteAllTagsAndTagTypes();
     });
 
-    it(
-        "businessservice, tag update and delete dependency on application",
-        { tags: "@tier1" },
-        function () {
-            let businessservicesList = createMultipleBusinessServices(2);
-            let tagList = createMultipleTags(2);
-            let appdata = {
-                name: data.getAppName(),
-                business: businessservicesList[0].name,
-                description: data.getDescription(),
-                tags: [tagList[0].name],
-                comment: data.getDescription(),
-            };
-            const application = new Assessment(appdata);
-            application.create();
-            cy.wait("@getApplication");
-            cy.wait(2000);
+    it(["@tier1"], "businessservice, tag update and delete dependency on application", function () {
+        let businessservicesList = createMultipleBusinessServices(2);
+        let tagList = createMultipleTags(2);
+        let appdata = {
+            name: data.getAppName(),
+            business: businessservicesList[0].name,
+            description: data.getDescription(),
+            tags: [tagList[0].name],
+            comment: data.getDescription(),
+        };
+        const application = new Assessment(appdata);
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
 
-            application.verifyTagCount(1);
-            // Remove the BS and tags
-            application.removeBusinessService();
-            tagList[0].delete();
+        application.verifyTagCount(1);
+        // Remove the BS and tags
+        application.removeBusinessService();
+        tagList[0].delete();
 
-            // Navigate to application inventory
-            clickByText(navMenu, applicationInventory);
-            cy.wait(100);
-            cy.wait("@getApplication");
+        // Navigate to application inventory
+        clickByText(navMenu, applicationInventory);
+        cy.wait(100);
+        cy.wait("@getApplication");
 
-            // Assert that deleted business service is removed from application
-            application.getColumnText(businessColumnSelector, "");
-            cy.wait(100);
+        // Assert that deleted business service is removed from application
+        application.getColumnText(businessColumnSelector, "");
+        cy.wait(100);
 
-            // Assert that deleted tag is removed
-            application.expandApplicationRow();
-            application.existsWithinRow(application.name, "Tags", "");
-            application.closeApplicationRow();
-            application.verifyTagCount(0);
+        // Assert that deleted tag is removed
+        application.expandApplicationRow();
+        application.existsWithinRow(application.name, "Tags", "");
+        application.closeApplicationRow();
+        application.verifyTagCount(0);
 
-            application.edit({
-                business: businessservicesList[1].name,
-                tags: [tagList[1].name],
-            });
-            cy.wait("@getApplication");
+        application.edit({
+            business: businessservicesList[1].name,
+            tags: [tagList[1].name],
+        });
+        cy.wait("@getApplication");
 
-            // Assert that business service is updated
-            application.getColumnText(businessColumnSelector, businessservicesList[1].name);
-            cy.wait(1000);
+        // Assert that business service is updated
+        application.getColumnText(businessColumnSelector, businessservicesList[1].name);
+        cy.wait(1000);
 
-            // Assert that created tag exists
-            application.expandApplicationRow();
-            application.existsWithinRow(application.name, "Tags", tagList[1].name);
-            application.closeApplicationRow();
-            application.verifyTagCount(1);
-            cy.wait(1000);
-        }
-    );
+        // Assert that created tag exists
+        application.expandApplicationRow();
+        application.existsWithinRow(application.name, "Tags", tagList[1].name);
+        application.closeApplicationRow();
+        application.verifyTagCount(1);
+        cy.wait(1000);
+    });
 
     it(
+        ["@newtest"],
         "Stakeholder and stakeholdergroup delete dependency on application",
-        { tags: "@newtest" },
         function () {
             //Create application
             let appdata = {

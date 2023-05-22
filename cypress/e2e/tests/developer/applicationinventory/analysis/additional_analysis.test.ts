@@ -10,7 +10,7 @@ import { getRandomProxyData } from "../../../../../utils/data_utils";
 import { ProxyType } from "../../../../views/proxy.view";
 import { Analysis } from "../../../../models/developer/applicationinventory/analysis";
 
-describe("Running analysis with incorrect proxy configuration", { tags: "@tier2" }, () => {
+describe(["@tier2"], "Running analysis with incorrect proxy configuration", () => {
     let httpsProxy = new Proxy(getRandomProxyData(), ProxyType.https);
     let httpProxy = new Proxy(getRandomProxyData(), ProxyType.http);
 

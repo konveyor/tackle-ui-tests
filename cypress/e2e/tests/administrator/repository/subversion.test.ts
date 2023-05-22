@@ -35,7 +35,7 @@ import { Analysis } from "../../../models/developer/applicationinventory/analysi
 let subversionConfiguration = new SubversionConfiguration();
 let source_credential;
 
-describe("Test secure and insecure svn repository analysis", { tags: "@tier1" }, () => {
+describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;

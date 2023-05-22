@@ -13,7 +13,7 @@ import { CredentialsSourceControlUsername } from "../../../models/administrator/
 import { CredentialsSourceControlKey } from "../../../models/administrator/credentials/credentialsSourceControlKey";
 import { Credentials } from "../../../models/administrator/credentials/credentials";
 
-describe("Tag type pagination validations", { tags: "@tier3" }, function () {
+describe(["@tier3"], "Tag type pagination validations", function () {
     // let newCredentialsList: Array<Credentials> = [];
     let createdCredentialsList: Array<Credentials> = [];
     before("Login and Create Test Data", () => {

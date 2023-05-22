@@ -41,7 +41,7 @@ const businessService = new BusinessServices("BS_tag_test");
 const filePath = "app_import/csv/";
 var applicationsList: Array<Assessment> = [];
 
-describe("Application import operations", () => {
+describe(["@tier2"], "Application import operations", () => {
     before("Login and create test data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
@@ -72,7 +72,7 @@ describe("Application import operations", () => {
         deleteApplicationTableRows();
     });
 
-    it("Valid applications import", { tags: "@tier1" }, function () {
+    it(["@tier1"], "Valid applications import", function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
@@ -94,7 +94,7 @@ describe("Application import operations", () => {
         verifyAppImport(fileName, "Completed", 5, 0);
     });
 
-    it("Duplicate applications import", { tags: "@tier1" }, function () {
+    it(["@tier1"], "Duplicate applications import", function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
@@ -120,7 +120,7 @@ describe("Application import operations", () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Applications import for non existing tags", { tags: "@tier1" }, function () {
+    it(["@tier1"], "Applications import for non existing tags", function () {
         businessService.create();
         exists(businessService.name);
         selectUserPerspective("Developer");
@@ -146,7 +146,7 @@ describe("Application import operations", () => {
         notExists(businessService.name);
     });
 
-    it("Applications import for non existing business service", { tags: "@tier1" }, function () {
+    it(["@tier1"], "Applications import for non existing business service", function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
@@ -168,8 +168,9 @@ describe("Application import operations", () => {
     });
 
     it(
+        ["@tier1"],
         "Applications import with minimum required field(s) and empty row",
-        { tags: "@tier1" },
+
         function () {
             selectUserPerspective("Developer");
             clickByText(navMenu, applicationInventory);
@@ -198,7 +199,7 @@ describe("Application import operations", () => {
         }
     );
 
-    it("Applications import having same name with spaces", { tags: "@tier1" }, function () {
+    it(["@tier1"], "Applications import having same name with spaces", function () {
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
         cy.wait("@getApplication");
@@ -219,11 +220,10 @@ describe("Application import operations", () => {
         verifyImportErrorMsg("UNIQUE constraint failed: Application.Name");
     });
 
-    it(
+    it.skip(
+        ["@tier1"],
         "Applications import having description and comments exceeding allowed limits",
-        { tags: "@tier1" },
         function () {
-            /*
             // Unresolved 2.1 bug - https://issues.redhat.com/browse/TACKLE-738
             selectUserPerspective("Developer");
             clickByText(navMenu, applicationInventory);
@@ -239,11 +239,10 @@ describe("Application import operations", () => {
 
             // Verify import applications page shows correct information
             verifyAppImport(fileName, "Completed", 0, 2);
-        */
         }
     );
 
-    it("Applications import for invalid csv schema", { tags: "@newtest" }, function () {
+    it(["@newtest"], "Applications import for invalid csv schema", function () {
         // Impacted by bug - https://issues.redhat.com/browse/TACKLE-320
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
@@ -267,7 +266,7 @@ describe("Application import operations", () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Applications import for with inavlid record type", { tags: "@newtest" }, function () {
+    it(["@newtest"], "Applications import for with inavlid record type", function () {
         // The only valid record types for records in a CSV file are 1(application) or 2(dependency).
         // In this test, we import a CSV file that has records with a record type that's neither 1 nor 2.
         // Automates https://issues.redhat.com/browse/TACKLE-634
@@ -278,7 +277,7 @@ describe("Application import operations", () => {
         // Import csv with invalid record type
         const fileName = "invalid_record_type_21.csv";
         importApplication(filePath + fileName);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Open application imports page
         openManageImportsPage();

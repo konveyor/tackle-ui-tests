@@ -28,7 +28,7 @@ import { Stakeholders } from "../../../../models/developer/controls/stakeholders
 
 import * as data from "../../../../../utils/data_utils";
 
-describe("Business service CRUD operations", { tags: "@tier1" }, () => {
+describe(["@tier1"], "Business service CRUD operations", () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;

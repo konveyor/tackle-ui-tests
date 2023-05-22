@@ -15,7 +15,7 @@ import { UserAdmin } from "../../../models/keycloak/users/userAdmin";
 import { getRandomUserData } from "../../../../utils/data_utils";
 import { User } from "../../../models/keycloak/users/user";
 
-describe("Credentials filter validations", { tags: "@tier2" }, function () {
+describe(["@tier2"], "Credentials filter validations", function () {
     let adminUserName = Cypress.env("user");
     let adminUserPassword = Cypress.env("pass");
     let credentialsListByDefaultAdmin: Array<Credentials> = [];

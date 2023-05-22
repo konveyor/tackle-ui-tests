@@ -49,7 +49,7 @@ let stakeholdersList: Array<Stakeholders> = [];
 let jobFunctionsList: Array<Jobfunctions> = [];
 let stakeholderGroupList: Array<Stakeholdergroups> = [];
 
-describe("Stakeholder sort validations", { tags: "@tier2" }, function () {
+describe(["@tier2"], "Stakeholder sort validations", function () {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

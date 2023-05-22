@@ -44,7 +44,7 @@ import { Stakeholdergroups } from "../../../../models/developer/controls/stakeho
 import * as data from "../../../../../utils/data_utils";
 import * as commonView from "../../../../../e2e/views/common.view";
 
-describe("Stakeholder groups validations", { tags: "@tier2" }, () => {
+describe(["@tier2"], "Stakeholder groups validations", () => {
     const stakeholdergroup = new Stakeholdergroups(data.getCompanyName(), data.getDescription());
 
     before("Login", function () {

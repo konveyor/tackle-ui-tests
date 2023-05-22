@@ -25,7 +25,7 @@ import { Tag } from "../../../../../models/developer/controls/tags";
 import { name, SEC } from "../../../../../types/constants";
 import * as data from "../../../../../../utils/data_utils";
 
-describe("Tags filter validations", { tags: "@tier2" }, function () {
+describe(["@tier2"], "Tags filter validations", function () {
     const tagType = new TagType(data.getRandomWord(5), data.getColor());
     const tag = new Tag(data.getRandomWord(5), tagType.name);
 

@@ -51,7 +51,7 @@ const filesToImport = [
     "non_existing_tags_business_service_rows.csv",
 ];
 
-describe("Manage imports pagination validations", { tags: "@tier3" }, function () {
+describe(["@tier3"], "Manage imports pagination validations", function () {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier3")) return;

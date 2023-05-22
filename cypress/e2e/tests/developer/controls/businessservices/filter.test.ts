@@ -47,7 +47,7 @@ let businessServicesList: Array<BusinessServices> = [];
 let stakeholdersList: Array<Stakeholders> = [];
 let invalidSearchInput = String(data.getRandomNumber());
 
-describe("Business services filter validations", { tags: "@tier2" }, function () {
+describe(["@tier2"], "Business services filter validations", function () {
     before("Login and Create Test Data", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

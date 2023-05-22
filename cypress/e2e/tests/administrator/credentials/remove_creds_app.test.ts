@@ -12,7 +12,7 @@ import { Analysis } from "../../../models/developer/applicationinventory/analysi
 let source_credential;
 let application;
 
-describe("Validation of Source Control Credentials", { tags: "@tier1" }, () => {
+describe(["@tier1"], "Validation of Source Control Credentials", () => {
     before("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;

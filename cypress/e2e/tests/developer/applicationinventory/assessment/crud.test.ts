@@ -27,7 +27,7 @@ import * as data from "../../../../../utils/data_utils";
 import { BusinessServices } from "../../../../models/developer/controls/businessservices";
 import { Assessment } from "../../../../models/developer/applicationinventory/assessment";
 
-describe("Application crud operations", { tags: "@tier1" }, () => {
+describe(["@tier1"], "Application crud operations", () => {
     beforeEach("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;

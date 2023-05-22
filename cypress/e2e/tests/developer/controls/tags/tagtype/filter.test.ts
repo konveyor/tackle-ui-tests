@@ -37,7 +37,7 @@ import {
 import * as data from "../../../../../../utils/data_utils";
 import { TagType } from "../../../../../models/developer/controls/tagtypes";
 
-describe("Tag type filter validations", { tags: "@tier2" }, function () {
+describe(["@tier2"], "Tag type filter validations", function () {
     beforeEach("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier2")) return;

@@ -30,7 +30,7 @@ import { Tag } from "../../../../../models/developer/controls/tags";
 import { tdTag } from "../../../../../types/constants";
 import * as data from "../../../../../../utils/data_utils";
 
-describe("Tag CRUD operations", { tags: "@tier1" }, () => {
+describe(["@tier1"], "Tag CRUD operations", () => {
     beforeEach("Login", function () {
         // Prevent hook from running, if the tag is excluded from run
         if (hasToBeSkipped("@tier1")) return;
