@@ -142,7 +142,7 @@ export class User {
     }
 
     login(): void {
-        login(this.username, this.password);
+        login(this.username, this.password, this.firstLogin);
         if (this.firstLogin) {
             this.password = Cypress.env("pass");
             this.firstLogin = false;
