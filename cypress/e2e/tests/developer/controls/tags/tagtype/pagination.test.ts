@@ -122,13 +122,11 @@ describe(["@tier3"], "Tag type pagination validations", function () {
     });
 
     it("Page number validations", function () {
-        // Navigate to Tags tab
-        TagType.openList();
-
-        // Select 10 items per page
-        selectItemsPerPage(10);
+        // Navigate to Tags tab and select 10 items per page
+        TagType.openList(10);
 
         // Go to page number 2
+        cy.log("-----Go to page 2-----");
         goToPage(2);
 
         // Verify that page number has changed, as previous page nav button got enabled
@@ -137,6 +135,7 @@ describe(["@tier3"], "Tag type pagination validations", function () {
         });
 
         // Go back to page number 1
+        cy.log("-----Go to page 1-----");
         goToPage(1);
     });
 });

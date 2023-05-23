@@ -1050,9 +1050,22 @@ export function deleteAllStakeholderGroups(cancel = false): void {
 }
 
 // TODO: Review and refactor function below!
-export async function deleteAllBusinessServices(cancel = false) {
-    let list = await BusinessServices.getList();
-    deleteByList(list);
+export function deleteAllBusinessServices(cancel = false) {
+    BusinessServices.openList();
+    selectItemsPerPage(100);
+    cy.get(commonView.deleteButton).then(($elems) => {
+        const elemsLength = $elems.length;
+        for (let i = 0; i < elemsLength; i++) {
+            cy.get(commonView.deleteButton)
+                .first()
+                .click()
+                .then((_) => {
+                    cy.wait(0.5 * SEC);
+                    click(commonView.confirmButton);
+                    cy.wait(SEC);
+                });
+        }
+    });
 }
 
 export function deleteAllTagTypes(cancel = false): void {

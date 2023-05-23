@@ -22,7 +22,7 @@ import {
     preservecookies,
     hasToBeSkipped,
     selectUserPerspective,
-    clickWithin,
+    click,
 } from "../../../../../../utils/utils";
 import { navMenu, navTab } from "../../../../../views/menu.view";
 import {
@@ -38,17 +38,16 @@ import {
     createTagtypeButton,
     nameInput,
     nameHelper,
-    dropdownMenuToggle,
     rankInput,
     rankHelper,
     positiveRankMsg,
     colorHelper,
+    tagTypeColorToggle,
 } from "../../../../../views/tags.view";
 import { TagType } from "../../../../../models/developer/controls/tagtypes";
 
 import * as commonView from "../../../../../views/common.view";
 import * as data from "../../../../../../utils/data_utils";
-import { modal } from "../../../../../views/common.view";
 
 describe(["@tier2"], "Tag type validations", () => {
     before("Login", function () {
@@ -87,7 +86,7 @@ describe(["@tier2"], "Tag type validations", () => {
         // Validate the create button is enabled with valid inputs
         inputText(nameInput, data.getRandomWord(6));
         inputText(rankInput, data.getRandomNumber(5, 15));
-        clickWithin(modal, dropdownMenuToggle);
+        click(tagTypeColorToggle);
         clickByText(button, data.getColor());
         cy.get(commonView.submitButton).should("not.be.disabled");
 
@@ -137,7 +136,7 @@ describe(["@tier2"], "Tag type validations", () => {
 
         // Check tag type name duplication
         inputText(nameInput, tagType.name);
-        clickWithin(modal, dropdownMenuToggle);
+        click(tagTypeColorToggle);
         clickByText(button, data.getColor());
         cy.get(nameHelper).should("contain.text", duplicateTagTypeName);
         cy.get(commonView.closeButton).click();
