@@ -49,6 +49,7 @@ import {
     createTagButton,
     nameInput,
     tagMenuButton,
+    tagTypeToggle,
 } from "../../../views/tags.view";
 
 export function clickTags(): void {
@@ -83,7 +84,7 @@ export class Tag {
     }
 
     protected selectTagType(tagType: string): void {
-        selectWithinModal(dropdownMenuToggle);
+        click(tagTypeToggle);
         clickByText(button, tagType);
     }
 

@@ -17,6 +17,7 @@ export const createTagButton = "Create tag";
 export const createTagtypeButton = "Create tag type";
 export const colorHelper = "div[id=color-helper]";
 export const dropdownMenuToggle = "button[aria-label='Options menu']";
+export const tagTypeToggle = "#tag-type-toggle";
 export const nameHelper = "div[id=name-helper]";
 export const nameInput = "input[aria-label='name']";
 export const rankInput = "input[aria-label='rank']";
