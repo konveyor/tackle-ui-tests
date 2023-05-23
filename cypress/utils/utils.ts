@@ -1155,8 +1155,7 @@ export function deleteAllItems(amountPerPage = 100, pageNumber?: number) {
                         let name = $tableRow.find("td[data-label=Name]").text();
                         cy.get(tdTag)
                             .contains(name)
-                            .parent(tdTag)
-                            .siblings(tdTag)
+                            .closest(trTag)
                             .within(() => {
                                 click(commonView.deleteButton);
                                 cy.wait(1000);
