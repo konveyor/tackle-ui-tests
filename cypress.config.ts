@@ -1,4 +1,5 @@
 import { defineConfig } from "cypress";
+import cypressSplit = require("cypress-split");
 import { tagify } from "cypress-tags";
 
 export default defineConfig({
@@ -39,8 +40,10 @@ export default defineConfig({
         testIsolation: false,
         specPattern: "cypress/e2e/**/*.{js,jsx,ts,tsx}",
         setupNodeEvents(on, config) {
+            cypressSplit(on, config);
             require("./cypress/plugins/index.js")(on, config);
             on("file:preprocessor", tagify(config));
+            return config;
         },
     },
 });
