@@ -36,7 +36,7 @@ import { CredentialsSourceControlUsername } from "../../../models/administration
 import { getRulesData } from "../../../../utils/data_utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 
-describe(["@tier1", "@dc"], "Custom Migration Targets CRUD operations", () => {
+describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operations", () => {
     // Automates Polarion TC 300 & 305
     beforeEach("Login", function () {
         login();

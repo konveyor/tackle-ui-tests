@@ -82,7 +82,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2000);
     });
 
-    it("Application assessment and review with medium risk", function () {
+    it(["@interop"], "Application assessment and review with medium risk", function () {
         // Navigate to application inventory tab and create new application
         const application = new Assessment(getRandomApplicationData());
         application.create();

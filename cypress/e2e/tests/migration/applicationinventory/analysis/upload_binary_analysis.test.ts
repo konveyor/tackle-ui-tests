@@ -79,7 +79,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         writeGpgKey("abcde");
     });
 
-    it("Upload Binary Analysis", function () {
+    it(["@interop"], "Upload Binary Analysis", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
