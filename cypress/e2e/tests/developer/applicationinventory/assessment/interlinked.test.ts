@@ -132,41 +132,37 @@ describe(["@tier2"], "Applications interlinked to tags and business service", ()
         cy.wait(1000);
     });
 
-    it(
-        ["@newtest"],
-        "Stakeholder and stakeholdergroup delete dependency on application",
-        function () {
-            //Create application
-            let appdata = {
-                name: data.getAppName(),
-                description: data.getDescription(),
-                comment: data.getDescription(),
-            };
-            const application = new Assessment(appdata);
-            application.create();
-            cy.wait("@getApplication");
-            cy.wait(2000);
-            // Perform assessment of application
-            application.perform_assessment(
-                "low",
-                [stakeholdersList[0].name],
-                [stakeholdergroupsList[0].name]
-            );
-            application.verifyStatus("assessment", "Completed");
+    it("Stakeholder and stakeholdergroup delete dependency on application", function () {
+        //Create application
+        let appdata = {
+            name: data.getAppName(),
+            description: data.getDescription(),
+            comment: data.getDescription(),
+        };
+        const application = new Assessment(appdata);
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        // Perform assessment of application
+        application.perform_assessment(
+            "low",
+            [stakeholdersList[0].name],
+            [stakeholdergroupsList[0].name]
+        );
+        application.verifyStatus("assessment", "Completed");
 
-            // Delete the stakeholders, group
-            stakeholdersList[0].delete();
-            stakeholdergroupsList[0].delete();
+        // Delete the stakeholders, group
+        stakeholdersList[0].delete();
+        stakeholdergroupsList[0].delete();
 
-            clickByText(navMenu, applicationInventory);
-            application.selectApplication();
-            application.click_assess_button();
-            click(continueButton);
-            cy.wait(6000);
+        clickByText(navMenu, applicationInventory);
+        application.selectApplication();
+        application.click_assess_button();
+        click(continueButton);
+        cy.wait(6000);
 
-            //Verify that values show blank
-            cy.get(stakeholderSelect).should("have.value", "");
-            cy.get(stakeholdergroupsSelect).should("have.value", "");
-        }
-    );
+        //Verify that values show blank
+        cy.get(stakeholderSelect).should("have.value", "");
+        cy.get(stakeholdergroupsSelect).should("have.value", "");
+    });
 });

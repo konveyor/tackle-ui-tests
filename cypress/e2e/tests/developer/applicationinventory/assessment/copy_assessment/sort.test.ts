@@ -40,11 +40,8 @@ var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var applicationList: Array<Assessment> = [];
 
-describe(["@newtest"], "Copy assessment and review tests", () => {
+describe("Copy assessment and review tests", () => {
     before("Login and Create Test Data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@newtest")) return;
-
         // Perform login
         login();
 
@@ -69,8 +66,6 @@ describe(["@newtest"], "Copy assessment and review tests", () => {
     });
 
     after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@newtest")) return;
-
         // Delete the stakeholders created before the tests
         deleteAllStakeholders();
 

@@ -23,11 +23,8 @@ import {
 } from "../../../../../utils/utils";
 import { actionButton } from "../../../../views/applicationinventory.view";
 
-describe(["@newtest"], "Manage imports tests", function () {
+describe("Manage imports tests", function () {
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@newtest")) return;
-
         // Perform login
         login();
 

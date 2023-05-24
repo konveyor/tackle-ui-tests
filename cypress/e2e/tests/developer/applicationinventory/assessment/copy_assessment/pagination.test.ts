@@ -35,11 +35,8 @@ import { Assessment } from "../../../../../models/developer/applicationinventory
 var stakeholdersList: Array<Stakeholders> = [];
 var applicationList: Array<Assessment> = [];
 
-describe(["@newtest"], "Assessment pagination validations", function () {
+describe("Assessment pagination validations", function () {
     before("Login and create test data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@newtest")) return;
-
         // Perform login
         login();
 
@@ -59,8 +56,6 @@ describe(["@newtest"], "Assessment pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@newtest")) return;
-
         // Delete the stakeholders created before the tests
         deleteAllStakeholders();
 

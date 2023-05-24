@@ -43,9 +43,6 @@ var applicationsList: Array<Assessment> = [];
 
 describe(["@tier2"], "Application import operations", () => {
     before("Login and create test data", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
-
         // Perform login
         login();
 
@@ -64,9 +61,6 @@ describe(["@tier2"], "Application import operations", () => {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier1") && hasToBeSkipped("@newtest")) return;
-
         // Delete the existing application rows before deleting business service(s)
         clickByText(navMenu, applicationInventory);
         deleteApplicationTableRows();
@@ -242,7 +236,7 @@ describe(["@tier2"], "Application import operations", () => {
         }
     );
 
-    it(["@newtest"], "Applications import for invalid csv schema", function () {
+    it("Applications import for invalid csv schema", function () {
         // Impacted by bug - https://issues.redhat.com/browse/TACKLE-320
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
@@ -266,7 +260,7 @@ describe(["@tier2"], "Application import operations", () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it(["@newtest"], "Applications import for with inavlid record type", function () {
+    it("Applications import for with inavlid record type", function () {
         // The only valid record types for records in a CSV file are 1(application) or 2(dependency).
         // In this test, we import a CSV file that has records with a record type that's neither 1 nor 2.
         // Automates https://issues.redhat.com/browse/TACKLE-634
