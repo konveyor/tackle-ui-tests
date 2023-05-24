@@ -27,7 +27,7 @@ describe(["@tier1"], "Validation of Source Control Credentials", () => {
 
     it(
         "Creating source control credentials with username/password and cancelling without saving",
-        { tags: ["@tier1", "@dc"] },
+        { tags: ["@tier1", "@dc", "@interop"] },
         () => {
             scCredsUsername.create(toBeCanceled);
         }

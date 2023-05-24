@@ -29,7 +29,7 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 import * as data from "../../../../../utils/data_utils";
 import { migration } from "../../../../types/constants";
 
-describe(["@tier1"], "Business service CRUD operations", () => {
+describe(["@tier1", "@interop"], "Business service CRUD operations", () => {
     before("Login", function () {
         // Perform login
         login();

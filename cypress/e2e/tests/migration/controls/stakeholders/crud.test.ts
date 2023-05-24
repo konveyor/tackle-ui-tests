@@ -34,7 +34,7 @@ import { migration, tdTag } from "../../../../types/constants";
 import { groupsCount } from "../../../../views/stakeholders.view";
 import * as data from "../../../../../utils/data_utils";
 
-describe(["@tier1"], "Stakeholder CRUD operations", () => {
+describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
     before("Login", function () {
         // Perform login
         login();
