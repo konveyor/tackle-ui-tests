@@ -24,15 +24,11 @@ import {
     preservecookies,
     hasToBeSkipped,
     createMultipleStakeholders,
-    createMultipleBusinessServices,
-    createMultipleTags,
     createMultipleApplications,
     deleteAllStakeholders,
-    deleteAllBusinessServices,
     deleteApplicationTableRows,
     selectUserPerspective,
     click,
-    deleteAllTagsAndTagTypes,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import {
@@ -47,6 +43,7 @@ import {
     question,
     answer,
     applicationInventory,
+    SEC,
 } from "../../../types/constants";
 import {
     adoptionCandidateDistributionTable,
@@ -83,7 +80,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Perform assessment of application
         applicationsList[0].perform_assessment("high", [stakeholdersList[0].name]);
         applicationsList[0].verifyStatus("assessment", "Completed");
-        cy.wait(4000);
+        cy.wait(4 * SEC);
         // Perform application review
         applicationsList[0].perform_review("high");
         applicationsList[0].verifyStatus("review", "Completed");
@@ -100,7 +97,7 @@ describe(["@tier2"], "Reports filter validations", () => {
 
         selectUserPerspective("Developer");
         clickByText(navMenu, applicationInventory);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Delete the applications, stakeholders, business services and tag types
         deleteApplicationTableRows();
@@ -111,13 +108,13 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Navigate to reports
         selectUserPerspective("Developer");
         clickByText(navMenu, reports);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Enter an existing application name substring and apply it as search filter
         var validSearchInput = applicationsList[0].name;
 
         applySearchFilter(name, validSearchInput);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // Check element filterd for table Adoption Candidate Distribution
         selectItemsPerPageAdoptionCandidate(100);
@@ -133,7 +130,7 @@ describe(["@tier2"], "Reports filter validations", () => {
 
         // Check element filtered for table Identified risks
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         selectItemsPerPageIdentifiedRisks(100);
 
@@ -153,9 +150,9 @@ describe(["@tier2"], "Reports filter validations", () => {
 
         // Expand article cards
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         expandArticle("Suggested adoption plan");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Assert that no search results are found
         // Check for current landscape donut charts
@@ -164,16 +161,17 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Clear all filters
         clickByText(button, clearAllFilters);
     });
+
     it.skip("Description field validations", function () {
         // Navigate to reports
         selectUserPerspective("Developer");
         clickByText(navMenu, reports);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Enter an existing application description substring and apply it as search filter
         var validSearchInput = applicationsList[0].description;
         applySearchFilter(description, validSearchInput);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // Check element filtered for table Adoption Candidate Distribution
         selectItemsPerPageAdoptionCandidate(100);
@@ -189,7 +187,7 @@ describe(["@tier2"], "Reports filter validations", () => {
 
         // Check element filtered for table Identified risks
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         selectItemsPerPageIdentifiedRisks(100);
 
@@ -206,9 +204,9 @@ describe(["@tier2"], "Reports filter validations", () => {
 
         // Expand article cards
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         expandArticle("Suggested adoption plan");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Assert that no search results are found
         // Check for current landscape donut charts
@@ -231,12 +229,12 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Navigate to reports
         selectUserPerspective("Developer");
         clickByText(navMenu, reports);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // select an existing application business service and apply it as search filter
         var validSearchInput = applicationsList[0].business;
         applySearchFilter(businessService, validSearchInput);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // Check element filtered for table Adoption Candidate Distribution
         selectItemsPerPageAdoptionCandidate(100);
@@ -252,7 +250,7 @@ describe(["@tier2"], "Reports filter validations", () => {
 
         // Check element filtered for table Identified risks
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         selectItemsPerPageIdentifiedRisks(100);
 
@@ -269,12 +267,12 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Navigate to reports
         selectUserPerspective("Developer");
         clickByText(navMenu, reports);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // select an existing application tag and apply it as search filter
         var validSearchInput = applicationsList[0].tags[0];
         applySearchFilter(tag, validSearchInput);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // Check element filtered for table Adoption Candidate Distribution
         selectItemsPerPageAdoptionCandidate(100);
@@ -290,7 +288,7 @@ describe(["@tier2"], "Reports filter validations", () => {
 
         // Check element filtered for table Identified risks
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         selectItemsPerPageIdentifiedRisks(100);
 
@@ -307,24 +305,26 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Navigate to reports
         selectUserPerspective("Developer");
         clickByText(navMenu, reports);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Workaround for filters - Keeping default filter selected for reports filter
         // if it gets changed to tag/business service due to last test case then
         // eq(1) for identified filter text input does not apply
+        cy.log("Selecting filter by name");
         selectFilter("Name");
+        cy.log("Filter by name selected");
 
         // Enter an application name and apply it as search filter
         var validSearchInput = applicationsList[0].name.substring(0, 11);
 
         // Expand table Identified risks
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         selectItemsPerPageIdentifiedRisks(100);
 
         applySearchFilter(name, validSearchInput, true, 1);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // Get list of filtered applications rows and varify
         var applicationsData = getTableColumnData("Application(s)");
@@ -336,7 +336,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         clickByText(button, clearAllFilters);
 
         applySearchFilter(name, applicationsList[0].name, true);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // Get list of filtered applications rows and varify
         var applicationsData = getTableColumnData("Application(s)");
@@ -361,11 +361,11 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Navigate to reports
         selectUserPerspective("Developer");
         clickByText(navMenu, reports);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Expand table Identified risks
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         selectItemsPerPageIdentifiedRisks(100);
 
@@ -374,7 +374,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         var validSearchInput = categoryString.substring(0, 16);
 
         applySearchFilter(category, validSearchInput, true, 1);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // Get list of filtered category rows and varify
         var categoryData = getTableColumnData("Category");
@@ -386,7 +386,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         clickByText(button, clearAllFilters);
 
         applySearchFilter(category, categoryString, true, 1);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // Get list of filtered category rows and varify
         var categoryData = getTableColumnData("Category");
@@ -411,11 +411,11 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Navigate to reports
         selectUserPerspective("Developer");
         clickByText(navMenu, reports);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Expand table Identified risks
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         selectItemsPerPageIdentifiedRisks(100);
 
@@ -423,7 +423,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         var questionString = "How is the application tested?";
         var validSearchInput = questionString.substring(0, 27);
         applySearchFilter(question, validSearchInput, true, 1);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // Get list of filtered questions rows and varify
         var questionsData = getTableColumnData("Question");
@@ -435,7 +435,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         clickByText(button, clearAllFilters);
 
         applySearchFilter(question, questionString, true, 1);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // Get list of filtered questions rows and varify
         var questionsData = getTableColumnData("Question");
@@ -460,11 +460,11 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Navigate to reports
         selectUserPerspective("Developer");
         clickByText(navMenu, reports);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Expand table Identified risks
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         selectItemsPerPageIdentifiedRisks(100);
 
@@ -472,7 +472,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         var answerString = "Not tracked";
         var validSearchInput = answerString.substring(0, 7);
         applySearchFilter(answer, validSearchInput, true, 1);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // Get list of filtered answers rows and varify
         var answersData = getTableColumnData("Answer");
@@ -484,7 +484,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         clickByText(button, clearAllFilters);
 
         applySearchFilter(answer, answerString, true, 1);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // Get list of filtered answers rows and varify
         var answersData = getTableColumnData("Answer");
