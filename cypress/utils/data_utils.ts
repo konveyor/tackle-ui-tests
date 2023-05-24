@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import * as faker from "faker";
-import { CredentialsData, ProxyData, UserData } from "../integration/types/types";
-import { CredentialType, UserCredentials } from "../integration/types/constants";
+import { CredentialsData, ProxyData, UserData } from "../e2e/types/types";
+import { CredentialType, UserCredentials } from "../e2e/types/constants";
 import { writeGpgKey, writeMavenSettingsFile } from "./utils";
 
 export function getFullName(): string {

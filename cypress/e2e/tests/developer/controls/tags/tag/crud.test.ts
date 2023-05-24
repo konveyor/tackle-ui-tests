@@ -1,0 +1,85 @@
+/*
+Copyright © 2021 the Konveyor Contributors (https://konveyor.io/)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+/// <reference types="cypress" />
+
+import {
+    login,
+    exists,
+    expandRowDetails,
+    existsWithinRow,
+    closeRowDetails,
+    notExistsWithinRow,
+    hasToBeSkipped,
+    selectUserPerspective,
+} from "../../../../../../utils/utils";
+import { Tag } from "../../../../../models/developer/controls/tags";
+
+import { tdTag } from "../../../../../types/constants";
+import * as data from "../../../../../../utils/data_utils";
+
+describe(["@tier1"], "Tag CRUD operations", () => {
+    beforeEach("Login", function () {
+        // Prevent hook from running, if the tag is excluded from run
+        if (hasToBeSkipped("@tier1")) return;
+
+        // Perform login
+        login();
+
+        // Interceptors
+        cy.intercept("POST", "/hub/tag*").as("postTag");
+        cy.intercept("GET", "/hub/tag*").as("getTag");
+        cy.intercept("PUT", "/hub/tag/*").as("putTag");
+        cy.intercept("DELETE", "/hub/tag/*").as("deleteTag");
+    });
+
+    it("Tag CRUD", function () {
+        selectUserPerspective("Developer");
+        // Create new tag
+        const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagType());
+        tag.create();
+        cy.wait("@postTag");
+
+        // Assert that created tag exists
+        expandRowDetails(tag.tagType);
+        existsWithinRow(tag.tagType, tdTag, tag.name);
+        closeRowDetails(tag.tagType);
+
+        // Edit the tag and tag type name
+        let updatedTagName = data.getRandomWord(8);
+        let updatedTagTypeName = data.getRandomDefaultTagType();
+        tag.edit({ name: updatedTagName, tagtype: updatedTagTypeName });
+        cy.get("@putTag");
+        cy.wait(2000);
+
+        // Assert that tag type name got updated
+        exists(updatedTagTypeName);
+
+        // Assert that tag name got updated
+        expandRowDetails(updatedTagTypeName);
+        existsWithinRow(updatedTagTypeName, tdTag, updatedTagName);
+        closeRowDetails(updatedTagTypeName);
+
+        // Delete tag
+        tag.delete();
+        cy.get("@deleteTag");
+        cy.wait(2000);
+
+        // Assert that tag got deleted
+        expandRowDetails(tag.tagType);
+        notExistsWithinRow(tag.tagType, tdTag, tag.name);
+        closeRowDetails(tag.tagType);
+    });
+});
