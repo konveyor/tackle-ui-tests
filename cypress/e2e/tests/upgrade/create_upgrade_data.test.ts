@@ -36,7 +36,7 @@ import { Analysis } from "../../models/developer/applicationinventory/analysis";
 import { UpgradeData } from "../../types/types";
 import { CredentialsMaven } from "../../models/administrator/credentials/credentialsMaven";
 
-describe("Creating pre-requisites before an upgrade", { tags: "@pre-upgrade" }, () => {
+describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     let mavenCredentialsUsername: CredentialsMaven;
     let sourceControlUsernameCredentials: CredentialsSourceControlUsername;
 
