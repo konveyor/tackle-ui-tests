@@ -179,7 +179,7 @@
         "target": ["Containerization"],
         "appName": "deps",
         "openSourceLibraries": true,
-        "storyPoints": "2,602"
+        "storyPoints": "2,601"
     },
 
     "analysis_on_example-1-app": {
