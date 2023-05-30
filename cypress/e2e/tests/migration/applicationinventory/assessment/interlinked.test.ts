@@ -47,7 +47,7 @@ import { Assessment } from "../../../../models/migration/applicationinventory/as
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 
-describe("Applications interlinked to tags and business service", () => {
+describe(["@tier3"], "Applications interlinked to tags and business service", () => {
     before("Login and Create Test Data", function () {
         // Perform login
         login();
@@ -76,91 +76,83 @@ describe("Applications interlinked to tags and business service", () => {
         deleteAllTagsAndTagCategories();
     });
 
-    it(
-        "businessservice, tag update and delete dependency on application",
-        { tags: "@tier3" },
-        function () {
-            let businessservicesList = createMultipleBusinessServices(2);
-            let tagList = createMultipleTags(2);
-            let appdata = {
-                name: data.getAppName(),
-                business: businessservicesList[0].name,
-                description: data.getDescription(),
-                tags: [tagList[0].name],
-                comment: data.getDescription(),
-            };
-            const application = new Assessment(appdata);
-            application.create();
-            cy.get("@getApplication");
-            cy.wait(2000);
+    it("businessservice, tag update and delete dependency on application", function () {
+        let businessservicesList = createMultipleBusinessServices(2);
+        let tagList = createMultipleTags(2);
+        let appdata = {
+            name: data.getAppName(),
+            business: businessservicesList[0].name,
+            description: data.getDescription(),
+            tags: [tagList[0].name],
+            comment: data.getDescription(),
+        };
+        const application = new Assessment(appdata);
+        application.create();
+        cy.get("@getApplication");
+        cy.wait(2000);
 
-            application.tagAndCategoryExists(tagList[0].name);
-            // Remove the BS and tags
-            application.removeBusinessService();
-            tagList[0].delete();
+        application.tagAndCategoryExists(tagList[0].name);
+        // Remove the BS and tags
+        application.removeBusinessService();
+        tagList[0].delete();
 
-            // Navigate to application inventory
-            clickByText(navMenu, applicationInventory);
-            cy.wait(100);
-            cy.get("@getApplication");
+        // Navigate to application inventory
+        clickByText(navMenu, applicationInventory);
+        cy.wait(100);
+        cy.get("@getApplication");
 
-            // Assert that deleted business service is removed from application
-            application.getColumnText(businessColumnSelector, "");
-            cy.wait(100);
+        // Assert that deleted business service is removed from application
+        application.getColumnText(businessColumnSelector, "");
+        cy.wait(100);
 
-            // Assert that deleted tag is removed
-            application.tagAndCategoryExists("");
+        // Assert that deleted tag is removed
+        application.tagAndCategoryExists("");
 
-            application.edit({
-                business: businessservicesList[1].name,
-                tags: [tagList[1].name],
-            });
-            cy.get("@getApplication");
+        application.edit({
+            business: businessservicesList[1].name,
+            tags: [tagList[1].name],
+        });
+        cy.get("@getApplication");
 
-            // Assert that business service is updated
-            application.getColumnText(businessColumnSelector, businessservicesList[1].name);
-            cy.wait(1000);
+        // Assert that business service is updated
+        application.getColumnText(businessColumnSelector, businessservicesList[1].name);
+        cy.wait(1000);
 
-            // Assert that created tag exists
-            application.tagAndCategoryExists(tagList[1].name);
-        }
-    );
+        // Assert that created tag exists
+        application.tagAndCategoryExists(tagList[1].name);
+    });
 
-    it(
-        "Stakeholder and stakeholdergroup delete dependency on application",
-        { tags: "@tier3" },
-        function () {
-            //Create application
-            let appdata = {
-                name: data.getAppName(),
-                description: data.getDescription(),
-                comment: data.getDescription(),
-            };
-            const application = new Assessment(appdata);
-            application.create();
-            cy.get("@getApplication");
-            cy.wait(2000);
-            // Perform assessment of application
-            application.perform_assessment(
-                "low",
-                [stakeholdersList[0].name],
-                [stakeholdergroupsList[0].name]
-            );
-            application.verifyStatus("assessment", "Completed");
+    it("Stakeholder and stakeholdergroup delete dependency on application", function () {
+        //Create application
+        let appdata = {
+            name: data.getAppName(),
+            description: data.getDescription(),
+            comment: data.getDescription(),
+        };
+        const application = new Assessment(appdata);
+        application.create();
+        cy.get("@getApplication");
+        cy.wait(2000);
+        // Perform assessment of application
+        application.perform_assessment(
+            "low",
+            [stakeholdersList[0].name],
+            [stakeholdergroupsList[0].name]
+        );
+        application.verifyStatus("assessment", "Completed");
 
-            // Delete the stakeholders, group
-            stakeholdersList[0].delete();
-            stakeholdergroupsList[0].delete();
+        // Delete the stakeholders, group
+        stakeholdersList[0].delete();
+        stakeholdergroupsList[0].delete();
 
-            clickByText(navMenu, applicationInventory);
-            application.selectApplication();
-            application.click_assess_button();
-            click(continueButton);
-            cy.wait(6000);
+        clickByText(navMenu, applicationInventory);
+        application.selectApplication();
+        application.click_assess_button();
+        click(continueButton);
+        cy.wait(6000);
 
-            //Verify that values show blank
-            cy.get(stakeholderSelect).should("have.value", "");
-            cy.get(stakeholdergroupsSelect).should("have.value", "");
-        }
-    );
+        //Verify that values show blank
+        cy.get(stakeholderSelect).should("have.value", "");
+        cy.get(stakeholdergroupsSelect).should("have.value", "");
+    });
 });

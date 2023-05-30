@@ -35,7 +35,7 @@ const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
 let appdata = { name: "Customers" };
 
-describe("Operations after application import", () => {
+describe(["@tier2"], "Operations after application import", () => {
     before("Login and create test data", function () {
         // Perform login
         login();
@@ -70,7 +70,7 @@ describe("Operations after application import", () => {
 
     it(
         "Perform application assessment after a successful application import",
-        { tags: ["@tier2", "@dc"] },
+        { tags: "@dc" },
         function () {
             const application = new Assessment(appdata);
 
@@ -81,24 +81,20 @@ describe("Operations after application import", () => {
         }
     );
 
-    it(
-        "Perform application review after a successful application import",
-        { tags: ["@tier2"] },
-        function () {
-            // Automates https://polarion.engineering.redhat.com/polarion/redirect/project/MTAPathfinder/workitem?id=MTA-295
-            const application = new Assessment(appdata);
+    it("Perform application review after a successful application import", function () {
+        // Automates https://polarion.engineering.redhat.com/polarion/redirect/project/MTAPathfinder/workitem?id=MTA-295
+        const application = new Assessment(appdata);
 
-            // Perform application review
-            application.perform_review("low");
-            cy.wait(2000);
-            application.verifyStatus("review", "Completed");
+        // Perform application review
+        application.perform_review("low");
+        cy.wait(2000);
+        application.verifyStatus("review", "Completed");
 
-            // Delete application
-            application.delete();
-            cy.wait(2000);
-            notExists(application.name);
-        }
-    );
+        // Delete application
+        application.delete();
+        cy.wait(2000);
+        notExists(application.name);
+    });
 
     after("Perform test data clean up", function () {
         // Delete the existing application rows before deleting business service(s)
