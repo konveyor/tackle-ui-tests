@@ -42,7 +42,7 @@ const businessService = new BusinessServices("BS_tag_test");
 const filePath = "app_import/csv/";
 var applicationsList: Array<Assessment> = [];
 
-describe("Application import operations", () => {
+describe(["@tier2"], "Application import operations", () => {
     before("Login and create test data", function () {
         // Perform login
         login();
@@ -65,7 +65,7 @@ describe("Application import operations", () => {
         deleteApplicationTableRows();
     });
 
-    it("Valid applications import", { tags: "@tier1" }, function () {
+    it("Valid applications import", function () {
         Application.open();
 
         // Import valid csv
@@ -85,7 +85,7 @@ describe("Application import operations", () => {
         verifyAppImport(fileName, "Completed", 5, 0);
     });
 
-    it("Duplicate applications import", { tags: "@tier2" }, function () {
+    it("Duplicate applications import", function () {
         Application.open();
         cy.wait("@getApplication");
 
@@ -110,7 +110,7 @@ describe("Application import operations", () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Applications import for non existing tags", { tags: "@tier2" }, function () {
+    it("Applications import for non existing tags", function () {
         businessService.create();
         exists(businessService.name);
         Application.open();
@@ -135,7 +135,7 @@ describe("Application import operations", () => {
         notExists(businessService.name);
     });
 
-    it("Applications import for non existing business service", { tags: "@tier2" }, function () {
+    it("Applications import for non existing business service", function () {
         Application.open();
         cy.wait("@getApplication");
 
@@ -155,37 +155,33 @@ describe("Application import operations", () => {
         verifyImportErrorMsg("BusinessService 'Finance' could not be found");
     });
 
-    it(
-        "Applications import with minimum required field(s) and empty row",
-        { tags: "@tier2" },
-        function () {
-            Application.open();
-            cy.wait("@getApplication");
+    it("Applications import with minimum required field(s) and empty row", function () {
+        Application.open();
+        cy.wait("@getApplication");
 
-            // Import csv with an empty row between two valid rows having minimum required field(s)
-            const fileName = "mandatory_and_empty_row_21.csv";
-            importApplication(filePath + fileName);
-            cy.wait(4 * SEC);
+        // Import csv with an empty row between two valid rows having minimum required field(s)
+        const fileName = "mandatory_and_empty_row_21.csv";
+        importApplication(filePath + fileName);
+        cy.wait(4 * SEC);
 
-            /* // Verify imported apps are visible in table
+        /* // Verify imported apps are visible in table
             exists("Import-app-5");
             exists("Import-app-6");
             // ToDO: need to modify exists method doesn't work here
             */
 
-            // Open application imports page
-            openManageImportsPage();
+        // Open application imports page
+        openManageImportsPage();
 
-            // Verify import applications page shows correct information
-            verifyAppImport(fileName, "Completed", 2, 1);
+        // Verify import applications page shows correct information
+        verifyAppImport(fileName, "Completed", 2, 1);
 
-            // Verify the error report message
-            openErrorReport();
-            verifyImportErrorMsg("Empty Record Type");
-        }
-    );
+        // Verify the error report message
+        openErrorReport();
+        verifyImportErrorMsg("Empty Record Type");
+    });
 
-    it("Applications import having same name with spaces", { tags: "@tier2" }, function () {
+    it("Applications import having same name with spaces", function () {
         Application.open();
         cy.wait("@getApplication");
 
@@ -205,11 +201,8 @@ describe("Application import operations", () => {
         verifyImportErrorMsg("UNIQUE constraint failed: Application.Name");
     });
 
-    it(
-        "Applications import having description and comments exceeding allowed limits",
-        { tags: "@tier2" },
-        function () {
-            /*
+    it("Applications import having description and comments exceeding allowed limits", function () {
+        /*
             // Unresolved 2.1 bug - https://issues.redhat.com/browse/TACKLE-738
             selectUserPerspective("Developer");
             clickByText(navMenu, applicationInventory);
@@ -226,10 +219,9 @@ describe("Application import operations", () => {
             // Verify import applications page shows correct information
             verifyAppImport(fileName, "Completed", 0, 2);
         */
-        }
-    );
+    });
 
-    it("Applications import for invalid csv schema", { tags: "@tier2" }, function () {
+    it("Applications import for invalid csv schema", function () {
         // Impacted by bug - https://issues.redhat.com/browse/TACKLE-320
         Application.open();
         cy.wait("@getApplication");
@@ -252,7 +244,7 @@ describe("Application import operations", () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Applications import for with inavlid record type", { tags: "@tier2" }, function () {
+    it("Applications import for with inavlid record type", function () {
         // The only valid record types for records in a CSV file are 1(application) or 2(dependency).
         // In this test, we import a CSV file that has records with a record type that's neither 1 nor 2.
         // Automates https://issues.redhat.com/browse/TACKLE-634
