@@ -72,6 +72,7 @@ import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
 
 export class Application {
     name: string;
+    owner?: string;
     business?: string;
     description?: string;
     tags?: Array<string>;

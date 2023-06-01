@@ -76,6 +76,8 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         generalConfig.disableDownloadHtml();
         generalConfig.disableDownloadCsv();
 
+        let vaaaaa = "potato";
+
         writeGpgKey("abcde");
     });
 
