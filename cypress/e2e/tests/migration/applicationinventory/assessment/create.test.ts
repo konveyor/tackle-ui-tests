@@ -21,17 +21,16 @@ import {
     inputText,
     exists,
     notExists,
-    hasToBeSkipped,
     preservecookies,
     createMultipleBusinessServices,
     selectFormItems,
     deleteApplicationTableRows,
     deleteAllBusinessServices,
     getRandomApplicationData,
-    click,
     createMultipleApplications,
     application_inventory_kebab_menu,
     navigate_to_application_inventory,
+    createMultipleStakeholders,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -45,24 +44,26 @@ import {
     applicationDescriptionInput,
     applicationNameInput,
     applicationBusinessServiceSelect,
-    actionButton,
+    applicationContributorsInput,
 } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
-var businessservicesList: Array<BusinessServices> = [];
-var applicationList: Array<Assessment> = [];
+let businessservicesList: Array<BusinessServices> = [];
+let applicationList: Array<Assessment> = [];
+let stakeHolders: Stakeholders[];
 
 describe(["@tier2"], "Application validations", () => {
     before("Login", function () {
         // Perform login
         login();
         deleteApplicationTableRows();
-        applicationList = createMultipleApplications(11);
         businessservicesList = createMultipleBusinessServices(1);
+        stakeHolders = createMultipleStakeholders(2);
     });
 
     beforeEach("Persist session", function () {
@@ -101,6 +102,16 @@ describe(["@tier2"], "Application validations", () => {
         // Validate the create button is enabled with valid inputs
         inputText(applicationNameInput, data.getFullName());
         cy.get(commonView.submitButton).should("not.be.disabled");
+
+        // Contributors Validation, Polarion TC 331
+        inputText(applicationContributorsInput, stakeHolders[0].name);
+        cy.get("button").contains(stakeHolders[0].name).click();
+        inputText(applicationContributorsInput, stakeHolders[1].name);
+        cy.get("button").contains(stakeHolders[1].name).click();
+        cy.get(applicationContributorsInput)
+            .parent()
+            .should("contain", stakeHolders[0].name)
+            .and("contain", stakeHolders[1].name);
 
         // Close the form
         cy.get(commonView.closeButton).click();
@@ -150,6 +161,7 @@ describe(["@tier2"], "Application validations", () => {
     });
 
     it("Bulk deletion of applications - Select page ", function () {
+        applicationList = createMultipleApplications(11);
         navigate_to_application_inventory();
         // Click dropdown toggle button to make 'Select page' selection.
         cy.get("button[aria-label='Select']").click();
