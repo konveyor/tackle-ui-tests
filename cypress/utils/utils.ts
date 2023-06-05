@@ -1035,7 +1035,7 @@ export function deleteByList<T extends Deletable>(array: T[]): void {
     });
 }
 
-export function deleteAllStakeholders(cancel = false): void {
+export function deleteAllStakeholders(): void {
     Stakeholders.openList();
     cy.get("table[aria-label='Stakeholders table']", { timeout: 2 * SEC })
         .next()
