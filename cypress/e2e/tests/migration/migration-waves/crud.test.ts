@@ -1,0 +1,78 @@
+import {
+    checkSuccessAlert,
+    createMultipleStakeholderGroups,
+    createMultipleStakeholders,
+    deleteAllStakeholderGroups,
+    deleteAllStakeholders,
+    login,
+} from "../../../../utils/utils";
+import { SEC } from "../../../types/constants";
+import * as data from "../../../../utils/data_utils";
+import { Stakeholders } from "../../../models/migration/controls/stakeholders";
+import { Stakeholdergroups } from "../../../models/migration/controls/stakeholdergroups";
+import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
+import { successAlertMessage } from "../../../views/common.view";
+
+let stakeHolders: Stakeholders[];
+let stakeHolderGroups: Stakeholdergroups[];
+// Automates Polarion TC 332
+describe(["@tier1"], "Migration Waves CRUD operations", () => {
+    before("Create test data", () => {
+        //login();
+        stakeHolders = createMultipleStakeholders(2);
+        stakeHolderGroups = createMultipleStakeholderGroups(2);
+    });
+
+    beforeEach("Login", function () {
+        cy.intercept("GET", "/hub/migrationwaves*").as("getWave");
+        cy.intercept("POST", "/hub/migrationwaves*").as("postWave");
+        cy.intercept("PUT", "/hub/migrationwaves*/*").as("putWave");
+        cy.intercept("DELETE", "/hub/migrationwaves*/*").as("deleteWave");
+    });
+
+    it("Migration Wave CRUD", function () {
+        const now = new Date();
+        const end = new Date(now.getTime());
+        end.setFullYear(end.getFullYear() + 1);
+
+        const migrationWave = new MigrationWave(
+            data.getRandomWord(8),
+            now,
+            end,
+            stakeHolders,
+            stakeHolderGroups
+        );
+
+        // This will fail as of 2023-06-06 due to bug 706
+        migrationWave.create();
+        cy.get("td", { timeout: 12 * SEC }).should("contain", migrationWave.name);
+        cy.wait("@postWave");
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success Alert:Migration wave ${migrationWave.name} was successfully created.`
+        );
+
+        const newName = data.getRandomWord(8);
+        migrationWave.edit({ name: newName });
+        checkSuccessAlert(
+            successAlertMessage,
+            "Success Alert:Migration wave was successfully saved."
+        );
+        cy.wait("@putWave");
+        cy.get("td", { timeout: 12 * SEC }).should("contain", newName);
+        migrationWave.name = newName;
+
+        migrationWave.delete();
+        cy.wait("@deleteWave");
+        cy.get("td", { timeout: 12 * SEC }).should("not.contain", newName);
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success Alert:Migration wave ${migrationWave.name} was successfully deleted.`
+        );
+    });
+
+    after("Clear test data", function () {
+        deleteAllStakeholders();
+        deleteAllStakeholderGroups();
+    });
+});

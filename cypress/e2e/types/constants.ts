@@ -18,6 +18,7 @@ export const applicationName = "Application name";
 export const application = "Application";
 export const applicationInventory = "Application inventory";
 export const customMigrationTargets = "Custom migration targets";
+export const migrationWaves = "Migration waves";
 export const assess = "Assess";
 export const assessment = "Assessment";
 export const analysis = "Analysis";
