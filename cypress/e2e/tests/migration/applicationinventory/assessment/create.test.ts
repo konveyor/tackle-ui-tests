@@ -55,7 +55,7 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 
 let businessservicesList: Array<BusinessServices> = [];
 let applicationList: Array<Assessment> = [];
-let stakeHolders: Stakeholders[];
+let stakeHoldersList: Stakeholders[];
 
 describe(["@tier2"], "Application validations", () => {
     before("Login", function () {
@@ -63,7 +63,7 @@ describe(["@tier2"], "Application validations", () => {
         login();
         deleteApplicationTableRows();
         businessservicesList = createMultipleBusinessServices(1);
-        stakeHolders = createMultipleStakeholders(2);
+        stakeHoldersList = createMultipleStakeholders(2);
     });
 
     beforeEach("Persist session", function () {
@@ -104,14 +104,14 @@ describe(["@tier2"], "Application validations", () => {
         cy.get(commonView.submitButton).should("not.be.disabled");
 
         // Contributors Validation, Polarion TC 331
-        inputText(applicationContributorsInput, stakeHolders[0].name);
-        cy.get("button").contains(stakeHolders[0].name).click();
-        inputText(applicationContributorsInput, stakeHolders[1].name);
-        cy.get("button").contains(stakeHolders[1].name).click();
+        inputText(applicationContributorsInput, stakeHoldersList[0].name);
+        cy.get("button").contains(stakeHoldersList[0].name).click();
+        inputText(applicationContributorsInput, stakeHoldersList[1].name);
+        cy.get("button").contains(stakeHoldersList[1].name).click();
         cy.get(applicationContributorsInput)
             .parent()
-            .should("contain", stakeHolders[0].name)
-            .and("contain", stakeHolders[1].name);
+            .should("contain", stakeHoldersList[0].name)
+            .and("contain", stakeHoldersList[1].name);
 
         // Close the form
         cy.get(commonView.closeButton).click();
