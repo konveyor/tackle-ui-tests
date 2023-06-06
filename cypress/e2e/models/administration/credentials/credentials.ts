@@ -15,6 +15,7 @@ import {
     enumKeys,
     clearAllFilters,
     doesExistText,
+    isButtonEnabled,
 } from "../../../../utils/utils";
 import {
     button,
@@ -115,8 +116,9 @@ export class Credentials {
         validateTooLongInput(passwordInput);
     }
 
-    protected fillName(): void {
+    protected fillName(edit = false): void {
         inputText(credentialNameInput, this.name);
+        if (edit) isButtonEnabled("#identity-form-submit", true);
     }
 
     protected validateName(name: string) {

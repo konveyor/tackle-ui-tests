@@ -118,7 +118,7 @@ export function getRandomCredentialsData(
     let password = getRandomWord(6);
     let user = getRandomWord(6);
     let email = getEmail();
-    let token = getRandomWord(6);
+    let token = getRandomWord(20);
 
     if (useRealUser) {
         user = Cypress.env("git_user");

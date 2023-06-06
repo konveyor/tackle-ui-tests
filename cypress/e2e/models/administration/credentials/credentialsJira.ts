@@ -60,7 +60,7 @@ export class CredentialsJira extends Credentials {
         const oldValues = this.storeOldValues();
         super.edit(null);
         this.init(credentialsJiraData);
-        this.fillName();
+        this.fillName(true);
         this.fillDescription();
         this.fillEmail();
         this.fillToken();
