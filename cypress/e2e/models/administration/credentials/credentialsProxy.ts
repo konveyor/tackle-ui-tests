@@ -10,12 +10,12 @@ import {
     validateValue,
 } from "../../../../utils/utils";
 import { CredentialsProxyData } from "../../../types/types";
-import { button } from "../../../types/constants";
+import { button, CredentialType } from "../../../types/constants";
 import { selectType, usernameInput } from "../../../views/credentials.view";
 import { userPasswordInput } from "../../../views/login.view";
 
 export class CredentialsProxy extends Credentials {
-    type = "Proxy";
+    type = CredentialType.proxy;
     username = "";
     password = "";
 
@@ -62,18 +62,9 @@ export class CredentialsProxy extends Credentials {
     }
 
     edit(credentialsProxyData: CredentialsProxyData, toBeCanceled = false) {
-        if (!toBeCanceled) {
-            const { name, description, username, password } = credentialsProxyData;
-            cy.log(`Name: ${name}`);
-            cy.log(`Description: ${description}`);
-            cy.log(`Username: ${username}`);
-            cy.log(`Password: ${password}`);
-        }
         const oldValues = this.storeOldValues();
         super.edit(oldValues);
-        // if (!toBeCanceled) {
         this.init(credentialsProxyData);
-        // }
         this.fillName();
         this.fillDescription();
         this.fillUsername();
