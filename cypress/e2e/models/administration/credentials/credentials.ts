@@ -49,6 +49,7 @@ import {
     confirmButton,
     cancelButton,
     closeSuccessNotification,
+    submitButton,
 } from "../../../views/common.view";
 import { selectType } from "../../../views/credentials.view";
 import * as commonView from "../../../views/common.view";
@@ -116,9 +117,8 @@ export class Credentials {
         validateTooLongInput(passwordInput);
     }
 
-    protected fillName(edit = false): void {
+    protected fillName(): void {
         inputText(credentialNameInput, this.name);
-        if (edit) isButtonEnabled("#identity-form-submit", true);
     }
 
     protected validateName(name: string) {

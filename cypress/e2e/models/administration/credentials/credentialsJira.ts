@@ -2,16 +2,16 @@ import { Credentials } from "./credentials";
 import { CredentialsJiraData } from "../../../types/types";
 import {
     cancelForm,
-    click,
-    clickByText,
     exists,
     inputText,
+    isButtonEnabled,
     notExists,
     submitForm,
     validateValue,
 } from "../../../../utils/utils";
 import { passwordInput, usernameInput } from "../../../views/credentials.view";
 import { button, CredentialType } from "../../../types/constants";
+import { submitButton } from "../../../views/common.view";
 
 export class CredentialsJira extends Credentials {
     type = CredentialType.jira;
@@ -60,10 +60,14 @@ export class CredentialsJira extends Credentials {
         const oldValues = this.storeOldValues();
         super.edit(null);
         this.init(credentialsJiraData);
-        this.fillName(true);
+        this.fillName();
+        isButtonEnabled(submitButton, true);
         this.fillDescription();
+        isButtonEnabled(submitButton, true);
         this.fillEmail();
+        isButtonEnabled(submitButton, true);
         this.fillToken();
+        isButtonEnabled(submitButton, true);
         if (!toBeCanceled) {
             // Edit action is confirmed, submitting form and validating data is updated
             submitForm();

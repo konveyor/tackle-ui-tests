@@ -118,14 +118,14 @@ export function getRandomCredentialsData(
     let password = getRandomWord(6);
     let user = getRandomWord(6);
     let email = getEmail();
+    //TODO: This value is set to 20 to avoid a bug. Need to be updated to 200 when bug is fixed
     let token = getRandomWord(20);
 
-    if (useRealUser) {
-        user = Cypress.env("git_user");
-        password = Cypress.env("git_password");
-    }
-
     if (type === CredentialType.proxy) {
+        if (useRealUser) {
+            user = "redhat";
+            password = "redhat";
+        }
         return {
             type: type,
             name: getRandomWord(6),
@@ -162,6 +162,10 @@ export function getRandomCredentialsData(
             };
         } else {
             // Source Control - username and password
+            if (useRealUser) {
+                user = Cypress.env("git_user");
+                password = Cypress.env("git_password");
+            }
             return {
                 type: type,
                 name: getRandomWord(6),
