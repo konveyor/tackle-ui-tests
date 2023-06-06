@@ -1035,29 +1035,26 @@ export function deleteByList<T extends Deletable>(array: T[]): void {
     });
 }
 
-export function deleteAllStakeholders(cancel = false): void {
+export function deleteAllStakeholders(): void {
     Stakeholders.openList();
-    selectItemsPerPage(100);
-    cy.wait(0.5 * SEC);
-    cy.get(commonView.appTable)
+    cy.get("table[aria-label='Stakeholders table']", { timeout: 2 * SEC })
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
-                    .each(($tableRow) => {
-                        let name = $tableRow.find("td[data-label=Email]").text();
-                        cy.get(tdTag)
-                            .contains(name)
-                            .parent(trTag)
-                            .within(() => {
-                                click(commonView.deleteButton);
-                                cy.wait(800);
+                selectItemsPerPage(100);
+                cy.get(commonView.deleteButton).then(($elems) => {
+                    const elemsLength = $elems.length;
+                    for (let i = 0; i < elemsLength; i++) {
+                        cy.get(commonView.deleteButton)
+                            .first()
+                            .click()
+                            .then((_) => {
+                                cy.wait(0.5 * SEC);
+                                click(commonView.confirmButton);
+                                cy.wait(SEC);
                             });
-                        click(commonView.confirmButton);
-                        cy.wait(4000);
-                    });
+                    }
+                });
             }
         });
 }
