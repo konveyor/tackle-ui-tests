@@ -110,7 +110,7 @@ export function getDefaultTagCategories(): string[] {
 }
 
 /**
- * Calculates the square root of a number.
+ * Generates credentials of defined type and sends it back
  *
  * @param type is type of credentials to be generated.
  * @param userCred defines type of source credentials. Optional.
