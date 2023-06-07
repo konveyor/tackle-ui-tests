@@ -112,17 +112,17 @@ export function getDefaultTagCategories(): string[] {
 export function getRandomCredentialsData(
     type: string,
     userCred?: string,
-    useRealUser = false,
+    useTestingAccount = false,
     url?: string
 ): CredentialsData {
     let password = getRandomWord(6);
     let user = getRandomWord(6);
     let email = getEmail();
-    //TODO: This value is set to 20 to avoid a bug. Need to be updated to 200 when bug is fixed
+    //TODO: This value is set to 20 to avoid a bug https://issues.redhat.com/browse/MTA-717. Need to be updated to 200 when bug is fixed
     let token = getRandomWord(20);
 
     if (type === CredentialType.proxy) {
-        if (useRealUser) {
+        if (useTestingAccount) {
             user = "redhat";
             password = "redhat";
         }
@@ -136,7 +136,7 @@ export function getRandomCredentialsData(
     }
 
     if (type === CredentialType.jira) {
-        if (useRealUser) {
+        if (useTestingAccount) {
             email = Cypress.env("jira_email");
             token = Cypress.env("jira_token");
         }
@@ -162,7 +162,7 @@ export function getRandomCredentialsData(
             };
         } else {
             // Source Control - username and password
-            if (useRealUser) {
+            if (useTestingAccount) {
                 user = Cypress.env("git_user");
                 password = Cypress.env("git_password");
             }
@@ -176,7 +176,7 @@ export function getRandomCredentialsData(
         }
     } else {
         // Maven credentials
-        if (useRealUser) {
+        if (useTestingAccount) {
             if (url) {
                 writeMavenSettingsFile(user, password, url);
             } else {
