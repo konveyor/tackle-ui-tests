@@ -34,11 +34,20 @@ export type CredentialsMavenData = {
     settingFile?: any;
 };
 
+export type CredentialsJiraData = {
+    type: string;
+    name?: string;
+    description?: string;
+    email?: string;
+    token?: string;
+};
+
 export type CredentialsData =
     | CredentialsProxyData
     | CredentialsSourceControlData
     | CredentialsMavenData
-    | CredentialsSourceControlPrivateKeyData;
+    | CredentialsSourceControlPrivateKeyData
+    | CredentialsJiraData;
 
 export type applicationData = {
     name: string;
