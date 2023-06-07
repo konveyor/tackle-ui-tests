@@ -31,6 +31,7 @@ import {
     application_inventory_kebab_menu,
     navigate_to_application_inventory,
     createMultipleStakeholders,
+    deleteAllStakeholders,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -78,6 +79,7 @@ describe(["@tier2"], "Application validations", () => {
     after("Perform test data clean up", function () {
         deleteApplicationTableRows();
         deleteAllBusinessServices();
+        deleteAllStakeholders();
     });
 
     it("Application field validations", function () {
@@ -106,12 +108,22 @@ describe(["@tier2"], "Application validations", () => {
         // Contributors Validation, Polarion TC 331
         inputText(applicationContributorsInput, stakeHoldersList[0].name);
         cy.get("button").contains(stakeHoldersList[0].name).click();
+
         inputText(applicationContributorsInput, stakeHoldersList[1].name);
         cy.get("button").contains(stakeHoldersList[1].name).click();
+
         cy.get(applicationContributorsInput)
             .parent()
             .should("contain", stakeHoldersList[0].name)
             .and("contain", stakeHoldersList[1].name);
+
+        cy.get(applicationContributorsInput)
+            .parent()
+            .contains("span", stakeHoldersList[0].name)
+            .next("button")
+            .click();
+
+        cy.get(applicationContributorsInput).parent().and("contain", stakeHoldersList[1].name);
 
         // Close the form
         cy.get(commonView.closeButton).click();
