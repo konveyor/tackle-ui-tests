@@ -109,6 +109,15 @@ export function getDefaultTagCategories(): string[] {
     ];
 }
 
+/**
+ * Calculates the square root of a number.
+ *
+ * @param type is type of credentials to be generated.
+ * @param userCred defines type of source credentials. Optional.
+ * @param useTestingAccount defines if returned user credentials are random (when false) or real test user (when true)
+ * @param url is used for Maven credentials type. Optional.
+ * @returns CredentialsData of selected type.
+ */
 export function getRandomCredentialsData(
     type: string,
     userCred?: string,
