@@ -5,7 +5,7 @@ export class Metrics {
 
     constructor() {
         let splitted = Cypress.env("tackleUrl").split("//");
-        this.metricsUrl = "http://metrics-" + splitted[1] + "metrics";
+        this.metricsUrl = "http://metrics-" + splitted[1] + "/metrics";
     }
 
     validateApplicationsInventoried(value: number): void {
@@ -13,5 +13,12 @@ export class Metrics {
         cy.request(this.metricsUrl)
             .its("body")
             .should("contain", `konveyor_applications_inventoried ${value}`);
+    }
+
+    validateAssessmentsInitiated(value: number): void {
+        cy.wait(30 * SEC);
+        cy.request(this.metricsUrl)
+            .its("body")
+            .should("contain", `konveyor_assessments_initiated_total ${value}`);
     }
 }
