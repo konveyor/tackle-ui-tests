@@ -46,6 +46,7 @@ import {
     applicationNameInput,
     applicationBusinessServiceSelect,
     applicationContributorsInput,
+    applicationOwnerInput,
 } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
@@ -105,6 +106,16 @@ describe(["@tier2"], "Application validations", () => {
         inputText(applicationNameInput, data.getFullName());
         cy.get(commonView.submitButton).should("not.be.disabled");
 
+        // Owner validation, Polarian TC 330
+        inputText(applicationOwnerInput, stakeHoldersList[0].name);
+        cy.get("button").contains(stakeHoldersList[0].name).click();
+
+        cy.get(applicationOwnerInput)
+            .invoke("val") 
+            .then((value) => {
+             expect(value).to.contain(stakeHoldersList[0].name); 
+        });
+      
         // Contributors Validation, Polarion TC 331
         inputText(applicationContributorsInput, stakeHoldersList[0].name);
         cy.get("button").contains(stakeHoldersList[0].name).click();
@@ -124,6 +135,8 @@ describe(["@tier2"], "Application validations", () => {
             .click();
 
         cy.get(applicationContributorsInput).parent().and("contain", stakeHoldersList[1].name);
+
+        
 
         // Close the form
         cy.get(commonView.closeButton).click();

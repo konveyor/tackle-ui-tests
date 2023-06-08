@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 export const itemsPerPageToggleButton = "button[aria-label='Items per page']";
-export const submitButton = "#identity-form-submit";
+export const submitButton = "button[aria-label=submit]";
 export const cancelButton = "button[aria-label=cancel]";
 export const closeButton = "button[aria-label=Close]";
 export const confirmButton = "button[aria-label=confirm]";

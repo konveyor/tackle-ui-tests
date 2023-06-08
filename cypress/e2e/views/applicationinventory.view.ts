@@ -19,6 +19,7 @@ export const applicationDescriptionInput = "input[name=description]";
 export const applicationBusinessServiceSelect = "[placeholder='Select a business service']";
 export const applicationContributorsInput =
     "#contributors-select-toggle-select-multi-typeahead-typeahead";
+export const applicationOwnerInput = "#owner-toggle-select-typeahead";
 export const repoTypeSelect = "button[id='repo-type-toggle']";
 export const applicationTagsSelect = "[placeholder='Select a tag(s)']";
 export const applicationCommentInput = "textarea[name=comments]";
