@@ -4,11 +4,9 @@ import {
     inputText,
     selectItemsPerPage,
     selectUserPerspective,
-    uploadXml,
 } from "../../../../utils/utils";
 import {
     createNewButton,
-    customMigrationTargets,
     button,
     SEC,
     deleteAction,
@@ -63,7 +61,7 @@ export class MigrationWave {
 
     public create() {
         MigrationWave.openNewForm();
-        MigrationWave.fillForm(this);
+        this.fillForm(this);
 
         cy.get(MigrationWaveView.submitButton, { timeout: 10 * SEC })
             .should("be.enabled")
@@ -75,7 +73,7 @@ export class MigrationWave {
         this.expandActionsMenu();
         cy.contains(editAction).click();
 
-        MigrationWave.fillForm(updateValues);
+        this.fillForm(updateValues);
 
         cy.get(MigrationWaveView.submitButton, { timeout: 10 * SEC })
             .should("be.enabled")
@@ -103,18 +101,59 @@ export class MigrationWave {
         cy.get("button").contains(stakeHolderGroupName).click();
     }
 
-    private static fillForm(values: Partial<MigrationWave>) {
+    /**
+     * This method should NOT be used to do assertions, if an invalid date is passed, it'll throw an exception
+     * It selects the date using the picker because it can't be manually entered right now due to bug MTA-706
+     * @param date
+     */
+    public fillStartDate(date: Date) {
+        const nowTime = new Date().setHours(0, 0, 0, 0);
+        date.setHours(0, 0, 0, 0);
+        if (nowTime >= date.getTime()) {
+            expect(
+                true,
+                "Start Date should be greater than actual Date. If you want to assert the validation, enter the date manually"
+            ).to.eq(false);
+        }
+
+        const currentStartDate = this.startDate ? this.startDate : new Date();
+        const currentMonth = currentStartDate.toLocaleString("en-us", { month: "long" });
+        cy.get(MigrationWaveView.startDateInput).next("button").click();
+        MigrationWave.selectDateFromDatePicker(date, currentMonth);
+    }
+
+    /**
+     * This method should NOT be used to do assertions, if an invalid date is passed, it'll throw an exception
+     * It selects the date using the picker because it can't be manually entered right now due to bug MTA-706
+     * @param date
+     */
+    public fillEndDate(date: Date) {
+        date.setHours(0, 0, 0, 0);
+        if (this.startDate.setHours(0, 0, 0, 0) >= date.getTime()) {
+            expect(
+                true,
+                "End Date should be greater than Start Date. If you want to assert the validation, enter the date manually"
+            ).to.eq(false);
+        }
+
+        const currentEndDate = this.endDate ? this.endDate : new Date();
+        const currentMonth = currentEndDate.toLocaleString("en-us", { month: "long" });
+        cy.get(MigrationWaveView.endDateInput).next("button").click();
+        MigrationWave.selectDateFromDatePicker(date, currentMonth);
+    }
+
+    private fillForm(values: Partial<MigrationWave>) {
         if (values.name) {
             MigrationWave.fillName(values.name);
         }
 
-        /*if (values.startDate) {
-      inputText(MigrationWaveView.startDateInput, values.startDate.toLocaleDateString());
-    }
+        if (values.startDate) {
+            this.fillStartDate(values.startDate);
+        }
 
-    if (values.endDate) {
-      inputText(MigrationWaveView.endDateInput, values.endDate.toLocaleDateString());
-    }*/
+        if (values.endDate) {
+            this.fillEndDate(values.endDate);
+        }
 
         if (values.stakeHolders) {
             values.stakeHolders.forEach((stakeHolder) =>
@@ -127,26 +166,6 @@ export class MigrationWave {
                 MigrationWave.fillStakeHolderGroup(stakeHolderGroups.name)
             );
         }
-        /*
-        if (values.description) {
-          inputText(CustomMigrationTargetView.descriptionInput, values.description);
-        }
-
-        if (values.imagePath) {
-          CustomMigrationTarget.uploadImage(values.imagePath);
-        }
-
-        if (values.ruleTypeData) {
-          if (values.ruleTypeData.type === CustomRuleType.Manual) {
-            CustomMigrationTarget.fillManualForm(values.ruleTypeData);
-          }
-
-          if (values.ruleTypeData.type === CustomRuleType.Repository) {
-            click(CustomMigrationTargetView.retrieveFromARepositoryRadio);
-            CustomMigrationTarget.fillRepositoryForm(values.ruleTypeData);
-          }
-        }
-        */
     }
 
     private expandActionsMenu() {
@@ -159,5 +178,12 @@ export class MigrationWave {
                     }
                 });
             });
+    }
+
+    private static selectDateFromDatePicker(date: Date, currentMonth: string) {
+        cy.get(MigrationWaveView.yearInput).type(`{selectAll}${date.getFullYear()}`);
+        cy.contains("button", currentMonth).click();
+        cy.contains("li", date.toLocaleString("en-us", { month: "long" })).click();
+        cy.contains("button:not([disabled])", `${date.getDate()}`).first().click();
     }
 }

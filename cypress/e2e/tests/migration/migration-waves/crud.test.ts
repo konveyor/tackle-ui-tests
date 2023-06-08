@@ -15,10 +15,11 @@ import { successAlertMessage } from "../../../views/common.view";
 
 let stakeHolders: Stakeholders[];
 let stakeHolderGroups: Stakeholdergroups[];
+
 // Automates Polarion TC 332
 describe(["@tier1"], "Migration Waves CRUD operations", () => {
     before("Create test data", () => {
-        //login();
+        login();
         stakeHolders = createMultipleStakeholders(2);
         stakeHolderGroups = createMultipleStakeholderGroups(2);
     });
@@ -32,6 +33,8 @@ describe(["@tier1"], "Migration Waves CRUD operations", () => {
 
     it("Migration Wave CRUD", function () {
         const now = new Date();
+        now.setDate(now.getDate() + 1);
+
         const end = new Date(now.getTime());
         end.setFullYear(end.getFullYear() + 1);
 
@@ -43,7 +46,6 @@ describe(["@tier1"], "Migration Waves CRUD operations", () => {
             stakeHolderGroups
         );
 
-        // This will fail as of 2023-06-06 due to bug 706
         migrationWave.create();
         cy.get("td", { timeout: 12 * SEC }).should("contain", migrationWave.name);
         cy.wait("@postWave");

@@ -6,4 +6,5 @@ export enum MigrationWaveView {
     stakeHoldersInput = "#stakeholders-toggle-select-multi-typeahead-typeahead",
     stakeHolderGroupsInput = "#stakeholder-groups-toggle-select-multi-typeahead-typeahead",
     actionsButton = "button[aria-label='Actions']",
+    yearInput = "input[aria-label='Select year']",
 }
