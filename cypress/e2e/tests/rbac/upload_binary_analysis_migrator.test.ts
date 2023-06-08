@@ -20,7 +20,6 @@ import {
     deleteApplicationTableRows,
     getRandomAnalysisData,
     getRandomApplicationData,
-    hasToBeSkipped,
     login,
     logout,
     resetURL,
@@ -36,11 +35,10 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
     let userMigrator = new UserMigrator(getRandomUserData());
 
     before("Login", function () {
-        // Prevent hook from running, if the tag is excluded from run
-        if (hasToBeSkipped("@tier3")) return;
-
         User.loginKeycloakAdmin();
         userMigrator.create();
+        // Perform login as admin user to be able to create all required instances
+        login();
     });
 
     beforeEach("Persist session", function () {
@@ -52,12 +50,6 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
             this.analysisData = analysisData;
         });
 
-        // Interceptors
-        cy.intercept("POST", "/hub/application*").as("postApplication");
-        cy.intercept("GET", "/hub/application*").as("getApplication");
-
-        // Perform login as admin user to be able to create all required instances
-        login();
         deleteApplicationTableRows();
     });
 
@@ -67,7 +59,6 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
             getRandomAnalysisData(this.analysisData[4])
         );
         application.create();
-        cy.wait("@getApplication");
         cy.wait(2 * SEC);
         // Need to log out as admin and login as Architect to perform analysis
         logout();
@@ -87,7 +78,6 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
             getRandomAnalysisData(this.analysisData[5])
         );
         application.create();
-        cy.wait("@getApplication");
         cy.wait(2 * SEC);
         // Need to log out as admin and login as Architect to perform analysis
         logout();
@@ -106,7 +96,6 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
             getRandomAnalysisData(this.analysisData[7])
         );
         application.create();
-        cy.wait("@getApplication");
         cy.wait(2 * SEC);
         // Need to log out as admin and login as Architect to perform analysis
         logout();
@@ -126,10 +115,6 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
     });
 
     after("Perform test data clean up", function () {
-        if (hasToBeSkipped("@tier3")) return;
-        // Prevent hook from running, if the tag is excluded from run
-        userMigrator.logout();
-        login();
         deleteApplicationTableRows();
         deleteAllBusinessServices();
         writeGpgKey("abcde");
