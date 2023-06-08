@@ -31,10 +31,11 @@ import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { getRandomUserData } from "../../../utils/data_utils";
 import { User } from "../../models/keycloak/users/user";
 
-describe(["@tier3"], "Upload Binary Analysis", () => {
+describe(["@tier3"], "Upload Binary Analysis as Migrator", () => {
     let userMigrator = new UserMigrator(getRandomUserData());
 
     before("Login", function () {
+        cy.clearLocalStorage();
         User.loginKeycloakAdmin();
         userMigrator.create();
         // Perform login as admin user to be able to create all required instances

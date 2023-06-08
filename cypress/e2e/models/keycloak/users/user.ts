@@ -9,6 +9,7 @@ import {
     logout,
 } from "../../../../utils/utils";
 import * as loginView from "../../../views/login.view";
+import Chainable = Cypress.Chainable;
 const tackleUiUrl = Cypress.env("tackleUrl");
 const keycloakAdminPassword = Cypress.env("keycloakAdminPassword");
 
@@ -35,18 +36,20 @@ export class User {
 
     static keycloakUrl = tackleUiUrl + "/auth/";
 
-    static loginKeycloakAdmin(loggedIn = false): void {
-        cy.visit(User.keycloakUrl, { timeout: 120 * SEC });
-        cy.contains("h1", "Welcome to", { timeout: 120 * SEC }); // Make sure that welcome page opened and loaded
-        clickByText("a", "Administration Console");
+    static loginKeycloakAdmin(loggedIn = false): Chainable<null> {
+        return cy.session("sessionId", () => {
+            cy.visit(User.keycloakUrl, { timeout: 120 * SEC });
+            cy.contains("h1", "Welcome to", { timeout: 120 * SEC }); // Make sure that welcome page opened and loaded
+            clickByText("a", "Administration Console");
 
-        // This is required to be skipped if admin user is logged in already to keycloak
-        if (!loggedIn) {
-            cy.get("#kc-header-wrapper", { timeout: 120 * SEC }); // Make sure that login page opened and loaded
-            inputText(loginView.userNameInput, "admin");
-            inputText(loginView.userPasswordInput, keycloakAdminPassword);
-            click(loginView.loginButton);
-        }
+            // This is required to be skipped if admin user is logged in already to keycloak
+            if (!loggedIn) {
+                cy.get("#kc-header-wrapper", { timeout: 120 * SEC }); // Make sure that login page opened and loaded
+                inputText(loginView.userNameInput, "admin");
+                inputText(loginView.userPasswordInput, keycloakAdminPassword);
+                click(loginView.loginButton);
+            }
+        });
     }
 
     static openList(): void {

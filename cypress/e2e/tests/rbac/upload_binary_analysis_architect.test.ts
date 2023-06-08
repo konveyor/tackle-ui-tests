@@ -35,6 +35,7 @@ describe(["@tier3"], "Upload Binary Analysis as an Architect", () => {
     let userArchitect = new UserArchitect(getRandomUserData());
 
     before("Login", function () {
+        cy.clearLocalStorage();
         User.loginKeycloakAdmin();
         userArchitect.create();
         // Perform login as admin user to be able to create all required instances
