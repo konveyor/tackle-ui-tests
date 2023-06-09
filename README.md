@@ -59,13 +59,16 @@
 2. Click [here](https://reportportal-migration-qe.apps.ocp4.prod.psi.redhat.com) to see **Current** test runs
 
 #### Tag based test execution
-1. To run tests based on tags, use below command - 
+This repository uses the package [cypress-tags](https://www.npmjs.com/package/cypress-tags) to slice up test runs.
 
-    `npx cypress run --env grepTags=@tagName`
+1. To run tests based on tags, use below command 
 
-2. To run multiple tags(tiers) in a single run, provide tag names appended in below format - 
+    `CYPRESS_INCLUDE_TAGS=@tagName npx cypress run`
 
-    `npx cypress run --env grepTags=@tag1+@tag2`
+
+2. To run multiple tags(tiers) in a single run, provide tag names separated by commas 
+
+    `CYPRESS_INCLUDE_TAGS=@tier1,@tier2 npx cypress run`
 
 #### Running tests locally over Tackle UI hosted on minikube
 
