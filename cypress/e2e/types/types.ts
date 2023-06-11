@@ -49,6 +49,13 @@ export type CredentialsData =
     | CredentialsSourceControlPrivateKeyData
     | CredentialsJiraData;
 
+export type JiraConnectionData = {
+    name: string;
+    url: string;
+    type: string;
+    credential: CredentialsJiraData;
+};
+
 export type applicationData = {
     name: string;
     business?: string;
