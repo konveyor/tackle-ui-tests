@@ -116,6 +116,18 @@ describe(["@tier2"], "Application validations", () => {
                 expect(value).to.contain(stakeHoldersList[0].name);
             });
 
+        cy.get(applicationOwnerInput)
+            .parent()
+            .next("button")
+            .click()
+            .then(() => {
+                cy.get(applicationOwnerInput)
+                    .invoke("val")
+                    .then((newValue) => {
+                        expect(newValue).to.not.contain(stakeHoldersList[0].name);
+                    });
+            });
+
         // Contributors Validation, Polarion TC 331
         inputText(applicationContributorsInput, stakeHoldersList[0].name);
         cy.get("button").contains(stakeHoldersList[0].name).click();
