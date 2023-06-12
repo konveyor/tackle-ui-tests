@@ -109,24 +109,32 @@ export function getDefaultTagCategories(): string[] {
     ];
 }
 
+/**
+ * Generates credentials of defined type and sends it back
+ *
+ * @param type is type of credentials to be generated.
+ * @param userCred defines type of source credentials. Optional.
+ * @param useTestingAccount defines if returned user credentials are random (when false) or real test user (when true)
+ * @param url is used for Maven credentials type. Optional.
+ * @returns CredentialsData of selected type.
+ */
 export function getRandomCredentialsData(
     type: string,
     userCred?: string,
-    gitTestingUser = false,
+    useTestingAccount = false,
     url?: string
 ): CredentialsData {
-    let password;
-    let user;
-
-    if (gitTestingUser) {
-        user = Cypress.env("git_user");
-        password = Cypress.env("git_password");
-    } else {
-        user = getRandomWord(6);
-        password = getRandomWord(6);
-    }
+    let password = getRandomWord(6);
+    let user = getRandomWord(6);
+    let email = getEmail();
+    //TODO: This value is set to 20 to avoid a bug https://issues.redhat.com/browse/MTA-717. Need to be updated to 200 when bug is fixed
+    let token = getRandomWord(20);
 
     if (type === CredentialType.proxy) {
+        if (useTestingAccount) {
+            user = "redhat";
+            password = "redhat";
+        }
         return {
             type: type,
             name: getRandomWord(6),
@@ -135,6 +143,21 @@ export function getRandomCredentialsData(
             password: password,
         };
     }
+
+    if (type === CredentialType.jira) {
+        if (useTestingAccount) {
+            email = Cypress.env("jira_email");
+            token = Cypress.env("jira_token");
+        }
+        return {
+            type: type,
+            name: getRandomWord(6),
+            description: getDescription(),
+            email: email,
+            token: token,
+        };
+    }
+
     if (type === CredentialType.sourceControl) {
         if (userCred === UserCredentials.sourcePrivateKey) {
             // Source control - gpg key and passphrase
@@ -148,6 +171,10 @@ export function getRandomCredentialsData(
             };
         } else {
             // Source Control - username and password
+            if (useTestingAccount) {
+                user = Cypress.env("git_user");
+                password = Cypress.env("git_password");
+            }
             return {
                 type: type,
                 name: getRandomWord(6),
@@ -158,7 +185,7 @@ export function getRandomCredentialsData(
         }
     } else {
         // Maven credentials
-        if (gitTestingUser) {
+        if (useTestingAccount) {
             if (url) {
                 writeMavenSettingsFile(user, password, url);
             } else {

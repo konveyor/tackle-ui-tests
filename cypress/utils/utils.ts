@@ -1472,6 +1472,14 @@ export function isEnabled(selector: string, toBeEnabled?: boolean): void {
     }
 }
 
+export function isButtonEnabled(selector: string, toBeEnabled?: boolean): void {
+    if (toBeEnabled) {
+        cy.get(selector).should("be.enabled");
+    } else {
+        cy.get(selector).should("not.be.enabled");
+    }
+}
+
 export function clickTab(name: string): void {
     clickByText(navTab, name);
 }
