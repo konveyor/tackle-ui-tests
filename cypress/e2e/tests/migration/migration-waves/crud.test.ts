@@ -31,7 +31,7 @@ describe(["@tier1"], "Migration Waves CRUD operations", () => {
         cy.intercept("DELETE", "/hub/migrationwaves*/*").as("deleteWave");
     });
 
-    it("Migration Wave CRUD", function () {
+    it("Fails due to MTA-753 | Migration Wave CRUD", function () {
         const now = new Date();
         now.setDate(now.getDate() + 1);
 
@@ -47,30 +47,33 @@ describe(["@tier1"], "Migration Waves CRUD operations", () => {
         );
 
         migrationWave.create();
-        cy.get("td", { timeout: 12 * SEC }).should("contain", migrationWave.name);
-        cy.wait("@postWave");
         checkSuccessAlert(
             successAlertMessage,
-            `Success Alert:Migration wave ${migrationWave.name} was successfully created.`
+            `Success alert:Migration wave ${migrationWave.name} was successfully created.`,
+            true
         );
+        cy.wait("@postWave");
+        cy.get("td", { timeout: 12 * SEC }).should("contain", migrationWave.name);
 
         const newName = data.getRandomWord(8);
         migrationWave.edit({ name: newName });
         checkSuccessAlert(
             successAlertMessage,
-            "Success Alert:Migration wave was successfully saved."
+            "Success alert:Migration wave was successfully saved.",
+            true
         );
         cy.wait("@putWave");
         cy.get("td", { timeout: 12 * SEC }).should("contain", newName);
         migrationWave.name = newName;
 
         migrationWave.delete();
-        cy.wait("@deleteWave");
-        cy.get("td", { timeout: 12 * SEC }).should("not.contain", newName);
         checkSuccessAlert(
             successAlertMessage,
-            `Success Alert:Migration wave ${migrationWave.name} was successfully deleted.`
+            `Success alert:Migration wave ${migrationWave.name} was successfully deleted.`,
+            true
         );
+        cy.wait("@deleteWave");
+        cy.get("td", { timeout: 12 * SEC }).should("not.contain", newName);
     });
 
     after("Clear test data", function () {
