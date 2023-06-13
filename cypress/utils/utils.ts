@@ -57,6 +57,7 @@ import {
     createEntitiesCheckbox,
 } from "../e2e/views/applicationinventory.view";
 import {
+    closeSuccessNotification,
     confirmButton,
     divHeader,
     firstPageButton,
@@ -233,8 +234,17 @@ export function selectReactFormItems(
     cy.contains("button", item).click();
 }
 
-export function checkSuccessAlert(fieldId: string, message: string): void {
+export function checkSuccessAlert(fieldId: string, message: string, close = false): void {
     cy.get(fieldId, { timeout: 150 * SEC }).should("contain.text", message);
+    if (close) {
+        closeSuccessAlert();
+    }
+}
+
+export function closeSuccessAlert(): void {
+    cy.get(closeSuccessNotification, { timeout: 10 * SEC })
+        .first()
+        .click({ force: true });
 }
 
 export function removeMember(memberName: string): void {
