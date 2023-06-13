@@ -2,6 +2,7 @@ import { string } from "@oozcitak/infra";
 import { Tag } from "../models/migration/controls/tags";
 import { CustomRuleType, RepositoryType } from "../types/constants";
 import { CredentialsSourceControl } from "../models/administration/credentials/credentialsSourceControl";
+import { CredentialsJira } from "../models/administration/credentials/credentialsJira";
 
 export type CredentialsSourceControlData = {
     type: string;
@@ -53,7 +54,8 @@ export type JiraConnectionData = {
     name: string;
     url: string;
     type: string;
-    credential: CredentialsJiraData;
+    credential: CredentialsJira;
+    isInsecure?: boolean;
 };
 
 export type applicationData = {
