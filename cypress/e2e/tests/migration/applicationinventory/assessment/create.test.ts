@@ -106,7 +106,7 @@ describe(["@tier2"], "Application validations", () => {
         inputText(applicationNameInput, data.getFullName());
         cy.get(commonView.submitButton).should("not.be.disabled");
 
-        // Owner validation, Polarian TC 330
+        // Owner validation, Polarion TC 330
         inputText(applicationOwnerInput, stakeHoldersList[0].name);
         cy.get("button").contains(stakeHoldersList[0].name).click();
 
