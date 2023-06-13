@@ -22,11 +22,20 @@ import {
 import { administration, button, SEC, tdTag, trTag } from "../../../types/constants";
 import { navLink } from "../../../views/common.view";
 
+/**
+ * Base class for Jira connection
+ *
+ */
 export class Jira {
+    /** Name of Jira connection */
     name: string;
+    /** URL of jira instance */
     url: string;
+    /** One of possible Jira setup types */
     type: string;
+    /** Credential to be used to authorize Jira connection */
     credential: CredentialsJira;
+    /** Shows if insecure Jira connection is acceptable or not */
     isInsecure: boolean;
 
     /** Contains URL of Jira connections web page */
@@ -36,6 +45,11 @@ export class Jira {
         this.init(jiraConnectionData);
     }
 
+    /**
+     * This method opens list of Jira connections
+     *
+     * @param itemsPerPage is optional parameter defining how many items should be shown on page
+     */
     static openList(itemsPerPage = 100) {
         cy.url().then(($url) => {
             if ($url != Jira.fullUrl) {
@@ -47,6 +61,10 @@ export class Jira {
         selectItemsPerPage(itemsPerPage);
     }
 
+    /**
+     * This method is initializing values of object class. It is used both in Create and Edit
+     * @param jiraConnectionData is required parameter containing all required data to init a Jira connection object
+     */
     private init(jiraConnectionData: JiraConnectionData) {
         const { name, url, type, credential, isInsecure } = jiraConnectionData;
         this.name = name;
@@ -56,24 +74,39 @@ export class Jira {
         this.isInsecure = isInsecure;
     }
 
+    /**
+     * This method is filling Name field of Jira connection
+     */
     private fillName(): void {
         inputText(instanceName, this.name);
     }
 
+    /**
+     * This method is filling URL field of Jira connection
+     */
     private fillUrl(): void {
         inputText(instanceUrl, this.url);
     }
 
+    /**
+     * This method is selecting type of Jira connection
+     */
     private selectType(): void {
         click(selectTypeToggle);
         clickByText(button, this.type);
     }
 
+    /**
+     * This method is selecting credentials for Jira connection
+     */
     private selectCredentials(): void {
         click(selectCredentialToggle);
         clickByText(button, this.credential.name);
     }
 
+    /**
+     * This method is enabling/disabling insecure connection according to value in object
+     */
     private configureInsecure(): void {
         if (this.isInsecure) {
             enableSwitch("#insecure-switch");
@@ -82,6 +115,11 @@ export class Jira {
         }
     }
 
+    /**
+     * This method creates new Jira connection according to object values
+     *
+     * @param toBeCanceled is responsible for canceling creation instead of submitting if set to `true`
+     */
     public create(toBeCanceled = false): void {
         Jira.openList();
         this.fillName();
@@ -98,6 +136,9 @@ export class Jira {
         }
     }
 
+    /**
+     * This method validates all fields values of Jira connection after creation
+     */
     private validateState(): void {
         cy.get(tdTag, { timeout: 120 * SEC })
             .contains(this.name, { timeout: 120 * SEC })
@@ -106,7 +147,7 @@ export class Jira {
             .within(() => {
                 this.validateSingleState(jiraLabels.name, this.name);
                 this.validateSingleState(jiraLabels.url, this.url);
-                // Commenting line below because of the bug that respective columns have same labels (bug will be opened)
+                // Commenting lines below because of the bug that respective columns have same labels (MTA-766)
                 // this.validateSingleState(jiraLabels.type, this.type);
                 // this.validateSingleState(jiraLabels.connection, "Connected");
             });
@@ -114,10 +155,21 @@ export class Jira {
 
     // This method is actually doing the same what utils/checkSuccessAlert does.
     // TODO: To consider re-use of method in utils
+    /**
+     * This method is validating field of Jira connection
+     *
+     * @param FieldId is selector allowing to identify field to be validated
+     * @param text contains value to compare with field content
+     */
     private validateSingleState(FieldId, text: string): void {
         cy.get(FieldId, { timeout: 120 * SEC }).should("contain.text", text);
     }
 
+    /**
+     * This method is reading current values of object fields and returns it as a custom data type.
+     *
+     * @returns JiraConnectionData
+     */
     storeOldValues(): JiraConnectionData {
         return {
             isInsecure: this.isInsecure,
