@@ -235,10 +235,14 @@ export function selectReactFormItems(
 }
 
 export function checkSuccessAlert(fieldId: string, message: string, close = false): void {
-    cy.get(fieldId, { timeout: 150 * SEC }).should("contain.text", message);
+    validateTextPresence(fieldId, message);
     if (close) {
         closeSuccessAlert();
     }
+}
+
+export function validateTextPresence(fieldId: string, message: string): void {
+    cy.get(fieldId, { timeout: 150 * SEC }).should("contain.text", message);
 }
 
 export function closeSuccessAlert(): void {
