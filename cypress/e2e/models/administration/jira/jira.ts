@@ -13,6 +13,7 @@ import {
     selectItemsPerPage,
     selectUserPerspective,
     submitForm,
+    validateTextPresence,
 } from "../../../../utils/utils";
 import {
     instanceName,
@@ -194,29 +195,17 @@ export class Jira {
     /**
      * This method validates all fields values of Jira connection after creation
      */
-    private validateState(): void {
+    public validateState(): void {
         cy.get(tdTag, { timeout: 120 * SEC })
             .contains(this.name, { timeout: 120 * SEC })
             .closest(trTag)
             .within(() => {
-                this.validateSingleState(jiraLabels.name, this.name);
-                this.validateSingleState(jiraLabels.url, this.url);
+                validateTextPresence(jiraLabels.name, this.name);
+                validateTextPresence(jiraLabels.url, this.url);
                 // Commenting lines below because of the bug that respective columns have same labels (MTA-766)
-                // this.validateSingleState(jiraLabels.type, this.type);
-                // this.validateSingleState(jiraLabels.connection, "Connected");
+                // validateTextPresence(jiraLabels.type, this.type);
+                // validateTextPresence(jiraLabels.connection, "Connected");
             });
-    }
-
-    // This method is actually doing the same what utils/checkSuccessAlert does.
-    // TODO: To consider re-use of method in utils
-    /**
-     * This method is validating field of Jira connection
-     *
-     * @param FieldId is selector allowing to identify field to be validated
-     * @param text contains value to compare with field content
-     */
-    private validateSingleState(FieldId: string, text: string): void {
-        cy.get(FieldId, { timeout: 120 * SEC }).should("contain.text", text);
     }
 
     /**
