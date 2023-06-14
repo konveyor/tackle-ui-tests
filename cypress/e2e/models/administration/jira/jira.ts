@@ -6,8 +6,10 @@ import {
     clickByText,
     disableSwitch,
     enableSwitch,
+    exists,
     inputText,
     notExists,
+    performRowAction,
     selectItemsPerPage,
     selectUserPerspective,
     submitForm,
@@ -19,8 +21,16 @@ import {
     selectCredentialToggle,
     selectTypeToggle,
 } from "../../../views/jira.view";
-import { administration, button, SEC, tdTag, trTag } from "../../../types/constants";
-import { navLink } from "../../../views/common.view";
+import {
+    administration,
+    button,
+    deleteAction,
+    editAction,
+    SEC,
+    tdTag,
+    trTag,
+} from "../../../types/constants";
+import { cancelButton, confirmButton, navLink } from "../../../views/common.view";
 
 /**
  * Base class for Jira connection
@@ -137,12 +147,56 @@ export class Jira {
     }
 
     /**
+     * This method edits existing Jira connection according to object values
+     *
+     * @param jiraConnectionData brings new values that should be applied to instance.
+     * @param toBeCanceled is responsible for canceling editing instead of submitting if set to `true`
+     */
+    public edit(jiraConnectionData: JiraConnectionData, toBeCanceled = false): void {
+        Jira.openList();
+        performRowAction(this.name, editAction);
+        const oldValues = this.storeOldValues();
+        this.init(jiraConnectionData);
+        this.fillName();
+        this.fillUrl();
+        this.selectType();
+        this.selectCredentials();
+        this.configureInsecure();
+        if (!toBeCanceled) {
+            // Edit action is confirmed, submitting form
+            submitForm();
+        } else {
+            // Edit action was canceled
+            this.init(oldValues);
+            cancelForm();
+        }
+        this.validateState();
+        exists(this.name);
+    }
+
+    /**
+     * This method deletes Jira connection
+     *
+     * @param toBeCanceled is responsible for canceling deletion instead of submitting if set to `true`
+     */
+    public delete(toBeCanceled = false): void {
+        Jira.openList();
+        performRowAction(this.name, deleteAction);
+        if (toBeCanceled) {
+            click(cancelButton);
+            exists(this.name);
+        } else {
+            click(confirmButton);
+            notExists(this.name);
+        }
+    }
+
+    /**
      * This method validates all fields values of Jira connection after creation
      */
     private validateState(): void {
         cy.get(tdTag, { timeout: 120 * SEC })
             .contains(this.name, { timeout: 120 * SEC })
-            // .closest(tdTag)
             .closest(trTag)
             .within(() => {
                 this.validateSingleState(jiraLabels.name, this.name);
@@ -161,7 +215,7 @@ export class Jira {
      * @param FieldId is selector allowing to identify field to be validated
      * @param text contains value to compare with field content
      */
-    private validateSingleState(FieldId, text: string): void {
+    private validateSingleState(FieldId: string, text: string): void {
         cy.get(FieldId, { timeout: 120 * SEC }).should("contain.text", text);
     }
 
