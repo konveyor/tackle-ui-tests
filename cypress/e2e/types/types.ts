@@ -2,7 +2,7 @@ import { string } from "@oozcitak/infra";
 import { Tag } from "../models/migration/controls/tags";
 import { CustomRuleType, RepositoryType } from "../types/constants";
 import { CredentialsSourceControl } from "../models/administration/credentials/credentialsSourceControl";
-import { CredentialsJira } from "../models/administration/credentials/credentialsJira";
+import { CredentialsBasicJira } from "../models/administration/credentials/credentialsBasicJira";
 
 export type CredentialsSourceControlData = {
     type: string;
@@ -35,7 +35,7 @@ export type CredentialsMavenData = {
     settingFile?: any;
 };
 
-export type CredentialsJiraData = {
+export type CredentialsJiraBasicData = {
     type: string;
     name?: string;
     description?: string;
@@ -43,18 +43,26 @@ export type CredentialsJiraData = {
     token?: string;
 };
 
+export type CredentialsJiraTokenData = {
+    type: string;
+    name?: string;
+    description?: string;
+    key?: string;
+};
+
 export type CredentialsData =
     | CredentialsProxyData
     | CredentialsSourceControlData
     | CredentialsMavenData
     | CredentialsSourceControlPrivateKeyData
-    | CredentialsJiraData;
+    | CredentialsJiraTokenData
+    | CredentialsJiraBasicData;
 
 export type JiraConnectionData = {
     name: string;
     url: string;
     type: string;
-    credential: CredentialsJira;
+    credential: CredentialsBasicJira;
     isInsecure?: boolean;
 };
 
