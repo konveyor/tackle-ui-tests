@@ -113,6 +113,11 @@ export enum CredentialType {
     jira = "Jira",
 }
 
+export enum JiraType {
+    cloud = "Jira Cloud",
+    server = "Jira Server/Datacenter",
+}
+
 export enum UserCredentials {
     usernamePassword = "Username/Password",
     sourcePrivateKey = "Source PrivateKey",

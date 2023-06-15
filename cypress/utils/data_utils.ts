@@ -22,7 +22,9 @@ import {
     UserData,
     RulesManualFields,
     RulesRepositoryFields,
+    JiraConnectionData,
 } from "../e2e/types/types";
+import { CredentialsJira } from "../e2e/models/administration/credentials/credentialsJira";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
@@ -199,6 +201,21 @@ export function getRandomCredentialsData(
             settingFile: "xml/settings.xml",
         };
     }
+}
+
+export function getJiraConnectionData(
+    jiraCredential: CredentialsJira,
+    type: string,
+    url: string,
+    isInsecure?: boolean
+): JiraConnectionData {
+    return {
+        credential: jiraCredential,
+        isInsecure: isInsecure,
+        name: getRandomWord(6),
+        type: type,
+        url: url,
+    };
 }
 
 export function getRandomProxyData(credentials?: CredentialsData): ProxyData {

@@ -50,7 +50,7 @@ export class Jira {
     isInsecure: boolean;
 
     /** Contains URL of Jira connections web page */
-    static fullUrl = Cypress.env("tackleUrl") + "/identities";
+    static fullUrl = Cypress.env("tackleUrl") + "/jira";
 
     constructor(jiraConnectionData: JiraConnectionData) {
         this.init(jiraConnectionData);
