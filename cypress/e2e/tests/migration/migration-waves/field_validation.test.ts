@@ -17,7 +17,6 @@ limitations under the License.
 
 import { login, validateTooLongInput, validateTooShortInput } from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
-import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { MigrationWaveView } from "../../../views/migration-wave.view";
 import { cancelButton, nameHelper } from "../../../views/common.view";
@@ -45,7 +44,7 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         cy.get(MigrationWaveView.submitButton).should("be.disabled");
 
         validateTooShortInput(MigrationWaveView.nameInput, "body");
-        validateTooLongInput(CustomMigrationTargetView.nameInput);
+        validateTooLongInput(MigrationWaveView.nameInput);
 
         MigrationWave.fillName(migrationWave.name);
         cy.get(nameHelper).contains(
