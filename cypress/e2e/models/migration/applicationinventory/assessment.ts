@@ -60,7 +60,9 @@ import {
 } from "../../../views/assessment.view";
 import {
     criticalityInput,
+    effortEstimateSelect,
     priorityInput,
+    proposedActionSelect,
     reviewColumnSelector,
     selectInput,
 } from "../../../views/review.view";
@@ -105,7 +107,7 @@ export class Assessment extends Application {
             const migrationActions = ["Repurchase", "Retire"];
             action = migrationActions[Math.floor(Math.random() * migrationActions.length)];
         }
-        cy.get(selectInput).eq(0).click();
+        cy.get(proposedActionSelect).eq(0).click();
         cy.contains(button, action).click();
     }
 
@@ -119,7 +121,7 @@ export class Assessment extends Application {
             const effortEstimates = ["Large", "Extra large"];
             effort = effortEstimates[Math.floor(Math.random() * effortEstimates.length)];
         }
-        cy.get(selectInput).eq(1).click();
+        cy.get(effortEstimateSelect).eq(1).click();
         cy.contains(button, effort).click();
     }
 
