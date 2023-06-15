@@ -13,7 +13,7 @@ export default defineConfig({
         jira_email: "mta.qe.testing@gmail.com",
         jira_token:
             "ATATT3xFfGF0OaEyVWcq8N0FfE9ahkpAgC1_z6x_xtojG-51MtinINlMRSxP8rYrvnSK9TaCJSyVZrd5ptB6ajVmmK-vP0vuMFDNEaeb4Hx_WnPtipJxXUsgnr4TKeA99qFulZVophvjBviLjp6HmoM9pqGSJr6uxjpNQr2R3cyMaka7j1rqlU4=420CCF51",
-        tackleUrl: "https://tackle-konveyor-tackle.apps.mig01.cnv-qe.rhcloud.com/",
+        tackleUrl: "https://tackle-konveyor-tackle.apps.mtv03.rhos-psi.cnv-qe.rhood.us",
         rwx_enabled: true,
     },
     retries: {
