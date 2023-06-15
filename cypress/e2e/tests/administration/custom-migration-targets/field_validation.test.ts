@@ -15,7 +15,13 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { click, login, preservecookies, validateTooShortInput } from "../../../../utils/utils";
+import {
+    click,
+    login,
+    preservecookies,
+    validateTooLongInput,
+    validateTooShortInput,
+} from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import { CustomMigrationTarget } from "../../../models/administration/custom-migration-targets/custom-migration-target";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
@@ -40,7 +46,7 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         cy.get(CustomMigrationTargetView.createSubmitButton).should("be.disabled");
 
         validateTooShortInput(CustomMigrationTargetView.nameInput, "body");
-        validateTooShortInput(CustomMigrationTargetView.nameInput);
+        validateTooLongInput(CustomMigrationTargetView.nameInput);
 
         CustomMigrationTarget.fillName("Containerization");
         cy.get(CustomMigrationTargetView.nameHelper).contains(
