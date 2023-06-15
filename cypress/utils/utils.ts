@@ -80,6 +80,7 @@ import { Application } from "../e2e/models/migration/applicationinventory/applic
 import { switchToggle } from "../e2e/views/reports.view";
 import { rightSideMenu } from "../e2e/views/analysis.view";
 import Chainable = Cypress.Chainable;
+import { MigrationWave } from "../e2e/models/migration/migration-waves/migration-wave";
 
 let userName = Cypress.env("user");
 let userPassword = Cypress.env("pass");
@@ -823,6 +824,29 @@ export function createMultipleStakeholders(
         stakeholdersList.push(stakeholder);
     }
     return stakeholdersList;
+}
+
+export function createMultipleMigrationWaves(
+    numberOfMigrationWaves: number,
+    StakeholdersList?: Array<Stakeholders>,
+    stakeholderGroupsList?: Array<Stakeholdergroups>
+): Array<MigrationWave> {
+    let MigrationWaveList: Array<MigrationWave> = [];
+    for (let i = 0; i < numberOfMigrationWaves; i++) {
+        let startDate = new Date("2023-06-28");
+        let endDate = new Date("2023-06-30");
+        // Create new stakeholder
+        const migrationWave = new MigrationWave(
+            data.getAppName(),
+            startDate,
+            endDate,
+            StakeholdersList,
+            stakeholderGroupsList
+        );
+        migrationWave.create();
+        MigrationWaveList.push(migrationWave);
+    }
+    return MigrationWaveList;
 }
 
 export function createMultipleJobFunctions(num): Array<Jobfunctions> {
