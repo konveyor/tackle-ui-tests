@@ -20,13 +20,7 @@ import {
     deleteByList,
     createMultipleMigrationWaves,
 } from "../../../../utils/utils";
-import {
-    button,
-    name,
-    clearAllFilters,
-    
-    SEC,
-} from "../../../types/constants";
+import { button, name, clearAllFilters, SEC } from "../../../types/constants";
 
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
