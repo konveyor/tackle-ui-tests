@@ -16,9 +16,9 @@ limitations under the License.
 export const createTagButton = "Create tag";
 export const createTagCategoryButton = "Create tag category";
 export const colorHelper = "div[id=color-helper]";
-export const dropdownMenuToggle = "button[aria-label='Options menu']";
+export const dropdownMenuToggle = "button[id='tag-type-select-toggle']";
 export const nameHelper = "div[id=name-helper]";
-export const nameInput = "input[aria-label='name']";
+export const nameInput = "input[name=name]";
 export const rankInput = "input[aria-label='rank']";
 export const rankHelper = "div[id=rank-helper]";
 export const tagTable = "table[aria-label='tag-table']";

@@ -43,7 +43,7 @@ import {
     max250CharsMsg,
     duplicateApplication,
     createNewButton,
-    tdTag
+    tdTag,
 } from "../../../../types/constants";
 import {
     applicationDescriptionInput,
@@ -71,6 +71,7 @@ describe(["@tier2"], "Application validations", () => {
         deleteApplicationTableRows();
         businessservicesList = createMultipleBusinessServices(1);
         stakeHoldersList = createMultipleStakeholders(2);
+        cy.intercept("POST", "/hub/tag*").as("postTag");
     });
 
     beforeEach("Persist session", function () {
@@ -244,7 +245,7 @@ describe(["@tier2"], "Application validations", () => {
         }
     });
 
-    it("Create tag from application side drawer" , function () {
+    it("Create tag from application side drawer", function () {
         // Automates Polarion MTA-321
         const application = new Assessment(getRandomApplicationData());
         const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagCategory());
@@ -254,7 +255,7 @@ describe(["@tier2"], "Application validations", () => {
         exists(application.name);
 
         application.applicationDetailsTab("Tags");
-        clickByText(button, 'Create tag');
+        clickByText(button, "Create tag");
 
         tag.create();
         cy.wait("@postTag");
@@ -264,4 +265,4 @@ describe(["@tier2"], "Application validations", () => {
         existsWithinRow(tag.tagCategory, tdTag, tag.name);
         closeRowDetails(tag.tagCategory);
     });
-})
+});
