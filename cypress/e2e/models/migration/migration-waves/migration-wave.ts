@@ -12,12 +12,16 @@ import {
     deleteAction,
     editAction,
     migrationWaves,
+    tdTag,
+    trTag,
 } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { MigrationWaveView } from "../../../views/migration-wave.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
-import { confirmButton } from "../../../views/common.view";
+import { cancelButton, confirmButton } from "../../../views/common.view";
+import { selectBox } from "../../../views/applicationinventory.view";
+import { Application } from "../../../models/migration/applicationinventory/application";
 
 export interface MigrationWave {
     name: string;
@@ -25,6 +29,7 @@ export interface MigrationWave {
     endDate: Date;
     stakeHolders?: Stakeholders[];
     stakeHolderGroups?: Stakeholdergroups[];
+    applications?: Application[];
 }
 
 export class MigrationWave {
@@ -33,13 +38,15 @@ export class MigrationWave {
         startDate: Date,
         endDate: Date,
         stakeHolders?: Stakeholders[],
-        stakeHolderGroups?: Stakeholdergroups[]
+        stakeHolderGroups?: Stakeholdergroups[],
+        applications?: Application[]
     ) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.stakeHolders = stakeHolders;
         this.stakeHolderGroups = stakeHolderGroups;
+        this.applications = applications;
     }
 
     public static fullUrl = Cypress.env("tackleUrl") + "/migration-waves";
@@ -66,6 +73,8 @@ export class MigrationWave {
         cy.get(MigrationWaveView.submitButton, { timeout: 10 * SEC })
             .should("be.enabled")
             .click();
+
+        this.setApplications();
     }
 
     public edit(updateValues: Partial<MigrationWave>) {
@@ -85,6 +94,32 @@ export class MigrationWave {
         this.expandActionsMenu();
         cy.contains(deleteAction).click();
         click(confirmButton);
+    }
+
+    public setApplications(toBeCanceled = false): void {
+        if (!this.applications || !this.applications.length) {
+            return;
+        }
+
+        MigrationWave.open();
+        this.expandActionsMenu();
+        cy.contains("Manage applications").click();
+        cy.get("div[role='dialog'] button[aria-label='Select']").click();
+        cy.contains(button, "Select none").click();
+
+        this.applications.forEach((app) => {
+            cy.get(tdTag)
+                .contains(app.name)
+                .closest(trTag)
+                .within((_) => click(selectBox));
+        });
+
+        if (toBeCanceled) {
+            cy.get(cancelButton).click();
+            return;
+        }
+
+        cy.get(MigrationWaveView.applicationsSubmitButton).click();
     }
 
     public static fillName(name: string) {

@@ -1,5 +1,6 @@
 export enum MigrationWaveView {
     submitButton = "#migration-wave-form-submit",
+    applicationsSubmitButton = "#wave-form-submit",
     nameInput = "#name",
     startDateInput = "input[aria-label='startDate']",
     endDateInput = "input[aria-label='endDate']",
@@ -7,4 +8,5 @@ export enum MigrationWaveView {
     stakeHolderGroupsInput = "#stakeholder-groups-toggle-select-multi-typeahead-typeahead",
     actionsButton = "button[aria-label='Actions']",
     yearInput = "input[aria-label='Select year']",
+    applicationCountColumn = "td[data-label='Applications']",
 }
