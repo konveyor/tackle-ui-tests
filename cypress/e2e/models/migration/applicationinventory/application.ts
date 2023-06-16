@@ -189,7 +189,7 @@ export class Application {
             submitForm();
             checkSuccessAlert(
                 commonView.successAlertMessage,
-                `Success! ${this.name} was added as a(n) application.`
+                `application ${this.name} was successfully saved.`
             );
         }
     }
