@@ -83,7 +83,7 @@ export class Tag {
     }
 
     protected selectTagType(tagType: string): void {
-        selectWithinModal(dropdownMenuToggle);
+        click(dropdownMenuToggle);
         clickByText(button, tagType);
     }
 

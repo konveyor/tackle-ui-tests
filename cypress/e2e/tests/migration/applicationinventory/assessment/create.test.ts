@@ -32,6 +32,9 @@ import {
     navigate_to_application_inventory,
     createMultipleStakeholders,
     deleteAllStakeholders,
+    expandRowDetails,
+    existsWithinRow,
+    closeRowDetails,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -40,6 +43,7 @@ import {
     max250CharsMsg,
     duplicateApplication,
     createNewButton,
+    tdTag,
 } from "../../../../types/constants";
 import {
     applicationDescriptionInput,
@@ -54,6 +58,7 @@ import * as data from "../../../../../utils/data_utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
+import { Tag } from "../../../../models/migration/controls/tags";
 
 let businessservicesList: Array<BusinessServices> = [];
 let applicationList: Array<Assessment> = [];
@@ -66,6 +71,7 @@ describe(["@tier2"], "Application validations", () => {
         deleteApplicationTableRows();
         businessservicesList = createMultipleBusinessServices(1);
         stakeHoldersList = createMultipleStakeholders(2);
+        cy.intercept("POST", "/hub/tag*").as("postTag");
     });
 
     beforeEach("Persist session", function () {
@@ -237,5 +243,26 @@ describe(["@tier2"], "Application validations", () => {
         for (let i = 0; i < applicationList.length; i++) {
             notExists(applicationList[i].name);
         }
+    });
+
+    it("Create tag from application side drawer", function () {
+        // Automates Polarion MTA-321
+        const application = new Assessment(getRandomApplicationData());
+        const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagCategory());
+
+        application.create();
+        cy.wait("@postApplication");
+        exists(application.name);
+
+        application.applicationDetailsTab("Tags");
+        clickByText(button, "Create tag");
+
+        tag.create();
+        cy.wait("@postTag");
+
+        // Assert that created tag exists
+        expandRowDetails(tag.tagCategory);
+        existsWithinRow(tag.tagCategory, tdTag, tag.name);
+        closeRowDetails(tag.tagCategory);
     });
 });
