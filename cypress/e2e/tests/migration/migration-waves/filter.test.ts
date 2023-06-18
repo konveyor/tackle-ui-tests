@@ -26,8 +26,7 @@ import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 
 let migrationWavesList: Array<MigrationWave> = [];
-let invalidSearchInput = String(data.getRandomNumber());
-
+//Automates Polarion TC 343
 describe(["@tier2"], "Migration waves filter validations", function () {
     before("Login and Create Test Data", function () {
         // Peform login
@@ -37,40 +36,35 @@ describe(["@tier2"], "Migration waves filter validations", function () {
         migrationWavesList = createMultipleMigrationWaves(3);
     });
 
-    after("Perform test data clean up", function () {
-        // Delete the business services
-        deleteByList(migrationWavesList);
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-    });
-
     it("Name filter validations", function () {
         MigrationWave.open();
 
         // Enter an existing display name substring and assert
-        let validSearchInput = migrationWavesList[0].name.substring(0, 3);
+        const validSearchInput = migrationWavesList[0].name.substring(0, 3);
         applySearchFilter(name, validSearchInput);
-        cy.get("td", { timeout: 12 * SEC }).should("contain", migrationWavesList[0].name);
+        cy.get("td").should("contain", migrationWavesList[0].name);
 
         if (migrationWavesList[1].name.indexOf(validSearchInput) >= 0) {
-            cy.get("td", { timeout: 12 * SEC }).should("contain", migrationWavesList[1].name);
+            cy.get("td").should("contain", migrationWavesList[1].name);
         }
         clickByText(button, clearAllFilters);
 
         // Enter an existing exact name and assert
         applySearchFilter(name, migrationWavesList[1].name);
-        cy.get("td", { timeout: 12 * SEC }).should("contain", migrationWavesList[1].name);
-        cy.get("td", { timeout: 12 * SEC }).should("not.contain", migrationWavesList[0].name);
+        cy.get("td").should("contain", migrationWavesList[1].name);
+        cy.get("td").should("not.contain", migrationWavesList[0].name);
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing name substring and apply it as search filter
-        applySearchFilter(name, invalidSearchInput);
+        applySearchFilter(name, String(data.getRandomNumber()));
 
         // Assert that no search results are found
         cy.get("td").should("not.exist");
         clickByText(button, clearAllFilters);
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the business services
+        deleteByList(migrationWavesList);
     });
 });

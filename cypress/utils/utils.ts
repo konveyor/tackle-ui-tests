@@ -828,25 +828,27 @@ export function createMultipleStakeholders(
 
 export function createMultipleMigrationWaves(
     numberOfMigrationWaves: number,
-    StakeholdersList?: Array<Stakeholders>,
+    stakeholdersList?: Array<Stakeholders>,
     stakeholderGroupsList?: Array<Stakeholdergroups>
 ): Array<MigrationWave> {
-    let MigrationWaveList: Array<MigrationWave> = [];
+    let migrationWaveList: Array<MigrationWave> = [];
     for (let i = 0; i < numberOfMigrationWaves; i++) {
-        let startDate = new Date("2023-06-28");
-        let endDate = new Date("2023-06-30");
+        const now = new Date();
+        now.setDate(now.getDate() + 1);
+        const end = new Date(now.getTime());
+        end.setFullYear(end.getFullYear() + 1);
         // Create new stakeholder
         const migrationWave = new MigrationWave(
             data.getAppName(),
-            startDate,
-            endDate,
-            StakeholdersList,
+            now,
+            end,
+            stakeholdersList,
             stakeholderGroupsList
         );
         migrationWave.create();
-        MigrationWaveList.push(migrationWave);
+        migrationWaveList.push(migrationWave);
     }
-    return MigrationWaveList;
+    return migrationWaveList;
 }
 
 export function createMultipleJobFunctions(num): Array<Jobfunctions> {
