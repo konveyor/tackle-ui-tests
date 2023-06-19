@@ -12,12 +12,18 @@ import {
     deleteAction,
     editAction,
     migrationWaves,
+    tdTag,
+    trTag,
+    selectNone,
+    manageApplications,
 } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { MigrationWaveView } from "../../../views/migration-wave.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
-import { confirmButton } from "../../../views/common.view";
+import { cancelButton, confirmButton, itemsSelectInsideDialog } from "../../../views/common.view";
+import { selectBox } from "../../../views/applicationinventory.view";
+import { Application } from "../../../models/migration/applicationinventory/application";
 
 export interface MigrationWave {
     name: string;
@@ -25,6 +31,7 @@ export interface MigrationWave {
     endDate: Date;
     stakeHolders?: Stakeholders[];
     stakeHolderGroups?: Stakeholdergroups[];
+    applications?: Application[];
 }
 
 export class MigrationWave {
@@ -33,13 +40,15 @@ export class MigrationWave {
         startDate: Date,
         endDate: Date,
         stakeHolders?: Stakeholders[],
-        stakeHolderGroups?: Stakeholdergroups[]
+        stakeHolderGroups?: Stakeholdergroups[],
+        applications?: Application[]
     ) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.stakeHolders = stakeHolders;
         this.stakeHolderGroups = stakeHolderGroups;
+        this.applications = applications;
     }
 
     public static fullUrl = Cypress.env("tackleUrl") + "/migration-waves";
@@ -66,6 +75,8 @@ export class MigrationWave {
         cy.get(MigrationWaveView.submitButton, { timeout: 10 * SEC })
             .should("be.enabled")
             .click();
+
+        this.setApplications();
     }
 
     public edit(updateValues: Partial<MigrationWave>) {
@@ -87,18 +98,51 @@ export class MigrationWave {
         click(confirmButton);
     }
 
-    public static fillName(name: string) {
+    public setApplications(toBeCanceled = false): void {
+        if (!this.applications || !this.applications.length) {
+            return;
+        }
+
+        MigrationWave.open();
+        this.expandActionsMenu();
+        cy.contains(manageApplications).click();
+        cy.get(itemsSelectInsideDialog).click();
+        cy.contains(button, selectNone).click();
+
+        this.applications.forEach((app) => {
+            cy.get(tdTag)
+                .contains(app.name)
+                .closest(trTag)
+                .within((_) => click(selectBox));
+        });
+
+        if (toBeCanceled) {
+            cy.get(cancelButton).click();
+            return;
+        }
+
+        cy.get(MigrationWaveView.applicationsSubmitButton).click();
+    }
+
+    public clearApplications(): void {
+        if (!this.applications || !this.applications.length) {
+            expect(
+                true,
+                `You can't clear the applications of a migration wave with no applications associated.\
+               This is not a test-related issue, is a problem in your code`
+            ).to.eq(false);
+            return;
+        }
+
+        cy.contains(manageApplications).click();
+        cy.get(itemsSelectInsideDialog).click();
+        cy.contains(button, selectNone).click();
+        cy.get(MigrationWaveView.applicationsSubmitButton).click();
+        this.applications = [];
+    }
+
+    public static fillName(name: string): void {
         inputText(MigrationWaveView.nameInput, name);
-    }
-
-    private static fillStakeHolder(stakeHolderName: string) {
-        inputText(MigrationWaveView.stakeHoldersInput, stakeHolderName);
-        cy.get("button").contains(stakeHolderName).click();
-    }
-
-    private static fillStakeHolderGroup(stakeHolderGroupName: string) {
-        inputText(MigrationWaveView.stakeHolderGroupsInput, stakeHolderGroupName);
-        cy.get("button").contains(stakeHolderGroupName).click();
     }
 
     /**
@@ -106,7 +150,7 @@ export class MigrationWave {
      * It selects the date using the picker because it can't be manually entered right now due to bug MTA-706
      * @param date
      */
-    public fillStartDate(date: Date) {
+    public fillStartDate(date: Date): void {
         const nowTime = new Date().setHours(0, 0, 0, 0);
         date.setHours(0, 0, 0, 0);
         if (nowTime >= date.getTime()) {
@@ -166,6 +210,16 @@ export class MigrationWave {
                 MigrationWave.fillStakeHolderGroup(stakeHolderGroups.name)
             );
         }
+    }
+
+    private static fillStakeHolder(stakeHolderName: string) {
+        inputText(MigrationWaveView.stakeHoldersInput, stakeHolderName);
+        cy.get("button").contains(stakeHolderName).click();
+    }
+
+    private static fillStakeHolderGroup(stakeHolderGroupName: string) {
+        inputText(MigrationWaveView.stakeHolderGroupsInput, stakeHolderGroupName);
+        cy.get("button").contains(stakeHolderGroupName).click();
     }
 
     private expandActionsMenu() {

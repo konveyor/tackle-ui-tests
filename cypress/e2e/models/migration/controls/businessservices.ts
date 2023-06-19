@@ -148,7 +148,7 @@ export class BusinessServices {
             submitForm();
             checkSuccessAlert(
                 commonView.successAlertMessage,
-                `Success! ${this.name} was added as a(n) business service.`
+                `Success alert:business service ${this.name} was successfully saved.`
             );
         }
     }

@@ -86,7 +86,7 @@ export class TagCategory {
             submitForm();
             checkSuccessAlert(
                 commonView.successAlertMessage,
-                `Success! ${this.name} was added as a(n) tag type.`
+                "Success alert:Tag category was successfully created."
             );
         }
     }
