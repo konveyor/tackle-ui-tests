@@ -113,7 +113,7 @@ export class Tag {
             submitForm();
             checkSuccessAlert(
                 commonView.successAlertMessage,
-                `Success! ${this.name} was added as a(n) tag.`
+                "Success alert:Tag was successfully created."
             );
         }
     }

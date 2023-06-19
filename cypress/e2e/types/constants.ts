@@ -72,6 +72,8 @@ export const tdTag = "td";
 export const trTag = "tr";
 export const tagCategory = "Tag category";
 export const tagName = "Tag name";
+export const selectNone = "Select none";
+export const manageApplications = "Manage applications";
 
 export const createAppButton = "#create-application";
 export const assessAppButton = "#assess-application";

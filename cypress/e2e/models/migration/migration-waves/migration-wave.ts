@@ -14,12 +14,14 @@ import {
     migrationWaves,
     tdTag,
     trTag,
+    selectNone,
+    manageApplications,
 } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { MigrationWaveView } from "../../../views/migration-wave.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
-import { cancelButton, confirmButton } from "../../../views/common.view";
+import { cancelButton, confirmButton, itemsSelectInsideDialog } from "../../../views/common.view";
 import { selectBox } from "../../../views/applicationinventory.view";
 import { Application } from "../../../models/migration/applicationinventory/application";
 
@@ -103,9 +105,9 @@ export class MigrationWave {
 
         MigrationWave.open();
         this.expandActionsMenu();
-        cy.contains("Manage applications").click();
-        cy.get("div[role='dialog'] button[aria-label='Select']").click();
-        cy.contains(button, "Select none").click();
+        cy.contains(manageApplications).click();
+        cy.get(itemsSelectInsideDialog).click();
+        cy.contains(button, selectNone).click();
 
         this.applications.forEach((app) => {
             cy.get(tdTag)
@@ -132,9 +134,9 @@ export class MigrationWave {
             return;
         }
 
-        cy.contains("Manage applications").click();
-        cy.get("div[role='dialog'] button[aria-label='Select']").click();
-        cy.contains(button, "Select none").click();
+        cy.contains(manageApplications).click();
+        cy.get(itemsSelectInsideDialog).click();
+        cy.contains(button, selectNone).click();
         cy.get(MigrationWaveView.applicationsSubmitButton).click();
         this.applications = [];
     }
