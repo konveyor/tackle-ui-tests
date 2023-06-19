@@ -1,3 +1,5 @@
+import { MigrationWave } from "../models/migration/migration-waves/migration-wave";
+
 export enum MigrationWaveView {
     submitButton = "#migration-wave-form-submit",
     applicationsSubmitButton = "#wave-form-submit",
@@ -10,3 +12,14 @@ export enum MigrationWaveView {
     yearInput = "input[aria-label='Select year']",
     applicationCountColumn = "td[data-label='Applications']",
 }
+
+export enum MigrationWavesSpecialColumns {
+    Applications = "Applications",
+    Stakeholders = "Stakeholders",
+}
+export const getSpecialMigrationWavesTableSelector = (
+    wave: MigrationWave,
+    columnSelector: MigrationWavesSpecialColumns
+) => {
+    return `table[aria-label="${columnSelector} table for migration wave ${wave.name}"]`;
+};

@@ -14,7 +14,11 @@ import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { Stakeholdergroups } from "../../../models/migration/controls/stakeholdergroups";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { successAlertMessage } from "../../../views/common.view";
-import { MigrationWaveView } from "../../../views/migration-wave.view";
+import {
+    getSpecialMigrationWavesTableSelector,
+    MigrationWavesSpecialColumns,
+    MigrationWaveView,
+} from "../../../views/migration-wave.view";
 
 let stakeHolders: Stakeholders[];
 let stakeHolderGroups: Stakeholdergroups[];
@@ -32,7 +36,6 @@ describe(["@tier1"], "Migration Waves CRUD operations", () => {
     });
 
     beforeEach("Login", function () {
-        cy.intercept("GET", "/hub/migrationwaves*").as("getWave");
         cy.intercept("POST", "/hub/migrationwaves*").as("postWave");
         cy.intercept("PUT", "/hub/migrationwaves*/*").as("putWave");
         cy.intercept("DELETE", "/hub/migrationwaves*/*").as("deleteWave");
@@ -48,6 +51,7 @@ describe(["@tier1"], "Migration Waves CRUD operations", () => {
             stakeHolderGroups
         );
 
+        // Create
         migrationWave.create();
         checkSuccessAlert(
             successAlertMessage,
@@ -57,6 +61,7 @@ describe(["@tier1"], "Migration Waves CRUD operations", () => {
         cy.wait("@postWave");
         cy.get("td", { timeout: 12 * SEC }).should("contain", migrationWave.name);
 
+        // Edit
         const newName = data.getRandomWord(8);
         migrationWave.edit({ name: newName });
         checkSuccessAlert(
@@ -68,6 +73,7 @@ describe(["@tier1"], "Migration Waves CRUD operations", () => {
         cy.get("td", { timeout: 12 * SEC }).should("contain", newName);
         migrationWave.name = newName;
 
+        // Delete
         migrationWave.delete();
         checkSuccessAlert(
             successAlertMessage,
@@ -90,27 +96,33 @@ describe(["@tier1"], "Migration Waves CRUD operations", () => {
             applications
         );
         migrationWave.create();
-        const applicationTableSelector = `table[aria-label="Applications table for migration wave ${migrationWave.name}"]`;
 
-        cy.contains("td", migrationWave.name)
-            .siblings(MigrationWaveView.applicationCountColumn)
-            .should("contain", 2);
+        verifySpecialColumnCount(migrationWave, MigrationWavesSpecialColumns.Stakeholders, 2);
+        verifySpecialColumnCount(migrationWave, MigrationWavesSpecialColumns.Applications, 2);
 
+        // Clicks the Application number
         cy.contains("td", migrationWave.name)
             .siblings(MigrationWaveView.applicationCountColumn)
             .click();
+
+        const applicationTableSelector = getSpecialMigrationWavesTableSelector(
+            migrationWave,
+            MigrationWavesSpecialColumns.Applications
+        );
+
+        // Verifies the application names
         cy.get(applicationTableSelector)
             .should("contain", applications[0].name)
             .and("contain", applications[1].name);
 
+        // Delete all applications by clicking the delete buttons
         cy.get(applicationTableSelector + " td > button").each((btn) => {
             cy.wrap(btn).click();
             cy.wait(3 * SEC);
         });
+        migrationWave.applications = [];
 
-        cy.contains("td", migrationWave.name)
-            .siblings(MigrationWaveView.applicationCountColumn)
-            .should("contain", 0);
+        verifySpecialColumnCount(migrationWave, MigrationWavesSpecialColumns.Applications, 0);
 
         migrationWave.delete();
     });
@@ -120,4 +132,14 @@ describe(["@tier1"], "Migration Waves CRUD operations", () => {
         deleteAllStakeholderGroups();
         deleteApplicationTableRows();
     });
+
+    const verifySpecialColumnCount = (
+        wave: MigrationWave,
+        column: MigrationWavesSpecialColumns,
+        expectedCount: number
+    ) => {
+        cy.contains("td", wave.name)
+            .siblings(`td[data-label='${column}']`)
+            .should("contain", expectedCount);
+    };
 });

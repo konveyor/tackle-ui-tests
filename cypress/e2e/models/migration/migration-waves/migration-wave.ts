@@ -122,18 +122,25 @@ export class MigrationWave {
         cy.get(MigrationWaveView.applicationsSubmitButton).click();
     }
 
-    public static fillName(name: string) {
+    public clearApplications(): void {
+        if (!this.applications || !this.applications.length) {
+            expect(
+                true,
+                `You can't clear the applications of a migration wave with no applications associated.\
+               This is not a test-related issue, is a problem in your code`
+            ).to.eq(false);
+            return;
+        }
+
+        cy.contains("Manage applications").click();
+        cy.get("div[role='dialog'] button[aria-label='Select']").click();
+        cy.contains(button, "Select none").click();
+        cy.get(MigrationWaveView.applicationsSubmitButton).click();
+        this.applications = [];
+    }
+
+    public static fillName(name: string): void {
         inputText(MigrationWaveView.nameInput, name);
-    }
-
-    private static fillStakeHolder(stakeHolderName: string) {
-        inputText(MigrationWaveView.stakeHoldersInput, stakeHolderName);
-        cy.get("button").contains(stakeHolderName).click();
-    }
-
-    private static fillStakeHolderGroup(stakeHolderGroupName: string) {
-        inputText(MigrationWaveView.stakeHolderGroupsInput, stakeHolderGroupName);
-        cy.get("button").contains(stakeHolderGroupName).click();
     }
 
     /**
@@ -141,7 +148,7 @@ export class MigrationWave {
      * It selects the date using the picker because it can't be manually entered right now due to bug MTA-706
      * @param date
      */
-    public fillStartDate(date: Date) {
+    public fillStartDate(date: Date): void {
         const nowTime = new Date().setHours(0, 0, 0, 0);
         date.setHours(0, 0, 0, 0);
         if (nowTime >= date.getTime()) {
@@ -201,6 +208,16 @@ export class MigrationWave {
                 MigrationWave.fillStakeHolderGroup(stakeHolderGroups.name)
             );
         }
+    }
+
+    private static fillStakeHolder(stakeHolderName: string) {
+        inputText(MigrationWaveView.stakeHoldersInput, stakeHolderName);
+        cy.get("button").contains(stakeHolderName).click();
+    }
+
+    private static fillStakeHolderGroup(stakeHolderGroupName: string) {
+        inputText(MigrationWaveView.stakeHolderGroupsInput, stakeHolderGroupName);
+        cy.get("button").contains(stakeHolderGroupName).click();
     }
 
     private expandActionsMenu() {
