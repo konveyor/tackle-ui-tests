@@ -1,44 +1,57 @@
 import { login } from "../../../../utils/utils";
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
 import { CredentialType } from "../../../types/constants";
-import { CredentialsJira } from "../../../models/administration/credentials/credentialsJira";
+import { CredentialsBasicJira } from "../../../models/administration/credentials/credentialsBasicJira";
 import { CredentialsData } from "../../../types/types";
 
 describe(["@tier2"], "Validation of jira credentials", () => {
     const toBeCanceled = true;
-    let validJiraCredentials: CredentialsData;
-    let randomJiraCredentials: CredentialsData;
-    let jiraCredentials: CredentialsJira;
+    let validJiraBasicCredentials: CredentialsData;
+    let randomJiraBasicCredentials: CredentialsData;
+    let validJiraTokenCredentials: CredentialsData;
+    let randomJiraTokenCredentials: CredentialsData;
+    let jiraBasicCredentials: CredentialsBasicJira;
+    let jiraTokenCredentials: CredentialsBasicJira;
 
     before("Login", function () {
         // Perform login
         login();
-        validJiraCredentials = getRandomCredentialsData(CredentialType.jira, "", true);
-        randomJiraCredentials = getRandomCredentialsData(CredentialType.jira, "", false);
-        jiraCredentials = new CredentialsJira(randomJiraCredentials);
+        validJiraBasicCredentials = getRandomCredentialsData(CredentialType.jiraBasic, "", true);
+        randomJiraBasicCredentials = getRandomCredentialsData(CredentialType.jiraBasic, "", false);
+        jiraBasicCredentials = new CredentialsBasicJira(randomJiraBasicCredentials);
+
+        validJiraTokenCredentials = getRandomCredentialsData(CredentialType.jiraToken, "", true);
+        randomJiraTokenCredentials = getRandomCredentialsData(CredentialType.jiraToken, "", false);
+        jiraTokenCredentials = new CredentialsBasicJira(randomJiraBasicCredentials);
     });
 
     it("Creating Jira credentials and cancelling without saving", () => {
-        jiraCredentials.create(toBeCanceled);
+        jiraBasicCredentials.create(toBeCanceled);
+        jiraTokenCredentials.create(toBeCanceled);
     });
 
     it("Creating Jira credentials", () => {
-        jiraCredentials.create();
+        jiraBasicCredentials.create();
+        jiraTokenCredentials.create();
     });
 
     it("Editing Jira credentials and cancelling without saving", () => {
-        jiraCredentials.edit(validJiraCredentials, toBeCanceled);
+        jiraBasicCredentials.edit(validJiraBasicCredentials, toBeCanceled);
+        jiraTokenCredentials.edit(validJiraBasicCredentials, toBeCanceled);
     });
 
     it("Editing Jira credentials", () => {
-        jiraCredentials.edit(validJiraCredentials);
+        jiraBasicCredentials.edit(validJiraBasicCredentials);
+        jiraTokenCredentials.edit(validJiraBasicCredentials);
     });
 
     it("Delete Jira credentials and cancel deletion", () => {
-        jiraCredentials.delete(toBeCanceled);
+        jiraBasicCredentials.delete(toBeCanceled);
+        jiraTokenCredentials.delete(toBeCanceled);
     });
 
     after("Delete Jira credentials", () => {
-        jiraCredentials.delete();
+        jiraBasicCredentials.delete();
+        jiraTokenCredentials.delete();
     });
 });

@@ -110,7 +110,8 @@ export enum CredentialType {
     proxy = "Proxy",
     sourceControl = "Source Control",
     maven = "Maven",
-    jira = "Jira",
+    jiraBasic = "Jira Basic Auth",
+    jiraToken = "Jira Bearer Token",
 }
 
 export enum JiraType {

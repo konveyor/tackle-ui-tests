@@ -1,4 +1,4 @@
-import { CredentialsJira } from "../credentials/credentialsJira";
+import { CredentialsBasicJira } from "../credentials/credentialsBasicJira";
 import { JiraConnectionData } from "../../../types/types";
 import {
     cancelForm,
@@ -45,7 +45,7 @@ export class Jira {
     /** One of possible Jira setup types */
     type: string;
     /** Credential to be used to authorize Jira connection */
-    credential: CredentialsJira;
+    credential: CredentialsBasicJira;
     /** Shows if insecure Jira connection is acceptable or not */
     isInsecure: boolean;
 

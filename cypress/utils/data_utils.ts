@@ -24,7 +24,7 @@ import {
     RulesRepositoryFields,
     JiraConnectionData,
 } from "../e2e/types/types";
-import { CredentialsJira } from "../e2e/models/administration/credentials/credentialsJira";
+import { CredentialsBasicJira } from "../e2e/models/administration/credentials/credentialsBasicJira";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
@@ -131,6 +131,7 @@ export function getRandomCredentialsData(
     let email = getEmail();
     //TODO: This value is set to 20 to avoid a bug https://issues.redhat.com/browse/MTA-717. Need to be updated to 200 when bug is fixed
     let token = getRandomWord(20);
+    let key = getRandomWord(20);
 
     if (type === CredentialType.proxy) {
         if (useTestingAccount) {
@@ -146,7 +147,7 @@ export function getRandomCredentialsData(
         };
     }
 
-    if (type === CredentialType.jira) {
+    if (type === CredentialType.jiraBasic) {
         if (useTestingAccount) {
             email = Cypress.env("jira_email");
             token = Cypress.env("jira_token");
@@ -157,6 +158,18 @@ export function getRandomCredentialsData(
             description: getDescription(),
             email: email,
             token: token,
+        };
+    }
+
+    if (type === CredentialType.jiraToken) {
+        if (useTestingAccount) {
+            key = Cypress.env("jira_key");
+        }
+        return {
+            type: type,
+            name: getRandomWord(6),
+            description: getDescription(),
+            key: key,
         };
     }
 
@@ -204,7 +217,7 @@ export function getRandomCredentialsData(
 }
 
 export function getJiraConnectionData(
-    jiraCredential: CredentialsJira,
+    jiraCredential: CredentialsBasicJira,
     type: string,
     url: string,
     isInsecure?: boolean
