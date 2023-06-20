@@ -256,9 +256,9 @@ export function removeMember(memberName: string): void {
     cy.get("span").contains(memberName).siblings(commonView.removeButton).click();
 }
 
-export function exists(value: string): void {
+export function exists(value: string, tableSelector = commonView.appTable): void {
     // Wait for DOM to render table and sibling elements
-    cy.get(commonView.appTable, { timeout: 5 * SEC })
+    cy.get(tableSelector, { timeout: 5 * SEC })
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
@@ -268,17 +268,14 @@ export function exists(value: string): void {
         });
 }
 
-export function notExists(value: string): void {
+export function notExists(value: string, tableSelector = commonView.appTable): void {
     // Wait for DOM to render table and sibling elements
-    cy.get(commonView.appTable, { timeout: 5 * SEC })
+    cy.get(tableSelector, { timeout: 5 * SEC })
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
                 selectItemsPerPage(100);
-                cy.get("table[aria-label='main-table']", { timeout: 5 * SEC }).should(
-                    "not.contain",
-                    value
-                );
+                cy.get(tableSelector, { timeout: 5 * SEC }).should("not.contain", value);
             }
         });
 }

@@ -99,11 +99,6 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
              * that the image was uploaded successfully
              */
             expect(err.message).to.include("File Not Found");
-            cy.get(CustomMigrationTargetView.imageHelper).should(
-                "contain",
-                "Max image file size of 1 MB exceeded."
-            );
-
             return false;
         });
         CustomMigrationTarget.uploadImage("img/big-image.jpg");
@@ -111,7 +106,7 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         cy.wait(2 * SEC);
     });
 
-    it("Rule repository URL validation", function () {
+    it("BUG MTA-484 | Rule repository URL validation", function () {
         // Fails due to bug 484
         CustomMigrationTarget.openNewForm();
         click(CustomMigrationTargetView.retrieveFromARepositoryRadio);

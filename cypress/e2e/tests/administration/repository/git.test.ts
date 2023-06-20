@@ -93,7 +93,7 @@ describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, "None");
+        application.manageCredentials(source_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
@@ -115,7 +115,7 @@ describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, "None");
+        application.manageCredentials(source_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Failed");
         application.openAnalysisDetails();
