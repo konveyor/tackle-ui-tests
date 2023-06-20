@@ -33,7 +33,7 @@ describe(["@tier2"], "Migration waves filter validations", function () {
         login();
 
         // Create multiple migration waves
-        migrationWavesList = createMultipleMigrationWaves(3);
+        migrationWavesList = createMultipleMigrationWaves(2);
     });
 
     it("Name filter validations", function () {

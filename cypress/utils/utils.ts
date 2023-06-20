@@ -831,13 +831,13 @@ export function createMultipleMigrationWaves(
     stakeholdersList?: Array<Stakeholders>,
     stakeholderGroupsList?: Array<Stakeholdergroups>
 ): Array<MigrationWave> {
-    let migrationWaveList: Array<MigrationWave> = [];
+    const migrationWaveList: Array<MigrationWave> = [];
     for (let i = 0; i < numberOfMigrationWaves; i++) {
         const now = new Date();
         now.setDate(now.getDate() + 1);
         const end = new Date(now.getTime());
         end.setFullYear(end.getFullYear() + 1);
-        // Create new stakeholder
+        // Create new migration wave
         const migrationWave = new MigrationWave(
             data.getAppName(),
             now,
