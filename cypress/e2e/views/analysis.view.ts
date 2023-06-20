@@ -20,8 +20,8 @@ export const sourceofAnalysiSelect = "[placeholder='Select a business service']"
 export const sourceDropdown = "#analysis-mode-toggle";
 export const analysisColumn = "td[data-label='Analysis']";
 export const manageCredentials = "Manage credentials";
-export const sourceCredential = "input[aria-label='sourceCredentials']";
-export const mavenCredential = "input[aria-label='mavenSettings']";
+export const sourceCredential = "#source-credentials-toggle-select-typeahead";
+export const mavenCredential = "#maven-settings-toggle-select-typeahead";
 export const nextButton = "button[type=submit]";
 export const addRules = "div > footer[class='pf-c-modal-box__footer'] > button";
 export const fileName = "div[class='fileName']";

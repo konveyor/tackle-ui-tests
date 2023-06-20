@@ -22,7 +22,6 @@ import {
     existsWithinRow,
     expandRowDetails,
     closeRowDetails,
-    hasToBeSkipped,
     preservecookies,
     selectUserPerspective,
     deleteByList,
@@ -33,6 +32,7 @@ import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions
 import { migration, tdTag } from "../../../../types/constants";
 import { groupsCount } from "../../../../views/stakeholders.view";
 import * as data from "../../../../../utils/data_utils";
+import { stakeHoldersTable } from "../../../../views/common.view";
 
 describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
     before("Login", function () {
@@ -56,7 +56,7 @@ describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
         // Create new stakeholder
         stakeholder.create();
         cy.wait("@postStakeholder");
-        exists(stakeholder.email);
+        exists(stakeholder.email, stakeHoldersTable);
 
         // Edit the current stakeholder's name
         let updatedStakeholderName = data.getFullName();
@@ -64,7 +64,7 @@ describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
         cy.wait("@getStakeholders");
 
         // Assert that stakeholder name got edited
-        exists(updatedStakeholderName);
+        exists(updatedStakeholderName, stakeHoldersTable);
 
         // Delete stakeholder
         stakeholder.delete();
@@ -72,7 +72,7 @@ describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
         cy.wait("@getStakeholders");
 
         // Assert that newly created stakeholder is deleted
-        notExists(stakeholder.email);
+        notExists(stakeholder.email, stakeHoldersTable);
     });
 
     it("Stakeholder CRUD cancel", function () {
@@ -81,30 +81,29 @@ describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
         const stakeholder = new Stakeholders(data.getEmail(), initialStakeholderName);
         // Cancel the creation of new stakeholder task
         stakeholder.create(true);
-        notExists(stakeholder.email);
+        notExists(stakeholder.email, stakeHoldersTable);
 
         // Create new stakeholder for edit and delete cancel verification purpose
         stakeholder.create();
         cy.wait("@postStakeholder");
-        exists(stakeholder.email);
+        exists(stakeholder.email, stakeHoldersTable);
 
         // Cancel the Edit stakeholder task
         stakeholder.edit({}, true);
 
         // Assert that stakeholder name did not get edited
-        exists(initialStakeholderName);
+        exists(initialStakeholderName, stakeHoldersTable);
 
         // Cancel the Delete stakeholder task
         stakeholder.delete(true);
 
         // Assert that stakeholder still exists, as delete was cancelled
-        exists(stakeholder.email);
+        exists(stakeholder.email, stakeHoldersTable);
 
         // Finally, perform clean up by deleting the stakeholder
         stakeholder.delete();
         cy.wait("@deleteStakeholder");
         cy.wait("@getStakeholders");
-        // notExists(stakeholder.email);
     });
 
     it("Stakeholder CRUD operations with members (jobfunction and groups)", function () {
@@ -139,7 +138,7 @@ describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
         // Create new stakeholder with one of the job function and group created above
         stakeholder.create();
         cy.wait("@postStakeholder");
-        exists(stakeholder.email);
+        exists(stakeholder.email, stakeHoldersTable);
 
         // Edit the current stakeholder's name, jobfunction and stakeholder group (by removing first one and adding second)
         stakeholder.edit({
@@ -165,7 +164,7 @@ describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
         cy.wait("@getStakeholders");
 
         // Assert that newly created stakeholder is deleted
-        notExists(stakeholder.email);
+        notExists(stakeholder.email, stakeHoldersTable);
 
         // Perform clean up by deleting jobfunctions and groups created at the start of test
         deleteByList(jobFunctionsList);
