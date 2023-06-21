@@ -130,9 +130,12 @@ export class Jira {
      * This method creates new Jira connection according to object values
      *
      * @param toBeCanceled is responsible for canceling creation instead of submitting if set to `true`
+     *
+     * @param expectedToFail is set to `true` when running negative test, and it is OK that validation fails
      */
-    public create(toBeCanceled = false): void {
+    public create(toBeCanceled = false, expectedToFail = false): void {
         Jira.openList();
+        click("#create-Tracker");
         this.fillName();
         this.fillUrl();
         this.selectType();
@@ -140,10 +143,10 @@ export class Jira {
         this.configureInsecure();
         if (!toBeCanceled) {
             submitForm();
-            this.validateState();
+            this.validateState(expectedToFail);
         } else {
             cancelForm();
-            notExists(this.name);
+            notExists(this.name, "table[aria-label='Jira trackers table']");
         }
     }
 
@@ -151,9 +154,16 @@ export class Jira {
      * This method edits existing Jira connection according to object values
      *
      * @param jiraConnectionData brings new values that should be applied to instance.
+     *
      * @param toBeCanceled is responsible for canceling editing instead of submitting if set to `true`
+     *
+     * @param expectedToFail is set to `true` when running negative test, and it is OK that validation fails
      */
-    public edit(jiraConnectionData: JiraConnectionData, toBeCanceled = false): void {
+    public edit(
+        jiraConnectionData: JiraConnectionData,
+        toBeCanceled = false,
+        expectedToFail = false
+    ): void {
         Jira.openList();
         performRowAction(this.name, editAction);
         const oldValues = this.storeOldValues();
@@ -171,8 +181,7 @@ export class Jira {
             this.init(oldValues);
             cancelForm();
         }
-        this.validateState();
-        exists(this.name);
+        this.validateState(expectedToFail);
     }
 
     /**
@@ -185,26 +194,36 @@ export class Jira {
         performRowAction(this.name, deleteAction);
         if (toBeCanceled) {
             click(cancelButton);
-            exists(this.name);
+            this.validateState();
         } else {
             click(confirmButton);
-            notExists(this.name);
+            notExists(this.name, "table[aria-label='Jira trackers table']");
         }
     }
 
     /**
      * This method validates all fields values of Jira connection after creation
      */
-    public validateState(): void {
+    public validateState(expectedToFail = false): void {
+        let expectedStatus: string;
+        if (expectedToFail) {
+            expectedStatus = "Not connected";
+        } else {
+            expectedStatus = "Connected";
+        }
+        // This is horrible, but somehow further code inside `cy.get()` takes OLD values from the object and I need to define separate values and use them to override this problem.
+        const name = this.name;
+        const url = this.url;
+
         cy.get(tdTag, { timeout: 120 * SEC })
             .contains(this.name, { timeout: 120 * SEC })
             .closest(trTag)
             .within(() => {
-                validateTextPresence(jiraLabels.name, this.name);
-                validateTextPresence(jiraLabels.url, this.url);
-                // Commenting lines below because of the bug that respective columns have same labels (MTA-766)
+                validateTextPresence(jiraLabels.name, name);
+                validateTextPresence(jiraLabels.url, url);
+                // Commenting check below due to the bug https://issues.redhat.com/browse/MTA-815
                 // validateTextPresence(jiraLabels.type, this.type);
-                // validateTextPresence(jiraLabels.connection, "Connected");
+                validateTextPresence(jiraLabels.connection, expectedStatus);
             });
     }
 
