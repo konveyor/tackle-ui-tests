@@ -269,15 +269,12 @@ export function exists(value: string, tableSelector = commonView.appTable): void
 }
 
 export function notExists(value: string, tableSelector = commonView.appTable): void {
-    // Wait for DOM to render table and sibling elements
-    cy.get(tableSelector, { timeout: 5 * SEC })
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                selectItemsPerPage(100);
-                cy.get(tableSelector, { timeout: 5 * SEC }).should("not.contain", value);
-            }
-        });
+    cy.get(tableSelector).then(($tbody) => {
+        if ($tbody.text() !== "No data available") {
+            selectItemsPerPage(100);
+            cy.get(tableSelector, { timeout: 5 * SEC }).should("not.contain", value);
+        }
+    });
 }
 
 export function selectFilter(filterName: string, identifiedRisk?: boolean, value = 0): void {
