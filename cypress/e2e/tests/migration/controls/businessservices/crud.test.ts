@@ -28,6 +28,7 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 
 import * as data from "../../../../../utils/data_utils";
 import { migration } from "../../../../types/constants";
+import { stakeHoldersTable } from "../../../../views/common.view";
 
 describe(["@tier1", "@interop"], "Business service CRUD operations", () => {
     before("Login", function () {
@@ -108,6 +109,6 @@ describe(["@tier1", "@interop"], "Business service CRUD operations", () => {
         cy.wait("@getStakeholders");
 
         // Assert that stakeholder owner is deleted
-        notExists(stakeholder.email);
+        notExists(stakeholder.email, stakeHoldersTable);
     });
 });

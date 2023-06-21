@@ -31,7 +31,7 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import { tdTag, trTag, stakeholders, migration } from "../../../../types/constants";
-import { expandRow } from "../../../../views/common.view";
+import { expandRow, stakeHoldersTable } from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
 
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
@@ -84,7 +84,7 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
         );
         stakeholder.create();
         cy.wait("@postStakeholder");
-        exists(stakeholder.email);
+        exists(stakeholder.email, stakeHoldersTable);
 
         // Check if both the stakeholder groups got attached to stakeholder
         selectItemsPerPage(100);
@@ -170,7 +170,7 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName(), jobfunction.name);
         stakeholder.create();
         cy.wait("@postStakeholder");
-        exists(stakeholder.email);
+        exists(stakeholder.email, stakeHoldersTable);
 
         // Check if the job function got attached to stakeholder
         selectItemsPerPage(100);
@@ -223,6 +223,6 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
         cy.wait("@getStakeholders");
 
         // Assert that stakeholder got deleted
-        notExists(stakeholder.email);
+        notExists(stakeholder.email, stakeHoldersTable);
     });
 });

@@ -31,7 +31,7 @@ import { navTab } from "../../../../views/menu.view";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { tdTag, trTag, stakeholderGroups, migration } from "../../../../types/constants";
-import { expandRow } from "../../../../views/common.view";
+import { expandRow, stakeHoldersTable } from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
 
 var stakeholdersList: Array<Stakeholders> = [];
@@ -119,7 +119,7 @@ describe(["@tier1"], "Stakeholder group linked to stakeholder members", () => {
         stakeholdersList[1].delete();
         cy.wait("@getStakeholders");
         // Assert that second stakeholder deleted
-        notExists(stakeholdersList[1].name);
+        notExists(stakeholdersList[1].name, stakeHoldersTable);
 
         // Go to stakeholder group page
         clickByText(navTab, stakeholderGroups);
@@ -148,6 +148,6 @@ describe(["@tier1"], "Stakeholder group linked to stakeholder members", () => {
         stakeholdersList[0].delete();
         cy.wait("@getStakeholders");
         // Assert that first stakeholder deleted
-        notExists(stakeholdersList[0].name);
+        notExists(stakeholdersList[0].name, stakeHoldersTable);
     });
 });
