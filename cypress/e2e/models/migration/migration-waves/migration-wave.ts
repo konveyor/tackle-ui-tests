@@ -16,14 +16,22 @@ import {
     trTag,
     selectNone,
     manageApplications,
+    exportToIssueManagerAction,
+    JiraType,
 } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { MigrationWaveView } from "../../../views/migration-wave.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
-import { cancelButton, confirmButton, itemsSelectInsideDialog } from "../../../views/common.view";
+import {
+    cancelButton,
+    confirmButton,
+    itemsSelectInsideDialog,
+    submitButton,
+} from "../../../views/common.view";
 import { selectBox } from "../../../views/applicationinventory.view";
 import { Application } from "../../../models/migration/applicationinventory/application";
+import { Jira } from "../../../models/administration/jira/jira";
 
 export interface MigrationWave {
     name: string;
@@ -96,6 +104,29 @@ export class MigrationWave {
         this.expandActionsMenu();
         cy.contains(deleteAction).click();
         click(confirmButton);
+    }
+
+    public exportToIssueManager(
+        issueManager: string,
+        instance: string,
+        project: string,
+        issueType: string
+    ): void {
+        this.expandActionsMenu();
+        cy.contains(exportToIssueManagerAction).click();
+        cy.get(MigrationWaveView.issueManagerSelectToggle).click();
+        cy.contains(issueManager).click();
+
+        cy.get(MigrationWaveView.instanceSelectToggle).click();
+        cy.contains(instance).click();
+
+        cy.get(MigrationWaveView.projectSelectToggle).click();
+        cy.contains(project).click();
+
+        cy.get(MigrationWaveView.issueTypeSelectToggle).click();
+        cy.contains(issueType).click();
+
+        cy.get(submitButton).click();
     }
 
     public setApplications(toBeCanceled = false): void {
