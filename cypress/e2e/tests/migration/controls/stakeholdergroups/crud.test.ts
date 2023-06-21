@@ -26,6 +26,7 @@ import {
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import * as data from "../../../../../utils/data_utils";
+import { stakeHoldersTable } from "../../../../views/common.view";
 
 describe(["@tier1"], "Stakeholder group CRUD operations", () => {
     const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
@@ -73,7 +74,7 @@ describe(["@tier1"], "Stakeholder group CRUD operations", () => {
     it("Stakeholder group CRUD with stakeholder member attached", function () {
         // Create stakeholder
         stakeholder.create();
-        exists(stakeholder.email);
+        exists(stakeholder.email, stakeHoldersTable);
         var memberStakeholderName = stakeholder.name;
 
         // Create new object of stakeholder group with members
@@ -115,6 +116,6 @@ describe(["@tier1"], "Stakeholder group CRUD operations", () => {
         stakeholder.delete();
 
         // Assert that created stakeholder is deleted
-        notExists(stakeholder.email);
+        notExists(stakeholder.email, stakeHoldersTable);
     });
 });
