@@ -107,7 +107,7 @@ export class Assessment extends Application {
             const migrationActions = ["Repurchase", "Retire"];
             action = migrationActions[Math.floor(Math.random() * migrationActions.length)];
         }
-        cy.get(proposedActionSelect).eq(0).click();
+        cy.get(proposedActionSelect).click();
         cy.contains(button, action).click();
     }
 
@@ -121,7 +121,7 @@ export class Assessment extends Application {
             const effortEstimates = ["Large", "Extra large"];
             effort = effortEstimates[Math.floor(Math.random() * effortEstimates.length)];
         }
-        cy.get(effortEstimateSelect).eq(1).click();
+        cy.get(effortEstimateSelect).click();
         cy.contains(button, effort).click();
     }
 
