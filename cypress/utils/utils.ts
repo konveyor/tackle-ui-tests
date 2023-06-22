@@ -1461,8 +1461,8 @@ export function validateTooShortInput(selector, anotherSelector?: string): void 
     doesExistText("This field must contain at least 3 characters.", true);
 }
 
-export function validateTooLongInput(selector, anotherSelector?: string): void {
-    inputText(selector, randomWordGenerator(121));
+export function validateTooLongInput(selector, anotherSelector?: string, length = 121): void {
+    inputText(selector, randomWordGenerator(length));
     if (anotherSelector) click(anotherSelector);
     doesExistText("This field must contain fewer than 120 characters.", true);
 }

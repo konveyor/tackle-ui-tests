@@ -14,6 +14,8 @@ import {
     selectUserPerspective,
     submitForm,
     validateTextPresence,
+    validateTooLongInput,
+    validateTooShortInput,
 } from "../../../../utils/utils";
 import {
     instanceName,
@@ -240,5 +242,20 @@ export class Jira {
             type: this.type,
             url: this.url,
         };
+    }
+
+    static validateFields() {
+        Jira.openList();
+        click("#create-Tracker");
+        this.fillNameTooShort();
+        this.fillNameTooLong();
+    }
+
+    protected static fillNameTooShort() {
+        validateTooShortInput(instanceName);
+    }
+
+    protected static fillNameTooLong() {
+        validateTooLongInput(instanceName);
     }
 }
