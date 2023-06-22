@@ -6,12 +6,11 @@ import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
-import { RbacValidationRules } from "../../types/types";
-import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
+import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import * as data from "../../../utils/data_utils";
 
-describe(["@tier2"], "Architect RBAC operations", function () {
+describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
     let userArchitect = new UserArchitect(getRandomUserData());
     const application = new Assessment(getRandomApplicationData());
     let stakeholdersList: Array<Stakeholders> = [];
@@ -22,6 +21,7 @@ describe(["@tier2"], "Architect RBAC operations", function () {
     );
 
     before("Creating RBAC users, adding roles for them", function () {
+        //Need to log in as admin and create simple app with known name to use it for tests
         login();
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
