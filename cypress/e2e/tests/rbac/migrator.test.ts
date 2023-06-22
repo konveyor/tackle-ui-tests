@@ -5,13 +5,12 @@ import { deleteByList, getRandomApplicationData, login, logout } from "../../../
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType } from "../../types/constants";
-import { RbacValidationRules } from "../../types/types";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import * as data from "../../../utils/data_utils";
 
-describe(["@tier2"], "Migrator RBAC operations", () => {
+describe(["@tier2", "@rhsso"], "Migrator RBAC operations", () => {
     let userMigrator = new UserMigrator(getRandomUserData());
     const application = new Assessment(getRandomApplicationData());
     let stakeholdersList: Array<Stakeholders> = [];

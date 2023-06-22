@@ -6,5 +6,5 @@ export enum jiraLabels {
     name = 'td[data-label="Instance name"]',
     url = 'td[data-label="URL"]',
     type = 'td[data-label="Instance type"]',
-    connection = 'td[data-label="Instance connection"]',
+    connection = 'td[data-label="Connection"]',
 }

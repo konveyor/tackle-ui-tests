@@ -66,7 +66,7 @@ describe(["@tier1"], "Source Analysis", () => {
 
         // Create Maven credentials
         maven_credential = new CredentialsMaven(
-            data.getRandomCredentialsData(CredentialType.maven, "None", true)
+            data.getRandomCredentialsData(CredentialType.maven, null, true)
         );
         maven_credential.create();
     });
@@ -162,7 +162,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials("None", maven_credential.name);
+        application.manageCredentials(null, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
@@ -180,7 +180,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, "None");
+        application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
@@ -205,7 +205,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(scCredsKey.name, "None");
+        application.manageCredentials(scCredsKey.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
@@ -223,7 +223,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, "None");
+        application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
@@ -260,7 +260,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, "None");
+        application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.tagAndCategoryExists(
