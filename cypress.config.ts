@@ -12,8 +12,9 @@ export default defineConfig({
         git_password: "",
         jira_url: "",
         jira_key: "",
-        jira_email: "",
-        jira_token: "",
+        jira_email: "https://mta-qe-testing.atlassian.net/",
+        jira_token:
+            "ATATT3xFfGF0HJWCrWtK4EBIQKsYMEGXmsIT896BSOiwQYI-9ZYCOwhqkPrWx3ozYDAwwTxMolJx4PDFbMitqMUCBFIydsA7Cn7AB68o1oOZ7RHQxFVknCfY6YeD-mYa-15J9Ag623WF8ukfaVY3xyAo-3MGB2bFNmH6e4vEi_StiXaXym6YPo4=135F5AA6",
         tackleUrl: "https://tackle-konveyor-tackle.apps.mtv03.rhos-psi.cnv-qe.rhood.us",
         rwx_enabled: true,
     },
