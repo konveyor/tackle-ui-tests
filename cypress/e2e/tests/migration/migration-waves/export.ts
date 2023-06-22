@@ -30,8 +30,8 @@ let migrationWave: MigrationWave;
 let jiraInstance: Jira;
 
 // Automates Polarion TC 340
-describe(["@tier3"], "Export Migration Wave to Issue Manager", () => {
-    before("Create test data", () => {
+describe(["@tier3"], "Export Migration Wave to Issue Manager", function () {
+    before("Create test data", function () {
         login();
         applications = createMultipleApplications(2);
 
@@ -46,7 +46,7 @@ describe(["@tier3"], "Export Migration Wave to Issue Manager", () => {
         migrationWave.create();
 
         const jiraCredentials = new CredentialsBasicJira(
-            data.getRandomCredentialsData(CredentialType.jiraBasic)
+            data.getRandomCredentialsData(CredentialType.jiraBasic, null, true)
         );
         jiraCredentials.create();
 
@@ -60,7 +60,24 @@ describe(["@tier3"], "Export Migration Wave to Issue Manager", () => {
     });
 
     it("Export to Jira", function () {
-        migrationWave.exportToIssueManager(JiraType.cloud, "asdasd", "Test", "Task");
+        let project = "";
+
+        jiraInstance
+            .getProjects()
+            .then((projects) => {
+                project = projects.find((proj) => proj.name === "Test").name;
+
+                return jiraInstance.getIssueTypes();
+            })
+            .then((issueTypes) => {
+                const task = issueTypes.find((issueType) => issueType.untranslatedName === "Task");
+                migrationWave.exportToIssueManager(
+                    JiraType.cloud,
+                    jiraInstance.name,
+                    project,
+                    task.untranslatedName
+                );
+            });
     });
 
     after("Clear test data", function () {
