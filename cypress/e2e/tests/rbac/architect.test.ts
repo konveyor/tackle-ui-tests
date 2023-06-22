@@ -6,12 +6,11 @@ import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
-import { RbacValidationRules } from "../../types/types";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import * as data from "../../../utils/data_utils";
 
-describe(["@tier2"], "Architect RBAC operations", function () {
+describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
     let userArchitect = new UserArchitect(getRandomUserData());
     const application = new Assessment(getRandomApplicationData());
     let stakeholdersList: Array<Stakeholders> = [];
