@@ -112,6 +112,7 @@ export class MigrationWave {
         project: string,
         issueType: string
     ): void {
+        MigrationWave.open();
         this.expandActionsMenu();
         cy.contains(exportToIssueManagerAction).click();
         cy.get(MigrationWaveView.issueManagerSelectToggle).click();

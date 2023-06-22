@@ -32,6 +32,7 @@ import {
     trTag,
 } from "../../../types/constants";
 import { cancelButton, confirmButton, navLink } from "../../../views/common.view";
+import { JiraIssueType, JiraProject } from "./jira-api.interface";
 
 /**
  * Base class for Jira connection
@@ -240,5 +241,27 @@ export class Jira {
             type: this.type,
             url: this.url,
         };
+    }
+
+    public getProjects(): Cypress.Chainable<JiraProject[]> {
+        return this.doJiraRequest<JiraProject[]>(`${this.url}/rest/api/3/project`);
+    }
+
+    public getIssueTypes(): Cypress.Chainable<JiraIssueType[]> {
+        return this.doJiraRequest<JiraIssueType[]>(`${this.url}/rest/api/3/issuetype`);
+    }
+
+    private doJiraRequest<T>(url: string): Cypress.Chainable<T> {
+        const basicAuth = Buffer.from(`${this.credential.email}:${this.credential.token}`).toString(
+            "base64"
+        );
+        return cy
+            .request({
+                url: url,
+                headers: {
+                    Authorization: "Basic " + basicAuth,
+                },
+            })
+            .its("body");
     }
 }
