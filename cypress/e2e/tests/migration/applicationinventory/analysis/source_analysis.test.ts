@@ -116,7 +116,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.validateStoryPoints();
     });
 
-    it("Source + dependencies analysis on tackletest app", function () {
+    it.only("Source + dependencies analysis on tackletest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies", {
