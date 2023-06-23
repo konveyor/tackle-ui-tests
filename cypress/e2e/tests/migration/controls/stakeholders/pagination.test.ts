@@ -35,6 +35,7 @@ import {
     nextPageButton,
     pageNumInput,
     prevPageButton,
+    stakeHoldersTable,
 } from "../../../../views/common.view";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
@@ -156,7 +157,7 @@ describe(["@tier3"], "Stakeholder pagination validations", function () {
         cy.wait(2000);
 
         // Delete all items of last page
-        deleteTableRows();
+        deleteTableRows(stakeHoldersTable);
 
         // Verify that page is re-directed to previous page
         cy.get("td[data-label=Email]").then(($rows) => {
