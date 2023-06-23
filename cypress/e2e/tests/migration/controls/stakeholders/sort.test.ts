@@ -44,6 +44,7 @@ import {
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
+import { fieldHeader, groupCountHeader } from "../../../../views/stakeholders.view";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let jobFunctionsList: Array<Jobfunctions> = [];
@@ -70,9 +71,9 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
 
     after("Perform test data clean up", function () {
         // Delete the job functions, stakeholder groups and stakeholders created before the tests
-        deleteByList(jobFunctionsList);
         deleteByList(stakeholdersList);
         deleteByList(stakeholderGroupList);
+        deleteByList(jobFunctionsList);
     });
 
     it("Email sort validations", function () {
@@ -84,7 +85,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         const unsortedList = getTableColumnData(email);
 
         // Sort the stakeholders by email in ascending order
-        sortAsc(email);
+        sortAsc(email, fieldHeader);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
@@ -92,7 +93,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by email in descending order
-        sortDesc(email);
+        sortDesc(email, fieldHeader);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in descending order
@@ -109,7 +110,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         const unsortedList = getTableColumnData(displayName);
 
         // Sort the stakeholders by display name in ascending order
-        sortAsc(displayName);
+        sortAsc(displayName, fieldHeader);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
@@ -117,7 +118,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by display name in descending order
-        sortDesc(displayName);
+        sortDesc(displayName, fieldHeader);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in descending order
@@ -134,7 +135,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         const unsortedList = getTableColumnData(jobFunction);
 
         // Sort the stakeholders by Job function in ascending order
-        sortAsc(jobFunction);
+        sortAsc(jobFunction, fieldHeader);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
@@ -142,7 +143,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by Job function in descending order
-        sortDesc(jobFunction);
+        sortDesc(jobFunction, fieldHeader);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in descending order
@@ -159,7 +160,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         const unsortedList = getTableColumnData(groupCount);
 
         // Sort the stakeholders by group count in ascending order
-        sortAsc(groupCount);
+        sortAsc(groupCount, groupCountHeader);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
@@ -167,7 +168,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by group count in descending order
-        sortDesc(groupCount);
+        sortDesc(groupCount, groupCountHeader);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in descending order

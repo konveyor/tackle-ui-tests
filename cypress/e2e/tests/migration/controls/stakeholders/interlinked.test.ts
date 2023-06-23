@@ -147,7 +147,7 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
         cy.wait("@getStakeholders");
 
         // Assert that stakeholder got deleted
-        notExists(stakeholder.email);
+        notExists(stakeholder.email, stakeHoldersTable);
 
         // Delete first stakeholder group
         stakeholdergroupsList[0].delete();

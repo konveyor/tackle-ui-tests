@@ -65,9 +65,9 @@ describe(["@tier2"], "Stakeholder groups validations", () => {
 
         // Name constraints
         inputText(stakeholdergroupNameInput, data.getRandomWord(2));
-        cy.get(commonView.nameHelper).should("contain", minCharsMsg);
+        cy.get(commonView.nameHelperStakeholderGroup).should("contain", minCharsMsg);
         inputText(stakeholdergroupNameInput, data.getRandomWords(50));
-        cy.get(commonView.nameHelper).should("contain", max120CharsMsg);
+        cy.get(commonView.nameHelperStakeholderGroup).should("contain", max120CharsMsg);
         inputText(stakeholdergroupNameInput, data.getRandomWord(4));
         cy.get(commonView.submitButton).should("not.be.disabled");
 
@@ -115,7 +115,10 @@ describe(["@tier2"], "Stakeholder groups validations", () => {
         // Check name duplication
         inputText(stakeholdergroupNameInput, stakeholdergroup.name);
         cy.get(commonView.submitButton).should("be.disabled");
-        cy.get(commonView.nameHelper).should("contain.text", duplicateStakeholderGroupName);
+        cy.get(commonView.nameHelperStakeholderGroup).should(
+            "contain.text",
+            duplicateStakeholderGroupName
+        );
 
         // Delete created stakeholder group
         cy.get(commonView.closeButton).click();
