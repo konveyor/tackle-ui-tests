@@ -95,7 +95,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.validateStoryPoints();
     });
 
-    it("Custom rules with custom targets", function () {
+    it("Bug MTA-845 | Custom rules with custom targets", function () {
         // Automated https://issues.redhat.com/browse/TACKLE-561
         const application = new Analysis(
             getRandomApplicationData("customRule_customTarget"),

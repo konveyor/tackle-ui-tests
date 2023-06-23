@@ -104,7 +104,7 @@ describe(["@tier1"], "Binary Analysis", () => {
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 
-    it("Binary Analysis", function () {
+    it("Bug MTA-845 | Binary Analysis", function () {
         // For binary analysis application must have group,artifcat and version.
         const application = new Analysis(
             getRandomApplicationData("tackletestApp_binary", {
