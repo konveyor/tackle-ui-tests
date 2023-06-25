@@ -5,8 +5,8 @@ import {
     click,
     clickByText,
     disableSwitch,
+    doesExistText,
     enableSwitch,
-    exists,
     inputText,
     notExists,
     performRowAction,
@@ -18,6 +18,7 @@ import {
     validateTooShortInput,
 } from "../../../../utils/utils";
 import {
+    createButton,
     instanceName,
     instanceUrl,
     jiraLabels,
@@ -137,7 +138,7 @@ export class Jira {
      */
     public create(toBeCanceled = false, expectedToFail = false): void {
         Jira.openList();
-        click("#create-Tracker");
+        click(createButton);
         this.fillName();
         this.fillUrl();
         this.selectType();
@@ -213,7 +214,7 @@ export class Jira {
         } else {
             expectedStatus = "Connected";
         }
-        // This is horrible, but somehow further code inside `cy.get()` takes OLD values from the object and I need to define separate values and use them to override this problem.
+        // As 'within' uses callback function, object values inside of it may differ from values outside. Saving them separately to avoid this affect.
         const name = this.name;
         const url = this.url;
 
@@ -223,8 +224,7 @@ export class Jira {
             .within(() => {
                 validateTextPresence(jiraLabels.name, name);
                 validateTextPresence(jiraLabels.url, url);
-                // Commenting check below due to the bug https://issues.redhat.com/browse/MTA-815
-                // validateTextPresence(jiraLabels.type, this.type);
+                validateTextPresence(jiraLabels.type, this.type);
                 validateTextPresence(jiraLabels.connection, expectedStatus);
             });
     }
@@ -246,9 +246,12 @@ export class Jira {
 
     static validateFields() {
         Jira.openList();
-        click("#create-Tracker");
+        click(createButton);
         this.fillNameTooShort();
         this.fillNameTooLong();
+        this.fillUrlWrong();
+        this.fillUrlTooLong();
+        cancelForm();
     }
 
     protected static fillNameTooShort() {
@@ -257,5 +260,25 @@ export class Jira {
 
     protected static fillNameTooLong() {
         validateTooLongInput(instanceName);
+    }
+
+    protected static fillUrlWrong(): void {
+        inputText(instanceUrl, "https://");
+        doesExistText(
+            "Enter a valid URL. Note that a cloud instance or most public instances will require the use of HTTPS.",
+            true
+        );
+    }
+
+    protected static fillUrlTooLong(): void {
+        validateTooLongInput(instanceUrl, null, 252);
+    }
+
+    public validateDuplicateName(): void {
+        Jira.openList();
+        click(createButton);
+        this.fillName();
+        doesExistText("An identity with this name already exists. Use a different name.", true);
+        cancelForm();
     }
 }
