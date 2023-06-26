@@ -11,7 +11,7 @@ import { getJiraConnectionData, getRandomCredentialsData } from "../../../../uti
 import { CredentialType, JiraType } from "../../../types/constants";
 import { CredentialsBasicJira } from "../../../models/administration/credentials/credentialsBasicJira";
 import { CredentialsData, JiraConnectionData } from "../../../types/types";
-import { Jira } from "../../../models/administration/jira/jira";
+import { Jira } from "../../../models/administration/jira-connection/jira";
 import { createJiraButton, instanceName, instanceUrl } from "../../../views/jira.view";
 
 let validJiraBasicCredentials: CredentialsData;
