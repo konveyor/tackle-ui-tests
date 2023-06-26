@@ -6,7 +6,6 @@ import {
     clickByText,
     disableSwitch,
     enableSwitch,
-    exists,
     inputText,
     notExists,
     performRowAction,
@@ -16,6 +15,7 @@ import {
     validateTextPresence,
 } from "../../../../utils/utils";
 import {
+    createJiraButton,
     instanceName,
     instanceUrl,
     jiraLabels,
@@ -88,7 +88,7 @@ export class Jira {
     /**
      * This method is filling Name field of Jira connection
      */
-    private fillName(): void {
+    protected fillName(): void {
         inputText(instanceName, this.name);
     }
 
@@ -135,7 +135,7 @@ export class Jira {
      */
     public create(toBeCanceled = false, expectedToFail = false): void {
         Jira.openList();
-        click("#create-Tracker");
+        click(createJiraButton);
         this.fillName();
         this.fillUrl();
         this.selectType();
@@ -211,7 +211,7 @@ export class Jira {
         } else {
             expectedStatus = "Connected";
         }
-        // This is horrible, but somehow further code inside `cy.get()` takes OLD values from the object and I need to define separate values and use them to override this problem.
+        // As 'within' uses callback function, object values inside of it may differ from values outside. Saving them separately to avoid this affect.
         const name = this.name;
         const url = this.url;
 
@@ -221,8 +221,7 @@ export class Jira {
             .within(() => {
                 validateTextPresence(jiraLabels.name, name);
                 validateTextPresence(jiraLabels.url, url);
-                // Commenting check below due to the bug https://issues.redhat.com/browse/MTA-815
-                // validateTextPresence(jiraLabels.type, this.type);
+                validateTextPresence(jiraLabels.type, this.type);
                 validateTextPresence(jiraLabels.connection, expectedStatus);
             });
     }

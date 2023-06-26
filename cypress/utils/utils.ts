@@ -1461,10 +1461,10 @@ export function validateTooShortInput(selector, anotherSelector?: string): void 
     doesExistText("This field must contain at least 3 characters.", true);
 }
 
-export function validateTooLongInput(selector, anotherSelector?: string): void {
-    inputText(selector, randomWordGenerator(121));
+export function validateTooLongInput(selector, anotherSelector?: string, length = 121): void {
+    inputText(selector, randomWordGenerator(length));
     if (anotherSelector) click(anotherSelector);
-    doesExistText("This field must contain fewer than 120 characters.", true);
+    doesExistText("This field must contain fewer than", true);
 }
 
 // This method accepts enums or maps and returns list of keys, so you can iterate by keys

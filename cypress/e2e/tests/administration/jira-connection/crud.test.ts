@@ -4,7 +4,7 @@ import { CredentialType, JiraType } from "../../../types/constants";
 import { CredentialsBasicJira } from "../../../models/administration/credentials/credentialsBasicJira";
 import { CredentialsData, JiraConnectionData } from "../../../types/types";
 import { CredentialsTokenJira } from "../../../models/administration/credentials/credentialsTokenJira";
-import { Jira } from "../../../models/administration/jira/jira";
+import { Jira } from "../../../models/administration/jira-connection/jira";
 
 describe(["@tier2"], "CRUD operations for Jira Server connection instance", () => {
     const toBeCanceled = true;
