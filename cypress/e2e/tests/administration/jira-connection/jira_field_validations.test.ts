@@ -1,9 +1,18 @@
-import { login } from "../../../../utils/utils";
+import {
+    cancelForm,
+    click,
+    doesExistText,
+    inputText,
+    login,
+    validateTooLongInput,
+    validateTooShortInput,
+} from "../../../../utils/utils";
 import { getJiraConnectionData, getRandomCredentialsData } from "../../../../utils/data_utils";
 import { CredentialType, JiraType } from "../../../types/constants";
 import { CredentialsBasicJira } from "../../../models/administration/credentials/credentialsBasicJira";
 import { CredentialsData, JiraConnectionData } from "../../../types/types";
 import { Jira } from "../../../models/administration/jira/jira";
+import { createJiraButton, instanceName, instanceUrl } from "../../../views/jira.view";
 
 let validJiraBasicCredentials: CredentialsData;
 let jiraBasicCredential: CredentialsBasicJira;
@@ -33,11 +42,28 @@ describe(["@tier3"], "Field validations for Jira Server connection instance", ()
     });
 
     it("Testing fields validation", () => {
-        Jira.validateFields();
+        Jira.openList();
+        click(createJiraButton);
+        // Validating too short and too long cases for name
+        validateTooShortInput(instanceName);
+        validateTooLongInput(instanceName);
+        // Validating URL format and too long link
+        inputText(instanceUrl, "https://");
+        doesExistText(
+            "Enter a valid URL. Note that a cloud instance or most public instances will require the use of HTTPS.",
+            true
+        );
+        validateTooLongInput(instanceUrl, null, 251);
+        // Cancelling form after checks are done
+        cancelForm();
     });
 
     it("Testing duplicate error message", () => {
-        jiraServerConnection.validateDuplicateName();
+        Jira.openList();
+        click(createJiraButton);
+        inputText(instanceName, jiraServerConnection.name);
+        doesExistText("An identity with this name already exists. Use a different name.", true);
+        cancelForm();
     });
 
     after("Delete Jira connection and Jira credentials", () => {

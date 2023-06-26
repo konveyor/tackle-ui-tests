@@ -5,7 +5,6 @@ import {
     click,
     clickByText,
     disableSwitch,
-    doesExistText,
     enableSwitch,
     inputText,
     notExists,
@@ -14,11 +13,9 @@ import {
     selectUserPerspective,
     submitForm,
     validateTextPresence,
-    validateTooLongInput,
-    validateTooShortInput,
 } from "../../../../utils/utils";
 import {
-    createButton,
+    createJiraButton,
     instanceName,
     instanceUrl,
     jiraLabels,
@@ -91,7 +88,7 @@ export class Jira {
     /**
      * This method is filling Name field of Jira connection
      */
-    private fillName(): void {
+    protected fillName(): void {
         inputText(instanceName, this.name);
     }
 
@@ -138,7 +135,7 @@ export class Jira {
      */
     public create(toBeCanceled = false, expectedToFail = false): void {
         Jira.openList();
-        click(createButton);
+        click(createJiraButton);
         this.fillName();
         this.fillUrl();
         this.selectType();
@@ -242,43 +239,5 @@ export class Jira {
             type: this.type,
             url: this.url,
         };
-    }
-
-    static validateFields() {
-        Jira.openList();
-        click(createButton);
-        this.fillNameTooShort();
-        this.fillNameTooLong();
-        this.fillUrlWrong();
-        this.fillUrlTooLong();
-        cancelForm();
-    }
-
-    protected static fillNameTooShort() {
-        validateTooShortInput(instanceName);
-    }
-
-    protected static fillNameTooLong() {
-        validateTooLongInput(instanceName);
-    }
-
-    protected static fillUrlWrong(): void {
-        inputText(instanceUrl, "https://");
-        doesExistText(
-            "Enter a valid URL. Note that a cloud instance or most public instances will require the use of HTTPS.",
-            true
-        );
-    }
-
-    protected static fillUrlTooLong(): void {
-        validateTooLongInput(instanceUrl, null, 252);
-    }
-
-    public validateDuplicateName(): void {
-        Jira.openList();
-        click(createButton);
-        this.fillName();
-        doesExistText("An identity with this name already exists. Use a different name.", true);
-        cancelForm();
     }
 }
