@@ -14,19 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import * as faker from "faker";
-import { CredentialType, CustomRuleType, UserCredentials } from "../e2e/types/constants";
+import { CredentialType, CustomRuleType, JiraType, UserCredentials } from "../e2e/types/constants";
 import { writeGpgKey, writeMavenSettingsFile } from "./utils";
 import {
     CredentialsData,
+    JiraConnectionData,
     ProxyData,
-    UserData,
     RulesManualFields,
     RulesRepositoryFields,
-    JiraConnectionData,
-    CredentialsJiraBasicData,
-    CredentialsJiraTokenData,
+    UserData,
 } from "../e2e/types/types";
 import { CredentialsBasicJira } from "../e2e/models/administration/credentials/credentialsBasicJira";
+import { CredentialsTokenJira } from "../e2e/models/administration/credentials/credentialsTokenJira";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
@@ -214,43 +213,45 @@ export function getRandomCredentialsData(
     }
 }
 
+/**
+ * This function returns JiraConnectionData
+ * @param jiraCredential: credential used to build Jira connection. Can be either CredentialsBasicJira or CredentialsTokenJira
+ * @param isInsecure: if true selfsigned certificates will be accepted
+ * @param useTestingAccount: if true - real connection data will be used, otherwise fake data will be added
+ *
+ */
 export function getJiraConnectionData(
-    jiraCredential: CredentialsBasicJira,
-    type: string,
-    url: string,
-    isInsecure?: boolean
+    jiraCredential: CredentialsBasicJira | CredentialsTokenJira,
+    isInsecure?: boolean,
+    useTestingAccount = false
 ): JiraConnectionData {
+    let name: string;
+    let url: string;
+    let type: string;
+
+    if (jiraCredential.type === CredentialType.jiraBasic) {
+        type = JiraType.cloud;
+    } else if (jiraCredential.type === CredentialType.jiraToken) {
+        type = JiraType.server;
+    }
+
+    if (useTestingAccount) {
+        name = "Jira" + `${type}`;
+        url = Cypress.env("jira_url");
+    } else {
+        name = getRandomWord(6);
+        url = "https//" + getRandomWord(6) + ".com";
+    }
     return {
         credential: jiraCredential,
         isInsecure: isInsecure,
-        name: getRandomWord(6),
+        name: name,
         type: type,
         url: url,
     };
 }
 
-export function getJiraCredentialProdData(useTestingAccount = false): CredentialsJiraTokenData {
-    let accountName: string;
-    let key: string;
-    let description: string;
-    if (useTestingAccount) {
-        accountName = "ProductionCredential";
-        key = Cypress.env("jira_prod_key");
-        description = "Production bearer account";
-    } else {
-        accountName = getRandomWord(6);
-        key = getRandomWord(20);
-        description = getDescription();
-    }
-    return {
-        type: CredentialType.jiraToken,
-        name: accountName,
-        description: description,
-        key: key,
-    };
-}
-
-export function getJiraCredentialStageData(useTestingAccount = false): CredentialsJiraTokenData {
+export function getJiraStageDatacenterCredential(useTestingAccount = false): CredentialsTokenJira {
     let accountName: string;
     let key: string;
     let description: string;
@@ -263,15 +264,15 @@ export function getJiraCredentialStageData(useTestingAccount = false): Credentia
         key = getRandomWord(20);
         description = getDescription();
     }
-    return {
+    return new CredentialsTokenJira({
         type: CredentialType.jiraToken,
         name: accountName,
         description: description,
         key: key,
-    };
+    });
 }
 
-export function getJiraCredentialPrivateData(useTestingAccount = false): CredentialsJiraBasicData {
+export function getJiraAtlassianCloudCredential(useTestingAccount = false): CredentialsBasicJira {
     let accountName: string;
     let email: string;
     let token: string;
@@ -287,13 +288,13 @@ export function getJiraCredentialPrivateData(useTestingAccount = false): Credent
         token = getRandomWord(20);
         description = getDescription();
     }
-    return {
+    return new CredentialsBasicJira({
         type: CredentialType.jiraBasic,
         name: accountName,
         description: description,
         email: email,
         token: token,
-    };
+    });
 }
 
 export function getRandomProxyData(credentials?: CredentialsData): ProxyData {
