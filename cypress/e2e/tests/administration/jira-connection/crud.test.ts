@@ -1,5 +1,9 @@
 import { login } from "../../../../utils/utils";
-import { getJiraConnectionData, getRandomCredentialsData } from "../../../../utils/data_utils";
+import {
+    getJiraConnectionData,
+    getJiraCredentialPrivateData,
+    getRandomCredentialsData,
+} from "../../../../utils/data_utils";
 import { CredentialType, JiraType } from "../../../types/constants";
 import { CredentialsBasicJira } from "../../../models/administration/credentials/credentialsBasicJira";
 import { CredentialsData, JiraConnectionData } from "../../../types/types";
@@ -10,7 +14,8 @@ describe(["@tier2"], "CRUD operations for Jira Server connection instance", () =
     const toBeCanceled = true;
     const notToBeCanceled = false;
     const expectedToFail = true;
-    let validJiraBasicCredentials: CredentialsData;
+    const useTestingAccount = true;
+    let validJiraBasicCredentialsData: CredentialsData;
     let jiraBasicCredential: CredentialsBasicJira;
     let jiraServerConnectionData: JiraConnectionData;
     let jiraServerConnectionDataIncorrect: JiraConnectionData;
@@ -21,8 +26,8 @@ describe(["@tier2"], "CRUD operations for Jira Server connection instance", () =
         // Perform login
         login();
         // Defining and creating credentials to be used in test
-        validJiraBasicCredentials = getRandomCredentialsData(CredentialType.jiraBasic, "", true);
-        jiraBasicCredential = new CredentialsBasicJira(validJiraBasicCredentials);
+        validJiraBasicCredentialsData = getJiraCredentialPrivateData(useTestingAccount);
+        jiraBasicCredential = new CredentialsBasicJira(validJiraBasicCredentialsData);
 
         jiraBasicCredential.create();
 

@@ -62,7 +62,7 @@ export type JiraConnectionData = {
     name: string;
     url: string;
     type: string;
-    credential: CredentialsBasicJira;
+    credential: CredentialsBasicJira | CredentialsJiraTokenData;
     isInsecure?: boolean;
 };
 

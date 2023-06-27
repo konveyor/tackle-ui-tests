@@ -23,6 +23,8 @@ import {
     RulesManualFields,
     RulesRepositoryFields,
     JiraConnectionData,
+    CredentialsJiraBasicData,
+    CredentialsJiraTokenData,
 } from "../e2e/types/types";
 import { CredentialsBasicJira } from "../e2e/models/administration/credentials/credentialsBasicJira";
 
@@ -224,6 +226,73 @@ export function getJiraConnectionData(
         name: getRandomWord(6),
         type: type,
         url: url,
+    };
+}
+
+export function getJiraCredentialProdData(useTestingAccount = false): CredentialsJiraTokenData {
+    let accountName: string;
+    let key: string;
+    let description: string;
+    if (useTestingAccount) {
+        accountName = "ProductionCredential";
+        key = Cypress.env("jira_prod_key");
+        description = "Production bearer account";
+    } else {
+        accountName = getRandomWord(6);
+        key = getRandomWord(20);
+        description = getDescription();
+    }
+    return {
+        type: CredentialType.jiraToken,
+        name: accountName,
+        description: description,
+        key: key,
+    };
+}
+
+export function getJiraCredentialStageData(useTestingAccount = false): CredentialsJiraTokenData {
+    let accountName: string;
+    let key: string;
+    let description: string;
+    if (useTestingAccount) {
+        accountName = "StageCredential";
+        key = Cypress.env("jira_stage_key");
+        description = "Stage bearer account";
+    } else {
+        accountName = getRandomWord(6);
+        key = getRandomWord(20);
+        description = getDescription();
+    }
+    return {
+        type: CredentialType.jiraToken,
+        name: accountName,
+        description: description,
+        key: key,
+    };
+}
+
+export function getJiraCredentialPrivateData(useTestingAccount = false): CredentialsJiraBasicData {
+    let accountName: string;
+    let email: string;
+    let token: string;
+    let description: string;
+    if (useTestingAccount) {
+        accountName = "PrivateCredential";
+        email = Cypress.env("jira_private_email");
+        token = Cypress.env("jira_private_token");
+        description = "Private cloud account";
+    } else {
+        accountName = getRandomWord(6);
+        email = getEmail();
+        token = getRandomWord(20);
+        description = getDescription();
+    }
+    return {
+        type: CredentialType.jiraBasic,
+        name: accountName,
+        description: description,
+        email: email,
+        token: token,
     };
 }
 
