@@ -79,7 +79,6 @@ import { CredentialsSourceControlKey } from "../e2e/models/administration/creden
 import { Application } from "../e2e/models/migration/applicationinventory/application";
 import { switchToggle } from "../e2e/views/reports.view";
 import { waveTable } from "../e2e/views/migration-wave.view";
-import { rightSideMenu } from "../e2e/views/analysis.view";
 import Chainable = Cypress.Chainable;
 import { MigrationWave } from "../e2e/models/migration/migration-waves/migration-wave";
 
@@ -780,9 +779,6 @@ export function deleteAppImportsTableRows(lastPage = false): void {
             }
         });
 }
-
-
-
 
 // TODO: Delete calls to this method and then remove it
 export function preservecookies(): void {}

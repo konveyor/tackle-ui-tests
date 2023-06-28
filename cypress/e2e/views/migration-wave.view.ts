@@ -28,4 +28,4 @@ export const getSpecialMigrationWavesTableSelector = (
     return `table[aria-label="${columnSelector} table for migration wave ${wave.name}"]`;
 };
 
-export const waveTable = "table[aria-label='Migration waves table']"
+export const waveTable = "table[aria-label='Migration waves table']";
