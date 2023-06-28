@@ -1,18 +1,14 @@
 import { login } from "../../../../utils/utils";
-import {
-    getJiraConnectionData,
-    getJiraCredential,
-    getRandomCredentialsData,
-} from "../../../../utils/data_utils";
-import { CredentialType, JiraType } from "../../../types/constants";
+import { getJiraConnectionData, getJiraCredential } from "../../../../utils/data_utils";
+import { CredentialType } from "../../../types/constants";
 import { JiraCredentialsBasic } from "../../../models/administration/credentials/jiraCredentialsBasic";
-import { CredentialsData, JiraConnectionData } from "../../../types/types";
+import { JiraConnectionData } from "../../../types/types";
 import { JiraCredentialsBearer } from "../../../models/administration/credentials/jiraCredentialsBearer";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 
 describe(["@tier2"], "CRUD operations for Jira Cloud instance", () => {
     const toBeCanceled = true;
-    const notToBeCanceled = false;
+    // const notToBeCanceled = false;
     const expectedToFail = true;
     const useTestingAccount = true;
     const useDummyAccount = false;
@@ -60,7 +56,7 @@ describe(["@tier2"], "CRUD operations for Jira Cloud instance", () => {
     });
 
     it("Editing Jira credentials with incorrect data, then configuring back with correct", () => {
-        jiraCloudConnection.edit(jiraCloudConnectionDataIncorrect, notToBeCanceled, expectedToFail);
+        jiraCloudConnection.edit(jiraCloudConnectionDataIncorrect, !toBeCanceled, expectedToFail);
         jiraCloudConnection.edit(jiraCloudConnectionData);
     });
 
