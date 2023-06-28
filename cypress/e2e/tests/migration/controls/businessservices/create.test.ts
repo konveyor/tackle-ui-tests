@@ -66,9 +66,9 @@ describe(["@tier2"], "Business service validations", () => {
 
         // Name constraints
         inputText(businessServiceNameInput, data.getRandomWord(2));
-        cy.get(commonView.nameHelper).should("contain", minCharsMsg);
+        cy.get(commonView.nameHelperBusiness).should("contain", minCharsMsg);
         inputText(businessServiceNameInput, data.getRandomWords(45));
-        cy.get(commonView.nameHelper).should("contain", max120CharsMsg);
+        cy.get(commonView.nameHelperBusiness).should("contain", max120CharsMsg);
         inputText(businessServiceNameInput, data.getRandomWord(4));
         cy.get(commonView.submitButton).should("not.be.disabled");
 
@@ -118,7 +118,7 @@ describe(["@tier2"], "Business service validations", () => {
         // Check name duplication
         inputText(businessServiceNameInput, businessService.name);
         cy.get(commonView.submitButton).should("be.disabled");
-        cy.get(commonView.nameHelper).should("contain.text", duplicateBusinessService);
+        cy.get(commonView.nameHelperBusiness).should("contain.text", duplicateBusinessService);
 
         // Delete created business service
         cy.get(commonView.closeButton).click();

@@ -50,6 +50,7 @@ import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 
 import * as commonView from "../../../../views/common.view";
+import { stakeHoldersTable } from "../../../../views/common.view";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let jobFunctionsList: Array<Jobfunctions> = [];
@@ -94,9 +95,9 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         applySearchFilter(email, validSearchInput);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
-        exists(stakeholdersList[0].email);
+        exists(stakeholdersList[0].email, stakeHoldersTable);
         if (stakeholdersList[1].email.indexOf(validSearchInput) >= 0) {
-            exists(stakeholdersList[1].email);
+            exists(stakeholdersList[1].email, stakeHoldersTable);
         }
 
         // Clear all filters
@@ -120,9 +121,9 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         applySearchFilter(name, validSearchInput);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
-        exists(stakeholdersList[0].name);
+        exists(stakeholdersList[0].name, stakeHoldersTable);
         if (stakeholdersList[1].name.indexOf(validSearchInput) >= 0) {
-            exists(stakeholdersList[1].name);
+            exists(stakeholdersList[1].name, stakeHoldersTable);
         }
 
         // Clear all filters
@@ -154,7 +155,7 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
             .should("contain", stakeholdersList[0].jobfunction);
 
         if (stakeholdersList[1].jobfunction.indexOf(validSearchInput) >= 0) {
-            exists(stakeholdersList[1].email);
+            exists(stakeholdersList[1].email, stakeHoldersTable);
         }
 
         // Clear all filters
@@ -189,7 +190,7 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
             .should("contain", stakeholdersList[0].groups[0]);
 
         if (stakeholdersList[1].groups[0].indexOf(validSearchInput) >= 0) {
-            exists(stakeholdersList[1].email);
+            exists(stakeholdersList[1].email, stakeHoldersTable);
         }
 
         // Clear all filters

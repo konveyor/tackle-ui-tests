@@ -201,11 +201,7 @@ export function getRandomCredentialsData(
     } else {
         // Maven credentials
         if (useTestingAccount) {
-            if (url) {
-                writeMavenSettingsFile(user, password, url);
-            } else {
-                writeMavenSettingsFile(user, password);
-            }
+            writeMavenSettingsFile(Cypress.env("git_user"), Cypress.env("git_password"), url);
         }
         return {
             type: type,

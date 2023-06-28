@@ -47,6 +47,7 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 
 import * as commonView from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
+import { stakeHoldersTable } from "../../../../views/common.view";
 
 describe(["@tier2"], "Stakeholder validations", () => {
     const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
@@ -120,7 +121,7 @@ describe(["@tier2"], "Stakeholder validations", () => {
         // Create a new stakeholder
         stakeholder.create();
         cy.wait("@postStakeholder");
-        exists(stakeholder.email);
+        exists(stakeholder.email, stakeHoldersTable);
 
         // Navigate to stakeholder tab and click create new button
         clickByText(button, createNewButton);
@@ -134,6 +135,6 @@ describe(["@tier2"], "Stakeholder validations", () => {
         cy.get(commonView.closeButton).click();
         stakeholder.delete();
         cy.wait("@deleteStakeholder");
-        notExists(stakeholder.email);
+        notExists(stakeholder.email, stakeHoldersTable);
     });
 });

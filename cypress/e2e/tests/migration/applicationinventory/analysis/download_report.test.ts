@@ -33,7 +33,7 @@ describe(["@tier2"], "Enable and Download HTML and CSV Reports", function () {
         });
     });
 
-    it("Download HTML and CSV Reports - Source App", function () {
+    it("Bug MTA-845 | Download HTML and CSV Reports - Source App", function () {
         sourceApplication = new Analysis(
             getRandomApplicationData("SourceApp", {
                 sourceData: this.appData["bookserver-app"],

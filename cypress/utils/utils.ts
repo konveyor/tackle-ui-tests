@@ -368,8 +368,11 @@ export function applySearchFilter(
     cy.wait(4000);
 }
 
-export function sortAsc(sortCriteria: string): void {
-    cy.get(`th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
+export function sortAsc(
+    sortCriteria: string,
+    tableSelector = `th[data-label="${sortCriteria}"]`
+): void {
+    cy.get(tableSelector).then(($tableHeader) => {
         if (
             $tableHeader.attr("aria-sort") === "descending" ||
             $tableHeader.attr("aria-sort") === "none"
@@ -379,8 +382,11 @@ export function sortAsc(sortCriteria: string): void {
     });
 }
 
-export function sortDesc(sortCriteria: string): void {
-    cy.get(`th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
+export function sortDesc(
+    sortCriteria: string,
+    tableSelector = `th[data-label="${sortCriteria}"]`
+): void {
+    cy.get(tableSelector).then(($tableHeader) => {
         if (
             $tableHeader.attr("aria-sort") === "ascending" ||
             $tableHeader.attr("aria-sort") === "none"
@@ -534,8 +540,8 @@ export function notExistsWithinRow(
         .should("not.contain", valueToSearch);
 }
 
-export function deleteTableRows(): void {
-    cy.get(commonView.appTable).get("tbody").find(trTag).as("rowsIdentifier");
+export function deleteTableRows(tableSelector = commonView.appTable): void {
+    cy.get(tableSelector).get("tbody").find(trTag).as("rowsIdentifier");
     cy.get("@rowsIdentifier").then(($tableRows) => {
         for (let i = 0; i < $tableRows.length; i++) {
             cy.get("@rowsIdentifier")
@@ -1455,10 +1461,10 @@ export function validateTooShortInput(selector, anotherSelector?: string): void 
     doesExistText("This field must contain at least 3 characters.", true);
 }
 
-export function validateTooLongInput(selector, anotherSelector?: string): void {
-    inputText(selector, randomWordGenerator(121));
+export function validateTooLongInput(selector, anotherSelector?: string, length = 121): void {
+    inputText(selector, randomWordGenerator(length));
     if (anotherSelector) click(anotherSelector);
-    doesExistText("This field must contain fewer than 120 characters.", true);
+    doesExistText("This field must contain fewer than", true);
 }
 
 // This method accepts enums or maps and returns list of keys, so you can iterate by keys
