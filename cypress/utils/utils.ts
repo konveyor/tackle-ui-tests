@@ -683,7 +683,43 @@ export function verifyImportErrorMsg(errorMsg: any): void {
     }
 }
 
+export function migration_wave_kebab_menu(menu): void {
+    // The value for menu could be one of {Export to Issue Manager, Delete}
+    cy.get(actionButton).eq(1).click({ force: true });
+    cy.get(commonView.kebabMenuItem).contains(menu).click({ force: true });
+}
+
+export function deleteAllMigrationWaves(currentPage = false): void {
+    MigrationWave.open();
+    cy.wait(2000);
+    cy.get(waveTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.wait(1000);
+                cy.get("span.pf-c-options-menu__toggle-text")
+                    .eq(0)
+                    .then(($body) => {
+                        if (!$body.text().includes("of 0")) {
+                            if (currentPage) {
+                                cy.get(".pf-c-dropdown__toggle-button").click({ force: true });
+                                clickByText(button, "Select page");
+                            } else {
+                                cy.get("input#bulk-selected-items-checkbox", {
+                                    timeout: 10 * SEC,
+                                }).check({ force: true });
+                            }
+
+                            migration_wave_kebab_menu("Delete");
+                            clickByText(button, "Delete", true);
+                        }
+                    });
+            }
+        });
+}
+
 export function deleteApplicationTableRows(currentPage = false): void {
+    deleteAllMigrationWaves();
     navigate_to_application_inventory();
     // Wait for application table to be populated with any existing applications
     cy.wait(2000);
@@ -745,40 +781,8 @@ export function deleteAppImportsTableRows(lastPage = false): void {
         });
 }
 
-export function deleteAllMigrationWaves(currentPage = false): void {
-    MigrationWave.open();
-    cy.wait(2000);
-    cy.get(waveTable)
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.wait(1000);
-                cy.get("span.pf-c-options-menu__toggle-text")
-                    .eq(0)
-                    .then(($body) => {
-                        if (!$body.text().includes("of 0")) {
-                            if (currentPage) {
-                                cy.get(".pf-c-dropdown__toggle-button").click({ force: true });
-                                clickByText(button, "Select page");
-                            } else {
-                                cy.get("input#bulk-selected-items-checkbox", {
-                                    timeout: 10 * SEC,
-                                }).check({ force: true });
-                            }
 
-                            migration_wave_kebab_menu("Delete");
-                            clickByText(button, "Delete", true);
-                        }
-                    });
-            }
-        });
-}
 
-export function migration_wave_kebab_menu(menu): void {
-    // The value for menu could be one of {Export to Issue Manager, Delete}
-    cy.get(actionButton).eq(1).click({ force: true });
-    cy.get("a.pf-c-dropdown__menu-item").contains(menu).click({ force: true });
-}
 
 // TODO: Delete calls to this method and then remove it
 export function preservecookies(): void {}
