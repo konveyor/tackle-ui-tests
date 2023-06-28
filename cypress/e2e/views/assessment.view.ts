@@ -15,7 +15,7 @@ limitations under the License.
 */
 export const stakeholderSelect = "#stakeholders-select-toggle-select-multi-typeahead-typeahead";
 export const stakeholdergroupsSelect =
-    "stakeholder-groups-select-toggle-select-multi-typeahead-typeahead";
+    "#stakeholder-groups-select-toggle-select-multi-typeahead-typeahead";
 export const questionBlock = "div[cy-data='question']";
 export const radioInput = "input[type='radio']";
 export const assessmentColumnSelector = "td[data-label='Assessment']";
