@@ -9,13 +9,13 @@ import {
 } from "../../../../utils/utils";
 import { getJiraConnectionData, getRandomCredentialsData } from "../../../../utils/data_utils";
 import { CredentialType, JiraType } from "../../../types/constants";
-import { CredentialsBasicJira } from "../../../models/administration/credentials/credentialsBasicJira";
+import { JiraCredentialsBasic } from "../../../models/administration/credentials/jiraCredentialsBasic";
 import { CredentialsData, JiraConnectionData } from "../../../types/types";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 import { createJiraButton, instanceName, instanceUrl } from "../../../views/jira.view";
 
 let validJiraBasicCredentials: CredentialsData;
-let jiraBasicCredential: CredentialsBasicJira;
+let jiraBasicCredential: JiraCredentialsBasic;
 let jiraServerConnectionData: JiraConnectionData;
 let jiraServerConnection: Jira;
 const jira_url = Cypress.env("jira_url");
@@ -26,7 +26,7 @@ describe(["@tier3"], "Field validations for Jira Server connection instance", ()
         login();
         // Defining and creating credentials to be used in test
         validJiraBasicCredentials = getRandomCredentialsData(CredentialType.jiraBasic, "", true);
-        jiraBasicCredential = new CredentialsBasicJira(validJiraBasicCredentials);
+        jiraBasicCredential = new JiraCredentialsBasic(validJiraBasicCredentials);
 
         jiraBasicCredential.create();
 

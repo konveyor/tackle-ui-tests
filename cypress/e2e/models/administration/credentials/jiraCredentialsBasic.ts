@@ -13,7 +13,7 @@ import { passwordInput, usernameInput } from "../../../views/credentials.view";
 import { button, CredentialType } from "../../../types/constants";
 import { submitButton } from "../../../views/common.view";
 
-export class CredentialsBasicJira extends Credentials {
+export class JiraCredentialsBasic extends Credentials {
     type = CredentialType.jiraBasic;
     email: string;
     token: string;

@@ -1,7 +1,7 @@
 import { login } from "../../../../utils/utils";
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
 import { CredentialType } from "../../../types/constants";
-import { CredentialsBasicJira } from "../../../models/administration/credentials/credentialsBasicJira";
+import { JiraCredentialsBasic } from "../../../models/administration/credentials/jiraCredentialsBasic";
 import { CredentialsData } from "../../../types/types";
 // import { CredentialsTokenJira } from "../../../models/administration/credentials/credentialsTokenJira";
 
@@ -12,7 +12,7 @@ describe(["@tier2"], "Validation of jira credentials", () => {
     let randomJiraBasicCredentials: CredentialsData;
     // let validJiraTokenCredentials: CredentialsData;
     // let randomJiraTokenCredentials: CredentialsData;
-    let jiraBasicCredentials: CredentialsBasicJira;
+    let jiraBasicCredentials: JiraCredentialsBasic;
     // let jiraTokenCredentials: CredentialsTokenJira;
 
     before("Login", function () {
@@ -20,7 +20,7 @@ describe(["@tier2"], "Validation of jira credentials", () => {
         login();
         validJiraBasicCredentials = getRandomCredentialsData(CredentialType.jiraBasic, "", true);
         randomJiraBasicCredentials = getRandomCredentialsData(CredentialType.jiraBasic, "", false);
-        jiraBasicCredentials = new CredentialsBasicJira(randomJiraBasicCredentials);
+        jiraBasicCredentials = new JiraCredentialsBasic(randomJiraBasicCredentials);
 
         // validJiraTokenCredentials = getRandomCredentialsData(CredentialType.jiraToken, "", true);
         // randomJiraTokenCredentials = getRandomCredentialsData(CredentialType.jiraToken, "", false);

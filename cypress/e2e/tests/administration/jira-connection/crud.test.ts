@@ -1,33 +1,32 @@
 import { login } from "../../../../utils/utils";
 import {
     getJiraConnectionData,
-    getJiraAtlassianCloudCredential,
+    getJiraCredential,
     getRandomCredentialsData,
 } from "../../../../utils/data_utils";
 import { CredentialType, JiraType } from "../../../types/constants";
-import { CredentialsBasicJira } from "../../../models/administration/credentials/credentialsBasicJira";
+import { JiraCredentialsBasic } from "../../../models/administration/credentials/jiraCredentialsBasic";
 import { CredentialsData, JiraConnectionData } from "../../../types/types";
-import { CredentialsTokenJira } from "../../../models/administration/credentials/credentialsTokenJira";
+import { JiraCredentialsBearer } from "../../../models/administration/credentials/jiraCredentialsBearer";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 
-describe(["@tier2"], "CRUD operations for Jira Server connection instance", () => {
+describe(["@tier2"], "CRUD operations for Jira Cloud instance", () => {
     const toBeCanceled = true;
     const notToBeCanceled = false;
     const expectedToFail = true;
     const useTestingAccount = true;
-    const useFakeAccount = false;
+    const useDummyAccount = false;
     const isSecure = false;
-    let jiraBasicCredential: CredentialsBasicJira;
+    let jiraBasicCredential: JiraCredentialsBasic | JiraCredentialsBearer;
     let jiraCloudConnectionData: JiraConnectionData;
     let jiraCloudConnectionDataIncorrect: JiraConnectionData;
     let jiraCloudConnection: Jira;
-    const jira_url = Cypress.env("jira_url");
 
     before("Login", function () {
         // Perform login
         login();
         // Defining and creating credentials to be used in test
-        jiraBasicCredential = getJiraAtlassianCloudCredential(useTestingAccount);
+        jiraBasicCredential = getJiraCredential(CredentialType.jiraBasic, useTestingAccount);
 
         jiraBasicCredential.create();
 
@@ -42,7 +41,7 @@ describe(["@tier2"], "CRUD operations for Jira Server connection instance", () =
         jiraCloudConnectionDataIncorrect = getJiraConnectionData(
             jiraBasicCredential,
             isSecure,
-            useFakeAccount
+            useDummyAccount
         );
 
         jiraCloudConnection = new Jira(jiraCloudConnectionData);

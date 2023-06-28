@@ -24,8 +24,8 @@ import {
     RulesRepositoryFields,
     UserData,
 } from "../e2e/types/types";
-import { CredentialsBasicJira } from "../e2e/models/administration/credentials/credentialsBasicJira";
-import { CredentialsTokenJira } from "../e2e/models/administration/credentials/credentialsTokenJira";
+import { JiraCredentialsBasic } from "../e2e/models/administration/credentials/jiraCredentialsBasic";
+import { JiraCredentialsBearer } from "../e2e/models/administration/credentials/jiraCredentialsBearer";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
@@ -221,7 +221,7 @@ export function getRandomCredentialsData(
  *
  */
 export function getJiraConnectionData(
-    jiraCredential: CredentialsBasicJira | CredentialsTokenJira,
+    jiraCredential: JiraCredentialsBasic | JiraCredentialsBearer,
     isInsecure?: boolean,
     useTestingAccount = false
 ): JiraConnectionData {
@@ -229,19 +229,16 @@ export function getJiraConnectionData(
     let url: string;
     let type: string;
 
-    if (jiraCredential.type === CredentialType.jiraBasic) {
-        type = JiraType.cloud;
-    } else if (jiraCredential.type === CredentialType.jiraToken) {
-        type = JiraType.server;
-    }
+    // if (jiraCredential.type === CredentialType.jiraBasic) {
+    //     type = JiraType.cloud;
+    // } else if (jiraCredential.type === CredentialType.jiraToken) {
+    //     type = JiraType.server;
+    // }
 
-    if (useTestingAccount) {
-        name = "Jira" + `${type}`;
-        url = Cypress.env("jira_url");
-    } else {
-        name = getRandomWord(6);
-        url = "https//" + getRandomWord(6) + ".com";
-    }
+    type = jiraCredential.type === CredentialType.jiraBasic ? JiraType.cloud : JiraType.server;
+    url = useTestingAccount ? Cypress.env("jira_url") : "https//" + getRandomWord(6) + ".com";
+    name = "Jira" + `${type}` + getRandomWord(5);
+
     return {
         credential: jiraCredential,
         isInsecure: isInsecure,
@@ -251,50 +248,51 @@ export function getJiraConnectionData(
     };
 }
 
-export function getJiraStageDatacenterCredential(useTestingAccount = false): CredentialsTokenJira {
-    let accountName: string;
-    let key: string;
-    let description: string;
-    if (useTestingAccount) {
-        accountName = "StageCredential";
-        key = Cypress.env("jira_stage_key");
-        description = "Stage bearer account";
-    } else {
-        accountName = getRandomWord(6);
-        key = getRandomWord(20);
-        description = getDescription();
-    }
-    return new CredentialsTokenJira({
-        type: CredentialType.jiraToken,
-        name: accountName,
-        description: description,
-        key: key,
-    });
-}
-
-export function getJiraAtlassianCloudCredential(useTestingAccount = false): CredentialsBasicJira {
+export function getJiraCredential(
+    accountType: string,
+    useTestingAccount = false
+): JiraCredentialsBasic | JiraCredentialsBearer {
     let accountName: string;
     let email: string;
     let token: string;
     let description: string;
-    if (useTestingAccount) {
-        accountName = "PrivateCredential";
-        email = Cypress.env("jira_private_email");
-        token = Cypress.env("jira_private_token");
-        description = "Private cloud account";
+    let key: string;
+    if (accountType === CredentialType.jiraBasic) {
+        if (useTestingAccount) {
+            accountName = "PrivateCredential" + getRandomWord(5);
+            email = Cypress.env("jira_private_email");
+            token = Cypress.env("jira_private_token");
+            description = "Private cloud account";
+        } else {
+            accountName = getRandomWord(6);
+            email = getEmail();
+            token = getRandomWord(20);
+            description = getDescription();
+        }
+        return new JiraCredentialsBasic({
+            type: CredentialType.jiraBasic,
+            name: accountName,
+            description: description,
+            email: email,
+            token: token,
+        });
     } else {
-        accountName = getRandomWord(6);
-        email = getEmail();
-        token = getRandomWord(20);
-        description = getDescription();
+        if (useTestingAccount) {
+            accountName = "StageCredential" + getRandomWord(5);
+            key = Cypress.env("jira_stage_key");
+            description = "Stage bearer account";
+        } else {
+            accountName = getRandomWord(6);
+            key = getRandomWord(20);
+            description = getDescription();
+        }
+        return new JiraCredentialsBearer({
+            type: CredentialType.jiraToken,
+            name: accountName,
+            description: description,
+            key: key,
+        });
     }
-    return new CredentialsBasicJira({
-        type: CredentialType.jiraBasic,
-        name: accountName,
-        description: description,
-        email: email,
-        token: token,
-    });
 }
 
 export function getRandomProxyData(credentials?: CredentialsData): ProxyData {
