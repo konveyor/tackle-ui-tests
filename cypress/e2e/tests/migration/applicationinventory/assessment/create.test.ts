@@ -209,7 +209,6 @@ describe(["@tier2"], "Application validations", () => {
         cy.get("ul[role=menu] > li").contains("Select page").click();
 
         application_inventory_kebab_menu("Delete");
-        clickByText(button, "Delete");
 
         // Assert that all applications except the one(s) on the next page have been deleted.
         for (let i = 0; i < applicationList.length - 1; i++) {
@@ -226,7 +225,7 @@ describe(["@tier2"], "Application validations", () => {
         cy.get("ul[role=menu] > li").contains("Select all").click();
 
         application_inventory_kebab_menu("Delete");
-        clickByText(button, "Delete");
+
         for (let i = 0; i < applicationList.length; i++) {
             notExists(applicationList[i].name);
         }
@@ -239,7 +238,7 @@ describe(["@tier2"], "Application validations", () => {
         cy.get("input#bulk-selected-apps-checkbox").check({ force: true });
 
         application_inventory_kebab_menu("Delete");
-        clickByText(button, "Delete");
+
         for (let i = 0; i < applicationList.length; i++) {
             notExists(applicationList[i].name);
         }

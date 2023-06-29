@@ -624,14 +624,19 @@ export function application_inventory_kebab_menu(menu, tab?): void {
     else navigate_to_application_inventory();
 
     cy.get(actionButton).eq(1).click({ force: true });
-    if (menu == "Import") clickByText(button, "Import");
-    else {
+    if (menu == "Import") {
+        clickByText(button, "Import");
+        // cy.wait(10000);
+    } else {
         cy.get("a")
             .contains(menu)
             .then(($menu_item) => {
                 if (!$menu_item.hasClass("pf-m-disabled")) {
-                    $menu_item.click();
+                    clickByText("a", menu);
                     if (menu == "Delete") clickByText(button, menu, true);
+                } else {
+                    // close menu if nothing to do
+                    cy.get(actionButton).eq(1).click({ force: true });
                 }
             });
     }
