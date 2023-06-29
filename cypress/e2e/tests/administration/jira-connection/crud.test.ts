@@ -1,19 +1,16 @@
 import { login } from "../../../../utils/utils";
-import { getJiraConnectionData, getJiraCredential } from "../../../../utils/data_utils";
+import { getJiraConnectionData, getJiraCredentialData } from "../../../../utils/data_utils";
 import { CredentialType } from "../../../types/constants";
-import { JiraCredentialsBasic } from "../../../models/administration/credentials/jiraCredentialsBasic";
 import { JiraConnectionData } from "../../../types/types";
-import { JiraCredentialsBearer } from "../../../models/administration/credentials/jiraCredentialsBearer";
 import { Jira } from "../../../models/administration/jira-connection/jira";
+import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
 
-describe(["@tier2"], "CRUD operations for Jira Cloud instance", () => {
+describe(["@tier1"], "CRUD operations for Jira Cloud instance", () => {
     const toBeCanceled = true;
-    // const notToBeCanceled = false;
     const expectedToFail = true;
     const useTestingAccount = true;
-    const useDummyAccount = false;
     const isSecure = false;
-    let jiraBasicCredential: JiraCredentialsBasic | JiraCredentialsBearer;
+    let jiraBasicCredential: JiraCredentials;
     let jiraCloudConnectionData: JiraConnectionData;
     let jiraCloudConnectionDataIncorrect: JiraConnectionData;
     let jiraCloudConnection: Jira;
@@ -22,7 +19,9 @@ describe(["@tier2"], "CRUD operations for Jira Cloud instance", () => {
         // Perform login
         login();
         // Defining and creating credentials to be used in test
-        jiraBasicCredential = getJiraCredential(CredentialType.jiraBasic, useTestingAccount);
+        jiraBasicCredential = new JiraCredentials(
+            getJiraCredentialData(CredentialType.jiraBasic, useTestingAccount)
+        );
 
         jiraBasicCredential.create();
 
@@ -33,11 +32,11 @@ describe(["@tier2"], "CRUD operations for Jira Cloud instance", () => {
             useTestingAccount
         );
 
-        // Defining fake data to edit Jira Cloud connection
+        // Defining dummy data to edit Jira Cloud connection
         jiraCloudConnectionDataIncorrect = getJiraConnectionData(
             jiraBasicCredential,
             isSecure,
-            useDummyAccount
+            !useTestingAccount
         );
 
         jiraCloudConnection = new Jira(jiraCloudConnectionData);

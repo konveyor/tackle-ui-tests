@@ -7,34 +7,38 @@ import {
     validateTooLongInput,
     validateTooShortInput,
 } from "../../../../utils/utils";
-import { getJiraConnectionData, getRandomCredentialsData } from "../../../../utils/data_utils";
-import { CredentialType, JiraType } from "../../../types/constants";
-import { JiraCredentialsBasic } from "../../../models/administration/credentials/jiraCredentialsBasic";
+import { getJiraConnectionData, getJiraCredentialData } from "../../../../utils/data_utils";
+import { CredentialType } from "../../../types/constants";
 import { CredentialsData, JiraConnectionData } from "../../../types/types";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 import { createJiraButton, instanceName, instanceUrl } from "../../../views/jira.view";
+import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
 
 let validJiraBasicCredentials: CredentialsData;
-let jiraBasicCredential: JiraCredentialsBasic;
+let jiraBasicCredential: JiraCredentials;
 let jiraServerConnectionData: JiraConnectionData;
 let jiraServerConnection: Jira;
-const jira_url = Cypress.env("jira_url");
+const useTestingAccount = true;
+const isInsecure = true;
 
 describe(["@tier3"], "Field validations for Jira Server connection instance", () => {
     before("Login", function () {
         // Perform login
         login();
         // Defining and creating credentials to be used in test
-        validJiraBasicCredentials = getRandomCredentialsData(CredentialType.jiraBasic, "", true);
-        jiraBasicCredential = new JiraCredentialsBasic(validJiraBasicCredentials);
+        validJiraBasicCredentials = getJiraCredentialData(
+            CredentialType.jiraBasic,
+            useTestingAccount
+        );
+        jiraBasicCredential = new JiraCredentials(validJiraBasicCredentials);
 
         jiraBasicCredential.create();
 
         // Defining correct data to create new Jira connection
         jiraServerConnectionData = getJiraConnectionData(
             jiraBasicCredential,
-            JiraType.cloud,
-            jira_url
+            !isInsecure,
+            useTestingAccount
         );
 
         jiraServerConnection = new Jira(jiraServerConnectionData);

@@ -1,6 +1,5 @@
 import { Credentials } from "./credentials";
-import { CredentialType } from "../../../types/constants";
-import { CredentialsJiraTokenData } from "../../../types/types";
+import { CredentialsJiraData } from "../../../types/types";
 import {
     cancelForm,
     exists,
@@ -13,24 +12,31 @@ import {
 import { passwordInput, usernameInput } from "../../../views/credentials.view";
 import { submitButton } from "../../../views/common.view";
 
-export class JiraCredentialsBearer extends Credentials {
-    type = CredentialType.jiraBasic;
-    key: string;
+export class JiraCredentials extends Credentials {
+    type: string;
+    token: string;
+    email?: string;
 
-    constructor(credentialsJiraTokenData: CredentialsJiraTokenData) {
+    constructor(credentialsJiraData: CredentialsJiraData) {
         super();
-        this.init(credentialsJiraTokenData);
+        this.init(credentialsJiraData);
     }
 
-    protected init(credentialsJiraTokenData: CredentialsJiraTokenData) {
-        const { name, description, key } = credentialsJiraTokenData;
+    protected init(credentialsJiraData: CredentialsJiraData) {
+        const { name, description, token, email, type } = credentialsJiraData;
         this.name = name;
         this.description = description;
-        this.key = key;
+        this.token = token;
+        this.type = type;
+        if (email) this.email = email;
     }
 
-    protected fillKey() {
-        inputText(passwordInput, this.key);
+    protected fillToken() {
+        inputText(passwordInput, this.token);
+    }
+
+    protected fillEmail() {
+        if (this.email) inputText(usernameInput, this.email);
     }
 
     create(toBeCanceled = false) {
@@ -38,7 +44,8 @@ export class JiraCredentialsBearer extends Credentials {
         this.fillName();
         this.fillDescription();
         this.selectType(this.type);
-        this.fillKey();
+        this.fillEmail();
+        this.fillToken();
         if (!toBeCanceled) {
             submitForm();
             this.closeSuccessNotification();
@@ -49,7 +56,7 @@ export class JiraCredentialsBearer extends Credentials {
         }
     }
 
-    edit(credentialsJiraData: CredentialsJiraTokenData, toBeCanceled = false) {
+    edit(credentialsJiraData: CredentialsJiraData, toBeCanceled = false) {
         const oldValues = this.storeOldValues();
         super.edit(null);
         this.init(credentialsJiraData);
@@ -57,7 +64,7 @@ export class JiraCredentialsBearer extends Credentials {
         isButtonEnabled(submitButton, true);
         this.fillDescription();
         isButtonEnabled(submitButton, true);
-        this.fillKey();
+        this.fillToken();
         isButtonEnabled(submitButton, true);
         if (!toBeCanceled) {
             // Edit action is confirmed, submitting form and validating data is updated
@@ -76,7 +83,7 @@ export class JiraCredentialsBearer extends Credentials {
         validateValue(usernameInput, email);
     }
 
-    protected validateValues(credentialsJiraData: CredentialsJiraTokenData): void {
+    protected validateValues(credentialsJiraData: CredentialsJiraData): void {
         const { name, description } = credentialsJiraData;
         super.edit(null);
         this.validateName(name);
@@ -84,12 +91,13 @@ export class JiraCredentialsBearer extends Credentials {
         cancelForm();
     }
 
-    storeOldValues(): CredentialsJiraTokenData {
+    storeOldValues(): CredentialsJiraData {
         return {
             name: this.name,
             type: this.type,
             description: this.description,
-            key: this.key,
+            token: this.token,
+            email: this.email,
         };
     }
 }

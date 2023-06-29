@@ -18,14 +18,14 @@ import { CredentialType, CustomRuleType, JiraType, UserCredentials } from "../e2
 import { writeGpgKey, writeMavenSettingsFile } from "./utils";
 import {
     CredentialsData,
+    CredentialsJiraData,
     JiraConnectionData,
     ProxyData,
     RulesManualFields,
     RulesRepositoryFields,
     UserData,
 } from "../e2e/types/types";
-import { JiraCredentialsBasic } from "../e2e/models/administration/credentials/jiraCredentialsBasic";
-import { JiraCredentialsBearer } from "../e2e/models/administration/credentials/jiraCredentialsBearer";
+import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
@@ -230,7 +230,7 @@ export function getRandomCredentialsData(
  *
  */
 export function getJiraConnectionData(
-    jiraCredential: JiraCredentialsBasic | JiraCredentialsBearer,
+    jiraCredential: JiraCredentials,
     isInsecure?: boolean,
     useTestingAccount = false
 ): JiraConnectionData {
@@ -264,51 +264,32 @@ export function getJiraConnectionData(
  * @param useTestingAccount: if true - real credential data will be used, otherwise dummy data will be added
  *
  */
-export function getJiraCredential(
+export function getJiraCredentialData(
     accountType: string,
     useTestingAccount = false
-): JiraCredentialsBasic | JiraCredentialsBearer {
-    let accountName: string;
-    let email: string;
-    let token: string;
-    let description: string;
-    let key: string;
-    if (accountType === CredentialType.jiraBasic) {
-        if (useTestingAccount) {
-            accountName = "PrivateCredential" + getRandomWord(5);
+): CredentialsJiraData {
+    let accountName = "Jira_" + getRandomWord(6);
+    let description = getDescription();
+    let email = getEmail();
+    let token = getRandomWord(20);
+
+    if (useTestingAccount) {
+        if (accountType === CredentialType.jiraBasic) {
             email = Cypress.env("jira_atassian_cloud_email");
             token = Cypress.env("jira_atassian_cloud_token");
-            description = "Private cloud account";
         } else {
-            accountName = getRandomWord(6);
-            email = getEmail();
-            token = getRandomWord(20);
-            description = getDescription();
+            // email field not present for bearer auth
+            email = null;
+            token = Cypress.env("jira_stage_bearer_token");
         }
-        return new JiraCredentialsBasic({
-            type: CredentialType.jiraBasic,
-            name: accountName,
-            description: description,
-            email: email,
-            token: token,
-        });
-    } else {
-        if (useTestingAccount) {
-            accountName = "StageCredential" + getRandomWord(5);
-            key = Cypress.env("jira_stage_bearer_token");
-            description = "Stage bearer account";
-        } else {
-            accountName = getRandomWord(6);
-            key = getRandomWord(20);
-            description = getDescription();
-        }
-        return new JiraCredentialsBearer({
-            type: CredentialType.jiraToken,
-            name: accountName,
-            description: description,
-            key: key,
-        });
     }
+    return {
+        type: accountType,
+        name: accountName,
+        description: description,
+        email: email,
+        token: token,
+    };
 }
 
 export function getRandomProxyData(credentials?: CredentialsData): ProxyData {
