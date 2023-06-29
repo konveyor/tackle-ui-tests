@@ -4,8 +4,8 @@ import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import { Jira } from "../../../models/administration/jira-connection/jira";
-import { CredentialsBasicJira } from "../../../models/administration/credentials/credentialsBasicJira";
 import { JiraIssue } from "../../../models/administration/jira-connection/jira-api.interface";
+import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
 
 const now = new Date();
 now.setDate(now.getDate() + 1);
@@ -16,7 +16,7 @@ end.setFullYear(end.getFullYear() + 1);
 let applications: Assessment[];
 let migrationWave: MigrationWave;
 let jiraInstance: Jira;
-let jiraCredentials: CredentialsBasicJira;
+let jiraCredentials: JiraCredentials;
 
 // Automates Polarion TC 340
 describe(["@tier1"], "Export Migration Wave to Issue Manager", function () {
@@ -34,7 +34,7 @@ describe(["@tier1"], "Export Migration Wave to Issue Manager", function () {
         );
         migrationWave.create();
 
-        jiraCredentials = new CredentialsBasicJira(
+        jiraCredentials = new JiraCredentials(
             data.getRandomCredentialsData(CredentialType.jiraBasic, null, true)
         );
         jiraCredentials.create();
@@ -87,8 +87,8 @@ describe(["@tier1"], "Export Migration Wave to Issue Manager", function () {
 
     after("Clear test data", function () {
         migrationWave.delete();
-        // jiraInstance.delete(); This method is not working right now
-        // jiraCredentials.delete();
+        jiraInstance.delete();
+        jiraCredentials.delete();
         applications.forEach((app) => app.delete());
     });
 });
