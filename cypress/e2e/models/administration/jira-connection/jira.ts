@@ -32,7 +32,7 @@ import {
     trTag,
 } from "../../../types/constants";
 import { cancelButton, confirmButton, navLink } from "../../../views/common.view";
-import { JiraIssueType, JiraProject } from "./jira-api.interface";
+import { JiraIssue, JiraIssueType, JiraProject } from "./jira-api.interface";
 
 /**
  * Base class for Jira connection
@@ -250,13 +250,26 @@ export class Jira {
         return this.doJiraRequest<JiraIssueType[]>(`${this.url}/rest/api/3/issuetype`);
     }
 
-    private doJiraRequest<T>(url: string): Cypress.Chainable<T> {
+    public deleteIssues(issueIds: string[]): void {
+        issueIds.forEach((id) =>
+            this.doJiraRequest(`${this.url}/rest/api/3/issue/${id}`, "DELETE")
+        );
+    }
+
+    public getIssues(projectName: string): Cypress.Chainable<JiraIssue[]> {
+        return this.doJiraRequest<JiraIssue[]>(
+            `${this.url}/rest/api/3/search?jql=project=${projectName}`
+        ).its("issues");
+    }
+
+    private doJiraRequest<T>(url: string, method = "GET"): Cypress.Chainable<T> {
         const basicAuth = Buffer.from(`${this.credential.email}:${this.credential.token}`).toString(
             "base64"
         );
         return cy
             .request({
                 url: url,
+                method,
                 headers: {
                     Authorization: "Basic " + basicAuth,
                 },

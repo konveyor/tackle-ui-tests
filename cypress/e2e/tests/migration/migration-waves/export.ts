@@ -1,23 +1,11 @@
-import {
-    checkSuccessAlert,
-    createMultipleApplications,
-    deleteAllStakeholderGroups,
-    deleteAllStakeholders,
-    deleteApplicationTableRows,
-    login,
-} from "../../../../utils/utils";
+import { createMultipleApplications, login } from "../../../../utils/utils";
 import { CredentialType, JiraType, SEC } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
-import { successAlertMessage } from "../../../views/common.view";
-import {
-    getSpecialMigrationWavesTableSelector,
-    MigrationWavesSpecialColumns,
-    MigrationWaveView,
-} from "../../../views/migration-wave.view";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
-import { Jira } from "../../../models/administration/jira/jira";
+import { Jira } from "../../../models/administration/jira-connection/jira";
 import { CredentialsBasicJira } from "../../../models/administration/credentials/credentialsBasicJira";
+import { JiraIssue } from "../../../models/administration/jira-connection/jira-api.interface";
 
 const now = new Date();
 now.setDate(now.getDate() + 1);
@@ -28,6 +16,7 @@ end.setFullYear(end.getFullYear() + 1);
 let applications: Assessment[];
 let migrationWave: MigrationWave;
 let jiraInstance: Jira;
+let jiraCredentials: CredentialsBasicJira;
 
 // Automates Polarion TC 340
 describe(["@tier3"], "Export Migration Wave to Issue Manager", function () {
@@ -45,7 +34,7 @@ describe(["@tier3"], "Export Migration Wave to Issue Manager", function () {
         );
         migrationWave.create();
 
-        const jiraCredentials = new CredentialsBasicJira(
+        jiraCredentials = new CredentialsBasicJira(
             data.getRandomCredentialsData(CredentialType.jiraBasic, null, true)
         );
         jiraCredentials.create();
@@ -66,23 +55,40 @@ describe(["@tier3"], "Export Migration Wave to Issue Manager", function () {
             .getProjects()
             .then((projects) => {
                 project = projects.find((proj) => proj.name === "Test").name;
+                expect(!!project).to.eq(true);
 
                 return jiraInstance.getIssueTypes();
             })
             .then((issueTypes) => {
                 const task = issueTypes.find((issueType) => issueType.untranslatedName === "Task");
+                expect(!!task).to.eq(true);
+
                 migrationWave.exportToIssueManager(
                     JiraType.cloud,
                     jiraInstance.name,
                     project,
                     task.untranslatedName
                 );
+            })
+            .then((_) => {
+                cy.wait(35 * SEC); // Enough time to create both tasks and for them to be available in the Jira API
+                return jiraInstance.getIssues(project);
+            })
+            .then((issues: JiraIssue[]) => {
+                expect(
+                    migrationWave.applications.every((app) =>
+                        issues.find((issue) => issue.fields.summary.includes(app.name))
+                    )
+                ).to.eq(true);
+
+                jiraInstance.deleteIssues(issues.map((issue) => issue.id));
             });
     });
 
     after("Clear test data", function () {
-        //deleteAllStakeholders();
-        //deleteAllStakeholderGroups();
-        //deleteApplicationTableRows();
+        migrationWave.delete();
+        // jiraInstance.delete(); This method is not working right now
+        // jiraCredentials.delete();
+        applications.forEach((app) => app.delete());
     });
 });

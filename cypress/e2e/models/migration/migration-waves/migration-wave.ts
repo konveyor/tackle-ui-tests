@@ -17,7 +17,6 @@ import {
     selectNone,
     manageApplications,
     exportToIssueManagerAction,
-    JiraType,
 } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { MigrationWaveView } from "../../../views/migration-wave.view";
@@ -31,7 +30,6 @@ import {
 } from "../../../views/common.view";
 import { selectBox } from "../../../views/applicationinventory.view";
 import { Application } from "../../../models/migration/applicationinventory/application";
-import { Jira } from "../../../models/administration/jira/jira";
 
 export interface MigrationWave {
     name: string;
