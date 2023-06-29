@@ -201,25 +201,25 @@ describe(["@tier2"], "Application validations", () => {
         cy.get(commonView.closeButton).click();
     });
 
-    it("Create tag from application side drawer", function () {
-        // Automates Polarion MTA-321
-        const application = new Assessment(getRandomApplicationData());
-        const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagCategory());
+    it("Bulk deletion of applications - Select page ", function () {
+        applicationList = createMultipleApplications(11);
+        navigate_to_application_inventory();
+        // Click dropdown toggle button to make 'Select page' selection.
+        cy.get("button[aria-label='Select']").click();
+        cy.get("ul[role=menu] > li").contains("Select page").click();
 
-        application.create();
-        cy.wait("@postApplication");
-        exists(application.name);
+        application_inventory_kebab_menu("Delete");
+        clickByText(button, "Delete");
 
-        application.applicationDetailsTab("Tags");
-        clickByText(button, "Create tag");
+        exists(applicationList[applicationList.length - 1].name);
+         // Assert that all applications except the one on the next page have been deleted.
+        cy.get(".pf-c-table > tbody > tr")
+            .not(".pf-c-table__expandable-row")
+            .find("td[data-label=Name]")
+            .then(($rows) => {
+                cy.wrap($rows.length).should("eq", 1);
+            });
 
-        tag.create();
-        cy.wait("@postTag");
-
-        // Assert that created tag exists
-        expandRowDetails(tag.tagCategory);
-        existsWithinRow(tag.tagCategory, tdTag, tag.name);
-        closeRowDetails(tag.tagCategory);
     });
 
     it("Bulk deletion of applications - Select all ", function () {
@@ -249,24 +249,24 @@ describe(["@tier2"], "Application validations", () => {
         }
     });
 
-    it.only("Bulk deletion of applications - Select page ", function () {
-        applicationList = createMultipleApplications(11);
-        navigate_to_application_inventory();
-        // Click dropdown toggle button to make 'Select page' selection.
-        cy.get("button[aria-label='Select']").click();
-        cy.get("ul[role=menu] > li").contains("Select page").click();
+    it("Create tag from application side drawer", function () {
+        // Automates Polarion MTA-321
+        const application = new Assessment(getRandomApplicationData());
+        const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagCategory());
 
-        application_inventory_kebab_menu("Delete");
-        clickByText(button, "Delete");
+        application.create();
+        cy.wait("@postApplication");
+        exists(application.name);
 
-        exists(applicationList[applicationList.length - 1].name);
-         // Assert that all applications except the one on the next page have been deleted.
-        cy.get(".pf-c-table > tbody > tr")
-            .not(".pf-c-table__expandable-row")
-            .find("td[data-label=Name]")
-            .then(($rows) => {
-                cy.wrap($rows.length).should("eq", 1);
-            });
+        application.applicationDetailsTab("Tags");
+        clickByText(button, "Create tag");
 
+        tag.create();
+        cy.wait("@postTag");
+
+        // Assert that created tag exists
+        expandRowDetails(tag.tagCategory);
+        existsWithinRow(tag.tagCategory, tdTag, tag.name);
+        closeRowDetails(tag.tagCategory);
     });
 });
