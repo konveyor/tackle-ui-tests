@@ -622,9 +622,23 @@ export function application_inventory_kebab_menu(menu, tab?): void {
     // The value for menu could be one of {Import, Manage imports, Delete, Manage credentials}
     if (tab == "Analysis") navigate_to_application_inventory("Analysis");
     else navigate_to_application_inventory();
+
     cy.get(actionButton).eq(1).click({ force: true });
-    if (menu == "Import") clickByText(button, "Import");
-    else cy.get("a.pf-c-dropdown__menu-item").contains(menu).click({ force: true });
+    if (menu == "Import") {
+        clickByText(button, "Import");
+    } else {
+        cy.get("a")
+            .contains(menu)
+            .then(($menu_item) => {
+                if (!$menu_item.hasClass("pf-m-disabled")) {
+                    clickByText("a", menu);
+                    if (menu == "Delete") clickByText(button, menu, true);
+                } else {
+                    // close menu if nothing to do
+                    cy.get(actionButton).eq(1).click({ force: true });
+                }
+            });
+    }
 }
 
 export function openManageImportsPage(): void {
@@ -689,9 +703,7 @@ export function deleteApplicationTableRows(currentPage = false): void {
                                     timeout: 10 * SEC,
                                 }).check({ force: true });
                             }
-
                             application_inventory_kebab_menu("Delete");
-                            clickByText(button, "Delete", true);
                         }
                     });
             }
