@@ -14,17 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import * as faker from "faker";
-import { CredentialType, CustomRuleType, UserCredentials } from "../e2e/types/constants";
+import { CredentialType, CustomRuleType, JiraType, UserCredentials } from "../e2e/types/constants";
 import { writeGpgKey, writeMavenSettingsFile } from "./utils";
 import {
     CredentialsData,
+    CredentialsJiraData,
+    JiraConnectionData,
     ProxyData,
-    UserData,
     RulesManualFields,
     RulesRepositoryFields,
-    JiraConnectionData,
+    UserData,
 } from "../e2e/types/types";
-import { CredentialsBasicJira } from "../e2e/models/administration/credentials/credentialsBasicJira";
+import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
@@ -109,6 +110,14 @@ export function getDefaultTagCategories(): string[] {
         "Operating System",
         "Runtime",
     ];
+}
+/**
+ * Generates random URL
+ *
+ * @param length: length of URL between "https://" and domain ".com"
+ */
+export function getRandomUrl(length = 6): string {
+    return "https://" + getRandomWord(length).toLowerCase() + ".com";
 }
 
 /**
@@ -212,18 +221,74 @@ export function getRandomCredentialsData(
     }
 }
 
+/**
+ * This function returns JiraConnectionData
+ *
+ * @param jiraCredential: credential used to build Jira connection. Can be either JiraCredentialsBasic or JiraCredentialsBearer
+ * @param isInsecure: if true - selfsigned certificates will be accepted
+ * @param useTestingAccount: if true - real connection data will be used, otherwise dummy data will be added
+ *
+ */
 export function getJiraConnectionData(
-    jiraCredential: CredentialsBasicJira,
-    type: string,
-    url: string,
-    isInsecure?: boolean
+    jiraCredential: JiraCredentials,
+    isInsecure?: boolean,
+    useTestingAccount = false
 ): JiraConnectionData {
+    let name: string;
+    let url: string;
+    let type: string;
+
+    if (jiraCredential.type === CredentialType.jiraBasic) {
+        type = JiraType.cloud;
+        url = useTestingAccount ? Cypress.env("jira_atassian_cloud_url") : getRandomUrl(6);
+    } else if (jiraCredential.type === CredentialType.jiraToken) {
+        type = JiraType.server;
+        url = useTestingAccount ? Cypress.env("jira_stage_datacenter_url") : getRandomUrl(6);
+    }
+
+    name = "Jira" + getRandomWord(5);
+
     return {
         credential: jiraCredential,
         isInsecure: isInsecure,
-        name: getRandomWord(6),
+        name: name,
         type: type,
         url: url,
+    };
+}
+
+/**
+ * This function returns Jira credentials, either JiraCredentialsBasic or JiraCredentialsBearer
+ *
+ * @param accountType: Type of account, it can be Cloud or Datacenter/Server
+ * @param useTestingAccount: if true - real credential data will be used, otherwise dummy data will be added
+ *
+ */
+export function getJiraCredentialData(
+    accountType: string,
+    useTestingAccount = false
+): CredentialsJiraData {
+    let accountName = "Jira_" + getRandomWord(6);
+    let description = getDescription();
+    let email = getEmail();
+    let token = getRandomWord(20);
+
+    if (useTestingAccount) {
+        if (accountType === CredentialType.jiraBasic) {
+            email = Cypress.env("jira_atassian_cloud_email");
+            token = Cypress.env("jira_atassian_cloud_token");
+        } else {
+            // email field not present for bearer auth
+            email = null;
+            token = Cypress.env("jira_stage_bearer_token");
+        }
+    }
+    return {
+        type: accountType,
+        name: accountName,
+        description: description,
+        email: email,
+        token: token,
     };
 }
 
