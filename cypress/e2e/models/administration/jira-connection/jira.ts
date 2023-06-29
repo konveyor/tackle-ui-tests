@@ -242,12 +242,24 @@ export class Jira {
         };
     }
 
-    public getProjects(): Cypress.Chainable<JiraProject[]> {
+    public getAllProjects(): Cypress.Chainable<JiraProject[]> {
         return this.doJiraRequest<JiraProject[]>(`${this.url}/rest/api/3/project`);
     }
 
-    public getIssueTypes(): Cypress.Chainable<JiraIssueType[]> {
+    public getProject(projectName = "Test"): Cypress.Chainable<JiraProject | null> {
+        return this.getAllProjects().then((projects) => {
+            return projects.find((project) => project.name === projectName);
+        });
+    }
+
+    public getAllIssueTypes(): Cypress.Chainable<JiraIssueType[]> {
         return this.doJiraRequest<JiraIssueType[]>(`${this.url}/rest/api/3/issuetype`);
+    }
+
+    public getIssueType(type: string): Cypress.Chainable<JiraIssueType | null> {
+        return this.getAllIssueTypes().then((issueTypes) => {
+            return issueTypes.find((issueType) => issueType.untranslatedName === type);
+        });
     }
 
     public deleteIssues(issueIds: string[]): void {

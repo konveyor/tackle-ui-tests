@@ -19,7 +19,7 @@ let jiraInstance: Jira;
 let jiraCredentials: CredentialsBasicJira;
 
 // Automates Polarion TC 340
-describe(["@tier3"], "Export Migration Wave to Issue Manager", function () {
+describe(["@tier1"], "Export Migration Wave to Issue Manager", function () {
     before("Create test data", function () {
         login();
         applications = createMultipleApplications(2);
@@ -48,31 +48,31 @@ describe(["@tier3"], "Export Migration Wave to Issue Manager", function () {
         jiraInstance.create();
     });
 
-    it("Export to Jira", function () {
-        let project = "";
+    it("Export issues to Jira", function () {
+        let projectName = "";
 
         jiraInstance
-            .getProjects()
-            .then((projects) => {
-                project = projects.find((proj) => proj.name === "Test").name;
+            .getProject()
+            .then((project) => {
                 expect(!!project).to.eq(true);
 
-                return jiraInstance.getIssueTypes();
+                projectName = project.name;
+
+                return jiraInstance.getIssueType("Task");
             })
-            .then((issueTypes) => {
-                const task = issueTypes.find((issueType) => issueType.untranslatedName === "Task");
+            .then((task) => {
                 expect(!!task).to.eq(true);
 
                 migrationWave.exportToIssueManager(
                     JiraType.cloud,
                     jiraInstance.name,
-                    project,
+                    projectName,
                     task.untranslatedName
                 );
             })
             .then((_) => {
                 cy.wait(35 * SEC); // Enough time to create both tasks and for them to be available in the Jira API
-                return jiraInstance.getIssues(project);
+                return jiraInstance.getIssues(projectName);
             })
             .then((issues: JiraIssue[]) => {
                 expect(
