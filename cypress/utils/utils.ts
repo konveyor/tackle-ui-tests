@@ -626,7 +626,6 @@ export function application_inventory_kebab_menu(menu, tab?): void {
     cy.get(actionButton).eq(1).click({ force: true });
     if (menu == "Import") {
         clickByText(button, "Import");
-        // cy.wait(10000);
     } else {
         cy.get("a")
             .contains(menu)
