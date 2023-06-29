@@ -1,4 +1,3 @@
-import { CredentialsBasicJira } from "../credentials/credentialsBasicJira";
 import { JiraConnectionData } from "../../../types/types";
 import {
     cancelForm,
@@ -33,6 +32,7 @@ import {
 } from "../../../types/constants";
 import { cancelButton, confirmButton, navLink } from "../../../views/common.view";
 import { JiraIssue, JiraIssueType, JiraProject } from "./jira-api.interface";
+import { JiraCredentials } from "../credentials/JiraCredentials";
 
 /**
  * Base class for Jira connection
@@ -46,7 +46,7 @@ export class Jira {
     /** One of possible Jira setup types */
     type: string;
     /** Credential to be used to authorize Jira connection */
-    credential: CredentialsBasicJira;
+    credential: JiraCredentials;
     /** Shows if insecure Jira connection is acceptable or not */
     isInsecure: boolean;
 

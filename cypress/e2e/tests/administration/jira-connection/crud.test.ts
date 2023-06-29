@@ -1,75 +1,70 @@
 import { login } from "../../../../utils/utils";
-import { getJiraConnectionData, getRandomCredentialsData } from "../../../../utils/data_utils";
-import { CredentialType, JiraType } from "../../../types/constants";
-import { CredentialsBasicJira } from "../../../models/administration/credentials/credentialsBasicJira";
-import { CredentialsData, JiraConnectionData } from "../../../types/types";
-import { CredentialsTokenJira } from "../../../models/administration/credentials/credentialsTokenJira";
+import { getJiraConnectionData, getJiraCredentialData } from "../../../../utils/data_utils";
+import { CredentialType } from "../../../types/constants";
+import { JiraConnectionData } from "../../../types/types";
 import { Jira } from "../../../models/administration/jira-connection/jira";
+import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
 
-describe(["@tier2"], "CRUD operations for Jira Server connection instance", () => {
+describe(["@tier1"], "CRUD operations for Jira Cloud instance", () => {
     const toBeCanceled = true;
-    const notToBeCanceled = false;
     const expectedToFail = true;
-    let validJiraBasicCredentials: CredentialsData;
-    let jiraBasicCredential: CredentialsBasicJira;
-    let jiraServerConnectionData: JiraConnectionData;
-    let jiraServerConnectionDataIncorrect: JiraConnectionData;
-    let jiraServerConnection: Jira;
-    const jira_url = Cypress.env("jira_url");
+    const useTestingAccount = true;
+    const isSecure = false;
+    let jiraBasicCredential: JiraCredentials;
+    let jiraCloudConnectionData: JiraConnectionData;
+    let jiraCloudConnectionDataIncorrect: JiraConnectionData;
+    let jiraCloudConnection: Jira;
 
     before("Login", function () {
         // Perform login
         login();
         // Defining and creating credentials to be used in test
-        validJiraBasicCredentials = getRandomCredentialsData(CredentialType.jiraBasic, "", true);
-        jiraBasicCredential = new CredentialsBasicJira(validJiraBasicCredentials);
+        jiraBasicCredential = new JiraCredentials(
+            getJiraCredentialData(CredentialType.jiraBasic, useTestingAccount)
+        );
 
         jiraBasicCredential.create();
 
-        // Defining correct data to create new Jira connection
-        jiraServerConnectionData = getJiraConnectionData(
+        // Defining correct data to create new Jira Cloud connection
+        jiraCloudConnectionData = getJiraConnectionData(
             jiraBasicCredential,
-            JiraType.cloud,
-            jira_url
+            isSecure,
+            useTestingAccount
         );
 
-        // Defining fake data to edit Jira connection
-        jiraServerConnectionDataIncorrect = getJiraConnectionData(
+        // Defining dummy data to edit Jira Cloud connection
+        jiraCloudConnectionDataIncorrect = getJiraConnectionData(
             jiraBasicCredential,
-            JiraType.cloud,
-            "https://test.com"
+            isSecure,
+            !useTestingAccount
         );
 
-        jiraServerConnection = new Jira(jiraServerConnectionData);
+        jiraCloudConnection = new Jira(jiraCloudConnectionData);
     });
 
     it("Creating Jira connection and cancelling without saving", () => {
-        jiraServerConnection.create(toBeCanceled);
+        jiraCloudConnection.create(toBeCanceled);
     });
 
     it("Creating Jira connection", () => {
-        jiraServerConnection.create();
+        jiraCloudConnection.create();
     });
 
     it("Editing Jira connection and cancelling without saving", () => {
-        jiraServerConnection.edit(jiraServerConnectionDataIncorrect, toBeCanceled);
+        jiraCloudConnection.edit(jiraCloudConnectionDataIncorrect, toBeCanceled);
     });
 
     it("Editing Jira credentials with incorrect data, then configuring back with correct", () => {
-        jiraServerConnection.edit(
-            jiraServerConnectionDataIncorrect,
-            notToBeCanceled,
-            expectedToFail
-        );
-        jiraServerConnection.edit(jiraServerConnectionData);
+        jiraCloudConnection.edit(jiraCloudConnectionDataIncorrect, !toBeCanceled, expectedToFail);
+        jiraCloudConnection.edit(jiraCloudConnectionData);
     });
 
     it("Delete Jira connection and cancel deletion", () => {
-        jiraServerConnection.delete(toBeCanceled);
+        jiraCloudConnection.delete(toBeCanceled);
     });
 
     after("Delete Jira connection and Jira credentials", () => {
-        jiraServerConnection.delete();
+        jiraCloudConnection.delete();
         jiraBasicCredential.delete();
     });
 });
