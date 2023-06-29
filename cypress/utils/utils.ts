@@ -368,32 +368,35 @@ export function applySearchFilter(
     cy.wait(4000);
 }
 
-export function sortAsc(
-    sortCriteria: string,
-    tableSelector = `th[data-label="${sortCriteria}"]`
-): void {
-    cy.get(tableSelector).then(($tableHeader) => {
-        if (
-            $tableHeader.attr("aria-sort") === "descending" ||
-            $tableHeader.attr("aria-sort") === "none"
-        ) {
-            $tableHeader.find("button").trigger("click");
-        }
-    });
+//tableSelector should be .pf-c-table__sort as the fieldHeader in views
+export function sortAsc(sortCriteria: string, tableSelector: string): void {
+    cy.get(tableSelector)
+        .contains("th", sortCriteria)
+        .then(($tableHeader) => {
+            const button = $tableHeader.find("button");
+            if (
+                $tableHeader.attr("aria-sort") === "none" ||
+                $tableHeader.attr("aria-sort") === "descending"
+            ) {
+                button.trigger("click");
+            }
+            cy.wrap($tableHeader).should("have.attr", "aria-sort", "ascending");
+        });
 }
 
-export function sortDesc(
-    sortCriteria: string,
-    tableSelector = `th[data-label="${sortCriteria}"]`
-): void {
-    cy.get(tableSelector).then(($tableHeader) => {
-        if (
-            $tableHeader.attr("aria-sort") === "ascending" ||
-            $tableHeader.attr("aria-sort") === "none"
-        ) {
-            $tableHeader.find("button").trigger("click");
-        }
-    });
+export function sortDesc(sortCriteria: string, tableSelector: string): void {
+    cy.get(tableSelector)
+        .contains("th", sortCriteria)
+        .then(($tableHeader) => {
+            const button = $tableHeader.find("button");
+            if (
+                $tableHeader.attr("aria-sort") === "none" ||
+                $tableHeader.attr("aria-sort") === "ascending"
+            ) {
+                button.trigger("click");
+            }
+            cy.wrap($tableHeader).should("have.attr", "aria-sort", "descending");
+        });
 }
 
 export function sortAscCopyAssessmentTable(sortCriteria: string): void {
@@ -455,6 +458,53 @@ export function getTableColumnData(columnName: string): Array<string> {
             }
         });
     return itemList;
+}
+export function verifyDateSortAsc(listToVerify: Array<string>, unsortedList: Array<string>): void {
+    cy.wrap(listToVerify).then((capturedList) => {
+        let sortedList = [...unsortedList]
+            .map((dateStr) => {
+                // Manually parse the date
+                const [month, day, year] = dateStr.split("/");
+                return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+            })
+            .sort((a, b) => a.getTime() - b.getTime()) // sort the dates
+            .map((date) => {
+                // Convert the date back to "MM/DD/YYYY" format.
+                let formattedDate =
+                    (date.getMonth() + 1).toString().padStart(2, "0") +
+                    "/" +
+                    date.getDate().toString().padStart(2, "0") +
+                    "/" +
+                    date.getFullYear();
+                return formattedDate;
+            });
+        expect(capturedList).to.be.deep.equal(sortedList);
+    });
+}
+
+export function verifyDateSortDesc(listToVerify: Array<string>, unsortedList: Array<string>): void {
+    cy.wrap(listToVerify).then((capturedList) => {
+        let sortedList = [...unsortedList]
+            // Check if the unsortedList is sorted in ascending order
+            .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
+            .map((dateStr) => {
+                // Manually parse the date
+                const [month, day, year] = dateStr.split("/");
+                return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+            })
+            .sort((a, b) => b.getTime() - a.getTime()) // sort the dates in descending order
+            .map((date) => {
+                // Convert the date back to "MM/DD/YYYY" format.
+                let formattedDate =
+                    (date.getMonth() + 1).toString().padStart(2, "0") +
+                    "/" +
+                    date.getDate().toString().padStart(2, "0") +
+                    "/" +
+                    date.getFullYear();
+                return formattedDate;
+            });
+        expect(capturedList).to.be.deep.equal(sortedList);
+    });
 }
 
 export function verifySortAsc(listToVerify: Array<any>, unsortedList: Array<any>): void {
@@ -828,6 +878,22 @@ export function createMultipleStakeholders(
     return stakeholdersList;
 }
 
+function generateRandomDateRange() {
+    const now = new Date();
+    const startOffset = Math.floor(Math.random() * 365);
+    const startDate = new Date(now.getTime());
+    startDate.setDate(startDate.getDate() + startOffset);
+
+    const endOffset = Math.floor(Math.random() * (365 - startOffset) + 1);
+    const endDate = new Date(startDate.getTime());
+    endDate.setDate(endDate.getDate() + endOffset);
+
+    return {
+        start: startDate,
+        end: endDate,
+    };
+}
+
 export function createMultipleMigrationWaves(
     numberOfMigrationWaves: number,
     stakeholdersList?: Array<Stakeholders>,
@@ -835,15 +901,13 @@ export function createMultipleMigrationWaves(
 ): Array<MigrationWave> {
     const migrationWaveList: Array<MigrationWave> = [];
     for (let i = 0; i < numberOfMigrationWaves; i++) {
-        const now = new Date();
-        now.setDate(now.getDate() + 1);
-        const end = new Date(now.getTime());
-        end.setFullYear(end.getFullYear() + 1);
+        const dateRange = generateRandomDateRange();
+
         // Create new migration wave
         const migrationWave = new MigrationWave(
             data.getAppName(),
-            now,
-            end,
+            dateRange.start, // Use start date from random date range
+            dateRange.end, // Use end date from random date range
             stakeholdersList,
             stakeholderGroupsList
         );
