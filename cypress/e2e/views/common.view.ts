@@ -54,3 +54,4 @@ export const itemsSelectInsideDialog = "div[role='dialog'] button[aria-label='Se
 export const stakeHoldersTable = "table[aria-label='Stakeholders table']";
 export const nameHelperBusiness = "#business-service-name-helper";
 export const nameHelperStakeholderGroup = "#-helper";
+export const kebabMenuItem = "a.pf-c-dropdown__menu-item";

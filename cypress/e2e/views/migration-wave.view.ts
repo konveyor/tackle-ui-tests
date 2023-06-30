@@ -15,6 +15,7 @@ export enum MigrationWaveView {
     instanceSelectToggle = "#tracker-select-toggle-select-typeahead",
     projectSelectToggle = "#project-select-toggle-select-typeahead",
     issueTypeSelectToggle = "#issue-type-select-toggle-select-typeahead",
+    waveTable = "table[aria-label='Migration waves table']",
 }
 
 export enum MigrationWavesSpecialColumns {

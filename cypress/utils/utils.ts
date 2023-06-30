@@ -78,7 +78,7 @@ import { CredentialsSourceControlUsername } from "../e2e/models/administration/c
 import { CredentialsSourceControlKey } from "../e2e/models/administration/credentials/credentialsSourceControlKey";
 import { Application } from "../e2e/models/migration/applicationinventory/application";
 import { switchToggle } from "../e2e/views/reports.view";
-import { rightSideMenu } from "../e2e/views/analysis.view";
+import { MigrationWaveView } from "../e2e/views/migration-wave.view";
 import Chainable = Cypress.Chainable;
 import { MigrationWave } from "../e2e/models/migration/migration-waves/migration-wave";
 
@@ -680,6 +680,41 @@ export function verifyImportErrorMsg(errorMsg: any): void {
     } else {
         cy.get("table > tbody > tr > td").should("contain", errorMsg);
     }
+}
+
+export function migration_wave_kebab_menu(menu): void {
+    // The value for menu could be one of {Export to Issue Manager, Delete}
+    cy.get(actionButton).eq(1).click({ force: true });
+    cy.get(commonView.kebabMenuItem).contains(menu).click({ force: true });
+}
+
+export function deleteAllMigrationWaves(currentPage = false): void {
+    MigrationWave.open();
+    cy.wait(2000);
+    cy.get(MigrationWaveView.waveTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.wait(1000);
+                cy.get("span.pf-c-options-menu__toggle-text")
+                    .eq(0)
+                    .then(($body) => {
+                        if (!$body.text().includes("of 0")) {
+                            if (currentPage) {
+                                cy.get(".pf-c-dropdown__toggle-button").click({ force: true });
+                                clickByText(button, "Select page");
+                            } else {
+                                cy.get("input#bulk-selected-items-checkbox", {
+                                    timeout: 10 * SEC,
+                                }).check({ force: true });
+                            }
+
+                            migration_wave_kebab_menu("Delete");
+                            clickByText(button, "Delete", true);
+                        }
+                    });
+            }
+        });
 }
 
 export function deleteApplicationTableRows(currentPage = false): void {
