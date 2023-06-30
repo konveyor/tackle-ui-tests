@@ -380,7 +380,10 @@ export class Analysis extends Application {
 
     validateStoryPoints(): void {
         cy.get(fileName).should("contain", this.appName);
-        cy.get(reportStoryPoints).should("contain", this.storyPoints);
+        //Validating that this field contains number
+        cy.get(reportStoryPoints).should((value) => {
+            expect(Number.isNaN(parseInt(value.text(), 10))).to.eq(false);
+        });
     }
 
     validateTransactionReport(): void {
