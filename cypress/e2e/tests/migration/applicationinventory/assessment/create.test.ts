@@ -210,11 +210,14 @@ describe(["@tier2"], "Application validations", () => {
 
         application_inventory_kebab_menu("Delete");
 
-        // Assert that all applications except the one(s) on the next page have been deleted.
-        for (let i = 0; i < applicationList.length - 1; i++) {
-            notExists(applicationList[i].name);
-        }
         exists(applicationList[applicationList.length - 1].name);
+        // Assert that all applications except the one on the next page have been deleted.
+        cy.get(".pf-c-table > tbody > tr")
+            .not(".pf-c-table__expandable-row")
+            .find("td[data-label=Name]")
+            .then(($rows) => {
+                cy.wrap($rows.length).should("eq", 1);
+            });
     });
 
     it("Bulk deletion of applications - Select all ", function () {
