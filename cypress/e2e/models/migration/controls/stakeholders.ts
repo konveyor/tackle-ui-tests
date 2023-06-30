@@ -28,6 +28,7 @@ import {
     stakeholderEmailInput,
     jobfunctionInput,
     groupInput,
+    removeJobFunction,
 } from "../../../views/stakeholders.view";
 import {
     clickByText,
@@ -91,6 +92,12 @@ export class Stakeholders {
         groups.forEach(function (group) {
             removeMember(group);
         });
+    }
+
+    removeJobfunction(): void {
+        performRowAction(this.email, editAction);
+        click(removeJobFunction);
+        submitForm();
     }
 
     create(cancel = false): void {

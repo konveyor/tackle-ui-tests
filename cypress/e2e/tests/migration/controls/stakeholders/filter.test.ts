@@ -86,7 +86,7 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         deleteByList(stakeholderGroupsList);
     });
 
-    it("Email filter validations", function () {
+    it("MTA-881 | Email filter validations", function () {
         // Navigate to stakeholder tab
         Stakeholders.openList();
 
@@ -112,7 +112,7 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Display name filter validations", function () {
+    it("MTA-881 | Display name filter validations", function () {
         // Navigate to stakeholder tab
         Stakeholders.openList();
 
@@ -138,7 +138,7 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Job function filter validations", function () {
+    it("MTA-881 | Job function filter validations", function () {
         // Navigate to stakeholder tab
         Stakeholders.openList();
 
@@ -170,7 +170,7 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Group filter validations", function () {
+    it("MTA-881 | Group filter validations", function () {
         // Navigate to stakeholder tab
         Stakeholders.openList();
 
