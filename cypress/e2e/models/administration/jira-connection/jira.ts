@@ -31,6 +31,7 @@ import {
     trTag,
 } from "../../../types/constants";
 import { cancelButton, confirmButton, navLink } from "../../../views/common.view";
+import { JiraIssue, JiraIssueType, JiraProject } from "./jira-api.interface";
 import { JiraCredentials } from "../credentials/JiraCredentials";
 
 /**
@@ -239,5 +240,52 @@ export class Jira {
             type: this.type,
             url: this.url,
         };
+    }
+
+    public getAllProjects(): Cypress.Chainable<JiraProject[]> {
+        return this.doJiraRequest<JiraProject[]>(`${this.url}/rest/api/3/project`);
+    }
+
+    public getProject(projectName = "Test"): Cypress.Chainable<JiraProject | null> {
+        return this.getAllProjects().then((projects) => {
+            return projects.find((project) => project.name === projectName);
+        });
+    }
+
+    public getAllIssueTypes(): Cypress.Chainable<JiraIssueType[]> {
+        return this.doJiraRequest<JiraIssueType[]>(`${this.url}/rest/api/3/issuetype`);
+    }
+
+    public getIssueType(type: string): Cypress.Chainable<JiraIssueType | null> {
+        return this.getAllIssueTypes().then((issueTypes) => {
+            return issueTypes.find((issueType) => issueType.untranslatedName === type);
+        });
+    }
+
+    public deleteIssues(issueIds: string[]): void {
+        issueIds.forEach((id) =>
+            this.doJiraRequest(`${this.url}/rest/api/3/issue/${id}`, "DELETE")
+        );
+    }
+
+    public getIssues(projectName: string): Cypress.Chainable<JiraIssue[]> {
+        return this.doJiraRequest<JiraIssue[]>(
+            `${this.url}/rest/api/3/search?jql=project=${projectName}`
+        ).its("issues");
+    }
+
+    private doJiraRequest<T>(url: string, method = "GET"): Cypress.Chainable<T> {
+        const basicAuth = Buffer.from(`${this.credential.email}:${this.credential.token}`).toString(
+            "base64"
+        );
+        return cy
+            .request({
+                url: url,
+                method,
+                headers: {
+                    Authorization: "Basic " + basicAuth,
+                },
+            })
+            .its("body");
     }
 }

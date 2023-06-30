@@ -38,6 +38,7 @@ export const credentials = "Credentials";
 export const credentialType = "Credential type";
 export const deleteAction = "Delete";
 export const editAction = "Edit";
+export const exportToIssueManagerAction = "Export to Issue Manager";
 export const description = "Description";
 export const displayName = "Display name";
 export const effort = "Effort";

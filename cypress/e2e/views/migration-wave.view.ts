@@ -11,6 +11,10 @@ export enum MigrationWaveView {
     actionsButton = "button[aria-label='Actions']",
     yearInput = "input[aria-label='Select year']",
     applicationCountColumn = "td[data-label='Applications']",
+    issueManagerSelectToggle = "#issue-manager-select-toggle-select-typeahead",
+    instanceSelectToggle = "#tracker-select-toggle-select-typeahead",
+    projectSelectToggle = "#project-select-toggle-select-typeahead",
+    issueTypeSelectToggle = "#issue-type-select-toggle-select-typeahead",
 }
 
 export enum MigrationWavesSpecialColumns {
