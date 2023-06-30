@@ -78,7 +78,7 @@ import { CredentialsSourceControlUsername } from "../e2e/models/administration/c
 import { CredentialsSourceControlKey } from "../e2e/models/administration/credentials/credentialsSourceControlKey";
 import { Application } from "../e2e/models/migration/applicationinventory/application";
 import { switchToggle } from "../e2e/views/reports.view";
-import { waveTable } from "../e2e/views/migration-wave.view";
+import { MigrationWaveView } from "../e2e/views/migration-wave.view";
 import Chainable = Cypress.Chainable;
 import { MigrationWave } from "../e2e/models/migration/migration-waves/migration-wave";
 
@@ -691,7 +691,7 @@ export function migration_wave_kebab_menu(menu): void {
 export function deleteAllMigrationWaves(currentPage = false): void {
     MigrationWave.open();
     cy.wait(2000);
-    cy.get(waveTable)
+    cy.get(MigrationWaveView.waveTable)
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
@@ -718,7 +718,6 @@ export function deleteAllMigrationWaves(currentPage = false): void {
 }
 
 export function deleteApplicationTableRows(currentPage = false): void {
-    deleteAllMigrationWaves();
     navigate_to_application_inventory();
     // Wait for application table to be populated with any existing applications
     cy.wait(2000);

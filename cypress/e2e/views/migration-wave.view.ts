@@ -12,6 +12,7 @@ export enum MigrationWaveView {
     yearInput = "input[aria-label='Select year']",
     applicationCountColumn = "td[data-label='Applications']",
     issueManagerSelectToggle = "#issue-manager-select-toggle-select-typeahead",
+    waveTable = "table[aria-label='Migration waves table']",
     instanceSelectToggle = "#tracker-select-toggle-select-typeahead",
     projectSelectToggle = "#project-select-toggle-select-typeahead",
     issueTypeSelectToggle = "#issue-type-select-toggle-select-typeahead",
@@ -27,5 +28,3 @@ export const getSpecialMigrationWavesTableSelector = (
 ) => {
     return `table[aria-label="${columnSelector} table for migration wave ${wave.name}"]`;
 };
-
-export const waveTable = "table[aria-label='Migration waves table']";
