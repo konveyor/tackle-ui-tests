@@ -22,9 +22,10 @@ import {
     clickByText,
     exists,
     notExists,
-    preservecookies,
-    hasToBeSkipped,
     selectUserPerspective,
+    deleteAllStakeholders,
+    deleteAllJobfunctions,
+    deleteAllStakeholderGroups,
 } from "../../../../../utils/utils";
 import { navTab } from "../../../../views/menu.view";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
@@ -44,9 +45,6 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
         // Interceptors for stakeholder groups
         cy.intercept("POST", "/hub/stakeholdergroups*").as("postStakeholdergroups");
         cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");
@@ -199,6 +197,11 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
             .find("td[data-label='Job function']")
             .should("contain", updatedJobfunctionName);
 
+        // Remove the job function from the stakeholder
+        stakeholder.removeJobfunction();
+        cy.wait("@getJobfunctions");
+        cy.wait(2000);
+
         // Delete the job function
         jobfunction.delete();
         cy.wait("@getJobfunctions");
@@ -224,5 +227,12 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
 
         // Assert that stakeholder got deleted
         notExists(stakeholder.email, stakeHoldersTable);
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the stakeholder groups and job functions created before the tests
+        deleteAllStakeholders();
+        deleteAllStakeholderGroups();
+        deleteAllJobfunctions();
     });
 });
