@@ -3,6 +3,7 @@ export const instanceUrl = "#url";
 export const selectTypeToggle = "#type-select-toggle";
 export const selectCredentialToggle = "#credentials-select-toggle";
 export const createJiraButton = "#create-Tracker";
+export const jiraTable = "table[aria-label='Jira trackers table']";
 export enum jiraLabels {
     name = 'td[data-label="Instance name"]',
     url = 'td[data-label="URL"]',

@@ -33,7 +33,7 @@ import {
     credLabels,
     descriptionInput,
     filterCatType,
-    filterCatName,
+    filterCategory,
     filteredBy,
     passwordInput,
     usernameInput,
@@ -177,7 +177,7 @@ export class Credentials {
     }
 
     static ApplyFilterByName(value: string) {
-        selectFromDropList(filteredBy, filterCatName);
+        selectFromDropList(filteredBy, filterCategory);
         inputText(filterNameInput, value);
         click(filterSubmitButton);
     }
