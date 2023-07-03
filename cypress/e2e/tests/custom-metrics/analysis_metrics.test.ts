@@ -58,7 +58,6 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
-        // No credentials required for uploaded binary.
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         counter++;
@@ -68,7 +67,7 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
         metrics.validateTasksInitiated(counter);
     });
 
-    it("BUG MTA-894 | Perform analysis on tackle-testapp withoud credentials - Validate analysis failed but counter increased", function () {
+    it("BUG MTA-894 | Perform analysis on tackle-testapp without credentials - Validate analysis failed but counter increased", function () {
         // For tackle test app source credentials are required.
         const tackleTestApp = new Analysis(
             getRandomApplicationData("tackle-testapp", {
