@@ -23,3 +23,4 @@ export const displayNameHelper = "div[id=name-helper]";
 export const fieldHeader = ".pf-c-table__button";
 export const groupCountHeader = "thead > tr > :nth-child(5)";
 export const removeJobFunction = ".pf-c-select__toggle-clear";
+export const stakeHoldersTable = "table[aria-label='Stakeholders table']";

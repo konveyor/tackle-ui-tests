@@ -17,54 +17,37 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
     sortAsc,
     sortDesc,
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
-    preservecookies,
-    hasToBeSkipped,
     createMultipleStakeholders,
     createMultipleBusinessServices,
-    deleteAllBusinessServices,
-    deleteAllStakeholders,
-    selectUserPerspective,
     deleteByList,
+    clickOnSortButton,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, businessServices, name, owner } from "../../../../types/constants";
+import { name, owner } from "../../../../types/constants";
 
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
+import { businessServiceTable } from "../../../../views/businessservices.view";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var businessServicesList: Array<BusinessServices> = [];
 
 describe(["@tier2"], "Business services sort validations", function () {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
-        //Delete pre-existing data
-        deleteAllBusinessServices();
         // Create data
         stakeholdersList = createMultipleStakeholders(2);
         businessServicesList = createMultipleBusinessServices(2, stakeholdersList);
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
         // Interceptors
         cy.intercept("POST", "/hub/business-service*").as("postBusinessService");
         cy.intercept("GET", "/hub/business-service*").as("getBusinessService");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the bussiness services and stakeholders created before the tests
-        deleteByList(businessServicesList);
-        deleteAllStakeholders();
     });
 
     it("Name sort validations", function () {
@@ -76,7 +59,7 @@ describe(["@tier2"], "Business services sort validations", function () {
         const unsortedList = getTableColumnData(name);
 
         // Sort the business services by name in ascending order
-        sortAsc(name);
+        clickOnSortButton(name, "ascending", businessServiceTable);
         cy.wait(2000);
 
         // Verify that the business services table rows are displayed in ascending order
@@ -84,7 +67,7 @@ describe(["@tier2"], "Business services sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the business services by name in descending order
-        sortDesc(name);
+        clickOnSortButton(name, "descending", businessServiceTable);
         cy.wait(2000);
 
         // Verify that the business services table rows are displayed in descending order
@@ -101,7 +84,7 @@ describe(["@tier2"], "Business services sort validations", function () {
         const unsortedList = getTableColumnData(owner);
 
         // Sort the business services by owner in ascending order
-        sortAsc(owner);
+        clickOnSortButton(owner, "ascending", businessServiceTable);
         cy.wait(2000);
 
         // Verify that the business services table rows are displayed in ascending order
@@ -109,11 +92,17 @@ describe(["@tier2"], "Business services sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the business services by owner in descending order
-        sortDesc(owner);
+        clickOnSortButton(owner, "descending", businessServiceTable);
         cy.wait(2000);
 
         // Verify that the business services table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(owner);
         verifySortDesc(afterDescSortList, unsortedList);
+    });
+
+    after("Perform test data clean up", function () {
+        // Clean up data created.
+        deleteByList(businessServicesList);
+        deleteByList(stakeholdersList);
     });
 });
