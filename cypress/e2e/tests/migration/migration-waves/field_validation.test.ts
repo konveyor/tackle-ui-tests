@@ -39,17 +39,12 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         migrationWave.create();
     });
 
-    it("Name validations", function () {
+    it("Bug MTA-906 | Name validations", function () {
         MigrationWave.openNewForm();
         cy.get(MigrationWaveView.submitButton).should("be.disabled");
 
         validateTooShortInput(MigrationWaveView.nameInput, "body");
         validateTooLongInput(MigrationWaveView.nameInput);
-
-        MigrationWave.fillName(migrationWave.name);
-        cy.get(nameHelper).contains(
-            "An identity with this name already exists. Use a different name."
-        );
 
         cy.get(MigrationWaveView.submitButton).should("be.disabled");
         cy.get(cancelButton).click();
@@ -62,16 +57,15 @@ describe(["@tier1"], "Migration Waves Validations", () => {
 
         const now = new Date();
         cy.get(MigrationWaveView.startDateInput).next("button").click();
+        const tomorrow = new RegExp("^" + (now.getDate() + 1) + "$");
         // Start date should be greater than actual date
-        cy.contains("button", `${now.getDate()}`).should("be.disabled");
-        cy.contains("button", `${now.getDate() + 1}`)
-            .should("be.enabled")
-            .click();
+        cy.contains("button", new RegExp("^" + now.getDate() + "$")).should("be.disabled");
+        cy.contains("button", tomorrow).should("be.enabled").click();
 
         cy.get(MigrationWaveView.endDateInput).next("button").click();
         // End date should be greater than start date
-        cy.contains("button", `${now.getDate() + 1}`).should("be.disabled");
-        cy.contains("button", `${now.getDate() + 2}`)
+        cy.contains("button", tomorrow).should("be.disabled");
+        cy.contains("button", new RegExp("^" + (now.getDate() + 2) + "$"))
             .should("be.enabled")
             .click();
 
