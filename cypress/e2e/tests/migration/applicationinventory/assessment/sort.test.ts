@@ -31,7 +31,6 @@ var applicationsList: Array<Assessment> = [];
 
 describe(["@tier2"], "Application inventory sort validations", function () {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
 
         var tagsList = ["C++", "COBOL", "Java"];
@@ -78,6 +77,8 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         const afterDescSortList = getTableColumnData(name);
         verifySortDesc(afterDescSortList, unsortedList);
     });
+
+    // Add Test case for sorting by business service
 
     it("Tag count sort validations", function () {
         // Navigate to application inventory page
