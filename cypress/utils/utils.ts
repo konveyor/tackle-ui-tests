@@ -399,7 +399,7 @@ export function sortDesc(
 export function clickOnSortButton(
     fieldName: string,
     sortCriteria: string,
-    tableSelector: string
+    tableSelector: string = commonView.commonTable
 ): void {
     cy.get(tableSelector)
         .contains("th", fieldName)

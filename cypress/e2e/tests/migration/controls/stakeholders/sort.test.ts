@@ -26,7 +26,7 @@ import {
     deleteByList,
     clickOnSortButton,
 } from "../../../../../utils/utils";
-import { email, displayName, jobFunction, groupCount } from "../../../../types/constants";
+import { email, displayName, jobFunction, groupCount, SortType } from "../../../../types/constants";
 
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
@@ -55,7 +55,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         const unsortedList = getTableColumnData(email);
 
         // Sort the stakeholders by email in ascending order
-        clickOnSortButton(email, "ascending", stakeHoldersTable);
+        clickOnSortButton(email, SortType.ascending, stakeHoldersTable);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
@@ -63,7 +63,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by email in descending order
-        clickOnSortButton(email, "descending", stakeHoldersTable);
+        clickOnSortButton(email, SortType.descending, stakeHoldersTable);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in descending order
@@ -79,7 +79,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         const unsortedList = getTableColumnData(displayName);
 
         // Sort the stakeholders by display name in ascending order
-        clickOnSortButton(displayName, "ascending", stakeHoldersTable);
+        clickOnSortButton(displayName, SortType.ascending, stakeHoldersTable);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
@@ -87,7 +87,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by display name in descending order
-        clickOnSortButton(displayName, "descending", stakeHoldersTable);
+        clickOnSortButton(displayName, SortType.descending, stakeHoldersTable);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in descending order
@@ -103,7 +103,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         const unsortedList = getTableColumnData(jobFunction);
 
         // Sort the stakeholders by Job function in ascending order
-        clickOnSortButton(jobFunction, "ascending", stakeHoldersTable);
+        clickOnSortButton(jobFunction, SortType.ascending, stakeHoldersTable);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
@@ -111,7 +111,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by Job function in descending order
-        clickOnSortButton(jobFunction, "descending", stakeHoldersTable);
+        clickOnSortButton(jobFunction, SortType.descending, stakeHoldersTable);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in descending order

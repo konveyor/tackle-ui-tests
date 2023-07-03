@@ -17,8 +17,6 @@ limitations under the License.
 
 import {
     login,
-    sortAsc,
-    sortDesc,
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
@@ -27,11 +25,10 @@ import {
     deleteByList,
     clickOnSortButton,
 } from "../../../../../utils/utils";
-import { name, owner } from "../../../../types/constants";
+import { SortType, name, owner } from "../../../../types/constants";
 
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
-import { businessServiceTable } from "../../../../views/businessservices.view";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var businessServicesList: Array<BusinessServices> = [];
@@ -59,7 +56,7 @@ describe(["@tier2"], "Business services sort validations", function () {
         const unsortedList = getTableColumnData(name);
 
         // Sort the business services by name in ascending order
-        clickOnSortButton(name, "ascending", businessServiceTable);
+        clickOnSortButton(name, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the business services table rows are displayed in ascending order
@@ -67,7 +64,7 @@ describe(["@tier2"], "Business services sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the business services by name in descending order
-        clickOnSortButton(name, "descending", businessServiceTable);
+        clickOnSortButton(name, SortType.descending);
         cy.wait(2000);
 
         // Verify that the business services table rows are displayed in descending order
@@ -84,7 +81,7 @@ describe(["@tier2"], "Business services sort validations", function () {
         const unsortedList = getTableColumnData(owner);
 
         // Sort the business services by owner in ascending order
-        clickOnSortButton(owner, "ascending", businessServiceTable);
+        clickOnSortButton(owner, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the business services table rows are displayed in ascending order
@@ -92,7 +89,7 @@ describe(["@tier2"], "Business services sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the business services by owner in descending order
-        clickOnSortButton(owner, "descending", businessServiceTable);
+        clickOnSortButton(owner, SortType.descending);
         cy.wait(2000);
 
         // Verify that the business services table rows are displayed in descending order

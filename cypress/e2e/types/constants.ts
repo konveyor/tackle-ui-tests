@@ -151,3 +151,8 @@ export enum CustomRuleType {
     Repository = "Repository",
     Manual = "Manual",
 }
+
+export enum SortType {
+    ascending = "ascending",
+    descending = "descending",
+}
