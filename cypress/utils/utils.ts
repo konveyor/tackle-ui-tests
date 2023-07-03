@@ -70,9 +70,13 @@ import {
 import { tagLabels } from "../e2e/views/tags.view";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
 import { Assessment } from "../e2e/models/migration/applicationinventory/assessment";
-import { analysisData, applicationData, UserData } from "../e2e/types/types";
+import { analysisData, applicationData, JiraConnectionData, UserData } from "../e2e/types/types";
 import { CredentialsProxy } from "../e2e/models/administration/credentials/credentialsProxy";
-import { getRandomCredentialsData, randomWordGenerator } from "../utils/data_utils";
+import {
+    getJiraConnectionData,
+    getRandomCredentialsData,
+    randomWordGenerator,
+} from "../utils/data_utils";
 import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../e2e/models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../e2e/models/administration/credentials/credentialsSourceControlKey";
@@ -81,6 +85,8 @@ import { switchToggle } from "../e2e/views/reports.view";
 import { MigrationWaveView } from "../e2e/views/migration-wave.view";
 import Chainable = Cypress.Chainable;
 import { MigrationWave } from "../e2e/models/migration/migration-waves/migration-wave";
+import { Jira } from "../e2e/models/administration/jira-connection/jira";
+import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
 
 let userName = Cypress.env("user");
 let userPassword = Cypress.env("pass");
@@ -258,14 +264,12 @@ export function removeMember(memberName: string): void {
 
 export function exists(value: string, tableSelector = commonView.appTable): void {
     // Wait for DOM to render table and sibling elements
-    cy.get(tableSelector, { timeout: 5 * SEC })
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                selectItemsPerPage(100);
-                cy.get("td", { timeout: 120 * SEC }).should("contain", value);
-            }
-        });
+    cy.get(tableSelector, { timeout: 5 * SEC }).then(($tbody) => {
+        if ($tbody.text() !== "No data available") {
+            selectItemsPerPage(100);
+            cy.get(tableSelector, { timeout: 5 * SEC }).should("contain", value);
+        }
+    });
 }
 
 export function notExists(value: string, tableSelector = commonView.appTable): void {
@@ -818,6 +822,25 @@ export function performRowActionByIcon(itemName: string, action: string): void {
         .within(() => {
             click(action);
         });
+}
+
+export function createMultipleJiraConnections(
+    numberOfJiras: number,
+    jiraCredential: JiraCredentials,
+    isInsecure = false,
+    useTestingAccount = true
+): Array<Jira> {
+    let jiraList: Array<Jira> = [];
+    let jiraCloudConnectionData: JiraConnectionData;
+    while (jiraList.length < numberOfJiras) {
+        jiraCloudConnectionData = getJiraConnectionData(
+            jiraCredential,
+            isInsecure,
+            useTestingAccount
+        );
+        jiraList.push(new Jira(jiraCloudConnectionData));
+    }
+    return jiraList;
 }
 
 export function createMultipleCredentials(numberOfCredentials: number): Array<Credentials> {

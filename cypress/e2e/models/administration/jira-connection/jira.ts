@@ -8,6 +8,7 @@ import {
     inputText,
     notExists,
     performRowAction,
+    selectFromDropList,
     selectItemsPerPage,
     selectUserPerspective,
     submitForm,
@@ -33,6 +34,13 @@ import {
 import { cancelButton, confirmButton, navLink } from "../../../views/common.view";
 import { JiraIssue, JiraIssueType, JiraProject } from "./jira-api.interface";
 import { JiraCredentials } from "../credentials/JiraCredentials";
+import {
+    filterCategory,
+    filteredBy,
+    filterNameInput,
+    filterSubmitButton,
+    searchButton,
+} from "../../../views/credentials.view";
 
 /**
  * Base class for Jira connection
@@ -240,6 +248,12 @@ export class Jira {
             type: this.type,
             url: this.url,
         };
+    }
+
+    static applyFilterByName(value: string) {
+        selectFromDropList(filteredBy, filterCategory);
+        inputText(filterNameInput, value);
+        click(filterSubmitButton);
     }
 
     public getAllProjects(): Cypress.Chainable<JiraProject[]> {
