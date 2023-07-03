@@ -400,6 +400,25 @@ export function sortDesc(
     });
 }
 
+export function clickOnSortButton(
+    fieldName: string,
+    sortCriteria: string,
+    tableSelector: string = commonView.commonTable
+): void {
+    cy.get(tableSelector)
+        .contains("th", fieldName)
+        .then(($tableHeader) => {
+            const sortButton = $tableHeader.find("button");
+            if (
+                $tableHeader.attr("aria-sort") === "none" ||
+                $tableHeader.attr("aria-sort") != sortCriteria
+            ) {
+                sortButton.trigger("click");
+            }
+            cy.wrap($tableHeader).should("have.attr", "aria-sort", sortCriteria);
+        });
+}
+
 export function sortAscCopyAssessmentTable(sortCriteria: string): void {
     cy.get(`.pf-m-compact > thead > tr > th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
         if (

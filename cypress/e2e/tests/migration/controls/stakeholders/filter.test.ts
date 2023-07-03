@@ -19,21 +19,15 @@ import {
     login,
     clickByText,
     exists,
-    preservecookies,
     click,
     applySearchFilter,
     selectItemsPerPage,
-    hasToBeSkipped,
     createMultipleJobFunctions,
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
-    selectUserPerspective,
     deleteByList,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
 import {
-    controls,
-    stakeholders,
     button,
     tdTag,
     trTag,
@@ -42,7 +36,6 @@ import {
     jobFunction,
     group,
     clearAllFilters,
-    migration,
 } from "../../../../types/constants";
 
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
@@ -50,7 +43,7 @@ import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 
 import * as commonView from "../../../../views/common.view";
-import { stakeHoldersTable } from "../../../../views/common.view";
+import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let jobFunctionsList: Array<Jobfunctions> = [];
@@ -59,31 +52,12 @@ let invalidSearchInput = "SomeInvalidInput";
 
 describe(["@tier2"], "Stakeholder filter validations", function () {
     before("Login and Create Test Data", function () {
-        // Prevent before hook from running, if the tag is excluded from run
-
-        // Perform login
         login();
 
         // Create multiple job functions, stakeholder groups and stakeholders
         jobFunctionsList = createMultipleJobFunctions(2);
         stakeholderGroupsList = createMultipleStakeholderGroups(2);
         stakeholdersList = createMultipleStakeholders(2, jobFunctionsList, stakeholderGroupsList);
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
-        // Interceptors
-    });
-
-    after("Perform test data clean up", function () {
-        // Prevent before hook from running, if the tag is excluded from run
-
-        // Delete the job functions, stakeholder groups and stakeholders created before the tests
-        deleteByList(jobFunctionsList);
-        deleteByList(stakeholdersList);
-        deleteByList(stakeholderGroupsList);
     });
 
     it("MTA-881 | Email filter validations", function () {
@@ -203,5 +177,12 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         cy.get("h2").contains("No stakeholders available");
 
         clickByText(button, clearAllFilters);
+    });
+
+    after("Perform test data clean up", function () {
+        // Cleanup data
+        deleteByList(jobFunctionsList);
+        deleteByList(stakeholdersList);
+        deleteByList(stakeholderGroupsList);
     });
 });

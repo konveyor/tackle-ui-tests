@@ -51,7 +51,7 @@ export const divHeader = "[id^=pf-random-id-]";
 export const divBottom = "#tags-pagination-bottom";
 export const selectFilter = "div.pf-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show";
 export const itemsSelectInsideDialog = "div[role='dialog'] button[aria-label='Select']";
-export const stakeHoldersTable = "table[aria-label='Stakeholders table']";
 export const nameHelperBusiness = "#business-service-name-helper";
 export const nameHelperStakeholderGroup = "#-helper";
 export const kebabMenuItem = "a.pf-c-dropdown__menu-item";
+export const commonTable = "table[aria-label='main-table']";

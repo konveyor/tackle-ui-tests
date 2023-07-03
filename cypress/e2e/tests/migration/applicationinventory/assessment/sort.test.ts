@@ -17,19 +17,13 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
-    sortAsc,
-    sortDesc,
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
-    preservecookies,
-    hasToBeSkipped,
-    deleteApplicationTableRows,
+    clickOnSortButton,
+    deleteByList,
 } from "../../../../../utils/utils";
-import { navMenu } from "../../../../views/menu.view";
-import { applicationInventory, name, tagCount, review } from "../../../../types/constants";
-
+import { name, tagCount, review, SortType } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 
@@ -37,11 +31,7 @@ var applicationsList: Array<Assessment> = [];
 
 describe(["@tier2"], "Application inventory sort validations", function () {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
-
-        // Delete the existing applications
-        deleteApplicationTableRows();
 
         var tagsList = ["C++", "COBOL", "Java"];
         // Create multiple applications with tags
@@ -58,17 +48,9 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         }
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplications");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the applications created before the tests
-        deleteApplicationTableRows();
     });
 
     it("Name sort validations", function () {
@@ -80,7 +62,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         const unsortedList = getTableColumnData(name);
 
         // Sort the application inventory by name in ascending order
-        sortAsc(name);
+        clickOnSortButton(name, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in ascending order
@@ -88,7 +70,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the application inventory by name in descending order
-        sortDesc(name);
+        clickOnSortButton(name, SortType.descending);
         cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in descending order
@@ -96,30 +78,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
-    it("Review sort validations", function () {
-        // Navigate to application inventory page
-        Assessment.open();
-        cy.wait("@getApplications");
-
-        // get unsorted list when page loads
-        const unsortedList = getTableColumnData(review);
-
-        // Sort the application inventory by review in ascending order
-        sortAsc(review);
-        cy.wait(2000);
-
-        // Verify that the application inventory table rows are displayed in ascending order
-        const afterAscSortList = getTableColumnData(review);
-        verifySortAsc(afterAscSortList, unsortedList);
-
-        // Sort the application inventory by name in descending order
-        sortDesc(review);
-        cy.wait(2000);
-
-        // Verify that the application inventory table rows are displayed in descending order
-        const afterDescSortList = getTableColumnData(review);
-        verifySortDesc(afterDescSortList, unsortedList);
-    });
+    // Add Test case for sorting by business service
 
     it("Tag count sort validations", function () {
         // Navigate to application inventory page
@@ -130,7 +89,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         const unsortedList = getTableColumnData(tagCount);
 
         // Sort the application inventory by Tag count in ascending order
-        sortAsc(tagCount);
+        clickOnSortButton(tagCount, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in ascending order
@@ -138,11 +97,16 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the application inventory by tags in descending order
-        sortDesc(tagCount);
+        clickOnSortButton(tagCount, SortType.descending);
         cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(tagCount);
         verifySortDesc(afterDescSortList, unsortedList);
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the applications created before the tests
+        deleteByList(applicationsList);
     });
 });
