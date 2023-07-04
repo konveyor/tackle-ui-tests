@@ -19,18 +19,12 @@ import {
     login,
     clickByText,
     inputText,
-    preservecookies,
-    hasToBeSkipped,
     selectUserPerspective,
-    clickWithin,
+    click,
 } from "../../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../../views/menu.view";
 import {
-    controls,
-    tags,
     button,
     max40CharMsg,
-    fieldReqMsg,
     minCharsMsg,
     duplicateTagTypeName,
     migration,
@@ -39,27 +33,19 @@ import {
     createTagCategoryButton,
     nameInput,
     nameHelper,
-    dropdownMenuToggle,
     rankInput,
     rankHelper,
     positiveRankMsg,
-    colorHelper,
+    dropdownMenuTypeToggle,
 } from "../../../../../views/tags.view";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 
 import * as commonView from "../../../../../views/common.view";
 import * as data from "../../../../../../utils/data_utils";
-import { modal } from "../../../../../views/common.view";
 
 describe(["@tier2"], "Tag category validations", () => {
     before("Login", function () {
-        // Perform login
         login();
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
     });
 
     it("Tag type field validations", function () {
@@ -77,13 +63,12 @@ describe(["@tier2"], "Tag category validations", () => {
         inputText(rankInput, data.getRandomNumber(-10, -20));
         cy.get(rankHelper).should("contain", positiveRankMsg);
 
-        // Color constraints
-        cy.get(colorHelper).should("contain", fieldReqMsg);
+        cy.get(commonView.submitButton).should("be.disabled");
 
         // Validate the create button is enabled with valid inputs
         inputText(nameInput, data.getRandomWord(6));
         inputText(rankInput, data.getRandomNumber(5, 15));
-        clickWithin(modal, dropdownMenuToggle);
+        click(dropdownMenuTypeToggle);
         clickByText(button, data.getColor());
         cy.get(commonView.submitButton).should("not.be.disabled");
 
@@ -131,13 +116,12 @@ describe(["@tier2"], "Tag category validations", () => {
 
         // Check tag category name duplication
         inputText(nameInput, tagCategory.name);
-        clickWithin(modal, dropdownMenuToggle);
+        click(dropdownMenuTypeToggle);
         clickByText(button, data.getColor());
         cy.get(nameHelper).should("contain.text", duplicateTagTypeName);
         cy.get(commonView.closeButton).click();
 
         // Delete created tag
         tagCategory.delete();
-        cy.wait(2000);
     });
 });
