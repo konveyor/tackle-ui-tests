@@ -108,6 +108,7 @@ export const SEC = 1000;
 export const administration = "Admin";
 export const migration = "Migration";
 export const general = "General";
+export const instanceName = "Instance name";
 
 export enum CredentialType {
     proxy = "Proxy",
