@@ -16,10 +16,8 @@ import {
     login,
     clickByText,
     applySearchFilter,
-    preservecookies,
     deleteByList,
     createMultipleApplications,
-    createMultipleMigrationWaves,
 } from "../../../../utils/utils";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { Stakeholdergroups } from "../../../models/migration/controls/stakeholdergroups";
@@ -36,13 +34,9 @@ const end = new Date(now.getTime());
 end.setFullYear(end.getFullYear() + 1);
 let migrationWavesList: Array<MigrationWave> = [];
 //Automates Polarion TC 343
-describe(["@tier2"], "Migration waves: Manage applications filter validations", function () {
+describe(["@tier2"], "Migration waves: Filter validations on Manage applications modal", function () {
     before("Login and Create Test Data", function () {
-        // Peform login
         login();
-
-        // Create multiple migration waves
-        // migrationWavesList = createMultipleMigrationWaves(1);
     });
 
     it("Filter applications by name", function () {
@@ -60,22 +54,19 @@ describe(["@tier2"], "Migration waves: Manage applications filter validations", 
         migrationWave.expandActionsMenu();
         cy.contains(manageApplications).click();
 
-        // Enter an existing exact name and assert
-        applySearchFilter(name, applications[1].name);
+        // Enter an existing exact name and apply it as search filter
+        applySearchFilter(name, applications[1].name, true, 1);
         cy.get("td").should("contain", applications[1].name);
         cy.get("td").should("not.contain", applications[0].name);
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing name substring and apply it as search filter
-        applySearchFilter(name, String(data.getRandomNumber()));
+        applySearchFilter(name, String(data.getRandomNumber()), true, 1);
 
         // Assert that no search results are found
         cy.get("td").should("not.exist");
         clickByText(button, clearAllFilters);
-    });
 
-    after("Perform test data clean up", function () {
-        // Delete the business services
-        deleteByList(migrationWavesList);
+        migrationWave.delete()
     });
 });
