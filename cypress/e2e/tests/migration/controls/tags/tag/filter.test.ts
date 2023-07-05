@@ -31,7 +31,7 @@ describe(["@tier2"], "Tags filter validations", function () {
         tag.create();
     });
 
-    it("Tag name filter validations", function () {
+    it("MTA-802 | Tag name filter validations", function () {
         // Navigate to Tags tab
         let validSearchInput = tag.name.substring(0, 3);
         let filterType = name;
