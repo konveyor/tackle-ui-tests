@@ -37,7 +37,6 @@ let migrationWavesList: MigrationWave[] = [];
 //Automates Polarion TC 341
 describe(["@tier2"], "Migration Waves sort validations", function () {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
 
         // Create multiple Migration Waves
@@ -45,9 +44,8 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
     });
 
     it("Name sort validations", function () {
-        // Navigate to Migration Waves tab
         MigrationWave.open();
-        // get unsorted list when page loads
+
         const unsortedList = getTableColumnData(name);
 
         // Sort the Migration Waves by name in ascending order
@@ -57,10 +55,9 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
         const afterAscSortList = getTableColumnData(name);
         verifySortAsc(afterAscSortList, unsortedList);
 
-        // Sort the Migration Waves by name in descending order
+        // same as above for descending
         clickOnSortButton(name, SortType.descending, MigrationWaveView.migrationWavesTable);
 
-        // Verify that the Migration Waves rows are displayed in descending order
         const afterDescSortList = getTableColumnData(name);
         verifySortDesc(afterDescSortList, unsortedList);
     });
@@ -70,13 +67,11 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
 
         const unsortedList = getTableColumnData(startDate);
 
-        // Sort the Migration Waves by Start date in ascending order
         clickOnSortButton(startDate, SortType.ascending, MigrationWaveView.migrationWavesTable);
 
         const afterAscSortList = getTableColumnData(startDate);
         verifyDateSortAsc(afterAscSortList, unsortedList);
 
-        // Sort the Migration Waves by Start date in descending order
         clickOnSortButton(startDate, SortType.descending, MigrationWaveView.migrationWavesTable);
 
         const afterDescSortList = getTableColumnData(startDate);

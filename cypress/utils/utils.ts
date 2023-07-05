@@ -423,7 +423,6 @@ export function generateRandomDateRange(
     minDate?: Date,
     maxDate?: Date
 ): { start: Date; end: Date } {
-    // If minDate is not provided, use current date
     if (!minDate) minDate = new Date();
 
     // If maxDate is not provided, use one year from now
@@ -434,16 +433,14 @@ export function generateRandomDateRange(
 
     const dateRangeInMs = maxDate.getTime() - minDate.getTime();
 
-    // Check if the date range is valid
     if (dateRangeInMs <= 0) {
         throw new Error("Invalid date range");
     }
 
-    // Calculate start date
+    // Calculate start date and end date
     const startOffset = Math.random() * dateRangeInMs;
     const startDate = new Date(minDate.getTime() + startOffset);
 
-    // Calculate end date
     const endOffset = Math.random() * (dateRangeInMs - startOffset);
     const endDate = new Date(startDate.getTime() + endOffset);
 
@@ -538,9 +535,9 @@ export function verifySortDesc(listToVerify: Array<any>, unsortedList: Array<any
     });
 }
 
-export function verifyDateSortAsc(listToVerify: Array<string>, unsortedList: Array<string>): void {
+export function verifyDateSortAsc(listToVerify: string[], unsortedList: string[]): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        let sortedList = [...unsortedList]
+        const sortedList = unsortedList
             .map((dateStr) => {
                 // Parse the date and store the date object and original string together
                 return {
@@ -557,9 +554,9 @@ export function verifyDateSortAsc(listToVerify: Array<string>, unsortedList: Arr
     });
 }
 
-export function verifyDateSortDesc(listToVerify: Array<string>, unsortedList: Array<string>): void {
+export function verifyDateSortDesc(listToVerify: string[], unsortedList: string[]): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        let sortedList = [...unsortedList]
+        const sortedList = unsortedList
             .map((dateStr) => {
                 // Parse the date and store the date object and original string together
                 return {
