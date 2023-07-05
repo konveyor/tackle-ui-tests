@@ -1,26 +1,19 @@
 import {
     login,
-    hasToBeSkipped,
-    preservecookies,
-    deleteApplicationTableRows,
     getRandomApplicationData,
     getRandomAnalysisData,
     resetURL,
-    deleteAllCredentials,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { analysis, CredentialType, UserCredentials } from "../../../../types/constants";
+import { CredentialType, UserCredentials } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 let source_credential;
+let application: Analysis;
 
 describe(["@tier2"], "Source Analysis", () => {
     before("Login", function () {
-        // Perform login
         login();
-
-        // Delete existing pre-data
-        deleteApplicationTableRows();
 
         // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
@@ -33,9 +26,7 @@ describe(["@tier2"], "Source Analysis", () => {
         source_credential.create();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+    beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -50,7 +41,7 @@ describe(["@tier2"], "Source Analysis", () => {
 
     it("Exclude a package in analysis", function () {
         // For source code analysis application must have source code URL git or svn
-        const application = new Analysis(
+        application = new Analysis(
             getRandomApplicationData("testapp-excludePackages", {
                 sourceData: this.appData["tackle-testapp-git"],
             }),
@@ -74,7 +65,7 @@ describe(["@tier2"], "Source Analysis", () => {
     });
 
     after("Perform test data clean up", function () {
-        deleteApplicationTableRows();
-        deleteAllCredentials();
+        application.delete();
+        source_credential.delete();
     });
 });

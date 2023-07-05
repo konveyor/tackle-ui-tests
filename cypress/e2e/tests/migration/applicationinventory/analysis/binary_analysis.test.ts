@@ -17,9 +17,6 @@ limitations under the License.
 
 import {
     login,
-    hasToBeSkipped,
-    preservecookies,
-    deleteApplicationTableRows,
     deleteAllBusinessServices,
     getRandomApplicationData,
     getRandomAnalysisData,
@@ -37,15 +34,11 @@ import { GeneralConfig } from "../../../../models/administration/general/general
 let source_credential;
 let maven_credential;
 const mavenConfiguration = new MavenConfiguration();
+let application: Analysis;
 
 describe(["@tier1"], "Binary Analysis", () => {
     before("Login", function () {
-        // Perform login
         login();
-        deleteApplicationTableRows();
-
-        //Disable all proxy settings
-        Proxy.disableAllProxies();
 
         // Enable HTML anc CSV report downloading
         let generalConfig = GeneralConfig.getInstance();
@@ -70,9 +63,7 @@ describe(["@tier1"], "Binary Analysis", () => {
         maven_credential.create();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+    beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -90,23 +81,9 @@ describe(["@tier1"], "Binary Analysis", () => {
         resetURL();
     });
 
-    after("Perform test data clean up", function () {
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
-        source_credential.delete();
-        maven_credential.delete();
-
-        // Disable HTML anc CSV report downloading
-        let generalConfig = GeneralConfig.getInstance();
-        generalConfig.disableDownloadHtml();
-        generalConfig.disableDownloadCsv();
-
-        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
-    });
-
     it("Bug MTA-845 | Binary Analysis", function () {
         // For binary analysis application must have group,artifcat and version.
-        const application = new Analysis(
+        application = new Analysis(
             getRandomApplicationData("tackletestApp_binary", {
                 binaryData: this.appData["tackle-testapp-binary"],
             }),
@@ -123,5 +100,19 @@ describe(["@tier1"], "Binary Analysis", () => {
         application.downloadReport("CSV");
         application.openReport();
         application.validateStoryPoints();
+    });
+
+    after("Perform test data clean up", function () {
+        application.delete();
+        deleteAllBusinessServices();
+        source_credential.delete();
+        maven_credential.delete();
+
+        // Disable HTML anc CSV report downloading
+        let generalConfig = GeneralConfig.getInstance();
+        generalConfig.disableDownloadHtml();
+        generalConfig.disableDownloadCsv();
+
+        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 });
