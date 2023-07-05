@@ -70,17 +70,23 @@ import {
 import { tagLabels } from "../e2e/views/tags.view";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
 import { Assessment } from "../e2e/models/migration/applicationinventory/assessment";
-import { analysisData, applicationData, UserData } from "../e2e/types/types";
+import { analysisData, applicationData, JiraConnectionData, UserData } from "../e2e/types/types";
 import { CredentialsProxy } from "../e2e/models/administration/credentials/credentialsProxy";
-import { getRandomCredentialsData, randomWordGenerator } from "../utils/data_utils";
+import {
+    getJiraConnectionData,
+    getRandomCredentialsData,
+    randomWordGenerator,
+} from "../utils/data_utils";
 import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../e2e/models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../e2e/models/administration/credentials/credentialsSourceControlKey";
 import { Application } from "../e2e/models/migration/applicationinventory/application";
 import { switchToggle } from "../e2e/views/reports.view";
-import { rightSideMenu } from "../e2e/views/analysis.view";
+import { MigrationWaveView } from "../e2e/views/migration-wave.view";
 import Chainable = Cypress.Chainable;
 import { MigrationWave } from "../e2e/models/migration/migration-waves/migration-wave";
+import { Jira } from "../e2e/models/administration/jira-connection/jira";
+import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
 
 let userName = Cypress.env("user");
 let userPassword = Cypress.env("pass");
@@ -258,14 +264,12 @@ export function removeMember(memberName: string): void {
 
 export function exists(value: string, tableSelector = commonView.appTable): void {
     // Wait for DOM to render table and sibling elements
-    cy.get(tableSelector, { timeout: 5 * SEC })
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                selectItemsPerPage(100);
-                cy.get("td", { timeout: 120 * SEC }).should("contain", value);
-            }
-        });
+    cy.get(tableSelector, { timeout: 5 * SEC }).then(($tbody) => {
+        if ($tbody.text() !== "No data available") {
+            selectItemsPerPage(100);
+            cy.get(tableSelector, { timeout: 5 * SEC }).should("contain", value);
+        }
+    });
 }
 
 export function notExists(value: string, tableSelector = commonView.appTable): void {
@@ -399,6 +403,25 @@ export function sortDesc(sortCriteria: string, tableSelector: string): void {
         });
 }
 
+export function clickOnSortButton(
+    fieldName: string,
+    sortCriteria: string,
+    tableSelector: string = commonView.commonTable
+): void {
+    cy.get(tableSelector)
+        .contains("th", fieldName)
+        .then(($tableHeader) => {
+            const sortButton = $tableHeader.find("button");
+            if (
+                $tableHeader.attr("aria-sort") === "none" ||
+                $tableHeader.attr("aria-sort") != sortCriteria
+            ) {
+                sortButton.trigger("click");
+            }
+            cy.wrap($tableHeader).should("have.attr", "aria-sort", sortCriteria);
+        });
+}
+
 export function sortAscCopyAssessmentTable(sortCriteria: string): void {
     cy.get(`.pf-m-compact > thead > tr > th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
         if (
@@ -463,49 +486,41 @@ export function verifyDateSortAsc(listToVerify: Array<string>, unsortedList: Arr
     cy.wrap(listToVerify).then((capturedList) => {
         let sortedList = [...unsortedList]
             .map((dateStr) => {
-                // Manually parse the date
-                const [month, day, year] = dateStr.split("/");
-                return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+                // Parse the date and store the date object and original string together
+                return { 
+                    date: new Date(Date.parse(dateStr)), 
+                    originalString: dateStr 
+                };
             })
-            .sort((a, b) => a.getTime() - b.getTime()) // sort the dates
-            .map((date) => {
-                // Convert the date back to "MM/DD/YYYY" format.
-                let formattedDate =
-                    (date.getMonth() + 1).toString().padStart(2, "0") +
-                    "/" +
-                    date.getDate().toString().padStart(2, "0") +
-                    "/" +
-                    date.getFullYear();
-                return formattedDate;
+            .sort((a, b) => a.date.getTime() - b.date.getTime()) // sort the dates
+            .map((item) => {
+                return item.originalString;
             });
+
         expect(capturedList).to.be.deep.equal(sortedList);
     });
 }
 
+
 export function verifyDateSortDesc(listToVerify: Array<string>, unsortedList: Array<string>): void {
     cy.wrap(listToVerify).then((capturedList) => {
         let sortedList = [...unsortedList]
-            // Check if the unsortedList is sorted in ascending order
-            .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
             .map((dateStr) => {
-                // Manually parse the date
-                const [month, day, year] = dateStr.split("/");
-                return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+                // Parse the date and store the date object and original string together
+                return { 
+                    date: new Date(Date.parse(dateStr)), 
+                    originalString: dateStr 
+                };
             })
-            .sort((a, b) => b.getTime() - a.getTime()) // sort the dates in descending order
-            .map((date) => {
-                // Convert the date back to "MM/DD/YYYY" format.
-                let formattedDate =
-                    (date.getMonth() + 1).toString().padStart(2, "0") +
-                    "/" +
-                    date.getDate().toString().padStart(2, "0") +
-                    "/" +
-                    date.getFullYear();
-                return formattedDate;
+            .sort((a, b) => b.date.getTime() - a.date.getTime()) // sort the dates
+            .map((item) => {
+                return item.originalString;
             });
+
         expect(capturedList).to.be.deep.equal(sortedList);
     });
 }
+
 
 export function verifySortAsc(listToVerify: Array<any>, unsortedList: Array<any>): void {
     cy.wrap(listToVerify).then((capturedList) => {
@@ -672,9 +687,23 @@ export function application_inventory_kebab_menu(menu, tab?): void {
     // The value for menu could be one of {Import, Manage imports, Delete, Manage credentials}
     if (tab == "Analysis") navigate_to_application_inventory("Analysis");
     else navigate_to_application_inventory();
+
     cy.get(actionButton).eq(1).click({ force: true });
-    if (menu == "Import") clickByText(button, "Import");
-    else cy.get("a.pf-c-dropdown__menu-item").contains(menu).click({ force: true });
+    if (menu == "Import") {
+        clickByText(button, "Import");
+    } else {
+        cy.get("a")
+            .contains(menu)
+            .then(($menu_item) => {
+                if (!$menu_item.hasClass("pf-m-disabled")) {
+                    clickByText("a", menu);
+                    if (menu == "Delete") clickByText(button, menu, true);
+                } else {
+                    // close menu if nothing to do
+                    cy.get(actionButton).eq(1).click({ force: true });
+                }
+            });
+    }
 }
 
 export function openManageImportsPage(): void {
@@ -718,6 +747,41 @@ export function verifyImportErrorMsg(errorMsg: any): void {
     }
 }
 
+export function migration_wave_kebab_menu(menu): void {
+    // The value for menu could be one of {Export to Issue Manager, Delete}
+    cy.get(actionButton).eq(1).click({ force: true });
+    cy.get(commonView.kebabMenuItem).contains(menu).click({ force: true });
+}
+
+export function deleteAllMigrationWaves(currentPage = false): void {
+    MigrationWave.open();
+    cy.wait(2000);
+    cy.get(MigrationWaveView.waveTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.wait(1000);
+                cy.get("span.pf-c-options-menu__toggle-text")
+                    .eq(0)
+                    .then(($body) => {
+                        if (!$body.text().includes("of 0")) {
+                            if (currentPage) {
+                                cy.get(".pf-c-dropdown__toggle-button").click({ force: true });
+                                clickByText(button, "Select page");
+                            } else {
+                                cy.get("input#bulk-selected-items-checkbox", {
+                                    timeout: 10 * SEC,
+                                }).check({ force: true });
+                            }
+
+                            migration_wave_kebab_menu("Delete");
+                            clickByText(button, "Delete", true);
+                        }
+                    });
+            }
+        });
+}
+
 export function deleteApplicationTableRows(currentPage = false): void {
     navigate_to_application_inventory();
     // Wait for application table to be populated with any existing applications
@@ -739,9 +803,7 @@ export function deleteApplicationTableRows(currentPage = false): void {
                                     timeout: 10 * SEC,
                                 }).check({ force: true });
                             }
-
                             application_inventory_kebab_menu("Delete");
-                            clickByText(button, "Delete", true);
                         }
                     });
             }
@@ -823,6 +885,25 @@ export function performRowActionByIcon(itemName: string, action: string): void {
         });
 }
 
+export function createMultipleJiraConnections(
+    numberOfJiras: number,
+    jiraCredential: JiraCredentials,
+    isInsecure = false,
+    useTestingAccount = true
+): Array<Jira> {
+    let jiraList: Array<Jira> = [];
+    let jiraCloudConnectionData: JiraConnectionData;
+    while (jiraList.length < numberOfJiras) {
+        jiraCloudConnectionData = getJiraConnectionData(
+            jiraCredential,
+            isInsecure,
+            useTestingAccount
+        );
+        jiraList.push(new Jira(jiraCloudConnectionData));
+    }
+    return jiraList;
+}
+
 export function createMultipleCredentials(numberOfCredentials: number): Array<Credentials> {
     let newCredentialsList: Array<Credentials> = [];
     let createdCredentialsList: Array<Credentials> = [];
@@ -878,15 +959,30 @@ export function createMultipleStakeholders(
     return stakeholdersList;
 }
 
-function generateRandomDateRange() {
-    const now = new Date();
-    const startOffset = Math.floor(Math.random() * 365);
-    const startDate = new Date(now.getTime());
-    startDate.setDate(startDate.getDate() + startOffset);
+export function generateRandomDateRange(minDate?: Date, maxDate?: Date): { start: Date, end: Date } {
+    // If minDate is not provided, use current date
+    if (!minDate) minDate = new Date();
 
-    const endOffset = Math.floor(Math.random() * (365 - startOffset) + 1);
-    const endDate = new Date(startDate.getTime());
-    endDate.setDate(endDate.getDate() + endOffset);
+    // If maxDate is not provided, use one year from now
+    if (!maxDate) {
+        maxDate = new Date(minDate.getTime());
+        maxDate.setFullYear(maxDate.getFullYear() + 1);
+    }
+
+    const dateRangeInMs = maxDate.getTime() - minDate.getTime();
+
+    // Check if the date range is valid
+    if (dateRangeInMs <= 0) {
+        throw new Error('Invalid date range');
+    }
+
+    // Calculate start date
+    const startOffset = Math.random() * dateRangeInMs;
+    const startDate = new Date(minDate.getTime() + startOffset);
+
+    // Calculate end date
+    const endOffset = Math.random() * (dateRangeInMs - startOffset);
+    const endDate = new Date(startDate.getTime() + endOffset);
 
     return {
         start: startDate,

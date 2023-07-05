@@ -26,15 +26,15 @@ import {
     createMultipleMigrationWaves,
     verifyDateSortAsc,
     verifyDateSortDesc,
+    clickOnSortButton,
 } from "../../../../utils/utils";
-import { startDate, endDate } from "../../../types/constants";
+import { startDate, endDate, SortType } from "../../../types/constants";
 
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { name } from "../../../types/constants";
-import { fieldHeader } from "../../../views/stakeholders.view";
 import { MigrationWaveView } from "../../../views/migration-wave.view";
 
-let migrationWavesList: Array<MigrationWave> = [];
+let migrationWavesList: MigrationWave[] = [];
 
 //Automates Polarion TC 341
 describe(["@tier2"], "Migration Waves sort validations", function () {
@@ -45,12 +45,7 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
         // Create multiple Migration Waves
         migrationWavesList = createMultipleMigrationWaves(2);
     });
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
 
-        // Interceptors
-        cy.intercept("GET", "/hub/migration-waves*").as("getMigrationWaves");
-    });
 
     after("Perform test data clean up", function () {
         // Delete the Migration Waves created before the tests
@@ -60,21 +55,18 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
     it("Name sort validations", function () {
         // Navigate to Migration Waves tab
         MigrationWave.open();
-        cy.get("@getMigrationWaves");
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(name);
 
         // Sort the Migration Waves by name in ascending order
-        sortAsc(name, MigrationWaveView.fieldHeader);
-        cy.wait(2000);
+        clickOnSortButton(name, SortType.ascending, MigrationWaveView.fieldHeader)
 
         // Verify that the Migration Waves rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(name);
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the Migration Waves by name in descending order
-        sortDesc(name, MigrationWaveView.fieldHeader);
-        cy.wait(2000);
+        clickOnSortButton(name, SortType.descending, MigrationWaveView.fieldHeader)
 
         // Verify that the Migration Waves rows are displayed in descending order
         const afterDescSortList = getTableColumnData(name);
@@ -82,49 +74,36 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
     });
 
     it("Start date sort validations", function () {
-        // Navigate to Migration Waves tab
         MigrationWave.open();
 
-        // get unsorted list when page loads
         const unsortedList = getTableColumnData(startDate);
 
         // Sort the Migration Waves by Start date in ascending order
-        sortAsc(startDate, MigrationWaveView.fieldHeader);
-        cy.wait(2000);
+        clickOnSortButton(startDate, SortType.ascending, MigrationWaveView.fieldHeader)
 
-        // Verify that the Migration Waves rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(startDate);
         verifyDateSortAsc(afterAscSortList, unsortedList);
 
         // Sort the Migration Waves by Start date in descending order
-        sortDesc(startDate, MigrationWaveView.fieldHeader);
-        cy.wait(2000);
+        clickOnSortButton(startDate, SortType.descending, MigrationWaveView.fieldHeader)
 
-        // Verify that the Migration Waves rows are displayed in descending order
         const afterDescSortList = getTableColumnData(startDate);
         verifyDateSortDesc(afterDescSortList, unsortedList);
     });
 
     it("End date sort validations", function () {
-        // Navigate to Migration Waves tab
         MigrationWave.open();
 
-        // get unsorted list when page loads
         const unsortedList = getTableColumnData(endDate);
 
-        // Sort the Migration Waves by End date in ascending order
-        sortAsc(endDate, MigrationWaveView.fieldHeader);
-        cy.wait(2000);
+        clickOnSortButton(endDate, SortType.ascending, MigrationWaveView.fieldHeader)
 
-        // Verify that the Migration Waves rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(endDate);
         verifyDateSortAsc(afterAscSortList, unsortedList);
 
-        // Sort the Migration Waves by End date in descending order
-        sortDesc(endDate, MigrationWaveView.fieldHeader);
-        cy.wait(2000);
+        clickOnSortButton(endDate, SortType.descending, MigrationWaveView.fieldHeader)
 
-        // Verify that the Migration Waves rows are displayed in descending order
+
         const afterDescSortList = getTableColumnData(endDate);
         verifyDateSortDesc(afterDescSortList, unsortedList);
     });
