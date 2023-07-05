@@ -32,19 +32,19 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import { tdTag, trTag, stakeholders, migration } from "../../../../types/constants";
-import { expandRow, stakeHoldersTable } from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
+import { stakeHoldersTable } from "../../../../views/stakeholders.view";
+import { expandRow } from "../../../../views/common.view";
 
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var stakeholdergroupNames: Array<string> = [];
 
 describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function", () => {
     before("Login", function () {
-        // Perform login
         login();
     });
 
-    beforeEach("Persist session", function () {
+    beforeEach("Interceptors", function () {
         // Interceptors for stakeholder groups
         cy.intercept("POST", "/hub/stakeholdergroups*").as("postStakeholdergroups");
         cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");

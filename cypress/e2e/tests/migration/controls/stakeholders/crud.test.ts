@@ -22,7 +22,6 @@ import {
     existsWithinRow,
     expandRowDetails,
     closeRowDetails,
-    preservecookies,
     selectUserPerspective,
     deleteByList,
 } from "../../../../../utils/utils";
@@ -30,20 +29,17 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import { migration, tdTag } from "../../../../types/constants";
-import { groupsCount } from "../../../../views/stakeholders.view";
+import { groupsCount, stakeHoldersTable } from "../../../../views/stakeholders.view";
 import * as data from "../../../../../utils/data_utils";
-import { stakeHoldersTable } from "../../../../views/common.view";
+let jobFunctionsList: Array<Jobfunctions> = [];
+let stakeholderGroupList: Array<Stakeholdergroups> = [];
 
 describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
     before("Login", function () {
-        // Perform login
         login();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("POST", "/hub/stakeholder*").as("postStakeholder");
         cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
@@ -108,8 +104,6 @@ describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
 
     it("Stakeholder CRUD operations with members (jobfunction and groups)", function () {
         selectUserPerspective(migration);
-        let jobFunctionsList: Array<Jobfunctions> = [];
-        let stakeholderGroupList: Array<Stakeholdergroups> = [];
         let stakeHolderGroupNameList: Array<string> = [];
         for (let i = 0; i < 2; i++) {
             // Create new job functions
@@ -165,8 +159,10 @@ describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
 
         // Assert that newly created stakeholder is deleted
         notExists(stakeholder.email, stakeHoldersTable);
+    });
 
-        // Perform clean up by deleting jobfunctions and groups created at the start of test
+    after("Perform test data clean up", function () {
+        // Clean up data created.
         deleteByList(jobFunctionsList);
         deleteByList(stakeholderGroupList);
     });
