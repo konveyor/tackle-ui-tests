@@ -32,7 +32,6 @@ import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 describe(["@tier1"], "Business service linked to stakeholder", () => {
     beforeEach("Login", function () {
-        // Perform login
         login();
 
         // Interceptors for business services
