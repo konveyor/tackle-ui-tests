@@ -419,6 +419,40 @@ export function clickOnSortButton(
         });
 }
 
+export function generateRandomDateRange(
+    minDate?: Date,
+    maxDate?: Date
+): { start: Date; end: Date } {
+    // If minDate is not provided, use current date
+    if (!minDate) minDate = new Date();
+
+    // If maxDate is not provided, use one year from now
+    if (!maxDate) {
+        maxDate = new Date(minDate.getTime());
+        maxDate.setFullYear(maxDate.getFullYear() + 1);
+    }
+
+    const dateRangeInMs = maxDate.getTime() - minDate.getTime();
+
+    // Check if the date range is valid
+    if (dateRangeInMs <= 0) {
+        throw new Error("Invalid date range");
+    }
+
+    // Calculate start date
+    const startOffset = Math.random() * dateRangeInMs;
+    const startDate = new Date(minDate.getTime() + startOffset);
+
+    // Calculate end date
+    const endOffset = Math.random() * (dateRangeInMs - startOffset);
+    const endDate = new Date(startDate.getTime() + endOffset);
+
+    return {
+        start: startDate,
+        end: endDate,
+    };
+}
+
 export function sortAscCopyAssessmentTable(sortCriteria: string): void {
     cy.get(`.pf-m-compact > thead > tr > th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
         if (
@@ -501,6 +535,44 @@ export function verifySortDesc(listToVerify: Array<any>, unsortedList: Array<any
             })
         );
         expect(capturedList).to.be.deep.equal(reverseSortedList);
+    });
+}
+
+export function verifyDateSortAsc(listToVerify: Array<string>, unsortedList: Array<string>): void {
+    cy.wrap(listToVerify).then((capturedList) => {
+        let sortedList = [...unsortedList]
+            .map((dateStr) => {
+                // Parse the date and store the date object and original string together
+                return {
+                    date: new Date(Date.parse(dateStr)),
+                    originalString: dateStr,
+                };
+            })
+            .sort((a, b) => a.date.getTime() - b.date.getTime()) // sort the dates
+            .map((item) => {
+                return item.originalString;
+            });
+
+        expect(capturedList).to.be.deep.equal(sortedList);
+    });
+}
+
+export function verifyDateSortDesc(listToVerify: Array<string>, unsortedList: Array<string>): void {
+    cy.wrap(listToVerify).then((capturedList) => {
+        let sortedList = [...unsortedList]
+            .map((dateStr) => {
+                // Parse the date and store the date object and original string together
+                return {
+                    date: new Date(Date.parse(dateStr)),
+                    originalString: dateStr,
+                };
+            })
+            .sort((a, b) => b.date.getTime() - a.date.getTime()) // sort the dates
+            .map((item) => {
+                return item.originalString;
+            });
+
+        expect(capturedList).to.be.deep.equal(sortedList);
     });
 }
 
