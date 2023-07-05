@@ -205,7 +205,7 @@ export class MigrationWave {
      */
     public fillEndDate(date: Date) {
         date.setHours(0, 0, 0, 0);
-        this.startDate.setHours(0, 0, 0, 0);
+        this.endDate.setHours(0, 0, 0, 0);
         if (this.startDate.setHours(0, 0, 0, 0) >= date.getTime()) {
             expect(
                 true,
