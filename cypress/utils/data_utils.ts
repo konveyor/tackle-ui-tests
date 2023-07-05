@@ -240,7 +240,7 @@ export function getJiraConnectionData(
 
     if (jiraCredential.type === CredentialType.jiraBasic) {
         type = JiraType.cloud;
-        url = useTestingAccount ? Cypress.env("jira_atassian_cloud_url") : getRandomUrl(6);
+        url = useTestingAccount ? Cypress.env("jira_atlassian_cloud_url") : getRandomUrl(6);
     } else if (jiraCredential.type === CredentialType.jiraToken) {
         type = JiraType.server;
         url = useTestingAccount ? Cypress.env("jira_stage_datacenter_url") : getRandomUrl(6);
@@ -275,8 +275,8 @@ export function getJiraCredentialData(
 
     if (useTestingAccount) {
         if (accountType === CredentialType.jiraBasic) {
-            email = Cypress.env("jira_atassian_cloud_email");
-            token = Cypress.env("jira_atassian_cloud_token");
+            email = Cypress.env("jira_atlassian_cloud_email");
+            token = Cypress.env("jira_atlassian_cloud_token");
         } else {
             // email field not present for bearer auth
             email = null;
