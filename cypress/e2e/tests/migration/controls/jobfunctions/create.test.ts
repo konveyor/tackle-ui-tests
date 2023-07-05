@@ -20,9 +20,9 @@ import {
     inputText,
     exists,
     notExists,
-    hasToBeSkipped,
     preservecookies,
     selectUserPerspective,
+    checkSuccessAlert,
 } from "../../../../../utils/utils";
 import {
     controls,
@@ -35,7 +35,6 @@ import {
     migration,
 } from "../../../../types/constants";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
-import { navMenu, navTab } from "../../../../views/menu.view";
 import { jobfunctionNameInput } from "../../../../views/jobfunctions.view";
 import * as commonView from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
@@ -44,14 +43,10 @@ describe(["@tier2"], "Job Function Validations", () => {
     const jobfunction = new Jobfunctions(data.getJobTitle());
 
     before("Login", function () {
-        // Perform login
         login();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("POST", "/hub/jobfunctions*").as("postJobfunctions");
     });
@@ -73,11 +68,15 @@ describe(["@tier2"], "Job Function Validations", () => {
         cy.get(commonView.cancelButton).click();
     });
 
-    it("Job function unique name constraint validation", function () {
+    it("Job function success alert and unique name constraint validation", function () {
         selectUserPerspective(migration);
 
         // Create new job function
         jobfunction.create();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            `Success alert:job function ${jobfunction.name} was successfully saved.`
+        );
         cy.wait("@postJobfunctions");
         exists(jobfunction.name);
         // Create job function with same name again

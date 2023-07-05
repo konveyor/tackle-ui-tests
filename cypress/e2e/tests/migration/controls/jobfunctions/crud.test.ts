@@ -15,13 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    exists,
-    hasToBeSkipped,
-    login,
-    notExists,
-    selectUserPerspective,
-} from "../../../../../utils/utils";
+import { exists, login, notExists, selectUserPerspective } from "../../../../../utils/utils";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import * as data from "../../../../../utils/data_utils";
 import { migration } from "../../../../types/constants";
@@ -30,7 +24,6 @@ describe(["@tier1"], "Job Function CRUD operations", () => {
     const jobfunction = new Jobfunctions(data.getJobTitle());
 
     before("Login", () => {
-        // Perform login
         login();
 
         // Interceptors
