@@ -22,6 +22,7 @@ import {
     exists,
     notExists,
     selectUserPerspective,
+    checkSuccessAlert,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -91,13 +92,17 @@ describe(["@tier2"], "Business service validations", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("Business service unique constraint validation", function () {
+    it("Business service success alert and unique constraint validation", function () {
         const businessService = new BusinessServices(data.getCompanyName());
 
         selectUserPerspective(migration);
 
         // Create new business service
         businessService.create();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            `Success alert:business service ${businessService.name} was successfully saved.`
+        );
         exists(businessService.name);
 
         // Navigate to business service tab and click "Create New" button

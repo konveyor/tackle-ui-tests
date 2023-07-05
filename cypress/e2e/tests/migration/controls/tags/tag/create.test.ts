@@ -19,6 +19,7 @@ import {
     clickByText,
     inputText,
     selectUserPerspective,
+    checkSuccessAlert,
 } from "../../../../../../utils/utils";
 import {
     button,
@@ -94,12 +95,16 @@ describe(["@tier2"], "Tag validations", () => {
         cy.contains(button, createTagButton).should("exist");
     });
 
-    it("Tag unique constraint validation", function () {
+    it("Tag success alert and unique constraint validation", function () {
         const tag = new Tag(data.getRandomWord(5), data.getRandomDefaultTagCategory());
 
         // Create a new tag
         selectUserPerspective("Migration");
         tag.create();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            "Success alert:Tag was successfully created."
+        );
         cy.wait("@postTag");
         cy.wait(2000);
 

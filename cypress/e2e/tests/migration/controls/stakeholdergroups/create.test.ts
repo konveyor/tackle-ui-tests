@@ -22,6 +22,7 @@ import {
     exists,
     notExists,
     selectUserPerspective,
+    checkSuccessAlert,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -91,11 +92,16 @@ describe(["@tier2"], "Stakeholder groups validations", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("Stakeholder group unique constraint validation", function () {
+    it("Stakeholder group success alert and unique constraint validation", function () {
         selectUserPerspective(migration);
 
         // Create new stakeholder group
         stakeholdergroup.create();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            "Success alert:Stakeholder group was successfully created."
+        );
+
         exists(stakeholdergroup.name);
 
         // Navigate to stakeholder group tab and click "Create New" button

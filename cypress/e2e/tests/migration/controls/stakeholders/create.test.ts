@@ -15,7 +15,14 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { login, clickByText, inputText, exists, notExists } from "../../../../../utils/utils";
+import {
+    login,
+    clickByText,
+    inputText,
+    exists,
+    notExists,
+    checkSuccessAlert,
+} from "../../../../../utils/utils";
 import {
     button,
     minCharsMsg,
@@ -100,9 +107,13 @@ describe(["@tier2"], "Stakeholder validations", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("Stakeholder unique constraint validation", function () {
+    it("Stakeholder success alert and unique constraint validation", function () {
         // Create a new stakeholder
         stakeholder.create();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            "Success alert:Stakeholder was successfully created."
+        );
         cy.wait("@postStakeholder");
         exists(stakeholder.email, stakeHoldersTable);
 

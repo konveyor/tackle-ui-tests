@@ -16,7 +16,6 @@ limitations under the License.
 
 import {
     cancelForm,
-    checkSuccessAlert,
     click,
     clickByText,
     confirm,
@@ -84,10 +83,6 @@ export class TagCategory {
             this.selectColor(this.color);
             if (this.rank) this.fillRank(this.rank);
             submitForm();
-            checkSuccessAlert(
-                commonView.successAlertMessage,
-                "Success alert:Tag category was successfully created."
-            );
         }
     }
 
