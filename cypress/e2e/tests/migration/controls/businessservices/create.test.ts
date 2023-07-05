@@ -19,19 +19,12 @@ import {
     login,
     clickByText,
     inputText,
-    submitForm,
     exists,
     notExists,
-    hasToBeSkipped,
-    preservecookies,
     selectUserPerspective,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
 import {
-    controls,
-    businessServices,
     button,
-    duplicateErrMsg,
     minCharsMsg,
     max120CharsMsg,
     max250CharsMsg,
@@ -52,11 +45,6 @@ describe(["@tier2"], "Business service validations", () => {
     before("Login", function () {
         // Perform login
         login();
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
     });
 
     it("Business service field validations", function () {
