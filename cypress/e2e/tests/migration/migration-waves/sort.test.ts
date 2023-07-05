@@ -17,8 +17,6 @@ limitations under the License.
 
 import {
     login,
-    sortAsc,
-    sortDesc,
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
@@ -46,11 +44,6 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
         migrationWavesList = createMultipleMigrationWaves(2);
     });
 
-    after("Perform test data clean up", function () {
-        // Delete the Migration Waves created before the tests
-        deleteByList(migrationWavesList);
-    });
-
     it("Name sort validations", function () {
         // Navigate to Migration Waves tab
         MigrationWave.open();
@@ -58,14 +51,14 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
         const unsortedList = getTableColumnData(name);
 
         // Sort the Migration Waves by name in ascending order
-        clickOnSortButton(name, SortType.ascending, MigrationWaveView.fieldHeader);
+        clickOnSortButton(name, SortType.ascending, MigrationWaveView.migrationWavesTable);
 
         // Verify that the Migration Waves rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(name);
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the Migration Waves by name in descending order
-        clickOnSortButton(name, SortType.descending, MigrationWaveView.fieldHeader);
+        clickOnSortButton(name, SortType.descending, MigrationWaveView.migrationWavesTable);
 
         // Verify that the Migration Waves rows are displayed in descending order
         const afterDescSortList = getTableColumnData(name);
@@ -78,13 +71,13 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
         const unsortedList = getTableColumnData(startDate);
 
         // Sort the Migration Waves by Start date in ascending order
-        clickOnSortButton(startDate, SortType.ascending, MigrationWaveView.fieldHeader);
+        clickOnSortButton(startDate, SortType.ascending, MigrationWaveView.migrationWavesTable);
 
         const afterAscSortList = getTableColumnData(startDate);
         verifyDateSortAsc(afterAscSortList, unsortedList);
 
         // Sort the Migration Waves by Start date in descending order
-        clickOnSortButton(startDate, SortType.descending, MigrationWaveView.fieldHeader);
+        clickOnSortButton(startDate, SortType.descending, MigrationWaveView.migrationWavesTable);
 
         const afterDescSortList = getTableColumnData(startDate);
         verifyDateSortDesc(afterDescSortList, unsortedList);
@@ -95,14 +88,19 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
 
         const unsortedList = getTableColumnData(endDate);
 
-        clickOnSortButton(endDate, SortType.ascending, MigrationWaveView.fieldHeader);
+        clickOnSortButton(endDate, SortType.ascending, MigrationWaveView.migrationWavesTable);
 
         const afterAscSortList = getTableColumnData(endDate);
         verifyDateSortAsc(afterAscSortList, unsortedList);
 
-        clickOnSortButton(endDate, SortType.descending, MigrationWaveView.fieldHeader);
+        clickOnSortButton(endDate, SortType.descending, MigrationWaveView.migrationWavesTable);
 
         const afterDescSortList = getTableColumnData(endDate);
         verifyDateSortDesc(afterDescSortList, unsortedList);
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the Migration Waves created before the tests
+        deleteByList(migrationWavesList);
     });
 });

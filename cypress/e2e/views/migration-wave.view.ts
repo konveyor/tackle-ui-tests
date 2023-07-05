@@ -10,7 +10,7 @@ export enum MigrationWaveView {
     stakeHolderGroupsInput = "#stakeholder-groups-toggle-select-multi-typeahead-typeahead",
     actionsButton = "button[aria-label='Actions']",
     yearInput = "input[aria-label='Select year']",
-    fieldHeader = ".pf-c-table__sort",
+    migrationWavesTable = "table[aria-label='Migration waves table']",
     applicationCountColumn = "td[data-label='Applications']",
     issueManagerSelectToggle = "#issue-manager-select-toggle-select-typeahead",
     instanceSelectToggle = "#tracker-select-toggle-select-typeahead",
