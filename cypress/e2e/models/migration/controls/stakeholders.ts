@@ -39,7 +39,6 @@ import {
     selectFormItems,
     removeMember,
     cancelForm,
-    checkSuccessAlert,
     performRowAction,
     selectUserPerspective,
 } from "../../../../utils/utils";
@@ -115,10 +114,6 @@ export class Stakeholders {
                 this.selectGroups(this.groups);
             }
             submitForm();
-            checkSuccessAlert(
-                commonView.successAlertMessage,
-                "Success alert:Stakeholder was successfully created."
-            );
         }
     }
 

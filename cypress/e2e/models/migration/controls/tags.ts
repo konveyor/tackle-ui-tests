@@ -32,18 +32,13 @@ import {
     selectItemsPerPage,
     submitForm,
     cancelForm,
-    checkSuccessAlert,
     expandRowDetails,
     closeRowDetails,
-    selectWithinModal,
     selectUserPerspective,
     applyAction,
     confirm,
-    selectFilter,
     click,
-    selectCheckBox,
 } from "../../../../utils/utils";
-import * as commonView from "../../../views/common.view";
 import {
     dropdownMenuToggle,
     createTagButton,
@@ -111,10 +106,6 @@ export class Tag {
             fillName(this.name);
             this.selectTagType(this.tagCategory);
             submitForm();
-            checkSuccessAlert(
-                commonView.successAlertMessage,
-                "Success alert:Tag was successfully created."
-            );
         }
     }
 

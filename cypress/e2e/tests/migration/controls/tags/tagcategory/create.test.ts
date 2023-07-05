@@ -21,6 +21,7 @@ import {
     inputText,
     selectUserPerspective,
     click,
+    checkSuccessAlert,
 } from "../../../../../../utils/utils";
 import {
     button,
@@ -99,7 +100,7 @@ describe(["@tier2"], "Tag category validations", () => {
         cy.contains(button, createTagCategoryButton).should("exist");
     });
 
-    it("Tag category unique constraint validation", function () {
+    it("Tag category success alert and unique constraint validation", function () {
         selectUserPerspective(migration);
         const tagCategory = new TagCategory(
             data.getRandomWord(5),
@@ -109,6 +110,10 @@ describe(["@tier2"], "Tag category validations", () => {
 
         // Create a new tag type
         tagCategory.create();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            "Success alert:Tag category was successfully created."
+        );
         cy.wait(2000);
 
         // Click "Create tag category" button
