@@ -15,10 +15,17 @@ describe(["@tier1"], "Validation of jira credentials", () => {
     before("Login", function () {
         // Perform login
         login();
-        validJiraBasicCredentials = randomJiraBasicCredentials = getJiraCredentialData(
+
+        randomJiraBasicCredentials = getJiraCredentialData(
             CredentialType.jiraBasic,
             !useTestingAccount
         );
+
+        validJiraBasicCredentials = getJiraCredentialData(
+            CredentialType.jiraBasic,
+            useTestingAccount
+        );
+
         jiraBasicCredentials = new JiraCredentials(randomJiraBasicCredentials);
     });
 
@@ -28,14 +35,17 @@ describe(["@tier1"], "Validation of jira credentials", () => {
 
     it("Creating Jira credentials", () => {
         jiraBasicCredentials.create();
+        jiraBasicCredentials.validateValues();
     });
 
     it("Editing Jira credentials and cancelling without saving", () => {
         jiraBasicCredentials.edit(validJiraBasicCredentials, toBeCanceled);
+        jiraBasicCredentials.validateValues();
     });
 
     it("Editing Jira credentials", () => {
         jiraBasicCredentials.edit(validJiraBasicCredentials);
+        jiraBasicCredentials.validateValues();
     });
 
     it("Delete Jira credentials and cancel deletion", () => {
