@@ -372,34 +372,6 @@ export function applySearchFilter(
     cy.wait(4000);
 }
 
-export function sortAsc(
-    sortCriteria: string,
-    tableSelector = `th[data-label="${sortCriteria}"]`
-): void {
-    cy.get(tableSelector).then(($tableHeader) => {
-        if (
-            $tableHeader.attr("aria-sort") === "descending" ||
-            $tableHeader.attr("aria-sort") === "none"
-        ) {
-            $tableHeader.find("button").trigger("click");
-        }
-    });
-}
-
-export function sortDesc(
-    sortCriteria: string,
-    tableSelector = `th[data-label="${sortCriteria}"]`
-): void {
-    cy.get(tableSelector).then(($tableHeader) => {
-        if (
-            $tableHeader.attr("aria-sort") === "ascending" ||
-            $tableHeader.attr("aria-sort") === "none"
-        ) {
-            $tableHeader.find("button").trigger("click");
-        }
-    });
-}
-
 export function clickOnSortButton(
     fieldName: string,
     sortCriteria: string,

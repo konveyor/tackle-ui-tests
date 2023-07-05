@@ -32,9 +32,7 @@ import { BusinessServices } from "../../../../models/migration/controls/business
 describe(["@tier3"], "Business services pagination validations", function () {
     let businessServiceList = [];
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
-        deleteAllBusinessServices();
         // Create 11 rows
         businessServiceList = createMultipleBusinessServices(11);
     });

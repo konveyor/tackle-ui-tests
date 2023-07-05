@@ -17,53 +17,31 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
     selectItemsPerPage,
     deleteTableRows,
-    preservecookies,
-    hasToBeSkipped,
     createMultipleStakeholderGroups,
     deleteAllStakeholderGroups,
-    selectUserPerspective,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, stakeholderGroups } from "../../../../types/constants";
-
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
-
-import * as data from "../../../../../utils/data_utils";
 import {
     firstPageButton,
     lastPageButton,
     nextPageButton,
     pageNumInput,
     prevPageButton,
-    appTable,
 } from "../../../../views/common.view";
-
-var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 
 describe(["@tier3"], "Stakeholder groups pagination validations", function () {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
-        //Delete pre-existing data
-        deleteAllStakeholderGroups();
+
         // Create 11 rows
         createMultipleStakeholderGroups(11);
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the stakeholder groups created before the tests
-        deleteAllStakeholderGroups();
     });
 
     it("Navigation button validations", function () {
@@ -167,5 +145,10 @@ describe(["@tier3"], "Stakeholder groups pagination validations", function () {
         cy.get("td[data-label=Name]").then(($rows) => {
             cy.wrap($rows.length).should("eq", 10);
         });
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the stakeholder groups created before the tests
+        deleteAllStakeholderGroups();
     });
 });

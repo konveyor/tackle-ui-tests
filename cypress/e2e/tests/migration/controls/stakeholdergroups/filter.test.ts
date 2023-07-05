@@ -22,23 +22,16 @@ import {
     click,
     applySearchFilter,
     selectItemsPerPage,
-    preservecookies,
-    hasToBeSkipped,
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
     deleteAllStakeholders,
     deleteAllStakeholderGroups,
-    selectUserPerspective,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
 import {
-    controls,
-    stakeholderGroups,
     button,
     tdTag,
     trTag,
     description,
-    member,
     clearAllFilters,
     name,
     stakeholders,
@@ -46,7 +39,6 @@ import {
 
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
-
 import * as commonView from "../../../../../e2e/views/common.view";
 import * as data from "../../../../../utils/data_utils";
 
@@ -56,9 +48,6 @@ var invalidSearchInput = data.getRandomNumber();
 
 describe(["@tier2"], "Stakeholder groups filter validations", function () {
     before("Login and Create Test Data", function () {
-        // Prevent before hook from running, if the tag is excluded from run
-
-        // Perform login
         login();
 
         // Create multiple stakeholder groups and stakeholders
@@ -66,20 +55,9 @@ describe(["@tier2"], "Stakeholder groups filter validations", function () {
         stakeholdergroupsList = createMultipleStakeholderGroups(2, stakeholdersList);
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");
-    });
-
-    after("Perform test data clean up", function () {
-        // Prevent before hook from running, if the tag is excluded from run
-
-        // Delete the stakeholder groups and stakeholders created before the tests
-        deleteAllStakeholders();
-        deleteAllStakeholderGroups();
     });
 
     it("Name filter validations", function () {
@@ -180,5 +158,11 @@ describe(["@tier2"], "Stakeholder groups filter validations", function () {
         // Clear all filters
         clickByText(button, clearAllFilters);
         cy.get("@getStakeholdergroups");
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the stakeholder groups and stakeholders created before the tests
+        deleteAllStakeholders();
+        deleteAllStakeholderGroups();
     });
 });

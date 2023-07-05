@@ -18,20 +18,17 @@ limitations under the License.
 import {
     login,
     clickByText,
-    sortAsc,
-    sortDesc,
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
     importApplication,
     openManageImportsPage,
     deleteApplicationTableRows,
-    preservecookies,
     deleteAppImportsTableRows,
-    deleteAllBusinessServices,
+    clickOnSortButton,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
-import { applicationInventory } from "../../../../types/constants";
+import { SortType, applicationInventory } from "../../../../types/constants";
 
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
@@ -42,13 +39,7 @@ const filePath = "app_import/csv/";
 
 describe(["@tier2"], "Manage applications import sort validations", function () {
     before("Login and create test data", function () {
-        // Perform login
         login();
-
-        // Delete all applications
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
-
         businessService.create();
 
         // Open the application inventory page
@@ -67,20 +58,10 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
         });
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplications");
         cy.intercept("GET", "/hub/import-summary*").as("getImportApplications");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the business service
-        deleteApplicationTableRows();
-        deleteAppImportsTableRows();
-        businessService.delete();
     });
 
     it("Date sort validations", function () {
@@ -94,7 +75,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
         const unsortedList = getTableColumnData(date);
 
         // Sort the manage imports by date in ascending order
-        sortAsc(date);
+        clickOnSortButton(date, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the imports are date sorted in ascending order
@@ -102,7 +83,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the manage imports by date in descending order
-        sortDesc(date);
+        clickOnSortButton(date, SortType.descending);
         cy.wait(2000);
 
         // Verify that the imports are date sorted in descending order
@@ -120,7 +101,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
         const unsortedList = getTableColumnData(user);
 
         // Sort the manage imports by user in ascending order
-        sortAsc(user);
+        clickOnSortButton(user, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the users are displayed in ascending order
@@ -128,7 +109,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the manage imports by user in descending order
-        sortDesc(user);
+        clickOnSortButton(user, SortType.descending);
         cy.wait(2000);
 
         // Verify that the users are displayed in descending order
@@ -146,7 +127,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
         const unsortedList = getTableColumnData(csvFileName);
 
         // Sort the manage imports by file name in ascending order
-        sortAsc(csvFileName);
+        clickOnSortButton(csvFileName, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the file names are displayed in ascending order
@@ -154,7 +135,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the manage imports by file name in descending order
-        sortDesc(csvFileName);
+        clickOnSortButton(csvFileName, SortType.descending);
         cy.wait(2000);
 
         // Verify that the file names are displayed in descending order
@@ -172,7 +153,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
         const unsortedList = getTableColumnData(importStatus);
 
         // Sort the manage imports by status in ascending order
-        sortAsc(importStatus);
+        clickOnSortButton(importStatus, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the import status rows are displayed in ascending order
@@ -180,11 +161,18 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the manage imports by status in descending order
-        sortDesc(importStatus);
+        clickOnSortButton(importStatus, SortType.descending);
         cy.wait(2000);
 
         // Verify that the import status rows are displayed in descending order
         const afterDescSortList = getTableColumnData(importStatus);
         verifySortDesc(afterDescSortList, unsortedList);
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the business service
+        deleteApplicationTableRows();
+        deleteAppImportsTableRows();
+        businessService.delete();
     });
 });

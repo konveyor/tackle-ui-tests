@@ -17,44 +17,29 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
-    sortAsc,
-    sortDesc,
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
-    preservecookies,
-    hasToBeSkipped,
     createMultipleJobFunctions,
-    selectUserPerspective,
     deleteAllJobfunctions,
+    clickOnSortButton,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, name, jobFunctions } from "../../../../types/constants";
+import { name, SortType } from "../../../../types/constants";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 
 let jobFunctionsList: Array<Jobfunctions> = [];
 
 describe(["@tier2"], "Job function sorting", function () {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
 
         // Create multiple job functions
         jobFunctionsList = createMultipleJobFunctions(2);
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("GET", "/hub/jobfunctions*").as("getJobfunctions");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the job functions after before the tests
-        deleteAllJobfunctions();
     });
 
     it("Name sort validations", function () {
@@ -66,7 +51,7 @@ describe(["@tier2"], "Job function sorting", function () {
         const unsortedList = getTableColumnData(name);
 
         // Sort the Job functions by name in ascending order
-        sortAsc(name);
+        clickOnSortButton(name, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the job function rows are displayed in ascending order
@@ -74,11 +59,16 @@ describe(["@tier2"], "Job function sorting", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the job function by name in descending order
-        sortDesc(name);
+        clickOnSortButton(name, SortType.descending);
         cy.wait(2000);
 
         // Verify that the job function rows are displayed in descending order
         const afterDescSortList = getTableColumnData(name);
         verifySortDesc(afterDescSortList, unsortedList);
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the job functions after before the tests
+        deleteAllJobfunctions();
     });
 });
