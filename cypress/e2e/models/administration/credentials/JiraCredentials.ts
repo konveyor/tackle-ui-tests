@@ -13,6 +13,8 @@ import { passwordInput, usernameInput } from "../../../views/credentials.view";
 import { submitButton } from "../../../views/common.view";
 
 export class JiraCredentials extends Credentials {
+    name: string;
+    description: string;
     type: string;
     token: string;
     email?: string;
@@ -69,12 +71,10 @@ export class JiraCredentials extends Credentials {
         if (!toBeCanceled) {
             // Edit action is confirmed, submitting form and validating data is updated
             submitForm();
-            this.validateValues(credentialsJiraData);
         } else {
             // Edit action was canceled, validating data is NOT updated.
             this.init(oldValues);
             cancelForm();
-            this.validateValues(oldValues);
         }
         exists(this.name);
     }
@@ -83,11 +83,10 @@ export class JiraCredentials extends Credentials {
         validateValue(usernameInput, email);
     }
 
-    protected validateValues(credentialsJiraData: CredentialsJiraData): void {
-        const { name, description } = credentialsJiraData;
+    public validateValues(): void {
         super.edit(null);
-        this.validateName(name);
-        this.validateDescription(description);
+        this.validateName(this.name);
+        this.validateDescription(this.description);
         cancelForm();
     }
 
