@@ -183,6 +183,7 @@ export class MigrationWave {
     public fillStartDate(date: Date): void {
         const nowTime = new Date().setHours(0, 0, 0, 0);
         date.setHours(0, 0, 0, 0);
+        this.startDate.setHours(0, 0, 0, 0);
         if (nowTime >= date.getTime()) {
             expect(
                 true,
@@ -190,7 +191,8 @@ export class MigrationWave {
             ).to.eq(false);
         }
 
-        const currentStartDate = this.startDate ? this.startDate : new Date();
+        const currentStartDate =
+            this.startDate.getTime() !== date.getTime() ? this.startDate : new Date();
         const currentMonth = currentStartDate.toLocaleString("en-us", { month: "long" });
         cy.get(MigrationWaveView.startDateInput).next("button").click();
         MigrationWave.selectDateFromDatePicker(date, currentMonth);
@@ -203,6 +205,7 @@ export class MigrationWave {
      */
     public fillEndDate(date: Date) {
         date.setHours(0, 0, 0, 0);
+        this.endDate.setHours(0, 0, 0, 0);
         if (this.startDate.setHours(0, 0, 0, 0) >= date.getTime()) {
             expect(
                 true,
@@ -210,7 +213,8 @@ export class MigrationWave {
             ).to.eq(false);
         }
 
-        const currentEndDate = this.endDate ? this.endDate : new Date();
+        const currentEndDate =
+            this.endDate.getTime() !== date.getTime() ? this.endDate : new Date();
         const currentMonth = currentEndDate.toLocaleString("en-us", { month: "long" });
         cy.get(MigrationWaveView.endDateInput).next("button").click();
         MigrationWave.selectDateFromDatePicker(date, currentMonth);
