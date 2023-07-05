@@ -22,8 +22,6 @@ import {
     clickByText,
     exists,
     notExists,
-    preservecookies,
-    hasToBeSkipped,
     createMultipleStakeholders,
     selectUserPerspective,
 } from "../../../../../utils/utils";
@@ -31,15 +29,15 @@ import { navTab } from "../../../../views/menu.view";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { tdTag, trTag, stakeholderGroups, migration } from "../../../../types/constants";
-import { expandRow, stakeHoldersTable } from "../../../../views/common.view";
+import { expandRow } from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
+import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var membersList: Array<string> = [];
 
 describe(["@tier1"], "Stakeholder group linked to stakeholder members", () => {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
 
         // Create two stakeholders
@@ -49,10 +47,7 @@ describe(["@tier1"], "Stakeholder group linked to stakeholder members", () => {
         }
     });
 
-    beforeEach("Login", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors for stakeholder groups
         cy.intercept("POST", "/hub/stakeholdergroups*").as("postStakeholdergroups");
         cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");

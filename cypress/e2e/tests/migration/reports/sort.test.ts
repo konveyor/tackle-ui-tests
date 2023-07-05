@@ -20,18 +20,13 @@ import {
     clickByText,
     verifySortAsc,
     verifySortDesc,
-    sortDesc,
     getTableColumnData,
-    sortAsc,
-    preservecookies,
-    hasToBeSkipped,
     createMultipleApplications,
     createMultipleStakeholders,
     deleteAllStakeholders,
     deleteApplicationTableRows,
     selectUserPerspective,
-    createMultipleBusinessServices,
-    deleteAllBusinessServices,
+    clickOnSortButton,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import {
@@ -42,14 +37,12 @@ import {
     priority,
     confidence,
     migration,
+    SortType,
 } from "../../../types/constants";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
-import { BusinessServices } from "../../../models/migration/controls/businessservices";
-
 var applicationsList: Array<Assessment> = [];
 var stakeholdersList: Array<Stakeholders> = [];
-var businessservicelist: Array<BusinessServices> = [];
 
 describe(["@tier2"], "Reports sort validations", () => {
     before("Login and create test data", function () {
@@ -71,17 +64,6 @@ describe(["@tier2"], "Reports sort validations", () => {
         }
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete All
-        deleteAllStakeholders();
-        deleteApplicationTableRows();
-    });
-
     it("Adoption candidate distribution - Application name sort validations", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
@@ -92,7 +74,7 @@ describe(["@tier2"], "Reports sort validations", () => {
         const unsortedList = getTableColumnData(applicationName);
 
         // Sort the Adoption candidate distribution by application name in ascending order
-        sortAsc(applicationName);
+        clickOnSortButton(applicationName, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the Adoption candidate distribution table rows are displayed in ascending order
@@ -100,7 +82,7 @@ describe(["@tier2"], "Reports sort validations", () => {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the Adoption candidate distribution by application name in descending order
-        sortDesc(applicationName);
+        clickOnSortButton(applicationName, SortType.descending);
         cy.wait(2000);
 
         // Verify that the Adoption candidate distribution table rows are displayed in descending order
@@ -118,7 +100,7 @@ describe(["@tier2"], "Reports sort validations", () => {
         const unsortedList = getTableColumnData(criticality);
 
         // Sort the Adoption candidate distribution by criticality in ascending order
-        sortAsc(criticality);
+        clickOnSortButton(criticality, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the Adoption candidate distribution table rows are displayed in ascending order
@@ -126,7 +108,7 @@ describe(["@tier2"], "Reports sort validations", () => {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the Adoption candidate distribution by criticality in descending order
-        sortDesc(criticality);
+        clickOnSortButton(criticality, SortType.descending);
         cy.wait(2000);
 
         // Verify that the Adoption candidate distribution table rows are displayed in descending order
@@ -144,7 +126,7 @@ describe(["@tier2"], "Reports sort validations", () => {
         const unsortedList = getTableColumnData(priority);
 
         // Sort the Adoption candidate distribution by priority in ascending order
-        sortAsc(priority);
+        clickOnSortButton(priority, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the Adoption candidate distribution table rows are displayed in ascending order
@@ -152,7 +134,7 @@ describe(["@tier2"], "Reports sort validations", () => {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the Adoption candidate distribution by priority in descending order
-        sortDesc(priority);
+        clickOnSortButton(priority, SortType.descending);
         cy.wait(2000);
 
         // Verify that the Adoption candidate distribution table rows are displayed in descending order
@@ -170,7 +152,7 @@ describe(["@tier2"], "Reports sort validations", () => {
         const unsortedList = getTableColumnData(confidence);
 
         // Sort the Adoption candidate distribution by confidence in ascending order
-        sortAsc(confidence);
+        clickOnSortButton(confidence, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the Adoption candidate distribution table rows are displayed in ascending order
@@ -178,7 +160,7 @@ describe(["@tier2"], "Reports sort validations", () => {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the Adoption candidate distribution by confidence in descending order
-        sortDesc(confidence);
+        clickOnSortButton(confidence, SortType.descending);
         cy.wait(2000);
 
         // Verify that the Adoption candidate distribution table rows are displayed in descending order
@@ -193,7 +175,7 @@ describe(["@tier2"], "Reports sort validations", () => {
         cy.wait(3000);
 
         // Sort the Adoption candidate distribution by effort in ascending order
-        sortAsc(effort);
+        clickOnSortButton(effort, SortType.ascending);
         cy.wait(2000);
 
         const afterAscSortList = getTableColumnData(effort);
@@ -209,7 +191,7 @@ describe(["@tier2"], "Reports sort validations", () => {
         });
 
         // Sort the Adoption candidate distribution by effort in descending order
-        sortDesc(effort);
+        clickOnSortButton(effort, SortType.descending);
         cy.wait(2000);
 
         const afterDescSortList = getTableColumnData(effort);
@@ -220,5 +202,11 @@ describe(["@tier2"], "Reports sort validations", () => {
             let currentIndex = itemsList.indexOf(value.toString());
             expect(currentIndex <= prevDescIndex).to.be.true;
         });
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete All
+        deleteAllStakeholders();
+        deleteApplicationTableRows();
     });
 });

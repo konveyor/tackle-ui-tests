@@ -21,14 +21,9 @@ import {
     inputText,
     exists,
     notExists,
-    hasToBeSkipped,
-    preservecookies,
     selectUserPerspective,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
 import {
-    controls,
-    stakeholderGroups,
     button,
     minCharsMsg,
     max120CharsMsg,
@@ -49,13 +44,7 @@ describe(["@tier2"], "Stakeholder groups validations", () => {
     const stakeholdergroup = new Stakeholdergroups(data.getCompanyName(), data.getDescription());
 
     before("Login", function () {
-        // Perform login
         login();
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
     });
 
     it("Stakeholder group field validations", function () {
