@@ -15,21 +15,8 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { login, clickByText, inputText, exists, notExists } from "../../../../../utils/utils";
 import {
-    login,
-    clickByText,
-    inputText,
-    submitForm,
-    exists,
-    notExists,
-    hasToBeSkipped,
-    preservecookies,
-    selectUserPerspective,
-} from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
-import {
-    controls,
-    stakeholders,
     button,
     minCharsMsg,
     max120CharsMsg,
@@ -42,25 +29,21 @@ import {
     stakeholderNameInput,
     emailHelper,
     displayNameHelper,
+    stakeHoldersTable,
 } from "../../../../views/stakeholders.view";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
 import * as commonView from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
-import { stakeHoldersTable } from "../../../../views/common.view";
 
 describe(["@tier2"], "Stakeholder validations", () => {
     const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
 
     before("Login", function () {
-        // Perform login
         login();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("POST", "/hub/stakeholder*").as("postStakeholder");
         cy.intercept("DELETE", "/hub/stakeholder*/*").as("deleteStakeholder");

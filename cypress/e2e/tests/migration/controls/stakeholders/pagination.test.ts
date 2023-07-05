@@ -17,50 +17,31 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
     selectItemsPerPage,
     deleteTableRows,
-    preservecookies,
-    hasToBeSkipped,
     createMultipleStakeholders,
     deleteAllStakeholders,
-    selectUserPerspective,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, migration, stakeholders } from "../../../../types/constants";
-
 import {
     firstPageButton,
     lastPageButton,
     nextPageButton,
     pageNumInput,
     prevPageButton,
-    stakeHoldersTable,
 } from "../../../../views/common.view";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
+import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 describe(["@tier3"], "Stakeholder pagination validations", function () {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
-
-        // Clear pre-existing data
-        deleteAllStakeholders();
         // Create 11 rows
         createMultipleStakeholders(11);
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the stakeholders created before the tests
-        deleteAllStakeholders();
     });
 
     it("Navigation button validations", function () {
@@ -163,5 +144,10 @@ describe(["@tier3"], "Stakeholder pagination validations", function () {
         cy.get("td[data-label=Email]").then(($rows) => {
             cy.wrap($rows.length).should("eq", 10);
         });
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the stakeholders created before the tests
+        deleteAllStakeholders();
     });
 });
