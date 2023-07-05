@@ -22,7 +22,6 @@ import {
     existsWithinRow,
     closeRowDetails,
     notExistsWithinRow,
-    hasToBeSkipped,
     selectUserPerspective,
 } from "../../../../../../utils/utils";
 import { Tag } from "../../../../../models/migration/controls/tags";

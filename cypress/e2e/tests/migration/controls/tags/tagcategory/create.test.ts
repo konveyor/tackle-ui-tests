@@ -32,7 +32,7 @@ import {
 import {
     createTagCategoryButton,
     nameInput,
-    nameHelper,
+    tagCategoryNameHelper,
     rankInput,
     rankHelper,
     positiveRankMsg,
@@ -55,9 +55,9 @@ describe(["@tier2"], "Tag category validations", () => {
 
         // Name constraints
         inputText(nameInput, data.getRandomWord(2));
-        cy.get(nameHelper).should("contain", minCharsMsg);
+        cy.get(tagCategoryNameHelper).should("contain", minCharsMsg);
         inputText(nameInput, data.getRandomWords(40));
-        cy.get(nameHelper).should("contain", max40CharMsg);
+        cy.get(tagCategoryNameHelper).should("contain", max40CharMsg);
 
         // Rank constraint
         inputText(rankInput, data.getRandomNumber(-10, -20));
@@ -118,7 +118,7 @@ describe(["@tier2"], "Tag category validations", () => {
         inputText(nameInput, tagCategory.name);
         click(dropdownMenuTypeToggle);
         clickByText(button, data.getColor());
-        cy.get(nameHelper).should("contain.text", duplicateTagTypeName);
+        cy.get(tagCategoryNameHelper).should("contain.text", duplicateTagTypeName);
         cy.get(commonView.closeButton).click();
 
         // Delete created tag
