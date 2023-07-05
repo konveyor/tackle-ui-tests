@@ -1,27 +1,21 @@
-import {
-    getRandomAnalysisData,
-    getRandomApplicationData,
-    hasToBeSkipped,
-    login,
-    preservecookies,
-} from "../../../../../utils/utils";
+import { getRandomAnalysisData, getRandomApplicationData, login } from "../../../../../utils/utils";
 import { Proxy } from "../../../../models/administration/proxy/proxy";
 import { getRandomProxyData } from "../../../../../utils/data_utils";
 import { ProxyType } from "../../../../views/proxy.view";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
+import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
+
+let application: Analysis;
 
 describe(["@tier2"], "Running analysis with incorrect proxy configuration", () => {
     let httpsProxy = new Proxy(getRandomProxyData(), ProxyType.https);
     let httpProxy = new Proxy(getRandomProxyData(), ProxyType.http);
 
     before("Login", function () {
-        // Perform login
         login();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+    beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -37,7 +31,7 @@ describe(["@tier2"], "Running analysis with incorrect proxy configuration", () =
         httpsProxy.excludeList = ["127.0.0.1", "github.com"];
         httpsProxy.configureProxy();
 
-        const application = new Analysis(
+        application = new Analysis(
             getRandomApplicationData("bookServerApp", {
                 sourceData: this.appData["bookserver-app"],
             }),
@@ -51,5 +45,6 @@ describe(["@tier2"], "Running analysis with incorrect proxy configuration", () =
     after("Perform test data clean up", function () {
         httpProxy.disable();
         httpsProxy.disable();
+        application.delete();
     });
 });

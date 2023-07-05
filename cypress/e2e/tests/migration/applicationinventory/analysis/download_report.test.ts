@@ -1,10 +1,4 @@
-import {
-    getRandomAnalysisData,
-    getRandomApplicationData,
-    hasToBeSkipped,
-    login,
-    preservecookies,
-} from "../../../../../utils/utils";
+import { getRandomAnalysisData, getRandomApplicationData, login } from "../../../../../utils/utils";
 import { GeneralConfig } from "../../../../models/administration/general/generalConfig";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { SEC } from "../../../../types/constants";
@@ -21,10 +15,7 @@ describe(["@tier2"], "Enable and Download HTML and CSV Reports", function () {
         generalConfig.enableDownloadCsv();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -41,7 +32,6 @@ describe(["@tier2"], "Enable and Download HTML and CSV Reports", function () {
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         sourceApplication.create();
-        // applicationList.push(sourceApplication);
         cy.wait(2 * SEC);
         sourceApplication.analyze();
         sourceApplication.verifyAnalysisStatus("Completed");

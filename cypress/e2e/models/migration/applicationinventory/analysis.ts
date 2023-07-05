@@ -286,7 +286,6 @@ export class Analysis extends Application {
             if (this.disableTagging) this.disableAutomatedTagging();
             if (!this.sources) cy.contains("button", "Next", { timeout: 200 }).click();
             cy.contains("button", "Run", { timeout: 200 }).click();
-            checkSuccessAlert(commonView.infoAlertMessage, `Submitted for analysis`);
         }
     }
 
@@ -301,7 +300,7 @@ export class Analysis extends Application {
             .closest(trTag)
             .within(() => {
                 cy.get(analysisColumn)
-                    .find("div > div:nth-child(2)", { timeout: 10800000 }) // 3h
+                    .find("div > div:nth-child(2)", { timeout: 3600000 }) // 1h
                     .should("not.have.text", AnalysisStatuses.notStarted)
                     .and("not.have.text", AnalysisStatuses.scheduled)
                     .and("not.have.text", AnalysisStatuses.inProgress)

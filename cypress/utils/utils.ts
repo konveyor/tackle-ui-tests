@@ -826,6 +826,7 @@ export function performRowAction(itemName: string, action: string): void {
             clickByText(button, action);
             cy.wait(500);
             clickByText(button, action);
+            cy.wait(500);
         });
 }
 
