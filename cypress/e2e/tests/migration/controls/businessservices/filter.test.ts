@@ -18,23 +18,11 @@ import {
     exists,
     notExists,
     applySearchFilter,
-    preservecookies,
-    hasToBeSkipped,
     createMultipleStakeholders,
     createMultipleBusinessServices,
-    selectUserPerspective,
     deleteByList,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
-import {
-    controls,
-    businessServices,
-    description,
-    button,
-    name,
-    clearAllFilters,
-    createdBy,
-} from "../../../../types/constants";
+import { description, button, name, clearAllFilters, createdBy } from "../../../../types/constants";
 
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
@@ -46,25 +34,11 @@ let invalidSearchInput = String(data.getRandomNumber());
 
 describe(["@tier2"], "Business services filter validations", function () {
     before("Login and Create Test Data", function () {
-        // Peform login
         login();
-
         // Create multiple stakeholder owners
         stakeholdersList = createMultipleStakeholders(3);
-
         // Create multiple business services
         businessServicesList = createMultipleBusinessServices(2, stakeholdersList);
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the business services
-        deleteByList(businessServicesList);
-        deleteByList(stakeholdersList);
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
     });
 
     it("Name filter validations", function () {
@@ -152,5 +126,11 @@ describe(["@tier2"], "Business services filter validations", function () {
         cy.get("h2").contains("No business services available");
 
         clickByText(button, clearAllFilters);
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the business services
+        deleteByList(businessServicesList);
+        deleteByList(stakeholdersList);
     });
 });
