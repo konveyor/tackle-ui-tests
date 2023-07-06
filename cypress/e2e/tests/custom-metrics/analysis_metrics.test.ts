@@ -1,5 +1,4 @@
 import {
-    deleteApplicationTableRows,
     login,
     getRandomApplicationData,
     getRandomAnalysisData,
@@ -8,19 +7,15 @@ import {
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { Metrics } from "../../models/migration/custom-metrics/custom-metrics";
 import { Application } from "../../models/migration/applicationinventory/application";
+const metrics = new Metrics();
+const metricName = "konveyor_tasks_initiated_total";
 let applicationList: Array<Application> = [];
-let metrics = new Metrics();
 let counter: number;
 
 describe(["@tier2"], "Custom Metrics - Count the total number of initiated analyses", function () {
     before("Login", function () {
         // Perform login
         login();
-
-        // Get the current counter value
-        metrics.getTasksInitiatedCounter().then((counterValue) => {
-            counter = counterValue;
-        });
     });
 
     beforeEach("Load data and define interceptors", function () {
@@ -33,6 +28,11 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
 
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplication");
+
+        // Get the current counter value
+        metrics.getValue(metricName).then((counterValue) => {
+            counter = counterValue;
+        });
     });
 
     it("Perform analyses - Validate the tasks initiated counter increased", function () {
@@ -64,7 +64,7 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
         applicationList.push(application);
 
         // Validate the tasks initiated counter increased
-        metrics.validateTasksInitiated(counter);
+        metrics.validateMetric(metricName, counter);
     });
 
     it("BUG MTA-894 | Perform analysis on tackle-testapp without credentials - Validate analysis failed but counter increased", function () {
@@ -85,11 +85,11 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
         applicationList.push(tackleTestApp);
 
         // Validate the tasks initiated counter increased
-        metrics.validateTasksInitiated(counter);
+        metrics.validateMetric(metricName, counter);
     });
 
-    it("BUG MTA-894 | Delete applications - Validate the tasks initiated counter didn't change", function () {
+    it("Delete applications - Validate the tasks initiated counter didn't change", function () {
         deleteByList(applicationList);
-        metrics.validateTasksInitiated(counter);
+        metrics.validateMetric(metricName, counter);
     });
 });
