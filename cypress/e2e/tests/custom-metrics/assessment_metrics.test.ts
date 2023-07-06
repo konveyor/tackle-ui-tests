@@ -1,25 +1,22 @@
 import {
     createMultipleApplications,
     createMultipleStakeholders,
-    deleteAllStakeholders,
-    deleteApplicationTableRows,
+    deleteByList,
     login,
 } from "../../../utils/utils";
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import { Metrics } from "../../models/migration/custom-metrics/custom-metrics";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
-
+const metrics = new Metrics();
+const metricName = "konveyor_assessments_initiated_total";
 let applicationList: Array<Assessment> = [];
-let metrics = new Metrics();
 let stakeholdersList: Array<Stakeholders> = [];
+let counter: number;
 
 describe(["@tier2"], "Custom Metrics - The total number of initiated assessments", function () {
     before("Login and create test data", function () {
         // Perform login
         login();
-
-        // Navigate to Application inventory tab, delete all applications
-        deleteApplicationTableRows();
 
         // Navigate to stakeholders control tab and create new stakeholder
         stakeholdersList = createMultipleStakeholders(1);
@@ -28,45 +25,46 @@ describe(["@tier2"], "Custom Metrics - The total number of initiated assessments
         applicationList = createMultipleApplications(2);
     });
 
-    it("Perform Assessment-Validate metrics assessment count increased", function () {
-        let count = applicationList.length;
+    beforeEach("Get the current counter value", function () {
+        metrics.getValue(metricName).then((counterValue) => {
+            counter = counterValue;
+        });
+    });
 
+    it("Perform Assessment-Validate metrics assessment count increased", function () {
         // Perform assessment of application
         for (let i = 0; i < applicationList.length; i++) {
             applicationList[i].perform_assessment("low", [stakeholdersList[0].name]);
             cy.wait(2000);
             applicationList[i].verifyStatus("assessment", "Completed");
+            counter++;
         }
 
         // Validate the assessment initiated count increased
-        metrics.validateAssessmentsInitiated(count);
+        metrics.validateMetric(metricName, counter);
     });
 
     it("Perform Review-No impact on assessment count", function () {
-        let count = applicationList.length;
-
         // Perform application review
         applicationList[1].perform_review("medium");
         cy.wait(2000);
         applicationList[1].verifyStatus("review", "Completed");
 
         // Validate the assessment initiated count doesn't change
-        metrics.validateAssessmentsInitiated(count);
+        metrics.validateMetric(metricName, counter);
     });
 
     it("Discard Assessment-Validate metrics assessment count doesn't change ", function () {
-        let count = applicationList.length;
-
         // Discard assessment of application
         applicationList[0].verifyStatus("assessment", "Completed");
         applicationList[0].discard_assessment();
 
         // Validate the assessment initiated count doesn't change
-        metrics.validateAssessmentsInitiated(count);
+        metrics.validateMetric(metricName, counter);
     });
 
     after("Perform test data clean up", function () {
-        deleteApplicationTableRows();
-        deleteAllStakeholders();
+        deleteByList(stakeholdersList);
+        deleteByList(applicationList);
     });
 });
