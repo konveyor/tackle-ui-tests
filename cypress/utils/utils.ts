@@ -94,9 +94,13 @@ const tackleUiUrl = Cypress.env("tackleUrl");
 const { _ } = Cypress;
 
 export function inputText(fieldId: string, text: any): void {
-    cy.get(fieldId).click().focused().clear();
-    cy.wait(200);
-    cy.get(fieldId).clear().type(text);
+    cy.log(`Type ${text} in ${fieldId}`);
+    cy.get(fieldId, { log: false })
+        .click({ log: false })
+        .focused({ log: false })
+        .clear({ log: false });
+    cy.wait(200, { log: false });
+    cy.get(fieldId, { log: false }).clear({ log: false }).type(text, { log: false });
 }
 
 export function clearInput(fieldID: string): void {
@@ -104,13 +108,18 @@ export function clearInput(fieldID: string): void {
 }
 
 export function clickByText(fieldId: string, buttonText: string, isForced = true): void {
+    cy.log(`Click by text, id: ${fieldId}, text: ${buttonText}`);
     // https://github.com/cypress-io/cypress/issues/2000#issuecomment-561468114
-    cy.contains(fieldId, buttonText, { timeout: 120 * SEC }).click({ force: isForced });
-    cy.wait(SEC);
+    cy.contains(fieldId, buttonText, { timeout: 60 * SEC, log: false }).click({
+        force: isForced,
+        log: false,
+    });
+    cy.wait(SEC, { log: false });
 }
 
 export function click(fieldId: string, isForced = true): void {
-    cy.get(fieldId, { timeout: 120 * SEC }).click({ force: isForced });
+    cy.log(`Click ${fieldId}`);
+    cy.get(fieldId, { log: false, timeout: 60 * SEC }).click({ log: false, force: isForced });
 }
 
 export function submitForm(): void {
@@ -134,9 +143,10 @@ export function login(username?, password?: string, firstLogin = false): Chainab
     const sessionId = (username ?? "login") + (firstLogin ? "FirstLogin" : "");
 
     return cy.session(sessionId, () => {
+        cy.log("Login in");
         cy.visit(Cypress.env("tackleUrl"), { timeout: 120 * SEC });
         cy.wait(5000);
-        cy.get("h1", { timeout: 120 * SEC }).then(($title) => {
+        cy.get("h1", { timeout: 120 * SEC, log: false }).then(($title) => {
             if ($title.text().toString().trim() !== "Sign in to your account") {
                 return;
             }
@@ -160,7 +170,7 @@ export function login(username?, password?: string, firstLogin = false): Chainab
 
         updatePassword();
         cy.get("#main-content-page-layout-horizontal-nav").within(() => {
-            cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
+            cy.get("h1", { timeout: 15 * SEC, log: false }).contains("Application inventory");
         });
     });
 }
@@ -197,13 +207,17 @@ export function resetURL(): void {
 }
 
 export function selectItemsPerPage(items: number): void {
-    cy.get(commonView.itemsPerPageMenu, { timeout: 120 * SEC })
-        .find(commonView.itemsPerPageToggleButton)
+    cy.log(`Select ${items} per page`);
+    cy.get(commonView.itemsPerPageMenu, { timeout: 60 * SEC, log: false })
+        .find(commonView.itemsPerPageToggleButton, { log: false })
         .then(($toggleBtn) => {
             if (!$toggleBtn.eq(0).is(":disabled")) {
                 $toggleBtn.eq(0).trigger("click");
-                cy.get(commonView.itemsPerPageMenuOptions);
-                cy.get(`li > button[data-action="per-page-${items}"]`).click({ force: true });
+                cy.get(commonView.itemsPerPageMenuOptions, { log: false });
+                cy.get(`li > button[data-action="per-page-${items}"]`, { log: false }).click({
+                    force: true,
+                    log: false,
+                });
                 cy.wait(2 * SEC);
             }
         });
