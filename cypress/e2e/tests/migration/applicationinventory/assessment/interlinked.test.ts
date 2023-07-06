@@ -18,8 +18,6 @@ limitations under the License.
 import {
     login,
     clickByText,
-    preservecookies,
-    hasToBeSkipped,
     click,
     deleteAllBusinessServices,
     deleteAllStakeholders,
@@ -40,24 +38,21 @@ import {
 import { navMenu } from "../../../../views/menu.view";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
-import { applicationInventory } from "../../../../types/constants";
+import { applicationInventory, SEC } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 
-var stakeholdersList: Array<Stakeholders> = [];
-var stakeholdergroupsList: Array<Stakeholdergroups> = [];
+let stakeholdersList: Array<Stakeholders> = [];
+let stakeholderGroupsList: Array<Stakeholdergroups> = [];
 
 describe(["@tier3"], "Applications interlinked to tags and business service", () => {
     before("Login and Create Test Data", function () {
         // Perform login
         login();
 
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
         // Create data
         stakeholdersList = createMultipleStakeholders(1);
-        stakeholdergroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
+        stakeholderGroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
     });
 
     beforeEach("Define interceptors", function () {
@@ -68,20 +63,12 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    after("Perform test data clean up", function () {
-        deleteAllStakeholders();
-        deleteAllStakeholderGroups();
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
-        deleteAllTagsAndTagCategories();
-    });
-
-    it("businessservice, tag update and delete dependency on application", function () {
-        let businessservicesList = createMultipleBusinessServices(2);
+    it("Business service, tag update and delete dependency on application", function () {
+        let businessServicesList = createMultipleBusinessServices(2);
         let tagList = createMultipleTags(2);
         let appdata = {
             name: data.getAppName(),
-            business: businessservicesList[0].name,
+            business: businessServicesList[0].name,
             description: data.getDescription(),
             tags: [tagList[0].name],
             comment: data.getDescription(),
@@ -89,7 +76,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         const application = new Assessment(appdata);
         application.create();
         cy.get("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         application.tagAndCategoryExists(tagList[0].name);
         // Remove the BS and tags
@@ -109,20 +96,20 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         application.tagAndCategoryExists("");
 
         application.edit({
-            business: businessservicesList[1].name,
+            business: businessServicesList[1].name,
             tags: [tagList[1].name],
         });
         cy.get("@getApplication");
 
         // Assert that business service is updated
-        application.getColumnText(businessColumnSelector, businessservicesList[1].name);
-        cy.wait(1000);
+        application.getColumnText(businessColumnSelector, businessServicesList[1].name);
+        cy.wait(SEC);
 
         // Assert that created tag exists
         application.tagAndCategoryExists(tagList[1].name);
     });
 
-    it("Stakeholder and stakeholdergroup delete dependency on application", function () {
+    it("Stakeholder and stakeholder group delete dependency on application", function () {
         //Create application
         let appdata = {
             name: data.getAppName(),
@@ -132,27 +119,35 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         const application = new Assessment(appdata);
         application.create();
         cy.get("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         // Perform assessment of application
         application.perform_assessment(
             "low",
             [stakeholdersList[0].name],
-            [stakeholdergroupsList[0].name]
+            [stakeholderGroupsList[0].name]
         );
         application.verifyStatus("assessment", "Completed");
 
         // Delete the stakeholders, group
         stakeholdersList[0].delete();
-        stakeholdergroupsList[0].delete();
+        stakeholderGroupsList[0].delete();
 
         clickByText(navMenu, applicationInventory);
         application.selectApplication();
         application.click_assess_button();
         click(continueButton);
-        cy.wait(6000);
+        cy.wait(6 * SEC);
 
         //Verify that values show blank
         cy.get(stakeholderSelect).should("have.value", "");
         cy.get(stakeholdergroupsSelect).should("have.value", "");
+    });
+
+    after("Perform test data clean up", function () {
+        deleteAllStakeholders();
+        deleteAllStakeholderGroups();
+        deleteApplicationTableRows();
+        deleteAllBusinessServices();
+        deleteAllTagsAndTagCategories();
     });
 });
