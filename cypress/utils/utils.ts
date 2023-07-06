@@ -1218,26 +1218,24 @@ export function deleteByList<T extends Deletable>(array: T[]): void {
 
 export function deleteAllStakeholders(): void {
     Stakeholders.openList();
-    cy.get("table[aria-label='Stakeholders table']", { timeout: 2 * SEC })
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                selectItemsPerPage(100);
-                cy.get(commonView.deleteButton).then(($elems) => {
-                    const elemsLength = $elems.length;
-                    for (let i = 0; i < elemsLength; i++) {
-                        cy.get(commonView.deleteButton)
-                            .first()
-                            .click()
-                            .then((_) => {
-                                cy.wait(0.5 * SEC);
-                                click(commonView.confirmButton);
-                                cy.wait(SEC);
-                            });
-                    }
-                });
-            }
-        });
+    cy.get("table[aria-label='Stakeholders table']", { timeout: 2 * SEC }).then(($tbody) => {
+        if (!$tbody.text().includes("No data available")) {
+            selectItemsPerPage(100);
+            cy.get(commonView.deleteButton).then(($elems) => {
+                const elemsLength = $elems.length;
+                for (let i = 0; i < elemsLength; i++) {
+                    cy.get(commonView.deleteButton)
+                        .first()
+                        .click()
+                        .then((_) => {
+                            cy.wait(0.5 * SEC);
+                            click(commonView.confirmButton);
+                            cy.wait(SEC);
+                        });
+                }
+            });
+        }
+    });
 }
 
 export function deleteAllStakeholderGroups(cancel = false): void {
@@ -1383,6 +1381,10 @@ export function deleteAllItems(amountPerPage = 100, pageNumber?: number) {
 
 export const deleteFromArray = <T>(array: T[], el: T): T[] => {
     return array.filter((item) => item !== el);
+};
+
+export const deleteFromArrayByIndex = <T>(array: T[], index: number): T[] => {
+    return array.filter((_, i) => i !== index);
 };
 
 export function goToPage(page: number): void {
