@@ -27,7 +27,7 @@ import * as commonView from "../../../views/common.view";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 
 let migrationWavesList: MigrationWave[] = [];
-
+//Automates Polarion TC 357
 describe(["@tier3"], "Application inventory pagination validations", function () {
     before("Login and Create Test Data", function () {
         // Perform login
