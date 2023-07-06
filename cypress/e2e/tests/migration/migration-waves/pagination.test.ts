@@ -73,7 +73,6 @@ describe(["@tier3"], "Migration Waves pagination validations", function () {
     it("Items per page validations", function () {
         MigrationWave.open();
 
-        // Select 10 items per page
         selectItemsPerPage(10);
 
         // Verify that only 10 items are displayed
@@ -99,7 +98,6 @@ describe(["@tier3"], "Migration Waves pagination validations", function () {
         MigrationWave.open();
         selectItemsPerPage(10);
 
-        // Go to page number 2
         goToPage(2);
 
         // Verify that page number has changed, as previous page nav button got enabled
@@ -107,14 +105,12 @@ describe(["@tier3"], "Migration Waves pagination validations", function () {
             cy.wrap($previousBtn).should("not.be.disabled");
         });
 
-        // Go back to page number 1
         goToPage(1);
     });
 
     it("Last page item(s) deletion, impact on page reload validation", function () {
         MigrationWave.open();
 
-        // Select 10 items per page
         selectItemsPerPage(10);
 
         goToLastPage();
@@ -132,7 +128,6 @@ describe(["@tier3"], "Migration Waves pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Delete the Migration Waves created before the tests
         deleteAllMigrationWaves();
     });
 });
