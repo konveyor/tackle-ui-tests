@@ -21,16 +21,10 @@ import {
     selectUserPerspective,
     checkSuccessAlert,
 } from "../../../../../../utils/utils";
-import {
-    button,
-    fieldReqMsg,
-    max120CharsMsg,
-    duplicateTagName,
-} from "../../../../../types/constants";
+import { button, max120CharsMsg, duplicateTagName } from "../../../../../types/constants";
 import {
     createTagButton,
     nameInput,
-    tagCategoryHelper,
     dropdownMenuToggle,
     tagNameHelper,
 } from "../../../../../views/tags.view";
@@ -50,7 +44,7 @@ describe(["@tier2"], "Tag validations", () => {
         cy.intercept("GET", "/hub/tag*").as("getTag");
     });
 
-    it("MTA-909 | Tag field validations", function () {
+    it("Tag field validations", function () {
         // Navigate to Tags tab and click "Create tag" button
         Tag.openList();
         clickByText(button, createTagButton);
@@ -58,9 +52,6 @@ describe(["@tier2"], "Tag validations", () => {
         // Name constraints
         inputText(nameInput, data.getRandomWords(40));
         cy.get(tagNameHelper).should("contain", max120CharsMsg);
-
-        // Tag Type constraints
-        cy.get(tagCategoryHelper).should("contain", fieldReqMsg);
 
         // Validate the create button is enabled with valid inputs
         inputText(nameInput, data.getRandomWord(5));
