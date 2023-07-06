@@ -28,18 +28,13 @@ import { MigrationWave } from "../../../models/migration/migration-waves/migrati
 
 let migrationWavesList: MigrationWave[] = [];
 //Automates Polarion TC 357
-describe(["@tier3"], "Application inventory pagination validations", function () {
+describe(["@tier3"], "Migration Waves pagination validations", function () {
     before("Login and Create Test Data", function () {
         // Perform login
         login();
         deleteAllMigrationWaves();
         // Navigate to Migration Waves tab, delete all and create 11 migration waves
         migrationWavesList = createMultipleMigrationWaves(11);
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the Migration Waves created before the tests
-        deleteAllMigrationWaves();
     });
 
     it("Navigation button validations", function () {
@@ -102,7 +97,7 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
 
     it("Page number validations", function () {
         MigrationWave.open();
-        -selectItemsPerPage(10);
+        selectItemsPerPage(10);
 
         // Go to page number 2
         goToPage(2);
@@ -134,5 +129,10 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
             .then(($rows) => {
                 cy.wrap($rows.length).should("eq", 10);
             });
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the Migration Waves created before the tests
+        deleteAllMigrationWaves();
     });
 });
