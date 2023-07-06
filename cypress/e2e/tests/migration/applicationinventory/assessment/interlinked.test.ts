@@ -19,15 +19,12 @@ import {
     login,
     clickByText,
     click,
-    deleteAllBusinessServices,
-    deleteAllStakeholders,
-    deleteAllStakeholderGroups,
-    deleteApplicationTableRows,
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
     createMultipleBusinessServices,
     createMultipleTags,
-    deleteAllTagsAndTagCategories,
+    deleteByList,
+    deleteFromArrayByIndex,
 } from "../../../../../utils/utils";
 import { businessColumnSelector } from "../../../../views/applicationinventory.view";
 import {
@@ -41,9 +38,12 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import { applicationInventory, SEC } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
+import { Tag } from "../../../../models/migration/controls/tags";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let stakeholderGroupsList: Array<Stakeholdergroups> = [];
+let applicationList: Array<Assessment> = [];
+let tagList: Array<Tag> = [];
 
 describe(["@tier3"], "Applications interlinked to tags and business service", () => {
     before("Login and Create Test Data", function () {
@@ -65,7 +65,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
 
     it("Business service, tag update and delete dependency on application", function () {
         let businessServicesList = createMultipleBusinessServices(2);
-        let tagList = createMultipleTags(2);
+        tagList = createMultipleTags(2);
         let appdata = {
             name: data.getAppName(),
             business: businessServicesList[0].name,
@@ -74,6 +74,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
             comment: data.getDescription(),
         };
         const application = new Assessment(appdata);
+        applicationList.push(application);
         application.create();
         cy.get("@getApplication");
         cy.wait(2 * SEC);
@@ -82,6 +83,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         // Remove the BS and tags
         application.removeBusinessService();
         tagList[0].delete();
+        deleteFromArrayByIndex(tagList, 0);
 
         // Navigate to application inventory
         clickByText(navMenu, applicationInventory);
@@ -117,6 +119,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
             comment: data.getDescription(),
         };
         const application = new Assessment(appdata);
+        applicationList.push(application);
         application.create();
         cy.get("@getApplication");
         cy.wait(2 * SEC);
@@ -128,9 +131,11 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         );
         application.verifyStatus("assessment", "Completed");
 
-        // Delete the stakeholders, group
+        // Delete the stakeholders, group and removing them from the list where they were added before
         stakeholdersList[0].delete();
+        deleteFromArrayByIndex(stakeholdersList, 0);
         stakeholderGroupsList[0].delete();
+        deleteFromArrayByIndex(stakeholderGroupsList, 0);
 
         clickByText(navMenu, applicationInventory);
         application.selectApplication();
@@ -144,10 +149,6 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
     });
 
     after("Perform test data clean up", function () {
-        deleteAllStakeholders();
-        deleteAllStakeholderGroups();
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
-        deleteAllTagsAndTagCategories();
+        deleteByList(applicationList);
     });
 });

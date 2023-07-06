@@ -1375,6 +1375,10 @@ export const deleteFromArray = <T>(array: T[], el: T): T[] => {
     return array.filter((item) => item !== el);
 };
 
+export const deleteFromArrayByIndex = <T>(array: T[], index: number): T[] => {
+    return array.filter((_, i) => i !== index);
+};
+
 export function goToPage(page: number): void {
     cy.get(divHeader)
         .eq(0)
