@@ -21,10 +21,6 @@ describe(
             });
         });
 
-        after("Perform test data clean up", function () {
-            deleteByList(applicationList);
-        });
-
         it("Create applications - Validate the applications count increased", function () {
             // Create 5 applications
             applicationList = createMultipleApplications(3);
@@ -50,6 +46,10 @@ describe(
 
             // Validate the applications count decreased
             metrics.validateMetric(metricName, count);
+        });
+
+        after("Perform test data clean up", function () {
+            deleteByList(applicationList);
         });
     }
 );
