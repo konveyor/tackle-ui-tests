@@ -816,34 +816,6 @@ export function deleteApplicationTableRows(): void {
         });
 }
 
-export function bulkDeleteApplications(currentPage = false): void {
-    navigate_to_application_inventory();
-    // Wait for application table to be populated with any existing applications
-    cy.wait(2000);
-    cy.get(commonView.appTable)
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.wait(1000);
-                cy.get("span.pf-c-options-menu__toggle-text")
-                    .eq(0)
-                    .then(($body) => {
-                        if (!$body.text().includes("of 0")) {
-                            if (currentPage) {
-                                cy.get(".pf-c-dropdown__toggle-button").click({ force: true });
-                                clickByText(button, "Select page");
-                            } else {
-                                cy.get("input#bulk-selected-items-checkbox", {
-                                    timeout: 10 * SEC,
-                                }).check({ force: true });
-                            }
-                            application_inventory_kebab_menu("Delete");
-                        }
-                    });
-            }
-        });
-}
-
 export function deleteAppImportsTableRows(lastPage = false): void {
     if (!lastPage) {
         openManageImportsPage();
