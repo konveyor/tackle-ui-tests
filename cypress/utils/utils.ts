@@ -781,29 +781,37 @@ export function deleteAllMigrationWaves(currentPage = false): void {
         });
 }
 
-export function deleteApplicationTableRows(currentPage = false): void {
+export function deleteApplicationTableRows(): void {
+    // Delete all rows one by one for which Delete button is enabled
+    // to be used only in manageImports tests as we don't know which apps
+    // are imported. For all other tests use deleteByList(appList)
     navigate_to_application_inventory();
-    // Wait for application table to be populated with any existing applications
-    cy.wait(2000);
     cy.get(commonView.appTable)
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
-                cy.wait(1000);
-                cy.get("span.pf-c-options-menu__toggle-text")
-                    .eq(0)
-                    .then(($body) => {
-                        if (!$body.text().includes("of 0")) {
-                            if (currentPage) {
-                                cy.get(".pf-c-dropdown__toggle-button").click({ force: true });
-                                clickByText(button, "Select page");
-                            } else {
-                                cy.get("input#bulk-selected-items-checkbox", {
-                                    timeout: 10 * SEC,
-                                }).check({ force: true });
-                            }
-                            application_inventory_kebab_menu("Delete");
-                        }
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        const name = $tableRow.find("td[data-label=Name]").text();
+                        cy.get(tdTag)
+                            .contains(name)
+                            .closest(trTag)
+                            .within(() => {
+                                click(actionButton);
+                                cy.wait(800);
+                            })
+                            .contains(button, deleteAction)
+                            .invoke("attr", "aria-disabled")
+                            .then((disabled) => {
+                                if (disabled == "false") {
+                                    clickByText(button, "Delete");
+                                    cy.wait(800);
+                                    click(commonView.confirmButton);
+                                    cy.wait(2000);
+                                }
+                            });
                     });
             }
         });

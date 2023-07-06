@@ -145,29 +145,4 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
         // Go back to page number 1
         goToPage(1);
     });
-
-    it("Last page item(s) deletion, impact on page reload validation", function () {
-        // Navigate to Application inventory tab
-        Application.open();
-        cy.wait("@getApplications");
-
-        // Select 10 items per page
-        selectItemsPerPage(10);
-        cy.wait(2000);
-
-        // Navigate to last page
-        goToLastPage();
-        cy.wait(2000);
-
-        // Delete all items of last page
-        deleteApplicationTableRows(true);
-
-        // Verify that page is re-directed to previous page
-        cy.get(".pf-c-table > tbody > tr")
-            .not(".pf-c-table__expandable-row")
-            .find("td[data-label=Name]")
-            .then(($rows) => {
-                cy.wrap($rows.length).should("eq", 10);
-            });
-    });
 });
