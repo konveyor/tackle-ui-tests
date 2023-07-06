@@ -26,6 +26,7 @@ import {
     goToPage,
     goToLastPage,
     deleteAppImportsTableRows,
+    deleteAllBusinessServices,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import {
@@ -237,6 +238,6 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         // Delete all Data
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
-        businessService.delete();
+        deleteAllBusinessServices();
     });
 });

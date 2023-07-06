@@ -26,6 +26,7 @@ import {
     deleteApplicationTableRows,
     deleteAppImportsTableRows,
     clickOnSortButton,
+    deleteAllBusinessServices,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import { SortType, applicationInventory } from "../../../../types/constants";
@@ -173,6 +174,6 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
         // Delete the business service
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
-        businessService.delete();
+        deleteAllBusinessServices();
     });
 });

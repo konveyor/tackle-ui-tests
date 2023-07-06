@@ -24,6 +24,7 @@ import {
     exists,
     deleteApplicationTableRows,
     deleteAppImportsTableRows,
+    deleteAllBusinessServices,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory, button, clearAllFilters } from "../../../../types/constants";
@@ -94,6 +95,6 @@ describe(["@tier2"], "Manage applications import filter validations", function (
     after("Perform test data clean up", function () {
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
-        businessService.delete();
+        deleteAllBusinessServices();
     });
 });
