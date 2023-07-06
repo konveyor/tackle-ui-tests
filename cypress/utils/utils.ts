@@ -783,6 +783,8 @@ export function deleteAllMigrationWaves(currentPage = false): void {
 
 export function deleteApplicationTableRows(): void {
     // Delete all rows one by one for which Delete button is enabled
+    // to be used only in manageImports tests as we don't know which apps
+    // are imported. For all other tests use deleteByList(appList)
     navigate_to_application_inventory();
     cy.get(commonView.appTable)
         .next()
@@ -792,7 +794,7 @@ export function deleteApplicationTableRows(): void {
                     .find(trTag)
                     .not(".pf-c-table__expandable-row")
                     .each(($tableRow) => {
-                        var name = $tableRow.find("td[data-label=Name]").text();
+                        const name = $tableRow.find("td[data-label=Name]").text();
                         cy.get(tdTag)
                             .contains(name)
                             .closest(trTag)
@@ -803,12 +805,11 @@ export function deleteApplicationTableRows(): void {
                             .contains(button, deleteAction)
                             .invoke("attr", "aria-disabled")
                             .then((disabled) => {
-                                cy.log(disabled);
                                 if (disabled == "false") {
                                     clickByText(button, "Delete");
                                     cy.wait(800);
                                     click(commonView.confirmButton);
-                                    cy.wait(4000);
+                                    cy.wait(2000);
                                 }
                             });
                     });
