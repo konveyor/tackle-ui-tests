@@ -15,23 +15,12 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    login,
-    openManageImportsPage,
-    preservecookies,
-    hasToBeSkipped,
-} from "../../../../../utils/utils";
+import { login, openManageImportsPage } from "../../../../../utils/utils";
 import { actionButton } from "../../../../views/applicationinventory.view";
 
 describe(["@tier2"], "Manage imports tests", function () {
     before("Login", function () {
-        // Perform login
         login();
-
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
-        // Go to application import page
         openManageImportsPage();
     });
 

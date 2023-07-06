@@ -23,12 +23,9 @@ import {
     importApplication,
     openManageImportsPage,
     deleteApplicationTableRows,
-    preservecookies,
-    hasToBeSkipped,
     goToPage,
     goToLastPage,
     deleteAppImportsTableRows,
-    deleteAllBusinessServices,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import {
@@ -55,13 +52,7 @@ const filesToImport = [
 
 describe(["@tier3"], "Manage imports pagination validations", function () {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
-
-        // Delete all items of page
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
-
         // Navigate to Application inventory tab
         clickByText(navMenu, applicationInventory);
         cy.wait(5000);
@@ -103,19 +94,9 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
             });
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors for Applications
         cy.intercept("GET", "/hub/application*").as("getApplications");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete all Data
-        deleteApplicationTableRows();
-        deleteAppImportsTableRows();
-        businessService.delete();
     });
 
     it("Navigation button validations", function () {
@@ -250,5 +231,12 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
             .then(($rows) => {
                 cy.wrap($rows.length).should("eq", 10);
             });
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete all Data
+        deleteApplicationTableRows();
+        deleteAppImportsTableRows();
+        businessService.delete();
     });
 });

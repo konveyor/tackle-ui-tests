@@ -781,7 +781,42 @@ export function deleteAllMigrationWaves(currentPage = false): void {
         });
 }
 
-export function deleteApplicationTableRows(currentPage = false): void {
+export function deleteApplicationTableRows(): void {
+    // Delete all rows one by one for which Delete button is enabled
+    navigate_to_application_inventory();
+    cy.get(commonView.appTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        var name = $tableRow.find("td[data-label=Name]").text();
+                        cy.get(tdTag)
+                            .contains(name)
+                            .closest(trTag)
+                            .within(() => {
+                                click(actionButton);
+                                cy.wait(800);
+                            })
+                            .contains(button, deleteAction)
+                            .invoke("attr", "aria-disabled")
+                            .then((disabled) => {
+                                cy.log(disabled);
+                                if (disabled == "false") {
+                                    clickByText(button, "Delete");
+                                    cy.wait(800);
+                                    click(commonView.confirmButton);
+                                    cy.wait(4000);
+                                }
+                            });
+                    });
+            }
+        });
+}
+
+export function bulkDeleteApplications(currentPage = false): void {
     navigate_to_application_inventory();
     // Wait for application table to be populated with any existing applications
     cy.wait(2000);

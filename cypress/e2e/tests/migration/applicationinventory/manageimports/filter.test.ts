@@ -23,11 +23,7 @@ import {
     applySearchFilter,
     exists,
     deleteApplicationTableRows,
-    preservecookies,
-    hasToBeSkipped,
-    selectUserPerspective,
     deleteAppImportsTableRows,
-    deleteAllBusinessServices,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory, button, clearAllFilters } from "../../../../types/constants";
@@ -48,13 +44,8 @@ var invalidSearchInput = String(data.getRandomNumber());
 
 describe(["@tier2"], "Manage applications import filter validations", function () {
     before("Login and create test data", function () {
-        // Perform login
         login();
-        // Delete all items of page
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
 
-        // Create business service
         businessService.create();
 
         // Open the application inventory page
@@ -68,19 +59,9 @@ describe(["@tier2"], "Manage applications import filter validations", function (
         });
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplications");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the business service
-        deleteApplicationTableRows();
-        deleteAppImportsTableRows();
-        deleteAllBusinessServices();
     });
 
     it("File name filter validations", function () {
@@ -108,5 +89,11 @@ describe(["@tier2"], "Manage applications import filter validations", function (
 
         // Assert that no search results are found
         cy.get("h2").contains("No data available");
+    });
+
+    after("Perform test data clean up", function () {
+        deleteApplicationTableRows();
+        deleteAppImportsTableRows();
+        businessService.delete();
     });
 });
