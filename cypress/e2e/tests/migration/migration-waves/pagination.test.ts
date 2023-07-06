@@ -18,14 +18,12 @@ limitations under the License.
 import {
     login,
     selectItemsPerPage,
-    deleteApplicationTableRows,
     goToPage,
     goToLastPage,
     deleteAllMigrationWaves,
     createMultipleMigrationWaves,
 } from "../../../../utils/utils";
 import * as commonView from "../../../views/common.view";
-import { Application } from "../../../models/migration/applicationinventory/application";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 
 let migrationWavesList: MigrationWave[] = [];
@@ -35,17 +33,16 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
         // Perform login
         login();
         deleteAllMigrationWaves();
-        // Navigate to Application inventory tab, delete all and create 11 applications
+        // Navigate to Migration Waves tab, delete all and create 11 migration waves
         migrationWavesList = createMultipleMigrationWaves(11);
     });
 
     after("Perform test data clean up", function () {
-        // Delete the Applications created before the tests
+        // Delete the Migration Waves created before the tests
         deleteAllMigrationWaves();
     });
 
     it("Navigation button validations", function () {
-        // Navigate to Application inventory tab
         MigrationWave.open();
         // select 10 items per page
         selectItemsPerPage(10);
@@ -79,7 +76,6 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
     });
 
     it("Items per page validations", function () {
-        // Navigate to Application inventory tab
         MigrationWave.open();
 
         // Select 10 items per page
@@ -93,7 +89,6 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
                 cy.wrap($rows.length).should("eq", 10);
             });
 
-        // Select 20 items per page
         selectItemsPerPage(20);
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
@@ -106,12 +101,8 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
     });
 
     it("Page number validations", function () {
-        // Navigate to Application inventory tab
         MigrationWave.open();
-        -(
-            // Select 10 items per page
-            selectItemsPerPage(10)
-        );
+        -selectItemsPerPage(10);
 
         // Go to page number 2
         goToPage(2);
@@ -126,13 +117,11 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
     });
 
     it("Last page item(s) deletion, impact on page reload validation", function () {
-        // Navigate to Application inventory tab
         MigrationWave.open();
 
         // Select 10 items per page
         selectItemsPerPage(10);
 
-        // Navigate to last page
         goToLastPage();
 
         // Delete all items of last page
