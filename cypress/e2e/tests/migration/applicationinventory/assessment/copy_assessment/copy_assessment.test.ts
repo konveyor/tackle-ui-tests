@@ -16,7 +16,6 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    hasToBeSkipped,
     login,
     preservecookies,
     createMultipleStakeholders,
@@ -29,7 +28,6 @@ import {
 } from "../../../../../../utils/utils";
 
 import { Stakeholders } from "../../../../../models/migration/controls/stakeholders";
-import { Stakeholdergroups } from "../../../../../models/migration/controls/stakeholdergroups";
 import { trTag } from "../../../../../types/constants";
 import { copy, selectBox } from "../../../../../views/applicationinventory.view";
 import { Assessment } from "../../../../../models/migration/applicationinventory/assessment";
@@ -37,7 +35,6 @@ import { modal } from "../../../../../views/common.view";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var stakeholdersList: Array<Stakeholders> = [];
-var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var applicationList: Array<Assessment> = [];
 
 describe(["@tier2"], "Copy assessment and review tests", () => {
@@ -49,7 +46,6 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
 
         // Create data
         stakeholdersList = createMultipleStakeholders(1);
-        stakeholdergroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
         applicationList = createMultipleApplications(4);
 
         // Verify copy assessment is not enabled untill assessment is done
@@ -145,13 +141,7 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
 
         // Select all the applications on page
         clickWithin(modal, "button[aria-label='Select']");
-        if (applicationList.length < 11) {
-            cy.get("ul[role=menu] > li")
-                .contains(`Select page (${applicationList.length} items)`)
-                .click();
-        } else {
-            cy.get("ul[role=menu] > li").contains("Select page (10 items)").click();
-        }
+        cy.get("ul[role=menu] > li").contains("Select page").click();
         cy.get(copy).should("be.visible").should("not.be.disabled");
         clickWithin(modal, "button[aria-label='Select']");
 
