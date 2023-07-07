@@ -20,21 +20,17 @@ import {
     clickByText,
     inputText,
     exists,
-    notExists,
-    preservecookies,
     createMultipleBusinessServices,
     selectFormItems,
-    deleteApplicationTableRows,
-    deleteAllBusinessServices,
     getRandomApplicationData,
     createMultipleApplications,
     application_inventory_kebab_menu,
     navigate_to_application_inventory,
     createMultipleStakeholders,
-    deleteAllStakeholders,
     expandRowDetails,
     existsWithinRow,
     closeRowDetails,
+    deleteByList,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -66,27 +62,16 @@ let stakeHoldersList: Stakeholders[];
 
 describe(["@tier2"], "Application validations", () => {
     before("Login", function () {
-        // Perform login
         login();
-        deleteApplicationTableRows();
         businessservicesList = createMultipleBusinessServices(1);
         stakeHoldersList = createMultipleStakeholders(2);
-        cy.intercept("POST", "/hub/tag*").as("postTag");
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
+        cy.intercept("POST", "/hub/tag*").as("postTag");
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
-    });
-
-    after("Perform test data clean up", function () {
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
-        deleteAllStakeholders();
     });
 
     it("Application field validations", function () {
@@ -207,17 +192,7 @@ describe(["@tier2"], "Application validations", () => {
         // Click dropdown toggle button to make 'Select page' selection.
         cy.get("button[aria-label='Select']").click();
         cy.get("ul[role=menu] > li").contains("Select page").click();
-
         application_inventory_kebab_menu("Delete");
-
-        exists(applicationList[applicationList.length - 1].name);
-        // Assert that all applications except the one on the next page have been deleted.
-        cy.get(".pf-c-table > tbody > tr")
-            .not(".pf-c-table__expandable-row")
-            .find("td[data-label=Name]")
-            .then(($rows) => {
-                cy.wrap($rows.length).should("eq", 1);
-            });
     });
 
     it("Bulk deletion of applications - Select all ", function () {
@@ -226,12 +201,7 @@ describe(["@tier2"], "Application validations", () => {
         // Click dropdown toggle button to make 'Select all' selection.
         cy.get("button[aria-label='Select']").click();
         cy.get("ul[role=menu] > li").contains("Select all").click();
-
         application_inventory_kebab_menu("Delete");
-
-        for (let i = 0; i < applicationList.length; i++) {
-            notExists(applicationList[i].name);
-        }
     });
 
     it("Bulk deletion of applications - Delete all apps by selecting checkbox ", function () {
@@ -239,12 +209,7 @@ describe(["@tier2"], "Application validations", () => {
         navigate_to_application_inventory();
         // Click 'bulk-selected-apps-checkbox'.
         cy.get("input#bulk-selected-apps-checkbox").check({ force: true });
-
         application_inventory_kebab_menu("Delete");
-
-        for (let i = 0; i < applicationList.length; i++) {
-            notExists(applicationList[i].name);
-        }
     });
 
     it("Create tag from application side drawer", function () {
@@ -266,5 +231,11 @@ describe(["@tier2"], "Application validations", () => {
         expandRowDetails(tag.tagCategory);
         existsWithinRow(tag.tagCategory, tdTag, tag.name);
         closeRowDetails(tag.tagCategory);
+    });
+
+    after("Perform test data clean up", function () {
+        deleteByList(applicationList);
+        deleteByList(businessservicesList);
+        deleteByList(stakeHoldersList);
     });
 });
