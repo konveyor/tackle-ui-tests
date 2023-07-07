@@ -93,33 +93,41 @@ let userPassword = Cypress.env("pass");
 const tackleUiUrl = Cypress.env("tackleUrl");
 const { _ } = Cypress;
 
-export function inputText(fieldId: string, text: any): void {
-    cy.log(`Type ${text} in ${fieldId}`);
-    cy.get(fieldId, { log: false })
-        .click({ log: false })
-        .focused({ log: false })
-        .clear({ log: false });
-    cy.wait(200, { log: false });
-    cy.get(fieldId, { log: false }).clear({ log: false }).type(text, { log: false });
+export function inputText(fieldId: string, text: any, log = false): void {
+    if (!log) {
+        cy.log(`Type ${text} in ${fieldId}`);
+    }
+    cy.get(fieldId, { log }).click({ log }).focused({ log }).clear({ log });
+    cy.wait(200, { log });
+    cy.get(fieldId, { log }).clear({ log }).type(text, { log });
 }
 
 export function clearInput(fieldID: string): void {
     cy.get(fieldID).clear();
 }
 
-export function clickByText(fieldId: string, buttonText: string, isForced = true): void {
-    cy.log(`Click by text, id: ${fieldId}, text: ${buttonText}`);
+export function clickByText(
+    fieldId: string,
+    buttonText: string,
+    isForced = true,
+    log = false
+): void {
+    if (!log) {
+        cy.log(`Click by text, id: ${fieldId}, text: ${buttonText}`);
+    }
     // https://github.com/cypress-io/cypress/issues/2000#issuecomment-561468114
-    cy.contains(fieldId, buttonText, { timeout: 60 * SEC, log: false }).click({
+    cy.contains(fieldId, buttonText, { timeout: 60 * SEC, log }).click({
         force: isForced,
-        log: false,
+        log,
     });
-    cy.wait(SEC, { log: false });
+    cy.wait(SEC, { log });
 }
 
-export function click(fieldId: string, isForced = true): void {
-    cy.log(`Click ${fieldId}`);
-    cy.get(fieldId, { log: false, timeout: 60 * SEC }).click({ log: false, force: isForced });
+export function click(fieldId: string, isForced = true, log = false): void {
+    if (!log) {
+        cy.log(`Click ${fieldId}`);
+    }
+    cy.get(fieldId, { log, timeout: 60 * SEC }).click({ log, force: isForced });
 }
 
 export function submitForm(): void {
