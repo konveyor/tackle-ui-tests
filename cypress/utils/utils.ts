@@ -804,13 +804,13 @@ export function deleteApplicationTableRows(): void {
                             })
                             .contains(button, deleteAction)
                             .then(($delete_btn) => {
-                                if(!$delete_btn.hasClass('pf-m-aria-disabled')){
+                                if (!$delete_btn.hasClass("pf-m-aria-disabled")) {
                                     $delete_btn.click();
                                     cy.wait(800);
                                     click(commonView.confirmButton);
                                     cy.wait(2000);
                                 }
-                            })
+                            });
                     });
             }
         });
@@ -1258,13 +1258,13 @@ export function deleteAllBusinessServices() {
                             .closest(trTag)
                             .contains(button, deleteAction)
                             .then(($delete_btn) => {
-                                if(!$delete_btn.hasClass('pf-m-aria-disabled')){
+                                if (!$delete_btn.hasClass("pf-m-aria-disabled")) {
                                     $delete_btn.click();
                                     cy.wait(800);
                                     click(commonView.confirmButton);
                                     cy.wait(2000);
                                 }
-                            })
+                            });
                     });
             }
         });
