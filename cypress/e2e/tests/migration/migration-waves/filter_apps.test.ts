@@ -17,13 +17,18 @@ import {
     clickByText,
     applySearchFilter,
     deleteByList,
-    createMultipleApplications,
+    createMultipleBusinessServices,
+    createMultipleTags,
+    createMultipleApplicationsWithBSandTags,
 } from "../../../../utils/utils";
+import { Application } from "../../../models/migration/applicationinventory/application";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { Stakeholdergroups } from "../../../models/migration/controls/stakeholdergroups";
 import { manageApplications, button, name, clearAllFilters, SEC } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
+import { BusinessServices } from "../../../models/migration/controls/businessservices";
+import { Tag } from "../../../models/migration/controls/tags";
 
 let stakeHolders: Stakeholders[];
 let stakeHolderGroups: Stakeholdergroups[];
@@ -32,41 +37,87 @@ now.setDate(now.getDate() + 1);
 const end = new Date(now.getTime());
 
 end.setFullYear(end.getFullYear() + 1);
-let migrationWavesList: Array<MigrationWave> = [];
-//Automates Polarion TC 343
-describe(["@tier2"], "Migration waves: Filter validations on Manage applications modal", function () {
-    before("Login and Create Test Data", function () {
-        login();
-    });
+let applicationsList: Array<Application> = [];
+let businessservicesList: Array<BusinessServices> = [];
+let tagList: Array<Tag> = [];
 
-    it("Filter applications by name", function () {
-        const applications = createMultipleApplications(2);
-        const migrationWave = new MigrationWave(
-            data.getRandomWord(8),
-            now,
-            end,
-            stakeHolders,
-            stakeHolderGroups,
-            applications
-        );
-        migrationWave.create();
-        MigrationWave.open();
-        migrationWave.expandActionsMenu();
-        cy.contains(manageApplications).click();
+//Automates Polarion MTA-354
+describe(
+    ["@tier2"],
+    "Migration waves: Filter validations on Manage applications modal",
+    function () {
+        before("Login and Create Test Data", function () {
+            login();
 
-        // Enter an existing exact name and apply it as search filter
-        applySearchFilter(name, applications[1].name, true, 1);
-        cy.get("td").should("contain", applications[1].name);
-        cy.get("td").should("not.contain", applications[0].name);
-        clickByText(button, clearAllFilters);
+            let businessservicesList = createMultipleBusinessServices(2);
+            let tagList = createMultipleTags(2);
+            applicationsList = createMultipleApplicationsWithBSandTags(
+                2,
+                businessservicesList,
+                tagList
+            );
+        });
 
-        // Enter a non-existing name substring and apply it as search filter
-        applySearchFilter(name, String(data.getRandomNumber()), true, 1);
+        it("Filter applications by name", function () {
+            let migrationWave = new MigrationWave(
+                data.getRandomWord(8),
+                now,
+                end,
+                stakeHolders,
+                stakeHolderGroups,
+                applicationsList
+            );
+            migrationWave.create();
+            MigrationWave.open();
+            migrationWave.expandActionsMenu();
+            cy.contains(manageApplications).click();
 
-        // Assert that no search results are found
-        cy.get("td").should("not.exist");
-        clickByText(button, clearAllFilters);
+            // Enter an existing exact name and apply it as search filter
+            applySearchFilter(name, applicationsList[1].name, true, 1);
+            cy.get("td").should("contain", applicationsList[1].name);
+            cy.get("td").should("not.contain", applicationsList[0].name);
+            clickByText(button, clearAllFilters);
 
-        migrationWave.delete()
-    });
-});
+            applySearchFilter(name, String(data.getRandomNumber()), true, 1);
+            cy.get("td").should("not.contain", applicationsList[1].name);
+            cy.get("td").should("not.contain", applicationsList[0].name);
+            clickByText(button, clearAllFilters);
+            clickByText(button, "Cancel");
+            migrationWave.delete();
+        });
+
+        it("Filter applications by business service", function () {
+            let migrationWave = new MigrationWave(
+                data.getRandomWord(8),
+                now,
+                end,
+                stakeHolders,
+                stakeHolderGroups,
+                applicationsList
+            );
+            migrationWave.create();
+            MigrationWave.open();
+            migrationWave.expandActionsMenu();
+            cy.contains(manageApplications).click();
+
+            // Enter an existing exact name and apply it as search filter
+            applySearchFilter(businessService, applicationsList[1].business);
+            cy.get("td").should("contain", applicationsList[1].name);
+            cy.get("td").should("not.contain", applicationsList[0].name);
+            clickByText(button, clearAllFilters);
+
+            applySearchFilter(businessService, applicationsList[0].business);
+            cy.get("td").should("not.contain", applicationsList[1].name);
+            cy.get("td").should("contain", applicationsList[0].name);
+            clickByText(button, clearAllFilters);
+            clickByText(button, "Cancel");
+            migrationWave.delete();
+        });
+
+        after("Perform test data clean up", function () {
+            deleteByList(businessservicesList);
+            deleteByList(tagList);
+            deleteByList(applicationsList);
+        });
+    }
+);
