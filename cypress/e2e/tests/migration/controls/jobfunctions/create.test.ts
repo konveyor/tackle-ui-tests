@@ -20,13 +20,10 @@ import {
     inputText,
     exists,
     notExists,
-    preservecookies,
     selectUserPerspective,
     checkSuccessAlert,
 } from "../../../../../utils/utils";
 import {
-    controls,
-    jobFunctions,
     button,
     minCharsMsg,
     max120CharsMsg,
@@ -69,8 +66,6 @@ describe(["@tier2"], "Job Function Validations", () => {
     });
 
     it("Job function success alert and unique name constraint validation", function () {
-        selectUserPerspective(migration);
-
         // Create new job function
         jobfunction.create();
         checkSuccessAlert(

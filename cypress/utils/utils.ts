@@ -803,10 +803,9 @@ export function deleteApplicationTableRows(): void {
                                 cy.wait(800);
                             })
                             .contains(button, deleteAction)
-                            .invoke("attr", "aria-disabled")
-                            .then((disabled) => {
-                                if (disabled == "false") {
-                                    clickByText(button, "Delete");
+                            .then(($delete_btn) => {
+                                if (!$delete_btn.hasClass("pf-m-aria-disabled")) {
+                                    $delete_btn.click();
                                     cy.wait(800);
                                     click(commonView.confirmButton);
                                     cy.wait(2000);
@@ -1245,24 +1244,28 @@ export function deleteAllStakeholderGroups(cancel = false): void {
 
 export function deleteAllBusinessServices() {
     BusinessServices.openList();
-    cy.get(commonView.appTable, { timeout: 2 * SEC })
+    cy.get(commonView.appTable)
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
-                selectItemsPerPage(100);
-                cy.get(commonView.deleteButton).then(($elems) => {
-                    const elemsLength = $elems.length;
-                    for (let i = 0; i < elemsLength; i++) {
-                        cy.get(commonView.deleteButton)
-                            .first()
-                            .click()
-                            .then((_) => {
-                                cy.wait(0.5 * SEC);
-                                click(commonView.confirmButton);
-                                cy.wait(SEC);
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        const name = $tableRow.find("td[data-label=Name]").text();
+                        cy.get(tdTag)
+                            .contains(name)
+                            .closest(trTag)
+                            .contains(button, deleteAction)
+                            .then(($delete_btn) => {
+                                if (!$delete_btn.hasClass("pf-m-aria-disabled")) {
+                                    $delete_btn.click();
+                                    cy.wait(800);
+                                    click(commonView.confirmButton);
+                                    cy.wait(2000);
+                                }
                             });
-                    }
-                });
+                    });
             }
         });
 }

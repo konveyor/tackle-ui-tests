@@ -20,14 +20,10 @@ import {
     clickByText,
     exists,
     applySearchFilter,
-    hasToBeSkipped,
     createMultipleJobFunctions,
-    selectUserPerspective,
     deleteByList,
-    deleteAllJobfunctions,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, jobFunctions, button, name, clearAllFilters } from "../../../../types/constants";
+import { button, name, clearAllFilters } from "../../../../types/constants";
 
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import * as data from "../../../../../utils/data_utils";
@@ -37,19 +33,10 @@ let invalidSearchInput = String(data.getRandomNumber());
 
 describe(["@tier2"], "Job function filter validations", function () {
     before("Login and Create Test Data", function () {
-        // Prevent before hook from running, if the tag is excluded from run
-
         login();
 
         // Create multiple job functions
         jobFunctionsList = createMultipleJobFunctions(2);
-    });
-
-    after("Perform test data clean up", function () {
-        // Prevent before hook from running, if the tag is excluded from run
-
-        // Delete the job functions
-        deleteAllJobfunctions();
     });
 
     it("Name filter validations", function () {
@@ -72,5 +59,9 @@ describe(["@tier2"], "Job function filter validations", function () {
         cy.get("h2").contains("No job functions available");
 
         clickByText(button, clearAllFilters);
+    });
+
+    after("Perform test data clean up", function () {
+        deleteByList(jobFunctionsList);
     });
 });

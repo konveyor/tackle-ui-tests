@@ -21,8 +21,8 @@ import {
     verifySortDesc,
     getTableColumnData,
     createMultipleJobFunctions,
-    deleteAllJobfunctions,
     clickOnSortButton,
+    deleteByList,
 } from "../../../../../utils/utils";
 import { name, SortType } from "../../../../types/constants";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
@@ -45,7 +45,6 @@ describe(["@tier2"], "Job function sorting", function () {
     it("Name sort validations", function () {
         // Navigate to job functions tab
         Jobfunctions.openList();
-        cy.wait("@getJobfunctions");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(name);
@@ -68,7 +67,6 @@ describe(["@tier2"], "Job function sorting", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Delete the job functions after before the tests
-        deleteAllJobfunctions();
+        deleteByList(jobFunctionsList);
     });
 });

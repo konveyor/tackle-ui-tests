@@ -18,10 +18,8 @@ limitations under the License.
 import {
     login,
     selectItemsPerPage,
-    preservecookies,
-    hasToBeSkipped,
     createMultipleJobFunctions,
-    deleteAllJobfunctions,
+    deleteByList,
 } from "../../../../../utils/utils";
 import {
     firstPageButton,
@@ -31,34 +29,21 @@ import {
     prevPageButton,
 } from "../../../../views/common.view";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
+let jobFunctionsList: Array<Jobfunctions> = [];
 
 describe(["@tier3"], "Job functions pagination validations", function () {
     before("Login and Create Test Data", function () {
-        // Prevent before hook from running, if the tag is excluded from run
-
-        // Perform login
         login();
-        // Get the current table row count and create appropriate test data rows
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        // Delete all pre-existing job functions
-        deleteAllJobfunctions();
-        // TODO: Implement creation of missing amount of job functions instead of deleting all and then creating again
-        // Create 11 Job functions
-        createMultipleJobFunctions(11);
+        jobFunctionsList = createMultipleJobFunctions(11);
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors for Job functions
         cy.intercept("GET", "/hub/jobfunctions*").as("getJobfunctions");
     });
 
     it("Navigation button validations", function () {
         Jobfunctions.openList();
-        cy.wait("@getJobfunctions");
 
         // select 10 items per page
         selectItemsPerPage(10);
@@ -133,9 +118,6 @@ describe(["@tier3"], "Job functions pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Prevent before hook from running, if the tag is excluded from run
-
-        // Delete the Job functions created before the tests
-        deleteAllJobfunctions();
+        deleteByList(jobFunctionsList);
     });
 });
