@@ -17,12 +17,9 @@ limitations under the License.
 
 import {
     login,
-    preservecookies,
     createMultipleStakeholders,
-    createMultipleStakeholderGroups,
     deleteAllStakeholders,
-    deleteApplicationTableRows,
-    deleteAllStakeholderGroups,
+    deleteByList,
     createMultipleApplications,
     clickWithin,
 } from "../../../../../../utils/utils";
@@ -42,8 +39,6 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
         // Perform login
         login();
 
-        deleteApplicationTableRows();
-
         // Create data
         stakeholdersList = createMultipleStakeholders(1);
         applicationList = createMultipleApplications(4);
@@ -61,22 +56,8 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplication");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the stakeholders created before the tests
-        deleteAllStakeholders();
-
-        // Delete the stakeholder groups created before the tests
-        deleteAllStakeholderGroups();
-
-        // Delete the applications created at the start of test
-        deleteApplicationTableRows();
     });
 
     it("Copy assessment to self", function () {
@@ -155,5 +136,10 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
         clickWithin(modal, "button[aria-label='Select']");
         cy.get("ul[role=menu] > li").contains("Select none (0 items)").click();
         cy.get(copy).should("be.visible").should("be.disabled");
+    });
+
+    after("Perform test data clean up", function () {
+        deleteAllStakeholders();
+        deleteByList(applicationList);
     });
 });
