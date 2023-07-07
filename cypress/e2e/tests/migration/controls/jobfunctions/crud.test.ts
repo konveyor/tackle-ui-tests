@@ -32,8 +32,6 @@ describe(["@tier1"], "Job Function CRUD operations", () => {
     });
 
     it("Jobfunction CRUD", function () {
-        selectUserPerspective(migration);
-
         // Create new job function
         jobfunction.create();
         cy.wait("@postJobfunction");
