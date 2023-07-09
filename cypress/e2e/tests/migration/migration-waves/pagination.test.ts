@@ -42,7 +42,7 @@ describe(["@tier3"], "Migration Waves pagination validations", function () {
         // select 10 items per page
         selectItemsPerPage(10);
 
-        // Verify next buttons are enabled as there are more than 11 rows present
+        // Verify next buttons are enabled as there are more than 10 rows present
         cy.get(commonView.nextPageButton).each(($nextBtn) => {
             cy.wrap($nextBtn).should("not.be.disabled");
         });
