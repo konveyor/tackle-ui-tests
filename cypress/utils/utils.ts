@@ -74,6 +74,7 @@ import { analysisData, applicationData, JiraConnectionData, UserData } from "../
 import { CredentialsProxy } from "../e2e/models/administration/credentials/credentialsProxy";
 import {
     getJiraConnectionData,
+    getJiraCredentialData,
     getRandomCredentialsData,
     randomWordGenerator,
 } from "../utils/data_utils";
@@ -934,6 +935,12 @@ export function createMultipleCredentials(numberOfCredentials: number): Array<Cr
                     UserCredentials.sourcePrivateKey
                 )
             )
+        );
+        newCredentialsList.push(
+            new JiraCredentials(getJiraCredentialData(CredentialType.jiraBasic, false))
+        );
+        newCredentialsList.push(
+            new JiraCredentials(getJiraCredentialData(CredentialType.jiraToken, false))
         );
     }
     newCredentialsList.forEach((currentCredential) => {

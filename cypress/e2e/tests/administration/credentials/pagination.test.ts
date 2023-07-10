@@ -1,7 +1,6 @@
 import {
     createMultipleCredentials,
-    deleteAllCredentials,
-    hasToBeSkipped,
+    deleteByList,
     login,
     validatePagination,
 } from "../../../../utils/utils";
@@ -13,8 +12,6 @@ describe(["@tier3"], "Tag type pagination validations", function () {
     before("Login and Create Test Data", () => {
         // Perform login
         login();
-        deleteAllCredentials();
-        // Create 12 extra credentials, 3 of each type
         createdCredentialsList = createMultipleCredentials(12);
     });
 
@@ -27,6 +24,6 @@ describe(["@tier3"], "Tag type pagination validations", function () {
     });
 
     after("Removing credentials, created earlier", () => {
-        deleteAllCredentials();
+        deleteByList(createdCredentialsList);
     });
 });

@@ -1,4 +1,4 @@
-import { hasToBeSkipped, login, preservecookies } from "../../../../utils/utils";
+import { login } from "../../../../utils/utils";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../models/administration/credentials/credentialsSourceControlKey";
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
@@ -18,11 +18,6 @@ describe(["@tier1"], "Validation of Source Control Credentials", () => {
         scCredsKey = new CredentialsSourceControlKey(
             getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.sourcePrivateKey)
         );
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
     });
 
     it(

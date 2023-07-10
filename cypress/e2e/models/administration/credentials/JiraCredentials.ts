@@ -9,8 +9,9 @@ import {
     submitForm,
     validateValue,
 } from "../../../../utils/utils";
-import { passwordInput, usernameInput } from "../../../views/credentials.view";
+import { keyInput, passwordInput, usernameInput } from "../../../views/credentials.view";
 import { submitButton } from "../../../views/common.view";
+import { CredentialType } from "../../../types/constants";
 
 export class JiraCredentials extends Credentials {
     name: string;
@@ -34,11 +35,13 @@ export class JiraCredentials extends Credentials {
     }
 
     protected fillToken() {
-        inputText(passwordInput, this.token);
+        inputText(this.type == CredentialType.jiraBasic ? passwordInput : keyInput, this.token);
     }
 
     protected fillEmail() {
-        if (this.email) inputText(usernameInput, this.email);
+        if (this.type == CredentialType.jiraBasic) {
+            inputText(usernameInput, this.email);
+        }
     }
 
     create(toBeCanceled = false) {
@@ -65,6 +68,8 @@ export class JiraCredentials extends Credentials {
         this.fillName();
         isButtonEnabled(submitButton, true);
         this.fillDescription();
+        isButtonEnabled(submitButton, true);
+        this.fillEmail();
         isButtonEnabled(submitButton, true);
         this.fillToken();
         isButtonEnabled(submitButton, true);
