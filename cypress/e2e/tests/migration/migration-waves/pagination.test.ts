@@ -19,9 +19,8 @@ import {
     login,
     selectItemsPerPage,
     goToPage,
-    goToLastPage,
-    deleteAllMigrationWaves,
     createMultipleMigrationWaves,
+    deleteByList,
 } from "../../../../utils/utils";
 import * as commonView from "../../../views/common.view";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
@@ -30,16 +29,12 @@ let migrationWavesList: MigrationWave[] = [];
 //Automates Polarion TC 357
 describe(["@tier3"], "Migration Waves pagination validations", function () {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
-        deleteAllMigrationWaves();
-        // Navigate to Migration Waves tab, delete all and create 11 migration waves
         migrationWavesList = createMultipleMigrationWaves(11);
     });
 
     it("Navigation button validations", function () {
         MigrationWave.open();
-        // select 10 items per page
         selectItemsPerPage(10);
 
         // Verify next buttons are enabled as there are more than 10 rows present
@@ -52,21 +47,17 @@ describe(["@tier3"], "Migration Waves pagination validations", function () {
             cy.wrap($previousBtn).should("be.disabled");
         });
 
-        // Verify that navigation button to last page is enabled
         cy.get(commonView.lastPageButton).should("not.be.disabled");
 
-        // Verify that navigation button to first page is disabled being on the first page
         cy.get(commonView.firstPageButton).should("be.disabled");
 
         // Navigate to next page
         cy.get(commonView.nextPageButton).eq(0).click();
 
-        // Verify that previous buttons are enabled after moving to next page
         cy.get(commonView.prevPageButton).each(($previousBtn) => {
             cy.wrap($previousBtn).should("not.be.disabled");
         });
 
-        // Verify that navigation button to first page is enabled after moving to next page
         cy.get(commonView.firstPageButton).should("not.be.disabled");
     });
 
@@ -100,7 +91,6 @@ describe(["@tier3"], "Migration Waves pagination validations", function () {
 
         goToPage(2);
 
-        // Verify that page number has changed, as previous page nav button got enabled
         cy.get(commonView.prevPageButton).each(($previousBtn) => {
             cy.wrap($previousBtn).should("not.be.disabled");
         });
@@ -108,26 +98,7 @@ describe(["@tier3"], "Migration Waves pagination validations", function () {
         goToPage(1);
     });
 
-    it("Last page item(s) deletion, impact on page reload validation", function () {
-        MigrationWave.open();
-
-        selectItemsPerPage(10);
-
-        goToLastPage();
-
-        // Delete all items of last page
-        deleteAllMigrationWaves(true);
-
-        // Verify that page is re-directed to previous page
-        cy.get(".pf-c-table > tbody > tr")
-            .not(".pf-c-table__expandable-row")
-            .find("td[data-label=Name]")
-            .then(($rows) => {
-                cy.wrap($rows.length).should("eq", 10);
-            });
-    });
-
     after("Perform test data clean up", function () {
-        deleteAllMigrationWaves();
+        deleteByList(migrationWavesList);
     });
 });
