@@ -295,12 +295,13 @@ export class Analysis extends Application {
     }
 
     verifyAnalysisStatus(status) {
-        cy.get(tdTag)
-            .contains(this.name)
-            .closest(trTag)
+        cy.log(`Verifying analysis status, expecting ${status}`);
+        cy.get(tdTag, { log: false })
+            .contains(this.name, { log: false })
+            .closest(trTag, { log: false })
             .within(() => {
-                cy.get(analysisColumn)
-                    .find("div > div:nth-child(2)", { timeout: 3600000 }) // 1h
+                cy.get(analysisColumn, { log: false })
+                    .find("div > div:nth-child(2)", { timeout: 3600000, log: false }) // 1h
                     .should("not.have.text", AnalysisStatuses.notStarted)
                     .and("not.have.text", AnalysisStatuses.scheduled)
                     .and("not.have.text", AnalysisStatuses.inProgress)
