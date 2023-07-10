@@ -1,5 +1,5 @@
 import { login } from "../../../../utils/utils";
-import { getJiraCredentialData, getRandomCredentialsData } from "../../../../utils/data_utils";
+import { getJiraCredentialData } from "../../../../utils/data_utils";
 import { CredentialType } from "../../../types/constants";
 import { CredentialsData } from "../../../types/types";
 import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";

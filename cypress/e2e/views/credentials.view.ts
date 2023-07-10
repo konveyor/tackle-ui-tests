@@ -17,6 +17,7 @@ export const credentialNameInput = "input[name=name]";
 export const descriptionInput = "input[name='description']";
 export const usernameInput = "#user";
 export const passwordInput = "#password";
+export const keyInput = "#key";
 export const privatePassphraseInput = "input[aria-label='Private Key Passphrase']";
 export const createBtn = "#create-credential-button";
 export const selectType = "#type-select-toggle";

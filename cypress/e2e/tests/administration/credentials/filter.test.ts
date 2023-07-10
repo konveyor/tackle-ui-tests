@@ -3,11 +3,9 @@ import {
     createMultipleCredentials,
     deleteByList,
     exists,
-    hasToBeSkipped,
     login,
     logout,
     notExists,
-    preservecookies,
 } from "../../../../utils/utils";
 import { Credentials } from "../../../models/administration/credentials/credentials";
 import * as data from "../../../../utils/data_utils";
@@ -24,7 +22,7 @@ describe(["@tier2"], "Credentials filter validations", function () {
 
     const newAdminUser = new UserAdmin(getRandomUserData());
     before("Login and Create Test Data", function () {
-        /*
+        /**
         1. Login to RBAC and create new admin user because only admins can create credentials.
         2. Logout from RBAC and login to Tackle as user created in step 1
         3. Create several credentials
@@ -43,11 +41,6 @@ describe(["@tier2"], "Credentials filter validations", function () {
 
         // Create multiple credentials of all types
         credentialsListByDefaultAdmin = createMultipleCredentials(4);
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
     });
 
     it("Name filter validations", () => {

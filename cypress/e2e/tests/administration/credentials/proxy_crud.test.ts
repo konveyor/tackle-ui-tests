@@ -19,10 +19,6 @@ describe(["@tier2"], "Validation of proxy credentials", () => {
         login();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-    });
-
     it("Creating proxy credentials and cancelling without saving", () => {
         proxyCreds.create(toBeCanceled);
     });

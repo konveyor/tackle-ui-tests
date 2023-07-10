@@ -1,7 +1,6 @@
 import {
     getRandomAnalysisData,
     getRandomApplicationData,
-    hasToBeSkipped,
     login,
     preservecookies,
 } from "../../../../utils/utils";
@@ -26,7 +25,6 @@ describe(["@tier1"], "Validation of Source Control Credentials", () => {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        preservecookies();
         cy.fixture("analysis").then(function (analysisData) {
             this.analysisData = analysisData;
         });
