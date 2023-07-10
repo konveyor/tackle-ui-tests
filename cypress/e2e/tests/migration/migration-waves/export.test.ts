@@ -41,7 +41,7 @@ describe(["@tier1"], "Export Migration Wave to Issue Manager", function () {
 
         jiraInstance = new Jira({
             name: data.getRandomWord(5),
-            url: Cypress.env("jira_url"),
+            url: Cypress.env("jira_atlassian_cloud_url"),
             credential: jiraCredentials,
             type: JiraType.cloud,
         });
