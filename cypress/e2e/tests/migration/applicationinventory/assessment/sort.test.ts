@@ -80,7 +80,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
 
     // Add Test case for sorting by business service
 
-    it("Tag count sort validations", function () {
+    it("Bug MTA-916: Tag count sort validations", function () {
         // Navigate to application inventory page
         Assessment.open();
         cy.wait("@getApplications");
