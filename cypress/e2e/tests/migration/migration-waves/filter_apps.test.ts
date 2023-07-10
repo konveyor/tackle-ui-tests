@@ -30,8 +30,6 @@ import { MigrationWave } from "../../../models/migration/migration-waves/migrati
 import { BusinessServices } from "../../../models/migration/controls/businessservices";
 import { Tag } from "../../../models/migration/controls/tags";
 
-let stakeHolders: Stakeholders[];
-let stakeHolderGroups: Stakeholdergroups[];
 const now = new Date();
 now.setDate(now.getDate() + 1);
 const end = new Date(now.getTime());
@@ -49,8 +47,8 @@ describe(
         before("Login and Create Test Data", function () {
             login();
 
-            let businessservicesList = createMultipleBusinessServices(2);
-            let tagList = createMultipleTags(2);
+            businessservicesList = createMultipleBusinessServices(2);
+            tagList = createMultipleTags(2);
             applicationsList = createMultipleApplicationsWithBSandTags(
                 2,
                 businessservicesList,
@@ -63,12 +61,11 @@ describe(
                 data.getRandomWord(8),
                 now,
                 end,
-                stakeHolders,
-                stakeHolderGroups,
+                null,
+                null,
                 applicationsList
             );
             migrationWave.create();
-            MigrationWave.open();
             migrationWave.expandActionsMenu();
             cy.contains(manageApplications).click();
 
@@ -91,12 +88,11 @@ describe(
                 data.getRandomWord(8),
                 now,
                 end,
-                stakeHolders,
-                stakeHolderGroups,
+                null,
+                null,
                 applicationsList
             );
             migrationWave.create();
-            MigrationWave.open();
             migrationWave.expandActionsMenu();
             cy.contains(manageApplications).click();
 
