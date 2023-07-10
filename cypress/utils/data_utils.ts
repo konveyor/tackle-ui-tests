@@ -158,8 +158,8 @@ export function getRandomCredentialsData(
 
     if (type === CredentialType.jiraBasic) {
         if (useTestingAccount) {
-            email = Cypress.env("jira_email");
-            token = Cypress.env("jira_token");
+            email = Cypress.env("jira_atlassian_cloud_email");
+            token = Cypress.env("jira_atlassian_cloud_token");
         }
         return {
             type: type,
@@ -172,7 +172,7 @@ export function getRandomCredentialsData(
 
     if (type === CredentialType.jiraToken) {
         if (useTestingAccount) {
-            key = Cypress.env("jira_key");
+            key = Cypress.env("jira_stage_bearer_token");
         }
         return {
             type: type,
