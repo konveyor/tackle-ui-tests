@@ -146,8 +146,8 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
 
         // Moves the custom migration target to the first place
         dragButton.move({
-            deltaX: -10000,
-            deltaY: -10000,
+            deltaX: Number.MIN_SAFE_INTEGER,
+            deltaY: Number.MIN_SAFE_INTEGER,
         });
 
         const application = new Analysis(
