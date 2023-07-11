@@ -23,10 +23,9 @@ import {
     getTableColumnData,
     createMultipleApplications,
     createMultipleStakeholders,
-    deleteAllStakeholders,
-    deleteApplicationTableRows,
     selectUserPerspective,
     clickOnSortButton,
+    deleteByList,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import {
@@ -38,11 +37,12 @@ import {
     confidence,
     migration,
     SortType,
+    SEC,
 } from "../../../types/constants";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
-var applicationsList: Array<Assessment> = [];
-var stakeholdersList: Array<Stakeholders> = [];
+let applicationsList: Array<Assessment> = [];
+let stakeholdersList: Array<Stakeholders> = [];
 
 describe(["@tier2"], "Reports sort validations", () => {
     before("Login and create test data", function () {
@@ -57,7 +57,7 @@ describe(["@tier2"], "Reports sort validations", () => {
             // Perform assessment of application
             applicationsList[i].perform_assessment(risks[i], [stakeholdersList[0].name]);
             applicationsList[i].verifyStatus("assessment", "Completed");
-            cy.wait(4000);
+            cy.wait(4 * SEC);
             // Perform application review
             applicationsList[i].perform_review(risks[i]);
             applicationsList[i].verifyStatus("review", "Completed");
@@ -68,14 +68,14 @@ describe(["@tier2"], "Reports sort validations", () => {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(applicationName);
 
         // Sort the Adoption candidate distribution by application name in ascending order
         clickOnSortButton(applicationName, SortType.ascending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the Adoption candidate distribution table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(applicationName);
@@ -83,7 +83,7 @@ describe(["@tier2"], "Reports sort validations", () => {
 
         // Sort the Adoption candidate distribution by application name in descending order
         clickOnSortButton(applicationName, SortType.descending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the Adoption candidate distribution table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(applicationName);
@@ -94,14 +94,14 @@ describe(["@tier2"], "Reports sort validations", () => {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(criticality);
 
         // Sort the Adoption candidate distribution by criticality in ascending order
         clickOnSortButton(criticality, SortType.ascending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the Adoption candidate distribution table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(criticality);
@@ -109,7 +109,7 @@ describe(["@tier2"], "Reports sort validations", () => {
 
         // Sort the Adoption candidate distribution by criticality in descending order
         clickOnSortButton(criticality, SortType.descending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the Adoption candidate distribution table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(criticality);
@@ -120,14 +120,14 @@ describe(["@tier2"], "Reports sort validations", () => {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(priority);
 
         // Sort the Adoption candidate distribution by priority in ascending order
         clickOnSortButton(priority, SortType.ascending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the Adoption candidate distribution table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(priority);
@@ -135,25 +135,25 @@ describe(["@tier2"], "Reports sort validations", () => {
 
         // Sort the Adoption candidate distribution by priority in descending order
         clickOnSortButton(priority, SortType.descending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the Adoption candidate distribution table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(priority);
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
-    it("Adoption candidate distribution - Confidence sort validations", function () {
+    it("MTA-943 | Adoption candidate distribution - Confidence sort validations", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(confidence);
 
         // Sort the Adoption candidate distribution by confidence in ascending order
         clickOnSortButton(confidence, SortType.ascending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the Adoption candidate distribution table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(confidence);
@@ -161,7 +161,7 @@ describe(["@tier2"], "Reports sort validations", () => {
 
         // Sort the Adoption candidate distribution by confidence in descending order
         clickOnSortButton(confidence, SortType.descending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the Adoption candidate distribution table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(confidence);
@@ -172,11 +172,11 @@ describe(["@tier2"], "Reports sort validations", () => {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // Sort the Adoption candidate distribution by effort in ascending order
         clickOnSortButton(effort, SortType.ascending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         const afterAscSortList = getTableColumnData(effort);
 
@@ -192,7 +192,7 @@ describe(["@tier2"], "Reports sort validations", () => {
 
         // Sort the Adoption candidate distribution by effort in descending order
         clickOnSortButton(effort, SortType.descending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         const afterDescSortList = getTableColumnData(effort);
 
@@ -206,7 +206,7 @@ describe(["@tier2"], "Reports sort validations", () => {
 
     after("Perform test data clean up", function () {
         // Delete All
-        deleteAllStakeholders();
-        deleteApplicationTableRows();
+        deleteByList(stakeholdersList);
+        deleteByList(applicationsList);
     });
 });
