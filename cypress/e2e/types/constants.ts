@@ -125,6 +125,13 @@ export enum JiraType {
     server = "Jira Server/Datacenter",
 }
 
+export enum JiraIssueTypes {
+    task = "Task",
+    subtask = "Subtask",
+    epic = "Epic",
+    story = "Story",
+}
+
 export enum UserCredentials {
     usernamePassword = "Username/Password",
     sourcePrivateKey = "Source PrivateKey",

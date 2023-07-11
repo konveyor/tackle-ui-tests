@@ -138,6 +138,7 @@ export class MigrationWave {
         cy.contains(manageApplications).click();
         cy.get(itemsSelectInsideDialog).click();
         cy.contains(button, selectNone).click();
+        selectItemsPerPage(100);
 
         this.applications.forEach((app) => {
             cy.get(tdTag)
