@@ -77,8 +77,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    afterEach("Persist session", function () {
-        // Reset URL from report page to web UI
+    afterEach("Reset Url", function () {
         resetURL();
     });
 
@@ -99,6 +98,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        cy.wait("@getApplication");
         application.openReport();
     });
 
@@ -124,6 +124,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        cy.wait("@getApplication");
         application.openReport();
     });
 
