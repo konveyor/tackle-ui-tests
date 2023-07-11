@@ -65,6 +65,7 @@ describe(["@tier2"], "Application validations", () => {
         login();
         businessservicesList = createMultipleBusinessServices(1);
         stakeHoldersList = createMultipleStakeholders(2);
+        applicationList = createMultipleApplications(11);
     });
 
     beforeEach("Interceptors", function () {
@@ -184,10 +185,10 @@ describe(["@tier2"], "Application validations", () => {
         selectFormItems(applicationBusinessServiceSelect, businessservicesList[0].name);
         cy.get(commonView.nameHelper).should("contain.text", duplicateApplication);
         cy.get(commonView.closeButton).click();
+        application.delete();
     });
 
     it("Bulk deletion of applications - Select page ", function () {
-        applicationList = createMultipleApplications(11);
         navigate_to_application_inventory();
         // Click dropdown toggle button to make 'Select page' selection.
         cy.get("button[aria-label='Select']").click();
@@ -196,7 +197,6 @@ describe(["@tier2"], "Application validations", () => {
     });
 
     it("Bulk deletion of applications - Select all ", function () {
-        applicationList = createMultipleApplications(11);
         navigate_to_application_inventory();
         // Click dropdown toggle button to make 'Select all' selection.
         cy.get("button[aria-label='Select']").click();
@@ -205,14 +205,13 @@ describe(["@tier2"], "Application validations", () => {
     });
 
     it("Bulk deletion of applications - Delete all apps by selecting checkbox ", function () {
-        applicationList = createMultipleApplications(11);
         navigate_to_application_inventory();
         // Click 'bulk-selected-apps-checkbox'.
-        cy.get("input#bulk-selected-apps-checkbox").check({ force: true });
+        cy.get("input#bulk-selected-items-checkbox").check({ force: true });
         application_inventory_kebab_menu("Delete");
     });
 
-    it("Create tag from application side drawer", function () {
+    it("MTA-939 | Create tag from application side drawer", function () {
         // Automates Polarion MTA-321
         const application = new Assessment(getRandomApplicationData());
         const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagCategory());
@@ -231,6 +230,8 @@ describe(["@tier2"], "Application validations", () => {
         expandRowDetails(tag.tagCategory);
         existsWithinRow(tag.tagCategory, tdTag, tag.name);
         closeRowDetails(tag.tagCategory);
+        application.delete();
+        tag.delete();
     });
 
     after("Perform test data clean up", function () {
