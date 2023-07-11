@@ -16,19 +16,14 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    hasToBeSkipped,
     login,
-    preservecookies,
     createMultipleStakeholders,
-    deleteAllStakeholders,
-    deleteApplicationTableRows,
     createMultipleBusinessServices,
     createMultipleTags,
     createApplicationObjects,
     applySearchFilter,
     clickByText,
-    deleteAllBusinessServices,
-    deleteAllTagsAndTagCategories,
+    deleteByList,
 } from "../../../../../../utils/utils";
 
 import { Stakeholders } from "../../../../../models/migration/controls/stakeholders";
@@ -54,7 +49,6 @@ var invalidSearchInput = "11111";
 
 describe(["@tier2"], "Copy assessment filter tests", () => {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
 
         // Create data
@@ -82,26 +76,9 @@ describe(["@tier2"], "Copy assessment filter tests", () => {
         applicationList[0].verifyStatus("assessment", "Completed");
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplication");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the stakeholders created before the tests
-        deleteAllStakeholders();
-
-        // Delete the applications created at the start of test
-        deleteApplicationTableRows();
-
-        // Delete the business services created before the test
-        deleteAllBusinessServices();
-
-        // Delete the tags created before the tests
-        deleteAllTagsAndTagCategories();
     });
 
     it("Name filter validations", function () {
@@ -190,5 +167,12 @@ describe(["@tier2"], "Copy assessment filter tests", () => {
         // Clear all filters and close model
         clickByText(button, clearAllFilters);
         cy.get(closeButton).click();
+    });
+
+    after("Perform test data clean up", function () {
+        deleteByList(applicationList);
+        deleteByList(businessservicesList);
+        deleteByList(tagList);
+        deleteByList(stakeholdersList);
     });
 });

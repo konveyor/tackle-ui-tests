@@ -16,21 +16,14 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    hasToBeSkipped,
     login,
-    preservecookies,
     createMultipleStakeholders,
-    createMultipleStakeholderGroups,
-    deleteAllStakeholders,
-    deleteApplicationTableRows,
-    deleteAllStakeholderGroups,
     createMultipleApplications,
     clickWithin,
     deleteByList,
 } from "../../../../../../utils/utils";
 
 import { Stakeholders } from "../../../../../models/migration/controls/stakeholders";
-import { Stakeholdergroups } from "../../../../../models/migration/controls/stakeholdergroups";
 import { trTag } from "../../../../../types/constants";
 import { copy, selectBox } from "../../../../../views/applicationinventory.view";
 import { Assessment } from "../../../../../models/migration/applicationinventory/assessment";

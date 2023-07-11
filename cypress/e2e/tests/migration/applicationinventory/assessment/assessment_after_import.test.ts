@@ -20,7 +20,6 @@ import {
     importApplication,
     login,
     deleteApplicationTableRows,
-    hasToBeSkipped,
     deleteAppImportsTableRows,
     notExists,
     preservecookies,
@@ -37,7 +36,6 @@ let appdata = { name: "Customers" };
 
 describe(["@tier2"], "Operations after application import", () => {
     before("Login and create test data", function () {
-        // Perform login
         login();
 
         // Navigate to stakeholders control tab and create new stakeholder
@@ -61,11 +59,6 @@ describe(["@tier2"], "Operations after application import", () => {
         exists("Customers");
         exists("Inventory");
         exists("Gateway");
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
     });
 
     it(

@@ -16,9 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    hasToBeSkipped,
     login,
-    preservecookies,
     sortAscCopyAssessmentTable,
     sortDescCopyAssessmentTable,
     verifySortAsc,
@@ -27,9 +25,7 @@ import {
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
     createMultipleApplications,
-    deleteAllStakeholders,
-    deleteApplicationTableRows,
-    deleteAllStakeholderGroups,
+    deleteByList,
 } from "../../../../../../utils/utils";
 import { name } from "../../../../../types/constants";
 import { Stakeholders } from "../../../../../models/migration/controls/stakeholders";
@@ -42,11 +38,7 @@ var applicationList: Array<Assessment> = [];
 
 describe(["@tier2"], "Copy assessment and review tests", () => {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
-
-        deleteApplicationTableRows();
-
         // Create data
         stakeholdersList = createMultipleStakeholders(1);
         stakeholdergroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
@@ -57,23 +49,9 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
         applicationList[0].verifyStatus("assessment", "Completed");
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplication");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the stakeholders created before the tests
-        deleteAllStakeholders();
-
-        // Delete the stakeholder groups created before the tests
-        deleteAllStakeholderGroups();
-
-        // Delete the applications created at the start of test
-        deleteApplicationTableRows();
     });
 
     it("Application name sort validations", function () {
@@ -99,5 +77,11 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
         // Verify that the applications are displayed in descending order
         const afterDescSortList = getColumnDataforCopyAssessmentTable(name);
         verifySortDesc(afterDescSortList, unsortedList);
+    });
+
+    after("Perform test data clean up", function () {
+        deleteByList(applicationList);
+        deleteByList(stakeholdersList);
+        deleteByList(stakeholdergroupsList);
     });
 });
