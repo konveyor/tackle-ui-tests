@@ -256,7 +256,7 @@ export class MigrationWave {
         cy.get("button").contains(stakeHolderGroupName).click();
     }
 
-    private expandActionsMenu() {
+    public expandActionsMenu() {
         cy.contains(this.name)
             .parents("tr")
             .within(() => {
