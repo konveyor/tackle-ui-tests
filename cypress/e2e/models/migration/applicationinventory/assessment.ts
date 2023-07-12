@@ -69,18 +69,21 @@ import {
 import { applicationData } from "../../../types/types";
 
 export class Assessment extends Application {
-    // name: string;
-    // business: string;
-
+    static fullUrl = Cypress.env("tackleUrl") + "/applications/assessment-tab";
     constructor(appData: applicationData) {
         super(appData);
     }
 
     //Navigate to the Application inventory->Assessment tab
-    public static open(): void {
-        selectUserPerspective(migration);
-        clickByText(navMenu, applicationInventory);
-        clickByText(navTab, assessment);
+    public static open(itemsPerPage = 100): void {
+        cy.url().then(($url) => {
+            if ($url != Assessment.fullUrl) {
+                selectUserPerspective(migration);
+                clickByText(navMenu, applicationInventory);
+                clickByText(navTab, assessment);
+            }
+        });
+        selectItemsPerPage(itemsPerPage);
     }
 
     protected selectStakeholders(stakeholders: Array<string>): void {
@@ -460,7 +463,7 @@ export class Assessment extends Application {
         }
     }
 
-    openCopyAssessmentModel(review = false): void {
+    openCopyAssessmentModel(review = false, items = 100): void {
         let action = "";
         if (review) {
             action = "Copy assessment and review";
@@ -479,23 +482,14 @@ export class Assessment extends Application {
                 clickByText(button, action);
             });
         cy.get("div.pf-c-modal-box").within(() => {
-            selectItemsPerPage(100);
+            selectItemsPerPage(items);
         });
     }
 
     selectItemsPerPage(items: number): void {
-        cy.wait(2000);
-        cy.get(copyAssessmentPagination)
-            .find(commonView.itemsPerPageMenu)
-            .find(commonView.itemsPerPageToggleButton)
-            .then(($toggleBtn) => {
-                if (!$toggleBtn.eq(0).is(":disabled")) {
-                    $toggleBtn.eq(0).trigger("click");
-                    cy.get(commonView.itemsPerPageMenuOptions);
-                    cy.get(`li > button[data-action="per-page-${items}"]`).click({ force: true });
-                    cy.wait(2000);
-                }
-            });
+        cy.get("div.pf-c-modal-box").within(() => {
+            selectItemsPerPage(items);
+        });
     }
 
     // Method to verify review button is disabled

@@ -21,13 +21,13 @@ import {
     createMultipleApplications,
     clickWithin,
     deleteByList,
-    selectItemsPerPage,
     click,
     selectCheckBox,
+    clickByText,
 } from "../../../../../../utils/utils";
 
 import { Stakeholders } from "../../../../../models/migration/controls/stakeholders";
-import { SEC, tdTag, trTag } from "../../../../../types/constants";
+import { button, SEC, trTag } from "../../../../../types/constants";
 import { copy, selectBox } from "../../../../../views/applicationinventory.view";
 import { Assessment } from "../../../../../models/migration/applicationinventory/assessment";
 import { modal } from "../../../../../views/common.view";
@@ -118,28 +118,32 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
 
         // select 10 items per page
         applicationList[0].selectItemsPerPage(10);
-        cy.wait(1000);
+        cy.wait(SEC);
 
         // Select all the applications on page
+        cy.log("Select page...");
         clickWithin(modal, "button[aria-label='Select']");
-        cy.get("ul[role=menu] > li").contains("Select page").click();
+        clickByText(button, "Select page");
         cy.get("div").then(($div) => {
             if ($div.text().includes("in-progress or complete assessment")) {
                 selectCheckBox("#confirm-copy-checkbox");
             }
         });
-        cy.get(copy).should("be.visible").should("not.be.disabled");
         clickWithin(modal, "button[aria-label='Select']");
+        cy.get(copy).should("be.visible").should("not.be.disabled");
 
         // Select all applications
+        cy.log("Select all...");
         clickWithin(modal, "button[aria-label='Select']");
-        cy.get("ul[role=menu] > li").contains(`Select all`).click();
+        clickByText(button, "Select all");
+        clickWithin(modal, "button[aria-label='Select']");
         cy.get(copy).should("be.visible").should("not.be.disabled");
-        clickWithin(modal, "button[aria-label='Select']");
 
         // Deselect all applications
+        cy.log("Select none...");
         clickWithin(modal, "button[aria-label='Select']");
-        cy.get("ul[role=menu] > li").contains("Select none (0 items)").click();
+        clickByText(button, "Select none (0 items)");
+        clickWithin(modal, "button[aria-label='Select']");
         cy.get(copy).should("be.visible").should("be.disabled");
         click('[aria-label="Close"]');
     });
