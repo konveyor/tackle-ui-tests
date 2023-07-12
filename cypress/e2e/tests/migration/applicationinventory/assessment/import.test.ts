@@ -16,7 +16,6 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    clickByText,
     exists,
     importApplication,
     login,
@@ -25,22 +24,15 @@ import {
     verifyAppImport,
     verifyImportErrorMsg,
     deleteApplicationTableRows,
-    preservecookies,
-    hasToBeSkipped,
-    selectUserPerspective,
     deleteAllBusinessServices,
     deleteAppImportsTableRows,
     notExists,
 } from "../../../../../utils/utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
-import { navMenu } from "../../../../views/menu.view";
-import { applicationInventory, button, SEC } from "../../../../types/constants";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
 const businessService = new BusinessServices("BS_tag_test");
 const filePath = "app_import/csv/";
-var applicationsList: Array<Assessment> = [];
 
 describe(["@tier2"], "Application import operations", () => {
     before("Login and create test data", function () {
@@ -53,9 +45,6 @@ describe(["@tier2"], "Application import operations", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplication");
         deleteAppImportsTableRows();

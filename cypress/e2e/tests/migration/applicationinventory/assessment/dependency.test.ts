@@ -15,15 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    click,
-    hasToBeSkipped,
-    login,
-    preservecookies,
-    createMultipleApplications,
-    deleteApplicationTableRows,
-    deleteByList,
-} from "../../../../../utils/utils";
+import { click, login, createMultipleApplications, deleteByList } from "../../../../../utils/utils";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import {
     closeForm,

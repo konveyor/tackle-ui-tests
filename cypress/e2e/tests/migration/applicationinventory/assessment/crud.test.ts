@@ -15,16 +15,8 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    exists,
-    hasToBeSkipped,
-    login,
-    notExists,
-    createMultipleBusinessServices,
-    getRandomApplicationData,
-} from "../../../../../utils/utils";
+import { exists, login, notExists, getRandomApplicationData } from "../../../../../utils/utils";
 import * as data from "../../../../../utils/data_utils";
-import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 
 describe(["@tier1"], "Application crud operations", () => {

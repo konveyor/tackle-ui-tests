@@ -36,6 +36,7 @@ import { navMenu } from "../../../../views/menu.view";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { applicationInventory, SEC } from "../../../../types/constants";
+import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import * as data from "../../../../../utils/data_utils";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Tag } from "../../../../models/migration/controls/tags";
@@ -44,6 +45,7 @@ let stakeholdersList: Array<Stakeholders> = [];
 let stakeholderGroupsList: Array<Stakeholdergroups> = [];
 let applicationList: Array<Assessment> = [];
 let tagList: Array<Tag> = [];
+let businessServicesList: Array<BusinessServices> = [];
 
 describe(["@tier3"], "Applications interlinked to tags and business service", () => {
     before("Login and Create Test Data", function () {
@@ -64,7 +66,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
     });
 
     it("Business service, tag update and delete dependency on application", function () {
-        let businessServicesList = createMultipleBusinessServices(2);
+        businessServicesList = createMultipleBusinessServices(2);
         tagList = createMultipleTags(2);
         let appdata = {
             name: data.getAppName(),
@@ -150,5 +152,6 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
 
     after("Perform test data clean up", function () {
         deleteByList(applicationList);
+        deleteByList(businessServicesList);
     });
 });
