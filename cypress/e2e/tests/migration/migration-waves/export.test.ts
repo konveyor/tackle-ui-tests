@@ -84,14 +84,17 @@ describe(["@tier1"], "Export Migration Wave to Issue Manager", function () {
             jiraCloudInstance.getIssues(projectName).then((issues: JiraIssue[]) => {
                 const waveIssues = issues.filter((issue) => {
                     return (
-                        issue.fields.summary.includes(wavesMap[issueType].applications[0].name) ||
-                        issue.fields.summary.includes(wavesMap[issueType].applications[1].name)
+                        (issue.fields.summary.includes(wavesMap[issueType].applications[0].name) ||
+                            issue.fields.summary.includes(
+                                wavesMap[issueType].applications[1].name
+                            )) &&
+                        issue.fields.issuetype.untranslatedName === (issueType as string)
                     );
                 });
 
-                expect(waveIssues).to.have.length(2);
-
                 jiraCloudInstance.deleteIssues(waveIssues.map((issue) => issue.id));
+
+                expect(waveIssues).to.have.length(2);
             });
         });
     });
