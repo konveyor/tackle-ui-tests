@@ -414,7 +414,7 @@ export class Assessment extends Application {
     }
 
     copy_assessment_review(applicationList: Array<Application>, cancel = false): void {
-        this.openCopyAssessmentReviewModel();
+        this.openCopyAssessmentModel(true);
         this.selectApps(applicationList);
 
         if (cancel) {
@@ -460,34 +460,27 @@ export class Assessment extends Application {
         }
     }
 
-    openCopyAssessmentModel(): void {
+    openCopyAssessmentModel(review = false): void {
+        let action = "";
+        if (review) {
+            action = "Copy assessment and review";
+        } else {
+            action = "Copy assessment";
+        }
         Assessment.open();
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.get(tdTag)
             .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
+            .closest(trTag)
             .within(() => {
                 click(actionButton);
                 cy.wait(500);
-                clickByText(button, "Copy assessment");
+                clickByText(button, action);
             });
-    }
-
-    openCopyAssessmentReviewModel(): void {
-        Assessment.open();
-        selectItemsPerPage(100);
-        cy.wait(2000);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(actionButton);
-                cy.wait(500);
-                clickByText(button, "Copy assessment and review");
-            });
+        cy.get("div.pf-c-modal-box").within(() => {
+            selectItemsPerPage(100);
+        });
     }
 
     selectItemsPerPage(items: number): void {

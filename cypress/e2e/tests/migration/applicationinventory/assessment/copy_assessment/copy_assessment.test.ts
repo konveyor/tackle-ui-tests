@@ -21,16 +21,19 @@ import {
     createMultipleApplications,
     clickWithin,
     deleteByList,
+    selectItemsPerPage,
+    click,
+    selectCheckBox,
 } from "../../../../../../utils/utils";
 
 import { Stakeholders } from "../../../../../models/migration/controls/stakeholders";
-import { trTag } from "../../../../../types/constants";
+import { SEC, tdTag, trTag } from "../../../../../types/constants";
 import { copy, selectBox } from "../../../../../views/applicationinventory.view";
 import { Assessment } from "../../../../../models/migration/applicationinventory/assessment";
 import { modal } from "../../../../../views/common.view";
 
-var stakeholdersList: Array<Stakeholders> = [];
-var applicationList: Array<Assessment> = [];
+let stakeholdersList: Array<Stakeholders> = [];
+let applicationList: Array<Assessment> = [];
 
 describe(["@tier2"], "Copy assessment and review tests", () => {
     before("Login and Create Test Data", function () {
@@ -40,7 +43,7 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
         stakeholdersList = createMultipleStakeholders(1);
         applicationList = createMultipleApplications(4);
 
-        // Verify copy assessment is not enabled untill assessment is done
+        // Verify copy assessment is not enabled until assessment is done
         applicationList[0].verifyCopyAssessmentDisabled();
 
         // Perform assessment of application
@@ -65,21 +68,22 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
             .parent(trTag)
             .within(() => {
                 cy.get(selectBox).should("be.disabled");
-                cy.wait(2000);
+                cy.wait(2 * SEC);
             });
+        click('[aria-label="Close"]');
     });
 
     it("Copy button not enabled until one app is selected", function () {
         // Copy assessment to self, should be disabled
         applicationList[0].openCopyAssessmentModel();
-        cy.wait(2000);
         cy.get(copy).should("be.disabled");
         applicationList[0].selectApps(applicationList);
         cy.get(copy).should("not.be.disabled");
+        click('[aria-label="Close"]');
     });
 
     it("Copy assessment to more than one application and discard assessment", function () {
-        // Verify copy assessment is not enabled untill assessment is done
+        // Verify copy assessment is not enabled until assessment is done
         applicationList[1].verifyCopyAssessmentDisabled();
 
         // Perform copy assessment of all the applications
@@ -119,6 +123,11 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
         // Select all the applications on page
         clickWithin(modal, "button[aria-label='Select']");
         cy.get("ul[role=menu] > li").contains("Select page").click();
+        cy.get("div").then(($div) => {
+            if ($div.text().includes("in-progress or complete assessment")) {
+                selectCheckBox("#confirm-copy-checkbox");
+            }
+        });
         cy.get(copy).should("be.visible").should("not.be.disabled");
         clickWithin(modal, "button[aria-label='Select']");
 
@@ -132,6 +141,7 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
         clickWithin(modal, "button[aria-label='Select']");
         cy.get("ul[role=menu] > li").contains("Select none (0 items)").click();
         cy.get(copy).should("be.visible").should("be.disabled");
+        click('[aria-label="Close"]');
     });
 
     after("Perform test data clean up", function () {
