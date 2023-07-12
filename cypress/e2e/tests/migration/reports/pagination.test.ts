@@ -59,12 +59,6 @@ describe(["@tier3"], "Reports pagination validations", () => {
         newApplication.verifyStatus("review", "Completed");
     });
 
-    after("Perform test data clean up", function () {
-        // Delete the stakeholders and applications created before the tests
-        deleteByList(stakeholdersList);
-        deleteByList(applicationsList);
-    });
-
     it("Adoption candidate distribution - Navigation button validations", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
@@ -236,5 +230,11 @@ describe(["@tier3"], "Reports pagination validations", () => {
             .each(($previousBtn) => {
                 cy.wrap($previousBtn).should("not.be.disabled");
             });
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the stakeholders and applications created before the tests
+        deleteByList(stakeholdersList);
+        deleteByList(applicationsList);
     });
 });
