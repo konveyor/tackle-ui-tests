@@ -24,17 +24,14 @@ import {
     exists,
     deleteApplicationTableRows,
     deleteAppImportsTableRows,
-    deleteAllBusinessServices,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import { applicationInventory, button, clearAllFilters } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 
-import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { FileName } from "../../../../views/applicationinventory.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
-const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/csv/";
 const filesToImport = [
     "valid_application_rows.csv",
@@ -46,9 +43,6 @@ var invalidSearchInput = String(data.getRandomNumber());
 describe(["@tier2"], "Manage applications import filter validations", function () {
     before("Login and create test data", function () {
         login();
-
-        businessService.create();
-
         // Open the application inventory page
         clickByText(navMenu, applicationInventory);
         cy.wait(2000);
@@ -95,6 +89,5 @@ describe(["@tier2"], "Manage applications import filter validations", function (
     after("Perform test data clean up", function () {
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
-        deleteAllBusinessServices();
     });
 });
