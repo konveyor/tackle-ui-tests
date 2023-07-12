@@ -22,6 +22,7 @@ import {
     preservecookies,
     createMultipleApplications,
     deleteApplicationTableRows,
+    deleteByList,
 } from "../../../../../utils/utils";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import {
@@ -37,20 +38,8 @@ var applicationsList: Array<Assessment> = [];
 
 describe(["@tier1"], "Manage application dependencies", () => {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
-
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
-        // Create new applications
-        deleteApplicationTableRows();
         applicationsList = createMultipleApplications(3);
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the applications
-        deleteApplicationTableRows();
     });
 
     it("Non-cyclic dependencies for applications", function () {
@@ -94,5 +83,10 @@ describe(["@tier1"], "Manage application dependencies", () => {
         cy.wait(500);
         cy.get(southboundHelper).should("contain.text", cyclicDependenciesErrorMsg);
         click(closeForm);
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the applications
+        deleteByList(applicationsList);
     });
 });

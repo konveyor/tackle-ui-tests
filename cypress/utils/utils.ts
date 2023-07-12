@@ -1442,11 +1442,11 @@ export function goToPage(page: number): void {
 export function selectUserPerspective(userType: string): void {
     cy.get(commonView.optionMenu, { timeout: 100 * SEC })
         .eq(0)
+        .click()
         .then(($a) => {
-            $a.click();
             if (userType == "Migration" && $a.find('ul[title="Admin"]').length) {
                 clickByText(commonView.userPerspectiveMenu, "Administration");
-                $a.click();
+                $a.trigger("click");
             }
             clickByText(commonView.userPerspectiveMenu, userType);
         });

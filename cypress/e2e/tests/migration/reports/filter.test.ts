@@ -21,33 +21,23 @@ import {
     applySearchFilter,
     getTableColumnData,
     selectFilter,
-    preservecookies,
-    hasToBeSkipped,
     createMultipleStakeholders,
-    createMultipleBusinessServices,
-    createMultipleTags,
     createMultipleApplications,
-    deleteAllStakeholders,
-    deleteAllBusinessServices,
-    deleteApplicationTableRows,
     selectUserPerspective,
     click,
-    deleteAllTagsAndTagCategories,
+    deleteByList,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import {
     reports,
     name,
-    description,
-    businessService,
-    tag,
     button,
     clearAllFilters,
     category,
     question,
     answer,
-    applicationInventory,
     migration,
+    SEC,
 } from "../../../types/constants";
 import {
     adoptionCandidateDistributionTable,
@@ -55,20 +45,16 @@ import {
 } from "../../../views/reports.view";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import * as data from "../../../../utils/data_utils";
-import { BusinessServices } from "../../../models/migration/controls/businessservices";
 import {
     selectItemsPerPageAdoptionCandidate,
     selectItemsPerPageIdentifiedRisks,
     expandArticle,
 } from "../../../models/migration/reports/reports";
-import { Tag } from "../../../models/migration/controls/tags";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 
-var applicationsList: Array<Assessment> = [];
-var businessServiceList: Array<BusinessServices> = [];
-var stakeholdersList: Array<Stakeholders> = [];
-var tagList: Array<Tag> = [];
-var invalidSearchInput = String(data.getRandomNumber());
+let applicationsList: Array<Assessment> = [];
+let stakeholdersList: Array<Stakeholders> = [];
+let invalidSearchInput = String(data.getRandomNumber());
 
 describe(["@tier2"], "Reports filter validations", () => {
     before("Login and create test data", function () {
@@ -81,40 +67,31 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Perform assessment of application
         applicationsList[0].perform_assessment("high", [stakeholdersList[0].name]);
         applicationsList[0].verifyStatus("assessment", "Completed");
-        cy.wait(4000);
+        cy.wait(4 * SEC);
         // Perform application review
         applicationsList[0].perform_review("high");
         applicationsList[0].verifyStatus("review", "Completed");
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-    });
-
     after("Perform test data clean up", function () {
-        selectUserPerspective(migration);
-        clickByText(navMenu, applicationInventory);
-        cy.wait(2000);
-
-        // Delete the applications, stakeholders, business services and tag types
-        deleteApplicationTableRows();
-        deleteAllStakeholders();
+        // Delete the applications and stakeholders
+        deleteByList(applicationsList);
+        deleteByList(stakeholdersList);
     });
 
     it("Name field validations", function () {
         // Navigate to reports
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Enter an existing application name substring and apply it as search filter
-        var validSearchInput = applicationsList[0].name;
+        let validSearchInput = applicationsList[0].name;
 
         applySearchFilter(name, validSearchInput);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
-        // Check element filterd for table Adoption Candidate Distribution
+        // Check element filtered for table Adoption Candidate Distribution
         selectItemsPerPageAdoptionCandidate(100);
 
         // Wait for DOM to render table and sibling elements
@@ -128,11 +105,11 @@ describe(["@tier2"], "Reports filter validations", () => {
 
         // Check element filtered for table Identified risks
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         selectItemsPerPageIdentifiedRisks(100);
 
-        var applicationsData = getTableColumnData("Application(s)");
+        let applicationsData = getTableColumnData("Application(s)");
         cy.wrap(applicationsData).each((application) => {
             expect(application).to.have.string(validSearchInput);
         });
@@ -143,14 +120,14 @@ describe(["@tier2"], "Reports filter validations", () => {
         //close Row Details of Identified risks
         click(closeRowIdentifiedRisk);
 
-        // Enter a invalid substring and apply it as search filter
+        // Enter an invalid substring and apply it as search filter
         applySearchFilter(name, invalidSearchInput);
 
         // Expand article cards
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         expandArticle("Suggested adoption plan");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Assert that no search results are found
         // Check for current landscape donut charts
@@ -164,7 +141,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Navigate to reports
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Workaround for filters - Keeping default filter selected for reports filter
         // if it gets changed to tag/business service due to last test case then
@@ -172,19 +149,19 @@ describe(["@tier2"], "Reports filter validations", () => {
         selectFilter("Name");
 
         // Enter an application name and apply it as search filter
-        var validSearchInput = applicationsList[0].name.substring(0, 11);
+        let validSearchInput = applicationsList[0].name.substring(0, 11);
 
         // Expand table Identified risks
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         selectItemsPerPageIdentifiedRisks(100);
 
         applySearchFilter(name, validSearchInput, true, 1);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
-        // Get list of filtered applications rows and varify
-        var applicationsData = getTableColumnData("Application(s)");
+        // Get list of filtered applications rows and verify
+        let applicationsData = getTableColumnData("Application(s)");
         cy.wrap(applicationsData).each((application) => {
             expect(application).to.have.string(applicationsList[0].name);
         });
@@ -193,10 +170,10 @@ describe(["@tier2"], "Reports filter validations", () => {
         clickByText(button, clearAllFilters);
 
         applySearchFilter(name, applicationsList[0].name, true);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
-        // Get list of filtered applications rows and varify
-        var applicationsData = getTableColumnData("Application(s)");
+        // Get list of filtered applications rows and verify
+        applicationsData = getTableColumnData("Application(s)");
         cy.wrap(applicationsData).each((application) => {
             expect(application).to.have.string(applicationsList[0].name);
         });
@@ -204,7 +181,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Clear all filters
         clickByText(button, clearAllFilters);
 
-        // Enter a invalid substring and apply it as search filter
+        // Enter an invalid substring and apply it as search filter
         applySearchFilter(name, invalidSearchInput, true, 1);
 
         // Assert that no search results are found
@@ -218,23 +195,23 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Navigate to reports
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Expand table Identified risks
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         selectItemsPerPageIdentifiedRisks(100);
 
-        // Get an category of assessment questions and apply it as search filter
-        var categoryString = "Application details";
-        var validSearchInput = categoryString.substring(0, 16);
+        // Get a category of assessment questions and apply it as search filter
+        let categoryString = "Application details";
+        let validSearchInput = categoryString.substring(0, 16);
 
         applySearchFilter(category, validSearchInput, true, 1);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
-        // Get list of filtered category rows and varify
-        var categoryData = getTableColumnData("Category");
+        // Get list of filtered category rows and verify
+        let categoryData = getTableColumnData("Category");
         cy.wrap(categoryData).each((category) => {
             expect(categoryString.toLowerCase()).to.equal(category);
         });
@@ -243,10 +220,10 @@ describe(["@tier2"], "Reports filter validations", () => {
         clickByText(button, clearAllFilters);
 
         applySearchFilter(category, categoryString, true, 1);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
-        // Get list of filtered category rows and varify
-        var categoryData = getTableColumnData("Category");
+        // Get list of filtered category rows and verify
+        categoryData = getTableColumnData("Category");
         cy.wrap(categoryData).each((category) => {
             expect(categoryString.toLowerCase()).to.equal(category);
         });
@@ -254,7 +231,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Clear all filters
         clickByText(button, clearAllFilters);
 
-        // Enter a invalid substring and apply it as search filter
+        // Enter an invalid substring and apply it as search filter
         applySearchFilter(category, invalidSearchInput, true, 1);
 
         // Assert that no search results are found
@@ -268,22 +245,22 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Navigate to reports
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Expand table Identified risks
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         selectItemsPerPageIdentifiedRisks(100);
 
         // Get a question from assessment question's list and apply it as search filter
-        var questionString = "How is the application tested?";
-        var validSearchInput = questionString.substring(0, 27);
+        let questionString = "How is the application tested?";
+        let validSearchInput = questionString.substring(0, 27);
         applySearchFilter(question, validSearchInput, true, 1);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
-        // Get list of filtered questions rows and varify
-        var questionsData = getTableColumnData("Question");
+        // Get list of filtered questions rows and verify
+        let questionsData = getTableColumnData("Question");
         cy.wrap(questionsData).each((question) => {
             expect(questionString.toLowerCase()).to.equal(question);
         });
@@ -292,10 +269,10 @@ describe(["@tier2"], "Reports filter validations", () => {
         clickByText(button, clearAllFilters);
 
         applySearchFilter(question, questionString, true, 1);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
-        // Get list of filtered questions rows and varify
-        var questionsData = getTableColumnData("Question");
+        // Get list of filtered questions rows and verify
+        questionsData = getTableColumnData("Question");
         cy.wrap(questionsData).each((question) => {
             expect(questionString.toLowerCase()).to.equal(question);
         });
@@ -303,7 +280,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Clear all filters
         clickByText(button, clearAllFilters);
 
-        // Enter a invalid substring and apply it as search filter
+        // Enter an invalid substring and apply it as search filter
         applySearchFilter(question, invalidSearchInput, true, 1);
 
         // Assert that no search results are found
@@ -317,22 +294,22 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Navigate to reports
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Expand table Identified risks
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         selectItemsPerPageIdentifiedRisks(100);
 
         // select an answer input from existing answers and apply it as search filter
-        var answerString = "Not tracked";
-        var validSearchInput = answerString.substring(0, 7);
+        let answerString = "Not tracked";
+        let validSearchInput = answerString.substring(0, 7);
         applySearchFilter(answer, validSearchInput, true, 1);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
-        // Get list of filtered answers rows and varify
-        var answersData = getTableColumnData("Answer");
+        // Get list of filtered answers rows and verify
+        let answersData = getTableColumnData("Answer");
         cy.wrap(answersData).each((answer) => {
             expect(answerString.toLowerCase()).to.equal(answer);
         });
@@ -341,10 +318,10 @@ describe(["@tier2"], "Reports filter validations", () => {
         clickByText(button, clearAllFilters);
 
         applySearchFilter(answer, answerString, true, 1);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
-        // Get list of filtered answers rows and varify
-        var answersData = getTableColumnData("Answer");
+        // Get list of filtered answers rows and verify
+        answersData = getTableColumnData("Answer");
         cy.wrap(answersData).each((answer) => {
             expect(answerString.toLowerCase()).to.equal(answer);
         });
@@ -352,7 +329,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         // Clear all filters
         clickByText(button, clearAllFilters);
 
-        // Enter a invalid substring and apply it as search filter
+        // Enter an invalid substring and apply it as search filter
         applySearchFilter(answer, invalidSearchInput, true, 1);
 
         // Assert that no search results are found

@@ -16,12 +16,12 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    hasToBeSkipped,
     login,
     preservecookies,
     deleteAllStakeholders,
     deleteApplicationTableRows,
     getRandomApplicationData,
+    deleteByList,
 } from "../../../../../utils/utils";
 
 import * as data from "../../../../../utils/data_utils";
@@ -34,7 +34,6 @@ const stakeholdersNameList: Array<string> = [];
 
 describe(["@tier1"], "Application assessment and review tests", () => {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
 
         // Navigate to stakeholders control tab and create new stakeholder
@@ -46,18 +45,9 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         stakeholdersNameList.push(stakeholder.name);
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplication");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the stakeholders created before the tests
-        deleteAllStakeholders();
-        deleteApplicationTableRows();
     });
 
     it("Application assessment and review with low risk", function () {
@@ -150,5 +140,9 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         // Delete application
         application.delete();
         cy.wait(2000);
+    });
+
+    after("Perform test data clean up", function () {
+        deleteByList(stakeholdersList);
     });
 });
