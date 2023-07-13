@@ -21,16 +21,20 @@ import {
     createMultipleApplications,
     clickWithin,
     deleteByList,
+    click,
+    selectCheckBox,
+    clickByText,
 } from "../../../../../../utils/utils";
 
 import { Stakeholders } from "../../../../../models/migration/controls/stakeholders";
-import { trTag } from "../../../../../types/constants";
+import { button, SEC, trTag } from "../../../../../types/constants";
 import { copy, selectBox } from "../../../../../views/applicationinventory.view";
 import { Assessment } from "../../../../../models/migration/applicationinventory/assessment";
 import { modal } from "../../../../../views/common.view";
+import { closeModal } from "../../../../../views/assessment.view";
 
-var stakeholdersList: Array<Stakeholders> = [];
-var applicationList: Array<Assessment> = [];
+let stakeholdersList: Array<Stakeholders> = [];
+let applicationList: Array<Assessment> = [];
 
 describe(["@tier2"], "Copy assessment and review tests", () => {
     before("Login and Create Test Data", function () {
@@ -40,7 +44,7 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
         stakeholdersList = createMultipleStakeholders(1);
         applicationList = createMultipleApplications(4);
 
-        // Verify copy assessment is not enabled untill assessment is done
+        // Verify copy assessment is not enabled until assessment is done
         applicationList[0].verifyCopyAssessmentDisabled();
 
         // Perform assessment of application
@@ -65,21 +69,22 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
             .parent(trTag)
             .within(() => {
                 cy.get(selectBox).should("be.disabled");
-                cy.wait(2000);
+                cy.wait(2 * SEC);
             });
+        click(closeModal, false, true);
     });
 
     it("Copy button not enabled until one app is selected", function () {
         // Copy assessment to self, should be disabled
         applicationList[0].openCopyAssessmentModel();
-        cy.wait(2000);
         cy.get(copy).should("be.disabled");
         applicationList[0].selectApps(applicationList);
         cy.get(copy).should("not.be.disabled");
+        click(closeModal, false, true);
     });
 
     it("Copy assessment to more than one application and discard assessment", function () {
-        // Verify copy assessment is not enabled untill assessment is done
+        // Verify copy assessment is not enabled until assessment is done
         applicationList[1].verifyCopyAssessmentDisabled();
 
         // Perform copy assessment of all the applications
@@ -114,24 +119,30 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
 
         // select 10 items per page
         applicationList[0].selectItemsPerPage(10);
-        cy.wait(1000);
+        cy.wait(SEC);
 
         // Select all the applications on page
         clickWithin(modal, "button[aria-label='Select']");
-        cy.get("ul[role=menu] > li").contains("Select page").click();
+        clickByText(button, "Select page", false, true);
+        cy.get("div").then(($div) => {
+            if ($div.text().includes("in-progress or complete assessment")) {
+                selectCheckBox("#confirm-copy-checkbox");
+            }
+        });
         cy.get(copy).should("be.visible").should("not.be.disabled");
-        clickWithin(modal, "button[aria-label='Select']");
 
         // Select all applications
+        clickWithin(modal, "button[aria-label='Select']", false, true);
+        clickByText(button, "Select all", false, true);
         clickWithin(modal, "button[aria-label='Select']");
-        cy.get("ul[role=menu] > li").contains(`Select all`).click();
         cy.get(copy).should("be.visible").should("not.be.disabled");
-        clickWithin(modal, "button[aria-label='Select']");
 
         // Deselect all applications
         clickWithin(modal, "button[aria-label='Select']");
-        cy.get("ul[role=menu] > li").contains("Select none (0 items)").click();
+        clickByText(button, "Select none (0 items)", false, true);
+        clickWithin(modal, "button[aria-label='Select']");
         cy.get(copy).should("be.visible").should("be.disabled");
+        click(closeModal, false, true);
     });
 
     after("Perform test data clean up", function () {
