@@ -83,7 +83,7 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
     });
 
     after("Perform test data clean up", function () {
-        Assessment.open(true);
+        Assessment.open(100, true);
         deleteByList(applicationsList);
         deleteByList(stakeholdersList);
         deleteByList(stakeholderGroupsList);

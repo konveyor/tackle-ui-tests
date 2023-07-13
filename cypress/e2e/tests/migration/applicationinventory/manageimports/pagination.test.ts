@@ -17,7 +17,6 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
     selectItemsPerPage,
     click,
     importApplication,
@@ -26,23 +25,13 @@ import {
     goToPage,
     goToLastPage,
     deleteAppImportsTableRows,
-    deleteAllBusinessServices,
 } from "../../../../../utils/utils";
-import { navMenu } from "../../../../views/menu.view";
-import {
-    applicationInventory,
-    button,
-    tdTag,
-    trTag,
-    deleteAction,
-} from "../../../../types/constants";
+import { button, tdTag, trTag, deleteAction } from "../../../../types/constants";
 import { actionButton } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
-import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
-const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/csv/";
 
 const filesToImport = [
@@ -55,8 +44,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
         // Navigate to Application inventory tab
-        clickByText(navMenu, applicationInventory);
-        cy.wait(5000);
+        Application.open();
         var rowsToCreate = 0;
 
         // Import multiple csv files
@@ -235,9 +223,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Delete all Data
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
-        deleteAllBusinessServices();
     });
 });
