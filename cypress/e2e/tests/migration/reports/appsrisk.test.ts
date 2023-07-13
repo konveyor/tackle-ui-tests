@@ -17,7 +17,6 @@ limitations under the License.
 
 import {
     login,
-    preservecookies,
     clickByText,
     createMultipleStakeholders,
     createMultipleApplications,
@@ -40,8 +39,6 @@ describe(["@tier2"], "Application risks tests", () => {
         // Perform login
         login();
 
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
         stakeholdersList = createMultipleStakeholders(1);
         applicationsList = createMultipleApplications(3);
         for (let i = 0; i < applicationsList.length; i++) {

@@ -73,12 +73,6 @@ describe(["@tier2"], "Reports filter validations", () => {
         applicationsList[0].verifyStatus("review", "Completed");
     });
 
-    after("Perform test data clean up", function () {
-        // Delete the applications and stakeholders
-        deleteByList(applicationsList);
-        deleteByList(stakeholdersList);
-    });
-
     it("Name field validations", function () {
         // Navigate to reports
         selectUserPerspective(migration);
@@ -337,5 +331,11 @@ describe(["@tier2"], "Reports filter validations", () => {
 
         // Clear all filters
         clickByText(button, clearAllFilters);
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the applications and stakeholders
+        deleteByList(applicationsList);
+        deleteByList(stakeholdersList);
     });
 });
