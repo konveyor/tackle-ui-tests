@@ -36,12 +36,7 @@ const filePath = "app_import/csv/";
 
 describe(["@tier2"], "Application import operations", () => {
     before("Login and create test data", function () {
-        // Perform login
         login();
-
-        // Delete the existing application rows
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
     });
 
     beforeEach("Persist session", function () {
@@ -259,5 +254,12 @@ describe(["@tier2"], "Application import operations", () => {
         // Verify the error report message
         openErrorReport();
         verifyImportErrorMsg(errorMsgs);
+    });
+
+    after("Perform test data clean up", function () {
+        // Business services and apps were created during app imports; Hence these functions are being used for
+        // cleanup.
+        deleteApplicationTableRows();
+        deleteAllBusinessServices();
     });
 });

@@ -36,7 +36,7 @@ describe(["@tier1"], "Application crud operations", () => {
         exists(application.name);
         cy.wait("@postApplication");
 
-        // Edit application's name
+        // Edit application name
         var updatedApplicationName = data.getAppName();
         application.edit({ name: updatedApplicationName });
         exists(updatedApplicationName);
