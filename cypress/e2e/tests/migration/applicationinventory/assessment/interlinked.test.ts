@@ -49,10 +49,8 @@ let businessServicesList: Array<BusinessServices> = [];
 
 describe(["@tier3"], "Applications interlinked to tags and business service", () => {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
 
-        // Create data
         stakeholdersList = createMultipleStakeholders(1);
         stakeholderGroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
     });

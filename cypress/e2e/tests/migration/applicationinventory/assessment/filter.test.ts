@@ -19,15 +19,11 @@ import {
     login,
     clickByText,
     exists,
-    preservecookies,
     applySearchFilter,
-    hasToBeSkipped,
     createMultipleBusinessServices,
     createMultipleTags,
-    deleteAllBusinessServices,
-    deleteApplicationTableRows,
+    deleteByList,
     createMultipleApplicationsWithBSandTags,
-    deleteAllTagsAndTagCategories,
     getRandomApplicationData,
     getRandomAnalysisData,
     notExists,
@@ -50,15 +46,19 @@ import {
 
 import * as data from "../../../../../utils/data_utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
+import { Tag } from "../../../../models/migration/controls/tags";
 
-var applicationsList: Array<Application> = [];
 var invalidSearchInput = String(data.getRandomNumber());
 let source_credential;
 let maven_credential;
+let applicationsList: Array<Application> = [];
+let businessServicesList: Array<BusinessServices> = [];
+let tagList: Array<Tag> = [];
 
 describe(["@tier2"], "Application inventory filter validations", function () {
     before("Login and Create Test Data", function () {
@@ -66,11 +66,11 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         login();
 
         //Create Multiple Application with Business service and Tags
-        let businessservicesList = createMultipleBusinessServices(2);
+        let businessServicesList = createMultipleBusinessServices(2);
         let tagList = createMultipleTags(2);
         applicationsList = createMultipleApplicationsWithBSandTags(
             2,
-            businessservicesList,
+            businessServicesList,
             tagList
         );
 
@@ -93,7 +93,6 @@ describe(["@tier2"], "Application inventory filter validations", function () {
 
     beforeEach("Persist session", function () {
         // Save the session and token cookie for maintaining one login session
-        preservecookies();
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -306,8 +305,8 @@ describe(["@tier2"], "Application inventory filter validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        deleteApplicationTableRows();
-        deleteAllTagsAndTagCategories();
-        deleteAllBusinessServices();
+        deleteByList(tagList);
+        deleteByList(businessServicesList);
+        deleteByList(applicationsList);
     });
 });
