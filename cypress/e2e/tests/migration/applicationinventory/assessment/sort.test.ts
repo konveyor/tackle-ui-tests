@@ -24,7 +24,7 @@ import {
     clickOnSortButton,
     deleteByList,
 } from "../../../../../utils/utils";
-import { name, tagCount, review, SortType } from "../../../../types/constants";
+import { name, tagCount, SortType, businessService } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
@@ -32,21 +32,18 @@ import { BusinessServices } from "../../../../models/migration/controls/business
 var applicationsList: Array<Assessment> = [];
 let businessServicesList: Array<BusinessServices> = [];
 
-
 describe(["@tier2"], "Application inventory sort validations", function () {
     before("Login and Create Test Data", function () {
         login();
 
         var tagsList = ["C++", "COBOL", "Java"];
         businessServicesList = createMultipleBusinessServices(3);
-        // Create multiple applications with tags and Business services
         for (let i = 0; i < 3; i++) {
             let appdata = {
                 name: data.getFullName(),
                 tags: tagsList,
                 business: businessServicesList[i].name,
             };
-            // Create new application
             const application = new Assessment(appdata);
             application.create();
             applicationsList.push(application);
@@ -84,31 +81,6 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
-    it("Bug MTA-916: Tag count sort validations", function () {
-        // Navigate to application inventory page
-        Assessment.open();
-        cy.wait("@getApplications");
-
-        // get unsorted list when page loads
-        const unsortedList = getTableColumnData(tagCount);
-
-        // Sort the application inventory by Tag count in ascending order
-        clickOnSortButton(tagCount, SortType.ascending);
-        cy.wait(2000);
-
-        // Verify that the application inventory table rows are displayed in ascending order
-        const afterAscSortList = getTableColumnData(tagCount);
-        verifySortAsc(afterAscSortList, unsortedList);
-
-        // Sort the application inventory by tags in descending order
-        clickOnSortButton(tagCount, SortType.descending);
-        cy.wait(2000);
-
-        // Verify that the application inventory table rows are displayed in descending order
-        const afterDescSortList = getTableColumnData(tagCount);
-        verifySortDesc(afterDescSortList, unsortedList);
-    });
-
     it("Business service sort validations", function () {
         // Navigate to application inventory page
         Assessment.open();
@@ -131,6 +103,31 @@ describe(["@tier2"], "Application inventory sort validations", function () {
 
         // Verify that the application inventory table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(businessService);
+        verifySortDesc(afterDescSortList, unsortedList);
+    });
+
+    it("Bug MTA-916: Tag count sort validations", function () {
+        // Navigate to application inventory page
+        Assessment.open();
+        cy.wait("@getApplications");
+
+        // get unsorted list when page loads
+        const unsortedList = getTableColumnData(tagCount);
+
+        // Sort the application inventory by Tag count in ascending order
+        clickOnSortButton(tagCount, SortType.ascending);
+        cy.wait(2000);
+
+        // Verify that the application inventory table rows are displayed in ascending order
+        const afterAscSortList = getTableColumnData(tagCount);
+        verifySortAsc(afterAscSortList, unsortedList);
+
+        // Sort the application inventory by tags in descending order
+        clickOnSortButton(tagCount, SortType.descending);
+        cy.wait(2000);
+
+        // Verify that the application inventory table rows are displayed in descending order
+        const afterDescSortList = getTableColumnData(tagCount);
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
