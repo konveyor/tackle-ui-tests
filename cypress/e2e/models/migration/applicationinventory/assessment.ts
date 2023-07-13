@@ -73,7 +73,10 @@ export class Assessment extends Application {
     }
 
     //Navigate to the Application inventory->Assessment tab
-    public static open(itemsPerPage = 100): void {
+    public static open(itemsPerPage = 100, forceReload = false): void {
+        if (forceReload) {
+            cy.visit(Cypress.env("tackleUrl"));
+        }
         cy.url().then(($url) => {
             if ($url != Assessment.fullUrl) {
                 selectUserPerspective(migration);
