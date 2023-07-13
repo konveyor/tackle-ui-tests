@@ -23,7 +23,7 @@ let projectName = "";
 /**
  * This test suite contains tests that are co-dependent, so they won't pass if they're executed separately
  */
-describe.only(["@tier1"], "Export Migration Wave to Issue Manager", function () {
+describe(["@tier1"], "Export Migration Wave to Issue Manager", function () {
     before("Create test data", function () {
         login();
 
