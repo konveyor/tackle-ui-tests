@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { Application } from "../applicationinventory/application";
+import { Application } from "./application";
 import {
     applicationInventory,
     tdTag,
@@ -36,7 +36,6 @@ import {
     kebabMenu,
     northdependenciesDropdownBtn,
     southdependenciesDropdownBtn,
-    copyAssessmentPagination,
 } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
@@ -64,7 +63,6 @@ import {
     priorityInput,
     proposedActionSelect,
     reviewColumnSelector,
-    selectInput,
 } from "../../../views/review.view";
 import { applicationData } from "../../../types/types";
 
@@ -92,14 +90,14 @@ export class Assessment extends Application {
         });
     }
 
-    protected selectStakeholdergroups(stakeholdergroups: Array<string>): void {
-        stakeholdergroups.forEach(function (stakeholdergroup) {
-            selectFormItems(stakeholdergroupsSelect, stakeholdergroup);
+    protected selectStakeholderGroups(stakeholderGroups: Array<string>): void {
+        stakeholderGroups.forEach(function (stakeholderGroup) {
+            selectFormItems(stakeholdergroupsSelect, stakeholderGroup);
         });
     }
 
     protected selectMigrationAction(risk: string): void {
-        var action: string;
+        let action: string;
         if (risk === "low") {
             const migrationActions = ["Replatform", "Refactor", "Rehost", "Retain"];
             action = migrationActions[Math.floor(Math.random() * migrationActions.length)];
@@ -115,7 +113,7 @@ export class Assessment extends Application {
     }
 
     protected selectEffortEstimate(risk: string): void {
-        var effort: string;
+        let effort: string;
         if (risk === "low") {
             effort = "Small";
         } else if (risk === "medium") {
@@ -129,7 +127,7 @@ export class Assessment extends Application {
     }
 
     protected getNumByRisk(risk: string): number {
-        var num: number;
+        let num: number;
         if (risk === "low") {
             num = data.getRandomNumber(1, 4);
         } else if (risk === "medium") {
@@ -164,8 +162,8 @@ export class Assessment extends Application {
     protected selectAnswers(risk: string): void {
         for (let i = 0; i < 5; i++) {
             cy.get(questionBlock).each(($question) => {
-                var totalOptions = $question.find("div.pf-l-stack").children("div").length;
-                var optionToSelect: number;
+                let totalOptions = $question.find("div.pf-l-stack").children("div").length;
+                let optionToSelect: number;
                 if (risk === "low") {
                     optionToSelect = totalOptions - 1;
                     this.clickRadioOption($question, optionToSelect);
@@ -175,7 +173,7 @@ export class Assessment extends Application {
                         .find("div.pf-l-split__item")
                         .then(($questionLine) => {
                             /* These 3 questions generate high risk with mean options, 
-                            hence to keep risk to medium, select last options for these set of specifc questions */
+                            hence to keep risk to medium, select last options for these set of specific questions */
                             if (
                                 $questionLine.text() ===
                                     "Does the application have legal and/or licensing requirements?" ||
@@ -234,12 +232,12 @@ export class Assessment extends Application {
     perform_assessment(
         risk,
         stakeholders?: Array<string>,
-        stakeholdergroups?: Array<string>
+        stakeholderGroups?: Array<string>
     ): void {
-        if (stakeholders == undefined && stakeholdergroups == undefined) {
+        if (stakeholders == undefined && stakeholderGroups == undefined) {
             expect(
                 false,
-                "Atleast one arg out of stakeholder or stakeholdergroups must be provided !"
+                "At least one arg out of stakeholder or stakeholder groups must be provided !"
             ).to.equal(true);
         } else {
             Assessment.open();
@@ -248,9 +246,9 @@ export class Assessment extends Application {
             this.click_assess_button();
             cy.wait(6000);
             if (stakeholders) this.selectStakeholders(stakeholders);
-            if (stakeholdergroups) this.selectStakeholdergroups(stakeholdergroups);
+            if (stakeholderGroups) this.selectStakeholderGroups(stakeholderGroups);
             clickByText(button, next);
-            cy.wait(1000);
+            cy.wait(SEC);
             this.selectAnswers(risk);
         }
     }
@@ -295,7 +293,7 @@ export class Assessment extends Application {
     }
 
     // Selects the application as dependency from dropdown. Arg dropdownNum value 0 selects northbound, whereas value 1 selects southbound
-    selectnorthDependency(appNameList: Array<string>): void {
+    selectNorthDependency(appNameList: Array<string>): void {
         appNameList.forEach(function (app) {
             cy.get(northdependenciesDropdownBtn).click();
             cy.contains("button", app).click();
@@ -314,16 +312,15 @@ export class Assessment extends Application {
     addDependencies(northbound?: Array<string>, southbound?: Array<string>): void {
         if (northbound || southbound) {
             this.openManageDependencies();
-            // cy.wait(1000);
             if (northbound.length > 0) {
                 this.selectDependency(northdependenciesDropdownBtn, northbound);
-                cy.wait(1000);
+                cy.wait(SEC);
             }
             if (southbound.length > 0) {
                 this.selectDependency(southdependenciesDropdownBtn, southbound);
-                cy.wait(1000);
+                cy.wait(SEC);
             }
-            cy.wait(2000);
+            cy.wait(2 * SEC);
             click(closeForm);
         }
     }
@@ -348,13 +345,13 @@ export class Assessment extends Application {
             this.openManageDependencies();
             if (northbound.length > 0) {
                 this.removeDep(northbound[0], "northbound");
-                cy.wait(1000);
+                cy.wait(SEC);
             }
             if (southbound.length > 0) {
                 this.removeDep(southbound[0], "southbound");
-                cy.wait(1000);
+                cy.wait(SEC);
             }
-            cy.wait(2000);
+            cy.wait(2 * SEC);
             click(closeForm);
         }
     }
@@ -362,7 +359,7 @@ export class Assessment extends Application {
     verifyDependencies(northboundApps?: Array<string>, southboundApps?: Array<string>): void {
         if (northboundApps || southboundApps) {
             this.openManageDependencies();
-            cy.wait(2000);
+            cy.wait(2 * SEC);
             if (northboundApps && northboundApps.length > 0) {
                 northboundApps.forEach((app) => {
                     this.dependencyExists("northbound", app);
@@ -390,7 +387,7 @@ export class Assessment extends Application {
     verifyCopyAssessmentDisabled(): void {
         Assessment.open();
         selectItemsPerPage(100);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         cy.get(tdTag)
             .contains(this.name)
             .parent(tdTag)
@@ -424,14 +421,14 @@ export class Assessment extends Application {
             cancelForm();
         } else {
             click(copy);
-            cy.wait(2000);
+            cy.wait(2 * SEC);
         }
     }
 
     discard_assessment(): void {
         Assessment.open();
         selectItemsPerPage(100);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         cy.get(tdTag)
             .contains(this.name)
             .parent(tdTag)
@@ -449,7 +446,7 @@ export class Assessment extends Application {
     }
 
     selectApps(applicationList: Array<Application>): void {
-        cy.wait(4000);
+        cy.wait(4 * SEC);
         for (let i = 0; i < applicationList.length; i++) {
             if (applicationList[i].name != this.name) {
                 cy.get(".pf-m-compact> tbody > tr > td")
@@ -457,22 +454,20 @@ export class Assessment extends Application {
                     .parent(trTag)
                     .within(() => {
                         click(selectBox);
-                        cy.wait(2000);
+                        cy.wait(2 * SEC);
                     });
             }
         }
     }
 
     openCopyAssessmentModel(review = false, items = 100): void {
-        let action = "";
+        let action = "Copy assessment";
         if (review) {
-            action = "Copy assessment and review";
-        } else {
-            action = "Copy assessment";
+            action += " and review";
         }
         Assessment.open();
-        selectItemsPerPage(100);
-        cy.wait(2000);
+        selectItemsPerPage(items);
+        cy.wait(2 * SEC);
         cy.get(tdTag)
             .contains(this.name)
             .closest(trTag)
@@ -496,7 +491,7 @@ export class Assessment extends Application {
     verifyReviewButtonDisabled(): void {
         Assessment.open();
         selectItemsPerPage(100);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         this.selectApplication();
         cy.get(button).contains(review).should("be.disabled");
     }

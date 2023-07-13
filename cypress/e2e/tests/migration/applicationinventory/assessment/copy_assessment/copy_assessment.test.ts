@@ -31,6 +31,7 @@ import { button, SEC, trTag } from "../../../../../types/constants";
 import { copy, selectBox } from "../../../../../views/applicationinventory.view";
 import { Assessment } from "../../../../../models/migration/applicationinventory/assessment";
 import { modal } from "../../../../../views/common.view";
+import { closeModal } from "../../../../../views/assessment.view";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let applicationList: Array<Assessment> = [];
@@ -70,7 +71,7 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
                 cy.get(selectBox).should("be.disabled");
                 cy.wait(2 * SEC);
             });
-        click('[aria-label="Close"]');
+        click(closeModal, false, true);
     });
 
     it("Copy button not enabled until one app is selected", function () {
@@ -79,7 +80,7 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
         cy.get(copy).should("be.disabled");
         applicationList[0].selectApps(applicationList);
         cy.get(copy).should("not.be.disabled");
-        click('[aria-label="Close"]');
+        click(closeModal, false, true);
     });
 
     it("Copy assessment to more than one application and discard assessment", function () {
@@ -121,31 +122,27 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
         cy.wait(SEC);
 
         // Select all the applications on page
-        cy.log("Select page...");
         clickWithin(modal, "button[aria-label='Select']");
-        clickByText(button, "Select page");
+        clickByText(button, "Select page", false, true);
         cy.get("div").then(($div) => {
             if ($div.text().includes("in-progress or complete assessment")) {
                 selectCheckBox("#confirm-copy-checkbox");
             }
         });
-        clickWithin(modal, "button[aria-label='Select']");
         cy.get(copy).should("be.visible").should("not.be.disabled");
 
         // Select all applications
-        cy.log("Select all...");
-        clickWithin(modal, "button[aria-label='Select']");
-        clickByText(button, "Select all");
+        clickWithin(modal, "button[aria-label='Select']", false, true);
+        clickByText(button, "Select all", false, true);
         clickWithin(modal, "button[aria-label='Select']");
         cy.get(copy).should("be.visible").should("not.be.disabled");
 
         // Deselect all applications
-        cy.log("Select none...");
         clickWithin(modal, "button[aria-label='Select']");
-        clickByText(button, "Select none (0 items)");
+        clickByText(button, "Select none (0 items)", false, true);
         clickWithin(modal, "button[aria-label='Select']");
         cy.get(copy).should("be.visible").should("be.disabled");
-        click('[aria-label="Close"]');
+        click(closeModal, false, true);
     });
 
     after("Perform test data clean up", function () {
