@@ -19,11 +19,11 @@ const applications: Assessment[] = [];
 const wavesMap = {};
 let projectName = "";
 
-// Automates Polarion TC 340
+// Automates Polarion TC 340, 359, 360 and 361 for Jira Cloud
 /**
  * This test suite contains tests that are co-dependent, so they won't pass if they're executed separately
  */
-describe(["@tier1"], "Export Migration Wave to Issue Manager", function () {
+describe.only(["@tier1"], "Export Migration Wave to Issue Manager", function () {
     before("Create test data", function () {
         login();
 
@@ -79,8 +79,9 @@ describe(["@tier1"], "Export Migration Wave to Issue Manager", function () {
     });
 
     Object.values(JiraIssueTypes).forEach((issueType) => {
-        it(`Assert exports for ${issueType}`, function () {
-            cy.wait(35 * SEC); // Enough time to create both tasks and for them to be available in the Jira API
+        const markBug = issueType === "Subtask" ? "BUG MTA-870 | " : "";
+        it(`${markBug} Assert exports for ${issueType}`, function () {
+            cy.wait(30 * SEC); // Enough time to create both tasks and for them to be available in the Jira API
             jiraCloudInstance.getIssues(projectName).then((issues: JiraIssue[]) => {
                 const waveIssues = issues.filter((issue) => {
                     return (
@@ -88,7 +89,8 @@ describe(["@tier1"], "Export Migration Wave to Issue Manager", function () {
                             issue.fields.summary.includes(
                                 wavesMap[issueType].applications[1].name
                             )) &&
-                        issue.fields.issuetype.untranslatedName === (issueType as string)
+                        issue.fields.issuetype.name.toUpperCase() ===
+                            (issueType as string).toUpperCase()
                     );
                 });
 
@@ -98,7 +100,6 @@ describe(["@tier1"], "Export Migration Wave to Issue Manager", function () {
             });
         });
     });
-
     after("Clear test data", function () {
         Object.values(wavesMap).forEach((wave: MigrationWave) => wave.delete());
         applications.forEach((app) => app.delete());
