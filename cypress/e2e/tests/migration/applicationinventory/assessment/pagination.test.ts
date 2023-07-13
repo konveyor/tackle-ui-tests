@@ -29,7 +29,6 @@ let applicationsList: Array<Application> = [];
 
 describe(["@tier3"], "Application inventory pagination validations", function () {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
         applicationsList = createMultipleApplications(11);
     });
