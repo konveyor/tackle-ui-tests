@@ -17,12 +17,10 @@ limitations under the License.
 
 import {
     login,
-    preservecookies,
-    deleteApplicationTableRows,
     createMultipleStakeholders,
     createMultipleApplications,
-    deleteAllStakeholders,
     deleteByList,
+    click,
 } from "../../../../../../utils/utils";
 import {
     copyAssessmentTableTr,
@@ -31,6 +29,7 @@ import {
 import * as commonView from "../../../../../views/common.view";
 import { Stakeholders } from "../../../../../models/migration/controls/stakeholders";
 import { Assessment } from "../../../../../models/migration/applicationinventory/assessment";
+import { closeModal } from "../../../../../views/assessment.view";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var applicationList: Array<Assessment> = [];
@@ -109,6 +108,8 @@ describe(["@tier2"], "Assessment pagination validations", function () {
             .then(($rows) => {
                 cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
             });
+
+        click(closeModal, false, true);
     });
 
     after("Perform test data clean up", function () {

@@ -20,4 +20,4 @@ export const questionBlock = "div[cy-data='question']";
 export const radioInput = "input[type='radio']";
 export const assessmentColumnSelector = "td[data-label='Assessment']";
 export const continueButton = "button[aria-label=confirm]";
-export const closeModal = "[aria-label='Close'";
+export const closeModal = "[aria-label='Close']";
