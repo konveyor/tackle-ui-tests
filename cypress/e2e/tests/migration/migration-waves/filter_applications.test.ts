@@ -60,7 +60,7 @@ describe(
             );
         });
 
-        it("Filter applications by name", function () {
+        it("Bug: MTA-969 Filter applications by name", function () {
             let migrationWave = new MigrationWave(
                 data.getRandomWord(8),
                 now,
@@ -88,7 +88,7 @@ describe(
             migrationWave.delete();
         });
 
-        it("Filter applications by business service", function () {
+        it("Bug: MTA-969 Filter applications by business service", function () {
             let migrationWave = new MigrationWave(
                 data.getRandomWord(8),
                 now,
@@ -101,25 +101,25 @@ describe(
             migrationWave.expandActionsMenu();
             cy.contains(manageApplications).click();
 
-            // Enter an existing exact BS and apply it as search filter
+            // Apply BS associated with applicationsList[1].name as search filter
             applySearchFilter(businessService, applicationsList[1].business, true, 1);
             cy.get("td").should("contain", applicationsList[1].name);
             cy.get("td").should("not.contain", applicationsList[0].name);
             clickByText(button, clearAllFilters);
 
-            // Enter a non-existing BS and apply it as search filter
-            applySearchFilter(businessService, String(data.getRandomNumber()), true, 1);
+            // Apply BS associated with applicationsList[0].name as search filter
+            applySearchFilter(businessService, applicationsList[0].business, true, 1);
             cy.get("td").should("not.contain", applicationsList[1].name);
-            cy.get("td").should("not.contain", applicationsList[0].name);
+            cy.get("td").should("contain", applicationsList[0].name);
             clickByText(button, clearAllFilters);
             clickByText(button, "Cancel");
             migrationWave.delete();
         });
 
         after("Perform test data clean up", function () {
-            deleteByList(applicationsList);
             deleteByList(businessservicesList);
             deleteByList(tagList);
+            deleteByList(applicationsList);
         });
     }
 );
