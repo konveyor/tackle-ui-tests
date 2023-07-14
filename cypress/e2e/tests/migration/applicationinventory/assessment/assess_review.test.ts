@@ -15,14 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    login,
-    preservecookies,
-    deleteAllStakeholders,
-    deleteApplicationTableRows,
-    getRandomApplicationData,
-    deleteByList,
-} from "../../../../../utils/utils";
+import { login, getRandomApplicationData, deleteByList } from "../../../../../utils/utils";
 
 import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";

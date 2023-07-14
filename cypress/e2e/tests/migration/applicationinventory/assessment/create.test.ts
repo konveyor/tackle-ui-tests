@@ -31,6 +31,7 @@ import {
     existsWithinRow,
     closeRowDetails,
     deleteByList,
+    checkSuccessAlert,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -168,12 +169,16 @@ describe(["@tier2"], "Application validations", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("Application unique constraint validation", function () {
+    it("Application success alert and unique constraint validation", function () {
         Assessment.open();
         const application = new Assessment(getRandomApplicationData());
 
         // Create a new application
         application.create();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            `Application ${application.name} was successfully saved.`
+        );
         cy.wait("@postApplication");
         exists(application.name);
 

@@ -30,7 +30,6 @@ import {
 import { navMenu } from "../../../views/menu.view";
 import {
     cancelForm,
-    checkSuccessAlert,
     cleanupDownloads,
     click,
     clickByText,

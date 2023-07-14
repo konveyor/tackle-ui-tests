@@ -21,7 +21,6 @@ import {
     createNewButton,
     deleteAction,
     assessment,
-    tagCount,
     assessAppButton,
     createAppButton,
     SEC,
@@ -59,7 +58,6 @@ import {
     submitForm,
     cancelForm,
     selectFormItems,
-    checkSuccessAlert,
     performRowActionByIcon,
     selectUserPerspective,
     selectItemsPerPage,
@@ -187,10 +185,6 @@ export class Application {
             if (this.sourceRepo) this.fillSourceModeFields();
             if (this.group) this.fillBinaryModeFields();
             submitForm();
-            checkSuccessAlert(
-                commonView.successAlertMessage,
-                `application ${this.name} was successfully saved.`
-            );
         }
     }
 

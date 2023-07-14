@@ -15,12 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    getRandomAnalysisData,
-    getRandomApplicationData,
-    login,
-    preservecookies,
-} from "../../../../utils/utils";
+import { getRandomAnalysisData, getRandomApplicationData, login } from "../../../../utils/utils";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
 import { CredentialType, UserCredentials } from "../../../types/constants";
@@ -30,7 +25,6 @@ let application;
 
 describe(["@tier1"], "Validation of Source Control Credentials", () => {
     before("Login", function () {
-        // Perform login
         login();
         source_credential = new CredentialsSourceControlUsername(
             getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.usernamePassword)
@@ -40,8 +34,7 @@ describe(["@tier1"], "Validation of Source Control Credentials", () => {
         source_credential.inUse = true;
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
+    beforeEach("Load data", function () {
         cy.fixture("analysis").then(function (analysisData) {
             this.analysisData = analysisData;
         });
