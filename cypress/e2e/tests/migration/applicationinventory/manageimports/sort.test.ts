@@ -26,22 +26,18 @@ import {
     deleteApplicationTableRows,
     deleteAppImportsTableRows,
     clickOnSortButton,
-    deleteAllBusinessServices,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import { SortType, applicationInventory } from "../../../../types/constants";
 
 import { Application } from "../../../../models/migration/applicationinventory/application";
-import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { csvFileName, date, importStatus, user } from "../../../../views/applicationinventory.view";
 
-const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/csv/";
 
 describe(["@tier2"], "Manage applications import sort validations", function () {
     before("Login and create test data", function () {
         login();
-        businessService.create();
 
         // Open the application inventory page
         clickByText(navMenu, applicationInventory);
@@ -171,9 +167,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
     });
 
     after("Perform test data clean up", function () {
-        // Delete the business service
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
-        deleteAllBusinessServices();
     });
 });

@@ -26,27 +26,29 @@ import {
     createMultipleStakeholderGroups,
     createMultipleApplications,
     deleteByList,
+    selectItemsPerPage,
 } from "../../../../../../utils/utils";
 import { name } from "../../../../../types/constants";
 import { Stakeholders } from "../../../../../models/migration/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../../models/migration/controls/stakeholdergroups";
 import { Assessment } from "../../../../../models/migration/applicationinventory/assessment";
+import { modal } from "../../../../../views/common.view";
 
-var stakeholdersList: Array<Stakeholders> = [];
-var stakeholdergroupsList: Array<Stakeholdergroups> = [];
-var applicationList: Array<Assessment> = [];
+let stakeholdersList: Array<Stakeholders> = [];
+let stakeholderGroupsList: Array<Stakeholdergroups> = [];
+let applicationsList: Array<Assessment> = [];
 
 describe(["@tier2"], "Copy assessment and review tests", () => {
     before("Login and Create Test Data", function () {
         login();
         // Create data
         stakeholdersList = createMultipleStakeholders(1);
-        stakeholdergroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
-        applicationList = createMultipleApplications(4);
+        stakeholderGroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
+        applicationsList = createMultipleApplications(4);
 
         // Perform assessment of application
-        applicationList[0].perform_assessment("low", [stakeholdersList[0].name]);
-        applicationList[0].verifyStatus("assessment", "Completed");
+        applicationsList[0].perform_assessment("low", [stakeholdersList[0].name]);
+        applicationsList[0].verifyStatus("assessment", "Completed");
     });
 
     beforeEach("Interceptors", function () {
@@ -56,15 +58,17 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
 
     it("Application name sort validations", function () {
         // Navigate to application inventory page and open copy assessment page
-        applicationList[0].openCopyAssessmentModel();
-        cy.wait(2000);
+        applicationsList[0].openCopyAssessmentModel();
+
+        cy.get(modal)
+            .eq(0)
+            .within((_) => selectItemsPerPage(100));
 
         // get unsorted list when page loads
         const unsortedList = getColumnDataforCopyAssessmentTable(name);
 
         // Sort the applications groups by name in ascending order
         sortAscCopyAssessmentTable(name);
-        cy.wait(2000);
 
         // Verify that the applications rows are displayed in ascending order
         const afterAscSortList = getColumnDataforCopyAssessmentTable(name);
@@ -72,7 +76,6 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
 
         // Sort the applications by name in descending order
         sortDescCopyAssessmentTable(name);
-        cy.wait(2000);
 
         // Verify that the applications are displayed in descending order
         const afterDescSortList = getColumnDataforCopyAssessmentTable(name);
@@ -80,8 +83,9 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
     });
 
     after("Perform test data clean up", function () {
-        deleteByList(applicationList);
+        Assessment.open(100, true);
+        deleteByList(applicationsList);
         deleteByList(stakeholdersList);
-        deleteByList(stakeholdergroupsList);
+        deleteByList(stakeholderGroupsList);
     });
 });

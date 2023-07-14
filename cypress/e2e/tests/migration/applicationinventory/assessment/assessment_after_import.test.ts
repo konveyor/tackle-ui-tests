@@ -22,7 +22,6 @@ import {
     deleteApplicationTableRows,
     deleteAppImportsTableRows,
     notExists,
-    preservecookies,
 } from "../../../../../utils/utils";
 
 import * as data from "../../../../../utils/data_utils";
@@ -45,10 +44,6 @@ describe(["@tier2"], "Operations after application import", () => {
 
         stakeholdersList.push(stakeholder);
         stakeholdersNameList.push(stakeholder.name);
-
-        // Delete the existing application rows
-        deleteApplicationTableRows();
-        deleteAppImportsTableRows();
 
         // Import applications through valid .CSV file
         const fileName = "template_application_import.csv";
@@ -90,7 +85,6 @@ describe(["@tier2"], "Operations after application import", () => {
     });
 
     after("Perform test data clean up", function () {
-        // Delete the existing application rows before deleting business service(s)
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
     });

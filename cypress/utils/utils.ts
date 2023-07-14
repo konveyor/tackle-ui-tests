@@ -1456,28 +1456,28 @@ export function selectWithinModal(selector: string): void {
     clickWithin(modal, selector);
 }
 
-export function clickWithin(parent, selector: string): void {
+export function clickWithin(parent, selector: string, isForced = false, log = false): void {
     cy.get(parent, { timeout: 30 * SEC })
         .eq(0)
         .within(() => {
-            click(selector);
+            click(selector, isForced, log);
         });
 }
 
 //function to select checkboxes
-export function selectCheckBox(selector: string): void {
+export function selectCheckBox(selector: string, isForced = false, log = false): void {
     cy.get(selector, { timeout: 120 * SEC }).then(($checkbox) => {
         if (!$checkbox.prop("checked")) {
-            click(selector);
+            click(selector, isForced, log);
         }
     });
 }
 
 //function to unselect checkboxes
-export function unSelectCheckBox(selector: string): void {
+export function unSelectCheckBox(selector: string, isForced = false, log = false): void {
     cy.get(selector, { timeout: 120 * SEC }).then(($checkbox) => {
         if ($checkbox.prop("checked")) {
-            click(selector);
+            click(selector, isForced, log);
         }
     });
 }

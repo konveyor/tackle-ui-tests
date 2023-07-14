@@ -16,7 +16,6 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    clickByText,
     exists,
     importApplication,
     login,
@@ -25,37 +24,22 @@ import {
     verifyAppImport,
     verifyImportErrorMsg,
     deleteApplicationTableRows,
-    preservecookies,
-    hasToBeSkipped,
-    selectUserPerspective,
     deleteAllBusinessServices,
     deleteAppImportsTableRows,
     notExists,
 } from "../../../../../utils/utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
-import { navMenu } from "../../../../views/menu.view";
-import { applicationInventory, button, SEC } from "../../../../types/constants";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
 const businessService = new BusinessServices("BS_tag_test");
 const filePath = "app_import/csv/";
-var applicationsList: Array<Assessment> = [];
 
 describe(["@tier2"], "Application import operations", () => {
     before("Login and create test data", function () {
-        // Perform login
         login();
-
-        // Delete the existing application rows
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplication");
         deleteAppImportsTableRows();
@@ -162,7 +146,7 @@ describe(["@tier2"], "Application import operations", () => {
         // Import csv with an empty row between two valid rows having minimum required field(s)
         const fileName = "mandatory_and_empty_row_21.csv";
         importApplication(filePath + fileName);
-        cy.wait(4 * SEC);
+        cy.wait(2000);
 
         /* // Verify imported apps are visible in table
             exists("Import-app-5");
@@ -270,5 +254,12 @@ describe(["@tier2"], "Application import operations", () => {
         // Verify the error report message
         openErrorReport();
         verifyImportErrorMsg(errorMsgs);
+    });
+
+    after("Perform test data clean up", function () {
+        // Business services and apps were created during app imports; Hence these functions are being used for
+        // cleanup.
+        deleteApplicationTableRows();
+        deleteAllBusinessServices();
     });
 });
