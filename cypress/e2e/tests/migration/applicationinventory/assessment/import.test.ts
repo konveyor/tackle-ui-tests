@@ -146,7 +146,7 @@ describe(["@tier2"], "Application import operations", () => {
         // Import csv with an empty row between two valid rows having minimum required field(s)
         const fileName = "mandatory_and_empty_row_21.csv";
         importApplication(filePath + fileName);
-        cy.wait(4 * SEC);
+        cy.wait(2000);
 
         /* // Verify imported apps are visible in table
             exists("Import-app-5");
