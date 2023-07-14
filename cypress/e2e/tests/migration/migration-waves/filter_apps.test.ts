@@ -22,9 +22,13 @@ import {
     createMultipleApplicationsWithBSandTags,
 } from "../../../../utils/utils";
 import { Application } from "../../../models/migration/applicationinventory/application";
-import { Stakeholders } from "../../../models/migration/controls/stakeholders";
-import { Stakeholdergroups } from "../../../models/migration/controls/stakeholdergroups";
-import { manageApplications, button, name, clearAllFilters, SEC } from "../../../types/constants";
+import {
+    manageApplications,
+    button,
+    name,
+    clearAllFilters,
+    businessService,
+} from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { BusinessServices } from "../../../models/migration/controls/businessservices";
@@ -96,15 +100,16 @@ describe(
             migrationWave.expandActionsMenu();
             cy.contains(manageApplications).click();
 
-            // Enter an existing exact name and apply it as search filter
+            // Enter an existing exact BS and apply it as search filter
             applySearchFilter(businessService, applicationsList[1].business);
             cy.get("td").should("contain", applicationsList[1].name);
             cy.get("td").should("not.contain", applicationsList[0].name);
             clickByText(button, clearAllFilters);
 
-            applySearchFilter(businessService, applicationsList[0].business);
+            // Enter a non-existing BS and apply it as search filter
+            applySearchFilter(businessService, String(data.getRandomNumber()));
             cy.get("td").should("not.contain", applicationsList[1].name);
-            cy.get("td").should("contain", applicationsList[0].name);
+            cy.get("td").should("not.contain", applicationsList[0].name);
             clickByText(button, clearAllFilters);
             clickByText(button, "Cancel");
             migrationWave.delete();
