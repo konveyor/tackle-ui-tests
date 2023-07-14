@@ -102,13 +102,13 @@ describe(
             cy.contains(manageApplications).click();
 
             // Enter an existing exact BS and apply it as search filter
-            applySearchFilter(businessService, applicationsList[1].business);
+            applySearchFilter(businessService, applicationsList[1].business, true, 1);
             cy.get("td").should("contain", applicationsList[1].name);
             cy.get("td").should("not.contain", applicationsList[0].name);
             clickByText(button, clearAllFilters);
 
             // Enter a non-existing BS and apply it as search filter
-            applySearchFilter(businessService, String(data.getRandomNumber()));
+            applySearchFilter(businessService, String(data.getRandomNumber()), true, 1);
             cy.get("td").should("not.contain", applicationsList[1].name);
             cy.get("td").should("not.contain", applicationsList[0].name);
             clickByText(button, clearAllFilters);
