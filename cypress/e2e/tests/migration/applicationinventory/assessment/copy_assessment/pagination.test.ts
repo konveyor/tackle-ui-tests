@@ -19,7 +19,6 @@ import {
     login,
     createMultipleStakeholders,
     createMultipleApplications,
-    deleteByList,
     click,
 } from "../../../../../../utils/utils";
 import {
