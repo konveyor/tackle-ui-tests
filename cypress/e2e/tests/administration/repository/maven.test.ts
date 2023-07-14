@@ -36,7 +36,7 @@ import { clearRepository, repoSize } from "../../../views/repository.view";
 let mavenConfiguration = new MavenConfiguration();
 let source_credential;
 let maven_credential;
-var applicationsList: Analysis[];
+let applicationsList: Analysis[];
 
 describe(["@tier1"], "Test secure and insecure maven repository analysis", () => {
     before("Login", function () {
@@ -153,7 +153,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
     after("Perform test data clean up", () => {
         configureRWX(false);
         login();
-        deleteByList(applicationsList);
+        deleteByList(applicationsList)
         source_credential.delete();
         maven_credential.delete();
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));

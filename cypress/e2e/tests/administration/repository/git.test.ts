@@ -31,7 +31,7 @@ import { CredentialType, UserCredentials } from "../../../types/constants";
 
 let gitConfiguration = new GitConfiguration();
 let source_credential;
-var applicationsList: Analysis[];
+let applicationsList: Analysis[];
 
 describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
     before("Login", function () {
@@ -78,7 +78,7 @@ describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
         );
 
         application.create();
-        applicationsList.push(application);
+        applicationsList.push(application)
         cy.wait("@getApplication");
         cy.wait(2000);
         application.manageCredentials(source_credential.name);

@@ -31,7 +31,7 @@ import { Analysis } from "../../../models/migration/applicationinventory/analysi
 
 let subversionConfiguration = new SubversionConfiguration();
 let source_credential;
-var applicationsList: Analysis[];
+let applicationsList: Analysis[];
 
 describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
     before("Login", function () {
