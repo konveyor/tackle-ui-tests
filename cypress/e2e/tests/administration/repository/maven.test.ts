@@ -153,7 +153,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
     after("Perform test data clean up", () => {
         configureRWX(false);
         login();
-        deleteByList(applicationsList)
+        deleteByList(applicationsList);
         source_credential.delete();
         maven_credential.delete();
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
