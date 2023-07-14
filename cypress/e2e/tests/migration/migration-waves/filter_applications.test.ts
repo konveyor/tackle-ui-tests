@@ -79,6 +79,7 @@ describe(
             cy.get("td").should("not.contain", applicationsList[0].name);
             clickByText(button, clearAllFilters);
 
+            // Enter a non-existing app name and apply it as search filter
             applySearchFilter(name, String(data.getRandomNumber()), true, 1);
             cy.get("td").should("not.contain", applicationsList[1].name);
             cy.get("td").should("not.contain", applicationsList[0].name);
@@ -116,9 +117,9 @@ describe(
         });
 
         after("Perform test data clean up", function () {
+            deleteByList(applicationsList);
             deleteByList(businessservicesList);
             deleteByList(tagList);
-            deleteByList(applicationsList);
         });
     }
 );
