@@ -20,7 +20,7 @@ import {
     selectItemsPerPage,
     deleteTableRows,
     createMultipleStakeholders,
-    deleteAllStakeholders,
+    deleteByList,
 } from "../../../../../utils/utils";
 import {
     firstPageButton,
@@ -31,12 +31,12 @@ import {
 } from "../../../../views/common.view";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { stakeHoldersTable } from "../../../../views/stakeholders.view";
+let stakeholdersList: Array<Stakeholders> = [];
 
 describe(["@tier3"], "Stakeholder pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
-        // Create 11 rows
-        createMultipleStakeholders(11);
+        stakeholdersList = createMultipleStakeholders(11);
     });
 
     beforeEach("Interceptors", function () {
@@ -147,7 +147,6 @@ describe(["@tier3"], "Stakeholder pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Delete the stakeholders created before the tests
-        deleteAllStakeholders();
+        deleteByList(stakeholdersList);
     });
 });
