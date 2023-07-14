@@ -16,13 +16,10 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    deleteAllBusinessServices,
-    deleteApplicationTableRows,
+    deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
-    hasToBeSkipped,
     login,
-    preservecookies,
     resetURL,
     writeMavenSettingsFile,
 } from "../../../../utils/utils";
@@ -34,12 +31,11 @@ import { Analysis } from "../../../models/migration/applicationinventory/analysi
 
 let subversionConfiguration = new SubversionConfiguration();
 let source_credential;
+var applicationsList: Analysis[];
 
 describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
     before("Login", function () {
-        // Perform login
         login();
-        deleteApplicationTableRows();
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -50,9 +46,7 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
         source_credential.create();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+    beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -70,17 +64,8 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
         resetURL();
     });
 
-    after("Perform test data clean up", () => {
-        login();
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
-        source_credential.delete();
-        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
-    });
-
     // test that when the insecure repository is enabled, then the analysis on a http repo should be completed successfully
     it("Analysis on insecure subversion Repository(http) for tackle test app when insecure repository is allowed", function () {
-        // open the configuration page for subversion and enable insecure repo
         subversionConfiguration.enableInsecureSubversionRepositories();
 
         const application = new Analysis(
@@ -90,6 +75,7 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.manageCredentials(source_credential.name, null);
@@ -100,7 +86,6 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
 
     // Negative test case, when the insecure repository is disabled, then the analysis on a http repo should fail
     it("Analysis on insecure subversion Repository(http) for tackle test app when insecure repository is not allowed", function () {
-        // open the configuration page for subversion and disable insecure repo
         subversionConfiguration.disableInsecureSubversionRepositories();
 
         const application = new Analysis(
@@ -110,11 +95,19 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Failed");
         application.openAnalysisDetails();
+    });
+
+    after("Perform test data clean up", () => {
+        login();
+        deleteByList(applicationsList);
+        source_credential.delete();
+        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 });

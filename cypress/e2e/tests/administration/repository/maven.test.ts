@@ -18,8 +18,7 @@ limitations under the License.
 import { MavenConfiguration } from "../../../models/administration/repositories/maven";
 import {
     configureRWX,
-    deleteAllBusinessServices,
-    deleteApplicationTableRows,
+    deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
     isEnabled,
@@ -37,12 +36,11 @@ import { clearRepository, repoSize } from "../../../views/repository.view";
 let mavenConfiguration = new MavenConfiguration();
 let source_credential;
 let maven_credential;
+var applicationsList: Analysis[];
 
 describe(["@tier1"], "Test secure and insecure maven repository analysis", () => {
     before("Login", function () {
-        // Perform login
         login();
-        deleteApplicationTableRows();
 
         //Create source and maven credentials required for analysis
         source_credential = new CredentialsSourceControlUsername(
@@ -64,7 +62,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         maven_credential.create();
     });
 
-    beforeEach("Persist session", function () {
+    beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -93,6 +91,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         );
 
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.manageCredentials(source_credential.name, maven_credential.name);
@@ -119,6 +118,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         );
 
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.manageCredentials(source_credential.name, maven_credential.name);
@@ -153,8 +153,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
     after("Perform test data clean up", () => {
         configureRWX(false);
         login();
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
+        deleteByList(applicationsList);
         source_credential.delete();
         maven_credential.delete();
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
