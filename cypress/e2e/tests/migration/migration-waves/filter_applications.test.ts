@@ -108,7 +108,7 @@ describe(
             clickByText(button, clearAllFilters);
 
             // Apply BS associated with applicationsList[0].name as search filter
-            applySearchFilter(businessService, applicationsList[0].business, true, 1);
+            applySearchFilter(businessService, applicationsList[0].business, true, 2);
             cy.get("td").should("not.contain", applicationsList[1].name);
             cy.get("td").should("contain", applicationsList[0].name);
             clickByText(button, clearAllFilters);
@@ -117,9 +117,9 @@ describe(
         });
 
         after("Perform test data clean up", function () {
+            deleteByList(applicationsList);
             deleteByList(businessservicesList);
             deleteByList(tagList);
-            deleteByList(applicationsList);
         });
     }
 );
