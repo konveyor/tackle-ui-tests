@@ -20,6 +20,7 @@ import {
     createMultipleStakeholders,
     createMultipleApplications,
     click,
+    deleteByList,
 } from "../../../../../../utils/utils";
 import {
     copyAssessmentTableTr,

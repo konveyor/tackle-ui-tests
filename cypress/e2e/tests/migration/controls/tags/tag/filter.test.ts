@@ -14,10 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { login, applySelectFilter, clearAllFilters } from "../../../../../../utils/utils";
+import {
+    login,
+    applySelectFilter,
+    clearAllFilters,
+    exists,
+    expandRowDetails,
+    existsWithinRow,
+    closeRowDetails,
+} from "../../../../../../utils/utils";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 import { Tag } from "../../../../../models/migration/controls/tags";
-import { name, SEC } from "../../../../../types/constants";
+import { name, SEC, tdTag } from "../../../../../types/constants";
 import * as data from "../../../../../../utils/data_utils";
 
 describe(["@tier2"], "Tags filter validations", function () {
@@ -30,14 +38,23 @@ describe(["@tier2"], "Tags filter validations", function () {
         tag.create();
     });
 
-    it("Tag name filter validations", function () {
+    it("Name filter validations", function () {
         // Navigate to Tags tab
-        let validSearchInput = tag.name.substring(0, 3);
+        let validSearchInputTag = tag.name.substring(0, 3);
+        let validSearchInputTagCategory = tagCategory.name.substring(0, 3);
         let filterType = name;
 
-        //Applying valid filter
+        //Applying valid filter for tags and tag category
         Tag.openList();
-        applySelectFilter("tags", filterType, validSearchInput);
+        applySelectFilter("tags", filterType, validSearchInputTag);
+        // Assert that created tag exists
+        expandRowDetails(tag.tagCategory);
+        existsWithinRow(tag.tagCategory, tdTag, tag.name);
+        closeRowDetails(tag.tagCategory);
+
+        applySelectFilter("tags", filterType, validSearchInputTagCategory);
+        exists(validSearchInputTagCategory);
+
         clearAllFilters();
 
         // Enter a non-existing tag name substring and apply it as search filter

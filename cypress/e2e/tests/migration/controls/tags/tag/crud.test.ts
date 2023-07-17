@@ -53,20 +53,20 @@ describe(["@tier1"], "Tag CRUD operations", () => {
         existsWithinRow(tag.tagCategory, tdTag, tag.name);
         closeRowDetails(tag.tagCategory);
 
-        // Edit the tag and tag type name
+        // Edit the tag and tag category name
         let updatedTagName = data.getRandomWord(8);
-        let updatedTagTypeName = data.getRandomDefaultTagCategory();
-        tag.edit({ name: updatedTagName, tagtype: updatedTagTypeName });
+        let updatedTagCategoryName = data.getRandomDefaultTagCategory();
+        tag.edit({ name: updatedTagName, tagcategory: updatedTagCategoryName });
         cy.get("@putTag");
         cy.wait(2000);
 
         // Assert that tag type name got updated
-        exists(updatedTagTypeName);
+        exists(updatedTagCategoryName);
 
         // Assert that tag name got updated
-        expandRowDetails(updatedTagTypeName);
-        existsWithinRow(updatedTagTypeName, tdTag, updatedTagName);
-        closeRowDetails(updatedTagTypeName);
+        expandRowDetails(updatedTagCategoryName);
+        existsWithinRow(updatedTagCategoryName, tdTag, updatedTagName);
+        closeRowDetails(updatedTagCategoryName);
 
         // Delete tag
         tag.delete();
