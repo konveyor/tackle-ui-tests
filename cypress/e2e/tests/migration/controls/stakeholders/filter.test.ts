@@ -60,7 +60,7 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         stakeholdersList = createMultipleStakeholders(2, jobFunctionsList, stakeholderGroupsList);
     });
 
-    it("MTA-881 | Email filter validations", function () {
+    it("Email filter validations", function () {
         // Navigate to stakeholder tab
         Stakeholders.openList();
 
@@ -81,12 +81,12 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         applySearchFilter(email, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No stakeholders available");
+        cy.get("h2").contains("No stakeholder available");
 
         clickByText(button, clearAllFilters);
     });
 
-    it("MTA-881 | Display name filter validations", function () {
+    it("Display name filter validations", function () {
         // Navigate to stakeholder tab
         Stakeholders.openList();
 
@@ -107,12 +107,12 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         applySearchFilter(name, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No stakeholders available");
+        cy.get("h2").contains("No stakeholder available");
 
         clickByText(button, clearAllFilters);
     });
 
-    it("MTA-881 | Job function filter validations", function () {
+    it("Job function filter validations", function () {
         // Navigate to stakeholder tab
         Stakeholders.openList();
 
@@ -139,12 +139,12 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         applySearchFilter(jobFunction, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No stakeholders available");
+        cy.get("h2").contains("No stakeholder available");
 
         clickByText(button, clearAllFilters);
     });
 
-    it("MTA-881 | Group filter validations", function () {
+    it("Group filter validations", function () {
         // Navigate to stakeholder tab
         Stakeholders.openList();
 
@@ -174,15 +174,15 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         applySearchFilter(group, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No stakeholders available");
+        cy.get("h2").contains("No stakeholder available");
 
         clickByText(button, clearAllFilters);
     });
 
     after("Perform test data clean up", function () {
         // Cleanup data
-        deleteByList(jobFunctionsList);
         deleteByList(stakeholdersList);
         deleteByList(stakeholderGroupsList);
+        deleteByList(jobFunctionsList);
     });
 });
