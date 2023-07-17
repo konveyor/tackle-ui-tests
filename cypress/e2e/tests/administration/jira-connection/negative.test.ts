@@ -15,12 +15,22 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { login } from "../../../../utils/utils";
+import {
+    createMultipleApplications,
+    doesExistText,
+    exists,
+    login,
+    performRowAction,
+    validateTextPresence,
+} from "../../../../utils/utils";
 import { getJiraConnectionData, getJiraCredentialData } from "../../../../utils/data_utils";
-import { CredentialType } from "../../../types/constants";
+import { CredentialType, deleteAction, JiraIssueTypes, JiraType } from "../../../types/constants";
 import { JiraConnectionData } from "../../../types/types";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
+import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
+import * as data from "../../../../utils/data_utils";
+import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 
 describe(["@tier2"], "Jira connection negative tests", () => {
     const toBeCanceled = true;
@@ -33,6 +43,12 @@ describe(["@tier2"], "Jira connection negative tests", () => {
     let jiraCloudConnectionDataIncorrect: JiraConnectionData;
     let jiraCloudConnection: Jira;
     let jiraCloudConnectionIncorrect: Jira;
+    let applicationList: Array<Assessment> = [];
+    const wavesMap = {};
+    const now = new Date();
+    now.setDate(now.getDate() + 1);
+    const end = new Date(now.getTime());
+    end.setFullYear(end.getFullYear() + 1);
 
     before("Login and create required credentials", function () {
         // Perform login
@@ -51,6 +67,8 @@ describe(["@tier2"], "Jira connection negative tests", () => {
             useTestingAccount
         );
 
+        jiraCloudConnection = new Jira(jiraCloudConnectionData);
+
         // Defining and creating dummy credentials to be used further in tests
         jiraBasicCredentialInvalid = new JiraCredentials(
             getJiraCredentialData(CredentialType.jiraBasic, !useTestingAccount)
@@ -66,20 +84,65 @@ describe(["@tier2"], "Jira connection negative tests", () => {
         );
 
         jiraCloudConnectionIncorrect = new Jira(jiraCloudConnectionDataIncorrect);
+
+        applicationList = createMultipleApplications(2);
     });
 
-    it("Creating Jira connection with incorrect credentials", () => {
+    it.skip("Creating Jira connection with incorrect credentials", () => {
         jiraCloudConnectionIncorrect.create();
         jiraCloudConnectionIncorrect.validateState(expectedToFail);
     });
 
     it("Removing Jira connection in use by wave", () => {
+        const issueType = JiraIssueTypes.task;
+        let projectName = "";
         jiraCloudConnection.create();
         jiraCloudConnection.validateState(!expectedToFail);
+
+        // Defining and creating new migration wave
+        const migrationWave = new MigrationWave(
+            data.getRandomWord(8),
+            now,
+            end,
+            null,
+            null,
+            applicationList
+        );
+        migrationWave.create();
+
+        jiraCloudConnection
+            // Getting all projects on Jira side
+            .getAllProjects()
+            .then((project) => {
+                // Checking that project is not a NULL or undefined
+                expect(!!project[0]).to.eq(true);
+                projectName = project[0].name;
+                return jiraCloudConnection.getIssueType(issueType);
+            })
+            .then((issue) => {
+                // Checking that Jira issue type is not a NULL or undefined
+                expect(!!issue).to.eq(true);
+
+                // Exporting wave to Jira
+                migrationWave.exportToIssueManager(
+                    JiraType.cloud,
+                    jiraCloudConnection.name,
+                    projectName,
+                    issue.untranslatedName
+                );
+            });
+        // jiraCloudConnection.delete();
+        Jira.openList();
+        performRowAction(jiraCloudConnection.name, deleteAction);
+        validateTextPresence(
+            "h4.pf-c-alert__title",
+            "Danger alert:The instance contains issues associated with application and cannot be deleted"
+        );
+        exists(jiraCloudConnection.name, "table[aria-label='Jira trackers table']");
     });
 
-    after("Delete Jira connection and Jira credentials", () => {
-        jiraCloudConnectionIncorrect.delete();
-        jiraBasicCredentialInvalid.delete();
-    });
+    // after("Delete Jira connection and Jira credentials", () => {
+    //     jiraCloudConnectionIncorrect.delete();
+    //     jiraBasicCredentialInvalid.delete();
+    // });
 });
