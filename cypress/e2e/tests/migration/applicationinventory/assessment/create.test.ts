@@ -240,7 +240,6 @@ describe(["@tier2"], "Application validations", () => {
     });
 
     after("Perform test data clean up", function () {
-        deleteByList(applicationList);
         deleteByList(businessservicesList);
         deleteByList(stakeHoldersList);
     });
