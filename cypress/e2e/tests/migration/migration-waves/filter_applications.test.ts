@@ -21,7 +21,7 @@ import {
     createMultipleTags,
     createMultipleApplicationsWithBSandTags,
 } from "../../../../utils/utils";
-import { Application } from "../../../models/migration/applicationinventory/application";
+import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import {
     manageApplications,
     button,
@@ -39,7 +39,7 @@ now.setDate(now.getDate() + 1);
 const end = new Date(now.getTime());
 
 end.setFullYear(end.getFullYear() + 1);
-let applicationsList: Array<Application> = [];
+let applicationsList: Assessment[] = [];
 let businessservicesList: Array<BusinessServices> = [];
 let tagList: Array<Tag> = [];
 
