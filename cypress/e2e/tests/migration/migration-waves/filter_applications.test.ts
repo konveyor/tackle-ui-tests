@@ -21,10 +21,14 @@ import {
     createMultipleTags,
     createMultipleApplicationsWithBSandTags,
 } from "../../../../utils/utils";
-import { Application } from "../../../models/migration/applicationinventory/application";
-import { Stakeholders } from "../../../models/migration/controls/stakeholders";
-import { Stakeholdergroups } from "../../../models/migration/controls/stakeholdergroups";
-import { manageApplications, button, name, clearAllFilters, SEC } from "../../../types/constants";
+import { Assessment } from "../../../models/migration/applicationinventory/assessment";
+import {
+    manageApplications,
+    button,
+    name,
+    clearAllFilters,
+    businessService,
+} from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { BusinessServices } from "../../../models/migration/controls/businessservices";
@@ -35,9 +39,9 @@ now.setDate(now.getDate() + 1);
 const end = new Date(now.getTime());
 
 end.setFullYear(end.getFullYear() + 1);
-let applicationsList: Array<Application> = [];
-let businessservicesList: Array<BusinessServices> = [];
-let tagList: Array<Tag> = [];
+let applicationsList: Assessment[] = [];
+let businessservicesList: BusinessServices[] = [];
+let tagList: Tag[] = [];
 
 //Automates Polarion MTA-354
 describe(
@@ -56,7 +60,7 @@ describe(
             );
         });
 
-        it("Filter applications by name", function () {
+        it("Bug: MTA-969 Filter applications by name", function () {
             let migrationWave = new MigrationWave(
                 data.getRandomWord(8),
                 now,
@@ -75,6 +79,7 @@ describe(
             cy.get("td").should("not.contain", applicationsList[0].name);
             clickByText(button, clearAllFilters);
 
+            // Enter a non-existing app name and apply it as search filter
             applySearchFilter(name, String(data.getRandomNumber()), true, 1);
             cy.get("td").should("not.contain", applicationsList[1].name);
             cy.get("td").should("not.contain", applicationsList[0].name);
@@ -83,7 +88,7 @@ describe(
             migrationWave.delete();
         });
 
-        it("Filter applications by business service", function () {
+        it("Bug: MTA-969 Filter applications by business service", function () {
             let migrationWave = new MigrationWave(
                 data.getRandomWord(8),
                 now,
@@ -96,13 +101,14 @@ describe(
             migrationWave.expandActionsMenu();
             cy.contains(manageApplications).click();
 
-            // Enter an existing exact name and apply it as search filter
-            applySearchFilter(businessService, applicationsList[1].business);
+            // Apply BS associated with applicationsList[1].name as search filter
+            applySearchFilter(businessService, applicationsList[1].business, true, 1);
             cy.get("td").should("contain", applicationsList[1].name);
             cy.get("td").should("not.contain", applicationsList[0].name);
             clickByText(button, clearAllFilters);
 
-            applySearchFilter(businessService, applicationsList[0].business);
+            // Apply BS associated with applicationsList[0].name as search filter
+            applySearchFilter(businessService, applicationsList[0].business, true, 1);
             cy.get("td").should("not.contain", applicationsList[1].name);
             cy.get("td").should("contain", applicationsList[0].name);
             clickByText(button, clearAllFilters);
@@ -111,9 +117,9 @@ describe(
         });
 
         after("Perform test data clean up", function () {
+            deleteByList(applicationsList);
             deleteByList(businessservicesList);
             deleteByList(tagList);
-            deleteByList(applicationsList);
         });
     }
 );

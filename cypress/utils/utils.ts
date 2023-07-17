@@ -1197,8 +1197,8 @@ export function createMultipleApplicationsWithBSandTags(
     numberofapplications: number,
     businessservice?: Array<BusinessServices>,
     tagList?: Array<Tag>
-): Array<Application> {
-    var applicationList: Array<Application> = [];
+): Array<Assessment> {
+    var applicationList: Array<Assessment> = [];
     var tags: string[];
     var business: string;
     clickByText(navMenu, applicationInventory);
@@ -1212,7 +1212,7 @@ export function createMultipleApplicationsWithBSandTags(
             tags: [tagList[i].name],
             comment: data.getDescription(),
         };
-        const application = new Application(appdata);
+        const application = new Assessment(appdata);
         application.create();
         applicationList.push(application);
         cy.wait(2000);
