@@ -132,7 +132,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        deleteByList(businessServicesList);
         deleteByList(applicationsList);
+        deleteByList(businessServicesList);
     });
 });
