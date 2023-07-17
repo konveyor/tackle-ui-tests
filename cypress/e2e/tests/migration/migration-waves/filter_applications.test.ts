@@ -40,8 +40,8 @@ const end = new Date(now.getTime());
 
 end.setFullYear(end.getFullYear() + 1);
 let applicationsList: Assessment[] = [];
-let businessservicesList: Array<BusinessServices> = [];
-let tagList: Array<Tag> = [];
+let businessservicesList: BusinessServices[] = [];
+let tagList: Tag[] = [];
 
 //Automates Polarion MTA-354
 describe(
