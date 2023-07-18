@@ -60,6 +60,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
             )
         );
         maven_credential.create();
+        applicationsList = [];
     });
 
     beforeEach("Load data", function () {

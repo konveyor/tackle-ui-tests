@@ -44,6 +44,7 @@ describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
             )
         );
         source_credential.create();
+        applicationsList = [];
     });
 
     beforeEach("Load data", function () {
