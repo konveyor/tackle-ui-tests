@@ -216,7 +216,7 @@ describe(["@tier2"], "Application validations", () => {
         application_inventory_kebab_menu("Delete");
     });
 
-    it("Create tag from application side drawer", function () {
+    it("MTA-939 | Create tag from application side drawer", function () {
         // Automates Polarion MTA-321
         const application = new Assessment(getRandomApplicationData());
         const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagCategory());
