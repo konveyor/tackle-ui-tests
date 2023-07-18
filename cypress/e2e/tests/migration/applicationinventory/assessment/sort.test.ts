@@ -106,7 +106,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
-    it("Bug MTA-916: Tag count sort validations", function () {
+    it("Tag count sort validations", function () {
         // Navigate to application inventory page
         Assessment.open();
         cy.wait("@getApplications");
@@ -132,7 +132,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        deleteByList(businessServicesList);
         deleteByList(applicationsList);
+        deleteByList(businessServicesList);
     });
 });
