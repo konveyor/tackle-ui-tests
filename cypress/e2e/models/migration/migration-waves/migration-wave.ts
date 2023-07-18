@@ -30,6 +30,7 @@ import {
 } from "../../../views/common.view";
 import { selectBox } from "../../../views/applicationinventory.view";
 import { Application } from "../../../models/migration/applicationinventory/application";
+import * as commonView from "../../../views/common.view";
 
 export interface MigrationWave {
     name: string;
@@ -136,6 +137,7 @@ export class MigrationWave {
         MigrationWave.open();
         this.expandActionsMenu();
         cy.contains(manageApplications).click();
+        selectItemsPerPage(100);
         cy.get(itemsSelectInsideDialog).click();
         cy.contains(button, selectNone).click();
         selectItemsPerPage(100);
