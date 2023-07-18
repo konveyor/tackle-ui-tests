@@ -25,13 +25,12 @@ describe(["@tier2"], "Tags filter validations", function () {
     const tag = new Tag(data.getRandomWord(5), tagCategory.name);
 
     before("Login", function () {
-        // Perform login
         login();
         tagCategory.create();
         tag.create();
     });
 
-    it("MTA-802 | Tag name filter validations", function () {
+    it("Tag name filter validations", function () {
         // Navigate to Tags tab
         let validSearchInput = tag.name.substring(0, 3);
         let filterType = name;
@@ -39,8 +38,6 @@ describe(["@tier2"], "Tags filter validations", function () {
         //Applying valid filter
         Tag.openList();
         applySelectFilter("tags", filterType, validSearchInput);
-
-        //Clear all filters
         clearAllFilters();
 
         // Enter a non-existing tag name substring and apply it as search filter
