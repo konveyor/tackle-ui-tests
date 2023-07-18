@@ -1209,7 +1209,9 @@ export function createMultipleApplicationsWithBSandTags(
         appdata.business = businessservice[i].name;
         if (businessservice) appdata.business = businessservice[i].name;
         if (tagList) appdata.tags = [tagList[i].name];
-        if (stakeholder) appdata.owner = [stakeholder[i].name];
+        if (stakeholder) appdata.owner = stakeholder[i].name;
+        appdata.description = data.getDescription();
+        appdata.comment = data.getDescription();
         /*
         if (!businessservice) business = businessservice[i].name;
         if (tagList) tags = [tagList[i].name];

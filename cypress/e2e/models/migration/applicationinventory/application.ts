@@ -74,7 +74,7 @@ export class Application {
     business?: string;
     description?: string;
     tags?: Array<string>;
-    owner? : string;
+    owner?: string;
     comment?: string;
     analysis?: boolean;
     repoType?: string;

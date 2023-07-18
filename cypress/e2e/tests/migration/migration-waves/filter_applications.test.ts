@@ -29,7 +29,7 @@ import {
     name,
     clearAllFilters,
     businessService,
-    owner
+    owner,
 } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
@@ -62,7 +62,7 @@ describe(
                 2,
                 businessservicesList,
                 tagList,
-                stakeholderList,  
+                stakeholderList
             );
         });
 
