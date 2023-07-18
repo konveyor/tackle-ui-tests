@@ -180,7 +180,6 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Cleanup data
         deleteByList(stakeholdersList);
         deleteByList(stakeholderGroupsList);
         deleteByList(jobFunctionsList);
