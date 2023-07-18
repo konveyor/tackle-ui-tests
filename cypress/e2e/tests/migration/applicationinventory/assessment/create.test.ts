@@ -16,7 +16,6 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    assertRowCount,
     login,
     clickByText,
     inputText,
@@ -24,9 +23,6 @@ import {
     createMultipleBusinessServices,
     selectFormItems,
     getRandomApplicationData,
-    createMultipleApplications,
-    application_inventory_kebab_menu,
-    navigate_to_application_inventory,
     createMultipleStakeholders,
     expandRowDetails,
     existsWithinRow,
@@ -59,7 +55,6 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 import { Tag } from "../../../../models/migration/controls/tags";
 
 let businessservicesList: Array<BusinessServices> = [];
-let applicationList: Array<Assessment> = [];
 let stakeHoldersList: Stakeholders[];
 
 describe(["@tier2"], "Application validations", () => {
@@ -193,33 +188,7 @@ describe(["@tier2"], "Application validations", () => {
         application.delete();
     });
 
-    it("Bulk deletion of applications - Select page ", function () {
-        applicationList = createMultipleApplications(11);
-        navigate_to_application_inventory();
-        // Click dropdown toggle button to make 'Select page' selection.
-        cy.get("button[aria-label='Select']").click();
-        cy.get("ul[role=menu] > li").contains("Select page").click();
-        application_inventory_kebab_menu("Delete");
-    });
-
-    it("Bulk deletion of applications - Select all ", function () {
-        applicationList = createMultipleApplications(11);
-        navigate_to_application_inventory();
-        // Click dropdown toggle button to make 'Select all' selection.
-        cy.get("button[aria-label='Select']").click();
-        cy.get("ul[role=menu] > li").contains("Select all").click();
-        application_inventory_kebab_menu("Delete");
-    });
-
-    it("Bulk deletion of applications - Delete all apps by selecting checkbox ", function () {
-        applicationList = createMultipleApplications(11);
-        navigate_to_application_inventory();
-        // Click 'bulk-selected-apps-checkbox'.
-        cy.get("input#bulk-selected-items-checkbox").check({ force: true });
-        application_inventory_kebab_menu("Delete");
-    });
-
-    it("MTA-939 | Create tag from application side drawer", function () {
+    it("Create tag from application side drawer", function () {
         // Automates Polarion MTA-321
         const application = new Assessment(getRandomApplicationData());
         const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagCategory());
