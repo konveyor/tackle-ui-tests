@@ -34,7 +34,6 @@ import * as data from "../../../../../../utils/data_utils";
 
 describe(["@tier2"], "Tag validations", () => {
     before("Login", function () {
-        // Perform login
         login();
     });
 
@@ -45,7 +44,6 @@ describe(["@tier2"], "Tag validations", () => {
     });
 
     it("Tag field validations", function () {
-        // Navigate to Tags tab and click "Create tag" button
         Tag.openList();
         clickByText(button, createTagButton);
 
