@@ -86,6 +86,7 @@ export type applicationData = {
     artifact?: string;
     version?: string;
     packaging?: string;
+    owner?; string;
 };
 
 export type ProxyData = {

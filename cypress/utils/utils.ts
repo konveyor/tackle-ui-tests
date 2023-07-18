@@ -1196,13 +1196,21 @@ export function createMultipleApplications(numberofapplications: number): Array<
 export function createMultipleApplicationsWithBSandTags(
     numberofapplications: number,
     businessservice?: Array<BusinessServices>,
-    tagList?: Array<Tag>
+    tagList?: Array<Tag>,
+    stakeholder?: Array<Stakeholders>
 ): Array<Assessment> {
     var applicationList: Array<Assessment> = [];
     var tags: string[];
     var business: string;
+    let appdata: applicationData;
+    cy.pause();
     clickByText(navMenu, applicationInventory);
     for (let i = 0; i < numberofapplications; i++) {
+        appdata.business = businessservice[i].name;
+        if (businessservice) appdata.business = businessservice[i].name;
+        if (tagList) appdata.tags = [tagList[i].name];
+        if (stakeholder) appdata.owner = [stakeholder[i].name];
+        /*
         if (!businessservice) business = businessservice[i].name;
         if (tagList) tags = [tagList[i].name];
         let appdata = {
@@ -1211,7 +1219,7 @@ export function createMultipleApplicationsWithBSandTags(
             description: data.getDescription(),
             tags: [tagList[i].name],
             comment: data.getDescription(),
-        };
+        };*/
         const application = new Assessment(appdata);
         application.create();
         applicationList.push(application);

@@ -36,6 +36,7 @@ import {
     applicationBusinessServiceSelect,
     applicationTagsSelect,
     applicationCommentInput,
+    applicationOwnerInput,
     applicationTag,
     closeDetailsPage,
     editButton,
@@ -73,6 +74,7 @@ export class Application {
     business?: string;
     description?: string;
     tags?: Array<string>;
+    owner? : string;
     comment?: string;
     analysis?: boolean;
     repoType?: string;
@@ -94,6 +96,7 @@ export class Application {
             business,
             description,
             tags,
+            owner,
             comment,
             analysis,
             repoType,
@@ -110,6 +113,7 @@ export class Application {
         if (description) this.description = description;
         if (comment) this.comment = comment;
         if (tags) this.tags = tags;
+        if (owner) this.owner = owner;
         if (analysis) this.analysis = analysis;
         if (repoType) this.repoType = repoType;
         if (sourceRepo) this.sourceRepo = sourceRepo;
@@ -150,6 +154,10 @@ export class Application {
         });
     }
 
+    protected selectOwner(owner: string): void {
+        selectFormItems(applicationOwnerInput, owner);
+    }
+
     protected selectRepoType(repoType: string): void {
         selectFormItems(repoTypeSelect, repoType);
     }
@@ -182,6 +190,7 @@ export class Application {
             if (this.description) this.fillDescription(this.description);
             if (this.comment) this.fillComment(this.comment);
             if (this.tags) this.selectTags(this.tags);
+            if (this.owner) this.selectOwner(this.owner);
             if (this.sourceRepo) this.fillSourceModeFields();
             if (this.group) this.fillBinaryModeFields();
             submitForm();
