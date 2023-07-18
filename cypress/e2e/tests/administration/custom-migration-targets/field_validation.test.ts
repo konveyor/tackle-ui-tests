@@ -125,8 +125,6 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         );
 
         CustomMigrationTarget.fillRepositoryUrl("https://github.com/konveyor/tackle-testapp");
-        cy.get(CustomMigrationTargetView.repositoryUrlHelper).should(
-            "not.exist",
-        );
+        cy.get(CustomMigrationTargetView.repositoryUrlHelper).should("not.exist");
     });
 });
