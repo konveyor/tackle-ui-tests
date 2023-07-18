@@ -36,7 +36,7 @@ import { clearRepository, repoSize } from "../../../views/repository.view";
 let mavenConfiguration = new MavenConfiguration();
 let source_credential;
 let maven_credential;
-let applicationsList: Analysis[];
+let applicationsList: Analysis[] = [];
 
 describe(["@tier1"], "Test secure and insecure maven repository analysis", () => {
     before("Login", function () {
@@ -60,7 +60,6 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
             )
         );
         maven_credential.create();
-        applicationsList = [];
     });
 
     beforeEach("Load data", function () {
