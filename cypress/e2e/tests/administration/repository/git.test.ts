@@ -31,7 +31,7 @@ import { CredentialType, UserCredentials } from "../../../types/constants";
 
 let gitConfiguration = new GitConfiguration();
 let source_credential;
-let applicationsList: Analysis[];
+let applicationsList: Analysis[] = [];
 
 describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
     before("Login", function () {
