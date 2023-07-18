@@ -41,7 +41,7 @@ describe(["@tier1"], "Tag CRUD operations", () => {
         cy.intercept("DELETE", "/hub/tag/*").as("deleteTag");
     });
 
-    it("Bug MTA-802 | Tag CRUD", function () {
+    it("Tag CRUD", function () {
         selectUserPerspective(migration);
         // Create new tag
         const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagCategory());

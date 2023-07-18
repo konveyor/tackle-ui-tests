@@ -39,7 +39,7 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         migrationWave.create();
     });
 
-    it("Bug MTA-906 | Name validations", function () {
+    it("Name validations", function () {
         MigrationWave.openNewForm();
         cy.get(MigrationWaveView.submitButton).should("be.disabled");
 

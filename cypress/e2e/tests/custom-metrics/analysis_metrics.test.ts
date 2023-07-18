@@ -30,7 +30,6 @@ let counter: number;
 
 describe(["@tier2"], "Custom Metrics - Count the total number of initiated analyses", function () {
     before("Login", function () {
-        // Perform login
         login();
     });
 
@@ -83,7 +82,7 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
         metrics.validateMetric(metricName, counter);
     });
 
-    it("BUG MTA-894 | Perform analysis on tackle-testapp without credentials - Validate analysis failed but counter increased", function () {
+    it("Perform analysis on tackle-testapp without credentials - Validate analysis failed but counter increased", function () {
         // For tackle test app source credentials are required.
         const tackleTestApp = new Analysis(
             getRandomApplicationData("tackle-testapp", {
