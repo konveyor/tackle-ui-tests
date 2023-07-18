@@ -104,10 +104,10 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         CustomMigrationTarget.uploadImage("img/big-image.jpg");
         cy.get(CustomMigrationTargetView.imageInput).blur();
         cy.wait(2 * SEC);
+        cy.contains("Cancel").click();
     });
 
-    it("BUG MTA-484 | Rule repository URL validation", function () {
-        // Fails due to bug 484
+    it("Rule repository URL validation", function () {
         CustomMigrationTarget.openNewForm();
         click(CustomMigrationTargetView.retrieveFromARepositoryRadio);
         CustomMigrationTarget.selectRepositoryType(RepositoryType.git);
@@ -125,9 +125,6 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         );
 
         CustomMigrationTarget.fillRepositoryUrl("https://github.com/konveyor/tackle-testapp");
-        cy.get(CustomMigrationTargetView.repositoryUrlHelper).should(
-            "not.contain",
-            "Must be a valid URL."
-        );
+        cy.get(CustomMigrationTargetView.repositoryUrlHelper).should("not.exist");
     });
 });
