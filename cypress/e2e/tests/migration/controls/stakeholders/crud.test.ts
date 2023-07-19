@@ -162,7 +162,6 @@ describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
     });
 
     after("Perform test data clean up", function () {
-        // Clean up data created.
         deleteByList(jobFunctionsList);
         deleteByList(stakeholderGroupList);
     });

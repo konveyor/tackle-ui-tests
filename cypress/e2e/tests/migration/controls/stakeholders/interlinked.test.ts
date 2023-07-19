@@ -23,9 +23,6 @@ import {
     exists,
     notExists,
     selectUserPerspective,
-    deleteAllStakeholders,
-    deleteAllJobfunctions,
-    deleteAllStakeholderGroups,
 } from "../../../../../utils/utils";
 import { navTab } from "../../../../views/menu.view";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
@@ -63,7 +60,6 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
 
         // Create two stakeholder groups
         for (let i = 0; i < 2; i++) {
-            // Create new stakeholder groups
             const stakeholdergroup = new Stakeholdergroups(
                 data.getCompanyName(),
                 data.getDescription()
@@ -103,9 +99,7 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
         cy.wait("@getStakeholdergroups");
         cy.wait(2000);
 
-        // Navigate to stakeholder page
         clickByText(navTab, stakeholders);
-
         // Verify if the second stakeholder group's name attached to the stakeholder got updated
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -121,13 +115,9 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
         // Delete second stakeholder group
         stakeholdergroupsList[1].delete();
         cy.wait("@getStakeholdergroups");
-
-        // Assert that second stakeholder group got deleted
         notExists(stakeholdergroupsList[1].name);
 
-        // Navigate to stakeholder page
         clickByText(navTab, stakeholders);
-
         // Verify if the second stakeholder group's name got detached from stakeholder
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -140,25 +130,19 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
             .get("div > dd")
             .should("not.contain", updatedStakeholderGroupName);
 
-        // Delete stakeholder
         stakeholder.delete();
         cy.wait("@getStakeholders");
-
-        // Assert that stakeholder got deleted
         notExists(stakeholder.email, stakeHoldersTable);
 
         // Delete first stakeholder group
         stakeholdergroupsList[0].delete();
         cy.wait("@getStakeholdergroups");
-
-        // Assert the deletion of first stakeholder group
         notExists(stakeholdergroupsList[0].name);
     });
 
     it("Job function attach, update and delete dependency on stakeholder", function () {
         selectUserPerspective(migration);
 
-        // Create new job function
         const jobfunction = new Jobfunctions(data.getJobTitle());
         jobfunction.create();
         cy.wait("@postJobfunction");
@@ -185,9 +169,7 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
         cy.wait("@getJobfunctions");
         cy.wait(2000);
 
-        // Navigate to stakeholder page
         clickByText(navTab, stakeholders);
-
         // Verify if the job function's name attached to the stakeholder got updated
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -202,16 +184,11 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
         cy.wait("@getJobfunctions");
         cy.wait(2000);
 
-        // Delete the job function
         jobfunction.delete();
         cy.wait("@getJobfunctions");
-
-        // Assert that job function got deleted
         notExists(jobfunction.name);
 
-        // Navigate to stakeholder page
         clickByText(navTab, stakeholders);
-
         // Verify if the job function's name got detached from stakeholder
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -221,11 +198,8 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
             .find("td[data-label='Job function']")
             .should("not.contain", updatedJobfunctionName);
 
-        // Delete stakeholder
         stakeholder.delete();
         cy.wait("@getStakeholders");
-
-        // Assert that stakeholder got deleted
         notExists(stakeholder.email, stakeHoldersTable);
     });
 });

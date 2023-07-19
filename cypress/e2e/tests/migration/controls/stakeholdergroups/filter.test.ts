@@ -24,8 +24,7 @@ import {
     selectItemsPerPage,
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
-    deleteAllStakeholders,
-    deleteAllStakeholderGroups,
+    deleteByList,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -161,8 +160,7 @@ describe(["@tier2"], "Stakeholder groups filter validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Delete the stakeholder groups and stakeholders created before the tests
-        deleteAllStakeholders();
-        deleteAllStakeholderGroups();
+        deleteByList(stakeholdersList);
+        deleteByList(stakeholdergroupsList);
     });
 });

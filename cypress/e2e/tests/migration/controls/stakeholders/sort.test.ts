@@ -40,15 +40,12 @@ let stakeholderGroupList: Array<Stakeholdergroups> = [];
 describe(["@tier2"], "Stakeholder sort validations", function () {
     before("Login and Create Test Data", function () {
         login();
-
-        // Create multiple job functions, stakeholder groups and stakeholders
         jobFunctionsList = createMultipleJobFunctions(2);
         stakeholderGroupList = createMultipleStakeholderGroups(2);
         stakeholdersList = createMultipleStakeholders(2, jobFunctionsList, stakeholderGroupList);
     });
 
     it("Email sort validations", function () {
-        // Navigate to stakeholder tab
         Stakeholders.openList();
 
         // get unsorted list when page loads
@@ -72,7 +69,6 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
     });
 
     it("Display name sort validations", function () {
-        // Navigate to stakeholder tab
         Stakeholders.openList();
 
         // get unsorted list when page loads
@@ -96,7 +92,6 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
     });
 
     it("Job function sort validations", function () {
-        // Navigate to stakeholder tab
         Stakeholders.openList();
 
         // get unsorted list when page loads
@@ -120,7 +115,6 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Delete the job functions, stakeholder groups and stakeholders created before the tests
         deleteByList(stakeholdersList);
         deleteByList(stakeholderGroupList);
         deleteByList(jobFunctionsList);

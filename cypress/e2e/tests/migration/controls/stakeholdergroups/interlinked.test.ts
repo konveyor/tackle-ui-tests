@@ -40,7 +40,6 @@ describe(["@tier1"], "Stakeholder group linked to stakeholder members", () => {
     before("Login and Create Test Data", function () {
         login();
 
-        // Create two stakeholders
         stakeholdersList = createMultipleStakeholders(2);
         for (let i = 0; i < stakeholdersList.length; i++) {
             membersList.push(stakeholdersList[i].name);
@@ -135,14 +134,11 @@ describe(["@tier1"], "Stakeholder group linked to stakeholder members", () => {
         // Delete stakeholder group
         stakeholdergroup.delete();
         cy.wait("@getStakeholdergroups");
-
-        // Assert that created stakeholder group is deleted
         notExists(stakeholdergroup.name);
 
         // Delete first stakeholder
         stakeholdersList[0].delete();
         cy.wait("@getStakeholders");
-        // Assert that first stakeholder deleted
         notExists(stakeholdersList[0].name, stakeHoldersTable);
     });
 });

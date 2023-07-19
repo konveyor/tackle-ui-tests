@@ -22,9 +22,8 @@ import {
     getTableColumnData,
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
-    deleteAllStakeholders,
-    deleteAllStakeholderGroups,
     clickOnSortButton,
+    deleteByList,
 } from "../../../../../utils/utils";
 import { name, memberCount, SortType } from "../../../../types/constants";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
@@ -98,8 +97,7 @@ describe(["@tier2"], "Stakeholder groups sort validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Delete the stakeholder groups and stakeholders created before the tests
-        deleteAllStakeholders();
-        deleteAllStakeholderGroups();
+        deleteByList(stakeholdergroupsList);
+        deleteByList(stakeholdersList);
     });
 });
