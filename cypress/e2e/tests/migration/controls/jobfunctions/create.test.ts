@@ -20,7 +20,6 @@ import {
     inputText,
     exists,
     notExists,
-    selectUserPerspective,
     checkSuccessAlert,
 } from "../../../../../utils/utils";
 import {
@@ -29,7 +28,6 @@ import {
     max120CharsMsg,
     createNewButton,
     duplicateJobFunctionName,
-    migration,
 } from "../../../../types/constants";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import { jobfunctionNameInput } from "../../../../views/jobfunctions.view";
