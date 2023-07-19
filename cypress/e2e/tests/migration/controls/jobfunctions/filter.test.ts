@@ -34,8 +34,6 @@ let invalidSearchInput = String(data.getRandomNumber());
 describe(["@tier2"], "Job function filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
-
-        // Create multiple job functions
         jobFunctionsList = createMultipleJobFunctions(2);
     });
 

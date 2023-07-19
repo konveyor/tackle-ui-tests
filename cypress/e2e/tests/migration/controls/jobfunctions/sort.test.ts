@@ -32,8 +32,6 @@ let jobFunctionsList: Array<Jobfunctions> = [];
 describe(["@tier2"], "Job function sorting", function () {
     before("Login and Create Test Data", function () {
         login();
-
-        // Create multiple job functions
         jobFunctionsList = createMultipleJobFunctions(2);
     });
 
@@ -43,7 +41,6 @@ describe(["@tier2"], "Job function sorting", function () {
     });
 
     it("Name sort validations", function () {
-        // Navigate to job functions tab
         Jobfunctions.openList();
 
         // get unsorted list when page loads
