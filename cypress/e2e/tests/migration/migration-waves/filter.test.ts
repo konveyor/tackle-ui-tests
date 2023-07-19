@@ -24,6 +24,7 @@ import { button, name, clearAllFilters, SEC } from "../../../types/constants";
 
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
+import { MigrationWaveView } from "../../../views/migration-wave.view";
 
 let migrationWavesList: Array<MigrationWave> = [];
 //Automates Polarion TC 343
@@ -59,7 +60,9 @@ describe(["@tier2"], "Migration waves filter validations", function () {
         applySearchFilter(name, String(data.getRandomNumber()));
 
         // Assert that no search results are found
-        cy.get("td").should("not.exist");
+        cy.get(MigrationWaveView.migrationWavesTable)
+            .find("h2")
+            .should("contain", "No migration waves available");
         clickByText(button, clearAllFilters);
     });
 
