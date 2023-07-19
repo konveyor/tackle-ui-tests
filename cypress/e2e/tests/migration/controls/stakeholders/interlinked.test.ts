@@ -228,11 +228,4 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
         // Assert that stakeholder got deleted
         notExists(stakeholder.email, stakeHoldersTable);
     });
-
-    after("Perform test data clean up", function () {
-        // Delete the stakeholder groups and job functions created before the tests
-        deleteAllStakeholders();
-        deleteAllStakeholderGroups();
-        deleteAllJobfunctions();
-    });
 });
