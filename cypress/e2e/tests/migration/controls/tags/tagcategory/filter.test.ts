@@ -23,7 +23,6 @@ import { TagCategory } from "../../../../../models/migration/controls/tagcategor
 
 describe(["@tier2"], "Tag tagCategory filter validations", function () {
     beforeEach("Login", function () {
-        // Perform login
         login();
 
         // Interceptors

@@ -31,7 +31,6 @@ import * as data from "../../../../../../utils/data_utils";
 
 describe(["@tier1"], "Tag CRUD operations", () => {
     beforeEach("Login", function () {
-        // Perform login
         login();
 
         // Interceptors
@@ -43,7 +42,6 @@ describe(["@tier1"], "Tag CRUD operations", () => {
 
     it("Tag CRUD", function () {
         selectUserPerspective(migration);
-        // Create new tag
         const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagCategory());
         tag.create();
         cy.wait("@postTag");

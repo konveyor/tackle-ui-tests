@@ -17,32 +17,20 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
     selectItemsPerPage,
-    preservecookies,
-    hasToBeSkipped,
     createMultipleTags,
     deleteAllTagsAndTagCategories,
-    selectUserPerspective,
     goToPage,
     validatePagination,
 } from "../../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../../views/menu.view";
-import { controls, SEC, tags } from "../../../../../types/constants";
+import { SEC } from "../../../../../types/constants";
 
-import {
-    firstPageButton,
-    lastPageButton,
-    nextPageButton,
-    prevPageButton,
-    appTable,
-} from "../../../../../views/common.view";
+import { prevPageButton, appTable } from "../../../../../views/common.view";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 import { tagCategory } from "../../../../../views/tags.view";
 
 describe(["@tier3"], "Tag category pagination validations", function () {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
         TagCategory.openList();
         let rowsToCreate = 0;
@@ -68,11 +56,6 @@ describe(["@tier3"], "Tag category pagination validations", function () {
                     createMultipleTags(rowsToCreate);
                 }
             });
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
     });
 
     after("Perform test data clean up", function () {
