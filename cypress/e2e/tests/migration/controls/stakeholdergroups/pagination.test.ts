@@ -20,7 +20,6 @@ import {
     selectItemsPerPage,
     deleteTableRows,
     createMultipleStakeholderGroups,
-    deleteByList,
 } from "../../../../../utils/utils";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import {
@@ -36,8 +35,6 @@ let stakeholderGroupsList: Array<Stakeholdergroups> = [];
 describe(["@tier3"], "Stakeholder groups pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
-
-        // Create 11 rows
         stakeholderGroupsList = createMultipleStakeholderGroups(11);
     });
 
@@ -150,6 +147,6 @@ describe(["@tier3"], "Stakeholder groups pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        deleteByList(stakeholderGroupsList);
+        deleteTableRows();
     });
 });
