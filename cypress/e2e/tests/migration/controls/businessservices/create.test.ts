@@ -44,12 +44,10 @@ import * as data from "../../../../../utils/data_utils";
 
 describe(["@tier2"], "Business service validations", () => {
     before("Login", function () {
-        // Perform login
         login();
     });
 
     it("Business service field validations", function () {
-        // Navigate to business service tab and click "Create New" button
         BusinessServices.openList();
         clickByText(button, createNewButton);
 
@@ -70,7 +68,6 @@ describe(["@tier2"], "Business service validations", () => {
     });
 
     it("Business service button validations", function () {
-        // Navigate to business service tab and click "Create New" button
         BusinessServices.openList();
         clickByText(button, createNewButton);
 

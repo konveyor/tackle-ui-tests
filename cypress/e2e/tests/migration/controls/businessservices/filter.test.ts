@@ -35,9 +35,7 @@ let invalidSearchInput = String(data.getRandomNumber());
 describe(["@tier2"], "Business services filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
-        // Create multiple stakeholder owners
         stakeholdersList = createMultipleStakeholders(3);
-        // Create multiple business services
         businessServicesList = createMultipleBusinessServices(2, stakeholdersList);
     });
 
@@ -129,7 +127,6 @@ describe(["@tier2"], "Business services filter validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Delete the business services
         deleteByList(businessServicesList);
         deleteByList(stakeholdersList);
     });

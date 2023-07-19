@@ -36,7 +36,6 @@ var businessServicesList: Array<BusinessServices> = [];
 describe(["@tier2"], "Business services sort validations", function () {
     before("Login and Create Test Data", function () {
         login();
-        // Create data
         stakeholdersList = createMultipleStakeholders(2);
         businessServicesList = createMultipleBusinessServices(2, stakeholdersList);
     });
@@ -98,7 +97,6 @@ describe(["@tier2"], "Business services sort validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Clean up data created.
         deleteByList(businessServicesList);
         deleteByList(stakeholdersList);
     });
