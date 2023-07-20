@@ -16,8 +16,9 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    checkSuccessAlert,
     createMultipleApplications,
-    doesExistText,
+    deleteByList,
     exists,
     login,
     performRowAction,
@@ -31,9 +32,9 @@ import { JiraCredentials } from "../../../models/administration/credentials/Jira
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import * as data from "../../../../utils/data_utils";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
+import { successAlertMessage } from "../../../views/common.view";
 
 describe(["@tier2"], "Jira connection negative tests", () => {
-    const toBeCanceled = true;
     const expectedToFail = true;
     const useTestingAccount = true;
     const isSecure = false;
@@ -44,11 +45,11 @@ describe(["@tier2"], "Jira connection negative tests", () => {
     let jiraCloudConnection: Jira;
     let jiraCloudConnectionIncorrect: Jira;
     let applicationList: Array<Assessment> = [];
-    const wavesMap = {};
     const now = new Date();
     now.setDate(now.getDate() + 1);
     const end = new Date(now.getTime());
     end.setFullYear(end.getFullYear() + 1);
+    let migrationWave: MigrationWave;
 
     before("Login and create required credentials", function () {
         // Perform login
@@ -88,7 +89,11 @@ describe(["@tier2"], "Jira connection negative tests", () => {
         applicationList = createMultipleApplications(2);
     });
 
-    it.skip("Creating Jira connection with incorrect credentials", () => {
+    beforeEach("Login", function () {
+        cy.intercept("DELETE", "/hub/migrationwaves*/*").as("deleteWave");
+    });
+
+    it("Creating Jira connection with incorrect credentials", () => {
         jiraCloudConnectionIncorrect.create();
         jiraCloudConnectionIncorrect.validateState(expectedToFail);
     });
@@ -100,7 +105,7 @@ describe(["@tier2"], "Jira connection negative tests", () => {
         jiraCloudConnection.validateState(!expectedToFail);
 
         // Defining and creating new migration wave
-        const migrationWave = new MigrationWave(
+        migrationWave = new MigrationWave(
             data.getRandomWord(8),
             now,
             end,
@@ -131,18 +136,27 @@ describe(["@tier2"], "Jira connection negative tests", () => {
                     issue.untranslatedName
                 );
             });
-        // jiraCloudConnection.delete();
         Jira.openList();
         performRowAction(jiraCloudConnection.name, deleteAction);
         validateTextPresence(
             "h4.pf-c-alert__title",
-            "Danger alert:The instance contains issues associated with application and cannot be deleted"
+            "Danger alert:This instance contains issues associated with applications and cannot be deleted"
         );
         exists(jiraCloudConnection.name, "table[aria-label='Jira trackers table']");
     });
 
-    // after("Delete Jira connection and Jira credentials", () => {
-    //     jiraCloudConnectionIncorrect.delete();
-    //     jiraBasicCredentialInvalid.delete();
-    // });
+    after("Delete Jira connection and Jira credentials", () => {
+        migrationWave.delete();
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success alert:Migration wave ${migrationWave.name} was successfully deleted.`,
+            true
+        );
+        cy.wait("@deleteWave");
+        jiraCloudConnectionIncorrect.delete();
+        jiraCloudConnection.delete();
+        jiraBasicCredentialInvalid.delete();
+        jiraBasicCredential.delete();
+        deleteByList(applicationList);
+    });
 });
