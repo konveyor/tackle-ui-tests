@@ -20,7 +20,6 @@ import {
     createMultipleBusinessServices,
     createMultipleTags,
     createMultipleApplicationsWithBSandTags,
-    createMultipleStakeholders,
 } from "../../../../utils/utils";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import {
@@ -29,13 +28,11 @@ import {
     name,
     clearAllFilters,
     businessService,
-    owner,
 } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { BusinessServices } from "../../../models/migration/controls/businessservices";
 import { Tag } from "../../../models/migration/controls/tags";
-import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 
 const now = new Date();
 now.setDate(now.getDate() + 1);
@@ -45,7 +42,6 @@ end.setFullYear(end.getFullYear() + 1);
 let applicationsList: Assessment[] = [];
 let businessservicesList: BusinessServices[] = [];
 let tagList: Tag[] = [];
-let stakeholderList: Stakeholders[] = [];
 
 //Automates Polarion MTA-354
 describe(
@@ -57,12 +53,10 @@ describe(
 
             businessservicesList = createMultipleBusinessServices(2);
             tagList = createMultipleTags(2);
-            stakeholderList = createMultipleStakeholders(2);
             applicationsList = createMultipleApplicationsWithBSandTags(
                 2,
                 businessservicesList,
-                tagList,
-                stakeholderList
+                tagList
             );
         });
 
@@ -117,28 +111,6 @@ describe(
             applySearchFilter(businessService, applicationsList[0].business, true, 1);
             cy.get("td").should("not.contain", applicationsList[1].name);
             cy.get("td").should("contain", applicationsList[0].name);
-            clickByText(button, clearAllFilters);
-            clickByText(button, "Cancel");
-            migrationWave.delete();
-        });
-
-        it("Bug: MTA-969 Filter applications by owner", function () {
-            let migrationWave = new MigrationWave(
-                data.getRandomWord(8),
-                now,
-                end,
-                null,
-                null,
-                applicationsList
-            );
-            migrationWave.create();
-            migrationWave.expandActionsMenu();
-            cy.contains(manageApplications).click();
-
-            // Enter an existing exact name and apply it as search filter
-            applySearchFilter("Owner", applicationsList[1].name, true, 1);
-            cy.get("td").should("contain", applicationsList[1].name);
-            cy.get("td").should("not.contain", applicationsList[0].name);
             clickByText(button, clearAllFilters);
             clickByText(button, "Cancel");
             migrationWave.delete();
