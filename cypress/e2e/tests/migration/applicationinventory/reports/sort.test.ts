@@ -69,14 +69,6 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    afterEach("Persist session", function () {
-        resetURL();
-    });
-
-    after("Perform test data clean up", function () {
-        deleteByList(applicationsList);
-    });
-
     it("Sort by Name validation test using Upload Binary Analysis", function () {
         const application: any = new Analysis(
             getRandomApplicationData("Source+dependencies", {
@@ -117,5 +109,13 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
         report.applySortAction("Story Points");
         cy.wait(2000);
         report.matchStoryPointsOrder();
+    });
+
+    afterEach("Persist session", function () {
+        resetURL();
+    });
+
+    after("Perform test data clean up", function () {
+        deleteByList(applicationsList);
     });
 });

@@ -65,15 +65,6 @@ describe(["@tier2"], "Report Page Filter Validation", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    afterEach("Persist session", function () {
-        // Reset URL from report page to web UI
-        resetURL();
-    });
-
-    after("Perform test data clean up", function () {
-        deleteByList(applicationsList);
-    });
-
     it("Filter by application/dependency name on anaysis report page", function () {
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies", {
@@ -142,5 +133,14 @@ describe(["@tier2"], "Report Page Filter Validation", () => {
         // Assert that no search results are found
         cy.get("span[id=count-results]").should("have.text", "0");
         cy.get(clearAllFilters).click();
+    });
+
+    afterEach("Persist session", function () {
+        // Reset URL from report page to web UI
+        resetURL();
+    });
+
+    after("Perform test data clean up", function () {
+        deleteByList(applicationsList);
     });
 });
