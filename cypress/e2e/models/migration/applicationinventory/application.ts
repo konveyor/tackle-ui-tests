@@ -203,6 +203,7 @@ export class Application {
             description?: string;
             business?: string;
             tags?: Array<string>;
+            owner?: string;
             comment?: string;
             repoType?: string;
         },

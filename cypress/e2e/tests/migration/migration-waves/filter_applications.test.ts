@@ -57,17 +57,17 @@ describe(
 
             businessservicesList = createMultipleBusinessServices(2);
             tagList = createMultipleTags(2);
-            (stakeholders = createMultipleStakeholders(2)),
-                (applicationsList = createMultipleApplicationsWithBSandTags(
-                    2,
-                    businessservicesList,
-                    tagList,
-                    stakeholders
-                ));
+            stakeholders = createMultipleStakeholders(2);
+            applicationsList = createMultipleApplicationsWithBSandTags(
+                2,
+                businessservicesList,
+                tagList,
+                stakeholders
+            );
         });
 
         it("Bug: MTA-969 Filter applications by name", function () {
-            let migrationWave = new MigrationWave(
+            const migrationWave = new MigrationWave(
                 data.getRandomWord(8),
                 now,
                 end,
@@ -95,7 +95,7 @@ describe(
         });
 
         it("Bug: MTA-969 Filter applications by business service", function () {
-            let migrationWave = new MigrationWave(
+            const migrationWave = new MigrationWave(
                 data.getRandomWord(8),
                 now,
                 end,
@@ -123,7 +123,7 @@ describe(
         });
 
         it("Bug: MTA-969 Filter applications by owner", function () {
-            let migrationWave = new MigrationWave(
+            const migrationWave = new MigrationWave(
                 data.getRandomWord(8),
                 now,
                 end,
@@ -154,6 +154,7 @@ describe(
             deleteByList(applicationsList);
             deleteByList(businessservicesList);
             deleteByList(tagList);
+            deleteByList(stakeholders);
         });
     }
 );

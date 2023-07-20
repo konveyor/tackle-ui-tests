@@ -1191,10 +1191,10 @@ export function createMultipleApplicationsWithBSandTags(
     tagList?: Array<Tag>,
     stakeholder?: Array<Stakeholders>
 ): Array<Assessment> {
-    var applicationList: Array<Assessment> = [];
-    var tags: string[];
-    var business: string = "";
-    var owner: string = "";
+    let applicationList: Array<Assessment> = [];
+    let tags: string[];
+    let business = "";
+    let owner = "";
     clickByText(navMenu, applicationInventory);
     for (let i = 0; i < numberofapplications; i++) {
         if (businessservice) business = businessservice[i].name;
