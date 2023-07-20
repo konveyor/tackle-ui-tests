@@ -146,6 +146,6 @@ describe(["@tier3"], "Stakeholder pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        deleteTableRows();
+        deleteTableRows(stakeHoldersTable);
     });
 });
