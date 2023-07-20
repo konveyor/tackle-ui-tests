@@ -42,7 +42,6 @@ import {
     applicationInventory,
     SEC,
     CredentialType,
-    assessment,
     UserCredentials,
     credentialType,
     artifact,
@@ -50,13 +49,7 @@ import {
     analysis,
     owner,
 } from "../e2e/types/constants";
-import {
-    actionButton,
-    applicationBusinessServiceSelect,
-    date,
-    selectBox,
-    createEntitiesCheckbox,
-} from "../e2e/views/applicationinventory.view";
+import { actionButton, date, createEntitiesCheckbox } from "../e2e/views/applicationinventory.view";
 import {
     closeSuccessNotification,
     confirmButton,
@@ -82,7 +75,6 @@ import {
 import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../e2e/models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../e2e/models/administration/credentials/credentialsSourceControlKey";
-import { Application } from "../e2e/models/migration/applicationinventory/application";
 import { switchToggle } from "../e2e/views/reports.view";
 import { MigrationWaveView } from "../e2e/views/migration-wave.view";
 import Chainable = Cypress.Chainable;
@@ -90,9 +82,6 @@ import { MigrationWave } from "../e2e/models/migration/migration-waves/migration
 import { Jira } from "../e2e/models/administration/jira-connection/jira";
 import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
 
-let userName = Cypress.env("user");
-let userPassword = Cypress.env("pass");
-const tackleUiUrl = Cypress.env("tackleUrl");
 const { _ } = Cypress;
 
 export function inputText(fieldId: string, text: any, log = false): void {
