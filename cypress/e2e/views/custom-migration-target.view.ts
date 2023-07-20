@@ -7,7 +7,7 @@ export enum CustomMigrationTargetView {
     descriptionInput = "#description",
     imageInput = "#custom-migration-target-upload-image-filename",
     imageHelper = "#custom-migration-target-upload-image-helper",
-    ruleInput = "div.pf-c-multiple-file-upload > input[accept='.xml']",
+    ruleInput = "input[accept='.xml']",
     ruleHelper = "div[aria-label='Danger Alert']",
     ruleFilesToggle = "button[aria-expanded='true']",
     takeMeThereNotification = "Take me there",
