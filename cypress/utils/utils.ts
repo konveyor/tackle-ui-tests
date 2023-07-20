@@ -48,6 +48,7 @@ import {
     artifact,
     repositoryType,
     analysis,
+    owner,
 } from "../e2e/types/constants";
 import {
     actionButton,
@@ -350,7 +351,8 @@ export function applySearchFilter(
         filterName == tag ||
         filterName == credentialType ||
         filterName == artifact ||
-        filterName == repositoryType
+        filterName == repositoryType ||
+        filterName == owner
     ) {
         cy.get("div.pf-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show")
             .find("div.pf-c-select")
@@ -358,7 +360,8 @@ export function applySearchFilter(
         if (
             filterName == businessService ||
             filterName == repositoryType ||
-            filterName == artifact
+            filterName == artifact ||
+            filterName == owner
         ) {
             // ul[role=listbox] > li is for the Application Inventory page.
             // span.pf-c-check__label is for the Copy assessment page.
@@ -1196,21 +1199,25 @@ export function createMultipleApplications(numberofapplications: number): Array<
 export function createMultipleApplicationsWithBSandTags(
     numberofapplications: number,
     businessservice?: Array<BusinessServices>,
-    tagList?: Array<Tag>
+    tagList?: Array<Tag>,
+    stakeholder?: Array<Stakeholders>
 ): Array<Assessment> {
     var applicationList: Array<Assessment> = [];
     var tags: string[];
-    var business: string;
+    var business: string = "";
+    var owner: string = "";
     clickByText(navMenu, applicationInventory);
     for (let i = 0; i < numberofapplications; i++) {
-        if (!businessservice) business = businessservice[i].name;
+        if (businessservice) business = businessservice[i].name;
         if (tagList) tags = [tagList[i].name];
+        if (stakeholder) owner = stakeholder[i].name;
         let appdata = {
             name: data.getAppName(),
-            business: businessservice[i].name,
+            business: business,
             description: data.getDescription(),
-            tags: [tagList[i].name],
+            tags: tags,
             comment: data.getDescription(),
+            owner: owner,
         };
         const application = new Assessment(appdata);
         application.create();
