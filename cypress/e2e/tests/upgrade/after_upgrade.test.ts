@@ -34,6 +34,7 @@ import { TagCategory } from "../../models/migration/controls/tagcategory";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { MavenConfiguration } from "../../models/administration/repositories/maven";
 import { clearRepository } from "../../views/repository.view";
+import { stakeHoldersTable } from "../../views/stakeholders.view";
 
 describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     before("Login", function () {
@@ -70,7 +71,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         exists(mavenUsernameCredentialName);
 
         Stakeholders.openList();
-        exists(stakeHolderName);
+        exists(stakeHolderName, stakeHoldersTable);
 
         Stakeholdergroups.openList();
         exists(stakeHolderGroupName);
