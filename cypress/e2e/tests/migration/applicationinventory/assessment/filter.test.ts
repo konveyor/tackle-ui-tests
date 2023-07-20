@@ -71,7 +71,8 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         applicationsList = createMultipleApplicationsWithBSandTags(
             2,
             businessServicesList,
-            tagList
+            tagList,
+            null
         );
 
         // Create source Credentials

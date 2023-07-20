@@ -42,20 +42,14 @@ import {
     applicationInventory,
     SEC,
     CredentialType,
-    assessment,
     UserCredentials,
     credentialType,
     artifact,
     repositoryType,
     analysis,
+    owner,
 } from "../e2e/types/constants";
-import {
-    actionButton,
-    applicationBusinessServiceSelect,
-    date,
-    selectBox,
-    createEntitiesCheckbox,
-} from "../e2e/views/applicationinventory.view";
+import { actionButton, date, createEntitiesCheckbox } from "../e2e/views/applicationinventory.view";
 import {
     closeSuccessNotification,
     confirmButton,
@@ -81,7 +75,6 @@ import {
 import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../e2e/models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../e2e/models/administration/credentials/credentialsSourceControlKey";
-import { Application } from "../e2e/models/migration/applicationinventory/application";
 import { switchToggle } from "../e2e/views/reports.view";
 import { MigrationWaveView } from "../e2e/views/migration-wave.view";
 import Chainable = Cypress.Chainable;
@@ -89,9 +82,6 @@ import { MigrationWave } from "../e2e/models/migration/migration-waves/migration
 import { Jira } from "../e2e/models/administration/jira-connection/jira";
 import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
 
-let userName = Cypress.env("user");
-let userPassword = Cypress.env("pass");
-const tackleUiUrl = Cypress.env("tackleUrl");
 const { _ } = Cypress;
 
 export function inputText(fieldId: string, text: any, log = false): void {
@@ -350,7 +340,8 @@ export function applySearchFilter(
         filterName == tag ||
         filterName == credentialType ||
         filterName == artifact ||
-        filterName == repositoryType
+        filterName == repositoryType ||
+        filterName == owner
     ) {
         cy.get("div.pf-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show")
             .find("div.pf-c-select")
@@ -358,7 +349,8 @@ export function applySearchFilter(
         if (
             filterName == businessService ||
             filterName == repositoryType ||
-            filterName == artifact
+            filterName == artifact ||
+            filterName == owner
         ) {
             // ul[role=listbox] > li is for the Application Inventory page.
             // span.pf-c-check__label is for the Copy assessment page.
@@ -1196,21 +1188,25 @@ export function createMultipleApplications(numberofapplications: number): Array<
 export function createMultipleApplicationsWithBSandTags(
     numberofapplications: number,
     businessservice?: Array<BusinessServices>,
-    tagList?: Array<Tag>
+    tagList?: Array<Tag>,
+    stakeholder?: Array<Stakeholders>
 ): Array<Assessment> {
-    var applicationList: Array<Assessment> = [];
-    var tags: string[];
-    var business: string;
+    let applicationList: Array<Assessment> = [];
+    let tags: string[];
+    let business = "";
+    let owner = "";
     clickByText(navMenu, applicationInventory);
     for (let i = 0; i < numberofapplications; i++) {
-        if (!businessservice) business = businessservice[i].name;
+        if (businessservice) business = businessservice[i].name;
         if (tagList) tags = [tagList[i].name];
+        if (stakeholder) owner = stakeholder[i].name;
         let appdata = {
             name: data.getAppName(),
-            business: businessservice[i].name,
+            business: business,
             description: data.getDescription(),
-            tags: [tagList[i].name],
+            tags: tags,
             comment: data.getDescription(),
+            owner: owner,
         };
         const application = new Assessment(appdata);
         application.create();
