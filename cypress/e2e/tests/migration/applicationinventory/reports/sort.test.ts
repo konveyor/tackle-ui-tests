@@ -20,7 +20,7 @@ import {
     deleteApplicationTableRows,
     getRandomApplicationData,
     getRandomAnalysisData,
-    resetURL,
+    resetURL, deleteByList,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Report } from "../../../../models/migration/applicationinventory/reportPage";
@@ -29,13 +29,14 @@ import * as data from "../../../../../utils/data_utils";
 import { CredentialType, UserCredentials } from "../../../../types/constants";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 
+let applicationsList: Analysis[] = [];
+
 describe(["@tier2"], "Report Page's Sort Validation", () => {
     const report = new Report();
     let source_credential;
     let maven_credential;
 
     before("Login", function () {
-        // Perform login
         login();
         deleteApplicationTableRows();
 
@@ -49,7 +50,6 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
         );
         source_credential.create();
 
-        // Create Maven credentials
         maven_credential = new CredentialsMaven(
             data.getRandomCredentialsData(CredentialType.maven, "None", true)
         );
@@ -64,18 +64,16 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
             this.analysisData = analysisData;
         });
 
-        // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     afterEach("Persist session", function () {
-        // Reset URL from report page to web UI
         resetURL();
     });
 
     after("Perform test data clean up", function () {
-        deleteApplicationTableRows();
+        deleteByList(applicationsList);
     });
 
     it("Sort by Name validation test using Upload Binary Analysis", function () {
@@ -86,11 +84,13 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
+
         // Sort the Application by Name
         report.applySortAction("Name");
         cy.wait(2000);
@@ -105,6 +105,7 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();

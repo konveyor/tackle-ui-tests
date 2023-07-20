@@ -17,7 +17,7 @@ import {
     deleteApplicationTableRows,
     getRandomApplicationData,
     getRandomAnalysisData,
-    resetURL,
+    resetURL, deleteByList,
 } from "../../../../../utils/utils";
 import * as data from "../../../../../utils/data_utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
@@ -30,15 +30,13 @@ import { clearAllFilters } from "../../../../views/reportPage.view";
 let source_credential;
 let maven_credential;
 const dependencies = "deps";
-
+let applicationsList: Analysis[] = [];
 describe(["@tier2"], "Report Page Filter Validation", () => {
     const report = new Report();
     before("Login", function () {
-        // Perform login
         login();
         deleteApplicationTableRows();
 
-        // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -48,7 +46,6 @@ describe(["@tier2"], "Report Page Filter Validation", () => {
         );
         source_credential.create();
 
-        // Create Maven credentials
         maven_credential = new CredentialsMaven(
             data.getRandomCredentialsData(CredentialType.maven, "None", true)
         );
@@ -63,7 +60,6 @@ describe(["@tier2"], "Report Page Filter Validation", () => {
             this.analysisData = analysisData;
         });
 
-        // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
@@ -74,7 +70,7 @@ describe(["@tier2"], "Report Page Filter Validation", () => {
     });
 
     after("Perform test data clean up", function () {
-        deleteApplicationTableRows();
+        deleteByList(applicationsList);
     });
 
     it("Filter by application/dependency name on anaysis report page", function () {
@@ -85,6 +81,7 @@ describe(["@tier2"], "Report Page Filter Validation", () => {
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.manageCredentials(source_credential.name, maven_credential.name);
@@ -96,15 +93,17 @@ describe(["@tier2"], "Report Page Filter Validation", () => {
         report.applyFilter(name, application.appName.substring(0, 6));
         cy.get("[role=main]").should("contain.text", application.appName);
         cy.get(clearAllFilters).click();
+
         // Enter an existing display exact name and assert that application dependency is listed in filter results
         report.applyFilter(name, "deps");
         cy.get("[role=main]").should("contain.text", dependencies);
         cy.get(clearAllFilters).click();
 
         // Enter a non-existing Name and apply it as search filter
-        // Assert that no search results are found
         let invalidSearchInput = "SomeInvalidInput";
         report.applyFilter(name, invalidSearchInput);
+
+        // Assert that no search results are found
         cy.get("span[id=count-results]").should("have.text", "0");
         cy.get(clearAllFilters).click();
     });
@@ -117,6 +116,7 @@ describe(["@tier2"], "Report Page Filter Validation", () => {
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.manageCredentials(source_credential.name, maven_credential.name);
@@ -135,9 +135,10 @@ describe(["@tier2"], "Report Page Filter Validation", () => {
         cy.get(clearAllFilters).click();
 
         // Enter a non-existing tag and apply it as search filter
-        // Assert that no search results are found
         let invalidSearchInput = "SomeInvalidInput0";
         report.applyFilter(tag, invalidSearchInput);
+
+        // Assert that no search results are found
         cy.get("span[id=count-results]").should("have.text", "0");
         cy.get(clearAllFilters).click();
     });
