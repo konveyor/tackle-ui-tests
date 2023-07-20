@@ -20,7 +20,8 @@ import {
     deleteApplicationTableRows,
     getRandomApplicationData,
     getRandomAnalysisData,
-    resetURL, deleteByList,
+    resetURL,
+    deleteByList,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Report } from "../../../../models/migration/applicationinventory/reportPage";
