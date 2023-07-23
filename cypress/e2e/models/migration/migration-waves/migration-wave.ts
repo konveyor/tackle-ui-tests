@@ -29,8 +29,7 @@ import {
     submitButton,
 } from "../../../views/common.view";
 import { selectBox } from "../../../views/applicationinventory.view";
-import { Application } from "../../../models/migration/applicationinventory/application";
-import * as commonView from "../../../views/common.view";
+import { Application } from "../applicationinventory/application";
 
 export interface MigrationWave {
     name: string;
@@ -276,5 +275,45 @@ export class MigrationWave {
         cy.contains("button", currentMonth).click();
         cy.contains("li", date.toLocaleString("en-us", { month: "long" })).click();
         cy.contains("button:not([disabled])", `${date.getDate()}`).first().click();
+    }
+
+    public clickOnApplicationStatus() {
+        cy.contains(this.name)
+            .parents("tr")
+            .within(() => {
+                cy.get(MigrationWaveView.applicationStatusColumn).click();
+            });
+    }
+
+    public removeApplication(applicationName) {
+        cy.contains(this.name)
+            .parent()
+            .parent()
+            .should(($element) => {
+                expect(
+                    $element,
+                    `Migration Wave with name ${this.name} is not expanded`
+                ).to.have.class(MigrationWaveView.waveExpanded);
+            });
+
+        cy.contains(applicationName)
+            .parent()
+            .within(() => {
+                cy.get(MigrationWaveView.removeApplicationButton).click();
+            });
+    }
+
+    public createTracker() {
+        cy.contains(this.name)
+            .parent()
+            .parent()
+            .should(($element) => {
+                expect(
+                    $element,
+                    `Migration Wave with name ${this.name} is not expanded`
+                ).to.have.class(MigrationWaveView.waveExpanded);
+            });
+
+        click(MigrationWaveView.createTrackerButton);
     }
 }
