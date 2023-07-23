@@ -20,7 +20,7 @@ export enum MigrationWaveView {
     waveTable = "table[aria-label='Migration waves table']",
     createTrackerButton = "#create-tracker",
     waveExpanded = "pf-m-expanded",
-    removeApplicationButton = ".pf-u-text-align-right > button"
+    removeApplicationButton = ".pf-u-text-align-right > button",
 }
 
 export enum MigrationWavesSpecialColumns {
