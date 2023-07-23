@@ -29,8 +29,7 @@ import {
     submitButton,
 } from "../../../views/common.view";
 import { selectBox } from "../../../views/applicationinventory.view";
-import { Application } from "../../../models/migration/applicationinventory/application";
-import * as commonView from "../../../views/common.view";
+import { Application } from "../applicationinventory/application";
 
 export interface MigrationWave {
     name: string;

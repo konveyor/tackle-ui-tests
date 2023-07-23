@@ -36,7 +36,6 @@ describe(["@tier2"], "Jira connections sort validations", function () {
     let jiraConnectionList: Jira[];
     let isInsecure = false;
     let toBeCanceled = true;
-    let expectedToFail = true;
 
     before("", () => {
         login();
@@ -54,7 +53,7 @@ describe(["@tier2"], "Jira connections sort validations", function () {
             !useTestingAccount
         );
         jiraConnectionList.forEach((jira) => {
-            jira.create(!toBeCanceled, expectedToFail);
+            jira.create(!toBeCanceled);
         });
     });
 
