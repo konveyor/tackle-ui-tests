@@ -122,6 +122,7 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
         cy.wait(SEC);
 
         // Select all the applications on page
+        cy.log("Selecting page...");
         clickWithin(modal, "button[aria-label='Select']");
         clickByText(button, "Select page", false, true);
         cy.get("div").then(($div) => {
@@ -132,12 +133,14 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
         cy.get(copy).should("be.visible").should("not.be.disabled");
 
         // Select all applications
+        cy.log("Selecting all...");
         clickWithin(modal, "button[aria-label='Select']", false, true);
         clickByText(button, "Select all", false, true);
         clickWithin(modal, "button[aria-label='Select']");
         cy.get(copy).should("be.visible").should("not.be.disabled");
 
         // Deselect all applications
+        cy.log("Selecting none...");
         clickWithin(modal, "button[aria-label='Select']");
         clickByText(button, "Select none (0 items)", false, true);
         clickWithin(modal, "button[aria-label='Select']");

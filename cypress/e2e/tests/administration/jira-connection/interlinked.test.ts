@@ -16,7 +16,6 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    checkSuccessAlert,
     createMultipleApplications,
     deleteByList,
     exists,
@@ -25,14 +24,20 @@ import {
     validateTextPresence,
 } from "../../../../utils/utils";
 import { getJiraConnectionData, getJiraCredentialData } from "../../../../utils/data_utils";
-import { CredentialType, deleteAction, JiraIssueTypes, JiraType } from "../../../types/constants";
+import {
+    cantDeleteJiraAlert,
+    CredentialType,
+    deleteAction,
+    JiraIssueTypes,
+    JiraType,
+} from "../../../types/constants";
 import { JiraConnectionData } from "../../../types/types";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import * as data from "../../../../utils/data_utils";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
-import { successAlertMessage } from "../../../views/common.view";
+import { jiraAlert, jiraTable } from "../../../views/jira.view";
 
 describe(["@tier2"], "Jira connection negative tests", () => {
     const expectedToFail = true;
@@ -52,9 +57,7 @@ describe(["@tier2"], "Jira connection negative tests", () => {
     let migrationWave: MigrationWave;
 
     before("Login and create required credentials", function () {
-        // Perform login
         login();
-        // Defining and creating credentials to be used in further tests
         jiraBasicCredential = new JiraCredentials(
             getJiraCredentialData(CredentialType.jiraBasic, useTestingAccount)
         );
@@ -89,7 +92,7 @@ describe(["@tier2"], "Jira connection negative tests", () => {
         applicationList = createMultipleApplications(2);
     });
 
-    beforeEach("Login", function () {
+    beforeEach("Interceptors", function () {
         cy.intercept("DELETE", "/hub/migrationwaves*/*").as("deleteWave");
     });
 
@@ -98,7 +101,7 @@ describe(["@tier2"], "Jira connection negative tests", () => {
         jiraCloudConnectionIncorrect.validateState(expectedToFail);
     });
 
-    it("Removing Jira connection in use by wave", () => {
+    it("Bug MTA-1014 | Trying to remove Jira connection used by wave", () => {
         const issueType = JiraIssueTypes.task;
         let projectName = "";
         jiraCloudConnection.create();
@@ -116,19 +119,14 @@ describe(["@tier2"], "Jira connection negative tests", () => {
         migrationWave.create();
 
         jiraCloudConnection
-            // Getting all projects on Jira side
             .getAllProjects()
-            .then((project) => {
-                // Checking that project is not a NULL or undefined
-                expect(!!project[0]).to.eq(true);
-                projectName = project[0].name;
+            .then((projects) => {
+                expect(!!projects[0]).to.eq(true);
+                projectName = projects[0].name;
                 return jiraCloudConnection.getIssueType(issueType);
             })
             .then((issue) => {
-                // Checking that Jira issue type is not a NULL or undefined
                 expect(!!issue).to.eq(true);
-
-                // Exporting wave to Jira
                 migrationWave.exportToIssueManager(
                     JiraType.cloud,
                     jiraCloudConnection.name,
@@ -138,20 +136,12 @@ describe(["@tier2"], "Jira connection negative tests", () => {
             });
         Jira.openList();
         performRowAction(jiraCloudConnection.name, deleteAction);
-        validateTextPresence(
-            "h4.pf-c-alert__title",
-            "Danger alert:This instance contains issues associated with applications and cannot be deleted"
-        );
-        exists(jiraCloudConnection.name, "table[aria-label='Jira trackers table']");
+        validateTextPresence(jiraAlert, cantDeleteJiraAlert);
+        exists(jiraCloudConnection.name, jiraTable);
     });
 
-    after("Delete Jira connection and Jira credentials", () => {
+    after("Delete Wave, Jira connection and Jira credentials", () => {
         migrationWave.delete();
-        checkSuccessAlert(
-            successAlertMessage,
-            `Success alert:Migration wave ${migrationWave.name} was successfully deleted.`,
-            true
-        );
         cy.wait("@deleteWave");
         jiraCloudConnectionIncorrect.delete();
         jiraCloudConnection.delete();
