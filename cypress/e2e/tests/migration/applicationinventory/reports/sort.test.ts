@@ -17,7 +17,6 @@ limitations under the License.
 
 import {
     login,
-    deleteApplicationTableRows,
     getRandomApplicationData,
     getRandomAnalysisData,
     resetURL,
@@ -39,9 +38,7 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
 
     before("Login", function () {
         login();
-        deleteApplicationTableRows();
 
-        // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -57,7 +54,7 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
         maven_credential.create();
     });
 
-    beforeEach("Persist session", function () {
+    beforeEach("Load Data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -111,7 +108,7 @@ describe(["@tier2"], "Report Page's Sort Validation", () => {
         report.matchStoryPointsOrder();
     });
 
-    afterEach("Persist session", function () {
+    afterEach("Reset url", function () {
         resetURL();
     });
 

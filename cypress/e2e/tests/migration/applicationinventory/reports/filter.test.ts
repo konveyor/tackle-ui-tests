@@ -14,7 +14,6 @@ limitations under the License.
 
 import {
     login,
-    deleteApplicationTableRows,
     getRandomApplicationData,
     getRandomAnalysisData,
     resetURL,
@@ -36,8 +35,6 @@ describe(["@tier2"], "Report Page Filter Validation", () => {
     const report = new Report();
     before("Login", function () {
         login();
-        deleteApplicationTableRows();
-
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -46,14 +43,13 @@ describe(["@tier2"], "Report Page Filter Validation", () => {
             )
         );
         source_credential.create();
-
         maven_credential = new CredentialsMaven(
             data.getRandomCredentialsData(CredentialType.maven, "None", true)
         );
         maven_credential.create();
     });
 
-    beforeEach("Persist session", function () {
+    beforeEach("Load Data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -135,7 +131,7 @@ describe(["@tier2"], "Report Page Filter Validation", () => {
         cy.get(clearAllFilters).click();
     });
 
-    afterEach("Persist session", function () {
+    afterEach("Reset url", function () {
         // Reset URL from report page to web UI
         resetURL();
     });
