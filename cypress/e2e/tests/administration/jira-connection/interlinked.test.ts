@@ -50,6 +50,7 @@ describe(["@tier2"], "Jira connection negative tests", () => {
     let jiraCloudConnection: Jira;
     let jiraCloudConnectionIncorrect: Jira;
     let applicationList: Array<Assessment> = [];
+    const targetProject = Cypress.env("jira_atlassian_cloud_project");
     const now = new Date();
     now.setDate(now.getDate() + 1);
     const end = new Date(now.getTime());
@@ -119,10 +120,9 @@ describe(["@tier2"], "Jira connection negative tests", () => {
         migrationWave.create();
 
         jiraCloudConnection
-            .getAllProjects()
-            .then((projects) => {
-                expect(!!projects[0]).to.eq(true);
-                projectName = projects[0].name;
+            .getProject(targetProject)
+            .then((project) => {
+                projectName = project.name;
                 return jiraCloudConnection.getIssueType(issueType);
             })
             .then((issue) => {
