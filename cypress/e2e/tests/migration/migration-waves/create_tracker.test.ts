@@ -16,14 +16,16 @@ const now = new Date();
 now.setDate(now.getDate() + 1);
 const end = new Date(now.getTime());
 end.setFullYear(end.getFullYear() + 1);
-let applicationsList: Assessment[] = [];
+let application: Application;
 let migrationWave: MigrationWave;
 
-import { login, getRandomApplicationData, deleteByList } from "../../../../utils/utils";
+import { login, getRandomApplicationData } from "../../../../utils/utils";
 
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import * as data from "../../../../utils/data_utils";
+import { Application } from "../../../models/migration/applicationinventory/application";
+import { createJiraButton } from "../../../views/jira.view";
 
 //Automates Polarion TC 358
 
@@ -32,10 +34,9 @@ describe(["@tier1"], "Testing the creation of a tracker in migration waves", fun
         login();
         const application = new Assessment(getRandomApplicationData());
         application.create();
-        applicationsList.push(application);
     });
 
-    beforeEach("Login", function () {
+    beforeEach("Interceptors", function () {
         cy.intercept("POST", "/hub/migrationwaves*").as("postWave");
         cy.intercept("PUT", "/hub/migrationwaves*/*").as("putWave");
         cy.intercept("DELETE", "/hub/migrationwaves*/*").as("deleteWave");
@@ -45,27 +46,23 @@ describe(["@tier1"], "Testing the creation of a tracker in migration waves", fun
         MigrationWave.open();
 
         // create new migration wave
-        migrationWave = new MigrationWave(
-            data.getRandomWord(8),
-            now,
-            end,
-            null,
-            null,
-            applicationsList
-        );
+        migrationWave = new MigrationWave(data.getRandomWord(8), now, end, null, null, [
+            application,
+        ]);
         migrationWave.create();
 
-        // expand the wave row but clicking on the application status
-        migrationWave.clickOnApplicationStatus();
-        migrationWave.removeApplication(applicationsList[0].name);
+        // expand the wave row but clicking on the wave status
+        migrationWave.clickWaveStatus();
+        migrationWave.removeApplication(application.name);
         migrationWave.createTracker();
 
         // assert the current page redirect to is the Jira configuration page
         cy.get("body").should("contain.text", "Jira configuration");
+        cy.get(createJiraButton).should("be.visible");
     });
 
     after("Delete test data", function () {
-        deleteByList(applicationsList);
         migrationWave.delete();
+        application.delete();
     });
 });

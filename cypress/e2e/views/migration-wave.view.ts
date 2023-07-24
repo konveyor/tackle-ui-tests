@@ -9,7 +9,7 @@ export enum MigrationWaveView {
     stakeHoldersInput = "#stakeholders-toggle-select-multi-typeahead-typeahead",
     stakeHolderGroupsInput = "#stakeholder-groups-toggle-select-multi-typeahead-typeahead",
     actionsButton = "button[aria-label='Actions']",
-    applicationStatusColumn = "td[data-label='Status']",
+    waveStatusColumn = "td[data-label='Status']",
     yearInput = "input[aria-label='Select year']",
     migrationWavesTable = "table[aria-label='Migration waves table']",
     applicationCountColumn = "td[data-label='Applications']",

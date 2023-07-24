@@ -277,15 +277,15 @@ export class MigrationWave {
         cy.contains("button:not([disabled])", `${date.getDate()}`).first().click();
     }
 
-    public clickOnApplicationStatus() {
+    public clickWaveStatus() {
         cy.contains(this.name)
             .parents("tr")
             .within(() => {
-                cy.get(MigrationWaveView.applicationStatusColumn).click();
+                cy.get(MigrationWaveView.waveStatusColumn).click();
             });
     }
 
-    public removeApplication(applicationName) {
+    public isExpanded() {
         cy.contains(this.name)
             .parent()
             .parent()
@@ -295,7 +295,10 @@ export class MigrationWave {
                     `Migration Wave with name ${this.name} is not expanded`
                 ).to.have.class(MigrationWaveView.waveExpanded);
             });
+    }
 
+    public removeApplication(applicationName) {
+        this.isExpanded();
         cy.contains(applicationName)
             .parent()
             .within(() => {
@@ -304,16 +307,7 @@ export class MigrationWave {
     }
 
     public createTracker() {
-        cy.contains(this.name)
-            .parent()
-            .parent()
-            .should(($element) => {
-                expect(
-                    $element,
-                    `Migration Wave with name ${this.name} is not expanded`
-                ).to.have.class(MigrationWaveView.waveExpanded);
-            });
-
+        this.isExpanded();
         click(MigrationWaveView.createTrackerButton);
     }
 }
