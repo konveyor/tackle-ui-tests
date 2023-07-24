@@ -16,6 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    clickByText,
     createMultipleApplications,
     deleteByList,
     exists,
@@ -25,11 +26,13 @@ import {
 } from "../../../../utils/utils";
 import { getJiraConnectionData, getJiraCredentialData } from "../../../../utils/data_utils";
 import {
+    button,
     cantDeleteJiraAlert,
     CredentialType,
     deleteAction,
     JiraIssueTypes,
     JiraType,
+    SEC,
 } from "../../../types/constants";
 import { JiraConnectionData } from "../../../types/types";
 import { Jira } from "../../../models/administration/jira-connection/jira";
@@ -97,12 +100,26 @@ describe(["@tier2"], "Jira connection negative tests", () => {
         cy.intercept("DELETE", "/hub/migrationwaves*/*").as("deleteWave");
     });
 
-    it("Creating Jira connection with incorrect credentials", () => {
+    it("Creating Jira connection with incorrect credentials, validating error why connection is not established", () => {
+        /**
+         Implements MTA-362 - Add JIRA instance with invalid credentials
+         Automates https://issues.redhat.com/browse/MTA-991
+        */
         jiraCloudConnectionIncorrect.create();
         jiraCloudConnectionIncorrect.validateState(expectedToFail);
+        cy.wait(30 * SEC);
+        clickByText(button, "Not connected");
+        cy.get("#code-content").then(($code) => {
+            expect($code.text()).to.contain("401 Unauthorized");
+            expect($code.text().toLowerCase()).not.to.contain("html");
+            expect($code.text()).not.to.contain("403");
+        });
     });
 
     it("Bug MTA-1014 | Trying to remove Jira connection used by wave", () => {
+        /**
+         Implements MTA-363 - Delete Jira Instance in use
+         */
         const issueType = JiraIssueTypes.task;
         let projectName = "";
         jiraCloudConnection.create();
