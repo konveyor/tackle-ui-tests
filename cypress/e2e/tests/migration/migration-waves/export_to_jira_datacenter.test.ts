@@ -30,29 +30,30 @@ now.setDate(now.getDate() + 1);
 const end = new Date(now.getTime());
 end.setFullYear(end.getFullYear() + 1);
 
-let jiraCloudCredentials: JiraCredentials;
-let jiraCloudInstance: Jira;
+let jiraCredentials: JiraCredentials;
+let jiraInstance: Jira;
 const applications: Assessment[] = [];
 const wavesMap = {};
 let projectName = "";
 
-// Automates Polarion TC 340, 359, 360 and 361 for Jira Cloud
+// Automates Polarion TC 340, 359, 360 and 361 for Jira Datacenter
 /**
  * This test suite contains tests that are co-dependent, so they won't pass if they're executed separately
- * @see export_to_jira_datacenter.test.ts for Jira Datacenter tests
- * This suite is almost identical to jira_datacenter but putting both tests in the same suite would make the code harder to read
+ * @see export_to_jira_cloud.test.ts for Jira Cloud tests
+ * This suite is almost identical to jira_cloud but putting both tests in the same suite would make the code harder to read
  */
-describe(["@tier1"], "Export Migration Wave to Jira Cloud", function () {
+describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
     before("Create test data", function () {
         login();
 
-        jiraCloudCredentials = new JiraCredentials(
+        jiraCredentials = new JiraCredentials(
             data.getJiraCredentialData(CredentialType.jiraBasic, true)
         );
-        jiraCloudCredentials.create();
+        jiraCredentials.create();
 
-        jiraCloudInstance = new Jira(data.getJiraConnectionData(jiraCloudCredentials, false, true));
-        jiraCloudInstance.create();
+        jiraInstance = new Jira(data.getJiraConnectionData(jiraCredentials, false, true));
+        jiraInstance.type = JiraType.server;
+        jiraInstance.create();
     });
 
     Object.values(JiraIssueTypes).forEach((issueType) => {
@@ -75,21 +76,21 @@ describe(["@tier1"], "Export Migration Wave to Jira Cloud", function () {
 
     Object.values(JiraIssueTypes).forEach((issueType) => {
         it(`Export wave as ${issueType} to Jira`, function () {
-            jiraCloudInstance
+            jiraInstance
                 .getProject()
                 .then((project) => {
                     expect(!!project).to.eq(true);
 
                     projectName = project.name;
 
-                    return jiraCloudInstance.getIssueType(issueType);
+                    return jiraInstance.getIssueType(issueType);
                 })
                 .then((issue) => {
                     expect(!!issue).to.eq(true);
 
                     wavesMap[issueType].exportToIssueManager(
-                        JiraType.cloud,
-                        jiraCloudInstance.name,
+                        JiraType.server,
+                        jiraInstance.name,
                         projectName,
                         issue.untranslatedName
                     );
@@ -100,7 +101,7 @@ describe(["@tier1"], "Export Migration Wave to Jira Cloud", function () {
     Object.values(JiraIssueTypes).forEach((issueType) => {
         it(`Assert exports for ${issueType}`, function () {
             cy.wait(30 * SEC); // Enough time to create both tasks and for them to be available in the Jira API
-            jiraCloudInstance.getIssues(projectName).then((issues: JiraIssue[]) => {
+            jiraInstance.getIssues(projectName).then((issues: JiraIssue[]) => {
                 const waveIssues = issues.filter((issue) => {
                     return (
                         (issue.fields.summary.includes(wavesMap[issueType].applications[0].name) ||
@@ -112,7 +113,7 @@ describe(["@tier1"], "Export Migration Wave to Jira Cloud", function () {
                     );
                 });
 
-                jiraCloudInstance.deleteIssues(waveIssues.map((issue) => issue.id));
+                jiraInstance.deleteIssues(waveIssues.map((issue) => issue.id));
 
                 expect(waveIssues).to.have.length(2);
             });
@@ -122,7 +123,7 @@ describe(["@tier1"], "Export Migration Wave to Jira Cloud", function () {
     after("Clear test data", function () {
         Object.values(wavesMap).forEach((wave: MigrationWave) => wave.delete());
         applications.forEach((app) => app.delete());
-        jiraCloudInstance.delete();
-        jiraCloudCredentials.delete();
+        jiraInstance.delete();
+        jiraCredentials.delete();
     });
 });
