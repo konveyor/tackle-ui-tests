@@ -140,7 +140,7 @@ describe(["@tier2"], "Jira connection negative tests", () => {
         exists(jiraCloudConnection.name, jiraTable);
     });
 
-    after("Delete Wave, Jira connection and Jira credentials", () => {
+    after("Clean up data", () => {
         migrationWave.delete();
         cy.wait("@deleteWave");
         jiraCloudConnectionIncorrect.delete();
