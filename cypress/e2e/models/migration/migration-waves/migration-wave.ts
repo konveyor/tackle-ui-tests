@@ -30,7 +30,6 @@ import {
 } from "../../../views/common.view";
 import { selectBox } from "../../../views/applicationinventory.view";
 import { Application } from "../../../models/migration/applicationinventory/application";
-import * as commonView from "../../../views/common.view";
 
 export interface MigrationWave {
     name: string;

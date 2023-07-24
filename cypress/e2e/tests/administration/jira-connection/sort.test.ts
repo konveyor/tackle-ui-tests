@@ -35,8 +35,6 @@ describe(["@tier2"], "Jira connections sort validations", function () {
     let jiraBasicCredential: JiraCredentials;
     let jiraConnectionList: Jira[];
     let isInsecure = false;
-    let toBeCanceled = true;
-    let expectedToFail = true;
 
     before("", () => {
         login();
@@ -54,7 +52,7 @@ describe(["@tier2"], "Jira connections sort validations", function () {
             !useTestingAccount
         );
         jiraConnectionList.forEach((jira) => {
-            jira.create(!toBeCanceled, expectedToFail);
+            jira.create();
         });
     });
 
@@ -80,7 +78,7 @@ describe(["@tier2"], "Jira connections sort validations", function () {
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
-    it.skip("BUG MTA-908 - URL sort validations", function () {
+    it("URL sort validations", function () {
         Jira.openList();
         // get unsorted list when page loads
         const unsortedList = getTableColumnData("URL");

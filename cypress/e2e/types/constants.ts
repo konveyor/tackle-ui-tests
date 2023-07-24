@@ -111,6 +111,8 @@ export const administration = "Admin";
 export const migration = "Migration";
 export const general = "General";
 export const instanceName = "Instance name";
+export const cantDeleteJiraAlert =
+    "Danger alert:This instance contains issues associated with applications and cannot be deleted";
 
 export enum CredentialType {
     proxy = "Proxy",

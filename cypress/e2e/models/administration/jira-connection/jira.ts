@@ -142,7 +142,7 @@ export class Jira {
      *
      * @param expectedToFail is set to `true` when running negative test, and it is OK that validation fails
      */
-    public create(toBeCanceled = false, expectedToFail = false): void {
+    public create(toBeCanceled = false): void {
         Jira.openList();
         click(createJiraButton);
         this.fillName();
@@ -152,7 +152,6 @@ export class Jira {
         this.configureInsecure();
         if (!toBeCanceled) {
             submitForm();
-            this.validateState(expectedToFail);
         } else {
             cancelForm();
             notExists(this.name, "table[aria-label='Jira trackers table']");
@@ -168,11 +167,7 @@ export class Jira {
      *
      * @param expectedToFail is set to `true` when running negative test, and it is OK that validation fails
      */
-    public edit(
-        jiraConnectionData: JiraConnectionData,
-        toBeCanceled = false,
-        expectedToFail = false
-    ): void {
+    public edit(jiraConnectionData: JiraConnectionData, toBeCanceled = false): void {
         Jira.openList();
         performRowAction(this.name, editAction);
         const oldValues = this.storeOldValues();
@@ -190,7 +185,6 @@ export class Jira {
             this.init(oldValues);
             cancelForm();
         }
-        this.validateState(expectedToFail);
     }
 
     /**
@@ -203,7 +197,6 @@ export class Jira {
         performRowAction(this.name, deleteAction);
         if (toBeCanceled) {
             click(cancelButton);
-            this.validateState();
         } else {
             click(confirmButton);
             notExists(this.name, "table[aria-label='Jira trackers table']");

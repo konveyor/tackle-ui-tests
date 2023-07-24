@@ -15,6 +15,7 @@ export default defineConfig({
         jira_atlassian_cloud_email: "",
         jira_atlassian_cloud_token: "",
         jira_atlassian_cloud_url: "",
+        jira_atlassian_cloud_project: "Test",
         tackleUrl: "https://tackle-konveyor-tackle.apps.mtv03.rhos-psi.cnv-qe.rhood.us",
         rwx_enabled: true,
     },
