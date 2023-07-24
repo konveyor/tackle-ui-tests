@@ -19,13 +19,13 @@ end.setFullYear(end.getFullYear() + 1);
 let application: Application;
 let migrationWave: MigrationWave;
 
-import {login, getRandomApplicationData} from "../../../../utils/utils";
+import { login, getRandomApplicationData } from "../../../../utils/utils";
 
-import {Assessment} from "../../../models/migration/applicationinventory/assessment";
-import {MigrationWave} from "../../../models/migration/migration-waves/migration-wave";
+import { Assessment } from "../../../models/migration/applicationinventory/assessment";
+import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import * as data from "../../../../utils/data_utils";
-import {Application} from "../../../models/migration/applicationinventory/application";
-import {createJiraButton} from "../../../views/jira.view";
+import { Application } from "../../../models/migration/applicationinventory/application";
+import { createJiraButton } from "../../../views/jira.view";
 
 //Automates Polarion TC 358
 
