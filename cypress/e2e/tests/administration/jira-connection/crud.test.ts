@@ -65,6 +65,7 @@ describe(["@tier1"], "CRUD operations for Jira Cloud instance", () => {
 
     it("Creating Jira connection", () => {
         jiraCloudConnection.create();
+        jiraCloudConnection.validateState(!expectedToFail);
     });
 
     it("Editing Jira connection and cancelling without saving", () => {
@@ -72,7 +73,8 @@ describe(["@tier1"], "CRUD operations for Jira Cloud instance", () => {
     });
 
     it("Editing Jira credentials with incorrect data, then configuring back with correct", () => {
-        jiraCloudConnection.edit(jiraCloudConnectionDataIncorrect, !toBeCanceled, expectedToFail);
+        jiraCloudConnection.edit(jiraCloudConnectionDataIncorrect, !toBeCanceled);
+        jiraCloudConnection.validateState(expectedToFail);
         jiraCloudConnection.edit(jiraCloudConnectionData);
     });
 
