@@ -51,8 +51,17 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         MigrationWave.openNewForm();
         cy.get(MigrationWaveView.submitButton).should("be.disabled");
 
-        MigrationWave.validateWrongInput(MigrationWaveView.nameInput, "body");
-        MigrationWave.validateWrongInput(MigrationWaveView.nameInput);
+        validateTooShortInput(
+            MigrationWaveView.nameInput,
+            "body",
+            "Name is invalid. The name must be between 3 and 120 characters"
+        );
+        validateTooLongInput(
+            MigrationWaveView.nameInput,
+            121,
+            null,
+            "Name is invalid. The name must be between 3 and 120 characters"
+        );
 
         cy.get(MigrationWaveView.submitButton).should("be.disabled");
         cy.get(cancelButton).click();
@@ -92,25 +101,19 @@ describe(["@tier1"], "Migration Waves Validations", () => {
 
     // Automates validations for Polarion TC 365
     it("Duplicate Migration wave name validation", function () {
-        let migrationWavesList: MigrationWave[] = [];
-
-        let name1 = data.getRandomWord(8);
-        let { start: startDate, end: endDate } = generateRandomDateRange();
-        const migrationWave1 = new MigrationWave(name1, startDate, endDate, null, null, null);
+        const migrationWavesList: MigrationWave[] = [];
+        const name = data.getRandomWord(8);
+        const { start: startDate, end: endDate } = generateRandomDateRange();
+        const migrationWave1 = new MigrationWave(name, startDate, endDate, null, null, null);
         migrationWave1.create();
         migrationWavesList.push(migrationWave1);
-
-        const migrationWave2 = new MigrationWave(name1, startDate, endDate, null, null, null);
-        migrationWave2.create();
-
+        //create another MW with same params
+        migrationWave1.create();
         checkSuccessAlert(commonView.duplicateNameWarning, "Failed to create migration wave.");
 
         const migrationWave3 = new MigrationWave(null, startDate, endDate, null, null, null);
         migrationWave3.create();
-
-        const migrationWave4 = new MigrationWave(null, startDate, endDate, null, null, null);
-        migrationWave4.create();
-
+        migrationWave3.create();
         checkSuccessAlert(commonView.duplicateNameWarning, "Failed to create migration wave.");
         //migrationwave3 name is null so it can't be deleted by list
         deleteByList(migrationWavesList);

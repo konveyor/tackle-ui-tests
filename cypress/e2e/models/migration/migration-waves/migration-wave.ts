@@ -179,13 +179,6 @@ export class MigrationWave {
         inputText(MigrationWaveView.nameInput, name);
     }
 
-    public static validateWrongInput(selector, anotherSelector?: string, length?: number): void {
-        let text = length && length > 120 ? randomWordGenerator(length) : "ab";
-        inputText(selector, text);
-        if (anotherSelector) click(anotherSelector);
-        doesExistText("Name is invalid. The name must be between 3 and 120 characters", true);
-    }
-
     /**
      * This method should NOT be used to do assertions, if an invalid date is passed, it'll throw an exception
      * It selects the date using the picker because it can't be manually entered right now due to bug MTA-706
