@@ -39,6 +39,8 @@ let projectName = "";
 // Automates Polarion TC 340, 359, 360 and 361 for Jira Cloud
 /**
  * This test suite contains tests that are co-dependent, so they won't pass if they're executed separately
+ * @see export_to_jira_datacenter.test.ts for Jira Datacenter tests
+ * This suite is almost identical to jira_datacenter but putting both tests in the same suite would make the code harder to read
  */
 describe(["@tier1"], "Export Migration Wave to Jira Cloud", function () {
     before("Create test data", function () {
@@ -74,7 +76,7 @@ describe(["@tier1"], "Export Migration Wave to Jira Cloud", function () {
     Object.values(JiraIssueTypes).forEach((issueType) => {
         it(`Export wave as ${issueType} to Jira`, function () {
             jiraCloudInstance
-                .getProject()
+                .getProject(Cypress.env("jira_atlassian_cloud_project"))
                 .then((project) => {
                     expect(!!project).to.eq(true);
 
@@ -96,8 +98,7 @@ describe(["@tier1"], "Export Migration Wave to Jira Cloud", function () {
     });
 
     Object.values(JiraIssueTypes).forEach((issueType) => {
-        const markBug = issueType === "Subtask" ? "BUG MTA-870 | " : "";
-        it(`${markBug} Assert exports for ${issueType}`, function () {
+        it(`Assert exports for ${issueType}`, function () {
             cy.wait(30 * SEC); // Enough time to create both tasks and for them to be available in the Jira API
             jiraCloudInstance.getIssues(projectName).then((issues: JiraIssue[]) => {
                 const waveIssues = issues.filter((issue) => {
@@ -117,6 +118,7 @@ describe(["@tier1"], "Export Migration Wave to Jira Cloud", function () {
             });
         });
     });
+
     after("Clear test data", function () {
         Object.values(wavesMap).forEach((wave: MigrationWave) => wave.delete());
         applications.forEach((app) => app.delete());

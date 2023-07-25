@@ -129,7 +129,7 @@ export enum JiraType {
 
 export enum JiraIssueTypes {
     task = "Task",
-    subtask = "Subtask",
+    bug = "Bug",
     epic = "Epic",
     story = "Story",
 }

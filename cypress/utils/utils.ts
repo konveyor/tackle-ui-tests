@@ -1453,6 +1453,18 @@ export function selectWithinModal(selector: string): void {
     clickWithin(modal, selector);
 }
 
+/**
+ * Executes a function inside a specified HTML element
+ * @param selector parent element
+ * @param functionToExec function to execute
+ * @param index selector index
+ */
+export function callWithin(selector: string, functionToExec: () => void, index = 0): void {
+    cy.get(selector)
+        .eq(index)
+        .within(() => functionToExec());
+}
+
 export function clickWithin(parent, selector: string, isForced = false, log = false): void {
     cy.get(parent, { timeout: 30 * SEC })
         .eq(0)

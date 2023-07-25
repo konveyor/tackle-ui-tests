@@ -1,4 +1,5 @@
 import {
+    callWithin,
     click,
     clickByText,
     inputText,
@@ -26,6 +27,7 @@ import {
     cancelButton,
     confirmButton,
     itemsSelectInsideDialog,
+    modal,
     submitButton,
 } from "../../../views/common.view";
 import { selectBox } from "../../../views/applicationinventory.view";
@@ -136,10 +138,10 @@ export class MigrationWave {
         MigrationWave.open();
         this.expandActionsMenu();
         cy.contains(manageApplications).click();
-        selectItemsPerPage(100);
+        callWithin(modal, () => selectItemsPerPage(100));
         cy.get(itemsSelectInsideDialog).click();
         cy.contains(button, selectNone).click();
-        selectItemsPerPage(100);
+        callWithin(modal, () => selectItemsPerPage(100));
 
         this.applications.forEach((app) => {
             cy.get(tdTag)
