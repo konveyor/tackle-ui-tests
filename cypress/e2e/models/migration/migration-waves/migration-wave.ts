@@ -1,4 +1,5 @@
 import {
+    callWithin,
     click,
     clickByText,
     inputText,
@@ -137,14 +138,10 @@ export class MigrationWave {
         MigrationWave.open();
         this.expandActionsMenu();
         cy.contains(manageApplications).click();
-        cy.get(modal)
-            .eq(0)
-            .within((_) => selectItemsPerPage(100));
+        callWithin(modal, () => selectItemsPerPage(100));
         cy.get(itemsSelectInsideDialog).click();
         cy.contains(button, selectNone).click();
-        cy.get(modal)
-            .eq(0)
-            .within((_) => selectItemsPerPage(100));
+        callWithin(modal, () => selectItemsPerPage(100));
 
         this.applications.forEach((app) => {
             cy.get(tdTag)
