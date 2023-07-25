@@ -46,7 +46,7 @@ describe(["@tier1"], "Testing the creation of a tracker in migration waves", fun
 
         // expand the wave row but clicking on the wave status
         migrationWave.clickWaveStatus();
-        migrationWave.removeApplication(application.name);
+        migrationWave.removeApplications([application]);
         migrationWave.createTracker();
 
         // assert the current page redirect to is the Jira configuration page

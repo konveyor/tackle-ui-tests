@@ -295,21 +295,25 @@ export class MigrationWave {
             });
     }
 
-    public removeApplication(applicationName) {
+    public removeApplications(applications) {
         this.isExpanded().then((expanded) => {
             expect(expanded).to.be.true;
         });
 
-        cy.contains(applicationName)
-            .parent()
-            .within(() => {
-                cy.get(MigrationWaveView.removeApplicationButton).click();
-            });
-        this.removeApplicationFromModel(applicationName);
+        applications.forEach((application) => {
+            cy.contains(application.name)
+                .parent()
+                .within(() => {
+                    cy.get(MigrationWaveView.removeApplicationButton).click();
+                });
+        });
+        this.removeApplicationsFromModel(applications);
     }
 
-    private removeApplicationFromModel(name) {
-        this.applications = this.applications.filter((item) => item.name != name);
+    private removeApplicationsFromModel(applicationsList) {
+        this.applications = this.applications.filter(
+            (application) => !applicationsList.some((app) => app.name === application.name)
+        );
     }
 
     public createTracker() {
