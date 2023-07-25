@@ -91,7 +91,7 @@ describe(["@tier1"], "Migration Waves Validations", () => {
     });
 
     // Automates validations for Polarion TC 365
-    it("Unique validations", function () {
+    it("Duplicate Migration wave name validation", function () {
         let migrationWavesList: MigrationWave[] = [];
 
         let name1 = data.getRandomWord(8);
