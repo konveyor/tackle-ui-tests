@@ -81,6 +81,7 @@ import Chainable = Cypress.Chainable;
 import { MigrationWave } from "../e2e/models/migration/migration-waves/migration-wave";
 import { Jira } from "../e2e/models/administration/jira-connection/jira";
 import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
+import { closeModal } from "../e2e/views/assessment.view";
 
 const { _ } = Cypress;
 
@@ -1700,4 +1701,19 @@ export function cleanupDownloads(): void {
     cy.exec("cd cypress/downloads; rm -rf ./*").then((result) => {
         cy.log(result.stdout);
     });
+}
+
+export function selectAssessmentApplications(apps: string): void {
+    clickWithin(modal, "button[aria-label='Select']");
+    clickByText(button, `Select ${apps}`, false, true);
+    clickWithin(modal, "button[aria-label='Select']", false, true);
+    cy.get("div").then(($div) => {
+        if ($div.text().includes("in-progress or complete assessment")) {
+            selectCheckBox("#confirm-copy-checkbox");
+        }
+    });
+}
+
+export function closeModalWindow(): void {
+    click(closeModal, false, true);
 }
