@@ -15,11 +15,19 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { login, validateTooLongInput, validateTooShortInput } from "../../../../utils/utils";
+import {
+    checkSuccessAlert,
+    deleteByList,
+    generateRandomDateRange,
+    login,
+    validateTooLongInput,
+    validateTooShortInput,
+} from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { MigrationWaveView } from "../../../views/migration-wave.view";
 import { cancelButton, nameHelper } from "../../../views/common.view";
+import * as commonView from "../../../views/common.view";
 
 let migrationWave: MigrationWave;
 
@@ -60,17 +68,49 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         const tomorrow = new RegExp("^" + (now.getDate() + 1) + "$");
         // Start date should be greater than actual date
         cy.contains("button", new RegExp("^" + now.getDate() + "$")).should("be.disabled");
-        cy.contains("button", tomorrow).should("be.enabled").click();
+        //making sure we are selecting correct element and not from last month as it is visible in the calendar
+        cy.get("td:not(.pf-m-adjacent-month)")
+            .contains("button.pf-c-calendar-month__date", tomorrow)
+            .should("be.enabled")
+            .click();
 
         cy.get(MigrationWaveView.endDateInput).next("button").click();
         // End date should be greater than start date
         cy.contains("button", tomorrow).should("be.disabled");
-        cy.contains("button", new RegExp("^" + (now.getDate() + 2) + "$"))
+
+        cy.get("td:not(.pf-m-adjacent-month)")
+            .contains(
+                "button.pf-c-calendar-month__date",
+                new RegExp("^" + (now.getDate() + 2) + "$")
+            )
             .should("be.enabled")
             .click();
 
         cy.get(MigrationWaveView.submitButton).should("be.enabled");
         cy.get(cancelButton).click();
+    });
+    it("Unique validations", function () {
+        let migrationWavesList: MigrationWave[] = [];
+
+        let name1 = data.getRandomWord(8);
+        let { start: startDate, end: endDate } = generateRandomDateRange();
+        const migrationWave1 = new MigrationWave(name1, startDate, endDate, null, null, null);
+        migrationWave1.create();
+        migrationWavesList.push(migrationWave1);
+
+        const migrationWave2 = new MigrationWave(name1, startDate, endDate, null, null, null);
+        migrationWave2.create();
+
+        checkSuccessAlert(commonView.duplicateNameWarning, "Failed to create migration wave.");
+        const migrationWave3 = new MigrationWave(null, startDate, endDate, null, null, null);
+        migrationWave3.create();
+
+        const migrationWave4 = new MigrationWave(null, startDate, endDate, null, null, null);
+        migrationWave4.create();
+
+        checkSuccessAlert(commonView.duplicateNameWarning, "Failed to create migration wave.");
+        //migrationwave3 name is null so it can't be deleted by list
+        deleteByList(migrationWavesList);
     });
 
     after("Delete test data", function () {
