@@ -1456,10 +1456,11 @@ export function selectWithinModal(selector: string): void {
  * Executes a function inside a specified HTML element
  * @param selector parent element
  * @param functionToExec function to execute
+ * @param index selector index
  */
-export function callWithin(selector: string, functionToExec: () => void): void {
+export function callWithin(selector: string, functionToExec: () => void, index = 0): void {
     cy.get(selector)
-        .eq(0)
+        .eq(index)
         .within(() => functionToExec());
 }
 
