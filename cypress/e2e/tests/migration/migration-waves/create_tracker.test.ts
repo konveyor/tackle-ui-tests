@@ -12,20 +12,19 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { login, getRandomApplicationData } from "../../../../utils/utils";
+import { Assessment } from "../../../models/migration/applicationinventory/assessment";
+import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
+import * as data from "../../../../utils/data_utils";
+import { Application } from "../../../models/migration/applicationinventory/application";
+import { createJiraButton } from "../../../views/jira.view";
+
 const now = new Date();
 now.setDate(now.getDate() + 1);
 const end = new Date(now.getTime());
 end.setFullYear(end.getFullYear() + 1);
 let application: Application;
 let migrationWave: MigrationWave;
-
-import { login, getRandomApplicationData } from "../../../../utils/utils";
-
-import { Assessment } from "../../../models/migration/applicationinventory/assessment";
-import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
-import * as data from "../../../../utils/data_utils";
-import { Application } from "../../../models/migration/applicationinventory/application";
-import { createJiraButton } from "../../../views/jira.view";
 
 //Automates Polarion TC 358
 

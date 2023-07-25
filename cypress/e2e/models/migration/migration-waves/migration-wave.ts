@@ -285,29 +285,38 @@ export class MigrationWave {
             });
     }
 
-    public isExpanded() {
-        cy.contains(this.name)
+    public isExpanded(): Cypress.Chainable<boolean> {
+        return cy
+            .contains(this.name)
             .parent()
             .parent()
-            .should(($element) => {
-                expect(
-                    $element,
-                    `Migration Wave with name ${this.name} is not expanded`
-                ).to.have.class(MigrationWaveView.waveExpanded);
+            .then(($element) => {
+                return $element.hasClass(MigrationWaveView.waveExpanded);
             });
     }
 
     public removeApplication(applicationName) {
-        this.isExpanded();
+        this.isExpanded().then((expanded) => {
+            expect(expanded).to.be.true;
+        });
+
         cy.contains(applicationName)
             .parent()
             .within(() => {
                 cy.get(MigrationWaveView.removeApplicationButton).click();
             });
+        this.removeApplicationFromModel(applicationName);
+    }
+
+    private removeApplicationFromModel(name) {
+        this.applications = this.applications.filter((item) => item.name != name);
     }
 
     public createTracker() {
-        this.isExpanded();
+        this.isExpanded().then((expanded) => {
+            expect(expanded).to.be.true;
+        });
+
         click(MigrationWaveView.createTrackerButton);
     }
 }
