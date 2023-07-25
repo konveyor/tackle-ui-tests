@@ -36,13 +36,7 @@ describe(["@tier1"], "Testing the creation of a tracker in migration waves", fun
         application.create();
     });
 
-    beforeEach("Interceptors", function () {
-        cy.intercept("POST", "/hub/migrationwaves*").as("postWave");
-        cy.intercept("PUT", "/hub/migrationwaves*/*").as("putWave");
-        cy.intercept("DELETE", "/hub/migrationwaves*/*").as("deleteWave");
-    });
-
-    it("Create Tracker", function () {
+    it("verify create tracker button is visible", function () {
         MigrationWave.open();
 
         // create new migration wave
