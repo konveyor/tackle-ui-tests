@@ -48,20 +48,12 @@ describe(["@tier1"], "Migration Waves Validations", () => {
     });
 
     it("Name validations", function () {
+        const invalidMessage = "Name is invalid. The name must be between 3 and 120 characters";
         MigrationWave.openNewForm();
         cy.get(MigrationWaveView.submitButton).should("be.disabled");
 
-        validateTooShortInput(
-            MigrationWaveView.nameInput,
-            "body",
-            "Name is invalid. The name must be between 3 and 120 characters"
-        );
-        validateTooLongInput(
-            MigrationWaveView.nameInput,
-            121,
-            null,
-            "Name is invalid. The name must be between 3 and 120 characters"
-        );
+        validateTooShortInput(MigrationWaveView.nameInput, "body", invalidMessage);
+        validateTooLongInput(MigrationWaveView.nameInput, 121, null, invalidMessage);
 
         cy.get(MigrationWaveView.submitButton).should("be.disabled");
         cy.get(cancelButton).click();
