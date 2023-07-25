@@ -29,13 +29,13 @@ let migrationWave: MigrationWave;
 //Automates Polarion TC 358
 
 describe(["@tier1"], "Testing the creation of a tracker in migration waves", function () {
-    before("Create new application", () => {
+    before("Login & Create new application", () => {
         login();
         application = new Assessment(getRandomApplicationData());
         application.create();
     });
 
-    it("verify create tracker button is visible", function () {
+    it("Verify create tracker button is visible", function () {
         MigrationWave.open();
 
         // create new migration wave
@@ -44,12 +44,12 @@ describe(["@tier1"], "Testing the creation of a tracker in migration waves", fun
         ]);
         migrationWave.create();
 
-        // expand the wave row but clicking on the wave status
+        // expand the wave row by clicking on the wave status
         migrationWave.clickWaveStatus();
         migrationWave.removeApplications([application]);
         migrationWave.createTracker();
 
-        // assert the current page redirect to is the Jira configuration page
+        // assert the current page redirect to the Jira configuration page
         cy.get("body").should("contain.text", "Jira configuration");
         cy.get(createJiraButton).should("be.visible");
     });
