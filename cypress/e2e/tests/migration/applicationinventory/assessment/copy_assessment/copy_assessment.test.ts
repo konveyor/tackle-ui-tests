@@ -127,6 +127,8 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
         cy.get("div").then(($div) => {
             if ($div.text().includes("in-progress or complete assessment")) {
                 selectCheckBox("#confirm-copy-checkbox");
+            } else {
+                clickWithin(modal, "button[aria-label='Select']", false, true);
             }
         });
         cy.get(copy).should("be.visible").should("not.be.disabled");
