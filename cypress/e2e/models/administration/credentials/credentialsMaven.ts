@@ -38,7 +38,6 @@ export class CredentialsMaven extends Credentials {
         this.fillSettingsFile();
         if (!toBeCanceled) {
             submitForm();
-            this.closeSuccessNotification();
             exists(this.name);
         } else {
             cancelForm();

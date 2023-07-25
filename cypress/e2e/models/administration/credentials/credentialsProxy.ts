@@ -53,7 +53,6 @@ export class CredentialsProxy extends Credentials {
         this.fillPassword();
         if (!toBeCanceled) {
             submitForm();
-            this.closeSuccessNotification();
             exists(this.name);
         } else {
             cancelForm();
