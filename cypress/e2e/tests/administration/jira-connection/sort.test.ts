@@ -101,7 +101,9 @@ describe(["@tier2"], "Jira connections sort validations", function () {
     });
 
     after("Clean up", () => {
-        deleteByList(jiraConnectionList);
+        jiraConnectionList.forEach((current_connection) => {
+            current_connection.delete();
+        });
         jiraBasicCredential.delete();
     });
 });
