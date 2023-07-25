@@ -29,7 +29,7 @@ import {
     submitButton,
 } from "../../../views/common.view";
 import { selectBox } from "../../../views/applicationinventory.view";
-import { Application } from "../../../models/migration/applicationinventory/application";
+import { Application } from "../applicationinventory/application";
 
 export interface MigrationWave {
     name: string;
@@ -275,5 +275,52 @@ export class MigrationWave {
         cy.contains("button", currentMonth).click();
         cy.contains("li", date.toLocaleString("en-us", { month: "long" })).click();
         cy.contains("button:not([disabled])", `${date.getDate()}`).first().click();
+    }
+
+    public clickWaveStatus() {
+        cy.contains(this.name)
+            .parents("tr")
+            .within(() => {
+                cy.get(MigrationWaveView.waveStatusColumn).click();
+            });
+    }
+
+    public isExpanded(): Cypress.Chainable<boolean> {
+        return cy
+            .contains(this.name)
+            .parent()
+            .parent()
+            .then(($element) => {
+                return $element.hasClass(MigrationWaveView.waveExpanded);
+            });
+    }
+
+    public removeApplications(applications) {
+        this.isExpanded().then((expanded) => {
+            expect(expanded).to.be.true;
+        });
+
+        applications.forEach((application) => {
+            cy.contains(application.name)
+                .parent()
+                .within(() => {
+                    cy.get(MigrationWaveView.removeApplicationButton).click();
+                });
+        });
+        this.removeApplicationsFromModel(applications);
+    }
+
+    private removeApplicationsFromModel(applicationsList) {
+        this.applications = this.applications.filter(
+            (application) => !applicationsList.some((app) => app.name === application.name)
+        );
+    }
+
+    public createTracker() {
+        this.isExpanded().then((expanded) => {
+            expect(expanded).to.be.true;
+        });
+
+        click(MigrationWaveView.createTrackerButton);
     }
 }
