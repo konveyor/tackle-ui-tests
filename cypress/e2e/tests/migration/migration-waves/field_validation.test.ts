@@ -89,6 +89,8 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         cy.get(MigrationWaveView.submitButton).should("be.enabled");
         cy.get(cancelButton).click();
     });
+
+    // Automates validations for Polarion TC 365
     it("Unique validations", function () {
         let migrationWavesList: MigrationWave[] = [];
 
@@ -102,6 +104,7 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         migrationWave2.create();
 
         checkSuccessAlert(commonView.duplicateNameWarning, "Failed to create migration wave.");
+
         const migrationWave3 = new MigrationWave(null, startDate, endDate, null, null, null);
         migrationWave3.create();
 
