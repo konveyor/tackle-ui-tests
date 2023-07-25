@@ -19,19 +19,15 @@ import {
     login,
     createMultipleStakeholders,
     createMultipleApplications,
-    clickWithin,
     deleteByList,
-    click,
-    selectCheckBox,
-    clickByText,
+    selectAssessmentApplications,
+    closeModalWindow,
 } from "../../../../../../utils/utils";
 
 import { Stakeholders } from "../../../../../models/migration/controls/stakeholders";
-import { button, SEC, trTag } from "../../../../../types/constants";
+import { SEC, trTag } from "../../../../../types/constants";
 import { copy, selectBox } from "../../../../../views/applicationinventory.view";
 import { Assessment } from "../../../../../models/migration/applicationinventory/assessment";
-import { modal } from "../../../../../views/common.view";
-import { closeModal } from "../../../../../views/assessment.view";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let applicationList: Array<Assessment> = [];
@@ -71,7 +67,7 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
                 cy.get(selectBox).should("be.disabled");
                 cy.wait(2 * SEC);
             });
-        click(closeModal, false, true);
+        closeModalWindow();
     });
 
     it("Copy button not enabled until one app is selected", function () {
@@ -80,7 +76,7 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
         cy.get(copy).should("be.disabled");
         applicationList[0].selectApps(applicationList);
         cy.get(copy).should("not.be.disabled");
-        click(closeModal, false, true);
+        closeModalWindow();
     });
 
     it("Copy assessment to more than one application and discard assessment", function () {
@@ -122,27 +118,17 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
         cy.wait(SEC);
 
         // Select all the applications on page
-        clickWithin(modal, "button[aria-label='Select']");
-        clickByText(button, "Select page", false, true);
-        cy.get("div").then(($div) => {
-            if ($div.text().includes("in-progress or complete assessment")) {
-                selectCheckBox("#confirm-copy-checkbox");
-            }
-        });
+        selectAssessmentApplications("page");
         cy.get(copy).should("be.visible").should("not.be.disabled");
 
         // Select all applications
-        clickWithin(modal, "button[aria-label='Select']", false, true);
-        clickByText(button, "Select all", false, true);
-        clickWithin(modal, "button[aria-label='Select']");
+        selectAssessmentApplications("all");
         cy.get(copy).should("be.visible").should("not.be.disabled");
 
         // Deselect all applications
-        clickWithin(modal, "button[aria-label='Select']");
-        clickByText(button, "Select none (0 items)", false, true);
-        clickWithin(modal, "button[aria-label='Select']");
+        selectAssessmentApplications("none");
         cy.get(copy).should("be.visible").should("be.disabled");
-        click(closeModal, false, true);
+        closeModalWindow();
     });
 
     after("Perform test data clean up", function () {
