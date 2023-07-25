@@ -1,6 +1,7 @@
 import {
     click,
     clickByText,
+    doesExistText,
     inputText,
     selectItemsPerPage,
     selectUserPerspective,
@@ -30,7 +31,7 @@ import {
 } from "../../../views/common.view";
 import { selectBox } from "../../../views/applicationinventory.view";
 import { Application } from "../../../models/migration/applicationinventory/application";
-import * as commonView from "../../../views/common.view";
+import { randomWordGenerator } from "../../../../utils/data_utils";
 
 export interface MigrationWave {
     name: string;
@@ -176,6 +177,13 @@ export class MigrationWave {
 
     public static fillName(name: string): void {
         inputText(MigrationWaveView.nameInput, name);
+    }
+
+    public static validateWrongInput(selector, anotherSelector?: string, length?: number): void {
+        let text = length && length > 120 ? randomWordGenerator(length) : "ab";
+        inputText(selector, text);
+        if (anotherSelector) click(anotherSelector);
+        doesExistText("Name is invalid. The name must be between 3 and 120 characters", true);
     }
 
     /**

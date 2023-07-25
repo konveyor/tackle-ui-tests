@@ -51,8 +51,8 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         MigrationWave.openNewForm();
         cy.get(MigrationWaveView.submitButton).should("be.disabled");
 
-        validateTooShortInput(MigrationWaveView.nameInput, "body");
-        validateTooLongInput(MigrationWaveView.nameInput);
+        MigrationWave.validateWrongInput(MigrationWaveView.nameInput, "body");
+        MigrationWave.validateWrongInput(MigrationWaveView.nameInput);
 
         cy.get(MigrationWaveView.submitButton).should("be.disabled");
         cy.get(cancelButton).click();

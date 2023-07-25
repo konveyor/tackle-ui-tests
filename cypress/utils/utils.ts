@@ -1627,13 +1627,13 @@ export function disableSwitch(selector: string): void {
 export function validateTooShortInput(selector, anotherSelector?: string): void {
     inputText(selector, "ab");
     if (anotherSelector) click(anotherSelector);
-    doesExistText("Name is invalid. The name must be between 3 and 120 characters", true);
+    doesExistText("This field must contain at least 3 characters.", true);
 }
 
 export function validateTooLongInput(selector, anotherSelector?: string, length = 121): void {
     inputText(selector, randomWordGenerator(length));
     if (anotherSelector) click(anotherSelector);
-    doesExistText("Name is invalid. The name must be between 3 and 120 characters", true);
+    doesExistText("This field must contain fewer than", true);
 }
 
 // This method accepts enums or maps and returns list of keys, so you can iterate by keys
