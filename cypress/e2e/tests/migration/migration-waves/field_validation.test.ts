@@ -15,11 +15,20 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { login, validateTooLongInput, validateTooShortInput } from "../../../../utils/utils";
+import {
+    checkSuccessAlert,
+    deleteByList,
+    generateRandomDateRange,
+    login,
+    validateTooLongInput,
+    validateTooShortInput,
+} from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { MigrationWaveView } from "../../../views/migration-wave.view";
 import { cancelButton, nameHelper } from "../../../views/common.view";
+import * as commonView from "../../../views/common.view";
+import { duplicateMigrationWaveError } from "../../../types/constants";
 
 let migrationWave: MigrationWave;
 
@@ -40,11 +49,12 @@ describe(["@tier1"], "Migration Waves Validations", () => {
     });
 
     it("Name validations", function () {
+        const invalidMessage = "Name is invalid. The name must be between 3 and 120 characters";
         MigrationWave.openNewForm();
         cy.get(MigrationWaveView.submitButton).should("be.disabled");
 
-        validateTooShortInput(MigrationWaveView.nameInput, "body");
-        validateTooLongInput(MigrationWaveView.nameInput);
+        validateTooShortInput(MigrationWaveView.nameInput, "body", invalidMessage);
+        validateTooLongInput(MigrationWaveView.nameInput, 121, null, invalidMessage);
 
         cy.get(MigrationWaveView.submitButton).should("be.disabled");
         cy.get(cancelButton).click();
@@ -60,17 +70,41 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         const tomorrow = new RegExp("^" + (now.getDate() + 1) + "$");
         // Start date should be greater than actual date
         cy.contains("button", new RegExp("^" + now.getDate() + "$")).should("be.disabled");
-        cy.contains("button", tomorrow).should("be.enabled").click();
-
+        cy.get("td:not(.pf-m-adjacent-month)")
+            .contains("button.pf-c-calendar-month__date", tomorrow)
+            .should("be.enabled")
+            .click();
         cy.get(MigrationWaveView.endDateInput).next("button").click();
         // End date should be greater than start date
         cy.contains("button", tomorrow).should("be.disabled");
-        cy.contains("button", new RegExp("^" + (now.getDate() + 2) + "$"))
+        cy.get("td:not(.pf-m-adjacent-month)")
+            .contains(
+                "button.pf-c-calendar-month__date",
+                new RegExp("^" + (now.getDate() + 2) + "$")
+            )
             .should("be.enabled")
             .click();
 
         cy.get(MigrationWaveView.submitButton).should("be.enabled");
         cy.get(cancelButton).click();
+    });
+    it("Duplicate Migration wave name validation", function () {
+        const migrationWavesList: MigrationWave[] = [];
+        const name = data.getRandomWord(8);
+        const { start: startDate, end: endDate } = generateRandomDateRange();
+        const migrationWave1 = new MigrationWave(name, startDate, endDate, null, null, null);
+        migrationWave1.create();
+        migrationWavesList.push(migrationWave1);
+        //create another MW with same params
+        migrationWave1.create();
+        checkSuccessAlert(commonView.duplicateNameWarning, duplicateMigrationWaveError);
+
+        const migrationWave3 = new MigrationWave(null, startDate, endDate, null, null, null);
+        migrationWave3.create();
+        migrationWave3.create();
+        checkSuccessAlert(commonView.duplicateNameWarning, duplicateMigrationWaveError);
+        //migrationwave3 name is null so it can't be deleted by list
+        deleteByList(migrationWavesList);
     });
 
     after("Delete test data", function () {
