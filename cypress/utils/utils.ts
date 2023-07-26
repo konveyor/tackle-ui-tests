@@ -1627,7 +1627,7 @@ export function disableSwitch(selector: string): void {
 export function validateTooShortInput(selector, anotherSelector?: string, message?: string): void {
     inputText(selector, "ab");
     if (anotherSelector) click(anotherSelector);
-    const validationMessage = message || "This field must contain at least 3 characters.";
+    const validationMessage = message || "This field must contain fewer than";
     doesExistText(validationMessage, true);
 }
 
