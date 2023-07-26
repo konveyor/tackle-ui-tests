@@ -48,6 +48,7 @@ import {
     repositoryType,
     analysis,
     owner,
+    JiraType,
 } from "../e2e/types/constants";
 import { actionButton, date, createEntitiesCheckbox } from "../e2e/views/applicationinventory.view";
 import {
@@ -919,6 +920,7 @@ export function createMultipleJiraConnections(
     while (jiraList.length < numberOfJiras) {
         jiraCloudConnectionData = getJiraConnectionData(
             jiraCredential,
+            JiraType.cloud,
             isInsecure,
             useTestingAccount
         );

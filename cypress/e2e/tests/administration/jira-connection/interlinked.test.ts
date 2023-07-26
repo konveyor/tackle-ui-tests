@@ -74,6 +74,7 @@ describe(["@tier2"], "Jira connection negative tests", () => {
         // Defining Jira Cloud connection data with correct credentials
         jiraCloudConnectionData = getJiraConnectionData(
             jiraBasicCredential,
+            JiraType.cloud,
             isSecure,
             useTestingAccount
         );
@@ -94,6 +95,7 @@ describe(["@tier2"], "Jira connection negative tests", () => {
         // Defining Jira Cloud connection data with incorrect credentials
         jiraCloudConnectionDataIncorrect = getJiraConnectionData(
             jiraBasicCredentialInvalid,
+            JiraType.cloud,
             isSecure,
             useTestingAccount
         );
@@ -103,6 +105,7 @@ describe(["@tier2"], "Jira connection negative tests", () => {
         // Defining Jira Stage connection data with incorrect credentials
         jiraStageConnectionDataIncorrect = getJiraConnectionData(
             jiraBearerCredentialInvalid,
+            JiraType.server,
             isSecure,
             useTestingAccount
         );

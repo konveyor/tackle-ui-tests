@@ -51,7 +51,9 @@ describe(["@tier1", "@interop"], "Export Migration Wave to Jira Cloud", function
         );
         jiraCloudCredentials.create();
 
-        jiraCloudInstance = new Jira(data.getJiraConnectionData(jiraCloudCredentials, false, true));
+        jiraCloudInstance = new Jira(
+            data.getJiraConnectionData(jiraCloudCredentials, JiraType.cloud, false, true)
+        );
         jiraCloudInstance.create();
     });
 
