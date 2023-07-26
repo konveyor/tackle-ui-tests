@@ -90,7 +90,7 @@ describe(["@tier2"], "Credentials filter validations", function () {
         clearAllFilters();
     });
 
-    it("BUG MTA-863 - Type filter validations", () => {
+    it("Type filter validations", () => {
         Credentials.filterByType();
     });
 
