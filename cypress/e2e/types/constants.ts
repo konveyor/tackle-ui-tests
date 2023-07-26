@@ -83,6 +83,8 @@ export const assessAppButton = "#assess-application";
 export const reviewAppButton = "#review-application";
 export const analyzeAppButton = "#analyze-application";
 export const actionsButton = "button[aria-label=Actions]";
+export const duplicateMigrationWaveError =
+    "Danger alert:The migration wave could not be created due to a conflict with an existing wave. Make sure the name and start/end dates are unique and try again.";
 
 // Error helper messages general to all views
 export const duplicateErrMsg = "ERROR: duplicate key value violates unique constraint";
