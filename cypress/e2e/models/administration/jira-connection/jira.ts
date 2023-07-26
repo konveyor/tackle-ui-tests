@@ -317,6 +317,7 @@ export class Jira {
                 method,
                 headers: {
                     "X-Atlassian-Token": "no-check",
+                    "User-Agent": "DUMMY-USER-AGENT",
                     Authorization:
                         this.credential.type === CredentialType.jiraBasic ? basicAuth : bearerAuth,
                 },
