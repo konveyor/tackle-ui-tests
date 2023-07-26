@@ -61,7 +61,10 @@ export class MigrationWave {
 
     public static fullUrl = Cypress.env("tackleUrl") + "/migration-waves";
 
-    public static open() {
+    public static open(forceReload = false) {
+        if (forceReload) {
+            cy.visit(MigrationWave.fullUrl);
+        }
         cy.url().then(($url) => {
             if ($url != MigrationWave.fullUrl) {
                 selectUserPerspective("Migration");
@@ -122,10 +125,10 @@ export class MigrationWave {
         cy.contains(instance).click();
 
         cy.get(MigrationWaveView.projectSelectToggle).click();
-        cy.contains(project).click();
+        cy.contains(project).click({ timeout: 10 * SEC, force: true });
 
         cy.get(MigrationWaveView.issueTypeSelectToggle).click();
-        cy.contains(issueType).click();
+        cy.contains(issueType).click({ timeout: 10 * SEC, force: true });
 
         cy.get(submitButton).click();
     }
