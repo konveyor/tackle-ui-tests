@@ -114,7 +114,7 @@ export function getDefaultTagCategories(): string[] {
 /**
  * Generates random URL
  *
- * @param length: length of URL between "https://" and domain ".com"
+ * @param length length of URL between "https://" and domain ".com"
  */
 export function getRandomUrl(length = 6): string {
     return "https://" + getRandomWord(length).toLowerCase() + ".com";
@@ -224,29 +224,29 @@ export function getRandomCredentialsData(
 /**
  * This function returns JiraConnectionData
  *
- * @param jiraCredential: credential used to build Jira connection. Can be either JiraCredentialsBasic or JiraCredentialsBearer
- * @param isInsecure: if true - selfsigned certificates will be accepted
- * @param useTestingAccount: if true - real connection data will be used, otherwise dummy data will be added
+ * @param jiraCredential credential used to build Jira connection. Can be either JiraCredentialsBasic or JiraCredentialsBearer
+ * @param jiraType is type of Jira account that should be returned
+ * @param isInsecure if true - selfsigned certificates will be accepted
+ * @param useTestingAccount if true - real connection data will be used, otherwise dummy data will be added
  *
  */
 export function getJiraConnectionData(
     jiraCredential: JiraCredentials,
+    jiraType = JiraType.cloud,
     isInsecure?: boolean,
     useTestingAccount = false
 ): JiraConnectionData {
     let name: string;
     let url: string;
-    let type: string;
+    let type = jiraType;
 
-    if (jiraCredential.type === CredentialType.jiraBasic) {
-        type = JiraType.cloud;
+    if (type === JiraType.cloud) {
         url = useTestingAccount ? Cypress.env("jira_atlassian_cloud_url") : getRandomUrl(6);
-    } else if (jiraCredential.type === CredentialType.jiraToken) {
-        type = JiraType.server;
+    } else {
         url = useTestingAccount ? Cypress.env("jira_stage_datacenter_url") : getRandomUrl(6);
     }
 
-    name = "Jira" + getRandomWord(5);
+    name = "Jira_" + getRandomWord(5);
 
     return {
         credential: jiraCredential,
@@ -260,13 +260,15 @@ export function getJiraConnectionData(
 /**
  * This function returns Jira credentials, either JiraCredentialsBasic or JiraCredentialsBearer
  *
- * @param accountType: Type of account, it can be Cloud or Datacenter/Server
- * @param useTestingAccount: if true - real credential data will be used, otherwise dummy data will be added
+ * @param accountType Type of account, it can be Cloud or Datacenter/Server
+ * @param useTestingAccount if true - real credential data will be used, otherwise dummy data will be added
+ * @param isStage should be `true` when using Stage Jira and false when using Cloud Jira
  *
  */
 export function getJiraCredentialData(
     accountType: string,
-    useTestingAccount = false
+    useTestingAccount = false,
+    isStage = false
 ): CredentialsJiraData {
     let accountName = "Jira_" + getRandomWord(6);
     let description = getDescription();
@@ -275,8 +277,13 @@ export function getJiraCredentialData(
 
     if (useTestingAccount) {
         if (accountType === CredentialType.jiraBasic) {
-            email = Cypress.env("jira_atlassian_cloud_email");
-            token = Cypress.env("jira_atlassian_cloud_token");
+            if (!isStage) {
+                email = Cypress.env("jira_atlassian_cloud_email");
+                token = Cypress.env("jira_atlassian_cloud_token");
+            } else {
+                email = Cypress.env("jira_stage_basic_login");
+                token = Cypress.env("jira_stage_basic_password");
+            }
         } else {
             // email field not present for bearer auth
             email = null;
