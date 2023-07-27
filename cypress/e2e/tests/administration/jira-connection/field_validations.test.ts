@@ -25,7 +25,7 @@ import {
     validateTooShortInput,
 } from "../../../../utils/utils";
 import { getJiraConnectionData, getJiraCredentialData } from "../../../../utils/data_utils";
-import { CredentialType } from "../../../types/constants";
+import { CredentialType, JiraType } from "../../../types/constants";
 import { CredentialsData, JiraConnectionData } from "../../../types/types";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 import { createJiraButton, instanceName, instanceUrl } from "../../../views/jira.view";
@@ -54,6 +54,7 @@ describe(["@tier3"], "Field validations for Jira Server connection instance", ()
         // Defining correct data to create new Jira connection
         jiraServerConnectionData = getJiraConnectionData(
             jiraBasicCredential,
+            JiraType.server,
             !isInsecure,
             useTestingAccount
         );

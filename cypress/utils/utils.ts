@@ -48,6 +48,7 @@ import {
     repositoryType,
     analysis,
     owner,
+    JiraType,
 } from "../e2e/types/constants";
 import { actionButton, date, createEntitiesCheckbox } from "../e2e/views/applicationinventory.view";
 import {
@@ -919,6 +920,7 @@ export function createMultipleJiraConnections(
     while (jiraList.length < numberOfJiras) {
         jiraCloudConnectionData = getJiraConnectionData(
             jiraCredential,
+            JiraType.cloud,
             isInsecure,
             useTestingAccount
         );
@@ -1637,16 +1639,23 @@ export function disableSwitch(selector: string): void {
         });
 }
 
-export function validateTooShortInput(selector, anotherSelector?: string): void {
+export function validateTooShortInput(selector, anotherSelector?: string, message?: string): void {
     inputText(selector, "ab");
     if (anotherSelector) click(anotherSelector);
-    doesExistText("This field must contain at least 3 characters.", true);
+    const validationMessage = message || "This field must contain at least 3 characters.";
+    doesExistText(validationMessage, true);
 }
 
-export function validateTooLongInput(selector, anotherSelector?: string, length = 121): void {
+export function validateTooLongInput(
+    selector,
+    length = 121,
+    anotherSelector?: string,
+    message?: string
+): void {
     inputText(selector, randomWordGenerator(length));
     if (anotherSelector) click(anotherSelector);
-    doesExistText("This field must contain fewer than", true);
+    const validationMessage = message || "This field must contain fewer than";
+    doesExistText(validationMessage, true);
 }
 
 // This method accepts enums or maps and returns list of keys, so you can iterate by keys
