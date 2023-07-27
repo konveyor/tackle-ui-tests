@@ -51,7 +51,9 @@ describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
         );
         jiraCredentials.create();
 
-        jiraInstance = new Jira(data.getJiraConnectionData(jiraCredentials, false, true));
+        jiraInstance = new Jira(
+            data.getJiraConnectionData(jiraCredentials, JiraType.server, false, true)
+        );
         jiraInstance.create();
     });
 
