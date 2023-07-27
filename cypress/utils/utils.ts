@@ -1647,7 +1647,7 @@ export function validateTooShortInput(selector, anotherSelector?: string, messag
 }
 
 export function validateTooLongInput(
-    selector,
+    selector: string,
     length = 121,
     anotherSelector?: string,
     message?: string

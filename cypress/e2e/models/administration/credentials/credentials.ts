@@ -15,7 +15,6 @@ import {
     enumKeys,
     clearAllFilters,
     doesExistText,
-    isButtonEnabled,
 } from "../../../../utils/utils";
 import {
     button,
@@ -49,7 +48,6 @@ import {
     confirmButton,
     cancelButton,
     closeSuccessNotification,
-    submitButton,
 } from "../../../views/common.view";
 import { selectType } from "../../../views/credentials.view";
 import * as commonView from "../../../views/common.view";
@@ -75,7 +73,7 @@ export class Credentials {
     /** Contains URL of credentials web page */
     static fullUrl = Cypress.env("tackleUrl") + "/identities";
 
-    constructor(name?) {
+    constructor(name?: string) {
         if (name) this.name = name;
     }
 
@@ -138,7 +136,7 @@ export class Credentials {
         validateValue(descriptionInput, description);
     }
 
-    protected selectType(type): void {
+    protected selectType(type: string): void {
         click(selectType);
         clickByText(button, type);
     }
