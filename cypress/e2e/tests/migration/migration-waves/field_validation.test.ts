@@ -26,7 +26,7 @@ import {
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { MigrationWaveView } from "../../../views/migration-wave.view";
-import { cancelButton, nameHelper } from "../../../views/common.view";
+import { cancelButton } from "../../../views/common.view";
 import * as commonView from "../../../views/common.view";
 import { duplicateMigrationWaveError } from "../../../types/constants";
 
@@ -103,7 +103,7 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         migrationWave3.create();
         migrationWave3.create();
         checkSuccessAlert(commonView.duplicateNameWarning, duplicateMigrationWaveError);
-        //migrationwave3 name is null so it can't be deleted by list
+        //migrationwave3 name is null, so it can't be deleted by list
         deleteByList(migrationWavesList);
     });
 
