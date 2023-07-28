@@ -68,7 +68,7 @@ describe(["@tier2"], "Job Function Validations", () => {
         jobfunction.create();
         checkSuccessAlert(
             commonView.successAlertMessage,
-            `Success alert:job function ${jobfunction.name} was successfully saved.`
+            `Success alert:Job function ${jobfunction.name} was successfully saved.`
         );
         cy.wait("@postJobfunctions");
         exists(jobfunction.name);

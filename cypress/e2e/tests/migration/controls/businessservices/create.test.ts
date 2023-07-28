@@ -98,7 +98,7 @@ describe(["@tier2"], "Business service validations", () => {
         businessService.create();
         checkSuccessAlert(
             commonView.successAlertMessage,
-            `Success alert:business service ${businessService.name} was successfully saved.`
+            `Success alert:Business service ${businessService.name} was successfully saved.`
         );
         exists(businessService.name);
 
