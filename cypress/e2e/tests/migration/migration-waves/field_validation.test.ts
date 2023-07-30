@@ -67,21 +67,33 @@ describe(["@tier1"], "Migration Waves Validations", () => {
 
         const now = new Date();
         cy.get(MigrationWaveView.startDateInput).next("button").click();
-        const tomorrow = new RegExp("^" + (now.getDate() + 1) + "$");
+        const tomorrow = new Date(now);
+        tomorrow.setDate(now.getDate() + 1);
+
+        const tomorrowRegex = new RegExp("^" + tomorrow.getDate() + "$");
         // Start date should be greater than actual date
         cy.contains("button", new RegExp("^" + now.getDate() + "$")).should("be.disabled");
-        cy.get("td:not(.pf-m-adjacent-month)")
-            .contains("button.pf-c-calendar-month__date", tomorrow)
+        cy.get("button")
+            .filter((index, element) => {
+                return (
+                    element.className === "pf-c-calendar-month__date" &&
+                    element.textContent.trim() === tomorrow.getDate().toString()
+                );
+            })
             .should("be.enabled")
             .click();
         cy.get(MigrationWaveView.endDateInput).next("button").click();
         // End date should be greater than start date
-        cy.contains("button", tomorrow).should("be.disabled");
-        cy.get("td:not(.pf-m-adjacent-month)")
-            .contains(
-                "button.pf-c-calendar-month__date",
-                new RegExp("^" + (now.getDate() + 2) + "$")
-            )
+        cy.contains("button", tomorrowRegex).should("be.disabled");
+        const dayAfterTomorrow = new Date(now);
+        dayAfterTomorrow.setDate(now.getDate() + 2);
+        cy.get("button")
+            .filter((index, element) => {
+                return (
+                    element.className === "pf-c-calendar-month__date" &&
+                    element.textContent.trim() === dayAfterTomorrow.getDate().toString()
+                );
+            })
             .should("be.enabled")
             .click();
 
@@ -103,6 +115,8 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         migrationWave3.create();
         migrationWave3.create();
         checkSuccessAlert(commonView.duplicateNameWarning, duplicateMigrationWaveError);
+        migrationWavesList.push(migrationWave3);
+
         //migrationwave3 name is null, so it can't be deleted by list
         deleteByList(migrationWavesList);
     });
