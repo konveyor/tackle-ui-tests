@@ -75,7 +75,7 @@ describe(["@tier3"], "Field validations for Jira Server connection instance", ()
             "Enter a valid URL. Note that a cloud instance or most public instances will require the use of HTTPS.",
             true
         );
-        validateTooLongInput(instanceUrl, null, 251);
+        validateTooLongInput(instanceUrl, 251, null);
         // Cancelling form after checks are done
         cancelForm();
     });
