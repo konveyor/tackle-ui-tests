@@ -260,23 +260,65 @@ export class MigrationWave {
         cy.get("button").contains(stakeHolderGroupName).click();
     }
 
+    static formatDateMMddYYYY(date: Date): string {
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0"); //January is 0!
+        const year = date.getFullYear();
+
+        return month + "/" + day + "/" + year;
+    }
+
     public expandActionsMenu() {
-        cy.contains(this.name)
-            .parents("tr")
-            .within(() => {
-                cy.get(MigrationWaveView.actionsButton).then(($btn) => {
-                    if ($btn.attr("aria-expanded") === "false") {
-                        $btn.trigger("click");
-                    }
+        if (this.name) {
+            const targetName = this.name;
+            cy.contains(targetName)
+                .parents("tr")
+                .within(() => {
+                    cy.get(MigrationWaveView.actionsButton).then(($btn) => {
+                        if ($btn.attr("aria-expanded") === "false") {
+                            $btn.trigger("click");
+                        }
+                    });
                 });
+        } else {
+            const targetStartDate = MigrationWave.formatDateMMddYYYY(this.startDate);
+            const targetEndDate = MigrationWave.formatDateMMddYYYY(this.endDate);
+
+            cy.get("tbody tr").each(($row) => {
+                const startCell = $row.find('td[data-label="Start date"]').text().trim();
+                const endCell = $row.find('td[data-label="End date"]').text().trim();
+
+                if (startCell === targetStartDate && endCell === targetEndDate) {
+                    cy.wrap($row)
+                        .find(MigrationWaveView.actionsButton)
+                        .then(($btn) => {
+                            if ($btn.attr("aria-expanded") === "false") {
+                                $btn.trigger("click");
+                            }
+                        });
+                }
             });
+        }
     }
 
     private static selectDateFromDatePicker(date: Date, currentMonth: string) {
         cy.get(MigrationWaveView.yearInput).type(`{selectAll}${date.getFullYear()}`);
         cy.contains("button", currentMonth).click();
         cy.contains("li", date.toLocaleString("en-us", { month: "long" })).click();
-        cy.contains("button:not([disabled])", `${date.getDate()}`).first().click();
+
+        // Wait for the date button to be available before clicking
+        cy.get(
+            'button[aria-label="' +
+                date.getDate() +
+                " " +
+                date.toLocaleString("en-us", { month: "long" }) +
+                " " +
+                date.getFullYear() +
+                '"]'
+        )
+            .should("be.visible")
+            .first()
+            .click();
     }
 
     public clickWaveStatus() {

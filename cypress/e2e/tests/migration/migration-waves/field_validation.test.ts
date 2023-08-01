@@ -64,26 +64,30 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         MigrationWave.openNewForm();
         MigrationWave.fillName(data.getRandomWord(5));
         cy.get(MigrationWaveView.submitButton).should("be.disabled");
-
         const now = new Date();
+
+        const options = { year: "numeric", month: "long", day: "numeric" } as const;
+        //used to get a date format such as "9 August 2023"
+        const nowDateLabel = new Intl.DateTimeFormat("en-GB", options).format(now);
+
         cy.get(MigrationWaveView.startDateInput).next("button").click();
-        const tomorrow = new RegExp("^" + (now.getDate() + 1) + "$");
+        const tomorrow = new Date(now);
+        tomorrow.setDate(now.getDate() + 1);
+
+        const dateTomorrowLabel = new Intl.DateTimeFormat("en-GB", options).format(tomorrow);
         // Start date should be greater than actual date
-        cy.contains("button", new RegExp("^" + now.getDate() + "$")).should("be.disabled");
-        cy.get("td:not(.pf-m-adjacent-month)")
-            .contains("button.pf-c-calendar-month__date", tomorrow)
-            .should("be.enabled")
-            .click();
+        cy.get(`button[aria-label="${nowDateLabel}"]`).should("be.disabled");
+        cy.get(`button[aria-label="${dateTomorrowLabel}"]`).should("be.enabled").click();
+
         cy.get(MigrationWaveView.endDateInput).next("button").click();
         // End date should be greater than start date
-        cy.contains("button", tomorrow).should("be.disabled");
-        cy.get("td:not(.pf-m-adjacent-month)")
-            .contains(
-                "button.pf-c-calendar-month__date",
-                new RegExp("^" + (now.getDate() + 2) + "$")
-            )
-            .should("be.enabled")
-            .click();
+        cy.get(`button[aria-label="${dateTomorrowLabel}"]`).should("be.disabled");
+        const dayAfterTomorrow = new Date(now);
+        dayAfterTomorrow.setDate(now.getDate() + 2);
+        const dayAfterTomorrowLabel = new Intl.DateTimeFormat("en-GB", options).format(
+            dayAfterTomorrow
+        );
+        cy.get(`button[aria-label="${dayAfterTomorrowLabel}"]`).should("be.enabled").click();
 
         cy.get(MigrationWaveView.submitButton).should("be.enabled");
         cy.get(cancelButton).click();
@@ -103,6 +107,8 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         migrationWave3.create();
         migrationWave3.create();
         checkSuccessAlert(commonView.duplicateNameWarning, duplicateMigrationWaveError);
+        migrationWavesList.push(migrationWave3);
+
         //migrationwave3 name is null, so it can't be deleted by list
         deleteByList(migrationWavesList);
     });
