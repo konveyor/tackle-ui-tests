@@ -25,8 +25,10 @@ import {
 import {
     administration,
     button,
+    CredentialType,
     deleteAction,
     editAction,
+    JiraType,
     SEC,
     tdTag,
     trTag,
@@ -250,7 +252,7 @@ export class Jira {
     }
 
     public getAllProjects(): Cypress.Chainable<JiraProject[]> {
-        return this.doJiraRequest<JiraProject[]>(`${this.url}/rest/api/3/project`);
+        return this.doJiraRequest<JiraProject[]>(`${this.url}/rest/api/2/project`);
     }
 
     public getProject(projectName = "Test"): Cypress.Chainable<JiraProject | null> {
@@ -259,38 +261,65 @@ export class Jira {
         });
     }
 
+    /**
+     * In some cases, the token may not have permissions to list all projects
+     * @param projectId
+     */
+    public getProjectById(projectId: number): Cypress.Chainable<JiraProject | null> {
+        return this.doJiraRequest<JiraProject>(`${this.url}/rest/api/2/project/${projectId}`);
+    }
+
     public getAllIssueTypes(): Cypress.Chainable<JiraIssueType[]> {
-        return this.doJiraRequest<JiraIssueType[]>(`${this.url}/rest/api/3/issuetype`);
+        return this.doJiraRequest<JiraIssueType[]>(`${this.url}/rest/api/2/issuetype`);
     }
 
     public getIssueType(type: string): Cypress.Chainable<JiraIssueType | null> {
         return this.getAllIssueTypes().then((issueTypes) => {
-            return issueTypes.find((issueType) => issueType.untranslatedName === type);
+            return issueTypes.find((issueType) => issueType.name === type);
         });
     }
 
+    /**
+     * Deletes multiple issues by their IDs
+     * @param issueIds
+     */
     public deleteIssues(issueIds: string[]): void {
         issueIds.forEach((id) =>
-            this.doJiraRequest(`${this.url}/rest/api/3/issue/${id}`, "DELETE")
+            this.doJiraRequest(`${this.url}/rest/api/2/issue/${id}`, "DELETE")
+        );
+    }
+
+    /**
+     * Archives multiple issues by their IDs, this will prevent them from appearing when searching issues
+     * This method should be used if the Jira user doesn't have permission to delete issues
+     * @param issueIds
+     */
+    public archiveIssues(issueIds: string[]): void {
+        issueIds.forEach((id) =>
+            this.doJiraRequest(`${this.url}/rest/api/2/issue/${id}/archive`, "PUT")
         );
     }
 
     public getIssues(projectName: string): Cypress.Chainable<JiraIssue[]> {
         return this.doJiraRequest<JiraIssue[]>(
-            `${this.url}/rest/api/3/search?jql=project=${projectName}`
+            `${this.url}/rest/api/2/search?jql=project=${projectName}`
         ).its("issues");
     }
 
     private doJiraRequest<T>(url: string, method = "GET"): Cypress.Chainable<T> {
-        const basicAuth = Buffer.from(`${this.credential.email}:${this.credential.token}`).toString(
-            "base64"
-        );
+        const basicAuth =
+            "Basic " +
+            Buffer.from(`${this.credential.email}:${this.credential.token}`).toString("base64");
+        const bearerAuth = "Bearer " + this.credential.token;
         return cy
             .request({
                 url: url,
                 method,
                 headers: {
-                    Authorization: "Basic " + basicAuth,
+                    "X-Atlassian-Token": "no-check",
+                    "User-Agent": "DUMMY-USER-AGENT",
+                    Authorization:
+                        this.credential.type === CredentialType.jiraBasic ? basicAuth : bearerAuth,
                 },
             })
             .its("body");
