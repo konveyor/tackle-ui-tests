@@ -15,7 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { createMultipleApplications, login } from "../../../../utils/utils";
+import { createMultipleApplications, deleteByList, login } from "../../../../utils/utils";
 import { CredentialType, JiraIssueTypes, JiraType, SEC } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
@@ -123,8 +123,8 @@ describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
 
     after("Clear test data", function () {
         MigrationWave.open(true);
-        Object.values(wavesMap).forEach((wave: MigrationWave) => wave.delete());
-        applications.forEach((app) => app.delete());
+        deleteByList(Object.values(wavesMap) as MigrationWave[]);
+        deleteByList(applications);
         jiraInstance.delete();
         jiraCredentials.delete();
     });
