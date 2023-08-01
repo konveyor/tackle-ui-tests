@@ -58,7 +58,7 @@ describe(["@tier1"], "Source Analysis", () => {
     });
 
     it("Apply search filter on app details page", function () {
-        // Automates https://polarion.engineering.redhat.com/polarion/#/project/MTAPathfinder/workitem?id=MTA-298
+        // Automates Polarion MTA-311
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source_autoTagging", {
                 sourceData: this.appData["tackle-testapp-git"],
@@ -81,8 +81,6 @@ describe(["@tier1"], "Source Analysis", () => {
             this.analysisData["analysis_for_enableTagging"]["techTags"]
         );
         application.closeApplicationDetails();
-
-
         application.delete();
     });
 });
