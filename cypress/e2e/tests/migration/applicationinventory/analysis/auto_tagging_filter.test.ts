@@ -27,13 +27,16 @@ import {
 } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
+import { Tag } from "../../../../models/migration/controls/tags";
+import { TagCategory } from "../../../../models/migration/controls/tagcategory";
 let source_credential;
 var applicationsList: Array<Analysis> = [];
+let tagCategory;
+let tag;
 
 describe(["@tier1"], "Source Analysis", () => {
     before("Login", function () {
         login();
-
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -42,6 +45,16 @@ describe(["@tier1"], "Source Analysis", () => {
             )
         );
         source_credential.create();
+
+        tagCategory = new TagCategory(
+            data.getRandomWord(8),
+            data.getColor(),
+            data.getRandomNumber(1, 30)
+        );
+        tagCategory.create();
+
+        tag = new Tag(data.getRandomWord(6), tagCategory.name);
+        tag.create();
     });
 
     beforeEach("Load data", function () {
@@ -60,7 +73,7 @@ describe(["@tier1"], "Source Analysis", () => {
     it("Apply search filter on app details page", function () {
         // Automates Polarion MTA-311
         const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_Source_autoTagging", {
+            getRandomApplicationData("tackleTestApp_Source_autoTagging", tag.name, {
                 sourceData: this.appData["tackle-testapp-git"],
             }),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
@@ -72,7 +85,6 @@ describe(["@tier1"], "Source Analysis", () => {
         application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.applicationDetailsTab("Tags");
         cy.wait(2000);
 
         // Filter tags by source:Analysis
@@ -80,6 +92,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.tagAndCategoryExists(
             this.analysisData["analysis_for_enableTagging"]["techTags"]
         );
+        cy.get("span.pf-c-label__content").should('not.contain', tag.name);
         application.closeApplicationDetails();
         application.delete();
     });
