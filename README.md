@@ -1,4 +1,6 @@
 ## End-to-end Cypress tests for tackle-ui
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkonveyor%2Ftackle-ui-tests.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkonveyor%2Ftackle-ui-tests?ref=badge_shield)
+
 
 ### Getting Started ###
 
@@ -104,6 +106,9 @@ To add the license's header to all eligible files, execute:
 yarn license-check-and-add add
 ```
 
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkonveyor%2Ftackle-ui-tests.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkonveyor%2Ftackle-ui-tests?ref=badge_large)
 
 ## Code of Conduct
 Refer to Konveyor's Code of Conduct [here](https://github.com/konveyor/community/blob/main/CODE_OF_CONDUCT.md).
