@@ -1156,9 +1156,8 @@ export function getRandomApplicationData(
         }
     }
 
-    if (tags) {
-        appdata["tags"] = tags;
-    }
+    if (tags) appdata["tags"] = tags;
+
     return appdata;
 }
 
