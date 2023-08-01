@@ -64,38 +64,30 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         MigrationWave.openNewForm();
         MigrationWave.fillName(data.getRandomWord(5));
         cy.get(MigrationWaveView.submitButton).should("be.disabled");
-
         const now = new Date();
+
+        let options = { year: "numeric", month: "long", day: "numeric" } as const;
+        //used to get a date format such as "9 August 2023"
+        const nowDateLabel = new Intl.DateTimeFormat("en-GB", options).format(now);
+
         cy.get(MigrationWaveView.startDateInput).next("button").click();
         const tomorrow = new Date(now);
         tomorrow.setDate(now.getDate() + 1);
 
-        const tomorrowRegex = new RegExp("^" + tomorrow.getDate() + "$");
+        const DateTomorrowLabel = new Intl.DateTimeFormat("en-GB", options).format(tomorrow);
         // Start date should be greater than actual date
-        cy.contains("button", new RegExp("^" + now.getDate() + "$")).should("be.disabled");
-        cy.get("button")
-            .filter((index, element) => {
-                return (
-                    element.className === "pf-c-calendar-month__date" &&
-                    element.textContent.trim() === tomorrow.getDate().toString()
-                );
-            })
-            .should("be.enabled")
-            .click();
+        cy.get(`button[aria-label="${nowDateLabel}"]`).should("be.disabled");
+        cy.get(`button[aria-label="${DateTomorrowLabel}"]`).should("be.enabled").click();
+
         cy.get(MigrationWaveView.endDateInput).next("button").click();
         // End date should be greater than start date
-        cy.contains("button", tomorrowRegex).should("be.disabled");
+        cy.get(`button[aria-label="${DateTomorrowLabel}"]`).should("be.disabled");
         const dayAfterTomorrow = new Date(now);
         dayAfterTomorrow.setDate(now.getDate() + 2);
-        cy.get("button")
-            .filter((index, element) => {
-                return (
-                    element.className === "pf-c-calendar-month__date" &&
-                    element.textContent.trim() === dayAfterTomorrow.getDate().toString()
-                );
-            })
-            .should("be.enabled")
-            .click();
+        let dayAfterTomorrowLabel = new Intl.DateTimeFormat("en-GB", options).format(
+            dayAfterTomorrow
+        );
+        cy.get(`button[aria-label="${dayAfterTomorrowLabel}"]`).should("be.enabled").click();
 
         cy.get(MigrationWaveView.submitButton).should("be.enabled");
         cy.get(cancelButton).click();
