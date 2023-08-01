@@ -312,6 +312,14 @@ export class Application {
             .click();
     }
 
+    filterTags(source: string): void {
+        // Filter tags on application details page
+        this.applicationDetailsTab("Tags");
+        cy.wait(2000);
+        cy.get("#source-filter-value-select").click();
+        cy.get("div.pf-c-select__menu").contains(source).click();
+    }
+
     tagAndCategoryExists(tags: string | string[][]): void {
         // Verify that tags and categories are present on Application details -> Tags page
         this.applicationDetailsTab("Tags");
