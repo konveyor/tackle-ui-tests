@@ -66,7 +66,7 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         cy.get(MigrationWaveView.submitButton).should("be.disabled");
         const now = new Date();
 
-        let options = { year: "numeric", month: "long", day: "numeric" } as const;
+        const options = { year: "numeric", month: "long", day: "numeric" } as const;
         //used to get a date format such as "9 August 2023"
         const nowDateLabel = new Intl.DateTimeFormat("en-GB", options).format(now);
 
@@ -74,17 +74,17 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         const tomorrow = new Date(now);
         tomorrow.setDate(now.getDate() + 1);
 
-        const DateTomorrowLabel = new Intl.DateTimeFormat("en-GB", options).format(tomorrow);
+        const dateTomorrowLabel = new Intl.DateTimeFormat("en-GB", options).format(tomorrow);
         // Start date should be greater than actual date
         cy.get(`button[aria-label="${nowDateLabel}"]`).should("be.disabled");
-        cy.get(`button[aria-label="${DateTomorrowLabel}"]`).should("be.enabled").click();
+        cy.get(`button[aria-label="${dateTomorrowLabel}"]`).should("be.enabled").click();
 
         cy.get(MigrationWaveView.endDateInput).next("button").click();
         // End date should be greater than start date
-        cy.get(`button[aria-label="${DateTomorrowLabel}"]`).should("be.disabled");
+        cy.get(`button[aria-label="${dateTomorrowLabel}"]`).should("be.disabled");
         const dayAfterTomorrow = new Date(now);
         dayAfterTomorrow.setDate(now.getDate() + 2);
-        let dayAfterTomorrowLabel = new Intl.DateTimeFormat("en-GB", options).format(
+        const dayAfterTomorrowLabel = new Intl.DateTimeFormat("en-GB", options).format(
             dayAfterTomorrow
         );
         cy.get(`button[aria-label="${dayAfterTomorrowLabel}"]`).should("be.enabled").click();
