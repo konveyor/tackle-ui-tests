@@ -37,8 +37,6 @@ import {
     applicationTagsSelect,
     applicationCommentInput,
     applicationOwnerInput,
-    applicationTag,
-    closeDetailsPage,
     editButton,
     selectBox,
     sourceRepository,
@@ -50,8 +48,8 @@ import {
     packaging,
     kebabMenu,
     repoTypeSelect,
-    tagFilter,
 } from "../../../views/applicationinventory.view";
+import { appDetailsView } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
     clickByText,
@@ -303,7 +301,7 @@ export class Application {
 
     closeApplicationDetails(): void {
         // closes application details page
-        click(closeDetailsPage);
+        click(appDetailsView.closeDetailsPage);
     }
 
     selectApplicationRow(): void {
@@ -320,21 +318,27 @@ export class Application {
     filterTags(source: string): void {
         this.applicationDetailsTab("Tags");
         cy.wait(2000);
-        cy.get(tagFilter).click();
-        cy.get("div.pf-c-select__menu").contains(source).click();
+        cy.get(appDetailsView.tagFilter).click();
+        cy.get(appDetailsView.filterSourceMenu).contains(source).click();
     }
 
+    /**
+     * Verify that tags and categories are present on Application details -> Tags page
+     * @param tags tag or list of tags
+     */
     tagAndCategoryExists(tags: string | string[][]): void {
-        // Verify that tags and categories are present on Application details -> Tags page
         if (Array.isArray(tags)) {
             // For Tags and Categories
-            for (var tagIndex = 0; tagIndex < tags.length; tagIndex++) {
-                cy.get(applicationTag, { timeout: 10 * SEC }).should("contain", tags[tagIndex][1]);
-                cy.get("div[class='pf-c-content'] > h4").should("contain", tags[tagIndex][0]);
+            for (let tagIndex = 0; tagIndex < tags.length; tagIndex++) {
+                cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
+                    "contain",
+                    tags[tagIndex][1]
+                );
+                cy.get(appDetailsView.tagCategory).should("contain", tags[tagIndex][0]);
             }
         }
         // For Tags
-        else cy.get(applicationTag).should("contain", tags);
+        else cy.get(appDetailsView.applicationTag).should("contain", tags);
     }
 
     static validateAssessButton(rbacRules: RbacValidationRules) {

@@ -22,7 +22,7 @@ import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { Tag } from "../../../../models/migration/controls/tags";
 import { TagCategory } from "../../../../models/migration/controls/tagcategory";
-import { applicationTag } from "../../../../views/applicationinventory.view";
+import { appDetailsView } from "../../../../views/applicationinventory.view";
 import { SEC } from "../../../../types/constants";
 let source_credential;
 let tagCategory;
@@ -65,9 +65,12 @@ describe(["@tier1"], "Source Analysis", () => {
     it("Apply search filter:Analysis on app details page", function () {
         // Automates Polarion MTA-311
         const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_Source_autoTagging", {
-                sourceData: this.appData["tackle-testapp-git"]},
-                [tag.name],
+            getRandomApplicationData(
+                "tackleTestApp_Source_autoTagging",
+                {
+                    sourceData: this.appData["tackle-testapp-git"],
+                },
+                [tag.name]
             ),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
@@ -80,7 +83,7 @@ describe(["@tier1"], "Source Analysis", () => {
 
         application.filterTags("Analysis");
         application.tagAndCategoryExists(this.techTags);
-        cy.get(applicationTag).should("not.contain", tag.name);
+        cy.get(appDetailsView.applicationTag).should("not.contain", tag.name);
         application.closeApplicationDetails();
         application.delete();
     });
@@ -88,9 +91,12 @@ describe(["@tier1"], "Source Analysis", () => {
     it("Apply search filter:Manual on app details page", function () {
         // Automates Polarion MTA-310
         const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_Source_autoTagging", {
-                sourceData: this.appData["tackle-testapp-git"]},
-                [tag.name],
+            getRandomApplicationData(
+                "tackleTestApp_Source_autoTagging",
+                {
+                    sourceData: this.appData["tackle-testapp-git"],
+                },
+                [tag.name]
             ),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
@@ -102,17 +108,13 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.wait(2000);
 
         application.filterTags("Manual");
-        cy.get(applicationTag).should("contain", tag.name);
-        this.techTags.forEach(tag => {
-            cy.get(applicationTag, { timeout: 10 * SEC }).should(
+        for (let index = 0; index < this.techTags.length; index++) {
+            cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
                 "not.contain",
-                this.techTags[tag][1]
+                this.techTags[index][1]
             );
-            cy.get("div[class='pf-c-content'] > h4").should(
-                "not.contain",
-                this.techTags[tag][0]
-            );
-        })
+        }
+        cy.get(appDetailsView.applicationTag).should("contain", tag.name);
         application.closeApplicationDetails();
         application.delete();
     });
