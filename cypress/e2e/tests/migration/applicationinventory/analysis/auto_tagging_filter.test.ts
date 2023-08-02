@@ -59,14 +59,16 @@ describe(["@tier1"], "Source Analysis", () => {
             this.analysisData = analysisData;
             this.techTags = analysisData["analysis_for_enableTagging"]["techTags"];
         });
+        cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     it("Apply search filter:Analysis on app details page", function () {
         // Automates Polarion MTA-311
         const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_Source_autoTagging", [tag.name], {
-                sourceData: this.appData["tackle-testapp-git"],
-            }),
+            getRandomApplicationData("tackleTestApp_Source_autoTagging", {
+                sourceData: this.appData["tackle-testapp-git"]},
+                [tag.name],
+            ),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
         application.create();
@@ -86,9 +88,10 @@ describe(["@tier1"], "Source Analysis", () => {
     it("Apply search filter:Manual on app details page", function () {
         // Automates Polarion MTA-310
         const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_Source_autoTagging", [tag.name], {
-                sourceData: this.appData["tackle-testapp-git"],
-            }),
+            getRandomApplicationData("tackleTestApp_Source_autoTagging", {
+                sourceData: this.appData["tackle-testapp-git"]},
+                [tag.name],
+            ),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
         application.create();

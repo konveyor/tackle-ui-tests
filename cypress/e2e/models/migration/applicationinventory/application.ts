@@ -312,8 +312,11 @@ export class Application {
             .click();
     }
 
+    /**
+     * Filter tags on application details page
+     * @param source string to filter on
+     */
     filterTags(source: string): void {
-        // Filter tags on application details page
         this.applicationDetailsTab("Tags");
         cy.wait(2000);
         cy.get("#source-filter-value-select").click();
