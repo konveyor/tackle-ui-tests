@@ -50,6 +50,7 @@ import {
     packaging,
     kebabMenu,
     repoTypeSelect,
+    tagFilter,
 } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
@@ -319,7 +320,7 @@ export class Application {
     filterTags(source: string): void {
         this.applicationDetailsTab("Tags");
         cy.wait(2000);
-        cy.get("#source-filter-value-select").click();
+        cy.get(tagFilter).click();
         cy.get("div.pf-c-select__menu").contains(source).click();
     }
 

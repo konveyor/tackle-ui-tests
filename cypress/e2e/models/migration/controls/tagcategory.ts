@@ -74,6 +74,7 @@ export class TagCategory {
     }
 
     create(cancel = false): void {
+        TagCategory.openList();
         clickTags();
         clickByText(button, createTagCategoryButton);
         if (cancel) {

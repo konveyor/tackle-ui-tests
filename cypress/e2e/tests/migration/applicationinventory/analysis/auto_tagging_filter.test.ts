@@ -103,16 +103,16 @@ describe(["@tier1"], "Source Analysis", () => {
 
         application.filterTags("Manual");
         cy.get(applicationTag).should("contain", tag.name);
-        for (var tagIndex = 0; tagIndex < this.techTags.length; tagIndex++) {
+        this.techTags.forEach(tag => {
             cy.get(applicationTag, { timeout: 10 * SEC }).should(
                 "not.contain",
-                this.techTags[tagIndex][1]
+                this.techTags[tag][1]
             );
             cy.get("div[class='pf-c-content'] > h4").should(
                 "not.contain",
-                this.techTags[tagIndex][0]
+                this.techTags[tag][0]
             );
-        }
+        })
         application.closeApplicationDetails();
         application.delete();
     });
