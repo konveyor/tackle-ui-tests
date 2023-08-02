@@ -242,8 +242,7 @@ describe(["@tier1"], "Source Analysis", () => {
     });
 
     it("Automated tagging using Source Analysis on tackle testapp", function () {
-        // For tackle test app source credentials are required.
-        // Automates https://polarion.engineering.redhat.com/polarion/#/project/MTAPathfinder/workitem?id=MTA-298
+        // Automates Polarion MTA-208
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source_autoTagging", {
                 sourceData: this.appData["tackle-testapp-git"],
@@ -257,9 +256,11 @@ describe(["@tier1"], "Source Analysis", () => {
         application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        application.applicationDetailsTab("Tags");
         application.tagAndCategoryExists(
             this.analysisData["analysis_for_enableTagging"]["techTags"]
         );
+        application.closeApplicationDetails();
     });
 
     it("Disable Automated tagging using Source Analysis on tackle testapp", function () {

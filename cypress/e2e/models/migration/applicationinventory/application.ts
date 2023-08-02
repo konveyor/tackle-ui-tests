@@ -322,7 +322,6 @@ export class Application {
 
     tagAndCategoryExists(tags: string | string[][]): void {
         // Verify that tags and categories are present on Application details -> Tags page
-        // this.applicationDetailsTab("Tags");
         if (Array.isArray(tags)) {
             // For Tags and Categories
             for (var tagIndex = 0; tagIndex < tags.length; tagIndex++) {
@@ -332,7 +331,6 @@ export class Application {
         }
         // For Tags
         else cy.get(applicationTag).should("contain", tags);
-        // this.closeApplicationDetails();
     }
 
     static validateAssessButton(rbacRules: RbacValidationRules) {
