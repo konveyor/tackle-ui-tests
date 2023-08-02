@@ -15,12 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    deleteByList,
-    login,
-    getRandomApplicationData,
-    getRandomAnalysisData,
-} from "../../../../../utils/utils";
+import { login, getRandomApplicationData, getRandomAnalysisData } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { CredentialType, UserCredentials } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
@@ -30,7 +25,6 @@ import { TagCategory } from "../../../../models/migration/controls/tagcategory";
 import { applicationTag } from "../../../../views/applicationinventory.view";
 import { SEC } from "../../../../types/constants";
 let source_credential;
-var applicationsList: Array<Analysis> = [];
 let tagCategory;
 let tag;
 
@@ -76,7 +70,6 @@ describe(["@tier1"], "Source Analysis", () => {
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
         application.create();
-        applicationsList.push(application);
         cy.wait("@getApplication");
         application.manageCredentials(source_credential.name, null);
         application.analyze();
@@ -99,7 +92,6 @@ describe(["@tier1"], "Source Analysis", () => {
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
         application.create();
-        applicationsList.push(application);
         cy.wait("@getApplication");
         application.manageCredentials(source_credential.name, null);
         application.analyze();
@@ -123,7 +115,6 @@ describe(["@tier1"], "Source Analysis", () => {
     });
 
     after("Perform test data clean up", function () {
-        deleteByList(applicationsList);
         tag.delete();
         tagCategory.delete();
         source_credential.delete();
