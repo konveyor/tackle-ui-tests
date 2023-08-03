@@ -42,6 +42,9 @@ export default defineConfig({
     },
     defaultCommandTimeout: 8000,
     e2e: {
+        env: {
+            logLevel: "ASSERT",
+        },
         testIsolation: false,
         specPattern: "cypress/e2e/**/*.{js,jsx,ts,tsx}",
         setupNodeEvents(on, config) {
