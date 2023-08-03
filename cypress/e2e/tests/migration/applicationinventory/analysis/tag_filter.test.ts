@@ -84,6 +84,10 @@ describe(["@tier3"], "Tag filtering on application details page", () => {
         application.filterTags("Analysis");
         application.tagAndCategoryExists(this.techTags);
         cy.get(appDetailsView.applicationTag).should("not.contain", tag.name);
+
+        application.filterTags(this.techTags[0][0]);
+        application.tagAndCategoryExists(this.techTags[0][1]);
+
         application.closeApplicationDetails();
         application.delete();
     });

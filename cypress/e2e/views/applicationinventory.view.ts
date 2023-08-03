@@ -65,4 +65,5 @@ export enum appDetailsView {
     tagFilter = "#source-filter-value-select",
     tagCategory = "div[class='pf-c-content'] > h4",
     filterSourceMenu = "div.pf-c-select__menu",
+    tagCategoryFilter = "#tagCategory-filter-value-select",
 }
