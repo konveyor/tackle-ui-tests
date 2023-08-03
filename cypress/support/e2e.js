@@ -42,6 +42,10 @@ require("cypress-xpath"); // Refer - https://www.npmjs.com/package/cypress-xpath
 // https://github.com/bahmutov/cypress-grep
 require("cypress-grep")();
 
+// Load cypress-log-filter-plugin
+// https://github.com/Brugui7/cypress-log-filter
+require("cypress-log-filter");
+
 /** Hide XHR logs line */
 // TODO: Improve by implementing a configuration parameter
 const app = window.top;
