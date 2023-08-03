@@ -28,7 +28,7 @@ let source_credential;
 let tagCategory;
 let tag;
 
-describe(["@tier1"], "Source Analysis", () => {
+describe(["@tier3"], "Tag filtering on application details page", () => {
     before("Login", function () {
         login();
         source_credential = new CredentialsSourceControlUsername(
@@ -62,7 +62,7 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Apply search filter:Analysis on app details page", function () {
+    it("Filter by automated tags generated after analysis", function () {
         // Automates Polarion MTA-311
         const application = new Analysis(
             getRandomApplicationData(
@@ -88,7 +88,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.delete();
     });
 
-    it("Apply search filter:Manual on app details page", function () {
+    it("Filter by manual tags", function () {
         // Automates Polarion MTA-310
         const application = new Analysis(
             getRandomApplicationData(
@@ -108,12 +108,12 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.wait(2000);
 
         application.filterTags("Manual");
-        for (let index = 0; index < this.techTags.length; index++) {
+        this.techTags.forEach(function (tag) {
             cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
                 "not.contain",
-                this.techTags[index][1]
+                tag[1]
             );
-        }
+        });
         cy.get(appDetailsView.applicationTag).should("contain", tag.name);
         application.closeApplicationDetails();
         application.delete();

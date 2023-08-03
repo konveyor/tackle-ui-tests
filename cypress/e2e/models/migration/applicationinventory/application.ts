@@ -329,13 +329,13 @@ export class Application {
     tagAndCategoryExists(tags: string | string[][]): void {
         if (Array.isArray(tags)) {
             // For Tags and Categories
-            for (let tagIndex = 0; tagIndex < tags.length; tagIndex++) {
+            tags.forEach(function (tag) {
                 cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
                     "contain",
-                    tags[tagIndex][1]
+                    tag[1]
                 );
-                cy.get(appDetailsView.tagCategory).should("contain", tags[tagIndex][0]);
-            }
+                cy.get(appDetailsView.tagCategory).should("contain", tag[0]);
+            });
         }
         // For Tags
         else cy.get(appDetailsView.applicationTag).should("contain", tags);
