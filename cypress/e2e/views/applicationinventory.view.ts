@@ -59,5 +59,10 @@ export const packaging = "input[name=packaging]";
 export const createEntitiesCheckbox = "#create-entities-checkbox";
 
 //Fields related to application details page
-export const applicationTag = "span.pf-c-label__content";
-export const closeDetailsPage = "button[aria-label='Close drawer panel']";
+export enum appDetailsView {
+    applicationTag = "span.pf-c-label__content",
+    closeDetailsPage = "button[aria-label='Close drawer panel']",
+    tagFilter = "#source-filter-value-select",
+    tagCategory = "div[class='pf-c-content'] > h4",
+    filterSourceMenu = "div.pf-c-select__menu",
+}

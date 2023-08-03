@@ -1124,7 +1124,8 @@ export function getRowsAmount(): number {
 
 export function getRandomApplicationData(
     appName?,
-    options?: { sourceData?; binaryData? }
+    options?: { sourceData?; binaryData? },
+    tags?
 ): applicationData {
     let name = data.getAppName();
     if (appName) {
@@ -1154,6 +1155,9 @@ export function getRandomApplicationData(
             appdata["packaging"] = options.binaryData.packaging;
         }
     }
+
+    if (tags) appdata["tags"] = tags;
+
     return appdata;
 }
 
