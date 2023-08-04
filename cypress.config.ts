@@ -49,5 +49,7 @@ export default defineConfig({
             require("./cypress/plugins/index.js")(on, config);
             on("file:preprocessor", tagify(config));
         },
+        experimentalMemoryManagement: true,
+        numTestsKeptInMemory: 15,
     },
 });
