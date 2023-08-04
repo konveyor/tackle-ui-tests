@@ -119,6 +119,10 @@ describe(["@tier3"], "Tag filtering on application details page", () => {
             );
         });
         cy.get(appDetailsView.applicationTag).should("contain", tag.name);
+
+        application.filterTags(tagCategory.name);
+        cy.get(appDetailsView.applicationTag).should("contain", tag.name);
+
         application.closeApplicationDetails();
         application.delete();
     });
