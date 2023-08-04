@@ -15,15 +15,25 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { login, getRandomApplicationData, getRandomAnalysisData } from "../../../../../utils/utils";
+import {
+    clickByText,
+    login,
+    getRandomApplicationData,
+    getRandomAnalysisData,
+} from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { CredentialType, UserCredentials } from "../../../../types/constants";
+import {
+    button,
+    clearAllFilters,
+    CredentialType,
+    UserCredentials,
+    SEC,
+} from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { Tag } from "../../../../models/migration/controls/tags";
 import { TagCategory } from "../../../../models/migration/controls/tagcategory";
 import { appDetailsView } from "../../../../views/applicationinventory.view";
-import { SEC } from "../../../../types/constants";
 let source_credential;
 let tagCategory;
 let tag;
@@ -63,7 +73,7 @@ describe(["@tier3"], "Tag filtering on application details page", () => {
     });
 
     it("Filter by automated tags generated after analysis", function () {
-        // Automates Polarion MTA-311
+        // Automates Polarion MTA-310
         const application = new Analysis(
             getRandomApplicationData(
                 "tackleTestApp_Source_autoTagging",
@@ -84,11 +94,9 @@ describe(["@tier3"], "Tag filtering on application details page", () => {
         application.filterTags("Analysis");
         application.tagAndCategoryExists(this.techTags);
         cy.get(appDetailsView.applicationTag).should("not.contain", tag.name);
-
-        application.filterTags(this.techTags[0][0]);
-        application.tagAndCategoryExists(this.techTags[0][1]);
-
+        clickByText(button, clearAllFilters);
         application.closeApplicationDetails();
+
         application.delete();
     });
 
@@ -119,11 +127,40 @@ describe(["@tier3"], "Tag filtering on application details page", () => {
             );
         });
         cy.get(appDetailsView.applicationTag).should("contain", tag.name);
+        application.closeApplicationDetails();
+
+        application.delete();
+    });
+
+    it("Filter tags by tag category", function () {
+        // Automates Polarion MTA-311
+        const application = new Analysis(
+            getRandomApplicationData(
+                "tackleTestApp_Source_autoTagging",
+                {
+                    sourceData: this.appData["tackle-testapp-git"],
+                },
+                [tag.name]
+            ),
+            getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
+        );
+        application.create();
+        cy.wait("@getApplication");
+        application.manageCredentials(source_credential.name, null);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        cy.wait(2000);
 
         application.filterTags(tagCategory.name);
+        this.techTags.forEach(function (tag) {
+            cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
+                "not.contain",
+                tag[1]
+            );
+        });
         cy.get(appDetailsView.applicationTag).should("contain", tag.name);
-
         application.closeApplicationDetails();
+
         application.delete();
     });
 
