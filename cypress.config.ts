@@ -21,6 +21,7 @@ export default defineConfig({
         jira_stage_datacenter_project_id: 12339124,
         tackleUrl: "https://tackle-konveyor-tackle.apps.mtv03.rhos-psi.cnv-qe.rhood.us",
         rwx_enabled: true,
+        logLevel: "ASSERT",
     },
     retries: {
         runMode: 2,
@@ -42,9 +43,6 @@ export default defineConfig({
     },
     defaultCommandTimeout: 8000,
     e2e: {
-        env: {
-            logLevel: "ASSERT",
-        },
         testIsolation: false,
         specPattern: "cypress/e2e/**/*.{js,jsx,ts,tsx}",
         setupNodeEvents(on, config) {
