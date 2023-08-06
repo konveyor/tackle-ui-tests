@@ -12,6 +12,7 @@ export enum MigrationWaveView {
     waveStatusColumn = "td[data-label='Status']",
     yearInput = "input[aria-label='Select year']",
     migrationWavesTable = "table[aria-label='Migration waves table']",
+    manageApplicationsTable = "table[aria-label='Migration waves table']",
     applicationCountColumn = "td[data-label='Applications']",
     issueManagerSelectToggle = "#issue-manager-select-toggle-select-typeahead",
     instanceSelectToggle = "#tracker-select-toggle-select-typeahead",
