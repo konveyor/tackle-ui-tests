@@ -169,5 +169,4 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
         deleteByList(businessServicesList);
         migrationWavesList.push(migrationWave);
     });
-
 });
