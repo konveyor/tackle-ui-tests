@@ -78,30 +78,21 @@ describe(["@tier2"], "Jira connection negative tests", () => {
 
     it("Trying to remove Basic credential used by Jira connection", () => {
         Credentials.openList();
-        // isButtonEnabled()
-        // validateButtonStatus(jiraBasicCredential.name, deleteAction, "disabled");
         cy.get(tdTag, { timeout: 120 * SEC })
             .contains(jiraBasicCredential.name, { timeout: 120 * SEC })
             .closest(trTag)
             .within(() => {
-                cy.contains(button, deleteAction).should(
-                    "have.class",
-                    ".pf-c-button.pf-m-link.pf-m-aria-disabled"
-                );
+                cy.contains(button, deleteAction).should("have.attr", "aria-disabled", "true");
             });
     });
 
     it("Trying to remove Token credential used by Jira connection", () => {
         Credentials.openList();
-        // validateButtonStatus(jiraStageCredential.name, deleteAction, "disabled");
         cy.get(tdTag, { timeout: 120 * SEC })
             .contains(jiraStageCredential.name, { timeout: 120 * SEC })
             .closest(trTag)
             .within(() => {
-                cy.contains(button, deleteAction).should(
-                    "have.class",
-                    ".pf-c-button.pf-m-link.pf-m-aria-disabled"
-                );
+                cy.contains(button, deleteAction).should("have.attr", "aria-disabled", "true");
             });
     });
 
