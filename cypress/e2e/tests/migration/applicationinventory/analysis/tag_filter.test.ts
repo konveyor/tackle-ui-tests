@@ -38,7 +38,7 @@ let source_credential;
 let tagCategory;
 let tag;
 
-describe(["@tier3"], "Tag filtering on application details page", () => {
+describe(["@tier3"], "Filter tags on application details page", () => {
     before("Login", function () {
         login();
         source_credential = new CredentialsSourceControlUsername(
@@ -89,7 +89,6 @@ describe(["@tier3"], "Tag filtering on application details page", () => {
         application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        cy.wait(2000);
 
         application.filterTags("Analysis");
         application.tagAndCategoryExists(this.techTags);
@@ -117,7 +116,6 @@ describe(["@tier3"], "Tag filtering on application details page", () => {
         application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        cy.wait(2000);
 
         application.filterTags("Manual");
         this.techTags.forEach(function (tag) {
@@ -149,7 +147,6 @@ describe(["@tier3"], "Tag filtering on application details page", () => {
         application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        cy.wait(2000);
 
         application.filterTags(tagCategory.name);
         this.techTags.forEach(function (tag) {
