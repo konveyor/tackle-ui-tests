@@ -39,6 +39,7 @@ import {
     doesExistText,
     inputText,
     performRowActionByIcon,
+    selectCheckBox,
     selectFormItems,
     selectItemsPerPage,
     selectUserPerspective,
@@ -288,6 +289,26 @@ export class Analysis extends Application {
         }
     }
 
+    public static analyzeAll(params: Analysis): void {
+        Analysis.open();
+        selectCheckBox("#bulk-selected-items-checkbox");
+        cy.contains("button", analyzeButton).should("be.enabled").click();
+        params.selectSourceofAnalysis(params.source);
+        params.isNextEnabled();
+        cy.contains("button", "Next").click();
+        params.selectTarget(params.target);
+        cy.contains("button", "Next").click();
+        params.scopeSelect();
+        if (params.customRule) params.uploadCustomRule();
+        if (params.customRuleRepository) params.fetchCustomRules();
+        cy.contains("button", "Next").click();
+        if (params.excludeRuleTags) params.tagsToExclude();
+        if (params.enableTransaction) params.enableTransactionAnalysis();
+        if (params.disableTagging) params.disableAutomatedTagging();
+        if (!params.sources) cy.contains("button", "Next").click();
+        cy.contains("button", "Run").click();
+    }
+
     static validateAnalyzeButton(rbacRules: RbacValidationRules) {
         Analysis.open();
         doesExistSelector(analyzeAppButton, rbacRules["Analyze"]);
@@ -319,6 +340,32 @@ export class Analysis extends Application {
                         }
                     });
             });
+    }
+
+    public static verifyAllAnalysisStatuses(status) {
+        cy.log(`Verifying all analysis statuses, expecting ${status}`);
+        cy.get(analysisColumn, { log: false }).each(($el) => {
+            cy.wrap($el)
+                .find("div > div:nth-child(2)", { timeout: 3600000, log: false }) // 1h
+                .should("not.have.text", AnalysisStatuses.notStarted)
+                .and("not.have.text", AnalysisStatuses.scheduled)
+                .and("not.have.text", AnalysisStatuses.inProgress)
+                .then(($a) => {
+                    console.log($a);
+                    const currentStatus = $a.text().toString() as AnalysisStatuses;
+                    if (currentStatus != status) {
+                        // If analysis failed and is not expected then test fails.
+                        if (
+                            currentStatus == AnalysisStatuses.failed &&
+                            status != AnalysisStatuses.failed
+                        ) {
+                            expect(currentStatus).to.eq(AnalysisStatuses.completed);
+                        }
+                    } else {
+                        expect(currentStatus).to.eq(status);
+                    }
+                });
+        });
     }
 
     openReport() {
