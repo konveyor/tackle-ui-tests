@@ -21,6 +21,7 @@ import {
     applicationInventory,
     button,
     migration,
+    next,
     RepositoryType,
     save,
     SEC,
@@ -292,21 +293,33 @@ export class Analysis extends Application {
     public static analyzeAll(params: Analysis): void {
         Analysis.open();
         selectCheckBox("#bulk-selected-items-checkbox");
-        cy.contains("button", analyzeButton).should("be.enabled").click();
+        cy.contains(button, analyzeButton).should("be.enabled").click();
         params.selectSourceofAnalysis(params.source);
         params.isNextEnabled();
-        cy.contains("button", "Next").click();
+        cy.contains(button, next).click();
         params.selectTarget(params.target);
-        cy.contains("button", "Next").click();
+        cy.contains(button, next).click();
         params.scopeSelect();
-        if (params.customRule) params.uploadCustomRule();
-        if (params.customRuleRepository) params.fetchCustomRules();
-        cy.contains("button", "Next").click();
-        if (params.excludeRuleTags) params.tagsToExclude();
-        if (params.enableTransaction) params.enableTransactionAnalysis();
-        if (params.disableTagging) params.disableAutomatedTagging();
-        if (!params.sources) cy.contains("button", "Next").click();
-        cy.contains("button", "Run").click();
+        if (params.customRule) {
+            params.uploadCustomRule();
+        }
+        if (params.customRuleRepository) {
+            params.fetchCustomRules();
+        }
+        cy.contains(button, next).click();
+        if (params.excludeRuleTags) {
+            params.tagsToExclude();
+        }
+        if (params.enableTransaction) {
+            params.enableTransactionAnalysis();
+        }
+        if (params.disableTagging) {
+            params.disableAutomatedTagging();
+        }
+        if (!params.sources) {
+            cy.contains(button, next).click();
+        }
+        cy.contains(button, "Run").click();
     }
 
     static validateAnalyzeButton(rbacRules: RbacValidationRules) {
