@@ -28,7 +28,7 @@ import { infoAlertMessage } from "../../../../views/common.view";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { AnalysisStatuses } from "../../../../types/constants";
 
-let analyses: Analysis[] = [];
+const analyses: Analysis[] = [];
 const NUMBER_OF_APPS = 25;
 
 describe(["@load"], "Bulk Analysis", () => {
