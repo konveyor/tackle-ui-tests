@@ -370,4 +370,9 @@ export class MigrationWave {
 
         click(MigrationWaveView.createTrackerButton);
     }
+    public openManageApplications() {
+        MigrationWave.open();
+        this.expandActionsMenu();
+        cy.contains(manageApplications).click();
+    }
 }

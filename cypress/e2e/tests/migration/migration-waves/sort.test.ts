@@ -25,12 +25,18 @@ import {
     verifyDateSortAsc,
     verifyDateSortDesc,
     clickOnSortButton,
+    createMultipleStakeholders,
+    createMultipleBusinessServices,
+    generateRandomDateRange,
+    cancelForm,
 } from "../../../../utils/utils";
 import { startDate, endDate, SortType } from "../../../types/constants";
 
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { name } from "../../../types/constants";
 import { MigrationWaveView } from "../../../views/migration-wave.view";
+import { Assessment } from "../../../models/migration/applicationinventory/assessment";
+import * as data from "../../../../utils/data_utils";
 
 let migrationWavesList: MigrationWave[] = [];
 
@@ -92,6 +98,71 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
 
         const afterDescSortList = getTableColumnData(endDate);
         verifyDateSortDesc(afterDescSortList, unsortedList);
+    });
+    it("Sort Manage applications table", function () {
+        const applicationsList: Assessment[] = [];
+
+        const stakeholdersList = createMultipleStakeholders(3);
+        const businessServicesList = createMultipleBusinessServices(3);
+        for (let i = 0; i < 3; i++) {
+            let appdata = {
+                name: data.getRandomWord(4),
+                owner: stakeholdersList[i].name,
+                business: businessServicesList[i].name,
+            };
+            const application = new Assessment(appdata);
+            application.create();
+            applicationsList.push(application);
+        }
+        const { start: startDate, end: endDate } = generateRandomDateRange();
+        const migrationWave = new MigrationWave(data.getRandomWord(4), startDate, endDate);
+        migrationWave.create();
+        migrationWave.openManageApplications();
+        const unsortedappList = getTableColumnData("Application Name");
+        const unsortedbusinessList = getTableColumnData("Business service");
+        const unsortedOwnerList = getTableColumnData("Owner");
+        //sort asc and desc for 3 columns
+        clickOnSortButton(
+            "Business service",
+            SortType.ascending,
+            MigrationWaveView.manageApplicationsTable
+        );
+        const afterAscSortBusinessList = getTableColumnData("Business service");
+        verifySortAsc(afterAscSortBusinessList, unsortedbusinessList);
+        clickOnSortButton(
+            "Application Name",
+            SortType.ascending,
+            MigrationWaveView.manageApplicationsTable
+        );
+        const afterAscSortappList = getTableColumnData("Application Name");
+        verifySortAsc(afterAscSortappList, unsortedappList);
+
+        clickOnSortButton("Owner", SortType.ascending, MigrationWaveView.manageApplicationsTable);
+        const afterAscSortOwnerList = getTableColumnData("Owner");
+        verifySortAsc(afterAscSortOwnerList, unsortedOwnerList);
+        clickOnSortButton(
+            "Business service",
+            SortType.ascending,
+            MigrationWaveView.manageApplicationsTable
+        );
+        const afterDescSortBusinessList = getTableColumnData("Business service");
+        verifyDateSortDesc(afterDescSortBusinessList, unsortedbusinessList);
+        clickOnSortButton(
+            "Application Name",
+            SortType.ascending,
+            MigrationWaveView.manageApplicationsTable
+        );
+        const afterDescSortappList = getTableColumnData("Application Name");
+        verifyDateSortDesc(afterDescSortappList, unsortedappList);
+
+        clickOnSortButton("Owner", SortType.ascending, MigrationWaveView.manageApplicationsTable);
+        const afterDescSortOwnerList = getTableColumnData("Owner");
+        verifyDateSortDesc(afterDescSortOwnerList, unsortedOwnerList);
+        cancelForm();
+        deleteByList(applicationsList);
+        deleteByList(stakeholdersList);
+        deleteByList(businessServicesList);
+        migrationWavesList.push(migrationWave);
     });
 
     after("Perform test data clean up", function () {
