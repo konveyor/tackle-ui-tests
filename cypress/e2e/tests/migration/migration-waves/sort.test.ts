@@ -30,20 +30,34 @@ import {
     generateRandomDateRange,
     cancelForm,
 } from "../../../../utils/utils";
-import { startDate, endDate, SortType } from "../../../types/constants";
+import {
+    startDate,
+    endDate,
+    SortType,
+    businessService,
+    businessServices,
+} from "../../../types/constants";
 
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { name } from "../../../types/constants";
 import { MigrationWaveView } from "../../../views/migration-wave.view";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import * as data from "../../../../utils/data_utils";
+import { Stakeholders } from "../../../models/migration/controls/stakeholders";
+import { BusinessServices } from "../../../models/migration/controls/businessservices";
 
 let migrationWavesList: MigrationWave[] = [];
+let applicationsList: Assessment[] = [];
+let stakeholdersList: Stakeholders[] = [];
+let businessServicesList: BusinessServices[] = [];
 
 //Automates Polarion TC 341
 describe(["@tier2"], "Migration Waves sort validations", function () {
     before("Login and Create Test Data", function () {
         login();
+
+        stakeholdersList = createMultipleStakeholders(3);
+        businessServicesList = createMultipleBusinessServices(3);
 
         // Create multiple Migration Waves
         migrationWavesList = createMultipleMigrationWaves(2);
@@ -100,12 +114,8 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
         verifyDateSortDesc(afterDescSortList, unsortedList);
     });
     it("Sort Manage applications table", function () {
-        const applicationsList: Assessment[] = [];
-
-        const stakeholdersList = createMultipleStakeholders(3);
-        const businessServicesList = createMultipleBusinessServices(3);
         for (let i = 0; i < 3; i++) {
-            let appdata = {
+            const appdata = {
                 name: data.getRandomWord(4),
                 owner: stakeholdersList[i].name,
                 business: businessServicesList[i].name,
@@ -118,55 +128,56 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
         const migrationWave = new MigrationWave(data.getRandomWord(4), startDate, endDate);
         migrationWave.create();
         migrationWave.openManageApplications();
-        const unsortedappList = getTableColumnData("Application Name");
-        const unsortedbusinessList = getTableColumnData("Business service");
+        const unsortedAppList = getTableColumnData("Application Name");
+        const unsortedBusinessList = getTableColumnData("Business service");
         const unsortedOwnerList = getTableColumnData("Owner");
         //sort asc and desc for 3 columns
         clickOnSortButton(
             "Business service",
             SortType.ascending,
-            MigrationWaveView.manageApplicationsTable
+            MigrationWaveView.migrationWavesTable
         );
         const afterAscSortBusinessList = getTableColumnData("Business service");
-        verifySortAsc(afterAscSortBusinessList, unsortedbusinessList);
+        verifySortAsc(afterAscSortBusinessList, unsortedBusinessList);
         clickOnSortButton(
             "Application Name",
             SortType.ascending,
-            MigrationWaveView.manageApplicationsTable
+            MigrationWaveView.migrationWavesTable
         );
         const afterAscSortappList = getTableColumnData("Application Name");
-        verifySortAsc(afterAscSortappList, unsortedappList);
+        verifySortAsc(afterAscSortappList, unsortedAppList);
 
-        clickOnSortButton("Owner", SortType.ascending, MigrationWaveView.manageApplicationsTable);
+        clickOnSortButton("Owner", SortType.ascending, MigrationWaveView.migrationWavesTable);
         const afterAscSortOwnerList = getTableColumnData("Owner");
         verifySortAsc(afterAscSortOwnerList, unsortedOwnerList);
         clickOnSortButton(
             "Business service",
             SortType.ascending,
-            MigrationWaveView.manageApplicationsTable
+            MigrationWaveView.migrationWavesTable
         );
         const afterDescSortBusinessList = getTableColumnData("Business service");
-        verifyDateSortDesc(afterDescSortBusinessList, unsortedbusinessList);
+        verifyDateSortDesc(afterDescSortBusinessList, unsortedBusinessList);
         clickOnSortButton(
             "Application Name",
             SortType.ascending,
-            MigrationWaveView.manageApplicationsTable
+            MigrationWaveView.migrationWavesTable
         );
         const afterDescSortappList = getTableColumnData("Application Name");
-        verifyDateSortDesc(afterDescSortappList, unsortedappList);
+        verifyDateSortDesc(afterDescSortappList, unsortedAppList);
 
-        clickOnSortButton("Owner", SortType.ascending, MigrationWaveView.manageApplicationsTable);
+        clickOnSortButton("Owner", SortType.ascending, MigrationWaveView.migrationWavesTable);
         const afterDescSortOwnerList = getTableColumnData("Owner");
         verifyDateSortDesc(afterDescSortOwnerList, unsortedOwnerList);
         cancelForm();
-        deleteByList(applicationsList);
-        deleteByList(stakeholdersList);
-        deleteByList(businessServicesList);
+
         migrationWavesList.push(migrationWave);
     });
 
     after("Perform test data clean up", function () {
         // Delete the Migration Waves created before the tests
         deleteByList(migrationWavesList);
+        deleteByList(applicationsList);
+        deleteByList(stakeholdersList);
+        deleteByList(businessServicesList);
     });
 });
