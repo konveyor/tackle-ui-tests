@@ -1695,8 +1695,6 @@ export function getNamespace(): string {
     }
 }
 
-// This method is patching
-export function configureRWX(isEnabled = true): void {
     // Patching CR to set value
     let value = "";
     if (isEnabled) {
@@ -1712,7 +1710,9 @@ export function configureRWX(isEnabled = true): void {
     command += "$tackle ";
     command += `-n${namespace} `;
     command += "--type merge ";
-    command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
+    if (option == "configurerwx") command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
+    else if (option == "keycloak")
+        command += `--patch '{"spec":{"feature_auth_required": ${value}}}'`;
     cy.log(command);
     cy.exec(command).then((result) => {
         cy.log(result.stderr);
