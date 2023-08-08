@@ -318,7 +318,10 @@ export class Application {
     filterTags(source: string): void {
         this.applicationDetailsTab("Tags");
         cy.wait(2000);
-        cy.get(appDetailsView.tagFilter).click();
+        if (source != "Manual" && source != "Analysis")
+            cy.get(appDetailsView.tagCategoryFilter).click();
+        else cy.get(appDetailsView.tagFilter).click();
+
         cy.get(appDetailsView.filterSourceMenu).contains(source).click();
     }
 
