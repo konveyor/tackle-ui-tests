@@ -24,30 +24,44 @@ import {
     getRandomWord,
 } from "../../../../utils/data_utils";
 import { CredentialType } from "../../../types/constants";
-import { ProxyType, ProxyViewSelectors, ProxyViewSelectorsByType } from "../../../views/proxy.view";
+import { ProxyType, ProxyViewSelectorsByType } from "../../../views/proxy.view";
 import { submitButton } from "../../../views/common.view";
 
 describe(["@tier2"], "Proxy operations", () => {
     let httpsProxy = new Proxy(getRandomProxyData(), ProxyType.https);
     let httpProxy = new Proxy(getRandomProxyData(), ProxyType.http);
-    const httpProxyCreds = new CredentialsProxy(getRandomCredentialsData(CredentialType.proxy));
-    const httpsProxyCreds = new CredentialsProxy(getRandomCredentialsData(CredentialType.proxy));
+    const httpProxyCredentials = new CredentialsProxy(
+        getRandomCredentialsData(CredentialType.proxy)
+    );
+    const httpsProxyCredentials = new CredentialsProxy(
+        getRandomCredentialsData(CredentialType.proxy)
+    );
 
     before("Login", function () {
         // Perform login
         login();
-        httpProxyCreds.create();
-        httpsProxyCreds.create();
+        httpProxyCredentials.create();
+        httpsProxyCredentials.create();
     });
 
     it("Http Proxy port and host field validation", function () {
         httpProxy.enable();
         httpProxy.fillHost(getRandomWord(121));
         httpProxy.fillPort("Invalid port test");
-        cy.get(ProxyViewSelectors.portHelper).contains("This field is required");
-        cy.get(ProxyViewSelectorsByType[httpProxy.type].hostHelper).contains(
-            "This field must contain fewer than 120 characters."
-        );
+        cy.get("#port")
+            .closest("div")
+            .within(() => {
+                cy.get('span[class="pf-v5-c-helper-text__item-text"]').contains(
+                    "This field is required"
+                );
+            });
+        cy.get(ProxyViewSelectorsByType[httpProxy.type].host)
+            .closest("div")
+            .within(() => {
+                cy.get('span[class="pf-v5-c-helper-text__item-text"]').contains(
+                    "This field must contain fewer than 120 characters."
+                );
+            });
         cy.get(submitButton).should("be.disabled");
         httpProxy.configureProxy();
         httpProxy.disable();
@@ -57,10 +71,20 @@ describe(["@tier2"], "Proxy operations", () => {
         httpsProxy.enable();
         httpsProxy.fillHost(getRandomWord(121));
         httpsProxy.fillPort("Invalid port test");
-        cy.get(ProxyViewSelectors.portHelper).contains("This field is required");
-        cy.get(ProxyViewSelectorsByType[httpsProxy.type].hostHelper).contains(
-            "This field must contain fewer than 120 characters."
-        );
+        cy.get("#port")
+            .closest("div")
+            .within(() => {
+                cy.get('span[class="pf-v5-c-helper-text__item-text"]').contains(
+                    "This field is required"
+                );
+            });
+        cy.get(ProxyViewSelectorsByType[httpsProxy.type].host)
+            .closest("div")
+            .within(() => {
+                cy.get('span[class="pf-v5-c-helper-text__item-text"]').contains(
+                    "This field must contain fewer than 120 characters."
+                );
+            });
         cy.get(submitButton).should("be.disabled");
         httpsProxy.configureProxy();
         httpsProxy.disable();
@@ -78,7 +102,7 @@ describe(["@tier2"], "Proxy operations", () => {
 
     it("Enable HTTP proxy ", function () {
         httpProxy.excludeList = ["127.0.0.1", "github.com"];
-        httpProxy.credentials = httpProxyCreds;
+        httpProxy.credentials = httpProxyCredentials;
         httpProxy.configureProxy();
     });
 
@@ -88,7 +112,7 @@ describe(["@tier2"], "Proxy operations", () => {
 
     it("Enable HTTPS proxy with valid configuration", () => {
         httpsProxy.excludeList = ["127.0.0.1", "github.com"];
-        httpsProxy.credentials = httpsProxyCreds;
+        httpsProxy.credentials = httpsProxyCredentials;
         httpsProxy.configureProxy();
     });
 
@@ -97,7 +121,7 @@ describe(["@tier2"], "Proxy operations", () => {
     });
 
     after("Perform test data clean up", function () {
-        httpsProxyCreds.delete();
-        httpProxyCreds.delete();
+        httpsProxyCredentials.delete();
+        httpProxyCredentials.delete();
     });
 });

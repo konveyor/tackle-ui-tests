@@ -32,7 +32,7 @@ export class Proxy {
         cy.url().then((url) => {
             if (url !== Proxy.url) {
                 selectUserPerspective(administration);
-                clickByText("a.pf-c-nav__link", "Proxy");
+                clickByText("a.pf-v5-c-nav__link", "Proxy");
                 cy.contains("h1", "Proxy configuration", { timeout: 5000 });
                 cy.wait(5000); // This wait is required because of problems with page rendering, will be fixed later
             }
