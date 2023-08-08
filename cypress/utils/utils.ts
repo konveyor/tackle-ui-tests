@@ -209,19 +209,21 @@ export function resetURL(): void {
 
 export function selectItemsPerPage(items: number): void {
     cy.log(`Select ${items} per page`);
-    cy.get(commonView.itemsPerPageMenu, { timeout: 60 * SEC, log: false })
-        .find(commonView.itemsPerPageToggleButton, { log: false })
-        .then(($toggleBtn) => {
+    cy.get(commonView.itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(
+        ($toggleBtn) => {
             if (!$toggleBtn.eq(0).is(":disabled")) {
                 $toggleBtn.eq(0).trigger("click");
                 cy.get(commonView.itemsPerPageMenuOptions, { log: false });
-                cy.get(`li > button[data-action="per-page-${items}"]`, { log: false }).click({
-                    force: true,
-                    log: false,
-                });
+                cy.get(`li[data-action="per-page-${items}"]`, { log: false })
+                    .contains(`${items}`)
+                    .click({
+                        force: true,
+                        log: false,
+                    });
                 cy.wait(2 * SEC);
             }
-        });
+        }
+    );
 }
 
 export function selectFromDropList(dropList, item: string) {
