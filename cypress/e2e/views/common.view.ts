@@ -43,7 +43,7 @@ export const lastPageButton = "button[aria-label='Go to last page']";
 export const firstPageButton = "button[aria-label='Go to first page']";
 export const pageNumInput = "input[aria-label='Current page']";
 export const optionMenu = '[aria-label="Options menu"]';
-export const userPerspectiveMenu = "#sidebar-perspective-toggle";
+export const userPerspectiveMenu = '[class*="select__menu-item"]';
 export const modal = "[id^=pf-modal-part-]";
 export const navLink = ".pf-c-nav__link";
 export const closeSuccessNotification = "button[aria-label^='Close Success alert:']";

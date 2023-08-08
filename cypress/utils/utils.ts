@@ -1449,9 +1449,12 @@ export function selectUserPerspective(userType: string): void {
         .eq(0)
         .click()
         .then(($a) => {
-            if (userType == "Migration" && $a.find('ul[title="Admin"]').length) {
-                clickByText(commonView.userPerspectiveMenu, "Administration");
-                $a.trigger("click");
+            if (userType == "Migration") {
+                const adminBtn = $a.find('button:contains("Administration")');
+                if (adminBtn.length) {
+                    clickByText(commonView.userPerspectiveMenu, "Administration");
+                    $a.trigger("click");
+                }
             }
             clickByText(commonView.userPerspectiveMenu, userType);
         });
