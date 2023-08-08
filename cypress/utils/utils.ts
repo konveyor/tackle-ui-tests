@@ -1695,7 +1695,6 @@ export function getNamespace(): string {
     }
 }
 
-    // Patching CR to set value
     let value = "";
     if (isEnabled) {
         value = "true";
