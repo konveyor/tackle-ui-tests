@@ -20,7 +20,6 @@ import {
     login,
     getRandomApplicationData,
     getRandomAnalysisData,
-    configureRWX,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import {
@@ -42,7 +41,6 @@ let tag;
 describe(["@tier3"], "Filter tags on application details page", () => {
     before("Login", function () {
         login();
-        /*
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -60,11 +58,10 @@ describe(["@tier3"], "Filter tags on application details page", () => {
         tagCategory.create();
 
         tag = new Tag(data.getRandomWord(6), tagCategory.name);
-        tag.create(); */
+        tag.create();
     });
 
     beforeEach("Load data", function () {
-        /*
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -72,13 +69,11 @@ describe(["@tier3"], "Filter tags on application details page", () => {
             this.analysisData = analysisData;
             this.techTags = analysisData["analysis_for_enableTagging"]["techTags"];
         });
-        cy.intercept("GET", "/hub/application*").as("getApplication"); */
+        cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     it.only("Filter by automated tags generated after analysis", function () {
         // Automates Polarion MTA-310
-        configureRWX();
-        /*
         const application = new Analysis(
             getRandomApplicationData(
                 "tackleTestApp_Source_autoTagging",
@@ -101,7 +96,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
         clickByText(button, clearAllFilters);
         application.closeApplicationDetails();
 
-        application.delete(); */
+        application.delete();
     });
 
     it("Filter by manual tags", function () {
@@ -167,9 +162,8 @@ describe(["@tier3"], "Filter tags on application details page", () => {
     });
 
     after("Perform test data clean up", function () {
-        /*
         tag.delete();
         tagCategory.delete();
-        source_credential.delete(); */
+        source_credential.delete();
     });
 });
