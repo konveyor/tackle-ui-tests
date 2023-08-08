@@ -72,7 +72,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it.only("Filter by automated tags generated after analysis", function () {
+    it("Filter by automated tags generated after analysis", function () {
         // Automates Polarion MTA-310
         const application = new Analysis(
             getRandomApplicationData(

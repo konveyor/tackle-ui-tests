@@ -19,13 +19,13 @@ import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import * as data from "../../../utils/data_utils";
-import { getRandomApplicationData, login, patchTackleYaml } from "../../../utils/utils";
+import { getRandomApplicationData, login, patchTackleCR } from "../../../utils/utils";
 let application = new Assessment(getRandomApplicationData());
 
 describe(["@tier2"], "Perform certain operations after disabling Keycloak", function () {
     before("Disable Keycloak", function () {
         login();
-        patchTackleYaml("keycloak", false);
+        patchTackleCR("keycloak", false);
         application.create();
     });
 
@@ -65,7 +65,7 @@ describe(["@tier2"], "Perform certain operations after disabling Keycloak", func
     });
 
     after("Re-enable Keycloak", function () {
-        patchTackleYaml("keycloak", true);
+        // patchTackleCR("keycloak", true);
         application.delete();
     });
 });
