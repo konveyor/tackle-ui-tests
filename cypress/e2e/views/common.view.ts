@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-export const itemsPerPageToggleButton = "button#pagination-id-top-toggle";
+export const itemsPerPageToggleButton = "#pagination-id-top-toggle";
 export const submitButton = '[id*="form-submit"]';
 export const cancelButton = "button[aria-label=cancel]";
 export const closeButton = "button[aria-label=Close]";
