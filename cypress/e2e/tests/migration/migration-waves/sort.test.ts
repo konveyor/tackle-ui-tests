@@ -25,14 +25,26 @@ import {
     verifyDateSortAsc,
     verifyDateSortDesc,
     clickOnSortButton,
+    createMultipleStakeholders,
+    createMultipleBusinessServices,
+    generateRandomDateRange,
+    cancelForm,
 } from "../../../../utils/utils";
 import { startDate, endDate, SortType } from "../../../types/constants";
 
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { name } from "../../../types/constants";
 import { MigrationWaveView } from "../../../views/migration-wave.view";
+import { Assessment } from "../../../models/migration/applicationinventory/assessment";
+import * as data from "../../../../utils/data_utils";
+import { Stakeholders } from "../../../models/migration/controls/stakeholders";
+import { BusinessServices } from "../../../models/migration/controls/businessservices";
 
 let migrationWavesList: MigrationWave[] = [];
+let applicationsList: Assessment[] = [];
+
+let stakeholdersList: Stakeholders[] = [];
+let businessServicesList: BusinessServices[] = [];
 
 //Automates Polarion TC 341
 describe(["@tier2"], "Migration Waves sort validations", function () {
@@ -41,6 +53,8 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
 
         // Create multiple Migration Waves
         migrationWavesList = createMultipleMigrationWaves(2);
+        stakeholdersList = createMultipleStakeholders(3);
+        businessServicesList = createMultipleBusinessServices(3);
     });
 
     it("Name sort validations", function () {
@@ -93,9 +107,70 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
         const afterDescSortList = getTableColumnData(endDate);
         verifyDateSortDesc(afterDescSortList, unsortedList);
     });
+    it("Sort Manage applications table", function () {
+        for (let i = 0; i < 3; i++) {
+            const appdata = {
+                name: data.getRandomWord(4),
+                owner: stakeholdersList[i].name,
+                business: businessServicesList[i].name,
+            };
+            const application = new Assessment(appdata);
+            application.create();
+            applicationsList.push(application);
+        }
+        const { start: startDate, end: endDate } = generateRandomDateRange();
+        const migrationWave = new MigrationWave(data.getRandomWord(4), startDate, endDate);
+        migrationWave.create();
+        migrationWave.openManageApplications();
+        const unsortedAppList = getTableColumnData("Application Name");
+        const unsortedBusinessList = getTableColumnData("Business service");
+        const unsortedOwnerList = getTableColumnData("Owner");
+        //sort asc and desc for 3 columns
+        clickOnSortButton(
+            "Business service",
+            SortType.ascending,
+            MigrationWaveView.migrationWavesTable
+        );
+        const afterAscSortBusinessList = getTableColumnData("Business service");
+        verifySortAsc(afterAscSortBusinessList, unsortedBusinessList);
+        clickOnSortButton(
+            "Application Name",
+            SortType.ascending,
+            MigrationWaveView.migrationWavesTable
+        );
+        const afterAscSortappList = getTableColumnData("Application Name");
+        verifySortAsc(afterAscSortappList, unsortedAppList);
+
+        clickOnSortButton("Owner", SortType.ascending, MigrationWaveView.migrationWavesTable);
+        const afterAscSortOwnerList = getTableColumnData("Owner");
+        verifySortAsc(afterAscSortOwnerList, unsortedOwnerList);
+        clickOnSortButton(
+            "Business service",
+            SortType.ascending,
+            MigrationWaveView.migrationWavesTable
+        );
+        const afterDescSortBusinessList = getTableColumnData("Business service");
+        verifyDateSortDesc(afterDescSortBusinessList, unsortedBusinessList);
+        clickOnSortButton(
+            "Application Name",
+            SortType.ascending,
+            MigrationWaveView.migrationWavesTable
+        );
+        const afterDescSortappList = getTableColumnData("Application Name");
+        verifyDateSortDesc(afterDescSortappList, unsortedAppList);
+
+        clickOnSortButton("Owner", SortType.ascending, MigrationWaveView.migrationWavesTable);
+        const afterDescSortOwnerList = getTableColumnData("Owner");
+        verifyDateSortDesc(afterDescSortOwnerList, unsortedOwnerList);
+        cancelForm();
+        migrationWavesList.push(migrationWave);
+    });
 
     after("Perform test data clean up", function () {
         // Delete the Migration Waves created before the tests
         deleteByList(migrationWavesList);
+        deleteByList(applicationsList);
+        deleteByList(stakeholdersList);
+        deleteByList(businessServicesList);
     });
 });
