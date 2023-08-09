@@ -1,8 +1,4 @@
-export enum ProxyViewSelectors {
-    excludedList = "#excluded",
-    portHelper = "#port-helper",
-}
-
+export const excludedList = "#excluded";
 export enum ProxyType {
     http = "http",
     https = "https",
@@ -26,3 +22,7 @@ export const ProxyViewSelectorsByType = {
         hostHelper: "#httpsHost-helper",
     },
 };
+
+export const navLink = "a.pf-v5-c-nav__link";
+export const port = "#port";
+export const helper = 'span[class="pf-v5-c-helper-text__item-text"]';
