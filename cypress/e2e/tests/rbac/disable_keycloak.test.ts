@@ -42,10 +42,10 @@ describe(["@tier2"], "Perform certain operations after disabling Keycloak", func
     });
 
     it("Auth disabled, Verify presence of Review application button", function () {
-        Application.validateAssessButton(this.rbacRules);
+        Application.validateReviewButton(this.rbacRules);
     });
 
-    it("Auth disabled, validate assessment context menu buttons presence", function () {
+    it("Auth disabled, Verify presence of assessment context menu buttons", function () {
         application.validateAssessmentAvailableOptions(this.rbacRules);
     });
 
