@@ -15,18 +15,19 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { Application } from "../../models/migration/applicationinventory/application";
-import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import * as data from "../../../utils/data_utils";
 import { getRandomApplicationData, login, patchTackleCR } from "../../../utils/utils";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
+import { Application } from "../../models/migration/applicationinventory/application";
+import { Assessment } from "../../models/migration/applicationinventory/assessment";
 let application = new Assessment(getRandomApplicationData());
 let stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
 
 describe(["@tier2"], "Perform certain operations after disabling Keycloak", function () {
+    // Automates Polarion MTA-293
     before("Disable Keycloak", function () {
         login();
-        // patchTackleCR("keycloak", false);
+        patchTackleCR("keycloak", false);
 
         stakeholder.create();
         application.create();
@@ -41,7 +42,7 @@ describe(["@tier2"], "Perform certain operations after disabling Keycloak", func
     });
 
     it("Auth disabled, Verify presence of Review application button", function () {
-        Application.validateReviewButton(this.rbacRules);
+        Application.validateAssessButton(this.rbacRules);
     });
 
     it("Auth disabled, validate assessment context menu buttons presence", function () {
