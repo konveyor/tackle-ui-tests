@@ -70,7 +70,10 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         //used to get a date format such as "9 August 2023"
         const nowDateLabel = new Intl.DateTimeFormat("en-GB", options).format(now);
 
-        cy.get(MigrationWaveView.startDateInput).next("button").click();
+        cy.get(MigrationWaveView.startDateInput)
+            .closest(MigrationWaveView.generalDatePicker)
+            .find(MigrationWaveView.calendarButton)
+            .click();
         const tomorrow = new Date(now);
         tomorrow.setDate(now.getDate() + 1);
 
@@ -79,8 +82,10 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         cy.get(`button[aria-label="${nowDateLabel}"]`).should("be.disabled");
         cy.get(`button[aria-label="${dateTomorrowLabel}"]`).should("be.enabled").click();
 
-        cy.get(MigrationWaveView.endDateInput).next("button").click();
-        // End date should be greater than start date
+        cy.get(MigrationWaveView.endDateInput)
+            .closest(MigrationWaveView.generalDatePicker)
+            .find(MigrationWaveView.calendarButton)
+            .click(); // End date should be greater than start date
         cy.get(`button[aria-label="${dateTomorrowLabel}"]`).should("be.disabled");
         const dayAfterTomorrow = new Date(now);
         dayAfterTomorrow.setDate(now.getDate() + 2);
