@@ -21,6 +21,7 @@ import {
     applicationInventory,
     button,
     migration,
+    next,
     RepositoryType,
     save,
     SEC,
@@ -39,6 +40,7 @@ import {
     doesExistText,
     inputText,
     performRowActionByIcon,
+    selectCheckBox,
     selectFormItems,
     selectItemsPerPage,
     selectUserPerspective,
@@ -266,26 +268,48 @@ export class Analysis extends Application {
     analyze(cancel = false): void {
         Analysis.open();
         this.selectApplication();
-        cy.contains("button", analyzeButton, { timeout: 20000 }).should("be.enabled").click();
         if (cancel) {
             cancelForm();
-        } else {
-            this.selectSourceofAnalysis(this.source);
-            if (this.binary) this.uploadBinary();
-            this.isNextEnabled();
-            cy.contains("button", "Next", { timeout: 200 }).click();
-            this.selectTarget(this.target);
-            cy.contains("button", "Next", { timeout: 200 }).click();
-            this.scopeSelect();
-            if (this.customRule) this.uploadCustomRule();
-            if (this.customRuleRepository) this.fetchCustomRules();
-            cy.contains("button", "Next", { timeout: 200 }).click();
-            if (this.excludeRuleTags) this.tagsToExclude();
-            if (this.enableTransaction) this.enableTransactionAnalysis();
-            if (this.disableTagging) this.disableAutomatedTagging();
-            if (!this.sources) cy.contains("button", "Next", { timeout: 200 }).click();
-            cy.contains("button", "Run", { timeout: 200 }).click();
+            return;
         }
+
+        this.startAnalysis();
+    }
+
+    private startAnalysis() {
+        cy.contains(button, analyzeButton).should("be.enabled").click();
+        this.selectSourceofAnalysis(this.source);
+        this.isNextEnabled();
+        cy.contains(button, next).click();
+        this.selectTarget(this.target);
+        cy.contains(button, next).click();
+        this.scopeSelect();
+        if (this.customRule) {
+            this.uploadCustomRule();
+        }
+        if (this.customRuleRepository) {
+            this.fetchCustomRules();
+        }
+        cy.contains(button, next).click();
+        if (this.excludeRuleTags) {
+            this.tagsToExclude();
+        }
+        if (this.enableTransaction) {
+            this.enableTransactionAnalysis();
+        }
+        if (this.disableTagging) {
+            this.disableAutomatedTagging();
+        }
+        if (!this.sources) {
+            cy.contains(button, next).click();
+        }
+        cy.contains(button, "Run").click();
+    }
+
+    public static analyzeAll(params: Analysis): void {
+        Analysis.open();
+        selectCheckBox("#bulk-selected-items-checkbox");
+        params.startAnalysis();
     }
 
     static validateAnalyzeButton(rbacRules: RbacValidationRules) {
@@ -299,25 +323,36 @@ export class Analysis extends Application {
             .contains(this.name, { log: false })
             .closest(trTag, { log: false })
             .within(() => {
-                cy.get(analysisColumn, { log: false })
-                    .find("div > div:nth-child(2)", { timeout: 3600000, log: false }) // 1h
-                    .should("not.have.text", AnalysisStatuses.notStarted)
-                    .and("not.have.text", AnalysisStatuses.scheduled)
-                    .and("not.have.text", AnalysisStatuses.inProgress)
-                    .then(($a) => {
-                        const currentStatus = $a.text().toString() as AnalysisStatuses;
-                        if (currentStatus != status) {
-                            // If analysis failed and is not expected then test fails.
-                            if (
-                                currentStatus == AnalysisStatuses.failed &&
-                                status != AnalysisStatuses.failed
-                            ) {
-                                expect(currentStatus).to.eq(AnalysisStatuses.completed);
-                            }
-                        } else {
-                            expect(currentStatus).to.eq(status);
-                        }
-                    });
+                Analysis.verifyStatus(cy.get(analysisColumn, { log: false }), status);
+            });
+    }
+
+    public static verifyAllAnalysisStatuses(status) {
+        cy.log(`Verifying all analysis statuses, expecting ${status}`);
+        cy.get(analysisColumn, { log: false }).each(($el) => {
+            Analysis.verifyStatus(cy.wrap($el), status);
+        });
+    }
+
+    private static verifyStatus(element: Cypress.Chainable, status: string) {
+        element
+            .find("div > div:nth-child(2)", { timeout: 3600000, log: false }) // 1h
+            .should("not.have.text", AnalysisStatuses.notStarted)
+            .and("not.have.text", AnalysisStatuses.scheduled)
+            .and("not.have.text", AnalysisStatuses.inProgress)
+            .then(($a) => {
+                const currentStatus = $a.text().toString() as AnalysisStatuses;
+                if (currentStatus != status) {
+                    // If analysis failed and is not expected then test fails.
+                    if (
+                        currentStatus == AnalysisStatuses.failed &&
+                        status != AnalysisStatuses.failed
+                    ) {
+                        expect(currentStatus).to.eq(AnalysisStatuses.completed);
+                    }
+                } else {
+                    expect(currentStatus).to.eq(status);
+                }
             });
     }
 
