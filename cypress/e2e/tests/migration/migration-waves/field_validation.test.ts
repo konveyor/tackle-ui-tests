@@ -71,7 +71,7 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         const nowDateLabel = new Intl.DateTimeFormat("en-GB", options).format(now);
 
         cy.get(MigrationWaveView.startDateInput)
-            .parents(MigrationWaveView.generalDatePicker)
+            .closest(MigrationWaveView.generalDatePicker)
             .find(MigrationWaveView.calendarButton)
             .click();
         const tomorrow = new Date(now);
@@ -83,7 +83,7 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         cy.get(`button[aria-label="${dateTomorrowLabel}"]`).should("be.enabled").click();
 
         cy.get(MigrationWaveView.endDateInput)
-            .parents(MigrationWaveView.generalDatePicker)
+            .closest(MigrationWaveView.generalDatePicker)
             .find(MigrationWaveView.calendarButton)
             .click(); // End date should be greater than start date
         cy.get(`button[aria-label="${dateTomorrowLabel}"]`).should("be.disabled");

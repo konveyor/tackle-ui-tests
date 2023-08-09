@@ -202,7 +202,7 @@ export class MigrationWave {
             this.startDate.getTime() !== date.getTime() ? this.startDate : new Date();
         const currentMonth = currentStartDate.toLocaleString("en-us", { month: "long" });
         cy.get(MigrationWaveView.startDateInput)
-            .parents(MigrationWaveView.generalDatePicker)
+            .closest(MigrationWaveView.generalDatePicker)
             .find(MigrationWaveView.calendarButton)
             .click();
 
@@ -228,7 +228,7 @@ export class MigrationWave {
             this.endDate.getTime() !== date.getTime() ? this.endDate : new Date();
         const currentMonth = currentEndDate.toLocaleString("en-us", { month: "long" });
         cy.get(MigrationWaveView.endDateInput)
-            .parents(MigrationWaveView.generalDatePicker)
+            .closest(MigrationWaveView.generalDatePicker)
             .find(MigrationWaveView.calendarButton)
             .click();
         MigrationWave.selectDateFromDatePicker(date, currentMonth);
