@@ -24,6 +24,7 @@ import {
 } from "../../../../utils/utils";
 import * as commonView from "../../../views/common.view";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
+import { MigrationWaveView } from "../../../views/migration-wave.view";
 
 let migrationWavesList: MigrationWave[] = [];
 //Automates Polarion TC 357
@@ -67,8 +68,7 @@ describe(["@tier3"], "Migration Waves pagination validations", function () {
         selectItemsPerPage(10);
 
         // Verify that only 10 items are displayed
-        cy.get(".pf-c-table > tbody > tr")
-            .not(".pf-c-table__expandable-row")
+        cy.get(MigrationWaveView.migrationWavesTable)
             .find("td[data-label=Name]")
             .then(($rows) => {
                 cy.wrap($rows.length).should("eq", 10);
@@ -77,8 +77,7 @@ describe(["@tier3"], "Migration Waves pagination validations", function () {
         selectItemsPerPage(20);
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
-        cy.get(".pf-c-table > tbody > tr")
-            .not(".pf-c-table__expandable-row")
+        cy.get(MigrationWaveView.migrationWavesTable)
             .find("td[data-label=Name]")
             .then(($rows) => {
                 cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
