@@ -8,12 +8,17 @@ import {
 } from "../../../../utils/utils";
 import { administration, button, SEC } from "../../../types/constants";
 import { CredentialsProxyData, ProxyData } from "../../../types/types";
-import { ProxyType, ProxyViewSelectors, ProxyViewSelectorsByType } from "../../../views/proxy.view";
+import {
+    excludedList,
+    navLink,
+    ProxyType,
+    ProxyViewSelectorsByType,
+} from "../../../views/proxy.view";
 import { getRandomProxyData } from "../../../../utils/data_utils";
 
 export class Proxy {
-    hostname;
-    port;
+    hostname: string;
+    port: string;
     credentials: CredentialsProxyData;
     excludeList = [];
     type: ProxyType;
@@ -32,9 +37,8 @@ export class Proxy {
         cy.url().then((url) => {
             if (url !== Proxy.url) {
                 selectUserPerspective(administration);
-                clickByText("a.pf-v5-c-nav__link", "Proxy");
-                cy.contains("h1", "Proxy configuration", { timeout: 5000 });
-                cy.wait(5000); // This wait is required because of problems with page rendering, will be fixed later
+                clickByText(navLink, "Proxy");
+                cy.contains("h1", "Proxy configuration", { timeout: 5 * SEC });
             }
         });
     }
@@ -65,13 +69,12 @@ export class Proxy {
             this.fillExcludeList();
         }
         submitForm();
-        cy.wait(2500);
     }
 
     unConfigureProxy(): void {
         clearInput(ProxyViewSelectorsByType[this.type].host);
         clearInput(ProxyViewSelectorsByType[this.type].port);
-        clearInput(ProxyViewSelectors.excludedList);
+        clearInput(excludedList);
         this.disable();
     }
 
@@ -81,7 +84,7 @@ export class Proxy {
             fullList = fullList + current + ", ";
         });
         cy.log(fullList);
-        inputText(ProxyViewSelectors.excludedList, fullList);
+        inputText(excludedList, fullList);
     }
 
     fillHost(host?: string): void {
@@ -110,7 +113,6 @@ export class Proxy {
             if ($checkbox.prop("checked")) {
                 click(selector);
                 submitForm();
-                cy.wait(2500);
             }
         });
     }

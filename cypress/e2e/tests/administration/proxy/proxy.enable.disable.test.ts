@@ -24,7 +24,7 @@ import {
     getRandomWord,
 } from "../../../../utils/data_utils";
 import { CredentialType } from "../../../types/constants";
-import { ProxyType, ProxyViewSelectorsByType } from "../../../views/proxy.view";
+import { helper, port, ProxyType, ProxyViewSelectorsByType } from "../../../views/proxy.view";
 import { submitButton } from "../../../views/common.view";
 
 describe(["@tier2"], "Proxy operations", () => {
@@ -48,19 +48,15 @@ describe(["@tier2"], "Proxy operations", () => {
         httpProxy.enable();
         httpProxy.fillHost(getRandomWord(121));
         httpProxy.fillPort("Invalid port test");
-        cy.get("#port")
+        cy.get(port)
             .closest("div")
             .within(() => {
-                cy.get('span[class="pf-v5-c-helper-text__item-text"]').contains(
-                    "This field is required"
-                );
+                cy.get(helper).contains("This field is required");
             });
         cy.get(ProxyViewSelectorsByType[httpProxy.type].host)
             .closest("div")
             .within(() => {
-                cy.get('span[class="pf-v5-c-helper-text__item-text"]').contains(
-                    "This field must contain fewer than 120 characters."
-                );
+                cy.get(helper).contains("This field must contain fewer than 120 characters.");
             });
         cy.get(submitButton).should("be.disabled");
         httpProxy.configureProxy();
@@ -71,19 +67,15 @@ describe(["@tier2"], "Proxy operations", () => {
         httpsProxy.enable();
         httpsProxy.fillHost(getRandomWord(121));
         httpsProxy.fillPort("Invalid port test");
-        cy.get("#port")
+        cy.get(port)
             .closest("div")
             .within(() => {
-                cy.get('span[class="pf-v5-c-helper-text__item-text"]').contains(
-                    "This field is required"
-                );
+                cy.get(helper).contains("This field is required");
             });
         cy.get(ProxyViewSelectorsByType[httpsProxy.type].host)
             .closest("div")
             .within(() => {
-                cy.get('span[class="pf-v5-c-helper-text__item-text"]').contains(
-                    "This field must contain fewer than 120 characters."
-                );
+                cy.get(helper).contains("This field must contain fewer than 120 characters.");
             });
         cy.get(submitButton).should("be.disabled");
         httpsProxy.configureProxy();
