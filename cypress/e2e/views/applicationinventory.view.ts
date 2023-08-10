@@ -34,14 +34,15 @@ export const cyclicDependenciesErrorMsg = "cyclic dependencies are not allowed";
 export const northdependenciesDropdownBtn = "button[aria-label='northbound-dependencies-toggle']";
 export const southdependenciesDropdownBtn = "button[aria-label='southbound-dependencies-toggle']";
 export const date = "Date";
-export const editButton = "div[class='pf-c-inline-edit__action pf-m-enable-editable'] > button";
+export const editButton =
+    "td[class='pf-v5-c-table__td pf-v5-c-table__inline-edit-action'] > button";
 export const importStatus = "Status";
 export const northboundHelper = "div[id=northbound-dependencies-helper]";
 export const southboundHelper = "div[id=southbound-dependencies-helper]";
 export const selectBox = "input[type=checkbox]";
 export const tags = "span";
 export const user = "User";
-export const kebabMenu = "div > button[aria-label='Actions']";
+export const kebabMenu = "td[class='pf-v5-c-table__td pf-v5-c-table__action'] > button";
 export const copyAssessmentPagination = "#bulk-copy-assessment-review-pagination-top";
 
 //Fields related to analysis - source mode
