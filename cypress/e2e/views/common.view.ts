@@ -31,7 +31,7 @@ export const infoAlertMessage = "div[aria-label='Info Alert']";
 export const duplicateNameWarning = "h4[class*='alert__title']";
 export const appTable = "table[aria-label='main-table']";
 export const expandableRow = ".pf-c-expandable-row";
-export const nameHelper = "div[id=name-helper]";
+export const nameHelper = "span.pf-v5-c-helper-text__item-text";
 export const descriptionHelper = "div[id=description-helper]";
 export const emailHelper = "div[id=email-helper]";
 export const filterToggleButton = "div.pf-c-dropdown > button.pf-c-dropdown__toggle";
