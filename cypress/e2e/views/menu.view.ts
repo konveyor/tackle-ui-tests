@@ -14,4 +14,4 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 export const navMenu = 'a[class*="nav__link"]';
-export const navTab = "span.pf-c-tabs__item-text";
+export const navTab = "span.pf-v5-c-tabs__item-text";
