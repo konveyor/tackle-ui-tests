@@ -169,14 +169,14 @@ export class Analysis extends Application {
 
     protected selectTarget(target: string[]): void {
         for (let i = 0; i < target.length; i++) {
-            cy.get("div.pf-c-empty-state__content").children("h4").contains(target[i]).click();
+            cy.get("div.pf-v5-c-empty-state__content").children("h4").contains(target[i]).click();
         }
     }
 
     protected uploadBinary() {
         this.binary.forEach((binaryList) => {
             uploadApplications(binaryList);
-            cy.get("span.pf-c-progress__measure", { timeout: 5000 * SEC }).should(
+            cy.get("span.pf-v5-c-progress__measure", { timeout: 5000 * SEC }).should(
                 "contain",
                 "100%"
             );
@@ -207,7 +207,7 @@ export class Analysis extends Application {
         cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
         uploadXml("xml/" + this.customRule);
         cy.wait(2000);
-        cy.get("span.pf-c-progress__measure", { timeout: 150000 }).should("contain", "100%");
+        cy.get("span.pf-v5-c-progress__measure", { timeout: 150000 }).should("contain", "100%");
         cy.wait(2000);
         cy.contains(addRules, "Add", { timeout: 2000 }).click();
     }
@@ -449,11 +449,11 @@ export class Analysis extends Application {
     static validateTopActionMenu(rbacRules: RbacValidationRules) {
         Analysis.open();
         if (rbacRules["Action menu"]["Not available"]) {
-            cy.get(".pf-c-toolbar__content-section").within(() => {
+            cy.get(".pf-v5-c-toolbar__content-section").within(() => {
                 doesExistSelector(actionsButton, false);
             });
         } else {
-            clickWithin(".pf-c-toolbar__content-section", actionsButton);
+            clickWithin(".pf-v5-c-toolbar__content-section", actionsButton);
             doesExistText("Import", rbacRules["Action menu"]["Import"]);
             doesExistText("Manage imports", rbacRules["Action menu"]["Manage imports"]);
             doesExistText("Manage credentials", rbacRules["Action menu"]["Manage credentials"]);
