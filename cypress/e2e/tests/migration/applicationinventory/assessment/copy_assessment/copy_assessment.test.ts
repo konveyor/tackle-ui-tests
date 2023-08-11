@@ -60,7 +60,7 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
     it("Copy assessment to self", function () {
         // Copy assessment to self, checkbox should be disabled
         applicationList[0].openCopyAssessmentModel();
-        cy.get(".pf-m-compact> tbody > tr > td")
+        cy.get("[id^=pf-modal-part-]")
             .contains(applicationList[0].name)
             .parent(trTag)
             .within(() => {
