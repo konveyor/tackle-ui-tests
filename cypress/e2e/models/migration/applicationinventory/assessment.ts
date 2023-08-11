@@ -467,13 +467,13 @@ export class Assessment extends Application {
         cy.wait(2 * SEC);
         performRowActionByIcon(this.name, kebabMenu);
         clickByText(button, action);
-        cy.get("div.pf-c-modal-box").within(() => {
+        cy.get("div.pf-v5-c-modal-box").within(() => {
             selectItemsPerPage(items);
         });
     }
 
     selectItemsPerPage(items: number): void {
-        cy.get("div.pf-c-modal-box").within(() => {
+        cy.get("div.pf-v5-c-modal-box").within(() => {
             selectItemsPerPage(items);
         });
     }
