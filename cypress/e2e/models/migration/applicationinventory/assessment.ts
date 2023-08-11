@@ -56,6 +56,7 @@ import {
     stakeholdergroupsSelect,
     stakeholderSelect,
     continueButton,
+    stack,
 } from "../../../views/assessment.view";
 import {
     criticalityInput,
@@ -155,7 +156,7 @@ export class Assessment extends Application {
 
     protected clickRadioOption(questionSelector, optionToSelect) {
         cy.wrap(questionSelector)
-            .find("div.pf-l-stack")
+            .find(stack)
             .children("div")
             .eq(optionToSelect)
             .find(radioInput)
@@ -165,7 +166,7 @@ export class Assessment extends Application {
     protected selectAnswers(risk: string): void {
         for (let i = 0; i < 5; i++) {
             cy.get(questionBlock).each(($question) => {
-                let totalOptions = $question.find("div.pf-l-stack").children("div").length;
+                let totalOptions = $question.find(stack).children("div").length;
                 let optionToSelect: number;
                 if (risk === "low") {
                     optionToSelect = totalOptions - 1;
@@ -173,7 +174,7 @@ export class Assessment extends Application {
                 } else if (risk === "medium") {
                     cy.wrap($question)
                         .children()
-                        .find("div.pf-l-split__item")
+                        .find("div.pf-v5-l-split__item")
                         .then(($questionLine) => {
                             /* These 3 questions generate high risk with mean options, 
                             hence to keep risk to medium, select last options for these set of specific questions */
