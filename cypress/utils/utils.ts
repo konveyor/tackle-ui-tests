@@ -302,8 +302,8 @@ export function selectFilter(filterName: string, identifiedRisk?: boolean, value
     cy.get(commonView.selectFilter)
         .eq(value)
         .within(() => {
-            cy.get("div.pf-c-dropdown").click();
-            cy.get("ul.pf-c-dropdown__menu").within(() => {
+            cy.get("#filtered-by").click();
+            cy.get("ul.pf-v5-c-dropdown__menu").within(() => {
                 clickByText("a", filterName);
             });
         });
