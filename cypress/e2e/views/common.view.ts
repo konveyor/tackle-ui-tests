@@ -26,7 +26,7 @@ export const controlsForm = "form.pf-v5-c-form";
 export const itemsPerPageMenu = "div.pf-c-options-menu";
 export const itemsPerPageMenuOptions = "ul.pf-v5-c-menu__list";
 export const expandRow = "button[aria-label=Details]";
-export const successAlertMessage = "div[aria-label='Success Alert']";
+export const successAlertMessage = ".pf-m-success";
 export const infoAlertMessage = "div[aria-label='Info Alert']";
 export const duplicateNameWarning = "h4[class*='alert__title']";
 export const appTable = "table[aria-label='main-table']";
