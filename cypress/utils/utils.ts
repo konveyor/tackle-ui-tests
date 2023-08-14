@@ -49,6 +49,7 @@ import {
     analysis,
     owner,
     JiraType,
+    actionsButton,
 } from "../e2e/types/constants";
 import {
     actionButton,
@@ -772,7 +773,7 @@ export function verifyImportErrorMsg(errorMsg: any): void {
 
 export function migration_wave_kebab_menu(menu): void {
     // The value for menu could be one of {Export to Issue Manager, Delete}
-    cy.get(topKebabMenu).eq(1).click({ force: true });
+    cy.get(actionButton).eq(1).click({ force: true });
     cy.get(commonView.kebabMenuItem).contains(menu).click({ force: true });
 }
 
@@ -823,7 +824,7 @@ export function deleteApplicationTableRows(): void {
                             .contains(name)
                             .closest(trTag)
                             .within(() => {
-                                click(topKebabMenu);
+                                click(actionButton);
                             })
                             .contains(button, deleteAction)
                             .then(($delete_btn) => {

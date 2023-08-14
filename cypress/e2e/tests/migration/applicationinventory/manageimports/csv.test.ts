@@ -25,11 +25,8 @@ describe(["@tier2"], "Manage imports tests", function () {
     });
 
     it("Download CSV template", function () {
-        // Open action dropdown
-        cy.get(topKebabMenu).click();
-        // Click on option - Download CSV template
-        cy.get("a.pf-c-dropdown__menu-item").contains("Download CSV template").click();
-        // Check if file contains appropriate data
+        cy.get(topKebabMenu).eq(1).click();
+        cy.get("a.pf-v5-c-dropdown__menu-item").contains("Download CSV template").click();
         cy.readFile("cypress/downloads/template_application_import.csv").should(
             "contain",
             "Customers"
