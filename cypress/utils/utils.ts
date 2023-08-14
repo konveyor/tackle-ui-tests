@@ -302,8 +302,8 @@ export function selectFilter(filterName: string, identifiedRisk?: boolean, value
     cy.get(commonView.selectFilter)
         .eq(value)
         .within(() => {
-            cy.get("div.pf-c-dropdown").click();
-            cy.get("ul.pf-c-dropdown__menu").within(() => {
+            cy.get("#filtered-by").click();
+            cy.get("ul.pf-v5-c-dropdown__menu").within(() => {
                 clickByText("a", filterName);
             });
         });
@@ -479,8 +479,8 @@ export function getColumnDataforCopyAssessmentTable(columnName: string): Array<s
 export function getTableColumnData(columnName: string): Array<string> {
     selectItemsPerPage(100);
     let itemList = [];
-    cy.get(".pf-c-table > tbody > tr", { timeout: 5 * SEC })
-        .not(".pf-c-table__expandable-row")
+    cy.get(".pf-v5-c-table > tbody > tr", { timeout: 5 * SEC })
+        .not(".pf-v5-c-table__expandable-row")
         .find(`td[data-label="${columnName}"]`)
         .each(($ele) => {
             if (
@@ -819,7 +819,6 @@ export function deleteApplicationTableRows(): void {
                             .closest(trTag)
                             .within(() => {
                                 click(actionButton);
-                                cy.wait(800);
                             })
                             .contains(button, deleteAction)
                             .then(($delete_btn) => {
