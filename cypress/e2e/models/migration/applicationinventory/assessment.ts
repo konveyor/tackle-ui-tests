@@ -392,8 +392,15 @@ export class Assessment extends Application {
         Assessment.open();
         selectItemsPerPage(100);
         cy.wait(2 * SEC);
-        performRowActionByIcon(this.name, kebabMenu);
-        cy.get("ul > li").find(button).should("not.contain", "Copy assessment");
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                click(actionButton);
+                cy.wait(500);
+                cy.get("ul > li").find(button).should("not.contain", "Copy assessment");
+            });
     }
 
     copy_assessment(applicationList: Array<Application>, cancel = false): void {
@@ -465,8 +472,14 @@ export class Assessment extends Application {
         Assessment.open();
         selectItemsPerPage(items);
         cy.wait(2 * SEC);
-        performRowActionByIcon(this.name, kebabMenu);
-        clickByText(button, action);
+        cy.get(tdTag)
+            .contains(this.name)
+            .closest(trTag)
+            .within(() => {
+                click(actionButton);
+                cy.wait(500);
+                clickByText(button, action);
+            });
         cy.get("div.pf-v5-c-modal-box").within(() => {
             selectItemsPerPage(items);
         });
