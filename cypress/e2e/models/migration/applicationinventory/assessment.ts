@@ -36,6 +36,7 @@ import {
     kebabMenu,
     northdependenciesDropdownBtn,
     southdependenciesDropdownBtn,
+    copyAssessmentModal,
 } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
@@ -480,13 +481,13 @@ export class Assessment extends Application {
                 cy.wait(500);
                 clickByText(button, action);
             });
-        cy.get("div.pf-c-modal-box").within(() => {
+        cy.get(copyAssessmentModal).within(() => {
             selectItemsPerPage(items);
         });
     }
 
     selectItemsPerPage(items: number): void {
-        cy.get("div.pf-c-modal-box").within(() => {
+        cy.get(copyAssessmentModal).within(() => {
             selectItemsPerPage(items);
         });
     }

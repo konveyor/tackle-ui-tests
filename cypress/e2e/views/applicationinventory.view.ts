@@ -28,8 +28,6 @@ export const csvFileName = "File name";
 export const FileName = "File Name";
 export const closeForm = "button[aria-label='close']";
 export const copy = "button[aria-label='Copy']";
-export const copyAssessmentTableTd = ".pf-m-compact> tbody > tr > td";
-export const copyAssessmentTableTr = ".pf-m-compact> tbody > tr";
 export const cyclicDependenciesErrorMsg = "cyclic dependencies are not allowed";
 export const northdependenciesDropdownBtn = "button[aria-label='northbound-dependencies-toggle']";
 export const southdependenciesDropdownBtn = "button[aria-label='southbound-dependencies-toggle']";
@@ -43,7 +41,6 @@ export const selectBox = "input[type=checkbox]";
 export const tags = "span";
 export const user = "User";
 export const kebabMenu = "td[class='pf-v5-c-table__td pf-v5-c-table__action'] > button";
-export const copyAssessmentPagination = "#bulk-copy-assessment-review-pagination-top";
 
 //Fields related to analysis - source mode
 export const sourceRepository = "input[name=sourceRepository]";
@@ -61,10 +58,16 @@ export const createEntitiesCheckbox = "#create-entities-checkbox";
 
 //Fields related to application details page
 export enum appDetailsView {
-    applicationTag = "span.pf-c-label__content",
+    applicationTag = "span.pf-v5-c-label__content",
     closeDetailsPage = "button[aria-label='Close drawer panel']",
     tagFilter = "#source-filter-value-select",
-    tagCategory = "div[class='pf-c-content'] > h4",
-    filterSourceMenu = "div.pf-c-select__menu",
+    tagCategory = "div[class='pf-v5-c-content'] > h4",
+    filterSourceMenu = "div.pf-v5-c-select__menu",
     tagCategoryFilter = "#tagCategory-filter-value-select",
 }
+
+// Fields related to copy assessment modal
+export const copyAssessmentTableTd = ".pf-m-compact> tbody > tr > td";
+export const copyAssessmentTableTr = ".pf-m-compact> tbody > tr";
+export const copyAssessmentPagination = "#bulk-copy-assessment-review-pagination-top";
+export const copyAssessmentModal = "div.pf-v5-c-modal-box";
