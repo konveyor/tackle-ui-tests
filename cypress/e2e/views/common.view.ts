@@ -49,7 +49,7 @@ export const navLink = ".pf-v5-c-nav__link";
 export const closeSuccessNotification = "button[aria-label^='Close Success alert:']";
 export const divHeader = "[id^=pf-random-id-]";
 export const divBottom = "#tags-pagination-bottom";
-export const selectFilter = "div.pf-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show";
+export const selectFilter = "div.pf-m-toggle-group.pf-m-filter-group.pf-m-show";
 export const itemsSelectInsideDialog = "div[role='dialog'] button[aria-label='Select']";
 export const nameHelperBusiness = "#business-service-name-helper";
 export const nameHelperStakeholderGroup = "#-helper";
