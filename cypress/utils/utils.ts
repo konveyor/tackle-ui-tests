@@ -479,8 +479,8 @@ export function getColumnDataforCopyAssessmentTable(columnName: string): Array<s
 export function getTableColumnData(columnName: string): Array<string> {
     selectItemsPerPage(100);
     let itemList = [];
-    cy.get(".pf-c-table > tbody > tr", { timeout: 5 * SEC })
-        .not(".pf-c-table__expandable-row")
+    cy.get(".pf-v5-c-table > tbody > tr", { timeout: 5 * SEC })
+        .not(".pf-v5-c-table__expandable-row")
         .find(`td[data-label="${columnName}"]`)
         .each(($ele) => {
             if (
