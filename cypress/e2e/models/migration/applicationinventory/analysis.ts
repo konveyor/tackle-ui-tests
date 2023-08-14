@@ -358,9 +358,9 @@ export class Analysis extends Application {
 
     openReport() {
         this.selectApplicationRow();
-        cy.get(rightSideMenu, { timeout: 30 * SEC }).within(() => {
+        cy.get(rightSideMenu, { timeout: 15 * SEC }).within(() => {
             clickTab("Reports");
-            cy.contains("a", "Report", { timeout: 30 * SEC })
+            cy.contains("button", "View analysis", { timeout: 15 * SEC })
                 .then(($a) => {
                     // Removing target from html so that report opens in same tab
                     $a.attr("target", "_self");
