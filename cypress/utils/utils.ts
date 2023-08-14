@@ -50,7 +50,12 @@ import {
     owner,
     JiraType,
 } from "../e2e/types/constants";
-import { actionButton, date, createEntitiesCheckbox } from "../e2e/views/applicationinventory.view";
+import {
+    actionButton,
+    date,
+    createEntitiesCheckbox,
+    topKebabMenu,
+} from "../e2e/views/applicationinventory.view";
 import {
     closeSuccessNotification,
     confirmButton,
@@ -706,7 +711,7 @@ export function application_inventory_kebab_menu(menu, tab?): void {
     if (tab == "Analysis") navigate_to_application_inventory("Analysis");
     else navigate_to_application_inventory();
 
-    cy.get(actionButton).eq(1).click({ force: true });
+    cy.get(topKebabMenu).eq(1).click({ force: true });
     if (menu == "Import") {
         clickByText(button, "Import");
     } else {
@@ -718,7 +723,7 @@ export function application_inventory_kebab_menu(menu, tab?): void {
                     if (menu == "Delete") clickByText(button, menu, true);
                 } else {
                     // close menu if nothing to do
-                    cy.get(actionButton).eq(1).click({ force: true });
+                    cy.get(topKebabMenu).eq(1).click({ force: true });
                 }
             });
     }
@@ -767,7 +772,7 @@ export function verifyImportErrorMsg(errorMsg: any): void {
 
 export function migration_wave_kebab_menu(menu): void {
     // The value for menu could be one of {Export to Issue Manager, Delete}
-    cy.get(actionButton).eq(1).click({ force: true });
+    cy.get(topKebabMenu).eq(1).click({ force: true });
     cy.get(commonView.kebabMenuItem).contains(menu).click({ force: true });
 }
 
@@ -818,7 +823,7 @@ export function deleteApplicationTableRows(): void {
                             .contains(name)
                             .closest(trTag)
                             .within(() => {
-                                click(actionButton);
+                                click(topKebabMenu);
                             })
                             .contains(button, deleteAction)
                             .then(($delete_btn) => {

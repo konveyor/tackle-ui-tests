@@ -41,6 +41,7 @@ export const selectBox = "input[type=checkbox]";
 export const tags = "span";
 export const user = "User";
 export const kebabMenu = "td[class='pf-v5-c-table__td pf-v5-c-table__action'] > button";
+export const topKebabMenu = "div > button[aria-label='Actions']";
 
 //Fields related to analysis - source mode
 export const sourceRepository = "input[name=sourceRepository]";
