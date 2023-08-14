@@ -819,7 +819,6 @@ export function deleteApplicationTableRows(): void {
                             .closest(trTag)
                             .within(() => {
                                 click(actionButton);
-                                cy.wait(800);
                             })
                             .contains(button, deleteAction)
                             .then(($delete_btn) => {
