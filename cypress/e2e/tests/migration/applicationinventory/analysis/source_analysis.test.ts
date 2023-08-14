@@ -17,7 +17,6 @@ limitations under the License.
 
 import {
     login,
-    deleteAllBusinessServices,
     getRandomApplicationData,
     getRandomAnalysisData,
     writeMavenSettingsFile,
@@ -36,12 +35,10 @@ import {
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../../models/administration/credentials/credentialsSourceControlKey";
-import { MavenConfiguration } from "../../../../models/administration/repositories/maven";
 import { infoAlertMessage } from "../../../../views/common.view";
 let source_credential;
 let maven_credential;
-const mavenConfiguration = new MavenConfiguration();
-var applicationsList: Array<Analysis> = [];
+let applicationsList: Array<Analysis> = [];
 
 describe(["@tier1"], "Source Analysis", () => {
     before("Login", function () {
@@ -282,7 +279,6 @@ describe(["@tier1"], "Source Analysis", () => {
 
     after("Perform test data clean up", function () {
         deleteByList(applicationsList);
-        deleteAllBusinessServices();
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 });
