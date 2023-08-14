@@ -51,12 +51,10 @@
         "storyPoints": 1,
         "techTags": [
             ["HTTP", "Servlet"],
-            ["MVC", "Spring MVC"],
-            ["Observability", "Spring Boot Actuator"],
-            ["Other", "Properties"],
-            ["Persistence", "JPA entities"],
-            ["Persistence", "Spring Data JPA"],
-            ["Web", "Spring Web"]
+            ["Processing", "Java EE Batch"],
+            ["Java EE", "Java EE Batch"],
+            ["Execute", "Java EE Batch"],
+            ["Connect", "Servlet"]
         ]
     },
 
