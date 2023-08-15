@@ -772,6 +772,16 @@ export function verifyImportErrorMsg(errorMsg: any): void {
     }
 }
 
+export function getRowCount(): number {
+    let rowCount = 0;
+    cy.get("table[aria-label='main-table']")
+        .find("tr")
+        .then(($row) => {
+            rowCount = $row.length - 1;
+        });
+    return rowCount;
+}
+
 export function migration_wave_kebab_menu(menu): void {
     // The value for menu could be one of {Export to Issue Manager, Delete}
     cy.get(actionButton).eq(1).click({ force: true });

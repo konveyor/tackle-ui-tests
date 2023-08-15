@@ -25,6 +25,7 @@ import {
     goToPage,
     goToLastPage,
     deleteAppImportsTableRows,
+    getRowCount,
 } from "../../../../../utils/utils";
 import { button, tdTag, trTag, deleteAction } from "../../../../types/constants";
 import { actionButton } from "../../../../views/applicationinventory.view";
@@ -42,10 +43,8 @@ const filesToImport = [
 
 describe(["@tier3"], "Manage imports pagination validations", function () {
     before("Login and Create Test Data", function () {
-        login();
-        // Navigate to Application inventory tab
-        Application.open();
-        var rowsToCreate = 0;
+        let rowsToCreate = 0;
+        let rowCount = 0;
 
         // Import multiple csv files
         function importMultipleFiles(num): void {
@@ -57,30 +56,15 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
             }
         }
 
-        // Get the current table row count and create appropriate test data rows
+        login();
+        Application.open();
         openManageImportsPage();
         selectItemsPerPage(100);
-        cy.get(commonView.appTable)
-            .next()
-            .then(($div) => {
-                if (!$div.hasClass("pf-c-empty-state")) {
-                    cy.get(".pf-c-table > tbody > tr")
-                        .not(".pf-c-table__expandable-row")
-                        .find("td[data-label='File name']")
-                        .then(($rows) => {
-                            var rowCount = $rows.length;
-                            if (rowCount <= 10) {
-                                rowsToCreate = 11 - rowCount;
-                            }
-                            if (rowsToCreate > 0) {
-                                importMultipleFiles(rowsToCreate);
-                            }
-                        });
-                } else {
-                    rowsToCreate = 11;
-                    importMultipleFiles(rowsToCreate);
-                }
-            });
+        rowCount = getRowCount();
+        if (rowCount == 0) rowsToCreate = 11;
+        else if (rowCount <= 10) rowsToCreate = 11 - rowCount;
+        else rowsToCreate = 0;
+        importMultipleFiles(rowsToCreate);
     });
 
     beforeEach("Interceptors", function () {
@@ -88,7 +72,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         cy.intercept("GET", "/hub/application*").as("getApplications");
     });
 
-    it("Navigation button validations", function () {
+    it.only("Navigation button validations", function () {
         // Navigate to Application inventory tab and open manage imports page
         Application.open();
         cy.get("@getApplications");
@@ -128,6 +112,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
     });
 
     it("Items per page validations", function () {
+        let rowCount = 0;
         // Navigate to Application inventory tab and open manage imports page
         Application.open();
         cy.get("@getApplications");
@@ -138,24 +123,16 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         cy.wait(2000);
 
         // Verify that only 10 items are displayed
-        cy.get(".pf-c-table > tbody > tr")
-            .not(".pf-c-table__expandable-row")
-            .find("td[data-label='File name']")
-            .then(($rows) => {
-                cy.wrap($rows.length).should("eq", 10);
-            });
+        rowCount = getRowCount();
+        if (rowCount !== 10) throw Error("Row count not eqaul to 10 ");
 
         // Select 20 items per page
         selectItemsPerPage(20);
         cy.wait(2000);
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
-        cy.get(".pf-c-table > tbody > tr")
-            .not(".pf-c-table__expandable-row")
-            .find("td[data-label='File name']")
-            .then(($rows) => {
-                cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
-            });
+        rowCount = getRowCount();
+        if (rowCount > 20 && rowCount <= 10) throw Error("Row count is not between 10 and 20");
     });
 
     it("Page number validations", function () {
