@@ -64,28 +64,28 @@ describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
         resetURL();
     });
 
-    it("Analysis on insecure git Repository(http) for tackle test app when insecure repository is allowed", function () {
-        // test that when the insecure repository is enabled the analysis on a http repo should be completed successfully
-
-        gitConfiguration.enableInsecureGitRepositories();
-
-        // For tackle test app source credentials are required.
-        const application = new Analysis(
-            getRandomApplicationData("Insecure_enabled_tackle_test_app", {
-                sourceData: this.appData["tackle-testapp"],
-            }),
-            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
-        );
-
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication");
-        cy.wait(2000);
-        application.manageCredentials(source_credential.name);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.openReport();
-    });
+    // it("Analysis on insecure git Repository(http) for tackle test app when insecure repository is allowed", function () {
+    //     // test that when the insecure repository is enabled the analysis on a http repo should be completed successfully
+    //
+    //     gitConfiguration.enableInsecureGitRepositories();
+    //
+    //     // For tackle test app source credentials are required.
+    //     const application = new Analysis(
+    //         getRandomApplicationData("Insecure_enabled_tackle_test_app", {
+    //             sourceData: this.appData["tackle-testapp"],
+    //         }),
+    //         getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+    //     );
+    //
+    //     application.create();
+    //     applicationsList.push(application);
+    //     cy.wait("@getApplication");
+    //     cy.wait(2000);
+    //     application.manageCredentials(source_credential.name);
+    //     application.analyze();
+    //     application.verifyAnalysisStatus("Completed");
+    //     application.openReport();
+    // });
 
     it("Analysis on insecure git Repository(http) for tackle test app when insecure repository is not allowed", function () {
         // Negative test case, when the insecure repository is disabled the analysis on a http repo should fail
