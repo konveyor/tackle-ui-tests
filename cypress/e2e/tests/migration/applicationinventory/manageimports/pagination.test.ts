@@ -25,7 +25,6 @@ import {
     goToPage,
     goToLastPage,
     deleteAppImportsTableRows,
-    getRowCount,
 } from "../../../../../utils/utils";
 import { button, tdTag, trTag, deleteAction } from "../../../../types/constants";
 import { actionButton } from "../../../../views/applicationinventory.view";
@@ -40,11 +39,11 @@ const filesToImport = [
     "mandatory_and_empty_rows.csv",
     "non_existing_tags_business_service_rows.csv",
 ];
+let rowsToCreate = 0;
 
 describe(["@tier3"], "Manage imports pagination validations", function () {
     before("Login and Create Test Data", function () {
         let rowsToCreate = 0;
-        let rowCount = 0;
 
         // Import multiple csv files
         function importMultipleFiles(num): void {
@@ -62,13 +61,20 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         selectItemsPerPage(100);
 
         // Get the current table row count and create the right number of rows accordingly
-        rowCount = getRowCount();
-        if (rowCount <= 10) {
-            if (rowCount == 0) rowsToCreate = 11;
-            else rowsToCreate = 11 - rowCount;
-        } else rowsToCreate = 0;
+        cy.get(commonView.appTable)
+            .get("tbody")
+            .find(trTag)
+            .then(($rows) => {
+                let rowCount = 0;
+                rowCount = $rows.length - 1;
 
-        importMultipleFiles(rowsToCreate);
+                if (rowCount <= 10) {
+                    if (rowCount == 0) rowsToCreate = 11;
+                    else rowsToCreate = 11 - rowCount;
+                }
+
+                importMultipleFiles(rowsToCreate);
+            });
     });
 
     beforeEach("Interceptors", function () {
@@ -124,15 +130,24 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         cy.wait(2000);
 
         // Verify that only 10 items are displayed
-        rowCount = getRowCount();
-        cy.wrap(rowCount).should("eq", 10);
+        cy.get(commonView.appTable)
+            .find(trTag)
+            .then(($rows) => {
+                rowCount = $rows.length - 1;
+                cy.wrap(rowCount).should("eq", 10);
+            });
 
         selectItemsPerPage(20);
         cy.wait(2000);
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
-        rowCount = getRowCount();
-        cy.wrap(rowCount).should("be.lte", 20).and("be.gt", 10);
+        cy.get(commonView.appTable)
+            .get("tbody")
+            .find(trTag)
+            .then(($rows) => {
+                rowCount = $rows.length - 1;
+                cy.wrap(rowCount).should("be.lte", 20).and("be.gt", 10);
+            });
     });
 
     it("Page number validations", function () {
