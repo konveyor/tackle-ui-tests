@@ -39,7 +39,6 @@ const filesToImport = [
     "mandatory_and_empty_rows.csv",
     "non_existing_tags_business_service_rows.csv",
 ];
-let rowsToCreate = 0;
 
 describe(["@tier3"], "Manage imports pagination validations", function () {
     before("Login and Create Test Data", function () {
@@ -62,10 +61,10 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
 
         // Get the current table row count and create the right number of rows accordingly
         cy.get(commonView.appTable)
-            .find(trTag)
+            .find("td[data-label='File name']")
             .then(($rows) => {
                 let rowCount = 0;
-                rowCount = $rows.length - 1;
+                rowCount = $rows.length;
 
                 if (rowCount <= 10) {
                     if (rowCount == 0) rowsToCreate = 11;
@@ -130,10 +129,9 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
 
         // Verify that only 10 items are displayed
         cy.get(commonView.appTable)
-            .find(trTag)
-            .then(($rows) => {
-                rowCount = $rows.length - 1;
-                cy.wrap(rowCount).should("eq", 10);
+            .find("td[data-label='File name']")
+            .then(($rowCount) => {
+                cy.wrap($rowCount.length).should("eq", 10);
             });
 
         selectItemsPerPage(20);
@@ -141,10 +139,9 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
         cy.get(commonView.appTable)
-            .find(trTag)
-            .then(($rows) => {
-                rowCount = $rows.length - 1;
-                cy.wrap(rowCount).should("be.lte", 20).and("be.gt", 10);
+            .find("td[data-label='File name']")
+            .then(($rowCount) => {
+                cy.wrap($rowCount.length).should("be.lte", 20).and("be.gt", 10);
             });
     });
 
