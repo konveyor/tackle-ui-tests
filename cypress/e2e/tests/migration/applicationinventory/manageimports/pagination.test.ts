@@ -62,7 +62,6 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
 
         // Get the current table row count and create the right number of rows accordingly
         cy.get(commonView.appTable)
-            .get("tbody")
             .find(trTag)
             .then(($rows) => {
                 let rowCount = 0;
@@ -142,7 +141,6 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
         cy.get(commonView.appTable)
-            .get("tbody")
             .find(trTag)
             .then(($rows) => {
                 rowCount = $rows.length - 1;
