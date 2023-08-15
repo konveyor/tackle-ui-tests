@@ -73,3 +73,6 @@ export const copyAssessmentTableTd = ".pf-m-compact> tbody > tr > td";
 export const copyAssessmentTableTr = ".pf-m-compact> tbody > tr";
 export const copyAssessmentPagination = "#bulk-copy-assessment-review-pagination-top";
 export const copyAssessmentModal = "div.pf-v5-c-modal-box";
+
+// Fields related to application import
+export const appImportForm = "form.pf-v5-c-form";
