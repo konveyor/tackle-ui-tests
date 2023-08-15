@@ -56,6 +56,7 @@ import {
     date,
     createEntitiesCheckbox,
     topKebabMenu,
+    appImportForm,
 } from "../e2e/views/applicationinventory.view";
 import {
     closeSuccessNotification,
@@ -659,7 +660,7 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
                 enabled ? cy.log("Button is disabled") : cy.get(createEntitiesCheckbox).uncheck();
             });
 
-    cy.get("form.pf-c-form", { timeout: 5 * SEC })
+    cy.get(appImportForm, { timeout: 5 * SEC })
         .find("button")
         .contains("Import")
         .trigger("click");
