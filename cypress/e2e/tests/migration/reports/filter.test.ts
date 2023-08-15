@@ -89,13 +89,13 @@ describe(["@tier2"], "Reports filter validations", () => {
         selectItemsPerPageAdoptionCandidate(100);
 
         // Wait for DOM to render table and sibling elements
-        cy.get(adoptionCandidateDistributionTable)
-            .next()
-            .then(($div) => {
-                if (!$div.hasClass("pf-c-empty-state")) {
-                    cy.get("td").should("contain", applicationsList[0].name);
-                }
-            });
+        cy.contains("h3", "Adoption candidate distribution")
+            .closest("div.pf-v5-c-card")
+            .find("div.pf-v5-c-card__body")
+            .should("not.have.class", "pf-v5-c-empty-state")
+            .and("not.have.class", "pf-m-sm")
+            .find("td")
+            .should("contain", applicationsList[0].name);
 
         // Check element filtered for table Identified risks
         expandArticle("Identified risks");
@@ -112,8 +112,13 @@ describe(["@tier2"], "Reports filter validations", () => {
         clickByText(button, clearAllFilters);
 
         //close Row Details of Identified risks
-        click(closeRowIdentifiedRisk);
-
+        cy.contains("h3", "Identified risks")
+            .closest("div.pf-v5-c-card") // Find the closest div with the given class
+            .find("div.pf-v5-c-card__header") // Within that div, find the header div
+            .within(() => {
+                cy.get("button") // Get the button within the header
+                    .click(); // Click the button
+            });
         // Enter an invalid substring and apply it as search filter
         applySearchFilter(name, invalidSearchInput);
 
