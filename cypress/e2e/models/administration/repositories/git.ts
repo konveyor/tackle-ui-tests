@@ -6,12 +6,13 @@ import {
 } from "../../../../utils/utils";
 import { administration } from "../../../types/constants";
 import { gitSecure } from "../../../views/repository.view";
+import { navLink } from "../../../views/proxy.view";
 
 export class GitConfiguration {
     static open() {
         // used to navigate to the git configuration page
         selectUserPerspective(administration);
-        clickByText("a.pf-c-nav__link", "Git");
+        clickByText(navLink, "Git");
         cy.contains("h1", "Git configuration", { timeout: 5000 });
     }
 
