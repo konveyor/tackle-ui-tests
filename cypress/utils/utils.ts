@@ -774,7 +774,7 @@ export function verifyImportErrorMsg(errorMsg: any): void {
 
 export function getRowCount(): number {
     let rowCount = 0;
-    cy.get("table[aria-label='main-table']")
+    cy.get(commonView.appTable)
         .find("tr")
         .then(($row) => {
             rowCount = $row.length - 1;

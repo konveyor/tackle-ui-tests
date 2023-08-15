@@ -60,10 +60,14 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         Application.open();
         openManageImportsPage();
         selectItemsPerPage(100);
+
+        // Get the current table row count and create the right number of rows accordingly
         rowCount = getRowCount();
-        if (rowCount == 0) rowsToCreate = 11;
-        else if (rowCount <= 10) rowsToCreate = 11 - rowCount;
-        else rowsToCreate = 0;
+        if (rowCount <= 10) {
+            if (rowCount == 0) rowsToCreate = 11;
+            else rowsToCreate = 11 - rowCount;
+        } else rowsToCreate = 0;
+
         importMultipleFiles(rowsToCreate);
     });
 
@@ -72,13 +76,11 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         cy.intercept("GET", "/hub/application*").as("getApplications");
     });
 
-    it.only("Navigation button validations", function () {
-        // Navigate to Application inventory tab and open manage imports page
+    it("Navigation button validations", function () {
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
 
-        // select 10 items per page
         selectItemsPerPage(10);
         cy.wait(2000);
 
@@ -113,39 +115,34 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
 
     it("Items per page validations", function () {
         let rowCount = 0;
-        // Navigate to Application inventory tab and open manage imports page
+
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
 
-        // Select 10 items per page
         selectItemsPerPage(10);
         cy.wait(2000);
 
         // Verify that only 10 items are displayed
         rowCount = getRowCount();
-        if (rowCount !== 10) throw Error("Row count not eqaul to 10 ");
+        cy.wrap(rowCount).should("eq", 10);
 
-        // Select 20 items per page
         selectItemsPerPage(20);
         cy.wait(2000);
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
         rowCount = getRowCount();
-        if (rowCount > 20 && rowCount <= 10) throw Error("Row count is not between 10 and 20");
+        cy.wrap(rowCount).should("be.lte", 20).and("be.gt", 10);
     });
 
     it("Page number validations", function () {
-        // Navigate to Application inventory tab and open manage imports page
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
 
-        // Select 10 items per page
         selectItemsPerPage(10);
         cy.wait(2000);
 
-        // Go to page number 2
         goToPage(2);
 
         // Verify that page number has changed, as previous page nav button got enabled
