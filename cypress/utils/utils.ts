@@ -201,8 +201,7 @@ export function logout(userName?: string): void {
     }
     clickByText(button, userName);
     cy.wait(0.5 * SEC);
-    clickByText("a", "Logout");
-    // cy.wait(4000);
+    click("#logout");
     cy.get("h1", { timeout: 15 * SEC }).contains("Sign in to your account");
 }
 
