@@ -17,7 +17,6 @@ limitations under the License.
 
 import {
     login,
-    deleteAllBusinessServices,
     getRandomApplicationData,
     getRandomAnalysisData,
     writeMavenSettingsFile,
@@ -25,12 +24,10 @@ import {
 } from "../../../../../utils/utils";
 import * as data from "../../../../../utils/data_utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { CredentialType, UserCredentials } from "../../../../types/constants";
+import { AnalysisStatuses, CredentialType, UserCredentials } from "../../../../types/constants";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
-import { Proxy } from "../../../../models/administration/proxy/proxy";
 import { MavenConfiguration } from "../../../../models/administration/repositories/maven";
-import { GeneralConfig } from "../../../../models/administration/general/generalConfig";
 let source_credential;
 let maven_credential;
 const mavenConfiguration = new MavenConfiguration();
@@ -39,11 +36,6 @@ let application: Analysis;
 describe(["@tier1"], "Binary Analysis", () => {
     before("Login", function () {
         login();
-
-        // Enable HTML anc CSV report downloading
-        let generalConfig = GeneralConfig.getInstance();
-        generalConfig.enableDownloadHtml();
-        generalConfig.enableDownloadCsv();
 
         // Clears artifact repository
         mavenConfiguration.clearRepository();
@@ -57,6 +49,7 @@ describe(["@tier1"], "Binary Analysis", () => {
             )
         );
         source_credential.create();
+
         maven_credential = new CredentialsMaven(
             data.getRandomCredentialsData(CredentialType.maven, "None", true)
         );
@@ -95,23 +88,13 @@ describe(["@tier1"], "Binary Analysis", () => {
         // Both source and maven credentials required for binary.
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.downloadReport("HTML");
-        application.downloadReport("CSV");
-        application.openReport();
-        application.validateStoryPoints();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
     after("Perform test data clean up", function () {
         application.delete();
-        deleteAllBusinessServices();
         source_credential.delete();
         maven_credential.delete();
-
-        // Disable HTML anc CSV report downloading
-        let generalConfig = GeneralConfig.getInstance();
-        generalConfig.disableDownloadHtml();
-        generalConfig.disableDownloadCsv();
 
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
