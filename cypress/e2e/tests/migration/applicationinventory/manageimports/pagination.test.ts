@@ -26,7 +26,7 @@ import {
     goToLastPage,
     deleteAppImportsTableRows,
 } from "../../../../../utils/utils";
-import { button, tdTag, trTag, deleteAction } from "../../../../types/constants";
+import { trTag } from "../../../../types/constants";
 import { actionButton } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
@@ -61,10 +61,10 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
 
         // Get the current table row count and create the right number of rows accordingly
         cy.get(commonView.appTable)
-            .find("td[data-label='File name']")
+            .find(trTag)
             .then(($rows) => {
                 let rowCount = 0;
-                rowCount = $rows.length;
+                rowCount = $rows.length - 1;
 
                 if (rowCount <= 10) {
                     if (rowCount == 0) rowsToCreate = 11;
@@ -181,15 +181,8 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
             .get("tbody")
             .find("td[data-label='File name']")
             .each(($tableRow) => {
-                var name = $tableRow.find("td[data-label='File name']").text();
-                cy.get(tdTag)
-                    .contains(name)
-                    .parent(trTag)
-                    .within(() => {
-                        click(actionButton);
-                    })
-                    .contains(button, deleteAction)
-                    .click();
+                click(actionButton);
+                cy.get("ul[role=menu] > li").contains("Delete").click();
                 click(commonView.confirmButton);
                 cy.wait(4000);
             });

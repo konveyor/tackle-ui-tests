@@ -1554,10 +1554,10 @@ export function validatePagination(): void {
 
 export function goToLastPage(): void {
     cy.get(lastPageButton, { timeout: 10 * SEC })
-        .eq(0)
+        .eq(1)
         .then(($button) => {
             if (!$button.hasClass(".pf-m-disabled")) {
-                clickWithin(divHeader, lastPageButton);
+                $button.click();
             }
         });
 }
