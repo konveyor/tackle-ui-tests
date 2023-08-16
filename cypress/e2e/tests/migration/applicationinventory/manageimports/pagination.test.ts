@@ -42,10 +42,7 @@ const filesToImport = [
 
 describe(["@tier3"], "Manage imports pagination validations", function () {
     before("Login and Create Test Data", function () {
-        login();
-        // Navigate to Application inventory tab
-        Application.open();
-        var rowsToCreate = 0;
+        let rowsToCreate = 0;
 
         // Import multiple csv files
         function importMultipleFiles(num): void {
@@ -57,29 +54,24 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
             }
         }
 
-        // Get the current table row count and create appropriate test data rows
+        login();
+        Application.open();
         openManageImportsPage();
         selectItemsPerPage(100);
+
+        // Get the current table row count and create the right number of rows accordingly
         cy.get(commonView.appTable)
-            .next()
-            .then(($div) => {
-                if (!$div.hasClass("pf-c-empty-state")) {
-                    cy.get(".pf-c-table > tbody > tr")
-                        .not(".pf-c-table__expandable-row")
-                        .find("td[data-label='File name']")
-                        .then(($rows) => {
-                            var rowCount = $rows.length;
-                            if (rowCount <= 10) {
-                                rowsToCreate = 11 - rowCount;
-                            }
-                            if (rowsToCreate > 0) {
-                                importMultipleFiles(rowsToCreate);
-                            }
-                        });
-                } else {
-                    rowsToCreate = 11;
-                    importMultipleFiles(rowsToCreate);
+            .find("td[data-label='File name']")
+            .then(($rows) => {
+                let rowCount = 0;
+                rowCount = $rows.length;
+
+                if (rowCount <= 10) {
+                    if (rowCount == 0) rowsToCreate = 11;
+                    else rowsToCreate = 11 - rowCount;
                 }
+
+                importMultipleFiles(rowsToCreate);
             });
     });
 
@@ -89,12 +81,10 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
     });
 
     it("Navigation button validations", function () {
-        // Navigate to Application inventory tab and open manage imports page
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
 
-        // select 10 items per page
         selectItemsPerPage(10);
         cy.wait(2000);
 
@@ -128,47 +118,39 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
     });
 
     it("Items per page validations", function () {
-        // Navigate to Application inventory tab and open manage imports page
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
 
-        // Select 10 items per page
         selectItemsPerPage(10);
         cy.wait(2000);
 
         // Verify that only 10 items are displayed
-        cy.get(".pf-c-table > tbody > tr")
-            .not(".pf-c-table__expandable-row")
+        cy.get(commonView.appTable)
             .find("td[data-label='File name']")
-            .then(($rows) => {
-                cy.wrap($rows.length).should("eq", 10);
+            .then(($rowCount) => {
+                cy.wrap($rowCount.length).should("eq", 10);
             });
 
-        // Select 20 items per page
         selectItemsPerPage(20);
         cy.wait(2000);
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
-        cy.get(".pf-c-table > tbody > tr")
-            .not(".pf-c-table__expandable-row")
+        cy.get(commonView.appTable)
             .find("td[data-label='File name']")
-            .then(($rows) => {
-                cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
+            .then(($rowCount) => {
+                cy.wrap($rowCount.length).should("be.lte", 20).and("be.gt", 10);
             });
     });
 
     it("Page number validations", function () {
-        // Navigate to Application inventory tab and open manage imports page
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
 
-        // Select 10 items per page
         selectItemsPerPage(10);
         cy.wait(2000);
 
-        // Go to page number 2
         goToPage(2);
 
         // Verify that page number has changed, as previous page nav button got enabled
