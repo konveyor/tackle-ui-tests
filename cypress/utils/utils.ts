@@ -49,7 +49,6 @@ import {
     analysis,
     owner,
     JiraType,
-    actionsButton,
 } from "../e2e/types/constants";
 import {
     actionButton,
@@ -72,14 +71,14 @@ import {
 import { tagLabels } from "../e2e/views/tags.view";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
 import { Assessment } from "../e2e/models/migration/applicationinventory/assessment";
-import { analysisData, applicationData, JiraConnectionData, UserData } from "../e2e/types/types";
+import { analysisData, applicationData, JiraConnectionData } from "../e2e/types/types";
 import { CredentialsProxy } from "../e2e/models/administration/credentials/credentialsProxy";
 import {
     getJiraConnectionData,
     getJiraCredentialData,
     getRandomCredentialsData,
     randomWordGenerator,
-} from "../utils/data_utils";
+} from "./data_utils";
 import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../e2e/models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../e2e/models/administration/credentials/credentialsSourceControlKey";
@@ -1481,7 +1480,7 @@ export function callWithin(selector: string, functionToExec: () => void, index =
         .within(() => functionToExec());
 }
 
-export function clickWithin(parent, selector: string, isForced = false, log = false): void {
+export function clickWithin(parent: string, selector: string, isForced = false, log = false): void {
     cy.get(parent, { timeout: 30 * SEC })
         .eq(0)
         .within(() => {
@@ -1621,7 +1620,7 @@ export function doesExistText(str: string, toBePresent: boolean): void {
     if (toBePresent) {
         cy.contains(str, { timeout: 120 * SEC }).should("exist");
     } else {
-        cy.contains(str).should("not.exist");
+        cy.contains(str, { timeout: 120 * SEC }).should("not.exist");
     }
 }
 
@@ -1684,7 +1683,7 @@ export function isRwxEnabled(): boolean {
 // This method is patching
 export function configureRWX(isEnabled = true): void {
     // Patching CR to set value
-    let value = "";
+    let value: string;
     if (isEnabled) {
         value = "true";
     } else {

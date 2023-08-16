@@ -38,3 +38,5 @@ export const enterPackageNameToExclude = "#packageToExclude";
 export const analysisDetails = "Analysis details";
 export const rightSideMenu = "#page-drawer-content";
 export const enableAutomatedTagging = "input[name=autoTaggingEnabled]";
+export const kebabTopMenuButton = 'button[aria-label="Actions"]';
+export const kebabButton = 'button[aria-label="Kebab toggle"]';
