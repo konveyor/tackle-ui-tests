@@ -28,7 +28,7 @@ import {
 
 var applicationsList: Array<Assessment> = [];
 
-describe(["@tier1"], "Manage application dependencies", () => {
+describe(["@tier3"], "Manage application dependencies", () => {
     before("Login and Create Test Data", function () {
         login();
         applicationsList = createMultipleApplications(3);
