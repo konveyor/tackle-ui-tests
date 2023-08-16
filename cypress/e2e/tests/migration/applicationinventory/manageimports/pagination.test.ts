@@ -179,8 +179,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         // Delete all items of last page
         cy.get(commonView.appTable)
             .get("tbody")
-            .find(trTag)
-            .not(".pf-c-table__expandable-row")
+            .find("td[data-label='File name']")
             .each(($tableRow) => {
                 var name = $tableRow.find("td[data-label='File name']").text();
                 cy.get(tdTag)
@@ -196,8 +195,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
             });
 
         // Verify that page is re-directed to previous page
-        cy.get(".pf-c-table > tbody > tr")
-            .not(".pf-c-table__expandable-row")
+        cy.get(commonView.appTable)
             .find("td[data-label='File name']")
             .then(($rows) => {
                 cy.wrap($rows.length).should("eq", 10);

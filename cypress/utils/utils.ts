@@ -1431,7 +1431,7 @@ export const deleteFromArrayByIndex = <T>(array: T[], index: number): T[] => {
 
 export function goToPage(page: number): void {
     cy.get(divHeader)
-        .eq(0)
+        .eq(2)
         .within(() => {
             cy.get(firstPageButton).then(($firstPageButton) => {
                 cy.get(lastPageButton).then(($lastPageButton) => {
