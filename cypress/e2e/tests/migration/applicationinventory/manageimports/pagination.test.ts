@@ -118,8 +118,6 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
     });
 
     it("Items per page validations", function () {
-        let rowCount = 0;
-
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
