@@ -20,6 +20,7 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
+    preservecookies,
     resetURL,
     writeMavenSettingsFile,
 } from "../../../../utils/utils";
@@ -30,12 +31,13 @@ import { CredentialType, UserCredentials } from "../../../types/constants";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 
 let subversionConfiguration = new SubversionConfiguration();
-let source_credential;
+let source_credential: CredentialsSourceControlUsername;
 let applicationsList: Analysis[] = [];
 
 describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
     before("Login", function () {
         login();
+
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -47,6 +49,8 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
     });
 
     beforeEach("Load data", function () {
+        preservecookies();
+
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
