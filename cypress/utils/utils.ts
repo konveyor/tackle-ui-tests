@@ -862,7 +862,6 @@ export function deleteAppImportsTableRows(lastPage = false): void {
                             .parent(trTag)
                             .within(() => {
                                 click(actionButton);
-                                cy.wait(800);
                             })
                             .contains(button, deleteAction)
                             .click();
