@@ -1674,31 +1674,38 @@ export function isRwxEnabled(): boolean {
 // This method is patching
 export function configureRWX(isEnabled = true): void {
     // Patching CR to set value
-    let value = "";
-    if (isEnabled) {
-        value = "true";
-    } else {
-        value = "false";
-    }
-    let command = "";
-    let tackleCr = "tackle=$(oc get tackle --all-namespaces|grep -iv name|awk '{print $2}'); ";
-    let namespace =
-        'namespace=$(oc get tackle --all-namespaces|egrep "tackle|mta"|cut -d " " -f 1); ';
-    command += tackleCr;
-    command += namespace;
-    command += "oc patch tackle ";
-    command += "$tackle ";
-    command += "-n$namespace ";
-    command += "--type merge ";
-    command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
-    cy.log(command);
-    cy.exec(command).then((result) => {
-        cy.log(result.stderr);
+    cy.url().then(($url) => {
+        const pattern = /-(.*?)\./;
+        let namespace: string;
+        const match = $url.match(pattern);
+        let value: string;
+        if (isEnabled) {
+            value = "true";
+        } else {
+            value = "false";
+        }
+        let command = "";
+        if (match && match[1]) {
+            namespace = match[1].toString();
+        } else {
+            namespace = "konveyor-tackle";
+        }
+        let tackleCr = `tackle=$(oc get tackle -n${namespace}|grep -iv name|awk '{print $1}'); `;
+        command += tackleCr;
+        command += "oc patch tackle ";
+        command += "$tackle ";
+        command += `-n${namespace} `;
+        command += "--type merge ";
+        command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
+        cy.log(command);
+        cy.pause();
+        cy.exec(command).then((result) => {
+            cy.log(result.stderr);
+        });
+        // Timeout as it takes time until pods are starting to reboot
+        cy.wait(180 * SEC);
+        cy.reload();
     });
-
-    // Timeout as it takes time until pods are starting to reboot
-    cy.wait(180 * SEC);
-    cy.reload();
 }
 
 export function isEnabled(selector: string, toBeEnabled?: boolean): void {
