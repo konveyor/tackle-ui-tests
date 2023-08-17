@@ -80,7 +80,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         cy.intercept("GET", "/hub/application*").as("getApplications");
     });
 
-    it("Navigation button validations", function () {
+    it("Bug MTA-1185: Navigation button validations", function () {
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
@@ -117,7 +117,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         cy.get(commonView.firstPageButton).should("not.be.disabled");
     });
 
-    it("Items per page validations", function () {
+    it("Bug MTA-1185: Items per page validations", function () {
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
@@ -143,7 +143,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
             });
     });
 
-    it("Page number validations", function () {
+    it("Bug MTA-1185: Page number validations", function () {
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
@@ -162,7 +162,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         goToPage(1);
     });
 
-    it("Last page item(s) deletion, impact on page reload validation", function () {
+    it("Bug MTA-1185: Last page item(s) deletion, impact on page reload validation", function () {
         // Navigate to Application inventory tab and open manage imports page
         Application.open();
         cy.get("@getApplications");
