@@ -83,6 +83,7 @@ import { MigrationWave } from "../e2e/models/migration/migration-waves/migration
 import { Jira } from "../e2e/models/administration/jira-connection/jira";
 import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
 import { closeModal } from "../e2e/views/assessment.view";
+import { string } from "@oozcitak/infra";
 
 const { _ } = Cypress;
 
@@ -1671,41 +1672,48 @@ export function isRwxEnabled(): boolean {
     return Cypress.env("rwx_enabled");
 }
 
+export function getUrl(): string {
+    return window.location.href;
+}
+
+export function getNamespace(): string {
+    // This is regexp pattern to search between first `-` and first `.`
+    const namespacePattern = /-(.*?)\./;
+    // First match, means `-`
+    const match = getUrl().match(namespacePattern);
+    if (match && match[1]) {
+        return match[1].toString();
+    } else {
+        return "konveyor-tackle";
+    }
+}
+
 // This method is patching
 export function configureRWX(isEnabled = true): void {
     // Patching CR to set value
-    cy.url().then(($url) => {
-        const pattern = /-(.*?)\./;
-        let namespace: string;
-        const match = $url.match(pattern);
-        let value: string;
-        if (isEnabled) {
-            value = "true";
-        } else {
-            value = "false";
-        }
-        let command = "";
-        if (match && match[1]) {
-            namespace = match[1].toString();
-        } else {
-            namespace = "konveyor-tackle";
-        }
-        let tackleCr = `tackle=$(oc get tackle -n${namespace}|grep -iv name|awk '{print $1}'); `;
-        command += tackleCr;
-        command += "oc patch tackle ";
-        command += "$tackle ";
-        command += `-n${namespace} `;
-        command += "--type merge ";
-        command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
-        cy.log(command);
-        cy.pause();
-        cy.exec(command).then((result) => {
-            cy.log(result.stderr);
-        });
-        // Timeout as it takes time until pods are starting to reboot
-        cy.wait(180 * SEC);
-        cy.reload();
+    let value = "";
+    if (isEnabled) {
+        value = "true";
+    } else {
+        value = "false";
+    }
+    let command = "";
+    let namespace = getNamespace();
+    let tackleCr = `tackle=$(oc get tackle -n${namespace}|grep -iv name|awk '{print $1}'); `;
+    command += tackleCr;
+    command += "oc patch tackle ";
+    command += "$tackle ";
+    command += `-n${namespace} `;
+    command += "--type merge ";
+    command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
+    cy.log(command);
+    cy.exec(command).then((result) => {
+        cy.log(result.stderr);
     });
+
+    // Timeout as it takes time until pods are starting to reboot
+    cy.wait(180 * SEC);
+    cy.reload();
 }
 
 export function isEnabled(selector: string, toBeEnabled?: boolean): void {
