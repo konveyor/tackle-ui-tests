@@ -24,7 +24,7 @@ export const nameInput = "input[name=name]";
 export const rankInput = "input[aria-label='rank']";
 export const rankHelper = "div[id=rank-helper]";
 export const tagTable = "table[aria-label='tag-table']";
-export const tagMenuButton = "button[aria-label='Actions']";
+export const tagMenuButton = 'button[aria-label="Kebab toggle"]';
 export const tagCategoryHelper = "div[id=tagCategory-helper]";
 export const positiveRankMsg = "This field must be greater than 1.";
 export const tagCategory = "td[data-label='Tag category']";
