@@ -861,7 +861,6 @@ export function deleteAppImportsTableRows(lastPage = false): void {
                             .parent(trTag)
                             .within(() => {
                                 click(actionButton);
-                                cy.wait(800);
                             })
                             .contains(button, deleteAction)
                             .click();
@@ -1430,7 +1429,7 @@ export const deleteFromArrayByIndex = <T>(array: T[], index: number): T[] => {
 
 export function goToPage(page: number): void {
     cy.get(divHeader)
-        .eq(0)
+        .eq(2)
         .within(() => {
             cy.get(firstPageButton).then(($firstPageButton) => {
                 cy.get(lastPageButton).then(($lastPageButton) => {
@@ -1553,10 +1552,10 @@ export function validatePagination(): void {
 
 export function goToLastPage(): void {
     cy.get(lastPageButton, { timeout: 10 * SEC })
-        .eq(0)
+        .eq(1)
         .then(($button) => {
             if (!$button.hasClass(".pf-m-disabled")) {
-                clickWithin(divHeader, lastPageButton);
+                $button.click();
             }
         });
 }

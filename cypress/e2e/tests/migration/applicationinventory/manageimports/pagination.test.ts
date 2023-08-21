@@ -26,7 +26,7 @@ import {
     goToLastPage,
     deleteAppImportsTableRows,
 } from "../../../../../utils/utils";
-import { button, tdTag, trTag, deleteAction } from "../../../../types/constants";
+import { trTag } from "../../../../types/constants";
 import { actionButton } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
@@ -61,10 +61,10 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
 
         // Get the current table row count and create the right number of rows accordingly
         cy.get(commonView.appTable)
-            .find("td[data-label='File name']")
+            .find(trTag)
             .then(($rows) => {
                 let rowCount = 0;
-                rowCount = $rows.length;
+                rowCount = $rows.length - 1;
 
                 if (rowCount <= 10) {
                     if (rowCount == 0) rowsToCreate = 11;
@@ -80,7 +80,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         cy.intercept("GET", "/hub/application*").as("getApplications");
     });
 
-    it("Navigation button validations", function () {
+    it("Bug MTA-1185: Navigation button validations", function () {
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
@@ -117,7 +117,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         cy.get(commonView.firstPageButton).should("not.be.disabled");
     });
 
-    it("Items per page validations", function () {
+    it("Bug MTA-1185: Items per page validations", function () {
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
@@ -143,7 +143,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
             });
     });
 
-    it("Page number validations", function () {
+    it("Bug MTA-1185: Page number validations", function () {
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
@@ -162,7 +162,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         goToPage(1);
     });
 
-    it("Last page item(s) deletion, impact on page reload validation", function () {
+    it("Bug MTA-1185: Last page item(s) deletion, impact on page reload validation", function () {
         // Navigate to Application inventory tab and open manage imports page
         Application.open();
         cy.get("@getApplications");
@@ -179,25 +179,16 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         // Delete all items of last page
         cy.get(commonView.appTable)
             .get("tbody")
-            .find(trTag)
-            .not(".pf-c-table__expandable-row")
+            .find("td[data-label='File name']")
             .each(($tableRow) => {
-                var name = $tableRow.find("td[data-label='File name']").text();
-                cy.get(tdTag)
-                    .contains(name)
-                    .parent(trTag)
-                    .within(() => {
-                        click(actionButton);
-                    })
-                    .contains(button, deleteAction)
-                    .click();
+                click(actionButton);
+                cy.get("ul[role=menu] > li").contains("Delete").click();
                 click(commonView.confirmButton);
                 cy.wait(4000);
             });
 
         // Verify that page is re-directed to previous page
-        cy.get(".pf-c-table > tbody > tr")
-            .not(".pf-c-table__expandable-row")
+        cy.get(commonView.appTable)
             .find("td[data-label='File name']")
             .then(($rows) => {
                 cy.wrap($rows.length).should("eq", 10);
