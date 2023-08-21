@@ -13,9 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-export const adoptionCandidateDistributionTable =
-    "article > div > div > table[aria-label='main-table']";
-export const identiFiedRisksTable = "article > div > div > div > table[aria-label='main-table']";
+
+export const adoptionCandidateDistributionTitle = 'h3:contains("Adoption candidate distribution")';
+export const identiFiedRisksTitle = 'h3:contains("Identified risks")';
 export const itemsPerPageMenu = "div.pf-m-bottom > div.pf-c-options-menu";
 export const itemsPerPageToggleButton = "div > button[aria-label='Items per page']";
 export const closeRowIdentifiedRisk =

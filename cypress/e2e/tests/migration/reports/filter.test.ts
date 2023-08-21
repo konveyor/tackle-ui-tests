@@ -38,17 +38,20 @@ import {
     answer,
     migration,
     SEC,
+    adoptionCandidateDistribution,
+    identiFiedRisks,
+    suggestedAdoptionPlan,
 } from "../../../types/constants";
 import {
-    adoptionCandidateDistributionTable,
-    closeRowIdentifiedRisk,
+    adoptionCandidateDistributionTitle,
+    identiFiedRisksTitle,
 } from "../../../views/reports.view";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import * as data from "../../../../utils/data_utils";
 import {
-    selectItemsPerPageAdoptionCandidate,
-    selectItemsPerPageIdentifiedRisks,
     expandArticle,
+    closeArticle,
+    selectArticleItemsPerPage,
 } from "../../../models/migration/reports/reports";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 
@@ -86,10 +89,10 @@ describe(["@tier2"], "Reports filter validations", () => {
         cy.wait(3 * SEC);
 
         // Check element filtered for table Adoption Candidate Distribution
-        selectItemsPerPageAdoptionCandidate(100);
+        selectArticleItemsPerPage(100, adoptionCandidateDistributionTitle);
 
         // Wait for DOM to render table and sibling elements
-        cy.contains("h3", "Adoption candidate distribution")
+        cy.get(adoptionCandidateDistributionTitle)
             .closest("div.pf-v5-c-card")
             .find("div.pf-v5-c-card__body")
             .should("not.have.class", "pf-v5-c-empty-state")
@@ -98,10 +101,10 @@ describe(["@tier2"], "Reports filter validations", () => {
             .should("contain", applicationsList[0].name);
 
         // Check element filtered for table Identified risks
-        expandArticle("Identified risks");
+        expandArticle(identiFiedRisks);
         cy.wait(2 * SEC);
 
-        selectItemsPerPageIdentifiedRisks(100);
+        selectArticleItemsPerPage(100, identiFiedRisksTitle);
 
         let applicationsData = getTableColumnData("Application(s)");
         cy.wrap(applicationsData).each((application) => {
@@ -112,20 +115,14 @@ describe(["@tier2"], "Reports filter validations", () => {
         clickByText(button, clearAllFilters);
 
         //close Row Details of Identified risks
-        cy.contains("h3", "Identified risks")
-            .closest("div.pf-v5-c-card") // Find the closest div with the given class
-            .find("div.pf-v5-c-card__header") // Within that div, find the header div
-            .within(() => {
-                cy.get("button") // Get the button within the header
-                    .click(); // Click the button
-            });
+        closeArticle(identiFiedRisksTitle);
         // Enter an invalid substring and apply it as search filter
         applySearchFilter(name, invalidSearchInput);
 
         // Expand article cards
-        expandArticle("Identified risks");
+        expandArticle(identiFiedRisks);
         cy.wait(2 * SEC);
-        expandArticle("Suggested adoption plan");
+        expandArticle(suggestedAdoptionPlan);
         cy.wait(2 * SEC);
 
         // Assert that no search results are found
@@ -151,10 +148,10 @@ describe(["@tier2"], "Reports filter validations", () => {
         let validSearchInput = applicationsList[0].name.substring(0, 11);
 
         // Expand table Identified risks
-        expandArticle("Identified risks");
+        expandArticle(identiFiedRisks);
         cy.wait(2 * SEC);
 
-        selectItemsPerPageIdentifiedRisks(100);
+        selectArticleItemsPerPage(100, identiFiedRisksTitle);
 
         applySearchFilter(name, validSearchInput, true, 1);
         cy.wait(3 * SEC);
@@ -197,10 +194,10 @@ describe(["@tier2"], "Reports filter validations", () => {
         cy.wait(2 * SEC);
 
         // Expand table Identified risks
-        expandArticle("Identified risks");
+        expandArticle(identiFiedRisks);
         cy.wait(2 * SEC);
 
-        selectItemsPerPageIdentifiedRisks(100);
+        selectArticleItemsPerPage(100, identiFiedRisksTitle);
 
         // Get a category of assessment questions and apply it as search filter
         let categoryString = "Application details";
@@ -247,10 +244,10 @@ describe(["@tier2"], "Reports filter validations", () => {
         cy.wait(2 * SEC);
 
         // Expand table Identified risks
-        expandArticle("Identified risks");
+        expandArticle(identiFiedRisks);
         cy.wait(2 * SEC);
 
-        selectItemsPerPageIdentifiedRisks(100);
+        selectArticleItemsPerPage(100, identiFiedRisksTitle);
 
         // Get a question from assessment question's list and apply it as search filter
         let questionString = "How is the application tested?";
@@ -296,10 +293,10 @@ describe(["@tier2"], "Reports filter validations", () => {
         cy.wait(2 * SEC);
 
         // Expand table Identified risks
-        expandArticle("Identified risks");
+        expandArticle(identiFiedRisks);
         cy.wait(2 * SEC);
 
-        selectItemsPerPageIdentifiedRisks(100);
+        selectArticleItemsPerPage(100, identiFiedRisksTitle);
 
         // select an answer input from existing answers and apply it as search filter
         let answerString = "Not tracked";

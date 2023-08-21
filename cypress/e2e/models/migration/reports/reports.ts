@@ -18,11 +18,39 @@ limitations under the License.
 
 import { SEC, applicationName, risk } from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
-import { itemsPerPageMenu, itemsPerPageToggleButton } from "../../../views/reports.view";
+import {
+    adoptionCandidateDistributionTitle,
+    identiFiedRisksTitle,
+    itemsPerPageMenu,
+    itemsPerPageToggleButton,
+} from "../../../views/reports.view";
+
+export function selectArticleItemsPerPage(items: number, articleTitle: string): void {
+    cy.log(`Select ${items} per page`);
+    cy.get(articleTitle)
+        .closest("div.pf-v5-l-stack__item")
+        .within(() => {
+            cy.get(commonView.itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(
+                ($toggleBtn) => {
+                    if (!$toggleBtn.is(":disabled")) {
+                        $toggleBtn.trigger("click");
+                        cy.get(commonView.itemsPerPageMenuOptions);
+                        cy.get(`li[data-action="per-page-${items}"]`, { log: false })
+                            .contains(`${items}`)
+                            .click({
+                                force: true,
+                                log: false,
+                            });
+                        cy.wait(2000);
+                    }
+                }
+            );
+        });
+}
 
 export function selectItemsPerPageAdoptionCandidate(items: number): void {
     cy.log(`Select ${items} per page`);
-    cy.contains("h3", "Adoption candidate distribution")
+    cy.get(adoptionCandidateDistributionTitle)
         .closest("div.pf-v5-l-stack__item")
         .within(() => {
             cy.get(commonView.itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(
@@ -45,7 +73,7 @@ export function selectItemsPerPageAdoptionCandidate(items: number): void {
 
 export function selectItemsPerPageIdentifiedRisks(items: number): void {
     cy.log(`Select ${items} per page`);
-    cy.contains("h3", "Identified risks")
+    cy.get(identiFiedRisksTitle)
         .closest("div.pf-v5-l-stack__item")
         .within(() => {
             cy.get(commonView.itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(
@@ -89,5 +117,13 @@ export function verifyApplicationRisk(risktype: string, appName: string): void {
                     risktype
                 );
             }
+        });
+}
+export function closeArticle(articleTitle: string): void {
+    cy.get(articleTitle)
+        .closest("div.pf-v5-c-card")
+        .find("div.pf-v5-c-card__header")
+        .within(() => {
+            cy.get("button").click();
         });
 }
