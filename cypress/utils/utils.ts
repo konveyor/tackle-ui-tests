@@ -68,7 +68,7 @@ import {
     pageNumInput,
     prevPageButton,
 } from "../e2e/views/common.view";
-import { tagLabels } from "../e2e/views/tags.view";
+import { tagLabels, tagMenuButton } from "../e2e/views/tags.view";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
 import { Assessment } from "../e2e/models/migration/applicationinventory/assessment";
 import { analysisData, applicationData, JiraConnectionData } from "../e2e/types/types";
@@ -1510,7 +1510,7 @@ export function applyAction(itemName, action: string): void {
     cy.contains(tdTag, itemName)
         .closest(trTag)
         .within(() => {
-            click('button[aria-label="Actions"]');
+            click(tagMenuButton);
             clickByText(button, action);
         });
 }
