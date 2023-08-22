@@ -25,7 +25,7 @@ import {
     deleteByList,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
-import { adoptionCandidateDistribution, migration, reports, SEC } from "../../../types/constants";
+import { migration, reports, SEC } from "../../../types/constants";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import {
     expandArticle,

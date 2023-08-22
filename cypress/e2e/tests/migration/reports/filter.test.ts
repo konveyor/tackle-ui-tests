@@ -24,7 +24,6 @@ import {
     createMultipleStakeholders,
     createMultipleApplications,
     selectUserPerspective,
-    click,
     deleteByList,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
@@ -38,7 +37,6 @@ import {
     answer,
     migration,
     SEC,
-    adoptionCandidateDistribution,
     identiFiedRisks,
     suggestedAdoptionPlan,
     tdTag,

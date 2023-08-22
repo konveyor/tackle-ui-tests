@@ -17,18 +17,13 @@ limitations under the License.
 /// <reference types="cypress-xpath" />
 
 import { selectItemsPerPage } from "../../../../utils/utils";
-import { SEC, applicationName, risk } from "../../../types/constants";
-import * as commonView from "../../../views/common.view";
+import { applicationName, risk } from "../../../types/constants";
 import {
-    adoptionCandidateDistributionTitle,
     articleCard,
     articleExpandedContent,
     articleHeader,
     articleItem,
     button,
-    identiFiedRisksTitle,
-    itemsPerPageMenu,
-    itemsPerPageToggleButton,
 } from "../../../views/reports.view";
 
 //TODO Update following method to a possible usage of current "selectItemsPerPage" method or reuse it inside following method
