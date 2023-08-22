@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {
-    actionsButton,
     analysis,
     analyzeAppButton,
     analyzeButton,
@@ -35,7 +34,6 @@ import {
     click,
     clickByText,
     clickTab,
-    clickWithin,
     doesExistSelector,
     doesExistText,
     inputText,
@@ -71,9 +69,9 @@ import {
     sourceCredential,
     sourceDropdown,
     tabsPanel,
+    kebabTopMenuButton,
 } from "../../../views/analysis.view";
 import { kebabMenu } from "../../../views/applicationinventory.view";
-import * as commonView from "../../../views/common.view";
 import { AnalysisStatuses } from "../../../types/constants";
 import { RulesRepositoryFields } from "../../../types/types";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
@@ -317,7 +315,7 @@ export class Analysis extends Application {
         doesExistSelector(analyzeAppButton, rbacRules["Analyze"]);
     }
 
-    verifyAnalysisStatus(status) {
+    verifyAnalysisStatus(status: string) {
         cy.log(`Verifying analysis status, expecting ${status}`);
         cy.get(tdTag, { log: false })
             .contains(this.name, { log: false })
@@ -327,7 +325,7 @@ export class Analysis extends Application {
             });
     }
 
-    public static verifyAllAnalysisStatuses(status) {
+    public static verifyAllAnalysisStatuses(status: string) {
         cy.log(`Verifying all analysis statuses, expecting ${status}`);
         cy.get(analysisColumn, { log: false }).each(($el) => {
             Analysis.verifyStatus(cy.wrap($el), status);
@@ -399,7 +397,7 @@ export class Analysis extends Application {
     }
 
     manageCredentials(sourceCred?: string, mavenCred?: string): void {
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         performRowActionByIcon(this.name, kebabMenu);
         clickByText(button, manageCredentials);
         if (sourceCred) {
@@ -449,11 +447,19 @@ export class Analysis extends Application {
     static validateTopActionMenu(rbacRules: RbacValidationRules) {
         Analysis.open();
         if (rbacRules["Action menu"]["Not available"]) {
-            cy.get(".pf-v5-c-toolbar__content-section").within(() => {
-                doesExistSelector(actionsButton, false);
-            });
+            cy.get(".pf-v5-c-page__main-section")
+                .eq(1)
+                .within(() => {
+                    doesExistSelector(kebabTopMenuButton, false);
+                });
         } else {
-            clickWithin(".pf-v5-c-toolbar__content-section", actionsButton);
+            cy.wait(SEC);
+
+            cy.get(".pf-v5-c-page__main-section")
+                .eq(1)
+                .within(() => {
+                    click(kebabTopMenuButton);
+                });
             doesExistText("Import", rbacRules["Action menu"]["Import"]);
             doesExistText("Manage imports", rbacRules["Action menu"]["Manage imports"]);
             doesExistText("Manage credentials", rbacRules["Action menu"]["Manage credentials"]);

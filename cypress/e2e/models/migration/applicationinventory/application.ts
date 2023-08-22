@@ -66,7 +66,7 @@ import {
     clickTab,
 } from "../../../../utils/utils";
 import { applicationData, RbacValidationRules } from "../../../types/types";
-import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
+import { kebabButton, rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
 
 export class Application {
     name: string;
@@ -370,7 +370,7 @@ export class Application {
             .within(() => {
                 click(selectBox);
                 cy.wait(SEC);
-                click('button[aria-label="Actions"]');
+                click('button[aria-label="Kebab toggle"]');
                 doesExistText(
                     "Analysis details",
                     rbacRules["analysis applicable options"]["Analysis details"]
@@ -396,9 +396,9 @@ export class Application {
             .within(() => {
                 click(selectBox);
                 cy.wait(SEC);
-                click('button[aria-label="Actions"]');
+                click(kebabButton);
                 doesExistText(
-                    "Discard assessment",
+                    "Discard assessment/review",
                     rbacRules["assessment applicable options"]["Discard assessment"]
                 );
                 doesExistText(

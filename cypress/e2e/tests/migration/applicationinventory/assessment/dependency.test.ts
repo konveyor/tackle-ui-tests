@@ -28,7 +28,7 @@ import {
 
 var applicationsList: Array<Assessment> = [];
 
-describe(["@tier1"], "Manage application dependencies", () => {
+describe(["@tier3"], "Manage application dependencies", () => {
     before("Login and Create Test Data", function () {
         login();
         applicationsList = createMultipleApplications(3);
@@ -51,7 +51,7 @@ describe(["@tier1"], "Manage application dependencies", () => {
         applicationsList[1].removeDependencies(northboundApps, southboundApps);
     });
 
-    it("Cyclic dependencies for applications", function () {
+    it("Bug MTA-1155 : Cyclic dependencies for applications", function () {
         var northboundApps: Array<string> = [applicationsList[0].name];
         var southboundApps: Array<string> = [applicationsList[2].name];
 

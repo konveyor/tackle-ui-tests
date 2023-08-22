@@ -49,7 +49,6 @@ import {
     analysis,
     owner,
     JiraType,
-    actionsButton,
 } from "../e2e/types/constants";
 import {
     actionButton,
@@ -69,17 +68,17 @@ import {
     pageNumInput,
     prevPageButton,
 } from "../e2e/views/common.view";
-import { tagLabels } from "../e2e/views/tags.view";
+import { tagLabels, tagMenuButton } from "../e2e/views/tags.view";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
 import { Assessment } from "../e2e/models/migration/applicationinventory/assessment";
-import { analysisData, applicationData, JiraConnectionData, UserData } from "../e2e/types/types";
+import { analysisData, applicationData, JiraConnectionData } from "../e2e/types/types";
 import { CredentialsProxy } from "../e2e/models/administration/credentials/credentialsProxy";
 import {
     getJiraConnectionData,
     getJiraCredentialData,
     getRandomCredentialsData,
     randomWordGenerator,
-} from "../utils/data_utils";
+} from "./data_utils";
 import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../e2e/models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../e2e/models/administration/credentials/credentialsSourceControlKey";
@@ -862,7 +861,6 @@ export function deleteAppImportsTableRows(lastPage = false): void {
                             .parent(trTag)
                             .within(() => {
                                 click(actionButton);
-                                cy.wait(800);
                             })
                             .contains(button, deleteAction)
                             .click();
@@ -1431,7 +1429,7 @@ export const deleteFromArrayByIndex = <T>(array: T[], index: number): T[] => {
 
 export function goToPage(page: number): void {
     cy.get(divHeader)
-        .eq(0)
+        .eq(2)
         .within(() => {
             cy.get(firstPageButton).then(($firstPageButton) => {
                 cy.get(lastPageButton).then(($lastPageButton) => {
@@ -1481,7 +1479,7 @@ export function callWithin(selector: string, functionToExec: () => void, index =
         .within(() => functionToExec());
 }
 
-export function clickWithin(parent, selector: string, isForced = false, log = false): void {
+export function clickWithin(parent: string, selector: string, isForced = false, log = false): void {
     cy.get(parent, { timeout: 30 * SEC })
         .eq(0)
         .within(() => {
@@ -1511,7 +1509,7 @@ export function applyAction(itemName, action: string): void {
     cy.contains(tdTag, itemName)
         .closest(trTag)
         .within(() => {
-            click('button[aria-label="Actions"]');
+            click(tagMenuButton);
             clickByText(button, action);
         });
 }
@@ -1554,10 +1552,10 @@ export function validatePagination(): void {
 
 export function goToLastPage(): void {
     cy.get(lastPageButton, { timeout: 10 * SEC })
-        .eq(0)
+        .eq(1)
         .then(($button) => {
             if (!$button.hasClass(".pf-m-disabled")) {
-                clickWithin(divHeader, lastPageButton);
+                $button.click();
             }
         });
 }
@@ -1621,7 +1619,7 @@ export function doesExistText(str: string, toBePresent: boolean): void {
     if (toBePresent) {
         cy.contains(str, { timeout: 120 * SEC }).should("exist");
     } else {
-        cy.contains(str).should("not.exist");
+        cy.contains(str, { timeout: 120 * SEC }).should("not.exist");
     }
 }
 
@@ -1681,6 +1679,22 @@ export function isRwxEnabled(): boolean {
     return Cypress.env("rwx_enabled");
 }
 
+export function getUrl(): string {
+    return window.location.href;
+}
+
+export function getNamespace(): string {
+    // This is regexp pattern to search between first `-` and first `.`
+    const namespacePattern = /-(.*?)\./;
+    // First match, means `-`
+    const match = getUrl().match(namespacePattern);
+    if (match && match[1]) {
+        return match[1].toString();
+    } else {
+        return "konveyor-tackle";
+    }
+}
+
 // This method is patching
 export function configureRWX(isEnabled = true): void {
     // Patching CR to set value
@@ -1691,14 +1705,12 @@ export function configureRWX(isEnabled = true): void {
         value = "false";
     }
     let command = "";
-    let tackleCr = "tackle=$(oc get tackle --all-namespaces|grep -iv name|awk '{print $2}'); ";
-    let namespace =
-        'namespace=$(oc get tackle --all-namespaces|egrep "tackle|mta"|cut -d " " -f 1); ';
+    let namespace = getNamespace();
+    let tackleCr = `tackle=$(oc get tackle -n${namespace}|grep -iv name|awk '{print $1}'); `;
     command += tackleCr;
-    command += namespace;
     command += "oc patch tackle ";
     command += "$tackle ";
-    command += "-n$namespace ";
+    command += `-n${namespace} `;
     command += "--type merge ";
     command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
     cy.log(command);
