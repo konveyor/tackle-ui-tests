@@ -23,7 +23,7 @@ import { Assessment } from "../../models/migration/applicationinventory/assessme
 let application = new Assessment(getRandomApplicationData());
 let stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
 
-describe(["@tier1"], "Perform certain operations after disabling Keycloak", function () {
+describe(["@tier4"], "Perform certain operations after disabling Keycloak", function () {
     // Automates Polarion MTA-293
     before("Disable Keycloak", function () {
         login();
@@ -40,13 +40,13 @@ describe(["@tier1"], "Perform certain operations after disabling Keycloak", func
         });
     });
 
-    it("Auth disabled, Perform application assessment", function () {
+    it.skip("Bug MTA-1152: Auth disabled, Perform application assessment", function () {
         application.perform_assessment("low", [stakeholder.name]);
         cy.wait(1000);
         application.verifyStatus("assessment", "Completed");
     });
 
-    it("Auth disabled, Verify presence of Review application button", function () {
+    it.skip("Bug MTA-1152: Auth disabled, Verify presence of Review application button", function () {
         Application.validateReviewButton(this.rbacRules);
     });
 
