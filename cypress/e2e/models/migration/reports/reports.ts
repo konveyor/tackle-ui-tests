@@ -25,6 +25,7 @@ import {
     itemsPerPageToggleButton,
 } from "../../../views/reports.view";
 
+//TODO - Update following method to a possible usage of current "selectItemsPerPage" method or reuse it inside following method
 export function selectArticleItemsPerPage(items: number, articleTitle: string): void {
     cy.log(`Select ${items} per page`);
     cy.get(articleTitle)
