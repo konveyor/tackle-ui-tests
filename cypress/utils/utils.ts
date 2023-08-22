@@ -1710,7 +1710,7 @@ export function patchTackleCR(option: string, isEnabled = true): void {
     command += "$tackle ";
     command += `-n${namespace} `;
     command += "--type merge ";
-    if (option == "configurerwx") command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
+    if (option == "configureRWX") command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
     else if (option == "keycloak")
         command += `--patch '{"spec":{"feature_auth_required": ${value}}}'`;
     cy.log(command);

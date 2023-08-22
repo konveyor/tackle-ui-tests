@@ -136,11 +136,11 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         isEnabled(clearRepository, rwxEnabled);
 
         rwxEnabled = true;
-        patchTackleCR("configurerwx", rwxEnabled);
+        patchTackleCR("configureRWX", rwxEnabled);
         isEnabled(clearRepository, rwxEnabled);
 
         rwxEnabled = false;
-        patchTackleCR("configurerwx", rwxEnabled);
+        patchTackleCR("configureRWX", rwxEnabled);
         isEnabled(clearRepository, rwxEnabled);
     });
 });
