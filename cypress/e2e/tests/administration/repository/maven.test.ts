@@ -41,7 +41,7 @@ let applicationsList: Analysis[] = [];
 describe(["@tier1"], "Test secure and insecure maven repository analysis", () => {
     before("Login", function () {
         login();
-        /*
+
         //Create source and maven credentials required for analysis
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
@@ -59,7 +59,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
                 "http://maven.pkg.github.com/konveyor/tackle-testapp"
             )
         );
-        maven_credential.create(); */
+        maven_credential.create();
     });
 
     beforeEach("Load data", function () {
@@ -128,7 +128,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         application.openReport();
     });
 
-    it.only("Perform RWX=true and clear repository", function () {
+    it("Perform RWX=true and clear repository", function () {
         MavenConfiguration.open();
         let rwxEnabled;
 
@@ -153,9 +153,9 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
     after("Perform test data clean up", () => {
         patchTackleCR("configureRWX", false);
         login();
-        // deleteByList(applicationsList);
-        // source_credential.delete();
-        // maven_credential.delete();
+        deleteByList(applicationsList);
+        source_credential.delete();
+        maven_credential.delete();
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 });
