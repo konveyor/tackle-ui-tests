@@ -20,6 +20,11 @@ import { SEC, applicationName, risk } from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
 import {
     adoptionCandidateDistributionTitle,
+    articleCard,
+    articleExpandedContent,
+    articleHeader,
+    articleItem,
+    button,
     identiFiedRisksTitle,
     itemsPerPageMenu,
     itemsPerPageToggleButton,
@@ -29,7 +34,7 @@ import {
 export function selectArticleItemsPerPage(items: number, articleTitle: string): void {
     cy.log(`Select ${items} per page`);
     cy.get(articleTitle)
-        .closest("div.pf-v5-l-stack__item")
+        .closest(articleItem)
         .within(() => {
             cy.get(commonView.itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(
                 ($toggleBtn) => {
@@ -52,7 +57,7 @@ export function selectArticleItemsPerPage(items: number, articleTitle: string): 
 export function selectItemsPerPageAdoptionCandidate(items: number): void {
     cy.log(`Select ${items} per page`);
     cy.get(adoptionCandidateDistributionTitle)
-        .closest("div.pf-v5-l-stack__item")
+        .closest(articleItem)
         .within(() => {
             cy.get(commonView.itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(
                 ($toggleBtn) => {
@@ -75,7 +80,7 @@ export function selectItemsPerPageAdoptionCandidate(items: number): void {
 export function selectItemsPerPageIdentifiedRisks(items: number): void {
     cy.log(`Select ${items} per page`);
     cy.get(identiFiedRisksTitle)
-        .closest("div.pf-v5-l-stack__item")
+        .closest(articleItem)
         .within(() => {
             cy.get(commonView.itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(
                 ($toggleBtn) => {
@@ -96,11 +101,11 @@ export function selectItemsPerPageIdentifiedRisks(items: number): void {
 
 export function expandArticle(name: string): void {
     cy.xpath(`//h3[contains(text(), '${name}')]`)
-        .closest("div.pf-v5-l-stack__item")
+        .closest(articleItem)
         .within(() => {
-            cy.get("div.pf-v5-c-card").then(($div) => {
-                if ($div.find("div.pf-v5-c-card__expandable-content").length === 0) {
-                    cy.get("button.pf-v5-c-button.pf-m-plain").eq(0).click({ force: true });
+            cy.get(articleCard).then(($div) => {
+                if ($div.find(articleExpandedContent).length === 0) {
+                    cy.get(button).eq(0).click({ force: true });
                 }
             });
         });
@@ -122,8 +127,8 @@ export function verifyApplicationRisk(risktype: string, appName: string): void {
 }
 export function closeArticle(articleTitle: string): void {
     cy.get(articleTitle)
-        .closest("div.pf-v5-c-card")
-        .find("div.pf-v5-c-card__header")
+        .closest(articleCard)
+        .find(articleHeader)
         .within(() => {
             cy.get("button").click();
         });

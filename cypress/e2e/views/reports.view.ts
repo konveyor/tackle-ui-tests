@@ -15,6 +15,12 @@ limitations under the License.
 */
 
 export const adoptionCandidateDistributionTitle = 'h3:contains("Adoption candidate distribution")';
+export const articleItem = "div.pf-v5-l-stack__item";
+export const articleCard = "div.pf-v5-c-card";
+export const articleHeader = "div.pf-v5-c-card__header";
+export const button = "button.pf-v5-c-button.pf-m-plain";
+export const articleBody = "div.pf-v5-c-card__body";
+export const articleExpandedContent = "div.pf-v5-c-card__expandable-content";
 export const identiFiedRisksTitle = 'h3:contains("Identified risks")';
 export const itemsPerPageMenu = "div.pf-m-bottom > div.pf-c-options-menu";
 export const itemsPerPageToggleButton = "div > button[aria-label='Items per page']";

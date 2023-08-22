@@ -41,9 +41,12 @@ import {
     adoptionCandidateDistribution,
     identiFiedRisks,
     suggestedAdoptionPlan,
+    tdTag,
 } from "../../../types/constants";
 import {
     adoptionCandidateDistributionTitle,
+    articleBody,
+    articleCard,
     identiFiedRisksTitle,
 } from "../../../views/reports.view";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
@@ -93,11 +96,10 @@ describe(["@tier2"], "Reports filter validations", () => {
 
         // Wait for DOM to render table and sibling elements
         cy.get(adoptionCandidateDistributionTitle)
-            .closest("div.pf-v5-c-card")
-            .find("div.pf-v5-c-card__body")
+            .closest(articleCard)
+            .find(articleBody)
             .should("not.have.class", "pf-v5-c-empty-state")
-            .and("not.have.class", "pf-m-sm")
-            .find("td")
+            .find(tdTag)
             .should("contain", applicationsList[0].name);
 
         // Check element filtered for table Identified risks
