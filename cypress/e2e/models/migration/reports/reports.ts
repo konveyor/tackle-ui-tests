@@ -16,6 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 /// <reference types="cypress-xpath" />
 
+import { selectItemsPerPage } from "../../../../utils/utils";
 import { SEC, applicationName, risk } from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
 import {
@@ -31,71 +32,12 @@ import {
 } from "../../../views/reports.view";
 
 //TODO Update following method to a possible usage of current "selectItemsPerPage" method or reuse it inside following method
-export function selectArticleItemsPerPage(items: number, articleTitle: string): void {
+export function selectItemsPerPageinReports(items: number, articleTitle: string): void {
     cy.log(`Select ${items} per page`);
     cy.get(articleTitle)
         .closest(articleItem)
         .within(() => {
-            cy.get(commonView.itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(
-                ($toggleBtn) => {
-                    if (!$toggleBtn.is(":disabled")) {
-                        $toggleBtn.trigger("click");
-                        cy.get(commonView.itemsPerPageMenuOptions);
-                        cy.get(`li[data-action="per-page-${items}"]`, { log: false })
-                            .contains(`${items}`)
-                            .click({
-                                force: true,
-                                log: false,
-                            });
-                        cy.wait(2000);
-                    }
-                }
-            );
-        });
-}
-
-export function selectItemsPerPageAdoptionCandidate(items: number): void {
-    cy.log(`Select ${items} per page`);
-    cy.get(adoptionCandidateDistributionTitle)
-        .closest(articleItem)
-        .within(() => {
-            cy.get(commonView.itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(
-                ($toggleBtn) => {
-                    if (!$toggleBtn.is(":disabled")) {
-                        $toggleBtn.trigger("click");
-                        cy.get(commonView.itemsPerPageMenuOptions);
-                        cy.get(`li[data-action="per-page-${items}"]`, { log: false })
-                            .contains(`${items}`)
-                            .click({
-                                force: true,
-                                log: false,
-                            });
-                        cy.wait(2000);
-                    }
-                }
-            );
-        });
-}
-
-export function selectItemsPerPageIdentifiedRisks(items: number): void {
-    cy.log(`Select ${items} per page`);
-    cy.get(identiFiedRisksTitle)
-        .closest(articleItem)
-        .within(() => {
-            cy.get(commonView.itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(
-                ($toggleBtn) => {
-                    if (!$toggleBtn.is(":disabled")) {
-                        $toggleBtn.trigger("click");
-                        cy.get(commonView.itemsPerPageMenuOptions, { log: false });
-                        cy.get(`li[data-action="per-page-${items}"]`, { log: false })
-                            .contains(`${items}`)
-                            .click({
-                                force: true,
-                                log: false,
-                            });
-                    }
-                }
-            );
+            selectItemsPerPage(items);
         });
 }
 

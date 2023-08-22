@@ -54,7 +54,7 @@ import * as data from "../../../../utils/data_utils";
 import {
     expandArticle,
     closeArticle,
-    selectArticleItemsPerPage,
+    selectItemsPerPageinReports,
 } from "../../../models/migration/reports/reports";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 
@@ -92,7 +92,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         cy.wait(3 * SEC);
 
         // Check element filtered for table Adoption Candidate Distribution
-        selectArticleItemsPerPage(100, adoptionCandidateDistributionTitle);
+        selectItemsPerPageinReports(100, adoptionCandidateDistributionTitle);
 
         // Wait for DOM to render table and sibling elements
         cy.get(adoptionCandidateDistributionTitle)
@@ -106,7 +106,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         expandArticle(identiFiedRisks);
         cy.wait(2 * SEC);
 
-        selectArticleItemsPerPage(100, identiFiedRisksTitle);
+        selectItemsPerPageinReports(100, identiFiedRisksTitle);
 
         let applicationsData = getTableColumnData("Application(s)");
         cy.wrap(applicationsData).each((application) => {
@@ -153,7 +153,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         expandArticle(identiFiedRisks);
         cy.wait(2 * SEC);
 
-        selectArticleItemsPerPage(100, identiFiedRisksTitle);
+        selectItemsPerPageinReports(100, identiFiedRisksTitle);
 
         applySearchFilter(name, validSearchInput, true, 1);
         cy.wait(3 * SEC);
@@ -199,7 +199,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         expandArticle(identiFiedRisks);
         cy.wait(2 * SEC);
 
-        selectArticleItemsPerPage(100, identiFiedRisksTitle);
+        selectItemsPerPageinReports(100, identiFiedRisksTitle);
 
         // Get a category of assessment questions and apply it as search filter
         let categoryString = "Application details";
@@ -249,7 +249,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         expandArticle(identiFiedRisks);
         cy.wait(2 * SEC);
 
-        selectArticleItemsPerPage(100, identiFiedRisksTitle);
+        selectItemsPerPageinReports(100, identiFiedRisksTitle);
 
         // Get a question from assessment question's list and apply it as search filter
         let questionString = "How is the application tested?";
@@ -298,7 +298,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         expandArticle(identiFiedRisks);
         cy.wait(2 * SEC);
 
-        selectArticleItemsPerPage(100, identiFiedRisksTitle);
+        selectItemsPerPageinReports(100, identiFiedRisksTitle);
 
         // select an answer input from existing answers and apply it as search filter
         let answerString = "Not tracked";
