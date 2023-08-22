@@ -86,8 +86,7 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
         cy.wait(2000);
 
         // Verify that only 10 items are displayed
-        cy.get(".pf-c-table > tbody > tr")
-            .not(".pf-c-table__expandable-row")
+        cy.get(commonView.appTable)
             .find("td[data-label=Name]")
             .then(($rows) => {
                 cy.wrap($rows.length).should("eq", 10);
@@ -98,8 +97,7 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
         cy.wait(2000);
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
-        cy.get(".pf-c-table > tbody > tr")
-            .not(".pf-c-table__expandable-row")
+        cy.get(commonView.appTable)
             .find("td[data-label=Name]")
             .then(($rows) => {
                 cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
