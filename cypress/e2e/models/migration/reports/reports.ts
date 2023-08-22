@@ -72,10 +72,10 @@ export function expandArticle(name: string): void {
 
 export function verifyApplicationRisk(risktype: string, appName: string): void {
     // Verifies particular application's risk type
-    selectArticleItemsPerPage(100, adoptionCandidateDistributionTitle);
+    selectItemsPerPageinReports(100, adoptionCandidateDistributionTitle);
     cy.wait(4000);
     cy.get(adoptionCandidateDistributionTitle)
-        .closest("div.pf-v5-l-stack__item")
+        .closest(articleItem)
         .find("tbody > tr")
         .each(($ele) => {
             if ($ele.find(`td[data-label="${applicationName}"]`).text() == appName) {
