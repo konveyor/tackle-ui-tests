@@ -251,7 +251,7 @@ export class Application {
             .closest("div")
             .next("button")
             .then(($a) => {
-                if ($a.hasClass("pf-v5-c-select__toggle-clear")) $a.click();
+                if ($a.hasClass(commonView.dropdownClearSelection)) $a.click();
             });
         submitForm();
     }
