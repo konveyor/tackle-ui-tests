@@ -252,7 +252,7 @@ export class Application {
             .parent("div")
             .next("button")
             .then(($a) => {
-                if ($a.hasClass("pf-c-select__toggle-clear")) $a.click();
+                if ($a.hasClass("pf-v5-c-select__toggle-clear")) $a.click();
             });
         submitForm();
     }
