@@ -79,6 +79,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         cy.get("@getApplication");
         cy.wait(2 * SEC);
 
+        application.applicationDetailsTab("Tags");
         application.tagAndCategoryExists(tagList[0].name);
         // Remove the BS and tags
         application.removeBusinessService();
@@ -95,6 +96,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         cy.wait(100);
 
         // Assert that deleted tag is removed
+        application.applicationDetailsTab("Tags");
         application.tagAndCategoryExists("");
 
         application.edit({

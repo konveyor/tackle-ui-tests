@@ -248,6 +248,7 @@ export class Application {
         cy.wait(2000);
         performRowActionByIcon(this.name, editButton);
         cy.get(applicationBusinessServiceSelect)
+            .parent("span")
             .parent("div")
             .next("button")
             .then(($a) => {
