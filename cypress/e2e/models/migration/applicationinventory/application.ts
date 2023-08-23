@@ -248,8 +248,7 @@ export class Application {
         cy.wait(2000);
         performRowActionByIcon(this.name, editButton);
         cy.get(applicationBusinessServiceSelect)
-            .parent("span")
-            .parent("div")
+            .closest("div")
             .next("button")
             .then(($a) => {
                 if ($a.hasClass("pf-v5-c-select__toggle-clear")) $a.click();
