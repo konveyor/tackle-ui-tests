@@ -72,10 +72,11 @@ export function expandArticle(name: string): void {
 
 export function verifyApplicationRisk(risktype: string, appName: string): void {
     // Verifies particular application's risk type
-    selectItemsPerPageAdoptionCandidate(100);
+    selectItemsPerPageinReports(100, adoptionCandidateDistributionTitle);
     cy.wait(4000);
-    cy.get(".pf-c-table > tbody > tr")
-        .not(".pf-c-table__expandable-row")
+    cy.get(adoptionCandidateDistributionTitle)
+        .closest(articleItem)
+        .find("tbody > tr")
         .each(($ele) => {
             if ($ele.find(`td[data-label="${applicationName}"]`).text() == appName) {
                 expect($ele.find(`td[data-label="${risk}"]`).text().toLowerCase()).to.equal(
