@@ -20,18 +20,15 @@ import {
     getRandomApplicationData,
     getRandomAnalysisData,
     deleteByList,
-    checkSuccessAlert,
-    selectCheckBox,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { infoAlertMessage } from "../../../../views/common.view";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { AnalysisStatuses } from "../../../../types/constants";
 
 const analyses: Analysis[] = [];
 const NUMBER_OF_APPS = 25;
 
-describe(["@load"], "Bulk Analysis", () => {
+describe(["@tier4"], "Bulk Analysis", () => {
     before("Login", function () {
         login();
         cy.fixture("application").then((appData) => {
