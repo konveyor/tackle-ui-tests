@@ -63,7 +63,7 @@ describe(["@tier2"], "Application validations", () => {
     before("Login", function () {
         login();
         businessservicesList = createMultipleBusinessServices(1);
-        // stakeHoldersList = createMultipleStakeholders(2);
+        stakeHoldersList = createMultipleStakeholders(2);
     });
 
     beforeEach("Interceptors", function () {
@@ -166,7 +166,7 @@ describe(["@tier2"], "Application validations", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it.only("Application success alert and unique constraint validation", function () {
+    it("Application success alert and unique constraint validation", function () {
         Assessment.open();
         const application = new Assessment(getRandomApplicationData());
 
