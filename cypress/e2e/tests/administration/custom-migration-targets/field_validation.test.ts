@@ -49,7 +49,7 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         validateTooLongInput(CustomMigrationTargetView.nameInput);
 
         CustomMigrationTarget.fillName("Containerization");
-        cy.get(CustomMigrationTargetView.nameHelper).contains(
+        cy.get(CustomMigrationTargetView.helperText).contains(
             "A custom target with this name already exists. Use a different name"
         );
 
@@ -113,18 +113,12 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         CustomMigrationTarget.selectRepositoryType(RepositoryType.git);
 
         CustomMigrationTarget.fillRepositoryUrl("   ");
-        cy.get(CustomMigrationTargetView.repositoryUrlHelper).should(
-            "contain",
-            "Must be a valid URL."
-        );
+        cy.get(CustomMigrationTargetView.helperText).should("contain", "Must be a valid URL.");
 
         CustomMigrationTarget.fillRepositoryUrl("Invalid url");
-        cy.get(CustomMigrationTargetView.repositoryUrlHelper).should(
-            "contain",
-            "Must be a valid URL."
-        );
+        cy.get(CustomMigrationTargetView.helperText).should("contain", "Must be a valid URL.");
 
         CustomMigrationTarget.fillRepositoryUrl("https://github.com/konveyor/tackle-testapp");
-        cy.get(CustomMigrationTargetView.repositoryUrlHelper).should("not.exist");
+        cy.get(CustomMigrationTargetView.helperText).should("not.contain", "Must be a valid URL.");
     });
 });
