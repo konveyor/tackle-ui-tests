@@ -38,7 +38,7 @@ describe(
         });
 
         it("Create applications - Validate the applications count increased", function () {
-            // Create 5 applications
+            // Create applications
             applicationList = createMultipleApplications(3);
             count += applicationList.length;
 

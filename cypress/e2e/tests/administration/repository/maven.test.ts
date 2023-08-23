@@ -17,7 +17,7 @@ limitations under the License.
 
 import { MavenConfiguration } from "../../../models/administration/repositories/maven";
 import {
-    configureRWX,
+    patchTackleCR,
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
@@ -138,7 +138,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
             isEnabled(clearRepository, rwxEnabled);
             // If rwx = true , clear Repo
             if (rwxEnabled) mavenConfiguration.clearRepository();
-            configureRWX(!rwxEnabled);
+            patchTackleCR("configureRWX", !rwxEnabled);
         });
         login();
         MavenConfiguration.open();
@@ -151,7 +151,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
     });
 
     after("Perform test data clean up", () => {
-        configureRWX(false);
+        patchTackleCR("configureRWX", false);
         login();
         deleteByList(applicationsList);
         source_credential.delete();

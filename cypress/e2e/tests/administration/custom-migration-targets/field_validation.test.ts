@@ -17,6 +17,7 @@ limitations under the License.
 
 import {
     click,
+    doesExistText,
     login,
     preservecookies,
     validateTooLongInput,
@@ -49,9 +50,7 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         validateTooLongInput(CustomMigrationTargetView.nameInput);
 
         CustomMigrationTarget.fillName("Containerization");
-        cy.get(CustomMigrationTargetView.nameHelper).contains(
-            "A custom target with this name already exists. Use a different name"
-        );
+        doesExistText("A custom target with this name already exists. Use a different name", true);
 
         cy.get(CustomMigrationTargetView.createSubmitButton).should("be.disabled");
         cy.contains("Cancel").click();
@@ -62,29 +61,20 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         CustomMigrationTarget.fillName(data.getRandomWord(5));
 
         CustomMigrationTarget.uploadRules(["xml/invalid-rule.windup.xml"]);
-        cy.get(CustomMigrationTargetView.ruleHelper).should(
-            "contain",
-            'Error: File "invalid-rule.windup.xml" is not a valid XML'
-        );
-        cy.get(CustomMigrationTargetView.ruleFilesToggle).should(
-            "contain",
-            "0 of 1 files uploaded"
-        );
+        doesExistText('Error: File "invalid-rule.windup.xml" is not a valid XML', true);
+
+        doesExistText("0 of 1 files uploaded", true);
+
         cy.get(CustomMigrationTargetView.createSubmitButton).should("be.disabled");
 
         CustomMigrationTarget.uploadRules(["xml/javax-package-custom.windup.xml"]);
-        cy.get(CustomMigrationTargetView.ruleFilesToggle).should(
-            "contain",
-            "1 of 2 files uploaded"
-        );
+        doesExistText("1 of 2 files uploaded", true);
+
         cy.get(CustomMigrationTargetView.createSubmitButton).should("be.enabled");
 
         cy.get('button[aria-label="Remove from list"]').each((btn) => cy.wrap(btn).click());
+        doesExistText("0 of 0 files uploaded", true);
 
-        cy.get(CustomMigrationTargetView.ruleFilesToggle).should(
-            "contain",
-            "0 of 0 files uploaded"
-        );
         cy.get(CustomMigrationTargetView.createSubmitButton).should("be.disabled");
         cy.contains("Cancel").click();
     });
@@ -113,18 +103,12 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         CustomMigrationTarget.selectRepositoryType(RepositoryType.git);
 
         CustomMigrationTarget.fillRepositoryUrl("   ");
-        cy.get(CustomMigrationTargetView.repositoryUrlHelper).should(
-            "contain",
-            "Must be a valid URL."
-        );
+        doesExistText("Must be a valid URL.", true);
 
         CustomMigrationTarget.fillRepositoryUrl("Invalid url");
-        cy.get(CustomMigrationTargetView.repositoryUrlHelper).should(
-            "contain",
-            "Must be a valid URL."
-        );
+        doesExistText("Must be a valid URL.", true);
 
         CustomMigrationTarget.fillRepositoryUrl("https://github.com/konveyor/tackle-testapp");
-        cy.get(CustomMigrationTargetView.repositoryUrlHelper).should("not.exist");
+        doesExistText("Must be a valid URL.", false);
     });
 });

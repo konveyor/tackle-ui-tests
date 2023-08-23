@@ -79,7 +79,10 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         cy.get("@getApplication");
         cy.wait(2 * SEC);
 
+        application.applicationDetailsTab("Tags");
         application.tagAndCategoryExists(tagList[0].name);
+        application.closeApplicationDetails();
+
         // Remove the BS and tags
         application.removeBusinessService();
         tagList[0].delete();
@@ -95,7 +98,9 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         cy.wait(100);
 
         // Assert that deleted tag is removed
+        application.applicationDetailsTab("Tags");
         application.tagAndCategoryExists("");
+        application.closeApplicationDetails();
 
         application.edit({
             business: businessServicesList[1].name,
@@ -108,7 +113,9 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         cy.wait(SEC);
 
         // Assert that created tag exists
+        application.applicationDetailsTab("Tags");
         application.tagAndCategoryExists(tagList[1].name);
+        application.closeApplicationDetails();
     });
 
     it("Stakeholder and stakeholder group delete dependency on application", function () {

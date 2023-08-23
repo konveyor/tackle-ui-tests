@@ -16,7 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    configureRWX,
+    patchTackleCR,
     exists,
     expandRowDetails,
     getRandomAnalysisData,
@@ -136,11 +136,11 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         isEnabled(clearRepository, rwxEnabled);
 
         rwxEnabled = true;
-        configureRWX(rwxEnabled);
+        patchTackleCR("configureRWX", rwxEnabled);
         isEnabled(clearRepository, rwxEnabled);
 
         rwxEnabled = false;
-        configureRWX(rwxEnabled);
+        patchTackleCR("configureRWX", rwxEnabled);
         isEnabled(clearRepository, rwxEnabled);
     });
 });
