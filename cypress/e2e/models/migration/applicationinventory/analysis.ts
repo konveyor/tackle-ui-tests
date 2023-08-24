@@ -231,12 +231,10 @@ export class Analysis extends Application {
     }
 
     protected isNextEnabled() {
-        cy.contains(button, "Next").then(($a) => {
-            if ($a.hasClass("pf-m-disabled")) {
-                cy.wait(2000);
-                this.isNextEnabled();
-            }
-        });
+        cy.contains(button, "Next", { timeout: 300 * SEC }).should(
+            "not.have.class",
+            "pf-m-disabled"
+        );
     }
 
     protected scopeSelect() {

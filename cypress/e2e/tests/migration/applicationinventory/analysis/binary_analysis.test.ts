@@ -28,8 +28,8 @@ import { AnalysisStatuses, CredentialType, UserCredentials } from "../../../../t
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { MavenConfiguration } from "../../../../models/administration/repositories/maven";
-let source_credential;
-let maven_credential;
+let source_credential: CredentialsSourceControlUsername;
+let maven_credential: CredentialsMaven;
 const mavenConfiguration = new MavenConfiguration();
 let application: Analysis;
 
