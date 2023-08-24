@@ -17,17 +17,16 @@ limitations under the License.
 /// <reference types="cypress-xpath" />
 
 import { selectItemsPerPage } from "../../../../utils/utils";
-import { applicationName, risk } from "../../../types/constants";
+import { applicationName, button, risk } from "../../../types/constants";
 import {
+    articleButton,
     articleCard,
     articleExpandedContent,
     articleHeader,
     articleItem,
-    button,
 } from "../../../views/reports.view";
 
 export function selectItemsPerPageinReports(items: number, articleTitle: string): void {
-    cy.log(`Select ${items} per page`);
     cy.get(articleTitle)
         .closest(articleItem)
         .within(() => {
@@ -40,8 +39,8 @@ export function expandArticle(name: string): void {
         .closest(articleItem)
         .within(() => {
             cy.get(articleCard).then(($div) => {
-                if ($div.find(articleExpandedContent).length === 0) {
-                    cy.get(button).eq(0).click({ force: true });
+                if (!$div.find(articleExpandedContent).length) {
+                    cy.get(articleButton).eq(0).click({ force: true });
                 }
             });
         });
@@ -66,6 +65,6 @@ export function closeArticle(articleTitle: string): void {
         .closest(articleCard)
         .find(articleHeader)
         .within(() => {
-            cy.get("button").click();
+            cy.get(button).click();
         });
 }
