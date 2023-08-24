@@ -45,6 +45,8 @@ import {
     applicationBusinessServiceSelect,
     applicationContributorsInput,
     applicationOwnerInput,
+    applicationContributorsText,
+    applicationContributorsAction,
 } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
@@ -65,17 +67,14 @@ describe(["@tier2"], "Application validations", () => {
     });
 
     beforeEach("Interceptors", function () {
-        // Interceptors
         cy.intercept("POST", "/hub/tag*").as("postTag");
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     it("Application field validations", function () {
-        // Navigate to application inventory page and click "Create New" button
         Assessment.open();
         clickByText(button, createNewButton);
-
         selectFormItems(applicationBusinessServiceSelect, businessservicesList[0].name);
 
         // Name constraints
@@ -83,10 +82,11 @@ describe(["@tier2"], "Application validations", () => {
         cy.get(commonView.nameHelper).should("contain", minCharsMsg);
         inputText(applicationNameInput, data.getRandomWords(90));
         cy.get(commonView.nameHelper).should("contain", max120CharsMsg);
+        cy.get(applicationNameInput).clear();
 
         // Description constraint
         inputText(applicationDescriptionInput, data.getRandomWords(90));
-        cy.get(commonView.descriptionHelper).should("contain", max250CharsMsg);
+        cy.get(commonView.nameHelper).should("contain", max250CharsMsg);
         // Clear description field to make it valid input
         cy.get(applicationDescriptionInput).clear();
 
@@ -105,7 +105,7 @@ describe(["@tier2"], "Application validations", () => {
             });
 
         cy.get(applicationOwnerInput)
-            .parent()
+            .closest("div")
             .next("button")
             .click()
             .then(() => {
@@ -124,17 +124,19 @@ describe(["@tier2"], "Application validations", () => {
         cy.get("button").contains(stakeHoldersList[1].name).click();
 
         cy.get(applicationContributorsInput)
-            .parent()
+            .closest("div")
             .should("contain", stakeHoldersList[0].name)
             .and("contain", stakeHoldersList[1].name);
 
-        cy.get(applicationContributorsInput)
+        // Unassign contributor#1 and verify only contributor#2 is listed
+        cy.get(applicationContributorsText)
+            .contains(stakeHoldersList[0].name)
             .parent()
-            .contains("span", stakeHoldersList[0].name)
-            .next("button")
+            .next(applicationContributorsAction)
             .click();
-
-        cy.get(applicationContributorsInput).parent().and("contain", stakeHoldersList[1].name);
+        cy.get(applicationContributorsInput)
+            .closest("div")
+            .should("contain", stakeHoldersList[1].name);
 
         // Close the form
         cy.get(commonView.closeButton).click();
