@@ -355,16 +355,8 @@ export class Analysis extends Application {
     }
 
     openReport() {
-        this.selectApplicationRow();
-        cy.get(rightSideMenu, { timeout: 15 * SEC }).within(() => {
-            clickTab("Reports");
-            cy.contains("button", "View analysis", { timeout: 15 * SEC })
-                .then(($a) => {
-                    // Removing target from html so that report opens in same tab
-                    $a.attr("target", "_self");
-                })
-                .click();
-        });
+        // TODO: Update once the new reports feature is implemented
+        return;
     }
 
     downloadReport(type: string, isEnabled = true) {

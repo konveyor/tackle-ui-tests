@@ -22,10 +22,12 @@ import {
     resetURL,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { CredentialType, UserCredentials } from "../../../../types/constants";
+import { AnalysisStatuses, CredentialType, UserCredentials } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
-let source_credential;
+import { analysisDetailsEditor } from "../../../../views/analysis.view";
+import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
+let source_credential: CredentialsSourceControlUsername;
 let application: Analysis;
 
 describe(["@tier2"], "Source Analysis", () => {
@@ -52,36 +54,30 @@ describe(["@tier2"], "Source Analysis", () => {
         });
 
         // Interceptors
-        cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     it("Exclude a package in analysis", function () {
         // For source code analysis application must have source code URL git or svn
+        const analysisData = this.analysisData["analysis_for_exclude_packages"];
         application = new Analysis(
             getRandomApplicationData("testapp-excludePackages", {
                 sourceData: this.appData["tackle-testapp-git"],
             }),
-            getRandomAnalysisData(this.analysisData["analysis_for_exclude_packages"])
+            getRandomAnalysisData(analysisData)
         );
+
         application.create();
         application.manageCredentials(source_credential.name);
         cy.wait("@getApplication");
-        cy.wait(2000);
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.openReport();
-        // Customer package is provided in excludePackage option in analysis
-        // and report should exclude customer package in analysis .
-        application.validateExcludedPackages("Customer");
-    });
-
-    afterEach("Persist session", function () {
-        // Reset URL from report page to web UI
-        resetURL();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.openAnalysisDetails();
+        cy.get(analysisDetailsEditor).should("contain.text", analysisData.excludePackages);
     });
 
     after("Perform test data clean up", function () {
+        Assessment.open(100, true);
         application.delete();
         source_credential.delete();
     });
