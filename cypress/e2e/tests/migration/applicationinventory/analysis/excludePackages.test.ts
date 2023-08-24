@@ -15,18 +15,14 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    login,
-    getRandomApplicationData,
-    getRandomAnalysisData,
-    resetURL,
-} from "../../../../../utils/utils";
+import { login, getRandomApplicationData, getRandomAnalysisData } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { AnalysisStatuses, CredentialType, UserCredentials } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { analysisDetailsEditor } from "../../../../views/analysis.view";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
+
 let source_credential: CredentialsSourceControlUsername;
 let application: Analysis;
 
@@ -53,12 +49,10 @@ describe(["@tier2"], "Source Analysis", () => {
             this.analysisData = analysisData;
         });
 
-        // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     it("Exclude a package in analysis", function () {
-        // For source code analysis application must have source code URL git or svn
         const analysisData = this.analysisData["analysis_for_exclude_packages"];
         application = new Analysis(
             getRandomApplicationData("testapp-excludePackages", {
@@ -70,6 +64,7 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         application.manageCredentials(source_credential.name);
         cy.wait("@getApplication");
+
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
         application.openAnalysisDetails();
