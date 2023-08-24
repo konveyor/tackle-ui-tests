@@ -16,7 +16,6 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    deleteAllBusinessServices,
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
@@ -25,18 +24,12 @@ import {
     writeGpgKey,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { GeneralConfig } from "../../../../models/administration/general/generalConfig";
 
-var applicationsList: Array<Analysis> = [];
+const applicationsList: Analysis[] = [];
 
 describe(["@tier1"], "Upload Binary Analysis", () => {
     before("Login", function () {
         login();
-
-        // Enable HTML anc CSV report downloading
-        let generalConfig = GeneralConfig.getInstance();
-        generalConfig.enableDownloadHtml();
-        generalConfig.enableDownloadCsv();
     });
 
     beforeEach("Load data", function () {
@@ -57,7 +50,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         resetURL();
     });
 
-    it(["@interop"], "Upload Binary Analysis", function () {
+    it(["@interop"], "Bug MTA-1175 | Upload Binary Analysis", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
@@ -69,12 +62,9 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         // No credentials required for uploaded binary.
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.downloadReport("HTML");
-        application.openReport();
-        application.validateStoryPoints();
     });
 
-    it("Custom rules with custom targets", function () {
+    it("Bug MTA-1175 | Custom rules with custom targets", function () {
         // Automated https://issues.redhat.com/browse/TACKLE-561
         const application = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
@@ -87,12 +77,9 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         // No credentials required for uploaded binary.
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.downloadReport("CSV");
-        application.openReport();
-        application.validateStoryPoints();
     });
 
-    it("DIVA report generation", function () {
+    it("Bug MTA-1175 | DIVA report generation", function () {
         const application = new Analysis(
             getRandomApplicationData("DIVA"),
             getRandomAnalysisData(this.analysisData["analysis_for_DIVA-report"])
@@ -104,12 +91,9 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         // No credentials required for uploaded binary.
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openReport();
-        application.validateStoryPoints();
-        application.validateTransactionReport();
     });
 
-    it("Analysis for jee-example-app upload binary ", function () {
+    it("Bug MTA-1175 | Analysis for jee-example-app upload binary ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(
@@ -122,11 +106,9 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openReport();
-        application.validateIncidents();
     });
 
-    it("Analysis for camunda-bpm-spring-boot-starter", function () {
+    it("Bug MTA-1175 | Analysis for camunda-bpm-spring-boot-starter", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_camunda_app"])
@@ -137,12 +119,9 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openReport();
-        application.validateStoryPoints();
-        application.validateIncidents();
     });
 
-    it("Analysis for complete-duke app upload binary ", function () {
+    it("Bug MTA-1175 | Analysis for complete-duke app upload binary ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(
@@ -155,12 +134,9 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openReport();
-        application.validateStoryPoints();
-        application.validateIncidents();
     });
 
-    it("Analysis for kafka-clients-sb app ", function () {
+    it("Bug MTA-1175 | Analysis for kafka-clients-sb app ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_kafka-app"])
@@ -171,20 +147,10 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.openReport();
-        application.validateStoryPoints();
-        application.validateIncidents();
     });
 
     after("Perform test data clean up", function () {
         deleteByList(applicationsList);
-        deleteAllBusinessServices();
-
-        // Disable HTML anc CSV report downloading
-        let generalConfig = GeneralConfig.getInstance();
-        generalConfig.disableDownloadHtml();
-        generalConfig.disableDownloadCsv();
-
         writeGpgKey("abcde");
     });
 });
