@@ -28,12 +28,15 @@ import { navMenu } from "../../../views/menu.view";
 import { migration, reports, SEC } from "../../../types/constants";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import {
-    selectItemsPerPageAdoptionCandidate,
-    selectItemsPerPageIdentifiedRisks,
     expandArticle,
+    selectItemsPerPageinReports,
 } from "../../../models/migration/reports/reports";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import * as commonView from "../../../views/common.view";
+import {
+    adoptionCandidateDistributionTitle,
+    identiFiedRisksTitle,
+} from "../../../views/reports.view";
 
 let applicationsList: Array<Assessment> = [];
 let stakeholdersList: Array<Stakeholders> = [];
@@ -66,7 +69,7 @@ describe(["@tier3"], "Reports pagination validations", () => {
         cy.wait(3 * SEC);
 
         // select 10 items per page
-        selectItemsPerPageAdoptionCandidate(10);
+        selectItemsPerPageinReports(10, adoptionCandidateDistributionTitle);
 
         // Verify next buttons are enabled as there are more than 11 rows present
         cy.get(commonView.nextPageButton).each(($nextBtn) => {
@@ -103,7 +106,7 @@ describe(["@tier3"], "Reports pagination validations", () => {
         cy.wait(3 * SEC);
 
         // Select 10 items per page
-        selectItemsPerPageAdoptionCandidate(10);
+        selectItemsPerPageinReports(10, adoptionCandidateDistributionTitle);
         cy.wait(2 * SEC);
 
         // Verify that only 10 items are displayed
@@ -112,7 +115,7 @@ describe(["@tier3"], "Reports pagination validations", () => {
         });
 
         // Select 20 items per page
-        selectItemsPerPageAdoptionCandidate(20);
+        selectItemsPerPageinReports(20, adoptionCandidateDistributionTitle);
         cy.wait(2 * SEC);
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
@@ -128,7 +131,7 @@ describe(["@tier3"], "Reports pagination validations", () => {
         cy.wait(3 * SEC);
 
         // Select 10 items per page
-        selectItemsPerPageAdoptionCandidate(10);
+        selectItemsPerPageinReports(10, adoptionCandidateDistributionTitle);
         cy.wait(2 * SEC);
 
         // Go to page number 2
@@ -151,7 +154,7 @@ describe(["@tier3"], "Reports pagination validations", () => {
         cy.wait(3 * SEC);
 
         // select 10 items per page
-        selectItemsPerPageIdentifiedRisks(10);
+        selectItemsPerPageinReports(10, identiFiedRisksTitle);
 
         // Verify next buttons are enabled as there are more than 11 rows present
         cy.get(commonView.nextPageButton).eq(2).should("not.be.disabled");
@@ -189,7 +192,7 @@ describe(["@tier3"], "Reports pagination validations", () => {
         cy.wait(2 * SEC);
 
         // Select 10 items per page
-        selectItemsPerPageIdentifiedRisks(10);
+        selectItemsPerPageinReports(10, identiFiedRisksTitle);
         cy.wait(2 * SEC);
 
         // Verify that only 10 items are displayed
@@ -198,7 +201,7 @@ describe(["@tier3"], "Reports pagination validations", () => {
         });
 
         // Select 20 items per page
-        selectItemsPerPageIdentifiedRisks(20);
+        selectItemsPerPageinReports(20, identiFiedRisksTitle);
         cy.wait(2 * SEC);
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
@@ -218,7 +221,7 @@ describe(["@tier3"], "Reports pagination validations", () => {
         cy.wait(2 * SEC);
 
         // Select 10 items per page
-        selectItemsPerPageIdentifiedRisks(10);
+        selectItemsPerPageinReports(10, identiFiedRisksTitle);
         cy.wait(2 * SEC);
 
         // Go to page number 2
