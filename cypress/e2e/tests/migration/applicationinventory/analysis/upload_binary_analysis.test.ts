@@ -26,7 +26,6 @@ import {
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 
 const applicationsList: Analysis[] = [];
-
 describe(["@tier1"], "Upload Binary Analysis", () => {
     before("Login", function () {
         login();
