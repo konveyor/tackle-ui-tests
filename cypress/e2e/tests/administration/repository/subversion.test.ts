@@ -20,7 +20,6 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    preservecookies,
     resetURL,
     writeMavenSettingsFile,
 } from "../../../../utils/utils";
@@ -49,8 +48,6 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
     });
 
     beforeEach("Load data", function () {
-        preservecookies();
-
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -108,7 +105,7 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
         application.openAnalysisDetails();
     });
 
-    after("Perform test data clean up", () => {
+    it("Perform test data clean up", () => {
         login();
         deleteByList(applicationsList);
         source_credential.delete();
