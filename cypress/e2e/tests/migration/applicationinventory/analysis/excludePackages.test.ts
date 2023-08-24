@@ -72,7 +72,7 @@ describe(["@tier2"], "Source Analysis", () => {
     });
 
     after("Perform test data clean up", function () {
-        Assessment.open(100, true);
+        Analysis.open(true);
         application.delete();
         source_credential.delete();
     });

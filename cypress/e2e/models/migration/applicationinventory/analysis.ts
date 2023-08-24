@@ -148,7 +148,10 @@ export class Analysis extends Application {
     }
 
     //Navigate to the Application inventory
-    public static open(): void {
+    public static open(forceReload = false): void {
+        if (forceReload) {
+            cy.visit(Cypress.env("tackleUrl"));
+        }
         selectUserPerspective(migration);
         clickByText(navMenu, applicationInventory);
         clickTab(analysis);

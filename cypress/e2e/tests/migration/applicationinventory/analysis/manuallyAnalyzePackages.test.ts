@@ -70,7 +70,7 @@ describe(["@tier2"], "Select the list of packages to be analyzed manually", () =
     });
 
     after("Perform test data clean up", function () {
-        Assessment.open(100, true);
+        Analysis.open(true);
         application.delete();
         source_credential.delete();
     });
