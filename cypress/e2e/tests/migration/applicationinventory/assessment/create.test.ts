@@ -67,14 +67,12 @@ describe(["@tier2"], "Application validations", () => {
     });
 
     beforeEach("Interceptors", function () {
-        // Interceptors
         cy.intercept("POST", "/hub/tag*").as("postTag");
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     it("Application field validations", function () {
-        // Navigate to application inventory page and click "Create New" button
         Assessment.open();
         clickByText(button, createNewButton);
         selectFormItems(applicationBusinessServiceSelect, "Collins LLC");
@@ -129,6 +127,7 @@ describe(["@tier2"], "Application validations", () => {
             .should("contain", stakeHoldersList[0].name)
             .and("contain", stakeHoldersList[1].name);
 
+        // Unassign contributor#1 and verify only contributor#2 is listed
         cy.get(applicationContributorsText)
             .contains(stakeHoldersList[0].name)
             .parent()

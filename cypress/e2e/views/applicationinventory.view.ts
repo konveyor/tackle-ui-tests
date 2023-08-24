@@ -20,7 +20,7 @@ export const applicationBusinessServiceSelect = "[placeholder='Select a business
 export const applicationContributorsInput =
     "#contributors-select-toggle-select-multi-typeahead-typeahead";
 export const applicationContributorsText = ".pf-v5-c-chip__text";
-export const applicationContributionAction = ".pf-v5-c-chip__actions";
+export const applicationContributorsAction = ".pf-v5-c-chip__actions";
 export const applicationOwnerInput = "#owner-toggle-select-typeahead";
 export const repoTypeSelect = "button[id='repo-type-toggle']";
 export const applicationTagsSelect = "[placeholder='Select tags']";
