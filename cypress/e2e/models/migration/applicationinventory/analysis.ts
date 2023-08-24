@@ -62,7 +62,6 @@ import {
     fileName,
     manageCredentials,
     mavenCredential,
-    nextButton,
     panelBody,
     reportStoryPoints,
     rightSideMenu,
@@ -148,7 +147,10 @@ export class Analysis extends Application {
     }
 
     //Navigate to the Application inventory
-    public static open(): void {
+    public static open(forceReload = false): void {
+        if (forceReload) {
+            cy.visit(Cypress.env("tackleUrl"));
+        }
         selectUserPerspective(migration);
         clickByText(navMenu, applicationInventory);
         clickTab(analysis);
@@ -232,12 +234,10 @@ export class Analysis extends Application {
     }
 
     protected isNextEnabled() {
-        cy.get(nextButton).then(($a) => {
-            if ($a.hasClass("pf-m-disabled")) {
-                cy.wait(2000);
-                this.isNextEnabled();
-            }
-        });
+        cy.contains(button, "Next", { timeout: 300 * SEC }).should(
+            "not.have.class",
+            "pf-m-disabled"
+        );
     }
 
     protected scopeSelect() {
@@ -277,6 +277,7 @@ export class Analysis extends Application {
     private startAnalysis() {
         cy.contains(button, analyzeButton).should("be.enabled").click();
         this.selectSourceofAnalysis(this.source);
+        if (this.binary) this.uploadBinary();
         this.isNextEnabled();
         cy.contains(button, next).click();
         this.selectTarget(this.target);
@@ -355,16 +356,8 @@ export class Analysis extends Application {
     }
 
     openReport() {
-        this.selectApplicationRow();
-        cy.get(rightSideMenu, { timeout: 15 * SEC }).within(() => {
-            clickTab("Reports");
-            cy.contains("button", "View analysis", { timeout: 15 * SEC })
-                .then(($a) => {
-                    // Removing target from html so that report opens in same tab
-                    $a.attr("target", "_self");
-                })
-                .click();
-        });
+        // TODO: Update once the new reports feature is implemented
+        return;
     }
 
     downloadReport(type: string, isEnabled = true) {

@@ -36,6 +36,7 @@ export const addButton = "#add-package-to-include";
 export const enterPackageName = "#packageToInclude";
 export const enterPackageNameToExclude = "#packageToExclude";
 export const analysisDetails = "Analysis details";
+export const analysisDetailsEditor = ".monaco-editor";
 export const rightSideMenu = "#page-drawer-content";
 export const enableAutomatedTagging = "input[name=autoTaggingEnabled]";
 export const kebabTopMenuButton = 'button[aria-label="Actions"]';

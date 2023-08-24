@@ -26,10 +26,6 @@ describe(["@tier2"], "Enable and Download HTML and CSV Reports", function () {
 
     before("Login and enable download of HTML and CSV reports", function () {
         login();
-
-        // Enable HTML anc CSV report downloading
-        generalConfig.enableDownloadHtml();
-        generalConfig.enableDownloadCsv();
     });
 
     beforeEach("Load data", function () {

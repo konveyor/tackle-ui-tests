@@ -15,18 +15,15 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    login,
-    getRandomApplicationData,
-    getRandomAnalysisData,
-    resetURL,
-} from "../../../../../utils/utils";
+import { login, getRandomApplicationData, getRandomAnalysisData } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { CredentialType, UserCredentials } from "../../../../types/constants";
+import { AnalysisStatuses, CredentialType, UserCredentials } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
+import { analysisDetailsEditor } from "../../../../views/analysis.view";
+import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 
-let source_credential;
+let source_credential: CredentialsSourceControlUsername;
 let application: Analysis;
 
 describe(["@tier2"], "Select the list of packages to be analyzed manually", () => {
@@ -51,36 +48,29 @@ describe(["@tier2"], "Select the list of packages to be analyzed manually", () =
             this.analysisData = analysisData;
         });
 
-        // Interceptors
-        cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    afterEach("Persist session", function () {
-        // Reset URL from report page to web UI
-        resetURL();
-    });
-
     it("Analyze the packages manually with excluded packages", function () {
-        // For source code analysis application must have source code URL git or svn
+        const analysisData = this.analysisData["analysis_for_manuallyAnalyzePackages"];
         application = new Analysis(
             getRandomApplicationData("testapp-excludePackages", {
                 sourceData: this.appData["tackle-testapp-git"],
             }),
-            getRandomAnalysisData(this.analysisData["analysis_for_manuallyAnalyzePackages"])
+            getRandomAnalysisData(analysisData)
         );
         application.create();
         application.manageCredentials(source_credential.name);
         cy.wait("@getApplication");
-        cy.wait(2000);
+
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.openReport();
-        // Verify in report all packages are excluded mention in excludedPackagesList.
-        application.validateExcludedPackages();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.openAnalysisDetails();
+        cy.get(analysisDetailsEditor).should("contain.text", analysisData.manuallyAnalyzePackages);
     });
 
     after("Perform test data clean up", function () {
+        Analysis.open(true);
         application.delete();
         source_credential.delete();
     });
