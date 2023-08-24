@@ -77,6 +77,9 @@ export const tagCategory = "Tag category";
 export const tagName = "Tag name";
 export const selectNone = "Select none";
 export const manageApplications = "Manage applications";
+export const adoptionCandidateDistribution = "Adoption candidate distribution";
+export const identiFiedRisks = "Identified risks";
+export const suggestedAdoptionPlan = "Suggested adoption plan";
 
 export const createAppButton = "#create-application";
 export const assessAppButton = "#assess-application";

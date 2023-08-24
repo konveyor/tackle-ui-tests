@@ -1487,6 +1487,20 @@ export function clickWithin(parent: string, selector: string, isForced = false, 
         });
 }
 
+export function clickWithinByText(
+    parent: string,
+    selector: string,
+    text: string,
+    isForced = false,
+    log = false
+): void {
+    cy.get(parent, { timeout: 30 * SEC })
+        .eq(0)
+        .within(() => {
+            clickByText(selector, text, isForced, log);
+        });
+}
+
 //function to select checkboxes
 export function selectCheckBox(selector: string, isForced = false, log = false): void {
     cy.get(selector, { timeout: 120 * SEC }).then(($checkbox) => {

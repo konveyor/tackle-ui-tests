@@ -62,7 +62,6 @@ import {
     fileName,
     manageCredentials,
     mavenCredential,
-    nextButton,
     panelBody,
     reportStoryPoints,
     rightSideMenu,
@@ -235,12 +234,10 @@ export class Analysis extends Application {
     }
 
     protected isNextEnabled() {
-        cy.get(nextButton).then(($a) => {
-            if ($a.hasClass("pf-m-disabled")) {
-                cy.wait(2000);
-                this.isNextEnabled();
-            }
-        });
+        cy.contains(button, "Next", { timeout: 300 * SEC }).should(
+            "not.have.class",
+            "pf-m-disabled"
+        );
     }
 
     protected scopeSelect() {
@@ -280,6 +277,7 @@ export class Analysis extends Application {
     private startAnalysis() {
         cy.contains(button, analyzeButton).should("be.enabled").click();
         this.selectSourceofAnalysis(this.source);
+        if (this.binary) this.uploadBinary();
         this.isNextEnabled();
         cy.contains(button, next).click();
         this.selectTarget(this.target);
