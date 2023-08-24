@@ -50,7 +50,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         resetURL();
     });
 
-    it(["@interop"], "Bug 1175 | Upload Binary Analysis", function () {
+    it(["@interop"], "Bug MTA-1175 | Upload Binary Analysis", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
@@ -64,7 +64,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it("Bug 1175 | Custom rules with custom targets", function () {
+    it("Bug MTA-1175 | Custom rules with custom targets", function () {
         // Automated https://issues.redhat.com/browse/TACKLE-561
         const application = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
@@ -79,7 +79,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it("Bug 1175 | DIVA report generation", function () {
+    it("Bug MTA-1175 | DIVA report generation", function () {
         const application = new Analysis(
             getRandomApplicationData("DIVA"),
             getRandomAnalysisData(this.analysisData["analysis_for_DIVA-report"])
@@ -93,7 +93,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it("Bug 1175 | Analysis for jee-example-app upload binary ", function () {
+    it("Bug MTA-1175 | Analysis for jee-example-app upload binary ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(
@@ -108,7 +108,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it("Bug 1175 | Analysis for camunda-bpm-spring-boot-starter", function () {
+    it("Bug MTA-1175 | Analysis for camunda-bpm-spring-boot-starter", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_camunda_app"])
@@ -121,7 +121,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it("Bug 1175 | Analysis for complete-duke app upload binary ", function () {
+    it("Bug MTA-1175 | Analysis for complete-duke app upload binary ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(
@@ -136,7 +136,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it("Bug 1175 | Analysis for kafka-clients-sb app ", function () {
+    it("Bug MTA-1175 | Analysis for kafka-clients-sb app ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_kafka-app"])
