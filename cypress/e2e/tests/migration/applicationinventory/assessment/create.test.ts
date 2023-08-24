@@ -75,13 +75,14 @@ describe(["@tier2"], "Application validations", () => {
     it("Application field validations", function () {
         Assessment.open();
         clickByText(button, createNewButton);
-        selectFormItems(applicationBusinessServiceSelect, "Collins LLC");
+        selectFormItems(applicationBusinessServiceSelect, businessservicesList[0].name);
 
         // Name constraints
         inputText(applicationNameInput, data.getRandomWord(2));
         cy.get(commonView.nameHelper).should("contain", minCharsMsg);
         inputText(applicationNameInput, data.getRandomWords(90));
         cy.get(commonView.nameHelper).should("contain", max120CharsMsg);
+        cy.get(applicationNameInput).clear();
 
         // Description constraint
         inputText(applicationDescriptionInput, data.getRandomWords(90));
