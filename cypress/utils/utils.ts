@@ -352,8 +352,8 @@ export function applySearchFilter(
         filterName == repositoryType ||
         filterName == owner
     ) {
-        cy.get("div.pf-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show")
-            .find("div.pf-c-select")
+        cy.get("div.pf-v5-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show")
+            .find("div.pf-v5-c-select")
             .click();
         if (
             filterName == businessService ||
@@ -363,17 +363,17 @@ export function applySearchFilter(
         ) {
             // ul[role=listbox] > li is for the Application Inventory page.
             // span.pf-c-check__label is for the Copy assessment page.
-            cy.get("ul[role=listbox] > li, span.pf-c-check__label").contains(searchText).click();
+            cy.get("ul[role=listbox] > li, span.pf-v5-c-check__label").contains(searchText).click();
         }
         if (filterName == tag || filterName == credentialType) {
             if (Array.isArray(searchText)) {
                 searchText.forEach(function (searchTextValue) {
-                    cy.get("div.pf-c-select__menu > fieldset > label > span")
+                    cy.get("div.pf-v5-c-select__menu > fieldset > label > span")
                         .contains(searchTextValue)
                         .click();
                 });
             } else {
-                cy.get("div.pf-c-select__menu").contains(searchText).click();
+                cy.get("div.pf-v5-c-select__menu").contains(searchText).click();
             }
         }
     } else {
