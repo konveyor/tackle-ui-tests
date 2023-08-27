@@ -19,6 +19,7 @@ limitations under the License.
 import { selectItemsPerPage } from "../../../../utils/utils";
 import { applicationName, button, risk } from "../../../types/constants";
 import {
+    adoptionCandidateDistributionTitle,
     articleButton,
     articleCard,
     articleExpandedContent,
