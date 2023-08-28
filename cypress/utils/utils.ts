@@ -79,6 +79,7 @@ import { Application } from "../e2e/models/migration/applicationinventory/applic
 import { switchToggle } from "../e2e/views/reports.view";
 import { rightSideMenu } from "../e2e/views/analysis.view";
 import Chainable = Cypress.Chainable;
+import { User } from "../e2e/models/keycloak/users/user";
 
 let userName = Cypress.env("user");
 let userPassword = Cypress.env("pass");
@@ -180,10 +181,14 @@ export function logout(userName?: string): void {
     cy.get("h1", { timeout: 15 * SEC }).contains("Sign in to your account");
 }
 
-export function resetURL(): void {
+export function resetURL(user?: User): void {
     cy.url().then(($url) => {
         if ($url.includes("report") || $url.includes("tasks")) {
-            login();
+            if (!user) {
+                login();
+            } else {
+                user.login();
+            }
         }
     });
 }
