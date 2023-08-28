@@ -2,6 +2,7 @@ import {
     callWithin,
     click,
     clickByText,
+    clickWithFocus,
     inputText,
     selectItemsPerPage,
     selectUserPerspective,
@@ -82,12 +83,7 @@ export class MigrationWave {
     public create() {
         MigrationWave.openNewForm();
         this.fillForm(this);
-
-        cy.get(MigrationWaveView.submitButton, { timeout: 10 * SEC })
-            .should("be.enabled")
-            .focus()
-            .click();
-
+        clickWithFocus(MigrationWaveView.submitButton);
         this.setApplications();
     }
 

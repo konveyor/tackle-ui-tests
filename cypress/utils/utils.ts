@@ -153,7 +153,7 @@ export function submitForm(): void {
 }
 
 export function cancelForm(): void {
-    cy.get(commonView.cancelButton).click();
+    click(commonView.cancelButton);
 }
 
 export function login(username?, password?: string, firstLogin = false): Chainable<null> {
