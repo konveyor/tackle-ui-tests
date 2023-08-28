@@ -20,9 +20,8 @@ import {
     getRandomApplicationData,
     login,
     logout,
-    preservecookies,
 } from "../../../utils/utils";
-import { AnalysisStatuses, CredentialType, UserCredentials } from "../../types/constants";
+import { AnalysisStatuses, CredentialType, SEC, UserCredentials } from "../../types/constants";
 import { RulesRepositoryFields } from "../../types/types";
 import * as data from "../../../utils/data_utils";
 import { getRulesData } from "../../../utils/data_utils";
@@ -66,8 +65,6 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
     });
 
     beforeEach("Persist session", function () {
-        preservecookies();
-
         cy.fixture("custom-rules").then(function (customRules) {
             this.customRules = customRules;
         });
@@ -79,6 +76,22 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         cy.fixture("analysis").then(function (analysisData) {
             this.analysisData = analysisData;
         });
+    });
+
+    it("Bug MTA-458 | Admin, Rules from public repository", function () {
+        analysisWithPublicRules = new Analysis(
+            getRandomApplicationData("bookServerApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+        );
+        analysisWithPublicRules.customRuleRepository = getRulesData(
+            this.customRules.rules_from_bookServerApp
+        ) as RulesRepositoryFields;
+        analysisWithPublicRules.target = [];
+
+        analysisWithPublicRules.create();
+        analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
     });
 
     it("Admin, Rules from private repository with credentials", function () {
@@ -116,6 +129,11 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         logout();
     });
 
+    it("Bug MTA-458 | Architect, Rules from public repository", function () {
+        architect.login();
+        analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
+    });
+
     it("Architect, Rules from private repository with credentials", function () {
         analyzeAndVerify(analysisWithPrivateRules, AnalysisStatuses.completed);
     });
@@ -123,6 +141,11 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
     it("Architect, Rules from private repository without credentials", function () {
         analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
         architect.logout();
+    });
+
+    it("Bug MTA-458 | Migrator, Rules from public repository", function () {
+        migrator.login();
+        analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
     });
 
     it("Migrator, Rules from private repository with credentials", function () {
@@ -147,6 +170,7 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
 
     const analyzeAndVerify = (analysis: Analysis, expectedStatus: AnalysisStatuses) => {
         analysis.analyze();
+        cy.wait(10 * SEC);
         analysis.verifyAnalysisStatus(expectedStatus);
     };
 });
