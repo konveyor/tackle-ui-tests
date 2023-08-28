@@ -711,19 +711,18 @@ export function application_inventory_kebab_menu(menu, tab?): void {
     if (tab == "Analysis") navigate_to_application_inventory("Analysis");
     else navigate_to_application_inventory();
 
-    cy.get(topKebabMenu).eq(1).click({ force: true });
+    cy.get(actionButton).eq(0).click({ force: true });
     if (menu == "Import") {
         clickByText(button, "Import");
     } else {
-        cy.get("a")
+        cy.get("span.pf-v5-c-menu__item-text")
             .contains(menu)
             .then(($menu_item) => {
                 if (!$menu_item.hasClass("pf-m-disabled")) {
-                    clickByText("a", menu);
-                    if (menu == "Delete") clickByText(button, menu, true);
+                    clickByText(button, menu, true);
                 } else {
                     // close menu if nothing to do
-                    cy.get(topKebabMenu).eq(1).click({ force: true });
+                    cy.get(actionButton).eq(0).click({ force: true });
                 }
             });
     }
@@ -860,7 +859,7 @@ export function deleteAppImportsTableRows(lastPage = false): void {
                             .contains(date)
                             .parent(trTag)
                             .within(() => {
-                                click(actionButton);
+                                cy.get("button[aria-label='Kebab toggle']").click();
                             })
                             .contains(button, deleteAction)
                             .click();

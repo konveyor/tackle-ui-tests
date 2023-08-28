@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-export const actionButton = "button[aria-label='Kebab toggle']";
+export const actionButton = "button[aria-label='kebab dropdown toggle']";
 export const applicationNameInput = "input[name=name]";
 export const applicationDescriptionInput = "input[name=description]";
 export const applicationBusinessServiceSelect = "[placeholder='Select a business service']";

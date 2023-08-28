@@ -29,7 +29,7 @@ export const expandRow = "button[aria-label=Details]";
 export const successAlertMessage = ".pf-m-success";
 export const infoAlertMessage = ".pf-m-info";
 export const duplicateNameWarning = "h4[class*='alert__title']";
-export const appTable = "table[aria-label='main-table']";
+export const appTable = ".pf-v5-c-table";
 export const expandableRow = ".pf-c-expandable-row";
 export const nameHelper = "span.pf-v5-c-helper-text__item-text";
 export const descriptionHelper = "div[id=description-helper]";
