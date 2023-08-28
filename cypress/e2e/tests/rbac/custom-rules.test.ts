@@ -20,9 +20,8 @@ import {
     getRandomApplicationData,
     login,
     logout,
-    preservecookies,
 } from "../../../utils/utils";
-import { AnalysisStatuses, CredentialType, UserCredentials } from "../../types/constants";
+import { AnalysisStatuses, CredentialType, SEC, UserCredentials } from "../../types/constants";
 import { RulesRepositoryFields } from "../../types/types";
 import * as data from "../../../utils/data_utils";
 import { getRulesData } from "../../../utils/data_utils";
@@ -66,8 +65,6 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
     });
 
     beforeEach("Persist session", function () {
-        preservecookies();
-
         cy.fixture("custom-rules").then(function (customRules) {
             this.customRules = customRules;
         });
@@ -81,7 +78,7 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         });
     });
 
-    it("Bug MTA-458 | Admin, Rules from public repository", function () {
+    it("Admin, Rules from public repository", function () {
         analysisWithPublicRules = new Analysis(
             getRandomApplicationData("bookServerApp", {
                 sourceData: this.appData["bookserver-app"],
@@ -132,7 +129,7 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         logout();
     });
 
-    it("Bug MTA-458 | Architect, Rules from public repository", function () {
+    it("Architect, Rules from public repository", function () {
         architect.login();
         analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
     });
@@ -146,7 +143,7 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         architect.logout();
     });
 
-    it("Bug MTA-458 | Migrator, Rules from public repository", function () {
+    it("Migrator, Rules from public repository", function () {
         migrator.login();
         analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
     });
@@ -173,6 +170,11 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
 
     const analyzeAndVerify = (analysis: Analysis, expectedStatus: AnalysisStatuses) => {
         analysis.analyze();
+        /**
+         * Ensures that a new analysis starts before verifying its status
+         * This waiting won't affect the test execution time because it overlaps an analysis time that will take more than 10 secs
+         */
+        cy.wait(10 * SEC);
         analysis.verifyAnalysisStatus(expectedStatus);
     };
 });
