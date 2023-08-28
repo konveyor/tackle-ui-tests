@@ -54,7 +54,7 @@ import {
     actionButton,
     date,
     createEntitiesCheckbox,
-    topKebabMenu,
+    sideKebabMenuImports,
     appImportForm,
 } from "../e2e/views/applicationinventory.view";
 import {

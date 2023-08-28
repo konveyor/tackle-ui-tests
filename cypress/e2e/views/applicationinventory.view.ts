@@ -45,6 +45,7 @@ export const user = "User";
 export const kebabMenu = "td[class='pf-v5-c-table__td pf-v5-c-table__action'] > button";
 export const topKebabMenu = "div > button[aria-label='Actions']";
 export const kebabMenuItem = "a.pf-v5-c-dropdown__menu-item";
+// This is on the Application imports page.
 export const sideKebabMenuImports = "button[aria-label='Kebab toggle']";
 
 //Fields related to analysis - source mode
