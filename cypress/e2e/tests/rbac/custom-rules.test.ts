@@ -170,6 +170,10 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
 
     const analyzeAndVerify = (analysis: Analysis, expectedStatus: AnalysisStatuses) => {
         analysis.analyze();
+        /**
+         * Ensures that a new analysis starts before verifying its status
+         * This waiting won't affect the test execution time because it overlaps an analysis time that will take more than 10 secs
+         */
         cy.wait(10 * SEC);
         analysis.verifyAnalysisStatus(expectedStatus);
     };
