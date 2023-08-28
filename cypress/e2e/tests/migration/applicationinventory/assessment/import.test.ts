@@ -45,10 +45,6 @@ describe(["@tier2"], "Application import operations", () => {
         deleteAppImportsTableRows();
     });
 
-    after("Perform test data clean up", function () {
-        deleteApplicationTableRows();
-    });
-
     it("Valid applications import", function () {
         Application.open();
 

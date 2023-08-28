@@ -859,7 +859,7 @@ export function deleteAppImportsTableRows(lastPage = false): void {
                             .contains(date)
                             .parent(trTag)
                             .within(() => {
-                                cy.get("button[aria-label='Kebab toggle']").click();
+                                cy.get(sideKebabMenuImports).click();
                             })
                             .contains(button, deleteAction)
                             .click();
