@@ -78,7 +78,7 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         });
     });
 
-    it("Bug MTA-458 | Admin, Rules from public repository", function () {
+    it("Admin, Rules from public repository", function () {
         analysisWithPublicRules = new Analysis(
             getRandomApplicationData("bookServerApp", {
                 sourceData: this.appData["bookserver-app"],
@@ -129,7 +129,7 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         logout();
     });
 
-    it("Bug MTA-458 | Architect, Rules from public repository", function () {
+    it("Architect, Rules from public repository", function () {
         architect.login();
         analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
     });
@@ -143,7 +143,7 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         architect.logout();
     });
 
-    it("Bug MTA-458 | Migrator, Rules from public repository", function () {
+    it("Migrator, Rules from public repository", function () {
         migrator.login();
         analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
     });
