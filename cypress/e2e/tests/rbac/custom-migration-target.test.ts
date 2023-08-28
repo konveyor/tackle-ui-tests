@@ -19,16 +19,13 @@ import {
     clickByText,
     getRandomAnalysisData,
     getRandomApplicationData,
-    hasToBeSkipped,
     login,
     logout,
-    preservecookies,
     resetURL,
     selectItemsPerPage,
 } from "../../../utils/utils";
 import {
     analyzeButton,
-    application,
     button,
     SEC,
     CustomRuleType,
@@ -56,7 +53,7 @@ describe(["tier2", "@dc"], "Custom Migration Targets RBAC operations", function 
 
         login();
         cy.fixture("custom-rules").then((customMigrationTargets) => {
-            const targetData = customMigrationTargets.rules_from_bookServerApp;
+            const targetData = customMigrationTargets["rules_from_bookServerApp"];
             const repositoryData: RulesRepositoryFields = {
                 ...targetData.repository,
                 type: CustomRuleType.Repository,
@@ -72,8 +69,6 @@ describe(["tier2", "@dc"], "Custom Migration Targets RBAC operations", function 
     });
 
     beforeEach("Persist session", function () {
-        preservecookies();
-
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -108,14 +103,14 @@ describe(["tier2", "@dc"], "Custom Migration Targets RBAC operations", function 
     it("Look for created target on an analysis as architect user", function () {
         architect.login();
         assertTargetIsVisible(analysis, target);
-        analyzeAndVerify(analysis);
+        analyzeAndVerify(analysis, architect);
         architect.logout();
     });
 
     it("Look for created target on an analysis as migrator user", function () {
         migrator.login();
         assertTargetIsVisible(analysis, target);
-        analyzeAndVerify(analysis);
+        analyzeAndVerify(analysis, migrator);
         migrator.logout();
     });
 
@@ -150,11 +145,11 @@ describe(["tier2", "@dc"], "Custom Migration Targets RBAC operations", function 
         clickByText(button, "Cancel");
     };
 
-    const analyzeAndVerify = (analysis: Analysis) => {
+    const analyzeAndVerify = (analysis: Analysis, user?: User) => {
         analysis.analyze();
         cy.wait(10 * SEC);
         analysis.verifyAnalysisStatus(AnalysisStatuses.completed);
         analysis.openReport();
-        resetURL();
+        resetURL(user);
     };
 });
