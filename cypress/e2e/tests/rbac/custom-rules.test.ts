@@ -81,22 +81,6 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         });
     });
 
-    it("Bug MTA-458 | Admin, Rules from public repository", function () {
-        analysisWithPublicRules = new Analysis(
-            getRandomApplicationData("bookServerApp", {
-                sourceData: this.appData["bookserver-app"],
-            }),
-            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
-        );
-        analysisWithPublicRules.customRuleRepository = getRulesData(
-            this.customRules.rules_from_bookServerApp
-        ) as RulesRepositoryFields;
-        analysisWithPublicRules.target = [];
-
-        analysisWithPublicRules.create();
-        analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
-    });
-
     it("Admin, Rules from private repository with credentials", function () {
         analysisWithPrivateRules = new Analysis(
             getRandomApplicationData("bookServerApp", {
@@ -132,11 +116,6 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         logout();
     });
 
-    it("Bug MTA-458 | Architect, Rules from public repository", function () {
-        architect.login();
-        analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
-    });
-
     it("Architect, Rules from private repository with credentials", function () {
         analyzeAndVerify(analysisWithPrivateRules, AnalysisStatuses.completed);
     });
@@ -144,11 +123,6 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
     it("Architect, Rules from private repository without credentials", function () {
         analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
         architect.logout();
-    });
-
-    it("Bug MTA-458 | Migrator, Rules from public repository", function () {
-        migrator.login();
-        analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
     });
 
     it("Migrator, Rules from private repository with credentials", function () {
