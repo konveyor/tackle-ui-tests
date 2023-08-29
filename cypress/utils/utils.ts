@@ -129,6 +129,24 @@ export function click(fieldId: string, isForced = true, log = false): void {
     cy.get(fieldId, { log, timeout: 60 * SEC }).click({ log, force: isForced });
 }
 
+export function clickWithFocus(fieldId: string, isForced = true, log = false): void {
+    if (!log) {
+        cy.log(`Click ${fieldId}`);
+    }
+    cy.get(fieldId, { log, timeout: 60 * SEC })
+        .focus()
+        .click({ log, force: isForced });
+}
+
+export function clickJs(fieldId: string, isForced = true, log = false): void {
+    if (!log) {
+        cy.log(`Click ${fieldId}`);
+    }
+    cy.get(fieldId, { log, timeout: 60 * SEC }).then(($obj) => {
+        $obj[0].click();
+    });
+}
+
 export function submitForm(): void {
     cy.get(commonView.submitButton).should("not.be.disabled");
     cy.get(commonView.controlsForm).submit();
