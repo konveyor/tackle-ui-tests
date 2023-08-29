@@ -231,7 +231,8 @@ export class Assessment extends Application {
     }
 
     click_assess_button(): void {
-        click(assessAppButton);
+        performRowActionByIcon(this.name, kebabMenu);
+        cy.get(commonView.actionMenuItem).contains("Assess").click();
     }
 
     perform_assessment(

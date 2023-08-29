@@ -42,7 +42,7 @@ export const southboundHelper = "div[id=southbound-dependencies-helper]";
 export const selectBox = "input[type=checkbox]";
 export const tags = "span";
 export const user = "User";
-export const kebabMenu = "td[class='pf-v5-c-table__td pf-v5-c-table__action'] > button";
+export const kebabMenu = "button[aria-label='kebab dropdown toggle']";
 export const topKebabMenu = "div > button[aria-label='Actions']";
 export const kebabMenuItem = "a.pf-v5-c-dropdown__menu-item";
 

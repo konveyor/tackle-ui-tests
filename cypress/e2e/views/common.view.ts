@@ -53,6 +53,7 @@ export const selectFilter = "div.pf-m-toggle-group.pf-m-filter-group.pf-m-show";
 export const itemsSelectInsideDialog = "div[role='dialog'] button[aria-label='Select']";
 export const nameHelperBusiness = "#business-service-name-helper";
 export const nameHelperStakeholderGroup = "#-helper";
+export const actionMenuItem = "span.pf-v5-c-menu__item-text";
 export const kebabMenuItem = "a.pf-c-dropdown__menu-item";
 export const commonTable = "table[aria-label='main-table']";
 export const dropdownClearSelection = "pf-v5-c-select__toggle-clear";

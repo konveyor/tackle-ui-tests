@@ -19,6 +19,7 @@ limitations under the License.
 import { selectItemsPerPage } from "../../../../utils/utils";
 import { applicationName, button, risk } from "../../../types/constants";
 import {
+    adoptionCandidateDistributionTitle,
     articleButton,
     articleCard,
     articleExpandedContent,
@@ -26,7 +27,7 @@ import {
     articleItem,
 } from "../../../views/reports.view";
 
-export function selectItemsPerPageinReports(items: number, articleTitle: string): void {
+export function selectItemsPerPageInReports(items: number, articleTitle: string): void {
     cy.get(articleTitle)
         .closest(articleItem)
         .within(() => {
@@ -46,9 +47,9 @@ export function expandArticle(name: string): void {
         });
 }
 
-export function verifyApplicationRisk(risktype: string, appName: string): void {
+export function verifyApplicationRisk(riskType: string, appName: string): void {
     // Verifies particular application's risk type
-    selectItemsPerPageinReports(100, adoptionCandidateDistributionTitle);
+    selectItemsPerPageInReports(100, adoptionCandidateDistributionTitle);
     cy.wait(4000);
     cy.get(adoptionCandidateDistributionTitle)
         .closest(articleItem)
@@ -56,7 +57,7 @@ export function verifyApplicationRisk(risktype: string, appName: string): void {
         .each(($ele) => {
             if ($ele.find(`td[data-label="${applicationName}"]`).text() == appName) {
                 expect($ele.find(`td[data-label="${risk}"]`).text().toLowerCase()).to.equal(
-                    risktype
+                    riskType
                 );
             }
         });
