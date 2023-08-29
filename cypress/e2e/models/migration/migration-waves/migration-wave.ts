@@ -85,6 +85,7 @@ export class MigrationWave {
 
         cy.get(MigrationWaveView.submitButton, { timeout: 10 * SEC })
             .should("be.enabled")
+            .focus()
             .click();
 
         this.setApplications();
