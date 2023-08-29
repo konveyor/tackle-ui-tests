@@ -757,7 +757,7 @@ export function openManageImportsPage(): void {
 export function openErrorReport(): void {
     // Open error report for the first row
     cy.get("table > tbody > tr").eq(0).as("firstRow");
-    cy.get("@firstRow").find(actionButton).click();
+    cy.get("@firstRow").find(sideKebabMenuImports).click();
     cy.get("@firstRow").find(button).contains("View error report").click();
     cy.get("h1", { timeout: 5 * SEC }).contains("Error report");
 }
