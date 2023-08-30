@@ -153,10 +153,10 @@ export function submitForm(): void {
 }
 
 export function cancelForm(): void {
-    click(commonView.cancelButton);
+    clickJs(commonView.cancelButton);
 }
 
-export function login(username?, password?: string, firstLogin = false): Chainable<null> {
+export function login(username?: string, password?: string, firstLogin = false): Chainable<null> {
     /**
      *  If the login method is explicitly called, it means that previous sessions are no longer required
      */
