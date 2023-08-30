@@ -17,6 +17,7 @@ limitations under the License.
 
 import {
     click,
+    clickJs,
     doesExistText,
     login,
     preservecookies,
@@ -27,6 +28,7 @@ import * as data from "../../../../utils/data_utils";
 import { CustomMigrationTarget } from "../../../models/administration/custom-migration-targets/custom-migration-target";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { RepositoryType, SEC } from "../../../types/constants";
+import { cancelButton } from "../../../views/common.view";
 
 describe(["@tier1"], "Custom Migration Target Validations", () => {
     let target: CustomMigrationTarget;
@@ -53,7 +55,7 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         doesExistText("A custom target with this name already exists. Use a different name", true);
 
         cy.get(CustomMigrationTargetView.createSubmitButton).should("be.disabled");
-        cy.contains("Cancel").focus().click();
+        clickJs(cancelButton);
     });
 
     it("Rule files validations", function () {
