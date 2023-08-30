@@ -73,14 +73,13 @@ describe(["@tier2"], "Jira connection filter validations", () => {
         notExists(firstName, jiraTable);
         clearAllFilters();
 
-        // Commented code below cause it fails due to the bug https://issues.redhat.com/browse/MTA-895
-        // // Searching for invalid name:
-        // Jira.ApplyFilterByName(invalidSearchInput);
-        //
-        // // Assert that no search results are found
-        // cy.get("h2").contains("No data available");
-        //
-        // clearAllFilters();
+        // Searching for invalid name:
+        Jira.applyFilterByName(invalidSearchInput);
+
+        // Assert that no search results are found
+        cy.get("h2").contains("No jira configuration available");
+
+        clearAllFilters();
     });
 
     after("Clean up", () => {

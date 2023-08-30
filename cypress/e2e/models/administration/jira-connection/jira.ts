@@ -248,7 +248,7 @@ export class Jira {
     static applyFilterByName(value: string) {
         selectFromDropList(filteredBy, filterCategory);
         inputText(filterNameInput, value);
-        click(filterSubmitButton);
+        click(searchButton);
     }
 
     public getAllProjects(): Cypress.Chainable<JiraProject[]> {

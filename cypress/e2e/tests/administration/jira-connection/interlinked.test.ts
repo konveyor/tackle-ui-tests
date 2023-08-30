@@ -92,6 +92,8 @@ describe(["@tier2"], "Jira connection negative tests", () => {
             getJiraCredentialData(CredentialType.jiraToken, !useTestingAccount)
         );
 
+        jiraBearerCredentialInvalid.create();
+
         // Defining Jira Cloud connection data with incorrect credentials
         jiraCloudConnectionDataIncorrect = getJiraConnectionData(
             jiraBasicCredentialInvalid,
@@ -135,7 +137,7 @@ describe(["@tier2"], "Jira connection negative tests", () => {
         });
     });
 
-    it("Bug MTA-991 | Validating error when Jira Stage Instance is not connected", () => {
+    it("Validating error when Jira Stage Instance is not connected", () => {
         /**
          Implements MTA-362 - Add JIRA instance with invalid credentials
          Automates https://issues.redhat.com/browse/MTA-991
