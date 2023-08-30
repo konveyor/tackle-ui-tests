@@ -53,7 +53,7 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         doesExistText("A custom target with this name already exists. Use a different name", true);
 
         cy.get(CustomMigrationTargetView.createSubmitButton).should("be.disabled");
-        cy.contains("Cancel").click();
+        cy.contains("Cancel").focus().click();
     });
 
     it("Rule files validations", function () {
