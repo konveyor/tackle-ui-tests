@@ -15,7 +15,7 @@ limitations under the License.
 */
 export const itemsPerPageToggleButton = "#pagination-id-top-toggle";
 export const submitButton = '[id*="form-submit"]';
-export const cancelButton = "#cancel";
+export const cancelButton = '[id*="cancel"]';
 export const closeButton = "button[aria-label=Close]";
 export const confirmButton = "#confirm-dialog-button";
 export const editButton = "button[aria-label=edit]";
