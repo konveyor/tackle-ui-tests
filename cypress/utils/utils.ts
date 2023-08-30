@@ -857,7 +857,7 @@ export function deleteApplicationTableRows(): void {
 }
 
 export function deleteAppImportsTableRows() {
-    function deleteItems(rowCount): void {
+    function deleteItems(rowCount: number): void {
         if (rowCount < 1) return;
         cy.get(sideKebabMenuImports, { timeout: 10000 }).first().click();
         cy.get("ul[role=menu] > li").contains("Delete").click();
@@ -873,8 +873,7 @@ export function deleteAppImportsTableRows() {
     cy.get(commonView.appTable)
         .find(trTag)
         .then(($rows) => {
-            let rowCount = 0;
-            rowCount = $rows.length - 1;
+            const rowCount = $rows.length - 1;
 
             if (rowCount >= 1) deleteItems(rowCount);
         });
