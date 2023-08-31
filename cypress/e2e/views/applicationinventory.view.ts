@@ -42,7 +42,7 @@ export const southboundHelper = "div[id=southbound-dependencies-helper]";
 export const selectBox = "input[type=checkbox]";
 export const tags = "span";
 export const user = "User";
-export const kebabMenu = "button[aria-label='kebab dropdown toggle']";
+export const kebabMenu = "button[aria-label='Kebab toggle']";
 export const topKebabMenu = "div > button[aria-label='Actions']";
 export const kebabMenuItem = "a.pf-v5-c-dropdown__menu-item";
 // This is on the Application imports page.
