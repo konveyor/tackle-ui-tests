@@ -757,7 +757,7 @@ export function openManageImportsPage(): void {
 export function openErrorReport(): void {
     // Open error report for the first row
     cy.get("table > tbody > tr").eq(0).as("firstRow");
-    cy.get("@firstRow").find(actionButton).click();
+    cy.get("@firstRow").find(sideKebabMenuImports).click();
     cy.get("@firstRow").find(button).contains("View error report").click();
     cy.get("h1", { timeout: 5 * SEC }).contains("Error report");
 }
@@ -856,36 +856,26 @@ export function deleteApplicationTableRows(): void {
         });
 }
 
-export function deleteAppImportsTableRows(lastPage = false): void {
-    if (!lastPage) {
-        openManageImportsPage();
-        // Select 100 items per page
-        selectItemsPerPage(100);
-        cy.wait(2000);
+export function deleteAppImportsTableRows() {
+    function deleteItems(rowCount: number): void {
+        if (rowCount < 1) return;
+        cy.get(sideKebabMenuImports, { timeout: 10000 }).first().click();
+        cy.get("ul[role=menu] > li").contains("Delete").click();
+        cy.get(commonView.confirmButton)
+            .click()
+            .then(() => {
+                cy.wait(4000);
+                deleteItems(--rowCount);
+            });
     }
 
+    openManageImportsPage();
     cy.get(commonView.appTable)
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
-                    .each(($tableRow) => {
-                        var date = $tableRow.find("td[data-label=Date]").text();
-                        cy.get(tdTag)
-                            .contains(date)
-                            .parent(trTag)
-                            .within(() => {
-                                cy.get(sideKebabMenuImports).click();
-                            })
-                            .contains(button, deleteAction)
-                            .click();
-                        cy.wait(800);
-                        click(commonView.confirmButton);
-                        cy.wait(4000);
-                    });
-            }
+        .find(trTag)
+        .then(($rows) => {
+            const rowCount = $rows.length - 1;
+
+            if (rowCount >= 1) deleteItems(rowCount);
         });
 }
 
