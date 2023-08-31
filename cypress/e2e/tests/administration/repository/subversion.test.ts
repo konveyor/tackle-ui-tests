@@ -16,6 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    clickWithinByText,
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
@@ -26,11 +27,12 @@ import {
 import * as data from "../../../../utils/data_utils";
 import { SubversionConfiguration } from "../../../models/administration/repositories/subversion";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
-import { CredentialType, UserCredentials } from "../../../types/constants";
+import { button, CredentialType, SEC, UserCredentials } from "../../../types/constants";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
+import { footer } from "../../../views/common.view";
 
 let subversionConfiguration = new SubversionConfiguration();
-let source_credential;
+let source_credential: CredentialsSourceControlUsername;
 let applicationsList: Analysis[] = [];
 
 describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
@@ -59,11 +61,6 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    afterEach("Persist session", function () {
-        // Reset URL from report page to web UI
-        resetURL();
-    });
-
     // test that when the insecure repository is enabled, then the analysis on a http repo should be completed successfully
     it("Analysis on insecure subversion Repository(http) for tackle test app when insecure repository is allowed", function () {
         subversionConfiguration.enableInsecureSubversionRepositories();
@@ -77,7 +74,7 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -97,15 +94,20 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Failed");
         application.openAnalysisDetails();
+        clickWithinByText(footer, button, "Close");
+    });
+
+    afterEach("Persist session", function () {
+        // Reset URL from report page to web UI
+        resetURL();
     });
 
     after("Perform test data clean up", () => {
-        login();
         deleteByList(applicationsList);
         source_credential.delete();
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
