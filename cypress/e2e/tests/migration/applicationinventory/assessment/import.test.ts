@@ -253,7 +253,7 @@ describe(["@tier2"], "Application import operations", () => {
     });
 
     it("Import .CSV file with missing application name", function () {
-        // Automates https://issues.redhat.com/browse/TACKLE-634
+        // Automates Polarion MTA-368
         Application.open();
         cy.wait("@getApplication");
 
