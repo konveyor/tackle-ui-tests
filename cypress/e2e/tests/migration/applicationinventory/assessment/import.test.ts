@@ -252,13 +252,13 @@ describe(["@tier2"], "Application import operations", () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Import .CSV file without app name", function () {
+    it("Import .CSV file with missing application name", function () {
         // Automates https://issues.redhat.com/browse/TACKLE-634
         Application.open();
         cy.wait("@getApplication");
 
         // Import csv with invalid record type
-        const fileName = "missing_app_name.csv";
+        const fileName = "missing_application_name.csv";
         importApplication(filePath + fileName);
         cy.wait(2000);
 
