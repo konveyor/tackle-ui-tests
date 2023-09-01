@@ -252,6 +252,29 @@ describe(["@tier2"], "Application import operations", () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
+    it("Import .CSV file without app name", function () {
+        // Automates https://issues.redhat.com/browse/TACKLE-634
+        Application.open();
+        cy.wait("@getApplication");
+
+        // Import csv with invalid record type
+        const fileName = "missing_app_name.csv";
+        importApplication(filePath + fileName);
+        cy.wait(2000);
+
+        // Open application imports page
+        openManageImportsPage();
+
+        // Verify import applications page shows correct information
+        verifyAppImport(fileName, "Completed", 0, 1);
+
+        var errorMsgs = ["Application Name is mandatory."];
+
+        // Verify the error report message
+        openErrorReport();
+        verifyImportErrorMsg(errorMsgs);
+    });
+
     after("Perform test data clean up", function () {
         // Business services and apps were created during app imports; Hence these functions are being used for
         // cleanup.
