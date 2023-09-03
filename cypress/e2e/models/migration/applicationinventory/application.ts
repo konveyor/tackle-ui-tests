@@ -280,7 +280,7 @@ export class Application {
             });
     }
 
-    getColumnText(columnSelector, columnText: string): void {
+    getColumnText(columnSelector: string, columnText: string): void {
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(this.name)

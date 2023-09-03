@@ -122,29 +122,34 @@ export function clickByText(
     cy.wait(SEC, { log });
 }
 
-export function click(fieldId: string, isForced = true, log = false): void {
-    if (!log) {
-        cy.log(`Click ${fieldId}`);
-    }
-    cy.get(fieldId, { log, timeout: 30 * SEC }).click({ log, force: isForced });
-}
-
-export function clickWithFocus(fieldId: string, isForced = true, log = false): void {
+export function click(fieldId: string, isForced = true, log = false, number = 0): void {
     if (!log) {
         cy.log(`Click ${fieldId}`);
     }
     cy.get(fieldId, { log, timeout: 30 * SEC })
+        .eq(number)
+        .click({ log, force: isForced });
+}
+
+export function clickWithFocus(fieldId: string, isForced = true, log = false, number = 0): void {
+    if (!log) {
+        cy.log(`Click ${fieldId}`);
+    }
+    cy.get(fieldId, { log, timeout: 30 * SEC })
+        .eq(number)
         .focus()
         .click({ log, force: isForced });
 }
 
-export function clickJs(fieldId: string, isForced = true, log = false): void {
+export function clickJs(fieldId: string, isForced = true, log = false, number = 0): void {
     if (!log) {
         cy.log(`Click ${fieldId}`);
     }
-    cy.get(fieldId, { log, timeout: 30 * SEC }).then(($obj) => {
-        $obj[0].click();
-    });
+    cy.get(fieldId, { log, timeout: 30 * SEC })
+        .eq(number)
+        .then(($obj) => {
+            $obj[0].click();
+        });
 }
 
 export function submitForm(): void {
@@ -913,7 +918,6 @@ export function performRowAction(itemName: string, action: string): void {
 export function performRowActionByIcon(itemName: string, action: string): void {
     // itemName is the text to be searched on the screen (For eg: application name, etc)
     // Action is the name of the action to be applied (For eg: edit or click kebab menu)
-    selectItemsPerPage(100);
     cy.contains(itemName, { timeout: 120 * SEC })
         .closest(trTag)
         .within(() => {
