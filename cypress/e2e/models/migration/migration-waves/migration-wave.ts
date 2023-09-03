@@ -2,7 +2,7 @@ import {
     callWithin,
     click,
     clickByText,
-    clickWithFocus,
+    clickJs,
     inputText,
     selectItemsPerPage,
     selectUserPerspective,
@@ -83,7 +83,7 @@ export class MigrationWave {
     public create() {
         MigrationWave.openNewForm();
         this.fillForm(this);
-        clickWithFocus(MigrationWaveView.submitButton);
+        clickJs(MigrationWaveView.submitButton);
         this.setApplications();
     }
 
