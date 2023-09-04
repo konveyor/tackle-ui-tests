@@ -91,12 +91,8 @@ export class MigrationWave {
         MigrationWave.open();
         this.expandActionsMenu();
         cy.contains(editAction).click();
-
         this.fillForm(updateValues);
-
-        cy.get(MigrationWaveView.submitButton, { timeout: 10 * SEC })
-            .should("be.enabled")
-            .click({ force: true });
+        clickJs(MigrationWaveView.submitButton);
     }
 
     public delete() {
