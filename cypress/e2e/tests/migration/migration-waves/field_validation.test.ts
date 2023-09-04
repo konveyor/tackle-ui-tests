@@ -28,7 +28,7 @@ import { MigrationWave } from "../../../models/migration/migration-waves/migrati
 import { MigrationWaveView } from "../../../views/migration-wave.view";
 import { cancelButton } from "../../../views/common.view";
 import * as commonView from "../../../views/common.view";
-import { duplicateMigrationWaveError, SEC } from "../../../types/constants";
+import { duplicateMigrationWaveError } from "../../../types/constants";
 
 let migrationWave: MigrationWave;
 
