@@ -111,8 +111,8 @@ describe(["@tier2"], "Application import operations", () => {
         openErrorReport();
         verifyImportErrorMsg("Tag 'TypeScript' could not be found");
 
-        // businessService.delete();
-        // notExists(businessService.name);
+        businessService.delete();
+        notExists(businessService.name);
     });
 
     it("Applications import for non existing business service", function () {
@@ -224,7 +224,7 @@ describe(["@tier2"], "Application import operations", () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Applications import with inavlid record type", function () {
+    it("Application import with invalid record type", function () {
         // The only valid record types for records in a CSV file are 1(application) or 2(dependency).
         // In this test, we import a CSV file that has records with a record type that's neither 1 nor 2.
         // Automates https://issues.redhat.com/browse/TACKLE-634
