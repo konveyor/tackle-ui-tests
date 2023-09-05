@@ -828,25 +828,31 @@ export function deleteApplicationTableRows(): void {
     // are imported. For all other tests use deleteByList(appList)
     navigate_to_application_inventory();
     cy.get(commonView.appTable)
-        .find(trTag)
-        .not(".pf-c-table__expandable-row")
-        .each(($tableRow) => {
-            const name = $tableRow.find("td[data-label=Name]").text();
-            cy.get(tdTag)
-                .contains(name)
-                .closest(trTag)
-                .within(() => {
-                    click(actionButton);
-                })
-                .contains(button, deleteAction)
-                .then(($delete_btn) => {
-                    if (!$delete_btn.hasClass("pf-m-aria-disabled")) {
-                        $delete_btn.click();
-                        cy.wait(800);
-                        click(commonView.confirmButton);
-                        cy.wait(2000);
-                    }
-                });
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        const name = $tableRow.find("td[data-label=Name]").text();
+                        cy.get(tdTag)
+                            .contains(name)
+                            .closest(trTag)
+                            .within(() => {
+                                click(actionButton);
+                            })
+                            .contains(button, deleteAction)
+                            .then(($delete_btn) => {
+                                if (!$delete_btn.hasClass("pf-m-aria-disabled")) {
+                                    $delete_btn.click();
+                                    cy.wait(800);
+                                    click(commonView.confirmButton);
+                                    cy.wait(2000);
+                                }
+                            });
+                    });
+            }
         });
 }
 
