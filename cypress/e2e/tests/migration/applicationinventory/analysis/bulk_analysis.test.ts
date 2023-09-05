@@ -24,11 +24,15 @@ import {
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { AnalysisStatuses } from "../../../../types/constants";
+import { Metrics } from "../../../../models/migration/custom-metrics/custom-metrics";
 
 const analyses: Analysis[] = [];
 const NUMBER_OF_APPS = 25;
+const metrics = new Metrics();
+const metricName = "konveyor_tasks_initiated_total";
+let counter: number;
 
-describe(["@tier4"], "Bulk Analysis", () => {
+describe(["@tier4"], "Bulk analysis and custom metrics afterwards", () => {
     before("Login", function () {
         login();
         cy.fixture("application").then((appData) => {
@@ -47,11 +51,18 @@ describe(["@tier4"], "Bulk Analysis", () => {
                 analyses.forEach((analysis) => analysis.create());
             });
         });
+
+        // Get the current counter value
+        metrics.getValue(metricName).then((counterValue) => {
+            counter = counterValue;
+        });
     });
 
-    it("Bulk analysis of source code + open source deps + known deps", function () {
+    it("Bulk analysis and collect metrics afterwards", function () {
         Analysis.analyzeAll(analyses[0]);
         Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
+        counter = counter + NUMBER_OF_APPS;
+        metrics.validateMetric(metricName, counter);
     });
 
     after("Perform test data clean up", function () {
