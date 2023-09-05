@@ -22,6 +22,7 @@ import {
     deleteAllStakeholderGroups,
     deleteAllStakeholders,
     deleteApplicationTableRows,
+    deleteByList,
     login,
 } from "../../../../utils/utils";
 import { SEC } from "../../../types/constants";
@@ -35,9 +36,12 @@ import {
     MigrationWavesSpecialColumns,
     MigrationWaveView,
 } from "../../../views/migration-wave.view";
+import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 
 let stakeHolders: Stakeholders[];
 let stakeHolderGroups: Stakeholdergroups[];
+let applications: Assessment[];
+
 const now = new Date();
 now.setDate(now.getDate() + 1);
 
@@ -102,7 +106,7 @@ describe(["@tier1"], "Migration Waves CRUD operations", () => {
 
     // Automates Polarion TC 333
     it("Migration Wave Application Association", function () {
-        const applications = createMultipleApplications(2);
+        applications = createMultipleApplications(2);
         const migrationWave = new MigrationWave(
             data.getRandomWord(8),
             now,
@@ -146,7 +150,7 @@ describe(["@tier1"], "Migration Waves CRUD operations", () => {
     after("Clear test data", function () {
         deleteAllStakeholders();
         deleteAllStakeholderGroups();
-        deleteApplicationTableRows();
+        deleteByList(applications);
     });
 
     const verifySpecialColumnCount = (
