@@ -224,32 +224,46 @@ describe(["@tier2"], "Application import operations", () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Applications import for with inavlid record type", function () {
+    it("Application import with invalid record type", function () {
         // The only valid record types for records in a CSV file are 1(application) or 2(dependency).
         // In this test, we import a CSV file that has records with a record type that's neither 1 nor 2.
         // Automates https://issues.redhat.com/browse/TACKLE-634
         Application.open();
         cy.wait("@getApplication");
 
-        // Import csv with invalid record type
         const fileName = "invalid_record_type_21.csv";
         importApplication(filePath + fileName);
         cy.wait(2000);
 
-        // Open application imports page
         openManageImportsPage();
 
-        // Verify import applications page shows correct information
         verifyAppImport(fileName, "Completed", 0, 2);
 
-        var errorMsgs = [
+        const errorMsgs = [
             "Invalid or unknown Record Type '3'. Must be '1' for Application or '2' for Dependency.",
             "Invalid or unknown Record Type '100'. Must be '1' for Application or '2' for Dependency.",
         ];
 
-        // Verify the error report message
         openErrorReport();
         verifyImportErrorMsg(errorMsgs);
+    });
+
+    it("Import .CSV file with missing application name", function () {
+        // Automates Polarion MTA-368
+        Application.open();
+        cy.wait("@getApplication");
+
+        const fileName = "missing_application_name.csv";
+        importApplication(filePath + fileName);
+        cy.wait(2000);
+
+        openManageImportsPage();
+
+        verifyAppImport(fileName, "Completed", 0, 1);
+
+        const errorMsg = ["Application Name is mandatory."];
+        openErrorReport();
+        verifyImportErrorMsg(errorMsg);
     });
 
     after("Perform test data clean up", function () {
