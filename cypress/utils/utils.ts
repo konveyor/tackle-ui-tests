@@ -56,6 +56,7 @@ import {
     createEntitiesCheckbox,
     sideKebabMenuImports,
     appImportForm,
+    kebabMenu,
 } from "../e2e/views/applicationinventory.view";
 import {
     closeSuccessNotification,
@@ -89,6 +90,8 @@ import { MigrationWave } from "../e2e/models/migration/migration-waves/migration
 import { Jira } from "../e2e/models/administration/jira-connection/jira";
 import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
 import { closeModal } from "../e2e/views/assessment.view";
+import { Application } from "../e2e/models/migration/applicationinventory/application";
+import { Analysis } from "../e2e/models/migration/applicationinventory/analysis";
 
 const { _ } = Cypress;
 
@@ -124,7 +127,7 @@ export function clickByText(
 
 export function click(fieldId: string, isForced = true, log = false, number = 0): void {
     if (!log) {
-        cy.log(`Click ${fieldId}`);
+        cy.log(`Click Cypress ${fieldId}`);
     }
     cy.get(fieldId, { log, timeout: 30 * SEC })
         .eq(number)
@@ -133,7 +136,7 @@ export function click(fieldId: string, isForced = true, log = false, number = 0)
 
 export function clickWithFocus(fieldId: string, isForced = true, log = false, number = 0): void {
     if (!log) {
-        cy.log(`Click ${fieldId}`);
+        cy.log(`Click Focus ${fieldId}`);
     }
     cy.get(fieldId, { log, timeout: 30 * SEC })
         .eq(number)
@@ -143,7 +146,7 @@ export function clickWithFocus(fieldId: string, isForced = true, log = false, nu
 
 export function clickJs(fieldId: string, isForced = true, log = false, number = 0): void {
     if (!log) {
-        cy.log(`Click ${fieldId}`);
+        cy.log(`Click Java Script ${fieldId}`);
     }
     cy.get(fieldId, { log, timeout: 30 * SEC })
         .eq(number)
@@ -720,13 +723,8 @@ export function uploadFile(fileName: string): void {
 }
 
 export function navigate_to_application_inventory(tab?): void {
-    cy.get("h1", { timeout: 5 * SEC }).then(($header) => {
-        if (!$header.text().includes("Application inventory")) {
-            selectUserPerspective("Migration");
-            clickByText(navMenu, applicationInventory);
-        }
-    });
-    if (tab == "Analysis") clickByText(navTab, analysis);
+    if (tab == "Analysis") Analysis.open();
+    else Assessment.open();
 }
 
 export function application_inventory_kebab_menu(menu, tab?): void {
@@ -827,6 +825,15 @@ export function deleteAllMigrationWaves(currentPage = false): void {
         });
 }
 
+export function deleteAppByName(name: string): void {
+    let application = new Application({
+        name: name,
+        description: data.getDescription(),
+        comment: data.getDescription(),
+    });
+    application.delete();
+}
+
 export function deleteApplicationTableRows(): void {
     // Delete all rows one by one for which Delete button is enabled
     // to be used only in manageImports tests as we don't know which apps
@@ -836,24 +843,20 @@ export function deleteApplicationTableRows(): void {
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
+                cy.get("table")
+                    .find(".pf-m-clickable")
                     .each(($tableRow) => {
                         const name = $tableRow.find("td[data-label=Name]").text();
                         cy.get(tdTag)
                             .contains(name)
                             .closest(trTag)
                             .within(() => {
-                                click(actionButton);
+                                click(kebabMenu);
                             })
                             .contains(button, deleteAction)
                             .then(($delete_btn) => {
                                 if (!$delete_btn.hasClass("pf-m-aria-disabled")) {
-                                    $delete_btn.click();
-                                    cy.wait(800);
-                                    click(commonView.confirmButton);
-                                    cy.wait(2000);
+                                    deleteAppByName(name);
                                 }
                             });
                     });
@@ -921,7 +924,7 @@ export function performRowActionByIcon(itemName: string, action: string): void {
     cy.contains(itemName, { timeout: 120 * SEC })
         .closest(trTag)
         .within(() => {
-            click(action);
+            clickJs(action);
         });
 }
 
