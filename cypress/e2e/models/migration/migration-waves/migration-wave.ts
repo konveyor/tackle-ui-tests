@@ -2,10 +2,10 @@ import {
     callWithin,
     click,
     clickByText,
-    clickJs,
     inputText,
     selectItemsPerPage,
     selectUserPerspective,
+    submitForm,
 } from "../../../../utils/utils";
 import {
     createNewButton,
@@ -83,7 +83,7 @@ export class MigrationWave {
     public create() {
         MigrationWave.openNewForm();
         this.fillForm(this);
-        clickJs(submitButton);
+        submitForm();
         this.setApplications();
     }
 
@@ -92,7 +92,7 @@ export class MigrationWave {
         this.expandActionsMenu();
         cy.contains(editAction).click();
         this.fillForm(updateValues);
-        clickJs(submitButton);
+        submitForm();
     }
 
     public delete() {
@@ -123,7 +123,7 @@ export class MigrationWave {
         cy.get(MigrationWaveView.issueTypeSelectToggle).click();
         cy.contains(issueType).click({ timeout: 10 * SEC, force: true });
 
-        cy.get(submitButton).click();
+        submitForm();
     }
 
     public setApplications(toBeCanceled = false): void {
