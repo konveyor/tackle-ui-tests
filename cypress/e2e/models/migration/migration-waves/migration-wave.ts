@@ -83,7 +83,7 @@ export class MigrationWave {
     public create() {
         MigrationWave.openNewForm();
         this.fillForm(this);
-        clickJs(MigrationWaveView.submitButton);
+        clickJs(submitButton);
         this.setApplications();
     }
 
@@ -92,7 +92,7 @@ export class MigrationWave {
         this.expandActionsMenu();
         cy.contains(editAction).click();
         this.fillForm(updateValues);
-        clickJs(MigrationWaveView.submitButton);
+        clickJs(submitButton);
     }
 
     public delete() {
@@ -151,7 +151,7 @@ export class MigrationWave {
             return;
         }
 
-        cy.get(MigrationWaveView.applicationsSubmitButton).click();
+        cy.get(submitButton).click();
     }
 
     public clearApplications(): void {
@@ -167,7 +167,7 @@ export class MigrationWave {
         cy.contains(manageApplications).click();
         cy.get(itemsSelectInsideDialog).click();
         cy.contains(button, selectNone).click();
-        cy.get(MigrationWaveView.applicationsSubmitButton).click();
+        cy.get(submitButton).click();
         this.applications = [];
     }
 
