@@ -2,6 +2,7 @@ import {
     callWithin,
     click,
     clickByText,
+    clickJs,
     inputText,
     selectItemsPerPage,
     selectUserPerspective,
@@ -151,7 +152,7 @@ export class MigrationWave {
             return;
         }
 
-        cy.get(submitButton).click();
+        clickJs(submitButton);
     }
 
     public clearApplications(): void {
@@ -167,7 +168,7 @@ export class MigrationWave {
         cy.contains(manageApplications).click();
         cy.get(itemsSelectInsideDialog).click();
         cy.contains(button, selectNone).click();
-        cy.get(submitButton).click();
+        clickJs(submitButton);
         this.applications = [];
     }
 
