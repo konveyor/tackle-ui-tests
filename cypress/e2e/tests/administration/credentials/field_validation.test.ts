@@ -22,7 +22,7 @@ import { CredentialsSourceControlUsername } from "../../../models/administration
 describe(["@tier2"], "Credentials fields validations", function () {
     before("Login and Create Test Data", function () {
         // Perform login
-        login();
+        login(); 
     });
 
     it("Validate Proxy credential's fields for too short (2 symbols) and too long (120+ symbols) length ", () => {
