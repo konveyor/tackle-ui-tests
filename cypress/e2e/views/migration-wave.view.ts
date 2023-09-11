@@ -4,7 +4,6 @@ export enum MigrationWaveView {
     generalDatePicker = ".pf-v5-c-date-picker",
     calendarButton = "[aria-label='Toggle date picker']",
     submitButton = "#migration-wave-form-submit",
-    applicationsSubmitButton = "#wave-form-submit",
     nameInput = "#name",
     startDateInput = "input[aria-label='startDateStr']",
     endDateInput = "input[aria-label='endDateStr']",

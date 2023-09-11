@@ -6,6 +6,7 @@ import {
     inputText,
     selectItemsPerPage,
     selectUserPerspective,
+    submitForm,
 } from "../../../../utils/utils";
 import {
     createNewButton,
@@ -83,7 +84,7 @@ export class MigrationWave {
     public create() {
         MigrationWave.openNewForm();
         this.fillForm(this);
-        clickJs(MigrationWaveView.submitButton);
+        submitForm();
         this.setApplications();
     }
 
@@ -92,7 +93,7 @@ export class MigrationWave {
         this.expandActionsMenu();
         cy.contains(editAction).click();
         this.fillForm(updateValues);
-        clickJs(MigrationWaveView.submitButton);
+        submitForm();
     }
 
     public delete() {
@@ -123,7 +124,7 @@ export class MigrationWave {
         cy.get(MigrationWaveView.issueTypeSelectToggle).click();
         cy.contains(issueType).click({ timeout: 10 * SEC, force: true });
 
-        cy.get(submitButton).click();
+        submitForm();
     }
 
     public setApplications(toBeCanceled = false): void {
@@ -151,7 +152,7 @@ export class MigrationWave {
             return;
         }
 
-        cy.get(MigrationWaveView.applicationsSubmitButton).click();
+        clickJs(submitButton);
     }
 
     public clearApplications(): void {
@@ -167,7 +168,7 @@ export class MigrationWave {
         cy.contains(manageApplications).click();
         cy.get(itemsSelectInsideDialog).click();
         cy.contains(button, selectNone).click();
-        cy.get(MigrationWaveView.applicationsSubmitButton).click();
+        clickJs(submitButton);
         this.applications = [];
     }
 

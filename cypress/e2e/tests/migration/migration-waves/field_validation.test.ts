@@ -17,6 +17,7 @@ limitations under the License.
 
 import {
     checkSuccessAlert,
+    clickJs,
     deleteByList,
     generateRandomDateRange,
     login,
@@ -51,19 +52,19 @@ describe(["@tier1"], "Migration Waves Validations", () => {
     it("Name validations", function () {
         const invalidMessage = "Name is invalid. The name must be between 3 and 120 characters";
         MigrationWave.openNewForm();
-        cy.get(MigrationWaveView.submitButton).should("be.disabled");
+        cy.get(commonView.submitButton).should("be.disabled");
 
         validateTooShortInput(MigrationWaveView.nameInput, "body", invalidMessage);
         validateTooLongInput(MigrationWaveView.nameInput, 121, null, invalidMessage);
 
-        cy.get(MigrationWaveView.submitButton).should("be.disabled");
-        cy.get(cancelButton).click();
+        cy.get(commonView.submitButton).should("be.disabled");
+        clickJs(cancelButton);
     });
 
     it("Dates Validations", function () {
         MigrationWave.openNewForm();
         MigrationWave.fillName(data.getRandomWord(5));
-        cy.get(MigrationWaveView.submitButton).should("be.disabled");
+        cy.get(commonView.submitButton).should("be.disabled");
         const now = new Date();
 
         const options = { year: "numeric", month: "long", day: "numeric" } as const;
@@ -94,8 +95,8 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         );
         cy.get(`button[aria-label="${dayAfterTomorrowLabel}"]`).should("be.enabled").click();
 
-        cy.get(MigrationWaveView.submitButton).should("be.enabled");
-        cy.get(cancelButton).click();
+        cy.get(commonView.submitButton).should("be.enabled");
+        clickJs(cancelButton);
     });
     it("Duplicate Migration wave name validation", function () {
         const migrationWavesList: MigrationWave[] = [];
