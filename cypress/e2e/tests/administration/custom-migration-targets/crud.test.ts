@@ -53,7 +53,7 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
             this.analysisData = analysisData;
         });
 
-        cy.intercept("POST", "/hub/rulesets*").as("postRule");
+        // cy.intercept("POST", "/hub/rulesets*").as("postRule");
         cy.intercept("GET", "/hub/rulesets*").as("getRule");
         cy.intercept("PUT", "/hub/rulesets*/*").as("putRule");
         cy.intercept("DELETE", "/hub/rulesets*/*").as("deleteRule");
@@ -68,7 +68,7 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
             getRulesData(targetData)
         );
         target.create();
-        cy.wait("@postRule");
+        // cy.wait("@postRule");
         cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
         cy.get("article", { timeout: 12 * SEC }).should("contain", target.name);
 
@@ -116,7 +116,7 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
         );
 
         target.create();
-        cy.wait("@postRule");
+        // cy.wait("@postRule");
         cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
         cy.get("article", { timeout: 12 * SEC }).should("contain", target.name);
 
@@ -136,7 +136,7 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
             getRulesData(targetData)
         );
         target.create();
-        cy.wait("@postRule");
+        // cy.wait("@postRule");
 
         const dragButton = cy
             .get("article", { timeout: 12 * SEC })

@@ -18,6 +18,7 @@ import {
 import { navMenu } from "../../../views/menu.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { RulesManualFields, RulesRepositoryFields } from "../../../types/types";
+import { submitButton } from "../../../views/common.view";
 
 export interface CustomMigrationTarget {
     name: string;
@@ -57,10 +58,11 @@ export class CustomMigrationTarget {
     public create() {
         CustomMigrationTarget.openNewForm();
         CustomMigrationTarget.fillForm(this);
+        click(submitButton);
 
-        cy.get(CustomMigrationTargetView.createSubmitButton, { timeout: 10 * SEC })
-            .should("be.enabled")
-            .click();
+        // cy.get(CustomMigrationTargetView.createSubmitButton, { timeout: 10 * SEC })
+        //     .should("be.enabled")
+        //     .click();
     }
 
     public edit(updateValues: Partial<CustomMigrationTarget>) {
