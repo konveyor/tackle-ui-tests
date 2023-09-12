@@ -9,7 +9,6 @@ import {
     createNewButton,
     customMigrationTargets,
     button,
-    SEC,
     deleteAction,
     editAction,
     RepositoryType,
@@ -59,10 +58,6 @@ export class CustomMigrationTarget {
         CustomMigrationTarget.openNewForm();
         CustomMigrationTarget.fillForm(this);
         click(submitButton);
-
-        // cy.get(CustomMigrationTargetView.createSubmitButton, { timeout: 10 * SEC })
-        //     .should("be.enabled")
-        //     .click();
     }
 
     public edit(updateValues: Partial<CustomMigrationTarget>) {
@@ -72,9 +67,10 @@ export class CustomMigrationTarget {
 
         CustomMigrationTarget.fillForm(updateValues);
 
-        cy.get(CustomMigrationTargetView.editSubmitButton, { timeout: 10 * SEC })
-            .should("be.enabled")
-            .click({ force: true });
+        // cy.get(CustomMigrationTargetView.editSubmitButton, { timeout: 10 * SEC })
+        //     .should("be.enabled")
+        //     .click({ force: true });
+        click(submitButton);
     }
 
     public delete() {
@@ -163,7 +159,7 @@ export class CustomMigrationTarget {
 
     private expandActionsMenu() {
         cy.contains(this.name)
-            .parents("article")
+            .parents(CustomMigrationTargetView.card)
             .within(() => {
                 cy.get(CustomMigrationTargetView.actionsButton).then(($btn) => {
                     if ($btn.attr("aria-expanded") === "false") {

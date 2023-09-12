@@ -18,4 +18,5 @@ export enum CustomMigrationTargetView {
     credentialsDropdown = "#associated-credentials-select-toggle",
     retrieveFromARepositoryRadio = "#repository",
     dragButton = "#drag-button",
+    card = ".pf-v5-c-card",
 }
