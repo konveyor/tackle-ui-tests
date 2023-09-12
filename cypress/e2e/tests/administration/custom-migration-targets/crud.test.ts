@@ -68,7 +68,6 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
             getRulesData(targetData)
         );
         target.create();
-        // cy.wait("@postRule");
         cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
         cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
             "contain",
@@ -121,7 +120,6 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
         );
 
         target.create();
-        // cy.wait("@postRule");
         cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
         cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
             "contain",
@@ -129,7 +127,7 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
         );
 
         target.delete();
-        // cy.wait("@deleteRule");
+        cy.wait("@deleteRule");
         cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
             "not.contain",
             target.name

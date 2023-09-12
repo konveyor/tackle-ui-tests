@@ -67,9 +67,6 @@ export class CustomMigrationTarget {
 
         CustomMigrationTarget.fillForm(updateValues);
 
-        // cy.get(CustomMigrationTargetView.editSubmitButton, { timeout: 10 * SEC })
-        //     .should("be.enabled")
-        //     .click({ force: true });
         click(submitButton);
     }
 
