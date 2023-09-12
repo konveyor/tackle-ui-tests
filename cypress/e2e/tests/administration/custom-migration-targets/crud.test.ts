@@ -151,12 +151,14 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
             .find(CustomMigrationTargetView.dragButton);
 
         // Moves the custom migration target to the first place
+        cy.wait(SEC);
         dragButton.move({
             deltaX: Number.MIN_SAFE_INTEGER,
             deltaY: Number.MIN_SAFE_INTEGER,
             force: true,
             waitForAnimations: false,
         });
+        cy.wait(SEC);
 
         const application = new Analysis(
             getRandomApplicationData("bookserverApp", {

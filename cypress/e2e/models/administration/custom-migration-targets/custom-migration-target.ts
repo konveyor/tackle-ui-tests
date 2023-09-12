@@ -1,6 +1,7 @@
 import {
     click,
     clickByText,
+    clickJs,
     inputText,
     selectUserPerspective,
     uploadXml,
@@ -57,7 +58,7 @@ export class CustomMigrationTarget {
     public create() {
         CustomMigrationTarget.openNewForm();
         CustomMigrationTarget.fillForm(this);
-        click(submitButton);
+        clickJs(submitButton);
     }
 
     public edit(updateValues: Partial<CustomMigrationTarget>) {
@@ -67,7 +68,7 @@ export class CustomMigrationTarget {
 
         CustomMigrationTarget.fillForm(updateValues);
 
-        click(submitButton);
+        clickJs(submitButton);
     }
 
     public delete() {
