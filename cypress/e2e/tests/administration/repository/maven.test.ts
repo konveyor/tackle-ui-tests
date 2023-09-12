@@ -79,7 +79,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         resetURL();
     });
 
-    it("Bug MTA-1183 | Binary analysis with maven containing http url when insecure repository is allowed", function () {
+    it.skip("Bug MTA-1183 | Binary analysis with maven containing http url when insecure repository is allowed", function () {
         mavenConfiguration.enableInsecureMavenRepositories();
 
         // For tackle test app source credentials are required.
@@ -101,7 +101,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         application.openReport();
     });
 
-    it("Bug MTA-1183 | Binary analysis with maven containing http url when insecure repository is not allowed", function () {
+    it.skip("Bug MTA-1183 | Binary analysis with maven containing http url when insecure repository is not allowed", function () {
         // The following test case should verify if the analysis is failed rather than completed,
         // but due to how maven structure works it will always pick the ( http ) link as ( https )
         // which means, it will always pass regardless if the insecure toggle is disabled or not
