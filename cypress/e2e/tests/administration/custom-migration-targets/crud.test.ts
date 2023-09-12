@@ -53,14 +53,14 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
             this.analysisData = analysisData;
         });
 
-        cy.intercept("POST", "/hub/rulesets*").as("postRule");
-        cy.intercept("GET", "/hub/rulesets*").as("getRule");
-        cy.intercept("PUT", "/hub/rulesets*/*").as("putRule");
-        cy.intercept("DELETE", "/hub/rulesets*/*").as("deleteRule");
+        cy.intercept("POST", "/hub/targets/*").as("postRule");
+        cy.intercept("GET", "/hub/targets*").as("getRule");
+        cy.intercept("PUT", "/hub/targets*/*").as("putRule");
+        cy.intercept("DELETE", "/hub/targets*/*").as("deleteRule");
     });
 
     it("Custom Migration Targets CRUD with rules uploaded manually", function () {
-        const targetData = this.customMigrationTargets.manual_rules;
+        const targetData = this.customMigrationTargets["manual_rules"];
         const target = new CustomMigrationTarget(
             data.getRandomWord(8),
             data.getDescription(),
@@ -68,9 +68,11 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
             getRulesData(targetData)
         );
         target.create();
-        cy.wait("@postRule");
         cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
-        cy.get("article", { timeout: 12 * SEC }).should("contain", target.name);
+        cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
+            "contain",
+            target.name
+        );
 
         const newName = data.getRandomWord(8);
         const newRules = {
@@ -82,14 +84,16 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
             name: newName,
             ruleTypeData: newRules,
         });
-        cy.wait("@putRule");
-        cy.get("article", { timeout: 12 * SEC }).should("contain", newName);
+        cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should("contain", newName);
         target.name = newName;
         target.ruleTypeData = newRules;
 
         target.delete();
         cy.wait("@deleteRule");
-        cy.get("article", { timeout: 12 * SEC }).should("not.contain", target.name);
+        cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
+            "not.contain",
+            target.name
+        );
     });
 
     it("Create Custom Migration Target with rules from repository with credentials", function () {
@@ -102,7 +106,7 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
         );
 
         sourceCredential.create();
-        const targetData = this.customMigrationTargets.rules_from_tackle_testApp;
+        const targetData = this.customMigrationTargets["rules_from_tackle_testApp"];
         const repositoryData = {
             ...getRulesData(targetData),
             credentials: sourceCredential,
@@ -116,19 +120,24 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
         );
 
         target.create();
-        cy.wait("@postRule");
         cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
-        cy.get("article", { timeout: 12 * SEC }).should("contain", target.name);
+        cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
+            "contain",
+            target.name
+        );
 
         target.delete();
         cy.wait("@deleteRule");
-        cy.get("article", { timeout: 12 * SEC }).should("not.contain", target.name);
+        cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
+            "not.contain",
+            target.name
+        );
 
         sourceCredential.delete();
     });
 
     it("Change layout", function () {
-        const targetData = this.customMigrationTargets.manual_rules;
+        const targetData = this.customMigrationTargets["manual_rules"];
         const target = new CustomMigrationTarget(
             data.getRandomWord(8),
             data.getDescription(),
@@ -136,21 +145,20 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
             getRulesData(targetData)
         );
         target.create();
-        cy.wait("@postRule");
 
         const dragButton = cy
-            .get("article", { timeout: 12 * SEC })
-            .contains(target.name)
-            .parents("article")
+            .contains(CustomMigrationTargetView.card, target.name, { timeout: 12 * SEC })
             .find(CustomMigrationTargetView.dragButton);
 
         // Moves the custom migration target to the first place
+        cy.wait(SEC);
         dragButton.move({
             deltaX: Number.MIN_SAFE_INTEGER,
             deltaY: Number.MIN_SAFE_INTEGER,
             force: true,
             waitForAnimations: false,
         });
+        cy.wait(SEC);
 
         const application = new Analysis(
             getRandomApplicationData("bookserverApp", {
@@ -163,13 +171,14 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
         Analysis.open();
         selectItemsPerPage(100);
         application.selectApplication();
-        cy.contains("button", analyzeButton, { timeout: 20000 }).should("be.enabled").click();
+        cy.contains(button, analyzeButton, { timeout: 20 * SEC })
+            .should("be.enabled")
+            .click();
 
         application.selectSourceofAnalysis(application.source);
-        cy.contains("button", "Next", { timeout: 200 }).click();
+        cy.contains(button, "Next", { timeout: 200 }).click();
 
-        cy.get("form article", { timeout: 12 * SEC })
-            .children()
+        cy.get(".pf-v5-c-card__body", { timeout: 12 * SEC })
             .first()
             .should("contain", target.name);
         clickByText(button, "Cancel");

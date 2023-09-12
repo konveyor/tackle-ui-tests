@@ -1,6 +1,7 @@
 import {
     click,
     clickByText,
+    clickJs,
     inputText,
     selectUserPerspective,
     uploadXml,
@@ -9,7 +10,6 @@ import {
     createNewButton,
     customMigrationTargets,
     button,
-    SEC,
     deleteAction,
     editAction,
     RepositoryType,
@@ -18,6 +18,7 @@ import {
 import { navMenu } from "../../../views/menu.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { RulesManualFields, RulesRepositoryFields } from "../../../types/types";
+import { submitButton } from "../../../views/common.view";
 
 export interface CustomMigrationTarget {
     name: string;
@@ -57,10 +58,7 @@ export class CustomMigrationTarget {
     public create() {
         CustomMigrationTarget.openNewForm();
         CustomMigrationTarget.fillForm(this);
-
-        cy.get(CustomMigrationTargetView.createSubmitButton, { timeout: 10 * SEC })
-            .should("be.enabled")
-            .click();
+        clickJs(submitButton);
     }
 
     public edit(updateValues: Partial<CustomMigrationTarget>) {
@@ -70,9 +68,7 @@ export class CustomMigrationTarget {
 
         CustomMigrationTarget.fillForm(updateValues);
 
-        cy.get(CustomMigrationTargetView.editSubmitButton, { timeout: 10 * SEC })
-            .should("be.enabled")
-            .click({ force: true });
+        clickJs(submitButton);
     }
 
     public delete() {
@@ -161,7 +157,7 @@ export class CustomMigrationTarget {
 
     private expandActionsMenu() {
         cy.contains(this.name)
-            .parents("article")
+            .parents(CustomMigrationTargetView.card)
             .within(() => {
                 cy.get(CustomMigrationTargetView.actionsButton).then(($btn) => {
                     if ($btn.attr("aria-expanded") === "false") {
