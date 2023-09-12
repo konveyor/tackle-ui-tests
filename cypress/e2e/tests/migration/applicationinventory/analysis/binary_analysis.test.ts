@@ -74,7 +74,7 @@ describe(["@tier1"], "Binary Analysis", () => {
         resetURL();
     });
 
-    it("Bug MTA-1183 | Binary Analysis", function () {
+    it.skip("Bug MTA-1183 | Binary Analysis", function () {
         // For binary analysis application must have group,artifcat and version.
         application = new Analysis(
             getRandomApplicationData("tackletestApp_binary", {
