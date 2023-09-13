@@ -17,10 +17,8 @@ limitations under the License.
 
 import {
     click,
-    clickJs,
     doesExistText,
     login,
-    preservecookies,
     validateTooLongInput,
     validateTooShortInput,
 } from "../../../../utils/utils";
@@ -28,7 +26,7 @@ import * as data from "../../../../utils/data_utils";
 import { CustomMigrationTarget } from "../../../models/administration/custom-migration-targets/custom-migration-target";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { RepositoryType, SEC } from "../../../types/constants";
-import { cancelButton } from "../../../views/common.view";
+import { cancelButton, submitButton } from "../../../views/common.view";
 
 describe(["@tier1"], "Custom Migration Target Validations", () => {
     let target: CustomMigrationTarget;
@@ -40,13 +38,9 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         login();
     });
 
-    beforeEach(function () {
-        preservecookies();
-    });
-
     it("Name validations", function () {
         CustomMigrationTarget.openNewForm();
-        cy.get(CustomMigrationTargetView.createSubmitButton).should("be.disabled");
+        cy.get(submitButton).should("be.disabled");
 
         validateTooShortInput(CustomMigrationTargetView.nameInput, "body");
         validateTooLongInput(CustomMigrationTargetView.nameInput);
@@ -54,8 +48,8 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         CustomMigrationTarget.fillName("Containerization");
         doesExistText("A custom target with this name already exists. Use a different name", true);
 
-        cy.get(CustomMigrationTargetView.createSubmitButton).should("be.disabled");
-        clickJs(cancelButton);
+        cy.get(submitButton).should("be.disabled");
+        click(cancelButton);
     });
 
     it("Rule files validations", function () {
@@ -67,18 +61,18 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
 
         doesExistText("0 of 1 files uploaded", true);
 
-        cy.get(CustomMigrationTargetView.createSubmitButton).should("be.disabled");
+        cy.get(submitButton).should("be.disabled");
 
         CustomMigrationTarget.uploadRules(["xml/javax-package-custom.windup.xml"]);
         doesExistText("1 of 2 files uploaded", true);
 
-        cy.get(CustomMigrationTargetView.createSubmitButton).should("be.enabled");
+        cy.get(submitButton).should("be.enabled");
 
         cy.get('button[aria-label="Remove from list"]').each((btn) => cy.wrap(btn).click());
         doesExistText("0 of 0 files uploaded", true);
 
-        cy.get(CustomMigrationTargetView.createSubmitButton).should("be.disabled");
-        cy.contains("Cancel").click();
+        cy.get(submitButton).should("be.disabled");
+        click(cancelButton);
     });
 
     it("Image Validations", function () {
@@ -96,7 +90,7 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         CustomMigrationTarget.uploadImage("img/big-image.jpg");
         cy.get(CustomMigrationTargetView.imageInput).blur();
         cy.wait(2 * SEC);
-        cy.contains("Cancel").click();
+        click(cancelButton);
     });
 
     it("Rule repository URL validation", function () {
