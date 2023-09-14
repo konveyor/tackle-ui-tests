@@ -65,7 +65,7 @@ export class TagCategory {
         inputText(rankInput, rank);
     }
 
-    assertColumnValue(columnName, columnVal) {
+    assertColumnValue(columnName: string, columnVal: string) {
         cy.get(tdTag)
             .contains(this.name)
             .parent(trTag)
@@ -124,7 +124,7 @@ export class TagCategory {
                 click(commonView.deleteButton);
             });
         if (cancel) {
-            cancelForm();
+            click(commonView.confirmCancelButton);
         } else {
             confirm();
         }

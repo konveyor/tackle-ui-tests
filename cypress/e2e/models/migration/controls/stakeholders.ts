@@ -159,7 +159,7 @@ export class Stakeholders {
         cy.wait(2000);
         performRowAction(this.email, deleteAction);
         if (cancel) {
-            cancelForm();
+            click(commonView.confirmCancelButton);
         } else {
             click(commonView.confirmButton);
         }

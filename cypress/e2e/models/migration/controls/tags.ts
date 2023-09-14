@@ -45,6 +45,7 @@ import {
     nameInput,
     tagMenuButton,
 } from "../../../views/tags.view";
+import * as commonView from "../../../views/common.view";
 
 export function clickTags(): void {
     clickByText(navMenu, controls);
@@ -134,7 +135,7 @@ export class Tag {
         expandRowDetails(this.tagCategory);
         applyAction(this.name, deleteAction);
         if (cancel) {
-            cancelForm();
+            click(commonView.confirmCancelButton);
         } else {
             confirm();
         }
