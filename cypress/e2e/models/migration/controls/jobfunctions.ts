@@ -16,7 +16,6 @@ limitations under the License.
 import {
     controls,
     jobFunctions,
-    tdTag,
     button,
     createNewButton,
     editAction,
@@ -94,7 +93,7 @@ export class Jobfunctions {
         cy.wait(2000);
         performRowAction(this.name, deleteAction);
         if (cancel) {
-            cancelForm();
+            click(commonView.confirmCancelButton);
         } else {
             click(commonView.confirmButton);
         }

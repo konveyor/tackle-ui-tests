@@ -55,7 +55,7 @@ export class BusinessServices {
 
     static fullUrl = Cypress.env("tackleUrl") + "/controls/business-services";
 
-    constructor(name, description?, owner?: string) {
+    constructor(name: string, description?: string, owner?: string) {
         this.name = name;
         if (description) this.description = description;
         if (owner) this.owner = owner;
@@ -185,7 +185,7 @@ export class BusinessServices {
         BusinessServices.openList();
         performRowAction(this.name, deleteAction);
         if (cancel) {
-            cancelForm();
+            click(commonView.confirmCancelButton);
         } else {
             click(commonView.confirmButton);
         }

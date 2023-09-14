@@ -129,7 +129,7 @@ export class Stakeholdergroups {
         cy.wait(2000);
         performRowAction(this.name, deleteAction);
         if (cancel) {
-            cancelForm();
+            click(commonView.confirmCancelButton);
         } else {
             click(commonView.confirmButton);
         }
