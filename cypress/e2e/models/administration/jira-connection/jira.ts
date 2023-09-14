@@ -33,7 +33,12 @@ import {
     tdTag,
     trTag,
 } from "../../../types/constants";
-import { cancelButton, confirmButton, navLink } from "../../../views/common.view";
+import {
+    cancelButton,
+    confirmButton,
+    confirmCancelButton,
+    navLink,
+} from "../../../views/common.view";
 import { JiraIssue, JiraIssueType, JiraProject } from "./jira-api.interface";
 import { JiraCredentials } from "../credentials/JiraCredentials";
 import {
@@ -166,8 +171,6 @@ export class Jira {
      * @param jiraConnectionData brings new values that should be applied to instance.
      *
      * @param toBeCanceled is responsible for canceling editing instead of submitting if set to `true`
-     *
-     * @param expectedToFail is set to `true` when running negative test, and it is OK that validation fails
      */
     public edit(jiraConnectionData: JiraConnectionData, toBeCanceled = false): void {
         Jira.openList();
@@ -198,7 +201,7 @@ export class Jira {
         Jira.openList();
         performRowAction(this.name, deleteAction);
         if (toBeCanceled) {
-            click(cancelButton);
+            click(confirmCancelButton);
         } else {
             click(confirmButton);
             notExists(this.name, "table[aria-label='Jira trackers table']");
