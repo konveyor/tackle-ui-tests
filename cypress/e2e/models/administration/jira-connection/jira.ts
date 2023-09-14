@@ -28,24 +28,17 @@ import {
     CredentialType,
     deleteAction,
     editAction,
-    JiraType,
     SEC,
     tdTag,
     trTag,
 } from "../../../types/constants";
-import {
-    cancelButton,
-    confirmButton,
-    confirmCancelButton,
-    navLink,
-} from "../../../views/common.view";
+import { confirmButton, confirmCancelButton, navLink } from "../../../views/common.view";
 import { JiraIssue, JiraIssueType, JiraProject } from "./jira-api.interface";
 import { JiraCredentials } from "../credentials/JiraCredentials";
 import {
     filterCategory,
     filteredBy,
     filterNameInput,
-    filterSubmitButton,
     searchButton,
 } from "../../../views/credentials.view";
 
@@ -147,7 +140,6 @@ export class Jira {
      *
      * @param toBeCanceled is responsible for canceling creation instead of submitting if set to `true`
      *
-     * @param expectedToFail is set to `true` when running negative test, and it is OK that validation fails
      */
     public create(toBeCanceled = false): void {
         Jira.openList();
