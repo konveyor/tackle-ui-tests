@@ -18,6 +18,7 @@ export const submitButton = "#submit";
 export const cancelButton = "#cancel";
 export const closeButton = "button[aria-label=Close]";
 export const confirmButton = "#confirm-dialog-button";
+export const confirmCancelButton = "#confirm-cancel-button";
 export const editButton = "button[aria-label=edit]";
 export const deleteButton = "button[aria-label=delete]";
 export const removeButton = "button[aria-label='Remove']";
