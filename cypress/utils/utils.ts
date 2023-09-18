@@ -906,7 +906,7 @@ export function performRowActionByIcon(itemName: string, action: string): void {
     cy.contains(itemName, { timeout: 120 * SEC })
         .closest(trTag)
         .within(() => {
-            click(action);
+            clickWithin(action, button);
         });
 }
 

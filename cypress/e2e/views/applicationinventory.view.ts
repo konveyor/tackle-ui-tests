@@ -34,15 +34,15 @@ export const cyclicDependenciesErrorMsg = "cyclic dependencies are not allowed";
 export const northdependenciesDropdownBtn = "button[aria-label='northbound-dependencies-toggle']";
 export const southdependenciesDropdownBtn = "button[aria-label='southbound-dependencies-toggle']";
 export const date = "Date";
-export const editButton = "td[class='pf-v5-c-table__td pf-v5-c-table__action'] > button";
+export const editButton = "#pencil-action";
 export const importStatus = "Status";
 export const northboundHelper = "div[id=northbound-dependencies-helper]";
 export const southboundHelper = "div[id=southbound-dependencies-helper]";
 export const selectBox = "input[type=checkbox]";
 export const tags = "span";
 export const user = "User";
-export const kebabMenu = "button[aria-label='Kebab toggle']";
-export const topKebabMenu = "div > button[aria-label='Actions']";
+export const kebabMenu = "#row-actions";
+export const topKebabMenu = "#toolbar-kebab";
 export const kebabMenuItem = "a.pf-v5-c-dropdown__menu-item";
 // This is on the Application imports page.
 export const sideKebabMenuImports = "button[aria-label='Kebab toggle']";
