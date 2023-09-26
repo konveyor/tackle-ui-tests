@@ -20,7 +20,6 @@ import {
     applicationInventory,
     button,
     migration,
-    next,
     RepositoryType,
     save,
     SEC,
@@ -37,6 +36,7 @@ import {
     doesExistSelector,
     doesExistText,
     inputText,
+    next,
     performRowActionByIcon,
     selectCheckBox,
     selectFormItems,
@@ -255,7 +255,7 @@ export class Analysis extends Application {
         if (this.openSourceLibraries) {
             click("#oss");
         }
-        cy.contains("button", "Next", { timeout: 200 }).click();
+        next();
     }
 
     protected tagsToExclude() {
@@ -279,9 +279,9 @@ export class Analysis extends Application {
         this.selectSourceofAnalysis(this.source);
         if (this.binary) this.uploadBinary();
         this.isNextEnabled();
-        cy.contains(button, next).click();
+        next();
         this.selectTarget(this.target);
-        cy.contains(button, next).click();
+        next();
         this.scopeSelect();
         if (this.customRule) {
             this.uploadCustomRule();
@@ -289,7 +289,7 @@ export class Analysis extends Application {
         if (this.customRuleRepository) {
             this.fetchCustomRules();
         }
-        cy.contains(button, next).click();
+        next();
         if (this.excludeRuleTags) {
             this.tagsToExclude();
         }
@@ -300,9 +300,9 @@ export class Analysis extends Application {
             this.disableAutomatedTagging();
         }
         if (!this.sources) {
-            cy.contains(button, next).click();
+            next();
         }
-        cy.contains(button, "Run").click();
+        next();
     }
 
     public static analyzeAll(params: Analysis): void {
