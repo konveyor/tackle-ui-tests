@@ -9,6 +9,7 @@
         "cypress-file-upload": "^5.0.8",
         "cypress-grep": "^2.5.3",
         "cypress-multi-reporters": "^1.5.0",
+        "cypress-parallel": "^0.13.0",
         "cypress-react-selector": "^2.3.17",
         "cypress-xpath": "^1.6.2",
         "faker": "^5.5.3",
@@ -21,7 +22,9 @@
     "scripts": {
         "check": "prettier --check './**/*.{ts,js,json}'",
         "format": "prettier --write './**/*.{ts,js,json}'",
-        "mergereports": "npx jrm ./cypress/reports/junitreport.xml ./cypress/reports/junit/*.xml"
+        "mergereports": "npx jrm ./cypress/reports/junitreport.xml ./cypress/reports/junit/*.xml",
+        "cy:run": "cypress run",
+        "cy:parallel": "cypress-parallel -s cy:run -t 2 -d ./cypress/e2e/tests/*"
     },
     "devDependencies": {
         "@4tw/cypress-drag-drop": "^2.2.3",
