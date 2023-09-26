@@ -1774,3 +1774,7 @@ export function selectAssessmentApplications(apps: string): void {
 export function closeModalWindow(): void {
     click(closeModal, false, true);
 }
+
+export function next(): void {
+    clickByText(button, "Next");
+}
