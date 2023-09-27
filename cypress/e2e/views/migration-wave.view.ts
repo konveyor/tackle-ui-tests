@@ -9,7 +9,7 @@ export enum MigrationWaveView {
     endDateInput = "input[aria-label='endDateStr']",
     stakeHoldersInput = "#stakeholders-toggle-select-multi-typeahead-typeahead",
     stakeHolderGroupsInput = "#stakeholder-groups-toggle-select-multi-typeahead-typeahead",
-    actionsButton = "button[aria-label='Actions']",
+    actionsButton = "button[aria-label='row actions dropdown toggle']",
     waveStatusColumn = "td[data-label='Status']",
     yearInput = "input[aria-label='Select year']",
     migrationWavesTable = "table[aria-label='Migration waves table']",

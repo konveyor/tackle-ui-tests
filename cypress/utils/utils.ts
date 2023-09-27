@@ -331,8 +331,8 @@ export function selectFilter(filterName: string, identifiedRisk?: boolean, value
         .eq(value)
         .within(() => {
             cy.get("#filtered-by").click();
-            cy.get("ul.pf-v5-c-dropdown__menu").within(() => {
-                clickByText("a", filterName);
+            cy.get("div.pf-v5-c-menu__content").within(() => {
+                clickByText("span", filterName);
             });
         });
 }
