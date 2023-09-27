@@ -302,7 +302,7 @@ export class Analysis extends Application {
         if (!this.sources) {
             next();
         }
-        next();
+        clickByText(button, "Run");
     }
 
     public static analyzeAll(params: Analysis): void {
