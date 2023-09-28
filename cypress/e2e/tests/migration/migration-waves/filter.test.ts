@@ -16,11 +16,10 @@ import {
     login,
     clickByText,
     applySearchFilter,
-    preservecookies,
     deleteByList,
     createMultipleMigrationWaves,
 } from "../../../../utils/utils";
-import { button, name, clearAllFilters, SEC } from "../../../types/constants";
+import { button, name, clearAllFilters } from "../../../types/constants";
 
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
@@ -37,7 +36,7 @@ describe(["@tier2"], "Migration waves filter validations", function () {
         migrationWavesList = createMultipleMigrationWaves(2);
     });
 
-    it("Name filter validations", function () {
+    it("Bug MTA-1281| Name filter validations", function () {
         MigrationWave.open();
 
         // Enter an existing display name substring and assert

@@ -35,7 +35,7 @@ describe(["@tier1"], "Testing the creation of a tracker in migration waves", fun
         application.create();
     });
 
-    it("Verify create tracker button is visible", function () {
+    it("Bug MTA-1337| Verify create tracker button is visible", function () {
         MigrationWave.open();
 
         // create new migration wave

@@ -34,7 +34,7 @@ describe(["@tier3"], "Migration Waves pagination validations", function () {
         migrationWavesList = createMultipleMigrationWaves(11);
     });
 
-    it("Navigation button validations", function () {
+    it("Bug MTA-1281| Navigation button validations", function () {
         MigrationWave.open();
         selectItemsPerPage(10);
 
@@ -62,7 +62,7 @@ describe(["@tier3"], "Migration Waves pagination validations", function () {
         cy.get(commonView.firstPageButton).should("not.be.disabled");
     });
 
-    it("Items per page validations", function () {
+    it("Bug MTA-1281| Items per page validations", function () {
         MigrationWave.open();
 
         selectItemsPerPage(10);
@@ -84,7 +84,7 @@ describe(["@tier3"], "Migration Waves pagination validations", function () {
             });
     });
 
-    it("Page number validations", function () {
+    it("Bug MTA-1281| Page number validations", function () {
         MigrationWave.open();
         selectItemsPerPage(10);
 
@@ -97,7 +97,7 @@ describe(["@tier3"], "Migration Waves pagination validations", function () {
         goToPage(1);
     });
 
-    after("Perform test data clean up", function () {
+    after("Bug MTA-1281| Perform test data clean up", function () {
         deleteByList(migrationWavesList);
     });
 });
