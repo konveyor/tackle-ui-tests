@@ -58,7 +58,7 @@ describe(["@tier1", "@interop"], "Export Migration Wave to Jira Cloud", function
     });
 
     Object.values(JiraIssueTypes).forEach((issueType) => {
-        it(`Bug MTA-1281| Create wave to export as ${issueType}`, function () {
+        it(`Bug MTA-1281: Create wave to export as ${issueType}`, function () {
             const apps = createMultipleApplications(2);
             applications.push(...apps);
 
@@ -76,7 +76,7 @@ describe(["@tier1", "@interop"], "Export Migration Wave to Jira Cloud", function
     });
 
     Object.values(JiraIssueTypes).forEach((issueType) => {
-        it(`Bug MTA-1281| Export wave as ${issueType} to Jira`, function () {
+        it(`Bug MTA-1281: Export wave as ${issueType} to Jira`, function () {
             jiraCloudInstance
                 .getProject(Cypress.env("jira_atlassian_cloud_project"))
                 .then((project) => {
