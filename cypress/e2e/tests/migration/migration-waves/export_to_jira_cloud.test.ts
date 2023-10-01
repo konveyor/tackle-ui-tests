@@ -121,7 +121,7 @@ describe(["@tier1", "@interop"], "Export Migration Wave to Jira Cloud", function
         });
     });
 
-    after("Bug MTA-1281| Clear test data", function () {
+    after("Bug MTA-1281: Clear test data", function () {
         Object.values(wavesMap).forEach((wave: MigrationWave) => wave.delete());
         applications.forEach((app) => app.delete());
         jiraCloudInstance.delete();
