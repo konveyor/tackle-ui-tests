@@ -331,8 +331,8 @@ export function selectFilter(filterName: string, identifiedRisk?: boolean, value
         .eq(value)
         .within(() => {
             cy.get("#filtered-by").click();
-            cy.get("div.pf-v5-c-menu__content").within(() => {
-                clickByText("span", filterName);
+            cy.get('ul[aria-labelledby="filtered-by"]').within(() => {
+                clickByText("a", filterName);
             });
         });
 }
