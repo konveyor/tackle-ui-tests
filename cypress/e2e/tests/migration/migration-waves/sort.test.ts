@@ -57,7 +57,7 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
         businessServicesList = createMultipleBusinessServices(3);
     });
 
-    it("Name sort validations", function () {
+    it("Bug MTA-1281: Name sort validations", function () {
         MigrationWave.open();
 
         const unsortedList = getTableColumnData(name);
@@ -76,7 +76,7 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
-    it("Start date sort validations", function () {
+    it("Bug MTA-1281: Start date sort validations", function () {
         MigrationWave.open();
 
         const unsortedList = getTableColumnData(startDate);
@@ -92,7 +92,7 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
         verifyDateSortDesc(afterDescSortList, unsortedList);
     });
 
-    it("End date sort validations", function () {
+    it("Bug MTA-1281: End date sort validations", function () {
         MigrationWave.open();
 
         const unsortedList = getTableColumnData(endDate);
@@ -107,7 +107,7 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
         const afterDescSortList = getTableColumnData(endDate);
         verifyDateSortDesc(afterDescSortList, unsortedList);
     });
-    it("Sort Manage applications table", function () {
+    it("Bug MTA-1281: Sort Manage applications table", function () {
         for (let i = 0; i < 3; i++) {
             const appdata = {
                 name: data.getRandomWord(4),
