@@ -22,7 +22,8 @@ import {
     exists,
     notExists,
     selectUserPerspective,
-    checkSuccessAlert, clickJs,
+    checkSuccessAlert,
+    clickJs,
 } from "../../../../../utils/utils";
 import {
     button,
