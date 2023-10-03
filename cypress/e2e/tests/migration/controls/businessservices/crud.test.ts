@@ -119,7 +119,7 @@ describe(["@tier1", "@interop"], "Business service CRUD operations", () => {
 
         // Delete stakeholder owner
         stakeholder.delete();
-        checkSuccessAlert(commonView.successAlertMessage, `Success alert:Business service deleted`);
+        checkSuccessAlert(commonView.successAlertMessage, `Success alert:Stakeholder deleted`);
         cy.wait("@getStakeholders");
 
         // Assert that stakeholder owner is deleted
