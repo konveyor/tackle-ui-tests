@@ -23,6 +23,7 @@ import {
     notExists,
     selectUserPerspective,
     checkSuccessAlert,
+    clickJs,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -53,18 +54,18 @@ describe(["@tier2"], "Business service validations", () => {
 
         // Name constraints
         inputText(businessServiceNameInput, data.getRandomWord(2));
-        cy.get(commonView.nameHelperBusiness).should("contain", minCharsMsg);
+        cy.get(commonView.helperBusiness).should("contain", minCharsMsg);
         inputText(businessServiceNameInput, data.getRandomWords(45));
-        cy.get(commonView.nameHelperBusiness).should("contain", max120CharsMsg);
+        cy.get(commonView.helperBusiness).should("contain", max120CharsMsg);
         inputText(businessServiceNameInput, data.getRandomWord(4));
         cy.get(commonView.submitButton).should("not.be.disabled");
 
         // Description constraints
         inputText(businessServiceDescriptionInput, data.getRandomWords(75));
-        cy.get(commonView.descriptionHelper).should("contain", max250CharsMsg);
+        cy.get(commonView.helperBusiness).should("contain", max250CharsMsg);
 
         // Close the form
-        cy.get(commonView.cancelButton).click();
+        clickJs(commonView.cancelButton);
     });
 
     it("Business service button validations", function () {
@@ -98,7 +99,7 @@ describe(["@tier2"], "Business service validations", () => {
         businessService.create();
         checkSuccessAlert(
             commonView.successAlertMessage,
-            `Success alert:Business service ${businessService.name} was successfully saved.`
+            `Success alert:Business service ${businessService.name} was successfully created.`
         );
         exists(businessService.name);
 
@@ -108,7 +109,7 @@ describe(["@tier2"], "Business service validations", () => {
         // Check name duplication
         inputText(businessServiceNameInput, businessService.name);
         cy.get(commonView.submitButton).should("be.disabled");
-        cy.get(commonView.nameHelperBusiness).should("contain.text", duplicateBusinessService);
+        cy.get(commonView.helperBusiness).should("contain.text", duplicateBusinessService);
 
         // Delete created business service
         cy.get(commonView.closeButton).click();
