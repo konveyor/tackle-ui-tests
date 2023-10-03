@@ -34,7 +34,7 @@ describe(["@tier3"], "Manage application dependencies", () => {
         applicationsList = createMultipleApplications(3);
     });
 
-    it("Non-cyclic dependencies for applications", function () {
+    it("Bug MTA-1329: Non-cyclic dependencies for applications", function () {
         var northboundApps: Array<string> = [applicationsList[0].name];
         var southboundApps: Array<string> = [applicationsList[2].name];
 
@@ -51,7 +51,7 @@ describe(["@tier3"], "Manage application dependencies", () => {
         applicationsList[1].removeDependencies(northboundApps, southboundApps);
     });
 
-    it("Bug MTA-1155 : Cyclic dependencies for applications", function () {
+    it("Bug MTA-1155, Bug-1329: Cyclic dependencies for applications", function () {
         var northboundApps: Array<string> = [applicationsList[0].name];
         var southboundApps: Array<string> = [applicationsList[2].name];
 
