@@ -100,7 +100,7 @@ describe(["@tier1", "@interop"], "Export Migration Wave to Jira Cloud", function
     });
 
     Object.values(JiraIssueTypes).forEach((issueType) => {
-        it(`Bug MTA-1281| Assert exports for ${issueType}`, function () {
+        it(`Bug MTA-1281: Assert exports for ${issueType}`, function () {
             cy.wait(30 * SEC); // Enough time to create both tasks and for them to be available in the Jira API
             jiraCloudInstance.getIssues(projectName).then((issues: JiraIssue[]) => {
                 const waveIssues = issues.filter((issue) => {
