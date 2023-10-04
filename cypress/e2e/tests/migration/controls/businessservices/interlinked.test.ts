@@ -51,7 +51,10 @@ describe(["@tier1"], "Business service linked to stakeholder", () => {
         // Create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
-        checkSuccessAlert(commonView.successAlertMessage, `Stakeholder was successfully created.`);
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            `Success alert:Stakeholder was successfully created.`
+        );
         cy.wait("@postStakeholder");
 
         // Create new business service and attach a stakeholder
