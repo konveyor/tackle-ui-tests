@@ -16,7 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { login, openManageImportsPage } from "../../../../../utils/utils";
-import { topKebabMenu, kebabMenuItem } from "../../../../views/applicationinventory.view";
+import { kebabMenuItem } from "../../../../views/applicationinventory.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
 describe(["@tier2"], "Manage imports tests", function () {
