@@ -37,7 +37,7 @@ const filesToImport = [
     "mandatory_and_empty_rows.csv",
     "non_existing_tags_business_service_rows.csv",
 ];
-var invalidSearchInput = String(data.getRandomNumber());
+const invalidSearchInput = String(data.getRandomNumber());
 
 describe(["@tier2"], "Manage applications import filter validations", function () {
     before("Login and create test data", function () {
@@ -63,7 +63,7 @@ describe(["@tier2"], "Manage applications import filter validations", function (
         openManageImportsPage();
 
         // Enter an existing file name substring and apply it as search filter
-        var validSearchInput = filesToImport[0].substring(0, 5);
+        const validSearchInput = filesToImport[0].substring(0, 5);
         applySearchFilter(FileName, validSearchInput);
 
         // Assert that application import row(s) containing the search text is/are displayed

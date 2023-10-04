@@ -27,10 +27,11 @@ import {
     deleteAppImportsTableRows,
 } from "../../../../../utils/utils";
 import { trTag } from "../../../../types/constants";
-import { actionButton } from "../../../../views/applicationinventory.view";
+import { actionButton, sideKebabMenuImports } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 
 const filePath = "app_import/csv/";
 
@@ -78,9 +79,11 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
     beforeEach("Interceptors", function () {
         // Interceptors for Applications
         cy.intercept("GET", "/hub/application*").as("getApplications");
+        cy.intercept("GET", "/hub/importsummaries*").as("getImports");
+        cy.intercept("DELETE", "/hub/importsummaries*/*").as("deleteImport");
     });
 
-    it("Bug MTA-1185: Navigation button validations", function () {
+    it("Navigation button validations", function () {
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
@@ -117,7 +120,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         cy.get(commonView.firstPageButton).should("not.be.disabled");
     });
 
-    it("Bug MTA-1185: Items per page validations", function () {
+    it("Items per page validations", function () {
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
@@ -143,7 +146,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
             });
     });
 
-    it("Bug MTA-1185: Page number validations", function () {
+    it("Page number validations", function () {
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
@@ -162,7 +165,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         goToPage(1);
     });
 
-    it("Bug MTA-1185: Last page item(s) deletion, impact on page reload validation", function () {
+    it("Last page item(s) deletion, impact on page reload validation", function () {
         // Navigate to Application inventory tab and open manage imports page
         Application.open();
         cy.get("@getApplications");
@@ -170,20 +173,21 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
 
         // Select 10 items per page
         selectItemsPerPage(10);
-        cy.wait(2000);
+        cy.wait("@getImports");
 
         // Navigate to last page
         goToLastPage();
-        cy.wait(2000);
+        cy.wait("@getImports");
 
         // Delete all items of last page
         cy.get(commonView.appTable)
             .get("tbody")
             .find("td[data-label='File name']")
             .each(($tableRow) => {
-                click(actionButton);
+                click(sideKebabMenuImports);
                 cy.get("ul[role=menu] > li").contains("Delete").click();
                 click(commonView.confirmButton);
+                cy.wait("@deleteImport");
                 cy.wait(4000);
             });
 

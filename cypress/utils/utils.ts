@@ -847,25 +847,20 @@ export function deleteApplicationTableRows(): void {
 }
 
 export function deleteAppImportsTableRows() {
-    function deleteItems(rowCount: number): void {
-        if (rowCount < 1) return;
-        cy.get(sideKebabMenuImports, { timeout: 10000 }).first().click();
-        cy.get("ul[role=menu] > li").contains("Delete").click();
-        cy.get(commonView.confirmButton)
-            .click()
-            .then(() => {
-                cy.wait(4000);
-                deleteItems(--rowCount);
-            });
-    }
-
     openManageImportsPage();
+
+    cy.intercept("DELETE", "/hub/importsummaries*/*").as("deleteImportUtils");
+
     cy.get(commonView.appTable)
         .find(trTag)
         .then(($rows) => {
-            const rowCount = $rows.length - 1;
-
-            if (rowCount >= 1) deleteItems(rowCount);
+            for (let i = 0; i < $rows.length - 1; i++) {
+                cy.get(sideKebabMenuImports, { timeout: 10000 }).first().click();
+                cy.get("ul[role=menu] > li").contains("Delete").click();
+                cy.get(commonView.confirmButton).click();
+                cy.wait("@deleteImportUtils");
+                cy.wait(5000);
+            }
         });
 }
 

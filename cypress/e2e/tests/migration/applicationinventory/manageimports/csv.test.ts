@@ -17,15 +17,17 @@ limitations under the License.
 
 import { login, openManageImportsPage } from "../../../../../utils/utils";
 import { topKebabMenu, kebabMenuItem } from "../../../../views/applicationinventory.view";
+import { Application } from "../../../../models/migration/applicationinventory/application";
 
 describe(["@tier2"], "Manage imports tests", function () {
     before("Login", function () {
         login();
+        Application.open();
         openManageImportsPage();
     });
 
     it("Download CSV template", function () {
-        cy.get(topKebabMenu).eq(1).click();
+        cy.get('button[aria-label="Actions"]').eq(1).click();
         cy.get(kebabMenuItem).contains("Download CSV template").click();
         cy.readFile("cypress/downloads/template_application_import.csv").should(
             "contain",
