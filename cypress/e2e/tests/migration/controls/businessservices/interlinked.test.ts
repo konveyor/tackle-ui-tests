@@ -22,6 +22,7 @@ import {
     exists,
     notExists,
     selectUserPerspective,
+    checkSuccessAlert,
 } from "../../../../../utils/utils";
 import { navTab } from "../../../../views/menu.view";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
@@ -29,6 +30,7 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 import { tdTag, businessServices, migration } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { stakeHoldersTable } from "../../../../views/stakeholders.view";
+import * as commonView from "../../../../views/common.view";
 
 describe(["@tier1"], "Business service linked to stakeholder", () => {
     beforeEach("Login", function () {
@@ -43,12 +45,16 @@ describe(["@tier1"], "Business service linked to stakeholder", () => {
         cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
     });
 
-    it("stakeholder attach, update and delete dependency on business service", function () {
+    it("Bug MTA-1375: stakeholder attach, update and delete dependency on business service", function () {
         selectUserPerspective(migration);
 
         // Create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            `Success alert:Stakeholder was successfully created.`
+        );
         cy.wait("@postStakeholder");
 
         // Create new business service and attach a stakeholder
@@ -58,6 +64,10 @@ describe(["@tier1"], "Business service linked to stakeholder", () => {
             stakeholder.name
         );
         businessservice.create();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            `Success alert:Business service ${businessservice.name} was successfully created.`
+        );
         cy.get("@postBusinessService");
         exists(businessservice.name);
 
