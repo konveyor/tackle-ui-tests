@@ -11,7 +11,14 @@ import {
 import { button, migration, SEC } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { searchButton } from "../../../views/common.view";
-import { appFilterName, bsFilterName, tagFilterName } from "../../../views/issue.view";
+import {
+    appFilterName,
+    bsFilterName,
+    categoryFilterName,
+    sourceFilterName,
+    tagFilterName,
+    targetFilterName,
+} from "../../../views/issue.view";
 
 export class Issue {
     /** Contains URL of issues web page */
@@ -47,5 +54,21 @@ export class Issue {
         names.forEach((name) => {
             clickWithinByText(tagFilterName, "span", name);
         });
+    }
+    public static filterByCategory(name: string) {
+        selectFilter("Category");
+        inputText(categoryFilterName, name);
+        click(searchButton);
+    }
+
+    public static filterBySource(name: string) {
+        selectFilter("Source");
+        inputText(sourceFilterName, name);
+        click(searchButton);
+    }
+    public static filterByTarget(name: string) {
+        selectFilter("Target");
+        inputText(categoryFilterName, name);
+        click(targetFilterName);
     }
 }
