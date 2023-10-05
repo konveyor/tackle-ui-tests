@@ -11,6 +11,7 @@ import {
 import { button, migration, SEC } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { searchButton } from "../../../views/common.view";
+import { appFilterName, bsFilterName, tagFilterName } from "../../../views/issue.view";
 
 export class Issue {
     /** Contains URL of issues web page */
@@ -30,21 +31,21 @@ export class Issue {
 
     public static filterByName(name: string) {
         selectFilter("Application name");
-        inputText("#application.name-input", name);
+        inputText(appFilterName, name);
         click(searchButton);
     }
 
     public static filterByBs(name: string) {
         selectFilter("Business service");
-        click("#businessService.name-filter-value-select");
-        clickWithinByText("#businessService.name-filter-value-select", button, name);
+        click(bsFilterName);
+        clickWithinByText(bsFilterName, button, name);
     }
 
     public static filterByTag(names: string[]) {
         selectFilter("Tags");
-        click("#tag.id-filter-value-select");
+        click(tagFilterName);
         names.forEach((name) => {
-            clickWithinByText("#tag.id-filter-value-select", "span", name);
+            clickWithinByText(tagFilterName, "span", name);
         });
     }
 }
