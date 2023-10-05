@@ -34,8 +34,7 @@ import {
 import {
     stakeholderEmailInput,
     stakeholderNameInput,
-    emailHelper,
-    displayNameHelper,
+    stakeholderHelper,
     stakeHoldersTable,
 } from "../../../../views/stakeholders.view";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
@@ -63,17 +62,17 @@ describe(["@tier2"], "Stakeholder validations", () => {
 
         // Email constraints
         inputText(stakeholderEmailInput, data.getRandomWord(2));
-        cy.get(emailHelper).should("contain", minCharsMsg);
+        cy.get(stakeholderHelper).should("contain", minCharsMsg);
         inputText(stakeholderEmailInput, data.getRandomWords(45));
-        cy.get(emailHelper).should("contain", max120CharsMsg);
+        cy.get(stakeholderHelper).should("contain", max120CharsMsg);
         inputText(stakeholderEmailInput, data.getRandomWord(10));
-        cy.get(emailHelper).should("contain", invalidEmailMsg);
+        cy.get(stakeholderHelper).should("contain", invalidEmailMsg);
 
         // Name constraints
         inputText(stakeholderNameInput, data.getRandomWord(2));
-        cy.get(displayNameHelper).should("contain", minCharsMsg);
+        cy.get(stakeholderHelper).should("contain", minCharsMsg);
         inputText(stakeholderNameInput, data.getRandomWords(90));
-        cy.get(displayNameHelper).should("contain", max120CharsMsg);
+        cy.get(stakeholderHelper).should("contain", max120CharsMsg);
 
         // Validate the create button is enabled with valid inputs
         inputText(stakeholderEmailInput, data.getEmail());
@@ -123,7 +122,7 @@ describe(["@tier2"], "Stakeholder validations", () => {
         // Check email duplication
         inputText(stakeholderEmailInput, stakeholder.email);
         inputText(stakeholderNameInput, data.getFullName());
-        cy.get(commonView.emailHelper).should("contain.text", duplicateEmail);
+        cy.get(stakeholderHelper).should("contain.text", duplicateEmail);
 
         // Delete created stakeholder
         cy.get(commonView.closeButton).click();
