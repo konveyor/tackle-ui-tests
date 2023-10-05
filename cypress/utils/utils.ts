@@ -330,10 +330,8 @@ export function selectFilter(filterName: string, identifiedRisk?: boolean, value
     cy.get(commonView.selectFilter)
         .eq(value)
         .within(() => {
-            cy.get("#filtered-by").click();
-            cy.get("div.pf-v5-c-menu__content").within(() => {
-                clickByText("span", filterName);
-            });
+            click("#filtered-by");
+            clickWithinByText('div[aria-labelledby="filtered-by"]', "a", filterName);
         });
 }
 
