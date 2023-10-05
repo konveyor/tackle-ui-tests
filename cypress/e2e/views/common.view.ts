@@ -33,7 +33,6 @@ export const duplicateNameWarning = "h4[class*='alert__title']";
 export const appTable = ".pf-v5-c-table";
 export const expandableRow = ".pf-c-expandable-row";
 export const nameHelper = "span.pf-v5-c-helper-text__item-text";
-export const descriptionHelper = "div[id=description-helper]";
 export const filterToggleButton = "div.pf-c-dropdown > button.pf-c-dropdown__toggle";
 export const filterInput = "input[type='search']";
 export const searchButton = "button[aria-label='search button for search input']";
@@ -53,7 +52,7 @@ export const selectFilter = "div.pf-m-toggle-group.pf-m-filter-group.pf-m-show";
 export const itemsSelectInsideDialog =
     "div[role='dialog'] button[class='pf-v5-c-menu-toggle__button']";
 export const helperBusiness = 'span[class*="helper-text__item"]';
-export const nameHelperStakeholderGroup = "#-helper";
+export const stakeHolderGroupHelper = "div.pf-v5-c-helper-text";
 export const actionMenuItem = "span.pf-v5-c-menu__item-text";
 export const kebabMenuItem = "a.pf-c-dropdown__menu-item";
 export const commonTable = "table[aria-label='main-table']";
