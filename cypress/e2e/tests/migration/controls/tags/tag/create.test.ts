@@ -26,7 +26,7 @@ import {
     createTagButton,
     nameInput,
     dropdownMenuToggle,
-    tagNameHelper,
+    tagsHelper,
 } from "../../../../../views/tags.view";
 import { Tag } from "../../../../../models/migration/controls/tags";
 import * as commonView from "../../../../../../e2e/views/common.view";
@@ -49,7 +49,7 @@ describe(["@tier2"], "Tag validations", () => {
 
         // Name constraints
         inputText(nameInput, data.getRandomWords(40));
-        cy.get(tagNameHelper).should("contain", max120CharsMsg);
+        cy.get(tagsHelper).should("contain", max120CharsMsg);
 
         // Validate the create button is enabled with valid inputs
         inputText(nameInput, data.getRandomWord(5));
@@ -105,7 +105,7 @@ describe(["@tier2"], "Tag validations", () => {
         cy.get(dropdownMenuToggle).click();
         clickByText(button, tag.tagCategory);
         cy.get(commonView.submitButton).should("be.disabled");
-        cy.get(tagNameHelper).should("contain.text", duplicateTagName);
+        cy.get(tagsHelper).should("contain.text", duplicateTagName);
         cy.get(commonView.closeButton).click();
         cy.wait(100);
 
