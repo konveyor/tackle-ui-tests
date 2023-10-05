@@ -33,7 +33,6 @@ export const duplicateNameWarning = "h4[class*='alert__title']";
 export const appTable = ".pf-v5-c-table";
 export const expandableRow = ".pf-c-expandable-row";
 export const nameHelper = "span.pf-v5-c-helper-text__item-text";
-export const emailHelper = "div[id=email-helper]";
 export const filterToggleButton = "div.pf-c-dropdown > button.pf-c-dropdown__toggle";
 export const filterInput = "input[type='search']";
 export const searchButton = "button[aria-label='search button for search input']";
