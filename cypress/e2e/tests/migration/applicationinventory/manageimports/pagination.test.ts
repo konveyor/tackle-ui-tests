@@ -27,11 +27,10 @@ import {
     deleteAppImportsTableRows,
 } from "../../../../../utils/utils";
 import { trTag } from "../../../../types/constants";
-import { actionButton, sideKebabMenuImports } from "../../../../views/applicationinventory.view";
+import { sideKebabMenuImports } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
-import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 
 const filePath = "app_import/csv/";
 

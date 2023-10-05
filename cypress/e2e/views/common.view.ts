@@ -60,4 +60,4 @@ export const kebabMenuItem = "a.pf-c-dropdown__menu-item";
 export const commonTable = "table[aria-label='main-table']";
 export const dropdownClearSelection = "pf-v5-c-select__toggle-clear";
 export const footer = "footer";
-export const actionsButton = 'button[aria-label="Actions"]';
+export const manageImportsActionsButton = 'button[aria-label="Actions"]';

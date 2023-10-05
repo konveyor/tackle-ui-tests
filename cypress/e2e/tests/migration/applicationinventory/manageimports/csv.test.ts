@@ -18,7 +18,7 @@ limitations under the License.
 import { click, login, openManageImportsPage } from "../../../../../utils/utils";
 import { kebabMenuItem } from "../../../../views/applicationinventory.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
-import { actionsButton } from "../../../../views/common.view";
+import { manageImportsActionsButton } from "../../../../views/common.view";
 
 describe(["@tier2"], "Manage imports tests", function () {
     before("Login", function () {
@@ -28,7 +28,7 @@ describe(["@tier2"], "Manage imports tests", function () {
     });
 
     it("Download CSV template", function () {
-        click(actionsButton, true, false, 1);
+        click(manageImportsActionsButton, true, false, 1);
         cy.get(kebabMenuItem).contains("Download CSV template").click();
         cy.readFile("cypress/downloads/template_application_import.csv").should(
             "contain",
