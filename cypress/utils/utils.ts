@@ -351,11 +351,11 @@ export function clearAllFilters(): void {
 export function applySelectFilter(filterId, filterName, filterText, isValid = true): void {
     selectFilter(filterName);
     click("#" + filterId + "-filter-value-select");
-    inputText("input.pf-c-form-control.pf-m-search", filterText);
+    inputText(".pf-v5-c-select__menu-search > input", filterText);
     if (isValid) {
-        clickByText("span.pf-c-check__label", filterText);
+        clickByText(".pf-v5-c-check", filterText);
     } else {
-        cy.contains("div.pf-c-select__menu", "No results found");
+        cy.contains("button.pf-v5-c-select__menu-item.pf-m-disabled", "No results found");
     }
     click("#" + filterId + "-filter-value-select");
 }
