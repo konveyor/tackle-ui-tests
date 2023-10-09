@@ -222,7 +222,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it.only(["@tier0"], "Automated tagging using Source Analysis on tackle testapp", function () {
+    it(["@tier0"], "Automated tagging using Source Analysis on tackle testapp", function () {
         // Automates Polarion MTA-208
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source_autoTagging", {
