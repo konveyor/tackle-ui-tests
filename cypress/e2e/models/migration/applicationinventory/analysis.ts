@@ -299,7 +299,9 @@ export class Analysis extends Application {
         if (this.disableTagging) {
             this.disableAutomatedTagging();
         }
-        next();
+        if (!this.sources) {
+            next();
+        }
         next();
     }
 
