@@ -299,10 +299,8 @@ export class Analysis extends Application {
         if (this.disableTagging) {
             this.disableAutomatedTagging();
         }
-        if (!this.sources) {
-            next();
-        }
-        clickByText(button, "Run");
+        next();
+        next();
     }
 
     public static analyzeAll(params: Analysis): void {

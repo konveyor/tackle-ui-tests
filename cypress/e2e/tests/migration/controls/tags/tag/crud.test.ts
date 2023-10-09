@@ -29,7 +29,7 @@ import { Tag } from "../../../../../models/migration/controls/tags";
 import { migration, tdTag } from "../../../../../types/constants";
 import * as data from "../../../../../../utils/data_utils";
 
-describe(["@tier1"], "Tag CRUD operations", () => {
+describe(["@tier0"], "Tag CRUD operations", () => {
     beforeEach("Login", function () {
         login();
 
