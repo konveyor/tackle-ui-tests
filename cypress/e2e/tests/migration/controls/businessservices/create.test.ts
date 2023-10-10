@@ -130,6 +130,7 @@ describe(["@tier2"], "Business service validations", () => {
         checkSuccessAlert(commonView.successAlertMessage, `Success alert:Business service deleted`);
         businessService1.delete();
         checkSuccessAlert(commonView.successAlertMessage, `Success alert:Business service deleted`);
+        stakeholder.delete();
         notExists(businessService.name);
     });
 });
