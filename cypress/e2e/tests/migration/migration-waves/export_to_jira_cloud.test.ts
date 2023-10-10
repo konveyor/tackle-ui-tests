@@ -42,7 +42,7 @@ let projectName = "";
  * @see export_to_jira_datacenter.test.ts for Jira Datacenter tests
  * This suite is almost identical to jira_datacenter but putting both tests in the same suite would make the code harder to read
  */
-describe(["@tier1", "@interop"], "Export Migration Wave to Jira Cloud", function () {
+describe(["@tier0", "@interop"], "Export Migration Wave to Jira Cloud", function () {
     before("Create test data", function () {
         login();
 
