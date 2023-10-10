@@ -36,7 +36,7 @@ describe(["@tier2"], "Migration waves filter validations", function () {
         migrationWavesList = createMultipleMigrationWaves(2);
     });
 
-    it("Bug MTA-1281: Name filter validations", function () {
+    it("Name filter validations", function () {
         MigrationWave.open();
 
         // Enter an existing display name substring and assert

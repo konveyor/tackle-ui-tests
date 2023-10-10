@@ -66,7 +66,7 @@ describe(
             );
         });
 
-        it("Bug MTA-1281: Filter applications by name", function () {
+        it("Filter applications by name", function () {
             const migrationWave = new MigrationWave(
                 data.getRandomWord(8),
                 now,
@@ -94,7 +94,7 @@ describe(
             migrationWave.delete();
         });
 
-        it("Bug MTA-1281: Filter applications by business service", function () {
+        it("Filter applications by business service", function () {
             const migrationWave = new MigrationWave(
                 data.getRandomWord(8),
                 now,
@@ -122,7 +122,7 @@ describe(
             migrationWave.delete();
         });
 
-        it("Bug MTA-1281: Filter applications by owner", function () {
+        it("Filter applications by owner", function () {
             const migrationWave = new MigrationWave(
                 data.getRandomWord(8),
                 now,
@@ -150,7 +150,7 @@ describe(
             migrationWave.delete();
         });
 
-        after("Bug MTA-1281: Perform test data clean up", function () {
+        after("Perform test data clean up", function () {
             deleteByList(applicationsList);
             deleteByList(businessservicesList);
             deleteByList(tagList);

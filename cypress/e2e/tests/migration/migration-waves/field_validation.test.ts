@@ -49,7 +49,7 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         migrationWave.create();
     });
 
-    it("Bug MTA-1281: Name validations", function () {
+    it("Name validations", function () {
         const invalidMessage = "Name is invalid. The name must be between 3 and 120 characters";
         MigrationWave.openNewForm();
         cy.get(commonView.submitButton).should("be.disabled");
@@ -61,7 +61,7 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         clickJs(cancelButton);
     });
 
-    it("Bug MTA-1281: Dates Validations", function () {
+    it("Dates Validations", function () {
         MigrationWave.openNewForm();
         MigrationWave.fillName(data.getRandomWord(5));
         cy.get(commonView.submitButton).should("be.disabled");
@@ -98,7 +98,7 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         cy.get(commonView.submitButton).should("be.enabled");
         clickJs(cancelButton);
     });
-    it("Bug MTA-1281: Duplicate Migration wave name validation", function () {
+    it("Duplicate Migration wave name validation", function () {
         const migrationWavesList: MigrationWave[] = [];
         const name = data.getRandomWord(8);
         const { start: startDate, end: endDate } = generateRandomDateRange();

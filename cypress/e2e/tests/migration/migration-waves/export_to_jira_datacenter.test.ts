@@ -58,7 +58,7 @@ describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
     });
 
     Object.values(JiraIssueTypes).forEach((issueType) => {
-        it(`Bug MTA-1281: Create wave to export as ${issueType}`, function () {
+        it(`Create wave to export as ${issueType}`, function () {
             const apps = createMultipleApplications(2);
             applications.push(...apps);
 
@@ -76,7 +76,7 @@ describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
     });
 
     Object.values(JiraIssueTypes).forEach((issueType) => {
-        it(`Bug MTA-1281: Export wave as ${issueType} to Jira`, function () {
+        it(`Export wave as ${issueType} to Jira`, function () {
             jiraInstance
                 .getProjectById(Cypress.env("jira_stage_datacenter_project_id"))
                 .then((project) => {
@@ -100,7 +100,7 @@ describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
     });
 
     Object.values(JiraIssueTypes).forEach((issueType) => {
-        it(`Bug MTA-1281: Assert exports for ${issueType}`, function () {
+        it(`Assert exports for ${issueType}`, function () {
             cy.wait(40 * SEC); // Enough time to create both tasks and for them to be available in the Jira API
             jiraInstance.getIssues(projectName).then((issues: JiraIssue[]) => {
                 const waveIssues = issues.filter((issue) => {
@@ -121,7 +121,7 @@ describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
         });
     });
 
-    after("Bug MTA-1281: Clear test data", function () {
+    after("Clear test data", function () {
         MigrationWave.open(true);
         deleteByList(Object.values(wavesMap) as MigrationWave[]);
         deleteByList(applications);

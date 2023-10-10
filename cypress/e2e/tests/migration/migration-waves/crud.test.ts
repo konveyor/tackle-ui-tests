@@ -61,7 +61,7 @@ describe(["@tier1"], "Migration Waves CRUD operations", () => {
     });
 
     // Automates Polarion TC 332
-    it("Bug MTA-1281, Bug MTA-1343: Migration Wave CRUD", function () {
+    it("Migration Wave CRUD", function () {
         const migrationWave = new MigrationWave(
             data.getRandomWord(8),
             now,
@@ -104,7 +104,7 @@ describe(["@tier1"], "Migration Waves CRUD operations", () => {
     });
 
     // Automates Polarion TC 333
-    it("Bug MTA-1281, Bug MTA-1343: Migration Wave Application Association", function () {
+    it("Migration Wave Application Association", function () {
         applications = createMultipleApplications(2);
         const migrationWave = new MigrationWave(
             data.getRandomWord(8),
