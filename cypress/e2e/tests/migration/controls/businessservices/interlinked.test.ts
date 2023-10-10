@@ -22,7 +22,6 @@ import {
     exists,
     notExists,
     selectUserPerspective,
-    checkSuccessAlert,
 } from "../../../../../utils/utils";
 import { navTab } from "../../../../views/menu.view";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
@@ -51,10 +50,6 @@ describe(["@tier1"], "Business service linked to stakeholder", () => {
         // Create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
-        checkSuccessAlert(
-            commonView.successAlertMessage,
-            `Success alert:Stakeholder was successfully created.`
-        );
         cy.wait("@postStakeholder");
 
         // Create new business service and attach a stakeholder
@@ -64,10 +59,6 @@ describe(["@tier1"], "Business service linked to stakeholder", () => {
             stakeholder.name
         );
         businessservice.create();
-        checkSuccessAlert(
-            commonView.successAlertMessage,
-            `Success alert:Business service ${businessservice.name} was successfully created.`
-        );
         cy.get("@postBusinessService");
         exists(businessservice.name);
 

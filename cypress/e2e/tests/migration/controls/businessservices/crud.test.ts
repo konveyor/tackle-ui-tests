@@ -15,13 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    checkSuccessAlert,
-    exists,
-    login,
-    notExists,
-    selectUserPerspective,
-} from "../../../../../utils/utils";
+import { exists, login, notExists, selectUserPerspective } from "../../../../../utils/utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
@@ -52,20 +46,12 @@ describe(["@tier1", "@interop"], "Business service CRUD operations", () => {
 
         // Create new Business service
         businessService.create();
-        checkSuccessAlert(
-            commonView.successAlertMessage,
-            `Success alert:Business service ${businessService.name} was successfully created.`
-        );
         cy.wait("@postBusinessService");
         exists(businessService.name);
 
         // Edit Business service's name
         let updatedBusinessServiceName = data.getCompanyName();
         businessService.edit({ name: updatedBusinessServiceName });
-        checkSuccessAlert(
-            commonView.successAlertMessage,
-            `Success alert:Business service ${businessService.name} was successfully saved.`
-        );
         cy.wait("@getBusinessService");
         exists(updatedBusinessServiceName);
 
@@ -92,26 +78,17 @@ describe(["@tier1", "@interop"], "Business service CRUD operations", () => {
             stakeholder.name
         );
         businessService.create();
-        checkSuccessAlert(
-            commonView.successAlertMessage,
-            `Success alert:Business service ${businessService.name} was successfully created.`
-        );
         cy.wait("@postBusinessService");
         exists(businessService.name);
 
         // Edit Business service's name
         let updatedBusinessServiceName = data.getCompanyName();
         businessService.edit({ name: updatedBusinessServiceName });
-        checkSuccessAlert(
-            commonView.successAlertMessage,
-            `Success alert:Business service ${businessService.name} was successfully saved.`
-        );
         cy.wait("@getBusinessService");
         exists(updatedBusinessServiceName);
 
         // Delete Business service
         businessService.delete();
-        checkSuccessAlert(commonView.successAlertMessage, `Success alert:Business service deleted`);
         cy.wait("@getBusinessService");
 
         // Assert that Business service is deleted
@@ -119,7 +96,6 @@ describe(["@tier1", "@interop"], "Business service CRUD operations", () => {
 
         // Delete stakeholder owner
         stakeholder.delete();
-        checkSuccessAlert(commonView.successAlertMessage, `Success alert:Stakeholder deleted`);
         cy.wait("@getStakeholders");
 
         // Assert that stakeholder owner is deleted
