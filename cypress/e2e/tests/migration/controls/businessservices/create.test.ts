@@ -42,6 +42,7 @@ import * as commonView from "../../../../views/common.view";
 
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import * as data from "../../../../../utils/data_utils";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
 describe(["@tier2"], "Business service validations", () => {
     before("Login", function () {
@@ -91,7 +92,13 @@ describe(["@tier2"], "Business service validations", () => {
     });
 
     it("Business service success alert and unique constraint validation", function () {
-        const businessService = new BusinessServices(data.getCompanyName());
+        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
+        stakeholder.create();
+        const businessService = new BusinessServices(
+            data.getCompanyName(),
+            data.getDescription(),
+            stakeholder.name
+        );
 
         selectUserPerspective(migration);
 
@@ -102,6 +109,12 @@ describe(["@tier2"], "Business service validations", () => {
             `Success alert:Business service ${businessService.name} was successfully created.`
         );
         exists(businessService.name);
+        const businessService1 = new BusinessServices(data.getCompanyName(), data.getDescription());
+        businessService1.create();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            `Success alert:Business service ${businessService1.name} was successfully created.`
+        );
 
         // Navigate to business service tab and click "Create New" button
         clickByText(button, createNewButton);
@@ -114,6 +127,10 @@ describe(["@tier2"], "Business service validations", () => {
         // Delete created business service
         cy.get(commonView.closeButton).click();
         businessService.delete();
+        checkSuccessAlert(commonView.successAlertMessage, `Success alert:Business service deleted`);
+        businessService1.delete();
+        checkSuccessAlert(commonView.successAlertMessage, `Success alert:Business service deleted`);
+        stakeholder.delete();
         notExists(businessService.name);
     });
 });
