@@ -50,7 +50,7 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
         });
     });
 
-    it("Perform analyses - Validate the tasks initiated counter increased", function () {
+    it("Bug MTA-1347: Perform analyses - Validate the tasks initiated counter increased", function () {
         // For source code analysis application must have source code URL git or svn
         const bookServerApp = new Analysis(
             getRandomApplicationData("bookserverApp", {
