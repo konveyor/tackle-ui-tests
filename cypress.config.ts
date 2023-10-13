@@ -18,7 +18,7 @@ export default defineConfig({
         jira_atlassian_cloud_token: "",
         jira_atlassian_cloud_url: "",
         jira_atlassian_cloud_project: "Test",
-        jira_stage_datacenter_project_id: 12339124,
+        jira_stage_datacenter_project_id: 12340621,
         tackleUrl: "https://tackle-konveyor-tackle.apps.mtv03.rhos-psi.cnv-qe.rhood.us",
         rwx_enabled: true,
     },
