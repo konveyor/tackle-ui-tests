@@ -19,12 +19,9 @@ import {
     tdTag,
     trTag,
     button,
-    next,
     review,
-    save,
     assessment,
     SEC,
-    assessAppButton,
     migration,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
@@ -48,6 +45,7 @@ import {
     selectUserPerspective,
     performRowActionByIcon,
     checkSuccessAlert,
+    clickJs,
 } from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import {
@@ -199,9 +197,9 @@ export class Assessment extends Application {
                 }
             });
             if (i === 4) {
-                clickByText(button, save);
+                clickJs(commonView.nextButton);
             } else {
-                clickByText(button, next);
+                clickJs(commonView.nextButton);
             }
         }
     }
@@ -235,6 +233,10 @@ export class Assessment extends Application {
         cy.get(commonView.actionMenuItem).contains("Assess").click();
     }
 
+    take_questionnaire(): void {
+        clickByText(button, "Take");
+    }
+
     perform_assessment(
         risk,
         stakeholders?: Array<string>,
@@ -251,9 +253,11 @@ export class Assessment extends Application {
             this.selectApplication();
             this.click_assess_button();
             cy.wait(6000);
+            this.take_questionnaire();
+            cy.wait(SEC);
             if (stakeholders) this.selectStakeholders(stakeholders);
             if (stakeholderGroups) this.selectStakeholderGroups(stakeholderGroups);
-            clickByText(button, next);
+            clickJs(commonView.nextButton);
             cy.wait(SEC);
             this.selectAnswers(risk);
         }

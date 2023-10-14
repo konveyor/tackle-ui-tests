@@ -13,9 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-export const stakeholderSelect = "#stakeholders-select-toggle-select-multi-typeahead-typeahead";
-export const stakeholdergroupsSelect =
-    "#stakeholder-groups-select-toggle-select-multi-typeahead-typeahead";
+export const stakeholderSelect = "input[aria-label='stakeholder-select-toggle']";
+export const stakeholdergroupsSelect = "input[aria-label='stakeholder-groups-select-toggle']";
 export const questionBlock = "div[cy-data='question']";
 export const radioInput = "input[type='radio']";
 export const assessmentColumnSelector = "td[data-label='Assessment']";
