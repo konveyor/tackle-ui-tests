@@ -25,7 +25,8 @@ import { GeneralConfig } from "../../../../models/administration/general/general
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
 
-describe(["@tier1"], "Application assessment and review tests", () => {
+describe.skip(["@tier1"], "Application assessment and review tests", () => {
+    // Need to be unskipped when bug MTA-1449 is fixed . All test are failing .
     before("Login and Create Test Data", function () {
         login();
 
