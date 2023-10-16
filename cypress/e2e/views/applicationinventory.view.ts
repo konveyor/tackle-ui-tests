@@ -44,6 +44,7 @@ export const user = "User";
 export const kebabMenu = "#row-actions";
 export const topKebabMenu = "#toolbar-kebab";
 export const kebabMenuItem = "a.pf-v5-c-dropdown__menu-item";
+export const bulkApplicationSelectionCheckBox = "input[name='bulk-selected-items-checkbox']";
 // This is on the Application imports page.
 export const sideKebabMenuImports = "button[aria-label='Kebab toggle']";
 
