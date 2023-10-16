@@ -171,3 +171,12 @@ export enum SortType {
     ascending = "ascending",
     descending = "descending",
 }
+
+export enum filterIssue {
+    appName = "Application name",
+    bs = "Business service",
+    tags = "Tags",
+    category = "Category",
+    source = "Source",
+    target = "Target",
+}

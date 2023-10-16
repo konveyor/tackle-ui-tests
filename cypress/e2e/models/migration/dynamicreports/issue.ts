@@ -8,7 +8,7 @@ import {
     selectItemsPerPage,
     selectUserPerspective,
 } from "../../../../utils/utils";
-import { button, migration, SEC } from "../../../types/constants";
+import { button, filterIssue, migration, SEC } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { searchButton } from "../../../views/common.view";
 import {
@@ -36,39 +36,29 @@ export class Issue {
         selectItemsPerPage(itemsPerPage);
     }
 
-    public static filterByName(name: string) {
-        selectFilter("Application name");
-        inputText(appFilterName, name);
-        click(searchButton);
-    }
-
-    public static filterByBs(name: string) {
-        selectFilter("Business service");
-        click(bsFilterName);
-        clickWithinByText(bsFilterName, button, name);
-    }
-
-    public static filterByTag(names: string[]) {
-        selectFilter("Tags");
-        click(tagFilterName);
-        names.forEach((name) => {
-            clickWithinByText(tagFilterName, "span", name);
-        });
-    }
-    public static filterByCategory(name: string) {
-        selectFilter("Category");
-        inputText(categoryFilterName, name);
-        click(searchButton);
-    }
-
-    public static filterBySource(name: string) {
-        selectFilter("Source");
-        inputText(sourceFilterName, name);
-        click(searchButton);
-    }
-    public static filterByTarget(name: string) {
-        selectFilter("Target");
-        inputText(categoryFilterName, name);
-        click(targetFilterName);
+    public static filterBy(item: string, itemName: string | string[]) {
+        let selector: string;
+        selectFilter(item);
+        if (
+            item == filterIssue.appName ||
+            item == filterIssue.category ||
+            item == filterIssue.source ||
+            item == filterIssue.target
+        ) {
+            if (item == filterIssue.appName) selector = appFilterName;
+            if (item == filterIssue.category) selector = categoryFilterName;
+            if (item == filterIssue.source) selector = sourceFilterName;
+            if (item == filterIssue.target) selector = targetFilterName;
+            inputText(selector, itemName);
+            click(searchButton);
+        } else if (item == filterIssue.bs && !Array.isArray(itemName)) {
+            click(bsFilterName);
+            clickWithinByText(bsFilterName, button, itemName);
+        } else if (item == filterIssue.tags && Array.isArray(itemName)) {
+            click(tagFilterName);
+            itemName.forEach((name) => {
+                clickWithinByText(tagFilterName, "span", name);
+            });
+        }
     }
 }
