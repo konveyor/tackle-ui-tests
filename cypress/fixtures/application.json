@@ -38,5 +38,9 @@
         "sourceRepo": "https://github.com/konveyor/example-applications",
         "branch": "main",
         "rootPath": "example-1"
+    },
+    "day-trader-app": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/WASdev/sample.daytrader7"
     }
 }
