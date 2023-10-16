@@ -20,11 +20,12 @@ import {
     createMultipleApplications,
     application_inventory_kebab_menu,
     navigate_to_application_inventory,
+    click,
 } from "../../../../../utils/utils";
 
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
-
-let applicationList: Array<Assessment> = [];
+import * as commonView from "../../../../views/common.view";
+import { bulkApplicationSelectionCheckBox } from "../../../../views/applicationinventory.view";
 
 describe(["@tier2"], "Bulk deletion of applications", () => {
     before("Login", function () {
@@ -32,8 +33,8 @@ describe(["@tier2"], "Bulk deletion of applications", () => {
     });
 
     beforeEach("Interceptors", function () {
-        applicationList = createMultipleApplications(11);
-        // Interceptors
+        Assessment.open(100, true);
+        createMultipleApplications(11);
         cy.intercept("POST", "/hub/tag*").as("postTag");
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
@@ -41,24 +42,24 @@ describe(["@tier2"], "Bulk deletion of applications", () => {
 
     it("Bulk deletion of applications - Select page ", function () {
         navigate_to_application_inventory();
-        // Click dropdown toggle button to make 'Select page' selection.
-        cy.get("button[aria-label='Select']").click();
+        cy.get("button.pf-v5-c-menu-toggle__button").click();
         cy.get("ul[role=menu] > li").contains("Select page").click();
         application_inventory_kebab_menu("Delete");
+        click(commonView.confirmButton);
     });
 
     it("Bulk deletion of applications - Select all ", function () {
         navigate_to_application_inventory();
-        // Click dropdown toggle button to make 'Select all' selection.
-        cy.get("button[aria-label='Select']").click();
+        cy.get("button.pf-v5-c-menu-toggle__button").click();
         cy.get("ul[role=menu] > li").contains("Select all").click();
         application_inventory_kebab_menu("Delete");
+        click(commonView.confirmButton);
     });
 
     it("Bulk deletion of applications - Delete all apps by selecting checkbox ", function () {
         navigate_to_application_inventory();
-        // Click 'bulk-selected-apps-checkbox'.
-        cy.get("input#bulk-selected-items-checkbox").check({ force: true });
+        cy.get(bulkApplicationSelectionCheckBox).check({ force: true });
         application_inventory_kebab_menu("Delete");
+        click(commonView.confirmButton);
     });
 });

@@ -70,7 +70,10 @@ import {
     tabsPanel,
     kebabTopMenuButton,
 } from "../../../views/analysis.view";
-import { kebabMenu } from "../../../views/applicationinventory.view";
+import {
+    bulkApplicationSelectionCheckBox,
+    kebabMenu,
+} from "../../../views/applicationinventory.view";
 import { AnalysisStatuses } from "../../../types/constants";
 import { RulesRepositoryFields } from "../../../types/types";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
@@ -307,7 +310,7 @@ export class Analysis extends Application {
 
     public static analyzeAll(params: Analysis): void {
         Analysis.open();
-        selectCheckBox("[name='bulk-selected-items-checkbox']");
+        selectCheckBox(bulkApplicationSelectionCheckBox);
         params.startAnalysis();
     }
 
