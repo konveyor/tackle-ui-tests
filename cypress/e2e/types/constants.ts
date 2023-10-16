@@ -80,6 +80,7 @@ export const manageApplications = "Manage applications";
 export const adoptionCandidateDistribution = "Adoption candidate distribution";
 export const identiFiedRisks = "Identified risks";
 export const suggestedAdoptionPlan = "Suggested adoption plan";
+export const assessmentQuestionnaires = "Assessment questionnaires";
 
 export const createAppButton = "#create-application";
 export const assessAppButton = "#assess-application";

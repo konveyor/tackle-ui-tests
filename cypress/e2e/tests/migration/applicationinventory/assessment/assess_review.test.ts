@@ -21,6 +21,7 @@ import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { GeneralConfig } from "../../../../models/administration/general/generalConfig";
+import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
@@ -29,7 +30,7 @@ describe.skip(["@tier1"], "Application assessment and review tests", () => {
     // Need to be unskipped when bug MTA-1449 is fixed . All test are failing .
     before("Login and Create Test Data", function () {
         login();
-
+        AssessmentQuestionnaire.enableLegacyQuestionanire();
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
