@@ -19,10 +19,8 @@ import {
     clickByText,
     getRandomAnalysisData,
     getRandomApplicationData,
-    hasToBeSkipped,
     login,
     logout,
-    preservecookies,
     resetURL,
     selectItemsPerPage,
 } from "../../../utils/utils";
@@ -72,8 +70,6 @@ describe(["tier2", "@dc"], "Custom Migration Targets RBAC operations", function 
     });
 
     beforeEach("Persist session", function () {
-        preservecookies();
-
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -92,10 +88,10 @@ describe(["tier2", "@dc"], "Custom Migration Targets RBAC operations", function 
         );
         analysis.create();
 
-        cy.intercept("POST", "/hub/rulebundles*").as("postRule");
+        cy.intercept("POST", "/hub/targets*").as("postRule");
         target.create();
         cy.wait("@postRule");
-        cy.get("article", { timeout: 12 * SEC })
+        cy.get(".pf-v5-c-card__body", { timeout: 12 * SEC })
             .should("contain", target.name)
             .then((_) => {
                 assertTargetIsVisible(analysis, target);
@@ -112,7 +108,7 @@ describe(["tier2", "@dc"], "Custom Migration Targets RBAC operations", function 
         architect.logout();
     });
 
-    it("Look for created target on an analysis as migrator user", function () {
+    it("Bug MTA-1455: Look for created target on an analysis as migrator user", function () {
         migrator.login();
         assertTargetIsVisible(analysis, target);
         analyzeAndVerify(analysis);
@@ -141,8 +137,7 @@ describe(["tier2", "@dc"], "Custom Migration Targets RBAC operations", function 
         cy.contains("button", "Next", { timeout: 200 }).click();
 
         // Ensures that the latest custom migration target created is the last one in the list
-        cy.get("form article", { timeout: 12 * SEC })
-            .children()
+        cy.get("form .pf-v5-c-card__body", { timeout: 12 * SEC })
             .last()
             .should("contain", existingTarget.name)
             .and("contain", "Custom");
