@@ -307,7 +307,7 @@ export class Analysis extends Application {
 
     public static analyzeAll(params: Analysis): void {
         Analysis.open();
-        selectCheckBox("#bulk-selected-items-checkbox");
+        selectCheckBox("[name='bulk-selected-items-checkbox']");
         params.startAnalysis();
     }
 
