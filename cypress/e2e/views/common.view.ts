@@ -60,3 +60,4 @@ export const dropdownClearSelection = "pf-v5-c-select__toggle-clear";
 export const footer = "footer";
 export const manageImportsActionsButton = 'button[aria-label="Actions"]';
 export const nextButton = "button[cy-data='next']";
+export const span = "span";

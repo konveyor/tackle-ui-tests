@@ -10,7 +10,7 @@ import {
 } from "../../../../utils/utils";
 import { button, filterIssue, migration, SEC } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
-import { searchButton } from "../../../views/common.view";
+import { searchButton, span } from "../../../views/common.view";
 import {
     appFilterName,
     bsFilterName,
@@ -36,20 +36,18 @@ export class Issue {
         selectItemsPerPage(itemsPerPage);
     }
 
-    public static filterBy(item: string, itemName: string | string[]) {
-        let selector: string;
+    public static filterBy(item: string, itemName: string | string[]): void {
+        //TODO: Refactor this after bug https://issues.redhat.com/browse/MTA-1465 will be fixed
+        const selectorMap: Record<string, string> = {
+            [filterIssue.appName]: appFilterName,
+            [filterIssue.category]: categoryFilterName,
+            [filterIssue.source]: sourceFilterName,
+            [filterIssue.target]: targetFilterName,
+        };
+
         selectFilter(item);
-        if (
-            item == filterIssue.appName ||
-            item == filterIssue.category ||
-            item == filterIssue.source ||
-            item == filterIssue.target
-        ) {
-            if (item == filterIssue.appName) selector = appFilterName;
-            if (item == filterIssue.category) selector = categoryFilterName;
-            if (item == filterIssue.source) selector = sourceFilterName;
-            if (item == filterIssue.target) selector = targetFilterName;
-            inputText(selector, itemName);
+        if (selectorMap[item]) {
+            inputText(selectorMap[item], itemName);
             click(searchButton);
         } else if (item == filterIssue.bs && !Array.isArray(itemName)) {
             click(bsFilterName);
@@ -57,7 +55,7 @@ export class Issue {
         } else if (item == filterIssue.tags && Array.isArray(itemName)) {
             click(tagFilterName);
             itemName.forEach((name) => {
-                clickWithinByText(tagFilterName, "span", name);
+                clickWithinByText(tagFilterName, span, name);
             });
         }
     }
