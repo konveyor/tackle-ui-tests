@@ -50,7 +50,7 @@ describe(["@tier1"], "Tag tagCategory CRUD operations", () => {
         exists(updatedTagType);
 
         // Assert that rank got updated
-        tagCategory.assertColumnValue(rank, updatedRank);
+        tagCategory.assertColumnValue(rank, updatedRank.toString());
 
         // Assert that color got updated
         tagCategory.assertColumnValue(color, updatedColor);
