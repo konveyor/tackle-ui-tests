@@ -46,6 +46,7 @@ import {
     performRowActionByIcon,
     checkSuccessAlert,
     clickJs,
+    clickItemInKebabMenu,
 } from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import {
@@ -233,6 +234,11 @@ export class Assessment extends Application {
         cy.get(commonView.actionMenuItem).contains("Assess").click();
     }
 
+    click_review_button(): void {
+        performRowActionByIcon(this.name, kebabMenu);
+        cy.get(commonView.actionMenuItem).contains("Review").click();
+    }
+
     take_questionnaire(): void {
         clickByText(button, "Take");
     }
@@ -251,7 +257,8 @@ export class Assessment extends Application {
             Assessment.open();
             selectItemsPerPage(100);
             this.selectApplication();
-            this.click_assess_button();
+            clickItemInKebabMenu(this.name, "Assess");
+            // this.click_assess_button();
             cy.wait(6000);
             this.take_questionnaire();
             cy.wait(SEC);
@@ -267,7 +274,8 @@ export class Assessment extends Application {
         Assessment.open();
         selectItemsPerPage(100);
         this.selectApplication();
-        clickByText(button, review);
+        clickItemInKebabMenu(this.name, "Review");
+        // this.click_review_button();
         cy.wait(8 * SEC);
         this.selectMigrationAction(risk);
         this.selectEffortEstimate(risk);
@@ -279,6 +287,7 @@ export class Assessment extends Application {
 
     // Method to verify the status of Assessment and Review
     verifyStatus(column, status): void {
+        Assessment.open();
         let columnSelector: string;
 
         if (column === "assessment") columnSelector = assessmentColumnSelector;
@@ -287,7 +296,6 @@ export class Assessment extends Application {
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(this.name)
-            .parent(tdTag)
             .parent(trTag)
             .within(() => {
                 cy.get(columnSelector).contains(status, { timeout: 15000 });

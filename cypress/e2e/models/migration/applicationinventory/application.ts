@@ -64,6 +64,7 @@ import {
     doesExistSelector,
     doesExistText,
     clickTab,
+    clickItemInKebabMenu,
 } from "../../../../utils/utils";
 import { applicationData, RbacValidationRules } from "../../../types/types";
 import { kebabButton, rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
@@ -258,8 +259,7 @@ export class Application {
 
     delete(cancel = false): void {
         cy.wait(2000);
-        performRowActionByIcon(this.name, kebabMenu);
-        clickByText(button, deleteAction);
+        clickItemInKebabMenu(this.name, "Delete");
         if (cancel) {
             cancelForm();
         } else {

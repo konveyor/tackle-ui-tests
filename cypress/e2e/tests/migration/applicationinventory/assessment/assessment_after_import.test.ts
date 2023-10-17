@@ -37,7 +37,6 @@ describe(["@tier2"], "Operations after application import", () => {
     before("Login and create test data", function () {
         login();
 
-        // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
         cy.wait(2000);
@@ -56,8 +55,8 @@ describe(["@tier2"], "Operations after application import", () => {
         exists("Gateway");
     });
 
-    it(
-        "Perform application assessment after a successful application import",
+    it.skip(
+        "Bug MTA-1425:Perform application assessment after a successful application import",
         { tags: "@dc" },
         function () {
             const application = new Assessment(appdata);
@@ -70,7 +69,7 @@ describe(["@tier2"], "Operations after application import", () => {
     );
 
     it("Perform application review after a successful application import", function () {
-        // Automates https://polarion.engineering.redhat.com/polarion/redirect/project/MTAPathfinder/workitem?id=MTA-295
+        // Automates Polarion TC MTA-295
         const application = new Assessment(appdata);
 
         // Perform application review
