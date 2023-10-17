@@ -2,9 +2,20 @@ import { click, clickByText, selectUserPerspective } from "../../../../utils/uti
 import { SEC, assessmentQuestionnaires } from "../../../types/constants";
 import { legacyPathfinderToggle } from "../../../views/assessmentquestionnaire.view";
 import { navMenu } from "../../../views/menu.view";
+import { button } from "../../../../e2e/types/constants";
+
+export interface AssessmentQuestionnaire {
+    fileName: string;
+}
 
 export class AssessmentQuestionnaire {
     public static fullUrl = Cypress.env("tackleUrl") + "/assessment";
+
+    constructor(
+        fileName: string,
+    ) {
+        this.fileName = fileName;
+    }
 
     public static open() {
         cy.url().then(($url) => {
@@ -17,6 +28,14 @@ export class AssessmentQuestionnaire {
 
     public importQuestionnaire() {
         AssessmentQuestionnaire.open();
+        clickByText(button, "Import questionnaire");
+        cy.get('input[type="file"]', { timeout: 2 * SEC }).attachFile(fileName, {
+            subjectType: "drag-n-drop",
+        });
+        cy.get("form.pf-v5-c-form", { timeout: 5 * SEC })
+        .find("button")
+        .contains("Import")
+        .trigger("click");
     }
 
     public downloadYamlTemplate() {
