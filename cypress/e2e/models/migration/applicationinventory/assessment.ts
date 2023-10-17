@@ -229,16 +229,6 @@ export class Assessment extends Application {
         super.delete();
     }
 
-    click_assess_button(): void {
-        performRowActionByIcon(this.name, kebabMenu);
-        cy.get(commonView.actionMenuItem).contains("Assess").click();
-    }
-
-    click_review_button(): void {
-        performRowActionByIcon(this.name, kebabMenu);
-        cy.get(commonView.actionMenuItem).contains("Review").click();
-    }
-
     take_questionnaire(): void {
         clickByText(button, "Take");
     }
@@ -258,7 +248,6 @@ export class Assessment extends Application {
             selectItemsPerPage(100);
             this.selectApplication();
             clickItemInKebabMenu(this.name, "Assess");
-            // this.click_assess_button();
             cy.wait(6000);
             this.take_questionnaire();
             cy.wait(SEC);
@@ -275,7 +264,6 @@ export class Assessment extends Application {
         selectItemsPerPage(100);
         this.selectApplication();
         clickItemInKebabMenu(this.name, "Review");
-        // this.click_review_button();
         cy.wait(8 * SEC);
         this.selectMigrationAction(risk);
         this.selectEffortEstimate(risk);
