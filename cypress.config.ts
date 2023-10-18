@@ -36,6 +36,7 @@ export default defineConfig({
             reportPageTitle: "Tackle test report",
             embeddedScreenshots: true,
             inlineAssets: true,
+            showSkipped: false
         },
         mochaJunitReporterReporterOptions: {
             mochaFile: "cypress/reports/junit/results-[hash].xml",
