@@ -48,6 +48,7 @@ import {
     packaging,
     kebabMenu,
     repoTypeSelect,
+    topKebabMenu,
 } from "../../../views/applicationinventory.view";
 import { appDetailsView } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
@@ -368,9 +369,7 @@ export class Application {
             .contains(this.name)
             .closest(trTag)
             .within(() => {
-                click(selectBox);
-                cy.wait(SEC);
-                click('button[aria-label="Kebab toggle"]');
+                click(`${kebabMenu} > button`);
                 doesExistText(
                     "Analysis details",
                     rbacRules["analysis applicable options"]["Analysis details"]
