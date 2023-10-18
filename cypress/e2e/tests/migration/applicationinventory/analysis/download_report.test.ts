@@ -15,16 +15,19 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { getRandomAnalysisData, getRandomApplicationData, login } from "../../../../../utils/utils";
-import { GeneralConfig } from "../../../../models/administration/general/generalConfig";
+import {
+    cleanupDownloads,
+    getRandomAnalysisData,
+    getRandomApplicationData,
+    login,
+} from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { SEC } from "../../../../types/constants";
+import { AnalysisStatuses, ReportTypeSelectors, SEC } from "../../../../types/constants";
 
 describe(["@tier2"], "Enable and Download HTML and CSV Reports", function () {
     let sourceApplication: Analysis;
-    let generalConfig = GeneralConfig.getInstance();
 
-    before("Login and enable download of HTML and CSV reports", function () {
+    before("Login", function () {
         login();
     });
 
@@ -37,7 +40,7 @@ describe(["@tier2"], "Enable and Download HTML and CSV Reports", function () {
         });
     });
 
-    it("Download HTML and CSV Reports - Source App", function () {
+    it("Download TAR and YAML Reports - Source App", function () {
         sourceApplication = new Analysis(
             getRandomApplicationData("SourceApp", {
                 sourceData: this.appData["bookserver-app"],
@@ -47,22 +50,13 @@ describe(["@tier2"], "Enable and Download HTML and CSV Reports", function () {
         sourceApplication.create();
         cy.wait(2 * SEC);
         sourceApplication.analyze();
-        sourceApplication.verifyAnalysisStatus("Completed");
-        sourceApplication.downloadReport("HTML");
-        sourceApplication.downloadReport("CSV");
-    });
-
-    it("Disable HTML/CSV reports and validate they are disabled", function () {
-        // Disabling download of HTML and CSV reports
-        generalConfig.disableDownloadHtml();
-        generalConfig.disableDownloadCsv();
-
-        // Validating that existing reports do not have HTML/CSV links anymore
-        sourceApplication.downloadReport("HTML", false);
-        sourceApplication.downloadReport("CSV", false);
+        sourceApplication.verifyAnalysisStatus(AnalysisStatuses.completed);
+        sourceApplication.downloadReport(ReportTypeSelectors.TAR);
+        sourceApplication.downloadReport(ReportTypeSelectors.YAML);
     });
 
     after("Cleaning up", function () {
         sourceApplication.delete();
+        cleanupDownloads();
     });
 });

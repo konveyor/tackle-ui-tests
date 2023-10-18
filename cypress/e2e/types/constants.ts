@@ -158,6 +158,11 @@ export enum AnalysisStatuses {
     canceled = "Canceled",
 }
 
+export enum ReportTypeSelectors {
+    TAR = "#download-tar-button",
+    YAML = "#download-yaml-button",
+}
+
 export enum RepositoryType {
     git = "Git",
     subversion = "Subversion",
