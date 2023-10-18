@@ -20,6 +20,7 @@ import {
     applicationInventory,
     button,
     migration,
+    ReportTypeSelectors,
     RepositoryType,
     save,
     SEC,
@@ -363,19 +364,18 @@ export class Analysis extends Application {
         return;
     }
 
-    downloadReport(type: string, isEnabled = true) {
+    downloadReport(type: ReportTypeSelectors) {
         Analysis.open();
         this.selectApplicationRow();
         cy.get(rightSideMenu, { timeout: 30 * SEC }).within(() => {
             clickTab("Reports");
-            if (isEnabled) {
-                clickByText("a", type);
-                cy.verifyDownload("report.tar.gz");
-                // Removing downloaded file after verifying it
-                cleanupDownloads();
-            } else {
-                doesExistText(type, isEnabled);
-            }
+            click(type);
+            // waits until the file is downloaded
+            cy.get(type, { timeout: 30 * SEC });
+            const extension = type === ReportTypeSelectors.YAML ? "yaml" : "tar";
+            cy.verifyDownload(`analysis-report-app-${this.name}.${extension}`);
+            // Removing downloaded file after verifying it
+            cleanupDownloads();
         });
         this.closeApplicationDetails();
     }
