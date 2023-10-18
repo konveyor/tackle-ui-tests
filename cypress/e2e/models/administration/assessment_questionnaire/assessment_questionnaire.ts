@@ -23,6 +23,16 @@ export class AssessmentQuestionnaire {
         });
     }
 
+    public static operation(fileName, operation) {
+        AssessmentQuestionnaire.open();
+        cy.contains(fileName, { timeout: 120 * SEC })
+            .closest("tr")
+            .within(() => {
+                click(actionButton);
+            });
+        clickByText(button, operation);
+    }
+
     public static importQuestionnaire(fileName) {
         AssessmentQuestionnaire.open();
         click(importQuestionnaire);
@@ -36,35 +46,17 @@ export class AssessmentQuestionnaire {
     }
 
     public static deleteQuestionnaire(fileName) {
-        AssessmentQuestionnaire.open();
-        cy.contains(fileName, { timeout: 120 * SEC })
-            .closest("tr")
-            .within(() => {
-                click(actionButton);
-            });
-        clickByText(button, deleteAction);
+        AssessmentQuestionnaire.operation(fileName, deleteAction);
         cy.get(confirmDeletion).click().focused().clear().type(fileName);
         clickByText(button, deleteAction);
     }
 
     public static exportQuestionnaire(fileName) {
-        AssessmentQuestionnaire.open();
-        cy.contains(fileName, { timeout: 120 * SEC })
-            .closest("tr")
-            .within(() => {
-                click(actionButton);
-            });
-        clickByText(button, "Export");
+        AssessmentQuestionnaire.operation(fileName, "Export");
     }
 
     public static viewQuestionnaire(fileName) {
-        AssessmentQuestionnaire.open();
-        cy.contains(fileName, { timeout: 120 * SEC })
-            .closest("tr")
-            .within(() => {
-                click(actionButton);
-            });
-        clickByText(button, "View");
+        AssessmentQuestionnaire.operation(fileName, "View");
     }
 
     public downloadYamlTemplate() {
