@@ -65,10 +65,27 @@ export class AssessmentQuestionnaire {
         clickByText(button, 'Export');
     }
 
+    public static toggleQuestionnaire(fileName, toggle: boolean) {
+        AssessmentQuestionnaire.open();
+        let selector  = (toggle)? ".pf-m-on" : ".pf-m-off";
+        cy.contains(fileName, { timeout: 120 * SEC })
+            .closest("tr")
+            .within(() => {
+                cy.get(selector)
+                    .invoke("css", "display")
+                    .then((display) => {
+                        if (display.toString() == "none") {
+                            click(".pf-v5-c-switch__toggle");
+                        }
+                    });
+            });
+    }
+
     public downloadYamlTemplate() {
         AssessmentQuestionnaire.open();
     }
 
+    /*
     public static enableLegacyQuestionanire() {
         AssessmentQuestionnaire.open();
         cy.get(legacyPathfinderToggle, { timeout: 2 * SEC }).then(($checkbox) => {
@@ -85,5 +102,5 @@ export class AssessmentQuestionnaire {
                 click(legacyPathfinderToggle);
             }
         });
-    }
+    }*/
 }
