@@ -56,6 +56,7 @@ import {
     createEntitiesCheckbox,
     sideKebabMenuImports,
     appImportForm,
+    kebabMenu,
 } from "../e2e/views/applicationinventory.view";
 import {
     closeSuccessNotification,
@@ -901,6 +902,11 @@ export function performRowActionByIcon(itemName: string, action: string): void {
         .within(() => {
             clickWithin(action, button);
         });
+}
+
+export function clickItemInKebabMenu(rowItem, itemName: string): void {
+    performRowActionByIcon(rowItem, kebabMenu);
+    cy.get(commonView.actionMenuItem).contains(itemName).click();
 }
 
 export function createMultipleJiraConnections(
