@@ -79,10 +79,14 @@ describe(["@tier0", "@interop"], "Export Migration Wave to Jira Cloud", function
         it(`Export wave as ${issueType} to Jira`, function () {
             jiraCloudInstance
                 .getProject(Cypress.env("jira_atlassian_cloud_project"))
-                .then((jiraProject) => {
-                    expect(!!jiraProject).to.eq(true);
+                .then((project) => {
+                    expect(!!project).to.eq(true);
 
-                    projectName = jiraProject.name;
+                    if (Array.isArray(project)) {
+                        project = project[0];
+                    }
+
+                    projectName = project.name;
                     expect("Test").to.eq(projectName);
 
                     return jiraCloudInstance.getIssueType(issueType);

@@ -134,8 +134,8 @@ export enum JiraType {
 
 export enum JiraIssueTypes {
     task = "Task",
-    //bug = "Bug",
-    //story = "Story",
+    bug = "Bug",
+    story = "Story",
 }
 
 export enum UserCredentials {
