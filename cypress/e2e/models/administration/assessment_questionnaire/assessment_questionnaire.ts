@@ -59,7 +59,7 @@ export class AssessmentQuestionnaire {
         AssessmentQuestionnaire.operation(fileName, "View");
     }
 
-    public static enable(fileName: string, enable: boolean) {
+    public static enable(fileName: string, enable = true) {
         AssessmentQuestionnaire.open();
         let selector = enable ? ".pf-m-on" : ".pf-m-off";
         cy.contains(fileName, { timeout: 120 * SEC })

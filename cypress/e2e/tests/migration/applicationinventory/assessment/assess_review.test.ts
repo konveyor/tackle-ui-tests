@@ -31,7 +31,7 @@ describe.skip(["@tier1"], "Application assessment and review tests", () => {
     // Need to be unskipped when bug MTA-1449 is fixed . All test are failing .
     before("Login and Create Test Data", function () {
         login();
-        AssessmentQuestionnaire.enable(fileName, true);
+        AssessmentQuestionnaire.enable(fileName);
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
