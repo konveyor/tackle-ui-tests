@@ -82,9 +82,8 @@ describe(["@tier0", "@interop"], "Export Migration Wave to Jira Cloud", function
                 .then((project) => {
                     expect(!!project).to.eq(true);
 
-                    projectName = project.name;
-                    console.log(project);
-                    expect("a").to.eq(project);
+                    projectName = project[0].name;
+                    expect("Test").to.eq(projectName);
 
                     return jiraCloudInstance.getIssueType(issueType);
                 })
