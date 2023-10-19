@@ -25,12 +25,13 @@ import { AssessmentQuestionnaire } from "../../../../models/administration/asses
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
+const fileName = "Legacy Pathfinder";
 
 describe.skip(["@tier1"], "Application assessment and review tests", () => {
     // Need to be unskipped when bug MTA-1449 is fixed . All test are failing .
     before("Login and Create Test Data", function () {
         login();
-        AssessmentQuestionnaire.enableLegacyQuestionanire();
+        AssessmentQuestionnaire.enable(fileName, true);
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();

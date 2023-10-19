@@ -1,10 +1,10 @@
 import { click, clickByText, selectUserPerspective } from "../../../../utils/utils";
 import { SEC, assessmentQuestionnaires, deleteAction } from "../../../types/constants";
 import {
-    legacyPathfinderToggle,
     questionnaireUpload,
     confirmDeletion,
     importQuestionnaire,
+    switchToggle,
 } from "../../../views/assessmentquestionnaire.view";
 import { navMenu } from "../../../views/menu.view";
 import { button } from "../../../../e2e/types/constants";
@@ -23,7 +23,7 @@ export class AssessmentQuestionnaire {
         });
     }
 
-    public static operation(fileName, operation) {
+    public static operation(fileName: string, operation: string) {
         AssessmentQuestionnaire.open();
         cy.contains(fileName, { timeout: 120 * SEC })
             .closest("tr")
@@ -33,7 +33,7 @@ export class AssessmentQuestionnaire {
         clickByText(button, operation);
     }
 
-    public static importQuestionnaire(fileName) {
+    public static import(fileName: string) {
         AssessmentQuestionnaire.open();
         click(importQuestionnaire);
         cy.get(questionnaireUpload, { timeout: 2 * SEC }).attachFile(fileName, {
@@ -45,39 +45,37 @@ export class AssessmentQuestionnaire {
             .click();
     }
 
-    public static deleteQuestionnaire(fileName) {
+    public static delete(fileName: string) {
         AssessmentQuestionnaire.operation(fileName, deleteAction);
         cy.get(confirmDeletion).click().focused().clear().type(fileName);
         clickByText(button, deleteAction);
     }
 
-    public static exportQuestionnaire(fileName) {
+    public static export(fileName: string) {
         AssessmentQuestionnaire.operation(fileName, "Export");
     }
 
-    public static viewQuestionnaire(fileName) {
+    public static view(fileName: string) {
         AssessmentQuestionnaire.operation(fileName, "View");
+    }
+
+    public static enable(fileName: string, enable: boolean) {
+        AssessmentQuestionnaire.open();
+        let selector = enable ? ".pf-m-on" : ".pf-m-off";
+        cy.contains(fileName, { timeout: 120 * SEC })
+            .closest("tr")
+            .within(() => {
+                cy.get(selector)
+                    .invoke("css", "display")
+                    .then((display) => {
+                        if (display.toString() == "none") {
+                            click(switchToggle);
+                        }
+                    });
+            });
     }
 
     public downloadYamlTemplate() {
         AssessmentQuestionnaire.open();
-    }
-
-    public static enableLegacyQuestionanire() {
-        AssessmentQuestionnaire.open();
-        cy.get(legacyPathfinderToggle, { timeout: 2 * SEC }).then(($checkbox) => {
-            if (!$checkbox.prop("checked")) {
-                click(legacyPathfinderToggle);
-            }
-        });
-    }
-
-    public static disableLegacyQuestionanire() {
-        AssessmentQuestionnaire.open();
-        cy.get(legacyPathfinderToggle, { timeout: 2 * SEC }).then(($checkbox) => {
-            if ($checkbox.prop("checked")) {
-                click(legacyPathfinderToggle);
-            }
-        });
     }
 }
