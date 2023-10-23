@@ -64,17 +64,10 @@ describe(["@tier1"], "Binary Analysis", () => {
             this.analysisData = analysisData;
         });
 
-        // Interceptors
-        cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    afterEach("Persist session", function () {
-        // Reset URL from report page to web UI
-        resetURL();
-    });
-
-    it.skip("Bug MTA-1183 | Binary Analysis", function () {
+    it("Binary Analysis", function () {
         // For binary analysis application must have group,artifcat and version.
         application = new Analysis(
             getRandomApplicationData("tackletestApp_binary", {
@@ -89,6 +82,10 @@ describe(["@tier1"], "Binary Analysis", () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
+    });
+
+    afterEach("Persist session", function () {
+        resetURL();
     });
 
     after("Perform test data clean up", function () {
