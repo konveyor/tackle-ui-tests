@@ -39,7 +39,7 @@ describe(["@tier2"], "Business services filter validations", function () {
         businessServicesList = createMultipleBusinessServices(2, stakeholdersList);
     });
 
-    it("Bug MTA-1375: Name filter validations", function () {
+    it("Name filter validations", function () {
         BusinessServices.openList();
 
         // Enter an existing display name substring and assert
@@ -68,7 +68,7 @@ describe(["@tier2"], "Business services filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Bug MTA-1375: Description filter validations", function () {
+    it("Description filter validations", function () {
         BusinessServices.openList();
 
         // Enter an existing description substring and assert
@@ -97,7 +97,7 @@ describe(["@tier2"], "Business services filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Bug MTA-1375: Owner filter validations", function () {
+    it("Owner filter validations", function () {
         BusinessServices.openList();
 
         // Enter an existing owner substring and assert
