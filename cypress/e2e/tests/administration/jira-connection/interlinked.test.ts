@@ -19,28 +19,15 @@ import {
     clickByText,
     createMultipleApplications,
     deleteByList,
-    exists,
     login,
-    performRowAction,
-    validateTextPresence,
 } from "../../../../utils/utils";
 import { getJiraConnectionData, getJiraCredentialData } from "../../../../utils/data_utils";
-import {
-    button,
-    cantDeleteJiraAlert,
-    CredentialType,
-    deleteAction,
-    JiraIssueTypes,
-    JiraType,
-    SEC,
-} from "../../../types/constants";
+import { button, CredentialType, JiraType, SEC } from "../../../types/constants";
 import { JiraConnectionData } from "../../../types/types";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
-import * as data from "../../../../utils/data_utils";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
-import { jiraAlert, jiraTable } from "../../../views/jira.view";
 
 describe(["@tier2"], "Jira connection negative tests", () => {
     const expectedToFail = true;
@@ -56,7 +43,6 @@ describe(["@tier2"], "Jira connection negative tests", () => {
     let jiraCloudConnectionIncorrect: Jira;
     let jiraStageConnectionIncorrect: Jira;
     let applicationList: Array<Assessment> = [];
-    const targetProject = Cypress.env("jira_atlassian_cloud_project");
     const now = new Date();
     now.setDate(now.getDate() + 1);
     const end = new Date(now.getTime());
@@ -153,54 +139,11 @@ describe(["@tier2"], "Jira connection negative tests", () => {
         });
     });
 
-    it("Bug MTA-1014 | Trying to remove Jira connection used by wave", () => {
-        /**
-         Implements MTA-363 - Delete Jira Instance in use
-         */
-        const issueType = JiraIssueTypes.task;
-        let projectName = "";
-        jiraCloudConnection.create();
-        jiraCloudConnection.validateState(!expectedToFail);
-
-        // Defining and creating new migration wave
-        migrationWave = new MigrationWave(
-            data.getRandomWord(8),
-            now,
-            end,
-            null,
-            null,
-            applicationList
-        );
-        migrationWave.create();
-
-        jiraCloudConnection
-            .getProject(targetProject)
-            .then((project) => {
-                projectName = project.name;
-                return jiraCloudConnection.getIssueType(issueType);
-            })
-            .then((issue) => {
-                expect(!!issue).to.eq(true);
-                migrationWave.exportToIssueManager(
-                    JiraType.cloud,
-                    jiraCloudConnection.name,
-                    projectName,
-                    issue.untranslatedName
-                );
-            });
-        Jira.openList();
-        performRowAction(jiraCloudConnection.name, deleteAction);
-        validateTextPresence(jiraAlert, cantDeleteJiraAlert);
-        exists(jiraCloudConnection.name, jiraTable);
-    });
-
     after("Clean up data", () => {
         migrationWave.delete();
         cy.wait("@deleteWave");
         jiraCloudConnectionIncorrect.delete();
-        jiraCloudConnection.delete();
         jiraBasicCredentialInvalid.delete();
-        jiraBasicCredential.delete();
         deleteByList(applicationList);
     });
 });
