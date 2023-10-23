@@ -332,7 +332,7 @@ export function selectFilter(filterName: string, identifiedRisk?: boolean, value
         .eq(value)
         .within(() => {
             click("#filtered-by");
-            clickWithinByText('div[aria-labelledby="filtered-by"]', "a", filterName);
+            clickWithinByText('div[class="pf-v5-c-menu__content"]', "button", filterName);
         });
 }
 
