@@ -63,7 +63,7 @@ describe(["@tier1", "@interop"], "Business service CRUD operations", () => {
         notExists(businessService.name);
     });
 
-    it("Bug MTA-1375: Business service CRUD with owner", function () {
+    it("Business service CRUD with owner", function () {
         selectUserPerspective(migration);
 
         // Create owner - stakeholder

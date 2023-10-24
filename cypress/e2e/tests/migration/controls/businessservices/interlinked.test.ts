@@ -44,7 +44,7 @@ describe(["@tier1"], "Business service linked to stakeholder", () => {
         cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
     });
 
-    it("Bug MTA-1375: stakeholder attach, update and delete dependency on business service", function () {
+    it("Stakeholder attach, update and delete dependency on business service", function () {
         selectUserPerspective(migration);
 
         // Create new stakeholder
