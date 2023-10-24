@@ -24,7 +24,7 @@ import {
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { AnalysisStatuses, ReportTypeSelectors, SEC } from "../../../../types/constants";
 
-describe(["@tier2"], "Enable and Download HTML and CSV Reports", function () {
+describe(["@tier2"], "Enable and Download TAR and YAML Reports", function () {
     let sourceApplication: Analysis;
 
     before("Login", function () {
