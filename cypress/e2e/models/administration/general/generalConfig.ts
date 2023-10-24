@@ -1,17 +1,17 @@
 import {
+    click,
     clickByText,
-    disableSwitch,
-    enableSwitch,
     selectUserPerspective,
 } from "../../../../utils/utils";
-import { downloadCSV, downloadHTML, reviewAssessment } from "../../../views/general.view";
-import { administration, general } from "../../../types/constants";
+import { SEC, administration, general } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
+import { switchToggle } from "../../../views/reports.view";
+
+
 
 export class GeneralConfig {
     private static instance: GeneralConfig;
-    static downloadHtml: boolean;
-    static downloadCsv: boolean;
+    static downloadReport: boolean;
     static fullUrl = Cypress.env("tackleUrl") + "/general";
 
     // GeneralConfig class is singleton, which means that only one object of this class can be created
@@ -32,37 +32,22 @@ export class GeneralConfig {
         });
     }
 
-    enableDownloadHtml(): void {
+    public static enableDownloadReport() {
         GeneralConfig.open();
-        enableSwitch(downloadHTML);
-        GeneralConfig.downloadHtml = true;
+        cy.get(switchToggle, { timeout: 2 * SEC }).then(($checkbox) => {
+            if (!$checkbox.prop("checked")) {
+                click(switchToggle);
+            }
+        });
     }
 
-    disableDownloadHtml(): void {
+    public static disableDownloadReport() {
         GeneralConfig.open();
-        disableSwitch(downloadHTML);
-        GeneralConfig.downloadHtml = false;
+        cy.get(switchToggle, { timeout: 2 * SEC }).then(($checkbox) => {
+            if ($checkbox.prop("checked")) {
+                click(switchToggle);
+            }
+        });
     }
 
-    enableDownloadCsv(): void {
-        GeneralConfig.open();
-        enableSwitch(downloadCSV);
-        GeneralConfig.downloadCsv = true;
-    }
-
-    disableDownloadCsv(): void {
-        GeneralConfig.open();
-        disableSwitch(downloadCSV);
-        GeneralConfig.downloadCsv = false;
-    }
-
-    enableReviewAssessment(): void {
-        GeneralConfig.open();
-        enableSwitch(reviewAssessment);
-    }
-
-    disableReviewAssessment(): void {
-        GeneralConfig.open();
-        disableSwitch(reviewAssessment);
-    }
 }
