@@ -70,16 +70,10 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
             this.analysisData = analysisData;
         });
 
-        // Interceptors
-        cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    afterEach("Reset Url", function () {
-        resetURL();
-    });
-
-    it.skip("Bug MTA-1183 | Binary analysis with maven containing http url when insecure repository is allowed", function () {
+    it("Binary analysis with maven containing http url when insecure repository is allowed", function () {
         mavenConfiguration.enableInsecureMavenRepositories();
 
         // For tackle test app source credentials are required.
@@ -101,7 +95,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         application.openReport();
     });
 
-    it.skip("Bug MTA-1183 | Binary analysis with maven containing http url when insecure repository is not allowed", function () {
+    it("Binary analysis with maven containing http url when insecure repository is not allowed", function () {
         // The following test case should verify if the analysis is failed rather than completed,
         // but due to how maven structure works it will always pick the ( http ) link as ( https )
         // which means, it will always pass regardless if the insecure toggle is disabled or not
@@ -148,6 +142,10 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
             isEnabled(clearRepository, rwxEnabled);
             if (rwxEnabled) mavenConfiguration.clearRepository();
         });
+    });
+
+    afterEach("Reset Url", function () {
+        resetURL();
     });
 
     after("Perform test data clean up", () => {

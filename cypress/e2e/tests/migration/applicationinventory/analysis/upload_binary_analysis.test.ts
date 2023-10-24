@@ -39,17 +39,10 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
             this.analysisData = analysisData;
         });
 
-        // Interceptors
-        cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    afterEach("Persist session", function () {
-        // Reset URL from report page to web UI
-        resetURL();
-    });
-
-    it(["@interop"], "Bug MTA-1347: Upload Binary Analysis", function () {
+    it(["@interop"], "Bug MTA-1420: Upload Binary Analysis", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
@@ -63,7 +56,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it.skip("Bug MTA-1347: Custom rules with custom targets", function () {
+    it.skip("Bug MTA-1420: Custom rules with custom targets", function () {
         // Automated https://issues.redhat.com/browse/TACKLE-561
         const application = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
@@ -78,7 +71,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it.skip("Bug MTA-1347: DIVA report generation", function () {
+    it.skip("Bug MTA-1420: DIVA report generation", function () {
         const application = new Analysis(
             getRandomApplicationData("DIVA"),
             getRandomAnalysisData(this.analysisData["analysis_for_DIVA-report"])
@@ -92,7 +85,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it.skip("Bug MTA-1347: Analysis for jee-example-app upload binary ", function () {
+    it.skip("Bug MTA-1420: Analysis for jee-example-app upload binary ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(
@@ -107,7 +100,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it.skip("Bug MTA-1347: Analysis for camunda-bpm-spring-boot-starter", function () {
+    it.skip("Bug MTA-1420: Analysis for camunda-bpm-spring-boot-starter", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_camunda_app"])
@@ -120,7 +113,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it.skip("Bug MTA-1347: Analysis for complete-duke app upload binary ", function () {
+    it.skip("Bug MTA-1420: Analysis for complete-duke app upload binary ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(
@@ -135,7 +128,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it.skip("Bug MTA-1347: Analysis for kafka-clients-sb app ", function () {
+    it.skip("Bug MTA-1420: Analysis for kafka-clients-sb app ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_kafka-app"])
@@ -146,6 +139,10 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+    });
+
+    afterEach("Persist session", function () {
+        resetURL();
     });
 
     after("Perform test data clean up", function () {
