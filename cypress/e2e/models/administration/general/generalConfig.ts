@@ -1,13 +1,7 @@
-import {
-    click,
-    clickByText,
-    selectUserPerspective,
-} from "../../../../utils/utils";
+import { click, clickByText, selectUserPerspective } from "../../../../utils/utils";
 import { SEC, administration, general } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { switchToggle } from "../../../views/reports.view";
-
-
 
 export class GeneralConfig {
     private static instance: GeneralConfig;
@@ -49,5 +43,4 @@ export class GeneralConfig {
             }
         });
     }
-
 }
