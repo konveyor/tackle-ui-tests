@@ -40,7 +40,6 @@ describe(["@tier2"], "Application import operations", () => {
     });
 
     beforeEach("Persist session", function () {
-        // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplication");
         deleteAppImportsTableRows();
     });
@@ -58,10 +57,8 @@ describe(["@tier2"], "Application import operations", () => {
         exists("Inventory");
         exists("Gateway");
 
-        // Open application imports page
         openManageImportsPage();
 
-        // Verify import applications page shows correct information
         verifyAppImport(fileName, "Completed", 5, 0);
     });
 
@@ -74,15 +71,12 @@ describe(["@tier2"], "Application import operations", () => {
         importApplication(filePath + fileName);
         cy.wait(2000);
 
-        // Open application imports page
         openManageImportsPage();
 
-        // Verify import applications page shows correct information
         verifyAppImport(fileName, "Completed", 2, 3);
 
-        // Verify the error report messages
         openErrorReport();
-        var errorMsgs = [
+        const errorMsgs = [
             "UNIQUE constraint failed: Application.Name",
             "UNIQUE constraint failed: Application.Name",
             "UNIQUE constraint failed: Application.Name",
@@ -101,13 +95,10 @@ describe(["@tier2"], "Application import operations", () => {
         importApplication(filePath + fileName, true);
         cy.wait(2000);
 
-        // Open application imports page
         openManageImportsPage();
 
-        // Verify import applications page shows correct information
         verifyAppImport(fileName, "Completed", 0, 1);
 
-        // Verify the error report messages
         openErrorReport();
         verifyImportErrorMsg("Tag 'TypeScript' could not be found");
 
@@ -119,18 +110,15 @@ describe(["@tier2"], "Application import operations", () => {
         Application.open();
         cy.wait("@getApplication");
 
-        // Import csv with non-existent businsess service
+        // Import csv with non-existent business service
         const fileName = "missing_business_21.csv";
         importApplication(filePath + fileName, true);
         cy.wait(2000);
 
-        // Open application imports page
         openManageImportsPage();
 
-        // Verify import applications page shows correct information
         verifyAppImport(fileName, "Completed", 0, 1);
 
-        // Verify the error report messages
         openErrorReport();
         verifyImportErrorMsg("BusinessService 'Finance' could not be found");
     });
@@ -144,19 +132,10 @@ describe(["@tier2"], "Application import operations", () => {
         importApplication(filePath + fileName);
         cy.wait(2000);
 
-        /* // Verify imported apps are visible in table
-            exists("Import-app-5");
-            exists("Import-app-6");
-            // ToDO: need to modify exists method doesn't work here
-            */
-
-        // Open application imports page
         openManageImportsPage();
 
-        // Verify import applications page shows correct information
         verifyAppImport(fileName, "Completed", 2, 1);
 
-        // Verify the error report message
         openErrorReport();
         verifyImportErrorMsg("Empty Record Type");
     });
@@ -170,35 +149,12 @@ describe(["@tier2"], "Application import operations", () => {
         importApplication(filePath + fileName);
         cy.wait(2000);
 
-        // Open application imports page
         openManageImportsPage();
 
-        // Verify import applications page shows correct information
         verifyAppImport(fileName, "Completed", 1, 1);
 
-        // Verify the error report message
         openErrorReport();
         verifyImportErrorMsg("UNIQUE constraint failed: Application.Name");
-    });
-
-    it("Applications import having description and comments exceeding allowed limits", function () {
-        /*
-            // Unresolved 2.1 bug - https://issues.redhat.com/browse/TACKLE-738
-            selectUserPerspective("Developer");
-            clickByText(navMenu, applicationInventory);
-            cy.wait("@getApplication");
-
-            // Import csv having description and comments over the allowed limits
-            const fileName = "desc_comments_char_limit_rows.csv";
-            importApplication(filePath + fileName);
-            cy.wait(2000);
-
-            // Open application imports page
-            openManageImportsPage();
-
-            // Verify import applications page shows correct information
-            verifyAppImport(fileName, "Completed", 0, 2);
-        */
     });
 
     it("Applications import for invalid csv schema", function () {
@@ -211,15 +167,11 @@ describe(["@tier2"], "Application import operations", () => {
         importApplication(filePath + fileName);
         cy.wait(2000);
 
-        // Open application imports page
         openManageImportsPage();
 
-        // Verify import applications page shows correct information
         verifyAppImport(fileName, "Completed", 0, 2);
 
-        var errorMsgs = ["Invalid or unknown Record Type", "Invalid or unknown Record Type"];
-
-        // Verify the error report message
+        const errorMsgs = ["Invalid or unknown Record Type", "Invalid or unknown Record Type"];
         openErrorReport();
         verifyImportErrorMsg(errorMsgs);
     });
@@ -267,8 +219,6 @@ describe(["@tier2"], "Application import operations", () => {
     });
 
     after("Perform test data clean up", function () {
-        // Business services and apps were created during app imports; Hence these functions are being used for
-        // cleanup.
         deleteApplicationTableRows();
         deleteAllBusinessServices();
     });
