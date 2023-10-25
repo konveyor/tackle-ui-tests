@@ -21,6 +21,7 @@ export default defineConfig({
         jira_stage_datacenter_project_id: 12340621,
         tackleUrl: "https://tackle-konveyor-tackle.apps.mtv03.rhos-psi.cnv-qe.rhood.us",
         rwx_enabled: true,
+        logLevel: "ASSERT",
     },
     retries: {
         runMode: 2,
@@ -48,5 +49,7 @@ export default defineConfig({
             require("./cypress/plugins/index.js")(on, config);
             on("file:preprocessor", tagify(config));
         },
+        experimentalMemoryManagement: true,
+        numTestsKeptInMemory: 15,
     },
 });
