@@ -19,7 +19,6 @@ import {
     trTag,
     button,
     createNewButton,
-    deleteAction,
     assessment,
     assessAppButton,
     createAppButton,
@@ -48,7 +47,6 @@ import {
     packaging,
     kebabMenu,
     repoTypeSelect,
-    topKebabMenu,
 } from "../../../views/applicationinventory.view";
 import { appDetailsView } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
@@ -69,7 +67,6 @@ import {
 } from "../../../../utils/utils";
 import { applicationData, RbacValidationRules } from "../../../types/types";
 import { kebabButton, rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
-import { createTagButton } from "../../../views/tags.view";
 
 export class Application {
     name: string;
@@ -127,7 +124,6 @@ export class Application {
         if (packaging) this.packaging = packaging;
     }
 
-    //Navigate to the Application inventory
     public static open(): void {
         selectUserPerspective(migration);
         clickByText(navMenu, applicationInventory);
@@ -300,7 +296,6 @@ export class Application {
     }
 
     closeApplicationDetails(): void {
-        // closes application details page
         click(appDetailsView.closeDetailsPage);
     }
 
