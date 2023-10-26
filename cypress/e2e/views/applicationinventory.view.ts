@@ -36,8 +36,6 @@ export const southdependenciesDropdownBtn = "button[aria-label='southbound-depen
 export const date = "Date";
 export const editButton = "#pencil-action";
 export const importStatus = "Status";
-export const northboundHelper = "div[id=northbound-dependencies-helper]";
-export const southboundHelper = "div[id=southbound-dependencies-helper]";
 export const selectBox = "input[type=checkbox]";
 export const tags = "span";
 export const user = "User";
