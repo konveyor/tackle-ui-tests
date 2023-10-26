@@ -86,7 +86,6 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
 
         // Remove the BS and tags
         application.removeBusinessService();
-        cy.wait(5000);
         tagList[0].delete();
         deleteFromArrayByIndex(tagList, 0);
 
@@ -149,7 +148,6 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         clickByText(navMenu, applicationInventory);
         application.selectApplication();
         clickItemInKebabMenu(application.name, "Assess");
-        // application.click_assess_button();
         click(continueButton);
         cy.wait(6 * SEC);
 

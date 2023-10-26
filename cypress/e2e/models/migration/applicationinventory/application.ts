@@ -285,7 +285,7 @@ export class Application {
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(this.name)
-            .parent(trTag)
+            .closest(trTag)
             .within(() => {
                 cy.get(columnSelector).should("contain", columnText);
             });
