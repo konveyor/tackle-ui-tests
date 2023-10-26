@@ -69,6 +69,7 @@ import {
 } from "../../../../utils/utils";
 import { applicationData, RbacValidationRules } from "../../../types/types";
 import { kebabButton, rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
+import { createTagButton } from "../../../views/tags.view";
 
 export class Application {
     name: string;
@@ -273,7 +274,6 @@ export class Application {
         cy.wait(4000);
         cy.get(tdTag)
             .contains(this.name)
-            // .parent(tdTag)
             .closest(trTag)
             .within(() => {
                 click(selectBox);
@@ -285,10 +285,9 @@ export class Application {
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(this.name)
-            .parent(tdTag)
             .parent(trTag)
             .within(() => {
-                cy.get(columnSelector).find("span").should("contain", columnText);
+                cy.get(columnSelector).should("contain", columnText);
             });
     }
 
@@ -343,6 +342,10 @@ export class Application {
         }
         // For Tags
         else cy.get(appDetailsView.applicationTag).should("contain", tags);
+    }
+
+    noTagExists(): void {
+        cy.contains("h2", "No tags available", { timeout: 120 * SEC });
     }
 
     static validateAssessButton(rbacRules: RbacValidationRules) {

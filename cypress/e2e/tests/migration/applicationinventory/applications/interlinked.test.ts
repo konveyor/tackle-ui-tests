@@ -25,6 +25,7 @@ import {
     createMultipleTags,
     deleteByList,
     deleteFromArrayByIndex,
+    clickItemInKebabMenu,
 } from "../../../../../utils/utils";
 import { businessColumnSelector } from "../../../../views/applicationinventory.view";
 import {
@@ -85,6 +86,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
 
         // Remove the BS and tags
         application.removeBusinessService();
+        cy.wait(5000);
         tagList[0].delete();
         deleteFromArrayByIndex(tagList, 0);
 
@@ -99,7 +101,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
 
         // Assert that deleted tag is removed
         application.applicationDetailsTab("Tags");
-        application.tagAndCategoryExists("");
+        application.noTagExists();
         application.closeApplicationDetails();
 
         application.edit({
@@ -146,7 +148,8 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
 
         clickByText(navMenu, applicationInventory);
         application.selectApplication();
-        application.click_assess_button();
+        clickItemInKebabMenu(application.name, "Assess");
+        // application.click_assess_button();
         click(continueButton);
         cy.wait(6 * SEC);
 

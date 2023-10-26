@@ -25,7 +25,7 @@ export const applicationOwnerInput = "#owner-toggle-select-typeahead";
 export const repoTypeSelect = "button[id='repo-type-toggle']";
 export const applicationTagsSelect = "[placeholder='Select tags']";
 export const applicationCommentInput = "textarea[name=comments]";
-export const businessColumnSelector = "td[data-label='Business service']";
+export const businessColumnSelector = "td[data-label='Business Service']";
 export const csvFileName = "File name";
 export const FileName = "File Name";
 export const closeForm = "button[aria-label='close']";
