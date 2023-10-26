@@ -52,7 +52,7 @@ describe(["@tier2"], "Application risks tests", () => {
         }
     });
 
-    it("Application risk validation", function () {
+    it("Bug MTA-1345: Application risk validation", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);

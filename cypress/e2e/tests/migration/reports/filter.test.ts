@@ -77,7 +77,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         applicationsList[0].verifyStatus("review", "Completed");
     });
 
-    it("Name field validations", function () {
+    it("Bug MTA-1345: Name field validations", function () {
         // Navigate to reports
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -133,7 +133,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         clickByText(button, clearAllFilters);
     });
 
-    it("Identified risk - Application name field validations", function () {
+    it("Bug MTA-1345: Identified risk - Application name field validations", function () {
         // Navigate to reports
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -187,7 +187,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         clickByText(button, clearAllFilters);
     });
 
-    it("Identified risk - Category field validations", function () {
+    it("Bug MTA-1345: Identified risk - Category field validations", function () {
         // Navigate to reports
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -237,7 +237,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         clickByText(button, clearAllFilters);
     });
 
-    it("Identified risk - Question field validations", function () {
+    it("Bug MTA-1345: Identified risk - Question field validations", function () {
         // Navigate to reports
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -286,7 +286,7 @@ describe(["@tier2"], "Reports filter validations", () => {
         clickByText(button, clearAllFilters);
     });
 
-    it("Identified risk - Answer field validations", function () {
+    it("Bug MTA-1345: Identified risk - Answer field validations", function () {
         // Navigate to reports
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
