@@ -24,7 +24,7 @@ import {
 } from "../../../../utils/utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { SEC, filterIssue } from "../../../types/constants";
-import { Issues } from "../../../models/migration/dynamicreports/issues";
+import { Issues } from "../../../models/migration/issues/issues";
 let applicationsList: Array<Analysis> = [];
 
 describe(["@tier2"], "Issues filtering", () => {
