@@ -340,7 +340,7 @@ export class Application {
     }
 
     noTagExists(): void {
-        cy.contains("h2", "No tags available", { timeout: 120 * SEC });
+        cy.contains("h2", "No tags available", { timeout: 2 * SEC });
     }
 
     static validateAssessButton(rbacRules: RbacValidationRules) {
