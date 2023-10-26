@@ -64,7 +64,7 @@ export class CustomMigrationTarget {
     public edit(updateValues: Partial<CustomMigrationTarget>) {
         CustomMigrationTarget.open();
         this.expandActionsMenu();
-        cy.contains("a", editAction).click();
+        cy.contains(button, editAction).click();
 
         CustomMigrationTarget.fillForm(updateValues);
 
@@ -74,7 +74,7 @@ export class CustomMigrationTarget {
     public delete() {
         CustomMigrationTarget.open();
         this.expandActionsMenu();
-        cy.contains("a", deleteAction).click();
+        cy.contains(button, deleteAction).click();
     }
 
     public static fillName(name: string) {

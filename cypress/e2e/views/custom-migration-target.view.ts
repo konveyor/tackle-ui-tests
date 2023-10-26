@@ -1,7 +1,7 @@
 export enum CustomMigrationTargetView {
     createSubmitButton = "button[id='identity-form-submit']:contains('Create')",
     editSubmitButton = "button[id='identity-form-submit']:contains('Save')",
-    actionsButton = "button[aria-label=Actions]",
+    actionsButton = "button[aria-label='Table toolbar actions kebab toggle']",
     nameInput = "#name",
     helperText = "span[class*='helper-text']",
     descriptionInput = "#description",
