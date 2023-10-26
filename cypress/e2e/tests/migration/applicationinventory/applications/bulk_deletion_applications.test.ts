@@ -25,11 +25,20 @@ import {
 
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import * as commonView from "../../../../views/common.view";
-import { bulkApplicationSelectionCheckBox } from "../../../../views/applicationinventory.view";
+import {
+    actionButton,
+    bulkApplicationSelectionCheckBox,
+} from "../../../../views/applicationinventory.view";
 
 describe(["@tier2"], "Bulk deletion of applications", () => {
     before("Login", function () {
         login();
+        Assessment.open(100, true);
+        cy.get("tr.pf-m-clickable").then(($rows) => {
+            if ($rows.length > 0) {
+                verifyDeleteButton();
+            }
+        });
     });
 
     beforeEach("Interceptors", function () {
@@ -62,4 +71,20 @@ describe(["@tier2"], "Bulk deletion of applications", () => {
         application_inventory_kebab_menu("Delete");
         click(commonView.confirmButton);
     });
+
+    const verifyDeleteButton = () => {
+        cy.get("button.pf-v5-c-menu-toggle__button").click();
+        cy.get("ul[role=menu] > li").contains("Select all").click();
+        cy.get(actionButton).eq(0).click({ force: true });
+        cy.get("li.pf-v5-c-menu__list-item")
+            .contains("Delete")
+            .then(($deleteButton) => {
+                if ($deleteButton.parent().hasClass("pf-m-aria-disabled")) {
+                    expect(
+                        true,
+                        "The Bulk Delete button is disabled, which may be caused by undeleted migration waves from previous tests."
+                    ).to.eq(false);
+                }
+            });
+    };
 });
