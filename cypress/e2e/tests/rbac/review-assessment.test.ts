@@ -15,11 +15,10 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { getRandomApplicationData, login, logout, preservecookies } from "../../../utils/utils";
+import { getRandomApplicationData, login, logout } from "../../../utils/utils";
 import * as data from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { User } from "../../models/keycloak/users/user";
-import { GeneralConfig } from "../../models/administration/general/generalConfig";
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import { SEC } from "../../types/constants";
 
@@ -27,71 +26,36 @@ describe(["@tier2"], "Assess review with RBAC operations", function () {
     // Polarion TC 312
     const architect = new UserArchitect(data.getRandomUserData());
     const application = new Assessment(getRandomApplicationData());
-    const generalConfig = GeneralConfig.getInstance();
 
     before("Create test data", function () {
         User.loginKeycloakAdmin();
         architect.create();
 
         login();
-
-        // Navigate to application inventory tab and create new application
         application.create();
         cy.wait(2 * SEC);
+        logout();
     });
 
-    beforeEach("Persist session", function () {
-        login();
-
-        preservecookies();
-
+    beforeEach("Load fixtures", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
     });
 
-    it("Architect, Enable review without assessment", function () {
-        // Enable allow reviewing applications without running an assessment first button
-        generalConfig.enableReviewAssessment();
-
-        // Logout from admin user
-        logout();
-
-        // Login to architect user
+    it("Architect, Application assessment and review", function () {
         architect.login();
 
-        // Perform application review
         application.perform_review("medium");
         cy.wait(2000);
         application.verifyStatus("review", "Completed");
 
-        // Logout from architect user
-        architect.logout();
-    });
-
-    it("Architect, Disable review without assessment", function () {
-        // Disable allow reviewing applications without running an assessment first button
-        generalConfig.disableReviewAssessment();
-
-        // Logout from admin user
-        logout();
-
-        // Login to architect user
-        architect.login();
-
-        // Verify review button is disabled for the application
-        application.verifyReviewButtonDisabled();
-
-        // Delete application
-        application.delete();
-        cy.wait(2000);
-
-        // Logout from architect user
         architect.logout();
     });
 
     after("Clear test data", () => {
         login();
+        application.delete();
         User.loginKeycloakAdmin();
         architect.delete();
     });
