@@ -18,7 +18,6 @@ limitations under the License.
 import {
     login,
     clickByText,
-    click,
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
     createMultipleBusinessServices,
@@ -28,15 +27,11 @@ import {
     clickItemInKebabMenu,
 } from "../../../../../utils/utils";
 import { businessColumnSelector } from "../../../../views/applicationinventory.view";
-import {
-    continueButton,
-    stakeholdergroupsSelect,
-    stakeholderSelect,
-} from "../../../../views/assessment.view";
+import { stakeholdergroupsSelect, stakeholderSelect } from "../../../../views/assessment.view";
 import { navMenu } from "../../../../views/menu.view";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
-import { applicationInventory, SEC } from "../../../../types/constants";
+import { applicationInventory, button, SEC } from "../../../../types/constants";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import * as data from "../../../../../utils/data_utils";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
@@ -148,8 +143,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         clickByText(navMenu, applicationInventory);
         application.selectApplication();
         clickItemInKebabMenu(application.name, "Assess");
-        click(continueButton);
-        cy.wait(6 * SEC);
+        clickByText(button, "Retake");
 
         //Verify that values show blank
         cy.get(stakeholderSelect).should("have.value", "");
