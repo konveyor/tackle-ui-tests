@@ -1,6 +1,6 @@
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { checkSuccessAlert, login, closeModalWindow } from "../../../../utils/utils";
-import { duplicateNameWarning } from "../../../views/common.view";
+import { alertTitle } from "../../../views/common.view";
 
 const yamlFileName = "questionnaire_import/cloud-native.yaml";
 const fileName = "Cloud Native";
@@ -13,7 +13,7 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
     it("Import questionnaire", function () {
         AssessmentQuestionnaire.import(yamlFileName);
         checkSuccessAlert(
-            duplicateNameWarning,
+            alertTitle,
             `Success alert:Questionnaire ${fileName} was successfully created.`,
             true
         );
@@ -22,14 +22,14 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
 
     it("Duplicate questionnaire Test", function () {
         AssessmentQuestionnaire.import(yamlFileName);
-        checkSuccessAlert(duplicateNameWarning, "UNIQUE constraint failed: Questionnaire.Name");
+        checkSuccessAlert(alertTitle, "UNIQUE constraint failed: Questionnaire.Name");
         closeModalWindow();
     });
 
     it("Delete questionnaire", function () {
         AssessmentQuestionnaire.delete(fileName);
         checkSuccessAlert(
-            duplicateNameWarning,
+            alertTitle,
             `Success alert:Questionnaire ${fileName} was successfully deleted.`,
             true
         );

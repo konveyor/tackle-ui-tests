@@ -107,12 +107,12 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         migrationWavesList.push(migrationWave1);
         //create another MW with same params
         migrationWave1.create();
-        checkSuccessAlert(commonView.duplicateNameWarning, duplicateMigrationWaveError);
+        checkSuccessAlert(commonView.alertTitle, duplicateMigrationWaveError);
 
         const migrationWave3 = new MigrationWave(null, startDate, endDate, null, null, null);
         migrationWave3.create();
         migrationWave3.create();
-        checkSuccessAlert(commonView.duplicateNameWarning, duplicateMigrationWaveError);
+        checkSuccessAlert(commonView.alertTitle, duplicateMigrationWaveError);
         migrationWavesList.push(migrationWave3);
 
         //migrationwave3 name is null, so it can't be deleted by list
