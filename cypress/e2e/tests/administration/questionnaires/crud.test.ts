@@ -26,6 +26,11 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
         closeModalWindow();
     });
 
+    it("Export questionnaire", function () {
+        AssessmentQuestionnaire.export(fileName);
+        cy.readFile("cypress/downloads/questionnaire-4.yaml").should("contain", "Cloud Native");
+    });
+
     it("Delete questionnaire", function () {
         AssessmentQuestionnaire.delete(fileName);
         checkSuccessAlert(
