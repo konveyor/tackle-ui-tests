@@ -39,15 +39,10 @@ describe(["@tier2"], "Issues filtering", () => {
         cy.fixture("analysis").then(function (analysisData) {
             this.analysisData = analysisData;
         });
-
-        // Interceptors
-        cy.intercept("POST", "/hub/application*").as("postApplication");
-        cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     it("Running analysis and filtering issues by app name", function () {
         // For source code analysis application must have source code URL git or svn
-        cy.log(this.analysisData[0]);
         const application = new Analysis(
             getRandomApplicationData("bookserverApp", {
                 sourceData: this.appData["bookserver-app"],
