@@ -24,7 +24,7 @@ import {
 } from "../../../../utils/utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { SEC, filterIssue } from "../../../types/constants";
-import { Issue } from "../../../models/migration/dynamicreports/issue";
+import { Issues } from "../../../models/migration/dynamicreports/issues";
 let applicationsList: Array<Analysis> = [];
 
 describe(["@tier2"], "Issues filtering", () => {
@@ -61,8 +61,7 @@ describe(["@tier2"], "Issues filtering", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
 
-        Issue.openList();
-        Issue.filterBy(filterIssue.appName, application.name);
+        Issues.filterBy(filterIssue.appName, application.name);
         cy.get("tr").should("not.contain", "No data available");
         clearAllFilters();
     });
