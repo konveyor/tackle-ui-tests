@@ -79,14 +79,14 @@ describe(["@tier2"], "Application validations", () => {
 
         // Name constraints
         inputText(applicationNameInput, data.getRandomWord(2));
-        cy.get(commonView.nameHelper).should("contain", minCharsMsg);
+        cy.get(commonView.helper).should("contain", minCharsMsg);
         inputText(applicationNameInput, data.getRandomWords(90));
-        cy.get(commonView.nameHelper).should("contain", max120CharsMsg);
+        cy.get(commonView.helper).should("contain", max120CharsMsg);
         cy.get(applicationNameInput).clear();
 
         // Description constraint
         inputText(applicationDescriptionInput, data.getRandomWords(90));
-        cy.get(commonView.nameHelper).should("contain", max250CharsMsg);
+        cy.get(commonView.helper).should("contain", max250CharsMsg);
         // Clear description field to make it valid input
         cy.get(applicationDescriptionInput).clear();
 
@@ -174,7 +174,7 @@ describe(["@tier2"], "Application validations", () => {
         application.create();
         checkSuccessAlert(
             commonView.successAlertMessage,
-            `Application ${application.name} was successfully saved.`
+            `Application ${application.name} was successfully created.`
         );
         cy.wait("@postApplication");
         exists(application.name);
@@ -185,7 +185,7 @@ describe(["@tier2"], "Application validations", () => {
         // Check name duplication
         inputText(applicationNameInput, application.name);
         selectFormItems(applicationBusinessServiceSelect, businessservicesList[0].name);
-        cy.get(commonView.nameHelper).should("contain.text", duplicateApplication);
+        cy.get(commonView.helper).should("contain.text", duplicateApplication);
         cy.get(commonView.closeButton).click();
         application.delete();
     });

@@ -19,7 +19,6 @@ import {
     trTag,
     button,
     createNewButton,
-    deleteAction,
     assessment,
     assessAppButton,
     createAppButton,
@@ -48,7 +47,6 @@ import {
     packaging,
     kebabMenu,
     repoTypeSelect,
-    topKebabMenu,
 } from "../../../views/applicationinventory.view";
 import { appDetailsView } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
@@ -126,7 +124,6 @@ export class Application {
         if (packaging) this.packaging = packaging;
     }
 
-    //Navigate to the Application inventory
     public static open(): void {
         selectUserPerspective(migration);
         clickByText(navMenu, applicationInventory);
@@ -273,7 +270,6 @@ export class Application {
         cy.wait(4000);
         cy.get(tdTag)
             .contains(this.name)
-            // .parent(tdTag)
             .closest(trTag)
             .within(() => {
                 click(selectBox);
@@ -285,10 +281,9 @@ export class Application {
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
+            .closest(trTag)
             .within(() => {
-                cy.get(columnSelector).find("span").should("contain", columnText);
+                cy.get(columnSelector).should("contain", columnText);
             });
     }
 
@@ -301,7 +296,6 @@ export class Application {
     }
 
     closeApplicationDetails(): void {
-        // closes application details page
         click(appDetailsView.closeDetailsPage);
     }
 
@@ -343,6 +337,10 @@ export class Application {
         }
         // For Tags
         else cy.get(appDetailsView.applicationTag).should("contain", tags);
+    }
+
+    noTagExists(): void {
+        cy.contains("h2", "No tags available", { timeout: 2 * SEC });
     }
 
     static validateAssessButton(rbacRules: RbacValidationRules) {

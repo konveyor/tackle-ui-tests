@@ -25,7 +25,7 @@ export const applicationOwnerInput = "#owner-toggle-select-typeahead";
 export const repoTypeSelect = "button[id='repo-type-toggle']";
 export const applicationTagsSelect = "[placeholder='Select tags']";
 export const applicationCommentInput = "textarea[name=comments]";
-export const businessColumnSelector = "td[data-label='Business service']";
+export const businessColumnSelector = "td[data-label='Business Service']";
 export const csvFileName = "File name";
 export const FileName = "File Name";
 export const closeForm = "button[aria-label='close']";
@@ -36,14 +36,12 @@ export const southdependenciesDropdownBtn = "button[aria-label='southbound-depen
 export const date = "Date";
 export const editButton = "#pencil-action";
 export const importStatus = "Status";
-export const northboundHelper = "div[id=northbound-dependencies-helper]";
-export const southboundHelper = "div[id=southbound-dependencies-helper]";
 export const selectBox = "input[type=checkbox]";
 export const tags = "span";
 export const user = "User";
 export const kebabMenu = "#row-actions";
 export const topKebabMenu = "#toolbar-kebab";
-export const kebabMenuItem = "a.pf-v5-c-dropdown__menu-item";
+export const kebabMenuItem = "span.pf-v5-c-menu__item-text";
 export const bulkApplicationSelectionCheckBox = "input[name='bulk-selected-items-checkbox']";
 // This is on the Application imports page.
 export const sideKebabMenuImports = "button[aria-label='Kebab toggle']";

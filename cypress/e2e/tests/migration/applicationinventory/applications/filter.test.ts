@@ -62,7 +62,6 @@ let tagList: Array<Tag> = [];
 
 describe(["@tier2"], "Application inventory filter validations", function () {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
 
         //Create Multiple Application with Business service and Tags

@@ -20,11 +20,10 @@ import { Assessment } from "../../../../models/migration/applicationinventory/as
 import {
     closeForm,
     cyclicDependenciesErrorMsg,
-    northboundHelper,
     northdependenciesDropdownBtn,
-    southboundHelper,
     southdependenciesDropdownBtn,
 } from "../../../../views/applicationinventory.view";
+import { helper } from "../../../../views/common.view";
 
 var applicationsList: Array<Assessment> = [];
 
@@ -34,7 +33,7 @@ describe(["@tier3"], "Manage application dependencies", () => {
         applicationsList = createMultipleApplications(3);
     });
 
-    it("Bug MTA-1329: Non-cyclic dependencies for applications", function () {
+    it("Non-cyclic dependencies for applications", function () {
         var northboundApps: Array<string> = [applicationsList[0].name];
         var southboundApps: Array<string> = [applicationsList[2].name];
 
@@ -51,7 +50,7 @@ describe(["@tier3"], "Manage application dependencies", () => {
         applicationsList[1].removeDependencies(northboundApps, southboundApps);
     });
 
-    it("Bug MTA-1155, Bug-1329: Cyclic dependencies for applications", function () {
+    it("Cyclic dependencies for applications", function () {
         var northboundApps: Array<string> = [applicationsList[0].name];
         var southboundApps: Array<string> = [applicationsList[2].name];
 
@@ -64,7 +63,7 @@ describe(["@tier3"], "Manage application dependencies", () => {
             applicationsList[2].name,
         ]);
         cy.wait(500);
-        cy.get(northboundHelper).should("contain.text", cyclicDependenciesErrorMsg);
+        cy.get(helper).should("contain.text", cyclicDependenciesErrorMsg);
         click(closeForm);
 
         // Adding app[0] as southbound dependency for app[2] should yield cyclic error
@@ -73,12 +72,11 @@ describe(["@tier3"], "Manage application dependencies", () => {
             applicationsList[0].name,
         ]);
         cy.wait(500);
-        cy.get(southboundHelper).should("contain.text", cyclicDependenciesErrorMsg);
+        cy.get(helper).should("contain.text", cyclicDependenciesErrorMsg);
         click(closeForm);
     });
 
     after("Perform test data clean up", function () {
-        // Delete the applications
         deleteByList(applicationsList);
     });
 });

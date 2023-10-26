@@ -18,24 +18,20 @@ limitations under the License.
 import {
     login,
     clickByText,
-    click,
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
     createMultipleBusinessServices,
     createMultipleTags,
     deleteByList,
     deleteFromArrayByIndex,
+    clickItemInKebabMenu,
 } from "../../../../../utils/utils";
 import { businessColumnSelector } from "../../../../views/applicationinventory.view";
-import {
-    continueButton,
-    stakeholdergroupsSelect,
-    stakeholderSelect,
-} from "../../../../views/assessment.view";
+import { stakeholdergroupsSelect, stakeholderSelect } from "../../../../views/assessment.view";
 import { navMenu } from "../../../../views/menu.view";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
-import { applicationInventory, SEC } from "../../../../types/constants";
+import { applicationInventory, button, SEC } from "../../../../types/constants";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import * as data from "../../../../../utils/data_utils";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
@@ -99,7 +95,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
 
         // Assert that deleted tag is removed
         application.applicationDetailsTab("Tags");
-        application.tagAndCategoryExists("");
+        application.noTagExists();
         application.closeApplicationDetails();
 
         application.edit({
@@ -146,9 +142,8 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
 
         clickByText(navMenu, applicationInventory);
         application.selectApplication();
-        application.click_assess_button();
-        click(continueButton);
-        cy.wait(6 * SEC);
+        clickItemInKebabMenu(application.name, "Assess");
+        clickByText(button, "Retake");
 
         //Verify that values show blank
         cy.get(stakeholderSelect).should("have.value", "");
