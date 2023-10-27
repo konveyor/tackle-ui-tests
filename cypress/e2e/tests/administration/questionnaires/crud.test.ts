@@ -1,5 +1,10 @@
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { checkSuccessAlert, login, closeModalWindow } from "../../../../utils/utils";
+import {
+    cleanupDownloads,
+    checkSuccessAlert,
+    login,
+    closeModalWindow,
+} from "../../../../utils/utils";
 import { alertTitle } from "../../../views/common.view";
 
 const yamlFileName = "questionnaire_import/cloud-native.yaml";
@@ -26,6 +31,11 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
         closeModalWindow();
     });
 
+    it("Export questionnaire", function () {
+        AssessmentQuestionnaire.export(fileName);
+        cy.readFile("cypress/downloads/questionnaire-4.yaml").should("contain", "Cloud Native");
+    });
+
     it("Delete questionnaire", function () {
         AssessmentQuestionnaire.delete(fileName);
         checkSuccessAlert(
@@ -33,5 +43,9 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
             `Success alert:Questionnaire ${fileName} was successfully deleted.`,
             true
         );
+    });
+
+    after("Cleaning up", function () {
+        cleanupDownloads();
     });
 });
