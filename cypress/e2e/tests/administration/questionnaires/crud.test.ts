@@ -4,6 +4,7 @@ import {
     checkSuccessAlert,
     login,
     closeModalWindow,
+    click,
 } from "../../../../utils/utils";
 import { alertTitle } from "../../../views/common.view";
 
