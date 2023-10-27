@@ -1,9 +1,6 @@
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { click, login } from "../../../../utils/utils";
+import { cleanupDownloads, click, login } from "../../../../utils/utils";
 import { downloadYamlTemplate } from "../../../views/assessmentquestionnaire.view";
-
-const yamlFileName = "questionnaire_import/cloud-native.yaml";
-const fileName = "Cloud Native";
 
 describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
     before("Login", function () {
@@ -17,5 +14,9 @@ describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
             "contain",
             "Test questionnaire  (SAMPLE)"
         );
+    });
+
+    after("Cleaning up", function () {
+        cleanupDownloads();
     });
 });
