@@ -13,6 +13,9 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
     it("Download YAML template", function () {
         AssessmentQuestionnaire.open();
         click(downloadYamlTemplate);
-        cy.readFile("cypress/downloads/questionnaire-template.yaml").should("contain", "Test questionnaire  (SAMPLE)");
-    })
+        cy.readFile("cypress/downloads/questionnaire-template.yaml").should(
+            "contain",
+            "Test questionnaire  (SAMPLE)"
+        );
+    });
 });
