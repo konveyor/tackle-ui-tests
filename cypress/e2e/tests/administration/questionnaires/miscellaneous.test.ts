@@ -5,7 +5,7 @@ import { downloadYamlTemplate } from "../../../views/assessmentquestionnaire.vie
 const yamlFileName = "questionnaire_import/cloud-native.yaml";
 const fileName = "Cloud Native";
 
-describe(["@tier2"], "Questionnaire CRUD operations", () => {
+describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
     before("Login", function () {
         login();
     });
