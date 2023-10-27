@@ -16,6 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    click,
     clickByText,
     getRandomAnalysisData,
     getRandomApplicationData,
@@ -35,6 +36,7 @@ import { CustomMigrationTargetView } from "../../../views/custom-migration-targe
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { getRulesData } from "../../../../utils/data_utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
+import { cancelButton } from "../../../views/common.view";
 
 describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operations", () => {
     // Automates Polarion TC 300 & 305
@@ -96,7 +98,7 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
         );
     });
 
-    it("Create Custom Migration Target with rules from repository with credentials", function () {
+    it("Bug MTA-1542: Create Custom Migration Target with rules from repository with credentials", function () {
         const sourceCredential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -125,6 +127,14 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
             "contain",
             target.name
         );
+
+        // TC MTA-403
+        target.openEditDialog();
+        cy.get(CustomMigrationTargetView.credentialsInput).should(
+            "have.value",
+            sourceCredential.name
+        );
+        click(cancelButton);
 
         target.delete();
         cy.wait("@deleteRule");

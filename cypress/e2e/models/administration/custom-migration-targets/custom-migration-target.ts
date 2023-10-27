@@ -61,13 +61,15 @@ export class CustomMigrationTarget {
         clickJs(submitButton);
     }
 
-    public edit(updateValues: Partial<CustomMigrationTarget>) {
+    public openEditDialog() {
         CustomMigrationTarget.open();
         this.expandActionsMenu();
         cy.contains(button, editAction).click();
+    }
 
+    public edit(updateValues: Partial<CustomMigrationTarget>) {
+        this.openEditDialog();
         CustomMigrationTarget.fillForm(updateValues);
-
         clickJs(submitButton);
     }
 
