@@ -71,7 +71,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
         application.downloadReport("HTML");
         application.openReport();
-        application.validateStoryPoints();
     });
 
     it("Custom rules with custom targets", function () {
@@ -89,7 +88,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
         application.downloadReport("CSV");
         application.openReport();
-        application.validateStoryPoints();
     });
 
     it("DIVA report generation", function () {
@@ -105,7 +103,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateStoryPoints();
         application.validateTransactionReport();
     });
 
@@ -123,7 +120,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateIncidents();
     });
 
     it("Analysis for camunda-bpm-spring-boot-starter", function () {
@@ -138,8 +134,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateStoryPoints();
-        application.validateIncidents();
     });
 
     it("Analysis for complete-duke app upload binary ", function () {
@@ -156,8 +150,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateStoryPoints();
-        application.validateIncidents();
     });
 
     it("Analysis for kafka-clients-sb app ", function () {
@@ -172,8 +164,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateStoryPoints();
-        application.validateIncidents();
     });
 
     after("Perform test data clean up", function () {

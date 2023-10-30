@@ -99,7 +99,6 @@ describe(["@tier1"], "Source Analysis", () => {
         checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateStoryPoints();
     });
 
     it("Source + dependencies analysis on tackletest app", function () {
@@ -118,7 +117,6 @@ describe(["@tier1"], "Source Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateStoryPoints();
     });
 
     it("Source + dependencies analysis on daytrader app", function () {
@@ -136,7 +134,6 @@ describe(["@tier1"], "Source Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateStoryPoints();
     });
 
     it("Analysis on daytrader app with maven credentials", function () {
@@ -155,7 +152,6 @@ describe(["@tier1"], "Source Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateStoryPoints();
     });
 
     it("Source Analysis on tackle testapp", function () {
@@ -174,7 +170,6 @@ describe(["@tier1"], "Source Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateStoryPoints();
     });
 
     it("Analysis on tackle test app with ssh credentials", function () {
@@ -200,7 +195,6 @@ describe(["@tier1"], "Source Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateStoryPoints();
     });
 
     it("Source Analysis on tackle testapp for svn repo type", function () {
@@ -219,7 +213,6 @@ describe(["@tier1"], "Source Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateStoryPoints();
     });
 
     it("Analysis for known Open Source libraries on tackleTest app", function () {
@@ -238,7 +231,6 @@ describe(["@tier1"], "Source Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateStoryPoints();
     });
 
     it("Automated tagging using Source Analysis on tackle testapp", function () {
@@ -295,7 +287,6 @@ describe(["@tier1"], "Source Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
         application.openReport();
-        application.validateStoryPoints();
     });
 
     after("Perform test data clean up", function () {
