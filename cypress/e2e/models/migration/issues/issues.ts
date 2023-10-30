@@ -20,15 +20,15 @@ import {
     targetFilterName,
 } from "../../../views/issue.view";
 
-export class Issue {
+export class Issues {
     /** Contains URL of issues web page */
     static fullUrl = Cypress.env("tackleUrl") + "/issues";
 
     public static openList(itemsPerPage = 100, forceReload = false): void {
         if (forceReload) {
-            cy.visit(Issue.fullUrl);
+            cy.visit(Issues.fullUrl);
         }
-        if (!getUrl().includes(Issue.fullUrl)) {
+        if (!getUrl().includes(Issues.fullUrl)) {
             selectUserPerspective(migration);
         }
         clickByText(navMenu, "Issues");
@@ -45,6 +45,7 @@ export class Issue {
             [filterIssue.target]: targetFilterName,
         };
 
+        Issues.openList();
         selectFilter(item);
         if (selectorMap[item]) {
             inputText(selectorMap[item], itemName);
