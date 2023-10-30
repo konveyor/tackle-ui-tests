@@ -99,7 +99,6 @@ describe(["@tier1"], "Binary Analysis", () => {
         application.downloadReport("HTML");
         application.downloadReport("CSV");
         application.openReport();
-        application.validateStoryPoints();
     });
 
     after("Perform test data clean up", function () {

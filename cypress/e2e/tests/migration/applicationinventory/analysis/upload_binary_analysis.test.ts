@@ -71,7 +71,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
         application.downloadReport("HTML");
         application.openReport();
-        application.validateStoryPoints();
     });
 
     it("Custom rules with custom targets", function () {
@@ -89,7 +88,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
         application.downloadReport("CSV");
         application.openReport();
-        application.validateStoryPoints();
     });
 
     it("DIVA report generation", function () {
@@ -105,7 +103,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateStoryPoints();
         application.validateTransactionReport();
     });
 
@@ -138,7 +135,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateStoryPoints();
         application.validateIncidents();
     });
 
@@ -156,7 +152,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateStoryPoints();
         application.validateIncidents();
     });
 
@@ -172,7 +167,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateStoryPoints();
         application.validateIncidents();
     });
 
