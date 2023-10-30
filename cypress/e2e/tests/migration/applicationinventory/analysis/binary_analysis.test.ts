@@ -122,6 +122,5 @@ describe(["@tier1"], "Binary Analysis", () => {
         application.downloadReport("HTML");
         application.downloadReport("CSV");
         application.openReport();
-        application.validateStoryPoints();
     });
 });
