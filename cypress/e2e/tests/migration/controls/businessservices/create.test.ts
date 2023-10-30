@@ -127,9 +127,9 @@ describe(["@tier2"], "Business service validations", () => {
         // Delete created business service
         cy.get(commonView.closeButton).click();
         businessService.delete();
-        checkSuccessAlert(commonView.alertTitle, `Success alert:Business service deleted`);
+        checkSuccessAlert(commonView.successAlertMessage, `Success alert:Business service deleted`);
         businessService1.delete();
-        checkSuccessAlert(commonView.alertTitle, `Success alert:Business service deleted`);
+        checkSuccessAlert(commonView.successAlertMessage, `Success alert:Business service deleted`);
         stakeholder.delete();
         notExists(businessService.name);
     });
