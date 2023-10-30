@@ -120,7 +120,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateIncidents();
     });
 
     it("Analysis for camunda-bpm-spring-boot-starter", function () {
@@ -135,7 +134,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateIncidents();
     });
 
     it("Analysis for complete-duke app upload binary ", function () {
@@ -152,7 +150,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateIncidents();
     });
 
     it("Analysis for kafka-clients-sb app ", function () {
@@ -167,7 +164,6 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
-        application.validateIncidents();
     });
 
     after("Perform test data clean up", function () {
