@@ -16,6 +16,7 @@ export enum CustomMigrationTargetView {
     branch = "#branch",
     rootPath = "#rootPath",
     credentialsDropdown = "#associated-credentials-select-toggle",
+    credentialsInput = "#associated-credentials-select-toggle-select-typeahead",
     retrieveFromARepositoryRadio = "#repository",
     dragButton = "#drag-button",
     card = ".pf-v5-c-card",
