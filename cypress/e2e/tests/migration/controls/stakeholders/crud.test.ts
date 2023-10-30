@@ -22,8 +22,6 @@ import {
     existsWithinRow,
     expandRowDetails,
     closeRowDetails,
-    hasToBeSkipped,
-    preservecookies,
     selectUserPerspective,
     deleteByList,
 } from "../../../../../utils/utils";
@@ -31,19 +29,17 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import { migration, tdTag } from "../../../../types/constants";
-import { groupsCount } from "../../../../views/stakeholders.view";
+import { groupsCount, stakeHoldersTable } from "../../../../views/stakeholders.view";
 import * as data from "../../../../../utils/data_utils";
+let jobFunctionsList: Array<Jobfunctions> = [];
+let stakeholderGroupList: Array<Stakeholdergroups> = [];
 
 describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
     before("Login", function () {
-        // Perform login
         login();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("POST", "/hub/stakeholder*").as("postStakeholder");
         cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
@@ -56,7 +52,7 @@ describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
         // Create new stakeholder
         stakeholder.create();
         cy.wait("@postStakeholder");
-        exists(stakeholder.email);
+        exists(stakeholder.email, stakeHoldersTable);
 
         // Edit the current stakeholder's name
         let updatedStakeholderName = data.getFullName();
@@ -64,7 +60,7 @@ describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
         cy.wait("@getStakeholders");
 
         // Assert that stakeholder name got edited
-        exists(updatedStakeholderName);
+        exists(updatedStakeholderName, stakeHoldersTable);
 
         // Delete stakeholder
         stakeholder.delete();
@@ -72,7 +68,7 @@ describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
         cy.wait("@getStakeholders");
 
         // Assert that newly created stakeholder is deleted
-        notExists(stakeholder.email);
+        notExists(stakeholder.email, stakeHoldersTable);
     });
 
     it("Stakeholder CRUD cancel", function () {
@@ -81,36 +77,33 @@ describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
         const stakeholder = new Stakeholders(data.getEmail(), initialStakeholderName);
         // Cancel the creation of new stakeholder task
         stakeholder.create(true);
-        notExists(stakeholder.email);
+        notExists(stakeholder.email, stakeHoldersTable);
 
         // Create new stakeholder for edit and delete cancel verification purpose
         stakeholder.create();
         cy.wait("@postStakeholder");
-        exists(stakeholder.email);
+        exists(stakeholder.email, stakeHoldersTable);
 
         // Cancel the Edit stakeholder task
         stakeholder.edit({}, true);
 
         // Assert that stakeholder name did not get edited
-        exists(initialStakeholderName);
+        exists(initialStakeholderName, stakeHoldersTable);
 
         // Cancel the Delete stakeholder task
         stakeholder.delete(true);
 
         // Assert that stakeholder still exists, as delete was cancelled
-        exists(stakeholder.email);
+        exists(stakeholder.email, stakeHoldersTable);
 
         // Finally, perform clean up by deleting the stakeholder
         stakeholder.delete();
         cy.wait("@deleteStakeholder");
         cy.wait("@getStakeholders");
-        // notExists(stakeholder.email);
     });
 
     it("Stakeholder CRUD operations with members (jobfunction and groups)", function () {
         selectUserPerspective(migration);
-        let jobFunctionsList: Array<Jobfunctions> = [];
-        let stakeholderGroupList: Array<Stakeholdergroups> = [];
         let stakeHolderGroupNameList: Array<string> = [];
         for (let i = 0; i < 2; i++) {
             // Create new job functions
@@ -139,7 +132,7 @@ describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
         // Create new stakeholder with one of the job function and group created above
         stakeholder.create();
         cy.wait("@postStakeholder");
-        exists(stakeholder.email);
+        exists(stakeholder.email, stakeHoldersTable);
 
         // Edit the current stakeholder's name, jobfunction and stakeholder group (by removing first one and adding second)
         stakeholder.edit({
@@ -165,9 +158,10 @@ describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
         cy.wait("@getStakeholders");
 
         // Assert that newly created stakeholder is deleted
-        notExists(stakeholder.email);
+        notExists(stakeholder.email, stakeHoldersTable);
+    });
 
-        // Perform clean up by deleting jobfunctions and groups created at the start of test
+    after("Perform test data clean up", function () {
         deleteByList(jobFunctionsList);
         deleteByList(stakeholderGroupList);
     });

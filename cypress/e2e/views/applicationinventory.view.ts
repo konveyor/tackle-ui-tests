@@ -17,8 +17,11 @@ export const actionButton = "div > button[aria-label='Actions']";
 export const applicationNameInput = "input[name=name]";
 export const applicationDescriptionInput = "input[name=description]";
 export const applicationBusinessServiceSelect = "[placeholder='Select a business service']";
+export const applicationContributorsInput =
+    "#contributors-select-toggle-select-multi-typeahead-typeahead";
+export const applicationOwnerInput = "#owner-toggle-select-typeahead";
 export const repoTypeSelect = "button[id='repo-type-toggle']";
-export const applicationTagsSelect = "[placeholder='Select a tag(s)']";
+export const applicationTagsSelect = "[placeholder='Select tags']";
 export const applicationCommentInput = "textarea[name=comments]";
 export const businessColumnSelector = "td[data-label='Business service']";
 export const csvFileName = "File name";
@@ -56,5 +59,11 @@ export const packaging = "input[name=packaging]";
 export const createEntitiesCheckbox = "#create-entities-checkbox";
 
 //Fields related to application details page
-export const applicationTag = "span.pf-c-label__content";
-export const closeDetailsPage = "button[aria-label='Close drawer panel']";
+export enum appDetailsView {
+    applicationTag = "span.pf-c-label__content",
+    closeDetailsPage = "button[aria-label='Close drawer panel']",
+    tagFilter = "#source-filter-value-select",
+    tagCategory = "div[class='pf-c-content'] > h4",
+    filterSourceMenu = "div.pf-c-select__menu",
+    tagCategoryFilter = "#tagCategory-filter-value-select",
+}

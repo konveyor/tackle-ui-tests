@@ -15,30 +15,20 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    exists,
-    hasToBeSkipped,
-    login,
-    notExists,
-    preservecookies,
-    selectUserPerspective,
-} from "../../../../../utils/utils";
+import { exists, login, notExists, selectUserPerspective } from "../../../../../utils/utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
 import * as data from "../../../../../utils/data_utils";
 import { migration } from "../../../../types/constants";
+import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 describe(["@tier1", "@interop"], "Business service CRUD operations", () => {
     before("Login", function () {
-        // Perform login
         login();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors for business services
         cy.intercept("POST", "/hub/businessservices*").as("postBusinessService");
         cy.intercept("GET", "/hub/businessservices*").as("getBusinessService");
@@ -108,6 +98,6 @@ describe(["@tier1", "@interop"], "Business service CRUD operations", () => {
         cy.wait("@getStakeholders");
 
         // Assert that stakeholder owner is deleted
-        notExists(stakeholder.email);
+        notExists(stakeholder.email, stakeHoldersTable);
     });
 });

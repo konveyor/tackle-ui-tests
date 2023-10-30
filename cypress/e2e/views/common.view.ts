@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 export const itemsPerPageToggleButton = "button[aria-label='Items per page']";
-export const submitButton = "button[aria-label=submit]";
+export const submitButton = '[id*="form-submit"]';
 export const cancelButton = "button[aria-label=cancel]";
 export const closeButton = "button[aria-label=Close]";
 export const confirmButton = "button[aria-label=confirm]";
@@ -50,3 +50,8 @@ export const closeSuccessNotification = "button[aria-label^='Close Success alert
 export const divHeader = "[id^=pf-random-id-]";
 export const divBottom = "#tags-pagination-bottom";
 export const selectFilter = "div.pf-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show";
+export const itemsSelectInsideDialog = "div[role='dialog'] button[aria-label='Select']";
+export const nameHelperBusiness = "#business-service-name-helper";
+export const nameHelperStakeholderGroup = "#-helper";
+export const kebabMenuItem = "a.pf-c-dropdown__menu-item";
+export const commonTable = "table[aria-label='main-table']";

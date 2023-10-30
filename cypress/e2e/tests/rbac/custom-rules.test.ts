@@ -81,7 +81,7 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         });
     });
 
-    it.skip("Admin, Rules from public repository, skipping tests failing due to a known bug MTA-458", function () {
+    it("Bug MTA-458 | Admin, Rules from public repository", function () {
         analysisWithPublicRules = new Analysis(
             getRandomApplicationData("bookServerApp", {
                 sourceData: this.appData["bookserver-app"],
@@ -132,7 +132,8 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         logout();
     });
 
-    it.skip("Architect, Rules from public repository, skipping tests failing due to a known bug MTA-458", function () {
+
+    it("Bug MTA-458 | Architect, Rules from public repository", function () {
         architect.login();
         analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
     });
@@ -148,7 +149,8 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         architect.logout();
     });
 
-    it.skip("Migrator, Rules from public repository, skipping tests failing due to a known bug MTA-458", function () {
+
+    it("Bug MTA-458 | Migrator, Rules from public repository", function () {
         migrator.login();
         analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
     });

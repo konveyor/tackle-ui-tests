@@ -18,6 +18,7 @@ export const applicationName = "Application name";
 export const application = "Application";
 export const applicationInventory = "Application inventory";
 export const customMigrationTargets = "Custom migration targets";
+export const migrationWaves = "Migration waves";
 export const assess = "Assess";
 export const assessment = "Assessment";
 export const analysis = "Analysis";
@@ -37,6 +38,9 @@ export const credentials = "Credentials";
 export const credentialType = "Credential type";
 export const deleteAction = "Delete";
 export const editAction = "Edit";
+export const startDate = "Start date";
+export const endDate = "End date";
+export const exportToIssueManagerAction = "Export to Issue Manager";
 export const description = "Description";
 export const displayName = "Display name";
 export const effort = "Effort";
@@ -71,12 +75,16 @@ export const tdTag = "td";
 export const trTag = "tr";
 export const tagCategory = "Tag category";
 export const tagName = "Tag name";
+export const selectNone = "Select none";
+export const manageApplications = "Manage applications";
 
 export const createAppButton = "#create-application";
 export const assessAppButton = "#assess-application";
 export const reviewAppButton = "#review-application";
 export const analyzeAppButton = "#analyze-application";
 export const actionsButton = "button[aria-label=Actions]";
+export const duplicateMigrationWaveError =
+    "Danger alert:The migration wave could not be created due to a conflict with an existing wave. Make sure the name and start/end dates are unique and try again.";
 
 // Error helper messages general to all views
 export const duplicateErrMsg = "ERROR: duplicate key value violates unique constraint";
@@ -104,11 +112,27 @@ export const SEC = 1000;
 export const administration = "Admin";
 export const migration = "Migration";
 export const general = "General";
+export const instanceName = "Instance name";
+export const cantDeleteJiraAlert =
+    "Danger alert:This instance contains issues associated with applications and cannot be deleted";
 
 export enum CredentialType {
     proxy = "Proxy",
     sourceControl = "Source Control",
     maven = "Maven",
+    jiraBasic = "Basic Auth (Jira)",
+    jiraToken = "Bearer Token (Jira)",
+}
+
+export enum JiraType {
+    cloud = "Jira Cloud",
+    server = "Jira Server/Datacenter",
+}
+
+export enum JiraIssueTypes {
+    task = "Task",
+    bug = "Bug",
+    story = "Story",
 }
 
 export enum UserCredentials {
@@ -139,4 +163,9 @@ export enum RepositoryType {
 export enum CustomRuleType {
     Repository = "Repository",
     Manual = "Manual",
+}
+
+export enum SortType {
+    ascending = "ascending",
+    descending = "descending",
 }

@@ -20,18 +20,15 @@ import {
     clickByText,
     inputText,
     exists,
-    notExists,
-    hasToBeSkipped,
-    preservecookies,
     createMultipleBusinessServices,
     selectFormItems,
-    deleteApplicationTableRows,
-    deleteAllBusinessServices,
     getRandomApplicationData,
-    click,
-    createMultipleApplications,
-    application_inventory_kebab_menu,
-    navigate_to_application_inventory,
+    createMultipleStakeholders,
+    expandRowDetails,
+    existsWithinRow,
+    closeRowDetails,
+    deleteByList,
+    checkSuccessAlert,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -40,43 +37,38 @@ import {
     max250CharsMsg,
     duplicateApplication,
     createNewButton,
+    tdTag,
 } from "../../../../types/constants";
 import {
     applicationDescriptionInput,
     applicationNameInput,
     applicationBusinessServiceSelect,
-    actionButton,
+    applicationContributorsInput,
+    applicationOwnerInput,
 } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
+import { Tag } from "../../../../models/migration/controls/tags";
 
-var businessservicesList: Array<BusinessServices> = [];
-var applicationList: Array<Assessment> = [];
+let businessservicesList: Array<BusinessServices> = [];
+let stakeHoldersList: Stakeholders[];
 
 describe(["@tier2"], "Application validations", () => {
     before("Login", function () {
-        // Perform login
         login();
-        deleteApplicationTableRows();
-        applicationList = createMultipleApplications(11);
         businessservicesList = createMultipleBusinessServices(1);
+        stakeHoldersList = createMultipleStakeholders(2);
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
+        cy.intercept("POST", "/hub/tag*").as("postTag");
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
-    });
-
-    after("Perform test data clean up", function () {
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
     });
 
     it("Application field validations", function () {
@@ -101,6 +93,48 @@ describe(["@tier2"], "Application validations", () => {
         // Validate the create button is enabled with valid inputs
         inputText(applicationNameInput, data.getFullName());
         cy.get(commonView.submitButton).should("not.be.disabled");
+
+        // Owner validation, Polarion TC 330
+        inputText(applicationOwnerInput, stakeHoldersList[0].name);
+        cy.get("button").contains(stakeHoldersList[0].name).click();
+
+        cy.get(applicationOwnerInput)
+            .invoke("val")
+            .then((value) => {
+                expect(value).to.contain(stakeHoldersList[0].name);
+            });
+
+        cy.get(applicationOwnerInput)
+            .parent()
+            .next("button")
+            .click()
+            .then(() => {
+                cy.get(applicationOwnerInput)
+                    .invoke("val")
+                    .then((newValue) => {
+                        expect(newValue).to.not.contain(stakeHoldersList[0].name);
+                    });
+            });
+
+        // Contributors Validation, Polarion TC 331
+        inputText(applicationContributorsInput, stakeHoldersList[0].name);
+        cy.get("button").contains(stakeHoldersList[0].name).click();
+
+        inputText(applicationContributorsInput, stakeHoldersList[1].name);
+        cy.get("button").contains(stakeHoldersList[1].name).click();
+
+        cy.get(applicationContributorsInput)
+            .parent()
+            .should("contain", stakeHoldersList[0].name)
+            .and("contain", stakeHoldersList[1].name);
+
+        cy.get(applicationContributorsInput)
+            .parent()
+            .contains("span", stakeHoldersList[0].name)
+            .next("button")
+            .click();
+
+        cy.get(applicationContributorsInput).parent().and("contain", stakeHoldersList[1].name);
 
         // Close the form
         cy.get(commonView.closeButton).click();
@@ -130,12 +164,16 @@ describe(["@tier2"], "Application validations", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("Application unique constraint validation", function () {
+    it("Application success alert and unique constraint validation", function () {
         Assessment.open();
         const application = new Assessment(getRandomApplicationData());
 
         // Create a new application
         application.create();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            `Application ${application.name} was successfully saved.`
+        );
         cy.wait("@postApplication");
         exists(application.name);
 
@@ -147,48 +185,34 @@ describe(["@tier2"], "Application validations", () => {
         selectFormItems(applicationBusinessServiceSelect, businessservicesList[0].name);
         cy.get(commonView.nameHelper).should("contain.text", duplicateApplication);
         cy.get(commonView.closeButton).click();
+        application.delete();
     });
 
-    it("Bulk deletion of applications - Select page ", function () {
-        navigate_to_application_inventory();
-        // Click dropdown toggle button to make 'Select page' selection.
-        cy.get("button[aria-label='Select']").click();
-        cy.get("ul[role=menu] > li").contains("Select page").click();
+    it("Create tag from application side drawer", function () {
+        // Automates Polarion MTA-321
+        const application = new Assessment(getRandomApplicationData());
+        const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagCategory());
 
-        application_inventory_kebab_menu("Delete");
-        clickByText(button, "Delete");
+        application.create();
+        cy.wait("@postApplication");
+        exists(application.name);
 
-        // Assert that all applications except the one(s) on the next page have been deleted.
-        for (let i = 0; i < applicationList.length - 1; i++) {
-            notExists(applicationList[i].name);
-        }
-        exists(applicationList[applicationList.length - 1].name);
+        application.applicationDetailsTab("Tags");
+        clickByText(button, "Create tag");
+
+        tag.create();
+        cy.wait("@postTag");
+
+        // Assert that created tag exists
+        expandRowDetails(tag.tagCategory);
+        existsWithinRow(tag.tagCategory, tdTag, tag.name);
+        closeRowDetails(tag.tagCategory);
+        application.delete();
+        tag.delete();
     });
 
-    it("Bulk deletion of applications - Select all ", function () {
-        applicationList = createMultipleApplications(11);
-        navigate_to_application_inventory();
-        // Click dropdown toggle button to make 'Select all' selection.
-        cy.get("button[aria-label='Select']").click();
-        cy.get("ul[role=menu] > li").contains("Select all").click();
-
-        application_inventory_kebab_menu("Delete");
-        clickByText(button, "Delete");
-        for (let i = 0; i < applicationList.length; i++) {
-            notExists(applicationList[i].name);
-        }
-    });
-
-    it("Bulk deletion of applications - Delete all apps by selecting checkbox ", function () {
-        applicationList = createMultipleApplications(11);
-        navigate_to_application_inventory();
-        // Click 'bulk-selected-apps-checkbox'.
-        cy.get("input#bulk-selected-apps-checkbox").check({ force: true });
-
-        application_inventory_kebab_menu("Delete");
-        clickByText(button, "Delete");
-        for (let i = 0; i < applicationList.length; i++) {
-            notExists(applicationList[i].name);
-        }
+    after("Perform test data clean up", function () {
+        deleteByList(businessservicesList);
+        deleteByList(stakeHoldersList);
     });
 });

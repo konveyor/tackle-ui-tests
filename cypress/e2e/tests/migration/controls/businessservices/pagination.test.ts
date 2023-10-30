@@ -23,18 +23,16 @@ import {
     validatePagination,
     goToPage,
     deleteTableRows,
-    deleteAllBusinessServices,
+    deleteByList,
 } from "../../../../../utils/utils";
 import { SEC } from "../../../../types/constants";
 import { prevPageButton } from "../../../../views/common.view";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 
+let businessServiceList = [];
 describe(["@tier3"], "Business services pagination validations", function () {
-    let businessServiceList = [];
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
-        deleteAllBusinessServices();
         // Create 11 rows
         businessServiceList = createMultipleBusinessServices(11);
     });
@@ -94,7 +92,6 @@ describe(["@tier3"], "Business services pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Delete the business services created before the tests
-        deleteAllBusinessServices();
+        deleteTableRows();
     });
 });

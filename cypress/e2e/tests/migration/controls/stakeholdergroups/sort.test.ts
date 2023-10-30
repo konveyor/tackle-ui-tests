@@ -17,22 +17,15 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
-    sortAsc,
-    sortDesc,
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
-    preservecookies,
-    hasToBeSkipped,
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
-    deleteAllStakeholders,
-    deleteAllStakeholderGroups,
-    selectUserPerspective,
+    clickOnSortButton,
+    deleteByList,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
-import { controls, stakeholderGroups, name, memberCount } from "../../../../types/constants";
+import { name, memberCount, SortType } from "../../../../types/constants";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
@@ -41,7 +34,6 @@ var stakeholdersList: Array<Stakeholders> = [];
 
 describe(["@tier2"], "Stakeholder groups sort validations", function () {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
 
         // Create multiple stakeholder groups and stakeholders
@@ -49,18 +41,9 @@ describe(["@tier2"], "Stakeholder groups sort validations", function () {
         stakeholdergroupsList = createMultipleStakeholderGroups(3, stakeholdersList);
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("GET", "/hub/stakeholder-group*").as("getStakeholdergroups");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the stakeholder groups and stakeholders created before the tests
-        deleteAllStakeholders();
-        deleteAllStakeholderGroups();
     });
 
     it("Name sort validations", function () {
@@ -72,7 +55,7 @@ describe(["@tier2"], "Stakeholder groups sort validations", function () {
         const unsortedList = getTableColumnData(name);
 
         // Sort the stakeholder groups by name in ascending order
-        sortAsc(name);
+        clickOnSortButton(name, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the stakeholder groups table rows are displayed in ascending order
@@ -80,7 +63,7 @@ describe(["@tier2"], "Stakeholder groups sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholder groups by name in descending order
-        sortDesc(name);
+        clickOnSortButton(name, SortType.descending);
         cy.wait(2000);
 
         // Verify that the stakeholder groups table rows are displayed in descending order
@@ -97,7 +80,7 @@ describe(["@tier2"], "Stakeholder groups sort validations", function () {
         const unsortedList = getTableColumnData(memberCount);
 
         // Sort the stakeholder groups by members in ascending order
-        sortAsc(memberCount);
+        clickOnSortButton(memberCount, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the stakeholder groups table rows are displayed in ascending order
@@ -105,11 +88,16 @@ describe(["@tier2"], "Stakeholder groups sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholder groups by members in descending order
-        sortDesc(memberCount);
+        clickOnSortButton(memberCount, SortType.descending);
         cy.wait(2000);
 
         // Verify that the stakeholder groups table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(memberCount);
         verifySortDesc(afterDescSortList, unsortedList);
+    });
+
+    after("Perform test data clean up", function () {
+        deleteByList(stakeholdergroupsList);
+        deleteByList(stakeholdersList);
     });
 });

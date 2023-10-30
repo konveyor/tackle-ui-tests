@@ -19,19 +19,13 @@ import {
     login,
     clickByText,
     inputText,
-    submitForm,
     exists,
     notExists,
-    hasToBeSkipped,
-    preservecookies,
     selectUserPerspective,
+    checkSuccessAlert,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
 import {
-    controls,
-    businessServices,
     button,
-    duplicateErrMsg,
     minCharsMsg,
     max120CharsMsg,
     max250CharsMsg,
@@ -50,25 +44,18 @@ import * as data from "../../../../../utils/data_utils";
 
 describe(["@tier2"], "Business service validations", () => {
     before("Login", function () {
-        // Perform login
         login();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-    });
-
     it("Business service field validations", function () {
-        // Navigate to business service tab and click "Create New" button
         BusinessServices.openList();
         clickByText(button, createNewButton);
 
         // Name constraints
         inputText(businessServiceNameInput, data.getRandomWord(2));
-        cy.get(commonView.nameHelper).should("contain", minCharsMsg);
+        cy.get(commonView.nameHelperBusiness).should("contain", minCharsMsg);
         inputText(businessServiceNameInput, data.getRandomWords(45));
-        cy.get(commonView.nameHelper).should("contain", max120CharsMsg);
+        cy.get(commonView.nameHelperBusiness).should("contain", max120CharsMsg);
         inputText(businessServiceNameInput, data.getRandomWord(4));
         cy.get(commonView.submitButton).should("not.be.disabled");
 
@@ -81,7 +68,6 @@ describe(["@tier2"], "Business service validations", () => {
     });
 
     it("Business service button validations", function () {
-        // Navigate to business service tab and click "Create New" button
         BusinessServices.openList();
         clickByText(button, createNewButton);
 
@@ -103,13 +89,17 @@ describe(["@tier2"], "Business service validations", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("Business service unique constraint validation", function () {
+    it("Business service success alert and unique constraint validation", function () {
         const businessService = new BusinessServices(data.getCompanyName());
 
         selectUserPerspective(migration);
 
         // Create new business service
         businessService.create();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            `Success alert:Business service ${businessService.name} was successfully saved.`
+        );
         exists(businessService.name);
 
         // Navigate to business service tab and click "Create New" button
@@ -118,7 +108,7 @@ describe(["@tier2"], "Business service validations", () => {
         // Check name duplication
         inputText(businessServiceNameInput, businessService.name);
         cy.get(commonView.submitButton).should("be.disabled");
-        cy.get(commonView.nameHelper).should("contain.text", duplicateBusinessService);
+        cy.get(commonView.nameHelperBusiness).should("contain.text", duplicateBusinessService);
 
         // Delete created business service
         cy.get(commonView.closeButton).click();

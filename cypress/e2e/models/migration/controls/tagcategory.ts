@@ -16,7 +16,6 @@ limitations under the License.
 
 import {
     cancelForm,
-    checkSuccessAlert,
     click,
     clickByText,
     confirm,
@@ -75,6 +74,7 @@ export class TagCategory {
     }
 
     create(cancel = false): void {
+        TagCategory.openList();
         clickTags();
         clickByText(button, createTagCategoryButton);
         if (cancel) {
@@ -84,10 +84,6 @@ export class TagCategory {
             this.selectColor(this.color);
             if (this.rank) this.fillRank(this.rank);
             submitForm();
-            checkSuccessAlert(
-                commonView.successAlertMessage,
-                `Success! ${this.name} was added as a(n) tag type.`
-            );
         }
     }
 

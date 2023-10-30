@@ -32,7 +32,7 @@ import {
     credLabels,
     descriptionInput,
     filterCatType,
-    filterCatName,
+    filterCategory,
     filteredBy,
     passwordInput,
     usernameInput,
@@ -73,7 +73,7 @@ export class Credentials {
     /** Contains URL of credentials web page */
     static fullUrl = Cypress.env("tackleUrl") + "/identities";
 
-    constructor(name?) {
+    constructor(name?: string) {
         if (name) this.name = name;
     }
 
@@ -136,7 +136,7 @@ export class Credentials {
         validateValue(descriptionInput, description);
     }
 
-    protected selectType(type): void {
+    protected selectType(type: string): void {
         click(selectType);
         clickByText(button, type);
     }
@@ -175,7 +175,7 @@ export class Credentials {
     }
 
     static ApplyFilterByName(value: string) {
-        selectFromDropList(filteredBy, filterCatName);
+        selectFromDropList(filteredBy, filterCategory);
         inputText(filterNameInput, value);
         click(filterSubmitButton);
     }

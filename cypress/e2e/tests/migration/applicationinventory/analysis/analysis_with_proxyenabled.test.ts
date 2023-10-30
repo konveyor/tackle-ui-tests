@@ -1,27 +1,37 @@
-import {
-    getRandomAnalysisData,
-    getRandomApplicationData,
-    hasToBeSkipped,
-    login,
-    preservecookies,
-} from "../../../../../utils/utils";
+/*
+Copyright © 2021 the Konveyor Contributors (https://konveyor.io/)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+/// <reference types="cypress" />
+
+import { getRandomAnalysisData, getRandomApplicationData, login } from "../../../../../utils/utils";
 import { Proxy } from "../../../../models/administration/proxy/proxy";
 import { getRandomProxyData } from "../../../../../utils/data_utils";
 import { ProxyType } from "../../../../views/proxy.view";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
+
+let application: Analysis;
 
 describe(["@tier2"], "Running analysis with incorrect proxy configuration", () => {
     let httpsProxy = new Proxy(getRandomProxyData(), ProxyType.https);
     let httpProxy = new Proxy(getRandomProxyData(), ProxyType.http);
 
     before("Login", function () {
-        // Perform login
         login();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+    beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -37,7 +47,7 @@ describe(["@tier2"], "Running analysis with incorrect proxy configuration", () =
         httpsProxy.excludeList = ["127.0.0.1", "github.com"];
         httpsProxy.configureProxy();
 
-        const application = new Analysis(
+        application = new Analysis(
             getRandomApplicationData("bookServerApp", {
                 sourceData: this.appData["bookserver-app"],
             }),
@@ -51,5 +61,6 @@ describe(["@tier2"], "Running analysis with incorrect proxy configuration", () =
     after("Perform test data clean up", function () {
         httpProxy.disable();
         httpsProxy.disable();
+        application.delete();
     });
 });

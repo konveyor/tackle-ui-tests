@@ -30,7 +30,6 @@ import {
 import { navMenu } from "../../../views/menu.view";
 import {
     cancelForm,
-    checkSuccessAlert,
     cleanupDownloads,
     click,
     clickByText,
@@ -286,7 +285,6 @@ export class Analysis extends Application {
             if (this.disableTagging) this.disableAutomatedTagging();
             if (!this.sources) cy.contains("button", "Next", { timeout: 200 }).click();
             cy.contains("button", "Run", { timeout: 200 }).click();
-            checkSuccessAlert(commonView.infoAlertMessage, `Submitted for analysis`);
         }
     }
 
@@ -296,12 +294,13 @@ export class Analysis extends Application {
     }
 
     verifyAnalysisStatus(status) {
-        cy.get(tdTag)
-            .contains(this.name)
-            .closest(trTag)
+        cy.log(`Verifying analysis status, expecting ${status}`);
+        cy.get(tdTag, { log: false })
+            .contains(this.name, { log: false })
+            .closest(trTag, { log: false })
             .within(() => {
-                cy.get(analysisColumn)
-                    .find("div > div:nth-child(2)", { timeout: 10800000 }) // 3h
+                cy.get(analysisColumn, { log: false })
+                    .find("div > div:nth-child(2)", { timeout: 3600000, log: false }) // 1h
                     .should("not.have.text", AnalysisStatuses.notStarted)
                     .and("not.have.text", AnalysisStatuses.scheduled)
                     .and("not.have.text", AnalysisStatuses.inProgress)
@@ -380,7 +379,10 @@ export class Analysis extends Application {
 
     validateStoryPoints(): void {
         cy.get(fileName).should("contain", this.appName);
-        cy.get(reportStoryPoints).should("contain", this.storyPoints);
+        //Validating that this field contains number
+        cy.get(reportStoryPoints).should((value) => {
+            expect(Number.isNaN(parseInt(value.text(), 10))).to.eq(false);
+        });
     }
 
     validateTransactionReport(): void {

@@ -15,8 +15,12 @@ limitations under the License.
 */
 export const stakeholderEmailInput = "input[name=email]";
 export const stakeholderNameInput = "input[name=name]";
-export const jobfunctionInput = "[placeholder='Select a job function']";
-export const groupInput = "[placeholder='Select a stakeholder group']";
+export const jobfunctionInput = "#job-function-toggle-select-typeahead";
+export const groupInput = "#stakeholder-groups-toggle-select-multi-typeahead-typeahead";
 export const groupsCount = "td[data-label='Group count']";
 export const emailHelper = "div[id=email-helper]";
 export const displayNameHelper = "div[id=name-helper]";
+export const fieldHeader = ".pf-c-table__button";
+export const groupCountHeader = "thead > tr > :nth-child(5)";
+export const removeJobFunction = ".pf-c-select__toggle-clear";
+export const stakeHoldersTable = "table[aria-label='Stakeholders table']";

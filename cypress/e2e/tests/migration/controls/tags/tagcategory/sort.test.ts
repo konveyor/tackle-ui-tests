@@ -17,30 +17,20 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
-    sortAsc,
-    sortDesc,
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
-    preservecookies,
-    hasToBeSkipped,
-    selectUserPerspective,
+    clickOnSortButton,
 } from "../../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../../views/menu.view";
-import { controls, tags, tagCategory, rank, tagCount } from "../../../../../types/constants";
+import { tagCategory, rank, tagCount, SortType } from "../../../../../types/constants";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 
 describe(["@tier2"], "Tag category sort validations", function () {
     before("Login", function () {
-        // Perform login
         login();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("GET", "/hub/tag-category*").as("getTagCategories");
     });
@@ -54,7 +44,7 @@ describe(["@tier2"], "Tag category sort validations", function () {
         const unsortedList = getTableColumnData(tagCategory);
 
         // Sort the tag type by name in ascending order
-        sortAsc(tagCategory);
+        clickOnSortButton(tagCategory, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the tag type rows are displayed in ascending order
@@ -62,7 +52,7 @@ describe(["@tier2"], "Tag category sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the tag type by name in descending order
-        sortDesc(tagCategory);
+        clickOnSortButton(tagCategory, SortType.descending);
         cy.wait(2000);
 
         // Verify that the tag type rows are displayed in descending order
@@ -79,7 +69,7 @@ describe(["@tier2"], "Tag category sort validations", function () {
         const unsortedList = getTableColumnData(rank);
 
         // Sort the tag category by rank in ascending order
-        sortAsc(rank);
+        clickOnSortButton(rank, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the tag category rows are displayed in ascending order
@@ -87,7 +77,7 @@ describe(["@tier2"], "Tag category sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the tag category by rank in descending order
-        sortDesc(rank);
+        clickOnSortButton(rank, SortType.descending);
         cy.wait(2000);
 
         // Verify that the tag category rows are displayed in descending order
@@ -104,7 +94,7 @@ describe(["@tier2"], "Tag category sort validations", function () {
         const unsortedList = getTableColumnData(tagCount);
 
         // Sort the tag category by tag count in ascending order
-        sortAsc(tagCount);
+        clickOnSortButton(tagCount, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the tag category rows are displayed in ascending order
@@ -112,7 +102,7 @@ describe(["@tier2"], "Tag category sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the tag category by tag count in descending order
-        sortDesc(tagCount);
+        clickOnSortButton(tagCount, SortType.descending);
         cy.wait(2000);
 
         // Verify that the tag category rows are displayed in descending order

@@ -21,14 +21,10 @@ import {
     inputText,
     exists,
     notExists,
-    hasToBeSkipped,
-    preservecookies,
     selectUserPerspective,
+    checkSuccessAlert,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
 import {
-    controls,
-    stakeholderGroups,
     button,
     minCharsMsg,
     max120CharsMsg,
@@ -49,13 +45,7 @@ describe(["@tier2"], "Stakeholder groups validations", () => {
     const stakeholdergroup = new Stakeholdergroups(data.getCompanyName(), data.getDescription());
 
     before("Login", function () {
-        // Perform login
         login();
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
     });
 
     it("Stakeholder group field validations", function () {
@@ -65,9 +55,9 @@ describe(["@tier2"], "Stakeholder groups validations", () => {
 
         // Name constraints
         inputText(stakeholdergroupNameInput, data.getRandomWord(2));
-        cy.get(commonView.nameHelper).should("contain", minCharsMsg);
+        cy.get(commonView.nameHelperStakeholderGroup).should("contain", minCharsMsg);
         inputText(stakeholdergroupNameInput, data.getRandomWords(50));
-        cy.get(commonView.nameHelper).should("contain", max120CharsMsg);
+        cy.get(commonView.nameHelperStakeholderGroup).should("contain", max120CharsMsg);
         inputText(stakeholdergroupNameInput, data.getRandomWord(4));
         cy.get(commonView.submitButton).should("not.be.disabled");
 
@@ -102,11 +92,16 @@ describe(["@tier2"], "Stakeholder groups validations", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("Stakeholder group unique constraint validation", function () {
+    it("Stakeholder group success alert and unique constraint validation", function () {
         selectUserPerspective(migration);
 
         // Create new stakeholder group
         stakeholdergroup.create();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            "Success alert:Stakeholder group was successfully created."
+        );
+
         exists(stakeholdergroup.name);
 
         // Navigate to stakeholder group tab and click "Create New" button
@@ -115,7 +110,10 @@ describe(["@tier2"], "Stakeholder groups validations", () => {
         // Check name duplication
         inputText(stakeholdergroupNameInput, stakeholdergroup.name);
         cy.get(commonView.submitButton).should("be.disabled");
-        cy.get(commonView.nameHelper).should("contain.text", duplicateStakeholderGroupName);
+        cy.get(commonView.nameHelperStakeholderGroup).should(
+            "contain.text",
+            duplicateStakeholderGroupName
+        );
 
         // Delete created stakeholder group
         cy.get(commonView.closeButton).click();

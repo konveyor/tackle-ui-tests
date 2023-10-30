@@ -18,25 +18,15 @@ import {
     login,
     clickByText,
     inputText,
-    preservecookies,
-    hasToBeSkipped,
     selectUserPerspective,
+    checkSuccessAlert,
 } from "../../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../../views/menu.view";
-import {
-    controls,
-    tags,
-    button,
-    fieldReqMsg,
-    max120CharsMsg,
-    duplicateTagName,
-} from "../../../../../types/constants";
+import { button, max120CharsMsg, duplicateTagName } from "../../../../../types/constants";
 import {
     createTagButton,
     nameInput,
-    nameHelper,
-    tagCategoryHelper,
     dropdownMenuToggle,
+    tagNameHelper,
 } from "../../../../../views/tags.view";
 import { Tag } from "../../../../../models/migration/controls/tags";
 import * as commonView from "../../../../../../e2e/views/common.view";
@@ -44,34 +34,26 @@ import * as data from "../../../../../../utils/data_utils";
 
 describe(["@tier2"], "Tag validations", () => {
     before("Login", function () {
-        // Perform login
         login();
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
         // Interceptors
         cy.intercept("POST", "/hub/tag*").as("postTag");
         cy.intercept("GET", "/hub/tag*").as("getTag");
     });
 
     it("Tag field validations", function () {
-        // Navigate to Tags tab and click "Create tag" button
         Tag.openList();
         clickByText(button, createTagButton);
 
         // Name constraints
         inputText(nameInput, data.getRandomWords(40));
-        cy.get(nameHelper).should("contain", max120CharsMsg);
-
-        // Tag Type constraints
-        cy.get(tagCategoryHelper).should("contain", fieldReqMsg);
+        cy.get(tagNameHelper).should("contain", max120CharsMsg);
 
         // Validate the create button is enabled with valid inputs
         inputText(nameInput, data.getRandomWord(5));
-        cy.get(dropdownMenuToggle).eq(2).click();
+        cy.get(dropdownMenuToggle).click();
         clickByText(button, data.getRandomDefaultTagCategory());
         cy.get(commonView.submitButton).should("not.be.disabled");
 
@@ -102,12 +84,16 @@ describe(["@tier2"], "Tag validations", () => {
         cy.contains(button, createTagButton).should("exist");
     });
 
-    it("Tag unique constraint validation", function () {
+    it("Tag success alert and unique constraint validation", function () {
         const tag = new Tag(data.getRandomWord(5), data.getRandomDefaultTagCategory());
 
         // Create a new tag
         selectUserPerspective("Migration");
         tag.create();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            "Success alert:Tag was successfully created."
+        );
         cy.wait("@postTag");
         cy.wait(2000);
 
@@ -116,10 +102,10 @@ describe(["@tier2"], "Tag validations", () => {
 
         // Check tag name duplication
         inputText(nameInput, tag.name);
-        cy.get(dropdownMenuToggle).eq(2).click();
+        cy.get(dropdownMenuToggle).click();
         clickByText(button, tag.tagCategory);
         cy.get(commonView.submitButton).should("be.disabled");
-        cy.get(commonView.nameHelper).should("contain.text", duplicateTagName);
+        cy.get(tagNameHelper).should("contain.text", duplicateTagName);
         cy.get(commonView.closeButton).click();
         cy.wait(100);
 

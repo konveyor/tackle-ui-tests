@@ -21,7 +21,6 @@ import {
     clickByText,
     exists,
     notExists,
-    hasToBeSkipped,
     selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navTab } from "../../../../views/menu.view";
@@ -29,10 +28,10 @@ import { BusinessServices } from "../../../../models/migration/controls/business
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { tdTag, businessServices, migration } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
+import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 describe(["@tier1"], "Business service linked to stakeholder", () => {
     beforeEach("Login", function () {
-        // Perform login
         login();
 
         // Interceptors for business services
@@ -90,7 +89,7 @@ describe(["@tier1"], "Business service linked to stakeholder", () => {
         stakeholder.delete();
         cy.wait("@getStakeholders");
         // Assert that stakeholder deleted
-        notExists(stakeholder.name);
+        notExists(stakeholder.name, stakeHoldersTable);
 
         // Go to business services page
         clickByText(navTab, businessServices);

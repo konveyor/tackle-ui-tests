@@ -32,18 +32,13 @@ import {
     selectItemsPerPage,
     submitForm,
     cancelForm,
-    checkSuccessAlert,
     expandRowDetails,
     closeRowDetails,
-    selectWithinModal,
     selectUserPerspective,
     applyAction,
     confirm,
-    selectFilter,
     click,
-    selectCheckBox,
 } from "../../../../utils/utils";
-import * as commonView from "../../../views/common.view";
 import {
     dropdownMenuToggle,
     createTagButton,
@@ -64,9 +59,9 @@ export class Tag {
     name: string;
     tagCategory: string;
 
-    constructor(name: string, tagType: string) {
+    constructor(name: string, tagCategory: string) {
         this.name = name;
-        this.tagCategory = tagType;
+        this.tagCategory = tagCategory;
     }
 
     static fullUrl = Cypress.env("tackleUrl") + "/controls/tags";
@@ -82,9 +77,9 @@ export class Tag {
         selectItemsPerPage(itemsPerPage);
     }
 
-    protected selectTagType(tagType: string): void {
-        selectWithinModal(dropdownMenuToggle);
-        clickByText(button, tagType);
+    protected selectTagCategory(tagCategory: string): void {
+        click(dropdownMenuToggle);
+        clickByText(button, tagCategory);
     }
 
     protected clickTagAction(buttonName: string): void {
@@ -109,16 +104,12 @@ export class Tag {
             cancelForm();
         } else {
             fillName(this.name);
-            this.selectTagType(this.tagCategory);
+            this.selectTagCategory(this.tagCategory);
             submitForm();
-            checkSuccessAlert(
-                commonView.successAlertMessage,
-                `Success! ${this.name} was added as a(n) tag.`
-            );
         }
     }
 
-    edit(updatedValue: { name?: string; tagtype?: string }, cancel = false): void {
+    edit(updatedValue: { name?: string; tagcategory?: string }, cancel = false): void {
         Tag.openList();
         expandRowDetails(this.tagCategory);
         this.clickTagAction(editAction);
@@ -129,9 +120,9 @@ export class Tag {
                 fillName(updatedValue.name);
                 this.name = updatedValue.name;
             }
-            if (updatedValue.tagtype && updatedValue.tagtype != this.tagCategory) {
-                this.selectTagType(updatedValue.tagtype);
-                this.tagCategory = updatedValue.tagtype;
+            if (updatedValue.tagcategory && updatedValue.tagcategory != this.tagCategory) {
+                this.selectTagCategory(updatedValue.tagcategory);
+                this.tagCategory = updatedValue.tagcategory;
             }
             if (updatedValue) submitForm();
         }

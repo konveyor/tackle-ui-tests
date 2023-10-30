@@ -10,8 +10,18 @@ export default defineConfig({
         pass: "Dog8code",
         git_user: "",
         git_password: "",
-        tackleUrl: "https://tackle-konveyor-tackle.apps.mig01.cnv-qe.rhcloud.com/",
+        jira_stage_datacenter_url: "https://issues.stage.redhat.com/",
+        jira_stage_bearer_token: "",
+        jira_stage_basic_login: "",
+        jira_stage_basic_password: "",
+        jira_atlassian_cloud_email: "",
+        jira_atlassian_cloud_token: "",
+        jira_atlassian_cloud_url: "",
+        jira_atlassian_cloud_project: "Test",
+        jira_stage_datacenter_project_id: 12340621,
+        tackleUrl: "https://tackle-konveyor-tackle.apps.mtv03.rhos-psi.cnv-qe.rhood.us",
         rwx_enabled: true,
+        logLevel: "ASSERT",
     },
     retries: {
         runMode: 2,
@@ -39,5 +49,7 @@ export default defineConfig({
             require("./cypress/plugins/index.js")(on, config);
             on("file:preprocessor", tagify(config));
         },
+        experimentalMemoryManagement: true,
+        numTestsKeptInMemory: 15,
     },
 });

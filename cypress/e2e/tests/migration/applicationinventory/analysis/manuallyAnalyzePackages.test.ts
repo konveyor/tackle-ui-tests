@@ -1,12 +1,25 @@
+/*
+Copyright © 2021 the Konveyor Contributors (https://konveyor.io/)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+/// <reference types="cypress" />
+
 import {
     login,
-    hasToBeSkipped,
-    preservecookies,
-    deleteApplicationTableRows,
     getRandomApplicationData,
     getRandomAnalysisData,
     resetURL,
-    deleteAllCredentials,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { CredentialType, UserCredentials } from "../../../../types/constants";
@@ -14,15 +27,11 @@ import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 
 let source_credential;
+let application: Analysis;
 
 describe(["@tier2"], "Select the list of packages to be analyzed manually", () => {
     before("Login", function () {
-        // Perform login
         login();
-
-        // Delete existing pre-data
-        deleteApplicationTableRows();
-
         // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
@@ -34,9 +43,7 @@ describe(["@tier2"], "Select the list of packages to be analyzed manually", () =
         source_credential.create();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+    beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -54,14 +61,9 @@ describe(["@tier2"], "Select the list of packages to be analyzed manually", () =
         resetURL();
     });
 
-    after("Perform test data clean up", function () {
-        deleteApplicationTableRows();
-        deleteAllCredentials();
-    });
-
     it("Analyze the packages manually with excluded packages", function () {
         // For source code analysis application must have source code URL git or svn
-        const application = new Analysis(
+        application = new Analysis(
             getRandomApplicationData("testapp-excludePackages", {
                 sourceData: this.appData["tackle-testapp-git"],
             }),
@@ -76,5 +78,10 @@ describe(["@tier2"], "Select the list of packages to be analyzed manually", () =
         application.openReport();
         // Verify in report all packages are excluded mention in excludedPackagesList.
         application.validateExcludedPackages();
+    });
+
+    after("Perform test data clean up", function () {
+        application.delete();
+        source_credential.delete();
     });
 });

@@ -20,10 +20,8 @@ import {
     importApplication,
     login,
     deleteApplicationTableRows,
-    hasToBeSkipped,
     deleteAppImportsTableRows,
     notExists,
-    preservecookies,
 } from "../../../../../utils/utils";
 
 import * as data from "../../../../../utils/data_utils";
@@ -35,9 +33,8 @@ const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
 let appdata = { name: "Customers" };
 
-describe("Operations after application import", () => {
+describe(["@tier2"], "Operations after application import", () => {
     before("Login and create test data", function () {
-        // Perform login
         login();
 
         // Navigate to stakeholders control tab and create new stakeholder
@@ -47,10 +44,6 @@ describe("Operations after application import", () => {
 
         stakeholdersList.push(stakeholder);
         stakeholdersNameList.push(stakeholder.name);
-
-        // Delete the existing application rows
-        deleteApplicationTableRows();
-        deleteAppImportsTableRows();
 
         // Import applications through valid .CSV file
         const fileName = "template_application_import.csv";
@@ -63,14 +56,9 @@ describe("Operations after application import", () => {
         exists("Gateway");
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-    });
-
     it(
         "Perform application assessment after a successful application import",
-        { tags: ["@tier2", "@dc"] },
+        { tags: "@dc" },
         function () {
             const application = new Assessment(appdata);
 
@@ -81,27 +69,22 @@ describe("Operations after application import", () => {
         }
     );
 
-    it(
-        "Perform application review after a successful application import",
-        { tags: ["@tier2"] },
-        function () {
-            // Automates https://polarion.engineering.redhat.com/polarion/redirect/project/MTAPathfinder/workitem?id=MTA-295
-            const application = new Assessment(appdata);
+    it("Perform application review after a successful application import", function () {
+        // Automates https://polarion.engineering.redhat.com/polarion/redirect/project/MTAPathfinder/workitem?id=MTA-295
+        const application = new Assessment(appdata);
 
-            // Perform application review
-            application.perform_review("low");
-            cy.wait(2000);
-            application.verifyStatus("review", "Completed");
+        // Perform application review
+        application.perform_review("low");
+        cy.wait(2000);
+        application.verifyStatus("review", "Completed");
 
-            // Delete application
-            application.delete();
-            cy.wait(2000);
-            notExists(application.name);
-        }
-    );
+        // Delete application
+        application.delete();
+        cy.wait(2000);
+        notExists(application.name);
+    });
 
     after("Perform test data clean up", function () {
-        // Delete the existing application rows before deleting business service(s)
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
     });

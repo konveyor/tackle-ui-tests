@@ -17,39 +17,29 @@ limitations under the License.
 
 import {
     deleteAllBusinessServices,
-    deleteApplicationTableRows,
+    deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
-    hasToBeSkipped,
     login,
-    preservecookies,
     resetURL,
     writeGpgKey,
 } from "../../../../../utils/utils";
-import { Proxy } from "../../../../models/administration/proxy/proxy";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { analysis } from "../../../../types/constants";
 import { GeneralConfig } from "../../../../models/administration/general/generalConfig";
+
+var applicationsList: Array<Analysis> = [];
 
 describe(["@tier1"], "Upload Binary Analysis", () => {
     before("Login", function () {
-        // Perform login
         login();
 
         // Enable HTML anc CSV report downloading
         let generalConfig = GeneralConfig.getInstance();
         generalConfig.enableDownloadHtml();
         generalConfig.enableDownloadCsv();
-
-        deleteApplicationTableRows();
-
-        //Disable all proxy settings
-        Proxy.disableAllProxies();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+    beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -67,24 +57,13 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         resetURL();
     });
 
-    after("Perform test data clean up", function () {
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
-
-        // Disable HTML anc CSV report downloading
-        let generalConfig = GeneralConfig.getInstance();
-        generalConfig.disableDownloadHtml();
-        generalConfig.disableDownloadCsv();
-
-        writeGpgKey("abcde");
-    });
-
     it(["@interop"], "Upload Binary Analysis", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         // No credentials required for uploaded binary.
@@ -101,6 +80,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_with_customrule"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         // No credentials required for uploaded binary.
@@ -116,6 +96,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
             getRandomAnalysisData(this.analysisData["analysis_for_DIVA-report"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         // No credentials required for uploaded binary.
@@ -133,6 +114,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
             )
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
@@ -146,6 +128,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_camunda_app"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
@@ -161,6 +144,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
             )
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
@@ -174,10 +158,23 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_kafka-app"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
+    });
+
+    after("Perform test data clean up", function () {
+        deleteByList(applicationsList);
+        deleteAllBusinessServices();
+
+        // Disable HTML anc CSV report downloading
+        let generalConfig = GeneralConfig.getInstance();
+        generalConfig.disableDownloadHtml();
+        generalConfig.disableDownloadCsv();
+
+        writeGpgKey("abcde");
     });
 });

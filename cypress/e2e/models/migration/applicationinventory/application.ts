@@ -21,7 +21,6 @@ import {
     createNewButton,
     deleteAction,
     assessment,
-    tagCount,
     assessAppButton,
     createAppButton,
     SEC,
@@ -37,8 +36,7 @@ import {
     applicationBusinessServiceSelect,
     applicationTagsSelect,
     applicationCommentInput,
-    applicationTag,
-    closeDetailsPage,
+    applicationOwnerInput,
     editButton,
     selectBox,
     sourceRepository,
@@ -51,6 +49,7 @@ import {
     kebabMenu,
     repoTypeSelect,
 } from "../../../views/applicationinventory.view";
+import { appDetailsView } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
     clickByText,
@@ -59,7 +58,6 @@ import {
     submitForm,
     cancelForm,
     selectFormItems,
-    checkSuccessAlert,
     performRowActionByIcon,
     selectUserPerspective,
     selectItemsPerPage,
@@ -75,6 +73,7 @@ export class Application {
     business?: string;
     description?: string;
     tags?: Array<string>;
+    owner?: string;
     comment?: string;
     analysis?: boolean;
     repoType?: string;
@@ -96,6 +95,7 @@ export class Application {
             business,
             description,
             tags,
+            owner,
             comment,
             analysis,
             repoType,
@@ -112,6 +112,7 @@ export class Application {
         if (description) this.description = description;
         if (comment) this.comment = comment;
         if (tags) this.tags = tags;
+        if (owner) this.owner = owner;
         if (analysis) this.analysis = analysis;
         if (repoType) this.repoType = repoType;
         if (sourceRepo) this.sourceRepo = sourceRepo;
@@ -152,6 +153,10 @@ export class Application {
         });
     }
 
+    protected selectOwner(owner: string): void {
+        selectFormItems(applicationOwnerInput, owner);
+    }
+
     protected selectRepoType(repoType: string): void {
         selectFormItems(repoTypeSelect, repoType);
     }
@@ -184,13 +189,10 @@ export class Application {
             if (this.description) this.fillDescription(this.description);
             if (this.comment) this.fillComment(this.comment);
             if (this.tags) this.selectTags(this.tags);
+            if (this.owner) this.selectOwner(this.owner);
             if (this.sourceRepo) this.fillSourceModeFields();
             if (this.group) this.fillBinaryModeFields();
             submitForm();
-            checkSuccessAlert(
-                commonView.successAlertMessage,
-                `Success! ${this.name} was added as a(n) application.`
-            );
         }
     }
 
@@ -200,6 +202,7 @@ export class Application {
             description?: string;
             business?: string;
             tags?: Array<string>;
+            owner?: string;
             comment?: string;
             repoType?: string;
         },
@@ -298,7 +301,7 @@ export class Application {
 
     closeApplicationDetails(): void {
         // closes application details page
-        click(closeDetailsPage);
+        click(appDetailsView.closeDetailsPage);
     }
 
     selectApplicationRow(): void {
@@ -308,19 +311,37 @@ export class Application {
             .click();
     }
 
-    tagAndCategoryExists(tags: string | string[][]): void {
-        // Verify that tags and categories are present on Application details -> Tags page
+    /**
+     * Filter tags on application details page
+     * @param source string to filter on
+     */
+    filterTags(source: string): void {
         this.applicationDetailsTab("Tags");
+        cy.wait(2000);
+        if (source != "Manual" && source != "Analysis")
+            cy.get(appDetailsView.tagCategoryFilter).click();
+        else cy.get(appDetailsView.tagFilter).click();
+
+        cy.get(appDetailsView.filterSourceMenu).contains(source).click();
+    }
+
+    /**
+     * Verify that tags and categories are present on Application details -> Tags page
+     * @param tags tag or list of tags
+     */
+    tagAndCategoryExists(tags: string | string[][]): void {
         if (Array.isArray(tags)) {
             // For Tags and Categories
-            for (var tagIndex = 0; tagIndex < tags.length; tagIndex++) {
-                cy.get(applicationTag, { timeout: 10 * SEC }).should("contain", tags[tagIndex][1]);
-                cy.get("div[class='pf-c-content'] > h4").should("contain", tags[tagIndex][0]);
-            }
+            tags.forEach(function (tag) {
+                cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
+                    "contain",
+                    tag[1]
+                );
+                cy.get(appDetailsView.tagCategory).should("contain", tag[0]);
+            });
         }
         // For Tags
-        else cy.get(applicationTag).should("contain", tags);
-        this.closeApplicationDetails();
+        else cy.get(appDetailsView.applicationTag).should("contain", tags);
     }
 
     static validateAssessButton(rbacRules: RbacValidationRules) {

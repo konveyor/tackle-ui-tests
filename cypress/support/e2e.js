@@ -41,3 +41,18 @@ require("cypress-xpath"); // Refer - https://www.npmjs.com/package/cypress-xpath
 // load and register the grep feature
 // https://github.com/bahmutov/cypress-grep
 require("cypress-grep")();
+
+// https://github.com/Brugui7/cypress-log-filter
+require("cypress-log-filter");
+
+/** Hide XHR logs line */
+// TODO: Improve by implementing a configuration parameter
+const app = window.top;
+
+if (app && !app.document.head.querySelector("[data-hide-command-log-request]")) {
+    const style = app.document.createElement("style");
+    style.innerHTML = ".command-name-request, .command-name-xhr { display: none }";
+    style.setAttribute("data-hide-command-log-request", "");
+
+    app.document.head.appendChild(style);
+}

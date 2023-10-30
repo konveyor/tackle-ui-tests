@@ -1,13 +1,28 @@
+/*
+Copyright © 2021 the Konveyor Contributors (https://konveyor.io/)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+/// <reference types="cypress" />
+
 import {
     clearAllFilters,
     createMultipleCredentials,
     deleteByList,
     exists,
-    hasToBeSkipped,
     login,
     logout,
     notExists,
-    preservecookies,
 } from "../../../../utils/utils";
 import { Credentials } from "../../../models/administration/credentials/credentials";
 import * as data from "../../../../utils/data_utils";
@@ -24,7 +39,7 @@ describe(["@tier2"], "Credentials filter validations", function () {
 
     const newAdminUser = new UserAdmin(getRandomUserData());
     before("Login and Create Test Data", function () {
-        /*
+        /**
         1. Login to RBAC and create new admin user because only admins can create credentials.
         2. Logout from RBAC and login to Tackle as user created in step 1
         3. Create several credentials
@@ -43,11 +58,6 @@ describe(["@tier2"], "Credentials filter validations", function () {
 
         // Create multiple credentials of all types
         credentialsListByDefaultAdmin = createMultipleCredentials(4);
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
     });
 
     it("Name filter validations", () => {

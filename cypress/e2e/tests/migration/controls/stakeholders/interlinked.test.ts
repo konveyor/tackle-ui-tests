@@ -22,8 +22,6 @@ import {
     clickByText,
     exists,
     notExists,
-    preservecookies,
-    hasToBeSkipped,
     selectUserPerspective,
 } from "../../../../../utils/utils";
 import { navTab } from "../../../../views/menu.view";
@@ -31,22 +29,19 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import { tdTag, trTag, stakeholders, migration } from "../../../../types/constants";
-import { expandRow } from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
+import { stakeHoldersTable } from "../../../../views/stakeholders.view";
+import { expandRow } from "../../../../views/common.view";
 
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var stakeholdergroupNames: Array<string> = [];
 
 describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function", () => {
     before("Login", function () {
-        // Perform login
         login();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors for stakeholder groups
         cy.intercept("POST", "/hub/stakeholdergroups*").as("postStakeholdergroups");
         cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");
@@ -65,7 +60,6 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
 
         // Create two stakeholder groups
         for (let i = 0; i < 2; i++) {
-            // Create new stakeholder groups
             const stakeholdergroup = new Stakeholdergroups(
                 data.getCompanyName(),
                 data.getDescription()
@@ -84,7 +78,7 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
         );
         stakeholder.create();
         cy.wait("@postStakeholder");
-        exists(stakeholder.email);
+        exists(stakeholder.email, stakeHoldersTable);
 
         // Check if both the stakeholder groups got attached to stakeholder
         selectItemsPerPage(100);
@@ -105,9 +99,7 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
         cy.wait("@getStakeholdergroups");
         cy.wait(2000);
 
-        // Navigate to stakeholder page
         clickByText(navTab, stakeholders);
-
         // Verify if the second stakeholder group's name attached to the stakeholder got updated
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -123,13 +115,9 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
         // Delete second stakeholder group
         stakeholdergroupsList[1].delete();
         cy.wait("@getStakeholdergroups");
-
-        // Assert that second stakeholder group got deleted
         notExists(stakeholdergroupsList[1].name);
 
-        // Navigate to stakeholder page
         clickByText(navTab, stakeholders);
-
         // Verify if the second stakeholder group's name got detached from stakeholder
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -142,25 +130,19 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
             .get("div > dd")
             .should("not.contain", updatedStakeholderGroupName);
 
-        // Delete stakeholder
         stakeholder.delete();
         cy.wait("@getStakeholders");
-
-        // Assert that stakeholder got deleted
-        notExists(stakeholder.email);
+        notExists(stakeholder.email, stakeHoldersTable);
 
         // Delete first stakeholder group
         stakeholdergroupsList[0].delete();
         cy.wait("@getStakeholdergroups");
-
-        // Assert the deletion of first stakeholder group
         notExists(stakeholdergroupsList[0].name);
     });
 
     it("Job function attach, update and delete dependency on stakeholder", function () {
         selectUserPerspective(migration);
 
-        // Create new job function
         const jobfunction = new Jobfunctions(data.getJobTitle());
         jobfunction.create();
         cy.wait("@postJobfunction");
@@ -170,7 +152,7 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName(), jobfunction.name);
         stakeholder.create();
         cy.wait("@postStakeholder");
-        exists(stakeholder.email);
+        exists(stakeholder.email, stakeHoldersTable);
 
         // Check if the job function got attached to stakeholder
         selectItemsPerPage(100);
@@ -187,9 +169,7 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
         cy.wait("@getJobfunctions");
         cy.wait(2000);
 
-        // Navigate to stakeholder page
         clickByText(navTab, stakeholders);
-
         // Verify if the job function's name attached to the stakeholder got updated
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -199,16 +179,16 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
             .find("td[data-label='Job function']")
             .should("contain", updatedJobfunctionName);
 
-        // Delete the job function
+        // Remove the job function from the stakeholder
+        stakeholder.removeJobfunction();
+        cy.wait("@getJobfunctions");
+        cy.wait(2000);
+
         jobfunction.delete();
         cy.wait("@getJobfunctions");
-
-        // Assert that job function got deleted
         notExists(jobfunction.name);
 
-        // Navigate to stakeholder page
         clickByText(navTab, stakeholders);
-
         // Verify if the job function's name got detached from stakeholder
         selectItemsPerPage(100);
         cy.wait(2000);
@@ -218,11 +198,8 @@ describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function"
             .find("td[data-label='Job function']")
             .should("not.contain", updatedJobfunctionName);
 
-        // Delete stakeholder
         stakeholder.delete();
         cy.wait("@getStakeholders");
-
-        // Assert that stakeholder got deleted
-        notExists(stakeholder.email);
+        notExists(stakeholder.email, stakeHoldersTable);
     });
 });

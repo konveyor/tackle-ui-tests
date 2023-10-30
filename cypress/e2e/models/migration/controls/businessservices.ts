@@ -42,7 +42,6 @@ import {
     submitForm,
     cancelForm,
     selectFormItems,
-    checkSuccessAlert,
     performRowAction,
     selectUserPerspective,
     goToPage,
@@ -146,10 +145,6 @@ export class BusinessServices {
                 this.selectOwner(this.owner);
             }
             submitForm();
-            checkSuccessAlert(
-                commonView.successAlertMessage,
-                `Success! ${this.name} was added as a(n) business service.`
-            );
         }
     }
 

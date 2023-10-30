@@ -17,12 +17,10 @@ limitations under the License.
 
 import {
     login,
-    preservecookies,
-    deleteApplicationTableRows,
-    hasToBeSkipped,
     createMultipleStakeholders,
     createMultipleApplications,
-    deleteAllStakeholders,
+    click,
+    deleteByList,
 } from "../../../../../../utils/utils";
 import {
     copyAssessmentTableTr,
@@ -31,20 +29,14 @@ import {
 import * as commonView from "../../../../../views/common.view";
 import { Stakeholders } from "../../../../../models/migration/controls/stakeholders";
 import { Assessment } from "../../../../../models/migration/applicationinventory/assessment";
+import { closeModal } from "../../../../../views/assessment.view";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var applicationList: Array<Assessment> = [];
 
 describe(["@tier2"], "Assessment pagination validations", function () {
     before("Login and create test data", function () {
-        // Perform login
         login();
-
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
-        // Navigate to Application inventory tab, delete all and create 11 applications
-        deleteApplicationTableRows();
 
         // Create data
         stakeholdersList = createMultipleStakeholders(1);
@@ -53,14 +45,6 @@ describe(["@tier2"], "Assessment pagination validations", function () {
         // Perform assessment of application
         applicationList[0].perform_assessment("low", [stakeholdersList[0].name]);
         applicationList[0].verifyStatus("assessment", "Completed");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the stakeholders created before the tests
-        deleteAllStakeholders();
-
-        // Delete the applications created at the start of test
-        deleteApplicationTableRows();
     });
 
     it("Navigation button validations", function () {
@@ -124,5 +108,12 @@ describe(["@tier2"], "Assessment pagination validations", function () {
             .then(($rows) => {
                 cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
             });
+
+        click(closeModal, false, true);
+    });
+
+    after("Perform test data clean up", function () {
+        deleteByList(applicationList);
+        deleteByList(stakeholdersList);
     });
 });

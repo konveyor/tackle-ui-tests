@@ -49,7 +49,6 @@ export class CredentialsSourceControlUsername extends CredentialsSourceControl {
         this.fillPassword();
         if (!toBeCanceled) {
             submitForm();
-            // this.closeSuccessNotification();
             exists(this.name);
         } else {
             cancelForm();

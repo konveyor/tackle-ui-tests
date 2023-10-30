@@ -28,6 +28,7 @@ import {
     stakeholderEmailInput,
     jobfunctionInput,
     groupInput,
+    removeJobFunction,
 } from "../../../views/stakeholders.view";
 import {
     clickByText,
@@ -38,7 +39,6 @@ import {
     selectFormItems,
     removeMember,
     cancelForm,
-    checkSuccessAlert,
     performRowAction,
     selectUserPerspective,
 } from "../../../../utils/utils";
@@ -93,6 +93,12 @@ export class Stakeholders {
         });
     }
 
+    removeJobfunction(): void {
+        performRowAction(this.email, editAction);
+        click(removeJobFunction);
+        submitForm();
+    }
+
     create(cancel = false): void {
         Stakeholders.openList();
         clickByText(button, createNewButton);
@@ -108,10 +114,6 @@ export class Stakeholders {
                 this.selectGroups(this.groups);
             }
             submitForm();
-            checkSuccessAlert(
-                commonView.successAlertMessage,
-                `Success! ${this.name} was added as a(n) stakeholder.`
-            );
         }
     }
 

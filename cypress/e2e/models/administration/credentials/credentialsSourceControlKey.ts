@@ -49,7 +49,6 @@ export class CredentialsSourceControlKey extends CredentialsSourceControl {
         if (this.keyPassphrase) this.fillKeyPassphrase();
         if (!toBeCanceled) {
             submitForm();
-            this.closeSuccessNotification();
             exists(this.name);
         } else {
             cancelForm();

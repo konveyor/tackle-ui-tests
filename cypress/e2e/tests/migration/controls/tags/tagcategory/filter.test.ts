@@ -15,52 +15,18 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    login,
-    clickByText,
-    exists,
-    applySearchFilter,
-    hasToBeSkipped,
-} from "../../../../../../utils/utils";
+import { login, clickByText, exists, applySearchFilter } from "../../../../../../utils/utils";
 import { button, clearAllFilters, color, rank } from "../../../../../types/constants";
 
 import * as data from "../../../../../../utils/data_utils";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
-import { tagCategory } from "../../../../../views/tags.view";
 
 describe(["@tier2"], "Tag tagCategory filter validations", function () {
     beforeEach("Login", function () {
-        // Perform login
         login();
 
         // Interceptors
         cy.intercept("GET", "/hub/tag-category*").as("getTagCategories");
-    });
-
-    it.skip("Tag type filter validations", function () {
-        // Navigate to Tags tab
-        TagCategory.openList();
-        cy.wait("@getTagCategories");
-
-        // Enter an existing tag type name substring and apply it as search filter
-        var validSearchInput = data.getRandomDefaultTagCategory();
-        applySearchFilter(tagCategory, validSearchInput);
-
-        // Assert that tag type row(s) containing the search text is/are displayed
-        exists(validSearchInput);
-
-        // Clear all filters
-        clickByText(button, clearAllFilters);
-        cy.wait("@getTagCategories");
-
-        // Enter a non-existing tag type name substring and apply it as search filter
-        var invalidSearchInput = String(data.getRandomNumber(111111, 222222));
-        applySearchFilter(tagCategory, invalidSearchInput);
-
-        // Assert that no search results are found
-        cy.get("h2").contains("No results found");
-
-        clickByText(button, clearAllFilters);
     });
 
     it("Tag category color filter validations", function () {

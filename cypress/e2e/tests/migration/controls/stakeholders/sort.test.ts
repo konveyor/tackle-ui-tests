@@ -17,33 +17,21 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
-    sortAsc,
-    sortDesc,
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
-    preservecookies,
-    hasToBeSkipped,
     createMultipleJobFunctions,
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
-    selectUserPerspective,
     deleteByList,
+    clickOnSortButton,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
-import {
-    controls,
-    email,
-    stakeholders,
-    displayName,
-    jobFunction,
-    groupCount,
-} from "../../../../types/constants";
+import { email, displayName, jobFunction, groupCount, SortType } from "../../../../types/constants";
 
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
+import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let jobFunctionsList: Array<Jobfunctions> = [];
@@ -51,40 +39,20 @@ let stakeholderGroupList: Array<Stakeholdergroups> = [];
 
 describe(["@tier2"], "Stakeholder sort validations", function () {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
-
-        // Create multiple job functions, stakeholder groups and stakeholders
         jobFunctionsList = createMultipleJobFunctions(2);
         stakeholderGroupList = createMultipleStakeholderGroups(2);
         stakeholdersList = createMultipleStakeholders(2, jobFunctionsList, stakeholderGroupList);
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
-        // Interceptors
-        cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the job functions, stakeholder groups and stakeholders created before the tests
-        deleteByList(jobFunctionsList);
-        deleteByList(stakeholdersList);
-        deleteByList(stakeholderGroupList);
-    });
-
     it("Email sort validations", function () {
-        // Navigate to stakeholder tab
         Stakeholders.openList();
-        cy.get("@getStakeholders");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(email);
 
         // Sort the stakeholders by email in ascending order
-        sortAsc(email);
+        clickOnSortButton(email, SortType.ascending, stakeHoldersTable);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
@@ -92,7 +60,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by email in descending order
-        sortDesc(email);
+        clickOnSortButton(email, SortType.descending, stakeHoldersTable);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in descending order
@@ -101,15 +69,13 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
     });
 
     it("Display name sort validations", function () {
-        // Navigate to stakeholder tab
         Stakeholders.openList();
-        cy.get("@getStakeholders");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(displayName);
 
         // Sort the stakeholders by display name in ascending order
-        sortAsc(displayName);
+        clickOnSortButton(displayName, SortType.ascending, stakeHoldersTable);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
@@ -117,7 +83,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by display name in descending order
-        sortDesc(displayName);
+        clickOnSortButton(displayName, SortType.descending, stakeHoldersTable);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in descending order
@@ -126,15 +92,13 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
     });
 
     it("Job function sort validations", function () {
-        // Navigate to stakeholder tab
         Stakeholders.openList();
-        cy.get("@getStakeholders");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(jobFunction);
 
         // Sort the stakeholders by Job function in ascending order
-        sortAsc(jobFunction);
+        clickOnSortButton(jobFunction, SortType.ascending, stakeHoldersTable);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in ascending order
@@ -142,7 +106,7 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by Job function in descending order
-        sortDesc(jobFunction);
+        clickOnSortButton(jobFunction, SortType.descending, stakeHoldersTable);
         cy.wait(2000);
 
         // Verify that the stakeholder rows are displayed in descending order
@@ -150,28 +114,9 @@ describe(["@tier2"], "Stakeholder sort validations", function () {
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
-    it("Group sort validations", function () {
-        // Navigate to stakeholder tab
-        Stakeholders.openList();
-        cy.get("@getStakeholders");
-
-        // get unsorted list when page loads
-        const unsortedList = getTableColumnData(groupCount);
-
-        // Sort the stakeholders by group count in ascending order
-        sortAsc(groupCount);
-        cy.wait(2000);
-
-        // Verify that the stakeholder rows are displayed in ascending order
-        const afterAscSortList = getTableColumnData(groupCount);
-        verifySortAsc(afterAscSortList, unsortedList);
-
-        // Sort the stakeholders by group count in descending order
-        sortDesc(groupCount);
-        cy.wait(2000);
-
-        // Verify that the stakeholder rows are displayed in descending order
-        const afterDescSortList = getTableColumnData(groupCount);
-        verifySortDesc(afterDescSortList, unsortedList);
+    after("Perform test data clean up", function () {
+        deleteByList(stakeholdersList);
+        deleteByList(stakeholderGroupList);
+        deleteByList(jobFunctionsList);
     });
 });

@@ -16,64 +16,56 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    hasToBeSkipped,
     login,
-    preservecookies,
     clickByText,
     createMultipleStakeholders,
     createMultipleApplications,
-    deleteAllStakeholders,
-    deleteApplicationTableRows,
     selectUserPerspective,
-    createMultipleBusinessServices,
+    deleteByList,
 } from "../../../../utils/utils";
 import { verifyApplicationRisk } from "../../../models/migration/reports/reports";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import { navMenu } from "../../../views/menu.view";
-import { businessService, migration, reports } from "../../../types/constants";
+import { migration, reports, SEC } from "../../../types/constants";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
-import { BusinessServices } from "../../../models/migration/controls/businessservices";
 
-var stakeholdersList: Array<Stakeholders> = [];
-var applicationsList: Array<Assessment> = [];
-var businessServiceList: Array<BusinessServices> = [];
+let stakeholdersList: Array<Stakeholders> = [];
+let applicationsList: Array<Assessment> = [];
 
 describe(["@tier2"], "Application risks tests", () => {
-    var risktype = ["low", "medium", "high"];
+    let riskType = ["low", "medium", "high"];
 
     before("Login and Create Test Data", function () {
         // Perform login
         login();
 
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
         stakeholdersList = createMultipleStakeholders(1);
         applicationsList = createMultipleApplications(3);
         for (let i = 0; i < applicationsList.length; i++) {
             // Perform assessment of application
-            applicationsList[i].perform_assessment(risktype[i], [stakeholdersList[0].name]);
+            applicationsList[i].perform_assessment(riskType[i], [stakeholdersList[0].name]);
             applicationsList[i].verifyStatus("assessment", "Completed");
 
             // Perform application review
-            applicationsList[i].perform_review(risktype[i]);
+            applicationsList[i].perform_review(riskType[i]);
             applicationsList[i].verifyStatus("review", "Completed");
         }
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the stakeholders created before the tests
-        deleteAllStakeholders();
-        deleteApplicationTableRows();
     });
 
     it("Application risk validation", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         for (let i = 0; i < 3; i++) {
-            verifyApplicationRisk(risktype[i], applicationsList[i].name);
+            verifyApplicationRisk(riskType[i], applicationsList[i].name);
         }
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the stakeholders and applications created before the tests
+        deleteByList(stakeholdersList);
+        deleteByList(applicationsList);
     });
 });

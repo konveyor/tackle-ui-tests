@@ -17,17 +17,19 @@ export const credentialNameInput = "input[name=name]";
 export const descriptionInput = "input[name='description']";
 export const usernameInput = "#user";
 export const passwordInput = "#password";
+export const keyInput = "#key";
 export const privatePassphraseInput = "input[aria-label='Private Key Passphrase']";
 export const createBtn = "#create-credential-button";
 export const selectType = "#type-select-toggle";
 export const filteredBy = "#filtered-by";
-export const filterCatName = "#filter-category-name";
+export const filterCategory = "#filter-category-name";
 export const filterCatType = "#filter-category-type";
 export const filterCatCreatedBy = "#filter-category-createdBy";
 export const filterNameInput = "#name-input";
 export const filterCreatedByInput = "#createdBy-input";
 export const filterSelectType = "#type-filter-value-select";
 export const filterSubmitButton = "button.pf-c-button.pf-m-control";
+export const searchButton = "#search-button";
 export const modalBoxBody = "div.pf-c-modal-box__body";
 export enum credLabels {
     name = 'td[data-label="Name"]',

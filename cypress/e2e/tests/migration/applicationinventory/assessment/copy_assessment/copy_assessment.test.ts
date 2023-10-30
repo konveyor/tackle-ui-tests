@@ -16,43 +16,31 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    hasToBeSkipped,
     login,
-    preservecookies,
     createMultipleStakeholders,
-    createMultipleStakeholderGroups,
-    deleteAllStakeholders,
-    deleteApplicationTableRows,
-    deleteAllStakeholderGroups,
     createMultipleApplications,
-    clickWithin,
+    deleteByList,
+    selectAssessmentApplications,
+    closeModalWindow,
 } from "../../../../../../utils/utils";
 
 import { Stakeholders } from "../../../../../models/migration/controls/stakeholders";
-import { Stakeholdergroups } from "../../../../../models/migration/controls/stakeholdergroups";
-import { trTag } from "../../../../../types/constants";
+import { SEC, trTag } from "../../../../../types/constants";
 import { copy, selectBox } from "../../../../../views/applicationinventory.view";
 import { Assessment } from "../../../../../models/migration/applicationinventory/assessment";
-import { modal } from "../../../../../views/common.view";
 
-var stakeholdersList: Array<Stakeholders> = [];
-var stakeholdersList: Array<Stakeholders> = [];
-var stakeholdergroupsList: Array<Stakeholdergroups> = [];
-var applicationList: Array<Assessment> = [];
+let stakeholdersList: Array<Stakeholders> = [];
+let applicationList: Array<Assessment> = [];
 
 describe(["@tier2"], "Copy assessment and review tests", () => {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
-
-        deleteApplicationTableRows();
 
         // Create data
         stakeholdersList = createMultipleStakeholders(1);
-        stakeholdergroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
         applicationList = createMultipleApplications(4);
 
-        // Verify copy assessment is not enabled untill assessment is done
+        // Verify copy assessment is not enabled until assessment is done
         applicationList[0].verifyCopyAssessmentDisabled();
 
         // Perform assessment of application
@@ -64,23 +52,9 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
         applicationList[0].verifyStatus("review", "Completed");
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplication");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the stakeholders created before the tests
-        deleteAllStakeholders();
-
-        // Delete the stakeholder groups created before the tests
-        deleteAllStakeholderGroups();
-
-        // Delete the applications created at the start of test
-        deleteApplicationTableRows();
     });
 
     it("Copy assessment to self", function () {
@@ -91,21 +65,22 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
             .parent(trTag)
             .within(() => {
                 cy.get(selectBox).should("be.disabled");
-                cy.wait(2000);
+                cy.wait(2 * SEC);
             });
+        closeModalWindow();
     });
 
     it("Copy button not enabled until one app is selected", function () {
         // Copy assessment to self, should be disabled
         applicationList[0].openCopyAssessmentModel();
-        cy.wait(2000);
         cy.get(copy).should("be.disabled");
         applicationList[0].selectApps(applicationList);
         cy.get(copy).should("not.be.disabled");
+        closeModalWindow();
     });
 
     it("Copy assessment to more than one application and discard assessment", function () {
-        // Verify copy assessment is not enabled untill assessment is done
+        // Verify copy assessment is not enabled until assessment is done
         applicationList[1].verifyCopyAssessmentDisabled();
 
         // Perform copy assessment of all the applications
@@ -136,34 +111,28 @@ describe(["@tier2"], "Copy assessment and review tests", () => {
     });
 
     it("Copy assessment select options validations", function () {
-        // Open copy assessment page
         applicationList[0].openCopyAssessmentModel();
 
         // select 10 items per page
         applicationList[0].selectItemsPerPage(10);
-        cy.wait(1000);
+        cy.wait(SEC);
 
         // Select all the applications on page
-        clickWithin(modal, "button[aria-label='Select']");
-        if (applicationList.length < 11) {
-            cy.get("ul[role=menu] > li")
-                .contains(`Select page (${applicationList.length} items)`)
-                .click();
-        } else {
-            cy.get("ul[role=menu] > li").contains("Select page (10 items)").click();
-        }
+        selectAssessmentApplications("page");
         cy.get(copy).should("be.visible").should("not.be.disabled");
-        clickWithin(modal, "button[aria-label='Select']");
 
         // Select all applications
-        clickWithin(modal, "button[aria-label='Select']");
-        cy.get("ul[role=menu] > li").contains(`Select all (${applicationList.length}`).click();
+        selectAssessmentApplications("all");
         cy.get(copy).should("be.visible").should("not.be.disabled");
-        clickWithin(modal, "button[aria-label='Select']");
 
         // Deselect all applications
-        clickWithin(modal, "button[aria-label='Select']");
-        cy.get("ul[role=menu] > li").contains("Select none (0 items)").click();
+        selectAssessmentApplications("none");
         cy.get(copy).should("be.visible").should("be.disabled");
+        closeModalWindow();
+    });
+
+    after("Perform test data clean up", function () {
+        deleteByList(stakeholdersList);
+        deleteByList(applicationList);
     });
 });

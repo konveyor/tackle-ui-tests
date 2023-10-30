@@ -42,21 +42,17 @@ import {
     applicationInventory,
     SEC,
     CredentialType,
-    assessment,
     UserCredentials,
     credentialType,
     artifact,
     repositoryType,
     analysis,
+    owner,
+    JiraType,
 } from "../e2e/types/constants";
+import { actionButton, date, createEntitiesCheckbox } from "../e2e/views/applicationinventory.view";
 import {
-    actionButton,
-    applicationBusinessServiceSelect,
-    date,
-    selectBox,
-    createEntitiesCheckbox,
-} from "../e2e/views/applicationinventory.view";
-import {
+    closeSuccessNotification,
     confirmButton,
     divHeader,
     firstPageButton,
@@ -69,41 +65,63 @@ import {
 import { tagLabels } from "../e2e/views/tags.view";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
 import { Assessment } from "../e2e/models/migration/applicationinventory/assessment";
-import { analysisData, applicationData, UserData } from "../e2e/types/types";
+import { analysisData, applicationData, JiraConnectionData, UserData } from "../e2e/types/types";
 import { CredentialsProxy } from "../e2e/models/administration/credentials/credentialsProxy";
-import { getRandomCredentialsData, randomWordGenerator } from "../utils/data_utils";
+import {
+    getJiraConnectionData,
+    getJiraCredentialData,
+    getRandomCredentialsData,
+    randomWordGenerator,
+} from "../utils/data_utils";
 import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../e2e/models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../e2e/models/administration/credentials/credentialsSourceControlKey";
-import { Application } from "../e2e/models/migration/applicationinventory/application";
 import { switchToggle } from "../e2e/views/reports.view";
-import { rightSideMenu } from "../e2e/views/analysis.view";
+import { MigrationWaveView } from "../e2e/views/migration-wave.view";
 import Chainable = Cypress.Chainable;
-import { User } from "../e2e/models/keycloak/users/user";
+import { MigrationWave } from "../e2e/models/migration/migration-waves/migration-wave";
+import { Jira } from "../e2e/models/administration/jira-connection/jira";
+import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
+import { closeModal } from "../e2e/views/assessment.view";
+import { string } from "@oozcitak/infra";
 
-let userName = Cypress.env("user");
-let userPassword = Cypress.env("pass");
-const tackleUiUrl = Cypress.env("tackleUrl");
 const { _ } = Cypress;
 
-export function inputText(fieldId: string, text: any): void {
-    cy.get(fieldId).click().focused().clear();
-    cy.wait(200);
-    cy.get(fieldId).clear().type(text);
+export function inputText(fieldId: string, text: any, log = false): void {
+    if (!log) {
+        cy.log(`Type ${text} in ${fieldId}`);
+    }
+    cy.get(fieldId, { log }).click({ log }).focused({ log }).clear({ log });
+    cy.wait(200, { log });
+    cy.get(fieldId, { log }).clear({ log }).type(text, { log });
 }
 
 export function clearInput(fieldID: string): void {
     cy.get(fieldID).clear();
 }
 
-export function clickByText(fieldId: string, buttonText: string, isForced = true): void {
+export function clickByText(
+    fieldId: string,
+    buttonText: string,
+    isForced = true,
+    log = false
+): void {
+    if (!log) {
+        cy.log(`Click by text, id: ${fieldId}, text: ${buttonText}`);
+    }
     // https://github.com/cypress-io/cypress/issues/2000#issuecomment-561468114
-    cy.contains(fieldId, buttonText, { timeout: 120 * SEC }).click({ force: isForced });
-    cy.wait(SEC);
+    cy.contains(fieldId, buttonText, { timeout: 60 * SEC, log }).click({
+        force: isForced,
+        log,
+    });
+    cy.wait(SEC, { log });
 }
 
-export function click(fieldId: string, isForced = true): void {
-    cy.get(fieldId, { timeout: 120 * SEC }).click({ force: isForced });
+export function click(fieldId: string, isForced = true, log = false): void {
+    if (!log) {
+        cy.log(`Click ${fieldId}`);
+    }
+    cy.get(fieldId, { log, timeout: 60 * SEC }).click({ log, force: isForced });
 }
 
 export function submitForm(): void {
@@ -127,9 +145,10 @@ export function login(username?, password?: string, firstLogin = false): Chainab
     const sessionId = (username ?? "login") + (firstLogin ? "FirstLogin" : "");
 
     return cy.session(sessionId, () => {
+        cy.log("Login in");
         cy.visit(Cypress.env("tackleUrl"), { timeout: 120 * SEC });
         cy.wait(5000);
-        cy.get("h1", { timeout: 120 * SEC }).then(($title) => {
+        cy.get("h1", { timeout: 120 * SEC, log: false }).then(($title) => {
             if ($title.text().toString().trim() !== "Sign in to your account") {
                 return;
             }
@@ -153,7 +172,7 @@ export function login(username?, password?: string, firstLogin = false): Chainab
 
         updatePassword();
         cy.get("#main-content-page-layout-horizontal-nav").within(() => {
-            cy.get("h1", { timeout: 15 * SEC }).contains("Application inventory");
+            cy.get("h1", { timeout: 15 * SEC, log: false }).contains("Application inventory");
         });
     });
 }
@@ -194,13 +213,17 @@ export function resetURL(user?: User): void {
 }
 
 export function selectItemsPerPage(items: number): void {
-    cy.get(commonView.itemsPerPageMenu, { timeout: 120 * SEC })
-        .find(commonView.itemsPerPageToggleButton)
+    cy.log(`Select ${items} per page`);
+    cy.get(commonView.itemsPerPageMenu, { timeout: 60 * SEC, log: false })
+        .find(commonView.itemsPerPageToggleButton, { log: false })
         .then(($toggleBtn) => {
             if (!$toggleBtn.eq(0).is(":disabled")) {
                 $toggleBtn.eq(0).trigger("click");
-                cy.get(commonView.itemsPerPageMenuOptions);
-                cy.get(`li > button[data-action="per-page-${items}"]`).click({ force: true });
+                cy.get(commonView.itemsPerPageMenuOptions, { log: false });
+                cy.get(`li > button[data-action="per-page-${items}"]`, { log: false }).click({
+                    force: true,
+                    log: false,
+                });
                 cy.wait(2 * SEC);
             }
         });
@@ -238,39 +261,44 @@ export function selectReactFormItems(
     cy.contains("button", item).click();
 }
 
-export function checkSuccessAlert(fieldId: string, message: string): void {
+export function checkSuccessAlert(fieldId: string, message: string, close = false): void {
+    validateTextPresence(fieldId, message);
+    if (close) {
+        closeSuccessAlert();
+    }
+}
+
+export function validateTextPresence(fieldId: string, message: string): void {
     cy.get(fieldId, { timeout: 150 * SEC }).should("contain.text", message);
+}
+
+export function closeSuccessAlert(): void {
+    cy.get(closeSuccessNotification, { timeout: 10 * SEC })
+        .first()
+        .click({ force: true });
 }
 
 export function removeMember(memberName: string): void {
     cy.get("span").contains(memberName).siblings(commonView.removeButton).click();
 }
 
-export function exists(value: string): void {
+export function exists(value: string, tableSelector = commonView.appTable): void {
     // Wait for DOM to render table and sibling elements
-    cy.get(commonView.appTable, { timeout: 5 * SEC })
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                selectItemsPerPage(100);
-                cy.get("td", { timeout: 120 * SEC }).should("contain", value);
-            }
-        });
+    cy.get(tableSelector, { timeout: 5 * SEC }).then(($tbody) => {
+        if ($tbody.text() !== "No data available") {
+            selectItemsPerPage(100);
+            cy.get(tableSelector, { timeout: 5 * SEC }).should("contain", value);
+        }
+    });
 }
 
-export function notExists(value: string): void {
-    // Wait for DOM to render table and sibling elements
-    cy.get(commonView.appTable, { timeout: 5 * SEC })
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                selectItemsPerPage(100);
-                cy.get("table[aria-label='main-table']", { timeout: 5 * SEC }).should(
-                    "not.contain",
-                    value
-                );
-            }
-        });
+export function notExists(value: string, tableSelector = commonView.appTable): void {
+    cy.get(tableSelector).then(($tbody) => {
+        if ($tbody.text() !== "No data available") {
+            selectItemsPerPage(100);
+            cy.get(tableSelector, { timeout: 5 * SEC }).should("not.contain", value);
+        }
+    });
 }
 
 export function selectFilter(filterName: string, identifiedRisk?: boolean, value = 0): void {
@@ -319,7 +347,8 @@ export function applySearchFilter(
         filterName == tag ||
         filterName == credentialType ||
         filterName == artifact ||
-        filterName == repositoryType
+        filterName == repositoryType ||
+        filterName == owner
     ) {
         cy.get("div.pf-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show")
             .find("div.pf-c-select")
@@ -327,7 +356,8 @@ export function applySearchFilter(
         if (
             filterName == businessService ||
             filterName == repositoryType ||
-            filterName == artifact
+            filterName == artifact ||
+            filterName == owner
         ) {
             // ul[role=listbox] > li is for the Application Inventory page.
             // span.pf-c-check__label is for the Copy assessment page.
@@ -364,26 +394,54 @@ export function applySearchFilter(
     cy.wait(4000);
 }
 
-export function sortAsc(sortCriteria: string): void {
-    cy.get(`th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
-        if (
-            $tableHeader.attr("aria-sort") === "descending" ||
-            $tableHeader.attr("aria-sort") === "none"
-        ) {
-            $tableHeader.find("button").trigger("click");
-        }
-    });
+export function clickOnSortButton(
+    fieldName: string,
+    sortCriteria: string,
+    tableSelector: string = commonView.commonTable
+): void {
+    cy.get(tableSelector)
+        .contains("th", fieldName)
+        .then(($tableHeader) => {
+            const sortButton = $tableHeader.find("button");
+            if (
+                $tableHeader.attr("aria-sort") === "none" ||
+                $tableHeader.attr("aria-sort") != sortCriteria
+            ) {
+                sortButton.trigger("click");
+            }
+            cy.wrap($tableHeader).should("have.attr", "aria-sort", sortCriteria);
+        });
 }
 
-export function sortDesc(sortCriteria: string): void {
-    cy.get(`th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
-        if (
-            $tableHeader.attr("aria-sort") === "ascending" ||
-            $tableHeader.attr("aria-sort") === "none"
-        ) {
-            $tableHeader.find("button").trigger("click");
-        }
-    });
+export function generateRandomDateRange(
+    minDate?: Date,
+    maxDate?: Date
+): { start: Date; end: Date } {
+    if (!minDate) minDate = new Date();
+
+    // If maxDate is not provided, use one year from now
+    if (!maxDate) {
+        maxDate = new Date(minDate.getTime());
+        maxDate.setFullYear(maxDate.getFullYear() + 1);
+    }
+
+    const dateRangeInMs = maxDate.getTime() - minDate.getTime();
+
+    if (dateRangeInMs <= 0) {
+        throw new Error("Invalid date range");
+    }
+
+    // Calculate start date and end date
+    const startOffset = Math.random() * dateRangeInMs;
+    const startDate = new Date(minDate.getTime() + startOffset);
+
+    const endOffset = Math.random() * (dateRangeInMs - startOffset);
+    const endDate = new Date(startDate.getTime() + endOffset);
+
+    return {
+        start: startDate,
+        end: endDate,
+    };
 }
 
 export function sortAscCopyAssessmentTable(sortCriteria: string): void {
@@ -471,6 +529,44 @@ export function verifySortDesc(listToVerify: Array<any>, unsortedList: Array<any
     });
 }
 
+export function verifyDateSortAsc(listToVerify: string[], unsortedList: string[]): void {
+    cy.wrap(listToVerify).then((capturedList) => {
+        const sortedList = unsortedList
+            .map((dateStr) => {
+                // Parse the date and store the date object and original string together
+                return {
+                    date: new Date(Date.parse(dateStr)),
+                    originalString: dateStr,
+                };
+            })
+            .sort((a, b) => a.date.getTime() - b.date.getTime()) // sort the dates
+            .map((item) => {
+                return item.originalString;
+            });
+
+        expect(capturedList).to.be.deep.equal(sortedList);
+    });
+}
+
+export function verifyDateSortDesc(listToVerify: string[], unsortedList: string[]): void {
+    cy.wrap(listToVerify).then((capturedList) => {
+        const sortedList = unsortedList
+            .map((dateStr) => {
+                // Parse the date and store the date object and original string together
+                return {
+                    date: new Date(Date.parse(dateStr)),
+                    originalString: dateStr,
+                };
+            })
+            .sort((a, b) => b.date.getTime() - a.date.getTime()) // sort the dates
+            .map((item) => {
+                return item.originalString;
+            });
+
+        expect(capturedList).to.be.deep.equal(sortedList);
+    });
+}
+
 export function expandRowDetails(rowIdentifier: string): void {
     // displays row details by clicking on the expand button
     cy.get(tdTag)
@@ -530,8 +626,8 @@ export function notExistsWithinRow(
         .should("not.contain", valueToSearch);
 }
 
-export function deleteTableRows(): void {
-    cy.get(commonView.appTable).get("tbody").find(trTag).as("rowsIdentifier");
+export function deleteTableRows(tableSelector = commonView.appTable): void {
+    cy.get(tableSelector).get("tbody").find(trTag).as("rowsIdentifier");
     cy.get("@rowsIdentifier").then(($tableRows) => {
         for (let i = 0; i < $tableRows.length; i++) {
             cy.get("@rowsIdentifier")
@@ -612,9 +708,23 @@ export function application_inventory_kebab_menu(menu, tab?): void {
     // The value for menu could be one of {Import, Manage imports, Delete, Manage credentials}
     if (tab == "Analysis") navigate_to_application_inventory("Analysis");
     else navigate_to_application_inventory();
+
     cy.get(actionButton).eq(1).click({ force: true });
-    if (menu == "Import") clickByText(button, "Import");
-    else cy.get("a.pf-c-dropdown__menu-item").contains(menu).click({ force: true });
+    if (menu == "Import") {
+        clickByText(button, "Import");
+    } else {
+        cy.get("a")
+            .contains(menu)
+            .then(($menu_item) => {
+                if (!$menu_item.hasClass("pf-m-disabled")) {
+                    clickByText("a", menu);
+                    if (menu == "Delete") clickByText(button, menu, true);
+                } else {
+                    // close menu if nothing to do
+                    cy.get(actionButton).eq(1).click({ force: true });
+                }
+            });
+    }
 }
 
 export function openManageImportsPage(): void {
@@ -658,9 +768,16 @@ export function verifyImportErrorMsg(errorMsg: any): void {
     }
 }
 
-export function deleteApplicationTableRows(currentPage = false): void {
-    navigate_to_application_inventory();
-    cy.get(commonView.appTable)
+export function migration_wave_kebab_menu(menu): void {
+    // The value for menu could be one of {Export to Issue Manager, Delete}
+    cy.get(actionButton).eq(1).click({ force: true });
+    cy.get(commonView.kebabMenuItem).contains(menu).click({ force: true });
+}
+
+export function deleteAllMigrationWaves(currentPage = false): void {
+    MigrationWave.open();
+    cy.wait(2000);
+    cy.get(MigrationWaveView.waveTable)
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
@@ -678,9 +795,44 @@ export function deleteApplicationTableRows(currentPage = false): void {
                                 }).check({ force: true });
                             }
 
-                            application_inventory_kebab_menu("Delete");
+                            migration_wave_kebab_menu("Delete");
                             clickByText(button, "Delete", true);
                         }
+                    });
+            }
+        });
+}
+
+export function deleteApplicationTableRows(): void {
+    // Delete all rows one by one for which Delete button is enabled
+    // to be used only in manageImports tests as we don't know which apps
+    // are imported. For all other tests use deleteByList(appList)
+    navigate_to_application_inventory();
+    cy.get(commonView.appTable)
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-c-empty-state")) {
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        const name = $tableRow.find("td[data-label=Name]").text();
+                        cy.get(tdTag)
+                            .contains(name)
+                            .closest(trTag)
+                            .within(() => {
+                                click(actionButton);
+                                cy.wait(800);
+                            })
+                            .contains(button, deleteAction)
+                            .then(($delete_btn) => {
+                                if (!$delete_btn.hasClass("pf-m-aria-disabled")) {
+                                    $delete_btn.click();
+                                    cy.wait(800);
+                                    click(commonView.confirmButton);
+                                    cy.wait(2000);
+                                }
+                            });
                     });
             }
         });
@@ -744,6 +896,7 @@ export function performRowAction(itemName: string, action: string): void {
             clickByText(button, action);
             cy.wait(500);
             clickByText(button, action);
+            cy.wait(500);
         });
 }
 
@@ -759,6 +912,26 @@ export function performRowActionByIcon(itemName: string, action: string): void {
         .within(() => {
             click(action);
         });
+}
+
+export function createMultipleJiraConnections(
+    numberOfJiras: number,
+    jiraCredential: JiraCredentials,
+    isInsecure = false,
+    useTestingAccount = true
+): Array<Jira> {
+    let jiraList: Array<Jira> = [];
+    let jiraCloudConnectionData: JiraConnectionData;
+    while (jiraList.length < numberOfJiras) {
+        jiraCloudConnectionData = getJiraConnectionData(
+            jiraCredential,
+            JiraType.cloud,
+            isInsecure,
+            useTestingAccount
+        );
+        jiraList.push(new Jira(jiraCloudConnectionData));
+    }
+    return jiraList;
 }
 
 export function createMultipleCredentials(numberOfCredentials: number): Array<Credentials> {
@@ -783,6 +956,12 @@ export function createMultipleCredentials(numberOfCredentials: number): Array<Cr
                     UserCredentials.sourcePrivateKey
                 )
             )
+        );
+        newCredentialsList.push(
+            new JiraCredentials(getJiraCredentialData(CredentialType.jiraBasic, false))
+        );
+        newCredentialsList.push(
+            new JiraCredentials(getJiraCredentialData(CredentialType.jiraToken, false))
         );
     }
     newCredentialsList.forEach((currentCredential) => {
@@ -814,6 +993,31 @@ export function createMultipleStakeholders(
         stakeholdersList.push(stakeholder);
     }
     return stakeholdersList;
+}
+
+export function createMultipleMigrationWaves(
+    numberOfMigrationWaves: number,
+    stakeholdersList?: Array<Stakeholders>,
+    stakeholderGroupsList?: Array<Stakeholdergroups>
+): Array<MigrationWave> {
+    const migrationWaveList: Array<MigrationWave> = [];
+    for (let i = 0; i < numberOfMigrationWaves; i++) {
+        const now = new Date();
+        now.setDate(now.getDate() + 1);
+        const end = new Date(now.getTime());
+        end.setFullYear(end.getFullYear() + 1);
+        // Create new migration wave
+        const migrationWave = new MigrationWave(
+            data.getAppName(),
+            now,
+            end,
+            stakeholdersList,
+            stakeholderGroupsList
+        );
+        migrationWave.create();
+        migrationWaveList.push(migrationWave);
+    }
+    return migrationWaveList;
 }
 
 export function createMultipleJobFunctions(num): Array<Jobfunctions> {
@@ -925,7 +1129,8 @@ export function getRowsAmount(): number {
 
 export function getRandomApplicationData(
     appName?,
-    options?: { sourceData?; binaryData? }
+    options?: { sourceData?; binaryData? },
+    tags?
 ): applicationData {
     let name = data.getAppName();
     if (appName) {
@@ -955,6 +1160,9 @@ export function getRandomApplicationData(
             appdata["packaging"] = options.binaryData.packaging;
         }
     }
+
+    if (tags) appdata["tags"] = tags;
+
     return appdata;
 }
 
@@ -992,23 +1200,27 @@ export function createMultipleApplications(numberofapplications: number): Array<
 export function createMultipleApplicationsWithBSandTags(
     numberofapplications: number,
     businessservice?: Array<BusinessServices>,
-    tagList?: Array<Tag>
-): Array<Application> {
-    var applicationList: Array<Application> = [];
-    var tags: string[];
-    var business: string;
+    tagList?: Array<Tag>,
+    stakeholder?: Array<Stakeholders>
+): Array<Assessment> {
+    let applicationList: Array<Assessment> = [];
+    let tags: string[];
+    let business = "";
+    let owner = "";
     clickByText(navMenu, applicationInventory);
     for (let i = 0; i < numberofapplications; i++) {
-        if (!businessservice) business = businessservice[i].name;
+        if (businessservice) business = businessservice[i].name;
         if (tagList) tags = [tagList[i].name];
+        if (stakeholder) owner = stakeholder[i].name;
         let appdata = {
             name: data.getAppName(),
-            business: businessservice[i].name,
+            business: business,
             description: data.getDescription(),
-            tags: [tagList[i].name],
+            tags: tags,
             comment: data.getDescription(),
+            owner: owner,
         };
-        const application = new Application(appdata);
+        const application = new Assessment(appdata);
         application.create();
         applicationList.push(application);
         cy.wait(2000);
@@ -1040,31 +1252,26 @@ export function deleteByList<T extends Deletable>(array: T[]): void {
     });
 }
 
-export function deleteAllStakeholders(cancel = false): void {
+export function deleteAllStakeholders(): void {
     Stakeholders.openList();
-    selectItemsPerPage(100);
-    cy.wait(0.5 * SEC);
-    cy.get(commonView.appTable)
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
-                    .each(($tableRow) => {
-                        let name = $tableRow.find("td[data-label=Email]").text();
-                        cy.get(tdTag)
-                            .contains(name)
-                            .parent(trTag)
-                            .within(() => {
-                                click(commonView.deleteButton);
-                                cy.wait(800);
-                            });
-                        click(commonView.confirmButton);
-                        cy.wait(4000);
-                    });
-            }
-        });
+    cy.get("table[aria-label='Stakeholders table']", { timeout: 2 * SEC }).then(($tbody) => {
+        if (!$tbody.text().includes("No data available")) {
+            selectItemsPerPage(100);
+            cy.get(commonView.deleteButton).then(($elems) => {
+                const elemsLength = $elems.length;
+                for (let i = 0; i < elemsLength; i++) {
+                    cy.get(commonView.deleteButton)
+                        .first()
+                        .click()
+                        .then((_) => {
+                            cy.wait(0.5 * SEC);
+                            click(commonView.confirmButton);
+                            cy.wait(SEC);
+                        });
+                }
+            });
+        }
+    });
 }
 
 export function deleteAllStakeholderGroups(cancel = false): void {
@@ -1074,24 +1281,28 @@ export function deleteAllStakeholderGroups(cancel = false): void {
 
 export function deleteAllBusinessServices() {
     BusinessServices.openList();
-    cy.get(commonView.appTable, { timeout: 2 * SEC })
+    cy.get(commonView.appTable)
         .next()
         .then(($div) => {
             if (!$div.hasClass("pf-c-empty-state")) {
-                selectItemsPerPage(100);
-                cy.get(commonView.deleteButton).then(($elems) => {
-                    const elemsLength = $elems.length;
-                    for (let i = 0; i < elemsLength; i++) {
-                        cy.get(commonView.deleteButton)
-                            .first()
-                            .click()
-                            .then((_) => {
-                                cy.wait(0.5 * SEC);
-                                click(commonView.confirmButton);
-                                cy.wait(SEC);
+                cy.get("tbody")
+                    .find(trTag)
+                    .not(".pf-c-table__expandable-row")
+                    .each(($tableRow) => {
+                        const name = $tableRow.find("td[data-label=Name]").text();
+                        cy.get(tdTag)
+                            .contains(name)
+                            .closest(trTag)
+                            .contains(button, deleteAction)
+                            .then(($delete_btn) => {
+                                if (!$delete_btn.hasClass("pf-m-aria-disabled")) {
+                                    $delete_btn.click();
+                                    cy.wait(800);
+                                    click(commonView.confirmButton);
+                                    cy.wait(2000);
+                                }
                             });
-                    }
-                });
+                    });
             }
         });
 }
@@ -1212,6 +1423,10 @@ export const deleteFromArray = <T>(array: T[], el: T): T[] => {
     return array.filter((item) => item !== el);
 };
 
+export const deleteFromArrayByIndex = <T>(array: T[], index: number): T[] => {
+    return array.filter((_, i) => i !== index);
+};
+
 export function goToPage(page: number): void {
     cy.get(divHeader)
         .eq(0)
@@ -1235,11 +1450,11 @@ export function goToPage(page: number): void {
 export function selectUserPerspective(userType: string): void {
     cy.get(commonView.optionMenu, { timeout: 100 * SEC })
         .eq(0)
+        .click()
         .then(($a) => {
-            $a.click();
             if (userType == "Migration" && $a.find('ul[title="Admin"]').length) {
                 clickByText(commonView.userPerspectiveMenu, "Administration");
-                $a.click();
+                $a.trigger("click");
             }
             clickByText(commonView.userPerspectiveMenu, userType);
         });
@@ -1249,28 +1464,40 @@ export function selectWithinModal(selector: string): void {
     clickWithin(modal, selector);
 }
 
-export function clickWithin(parent, selector: string): void {
+/**
+ * Executes a function inside a specified HTML element
+ * @param selector parent element
+ * @param functionToExec function to execute
+ * @param index selector index
+ */
+export function callWithin(selector: string, functionToExec: () => void, index = 0): void {
+    cy.get(selector)
+        .eq(index)
+        .within(() => functionToExec());
+}
+
+export function clickWithin(parent, selector: string, isForced = false, log = false): void {
     cy.get(parent, { timeout: 30 * SEC })
         .eq(0)
         .within(() => {
-            click(selector);
+            click(selector, isForced, log);
         });
 }
 
 //function to select checkboxes
-export function selectCheckBox(selector: string): void {
+export function selectCheckBox(selector: string, isForced = false, log = false): void {
     cy.get(selector, { timeout: 120 * SEC }).then(($checkbox) => {
         if (!$checkbox.prop("checked")) {
-            click(selector);
+            click(selector, isForced, log);
         }
     });
 }
 
 //function to unselect checkboxes
-export function unSelectCheckBox(selector: string): void {
+export function unSelectCheckBox(selector: string, isForced = false, log = false): void {
     cy.get(selector, { timeout: 120 * SEC }).then(($checkbox) => {
         if ($checkbox.prop("checked")) {
-            click(selector);
+            click(selector, isForced, log);
         }
     });
 }
@@ -1421,16 +1648,23 @@ export function disableSwitch(selector: string): void {
         });
 }
 
-export function validateTooShortInput(selector, anotherSelector?: string): void {
+export function validateTooShortInput(selector, anotherSelector?: string, message?: string): void {
     inputText(selector, "ab");
     if (anotherSelector) click(anotherSelector);
-    doesExistText("This field must contain at least 3 characters.", true);
+    const validationMessage = message || "This field must contain at least 3 characters.";
+    doesExistText(validationMessage, true);
 }
 
-export function validateTooLongInput(selector, anotherSelector?: string): void {
-    inputText(selector, randomWordGenerator(121));
+export function validateTooLongInput(
+    selector: string,
+    length = 121,
+    anotherSelector?: string,
+    message?: string
+): void {
+    inputText(selector, randomWordGenerator(length));
     if (anotherSelector) click(anotherSelector);
-    doesExistText("This field must contain fewer than 120 characters.", true);
+    const validationMessage = message || "This field must contain fewer than";
+    doesExistText(validationMessage, true);
 }
 
 // This method accepts enums or maps and returns list of keys, so you can iterate by keys
@@ -1494,6 +1728,14 @@ export function isEnabled(selector: string, toBeEnabled?: boolean): void {
     }
 }
 
+export function isButtonEnabled(selector: string, toBeEnabled?: boolean): void {
+    if (toBeEnabled) {
+        cy.get(selector).should("be.enabled");
+    } else {
+        cy.get(selector).should("not.be.enabled");
+    }
+}
+
 export function clickTab(name: string): void {
     clickByText(navTab, name);
 }
@@ -1503,4 +1745,19 @@ export function cleanupDownloads(): void {
     cy.exec("cd cypress/downloads; rm -rf ./*").then((result) => {
         cy.log(result.stdout);
     });
+}
+
+export function selectAssessmentApplications(apps: string): void {
+    clickWithin(modal, "button[aria-label='Select']");
+    clickByText(button, `Select ${apps}`, false, true);
+    clickWithin(modal, "button[aria-label='Select']", false, true);
+    cy.get("div").then(($div) => {
+        if ($div.text().includes("in-progress or complete assessment")) {
+            selectCheckBox("#confirm-copy-checkbox");
+        }
+    });
+}
+
+export function closeModalWindow(): void {
+    click(closeModal, false, true);
 }

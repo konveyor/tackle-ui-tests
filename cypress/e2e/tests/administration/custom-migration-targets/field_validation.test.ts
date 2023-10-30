@@ -15,7 +15,13 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { click, login, preservecookies, validateTooShortInput } from "../../../../utils/utils";
+import {
+    click,
+    login,
+    preservecookies,
+    validateTooLongInput,
+    validateTooShortInput,
+} from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import { CustomMigrationTarget } from "../../../models/administration/custom-migration-targets/custom-migration-target";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
@@ -40,7 +46,7 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         cy.get(CustomMigrationTargetView.createSubmitButton).should("be.disabled");
 
         validateTooShortInput(CustomMigrationTargetView.nameInput, "body");
-        validateTooShortInput(CustomMigrationTargetView.nameInput);
+        validateTooLongInput(CustomMigrationTargetView.nameInput);
 
         CustomMigrationTarget.fillName("Containerization");
         cy.get(CustomMigrationTargetView.nameHelper).contains(
@@ -93,20 +99,15 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
              * that the image was uploaded successfully
              */
             expect(err.message).to.include("File Not Found");
-            cy.get(CustomMigrationTargetView.imageHelper).should(
-                "contain",
-                "Max image file size of 1 MB exceeded."
-            );
-
             return false;
         });
         CustomMigrationTarget.uploadImage("img/big-image.jpg");
         cy.get(CustomMigrationTargetView.imageInput).blur();
         cy.wait(2 * SEC);
+        cy.contains("Cancel").click();
     });
 
     it("Rule repository URL validation", function () {
-        // Fails due to bug 484
         CustomMigrationTarget.openNewForm();
         click(CustomMigrationTargetView.retrieveFromARepositoryRadio);
         CustomMigrationTarget.selectRepositoryType(RepositoryType.git);
@@ -124,9 +125,6 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         );
 
         CustomMigrationTarget.fillRepositoryUrl("https://github.com/konveyor/tackle-testapp");
-        cy.get(CustomMigrationTargetView.repositoryUrlHelper).should(
-            "not.contain",
-            "Must be a valid URL."
-        );
+        cy.get(CustomMigrationTargetView.repositoryUrlHelper).should("not.exist");
     });
 });

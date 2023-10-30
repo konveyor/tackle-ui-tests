@@ -22,7 +22,6 @@ import {
     existsWithinRow,
     closeRowDetails,
     notExistsWithinRow,
-    hasToBeSkipped,
     selectUserPerspective,
 } from "../../../../../../utils/utils";
 import { Tag } from "../../../../../models/migration/controls/tags";
@@ -32,7 +31,6 @@ import * as data from "../../../../../../utils/data_utils";
 
 describe(["@tier1"], "Tag CRUD operations", () => {
     beforeEach("Login", function () {
-        // Perform login
         login();
 
         // Interceptors
@@ -44,7 +42,6 @@ describe(["@tier1"], "Tag CRUD operations", () => {
 
     it("Tag CRUD", function () {
         selectUserPerspective(migration);
-        // Create new tag
         const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagCategory());
         tag.create();
         cy.wait("@postTag");
@@ -54,20 +51,20 @@ describe(["@tier1"], "Tag CRUD operations", () => {
         existsWithinRow(tag.tagCategory, tdTag, tag.name);
         closeRowDetails(tag.tagCategory);
 
-        // Edit the tag and tag type name
+        // Edit the tag and tag category name
         let updatedTagName = data.getRandomWord(8);
-        let updatedTagTypeName = data.getRandomDefaultTagCategory();
-        tag.edit({ name: updatedTagName, tagtype: updatedTagTypeName });
+        let updatedTagCategoryName = data.getRandomDefaultTagCategory();
+        tag.edit({ name: updatedTagName, tagcategory: updatedTagCategoryName });
         cy.get("@putTag");
         cy.wait(2000);
 
         // Assert that tag type name got updated
-        exists(updatedTagTypeName);
+        exists(updatedTagCategoryName);
 
         // Assert that tag name got updated
-        expandRowDetails(updatedTagTypeName);
-        existsWithinRow(updatedTagTypeName, tdTag, updatedTagName);
-        closeRowDetails(updatedTagTypeName);
+        expandRowDetails(updatedTagCategoryName);
+        existsWithinRow(updatedTagCategoryName, tdTag, updatedTagName);
+        closeRowDetails(updatedTagCategoryName);
 
         // Delete tag
         tag.delete();

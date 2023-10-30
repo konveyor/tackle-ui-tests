@@ -53,10 +53,10 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
             this.analysisData = analysisData;
         });
 
-        cy.intercept("POST", "/hub/rulebundles*").as("postRule");
-        cy.intercept("GET", "/hub/rulebundles*").as("getRule");
-        cy.intercept("PUT", "/hub/rulebundles*/*").as("putRule");
-        cy.intercept("DELETE", "/hub/rulebundles*/*").as("deleteRule");
+        cy.intercept("POST", "/hub/rulesets*").as("postRule");
+        cy.intercept("GET", "/hub/rulesets*").as("getRule");
+        cy.intercept("PUT", "/hub/rulesets*/*").as("putRule");
+        cy.intercept("DELETE", "/hub/rulesets*/*").as("deleteRule");
     });
 
     it("Custom Migration Targets CRUD with rules uploaded manually", function () {
@@ -146,8 +146,10 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
 
         // Moves the custom migration target to the first place
         dragButton.move({
-            deltaX: -10000,
-            deltaY: -10000,
+            deltaX: Number.MIN_SAFE_INTEGER,
+            deltaY: Number.MIN_SAFE_INTEGER,
+            force: true,
+            waitForAnimations: false,
         });
 
         const application = new Analysis(

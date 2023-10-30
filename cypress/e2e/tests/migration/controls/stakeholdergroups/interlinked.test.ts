@@ -22,8 +22,6 @@ import {
     clickByText,
     exists,
     notExists,
-    preservecookies,
-    hasToBeSkipped,
     createMultipleStakeholders,
     selectUserPerspective,
 } from "../../../../../utils/utils";
@@ -33,26 +31,22 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 import { tdTag, trTag, stakeholderGroups, migration } from "../../../../types/constants";
 import { expandRow } from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
+import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 var stakeholdersList: Array<Stakeholders> = [];
 var membersList: Array<string> = [];
 
 describe(["@tier1"], "Stakeholder group linked to stakeholder members", () => {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
 
-        // Create two stakeholders
         stakeholdersList = createMultipleStakeholders(2);
         for (let i = 0; i < stakeholdersList.length; i++) {
             membersList.push(stakeholdersList[i].name);
         }
     });
 
-    beforeEach("Login", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors for stakeholder groups
         cy.intercept("POST", "/hub/stakeholdergroups*").as("postStakeholdergroups");
         cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");
@@ -119,7 +113,7 @@ describe(["@tier1"], "Stakeholder group linked to stakeholder members", () => {
         stakeholdersList[1].delete();
         cy.wait("@getStakeholders");
         // Assert that second stakeholder deleted
-        notExists(stakeholdersList[1].name);
+        notExists(stakeholdersList[1].name, stakeHoldersTable);
 
         // Go to stakeholder group page
         clickByText(navTab, stakeholderGroups);
@@ -140,14 +134,11 @@ describe(["@tier1"], "Stakeholder group linked to stakeholder members", () => {
         // Delete stakeholder group
         stakeholdergroup.delete();
         cy.wait("@getStakeholdergroups");
-
-        // Assert that created stakeholder group is deleted
         notExists(stakeholdergroup.name);
 
         // Delete first stakeholder
         stakeholdersList[0].delete();
         cy.wait("@getStakeholders");
-        // Assert that first stakeholder deleted
-        notExists(stakeholdersList[0].name);
+        notExists(stakeholdersList[0].name, stakeHoldersTable);
     });
 });

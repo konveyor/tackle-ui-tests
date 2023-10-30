@@ -19,17 +19,11 @@ import {
     login,
     clickByText,
     inputText,
-    submitForm,
     exists,
     notExists,
-    hasToBeSkipped,
-    preservecookies,
-    selectUserPerspective,
+    checkSuccessAlert,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
 import {
-    controls,
-    stakeholders,
     button,
     minCharsMsg,
     max120CharsMsg,
@@ -42,6 +36,7 @@ import {
     stakeholderNameInput,
     emailHelper,
     displayNameHelper,
+    stakeHoldersTable,
 } from "../../../../views/stakeholders.view";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
@@ -52,14 +47,10 @@ describe(["@tier2"], "Stakeholder validations", () => {
     const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
 
     before("Login", function () {
-        // Perform login
         login();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("POST", "/hub/stakeholder*").as("postStakeholder");
         cy.intercept("DELETE", "/hub/stakeholder*/*").as("deleteStakeholder");
@@ -116,11 +107,15 @@ describe(["@tier2"], "Stakeholder validations", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("Stakeholder unique constraint validation", function () {
+    it("Stakeholder success alert and unique constraint validation", function () {
         // Create a new stakeholder
         stakeholder.create();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            "Success alert:Stakeholder was successfully created."
+        );
         cy.wait("@postStakeholder");
-        exists(stakeholder.email);
+        exists(stakeholder.email, stakeHoldersTable);
 
         // Navigate to stakeholder tab and click create new button
         clickByText(button, createNewButton);
@@ -134,6 +129,6 @@ describe(["@tier2"], "Stakeholder validations", () => {
         cy.get(commonView.closeButton).click();
         stakeholder.delete();
         cy.wait("@deleteStakeholder");
-        notExists(stakeholder.email);
+        notExists(stakeholder.email, stakeHoldersTable);
     });
 });

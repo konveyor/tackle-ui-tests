@@ -16,13 +16,10 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    deleteAllBusinessServices,
-    deleteApplicationTableRows,
+    deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
-    hasToBeSkipped,
     login,
-    preservecookies,
     resetURL,
     writeMavenSettingsFile,
 } from "../../../../utils/utils";
@@ -34,11 +31,11 @@ import { CredentialType, UserCredentials } from "../../../types/constants";
 
 let gitConfiguration = new GitConfiguration();
 let source_credential;
+let applicationsList: Analysis[] = [];
 
 describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
     before("Login", function () {
         login();
-        deleteApplicationTableRows();
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -49,9 +46,7 @@ describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
         source_credential.create();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
+    beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -69,14 +64,6 @@ describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
         resetURL();
     });
 
-    after("Perform test data clean up", () => {
-        login();
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
-        source_credential.delete();
-        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
-    });
-
     it("Analysis on insecure git Repository(http) for tackle test app when insecure repository is allowed", function () {
         // test that when the insecure repository is enabled the analysis on a http repo should be completed successfully
 
@@ -91,9 +78,10 @@ describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
         );
 
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, "None");
+        application.manageCredentials(source_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
@@ -113,11 +101,19 @@ describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
         );
 
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, "None");
+        application.manageCredentials(source_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Failed");
         application.openAnalysisDetails();
+    });
+
+    after("Perform test data clean up", () => {
+        login();
+        deleteByList(applicationsList);
+        source_credential.delete();
+        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 });

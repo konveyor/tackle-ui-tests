@@ -1,4 +1,6 @@
 ## End-to-end Cypress tests for tackle-ui
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkonveyor%2Ftackle-ui-tests.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkonveyor%2Ftackle-ui-tests?ref=badge_shield)
+
 
 ### Getting Started ###
 
@@ -59,13 +61,16 @@
 2. Click [here](https://reportportal-migration-qe.apps.ocp4.prod.psi.redhat.com) to see **Current** test runs
 
 #### Tag based test execution
-1. To run tests based on tags, use below command - 
+This repository uses the package [cypress-tags](https://www.npmjs.com/package/cypress-tags) to slice up test runs.
 
-    `npx cypress run --env grepTags=@tagName`
+1. To run tests based on tags, use below command 
 
-2. To run multiple tags(tiers) in a single run, provide tag names appended in below format - 
+    `CYPRESS_INCLUDE_TAGS=@tagName npx cypress run`
 
-    `npx cypress run --env grepTags=@tag1+@tag2`
+
+2. To run multiple tags(tiers) in a single run, provide tag names separated by commas 
+
+    `CYPRESS_INCLUDE_TAGS=@tier1,@tier2 npx cypress run`
 
 #### Running tests locally over Tackle UI hosted on minikube
 
@@ -101,6 +106,9 @@ To add the license's header to all eligible files, execute:
 yarn license-check-and-add add
 ```
 
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fkonveyor%2Ftackle-ui-tests.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fkonveyor%2Ftackle-ui-tests?ref=badge_large)
 
 ## Code of Conduct
 Refer to Konveyor's Code of Conduct [here](https://github.com/konveyor/community/blob/main/CODE_OF_CONDUCT.md).

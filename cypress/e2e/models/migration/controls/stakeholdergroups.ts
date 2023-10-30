@@ -37,7 +37,6 @@ import {
     submitForm,
     cancelForm,
     selectFormItems,
-    checkSuccessAlert,
     performRowAction,
     selectUserPerspective,
 } from "../../../../utils/utils";
@@ -91,10 +90,6 @@ export class Stakeholdergroups {
                 this.selectMembers(this.members);
             }
             submitForm();
-            checkSuccessAlert(
-                commonView.successAlertMessage,
-                `Success! ${this.name} was added as a(n) stakeholder group.`
-            );
         }
     }
 

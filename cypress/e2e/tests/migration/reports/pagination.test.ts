@@ -18,21 +18,14 @@ limitations under the License.
 import {
     login,
     clickByText,
-    selectItemsPerPage,
-    preservecookies,
-    hasToBeSkipped,
     createMultipleStakeholders,
     createMultipleApplications,
-    deleteAllStakeholders,
-    deleteApplicationTableRows,
     selectUserPerspective,
-    createMultipleBusinessServices,
     goToPage,
-    deleteAllBusinessServices,
-    deleteAllTagsAndTagCategories,
+    deleteByList,
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
-import { applicationInventory, migration, reports } from "../../../types/constants";
+import { migration, reports, SEC } from "../../../types/constants";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import {
     selectItemsPerPageAdoptionCandidate,
@@ -41,50 +34,36 @@ import {
 } from "../../../models/migration/reports/reports";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import * as commonView from "../../../views/common.view";
-import { BusinessServices } from "../../../models/migration/controls/businessservices";
 
-var applicationsList: Array<Assessment> = [];
-var stakeholdersList: Array<Stakeholders> = [];
-var businessservicelist: Array<BusinessServices> = [];
+let applicationsList: Array<Assessment> = [];
+let stakeholdersList: Array<Stakeholders> = [];
 
 describe(["@tier3"], "Reports pagination validations", () => {
     before("Login and create test data", function () {
         // Perform login
         login();
         stakeholdersList = createMultipleStakeholders(1);
-        var rowsToCreate = 11;
+        let rowsToCreate = 11;
 
         // Create 11 applications
         applicationsList = createMultipleApplications(rowsToCreate);
 
         // Get the last extra application created
-        var newApplication = applicationsList[applicationsList.length - 1];
+        let newApplication = applicationsList[applicationsList.length - 1];
         // Perform assessment of application
         newApplication.perform_assessment("high", [stakeholdersList[0].name]);
         newApplication.verifyStatus("assessment", "Completed");
-        cy.wait(4000);
+        cy.wait(4 * SEC);
         // Perform application review
         newApplication.perform_review("high");
         newApplication.verifyStatus("review", "Completed");
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete All
-        clickByText(navMenu, applicationInventory);
-        deleteApplicationTableRows();
-        deleteAllStakeholders();
     });
 
     it("Adoption candidate distribution - Navigation button validations", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // select 10 items per page
         selectItemsPerPageAdoptionCandidate(10);
@@ -121,11 +100,11 @@ describe(["@tier3"], "Reports pagination validations", () => {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // Select 10 items per page
         selectItemsPerPageAdoptionCandidate(10);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that only 10 items are displayed
         cy.get("td[data-label='Application name']").then(($rows) => {
@@ -134,7 +113,7 @@ describe(["@tier3"], "Reports pagination validations", () => {
 
         // Select 20 items per page
         selectItemsPerPageAdoptionCandidate(20);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
         cy.get("td[data-label='Application name']").then(($rows) => {
@@ -146,11 +125,11 @@ describe(["@tier3"], "Reports pagination validations", () => {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // Select 10 items per page
         selectItemsPerPageAdoptionCandidate(10);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Go to page number 2
         goToPage(2);
@@ -165,11 +144,11 @@ describe(["@tier3"], "Reports pagination validations", () => {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
-        // Exapand identified risks card
+        // Expand identified risks card
         expandArticle("Identified risks");
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
         // select 10 items per page
         selectItemsPerPageIdentifiedRisks(10);
@@ -203,15 +182,15 @@ describe(["@tier3"], "Reports pagination validations", () => {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
-        // Exapand identified risks card
+        // Expand identified risks card
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Select 10 items per page
         selectItemsPerPageIdentifiedRisks(10);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that only 10 items are displayed
         cy.get("td[data-label='Category']").then(($rows) => {
@@ -220,7 +199,7 @@ describe(["@tier3"], "Reports pagination validations", () => {
 
         // Select 20 items per page
         selectItemsPerPageIdentifiedRisks(20);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
         cy.get("td[data-label='Category']").then(($rows) => {
@@ -232,15 +211,15 @@ describe(["@tier3"], "Reports pagination validations", () => {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
-        cy.wait(3000);
+        cy.wait(3 * SEC);
 
-        // Exapand identified risks card
+        // Expand identified risks card
         expandArticle("Identified risks");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Select 10 items per page
         selectItemsPerPageIdentifiedRisks(10);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Go to page number 2
         cy.get(commonView.pageNumInput).eq(1).clear().type("2").type("{enter}");
@@ -251,5 +230,11 @@ describe(["@tier3"], "Reports pagination validations", () => {
             .each(($previousBtn) => {
                 cy.wrap($previousBtn).should("not.be.disabled");
             });
+    });
+
+    after("Perform test data clean up", function () {
+        // Delete the stakeholders and applications created before the tests
+        deleteByList(stakeholdersList);
+        deleteByList(applicationsList);
     });
 });

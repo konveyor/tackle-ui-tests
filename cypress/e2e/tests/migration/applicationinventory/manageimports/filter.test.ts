@@ -23,21 +23,14 @@ import {
     applySearchFilter,
     exists,
     deleteApplicationTableRows,
-    preservecookies,
-    hasToBeSkipped,
-    selectUserPerspective,
     deleteAppImportsTableRows,
-    deleteAllBusinessServices,
 } from "../../../../../utils/utils";
-import { navMenu } from "../../../../views/menu.view";
-import { applicationInventory, button, clearAllFilters } from "../../../../types/constants";
+import { button, clearAllFilters } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 
-import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { FileName } from "../../../../views/applicationinventory.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
-const businessService = new BusinessServices("Finance and HR");
 const filePath = "app_import/csv/";
 const filesToImport = [
     "valid_application_rows.csv",
@@ -48,18 +41,8 @@ var invalidSearchInput = String(data.getRandomNumber());
 
 describe(["@tier2"], "Manage applications import filter validations", function () {
     before("Login and create test data", function () {
-        // Perform login
         login();
-        // Delete all items of page
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
-
-        // Create business service
-        businessService.create();
-
-        // Open the application inventory page
-        clickByText(navMenu, applicationInventory);
-        cy.wait(2000);
+        Application.open();
 
         // Import multiple csv files
         filesToImport.forEach(function (csvFile) {
@@ -68,19 +51,9 @@ describe(["@tier2"], "Manage applications import filter validations", function (
         });
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplications");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the business service
-        deleteApplicationTableRows();
-        deleteAppImportsTableRows();
-        deleteAllBusinessServices();
     });
 
     it("File name filter validations", function () {
@@ -108,5 +81,10 @@ describe(["@tier2"], "Manage applications import filter validations", function (
 
         // Assert that no search results are found
         cy.get("h2").contains("No data available");
+    });
+
+    after("Perform test data clean up", function () {
+        deleteApplicationTableRows();
+        deleteAppImportsTableRows();
     });
 });

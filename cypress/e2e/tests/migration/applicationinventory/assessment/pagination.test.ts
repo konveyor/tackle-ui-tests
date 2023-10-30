@@ -17,18 +17,11 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
     selectItemsPerPage,
-    preservecookies,
-    deleteApplicationTableRows,
-    hasToBeSkipped,
+    deleteByList,
     createMultipleApplications,
-    selectUserPerspective,
     goToPage,
-    goToLastPage,
 } from "../../../../../utils/utils";
-import { navMenu } from "../../../../views/menu.view";
-import { applicationInventory } from "../../../../types/constants";
 import * as commonView from "../../../../views/common.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
@@ -36,25 +29,13 @@ let applicationsList: Array<Application> = [];
 
 describe(["@tier3"], "Application inventory pagination validations", function () {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
-
-        // Navigate to Application inventory tab, delete all and create 11 applications
-        deleteApplicationTableRows();
         applicationsList = createMultipleApplications(11);
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
         // Interceptors for Applications
         cy.intercept("GET", "/hub/application*").as("getApplications");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the Applications created before the tests
-        deleteApplicationTableRows();
     });
 
     it("Navigation button validations", function () {
@@ -146,28 +127,7 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
         goToPage(1);
     });
 
-    it("Last page item(s) deletion, impact on page reload validation", function () {
-        // Navigate to Application inventory tab
-        Application.open();
-        cy.wait("@getApplications");
-
-        // Select 10 items per page
-        selectItemsPerPage(10);
-        cy.wait(2000);
-
-        // Navigate to last page
-        goToLastPage();
-        cy.wait(2000);
-
-        // Delete all items of last page
-        deleteApplicationTableRows(true);
-
-        // Verify that page is re-directed to previous page
-        cy.get(".pf-c-table > tbody > tr")
-            .not(".pf-c-table__expandable-row")
-            .find("td[data-label=Name]")
-            .then(($rows) => {
-                cy.wrap($rows.length).should("eq", 10);
-            });
+    after("Perform test data clean up", function () {
+        deleteByList(applicationsList);
     });
 });

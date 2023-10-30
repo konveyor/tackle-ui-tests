@@ -16,41 +16,34 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    createMultipleBusinessServices,
     login,
-    clickByText,
-    sortAsc,
-    sortDesc,
     verifySortAsc,
     verifySortDesc,
     getTableColumnData,
-    preservecookies,
-    hasToBeSkipped,
-    deleteApplicationTableRows,
+    clickOnSortButton,
+    deleteByList,
 } from "../../../../../utils/utils";
-import { navMenu } from "../../../../views/menu.view";
-import { applicationInventory, name, tagCount, review } from "../../../../types/constants";
-
+import { name, tagCount, SortType, businessService } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
+import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 
 var applicationsList: Array<Assessment> = [];
+let businessServicesList: Array<BusinessServices> = [];
 
 describe(["@tier2"], "Application inventory sort validations", function () {
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
 
-        // Delete the existing applications
-        deleteApplicationTableRows();
-
         var tagsList = ["C++", "COBOL", "Java"];
-        // Create multiple applications with tags
+        businessServicesList = createMultipleBusinessServices(3);
         for (let i = 0; i < 3; i++) {
             let appdata = {
                 name: data.getFullName(),
                 tags: tagsList,
+                business: businessServicesList[i].name,
             };
-            // Create new application
             const application = new Assessment(appdata);
             application.create();
             applicationsList.push(application);
@@ -58,17 +51,9 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         }
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Interceptors", function () {
         // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplications");
-    });
-
-    after("Perform test data clean up", function () {
-        // Delete the applications created before the tests
-        deleteApplicationTableRows();
     });
 
     it("Name sort validations", function () {
@@ -80,7 +65,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         const unsortedList = getTableColumnData(name);
 
         // Sort the application inventory by name in ascending order
-        sortAsc(name);
+        clickOnSortButton(name, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in ascending order
@@ -88,7 +73,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the application inventory by name in descending order
-        sortDesc(name);
+        clickOnSortButton(name, SortType.descending);
         cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in descending order
@@ -96,28 +81,28 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
-    it("Review sort validations", function () {
+    it("Business service sort validations", function () {
         // Navigate to application inventory page
         Assessment.open();
         cy.wait("@getApplications");
 
         // get unsorted list when page loads
-        const unsortedList = getTableColumnData(review);
+        const unsortedList = getTableColumnData(businessService);
 
-        // Sort the application inventory by review in ascending order
-        sortAsc(review);
+        // Sort the application inventory by Tag count in ascending order
+        clickOnSortButton(businessService, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in ascending order
-        const afterAscSortList = getTableColumnData(review);
+        const afterAscSortList = getTableColumnData(businessService);
         verifySortAsc(afterAscSortList, unsortedList);
 
-        // Sort the application inventory by name in descending order
-        sortDesc(review);
+        // Sort the application inventory by tags in descending order
+        clickOnSortButton(businessService, SortType.descending);
         cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in descending order
-        const afterDescSortList = getTableColumnData(review);
+        const afterDescSortList = getTableColumnData(businessService);
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
@@ -130,7 +115,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         const unsortedList = getTableColumnData(tagCount);
 
         // Sort the application inventory by Tag count in ascending order
-        sortAsc(tagCount);
+        clickOnSortButton(tagCount, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in ascending order
@@ -138,11 +123,16 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the application inventory by tags in descending order
-        sortDesc(tagCount);
+        clickOnSortButton(tagCount, SortType.descending);
         cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(tagCount);
         verifySortDesc(afterDescSortList, unsortedList);
+    });
+
+    after("Perform test data clean up", function () {
+        deleteByList(applicationsList);
+        deleteByList(businessServicesList);
     });
 });

@@ -19,18 +19,13 @@ import {
     login,
     clickByText,
     inputText,
-    preservecookies,
-    hasToBeSkipped,
     selectUserPerspective,
-    clickWithin,
+    click,
+    checkSuccessAlert,
 } from "../../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../../views/menu.view";
 import {
-    controls,
-    tags,
     button,
     max40CharMsg,
-    fieldReqMsg,
     minCharsMsg,
     duplicateTagTypeName,
     migration,
@@ -38,28 +33,20 @@ import {
 import {
     createTagCategoryButton,
     nameInput,
-    nameHelper,
-    dropdownMenuToggle,
+    tagCategoryNameHelper,
     rankInput,
     rankHelper,
     positiveRankMsg,
-    colorHelper,
+    dropdownMenuTypeToggle,
 } from "../../../../../views/tags.view";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 
 import * as commonView from "../../../../../views/common.view";
 import * as data from "../../../../../../utils/data_utils";
-import { modal } from "../../../../../views/common.view";
 
 describe(["@tier2"], "Tag category validations", () => {
     before("Login", function () {
-        // Perform login
         login();
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
     });
 
     it("Tag type field validations", function () {
@@ -69,21 +56,20 @@ describe(["@tier2"], "Tag category validations", () => {
 
         // Name constraints
         inputText(nameInput, data.getRandomWord(2));
-        cy.get(nameHelper).should("contain", minCharsMsg);
+        cy.get(tagCategoryNameHelper).should("contain", minCharsMsg);
         inputText(nameInput, data.getRandomWords(40));
-        cy.get(nameHelper).should("contain", max40CharMsg);
+        cy.get(tagCategoryNameHelper).should("contain", max40CharMsg);
 
         // Rank constraint
         inputText(rankInput, data.getRandomNumber(-10, -20));
         cy.get(rankHelper).should("contain", positiveRankMsg);
 
-        // Color constraints
-        cy.get(colorHelper).should("contain", fieldReqMsg);
+        cy.get(commonView.submitButton).should("be.disabled");
 
         // Validate the create button is enabled with valid inputs
         inputText(nameInput, data.getRandomWord(6));
         inputText(rankInput, data.getRandomNumber(5, 15));
-        clickWithin(modal, dropdownMenuToggle);
+        click(dropdownMenuTypeToggle);
         clickByText(button, data.getColor());
         cy.get(commonView.submitButton).should("not.be.disabled");
 
@@ -114,7 +100,7 @@ describe(["@tier2"], "Tag category validations", () => {
         cy.contains(button, createTagCategoryButton).should("exist");
     });
 
-    it("Tag category unique constraint validation", function () {
+    it("Tag category success alert and unique constraint validation", function () {
         selectUserPerspective(migration);
         const tagCategory = new TagCategory(
             data.getRandomWord(5),
@@ -124,6 +110,10 @@ describe(["@tier2"], "Tag category validations", () => {
 
         // Create a new tag type
         tagCategory.create();
+        checkSuccessAlert(
+            commonView.successAlertMessage,
+            "Success alert:Tag category was successfully created."
+        );
         cy.wait(2000);
 
         // Click "Create tag category" button
@@ -131,13 +121,12 @@ describe(["@tier2"], "Tag category validations", () => {
 
         // Check tag category name duplication
         inputText(nameInput, tagCategory.name);
-        clickWithin(modal, dropdownMenuToggle);
+        click(dropdownMenuTypeToggle);
         clickByText(button, data.getColor());
-        cy.get(nameHelper).should("contain.text", duplicateTagTypeName);
+        cy.get(tagCategoryNameHelper).should("contain.text", duplicateTagTypeName);
         cy.get(commonView.closeButton).click();
 
         // Delete created tag
         tagCategory.delete();
-        cy.wait(2000);
     });
 });

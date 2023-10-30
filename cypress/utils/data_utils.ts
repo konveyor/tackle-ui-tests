@@ -14,15 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import * as faker from "faker";
-import { CredentialType, CustomRuleType, UserCredentials } from "../e2e/types/constants";
+import { CredentialType, CustomRuleType, JiraType, UserCredentials } from "../e2e/types/constants";
 import { writeGpgKey, writeMavenSettingsFile } from "./utils";
 import {
     CredentialsData,
+    CredentialsJiraData,
+    JiraConnectionData,
     ProxyData,
-    UserData,
     RulesManualFields,
     RulesRepositoryFields,
+    UserData,
 } from "../e2e/types/types";
+import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title
@@ -108,25 +111,42 @@ export function getDefaultTagCategories(): string[] {
         "Runtime",
     ];
 }
+/**
+ * Generates random URL
+ *
+ * @param length length of URL between "https://" and domain ".com"
+ */
+export function getRandomUrl(length = 6): string {
+    return "https://" + getRandomWord(length).toLowerCase() + ".com";
+}
 
+/**
+ * Generates credentials of defined type and sends it back
+ *
+ * @param type is type of credentials to be generated.
+ * @param userCred defines type of source credentials. Optional.
+ * @param useTestingAccount defines if returned user credentials are random (when false) or real test user (when true)
+ * @param url is used for Maven credentials type. Optional.
+ * @returns CredentialsData of selected type.
+ */
 export function getRandomCredentialsData(
     type: string,
     userCred?: string,
-    gitTestingUser = false,
+    useTestingAccount = false,
     url?: string
 ): CredentialsData {
-    let password;
-    let user;
-
-    if (gitTestingUser) {
-        user = Cypress.env("git_user");
-        password = Cypress.env("git_password");
-    } else {
-        user = getRandomWord(6);
-        password = getRandomWord(6);
-    }
+    let password = getRandomWord(6);
+    let user = getRandomWord(6);
+    let email = getEmail();
+    //TODO: This value is set to 20 to avoid a bug https://issues.redhat.com/browse/MTA-717. Need to be updated to 200 when bug is fixed
+    let token = getRandomWord(20);
+    let key = getRandomWord(20);
 
     if (type === CredentialType.proxy) {
+        if (useTestingAccount) {
+            user = "redhat";
+            password = "redhat";
+        }
         return {
             type: type,
             name: getRandomWord(6),
@@ -135,6 +155,33 @@ export function getRandomCredentialsData(
             password: password,
         };
     }
+
+    if (type === CredentialType.jiraBasic) {
+        if (useTestingAccount) {
+            email = Cypress.env("jira_atlassian_cloud_email");
+            token = Cypress.env("jira_atlassian_cloud_token");
+        }
+        return {
+            type: type,
+            name: getRandomWord(6),
+            description: getDescription(),
+            email: email,
+            token: token,
+        };
+    }
+
+    if (type === CredentialType.jiraToken) {
+        if (useTestingAccount) {
+            key = Cypress.env("jira_stage_bearer_token");
+        }
+        return {
+            type: type,
+            name: getRandomWord(6),
+            description: getDescription(),
+            key: key,
+        };
+    }
+
     if (type === CredentialType.sourceControl) {
         if (userCred === UserCredentials.sourcePrivateKey) {
             // Source control - gpg key and passphrase
@@ -148,6 +195,10 @@ export function getRandomCredentialsData(
             };
         } else {
             // Source Control - username and password
+            if (useTestingAccount) {
+                user = Cypress.env("git_user");
+                password = Cypress.env("git_password");
+            }
             return {
                 type: type,
                 name: getRandomWord(6),
@@ -158,12 +209,8 @@ export function getRandomCredentialsData(
         }
     } else {
         // Maven credentials
-        if (gitTestingUser) {
-            if (url) {
-                writeMavenSettingsFile(user, password, url);
-            } else {
-                writeMavenSettingsFile(user, password);
-            }
+        if (useTestingAccount) {
+            writeMavenSettingsFile(Cypress.env("git_user"), Cypress.env("git_password"), url);
         }
         return {
             type: type,
@@ -172,6 +219,84 @@ export function getRandomCredentialsData(
             settingFile: "xml/settings.xml",
         };
     }
+}
+
+/**
+ * This function returns JiraConnectionData
+ *
+ * @param jiraCredential credential used to build Jira connection. Can be either JiraCredentialsBasic or JiraCredentialsBearer
+ * @param jiraType is type of Jira account that should be returned
+ * @param isInsecure if true - selfsigned certificates will be accepted
+ * @param useTestingAccount if true - real connection data will be used, otherwise dummy data will be added
+ *
+ */
+export function getJiraConnectionData(
+    jiraCredential: JiraCredentials,
+    jiraType = JiraType.cloud,
+    isInsecure?: boolean,
+    useTestingAccount = false
+): JiraConnectionData {
+    let name: string;
+    let url: string;
+    let type = jiraType;
+
+    if (type === JiraType.cloud) {
+        url = useTestingAccount ? Cypress.env("jira_atlassian_cloud_url") : getRandomUrl(6);
+    } else {
+        url = useTestingAccount ? Cypress.env("jira_stage_datacenter_url") : getRandomUrl(6);
+    }
+
+    name = "Jira_" + getRandomWord(5);
+
+    return {
+        credential: jiraCredential,
+        isInsecure: isInsecure,
+        name: name,
+        type: type,
+        url: url,
+    };
+}
+
+/**
+ * This function returns Jira credentials, either JiraCredentialsBasic or JiraCredentialsBearer
+ *
+ * @param accountType Type of account, it can be Cloud or Datacenter/Server
+ * @param useTestingAccount if true - real credential data will be used, otherwise dummy data will be added
+ * @param isStage should be `true` when using Stage Jira and false when using Cloud Jira
+ *
+ */
+export function getJiraCredentialData(
+    accountType: string,
+    useTestingAccount = false,
+    isStage = false
+): CredentialsJiraData {
+    let accountName = "Jira_" + getRandomWord(6);
+    let description = getDescription();
+    let email = getEmail();
+    let token = getRandomWord(20);
+
+    if (useTestingAccount) {
+        if (accountType === CredentialType.jiraBasic) {
+            if (!isStage) {
+                email = Cypress.env("jira_atlassian_cloud_email");
+                token = Cypress.env("jira_atlassian_cloud_token");
+            } else {
+                email = Cypress.env("jira_stage_basic_login");
+                token = Cypress.env("jira_stage_basic_password");
+            }
+        } else {
+            // email field not present for bearer auth
+            email = null;
+            token = Cypress.env("jira_stage_bearer_token");
+        }
+    }
+    return {
+        type: accountType,
+        name: accountName,
+        description: description,
+        email: email,
+        token: token,
+    };
 }
 
 export function getRandomProxyData(credentials?: CredentialsData): ProxyData {

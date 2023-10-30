@@ -15,29 +15,16 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    login,
-    exists,
-    notExists,
-    hasToBeSkipped,
-    preservecookies,
-    selectUserPerspective,
-} from "../../../../../../utils/utils";
+import { login, exists, notExists, selectUserPerspective } from "../../../../../../utils/utils";
 import { Tag } from "../../../../../models/migration/controls/tags";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 
 import * as data from "../../../../../../utils/data_utils";
-import { color, migration, rank, tagCategory, tagCount } from "../../../../../types/constants";
+import { color, migration, rank, tagCount } from "../../../../../types/constants";
 
 describe(["@tier1"], "Tag tagCategory CRUD operations", () => {
     before("Login", function () {
-        // Perform login
         login();
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
     });
 
     it("Tag Category CRUD", function () {
@@ -71,8 +58,6 @@ describe(["@tier1"], "Tag tagCategory CRUD operations", () => {
         // Delete tag category
         tagCategory.delete();
         cy.wait(2000);
-
-        // Assert that tag category got deleted
         notExists(tagCategory.name);
     });
 
@@ -105,11 +90,8 @@ describe(["@tier1"], "Tag tagCategory CRUD operations", () => {
             tagCategory.assertColumnValue(tagCount, tagAmount.toString());
         }
 
-        // Delete tag category
         tagCategory.delete();
         cy.wait(2000);
-
-        // Assert that tag category got deleted
         notExists(tagCategory.name);
     });
 });

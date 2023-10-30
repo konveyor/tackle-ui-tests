@@ -19,21 +19,15 @@ import {
     login,
     clickByText,
     exists,
-    preservecookies,
     click,
     applySearchFilter,
     selectItemsPerPage,
-    hasToBeSkipped,
     createMultipleJobFunctions,
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
-    selectUserPerspective,
     deleteByList,
 } from "../../../../../utils/utils";
-import { navMenu, navTab } from "../../../../views/menu.view";
 import {
-    controls,
-    stakeholders,
     button,
     tdTag,
     trTag,
@@ -42,7 +36,6 @@ import {
     jobFunction,
     group,
     clearAllFilters,
-    migration,
 } from "../../../../types/constants";
 
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
@@ -50,6 +43,7 @@ import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 
 import * as commonView from "../../../../views/common.view";
+import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let jobFunctionsList: Array<Jobfunctions> = [];
@@ -58,31 +52,12 @@ let invalidSearchInput = "SomeInvalidInput";
 
 describe(["@tier2"], "Stakeholder filter validations", function () {
     before("Login and Create Test Data", function () {
-        // Prevent before hook from running, if the tag is excluded from run
-
-        // Perform login
         login();
 
         // Create multiple job functions, stakeholder groups and stakeholders
         jobFunctionsList = createMultipleJobFunctions(2);
         stakeholderGroupsList = createMultipleStakeholderGroups(2);
         stakeholdersList = createMultipleStakeholders(2, jobFunctionsList, stakeholderGroupsList);
-    });
-
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
-        // Interceptors
-    });
-
-    after("Perform test data clean up", function () {
-        // Prevent before hook from running, if the tag is excluded from run
-
-        // Delete the job functions, stakeholder groups and stakeholders created before the tests
-        deleteByList(jobFunctionsList);
-        deleteByList(stakeholdersList);
-        deleteByList(stakeholderGroupsList);
     });
 
     it("Email filter validations", function () {
@@ -94,9 +69,9 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         applySearchFilter(email, validSearchInput);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
-        exists(stakeholdersList[0].email);
+        exists(stakeholdersList[0].email, stakeHoldersTable);
         if (stakeholdersList[1].email.indexOf(validSearchInput) >= 0) {
-            exists(stakeholdersList[1].email);
+            exists(stakeholdersList[1].email, stakeHoldersTable);
         }
 
         // Clear all filters
@@ -106,7 +81,7 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         applySearchFilter(email, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No stakeholders available");
+        cy.get("h2").contains("No stakeholder available");
 
         clickByText(button, clearAllFilters);
     });
@@ -120,9 +95,9 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         applySearchFilter(name, validSearchInput);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
-        exists(stakeholdersList[0].name);
+        exists(stakeholdersList[0].name, stakeHoldersTable);
         if (stakeholdersList[1].name.indexOf(validSearchInput) >= 0) {
-            exists(stakeholdersList[1].name);
+            exists(stakeholdersList[1].name, stakeHoldersTable);
         }
 
         // Clear all filters
@@ -132,7 +107,7 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         applySearchFilter(name, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No stakeholders available");
+        cy.get("h2").contains("No stakeholder available");
 
         clickByText(button, clearAllFilters);
     });
@@ -154,7 +129,7 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
             .should("contain", stakeholdersList[0].jobfunction);
 
         if (stakeholdersList[1].jobfunction.indexOf(validSearchInput) >= 0) {
-            exists(stakeholdersList[1].email);
+            exists(stakeholdersList[1].email, stakeHoldersTable);
         }
 
         // Clear all filters
@@ -164,7 +139,7 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         applySearchFilter(jobFunction, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No stakeholders available");
+        cy.get("h2").contains("No stakeholder available");
 
         clickByText(button, clearAllFilters);
     });
@@ -189,7 +164,7 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
             .should("contain", stakeholdersList[0].groups[0]);
 
         if (stakeholdersList[1].groups[0].indexOf(validSearchInput) >= 0) {
-            exists(stakeholdersList[1].email);
+            exists(stakeholdersList[1].email, stakeHoldersTable);
         }
 
         // Clear all filters
@@ -199,8 +174,14 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         applySearchFilter(group, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No stakeholders available");
+        cy.get("h2").contains("No stakeholder available");
 
         clickByText(button, clearAllFilters);
+    });
+
+    after("Perform test data clean up", function () {
+        deleteByList(stakeholdersList);
+        deleteByList(stakeholderGroupsList);
+        deleteByList(jobFunctionsList);
     });
 });

@@ -17,14 +17,13 @@ limitations under the License.
 
 import {
     login,
-    hasToBeSkipped,
-    preservecookies,
-    deleteApplicationTableRows,
     deleteAllBusinessServices,
     getRandomApplicationData,
     getRandomAnalysisData,
     writeMavenSettingsFile,
     resetURL,
+    deleteByList,
+    checkSuccessAlert,
 } from "../../../../../utils/utils";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
@@ -37,23 +36,17 @@ import {
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../../models/administration/credentials/credentialsSourceControlKey";
-import { Proxy } from "../../../../models/administration/proxy/proxy";
 import { MavenConfiguration } from "../../../../models/administration/repositories/maven";
+import { infoAlertMessage } from "../../../../views/common.view";
 let source_credential;
 let maven_credential;
 const mavenConfiguration = new MavenConfiguration();
+var applicationsList: Array<Analysis> = [];
 
 describe(["@tier1"], "Source Analysis", () => {
     before("Login", function () {
-        // Perform login
         login();
-        deleteApplicationTableRows();
 
-        //Disable all proxy settings
-        Proxy.disableAllProxies();
-
-        // Clears artifact repository
-        mavenConfiguration.clearRepository();
         // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
@@ -66,15 +59,12 @@ describe(["@tier1"], "Source Analysis", () => {
 
         // Create Maven credentials
         maven_credential = new CredentialsMaven(
-            data.getRandomCredentialsData(CredentialType.maven, "None", true)
+            data.getRandomCredentialsData(CredentialType.maven, null, true)
         );
         maven_credential.create();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
+    beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -92,13 +82,7 @@ describe(["@tier1"], "Source Analysis", () => {
         resetURL();
     });
 
-    after("Perform test data clean up", function () {
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
-        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
-    });
-
-    it("Source Analysis on bookserver app without credentials", function () {
+    it("Source Analysis on bookserver app and success alert validation", function () {
         // For source code analysis application must have source code URL git or svn
         cy.log(this.analysisData[0]);
         const application = new Analysis(
@@ -108,9 +92,11 @@ describe(["@tier1"], "Source Analysis", () => {
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
+        checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
         application.verifyAnalysisStatus("Completed");
         application.openReport();
     });
@@ -124,6 +110,7 @@ describe(["@tier1"], "Source Analysis", () => {
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.manageCredentials(source_credential.name, maven_credential.name);
@@ -141,6 +128,7 @@ describe(["@tier1"], "Source Analysis", () => {
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
@@ -157,9 +145,10 @@ describe(["@tier1"], "Source Analysis", () => {
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials("None", maven_credential.name);
+        application.manageCredentials(null, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
@@ -174,9 +163,10 @@ describe(["@tier1"], "Source Analysis", () => {
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, "None");
+        application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
@@ -198,9 +188,10 @@ describe(["@tier1"], "Source Analysis", () => {
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(scCredsKey.name, "None");
+        application.manageCredentials(scCredsKey.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
@@ -215,9 +206,10 @@ describe(["@tier1"], "Source Analysis", () => {
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, "None");
+        application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();
@@ -232,6 +224,7 @@ describe(["@tier1"], "Source Analysis", () => {
             getRandomAnalysisData(this.analysisData["analysis_for_openSourceLibraries"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.manageCredentials(source_credential.name, maven_credential.name);
@@ -241,8 +234,7 @@ describe(["@tier1"], "Source Analysis", () => {
     });
 
     it("Automated tagging using Source Analysis on tackle testapp", function () {
-        // For tackle test app source credentials are required.
-        // Automates https://polarion.engineering.redhat.com/polarion/#/project/MTAPathfinder/workitem?id=MTA-298
+        // Automates Polarion MTA-208
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source_autoTagging", {
                 sourceData: this.appData["tackle-testapp-git"],
@@ -250,14 +242,17 @@ describe(["@tier1"], "Source Analysis", () => {
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
-        application.manageCredentials(source_credential.name, "None");
+        application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        application.applicationDetailsTab("Tags");
         application.tagAndCategoryExists(
             this.analysisData["analysis_for_enableTagging"]["techTags"]
         );
+        application.closeApplicationDetails();
     });
 
     it("Disable Automated tagging using Source Analysis on tackle testapp", function () {
@@ -269,6 +264,7 @@ describe(["@tier1"], "Source Analysis", () => {
             getRandomAnalysisData(this.analysisData["analysis_for_disableTagging"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -285,10 +281,17 @@ describe(["@tier1"], "Source Analysis", () => {
             getRandomAnalysisData(this.analysisData["analysis_on_example-1-app"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
         application.openReport();
+    });
+
+    after("Perform test data clean up", function () {
+        deleteByList(applicationsList);
+        deleteAllBusinessServices();
+        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 });
