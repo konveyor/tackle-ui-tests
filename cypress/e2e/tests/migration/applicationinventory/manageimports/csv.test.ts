@@ -15,7 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { cleanupDownloads, click, login, openManageImportsPage } from "../../../../../utils/utils";
+import { cleanupDownloads, login, openManageImportsPage } from "../../../../../utils/utils";
 import { kebabMenuItem } from "../../../../views/applicationinventory.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { manageImportsActionsButton } from "../../../../views/common.view";
@@ -27,10 +27,17 @@ describe(["@tier2"], "Manage imports tests", function () {
         openManageImportsPage();
     });
 
-    it("Download CSV template", function () {
+    it("Bug MTA-1592: Download CSV template", function () {
         cy.get(manageImportsActionsButton).eq(0).click({ force: true });
+        cy.get(kebabMenuItem)
+            .contains("Download CSV template")
+            .parent()
+            .parent()
+            .then(($a) => {
+                $a.attr("download", ""); // TODO: remove this workaround once the bug is fixed
+            })
+            .click();
         cy.wait(2000);
-        cy.get(kebabMenuItem).contains("Download CSV template").click();
         cy.readFile("cypress/downloads/template_application_import.csv").should(
             "contain",
             "Customers"
