@@ -79,7 +79,7 @@ describe(["@tier1"], "Source Analysis", () => {
         resetURL();
     });
 
-    it(["@tier0"], "Source Analysis on bookserver app and success alert validation", function () {
+    it("Source Analysis on bookserver app and success alert validation", function () {
         // For source code analysis application must have source code URL git or svn
         cy.log(this.analysisData[0]);
         const application = new Analysis(
