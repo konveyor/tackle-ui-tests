@@ -59,7 +59,6 @@ describe(["@tier1"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-
     after("Perform test data clean up", function () {
         deleteByList(applicationsList);
     });
