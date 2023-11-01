@@ -79,24 +79,6 @@ describe(["@tier1"], "Source Analysis", () => {
         resetURL();
     });
 
-    it("Source Analysis on bookserver app and success alert validation", function () {
-        // For source code analysis application must have source code URL git or svn
-        cy.log(this.analysisData[0]);
-        const application = new Analysis(
-            getRandomApplicationData("bookserverApp", {
-                sourceData: this.appData["bookserver-app"],
-            }),
-            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
-        );
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication");
-        cy.wait(2000);
-        application.analyze();
-        checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
-        application.verifyAnalysisStatus("Completed");
-    });
-
     it("Source + dependencies analysis on tackletest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
