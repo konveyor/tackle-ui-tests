@@ -24,7 +24,7 @@ import {
     clickOnSortButton,
     deleteByList,
 } from "../../../../../utils/utils";
-import { name, tagCount, SortType, businessService } from "../../../../types/constants";
+import { name, tags, SortType, businessService } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
@@ -112,22 +112,22 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         cy.wait("@getApplications");
 
         // get unsorted list when page loads
-        const unsortedList = getTableColumnData(tagCount);
+        const unsortedList = getTableColumnData(tags);
 
         // Sort the application inventory by Tag count in ascending order
-        clickOnSortButton(tagCount, SortType.ascending);
+        clickOnSortButton(tags, SortType.ascending);
         cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in ascending order
-        const afterAscSortList = getTableColumnData(tagCount);
+        const afterAscSortList = getTableColumnData(tags);
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the application inventory by tags in descending order
-        clickOnSortButton(tagCount, SortType.descending);
+        clickOnSortButton(tags, SortType.descending);
         cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in descending order
-        const afterDescSortList = getTableColumnData(tagCount);
+        const afterDescSortList = getTableColumnData(tags);
         verifySortDesc(afterDescSortList, unsortedList);
     });
 

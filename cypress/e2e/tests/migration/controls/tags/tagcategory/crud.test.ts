@@ -27,7 +27,7 @@ describe(["@tier1"], "Tag tagCategory CRUD operations", () => {
         login();
     });
 
-    it("MTA-1195 | Tag Category CRUD", function () {
+    it("Tag Category CRUD", function () {
         selectUserPerspective("Migration");
 
         // Create new tag category
