@@ -79,7 +79,7 @@ describe(["@tier1"], "Source Analysis", () => {
         resetURL();
     });
 
-    it("Source Analysis on bookserver app and success alert validation", function () {
+    it(["@tier0"], "Source Analysis on bookserver app and success alert validation", function () {
         // For source code analysis application must have source code URL git or svn
         cy.log(this.analysisData[0]);
         const application = new Analysis(
@@ -222,7 +222,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it(["@tier0"], "Automated tagging using Source Analysis on tackle testapp", function () {
+    it("Automated tagging using Source Analysis on tackle testapp", function () {
         // Automates Polarion MTA-208
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source_autoTagging", {
