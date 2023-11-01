@@ -26,7 +26,7 @@ import { Analysis } from "../../../../models/migration/applicationinventory/anal
 import { infoAlertMessage } from "../../../../views/common.view";
 let applicationsList: Array<Analysis> = [];
 
-describe(["@tier1"], "Source Analysis", () => {
+describe("Source Analysis without credentials", () => {
     before("Load data", function () {
         login();
         cy.fixture("application").then(function (appData) {
