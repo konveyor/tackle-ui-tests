@@ -44,7 +44,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it.only("Application assessment and review with low risk", function () {
+    it("Application assessment and review with low risk", function () {
         // Navigate to application inventory tab and create new application
         const application = new Assessment(getRandomApplicationData());
         application.create();
