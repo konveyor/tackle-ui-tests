@@ -434,21 +434,9 @@ export class Assessment extends Application {
     discard_assessment(): void {
         Assessment.open();
         selectItemsPerPage(100);
-        cy.wait(2 * SEC);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(actionButton);
-                cy.wait(500);
-                clickByText(button, "Discard assessment");
-            });
+        this.selectApplication();
+        clickItemInKebabMenu(this.name, "Discard assessment/review");
         cy.get(continueButton).click();
-        checkSuccessAlert(
-            commonView.successAlertMessage,
-            `Success! Assessment discarded for ${this.name}.`
-        );
     }
 
     selectApps(applicationList: Array<Application>): void {
