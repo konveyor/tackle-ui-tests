@@ -44,6 +44,20 @@ let projectName = "";
  */
 describe(["@tier1", "@interop"], "Export Migration Wave to Jira Cloud", function () {
     before("Create test data", function () {
+        if (
+            !Cypress.env("jira_atlassian_cloud_project") ||
+            !Cypress.env("jira_atlassian_cloud_email") ||
+            !Cypress.env("jira_atlassian_cloud_token") ||
+            !Cypress.env("jira_atlassian_cloud_url")
+        ) {
+            expect(
+                true,
+                `
+                    Some configurations required for this test are missing, please ensure that you've properly configured the following parameters in the cypres.config.ts file:\n
+                    jira_atlassian_cloud_project\njira_atlassian_cloud_email\njira_atlassian_cloud_token\njira_atlassian_cloud_url
+                `
+            ).to.eq(false);
+        }
         login();
 
         jiraCloudCredentials = new JiraCredentials(
