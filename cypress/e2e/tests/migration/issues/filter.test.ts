@@ -51,7 +51,6 @@ describe(["@tier2"], "Issues filtering", () => {
         );
         application.create();
         applicationsList.push(application);
-        cy.wait("@getApplication");
         cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
