@@ -52,7 +52,7 @@ describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
             expect(
                 true,
                 `
-                    Some configurations required for this test are missing, please ensure that you've properly configured the following parameters in the cypres.config.ts file:\n
+                    Some configurations required for this test are missing, please ensure that you've properly configured the following parameters in the cypress.config.ts file:\n
                     jira_stage_datacenter_project_id\njira_stage_bearer_token\njira_stage_datacenter_url
                 `
             ).to.eq(false);
