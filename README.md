@@ -53,6 +53,10 @@ Below is a list of tests and the parameters they require.
 - `jira_atlassian_cloud_token`
 - `jira_atlassian_cloud_url`
 
+`source_analysis.test.ts` & `binary_analysis.test.ts`
+- `git_user`
+- `git_password`
+
 #### Code formatting using Prettier tool
 
 1. Format code
