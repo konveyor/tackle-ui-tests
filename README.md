@@ -37,6 +37,26 @@
 
     `npx cypress open`
 
+#### Required Parameters for Tests
+
+Some tests require certain configuration parameters to be correctly defined in the `cypress.config.ts` file.
+Below is a list of tests and the parameters they require.
+
+`export_to_jira_datacenter.test.ts`
+ - `jira_stage_datacenter_project_id`
+ - `jira_stage_bearer_token`
+ - `jira_stage_datacenter_url`
+
+`export_to_jira_cloud.test.ts`
+- `jira_atlassian_cloud_project`
+- `jira_atlassian_cloud_email`
+- `jira_atlassian_cloud_token`
+- `jira_atlassian_cloud_url`
+
+`source_analysis.test.ts` & `binary_analysis.test.ts`
+- `git_user`
+- `git_password`
+
 #### Code formatting using Prettier tool
 
 1. Format code
