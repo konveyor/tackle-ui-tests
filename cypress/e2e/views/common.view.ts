@@ -55,7 +55,7 @@ export const helperBusiness = 'span[class*="helper-text__item"]';
 export const stakeHolderGroupHelper = "div.pf-v5-c-helper-text";
 export const actionMenuItem = "span.pf-v5-c-menu__item-text";
 export const kebabMenuItem = "a.pf-c-dropdown__menu-item";
-export const commonTable = "table[class='pf-v5-c-table pf-m-grid-md']";
+export const commonTable = "table.pf-v5-c-table.pf-m-grid-md";
 export const dropdownClearSelection = "pf-v5-c-select__toggle-clear";
 export const footer = "footer";
 export const manageImportsActionsButton = "button[aria-label='Table toolbar actions kebab toggle']";
