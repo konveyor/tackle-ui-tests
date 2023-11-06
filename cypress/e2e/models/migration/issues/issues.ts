@@ -36,6 +36,8 @@ export class Issues {
         selectItemsPerPage(itemsPerPage);
     }
 
+    public static openSingleApplication(applicationName: string): void {}
+
     public static filterBy(item: string, itemName: string | string[]): void {
         //TODO: Refactor this after bug https://issues.redhat.com/browse/MTA-1465 will be fixed
         const selectorMap: Record<string, string> = {
