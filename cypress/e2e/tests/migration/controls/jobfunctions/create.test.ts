@@ -53,11 +53,11 @@ describe(["@tier2"], "Job Function Validations", () => {
 
         // Name constraints
         inputText(jobfunctionNameInput, " ");
-        cy.get(commonView.nameHelper).should("contain", "This field is required.");
+        cy.get(commonView.helper).should("contain", "This field is required.");
         inputText(jobfunctionNameInput, data.getRandomWord(2));
-        cy.get(commonView.nameHelper).should("contain", minCharsMsg);
+        cy.get(commonView.helper).should("contain", minCharsMsg);
         inputText(jobfunctionNameInput, data.getRandomWords(90));
-        cy.get(commonView.nameHelper).should("contain", max120CharsMsg);
+        cy.get(commonView.helper).should("contain", max120CharsMsg);
         inputText(jobfunctionNameInput, data.getRandomWord(10));
         cy.get(commonView.submitButton).should("not.be.disabled");
         cy.get(commonView.cancelButton).click();
@@ -76,7 +76,7 @@ describe(["@tier2"], "Job Function Validations", () => {
         clickByText(button, createNewButton);
         inputText(jobfunctionNameInput, jobfunction.name);
         cy.get(commonView.submitButton).should("be.disabled");
-        cy.get(commonView.nameHelper).should("contain.text", duplicateJobFunctionName);
+        cy.get(commonView.helper).should("contain.text", duplicateJobFunctionName);
 
         // Delete created jobfunction
         cy.get(commonView.closeButton).click();
