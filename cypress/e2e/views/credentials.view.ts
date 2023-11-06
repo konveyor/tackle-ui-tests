@@ -28,7 +28,6 @@ export const filterCatCreatedBy = "#filter-category-createdBy";
 export const filterNameInput = "#name-input";
 export const filterCreatedByInput = "#createdBy-input";
 export const filterSelectType = "#type-filter-value-select";
-export const filterSubmitButton = "button.pf-c-button.pf-m-control";
 export const searchButton = "#search-button";
 export const modalBoxBody = "#confirm-dialog";
 export enum credLabels {
