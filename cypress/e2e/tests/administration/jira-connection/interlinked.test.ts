@@ -26,7 +26,6 @@ import { button, CredentialType, JiraType, SEC } from "../../../types/constants"
 import { JiraConnectionData } from "../../../types/types";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
-import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 
 describe(["@tier2"], "Jira connection negative tests", () => {
@@ -47,7 +46,6 @@ describe(["@tier2"], "Jira connection negative tests", () => {
     now.setDate(now.getDate() + 1);
     const end = new Date(now.getTime());
     end.setFullYear(end.getFullYear() + 1);
-    let migrationWave: MigrationWave;
 
     before("Login and create required credentials", function () {
         login();
@@ -111,7 +109,7 @@ describe(["@tier2"], "Jira connection negative tests", () => {
         /**
          Implements MTA-362 - Add JIRA instance with invalid credentials
          Automates https://issues.redhat.com/browse/MTA-991
-        */
+         */
         jiraCloudConnectionIncorrect.create();
         jiraCloudConnectionIncorrect.validateState(expectedToFail);
         cy.wait(30 * SEC);
@@ -140,8 +138,6 @@ describe(["@tier2"], "Jira connection negative tests", () => {
     });
 
     after("Clean up data", () => {
-        migrationWave.delete();
-        cy.wait("@deleteWave");
         jiraCloudConnectionIncorrect.delete();
         jiraBasicCredentialInvalid.delete();
         deleteByList(applicationList);
