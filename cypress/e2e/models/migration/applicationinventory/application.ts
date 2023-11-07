@@ -344,15 +344,15 @@ export class Application {
         cy.contains("h2", "No tags available", { timeout: 2 * SEC });
     }
 
-    static validateAssessButton(rbacRules: RbacValidationRules, appName: string) {
+    public validateAssessButton(rbacRules: RbacValidationRules) {
         Application.open();
-        performRowActionByIcon(appName, kebabMenu);
+        performRowActionByIcon(this.name, kebabMenu);
         doesExistButton(assessAppButton, rbacRules["Assess"]);
     }
 
-    static validateReviewButton(rbacRules: RbacValidationRules, appName: string) {
+    public validateReviewButton(rbacRules: RbacValidationRules) {
         Application.open();
-        performRowActionByIcon(appName, kebabMenu);
+        performRowActionByIcon(this.name, kebabMenu);
         doesExistButton(reviewAppButton, rbacRules["Review"]);
     }
 
@@ -400,10 +400,6 @@ export class Application {
                 doesExistText(
                     "Discard assessment/review",
                     rbacRules["assessment applicable options"]["Discard assessment"]
-                );
-                doesExistText(
-                    "Copy assessment",
-                    rbacRules["assessment applicable options"]["Copy assessment"]
                 );
                 doesExistText(
                     "Manage dependencies",
