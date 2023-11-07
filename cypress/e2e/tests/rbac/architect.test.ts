@@ -18,20 +18,16 @@ limitations under the License.
 import { User } from "../../models/keycloak/users/user";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
-import { deleteByList, getRandomApplicationData, login, logout } from "../../../utils/utils";
+import { getRandomApplicationData, login, logout } from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
-import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
-import * as data from "../../../utils/data_utils";
 
 describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
     let userArchitect = new UserArchitect(getRandomUserData());
     const application = new Assessment(getRandomApplicationData());
-    let stakeholdersList: Array<Stakeholders> = [];
-    let stakeholderNameList: Array<string> = [];
 
     let appCredentials = new CredentialsSourceControlUsername(
         getRandomCredentialsData(CredentialType.sourceControl)
@@ -39,15 +35,9 @@ describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
 
     before("Creating RBAC users, adding roles for them", function () {
         login();
-        // Navigate to stakeholders control tab and create new stakeholder
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-        stakeholder.create();
-        stakeholdersList.push(stakeholder);
-        stakeholderNameList.push(stakeholder.name);
-
         appCredentials.create();
         application.create();
-        application.perform_assessment("low", stakeholderNameList);
+        application.perform_review("low");
         logout();
         User.loginKeycloakAdmin();
         userArchitect.create();
@@ -69,12 +59,12 @@ describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
 
     it("Architect, validate assess application button", function () {
         //Architect is allowed to create applications
-        Application.validateAssessButton(this.rbacRules);
+        application.validateAssessButton(this.rbacRules);
     });
 
     it("Architect, validate review application button", function () {
         //Architect is allowed to review applications
-        Application.validateReviewButton(this.rbacRules);
+        application.validateReviewButton(this.rbacRules);
     });
 
     it("Architect, validate presence of import and manage imports", function () {
@@ -104,7 +94,6 @@ describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
         login();
         appCredentials.delete();
         application.delete();
-        deleteByList(stakeholdersList);
         logout();
         User.loginKeycloakAdmin();
         userArchitect.delete();

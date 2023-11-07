@@ -18,20 +18,16 @@ limitations under the License.
 import { User } from "../../models/keycloak/users/user";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
-import { deleteByList, getRandomApplicationData, login, logout } from "../../../utils/utils";
+import { getRandomApplicationData, login, logout } from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
-import { Stakeholders } from "../../models/migration/controls/stakeholders";
-import * as data from "../../../utils/data_utils";
 
 describe(["@tier2", "@rhsso"], "Migrator RBAC operations", () => {
     let userMigrator = new UserMigrator(getRandomUserData());
     const application = new Assessment(getRandomApplicationData());
-    let stakeholdersList: Array<Stakeholders> = [];
-    let stakeholderNameList: Array<string> = [];
 
     let appCredentials = new CredentialsSourceControlUsername(
         getRandomCredentialsData(CredentialType.sourceControl)
@@ -40,15 +36,9 @@ describe(["@tier2", "@rhsso"], "Migrator RBAC operations", () => {
     before("Creating RBAC users, adding roles for them", () => {
         //Need to log in as admin and create simple app with known name to use it for tests
         login();
-        // Navigate to stakeholders control tab and create new stakeholder
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-        stakeholder.create();
-        stakeholdersList.push(stakeholder);
-        stakeholderNameList.push(stakeholder.name);
-
         appCredentials.create();
         application.create();
-        application.perform_assessment("low", stakeholderNameList);
+        application.perform_review("low");
         logout();
         //Logging in as keycloak admin to create migrator user and test it
         User.loginKeycloakAdmin();
@@ -71,12 +61,12 @@ describe(["@tier2", "@rhsso"], "Migrator RBAC operations", () => {
 
     it("Migrator, validate assess application button", function () {
         //Migrator is not allowed to create applications
-        Application.validateAssessButton(this.rbacRules);
+        application.validateAssessButton(this.rbacRules);
     });
 
     it("Migrator, validate review application button", function () {
         //Migrator is not allowed to review applications
-        Application.validateReviewButton(this.rbacRules);
+        application.validateReviewButton(this.rbacRules);
     });
 
     it("Migrator, validate presence of import and manage imports", function () {
@@ -105,7 +95,6 @@ describe(["@tier2", "@rhsso"], "Migrator RBAC operations", () => {
         login();
         appCredentials.delete();
         application.delete();
-        deleteByList(stakeholdersList);
         logout();
         User.loginKeycloakAdmin();
         userMigrator.delete();

@@ -83,8 +83,8 @@ export const suggestedAdoptionPlan = "Suggested adoption plan";
 export const assessmentQuestionnaires = "Assessment questionnaires";
 
 export const createAppButton = "#create-application";
-export const assessAppButton = "#assess-application";
-export const reviewAppButton = "#review-application";
+export const assessAppButton = "Assess";
+export const reviewAppButton = "Review";
 export const analyzeAppButton = "#analyze-application";
 export const duplicateMigrationWaveError =
     "Danger alert:The migration wave could not be created due to a conflict with an existing wave. Make sure the name and start/end dates are unique and try again.";

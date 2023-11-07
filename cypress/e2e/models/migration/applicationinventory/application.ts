@@ -64,6 +64,7 @@ import {
     doesExistText,
     clickTab,
     clickItemInKebabMenu,
+    doesExistButton,
 } from "../../../../utils/utils";
 import { applicationData, RbacValidationRules } from "../../../types/types";
 import { kebabButton, rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
@@ -343,14 +344,16 @@ export class Application {
         cy.contains("h2", "No tags available", { timeout: 2 * SEC });
     }
 
-    static validateAssessButton(rbacRules: RbacValidationRules) {
+    public validateAssessButton(rbacRules: RbacValidationRules) {
         Application.open();
-        doesExistSelector(assessAppButton, rbacRules["Assess"]);
+        performRowActionByIcon(this.name, kebabMenu);
+        doesExistButton(assessAppButton, rbacRules["Assess"]);
     }
 
-    static validateReviewButton(rbacRules: RbacValidationRules) {
+    public validateReviewButton(rbacRules: RbacValidationRules) {
         Application.open();
-        doesExistSelector(reviewAppButton, rbacRules["Review"]);
+        performRowActionByIcon(this.name, kebabMenu);
+        doesExistButton(reviewAppButton, rbacRules["Review"]);
     }
 
     static validateCreateAppButton(rbacRules: RbacValidationRules) {
@@ -397,10 +400,6 @@ export class Application {
                 doesExistText(
                     "Discard assessment/review",
                     rbacRules["assessment applicable options"]["Discard assessment"]
-                );
-                doesExistText(
-                    "Copy assessment",
-                    rbacRules["assessment applicable options"]["Copy assessment"]
                 );
                 doesExistText(
                     "Manage dependencies",
