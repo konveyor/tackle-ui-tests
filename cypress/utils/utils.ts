@@ -1617,27 +1617,15 @@ export function writeGpgKey(git_key): void {
 }
 
 export function doesExistSelector(selector: string, isAccessible: boolean): void {
-    if (isAccessible) {
-        cy.get(selector).should("exist");
-    } else {
-        cy.get(selector).should("not.exist");
-    }
+    cy.get(selector).should(isAccessible ? "exist" : "not.exist");
 }
 
 export function doesExistText(str: string, toBePresent: boolean): void {
-    if (toBePresent) {
-        cy.contains(str, { timeout: 120 * SEC }).should("exist");
-    } else {
-        cy.contains(str, { timeout: 120 * SEC }).should("not.exist");
-    }
+    cy.contains(str).should(toBePresent ? "exist" : "not.exist");
 }
 
 export function doesExistButton(str: string, toBePresent: boolean): void {
-    if (toBePresent) {
-        cy.contains(button, str).should("exist");
-    } else {
-        cy.contains(button, str).should("not.exist");
-    }
+    cy.contains(button, str).should(toBePresent ? "exist" : "not.exist");
 }
 
 export function enableSwitch(selector: string): void {
