@@ -47,7 +47,7 @@ describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
 
         appCredentials.create();
         application.create();
-        application.perform_assessment("low", stakeholderNameList);
+        application.perform_review("low");
         logout();
         User.loginKeycloakAdmin();
         userArchitect.create();
@@ -69,12 +69,12 @@ describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
 
     it("Architect, validate assess application button", function () {
         //Architect is allowed to create applications
-        Application.validateAssessButton(this.rbacRules);
+        Application.validateAssessButton(this.rbacRules, application.name);
     });
 
     it("Architect, validate review application button", function () {
         //Architect is allowed to review applications
-        Application.validateReviewButton(this.rbacRules);
+        Application.validateReviewButton(this.rbacRules, application.name);
     });
 
     it("Architect, validate presence of import and manage imports", function () {

@@ -34,6 +34,7 @@ import {
     click,
     clickByText,
     clickTab,
+    clickWithin,
     doesExistSelector,
     doesExistText,
     inputText,
@@ -454,7 +455,7 @@ export class Analysis extends Application {
             cy.get(".pf-v5-c-page__main-section")
                 .eq(1)
                 .within(() => {
-                    click(kebabTopMenuButton);
+                    clickWithin(kebabTopMenuButton, button);
                 });
             doesExistText("Import", rbacRules["Action menu"]["Import"]);
             doesExistText("Manage imports", rbacRules["Action menu"]["Manage imports"]);

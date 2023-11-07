@@ -1632,6 +1632,14 @@ export function doesExistText(str: string, toBePresent: boolean): void {
     }
 }
 
+export function doesExistButton(str: string, toBePresent: boolean): void {
+    if (toBePresent) {
+        cy.contains(button, str).should("exist");
+    } else {
+        cy.contains(button, str).should("not.exist");
+    }
+}
+
 export function enableSwitch(selector: string): void {
     cy.get(selector)
         .parent("label")

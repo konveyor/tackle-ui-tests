@@ -64,6 +64,7 @@ import {
     doesExistText,
     clickTab,
     clickItemInKebabMenu,
+    doesExistButton,
 } from "../../../../utils/utils";
 import { applicationData, RbacValidationRules } from "../../../types/types";
 import { kebabButton, rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
@@ -343,14 +344,16 @@ export class Application {
         cy.contains("h2", "No tags available", { timeout: 2 * SEC });
     }
 
-    static validateAssessButton(rbacRules: RbacValidationRules) {
+    static validateAssessButton(rbacRules: RbacValidationRules, appName: string) {
         Application.open();
-        doesExistSelector(assessAppButton, rbacRules["Assess"]);
+        performRowActionByIcon(appName, kebabMenu);
+        doesExistButton(assessAppButton, rbacRules["Assess"]);
     }
 
-    static validateReviewButton(rbacRules: RbacValidationRules) {
+    static validateReviewButton(rbacRules: RbacValidationRules, appName: string) {
         Application.open();
-        doesExistSelector(reviewAppButton, rbacRules["Review"]);
+        performRowActionByIcon(appName, kebabMenu);
+        doesExistButton(reviewAppButton, rbacRules["Review"]);
     }
 
     static validateCreateAppButton(rbacRules: RbacValidationRules) {
