@@ -34,8 +34,9 @@ describe(["@tier2"], "Bulk deletion of applications", () => {
     before("Login", function () {
         login();
         Assessment.open(100, true);
+        createMultipleApplications(1);
         cy.get("tr.pf-m-clickable").then(($rows) => {
-            if ($rows.length > 0) {
+            if ($rows.length > 1) {
                 verifyDeleteButton();
             }
         });
