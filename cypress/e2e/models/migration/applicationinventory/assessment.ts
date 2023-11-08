@@ -14,13 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import { Application } from "./application";
-import {
-    tdTag,
-    trTag,
-    button,
-    review,
-    SEC,
-} from "../../../types/constants";
+import { tdTag, trTag, button, review, SEC } from "../../../types/constants";
 import {
     actionButton,
     selectBox,
