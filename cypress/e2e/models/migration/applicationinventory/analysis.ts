@@ -14,12 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {
-    analysis,
     analyzeAppButton,
     analyzeButton,
-    applicationInventory,
     button,
-    migration,
     ReportTypeSelectors,
     RepositoryType,
     save,
@@ -27,7 +24,6 @@ import {
     tdTag,
     trTag,
 } from "../../../types/constants";
-import { navMenu } from "../../../views/menu.view";
 import {
     cancelForm,
     cleanupDownloads,
@@ -42,8 +38,6 @@ import {
     performRowActionByIcon,
     selectCheckBox,
     selectFormItems,
-    selectItemsPerPage,
-    selectUserPerspective,
     uploadApplications,
     uploadXml,
 } from "../../../../utils/utils";
@@ -151,23 +145,6 @@ export class Analysis extends Application {
         if (openSourceLibraries) this.openSourceLibraries = openSourceLibraries;
     }
 
-    //Navigate to the Application inventory
-    public static open(forceReload = false): void {
-        if (forceReload) {
-            cy.visit(Cypress.env("tackleUrl"));
-        }
-        selectUserPerspective(migration);
-        clickByText(navMenu, applicationInventory);
-        clickTab(analysis);
-        cy.wait(2 * SEC);
-        selectItemsPerPage(100);
-    }
-
-    create(): void {
-        Analysis.open();
-        super.create();
-    }
-
     public selectSourceofAnalysis(source: string): void {
         selectFormItems(sourceDropdown, source);
     }
@@ -269,7 +246,7 @@ export class Analysis extends Application {
     }
 
     analyze(cancel = false): void {
-        Analysis.open();
+        Application.open();
         this.selectApplication();
         if (cancel) {
             cancelForm();
@@ -311,13 +288,13 @@ export class Analysis extends Application {
     }
 
     public static analyzeAll(params: Analysis): void {
-        Analysis.open();
+        Application.open();
         selectCheckBox(bulkApplicationSelectionCheckBox);
         params.startAnalysis();
     }
 
     static validateAnalyzeButton(rbacRules: RbacValidationRules) {
-        Analysis.open();
+        Application.open();
         doesExistSelector(analyzeAppButton, rbacRules["Analyze"]);
     }
 
@@ -366,7 +343,7 @@ export class Analysis extends Application {
     }
 
     downloadReport(type: ReportTypeSelectors) {
-        Analysis.open();
+        Application.open();
         this.selectApplicationRow();
         cy.get(rightSideMenu, { timeout: 30 * SEC }).within(() => {
             clickTab("Reports");
@@ -386,11 +363,6 @@ export class Analysis extends Application {
         performRowActionByIcon(this.name, kebabMenu);
         clickByText(button, analysisDetails);
         cy.wait(2000);
-    }
-
-    delete(cancel = false): void {
-        Analysis.open();
-        super.delete();
     }
 
     manageCredentials(sourceCred?: string, mavenCred?: string): void {
@@ -442,7 +414,7 @@ export class Analysis extends Application {
     }
 
     static validateTopActionMenu(rbacRules: RbacValidationRules) {
-        Analysis.open();
+        Application.open();
         if (rbacRules["Action menu"]["Not available"]) {
             cy.get(".pf-v5-c-page__main-section")
                 .eq(1)
