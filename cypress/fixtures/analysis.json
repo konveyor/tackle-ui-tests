@@ -1,9 +1,17 @@
 {
     "source_analysis_on_bookserverapp": {
         "source": "Source code",
-        "target": ["Containerization"],
+        "target": ["Containerization", "Linux"],
         "appName": "book-server",
-        "storyPoints": 5
+        "storyPoints": 5,
+        "issues": [{
+            "name": "File system - Java IO",
+            "category": "mandatory",
+            "source": "None",
+            "target": ["cloud-readiness"],
+            "effort": 1,
+            "affectedFiles": 1
+        }]
     },
 
     "source+dep_analysis_on_tackletestapp": {

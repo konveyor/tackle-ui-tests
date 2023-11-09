@@ -4,3 +4,4 @@ export const tagFilterName = "#tag\\.id-filter-value-select";
 export const categoryFilterName = "#category-input";
 export const sourceFilterName = "#source-input";
 export const targetFilterName = "#target-input";
+export const singleAppDropList = "#application-select";

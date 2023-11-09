@@ -5,16 +5,18 @@ import {
     getUrl,
     inputText,
     selectFilter,
+    selectFromDropList,
     selectItemsPerPage,
     selectUserPerspective,
 } from "../../../../utils/utils";
-import { button, filterIssue, migration, SEC } from "../../../types/constants";
+import { button, filterIssue, migration, SEC, singleApplication } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { searchButton, span } from "../../../views/common.view";
 import {
     appFilterName,
     bsFilterName,
     categoryFilterName,
+    singleAppDropList,
     sourceFilterName,
     tagFilterName,
     targetFilterName,
@@ -36,7 +38,11 @@ export class Issues {
         selectItemsPerPage(itemsPerPage);
     }
 
-    public static openSingleApplication(applicationName: string): void {}
+    public static openSingleApplication(applicationName: string): void {
+        Issues.openList();
+        clickByText(button, singleApplication);
+        selectFromDropList(singleAppDropList, applicationName);
+    }
 
     public static filterBy(item: string, itemName: string | string[]): void {
         //TODO: Refactor this after bug https://issues.redhat.com/browse/MTA-1465 will be fixed
