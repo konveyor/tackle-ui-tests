@@ -23,7 +23,7 @@ export const manageCredentials = "Manage credentials";
 export const sourceCredential = "#source-credentials-toggle-select-typeahead";
 export const mavenCredential = "#maven-settings-toggle-select-typeahead";
 export const nextButton = "button[type=submit]";
-export const addRules = "div > footer[class='pf-c-modal-box__footer'] > button";
+export const addRules = "div > footer[class='pf-v5-c-modal-box__footer'] > button";
 export const fileName = "div[class='fileName']";
 export const reportStoryPoints = "div[class='effortPoints total'] > span[class='points']";
 export const enableTransactionAnalysis = "input[name=enableTransactionReport]";

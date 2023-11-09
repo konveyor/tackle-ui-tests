@@ -36,6 +36,7 @@ import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../../models/administration/credentials/credentialsSourceControlKey";
 import { infoAlertMessage } from "../../../../views/common.view";
+import { Application } from "../../../../models/migration/applicationinventory/application";
 let source_credential;
 let maven_credential;
 let applicationsList: Array<Analysis> = [];
@@ -74,9 +75,8 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    afterEach("Persist session", function () {
-        // Reset URL from report page to web UI
-        resetURL();
+    afterEach("Reset url", function () {
+        Application.open(100, true);
     });
 
     it("Source + dependencies analysis on tackletest app", function () {
