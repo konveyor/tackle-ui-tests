@@ -1451,19 +1451,8 @@ export function goToPage(page: number): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    cy.get(commonView.optionMenu, { timeout: 100 * SEC })
-        .eq(0)
-        .click()
-        .then(($a) => {
-            if (userType == "Migration") {
-                const adminBtn = $a.find('button:contains("Administration")');
-                if (adminBtn.length) {
-                    clickByText(commonView.userPerspectiveMenu, "Administration");
-                    $a.trigger("click");
-                }
-            }
-            clickByText(commonView.userPerspectiveMenu, userType);
-        });
+    cy.get(commonView.optionMenu).click();
+    cy.get(commonView.actionMenuItem).contains(userType).click();
 }
 
 export function selectWithinModal(selector: string): void {
