@@ -20,10 +20,9 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    resetURL,
-    writeGpgKey,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
+import { Application } from "../../../../models/migration/applicationinventory/application";
 
 const applicationsList: Analysis[] = [];
 describe(["@tier1"], "Upload Binary Analysis", () => {
@@ -42,7 +41,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it(["@interop"], "Bug MTA-1420: Upload Binary Analysis", function () {
+    it(["@interop"], "Upload Binary Analysis", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
@@ -51,12 +50,12 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
-        // No credentials required for uploaded binary.
+
         application.analyze();
         application.verifyAnalysisStatus("Completed");
     });
 
-    it.skip("Bug MTA-1420: Custom rules with custom targets", function () {
+    it("Custom rules with custom targets", function () {
         // Automated https://issues.redhat.com/browse/TACKLE-561
         const application = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
@@ -66,12 +65,12 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
-        // No credentials required for uploaded binary.
+
         application.analyze();
         application.verifyAnalysisStatus("Completed");
     });
 
-    it.skip("Bug MTA-1420: DIVA report generation", function () {
+    it("DIVA report generation", function () {
         const application = new Analysis(
             getRandomApplicationData("DIVA"),
             getRandomAnalysisData(this.analysisData["analysis_for_DIVA-report"])
@@ -80,12 +79,12 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
-        // No credentials required for uploaded binary.
+
         application.analyze();
         application.verifyAnalysisStatus("Completed");
     });
 
-    it.skip("Bug MTA-1420: Analysis for jee-example-app upload binary ", function () {
+    it("Analysis for jee-example-app upload binary ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(
@@ -100,7 +99,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it.skip("Bug MTA-1420: Analysis for camunda-bpm-spring-boot-starter", function () {
+    it("Analysis for camunda-bpm-spring-boot-starter", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_camunda_app"])
@@ -113,22 +112,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it.skip("Bug MTA-1420: Analysis for complete-duke app upload binary ", function () {
-        const application = new Analysis(
-            getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(
-                this.analysisData["analysis_and_incident_validation_complete-duke"]
-            )
-        );
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication");
-        cy.wait(2000);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-    });
-
-    it.skip("Bug MTA-1420: Analysis for kafka-clients-sb app ", function () {
+    it("Analysis for kafka-clients-sb app ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_kafka-app"])
@@ -142,11 +126,10 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
     });
 
     afterEach("Persist session", function () {
-        resetURL();
+        Application.open(100, true);
     });
 
     after("Perform test data clean up", function () {
         deleteByList(applicationsList);
-        writeGpgKey("abcde");
     });
 });
