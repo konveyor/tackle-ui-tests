@@ -19,7 +19,6 @@ import {
     trTag,
     button,
     createNewButton,
-    assessment,
     assessAppButton,
     createAppButton,
     SEC,
@@ -86,6 +85,8 @@ export class Application {
     version?: string;
     packaging?: string;
 
+    static fullUrl = Cypress.env("tackleUrl") + "/applications/";
+
     constructor(appData: applicationData) {
         this.init(appData);
     }
@@ -125,10 +126,17 @@ export class Application {
         if (packaging) this.packaging = packaging;
     }
 
-    public static open(): void {
-        selectUserPerspective(migration);
-        clickByText(navMenu, applicationInventory);
-        clickByText(navTab, assessment);
+    public static open(itemsPerPage = 100, forceReload = false): void {
+        if (forceReload) {
+            cy.visit(Cypress.env("tackleUrl"));
+        }
+        cy.url().then(($url) => {
+            if ($url != Application.fullUrl) {
+                selectUserPerspective(migration);
+                clickByText(navMenu, applicationInventory);
+            }
+        });
+        selectItemsPerPage(itemsPerPage);
     }
 
     protected fillName(name: string): void {
@@ -180,6 +188,7 @@ export class Application {
     }
 
     create(cancel = false): void {
+        Application.open();
         cy.contains("button", createNewButton, { timeout: 20000 }).should("be.enabled").click();
         if (cancel) {
             cancelForm();

@@ -14,17 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import { Application } from "./application";
-import {
-    applicationInventory,
-    tdTag,
-    trTag,
-    button,
-    review,
-    assessment,
-    SEC,
-    migration,
-} from "../../../types/constants";
-import { navMenu, navTab } from "../../../views/menu.view";
+import { tdTag, trTag, button, review, SEC } from "../../../types/constants";
 import {
     actionButton,
     selectBox,
@@ -42,7 +32,6 @@ import {
     selectItemsPerPage,
     cancelForm,
     selectFormItems,
-    selectUserPerspective,
     performRowActionByIcon,
     checkSuccessAlert,
     clickJs,
@@ -68,24 +57,8 @@ import {
 import { applicationData } from "../../../types/types";
 
 export class Assessment extends Application {
-    static fullUrl = Cypress.env("tackleUrl") + "/applications/assessment-tab";
     constructor(appData: applicationData) {
         super(appData);
-    }
-
-    //Navigate to the Application inventory->Assessment tab
-    public static open(itemsPerPage = 100, forceReload = false): void {
-        if (forceReload) {
-            cy.visit(Cypress.env("tackleUrl"));
-        }
-        cy.url().then(($url) => {
-            if ($url != Assessment.fullUrl) {
-                selectUserPerspective(migration);
-                clickByText(navMenu, applicationInventory);
-                clickByText(navTab, assessment);
-            }
-        });
-        selectItemsPerPage(itemsPerPage);
     }
 
     protected selectStakeholders(stakeholders: Array<string>): void {
@@ -205,11 +178,6 @@ export class Assessment extends Application {
         }
     }
 
-    create(): void {
-        Assessment.open();
-        super.create();
-    }
-
     edit(
         updatedValues: {
             name?: string;
@@ -220,13 +188,8 @@ export class Assessment extends Application {
         },
         cancel = false
     ): void {
-        Assessment.open();
+        Application.open();
         super.edit(updatedValues);
-    }
-
-    delete(cancel = false): void {
-        Assessment.open();
-        super.delete();
     }
 
     take_questionnaire(): void {
@@ -244,7 +207,7 @@ export class Assessment extends Application {
                 "At least one arg out of stakeholder or stakeholder groups must be provided !"
             ).to.equal(true);
         } else {
-            Assessment.open();
+            Application.open();
             selectItemsPerPage(100);
             this.selectApplication();
             clickItemInKebabMenu(this.name, "Assess");
@@ -260,7 +223,7 @@ export class Assessment extends Application {
     }
 
     perform_review(risk): void {
-        Assessment.open();
+        Application.open();
         selectItemsPerPage(100);
         this.selectApplication();
         clickItemInKebabMenu(this.name, "Review");
@@ -275,7 +238,7 @@ export class Assessment extends Application {
 
     // Method to verify the status of Assessment and Review
     verifyStatus(column, status): void {
-        Assessment.open();
+        Application.open();
         let columnSelector: string;
 
         if (column === "assessment") columnSelector = assessmentColumnSelector;
@@ -292,7 +255,7 @@ export class Assessment extends Application {
 
     // Opens the manage dependencies dialog from application inventory page
     openManageDependencies(): void {
-        Assessment.open();
+        Application.open();
         selectItemsPerPage(100);
         performRowActionByIcon(this.name, kebabMenu);
         clickByText(button, "Manage dependencies");
@@ -391,7 +354,7 @@ export class Assessment extends Application {
     }
 
     verifyCopyAssessmentDisabled(): void {
-        Assessment.open();
+        Application.open();
         selectItemsPerPage(100);
         cy.wait(2 * SEC);
         cy.get(tdTag)
@@ -432,7 +395,7 @@ export class Assessment extends Application {
     }
 
     discard_assessment(): void {
-        Assessment.open();
+        Application.open();
         selectItemsPerPage(100);
         this.selectApplication();
         clickItemInKebabMenu(this.name, "Discard assessment/review");
@@ -459,7 +422,7 @@ export class Assessment extends Application {
         if (review) {
             action += " and review";
         }
-        Assessment.open();
+        Application.open();
         selectItemsPerPage(items);
         cy.wait(2 * SEC);
         cy.get(tdTag)
@@ -483,7 +446,7 @@ export class Assessment extends Application {
 
     // Method to verify review button is disabled
     verifyReviewButtonDisabled(): void {
-        Assessment.open();
+        Application.open();
         selectItemsPerPage(100);
         cy.wait(2 * SEC);
         this.selectApplication();
