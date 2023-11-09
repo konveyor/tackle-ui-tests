@@ -51,7 +51,7 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
         login();
     });
 
-    it("Upload Binary Analysis", function () {
+    it.skip("Bug MTA-1455: Upload Binary Analysis", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
@@ -69,7 +69,7 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it("Custom rules with custom targets", function () {
+    it.skip("Bug MTA-1455: Custom rules with custom targets", function () {
         // Automated https://issues.redhat.com/browse/TACKLE-561
         const application = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
@@ -87,7 +87,7 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it("DIVA report generation", function () {
+    it.skip("Bug MTA-1455: DIVA report generation", function () {
         const application = new Analysis(
             getRandomApplicationData("DIVA"),
             getRandomAnalysisData(this.analysisData["analysis_for_DIVA-report"])

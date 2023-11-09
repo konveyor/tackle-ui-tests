@@ -23,6 +23,7 @@ import {
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { AnalysisStatuses } from "../../../../types/constants";
 
 const applicationsList: Analysis[] = [];
 describe(["@tier1"], "Upload Binary Analysis", () => {
@@ -52,7 +53,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait(2000);
 
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
     it("Custom rules with custom targets", function () {
@@ -67,7 +68,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait(2000);
 
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
     it("DIVA report generation", function () {
@@ -81,7 +82,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait(2000);
 
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
     it("Analysis for jee-example-app upload binary ", function () {
@@ -96,7 +97,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
     it("Analysis for camunda-bpm-spring-boot-starter", function () {
@@ -109,7 +110,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
     it("Analysis for kafka-clients-sb app ", function () {
@@ -122,7 +123,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
     afterEach("Persist session", function () {
