@@ -185,5 +185,19 @@
         "target": ["Containerization"],
         "appName": "example-1",
         "storyPoints": 1
+    },
+    "source_analysis_on_nexus_app": {
+        "source": "Source code",
+        "target": ["OpenJDK"],
+        "appName": "nexus"
+    },
+    "source_analysis_on_openmrs_app": {
+        "source": "Source code",
+        "target": ["OpenJDK"],
+        "appName": "openmrs"
+    },
+    "source_analysis_on_pet_clinic_app": {
+        "source": "Source code",
+        "appName": "pet-clinic"
     }
 }

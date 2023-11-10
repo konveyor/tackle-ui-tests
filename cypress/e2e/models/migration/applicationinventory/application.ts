@@ -128,7 +128,7 @@ export class Application {
 
     public static open(itemsPerPage = 100, forceReload = false): void {
         if (forceReload) {
-            cy.visit(Cypress.env("tackleUrl"));
+            cy.visit(Application.fullUrl);
         }
         cy.url().then(($url) => {
             if ($url != Application.fullUrl) {

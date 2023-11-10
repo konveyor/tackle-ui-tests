@@ -42,5 +42,17 @@
     "day-trader-app": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/WASdev/sample.daytrader7"
+    },
+    "nexus": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/sonatype/nexus-public"
+    },
+    "openmrs": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/openmrs/openmrs-core"
+    },
+    "pet-clinic": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/konveyor/spring-framework-petclinic"
     }
 }
