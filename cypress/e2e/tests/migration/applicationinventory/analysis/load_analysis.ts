@@ -42,7 +42,7 @@ describe(["@tier4"], "Source Analysis of big applications", () => {
             this.analysisData = analysisData;
         });
         cy.fixture("custom-rules").then((customMigrationTargets) => {
-            this.targetData = customMigrationTargets["hazelcast_target"];
+            this.targetData = customMigrationTargets;
         });
 
         cy.intercept("GET", "/hub/application*").as("getApplication");
@@ -66,9 +66,9 @@ describe(["@tier4"], "Source Analysis of big applications", () => {
     it("Source Analysis on OpenMMS app", function () {
         const application = new Analysis(
             getRandomApplicationData("OpenMRS Source", {
-                sourceData: this.appData["openmrs"], // TODO
+                sourceData: this.appData["openmrs"],
             }),
-            getRandomAnalysisData(this.analysisData["source_analysis_on_openmrs_app"]) // TODO
+            getRandomAnalysisData(this.analysisData["source_analysis_on_openmrs_app"])
         );
         application.create();
         applications.push(application);
@@ -78,12 +78,12 @@ describe(["@tier4"], "Source Analysis of big applications", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it.only("Bug MTA-1627: Source analysis on PetClinic app", function () {
+    it("Bug MTA-1627: Source analysis on PetClinic app", function () {
         const target = new CustomMigrationTarget(
             data.getRandomWord(8),
             data.getDescription(),
-            this.targetData.image,
-            getRulesData(this.targetData)
+            this.targetData["hazelcast_target"].image,
+            getRulesData(this.targetData["hazelcast_target"])
         );
         target.create();
 

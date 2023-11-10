@@ -130,12 +130,14 @@ export class Application {
         if (forceReload) {
             cy.visit(Application.fullUrl);
         }
+
         cy.url().then(($url) => {
             if ($url != Application.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, applicationInventory);
             }
         });
+
         selectItemsPerPage(itemsPerPage);
     }
 
