@@ -159,7 +159,7 @@ export enum AnalysisStatuses {
 }
 
 export enum ReportTypeSelectors {
-    TAR = "#download-tar-button",
+    HTML = "#download-tar-button",
     YAML = "#download-yaml-button",
 }
 
