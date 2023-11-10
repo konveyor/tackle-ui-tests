@@ -266,6 +266,7 @@ export class Application {
     }
 
     delete(cancel = false): void {
+        Application.open();
         cy.wait(2000);
         clickItemInKebabMenu(this.name, "Delete");
         if (cancel) {
