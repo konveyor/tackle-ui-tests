@@ -394,11 +394,11 @@ export class Assessment extends Application {
         }
     }
 
-    discard_assessment(): void {
+    selectKebabMenuItem(selection: string): void {
         Application.open();
         selectItemsPerPage(100);
         this.selectApplication();
-        clickItemInKebabMenu(this.name, "Discard assessment/review");
+        clickItemInKebabMenu(this.name, selection);
         cy.get(continueButton).click();
     }
 
