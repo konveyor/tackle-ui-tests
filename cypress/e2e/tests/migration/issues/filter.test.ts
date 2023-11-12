@@ -58,6 +58,7 @@ describe(["@tier2"], "Issues filtering", () => {
         Issues.filterBy(filterIssue.appName, application.name);
         cy.get("tr").should("not.contain", "No data available");
         clearAllFilters();
+        application.validateIssues(this.analysisData["source_analysis_on_bookserverapp"]["issues"]);
     });
 
     after("Perform test data clean up", function () {

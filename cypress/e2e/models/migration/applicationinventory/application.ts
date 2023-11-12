@@ -65,9 +65,13 @@ import {
     clickTab,
     clickItemInKebabMenu,
     doesExistButton,
+    validateTextPresence,
+    validateNumberPresence,
 } from "../../../../utils/utils";
-import { applicationData, RbacValidationRules } from "../../../types/types";
+import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
 import { kebabButton, rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
+import { Issues } from "../issues/issues";
+import { singleAppLabels } from "../../../views/issue.view";
 
 export class Application {
     name: string;
@@ -418,5 +422,29 @@ export class Application {
         cy.get(sourceDropdown).click();
         doesExistText("Upload a local binary", rbacRules["Upload binary"]);
         clickByText(button, "Cancel");
+    }
+
+    openIssues(): void {
+        Issues.openSingleApplication(this.name);
+    }
+
+    validateIssues(appIssues: AppIssue[]): void {
+        this.openIssues();
+        appIssues.forEach((currentIssue) => {
+            cy.contains(currentIssue["name"])
+                .closest(trTag)
+                .within(() => {
+                    validateTextPresence(singleAppLabels.issue, currentIssue["name"]);
+                    validateTextPresence(singleAppLabels.category, currentIssue["category"]);
+                    validateTextPresence(singleAppLabels.source, currentIssue["source"]);
+                    cy.get(singleAppLabels.target).within(() => {
+                        currentIssue["target"].forEach((currentTarget) => {
+                            validateTextPresence("li", currentTarget);
+                        });
+                    });
+                    validateNumberPresence(singleAppLabels.effort, currentIssue["effort"]);
+                    validateNumberPresence(singleAppLabels.files, currentIssue["affectedFiles"]);
+                });
+        });
     }
 }

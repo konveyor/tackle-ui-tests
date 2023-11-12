@@ -5,7 +5,6 @@ import {
     getUrl,
     inputText,
     selectFilter,
-    selectFromDropList,
     selectItemsPerPage,
     selectUserPerspective,
 } from "../../../../utils/utils";
@@ -41,7 +40,8 @@ export class Issues {
     public static openSingleApplication(applicationName: string): void {
         Issues.openList();
         clickByText(button, singleApplication);
-        selectFromDropList(singleAppDropList, applicationName);
+        click(singleAppDropList);
+        clickByText(button, applicationName);
     }
 
     public static filterBy(item: string, itemName: string | string[]): void {

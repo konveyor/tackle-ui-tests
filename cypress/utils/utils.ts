@@ -298,6 +298,14 @@ export function validateTextPresence(fieldId: string, message: string): void {
     cy.get(fieldId, { timeout: 150 * SEC }).should("contain.text", message);
 }
 
+export function validateNumberPresence(fieldId: string, value: number): void {
+    cy.get(fieldId)
+        .invoke("text")
+        .then((text) => {
+            cy.wrap(parseFloat(text)).should("eq", value);
+        });
+}
+
 export function closeSuccessAlert(): void {
     cy.get(closeSuccessNotification, { timeout: 10 * SEC })
         .first()
