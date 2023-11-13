@@ -27,16 +27,9 @@ describe(["@tier2"], "Manage imports tests", function () {
         openManageImportsPage();
     });
 
-    it("Bug MTA-1592: Download CSV template", function () {
+    it("Download CSV template", function () {
         cy.get(manageImportsActionsButton).eq(0).click({ force: true });
-        cy.get(kebabMenuItem)
-            .contains("Download CSV template")
-            .parent()
-            .parent()
-            .then(($a) => {
-                $a.attr("download", ""); // TODO: remove this workaround once the bug is fixed
-            })
-            .click();
+        cy.get(kebabMenuItem).contains("Download CSV template").click();
         cy.wait(2000);
         cy.readFile("cypress/downloads/template_application_import.csv").should(
             "contain",
