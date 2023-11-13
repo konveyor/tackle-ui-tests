@@ -59,7 +59,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].selectKebabMenuItem("Discard assessment(s)");
         checkSuccessAlert(
             alertTitle,
-            `Success alert:Success! Assessment discarded for applicationList[0].name.`
+            `Success alert:Success! Assessment discarded for ${applicationList[0].name}.`
         );
         applicationList[0].verifyStatus("assessment", "Not started");
     });
