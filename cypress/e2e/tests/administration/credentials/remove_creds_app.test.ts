@@ -18,12 +18,13 @@ limitations under the License.
 import { getRandomAnalysisData, getRandomApplicationData, login } from "../../../../utils/utils";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
-import { CredentialType, UserCredentials } from "../../../types/constants";
+import { CredentialType, SEC, tdTag, trTag, UserCredentials } from "../../../types/constants";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
-let source_credential;
-let application;
+import { Credentials } from "../../../models/administration/credentials/credentials";
+let source_credential: CredentialsSourceControlUsername;
+let application: Analysis;
 
-describe(["@tier1"], "Validation of Source Control Credentials", () => {
+describe(["@tier1"], "Validation of credentials being used by app", () => {
     before("Login", function () {
         login();
         source_credential = new CredentialsSourceControlUsername(
@@ -31,7 +32,6 @@ describe(["@tier1"], "Validation of Source Control Credentials", () => {
         );
 
         source_credential.create();
-        source_credential.inUse = true;
     });
 
     beforeEach("Load data", function () {
@@ -40,17 +40,24 @@ describe(["@tier1"], "Validation of Source Control Credentials", () => {
         });
     });
 
-    it("Deleting credential that is in use by one application", function () {
+    it("Validating cred used by app can't be deleted", function () {
         application = new Analysis(
             getRandomApplicationData(),
             getRandomAnalysisData(this.analysisData)
         );
         application.create();
         application.manageCredentials(source_credential.name);
-        source_credential.delete();
+        Credentials.openList();
+        cy.get(tdTag, { timeout: 120 * SEC })
+            .contains(source_credential.name, { timeout: 120 * SEC })
+            .closest(trTag)
+            .within(() => {
+                cy.get("#delete-button").should("have.class", "pf-m-aria-disabled");
+            });
     });
 
     after("Cleanup", () => {
         application.delete();
+        source_credential.delete();
     });
 });
