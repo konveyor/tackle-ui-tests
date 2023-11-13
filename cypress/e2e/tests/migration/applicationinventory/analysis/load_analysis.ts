@@ -46,36 +46,7 @@ describe(["@tier4"], "Source Analysis of big applications", () => {
         });
 
         cy.intercept("GET", "/hub/application*").as("getApplication");
-    });
-
-    it("Bug MTA-1647:Source Analysis on Nexus app", function () {
-        const application = new Analysis(
-            getRandomApplicationData("Nexus Source", {
-                sourceData: this.appData["nexus"],
-            }),
-            getRandomAnalysisData(this.analysisData["source_analysis_on_nexus_app"])
-        );
-        application.create();
-        applications.push(application);
-        cy.wait("@getApplication");
-        cy.wait(2 * SEC);
-        application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
-    });
-
-    it("Source Analysis on OpenMMS app", function () {
-        const application = new Analysis(
-            getRandomApplicationData("OpenMRS Source", {
-                sourceData: this.appData["openmrs"],
-            }),
-            getRandomAnalysisData(this.analysisData["source_analysis_on_openmrs_app"])
-        );
-        application.create();
-        applications.push(application);
-        cy.wait("@getApplication");
-        cy.wait(2 * SEC);
-        application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        Application.open(100, true);
     });
 
     it("Bug MTA-1627: Source analysis on PetClinic app", function () {
@@ -106,8 +77,34 @@ describe(["@tier4"], "Source Analysis of big applications", () => {
         target.delete();
     });
 
-    afterEach("Reset url", function () {
-        Application.open(100, true);
+    it("Bug MTA-1647:Source Analysis on Nexus app", function () {
+        const application = new Analysis(
+            getRandomApplicationData("Nexus Source", {
+                sourceData: this.appData["nexus"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_nexus_app"])
+        );
+        application.create();
+        applications.push(application);
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+    });
+
+    it("Source Analysis on OpenMMS app", function () {
+        const application = new Analysis(
+            getRandomApplicationData("OpenMRS Source", {
+                sourceData: this.appData["openmrs"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_openmrs_app"])
+        );
+        application.create();
+        applications.push(application);
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
     after("Test data clean up", function () {
