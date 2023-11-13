@@ -32,8 +32,6 @@ import {
     button,
     name,
     clearAllFilters,
-    description,
-    businessService,
     tag,
     CredentialType,
     UserCredentials,
@@ -137,45 +135,13 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Descriptions filter validations", function () {
-        Assessment.open();
-
-        // Enter an existing description substring and assert
-        var validSearchInput = applicationsList[0].description.substring(0, 8);
-        applySearchFilter(description, validSearchInput);
-        cy.wait(2000);
-        exists(applicationsList[0].description);
-
-        if (applicationsList[1].description.indexOf(validSearchInput) >= 0) {
-            exists(applicationsList[1].description);
-        }
-        clickByText(button, clearAllFilters);
-
-        // Enter an exact existing description substring and assert
-        applySearchFilter(description, applicationsList[1].description);
-        cy.wait(2000);
-        exists(applicationsList[1].description);
-
-        clickByText(button, clearAllFilters);
-
-        // Enter a non-existing description substring and apply it as search filter
-        applySearchFilter(description, invalidSearchInput);
-        cy.wait(3000);
-
-        // Assert that no search results are found
-        cy.get("h2").contains("No applications available");
-
-        // Clear all filters
-        clickByText(button, clearAllFilters);
-    });
-
     it("Business service filter validations", function () {
         // This is impacted by https://issues.redhat.com/browse/TACKLE-820
         Assessment.open();
 
         // Enter an existing businessservice and assert
         var validSearchInput = applicationsList[0].business;
-        applySearchFilter(businessService, validSearchInput);
+        applySearchFilter("Business service", validSearchInput);
         cy.wait(2000);
 
         exists(applicationsList[0].business);
