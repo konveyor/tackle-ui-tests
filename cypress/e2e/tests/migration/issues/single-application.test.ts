@@ -20,15 +20,13 @@ import {
     getRandomApplicationData,
     getRandomAnalysisData,
     deleteByList,
-    clearAllFilters,
 } from "../../../../utils/utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
-import { SEC, filterIssue } from "../../../types/constants";
-import { Issues } from "../../../models/migration/issues/issues";
+import { SEC } from "../../../types/constants";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 
-describe(["@tier2"], "Issues filtering", () => {
+describe(["@tier2"], "Single application issues inspection", () => {
     before("Login", function () {
         login();
     });
@@ -42,7 +40,7 @@ describe(["@tier2"], "Issues filtering", () => {
         });
     });
 
-    it("Running analysis and filtering issues by app name", function () {
+    it("Single application issues inspection", function () {
         // For source code analysis application must have source code URL git or svn
         application = new Analysis(
             getRandomApplicationData("bookserverApp", {
@@ -55,10 +53,7 @@ describe(["@tier2"], "Issues filtering", () => {
         cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-
-        Issues.filterBy(filterIssue.appName, application.name);
-        cy.get("tr").should("not.contain", "No data available");
-        clearAllFilters();
+        application.validateIssues(this.analysisData["source_analysis_on_bookserverapp"]["issues"]);
     });
 
     after("Perform test data clean up", function () {
