@@ -55,11 +55,17 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("review", "Completed");
     });
 
-    it("Discard Assess/Review", function () {
-        applicationList[0].discard_assessment();
-        /* Add this after bug MTA-1611 is resolved.
-        checkSuccessAlert(alertTitle, `Success alert:Success! Assessment discarded for applicationList[0].name.`);
-        applicationList[0].verifyStatus("assessment", "Not started"); */
+    it("Discard Assessment", function () {
+        applicationList[0].selectKebabMenuItem("Discard assessment(s)");
+        checkSuccessAlert(
+            alertTitle,
+            `Success alert:Success! Assessment discarded for ${applicationList[0].name}.`
+        );
+        applicationList[0].verifyStatus("assessment", "Not started");
+    });
+
+    it("Discard Review", function () {
+        applicationList[0].selectKebabMenuItem("Discard review");
         checkSuccessAlert(
             alertTitle,
             `Success alert:Success! Review discarded for ${applicationList[0].name}.`
