@@ -118,7 +118,7 @@ export const general = "General";
 export const instanceName = "Instance name";
 export const cantDeleteJiraAlert =
     "Danger alert:This instance contains issues associated with applications and cannot be deleted";
-
+export const singleApplication = "Single application";
 export enum CredentialType {
     proxy = "Proxy",
     sourceControl = "Source Control",
