@@ -49,7 +49,7 @@ describe(["@tier4"], "Source Analysis of big applications", () => {
         Application.open(100, true);
     });
 
-    it("Bug MTA-1627: Source analysis on PetClinic app", function () {
+    it("Source analysis on PetClinic app", function () {
         const target = new CustomMigrationTarget(
             data.getRandomWord(8),
             data.getDescription(),
@@ -108,6 +108,7 @@ describe(["@tier4"], "Source Analysis of big applications", () => {
     });
 
     after("Test data clean up", function () {
+        Application.open(100, true);
         deleteByList(applications);
     });
 });
