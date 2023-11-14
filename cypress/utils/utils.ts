@@ -90,6 +90,7 @@ import { MigrationWave } from "../e2e/models/migration/migration-waves/migration
 import { Jira } from "../e2e/models/administration/jira-connection/jira";
 import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
 import { closeModal } from "../e2e/views/assessment.view";
+import { Application } from "../e2e/models/migration/applicationinventory/application";
 
 const { _ } = Cypress;
 
@@ -229,11 +230,7 @@ export function logout(userName?: string): void {
 }
 
 export function resetURL(): void {
-    cy.url().then(($url) => {
-        if ($url.includes("report") || $url.includes("tasks")) {
-            login();
-        }
-    });
+    Application.open();
 }
 
 export function selectItemsPerPage(items: number): void {
@@ -878,10 +875,8 @@ export function hasToBeSkipped(tagName: string): boolean {
 export function performRowAction(itemName: string, action: string): void {
     // itemName is text to be searched on the screen (like credentials name, stakeholder name, etc)
     // Action is the name of the action to be applied (usually edit or delete)
-
     cy.get(tdTag, { timeout: 120 * SEC })
         .contains(itemName, { timeout: 120 * SEC })
-        // .closest(tdTag)
         .closest(trTag)
         .within(() => {
             clickByText(button, action);

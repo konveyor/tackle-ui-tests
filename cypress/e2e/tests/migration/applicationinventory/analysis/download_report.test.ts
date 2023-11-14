@@ -21,14 +21,16 @@ import {
     getRandomApplicationData,
     login,
 } from "../../../../../utils/utils";
+import { GeneralConfig } from "../../../../models/administration/general/generalConfig";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { AnalysisStatuses, ReportTypeSelectors, SEC } from "../../../../types/constants";
 
-describe(["@tier2"], "Enable and Download TAR and YAML Reports", function () {
+describe(["@tier2"], "Enable and Download HTML and YAML Reports", function () {
     let sourceApplication: Analysis;
 
     before("Login", function () {
         login();
+        GeneralConfig.enableDownloadReport();
     });
 
     beforeEach("Load data", function () {
@@ -51,7 +53,7 @@ describe(["@tier2"], "Enable and Download TAR and YAML Reports", function () {
         cy.wait(2 * SEC);
         sourceApplication.analyze();
         sourceApplication.verifyAnalysisStatus(AnalysisStatuses.completed);
-        sourceApplication.downloadReport(ReportTypeSelectors.TAR);
+        sourceApplication.downloadReport(ReportTypeSelectors.HTML);
         sourceApplication.downloadReport(ReportTypeSelectors.YAML);
     });
 
