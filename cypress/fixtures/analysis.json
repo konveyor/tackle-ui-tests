@@ -9,7 +9,7 @@
                 "name": "File system - Java IO",
                 "category": "mandatory",
                 "source": "None",
-                "target": ["cloud-readiness"],
+                "targets": ["cloud-readiness"],
                 "effort": 1,
                 "affectedFiles": 1
             }

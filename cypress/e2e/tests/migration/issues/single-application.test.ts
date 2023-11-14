@@ -38,7 +38,6 @@ describe(["@tier2"], "Single application issues inspection", () => {
     });
 
     it("Single application issues inspection", function () {
-        // For source code analysis application must have source code URL git or svn
         application = new Analysis(
             getRandomApplicationData("bookserverApp", {
                 sourceData: this.appData["bookserver-app"],

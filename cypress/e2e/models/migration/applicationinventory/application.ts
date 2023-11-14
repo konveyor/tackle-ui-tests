@@ -438,19 +438,19 @@ export class Application {
     validateIssues(appIssues: AppIssue[]): void {
         Issues.openSingleApplication(this.name);
         appIssues.forEach((currentIssue) => {
-            cy.contains(currentIssue["name"])
+            cy.contains(currentIssue.name)
                 .closest(trTag)
                 .within(() => {
-                    validateTextPresence(singleAppLabels.issue, currentIssue["name"]);
-                    validateTextPresence(singleAppLabels.category, currentIssue["category"]);
-                    validateTextPresence(singleAppLabels.source, currentIssue["source"]);
+                    validateTextPresence(singleAppLabels.issue, currentIssue.name);
+                    validateTextPresence(singleAppLabels.category, currentIssue.category);
+                    validateTextPresence(singleAppLabels.source, currentIssue.source);
                     cy.get(singleAppLabels.target).within(() => {
-                        currentIssue["target"].forEach((currentTarget) => {
+                        currentIssue.targets.forEach((currentTarget) => {
                             validateTextPresence(liTag, currentTarget);
                         });
                     });
-                    validateNumberPresence(singleAppLabels.effort, currentIssue["effort"]);
-                    validateNumberPresence(singleAppLabels.files, currentIssue["affectedFiles"]);
+                    validateNumberPresence(singleAppLabels.effort, currentIssue.effort);
+                    validateNumberPresence(singleAppLabels.files, currentIssue.affectedFiles);
                 });
         });
     }

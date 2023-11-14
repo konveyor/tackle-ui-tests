@@ -193,7 +193,7 @@ export type AppIssue = {
     name: string;
     category: string;
     source: string;
-    target: string[];
+    targets: string[];
     effort: number;
     affectedFiles: number;
 };
