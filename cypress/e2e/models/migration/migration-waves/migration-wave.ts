@@ -329,7 +329,9 @@ export class MigrationWave {
         cy.contains(this.name)
             .parents("tr")
             .within(() => {
-                cy.get(MigrationWaveView.waveStatusColumn).click();
+                cy.get(MigrationWaveView.waveStatusColumn)
+                    .should("not.contain", "N/A", { timeout: 10 * SEC })
+                    .click();
             });
     }
 
