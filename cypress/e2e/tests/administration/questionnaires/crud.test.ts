@@ -10,6 +10,7 @@ import { alertTitle } from "../../../views/common.view";
 
 const yamlFileName = "questionnaire_import/cloud-native.yaml";
 const fileName = "Cloud Native";
+const legacyQuestionnaire = "Legacy Pathfinder"
 
 describe(["@tier2"], "Questionnaire CRUD operations", () => {
     before("Login", function () {
@@ -33,8 +34,8 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
     });
 
     it("Export questionnaire", function () {
-        AssessmentQuestionnaire.export(fileName);
-        cy.readFile("cypress/downloads/questionnaire-4.yaml").should("contain", fileName);
+        AssessmentQuestionnaire.export(legacyQuestionnaire);
+        cy.readFile("cypress/downloads/questionnaire-1.yaml").should("contain", fileName);
     });
 
     it("Delete questionnaire", function () {
