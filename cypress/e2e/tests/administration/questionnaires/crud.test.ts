@@ -10,7 +10,7 @@ import { alertTitle } from "../../../views/common.view";
 
 const yamlFileName = "questionnaire_import/cloud-native.yaml";
 const fileName = "Cloud Native";
-const legacyQuestionnaire = "Legacy Pathfinder"
+const legacyQuestionnaire = "Legacy Pathfinder";
 
 describe(["@tier2"], "Questionnaire CRUD operations", () => {
     before("Login", function () {
