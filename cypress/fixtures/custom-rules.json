@@ -20,5 +20,9 @@
             "branch": "",
             "rootPath": "custom-rules"
         }
+    },
+    "hazelcast_target": {
+        "image": "img/cloud.png",
+        "rulesFiles": ["xml/hazelcast.windup.xml"]
     }
 }

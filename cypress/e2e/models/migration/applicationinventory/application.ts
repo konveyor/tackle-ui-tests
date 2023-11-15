@@ -26,6 +26,7 @@ import {
     analyzeButton,
     reviewAppButton,
     migration,
+    application,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -128,15 +129,19 @@ export class Application {
 
     public static open(itemsPerPage = 100, forceReload = false): void {
         if (forceReload) {
-            cy.visit(Cypress.env("tackleUrl"));
+            cy.visit(Application.fullUrl, { timeout: 15 * SEC }).then((_) =>
+                selectItemsPerPage(itemsPerPage)
+            );
+            return;
         }
+
         cy.url().then(($url) => {
             if ($url != Application.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, applicationInventory);
+                selectItemsPerPage(itemsPerPage);
             }
         });
-        selectItemsPerPage(itemsPerPage);
     }
 
     protected fillName(name: string): void {
