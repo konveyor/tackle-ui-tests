@@ -79,24 +79,6 @@ describe(["@tier1"], "Source Analysis", () => {
         Application.open(100, true);
     });
 
-    it("Analysis for Konveyor example1 application", function () {
-        // Automates https://github.com/konveyor/example-applications/tree/main/example-1
-        const application = new Analysis(
-            getRandomApplicationData("Example 1", {
-                sourceData: this.appData["konveyor-exampleapp"],
-            }),
-            getRandomAnalysisData(this.analysisData["analysis_on_example-1-app"])
-        );
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication");
-        cy.wait(2000);
-        application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
-        // Polarion TC 406
-        application.verifyEffort(2);
-    });
-
     it("Source + dependencies analysis on tackletest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
@@ -259,6 +241,24 @@ describe(["@tier1"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
         application.applicationDetailsTab("Tags");
         cy.get("h2", { timeout: 5 * SEC }).should("contain", "No tags available");
+    });
+
+    it("Analysis for Konveyor example1 application", function () {
+        // Automates https://github.com/konveyor/example-applications/tree/main/example-1
+        const application = new Analysis(
+            getRandomApplicationData("Example 1", {
+                sourceData: this.appData["konveyor-exampleapp"],
+            }),
+            getRandomAnalysisData(this.analysisData["analysis_on_example-1-app"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        // Polarion TC 406
+        application.verifyEffort(2);
     });
 
     after("Perform test data clean up", function () {
