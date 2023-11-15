@@ -25,6 +25,7 @@ import {
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { infoAlertMessage } from "../../../../views/common.view";
 let applicationsList: Array<Analysis> = [];
+let application: Analysis;
 
 describe("Source Analysis without credentials", () => {
     before("Load data", function () {
@@ -41,10 +42,10 @@ describe("Source Analysis without credentials", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it(["@tier0"], "Source Analysis on bookserver app and success alert validation", function () {
+    it(["@tier0"], "Source Analysis on bookserver app and its issues validation", function () {
         // For source code analysis application must have source code URL git or svn
         cy.log(this.analysisData[0]);
-        const application = new Analysis(
+        application = new Analysis(
             getRandomApplicationData("bookserverApp", {
                 sourceData: this.appData["bookserver-app"],
             }),
@@ -57,6 +58,7 @@ describe("Source Analysis without credentials", () => {
         application.analyze();
         checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
         application.verifyAnalysisStatus("Completed");
+        application.validateIssues(this.analysisData["source_analysis_on_bookserverapp"]["issues"]);
     });
 
     after("Perform test data clean up", function () {

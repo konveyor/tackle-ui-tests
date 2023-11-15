@@ -188,3 +188,12 @@ export type RulesManualFields = {
     type: CustomRuleType.Manual;
     rulesetPaths: string[];
 };
+
+export type AppIssue = {
+    name: string;
+    category: string;
+    source: string;
+    targets: string[];
+    effort: number;
+    affectedFiles: number;
+};

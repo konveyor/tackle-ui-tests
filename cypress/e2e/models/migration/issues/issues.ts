@@ -8,13 +8,14 @@ import {
     selectItemsPerPage,
     selectUserPerspective,
 } from "../../../../utils/utils";
-import { button, filterIssue, migration, SEC } from "../../../types/constants";
+import { button, filterIssue, migration, SEC, singleApplication } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { searchButton, span } from "../../../views/common.view";
 import {
     appFilterName,
     bsFilterName,
     categoryFilterName,
+    singleAppDropList,
     sourceFilterName,
     tagFilterName,
     targetFilterName,
@@ -34,6 +35,13 @@ export class Issues {
         clickByText(navMenu, "Issues");
         cy.wait(2 * SEC);
         selectItemsPerPage(itemsPerPage);
+    }
+
+    public static openSingleApplication(applicationName: string): void {
+        Issues.openList();
+        clickByText(button, singleApplication);
+        click(singleAppDropList);
+        clickByText(button, applicationName);
     }
 
     public static filterBy(item: string, itemName: string | string[]): void {

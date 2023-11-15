@@ -60,3 +60,4 @@ export const footer = "footer";
 export const manageImportsActionsButton = "button[aria-label='Table toolbar actions kebab toggle']";
 export const nextButton = "button[cy-data='next']";
 export const span = "span";
+export const liTag = "li";
