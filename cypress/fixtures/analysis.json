@@ -188,7 +188,7 @@
     },
     "source_analysis_on_nexus_app": {
         "source": "Source code",
-        "target": ["OpenJDK"],
+        "target": ["OpenJDK", "Containerization"],
         "appName": "nexus"
     },
     "source_analysis_on_openmrs_app": {
