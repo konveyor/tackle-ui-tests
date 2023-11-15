@@ -137,6 +137,7 @@ describe(["@tier0"], "Migration Waves CRUD operations", () => {
         // Delete all applications by clicking the delete buttons
         cy.get(applicationTableSelector + " td > button").each((btn) => {
             cy.wrap(btn).click();
+            cy.contains("Delete").click();
             cy.wait(3 * SEC);
         });
         migrationWave.applications = [];
