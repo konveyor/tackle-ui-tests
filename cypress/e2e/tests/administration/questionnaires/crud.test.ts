@@ -9,7 +9,7 @@ import {
 import { alertTitle } from "../../../views/common.view";
 
 const yamlFileName = "questionnaire_import/cloud-native.yaml";
-const fileName = "Cloud Native";
+const importedQuestionnaire = "Cloud Native";
 const legacyQuestionnaire = "Legacy Pathfinder";
 
 describe(["@tier2"], "Questionnaire CRUD operations", () => {
@@ -21,10 +21,10 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
         AssessmentQuestionnaire.import(yamlFileName);
         checkSuccessAlert(
             alertTitle,
-            `Success alert:Questionnaire ${fileName} was successfully created.`,
+            `Success alert:Questionnaire ${importedQuestionnaire} was successfully created.`,
             true
         );
-        AssessmentQuestionnaire.enable(fileName, false);
+        AssessmentQuestionnaire.enable(importedQuestionnaire, false);
     });
 
     it("Duplicate questionnaire Test", function () {
@@ -35,14 +35,17 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
 
     it("Export questionnaire", function () {
         AssessmentQuestionnaire.export(legacyQuestionnaire);
-        cy.readFile("cypress/downloads/questionnaire-1.yaml").should("contain", fileName);
+        cy.readFile("cypress/downloads/questionnaire-1.yaml").should(
+            "contain",
+            legacyQuestionnaire
+        );
     });
 
     it("Delete questionnaire", function () {
-        AssessmentQuestionnaire.delete(fileName);
+        AssessmentQuestionnaire.delete(importedQuestionnaire);
         checkSuccessAlert(
             alertTitle,
-            `Success alert:Questionnaire ${fileName} was successfully deleted.`,
+            `Success alert:Questionnaire ${importedQuestionnaire} was successfully deleted.`,
             true
         );
     });
