@@ -76,7 +76,7 @@ describe(["@tier3"], "Business services pagination validations", function () {
         });
     });
 
-    it("Last page item(s) deletion, impact on page reload validation", function () {
+    it("Bug MTA-1675: Last page item(s) deletion, impact on page reload validation", function () {
         // Navigate to business services tab and select 10 items per page
         BusinessServices.openList();
         selectItemsPerPage(10);

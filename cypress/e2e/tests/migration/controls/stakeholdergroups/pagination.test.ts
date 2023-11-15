@@ -123,7 +123,7 @@ describe(["@tier3"], "Stakeholder groups pagination validations", function () {
         });
     });
 
-    it("Last page item(s) deletion, impact on page reload validation", function () {
+    it("Bug MTA-1675: Last page item(s) deletion, impact on page reload validation", function () {
         // Issue - https://issues.redhat.com/browse/TACKLE-155
         // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
