@@ -257,6 +257,7 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyEffort(2);
     });
 
     after("Perform test data clean up", function () {
