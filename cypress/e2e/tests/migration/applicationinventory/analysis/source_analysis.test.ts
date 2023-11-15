@@ -96,7 +96,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it("Bug MTA-1664:Source + dependencies analysis on daytrader app", function () {
+    it("Bug MTA-1664: Source + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies", {
@@ -257,6 +257,8 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        // Polarion TC 406
+        application.verifyEffort(2);
     });
 
     after("Perform test data clean up", function () {

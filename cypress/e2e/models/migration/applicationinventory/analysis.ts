@@ -65,6 +65,7 @@ import {
     sourceDropdown,
     tabsPanel,
     kebabTopMenuButton,
+    effortColumn,
 } from "../../../views/analysis.view";
 import {
     bulkApplicationSelectionCheckBox,
@@ -305,6 +306,15 @@ export class Analysis extends Application {
             .closest(trTag, { log: false })
             .within(() => {
                 Analysis.verifyStatus(cy.get(analysisColumn, { log: false }), status);
+            });
+    }
+
+    public verifyEffort(effort: number) {
+        cy.get(tdTag)
+            .contains(this.name)
+            .closest(trTag)
+            .within(() => {
+                cy.get(effortColumn).should("contain", `${effort}`);
             });
     }
 

@@ -19,6 +19,7 @@ export const applicationDescriptionInput = "input[name=description]";
 export const sourceofAnalysiSelect = "[placeholder='Select a business service']";
 export const sourceDropdown = "#analysis-mode-toggle";
 export const analysisColumn = "td[data-label='Analysis']";
+export const effortColumn = "td[data-label='Effort']";
 export const manageCredentials = "Manage credentials";
 export const sourceCredential = "#source-credentials-toggle-select-typeahead";
 export const mavenCredential = "#maven-settings-toggle-select-typeahead";
