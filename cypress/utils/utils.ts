@@ -855,9 +855,6 @@ export function deleteAppImportsTableRows() {
         });
 }
 
-// TODO: Delete calls to this method and then remove it
-export function preservecookies(): void {}
-
 // Checks if the hook has to be skipped, if the tag is not mentioned during test run
 export function hasToBeSkipped(tagName: string): boolean {
     if (Cypress.env("grepTags")) {
@@ -1426,7 +1423,6 @@ export function goToPage(page: number): void {
                             .clear()
                             .type(page.toString())
                             .type("{enter}");
-                        cy.wait(5 * SEC);
                     }
                 });
             });
