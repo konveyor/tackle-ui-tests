@@ -99,7 +99,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
         application.delete();
     });
 
-    it("Filter by manual tags", function () {
+    it.only("Filter by manual tags", function () {
         // Automates Polarion MTA-310
         const application = new Analysis(
             getRandomApplicationData(

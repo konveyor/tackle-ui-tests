@@ -36,6 +36,7 @@ import { BusinessServices } from "../../../../models/migration/controls/business
 import * as data from "../../../../../utils/data_utils";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Tag } from "../../../../models/migration/controls/tags";
+import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let stakeholderGroupsList: Array<Stakeholdergroups> = [];
@@ -46,7 +47,7 @@ let businessServicesList: Array<BusinessServices> = [];
 describe(["@tier3"], "Applications interlinked to tags and business service", () => {
     before("Login and Create Test Data", function () {
         login();
-
+        AssessmentQuestionnaire.enable("Legacy Pathfinder");
         stakeholdersList = createMultipleStakeholders(1);
         stakeholderGroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
     });
@@ -148,6 +149,8 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         //Verify that values show blank
         cy.get(stakeholderSelect).should("have.value", "");
         cy.get(stakeholdergroupsSelect).should("have.value", "");
+        clickByText(button, "Cancel");
+        clickByText(button, "Continue");
     });
 
     after("Perform test data clean up", function () {
