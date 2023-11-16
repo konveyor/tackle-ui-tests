@@ -54,11 +54,7 @@ export class Stakeholdergroups {
         if (members) this.members = members;
     }
 
-    public static openList(itemsPerPage = 100, forceReload = false): void {
-        if (forceReload) {
-            cy.visit(Stakeholdergroups.fullUrl);
-            cy.wait(2 * SEC);
-        }
+    public static openList(itemsPerPage = 100): void {
         cy.url().then(($url) => {
             if ($url != Stakeholdergroups.fullUrl) {
                 selectUserPerspective(migration);
@@ -67,7 +63,6 @@ export class Stakeholdergroups {
             }
         });
         selectItemsPerPage(itemsPerPage);
-        cy.wait(2 * SEC);
     }
 
     protected fillName(name: string): void {

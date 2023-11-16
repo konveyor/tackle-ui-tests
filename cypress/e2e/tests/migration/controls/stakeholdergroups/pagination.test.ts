@@ -112,7 +112,6 @@ describe(["@tier3"], "Stakeholder groups pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        Stakeholdergroups.openList(100, true);
         deleteTableRows();
     });
 });

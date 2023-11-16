@@ -655,9 +655,10 @@ export function deleteTableRows(tableSelector = commonView.appTable): void {
                 .eq(0)
                 .within(() => {
                     click(commonView.deleteButton);
+                    cy.wait(2 * SEC);
                 });
             cy.get(commonView.confirmButton).click();
-            cy.wait(2 * SEC);
+            cy.wait(4000);
         }
     });
 }
@@ -715,20 +716,14 @@ export function uploadFile(fileName: string): void {
     cy.wait(2000);
 }
 
-export function navigate_to_application_inventory(tab?): void {
-    cy.get("h1", { timeout: 5 * SEC }).then(($header) => {
-        if (!$header.text().includes("Application inventory")) {
-            selectUserPerspective("Migration");
-            clickByText(navMenu, applicationInventory);
-        }
-    });
-    if (tab == "Analysis") clickByText(navTab, analysis);
+export function navigate_to_application_inventory(): void {
+    selectUserPerspective("Migration");
+    clickByText(navMenu, applicationInventory);
 }
 
-export function application_inventory_kebab_menu(menu, tab?): void {
+export function application_inventory_kebab_menu(menu): void {
     // The value for menu could be one of {Import, Manage imports, Delete, Manage credentials}
-    if (tab == "Analysis") navigate_to_application_inventory("Analysis");
-    else navigate_to_application_inventory();
+    navigate_to_application_inventory();
 
     cy.get(actionButton).eq(0).click({ force: true });
     if (menu == "Import") {
@@ -1431,6 +1426,7 @@ export function goToPage(page: number): void {
                             .clear()
                             .type(page.toString())
                             .type("{enter}");
+                        cy.wait(5 * SEC);
                     }
                 });
             });

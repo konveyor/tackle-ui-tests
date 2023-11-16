@@ -25,7 +25,7 @@ import {
     deleteTableRows,
 } from "../../../../../utils/utils";
 import { SEC } from "../../../../types/constants";
-import { firstPageButton, prevPageButton } from "../../../../views/common.view";
+import { prevPageButton } from "../../../../views/common.view";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 
 let businessServiceList = [];
