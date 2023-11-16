@@ -21,7 +21,6 @@ import {
     deleteAction,
     editAction,
     migration,
-    SEC,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
