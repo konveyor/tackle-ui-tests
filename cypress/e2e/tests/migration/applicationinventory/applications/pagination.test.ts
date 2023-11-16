@@ -21,6 +21,7 @@ import {
     deleteByList,
     createMultipleApplications,
     goToPage,
+    validatePagination,
 } from "../../../../../utils/utils";
 import * as commonView from "../../../../views/common.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
@@ -42,38 +43,8 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
         // Navigate to Application inventory tab
         Application.open();
         cy.wait("@getApplications");
-
-        // select 10 items per page
         selectItemsPerPage(10);
-        cy.get("@getApplications");
-
-        // Verify next buttons are enabled as there are more than 11 rows present
-        cy.get(commonView.nextPageButton).each(($nextBtn) => {
-            cy.wrap($nextBtn).should("not.be.disabled");
-        });
-
-        // Verify that previous buttons are disabled being on the first page
-        cy.get(commonView.prevPageButton).each(($previousBtn) => {
-            cy.wrap($previousBtn).should("be.disabled");
-        });
-
-        // Verify that navigation button to last page is enabled
-        cy.get(commonView.lastPageButton).should("not.be.disabled");
-
-        // Verify that navigation button to first page is disabled being on the first page
-        cy.get(commonView.firstPageButton).should("be.disabled");
-
-        // Navigate to next page
-        cy.get(commonView.nextPageButton).eq(0).click();
-        cy.get("@getApplications");
-
-        // Verify that previous buttons are enabled after moving to next page
-        cy.get(commonView.prevPageButton).each(($previousBtn) => {
-            cy.wrap($previousBtn).should("not.be.disabled");
-        });
-
-        // Verify that navigation button to first page is enabled after moving to next page
-        cy.get(commonView.firstPageButton).should("not.be.disabled");
+        validatePagination();
     });
 
     it("Items per page validations", function () {

@@ -27,15 +27,20 @@ import {
     clickItemInKebabMenu,
 } from "../../../../../utils/utils";
 import { businessColumnSelector } from "../../../../views/applicationinventory.view";
-import { stakeholdergroupsSelect, stakeholderSelect } from "../../../../views/assessment.view";
+import {
+    continueButton,
+    stakeholdergroupsSelect,
+    stakeholderSelect,
+} from "../../../../views/assessment.view";
 import { navMenu } from "../../../../views/menu.view";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
-import { applicationInventory, button, SEC } from "../../../../types/constants";
+import { applicationInventory, button, legacyPathfinder, SEC } from "../../../../types/constants";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import * as data from "../../../../../utils/data_utils";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Tag } from "../../../../models/migration/controls/tags";
+import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let stakeholderGroupsList: Array<Stakeholdergroups> = [];
@@ -46,7 +51,7 @@ let businessServicesList: Array<BusinessServices> = [];
 describe(["@tier3"], "Applications interlinked to tags and business service", () => {
     before("Login and Create Test Data", function () {
         login();
-
+        AssessmentQuestionnaire.enable(legacyPathfinder);
         stakeholdersList = createMultipleStakeholders(1);
         stakeholderGroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
     });
@@ -148,6 +153,8 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         //Verify that values show blank
         cy.get(stakeholderSelect).should("have.value", "");
         cy.get(stakeholdergroupsSelect).should("have.value", "");
+        clickByText(button, "Cancel");
+        cy.get(continueButton).click();
     });
 
     after("Perform test data clean up", function () {

@@ -25,6 +25,7 @@ import {
     goToPage,
     goToLastPage,
     deleteAppImportsTableRows,
+    validatePagination,
 } from "../../../../../utils/utils";
 import { trTag } from "../../../../types/constants";
 import { sideKebabMenuImports } from "../../../../views/applicationinventory.view";
@@ -88,35 +89,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         openManageImportsPage();
 
         selectItemsPerPage(10);
-        cy.wait(2000);
-
-        // Verify next buttons are enabled as there are more than 11 rows present
-        cy.get(commonView.nextPageButton).each(($nextBtn) => {
-            cy.wrap($nextBtn).should("not.be.disabled");
-        });
-
-        // Verify that previous buttons are disabled being on the first page
-        cy.get(commonView.prevPageButton).each(($previousBtn) => {
-            cy.wrap($previousBtn).should("be.disabled");
-        });
-
-        // Verify that navigation button to last page is enabled
-        cy.get(commonView.lastPageButton).should("not.be.disabled");
-
-        // Verify that navigation button to first page is disabled being on the first page
-        cy.get(commonView.firstPageButton).should("be.disabled");
-
-        // Navigate to next page
-        cy.get(commonView.nextPageButton).eq(0).click();
-        cy.wait(2000);
-
-        // Verify that previous buttons are enabled after moving to next page
-        cy.get(commonView.prevPageButton).each(($previousBtn) => {
-            cy.wrap($previousBtn).should("not.be.disabled");
-        });
-
-        // Verify that navigation button to first page is enabled after moving to next page
-        cy.get(commonView.firstPageButton).should("not.be.disabled");
+        validatePagination();
     });
 
     it("Items per page validations", function () {

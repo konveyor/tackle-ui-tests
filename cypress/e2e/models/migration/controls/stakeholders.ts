@@ -49,7 +49,7 @@ export class Stakeholders {
     email: string;
     jobfunction: string;
     groups: Array<string>;
-    static fullUrl = Cypress.env("tackleUrl") + "/controls/stakeholders";
+    static fullUrl = Cypress.env("tackleUrl") + "controls/stakeholders";
 
     constructor(email: string, name: string, jobfunction?: string, groups?: Array<string>) {
         this.email = email;
@@ -155,8 +155,6 @@ export class Stakeholders {
 
     delete(cancel = false): void {
         Stakeholders.openList();
-        selectItemsPerPage(100);
-        cy.wait(2000);
         performRowAction(this.email, deleteAction);
         if (cancel) {
             click(commonView.confirmCancelButton);

@@ -20,15 +20,10 @@ import {
     selectItemsPerPage,
     deleteTableRows,
     createMultipleStakeholderGroups,
+    validatePagination,
 } from "../../../../../utils/utils";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
-import {
-    firstPageButton,
-    lastPageButton,
-    nextPageButton,
-    pageNumInput,
-    prevPageButton,
-} from "../../../../views/common.view";
+import { lastPageButton, pageNumInput, prevPageButton } from "../../../../views/common.view";
 
 let stakeholderGroupsList: Array<Stakeholdergroups> = [];
 
@@ -47,38 +42,8 @@ describe(["@tier3"], "Stakeholder groups pagination validations", function () {
         // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
-
-        // select 10 items per page
         selectItemsPerPage(10);
-        cy.get("@getStakeholdergroups");
-
-        // Verify next buttons are enabled as there are more than 11 rows present
-        cy.get(nextPageButton).each(($nextBtn) => {
-            cy.wrap($nextBtn).should("not.be.disabled");
-        });
-
-        // Verify that previous buttons are disabled being on the first page
-        cy.get(prevPageButton).each(($previousBtn) => {
-            cy.wrap($previousBtn).should("be.disabled");
-        });
-
-        // Verify that navigation button to last page is enabled
-        cy.get(lastPageButton).should("not.be.disabled");
-
-        // Verify that navigation button to first page is disabled being on the first page
-        cy.get(firstPageButton).should("be.disabled");
-
-        // Navigate to next page
-        cy.get(nextPageButton).eq(0).click();
-        cy.get("@getStakeholdergroups");
-
-        // Verify that previous buttons are enabled after moving to next page
-        cy.get(prevPageButton).each(($previousBtn) => {
-            cy.wrap($previousBtn).should("not.be.disabled");
-        });
-
-        // Verify that navigation button to first page is enabled after moving to next page
-        cy.get(firstPageButton).should("not.be.disabled");
+        validatePagination();
     });
 
     it("Items per page validations", function () {
@@ -123,7 +88,7 @@ describe(["@tier3"], "Stakeholder groups pagination validations", function () {
         });
     });
 
-    it("Last page item(s) deletion, impact on page reload validation", function () {
+    it("Bug MTA-1675: Last page item(s) deletion, impact on page reload validation", function () {
         // Issue - https://issues.redhat.com/browse/TACKLE-155
         // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();

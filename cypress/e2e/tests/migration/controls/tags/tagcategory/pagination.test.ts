@@ -66,11 +66,7 @@ describe(["@tier3"], "Tag category pagination validations", function () {
     it("Navigation button validations", function () {
         // Navigate to Tags tab
         TagCategory.openList();
-
-        // select 10 items per page
         selectItemsPerPage(10);
-
-        // Run validation
         validatePagination();
     });
 
