@@ -28,6 +28,7 @@ import { name, tags, SortType, businessService } from "../../../../types/constan
 import * as data from "../../../../../utils/data_utils";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
+import { Application } from "../../../../models/migration/applicationinventory/application";
 
 var applicationsList: Array<Assessment> = [];
 let businessServicesList: Array<BusinessServices> = [];
@@ -132,6 +133,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
     });
 
     after("Perform test data clean up", function () {
+        Application.open(true);
         deleteByList(applicationsList);
         deleteByList(businessServicesList);
     });

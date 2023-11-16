@@ -127,7 +127,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
     });
 
     afterEach("Persist session", function () {
-        Application.open(100, true);
+        Application.open(true);
     });
 
     after("Perform test data clean up", function () {

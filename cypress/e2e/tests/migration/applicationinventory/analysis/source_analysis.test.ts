@@ -73,7 +73,7 @@ describe(["@tier1"], "Source Analysis", () => {
     });
 
     afterEach("Reset url", function () {
-        Application.open(100, true);
+        Application.open(true);
     });
 
     it("Source + dependencies analysis on tackletest app", function () {

@@ -46,7 +46,7 @@ describe(["@tier4"], "Source Analysis of big applications", () => {
         });
 
         cy.intercept("GET", "/hub/application*").as("getApplication");
-        Application.open(100, true);
+        Application.open(true);
     });
 
     it("Source analysis on PetClinic app", function () {
@@ -108,7 +108,7 @@ describe(["@tier4"], "Source Analysis of big applications", () => {
     });
 
     after("Test data clean up", function () {
-        Application.open(100, true);
+        Analysis.open(true);
         deleteByList(applications);
     });
 });

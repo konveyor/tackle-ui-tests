@@ -62,6 +62,7 @@ describe("Source Analysis without credentials", () => {
     });
 
     after("Perform test data clean up", function () {
+        Analysis.open(true);
         deleteByList(applicationsList);
     });
 });

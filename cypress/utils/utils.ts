@@ -231,7 +231,7 @@ export function logout(userName?: string): void {
 }
 
 export function resetURL(): void {
-    Application.open();
+    Application.open(true);
 }
 
 export function selectItemsPerPage(items: number): void {

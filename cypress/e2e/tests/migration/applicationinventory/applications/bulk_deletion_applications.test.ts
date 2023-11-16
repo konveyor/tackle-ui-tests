@@ -33,7 +33,7 @@ import {
 describe(["@tier2"], "Bulk deletion of applications", () => {
     before("Login", function () {
         login();
-        Assessment.open(100, true);
+        Assessment.open(true);
         createMultipleApplications(1);
         cy.get("tr.pf-m-clickable").then(($rows) => {
             if ($rows.length > 1) {
@@ -43,7 +43,7 @@ describe(["@tier2"], "Bulk deletion of applications", () => {
     });
 
     beforeEach("Interceptors", function () {
-        Assessment.open(100, true);
+        Assessment.open(true);
         createMultipleApplications(11);
         cy.intercept("POST", "/hub/tag*").as("postTag");
         cy.intercept("POST", "/hub/application*").as("postApplication");

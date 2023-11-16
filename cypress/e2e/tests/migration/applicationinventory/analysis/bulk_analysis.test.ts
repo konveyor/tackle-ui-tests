@@ -66,7 +66,7 @@ describe(["@tier4"], "Bulk analysis and custom metrics afterwards", () => {
     });
 
     after("Perform test data clean up", function () {
-        Assessment.open(100, true);
+        Analysis.open(true);
         deleteByList(analyses);
     });
 });
