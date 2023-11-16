@@ -60,7 +60,7 @@ export class Issues {
             click(searchButton);
         } else if (item == filterIssue.bs && !Array.isArray(itemName)) {
             click(bsFilterName);
-            clickWithinByText(bsFilterName, button, itemName);
+            clickByText(button, itemName);
         } else if (item == filterIssue.tags && Array.isArray(itemName)) {
             click(tagFilterName);
             itemName.forEach((name) => {
