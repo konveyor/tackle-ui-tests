@@ -55,6 +55,8 @@ import { BusinessServices } from "../../../../models/migration/controls/business
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Tag } from "../../../../models/migration/controls/tags";
+import { Application } from "../../../../models/migration/applicationinventory/application";
+import { MigrationWave } from "../../../../models/migration/migration-waves/migration-wave";
 
 let businessservicesList: Array<BusinessServices> = [];
 let stakeHoldersList: Stakeholders[];
@@ -211,6 +213,51 @@ describe(["@tier2"], "Application validations", () => {
         closeRowDetails(tag.tagCategory);
         application.delete();
         tag.delete();
+    });
+
+    it("Update and validate application profile details", function () {
+        let appdata = {
+            name: data.getAppName(),
+            description: data.getDescription(),
+            sourceRepo: data.getRandomUrl(),
+            group: data.getRandomUrl(),
+            artifact: data.getRandomWord(8),
+            version: data.getRandomWord(4),
+        };
+        let migrationWave: MigrationWave;
+        const now = new Date();
+        now.setDate(now.getDate() + 1);
+        const end = new Date(now.getTime());
+        end.setFullYear(end.getFullYear() + 1);
+
+        const application = new Application(appdata);
+        application.create();
+        cy.wait("@getApplication");
+
+        MigrationWave.open();
+
+        // create new migration wave
+        migrationWave = new MigrationWave(data.getRandomWord(8), now, end, null, null, [
+            application,
+        ]);
+        migrationWave.create();
+
+        application.validateAppInformationExist(appdata, migrationWave);
+        application.closeApplicationDetails();
+
+        // Update the application profile information
+        let addComment = data.getDescription();
+        let appdata1 = {
+            name: appdata.name,
+            owner: stakeHoldersList[0].name,
+            comment: addComment,
+            business: businessservicesList[0].name,
+        };
+        application.edit(appdata1, true);
+        application.validateAppInformationExist(appdata1);
+        application.closeApplicationDetails();
+        application.delete();
+        migrationWave.delete();
     });
 
     after("Perform test data clean up", function () {

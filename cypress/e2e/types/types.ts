@@ -87,6 +87,7 @@ export type applicationData = {
     version?: string;
     packaging?: string;
     owner?: string;
+    contributor?: string;
 };
 
 export type ProxyData = {

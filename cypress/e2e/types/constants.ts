@@ -38,6 +38,7 @@ export const criticality = "Criticality";
 export const credentials = "Credentials";
 export const credentialType = "Credential type";
 export const deleteAction = "Delete";
+export const details = "Details";
 export const editAction = "Edit";
 export const startDate = "Start date";
 export const endDate = "End date";
