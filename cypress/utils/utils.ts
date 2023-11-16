@@ -658,7 +658,7 @@ export function deleteTableRows(tableSelector = commonView.appTable): void {
                     cy.wait(2 * SEC);
                 });
             cy.get(commonView.confirmButton).click();
-            cy.wait(4000);
+            cy.wait(2 * SEC);
         }
     });
 }
