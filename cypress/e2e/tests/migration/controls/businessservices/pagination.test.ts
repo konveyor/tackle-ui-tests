@@ -23,10 +23,9 @@ import {
     validatePagination,
     goToPage,
     deleteTableRows,
-    deleteByList,
 } from "../../../../../utils/utils";
 import { SEC } from "../../../../types/constants";
-import { prevPageButton } from "../../../../views/common.view";
+import { firstPageButton, prevPageButton } from "../../../../views/common.view";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 
 let businessServiceList = [];

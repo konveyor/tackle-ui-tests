@@ -21,6 +21,7 @@ import {
     goToPage,
     createMultipleMigrationWaves,
     deleteByList,
+    validatePagination,
 } from "../../../../utils/utils";
 import * as commonView from "../../../views/common.view";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
@@ -37,34 +38,11 @@ describe(["@tier3"], "Migration Waves pagination validations", function () {
     it("Navigation button validations", function () {
         MigrationWave.open();
         selectItemsPerPage(10);
-
-        // Verify next buttons are enabled as there are more than 10 rows present
-        cy.get(commonView.nextPageButton).each(($nextBtn) => {
-            cy.wrap($nextBtn).should("not.be.disabled");
-        });
-
-        // Verify that previous buttons are disabled being on the first page
-        cy.get(commonView.prevPageButton).each(($previousBtn) => {
-            cy.wrap($previousBtn).should("be.disabled");
-        });
-
-        cy.get(commonView.lastPageButton).should("not.be.disabled");
-
-        cy.get(commonView.firstPageButton).should("be.disabled");
-
-        // Navigate to next page
-        cy.get(commonView.nextPageButton).eq(0).click();
-
-        cy.get(commonView.prevPageButton).each(($previousBtn) => {
-            cy.wrap($previousBtn).should("not.be.disabled");
-        });
-
-        cy.get(commonView.firstPageButton).should("not.be.disabled");
+        validatePagination();
     });
 
     it("Items per page validations", function () {
         MigrationWave.open();
-
         selectItemsPerPage(10);
 
         // Verify that only 10 items are displayed
