@@ -49,6 +49,7 @@ import {
     analysis,
     owner,
     JiraType,
+    migration,
 } from "../e2e/types/constants";
 import {
     actionButton,
@@ -717,7 +718,7 @@ export function uploadFile(fileName: string): void {
 }
 
 export function navigate_to_application_inventory(): void {
-    selectUserPerspective("Migration");
+    selectUserPerspective(migration);
     clickByText(navMenu, applicationInventory);
 }
 

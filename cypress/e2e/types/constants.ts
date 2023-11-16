@@ -81,6 +81,7 @@ export const adoptionCandidateDistribution = "Adoption candidate distribution";
 export const identiFiedRisks = "Identified risks";
 export const suggestedAdoptionPlan = "Suggested adoption plan";
 export const assessmentQuestionnaires = "Assessment questionnaires";
+export const legacyPathfinder = "Legacy Pathfinder";
 
 export const createAppButton = "#create-application";
 export const assessAppButton = "Assess";
