@@ -1,0 +1,11 @@
+name: Global CI
+
+on: ["push", "pull_request"]
+
+jobs:
+  e2e:
+    uses: konveyor/ci/.github/workflows/global-ci.yml@main
+    with:
+      run_api_tests: false
+      run_ui_tests: true
+      ui_tests_ref: ${{ github.event.number && format('refs/pull/{0}/merge', github.event.number) || '' }}
