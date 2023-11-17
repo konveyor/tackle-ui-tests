@@ -835,15 +835,19 @@ export function deleteApplicationTableRows(): void {
     // are imported. For all other tests use deleteByList(appList)
     navigate_to_application_inventory();
     cy.get(commonView.appTable)
-        .find(trTag)
-        .each(($tableRow) => {
-            if ($tableRow.hasClass("pf-m-clickable")) {
-                cy.wrap($tableRow).within(() => {
-                    cy.get(sideKebabMenuImports, { timeout: 10000 }).click();
-                    cy.get("ul[role=menu] > li").contains("Delete").click();
-                });
-                cy.get(commonView.confirmButton).click();
-                cy.wait(4000);
+        .next()
+        .then(($div) => {
+            if (!$div.hasClass("pf-v5-c-empty-state")) {
+                cy.get(commonView.appTable)
+                    .find(trTag)
+                    .then(($rows) => {
+                        for (let i = 0; i < $rows.length - 2; i++) {
+                            cy.get(sideKebabMenuImports, { timeout: 10000 }).first().click();
+                            cy.get("ul[role=menu] > li").contains("Delete").click();
+                            cy.get(commonView.confirmButton).click();
+                            cy.wait(5000);
+                        }
+                    });
             }
         });
 }
