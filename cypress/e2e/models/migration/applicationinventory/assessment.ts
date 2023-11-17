@@ -192,33 +192,24 @@ export class Assessment extends Application {
         super.edit(updatedValues);
     }
 
-    retake_assessment(
+    retake_questionnaire(
         risk,
         stakeholders?: Array<string>,
-        stakeholderGroups?: Array<string>,
-        applicationOpen = false
+        stakeholderGroups?: Array<string>
     ): void {
+        let applicationOpen: boolean;
         Application.open();
         this.selectApplication();
         clickItemInKebabMenu(this.name, "Assess");
         cy.wait(SEC);
         clickByText(button, "Retake");
-        if (stakeholders == undefined && stakeholderGroups == undefined) {
-            expect(
-                false,
-                "At least one arg out of stakeholder or stakeholder groups must be provided !"
-            ).to.equal(true);
-        } else if (stakeholders && stakeholderGroups == undefined)
-            this.perform_assessment(risk, stakeholders, null, (applicationOpen = false));
-        else if (stakeholders == undefined && stakeholderGroups)
-            this.perform_assessment(risk, stakeholderGroups, null, (applicationOpen = false));
-        else if (stakeholders && stakeholderGroups)
-            this.perform_assessment(
-                risk,
-                stakeholderGroups,
-                stakeholderGroups,
-                (applicationOpen = false)
-            );
+        // This check can't be done from the test because the alert message is displayed for a short time
+        // and we are in the midddle of answering a questionnaire at this point.
+        checkSuccessAlert(
+            commonView.alertTitle,
+            `Success alert:Success! Assessment discarded for ${this.name}.`
+        );
+        this.perform_assessment(risk, stakeholders, stakeholderGroups, (applicationOpen = false));
     }
 
     take_questionnaire(): void {
@@ -237,6 +228,7 @@ export class Assessment extends Application {
                 "At least one arg out of stakeholder or stakeholder groups must be provided !"
             ).to.equal(true);
         } else {
+            // These steps are not required for an assessment retake.
             if (applicationOpen) {
                 Application.open();
                 this.selectApplication();
