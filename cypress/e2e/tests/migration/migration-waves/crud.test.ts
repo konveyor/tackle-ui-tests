@@ -149,7 +149,7 @@ describe(["@tier0"], "Migration Waves CRUD operations", () => {
 
     after("Clear test data", function () {
         deleteAllStakeholders();
-        deleteAllStakeholderGroups();
+        deleteByList(stakeHolderGroups);
         deleteByList(applications);
     });
 
