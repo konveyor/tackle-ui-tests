@@ -58,7 +58,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("review", "Completed");
     });
 
-    it.only("Retake Assessment", function () {
+    it("Retake Assessment", function () {
         applicationList[0].retake_assessment(
             "low",
             stakeholderNameList,
