@@ -27,7 +27,6 @@ import {
     deleteAppImportsTableRows,
     validatePagination,
 } from "../../../../../utils/utils";
-import { trTag } from "../../../../types/constants";
 import { sideKebabMenuImports } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
@@ -43,37 +42,13 @@ const filesToImport = [
 
 describe(["@tier3"], "Manage imports pagination validations", function () {
     before("Login and Create Test Data", function () {
-        let rowsToCreate = 0;
-
-        // Import multiple csv files
-        function importMultipleFiles(num): void {
-            for (let i = 0; i < rowsToCreate; i++) {
-                var j = 0;
-                if (i <= 2) j = i;
-                importApplication(filePath + filesToImport[j]);
-                cy.wait(2000);
-            }
-        }
-
         login();
         Application.open();
         openManageImportsPage();
         selectItemsPerPage(100);
-
-        // Get the current table row count and create the right number of rows accordingly
-        cy.get(commonView.appTable)
-            .find(trTag)
-            .then(($rows) => {
-                let rowCount = 0;
-                rowCount = $rows.length - 1;
-
-                if (rowCount <= 10) {
-                    if (rowCount == 0) rowsToCreate = 11;
-                    else rowsToCreate = 11 - rowCount;
-                }
-
-                importMultipleFiles(rowsToCreate);
-            });
+        importApplication(filePath + filesToImport[0]);
+        importApplication(filePath + filesToImport[1]);
+        importApplication(filePath + filesToImport[2]);
     });
 
     beforeEach("Interceptors", function () {
@@ -87,7 +62,6 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         Application.open();
         cy.get("@getApplications");
         openManageImportsPage();
-
         selectItemsPerPage(10);
         validatePagination();
     });

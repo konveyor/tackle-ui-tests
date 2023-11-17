@@ -675,9 +675,11 @@ export function deleteTableRows(tableSelector = commonView.appTable): void {
 export function importApplication(fileName: string, disableAutoCreation?: boolean): void {
     // Performs application import via csv file upload
     application_inventory_kebab_menu("Import");
-    cy.get('input[type="file"]', { timeout: 2 * SEC }).attachFile(fileName, {
-        subjectType: "drag-n-drop",
-    });
+    cy.get('input[type="file"]', { timeout: 2 * SEC })
+        .eq(1)
+        .attachFile(fileName, {
+            subjectType: "drag-n-drop",
+        });
 
     //Uncheck createEntitiesCheckbox if auto creation of entities is disabled
     if (disableAutoCreation)
@@ -688,11 +690,11 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
             });
 
     cy.get(appImportForm, { timeout: 5 * SEC })
+        .eq(1)
         .find("button")
         .contains("Import")
-        .trigger("click");
+        .click();
     checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
-    // unresolved bug https://issues.redhat.com/browse/TACKLE-927
 }
 
 export function uploadXml(fileName: string, customSelector?: string): void {
