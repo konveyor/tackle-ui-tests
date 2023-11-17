@@ -16,6 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { click, login, createMultipleApplications, deleteByList } from "../../../../../utils/utils";
+import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import {
     closeForm,
@@ -77,6 +78,7 @@ describe(["@tier3"], "Manage application dependencies", () => {
     });
 
     after("Perform test data clean up", function () {
+        Application.open(true);
         deleteByList(applicationsList);
     });
 });

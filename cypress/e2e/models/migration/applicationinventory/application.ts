@@ -132,10 +132,10 @@ export class Application {
         if (packaging) this.packaging = packaging;
     }
 
-    public static open(itemsPerPage = 100, forceReload = false): void {
+    public static open(forceReload = false): void {
         if (forceReload) {
             cy.visit(Application.fullUrl, { timeout: 15 * SEC }).then((_) =>
-                selectItemsPerPage(itemsPerPage)
+                selectItemsPerPage(100)
             );
             return;
         }
@@ -144,7 +144,7 @@ export class Application {
             if ($url != Application.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, applicationInventory);
-                selectItemsPerPage(itemsPerPage);
+                selectItemsPerPage(100);
             }
         });
     }

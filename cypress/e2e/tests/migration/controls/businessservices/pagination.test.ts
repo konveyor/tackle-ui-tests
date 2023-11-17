@@ -23,17 +23,17 @@ import {
     validatePagination,
     goToPage,
     deleteTableRows,
+    deleteApplicationTableRows,
+    deleteAllBusinessServices,
 } from "../../../../../utils/utils";
 import { SEC } from "../../../../types/constants";
 import { prevPageButton } from "../../../../views/common.view";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 
-let businessServiceList = [];
 describe(["@tier3"], "Business services pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
-        // Create 11 rows
-        businessServiceList = createMultipleBusinessServices(11);
+        createMultipleBusinessServices(11);
     });
 
     it("Navigation button validations", function () {
@@ -75,12 +75,10 @@ describe(["@tier3"], "Business services pagination validations", function () {
         });
     });
 
-    it("Bug MTA-1675: Last page item(s) deletion, impact on page reload validation", function () {
-        // Navigate to business services tab and select 10 items per page
+    it("Last page item(s) deletion, impact on page reload validation", function () {
         BusinessServices.openList();
         selectItemsPerPage(10);
         cy.wait(2 * SEC);
-        // Navigate to last page
         goToLastPage();
         // Delete all items of last page
         deleteTableRows();
@@ -91,6 +89,7 @@ describe(["@tier3"], "Business services pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        deleteTableRows();
+        deleteApplicationTableRows();
+        deleteAllBusinessServices();
     });
 });

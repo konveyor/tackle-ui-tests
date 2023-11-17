@@ -25,6 +25,7 @@ import {
     deleteByList,
     deleteFromArrayByIndex,
     clickItemInKebabMenu,
+    selectItemsPerPage,
 } from "../../../../../utils/utils";
 import { businessColumnSelector } from "../../../../views/applicationinventory.view";
 import {
@@ -41,6 +42,7 @@ import * as data from "../../../../../utils/data_utils";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Tag } from "../../../../models/migration/controls/tags";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { Application } from "../../../../models/migration/applicationinventory/application";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let stakeholderGroupsList: Array<Stakeholdergroups> = [];
@@ -146,6 +148,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         deleteFromArrayByIndex(stakeholderGroupsList, 0);
 
         clickByText(navMenu, applicationInventory);
+        selectItemsPerPage(100);
         application.selectApplication();
         clickItemInKebabMenu(application.name, "Assess");
         clickByText(button, "Retake");
@@ -158,6 +161,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
     });
 
     after("Perform test data clean up", function () {
+        Application.open(true);
         deleteByList(applicationList);
         deleteByList(businessServicesList);
     });

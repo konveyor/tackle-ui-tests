@@ -97,6 +97,7 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
     });
 
     after("Perform test data clean up", function () {
+        Application.open(true);
         deleteByList(applicationsList);
     });
 });

@@ -27,53 +27,27 @@ import {
     deleteAppImportsTableRows,
     validatePagination,
 } from "../../../../../utils/utils";
-import { trTag } from "../../../../types/constants";
 import { sideKebabMenuImports } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
 const filePath = "app_import/csv/";
-
-const filesToImport = [
-    "valid_application_rows.csv",
-    "mandatory_and_empty_rows.csv",
-    "non_existing_tags_business_service_rows.csv",
-];
+const filesToImport = "valid_application_rows.csv";
 
 describe(["@tier3"], "Manage imports pagination validations", function () {
     before("Login and Create Test Data", function () {
-        let rowsToCreate = 0;
-
         // Import multiple csv files
         function importMultipleFiles(num): void {
-            for (let i = 0; i < rowsToCreate; i++) {
-                var j = 0;
-                if (i <= 2) j = i;
-                importApplication(filePath + filesToImport[j]);
+            for (let i = 0; i < num; i++) {
+                importApplication(filePath + filesToImport);
                 cy.wait(2000);
             }
         }
 
         login();
-        Application.open();
         openManageImportsPage();
-        selectItemsPerPage(100);
-
-        // Get the current table row count and create the right number of rows accordingly
-        cy.get(commonView.appTable)
-            .find(trTag)
-            .then(($rows) => {
-                let rowCount = 0;
-                rowCount = $rows.length - 1;
-
-                if (rowCount <= 10) {
-                    if (rowCount == 0) rowsToCreate = 11;
-                    else rowsToCreate = 11 - rowCount;
-                }
-
-                importMultipleFiles(rowsToCreate);
-            });
+        importMultipleFiles(11);
     });
 
     beforeEach("Interceptors", function () {
@@ -93,10 +67,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
     });
 
     it("Items per page validations", function () {
-        Application.open();
-        cy.get("@getApplications");
         openManageImportsPage();
-
         selectItemsPerPage(10);
         cy.wait(2000);
 
@@ -119,10 +90,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
     });
 
     it("Page number validations", function () {
-        Application.open();
-        cy.get("@getApplications");
         openManageImportsPage();
-
         selectItemsPerPage(10);
         cy.wait(2000);
 
@@ -137,13 +105,8 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         goToPage(1);
     });
 
-    it("Last page item(s) deletion, impact on page reload validation", function () {
-        // Navigate to Application inventory tab and open manage imports page
-        Application.open();
-        cy.get("@getApplications");
+    it("Bug MTA-1693: Last page item(s) deletion, impact on page reload validation", function () {
         openManageImportsPage();
-
-        // Select 10 items per page
         selectItemsPerPage(10);
         cy.wait("@getImports");
 

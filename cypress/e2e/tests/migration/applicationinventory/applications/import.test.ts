@@ -219,6 +219,7 @@ describe(["@tier2"], "Application import operations", () => {
     });
 
     after("Perform test data clean up", function () {
+        Application.open(true);
         deleteApplicationTableRows();
         deleteAllBusinessServices();
     });
