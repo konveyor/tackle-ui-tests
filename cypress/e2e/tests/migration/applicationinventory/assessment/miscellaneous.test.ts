@@ -20,6 +20,7 @@ import {
     createMultipleApplications,
     deleteByList,
     checkSuccessAlert,
+    selectItemsPerPage,
 } from "../../../../../utils/utils";
 
 import * as data from "../../../../../utils/data_utils";
@@ -27,11 +28,13 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { alertTitle } from "../../../../views/common.view";
+import { Application } from "../../../../models/migration/applicationinventory/application";
 
 const fileName = "Legacy Pathfinder";
 let stakeholderList: Array<Stakeholders> = [];
 let stakeholderNameList: Array<string> = [];
 let applicationList: Array<Assessment> = [];
+let applicationOpen: boolean;
 
 describe(["@tier3"], "Tests related to application assessment and review", () => {
     before("Perform application assessment and review", function () {
@@ -53,6 +56,16 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].perform_review("low");
         cy.wait(2000);
         applicationList[0].verifyStatus("review", "Completed");
+    });
+
+    it.only("Retake Assessment", function () {
+        applicationList[0].retake_assessment(
+            "low",
+            stakeholderNameList,
+            null,
+            (applicationOpen = false)
+        );
+        applicationList[0].verifyStatus("assessment", "Completed");
     });
 
     it("Discard Assessment", function () {

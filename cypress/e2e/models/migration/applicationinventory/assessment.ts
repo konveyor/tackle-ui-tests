@@ -192,6 +192,35 @@ export class Assessment extends Application {
         super.edit(updatedValues);
     }
 
+    retake_assessment(
+        risk,
+        stakeholders?: Array<string>,
+        stakeholderGroups?: Array<string>,
+        applicationOpen = false
+    ): void {
+        Application.open();
+        this.selectApplication();
+        clickItemInKebabMenu(this.name, "Assess");
+        cy.wait(SEC);
+        clickByText(button, "Retake");
+        if (stakeholders == undefined && stakeholderGroups == undefined) {
+            expect(
+                false,
+                "At least one arg out of stakeholder or stakeholder groups must be provided !"
+            ).to.equal(true);
+        } else if (stakeholders && stakeholderGroups == undefined)
+            this.perform_assessment(risk, stakeholders, null, (applicationOpen = false));
+        else if (stakeholders == undefined && stakeholderGroups)
+            this.perform_assessment(risk, stakeholderGroups, null, (applicationOpen = false));
+        else if (stakeholders && stakeholderGroups)
+            this.perform_assessment(
+                risk,
+                stakeholderGroups,
+                stakeholderGroups,
+                (applicationOpen = false)
+            );
+    }
+
     take_questionnaire(): void {
         clickByText(button, "Take");
     }
@@ -199,7 +228,8 @@ export class Assessment extends Application {
     perform_assessment(
         risk,
         stakeholders?: Array<string>,
-        stakeholderGroups?: Array<string>
+        stakeholderGroups?: Array<string>,
+        applicationOpen = true
     ): void {
         if (stakeholders == undefined && stakeholderGroups == undefined) {
             expect(
@@ -207,13 +237,14 @@ export class Assessment extends Application {
                 "At least one arg out of stakeholder or stakeholder groups must be provided !"
             ).to.equal(true);
         } else {
-            Application.open();
-            selectItemsPerPage(100);
-            this.selectApplication();
-            clickItemInKebabMenu(this.name, "Assess");
-            cy.wait(6000);
-            this.take_questionnaire();
-            cy.wait(SEC);
+            if (applicationOpen) {
+                Application.open();
+                this.selectApplication();
+                clickItemInKebabMenu(this.name, "Assess");
+                cy.wait(SEC);
+                this.take_questionnaire();
+                cy.wait(SEC);
+            }
             if (stakeholders) this.selectStakeholders(stakeholders);
             if (stakeholderGroups) this.selectStakeholderGroups(stakeholderGroups);
             clickJs(commonView.nextButton);
