@@ -192,15 +192,19 @@ export class Assessment extends Application {
         super.edit(updatedValues);
     }
 
+    clickAssessButton() {
+        Application.open();
+        this.selectApplication();
+        clickItemInKebabMenu(this.name, "Assess");
+    }
+
     retake_questionnaire(
         risk,
         stakeholders?: Array<string>,
         stakeholderGroups?: Array<string>
     ): void {
         let applicationOpen: boolean;
-        Application.open();
-        this.selectApplication();
-        clickItemInKebabMenu(this.name, "Assess");
+        this.clickAssessButton();
         cy.wait(SEC);
         clickByText(button, "Retake");
         // This check can't be done from the test because the alert message is displayed for a short time
@@ -228,11 +232,9 @@ export class Assessment extends Application {
                 "At least one arg out of stakeholder or stakeholder groups must be provided !"
             ).to.equal(true);
         } else {
-            // These steps are not required for an assessment retake.
+            // These steps are not required for a questionnaire retake.
             if (applicationOpen) {
-                Application.open();
-                this.selectApplication();
-                clickItemInKebabMenu(this.name, "Assess");
+                this.clickAssessButton();
                 cy.wait(SEC);
                 this.take_questionnaire();
                 cy.wait(SEC);
