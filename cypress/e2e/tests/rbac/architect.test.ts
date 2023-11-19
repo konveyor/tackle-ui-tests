@@ -18,12 +18,18 @@ limitations under the License.
 import { User } from "../../models/keycloak/users/user";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
-import { getRandomApplicationData, login, logout } from "../../../utils/utils";
+import {
+    createMultipleStakeholders,
+    getRandomApplicationData,
+    login,
+    logout,
+} from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
+import { Stakeholders } from "../../models/migration/controls/stakeholders";
 
 describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
     let userArchitect = new UserArchitect(getRandomUserData());
@@ -77,12 +83,8 @@ describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
         Analysis.validateAnalyzeButton(this.rbacRules);
     });
 
-    it("Architect, validate analysis details and cancel analysis buttons presence", function () {
+    it("Architect, validate analysis and assessment context menu buttons presence", function () {
         application.validateAnalysisAvailableActions(this.rbacRules);
-    });
-
-    it("Architect, validate assessment context menu buttons presence", function () {
-        application.validateAssessmentAvailableOptions(this.rbacRules);
     });
 
     it("Architect, validate availability of binary upload functionality", function () {
