@@ -25,6 +25,7 @@ import {
     deleteTableRows,
     deleteApplicationTableRows,
     deleteAllBusinessServices,
+    deleteAllItems,
 } from "../../../../../utils/utils";
 import { SEC } from "../../../../types/constants";
 import { prevPageButton } from "../../../../views/common.view";
@@ -81,7 +82,7 @@ describe(["@tier3"], "Business services pagination validations", function () {
         cy.wait(2 * SEC);
         goToLastPage();
         // Delete all items of last page
-        deleteTableRows();
+        deleteAllItems();
         // Verify that page is re-directed to previous page
         cy.get("td[data-label=Name]").then(($rows) => {
             cy.wrap($rows.length).should("eq", 10);

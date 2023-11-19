@@ -18,9 +18,9 @@ limitations under the License.
 import {
     login,
     selectItemsPerPage,
-    deleteTableRows,
     createMultipleStakeholders,
     validatePagination,
+    deleteAllItems,
 } from "../../../../../utils/utils";
 import { lastPageButton, pageNumInput, prevPageButton } from "../../../../views/common.view";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
@@ -101,7 +101,7 @@ describe(["@tier3"], "Stakeholder pagination validations", function () {
         cy.wait(2000);
 
         // Delete all items of last page
-        deleteTableRows(stakeHoldersTable);
+        deleteAllItems(stakeHoldersTable);
 
         // Verify that page is re-directed to previous page
         cy.get("td[data-label=Email]").then(($rows) => {
@@ -110,6 +110,6 @@ describe(["@tier3"], "Stakeholder pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        deleteTableRows(stakeHoldersTable);
+        deleteAllItems(stakeHoldersTable);
     });
 });
