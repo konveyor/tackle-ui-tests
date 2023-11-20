@@ -38,7 +38,6 @@ import {
     criticality,
     priority,
     confidence,
-    deleteAction,
     applicationInventory,
     SEC,
     CredentialType,
@@ -55,7 +54,7 @@ import {
     actionButton,
     date,
     createEntitiesCheckbox,
-    sideKebabMenuImports,
+    sideKebabMenu,
     appImportForm,
     kebabMenu,
 } from "../e2e/views/applicationinventory.view";
@@ -92,6 +91,7 @@ import { Jira } from "../e2e/models/administration/jira-connection/jira";
 import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
 import { closeModal } from "../e2e/views/assessment.view";
 import { Application } from "../e2e/models/migration/applicationinventory/application";
+import { stakeHoldersTable } from "../e2e/views/stakeholders.view";
 
 const { _ } = Cypress;
 
@@ -656,22 +656,6 @@ export function notExistsWithinRow(
         .should("not.contain", valueToSearch);
 }
 
-export function deleteTableRows(tableSelector = commonView.appTable): void {
-    cy.get(tableSelector).get("tbody").find(trTag).as("rowsIdentifier");
-    cy.get("@rowsIdentifier").then(($tableRows) => {
-        for (let i = 0; i < $tableRows.length; i++) {
-            cy.get("@rowsIdentifier")
-                .eq(0)
-                .within(() => {
-                    click(commonView.deleteButton);
-                    cy.wait(2 * SEC);
-                });
-            cy.get(commonView.confirmButton).click();
-            cy.wait(2 * SEC);
-        }
-    });
-}
-
 export function importApplication(fileName: string, disableAutoCreation?: boolean): void {
     // Performs application import via csv file upload
     application_inventory_kebab_menu("Import");
@@ -764,7 +748,7 @@ export function openManageImportsPage(): void {
 export function openErrorReport(): void {
     // Open error report for the first row
     cy.get("table > tbody > tr").eq(0).as("firstRow");
-    cy.get("@firstRow").find(sideKebabMenuImports).click();
+    cy.get("@firstRow").find(sideKebabMenu).click();
     cy.get("@firstRow").find(button).contains("View error report").click();
     cy.get("h1", { timeout: 5 * SEC }).contains("Error report");
 }
@@ -798,84 +782,6 @@ export function migration_wave_kebab_menu(menu): void {
     // The value for menu could be one of {Export to Issue Manager, Delete}
     cy.get(actionButton).eq(1).click({ force: true });
     cy.get(commonView.kebabMenuItem).contains(menu).click({ force: true });
-}
-
-export function deleteAllMigrationWaves(currentPage = false): void {
-    MigrationWave.open();
-    cy.wait(2000);
-    cy.get(MigrationWaveView.waveTable)
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.wait(1000);
-                cy.get("span.pf-c-options-menu__toggle-text")
-                    .eq(0)
-                    .then(($body) => {
-                        if (!$body.text().includes("of 0")) {
-                            if (currentPage) {
-                                cy.get(".pf-c-dropdown__toggle-button").click({ force: true });
-                                clickByText(button, "Select page");
-                            } else {
-                                cy.get("input#bulk-selected-items-checkbox", {
-                                    timeout: 10 * SEC,
-                                }).check({ force: true });
-                            }
-
-                            migration_wave_kebab_menu("Delete");
-                            clickByText(button, "Delete", true);
-                        }
-                    });
-            }
-        });
-}
-
-export function deleteApplicationTableRows(): void {
-    // Delete all rows one by one for which Delete button is enabled
-    // to be used only in manageImports tests as we don't know which apps
-    // are imported. For all other tests use deleteByList(appList)
-    navigate_to_application_inventory();
-    cy.get(commonView.appTable)
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-v5-c-empty-state")) {
-                cy.get(commonView.appTable)
-                    .find(trTag)
-                    .then(($rows) => {
-                        for (let i = 0; i < $rows.length - 2; i++) {
-                            cy.get(sideKebabMenuImports, { timeout: 10000 }).first().click();
-                            cy.get("ul[role=menu] > li").contains("Delete").click();
-                            cy.get(commonView.confirmButton).click();
-                            cy.wait(5000);
-                        }
-                    });
-            }
-        });
-}
-
-export function deleteAppImportsTableRows() {
-    openManageImportsPage();
-
-    cy.intercept("DELETE", "/hub/importsummaries*/*").as("deleteImportUtils");
-
-    cy.get(commonView.appTable)
-        .find(trTag)
-        .then(($rows) => {
-            for (let i = 0; i < $rows.length - 1; i++) {
-                cy.get(sideKebabMenuImports, { timeout: 10000 }).first().click();
-                cy.get("ul[role=menu] > li").contains("Delete").click();
-                cy.get(commonView.confirmButton).click();
-                cy.wait("@deleteImportUtils");
-                cy.wait(5000);
-            }
-        });
-}
-
-// Checks if the hook has to be skipped, if the tag is not mentioned during test run
-export function hasToBeSkipped(tagName: string): boolean {
-    if (Cypress.env("grepTags")) {
-        if (!Cypress.env("grepTags").includes(tagName)) return true;
-    }
-    return false;
 }
 
 // Perform edit/delete action on the specified row selector by clicking a text button
@@ -1235,11 +1141,6 @@ export function createApplicationObjects(numberOfObjects: number): Array<Assessm
     return applicationObjectsList;
 }
 
-export function deleteAllJobfunctions(cancel = false): void {
-    Jobfunctions.openList();
-    deleteAllItems();
-}
-
 type Deletable = { delete: () => void };
 
 export function deleteByList<T extends Deletable>(array: T[]): void {
@@ -1247,89 +1148,6 @@ export function deleteByList<T extends Deletable>(array: T[]): void {
         cy.wait(0.8 * SEC);
         element.delete();
     });
-}
-
-export function deleteAllStakeholders(): void {
-    Stakeholders.openList();
-    cy.get("table[aria-label='Stakeholders table']", { timeout: 2 * SEC }).then(($tbody) => {
-        if (!$tbody.text().includes("No data available")) {
-            selectItemsPerPage(100);
-            cy.get(commonView.deleteButton).then(($elems) => {
-                const elemsLength = $elems.length;
-                for (let i = 0; i < elemsLength; i++) {
-                    cy.get(commonView.deleteButton)
-                        .first()
-                        .click()
-                        .then((_) => {
-                            cy.wait(0.5 * SEC);
-                            click(commonView.confirmButton);
-                            cy.wait(SEC);
-                        });
-                }
-            });
-        }
-    });
-}
-
-export function deleteAllStakeholderGroups(cancel = false): void {
-    Stakeholdergroups.openList();
-    deleteAllItems();
-}
-
-export function deleteAllBusinessServices() {
-    BusinessServices.openList();
-    cy.get(commonView.appTable)
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
-                    .each(($tableRow) => {
-                        const name = $tableRow.find("td[data-label=Name]").text();
-                        cy.get(tdTag)
-                            .contains(name)
-                            .closest(trTag)
-                            .contains(button, deleteAction)
-                            .then(($delete_btn) => {
-                                if (!$delete_btn.hasClass("pf-m-aria-disabled")) {
-                                    $delete_btn.click();
-                                    cy.wait(800);
-                                    click(commonView.confirmButton);
-                                    cy.wait(2000);
-                                }
-                            });
-                    });
-            }
-        });
-}
-
-export function deleteAllTagCategory(cancel = false): void {
-    TagCategory.openList();
-    cy.get(commonView.appTable, { timeout: 2 * SEC })
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
-                    .each(($tableRow) => {
-                        cy.wait(1000);
-                        let name = $tableRow.find('td[data-label="Tag type"]').text();
-                        if (!(data.getDefaultTagCategories().indexOf(name) > -1)) {
-                            cy.get(tdTag)
-                                .contains(name)
-                                .parent(trTag)
-                                .within(() => {
-                                    click(commonView.deleteButton);
-                                    cy.wait(1000);
-                                });
-                            click(commonView.confirmButton);
-                            cy.wait(4000);
-                        }
-                    });
-            }
-        });
 }
 
 export function deleteAllTagsAndTagCategories(): void {
@@ -1383,37 +1201,97 @@ export function deleteAllTagsAndTagCategories(): void {
         });
 }
 
+export function isTableEmpty(
+    tableSelector: string = commonView.commonTable
+): Cypress.Chainable<boolean> {
+    return cy.get(tableSelector).then(($element) => {
+        return $element.hasClass("pf-c-empty-state");
+    });
+}
+
+export function deleteAllRows(tableSelector: string = commonView.commonTable) {
+    // This method if for pages that have delete button inside Kebab menu
+    // like Applications and Imports page
+    selectItemsPerPage(100);
+    isTableEmpty().then((empty) => {
+        if (!empty) {
+            cy.get(tableSelector)
+                .find(trTag)
+                .then(($rows) => {
+                    for (let i = 0; i < $rows.length - 2; i++) {
+                        cy.get(sideKebabMenu, { timeout: 10000 }).first().click();
+                        cy.get("ul[role=menu] > li").contains("Delete").click();
+                        cy.get(commonView.confirmButton).click();
+                        cy.wait(5000);
+                    }
+                });
+        }
+    });
+}
+
+export function deleteAllItems(
+    tableSelector: string = commonView.commonTable,
+    pageNumber?: number
+) {
+    // This method if for pages like controls that do not have delete button inside kebabmenu
+    if (pageNumber) {
+        goToPage(pageNumber);
+    }
+    isTableEmpty().then((empty) => {
+        if (!empty) {
+            cy.get(tableSelector)
+                .find(trTag)
+                .then(($rows) => {
+                    for (let i = 0; i < $rows.length - 1; i++) {
+                        cy.get(commonView.deleteButton, { timeout: 10000 })
+                            .first()
+                            .then(($delete_btn) => {
+                                if (!$delete_btn.hasClass("pf-m-aria-disabled")) {
+                                    $delete_btn.click();
+                                    cy.wait(0.5 * SEC);
+                                    click(commonView.confirmButton);
+                                    cy.wait(SEC);
+                                }
+                            });
+                    }
+                });
+        }
+    });
+}
+
+export function deleteAllBusinessServices() {
+    BusinessServices.openList();
+    deleteAllItems();
+}
+
+export function deleteAllStakeholderGroups(cancel = false): void {
+    Stakeholdergroups.openList();
+    deleteAllItems();
+}
+
+export function deleteAllStakeholders(): void {
+    Stakeholders.openList();
+    deleteAllItems(stakeHoldersTable);
+}
+
 export async function deleteAllCredentials() {
     Credentials.openList();
     deleteAllItems();
 }
 
-export function deleteAllItems(amountPerPage = 100, pageNumber?: number) {
-    selectItemsPerPage(amountPerPage);
-    if (pageNumber) {
-        goToPage(pageNumber);
-    }
-    cy.get(commonView.appTable, { timeout: 15 * SEC })
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
-                    .each(($tableRow) => {
-                        let name = $tableRow.find("td[data-label=Name]").text();
-                        cy.get(tdTag)
-                            .contains(name)
-                            .closest(trTag)
-                            .within(() => {
-                                click(commonView.deleteButton);
-                                cy.wait(SEC);
-                            });
-                        click(commonView.confirmButton);
-                        cy.wait(SEC);
-                    });
-            }
-        });
+export function deleteAllJobfunctions(cancel = false): void {
+    Jobfunctions.openList();
+    deleteAllItems();
+}
+
+export function deleteApplicationTableRows(): void {
+    navigate_to_application_inventory();
+    deleteAllRows();
+}
+
+export function deleteAppImportsTableRows() {
+    openManageImportsPage();
+    deleteAllRows();
 }
 
 export const deleteFromArray = <T>(array: T[], el: T): T[] => {

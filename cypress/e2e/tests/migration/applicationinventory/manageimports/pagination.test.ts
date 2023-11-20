@@ -27,7 +27,7 @@ import {
     deleteAppImportsTableRows,
     validatePagination,
 } from "../../../../../utils/utils";
-import { sideKebabMenuImports } from "../../../../views/applicationinventory.view";
+import { sideKebabMenu } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
@@ -119,7 +119,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
             .get("tbody")
             .find("td[data-label='File name']")
             .each(($tableRow) => {
-                click(sideKebabMenuImports);
+                click(sideKebabMenu);
                 cy.get("ul[role=menu] > li").contains("Delete").click();
                 click(commonView.confirmButton);
                 cy.wait("@deleteImport");

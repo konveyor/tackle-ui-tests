@@ -22,13 +22,7 @@ import {
     deleteByList,
     validatePagination,
 } from "../../../../../utils/utils";
-import {
-    firstPageButton,
-    lastPageButton,
-    nextPageButton,
-    pageNumInput,
-    prevPageButton,
-} from "../../../../views/common.view";
+import { pageNumInput, prevPageButton } from "../../../../views/common.view";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 let jobFunctionsList: Array<Jobfunctions> = [];
 
@@ -72,7 +66,7 @@ describe(["@tier3"], "Job functions pagination validations", function () {
         });
     });
 
-    it("Bug MTA-1675: Page number validations", function () {
+    it("Page number validations", function () {
         // Navigate to Job functions tab
         Jobfunctions.openList();
 

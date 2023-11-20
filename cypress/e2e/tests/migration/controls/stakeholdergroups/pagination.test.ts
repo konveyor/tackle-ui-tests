@@ -18,19 +18,18 @@ limitations under the License.
 import {
     login,
     selectItemsPerPage,
-    deleteTableRows,
     createMultipleStakeholderGroups,
     validatePagination,
+    deleteAllStakeholderGroups,
+    deleteAllItems,
 } from "../../../../../utils/utils";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { lastPageButton, pageNumInput, prevPageButton } from "../../../../views/common.view";
 
-let stakeholderGroupsList: Array<Stakeholdergroups> = [];
-
 describe(["@tier3"], "Stakeholder groups pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
-        stakeholderGroupsList = createMultipleStakeholderGroups(11);
+        createMultipleStakeholderGroups(11);
     });
 
     beforeEach("Interceptors", function () {
@@ -46,7 +45,7 @@ describe(["@tier3"], "Stakeholder groups pagination validations", function () {
         validatePagination();
     });
 
-    it("Items per page validations", function () {
+    it("Bug MTA-1694: Items per page validations", function () {
         // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
@@ -88,7 +87,7 @@ describe(["@tier3"], "Stakeholder groups pagination validations", function () {
         });
     });
 
-    it("Bug MTA-1675: Last page item(s) deletion, impact on page reload validation", function () {
+    it("Bug MTA-1694: Last page item(s) deletion, impact on page reload validation", function () {
         // Issue - https://issues.redhat.com/browse/TACKLE-155
         // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
@@ -103,7 +102,7 @@ describe(["@tier3"], "Stakeholder groups pagination validations", function () {
         cy.wait(2000);
 
         // Delete all items of last page
-        deleteTableRows();
+        deleteAllItems();
 
         // Verify that page is re-directed to previous page
         cy.get("td[data-label=Name]").then(($rows) => {
@@ -112,6 +111,6 @@ describe(["@tier3"], "Stakeholder groups pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        deleteTableRows();
+        deleteAllStakeholderGroups();
     });
 });
