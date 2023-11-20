@@ -382,7 +382,7 @@ export class Application {
         doesExistSelector(createAppButton, rbacRules["Create new"]);
     }
 
-    validateAnalysisAvailableActions(rbacRules: RbacValidationRules): void {
+    validateAppContextMenu(rbacRules: RbacValidationRules): void {
         Application.open();
         selectItemsPerPage(100);
         cy.wait(SEC);
@@ -391,51 +391,29 @@ export class Application {
             .closest(trTag)
             .within(() => {
                 clickWithin("#row-actions", button);
-                doesExistButton(assessAppButton, rbacRules["Assess"]);
+                doesExistButton(assessAppButton, rbacRules["Application actions"]["Assess"]);
+                doesExistButton(reviewAppButton, rbacRules["Application actions"]["Review"]);
                 doesExistText(
-                    "Analysis details",
-                    rbacRules["analysis applicable options"]["Analysis details"]
+                    "Discard assessment",
+                    rbacRules["Application actions"]["Discard assessment"]
                 );
-                // doesExistText(
-                //     "Cancel analysis",
-                //     rbacRules["analysis applicable options"]["Cancel analysis"]
-                // );
-                doesExistText(
-                    "Manage credentials",
-                    rbacRules["analysis applicable options"]["Manage credentials"]
-                );
-                doesExistText("Delete", rbacRules["analysis applicable options"]["Delete"]);
-                doesExistText(
-                    "Discard review",
-                    rbacRules["assessment applicable options"]["Discard assessment"]
-                );
+                doesExistText("Discard review", rbacRules["Application actions"]["Discard review"]);
+                doesExistText("Delete", rbacRules["Application actions"]["Delete"]);
                 doesExistText(
                     "Manage dependencies",
-                    rbacRules["assessment applicable options"]["Manage dependencies"]
+                    rbacRules["Application actions"]["Manage dependencies"]
+                );
+                doesExistText(
+                    "Manage credentials",
+                    rbacRules["Application actions"]["Manage credentials"]
+                );
+                doesExistText(
+                    "Analysis details",
+                    rbacRules["Application actions"]["Analysis details"]
                 );
             });
     }
 
-    validateAssessmentAvailableOptions(rbacRules: RbacValidationRules): void {
-        Application.open();
-        selectItemsPerPage(100);
-        cy.get(tdTag)
-            .contains(this.name)
-            .closest(trTag)
-            .within(() => {
-                click(selectBox);
-                cy.wait(SEC);
-                click(kebabButton);
-                doesExistText(
-                    "Discard review",
-                    rbacRules["assessment applicable options"]["Discard assessment"]
-                );
-                doesExistText(
-                    "Manage dependencies",
-                    rbacRules["assessment applicable options"]["Manage dependencies"]
-                );
-            });
-    }
     validateUploadBinary(rbacRules: RbacValidationRules): void {
         Application.open();
         selectItemsPerPage(100);

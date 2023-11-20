@@ -425,7 +425,7 @@ export class Analysis extends Application {
 
     static validateTopActionMenu(rbacRules: RbacValidationRules) {
         Application.open();
-        if (rbacRules["Action menu"]["Not available"]) {
+        if (rbacRules["Top action menu"]["Not available"]) {
             cy.get(".pf-v5-c-page__main-section")
                 .eq(1)
                 .within(() => {
@@ -439,10 +439,10 @@ export class Analysis extends Application {
                 .within(() => {
                     clickWithin(kebabTopMenuButton, button);
                 });
-            doesExistText("Import", rbacRules["Action menu"]["Import"]);
-            doesExistText("Manage imports", rbacRules["Action menu"]["Manage imports"]);
-            doesExistText("Manage credentials", rbacRules["Action menu"]["Manage credentials"]);
-            doesExistText("Delete", rbacRules["Action menu"]["Delete"]);
+            doesExistText("Import", rbacRules["Top action menu"]["Import"]);
+            doesExistText("Manage imports", rbacRules["Top action menu"]["Manage imports"]);
+            doesExistText("Manage credentials", rbacRules["Top action menu"]["Manage credentials"]);
+            doesExistText("Delete", rbacRules["Top action menu"]["Delete"]);
         }
     }
 

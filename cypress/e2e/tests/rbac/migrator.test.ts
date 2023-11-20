@@ -18,12 +18,19 @@ limitations under the License.
 import { User } from "../../models/keycloak/users/user";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
-import { getRandomApplicationData, login, logout } from "../../../utils/utils";
+import { deleteByList, getRandomApplicationData, login, logout } from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
-import { CredentialType } from "../../types/constants";
+import { CredentialType, SEC } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
+import { Stakeholders } from "../../models/migration/controls/stakeholders";
+import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import * as data from "../../../utils/data_utils";
+
+const stakeholdersList: Array<Stakeholders> = [];
+const stakeholdersNameList: Array<string> = [];
+const fileName = "Legacy Pathfinder";
 
 describe(["@tier2", "@rhsso"], "Migrator RBAC operations", () => {
     let userMigrator = new UserMigrator(getRandomUserData());
@@ -36,6 +43,15 @@ describe(["@tier2", "@rhsso"], "Migrator RBAC operations", () => {
     before("Creating RBAC users, adding roles for them", () => {
         //Need to log in as admin and create simple app with known name to use it for tests
         login();
+        AssessmentQuestionnaire.enable(fileName);
+        // Navigate to stakeholders control tab and create new stakeholder
+        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
+        stakeholder.create();
+        cy.wait(2 * SEC);
+
+        stakeholdersList.push(stakeholder);
+        stakeholdersNameList.push(stakeholder.name);
+
         appCredentials.create();
         application.create();
         application.perform_review("low");
@@ -59,16 +75,6 @@ describe(["@tier2", "@rhsso"], "Migrator RBAC operations", () => {
         Application.validateCreateAppButton(this.rbacRules);
     });
 
-    it("Migrator, validate assess application button", function () {
-        //Migrator is not allowed to create applications
-        application.validateAssessButton(this.rbacRules);
-    });
-
-    it("Migrator, validate review application button", function () {
-        //Migrator is not allowed to review applications
-        application.validateReviewButton(this.rbacRules);
-    });
-
     it("Migrator, validate presence of import and manage imports", function () {
         //migrator is allowed to import applications
         Analysis.validateTopActionMenu(this.rbacRules);
@@ -79,13 +85,10 @@ describe(["@tier2", "@rhsso"], "Migrator RBAC operations", () => {
         Analysis.validateAnalyzeButton(this.rbacRules);
     });
 
-    it("Migrator, validate analysis details and cancel analysis buttons presence", function () {
-        application.validateAnalysisAvailableActions(this.rbacRules);
+    it("BUG MTA-1640 - Migrator, validate analysis details and cancel analysis buttons presence", function () {
+        application.validateAppContextMenu(this.rbacRules);
     });
 
-    it("Migrator, validate assessment context menu buttons presence", function () {
-        application.validateAssessmentAvailableOptions(this.rbacRules);
-    });
     it("Migrator, validate availability of binary upload functionality", function () {
         application.validateUploadBinary(this.rbacRules);
     });
@@ -94,6 +97,7 @@ describe(["@tier2", "@rhsso"], "Migrator RBAC operations", () => {
         userMigrator.logout();
         login();
         appCredentials.delete();
+        deleteByList(stakeholdersList);
         application.delete();
         logout();
         User.loginKeycloakAdmin();
