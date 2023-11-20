@@ -1,7 +1,6 @@
 import {
     click,
     clickByText,
-    clickWithinByText,
     getUrl,
     inputText,
     selectFilter,
@@ -12,13 +11,10 @@ import { button, filterIssue, migration, SEC, singleApplication } from "../../..
 import { navMenu } from "../../../views/menu.view";
 import { searchButton, span } from "../../../views/common.view";
 import {
-    appFilterName,
     bsFilterName,
-    categoryFilterName,
+    searchInput,
     singleAppDropList,
-    sourceFilterName,
     tagFilterName,
-    targetFilterName,
 } from "../../../views/issue.view";
 
 export class Issues {
@@ -44,27 +40,25 @@ export class Issues {
         clickByText(button, applicationName);
     }
 
-    public static filterBy(item: string, itemName: string | string[]): void {
-        //TODO: Refactor this after bug https://issues.redhat.com/browse/MTA-1465 will be fixed
-        const selectorMap: Record<string, string> = {
-            [filterIssue.appName]: appFilterName,
-            [filterIssue.category]: categoryFilterName,
-            [filterIssue.source]: sourceFilterName,
-            [filterIssue.target]: targetFilterName,
-        };
-
+    public static filterBy(filterType: string, item: string | string[]): void {
         Issues.openList();
-        selectFilter(item);
-        if (selectorMap[item]) {
-            inputText(selectorMap[item], itemName);
+        selectFilter(filterType);
+        const isApplicableFilter =
+            filterType === filterIssue.appName ||
+            filterType === filterIssue.category ||
+            filterType === filterIssue.source ||
+            filterType === filterIssue.target;
+
+        if (isApplicableFilter) {
+            inputText(searchInput, item);
             click(searchButton);
-        } else if (item == filterIssue.bs && !Array.isArray(itemName)) {
+        } else if (filterType == filterIssue.bs && !Array.isArray(item)) {
             click(bsFilterName);
-            clickByText(button, itemName);
-        } else if (item == filterIssue.tags && Array.isArray(itemName)) {
+            clickByText(span, item);
+        } else if (filterType == filterIssue.tags && Array.isArray(item)) {
             click(tagFilterName);
-            itemName.forEach((name) => {
-                clickWithinByText(tagFilterName, span, name);
+            item.forEach((name) => {
+                clickByText(span, name);
             });
         }
     }
