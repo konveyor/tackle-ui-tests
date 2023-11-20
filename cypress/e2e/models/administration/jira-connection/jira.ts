@@ -35,12 +35,8 @@ import {
 import { confirmButton, confirmCancelButton, navLink } from "../../../views/common.view";
 import { JiraIssue, JiraIssueType, JiraProject } from "./jira-api.interface";
 import { JiraCredentials } from "../credentials/JiraCredentials";
-import {
-    filterCategory,
-    filteredBy,
-    filterNameInput,
-    searchButton,
-} from "../../../views/credentials.view";
+import { filterCategory, filteredBy, searchButton } from "../../../views/credentials.view";
+import { searchInput } from "../../../views/issue.view";
 
 /**
  * Base class for Jira connection
@@ -242,7 +238,7 @@ export class Jira {
 
     static applyFilterByName(value: string) {
         selectFromDropList(filteredBy, filterCategory);
-        inputText(filterNameInput, value);
+        inputText(searchInput, value);
         click(searchButton);
     }
 

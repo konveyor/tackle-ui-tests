@@ -61,3 +61,4 @@ export const manageImportsActionsButton = "button[aria-label='Table toolbar acti
 export const nextButton = "button[cy-data='next']";
 export const span = "span";
 export const liTag = "li";
+export const searchInput = "#search-input";
