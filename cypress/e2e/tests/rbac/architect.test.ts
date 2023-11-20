@@ -21,7 +21,7 @@ import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { deleteByList, getRandomApplicationData, login, logout } from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
-import { CredentialType, SEC } from "../../types/constants";
+import { CredentialType, legacyPathfinder, SEC } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
@@ -30,7 +30,6 @@ import * as data from "../../../utils/data_utils";
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
-const fileName = "Legacy Pathfinder";
 
 describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
     let userArchitect = new UserArchitect(getRandomUserData());
@@ -42,7 +41,7 @@ describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
 
     before("Creating RBAC users, adding roles for them", function () {
         login();
-        AssessmentQuestionnaire.enable(fileName);
+        AssessmentQuestionnaire.enable(legacyPathfinder);
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
@@ -75,7 +74,7 @@ describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
         Application.validateCreateAppButton(this.rbacRules);
     });
 
-    it("Architect, validate presence of import and manage imports", function () {
+    it("Architect, validate content of top kebab menu", function () {
         //Architect is allowed to import applications
         Analysis.validateTopActionMenu(this.rbacRules);
     });
@@ -85,7 +84,7 @@ describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
         Analysis.validateAnalyzeButton(this.rbacRules);
     });
 
-    it("Architect, validate analysis and assessment context menu buttons presence", function () {
+    it("Architect, validate content of application kebab menu", function () {
         application.validateAppContextMenu(this.rbacRules);
     });
 
