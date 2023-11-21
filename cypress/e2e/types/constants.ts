@@ -26,6 +26,7 @@ export const analyzeButton = "Analyze";
 export const artifact = "Artifact";
 export const businessServices = "Business services";
 export const businessService = "Business Service";
+export const businessServiceLower = "Business service";
 export const button = "button";
 export const category = "Category";
 export const clearAllFilters = "Clear all filters";
