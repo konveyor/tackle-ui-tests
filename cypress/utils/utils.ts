@@ -352,7 +352,7 @@ export function applySelectFilter(filterId, filterName, filterText, isValid = tr
 export function applySearchFilter(
     filterName: string,
     searchText: string | string[],
-    identifiedRisk: boolean = false,
+    identifiedRisk = false,
     value?: number
 ): void {
     selectFilter(filterName, identifiedRisk, value);
