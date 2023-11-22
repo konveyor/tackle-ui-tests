@@ -47,7 +47,7 @@ describe(["@tier4"], "Perform certain operations after disabling Keycloak", func
     });
 
     it.skip("Bug MTA-1152: Auth disabled, Verify presence of Review application button", function () {
-        Application.validateReviewButton(this.rbacRules);
+        // Application.validateReviewButton(this.rbacRules);
     });
 
     after("Re-enable Keycloak", function () {

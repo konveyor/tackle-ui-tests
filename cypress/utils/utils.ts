@@ -269,23 +269,6 @@ export function selectFormItems(fieldId: string, item: string): void {
     cy.contains("button", item).click();
 }
 
-export function selectReactFormItems(
-    locator: string,
-    item: string,
-    formId?: string,
-    fieldId?: string
-): void {
-    if (!formId) {
-        formId = "FormGroup";
-    }
-    if (!fieldId) {
-        fieldId = "fieldId";
-    }
-    cy.waitForReact();
-    cy.react(formId, { props: { fieldId: locator } }).click();
-    cy.contains("button", item).click();
-}
-
 export function checkSuccessAlert(fieldId: string, message: string, close = false): void {
     validateTextPresence(fieldId, message);
     if (close) {
@@ -369,56 +352,51 @@ export function applySelectFilter(filterId, filterName, filterText, isValid = tr
 export function applySearchFilter(
     filterName: string,
     searchText: string | string[],
-    identifiedRisk?: boolean,
+    identifiedRisk: boolean = false,
     value?: number
 ): void {
     selectFilter(filterName, identifiedRisk, value);
+    const isStandardKnownFilter = [
+        businessServiceLower,
+        businessService,
+        repositoryType,
+        artifact,
+        owner,
+    ].includes(filterName);
+    const isSpecialKnownFilter = [tag, credentialType].includes(filterName);
 
-    if (
-        [
-            businessServiceLower,
-            businessService,
-            tag,
-            credentialType,
-            artifact,
-            repositoryType,
-            owner,
-        ].includes(filterName)
-    ) {
-        cy.get("div.pf-v5-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show")
-            .find("div.pf-v5-c-select")
-            .click();
-
-        if (
-            [businessServiceLower, businessService, repositoryType, artifact, owner].includes(
-                filterName
-            )
-        ) {
-            // ul[role=listbox] > li is for the Application Inventory page.
-            // span.pf-c-check__label is for the Copy assessment page.
-            cy.get("ul[role=listbox] > li, span.pf-v5-c-check__label")
-                .contains(searchText as string)
-                .click();
-        }
-
-        if ([tag, credentialType].includes(filterName)) {
-            if (Array.isArray(searchText)) {
-                searchText.forEach((searchTextValue) => {
-                    cy.get("div.pf-v5-c-select__menu > fieldset > label > span")
-                        .contains(searchTextValue)
-                        .click();
-                });
-            } else {
-                cy.get("div.pf-v5-c-select__menu").contains(searchText).click();
-            }
-        }
-    } else {
-        if (!Array.isArray(searchText)) {
-            searchText = [searchText];
-        }
-
-        searchText.forEach((searchTextValue) => filterInputText(searchTextValue, +identifiedRisk));
+    if (!Array.isArray(searchText)) {
+        searchText = [searchText];
     }
+
+    if (!isStandardKnownFilter && !isSpecialKnownFilter) {
+        searchText.forEach((searchTextValue) => filterInputText(searchTextValue, +identifiedRisk));
+        cy.wait(4000);
+        return;
+    }
+
+    cy.get("div.pf-v5-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show")
+        .find("div.pf-v5-c-select")
+        .click();
+
+    if (isStandardKnownFilter) {
+        // ul[role=listbox] > li is for the Application Inventory page.
+        // span.pf-c-check__label is for the Copy assessment page.
+        searchText.forEach((searchTextValue) => {
+            cy.get("ul[role=listbox] > li, span.pf-v5-c-check__label")
+                .contains(searchTextValue)
+                .click();
+        });
+    }
+
+    if (isSpecialKnownFilter) {
+        searchText.forEach((searchTextValue) => {
+            cy.get("div.pf-v5-c-select__menu > fieldset > label > span")
+                .contains(searchTextValue)
+                .click();
+        });
+    }
+
     cy.wait(4000);
 }
 
@@ -1270,16 +1248,6 @@ export function deleteAllStakeholders(): void {
     deleteAllItems(stakeHoldersTable);
 }
 
-export async function deleteAllCredentials() {
-    Credentials.openList();
-    deleteAllItems();
-}
-
-export function deleteAllJobfunctions(cancel = false): void {
-    Jobfunctions.openList();
-    deleteAllItems();
-}
-
 export function deleteApplicationTableRows(): void {
     navigate_to_application_inventory();
     deleteAllRows();
@@ -1543,10 +1511,6 @@ export function validateTooLongInput(
 // This method accepts enums or maps and returns list of keys, so you can iterate by keys
 export function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
     return Object.keys(obj).filter((k) => Number.isNaN(+k)) as K[];
-}
-
-export function isRwxEnabled(): boolean {
-    return Cypress.env("rwx_enabled");
 }
 
 export function getUrl(): string {
