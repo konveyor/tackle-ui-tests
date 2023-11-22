@@ -49,6 +49,7 @@ import {
     owner,
     JiraType,
     migration,
+    businessServiceLower,
 } from "../e2e/types/constants";
 import {
     actionButton,
@@ -367,35 +368,42 @@ export function applySelectFilter(filterId, filterName, filterText, isValid = tr
 
 export function applySearchFilter(
     filterName: string,
-    searchText: any,
+    searchText: string | string[],
     identifiedRisk?: boolean,
     value?: number
 ): void {
     selectFilter(filterName, identifiedRisk, value);
+
     if (
-        filterName == businessService ||
-        filterName == tag ||
-        filterName == credentialType ||
-        filterName == artifact ||
-        filterName == repositoryType ||
-        filterName == owner
+        [
+            businessServiceLower,
+            businessService,
+            tag,
+            credentialType,
+            artifact,
+            repositoryType,
+            owner,
+        ].includes(filterName)
     ) {
         cy.get("div.pf-v5-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show")
             .find("div.pf-v5-c-select")
             .click();
+
         if (
-            filterName == businessService ||
-            filterName == repositoryType ||
-            filterName == artifact ||
-            filterName == owner
+            [businessServiceLower, businessService, repositoryType, artifact, owner].includes(
+                filterName
+            )
         ) {
             // ul[role=listbox] > li is for the Application Inventory page.
             // span.pf-c-check__label is for the Copy assessment page.
-            cy.get("ul[role=listbox] > li, span.pf-v5-c-check__label").contains(searchText).click();
+            cy.get("ul[role=listbox] > li, span.pf-v5-c-check__label")
+                .contains(searchText as string)
+                .click();
         }
-        if (filterName == tag || filterName == credentialType) {
+
+        if ([tag, credentialType].includes(filterName)) {
             if (Array.isArray(searchText)) {
-                searchText.forEach(function (searchTextValue) {
+                searchText.forEach((searchTextValue) => {
                     cy.get("div.pf-v5-c-select__menu > fieldset > label > span")
                         .contains(searchTextValue)
                         .click();
@@ -405,21 +413,11 @@ export function applySearchFilter(
             }
         }
     } else {
-        if (Array.isArray(searchText)) {
-            searchText.forEach(function (searchTextValue) {
-                if (identifiedRisk) {
-                    filterInputText(searchTextValue, 1);
-                } else {
-                    filterInputText(searchTextValue, 0);
-                }
-            });
-        } else {
-            if (identifiedRisk) {
-                filterInputText(searchText, 1);
-            } else {
-                filterInputText(searchText, 0);
-            }
+        if (!Array.isArray(searchText)) {
+            searchText = [searchText];
         }
+
+        searchText.forEach((searchTextValue) => filterInputText(searchTextValue, +identifiedRisk));
     }
     cy.wait(4000);
 }
