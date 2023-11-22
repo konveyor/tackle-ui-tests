@@ -135,7 +135,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Business service filter validations", function () {
+    it("Bug MTA-1718: Business service filter validations", function () {
         // This is impacted by https://issues.redhat.com/browse/TACKLE-820
         Assessment.open();
 
