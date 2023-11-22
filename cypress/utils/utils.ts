@@ -63,12 +63,16 @@ import {
     closeSuccessNotification,
     confirmButton,
     divHeader,
+    filterDropDown,
+    filterDropDownContainer,
     firstPageButton,
     lastPageButton,
     modal,
     nextPageButton,
     pageNumInput,
     prevPageButton,
+    specialFilter,
+    standardFilter,
 } from "../e2e/views/common.view";
 import { tagLabels, tagMenuButton } from "../e2e/views/tags.view";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
@@ -375,25 +379,17 @@ export function applySearchFilter(
         return;
     }
 
-    cy.get("div.pf-v5-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show")
-        .find("div.pf-v5-c-select")
-        .click();
+    cy.get(filterDropDownContainer).find(filterDropDown).click();
 
     if (isStandardKnownFilter) {
-        // ul[role=listbox] > li is for the Application Inventory page.
-        // span.pf-c-check__label is for the Copy assessment page.
         searchText.forEach((searchTextValue) => {
-            cy.get("ul[role=listbox] > li, span.pf-v5-c-check__label")
-                .contains(searchTextValue)
-                .click();
+            cy.get(standardFilter).contains(searchTextValue).click();
         });
     }
 
     if (isSpecialKnownFilter) {
         searchText.forEach((searchTextValue) => {
-            cy.get("div.pf-v5-c-select__menu > fieldset > label > span")
-                .contains(searchTextValue)
-                .click();
+            cy.get(specialFilter).contains(searchTextValue).click();
         });
     }
 
