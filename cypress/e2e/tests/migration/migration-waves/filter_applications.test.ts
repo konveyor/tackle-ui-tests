@@ -30,6 +30,7 @@ import {
     clearAllFilters,
     businessService,
     owner,
+    businessServiceLower,
 } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
@@ -108,13 +109,13 @@ describe(
             cy.contains(manageApplications).click();
 
             // Apply BS associated with applicationsList[1].name as search filter
-            applySearchFilter(businessService, applicationsList[1].business, true, 1);
+            applySearchFilter(businessServiceLower, applicationsList[1].business, true, 1);
             cy.get("td").should("contain", applicationsList[1].name);
             cy.get("td").should("not.contain", applicationsList[0].name);
             clickByText(button, clearAllFilters);
 
             // Apply BS associated with applicationsList[0].name as search filter
-            applySearchFilter(businessService, applicationsList[0].business, true, 1);
+            applySearchFilter(businessServiceLower, applicationsList[0].business, true, 1);
             cy.get("td").should("not.contain", applicationsList[1].name);
             cy.get("td").should("contain", applicationsList[0].name);
             clickByText(button, clearAllFilters);

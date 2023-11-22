@@ -49,6 +49,7 @@ import {
     owner,
     JiraType,
     migration,
+    businessServiceLower,
 } from "../e2e/types/constants";
 import {
     actionButton,
@@ -62,12 +63,16 @@ import {
     closeSuccessNotification,
     confirmButton,
     divHeader,
+    filterDropDown,
+    filterDropDownContainer,
     firstPageButton,
     lastPageButton,
     modal,
     nextPageButton,
     pageNumInput,
     prevPageButton,
+    specialFilter,
+    standardFilter,
 } from "../e2e/views/common.view";
 import { tagLabels, tagMenuButton } from "../e2e/views/tags.view";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
@@ -268,23 +273,6 @@ export function selectFormItems(fieldId: string, item: string): void {
     cy.contains("button", item).click();
 }
 
-export function selectReactFormItems(
-    locator: string,
-    item: string,
-    formId?: string,
-    fieldId?: string
-): void {
-    if (!formId) {
-        formId = "FormGroup";
-    }
-    if (!fieldId) {
-        fieldId = "fieldId";
-    }
-    cy.waitForReact();
-    cy.react(formId, { props: { fieldId: locator } }).click();
-    cy.contains("button", item).click();
-}
-
 export function checkSuccessAlert(fieldId: string, message: string, close = false): void {
     validateTextPresence(fieldId, message);
     if (close) {
@@ -367,60 +355,44 @@ export function applySelectFilter(filterId, filterName, filterText, isValid = tr
 
 export function applySearchFilter(
     filterName: string,
-    searchText: any,
-    identifiedRisk?: boolean,
+    searchText: string | string[],
+    identifiedRisk = false,
     value?: number
 ): void {
     selectFilter(filterName, identifiedRisk, value);
-    if (
-        filterName == businessService ||
-        filterName == tag ||
-        filterName == credentialType ||
-        filterName == artifact ||
-        filterName == repositoryType ||
-        filterName == owner
-    ) {
-        cy.get("div.pf-v5-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show")
-            .find("div.pf-v5-c-select")
-            .click();
-        if (
-            filterName == businessService ||
-            filterName == repositoryType ||
-            filterName == artifact ||
-            filterName == owner
-        ) {
-            // ul[role=listbox] > li is for the Application Inventory page.
-            // span.pf-c-check__label is for the Copy assessment page.
-            cy.get("ul[role=listbox] > li, span.pf-v5-c-check__label").contains(searchText).click();
-        }
-        if (filterName == tag || filterName == credentialType) {
-            if (Array.isArray(searchText)) {
-                searchText.forEach(function (searchTextValue) {
-                    cy.get("div.pf-v5-c-select__menu > fieldset > label > span")
-                        .contains(searchTextValue)
-                        .click();
-                });
-            } else {
-                cy.get("div.pf-v5-c-select__menu").contains(searchText).click();
-            }
-        }
-    } else {
-        if (Array.isArray(searchText)) {
-            searchText.forEach(function (searchTextValue) {
-                if (identifiedRisk) {
-                    filterInputText(searchTextValue, 1);
-                } else {
-                    filterInputText(searchTextValue, 0);
-                }
-            });
-        } else {
-            if (identifiedRisk) {
-                filterInputText(searchText, 1);
-            } else {
-                filterInputText(searchText, 0);
-            }
-        }
+    const isStandardKnownFilter = [
+        businessServiceLower,
+        businessService,
+        repositoryType,
+        artifact,
+        owner,
+    ].includes(filterName);
+    const isSpecialKnownFilter = [tag, credentialType].includes(filterName);
+
+    if (!Array.isArray(searchText)) {
+        searchText = [searchText];
     }
+
+    if (!isStandardKnownFilter && !isSpecialKnownFilter) {
+        searchText.forEach((searchTextValue) => filterInputText(searchTextValue, +identifiedRisk));
+        cy.wait(4000);
+        return;
+    }
+
+    cy.get(filterDropDownContainer).find(filterDropDown).click();
+
+    if (isStandardKnownFilter) {
+        searchText.forEach((searchTextValue) => {
+            cy.get(standardFilter).contains(searchTextValue).click();
+        });
+    }
+
+    if (isSpecialKnownFilter) {
+        searchText.forEach((searchTextValue) => {
+            cy.get(specialFilter).contains(searchTextValue).click();
+        });
+    }
+
     cy.wait(4000);
 }
 
@@ -1272,16 +1244,6 @@ export function deleteAllStakeholders(): void {
     deleteAllItems(stakeHoldersTable);
 }
 
-export async function deleteAllCredentials() {
-    Credentials.openList();
-    deleteAllItems();
-}
-
-export function deleteAllJobfunctions(cancel = false): void {
-    Jobfunctions.openList();
-    deleteAllItems();
-}
-
 export function deleteApplicationTableRows(): void {
     navigate_to_application_inventory();
     deleteAllRows();
@@ -1545,10 +1507,6 @@ export function validateTooLongInput(
 // This method accepts enums or maps and returns list of keys, so you can iterate by keys
 export function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O): K[] {
     return Object.keys(obj).filter((k) => Number.isNaN(+k)) as K[];
-}
-
-export function isRwxEnabled(): boolean {
-    return Cypress.env("rwx_enabled");
 }
 
 export function getUrl(): string {
