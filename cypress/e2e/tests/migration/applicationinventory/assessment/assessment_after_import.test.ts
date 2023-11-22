@@ -68,7 +68,7 @@ describe(["@tier2"], "Operations after application import", () => {
         }
     );
 
-    it("Perform application review after a successful application import", function () {
+    it("Bug MTA-1716: Perform application review after a successful application import", function () {
         // Automates Polarion TC MTA-295
         const application = new Assessment(appdata);
 

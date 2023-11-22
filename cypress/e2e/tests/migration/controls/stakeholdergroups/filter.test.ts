@@ -59,7 +59,7 @@ describe(["@tier2"], "Stakeholder groups filter validations", function () {
         cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");
     });
 
-    it("Name filter validations", function () {
+    it("Bug MTA-1715: Name filter validations", function () {
         // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
@@ -89,7 +89,7 @@ describe(["@tier2"], "Stakeholder groups filter validations", function () {
         cy.get("@getStakeholdergroups");
     });
 
-    it("Description filter validations", function () {
+    it("Bug MTA-1715: Description filter validations", function () {
         // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
@@ -119,7 +119,7 @@ describe(["@tier2"], "Stakeholder groups filter validations", function () {
         cy.get("@getStakeholdergroups");
     });
 
-    it("Member filter validations", function () {
+    it("Bug MTA-1715: Member filter validations", function () {
         // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
@@ -132,7 +132,6 @@ describe(["@tier2"], "Stakeholder groups filter validations", function () {
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(stakeholdergroupsList[0].name)
-            .parent(tdTag)
             .parent(trTag)
             .within(() => {
                 click(commonView.expandRow);
