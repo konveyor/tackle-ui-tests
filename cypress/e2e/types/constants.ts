@@ -82,7 +82,7 @@ export const identiFiedRisks = "Identified risks";
 export const suggestedAdoptionPlan = "Suggested adoption plan";
 export const assessmentQuestionnaires = "Assessment questionnaires";
 export const legacyPathfinder = "Legacy Pathfinder";
-
+export const cloudNative = "Cloud Native";
 export const createAppButton = "#create-application";
 export const assessAppButton = "Assess";
 export const reviewAppButton = "Review";

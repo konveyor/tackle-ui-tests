@@ -21,15 +21,16 @@ import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { legacyPathfinder, cloudNative } from "../../../../types/constants";
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
-const fileName = "Legacy Pathfinder";
+const yamlFileName = "questionnaire_import/cloud-native.yaml";
 
 describe(["@tier1"], "Application assessment and review tests", () => {
     before("Login and Create Test Data", function () {
         login();
-        AssessmentQuestionnaire.enable(fileName);
+        AssessmentQuestionnaire.enable(legacyPathfinder);
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
@@ -52,7 +53,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2000);
 
         // Perform assessment of application
-        application.perform_assessment("low", stakeholdersNameList);
+        application.perform_assessment("low", stakeholdersNameList, null, null, legacyPathfinder);
         cy.wait(2000);
         application.verifyStatus("assessment", "Completed");
 
@@ -74,7 +75,13 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2000);
 
         // Perform assessment of application
-        application.perform_assessment("medium", stakeholdersNameList);
+        application.perform_assessment(
+            "medium",
+            stakeholdersNameList,
+            null,
+            null,
+            legacyPathfinder
+        );
         cy.wait(2000);
         application.verifyStatus("assessment", "Completed");
 
@@ -96,7 +103,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2000);
 
         // Perform assessment of application
-        application.perform_assessment("high", stakeholdersNameList);
+        application.perform_assessment("high", stakeholdersNameList, null, null, legacyPathfinder);
         cy.wait(2000);
         application.verifyStatus("assessment", "Completed");
 
@@ -108,6 +115,25 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         // Delete application
         application.delete();
         cy.wait(2000);
+    });
+
+    it("Application with multiple assessments", function () {
+        // Navigate to application inventory tab and create new application
+        const application = new Assessment(getRandomApplicationData());
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+
+        AssessmentQuestionnaire.enable(legacyPathfinder);
+
+        AssessmentQuestionnaire.import(yamlFileName);
+        AssessmentQuestionnaire.enable(cloudNative);
+
+        application.perform_assessment("high", stakeholdersNameList, null, null, legacyPathfinder);
+        application.perform_assessment("high", stakeholdersNameList, null, null, cloudNative);
+        cy.wait(2000);
+
+        application.clickAssessButton();
     });
 
     after("Perform test data clean up", function () {

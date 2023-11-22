@@ -203,7 +203,6 @@ export class Assessment extends Application {
         stakeholders?: Array<string>,
         stakeholderGroups?: Array<string>
     ): void {
-        let applicationOpen: boolean;
         this.clickAssessButton();
         cy.wait(SEC);
         clickByText(button, "Retake");
@@ -213,18 +212,27 @@ export class Assessment extends Application {
             commonView.alertTitle,
             `Success alert:Success! Assessment discarded for ${this.name}.`
         );
-        this.perform_assessment(risk, stakeholders, stakeholderGroups, (applicationOpen = false));
+        this.perform_assessment(risk, stakeholders, stakeholderGroups, false);
     }
 
-    take_questionnaire(): void {
-        clickByText(button, "Take");
+    take_questionnaire(questionnaireName?: string): void {
+        if (!questionnaireName) {
+            clickByText(button, "Take");
+        } else {
+            // Wait for the element to load
+            cy.contains(questionnaireName).should("be.visible");
+
+            // click on the take button for that questionair
+            cy.contains(questionnaireName).siblings("td").contains("button", "Take").click();
+        }
     }
 
     perform_assessment(
         risk,
         stakeholders?: Array<string>,
         stakeholderGroups?: Array<string>,
-        applicationOpen = true
+        applicationOpen = true,
+        questionnaireName?: string
     ): void {
         if (stakeholders == undefined && stakeholderGroups == undefined) {
             expect(
@@ -236,7 +244,7 @@ export class Assessment extends Application {
             if (applicationOpen) {
                 this.clickAssessButton();
                 cy.wait(SEC);
-                this.take_questionnaire();
+                this.take_questionnaire(questionnaireName);
                 cy.wait(SEC);
             }
             if (stakeholders) this.selectStakeholders(stakeholders);
