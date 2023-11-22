@@ -22,7 +22,6 @@ import {
     goToLastPage,
     validatePagination,
     goToPage,
-    deleteTableRows,
     deleteApplicationTableRows,
     deleteAllBusinessServices,
     deleteAllItems,

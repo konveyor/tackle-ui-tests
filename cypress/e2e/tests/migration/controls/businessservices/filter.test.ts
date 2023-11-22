@@ -63,7 +63,7 @@ describe(["@tier2"], "Business services filter validations", function () {
         applySearchFilter(name, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No business services available");
+        cy.get("h2").contains("No business service available");
 
         clickByText(button, clearAllFilters);
     });
@@ -92,7 +92,7 @@ describe(["@tier2"], "Business services filter validations", function () {
         applySearchFilter(description, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No business services available");
+        cy.get("h2").contains("No business service available");
 
         clickByText(button, clearAllFilters);
     });
@@ -121,7 +121,7 @@ describe(["@tier2"], "Business services filter validations", function () {
         applySearchFilter(createdBy, stakeholdersList[2].name);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No business services available");
+        cy.get("h2").contains("No business service available");
 
         clickByText(button, clearAllFilters);
     });

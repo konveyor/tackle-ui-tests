@@ -665,11 +665,9 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
 
     //Uncheck createEntitiesCheckbox if auto creation of entities is disabled
     if (disableAutoCreation)
-        cy.get(createEntitiesCheckbox)
-            .invoke("attr", "enabled")
-            .then((enabled) => {
-                enabled ? cy.log("Button is disabled") : cy.get(createEntitiesCheckbox).uncheck();
-            });
+        cy.get(createEntitiesCheckbox).then((enabled) => {
+            enabled.prop("checked") ? cy.log("Button is disabled") : click(createEntitiesCheckbox);
+        });
 
     cy.get(appImportForm, { timeout: 5 * SEC })
         .eq(1)
@@ -758,7 +756,7 @@ export function verifyAppImport(
     rejected: number
 ): void {
     // Verify the app import features for a single row
-    cy.get("table > tbody > tr").eq(0).as("firstRow");
+    cy.get("table > tbody > tr").as("firstRow");
     cy.get("@firstRow").find("td[data-label='File name']").should("contain", fileName);
     cy.get("@firstRow").find("td[data-label='Status']").find("div").should("contain", status);
     cy.get("@firstRow").find("td[data-label='column-4']").should("contain", accepted);

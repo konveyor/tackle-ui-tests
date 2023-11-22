@@ -46,7 +46,7 @@ describe(["@tier2"], "Stakeholder groups sort validations", function () {
         cy.intercept("GET", "/hub/stakeholder-group*").as("getStakeholdergroups");
     });
 
-    it("Name sort validations", function () {
+    it("Bug MTA-1694: Name sort validations", function () {
         // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
