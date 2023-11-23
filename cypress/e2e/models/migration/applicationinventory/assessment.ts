@@ -13,8 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { Application } from "./application";
-import { tdTag, trTag, button, review, SEC } from "../../../types/constants";
+import {Application} from "./application";
+import {tdTag, trTag, button, review, SEC, legacyPathfinder} from "../../../types/constants";
 import {
     actionButton,
     selectBox,
@@ -54,7 +54,7 @@ import {
     proposedActionSelect,
     reviewColumnSelector,
 } from "../../../views/review.view";
-import { applicationData } from "../../../types/types";
+import {applicationData} from "../../../types/types";
 
 export class Assessment extends Application {
     constructor(appData: applicationData) {
@@ -153,11 +153,11 @@ export class Assessment extends Application {
                             hence to keep risk to medium, select last options for these set of specific questions */
                             if (
                                 $questionLine.text() ===
-                                    "Does the application have legal and/or licensing requirements?" ||
+                                "Does the application have legal and/or licensing requirements?" ||
                                 $questionLine.text() ===
-                                    "Does the application require specific hardware?" ||
+                                "Does the application require specific hardware?" ||
                                 $questionLine.text() ===
-                                    "How is the application clustering managed?"
+                                "How is the application clustering managed?"
                             ) {
                                 optionToSelect = totalOptions - 1;
                             } else {
@@ -215,16 +215,11 @@ export class Assessment extends Application {
         this.perform_assessment(risk, stakeholders, stakeholderGroups, false);
     }
 
-    take_questionnaire(questionnaireName?: string): void {
-        if (!questionnaireName) {
-            clickByText(button, "Take");
-        } else {
-            // Wait for the element to load
-            cy.contains(questionnaireName).should("be.visible");
-
-            // click on the take button for that questionair
-            cy.contains(questionnaireName).siblings("td").contains("button", "Take").click();
-        }
+    take_questionnaire(questionnaireName = legacyPathfinder): void {
+        cy.contains(questionnaireName)
+            .siblings("td")
+            .contains("button", "Take")
+            .click();
     }
 
     perform_assessment(
@@ -232,7 +227,7 @@ export class Assessment extends Application {
         stakeholders?: Array<string>,
         stakeholderGroups?: Array<string>,
         applicationOpen = true,
-        questionnaireName?: string
+        questionnaireName = legacyPathfinder
     ): void {
         if (stakeholders == undefined && stakeholderGroups == undefined) {
             expect(
@@ -282,7 +277,7 @@ export class Assessment extends Application {
             .contains(this.name)
             .parent(trTag)
             .within(() => {
-                cy.get(columnSelector).contains(status, { timeout: 15000 });
+                cy.get(columnSelector).contains(status, {timeout: 15000});
             });
     }
 
@@ -357,6 +352,7 @@ export class Assessment extends Application {
             click(closeForm);
         }
     }
+
     // Verifies if the north or south bound dependencies exist for an application
     verifyDependencies(northboundApps?: Array<string>, southboundApps?: Array<string>): void {
         if (northboundApps || southboundApps) {
