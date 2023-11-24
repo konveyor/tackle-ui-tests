@@ -21,8 +21,8 @@ import { Stakeholders } from "../controls/stakeholders";
 
 export interface Archetype {
     name: string;
-    criteriaTags: Array<string>;
-    archetypeTags: Array<string>;
+    criteriaTags: string[];
+    archetypeTags: string[];
     description?: string;
     stakeholders?: Stakeholders[];
     stakeholderGroups?: Stakeholdergroups[];
@@ -32,8 +32,8 @@ export interface Archetype {
 export class Archetype {
     constructor(
         name: string,
-        criteriaTags: Array<string>,
-        archetypeTags: Array<string>,
+        criteriaTags: string[],
+        archetypeTags: string[],
         description?: string,
         stakeholders?: Stakeholders[],
         stakeholderGroups?: Stakeholdergroups[],
