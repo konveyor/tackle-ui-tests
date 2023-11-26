@@ -49,14 +49,12 @@ describe(["@tier2"], "Issues filtering", () => {
     });
 
     it("Running analysis and filtering issues by app name", function () {
-        // For source code analysis application must have source code URL git or svn
         const application = new Analysis(
             getRandomApplicationData("bookserverApp", {
                 sourceData: this.appData["bookserver-app"],
             }),
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
-        let issue = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
         application.business = appBusinessService.name;
         application.create();
         applicationsList.push(application);
@@ -66,15 +64,22 @@ describe(["@tier2"], "Issues filtering", () => {
 
         Issues.filterBy(filterIssue.appName, application.name);
         cy.get("tr").should("not.contain", "No data available");
-        validateTextPresence(singleAppLabels.issue, issue["name"]);
+        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+            (issue: string[]) => {
+                validateTextPresence(singleAppLabels.issue, issue["name"]);
+            }
+        );
         clearAllFilters();
     });
 
     it("Filtering issues by BS", function () {
-        let issue = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
         Issues.filterBy(filterIssue.bs, appBusinessService.name);
         cy.get("tr").should("not.contain", "No data available");
-        validateTextPresence(singleAppLabels.issue, issue["name"]);
+        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+            (issue: string[]) => {
+                validateTextPresence(singleAppLabels.issue, issue["name"]);
+            }
+        );
         clearAllFilters();
     });
 
@@ -82,7 +87,11 @@ describe(["@tier2"], "Issues filtering", () => {
         let issue = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
         Issues.filterBy(filterIssue.tags, issue["tags"]);
         cy.get("tr").should("not.contain", "No data available");
-        validateTextPresence(singleAppLabels.issue, issue["name"]);
+        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+            (issue: string[]) => {
+                validateTextPresence(singleAppLabels.issue, issue["name"]);
+            }
+        );
         clearAllFilters();
     });
 
