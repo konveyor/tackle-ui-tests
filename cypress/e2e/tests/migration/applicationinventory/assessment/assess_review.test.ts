@@ -36,7 +36,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         stakeholdersList.push(stakeholder);
         stakeholdersNameList.push(stakeholder.name);
@@ -52,21 +52,21 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         const application = new Assessment(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Perform assessment of application
         application.perform_assessment("low", stakeholdersNameList);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
 
         // Perform application review
         application.perform_review("low");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         application.verifyStatus("review", "Completed");
 
         // Delete application
         application.delete();
-        cy.wait(2000);
+        cy.wait(2 * SEC);
     });
 
     it(["@interop"], "Application assessment and review with medium risk", function () {
@@ -74,7 +74,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         const application = new Assessment(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Perform assessment of application
         application.perform_assessment(
@@ -84,17 +84,17 @@ describe(["@tier1"], "Application assessment and review tests", () => {
             null,
             legacyPathfinder
         );
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
 
         // Perform application review
         application.perform_review("medium");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         application.verifyStatus("review", "Completed");
 
         // Delete application
         application.delete();
-        cy.wait(2000);
+        cy.wait(2 * SEC);
     });
 
     it("Application assessment and review with high risk", function () {
@@ -102,28 +102,28 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         const application = new Assessment(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Perform assessment of application
         application.perform_assessment("high", stakeholdersNameList);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
 
         // Perform application review
         application.perform_review("high");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         application.verifyStatus("review", "Completed");
 
         // Delete application
         application.delete();
-        cy.wait(2000);
+        cy.wait(2 * SEC);
     });
 
     it("Application with multiple assessments", function () {
         const application = new Assessment(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         application.perform_assessment("high", stakeholdersNameList);
         application.clickAssessButton();
@@ -140,6 +140,8 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.clickAssessButton();
         cy.wait(2 * SEC);
         cy.contains("tr", cloudNative).find("button.retake-button").should("have.length", 1);
+        application.delete();
+        cy.wait(2 * SEC);
     });
 
     after("Perform test data clean up", function () {
