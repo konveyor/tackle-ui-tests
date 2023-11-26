@@ -21,14 +21,15 @@ import {
     getRandomAnalysisData,
     deleteByList,
     clearAllFilters,
+    validateTextPresence,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { SEC, filterIssue } from "../../../../types/constants";
 import { Issues } from "../../../../models/migration/issues/issues";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import * as data from "../../../../../utils/data_utils";
+import { singleAppLabels } from "../../../../views/issue.view";
 let applicationsList: Array<Analysis> = [];
-
 let appBusinessService: BusinessServices;
 
 describe(["@tier2"], "Issues filtering", () => {
@@ -55,6 +56,7 @@ describe(["@tier2"], "Issues filtering", () => {
             }),
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
+        let issue = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
         application.business = appBusinessService.name;
         application.create();
         applicationsList.push(application);
@@ -64,12 +66,23 @@ describe(["@tier2"], "Issues filtering", () => {
 
         Issues.filterBy(filterIssue.appName, application.name);
         cy.get("tr").should("not.contain", "No data available");
+        validateTextPresence(singleAppLabels.issue, issue["name"]);
         clearAllFilters();
     });
 
     it("Filtering issues by BS", function () {
+        let issue = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
         Issues.filterBy(filterIssue.bs, appBusinessService.name);
         cy.get("tr").should("not.contain", "No data available");
+        validateTextPresence(singleAppLabels.issue, issue["name"]);
+        clearAllFilters();
+    });
+
+    it("Filtering issues by tags", function () {
+        let issue = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
+        Issues.filterBy(filterIssue.tags, issue["tags"]);
+        cy.get("tr").should("not.contain", "No data available");
+        validateTextPresence(singleAppLabels.issue, issue["name"]);
         clearAllFilters();
     });
 
