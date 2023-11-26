@@ -45,7 +45,7 @@ import {
     stakeholdergroupsSelect,
     stakeholderSelect,
     continueButton,
-    stack,
+    stack, assessmentBlock,
 } from "../../../views/assessment.view";
 import {
     criticalityInput,
@@ -137,45 +137,49 @@ export class Assessment extends Application {
     }
 
     protected selectAnswers(risk: string): void {
-        for (let i = 0; i < 5; i++) {
-            cy.get(questionBlock).each(($question) => {
-                let totalOptions = $question.find(stack).children("div").length;
-                let optionToSelect: number;
-                if (risk === "low") {
-                    optionToSelect = totalOptions - 1;
-                    this.clickRadioOption($question, optionToSelect);
-                } else if (risk === "medium") {
-                    cy.wrap($question)
-                        .children()
-                        .find("div.pf-v5-l-split__item")
-                        .then(($questionLine) => {
-                            /* These 3 questions generate high risk with mean options, 
-                            hence to keep risk to medium, select last options for these set of specific questions */
-                            if (
-                                $questionLine.text() ===
-                                "Does the application have legal and/or licensing requirements?" ||
-                                $questionLine.text() ===
-                                "Does the application require specific hardware?" ||
-                                $questionLine.text() ===
-                                "How is the application clustering managed?"
-                            ) {
-                                optionToSelect = totalOptions - 1;
-                            } else {
-                                optionToSelect = Math.floor(totalOptions / 2);
-                            }
+        cy.get(assessmentBlock).its("length")
+            .then( count => {
+                for (let i = 0; i < count - 1; i++) {
+                    cy.get(questionBlock).each(($question) => {
+                        let totalOptions = $question.find(stack).children("div").length;
+                        let optionToSelect: number;
+                        if (risk === "low") {
+                            optionToSelect = totalOptions - 1;
                             this.clickRadioOption($question, optionToSelect);
-                        });
-                } else {
-                    optionToSelect = 1;
-                    this.clickRadioOption($question, optionToSelect);
+                        } else if (risk === "medium") {
+                            cy.wrap($question)
+                                .children()
+                                .find("div.pf-v5-l-split__item")
+                                .then(($questionLine) => {
+                                    /* These 3 questions generate high risk with mean options,
+                                    hence to keep risk to medium, select last options for these set of specific questions */
+                                    if (
+                                        $questionLine.text() ===
+                                        "Does the application have legal and/or licensing requirements?" ||
+                                        $questionLine.text() ===
+                                        "Does the application require specific hardware?" ||
+                                        $questionLine.text() ===
+                                        "How is the application clustering managed?"
+                                    ) {
+                                        optionToSelect = totalOptions - 1;
+                                    } else {
+                                        optionToSelect = Math.floor(totalOptions / 2);
+                                    }
+                                    this.clickRadioOption($question, optionToSelect);
+                                });
+                        } else {
+                            optionToSelect = 1;
+                            this.clickRadioOption($question, optionToSelect);
+                        }
+                    });
+                    if (i === 4) {
+                        clickJs(commonView.nextButton);
+                    } else {
+                        clickJs(commonView.nextButton);
+                    }
                 }
+
             });
-            if (i === 4) {
-                clickJs(commonView.nextButton);
-            } else {
-                clickJs(commonView.nextButton);
-            }
-        }
     }
 
     edit(
@@ -277,7 +281,7 @@ export class Assessment extends Application {
             .contains(this.name)
             .parent(trTag)
             .within(() => {
-                cy.get(columnSelector).contains(status, {timeout: 15000});
+                cy.get(columnSelector).contains(status, {timeout: 2 * SEC});
             });
     }
 
