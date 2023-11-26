@@ -21,7 +21,7 @@ import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import {legacyPathfinder, cloudNative, SEC} from "../../../../types/constants";
+import { legacyPathfinder, cloudNative, SEC } from "../../../../types/constants";
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
@@ -128,16 +128,18 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.perform_assessment("high", stakeholdersNameList);
         application.clickAssessButton();
         cy.wait(2 * SEC);
-        cy.contains('tr', legacyPathfinder)
-            .find('button.retake-button')
-            .should('have.length', 1)
+        cy.contains("tr", legacyPathfinder).find("button.retake-button").should("have.length", 1);
 
-        application.perform_assessment("high", stakeholdersNameList, undefined, undefined, cloudNative);
+        application.perform_assessment(
+            "high",
+            stakeholdersNameList,
+            undefined,
+            undefined,
+            cloudNative
+        );
         application.clickAssessButton();
         cy.wait(2 * SEC);
-        cy.contains('tr', cloudNative)
-            .find('button.retake-button')
-            .should('have.length', 1)
+        cy.contains("tr", cloudNative).find("button.retake-button").should("have.length", 1);
     });
 
     after("Perform test data clean up", function () {

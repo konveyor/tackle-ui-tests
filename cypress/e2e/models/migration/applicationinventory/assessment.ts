@@ -13,8 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import {Application} from "./application";
-import {tdTag, trTag, button, review, SEC, legacyPathfinder} from "../../../types/constants";
+import { Application } from "./application";
+import { tdTag, trTag, button, review, SEC, legacyPathfinder } from "../../../types/constants";
 import {
     actionButton,
     selectBox,
@@ -45,7 +45,8 @@ import {
     stakeholdergroupsSelect,
     stakeholderSelect,
     continueButton,
-    stack, assessmentBlock,
+    stack,
+    assessmentBlock,
 } from "../../../views/assessment.view";
 import {
     criticalityInput,
@@ -54,7 +55,7 @@ import {
     proposedActionSelect,
     reviewColumnSelector,
 } from "../../../views/review.view";
-import {applicationData} from "../../../types/types";
+import { applicationData } from "../../../types/types";
 
 export class Assessment extends Application {
     constructor(appData: applicationData) {
@@ -137,8 +138,9 @@ export class Assessment extends Application {
     }
 
     protected selectAnswers(risk: string): void {
-        cy.get(assessmentBlock).its("length")
-            .then( count => {
+        cy.get(assessmentBlock)
+            .its("length")
+            .then((count) => {
                 for (let i = 0; i < count - 1; i++) {
                     cy.get(questionBlock).each(($question) => {
                         let totalOptions = $question.find(stack).children("div").length;
@@ -155,11 +157,11 @@ export class Assessment extends Application {
                                     hence to keep risk to medium, select last options for these set of specific questions */
                                     if (
                                         $questionLine.text() ===
-                                        "Does the application have legal and/or licensing requirements?" ||
+                                            "Does the application have legal and/or licensing requirements?" ||
                                         $questionLine.text() ===
-                                        "Does the application require specific hardware?" ||
+                                            "Does the application require specific hardware?" ||
                                         $questionLine.text() ===
-                                        "How is the application clustering managed?"
+                                            "How is the application clustering managed?"
                                     ) {
                                         optionToSelect = totalOptions - 1;
                                     } else {
@@ -178,7 +180,6 @@ export class Assessment extends Application {
                         clickJs(commonView.nextButton);
                     }
                 }
-
             });
     }
 
@@ -220,10 +221,7 @@ export class Assessment extends Application {
     }
 
     take_questionnaire(questionnaireName = legacyPathfinder): void {
-        cy.contains(questionnaireName)
-            .siblings("td")
-            .contains("button", "Take")
-            .click();
+        cy.contains(questionnaireName).siblings("td").contains("button", "Take").click();
     }
 
     perform_assessment(
@@ -281,7 +279,7 @@ export class Assessment extends Application {
             .contains(this.name)
             .parent(trTag)
             .within(() => {
-                cy.get(columnSelector).contains(status, {timeout: 2 * SEC});
+                cy.get(columnSelector).contains(status, { timeout: 2 * SEC });
             });
     }
 
