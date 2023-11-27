@@ -127,6 +127,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
 
         application.perform_assessment("high", stakeholdersNameList);
         application.clickAssessButton();
+        application.verifyStatus("assessment", "In-progress");
         cy.wait(2 * SEC);
         cy.contains("tr", legacyPathfinder).find("button.retake-button").should("have.length", 1);
 
@@ -139,6 +140,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         );
         application.clickAssessButton();
         cy.wait(2 * SEC);
+        application.verifyStatus("assessment", "Completed");
         cy.contains("tr", cloudNative).find("button.retake-button").should("have.length", 1);
         application.delete();
         cy.wait(2 * SEC);
