@@ -6,6 +6,7 @@ import {
     selectFilter,
     selectItemsPerPage,
     selectUserPerspective,
+    validateTextPresence,
 } from "../../../../utils/utils";
 import { button, filterIssue, migration, SEC, singleApplication } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
@@ -14,8 +15,10 @@ import {
     bsFilterName,
     searchInput,
     singleAppDropList,
+    singleAppLabels,
     tagFilterName,
 } from "../../../views/issue.view";
+import { AppIssue } from "../../../types/types";
 
 export class Issues {
     /** Contains URL of issues web page */
@@ -69,5 +72,17 @@ export class Issues {
             }
             click(selector);
         }
+    }
+
+    public static validateFilter(issues: AppIssue[], filterType: filterIssue, item: string): void {
+        issues.forEach((issue: AppIssue) => {
+            if (filterType === filterIssue.tags || filterType === filterIssue.source) {
+                Issues.filterBy(filterType, issue[item]);
+            } else {
+                Issues.filterBy(filterType, item);
+            }
+            cy.get("tr").should("not.contain", "No data available");
+            validateTextPresence(singleAppLabels.issue, issue["name"]);
+        });
     }
 }
