@@ -40,7 +40,8 @@ export class Issues {
         clickByText(button, applicationName);
     }
 
-    public static filterBy(filterType: string, item: string | string[]): void {
+    public static filterBy(filterType: filterIssue, item: string | string[]): void {
+        let selector = "";
         Issues.openList();
         selectFilter(filterType);
         const isApplicableFilter =
@@ -52,14 +53,21 @@ export class Issues {
         if (isApplicableFilter) {
             inputText(searchInput, item);
             click(searchButton);
-        } else if (filterType == filterIssue.bs && !Array.isArray(item)) {
-            click(bsFilterName);
-            clickByText(span, item);
-        } else if (filterType == filterIssue.tags && Array.isArray(item)) {
-            click(tagFilterName);
-            item.forEach((name) => {
-                clickByText(span, name);
-            });
+        } else {
+            if (filterType == filterIssue.bs) {
+                selector = bsFilterName;
+            } else if (filterType == filterIssue.tags) {
+                selector = tagFilterName;
+            }
+            click(selector);
+            if (Array.isArray(item)) {
+                item.forEach((name) => {
+                    clickByText(span, name);
+                });
+            } else {
+                clickByText(span, item);
+            }
+            click(selector);
         }
     }
 }

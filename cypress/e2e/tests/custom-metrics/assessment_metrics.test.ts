@@ -23,11 +23,14 @@ import {
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import { Metrics } from "../../models/migration/custom-metrics/custom-metrics";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
+import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { Application } from "../../models/migration/applicationinventory/application";
 const metrics = new Metrics();
 const metricName = "konveyor_assessments_initiated_total";
 let applicationList: Array<Assessment> = [];
 let stakeholdersList: Array<Stakeholders> = [];
 let counter: number;
+const fileName = "Legacy Pathfinder";
 
 describe(["@tier2"], "Custom Metrics - The total number of initiated assessments", function () {
     before("Login and create test data", function () {
@@ -39,6 +42,7 @@ describe(["@tier2"], "Custom Metrics - The total number of initiated assessments
 
         // Create 2 applications
         applicationList = createMultipleApplications(2);
+        AssessmentQuestionnaire.enable(fileName);
     });
 
     beforeEach("Get the current counter value", function () {
@@ -73,7 +77,7 @@ describe(["@tier2"], "Custom Metrics - The total number of initiated assessments
     it("Discard Assessment-Validate metrics assessment count doesn't change ", function () {
         // Discard assessment of application
         applicationList[0].verifyStatus("assessment", "Completed");
-        applicationList[0].discard_assessment();
+        applicationList[0].selectKebabMenuItem("Discard assessment(s)");
 
         // Validate the assessment initiated count doesn't change
         metrics.validateMetric(metricName, counter);

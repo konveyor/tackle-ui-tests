@@ -139,26 +139,23 @@ export type RbacValidationRules = {
     "Create new"?: boolean;
     Analyze?: boolean;
     "Upload binary"?: boolean;
-    Assess?: boolean;
-    Review?: boolean;
     Import?: boolean;
-    "Action menu"?: {
+    "Top action menu"?: {
         "Not available": boolean;
         Import?: boolean;
         "Manage imports"?: boolean;
         "Manage credentials"?: boolean;
         Delete?: boolean;
     };
-    "analysis applicable options"?: {
-        "Analysis details"?: boolean;
-        "Cancel analysis"?: boolean;
-        "Manage credentials"?: boolean;
-        Delete?: boolean;
-    };
-    "assessment applicable options"?: {
+    "Application actions"?: {
+        Assess?: boolean;
+        Review?: boolean;
         "Discard assessment"?: boolean;
-        "Copy assessment"?: boolean;
+        "Discard review"?: boolean;
+        Delete?: boolean;
         "Manage dependencies"?: boolean;
+        "Manage credentials"?: boolean;
+        "Analysis details"?: boolean;
     };
 };
 
@@ -196,4 +193,5 @@ export type AppIssue = {
     targets: string[];
     effort: number;
     affectedFiles: number;
+    tags?: string[];
 };

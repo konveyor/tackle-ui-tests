@@ -31,7 +31,6 @@ import {
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
-const businessService = new BusinessServices("BS_tag_test");
 const filePath = "app_import/csv/";
 
 describe(["@tier2"], "Application import operations", () => {
@@ -44,7 +43,7 @@ describe(["@tier2"], "Application import operations", () => {
         deleteAppImportsTableRows();
     });
 
-    it("Valid applications import", function () {
+    it("Bug MTA-1716: Valid applications import", function () {
         Application.open();
 
         // Import valid csv
@@ -62,7 +61,7 @@ describe(["@tier2"], "Application import operations", () => {
         verifyAppImport(fileName, "Completed", 5, 0);
     });
 
-    it("Duplicate applications import", function () {
+    it("Bug MTA-1716: Duplicate applications import", function () {
         Application.open();
         cy.wait("@getApplication");
 
@@ -84,9 +83,7 @@ describe(["@tier2"], "Application import operations", () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Applications import for non existing tags", function () {
-        businessService.create();
-        exists(businessService.name);
+    it("Bug MTA-1716: Applications import for non existing tags", function () {
         Application.open();
         cy.wait("@getApplication");
 
@@ -101,12 +98,9 @@ describe(["@tier2"], "Application import operations", () => {
 
         openErrorReport();
         verifyImportErrorMsg("Tag 'TypeScript' could not be found");
-
-        businessService.delete();
-        notExists(businessService.name);
     });
 
-    it("Applications import for non existing business service", function () {
+    it("Bug MTA-1716: Applications import for non existing business service", function () {
         Application.open();
         cy.wait("@getApplication");
 
@@ -123,7 +117,7 @@ describe(["@tier2"], "Application import operations", () => {
         verifyImportErrorMsg("BusinessService 'Finance' could not be found");
     });
 
-    it("Applications import with minimum required field(s) and empty row", function () {
+    it("Bug MTA-1716: Applications import with minimum required field(s) and empty row", function () {
         Application.open();
         cy.wait("@getApplication");
 
@@ -140,7 +134,7 @@ describe(["@tier2"], "Application import operations", () => {
         verifyImportErrorMsg("Empty Record Type");
     });
 
-    it("Applications import having same name with spaces", function () {
+    it("Bug MTA-1716: Applications import having same name with spaces", function () {
         Application.open();
         cy.wait("@getApplication");
 
@@ -157,7 +151,7 @@ describe(["@tier2"], "Application import operations", () => {
         verifyImportErrorMsg("UNIQUE constraint failed: Application.Name");
     });
 
-    it("Applications import for invalid csv schema", function () {
+    it("Bug MTA-1716: Applications import for invalid csv schema", function () {
         // Impacted by bug - https://issues.redhat.com/browse/TACKLE-320
         Application.open();
         cy.wait("@getApplication");
@@ -176,7 +170,7 @@ describe(["@tier2"], "Application import operations", () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Application import with invalid record type", function () {
+    it("Bug MTA-1716: Application import with invalid record type", function () {
         // The only valid record types for records in a CSV file are 1(application) or 2(dependency).
         // In this test, we import a CSV file that has records with a record type that's neither 1 nor 2.
         // Automates https://issues.redhat.com/browse/TACKLE-634
@@ -200,7 +194,7 @@ describe(["@tier2"], "Application import operations", () => {
         verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Import .CSV file with missing application name", function () {
+    it("Bug MTA-1716: Import .CSV file with missing application name", function () {
         // Automates Polarion MTA-368
         Application.open();
         cy.wait("@getApplication");

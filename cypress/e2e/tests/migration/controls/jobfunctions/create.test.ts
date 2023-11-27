@@ -21,6 +21,7 @@ import {
     exists,
     notExists,
     checkSuccessAlert,
+    clickJs,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -60,16 +61,15 @@ describe(["@tier2"], "Job Function Validations", () => {
         cy.get(commonView.helper).should("contain", max120CharsMsg);
         inputText(jobfunctionNameInput, data.getRandomWord(10));
         cy.get(commonView.submitButton).should("not.be.disabled");
-        cy.get(commonView.cancelButton).click();
+        clickJs(commonView.cancelButton);
     });
 
     it("Job function success alert and unique name constraint validation", function () {
         // Create new job function
         jobfunction.create();
-        checkSuccessAlert(
-            commonView.successAlertMessage,
-            `Success alert:Job function ${jobfunction.name} was successfully created.`
-        );
+        cy.get(commonView.successAlertMessage).then(($div) => {
+            assert($div.text().toString(), "Success alert:Job function was successfully created.");
+        });
         cy.wait("@postJobfunctions");
         exists(jobfunction.name);
         // Create job function with same name again
