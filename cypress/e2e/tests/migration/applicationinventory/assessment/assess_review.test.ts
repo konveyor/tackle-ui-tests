@@ -75,13 +75,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2 * SEC);
 
         // Perform assessment of application
-        application.perform_assessment(
-            "medium",
-            stakeholdersNameList,
-            null,
-            null,
-            legacyPathfinder
-        );
+        application.perform_assessment("medium", stakeholdersNameList);
         cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
 
@@ -118,7 +112,6 @@ describe(["@tier1"], "Application assessment and review tests", () => {
     });
 
     it("Application with multiple assessments", function () {
-
         AssessmentQuestionnaire.import(yamlFilePath);
         AssessmentQuestionnaire.enable(cloudNative);
 
@@ -128,22 +121,17 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2 * SEC);
 
         application.perform_assessment("high", stakeholdersNameList);
-        application.clickAssessButton();
-        application.verifyStatus("assessment", "In-progress");
         cy.wait(2 * SEC);
+        application.verifyStatus("assessment", "In-progress");
+        application.clickAssessButton();
         cy.contains("tr", legacyPathfinder).find("button.retake-button").should("have.length", 1);
 
-        application.perform_assessment(
-            "high",
-            stakeholdersNameList,
-            null,
-            null,
-            cloudNative
-        );
-        application.clickAssessButton();
+        application.perform_assessment("high", stakeholdersNameList, null, null, cloudNative);
         cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
+        application.clickAssessButton();
         cy.contains("tr", cloudNative).find("button.retake-button").should("have.length", 1);
+
         application.delete();
         cy.wait(2 * SEC);
     });
