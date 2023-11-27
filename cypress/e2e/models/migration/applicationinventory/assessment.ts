@@ -176,8 +176,6 @@ export class Assessment extends Application {
                     });
                     if (i === 4) {
                         clickJs(commonView.nextButton);
-                    } else {
-                        clickJs(commonView.nextButton);
                     }
                 }
             });
