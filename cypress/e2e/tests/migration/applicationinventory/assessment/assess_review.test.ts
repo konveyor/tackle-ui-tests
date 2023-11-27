@@ -126,7 +126,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.clickAssessButton();
         cy.contains("tr", legacyPathfinder).find("button.retake-button").should("have.length", 1);
 
-        application.perform_assessment("high", stakeholdersNameList, null, null, cloudNative);
+        application.perform_assessment("high", stakeholdersNameList, null, true, cloudNative);
         cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
         application.clickAssessButton();
