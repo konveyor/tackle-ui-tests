@@ -1,5 +1,5 @@
 import { click, clickByText, selectUserPerspective } from "../../../../utils/utils";
-import { SEC, administration, general } from "../../../types/constants";
+import { administration, general } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { switchToggle } from "../../../views/reports.view";
 
@@ -27,18 +27,20 @@ export class GeneralConfig {
     }
 
     public static enableDownloadReport() {
+        cy.intercept("GET", "/hub/settings/download.html.enabled").as("downloadReportEnabled");
         GeneralConfig.open();
-        cy.get(switchToggle, { timeout: 2 * SEC }).then(($checkbox) => {
-            if (!$checkbox.prop("checked")) {
+        cy.wait("@downloadReportEnabled").then((interception) => {
+            if (!interception.response.body) {
                 click(switchToggle);
             }
         });
     }
 
     public static disableDownloadReport() {
+        cy.intercept("GET", "/hub/settings/download.html.enabled").as("downloadReportEnabled");
         GeneralConfig.open();
-        cy.get(switchToggle, { timeout: 2 * SEC }).then(($checkbox) => {
-            if ($checkbox.prop("checked")) {
+        cy.wait("@downloadReportEnabled").then((interception) => {
+            if (interception.response.body) {
                 click(switchToggle);
             }
         });
