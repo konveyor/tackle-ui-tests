@@ -21,14 +21,15 @@ import {
     getRandomAnalysisData,
     deleteByList,
     clearAllFilters,
+    validateTextPresence,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { SEC, filterIssue } from "../../../../types/constants";
 import { Issues } from "../../../../models/migration/issues/issues";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import * as data from "../../../../../utils/data_utils";
+import { singleAppLabels } from "../../../../views/issue.view";
 let applicationsList: Array<Analysis> = [];
-
 let appBusinessService: BusinessServices;
 
 describe(["@tier2"], "Issues filtering", () => {
@@ -48,7 +49,6 @@ describe(["@tier2"], "Issues filtering", () => {
     });
 
     it("Running analysis and filtering issues by app name", function () {
-        // For source code analysis application must have source code URL git or svn
         const application = new Analysis(
             getRandomApplicationData("bookserverApp", {
                 sourceData: this.appData["bookserver-app"],
@@ -64,12 +64,34 @@ describe(["@tier2"], "Issues filtering", () => {
 
         Issues.filterBy(filterIssue.appName, application.name);
         cy.get("tr").should("not.contain", "No data available");
+        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+            (issue: string[]) => {
+                validateTextPresence(singleAppLabels.issue, issue["name"]);
+            }
+        );
         clearAllFilters();
     });
 
     it("Filtering issues by BS", function () {
         Issues.filterBy(filterIssue.bs, appBusinessService.name);
         cy.get("tr").should("not.contain", "No data available");
+        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+            (issue: string[]) => {
+                validateTextPresence(singleAppLabels.issue, issue["name"]);
+            }
+        );
+        clearAllFilters();
+    });
+
+    it("Filtering issues by tags", function () {
+        let issue = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
+        Issues.filterBy(filterIssue.tags, issue["tags"]);
+        cy.get("tr").should("not.contain", "No data available");
+        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+            (issue: string[]) => {
+                validateTextPresence(singleAppLabels.issue, issue["name"]);
+            }
+        );
         clearAllFilters();
     });
 
