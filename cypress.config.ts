@@ -19,9 +19,8 @@ export default defineConfig({
         jira_atlassian_cloud_url: "",
         jira_atlassian_cloud_project: "Test",
         jira_stage_datacenter_project_id: 12340621,
-        tackleUrl: "https://tackle-konveyor-tackle.apps.mtv03.rhos-psi.cnv-qe.rhood.us",
+        tackleUrl: "https://mta-openshift-mta.apps.mig-mida-2345c.rhos-psi.cnv-qe.rhood.us//",
         rwx_enabled: true,
-        logLevel: "ASSERT",
     },
     retries: {
         runMode: 2,
