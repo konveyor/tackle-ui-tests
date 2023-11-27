@@ -18,7 +18,6 @@ limitations under the License.
 import * as data from "../../../utils/data_utils";
 import { getRandomApplicationData, login, patchTackleCR } from "../../../utils/utils";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
-import { Application } from "../../models/migration/applicationinventory/application";
 import { Assessment } from "../../models/migration/applicationinventory/assessment";
 let application = new Assessment(getRandomApplicationData());
 let stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
@@ -27,7 +26,8 @@ describe(["@tier4"], "Perform certain operations after disabling Keycloak", func
     // Automates Polarion MTA-293
     before("Disable Keycloak", function () {
         login();
-        patchTackleCR("keycloak", false);
+        // Skipping patching Tackle CR due to a bug MTA-1152
+        // patchTackleCR("keycloak", false);
 
         stakeholder.create();
         application.create();
@@ -51,7 +51,8 @@ describe(["@tier4"], "Perform certain operations after disabling Keycloak", func
     });
 
     after("Re-enable Keycloak", function () {
-        patchTackleCR("keycloak", true);
+        // Skipping patching Tackle CR due to a bug MTA-1152
+        // patchTackleCR("keycloak", true);
         login();
 
         application.delete();
