@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import { Application } from "./application";
-import { tdTag, trTag, button, review, SEC } from "../../../types/constants";
+import { tdTag, trTag, button, review, SEC, legacyPathfinder } from "../../../types/constants";
 import {
     actionButton,
     selectBox,
@@ -46,6 +46,7 @@ import {
     stakeholderSelect,
     continueButton,
     stack,
+    assessmentBlock,
 } from "../../../views/assessment.view";
 import {
     criticalityInput,
@@ -137,45 +138,45 @@ export class Assessment extends Application {
     }
 
     protected selectAnswers(risk: string): void {
-        for (let i = 0; i < 5; i++) {
-            cy.get(questionBlock).each(($question) => {
-                let totalOptions = $question.find(stack).children("div").length;
-                let optionToSelect: number;
-                if (risk === "low") {
-                    optionToSelect = totalOptions - 1;
-                    this.clickRadioOption($question, optionToSelect);
-                } else if (risk === "medium") {
-                    cy.wrap($question)
-                        .children()
-                        .find("div.pf-v5-l-split__item")
-                        .then(($questionLine) => {
-                            /* These 3 questions generate high risk with mean options, 
-                            hence to keep risk to medium, select last options for these set of specific questions */
-                            if (
-                                $questionLine.text() ===
-                                    "Does the application have legal and/or licensing requirements?" ||
-                                $questionLine.text() ===
-                                    "Does the application require specific hardware?" ||
-                                $questionLine.text() ===
-                                    "How is the application clustering managed?"
-                            ) {
-                                optionToSelect = totalOptions - 1;
-                            } else {
-                                optionToSelect = Math.floor(totalOptions / 2);
-                            }
+        cy.get(assessmentBlock)
+            .its("length")
+            .then((count) => {
+                for (let i = 0; i < count - 1; i++) {
+                    cy.get(questionBlock).each(($question) => {
+                        let totalOptions = $question.find(stack).children("div").length;
+                        let optionToSelect: number;
+                        if (risk === "low") {
+                            optionToSelect = totalOptions - 1;
                             this.clickRadioOption($question, optionToSelect);
-                        });
-                } else {
-                    optionToSelect = 1;
-                    this.clickRadioOption($question, optionToSelect);
+                        } else if (risk === "medium") {
+                            cy.wrap($question)
+                                .children()
+                                .find("div.pf-v5-l-split__item")
+                                .then(($questionLine) => {
+                                    /* These 3 questions generate high risk with mean options,
+                                    hence to keep risk to medium, select last options for these set of specific questions */
+                                    if (
+                                        $questionLine.text() ===
+                                            "Does the application have legal and/or licensing requirements?" ||
+                                        $questionLine.text() ===
+                                            "Does the application require specific hardware?" ||
+                                        $questionLine.text() ===
+                                            "How is the application clustering managed?"
+                                    ) {
+                                        optionToSelect = totalOptions - 1;
+                                    } else {
+                                        optionToSelect = Math.floor(totalOptions / 2);
+                                    }
+                                    this.clickRadioOption($question, optionToSelect);
+                                });
+                        } else {
+                            optionToSelect = 1;
+                            this.clickRadioOption($question, optionToSelect);
+                        }
+                    });
+                    clickJs(commonView.nextButton);
                 }
             });
-            if (i === 4) {
-                clickJs(commonView.nextButton);
-            } else {
-                clickJs(commonView.nextButton);
-            }
-        }
     }
 
     edit(
@@ -203,7 +204,6 @@ export class Assessment extends Application {
         stakeholders?: Array<string>,
         stakeholderGroups?: Array<string>
     ): void {
-        let applicationOpen: boolean;
         this.clickAssessButton();
         cy.wait(SEC);
         clickByText(button, "Retake");
@@ -213,18 +213,19 @@ export class Assessment extends Application {
             commonView.alertTitle,
             `Success alert:Success! Assessment discarded for ${this.name}.`
         );
-        this.perform_assessment(risk, stakeholders, stakeholderGroups, (applicationOpen = false));
+        this.perform_assessment(risk, stakeholders, stakeholderGroups, false);
     }
 
-    take_questionnaire(): void {
-        clickByText(button, "Take");
+    take_questionnaire(questionnaireName = legacyPathfinder): void {
+        cy.contains(questionnaireName).siblings("td").contains("button", "Take").click();
     }
 
     perform_assessment(
         risk,
         stakeholders?: Array<string>,
         stakeholderGroups?: Array<string>,
-        applicationOpen = true
+        applicationOpen = true,
+        questionnaireName = legacyPathfinder
     ): void {
         if (stakeholders == undefined && stakeholderGroups == undefined) {
             expect(
@@ -236,7 +237,7 @@ export class Assessment extends Application {
             if (applicationOpen) {
                 this.clickAssessButton();
                 cy.wait(SEC);
-                this.take_questionnaire();
+                this.take_questionnaire(questionnaireName);
                 cy.wait(SEC);
             }
             if (stakeholders) this.selectStakeholders(stakeholders);
@@ -274,7 +275,7 @@ export class Assessment extends Application {
             .contains(this.name)
             .parent(trTag)
             .within(() => {
-                cy.get(columnSelector).contains(status, { timeout: 15000 });
+                cy.get(columnSelector).contains(status, { timeout: 30 * SEC });
             });
     }
 
@@ -349,6 +350,7 @@ export class Assessment extends Application {
             click(closeForm);
         }
     }
+
     // Verifies if the north or south bound dependencies exist for an application
     verifyDependencies(northboundApps?: Array<string>, southboundApps?: Array<string>): void {
         if (northboundApps || southboundApps) {
