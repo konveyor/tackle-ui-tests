@@ -32,7 +32,6 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         login();
         AssessmentQuestionnaire.enable(legacyPathfinder);
         AssessmentQuestionnaire.import(yamlFilePath);
-        AssessmentQuestionnaire.enable(cloudNative);
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
@@ -120,6 +119,9 @@ describe(["@tier1"], "Application assessment and review tests", () => {
     });
 
     it("Application with multiple assessments", function () {
+
+        AssessmentQuestionnaire.enable(cloudNative);
+
         const application = new Assessment(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");

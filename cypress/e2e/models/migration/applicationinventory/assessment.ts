@@ -269,7 +269,6 @@ export class Assessment extends Application {
     // Method to verify the status of Assessment and Review
     verifyStatus(column, status): void {
         Application.open();
-        cy.reload();
         let columnSelector: string;
 
         if (column === "assessment") columnSelector = assessmentColumnSelector;
