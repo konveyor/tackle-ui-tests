@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-export const adoptionCandidateDistributionTitle = 'h3:contains("Adoption candidate distribution")';
+export const applicationConfidenceandRiskTitle = 'h3:contains("Application confidence and risk")';
 export const articleItem = "div.pf-v5-l-stack__item";
 export const articleCard = "div.pf-v5-c-card";
 export const articleHeader = "div.pf-v5-c-card__header";

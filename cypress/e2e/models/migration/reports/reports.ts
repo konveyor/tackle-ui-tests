@@ -19,7 +19,7 @@ limitations under the License.
 import { selectItemsPerPage } from "../../../../utils/utils";
 import { applicationName, button, risk } from "../../../types/constants";
 import {
-    adoptionCandidateDistributionTitle,
+    applicationConfidenceandRiskTitle,
     articleButton,
     articleCard,
     articleExpandedContent,
@@ -49,9 +49,9 @@ export function expandArticle(name: string): void {
 
 export function verifyApplicationRisk(riskType: string, appName: string): void {
     // Verifies particular application's risk type
-    selectItemsPerPageInReports(100, adoptionCandidateDistributionTitle);
+    selectItemsPerPageInReports(100, applicationConfidenceandRiskTitle);
     cy.wait(4000);
-    cy.get(adoptionCandidateDistributionTitle)
+    cy.get(applicationConfidenceandRiskTitle)
         .closest(articleItem)
         .find("tbody > tr")
         .each(($ele) => {

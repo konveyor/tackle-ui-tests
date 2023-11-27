@@ -42,7 +42,7 @@ import {
     tdTag,
 } from "../../../types/constants";
 import {
-    adoptionCandidateDistributionTitle,
+    applicationConfidenceandRiskTitle,
     articleBody,
     articleCard,
     identiFiedRisksTitle,
@@ -61,7 +61,6 @@ let stakeholdersList: Array<Stakeholders> = [];
 let invalidSearchInput = String(data.getRandomNumber());
 
 describe.skip(["@tier2"], "Reports filter validations", () => {
-    /*
     before("Login and create test data", function () {
         // Perform login
         login();
@@ -76,7 +75,7 @@ describe.skip(["@tier2"], "Reports filter validations", () => {
         // Perform application review
         applicationsList[0].perform_review("high");
         applicationsList[0].verifyStatus("review", "Completed");
-    });*/
+    });
 
     it("Bug MTA-1345: Name field validations", function () {
         // Navigate to reports
@@ -91,10 +90,10 @@ describe.skip(["@tier2"], "Reports filter validations", () => {
         cy.wait(3 * SEC);
 
         // Check element filtered for table Adoption Candidate Distribution
-        selectItemsPerPageInReports(100, adoptionCandidateDistributionTitle);
+        selectItemsPerPageInReports(100, applicationConfidenceandRiskTitle);
 
         // Wait for DOM to render table and sibling elements
-        cy.get(adoptionCandidateDistributionTitle)
+        cy.get(applicationConfidenceandRiskTitle)
             .closest(articleCard)
             .find(articleBody)
             .should("not.have.class", "pf-v5-c-empty-state")

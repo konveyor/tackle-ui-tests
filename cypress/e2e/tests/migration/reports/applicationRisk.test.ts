@@ -36,7 +36,6 @@ describe(["@tier2"], "Application risks tests", () => {
     let riskType = ["low", "medium", "high"];
 
     before("Login and Create Test Data", function () {
-        // Perform login
         login();
 
         stakeholdersList = createMultipleStakeholders(1);
@@ -52,8 +51,7 @@ describe(["@tier2"], "Application risks tests", () => {
         }
     });
 
-    it.skip("Bug MTA-1345: Application risk validation", function () {
-        // Navigate to reports page
+    it("Bug MTA-1746: Application risk validation", function () {
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(3 * SEC);
@@ -64,7 +62,6 @@ describe(["@tier2"], "Application risks tests", () => {
     });
 
     after("Perform test data clean up", function () {
-        // Delete the stakeholders and applications created before the tests
         deleteByList(stakeholdersList);
         deleteByList(applicationsList);
     });
