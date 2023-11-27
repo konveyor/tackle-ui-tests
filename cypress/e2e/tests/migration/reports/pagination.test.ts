@@ -34,7 +34,7 @@ import {
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import * as commonView from "../../../views/common.view";
 import {
-    adoptionCandidateDistributionTitle,
+    applicationConfidenceandRiskTitle,
     identiFiedRisksTitle,
 } from "../../../views/reports.view";
 
@@ -69,7 +69,7 @@ describe.skip(["@tier3"], "Reports pagination validations", () => {
         cy.wait(3 * SEC);
 
         // select 10 items per page
-        selectItemsPerPageInReports(10, adoptionCandidateDistributionTitle);
+        selectItemsPerPageInReports(10, applicationConfidenceandRiskTitle);
 
         // Verify next buttons are enabled as there are more than 11 rows present
         cy.get(commonView.nextPageButton).each(($nextBtn) => {
@@ -106,7 +106,7 @@ describe.skip(["@tier3"], "Reports pagination validations", () => {
         cy.wait(3 * SEC);
 
         // Select 10 items per page
-        selectItemsPerPageInReports(10, adoptionCandidateDistributionTitle);
+        selectItemsPerPageInReports(10, applicationConfidenceandRiskTitle);
         cy.wait(2 * SEC);
 
         // Verify that only 10 items are displayed
@@ -115,7 +115,7 @@ describe.skip(["@tier3"], "Reports pagination validations", () => {
         });
 
         // Select 20 items per page
-        selectItemsPerPageInReports(20, adoptionCandidateDistributionTitle);
+        selectItemsPerPageInReports(20, applicationConfidenceandRiskTitle);
         cy.wait(2 * SEC);
 
         // Verify that items less than or equal to 20 and greater than 10 are displayed
@@ -131,7 +131,7 @@ describe.skip(["@tier3"], "Reports pagination validations", () => {
         cy.wait(3 * SEC);
 
         // Select 10 items per page
-        selectItemsPerPageInReports(10, adoptionCandidateDistributionTitle);
+        selectItemsPerPageInReports(10, applicationConfidenceandRiskTitle);
         cy.wait(2 * SEC);
 
         // Go to page number 2
