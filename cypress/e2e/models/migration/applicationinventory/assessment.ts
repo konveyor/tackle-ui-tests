@@ -174,9 +174,7 @@ export class Assessment extends Application {
                             this.clickRadioOption($question, optionToSelect);
                         }
                     });
-                    if (i === 4) {
-                        clickJs(commonView.nextButton);
-                    }
+                    clickJs(commonView.nextButton);
                 }
             });
     }
