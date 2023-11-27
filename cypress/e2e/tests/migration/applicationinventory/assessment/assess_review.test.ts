@@ -25,7 +25,7 @@ import { legacyPathfinder, cloudNative, SEC } from "../../../../types/constants"
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
-const yamlFilePath = "questionnaire_import/cloud-native.yaml";
+const yamlFile = "questionnaire_import/cloud-native.yaml";
 
 describe(["@tier1"], "Application assessment and review tests", () => {
     before("Login and Create Test Data", function () {
@@ -112,7 +112,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
     });
 
     it("Application with multiple assessments", function () {
-        AssessmentQuestionnaire.import(yamlFilePath);
+        AssessmentQuestionnaire.import(yamlFile);
         AssessmentQuestionnaire.enable(cloudNative);
 
         const application = new Assessment(getRandomApplicationData());
