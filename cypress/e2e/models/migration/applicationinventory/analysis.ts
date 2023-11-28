@@ -230,11 +230,13 @@ export class Analysis extends Application {
             inputText(enterPackageName, this.manuallyAnalyzePackages);
             clickByText(addButton, "Add");
         }
+
         if (this.excludePackages) {
             click(excludePackagesSwitch);
             inputText(enterPackageNameToExclude, this.excludePackages);
             clickByText(addButton, "Add");
         }
+
         if (this.openSourceLibraries) {
             click("#oss");
         }
@@ -395,14 +397,6 @@ export class Analysis extends Application {
         cy.get(reportStoryPoints).should((value) => {
             expect(Number.isNaN(parseInt(value.text(), 10))).to.eq(false);
         });
-    }
-
-    validateTransactionReport(): void {
-        cy.get(fileName + " > a")
-            .should("contain", this.appName)
-            .click();
-        cy.get(tabsPanel).contains("Transactions").click();
-        cy.get("div[class='main']").should("contain", "Transactions Report");
     }
 
     validateExcludedPackages(text?: string): void {

@@ -236,22 +236,20 @@ export function getJiraConnectionData(
     isInsecure?: boolean,
     useTestingAccount = false
 ): JiraConnectionData {
-    let name: string;
-    let url: string;
+    let url = getRandomUrl(6);
     let type = jiraType;
 
-    if (type === JiraType.cloud) {
-        url = useTestingAccount ? Cypress.env("jira_atlassian_cloud_url") : getRandomUrl(6);
-    } else {
-        url = useTestingAccount ? Cypress.env("jira_stage_datacenter_url") : getRandomUrl(6);
+    if (useTestingAccount) {
+        url =
+            type === JiraType.cloud
+                ? Cypress.env("jira_atlassian_cloud_url")
+                : Cypress.env("jira_stage_datacenter_url");
     }
-
-    name = "Jira_" + getRandomWord(5);
 
     return {
         credential: jiraCredential,
         isInsecure: isInsecure,
-        name: name,
+        name: "Jira_" + getRandomWord(5),
         type: type,
         url: url,
     };
@@ -306,17 +304,6 @@ export function getRandomProxyData(credentials?: CredentialsData): ProxyData {
         httpEnabled: false,
         hostname: getRandomWord(6),
         port: getRandomNumber().toString(),
-        httpsEnabled: true,
-    };
-}
-
-export function getRealProxyData(credentials?: CredentialsData): ProxyData {
-    return {
-        excludeList: ["127.0.0.1", "cnn.com"],
-        credentials: credentials,
-        httpEnabled: false,
-        hostname: "rhev-node-12.rdu2.scalelab.redhat.com",
-        port: (3128).toString(),
         httpsEnabled: true,
     };
 }

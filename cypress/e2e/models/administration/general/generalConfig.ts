@@ -4,18 +4,7 @@ import { navMenu } from "../../../views/menu.view";
 import { switchToggle } from "../../../views/reports.view";
 
 export class GeneralConfig {
-    private static instance: GeneralConfig;
-    static downloadReport: boolean;
     static fullUrl = Cypress.env("tackleUrl") + "/general";
-
-    // GeneralConfig class is singleton, which means that only one object of this class can be created
-    // This function is required to get GeneralConfig instance in any part of the code
-    public static getInstance(): GeneralConfig {
-        if (!GeneralConfig.instance) {
-            GeneralConfig.instance = new GeneralConfig();
-        }
-        return GeneralConfig.instance;
-    }
 
     static open(): void {
         cy.url().then(($url) => {

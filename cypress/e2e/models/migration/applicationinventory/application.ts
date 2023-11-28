@@ -22,11 +22,9 @@ import {
     assessAppButton,
     createAppButton,
     SEC,
-    analysis,
     analyzeButton,
     reviewAppButton,
     migration,
-    application,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {

@@ -45,7 +45,6 @@ import {
     credentialType,
     artifact,
     repositoryType,
-    analysis,
     owner,
     JiraType,
     migration,
@@ -89,7 +88,6 @@ import { CredentialsMaven } from "../e2e/models/administration/credentials/crede
 import { CredentialsSourceControlUsername } from "../e2e/models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../e2e/models/administration/credentials/credentialsSourceControlKey";
 import { switchToggle } from "../e2e/views/reports.view";
-import { MigrationWaveView } from "../e2e/views/migration-wave.view";
 import Chainable = Cypress.Chainable;
 import { MigrationWave } from "../e2e/models/migration/migration-waves/migration-wave";
 import { Jira } from "../e2e/models/administration/jira-connection/jira";
@@ -446,41 +444,6 @@ export function generateRandomDateRange(
     };
 }
 
-export function sortAscCopyAssessmentTable(sortCriteria: string): void {
-    cy.get(`.pf-m-compact > thead > tr > th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
-        if (
-            $tableHeader.attr("aria-sort") === "descending" ||
-            $tableHeader.attr("aria-sort") === "none"
-        ) {
-            $tableHeader.find("button").trigger("click");
-        }
-    });
-}
-
-export function sortDescCopyAssessmentTable(sortCriteria: string): void {
-    cy.get(`.pf-m-compact > thead > tr > th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
-        if (
-            $tableHeader.attr("aria-sort") === "ascending" ||
-            $tableHeader.attr("aria-sort") === "none"
-        ) {
-            $tableHeader.find("button").trigger("click");
-        }
-    });
-}
-
-export function getColumnDataforCopyAssessmentTable(columnName: string): Array<string> {
-    selectItemsPerPage(100);
-    cy.wait(4000);
-    let itemList = [];
-    cy.get(".pf-m-compact > tbody > tr")
-        .not(".pf-c-table__expandable-row")
-        .find(`td[data-label="${columnName}"]`)
-        .each(($ele) => {
-            if ($ele.text() !== "") itemList.push($ele.text().toString().toLowerCase());
-        });
-    return itemList;
-}
-
 export function getTableColumnData(columnName: string): Array<string> {
     selectItemsPerPage(100);
     let itemList = [];
@@ -651,12 +614,7 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
     checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
 }
 
-export function uploadXml(fileName: string, customSelector?: string): void {
-    let selector = 'input[type="file"]';
-    if (customSelector) {
-        selector = customSelector;
-    }
-    // Uplaod any file
+export function uploadXml(fileName: string, selector = 'input[type="file"]'): void {
     cy.get(selector, { timeout: 5 * SEC }).attachFile(
         { filePath: fileName, mimeType: "text/xml", encoding: "utf-8" },
         { subjectType: "drag-n-drop" }
@@ -665,7 +623,6 @@ export function uploadXml(fileName: string, customSelector?: string): void {
 }
 
 export function uploadApplications(fileName: string): void {
-    // Uplaod any file
     cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(
         { filePath: fileName, encoding: "binary" },
         { subjectType: "drag-n-drop" }
@@ -674,7 +631,6 @@ export function uploadApplications(fileName: string): void {
 }
 
 export function uploadFile(fileName: string): void {
-    // Uplaod any file
     cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(fileName, {
         subjectType: "drag-n-drop",
     });
@@ -686,7 +642,7 @@ export function navigate_to_application_inventory(): void {
     clickByText(navMenu, applicationInventory);
 }
 
-export function application_inventory_kebab_menu(menu): void {
+export function application_inventory_kebab_menu(menu: string): void {
     // The value for menu could be one of {Import, Manage imports, Delete, Manage credentials}
     navigate_to_application_inventory();
 
@@ -746,12 +702,6 @@ export function verifyImportErrorMsg(errorMsg: any): void {
     } else {
         cy.get("table > tbody > tr > td").should("contain", errorMsg);
     }
-}
-
-export function migration_wave_kebab_menu(menu): void {
-    // The value for menu could be one of {Export to Issue Manager, Delete}
-    cy.get(actionButton).eq(1).click({ force: true });
-    cy.get(commonView.kebabMenuItem).contains(menu).click({ force: true });
 }
 
 // Perform edit/delete action on the specified row selector by clicking a text button
@@ -991,15 +941,6 @@ export function generateMultipleCredentials(amount: number): Credentials[] {
     return createdCredentialsList;
 }
 
-export function getRowsAmount(): number {
-    let amount: number;
-    cy.get(commonView.appTable).get("tbody").find(trTag).as("rowsIdentifier");
-    cy.get("@rowsIdentifier").then(($tableRows) => {
-        amount = $tableRows.length;
-    });
-    return amount;
-}
-
 export function getRandomApplicationData(
     appName?,
     options?: { sourceData?; binaryData? },
@@ -1099,16 +1040,6 @@ export function createMultipleApplicationsWithBSandTags(
         cy.wait(2000);
     }
     return applicationList;
-}
-
-export function createApplicationObjects(numberOfObjects: number): Array<Assessment> {
-    let applicationObjectsList: Array<Assessment> = [];
-    for (let i = 0; i < numberOfObjects; i++) {
-        // Create an object of application
-        const application = new Assessment(getRandomApplicationData());
-        applicationObjectsList.push(application);
-    }
-    return applicationObjectsList;
 }
 
 type Deletable = { delete: () => void };
@@ -1418,9 +1349,10 @@ export function writeMavenSettingsFile(username: string, password: string, url?:
             cy.writeFile("cypress/fixtures/xml/settings.xml", "");
             return;
         }
-        var xml = data.toString();
         const parser = new DOMParser();
-        const xmlDOM = parser.parseFromString(xml, "text/xml");
+        const xmlDOM = parser.parseFromString(data.toString(), "text/xml");
+        const serializer = new XMLSerializer();
+
         xmlDOM.getElementsByTagName("username")[0].childNodes[0].nodeValue = username;
         xmlDOM.getElementsByTagName("password")[0].childNodes[0].nodeValue = password;
         if (url) {
@@ -1428,19 +1360,18 @@ export function writeMavenSettingsFile(username: string, password: string, url?:
                 .getElementsByTagName("repository")[1]
                 .getElementsByTagName("url")[0].childNodes[0].nodeValue = url;
         }
-        var serializer = new XMLSerializer();
-        var writetofile = serializer.serializeToString(xmlDOM);
-        cy.writeFile("cypress/fixtures/xml/settings.xml", writetofile);
+
+        cy.writeFile("cypress/fixtures/xml/settings.xml", serializer.serializeToString(xmlDOM));
     });
 }
 
 export function writeGpgKey(git_key): void {
     cy.readFile("cypress/fixtures/gpgkey").then((data) => {
-        var key = git_key;
-        var beginningKey: string = "-----BEGIN RSA PRIVATE KEY-----";
-        var endingKey: string = "-----END RSA PRIVATE KEY-----";
-        var keystring = key.toString().split(" ").join("\n");
-        var gpgkey = beginningKey + "\n" + keystring + "\n" + endingKey;
+        const key = git_key;
+        const beginningKey = "-----BEGIN RSA PRIVATE KEY-----";
+        const endingKey = "-----END RSA PRIVATE KEY-----";
+        const keystring = key.toString().split(" ").join("\n");
+        const gpgkey = beginningKey + "\n" + keystring + "\n" + endingKey;
         cy.writeFile("cypress/fixtures/gpgkey", gpgkey);
     });
 }
