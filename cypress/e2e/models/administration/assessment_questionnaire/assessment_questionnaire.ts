@@ -59,6 +59,9 @@ export class AssessmentQuestionnaire {
         AssessmentQuestionnaire.operation(fileName, "View");
     }
 
+    public static disable(fileName: string) {
+        this.enable(fileName, false);
+    }
     public static enable(fileName: string, enable = true) {
         AssessmentQuestionnaire.open();
         let selector = enable ? ".pf-m-on" : ".pf-m-off";
