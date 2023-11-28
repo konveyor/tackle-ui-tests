@@ -33,11 +33,18 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
         closeModalWindow();
     });
 
-    it("Export questionnaire", function () {
+    it("Bug MTA 1721: Export questionnaire", function () {
         AssessmentQuestionnaire.export(legacyQuestionnaire);
         cy.readFile("cypress/downloads/questionnaire-1.yaml").should(
             "contain",
             legacyQuestionnaire
+        );
+        // Polarion TC MTA-423
+        AssessmentQuestionnaire.import("cypress/downloads/questionnaire-1.yaml");
+        checkSuccessAlert(
+            alertTitle,
+            `Success alert:Questionnaire "Legacy Pathfinder" was successfully created.`,
+            true
         );
     });
 
