@@ -111,7 +111,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2 * SEC);
     });
 
-    // https://polarion.engineering.redhat.com/polarion/redirect/project/MTAPathfinder/workitem?id=MTA-382
+    // Polarion TC MTA-382
     it("Application with multiple assessments", function () {
         AssessmentQuestionnaire.import(yamlFile);
         AssessmentQuestionnaire.enable(cloudNative);
@@ -140,7 +140,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2 * SEC);
     });
 
-    // https://polarion.engineering.redhat.com/polarion/#/project/MTAPathfinder/workitem?id=MTA-422
+    // Polarion TC MTA-422
     it("Perform application review during assessment", function () {
         const application = new Assessment(getRandomApplicationData());
         application.create();
@@ -162,6 +162,9 @@ describe(["@tier1"], "Application assessment and review tests", () => {
 
         application.verifyStatus("assessment", "Completed");
         application.verifyStatus("review", "Completed");
+
+        // todo: Automate the bug once it's fixed
+        // bug: https://issues.redhat.com/browse/MTA-1751
     });
 
     after("Perform test data clean up", function () {
