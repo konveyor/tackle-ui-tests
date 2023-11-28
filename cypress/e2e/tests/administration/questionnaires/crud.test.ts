@@ -33,7 +33,7 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
         closeModalWindow();
     });
 
-    it("Bug MTA 1721: Export questionnaire", function () {
+    it("Bug MTA 1721: Export questionnaire and Import it back", function () {
         AssessmentQuestionnaire.export(legacyQuestionnaire);
         cy.readFile("cypress/downloads/questionnaire-1.yaml").should(
             "contain",
