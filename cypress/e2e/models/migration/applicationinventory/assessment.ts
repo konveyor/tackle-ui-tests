@@ -176,10 +176,11 @@ export class Assessment extends Application {
                             this.clickRadioOption($question, optionToSelect);
                         }
                     });
-                    clickJs(commonView.nextButton);
 
                     if (saveAndReview && i == lastStep) {
                         clickJs(commonView.saveAndReviewButton);
+                    }else {
+                        clickJs(commonView.nextButton);
                     }
                 }
             });

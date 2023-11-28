@@ -149,7 +149,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
             "high",
             stakeholdersNameList,
             null,
-            false,
+            true,
             legacyPathfinder,
             true
         );
