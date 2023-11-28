@@ -154,7 +154,9 @@ describe(["@tier1"], "Application assessment and review tests", () => {
             true
         );
         cy.wait(2 * SEC);
+
         application.perform_review("high", false);
+        cy.wait(2 * SEC);
 
         application.verifyStatus("assessment", "Completed");
         application.verifyStatus("review", "Completed");
