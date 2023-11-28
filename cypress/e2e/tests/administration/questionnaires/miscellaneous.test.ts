@@ -1,6 +1,8 @@
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { cleanupDownloads, click, login } from "../../../../utils/utils";
 import { downloadYamlTemplate } from "../../../views/assessmentquestionnaire.view";
+const filePath = "cypress/downloads/questionnaire-template.yaml";
+const yaml = require("js-yaml");
 
 describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
     before("Login", function () {
@@ -8,12 +10,19 @@ describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
     });
 
     it("Download YAML template", function () {
+        // Polarion TC MTA-397
         AssessmentQuestionnaire.open();
         click(downloadYamlTemplate);
-        cy.readFile("cypress/downloads/questionnaire-template.yaml").should(
-            "contain",
-            "Test questionnaire  (SAMPLE)"
-        );
+        cy.readFile(filePath).then((fileContent) => {
+            try {
+                yaml.load(fileContent);
+                fileContent.should("contain", "Test questionnaire  (SAMPLE)");
+                // Parsing successful, file is in YAML format
+            } catch (error) {
+                // Parsing failed, file is not in YAML format
+                throw new Error(`File is not in YAML format: ${filePath}`);
+            }
+        });
     });
 
     after("Cleaning up", function () {

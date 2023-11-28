@@ -13,6 +13,7 @@
         "cypress-react-selector": "^2.3.17",
         "cypress-xpath": "^1.6.2",
         "faker": "^5.5.3",
+        "js-yaml": "^4.1.0",
         "junit-report-merger": "^3.0.2",
         "mocha": "^9.1.2",
         "mocha-junit-reporter": "^2.0.2",
