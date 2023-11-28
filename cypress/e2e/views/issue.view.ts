@@ -3,7 +3,7 @@ export const bsFilterName = "#businessService\\.name-filter-value-select";
 export const tagFilterName = "#tag\\.id-filter-value-select";
 export const singleAppDropList = "#application-select";
 
-export enum singleAppLabels {
+export enum singleApplicationColumns {
     issue = 'td[data-label="Issue"]',
     category = 'td[data-label="Category"]',
     source = 'td[data-label="Source"]',

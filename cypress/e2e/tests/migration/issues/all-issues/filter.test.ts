@@ -21,22 +21,20 @@ import {
     getRandomAnalysisData,
     deleteByList,
     clearAllFilters,
-    validateTextPresence,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { SEC, filterIssue } from "../../../../types/constants";
 import { Issues } from "../../../../models/migration/issues/issues";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import * as data from "../../../../../utils/data_utils";
-import { singleAppLabels } from "../../../../views/issue.view";
 let applicationsList: Array<Analysis> = [];
-let appBusinessService: BusinessServices;
+let businessService: BusinessServices;
 
 describe(["@tier2"], "Issues filtering", () => {
     before("Login", function () {
         login();
-        appBusinessService = new BusinessServices(data.getCompanyName(), data.getDescription());
-        appBusinessService.create();
+        businessService = new BusinessServices(data.getCompanyName(), data.getDescription());
+        businessService.create();
     });
 
     beforeEach("Load data", function () {
@@ -55,48 +53,68 @@ describe(["@tier2"], "Issues filtering", () => {
             }),
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
-        application.business = appBusinessService.name;
+        application.business = businessService.name;
         application.create();
         applicationsList.push(application);
         cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
 
-        Issues.filterBy(filterIssue.appName, application.name);
-        cy.get("tr").should("not.contain", "No data available");
-        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
-            (issue: string[]) => {
-                validateTextPresence(singleAppLabels.issue, issue["name"]);
-            }
+        Issues.validateFilter(
+            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
+            filterIssue.appName,
+            application.name
         );
         clearAllFilters();
     });
 
     it("Filtering issues by BS", function () {
-        Issues.filterBy(filterIssue.bs, appBusinessService.name);
-        cy.get("tr").should("not.contain", "No data available");
-        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
-            (issue: string[]) => {
-                validateTextPresence(singleAppLabels.issue, issue["name"]);
-            }
+        Issues.validateFilter(
+            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
+            filterIssue.bs,
+            businessService.name
         );
         clearAllFilters();
     });
 
     it("Filtering issues by tags", function () {
-        let issue = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
-        Issues.filterBy(filterIssue.tags, issue["tags"]);
-        cy.get("tr").should("not.contain", "No data available");
-        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
-            (issue: string[]) => {
-                validateTextPresence(singleAppLabels.issue, issue["name"]);
-            }
+        Issues.validateFilter(
+            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
+            filterIssue.tags,
+            "tags"
+        );
+        clearAllFilters();
+    });
+
+    it("Filtering issues by category", function () {
+        Issues.validateFilter(
+            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
+            filterIssue.category,
+            "category"
+        );
+        clearAllFilters();
+    });
+
+    it("Filtering issues by source", function () {
+        Issues.validateFilter(
+            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
+            filterIssue.source,
+            "source"
+        );
+        clearAllFilters();
+    });
+
+    it("Filtering issues by target", function () {
+        Issues.validateFilter(
+            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
+            filterIssue.target,
+            "targets"
         );
         clearAllFilters();
     });
 
     after("Perform test data clean up", function () {
         deleteByList(applicationsList);
-        appBusinessService.delete();
+        businessService.delete();
     });
 });

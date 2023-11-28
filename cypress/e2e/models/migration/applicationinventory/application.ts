@@ -72,7 +72,7 @@ import {
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
 import { kebabButton, rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
 import { Issues } from "../issues/issues";
-import { singleAppLabels } from "../../../views/issue.view";
+import { singleApplicationColumns } from "../../../views/issue.view";
 import { liTag } from "../../../views/common.view";
 
 export class Application {
@@ -432,16 +432,19 @@ export class Application {
             cy.contains(currentIssue.name)
                 .closest(trTag)
                 .within(() => {
-                    validateTextPresence(singleAppLabels.issue, currentIssue.name);
-                    validateTextPresence(singleAppLabels.category, currentIssue.category);
-                    validateTextPresence(singleAppLabels.source, currentIssue.source);
-                    cy.get(singleAppLabels.target).within(() => {
+                    validateTextPresence(singleApplicationColumns.issue, currentIssue.name);
+                    validateTextPresence(singleApplicationColumns.category, currentIssue.category);
+                    validateTextPresence(singleApplicationColumns.source, currentIssue.source);
+                    cy.get(singleApplicationColumns.target).within(() => {
                         currentIssue.targets.forEach((currentTarget) => {
                             validateTextPresence(liTag, currentTarget);
                         });
                     });
-                    validateNumberPresence(singleAppLabels.effort, currentIssue.effort);
-                    validateNumberPresence(singleAppLabels.files, currentIssue.affectedFiles);
+                    validateNumberPresence(singleApplicationColumns.effort, currentIssue.effort);
+                    validateNumberPresence(
+                        singleApplicationColumns.files,
+                        currentIssue.affectedFiles
+                    );
                 });
         });
     }
