@@ -92,16 +92,14 @@ export class Archetype {
         inputText(archetype.description, description);
     }
 
-    protected selectStakeholders(stakeholders: Stakeholders[]): void {
-        stakeholders.forEach(function (stakeholder) {
-            selectFormItems(archetype.stakeholder, stakeholder);
-        });
+    protected selectStakeholders(stakeHolders: string) {
+        inputText(archetype.stakeholder, stakeHolders);
+        cy.get("button").contains(stakeHolders).click();
     }
 
-    protected selectStakeholderGroups(stakeholderGroups: Stakeholdergroups[]): void {
-        stakeholderGroups.forEach(function (stakeholderGroup) {
-            selectFormItems(archetype.stakeholderGroups, stakeholderGroup);
-        });
+    protected selectStakeholderGroups(stakeholderGroups: string) {
+        inputText(archetype.stakeholderGroups, stakeholderGroups);
+        cy.get("button").contains(stakeholderGroups).click();
     }
 
     protected fillComment(comment: string): void {
@@ -120,8 +118,16 @@ export class Archetype {
             this.selectCriteriaTags(this.criteriaTags);
             this.selectArchetypeTags(this.archetypeTags);
             if (this.description) this.fillDescription(this.description);
-            if (this.stakeholders) this.selectStakeholders(this.stakeholders);
-            if (this.stakeholderGroups) this.selectStakeholderGroups(this.stakeholderGroups);
+            if (this.stakeholders) {
+                this.stakeholders.forEach((stakeHolder) =>
+                    this.selectStakeholders(stakeHolder.name)
+                );
+            }
+            if (this.stakeholderGroups) {
+                this.stakeholderGroups.forEach((stakeHolderGroups) =>
+                    this.selectStakeholderGroups(stakeHolderGroups.name)
+                );
+            }
             if (this.comment) this.fillComment(this.comment);
             submitForm();
         }
