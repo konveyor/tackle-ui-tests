@@ -179,7 +179,7 @@ export class Assessment extends Application {
 
                     if (saveAndReview && i == lastStep) {
                         clickJs(commonView.saveAndReviewButton);
-                    }else {
+                    } else {
                         clickJs(commonView.nextButton);
                     }
                 }
