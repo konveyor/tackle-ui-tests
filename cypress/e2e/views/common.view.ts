@@ -59,6 +59,7 @@ export const dropdownClearSelection = "pf-v5-c-select__toggle-clear";
 export const footer = "footer";
 export const manageImportsActionsButton = "button[aria-label='Table toolbar actions kebab toggle']";
 export const nextButton = "button[cy-data='next']";
+export const saveAndReviewButton = "button[cy-data='save-and-review']";
 export const span = "span";
 export const liTag = "li";
 export const searchInput = "#search-input";

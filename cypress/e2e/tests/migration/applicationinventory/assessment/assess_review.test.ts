@@ -134,10 +134,27 @@ describe(["@tier1"], "Application assessment and review tests", () => {
 
         application.delete();
         cy.wait(2 * SEC);
+
+        AssessmentQuestionnaire.delete(cloudNative);
+        cy.wait(2 * SEC);
+    });
+
+    it( "Perform application review during assessment", function () {
+        const application = new Assessment(getRandomApplicationData());
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
+
+        application.perform_assessment("high", stakeholdersNameList, null, false, legacyPathfinder, true);
+        cy.wait(2 * SEC);
+        application.perform_review("high", false)
+
+        application.verifyStatus("assessment", "Completed");
+        application.verifyStatus("review", "Completed");
+
     });
 
     after("Perform test data clean up", function () {
         deleteByList(stakeholdersList);
-        AssessmentQuestionnaire.delete(cloudNative);
     });
 });
