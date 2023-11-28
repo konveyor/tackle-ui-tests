@@ -13,9 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-export const name = "#name";
+export const archetypeName = "#name";
+export const description = "#description";
 export const criteriaTags = "input[aria-label='criteria-tags-select-toggle']";
 export const archetypeTags = "input[aria-label='archetype-tags-select-toggle']";
-export const stakeholderSelect = "input[aria-label='stakeholder-select-toggle']";
-export const stakeholdergroupsSelect = "input[aria-label='stakeholder-groups-select-toggle']";
+export const stakeholder = "input[aria-label='stakeholder-select-toggle']";
+export const stakeholderGroups = "input[aria-label='stakeholder-groups-select-toggle']";
 export const comments = "#comments";
