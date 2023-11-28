@@ -111,6 +111,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2 * SEC);
     });
 
+    // https://polarion.engineering.redhat.com/polarion/redirect/project/MTAPathfinder/workitem?id=MTA-382
     it("Application with multiple assessments", function () {
         AssessmentQuestionnaire.import(yamlFile);
         AssessmentQuestionnaire.enable(cloudNative);
@@ -139,6 +140,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2 * SEC);
     });
 
+    // https://polarion.engineering.redhat.com/polarion/#/project/MTAPathfinder/workitem?id=MTA-422
     it("Perform application review during assessment", function () {
         const application = new Assessment(getRandomApplicationData());
         application.create();
