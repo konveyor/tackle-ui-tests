@@ -73,7 +73,7 @@ export class Archetype {
     }
 
     protected fillName(name: string): void {
-        inputText(archetype.archetypeName, name);
+        inputText(archetype.name, name);
     }
 
     protected selectCriteriaTags(tags: string[]): void {
@@ -92,14 +92,14 @@ export class Archetype {
         inputText(archetype.description, description);
     }
 
-    protected selectStakeholders(stakeHolders: string) {
-        inputText(archetype.stakeholder, stakeHolders);
-        cy.get("button").contains(stakeHolders).click();
+    protected selectStakeholders(stakeholder: string) {
+        inputText(archetype.stakeholders, stakeholder);
+        cy.get("button").contains(stakeholder).click();
     }
 
-    protected selectStakeholderGroups(stakeholderGroups: string) {
-        inputText(archetype.stakeholderGroups, stakeholderGroups);
-        cy.get("button").contains(stakeholderGroups).click();
+    protected selectStakeholderGroups(stakeholderGroup: string) {
+        inputText(archetype.stakeholderGroups, stakeholderGroup);
+        cy.get("button").contains(stakeholderGroup).click();
     }
 
     protected fillComment(comment: string): void {
@@ -119,13 +119,13 @@ export class Archetype {
             this.selectArchetypeTags(this.archetypeTags);
             if (this.description) this.fillDescription(this.description);
             if (this.stakeholders) {
-                this.stakeholders.forEach((stakeHolder) =>
-                    this.selectStakeholders(stakeHolder.name)
+                this.stakeholders.forEach((stakeholder) =>
+                    this.selectStakeholders(stakeholder.name)
                 );
             }
             if (this.stakeholderGroups) {
-                this.stakeholderGroups.forEach((stakeHolderGroups) =>
-                    this.selectStakeholderGroups(stakeHolderGroups.name)
+                this.stakeholderGroups.forEach((stakeholderGroup) =>
+                    this.selectStakeholderGroups(stakeholderGroup.name)
                 );
             }
             if (this.comment) this.fillComment(this.comment);
