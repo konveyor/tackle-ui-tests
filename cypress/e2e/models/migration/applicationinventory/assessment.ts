@@ -137,12 +137,11 @@ export class Assessment extends Application {
             .check();
     }
 
-    protected selectAnswers(risk: string, saveAndReview=false): void {
+    protected selectAnswers(risk: string, saveAndReview = false): void {
         cy.get(assessmentBlock)
             .its("length")
             .then((count) => {
-
-                let lastStep = count - 2
+                let lastStep = count - 2;
 
                 for (let i = 0; i <= lastStep; i++) {
                     cy.get(questionBlock).each(($question) => {
@@ -179,8 +178,8 @@ export class Assessment extends Application {
                     });
                     clickJs(commonView.nextButton);
 
-                    if( saveAndReview && (i == lastStep)){
-                        clickJs(commonView.saveAndReviewButton)
+                    if (saveAndReview && i == lastStep) {
+                        clickJs(commonView.saveAndReviewButton);
                     }
                 }
             });
@@ -257,7 +256,7 @@ export class Assessment extends Application {
     }
 
     perform_review(risk, openApplication = true): void {
-        if( openApplication ) {
+        if (openApplication) {
             Application.open();
             selectItemsPerPage(100);
             this.selectApplication();
