@@ -137,11 +137,13 @@ export class Assessment extends Application {
             .check();
     }
 
-    protected selectAnswers(risk: string): void {
+    protected selectAnswers(risk: string, saveAndReview = false): void {
         cy.get(assessmentBlock)
             .its("length")
             .then((count) => {
-                for (let i = 0; i < count - 1; i++) {
+                let lastStep = count - 2;
+
+                for (let i = 0; i <= lastStep; i++) {
                     cy.get(questionBlock).each(($question) => {
                         let totalOptions = $question.find(stack).children("div").length;
                         let optionToSelect: number;
@@ -174,7 +176,12 @@ export class Assessment extends Application {
                             this.clickRadioOption($question, optionToSelect);
                         }
                     });
-                    clickJs(commonView.nextButton);
+
+                    if (saveAndReview && i == lastStep) {
+                        clickJs(commonView.saveAndReviewButton);
+                    } else {
+                        clickJs(commonView.nextButton);
+                    }
                 }
             });
     }
@@ -225,7 +232,8 @@ export class Assessment extends Application {
         stakeholders?: Array<string>,
         stakeholderGroups?: Array<string>,
         applicationOpen = true,
-        questionnaireName = legacyPathfinder
+        questionnaireName = legacyPathfinder,
+        saveAndReview = false
     ): void {
         if (stakeholders == undefined && stakeholderGroups == undefined) {
             expect(
@@ -244,16 +252,18 @@ export class Assessment extends Application {
             if (stakeholderGroups) this.selectStakeholderGroups(stakeholderGroups);
             clickJs(commonView.nextButton);
             cy.wait(SEC);
-            this.selectAnswers(risk);
+            this.selectAnswers(risk, saveAndReview);
         }
     }
 
-    perform_review(risk): void {
-        Application.open();
-        selectItemsPerPage(100);
-        this.selectApplication();
-        clickItemInKebabMenu(this.name, "Review");
-        cy.wait(8 * SEC);
+    perform_review(risk, openApplication = true): void {
+        if (openApplication) {
+            Application.open();
+            selectItemsPerPage(100);
+            this.selectApplication();
+            clickItemInKebabMenu(this.name, "Review");
+            cy.wait(8 * SEC);
+        }
         this.selectMigrationAction(risk);
         this.selectEffortEstimate(risk);
         this.fillCriticality(risk);
