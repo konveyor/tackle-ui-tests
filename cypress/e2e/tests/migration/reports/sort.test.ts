@@ -44,7 +44,7 @@ import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 let applicationsList: Array<Assessment> = [];
 let stakeholdersList: Array<Stakeholders> = [];
 
-describe.skip(["@tier2"], "Reports sort validations", () => {
+describe.skip(["@tier2"], "Bug MTA-1762: Reports sort validations", () => {
     before("Login and create test data", function () {
         // Perform login
         login();

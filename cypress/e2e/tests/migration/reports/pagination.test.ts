@@ -41,7 +41,7 @@ import {
 let applicationsList: Array<Assessment> = [];
 let stakeholdersList: Array<Stakeholders> = [];
 
-describe.skip(["@tier3"], "Reports pagination validations", () => {
+describe.skip(["@tier3"], "Bug MTA-1762: Reports pagination validations", () => {
     before("Login and create test data", function () {
         // Perform login
         login();

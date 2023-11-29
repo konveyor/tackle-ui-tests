@@ -60,7 +60,7 @@ let applicationsList: Array<Assessment> = [];
 let stakeholdersList: Array<Stakeholders> = [];
 let invalidSearchInput = String(data.getRandomNumber());
 
-describe.skip(["@tier2"], "Reports filter validations", () => {
+describe.skip(["@tier2"], "Bug MTA-1762: Reports filter validations", () => {
     before("Login and create test data", function () {
         // Perform login
         login();
