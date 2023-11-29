@@ -25,8 +25,9 @@ import {
     analyzeButton,
     reviewAppButton,
     migration,
+    filterIssue,
 } from "../../../types/constants";
-import { navMenu, navTab } from "../../../views/menu.view";
+import { navMenu } from "../../../views/menu.view";
 import {
     applicationNameInput,
     applicationDescriptionInput,
@@ -63,15 +64,13 @@ import {
     clickTab,
     clickItemInKebabMenu,
     doesExistButton,
-    validateTextPresence,
-    validateNumberPresence,
     clickWithin,
+    validateSingleApplicationIssue,
+    filterIssueBy,
 } from "../../../../utils/utils";
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
-import { kebabButton, rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
+import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
 import { Issues } from "../issues/issues";
-import { singleApplicationColumns } from "../../../views/issue.view";
-import { liTag } from "../../../views/common.view";
 
 export class Application {
     name: string;
@@ -427,23 +426,15 @@ export class Application {
     validateIssues(appIssues: AppIssue[]): void {
         Issues.openSingleApplication(this.name);
         appIssues.forEach((currentIssue) => {
-            cy.contains(currentIssue.name)
-                .closest(trTag)
-                .within(() => {
-                    validateTextPresence(singleApplicationColumns.issue, currentIssue.name);
-                    validateTextPresence(singleApplicationColumns.category, currentIssue.category);
-                    validateTextPresence(singleApplicationColumns.source, currentIssue.source);
-                    cy.get(singleApplicationColumns.target).within(() => {
-                        currentIssue.targets.forEach((currentTarget) => {
-                            validateTextPresence(liTag, currentTarget);
-                        });
-                    });
-                    validateNumberPresence(singleApplicationColumns.effort, currentIssue.effort);
-                    validateNumberPresence(
-                        singleApplicationColumns.files,
-                        currentIssue.affectedFiles
-                    );
-                });
+            validateSingleApplicationIssue(currentIssue);
+        });
+    }
+
+    validateIssueFilter(issues: AppIssue[], filterType: filterIssue, filterValue: string): void {
+        Issues.openSingleApplication(this.name);
+        issues.forEach((currentIssue) => {
+            filterIssueBy(filterType, currentIssue[filterValue]);
+            validateSingleApplicationIssue(currentIssue);
         });
     }
 }

@@ -95,7 +95,7 @@ describe(["@tier2"], "Issues filtering", () => {
         clearAllFilters();
     });
 
-    it("Filtering issues by source", function () {
+    it("Bug MTA-1779 - Filtering issues by source", function () {
         Issues.validateFilter(
             this.analysisData["source_analysis_on_bookserverapp"]["issues"],
             filterIssue.source,
