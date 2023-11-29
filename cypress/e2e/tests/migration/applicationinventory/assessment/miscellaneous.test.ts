@@ -35,6 +35,7 @@ import {
     ArchivedQuestionnaires,
     ArchivedQuestionnairesTableDataCell,
 } from "../../../../views/assessmentquestionnaire.view";
+import {Application} from "../../../../models/migration/applicationinventory/application";
 
 const fileName = "Legacy Pathfinder";
 let stakeholderList: Array<Stakeholders> = [];
@@ -87,7 +88,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
     });
 
     // Polarion TC MTA-392
-    it("View archived questionnaire", function () {
+    it("Bug MTA-1722: View archived questionnaire", function () {
         const application = new Assessment(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
@@ -104,8 +105,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         cy.contains("table", ArchivedQuestionnaires)
             .find(ArchivedQuestionnairesTableDataCell)
             .should("have.text", legacyPathfinder);
-
-        // Bug: https://issues.redhat.com/browse/MTA-1722
 
         AssessmentQuestionnaire.import(yamlFile);
         AssessmentQuestionnaire.disable(cloudNative);
