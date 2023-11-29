@@ -35,7 +35,7 @@ export interface Archetype {
     description?: string;
     stakeholders?: Stakeholders[];
     stakeholderGroups?: Stakeholdergroups[];
-    comment?: string;
+    comments?: string;
 }
 
 export class Archetype {
@@ -46,7 +46,7 @@ export class Archetype {
         description?: string,
         stakeholders?: Stakeholders[],
         stakeholderGroups?: Stakeholdergroups[],
-        comment?: string
+        comments?: string
     ) {
         this.name = name;
         this.criteriaTags = criteriaTags;
@@ -54,7 +54,7 @@ export class Archetype {
         this.description = description;
         this.stakeholders = stakeholders;
         this.stakeholderGroups = stakeholderGroups;
-        this.comment = comment;
+        this.comments = comments;
     }
 
     static fullUrl = Cypress.env("tackleUrl") + "/archetypes";
@@ -106,14 +106,8 @@ export class Archetype {
         });
     }
 
-    /*
-    protected selectStakeholderGroups(stakeholderGroup: string) {
-        inputText(archetype.stakeholderGroups, stakeholderGroup);
-        cy.get("button").contains(stakeholderGroup).click();
-    }*/
-
-    protected fillComment(comment: string): void {
-        inputText(archetype.comments, comment);
+    protected fillComment(comments: string): void {
+        inputText(archetype.comments, comments);
     }
 
     create(cancel = false): void {
@@ -131,7 +125,7 @@ export class Archetype {
             if (this.stakeholders) this.selectStakeholders(this.stakeholders);
             if (this.stakeholderGroups) this.selectStakeholderGroups(this.stakeholderGroups);
         }
-        if (this.comment) this.fillComment(this.comment);
+        if (this.comments) this.fillComment(this.comments);
         submitForm();
     }
 }
