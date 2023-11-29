@@ -35,7 +35,6 @@ import {
     ArchivedQuestionnaires,
     ArchivedQuestionnairesTableDataCell,
 } from "../../../../views/assessmentquestionnaire.view";
-import {Application} from "../../../../models/migration/applicationinventory/application";
 
 const fileName = "Legacy Pathfinder";
 let stakeholderList: Array<Stakeholders> = [];
