@@ -92,15 +92,25 @@ export class Archetype {
         inputText(archetype.description, description);
     }
 
-    protected selectStakeholders(stakeholder: string) {
-        inputText(archetype.stakeholders, stakeholder);
-        cy.get("button").contains(stakeholder).click();
+    protected selectStakeholders(stakeholders: Stakeholders[]) {
+        stakeholders.forEach((stakeholder) => {
+            inputText(archetype.stakeholders, stakeholder.name);
+            cy.get("button").contains(stakeholder.name).click();
+        });
     }
 
+    protected selectStakeholderGroups(stakeholderGroups: Stakeholdergroups[]) {
+        stakeholderGroups.forEach((stakeholderGroup) => {
+            inputText(archetype.stakeholderGroups, stakeholderGroup.name);
+            cy.get("button").contains(stakeholderGroup.name).click();
+        });
+    }
+
+    /*
     protected selectStakeholderGroups(stakeholderGroup: string) {
         inputText(archetype.stakeholderGroups, stakeholderGroup);
         cy.get("button").contains(stakeholderGroup).click();
-    }
+    }*/
 
     protected fillComment(comment: string): void {
         inputText(archetype.comments, comment);
@@ -118,18 +128,10 @@ export class Archetype {
             this.selectCriteriaTags(this.criteriaTags);
             this.selectArchetypeTags(this.archetypeTags);
             if (this.description) this.fillDescription(this.description);
-            if (this.stakeholders) {
-                this.stakeholders.forEach((stakeholder) =>
-                    this.selectStakeholders(stakeholder.name)
-                );
-            }
-            if (this.stakeholderGroups) {
-                this.stakeholderGroups.forEach((stakeholderGroup) =>
-                    this.selectStakeholderGroups(stakeholderGroup.name)
-                );
-            }
-            if (this.comment) this.fillComment(this.comment);
-            submitForm();
+            if (this.stakeholders) this.selectStakeholders(this.stakeholders);
+            if (this.stakeholderGroups) this.selectStakeholderGroups(this.stakeholderGroups);
         }
+        if (this.comment) this.fillComment(this.comment);
+        submitForm();
     }
 }
