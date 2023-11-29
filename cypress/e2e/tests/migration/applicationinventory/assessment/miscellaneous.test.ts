@@ -116,7 +116,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             .last()
             .should("not.have.text", cloudNative);
         // todo: uncomment when the bug is fixed
-        AssessmentQuestionnaire.delete(cloudNative);
+        // AssessmentQuestionnaire.delete(cloudNative);
     });
 
     after("Perform test data clean up", function () {
