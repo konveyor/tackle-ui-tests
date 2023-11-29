@@ -35,7 +35,7 @@ export class Issues {
         clickByText(button, applicationName);
     }
 
-    public static filterBy(filterType: filterIssue, filterValue: string | string[]): void {
+    private static filterBy(filterType: filterIssue, filterValue: string | string[]): void {
         Issues.openList();
         filterIssueBy(filterType, filterValue);
     }

@@ -386,7 +386,7 @@ export function filterIssueBy(filterType: filterIssue, filterValue: string | str
     }
 }
 
-export function validateSingleAppIssue(issue: AppIssue): void {
+export function validateSingleApplicationIssue(issue: AppIssue): void {
     cy.contains(issue.name)
         .closest(trTag)
         .within(() => {

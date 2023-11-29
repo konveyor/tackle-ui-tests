@@ -65,7 +65,7 @@ import {
     clickItemInKebabMenu,
     doesExistButton,
     clickWithin,
-    validateSingleAppIssue,
+    validateSingleApplicationIssue,
     filterIssueBy,
 } from "../../../../utils/utils";
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
@@ -426,7 +426,7 @@ export class Application {
     validateIssues(appIssues: AppIssue[]): void {
         Issues.openSingleApplication(this.name);
         appIssues.forEach((currentIssue) => {
-            validateSingleAppIssue(currentIssue);
+            validateSingleApplicationIssue(currentIssue);
         });
     }
 
@@ -434,7 +434,7 @@ export class Application {
         Issues.openSingleApplication(this.name);
         issues.forEach((currentIssue) => {
             filterIssueBy(filterType, currentIssue[filterValue]);
-            validateSingleAppIssue(currentIssue);
+            validateSingleApplicationIssue(currentIssue);
         });
     }
 }

@@ -24,17 +24,12 @@ import {
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { SEC, filterIssue } from "../../../../types/constants";
-import { Issues } from "../../../../models/migration/issues/issues";
-import { BusinessServices } from "../../../../models/migration/controls/businessservices";
-import * as data from "../../../../../utils/data_utils";
 let applicationsList: Array<Analysis> = [];
-let businessService: BusinessServices;
+let application: Analysis;
 
-describe(["@tier2"], "Issues filtering", () => {
+describe(["@tier2"], "Single application issues filtering", () => {
     before("Login", function () {
         login();
-        businessService = new BusinessServices(data.getCompanyName(), data.getDescription());
-        businessService.create();
     });
 
     beforeEach("Load data", function () {
@@ -46,48 +41,20 @@ describe(["@tier2"], "Issues filtering", () => {
         });
     });
 
-    it("Running analysis and filtering issues by app name", function () {
-        const application = new Analysis(
+    it("Running analysis and filtering issues by category", function () {
+        application = new Analysis(
             getRandomApplicationData("bookserverApp", {
                 sourceData: this.appData["bookserver-app"],
             }),
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
-        application.business = businessService.name;
         application.create();
         applicationsList.push(application);
         cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
 
-        Issues.validateFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-            filterIssue.appName,
-            application.name
-        );
-        clearAllFilters();
-    });
-
-    it("Filtering issues by BS", function () {
-        Issues.validateFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-            filterIssue.bs,
-            businessService.name
-        );
-        clearAllFilters();
-    });
-
-    it("Filtering issues by tags", function () {
-        Issues.validateFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-            filterIssue.tags,
-            "tags"
-        );
-        clearAllFilters();
-    });
-
-    it("Filtering issues by category", function () {
-        Issues.validateFilter(
+        application.validateIssueFilter(
             this.analysisData["source_analysis_on_bookserverapp"]["issues"],
             filterIssue.category,
             "category"
@@ -95,8 +62,8 @@ describe(["@tier2"], "Issues filtering", () => {
         clearAllFilters();
     });
 
-    it("Filtering issues by source", function () {
-        Issues.validateFilter(
+    it("Bug MTA-1779 - Filtering issues by source", function () {
+        application.validateIssueFilter(
             this.analysisData["source_analysis_on_bookserverapp"]["issues"],
             filterIssue.source,
             "source"
@@ -105,7 +72,7 @@ describe(["@tier2"], "Issues filtering", () => {
     });
 
     it("Filtering issues by target", function () {
-        Issues.validateFilter(
+        application.validateIssueFilter(
             this.analysisData["source_analysis_on_bookserverapp"]["issues"],
             filterIssue.target,
             "targets"
@@ -115,6 +82,5 @@ describe(["@tier2"], "Issues filtering", () => {
 
     after("Perform test data clean up", function () {
         deleteByList(applicationsList);
-        businessService.delete();
     });
 });
