@@ -13,11 +13,20 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { clickByText, selectItemsPerPage, selectUserPerspective } from "../../../../utils/utils";
+import {
+    clickByText,
+    cancelForm,
+    inputText,
+    selectFormItems,
+    selectItemsPerPage,
+    selectUserPerspective,
+    submitForm,
+} from "../../../../utils/utils";
 import { migration } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
+import * as archetype from "../../../views/archetype.view";
 
 export interface Archetype {
     name: string;
@@ -26,7 +35,7 @@ export interface Archetype {
     description?: string;
     stakeholders?: Stakeholders[];
     stakeholderGroups?: Stakeholdergroups[];
-    comment?: string;
+    comments?: string;
 }
 
 export class Archetype {
@@ -37,7 +46,7 @@ export class Archetype {
         description?: string,
         stakeholders?: Stakeholders[],
         stakeholderGroups?: Stakeholdergroups[],
-        comment?: string
+        comments?: string
     ) {
         this.name = name;
         this.criteriaTags = criteriaTags;
@@ -45,7 +54,7 @@ export class Archetype {
         this.description = description;
         this.stakeholders = stakeholders;
         this.stakeholderGroups = stakeholderGroups;
-        this.comment = comment;
+        this.comments = comments;
     }
 
     static fullUrl = Cypress.env("tackleUrl") + "/archetypes";
@@ -61,5 +70,62 @@ export class Archetype {
                 selectItemsPerPage(100);
             }
         });
+    }
+
+    protected fillName(name: string): void {
+        inputText(archetype.name, name);
+    }
+
+    protected selectCriteriaTags(tags: string[]): void {
+        tags.forEach(function (tag) {
+            selectFormItems(archetype.criteriaTags, tag);
+        });
+    }
+
+    protected selectArchetypeTags(tags: string[]): void {
+        tags.forEach(function (tag) {
+            selectFormItems(archetype.archetypeTags, tag);
+        });
+    }
+
+    protected fillDescription(description: string): void {
+        inputText(archetype.description, description);
+    }
+
+    protected selectStakeholders(stakeholders: Stakeholders[]) {
+        stakeholders.forEach((stakeholder) => {
+            inputText(archetype.stakeholders, stakeholder.name);
+            cy.get("button").contains(stakeholder.name).click();
+        });
+    }
+
+    protected selectStakeholderGroups(stakeholderGroups: Stakeholdergroups[]) {
+        stakeholderGroups.forEach((stakeholderGroup) => {
+            inputText(archetype.stakeholderGroups, stakeholderGroup.name);
+            cy.get("button").contains(stakeholderGroup.name).click();
+        });
+    }
+
+    protected fillComment(comments: string): void {
+        inputText(archetype.comments, comments);
+    }
+
+    create(cancel = false): void {
+        Archetype.open();
+        cy.contains("button", "Create new archetype", { timeout: 20000 })
+            .should("be.enabled")
+            .click();
+        if (cancel) {
+            cancelForm();
+        } else {
+            this.fillName(this.name);
+            this.selectCriteriaTags(this.criteriaTags);
+            this.selectArchetypeTags(this.archetypeTags);
+            if (this.description) this.fillDescription(this.description);
+            if (this.stakeholders) this.selectStakeholders(this.stakeholders);
+            if (this.stakeholderGroups) this.selectStakeholderGroups(this.stakeholderGroups);
+        }
+        if (this.comments) this.fillComment(this.comments);
+        submitForm();
     }
 }
