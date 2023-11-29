@@ -14,17 +14,19 @@ import {
     editAction,
     RepositoryType,
     CustomRuleType,
+    Languages,
 } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { RulesManualFields, RulesRepositoryFields } from "../../../types/types";
-import { submitButton } from "../../../views/common.view";
+import { actionSelectToggle, submitButton } from "../../../views/common.view";
 
 export interface CustomMigrationTarget {
     name: string;
     description?: string;
     imagePath?: string;
     ruleTypeData: RulesRepositoryFields | RulesManualFields;
+    language: Languages;
 }
 
 export class CustomMigrationTarget {
@@ -32,16 +34,22 @@ export class CustomMigrationTarget {
         name: string,
         description: string,
         imagePath: string,
-        ruleTypeData: RulesRepositoryFields | RulesManualFields
+        ruleTypeData: RulesRepositoryFields | RulesManualFields,
+        language = Languages.Java
     ) {
         this.name = name;
         this.description = description;
         this.ruleTypeData = ruleTypeData;
+        this.language = language;
     }
 
     public static fullUrl = Cypress.env("tackleUrl") + "/migration-targets";
 
-    public static open() {
+    public static open(forceReload = false) {
+        if (forceReload) {
+            cy.visit(CustomMigrationTarget.fullUrl);
+        }
+
         cy.url().then(($url) => {
             if ($url != CustomMigrationTarget.fullUrl) {
                 selectUserPerspective("Administration");
@@ -56,6 +64,7 @@ export class CustomMigrationTarget {
     }
 
     public create() {
+        CustomMigrationTarget.selectLanguage(this.language);
         CustomMigrationTarget.openNewForm();
         CustomMigrationTarget.fillForm(this);
         clickJs(submitButton);
@@ -113,6 +122,12 @@ export class CustomMigrationTarget {
                 CustomMigrationTarget.fillRepositoryForm(values.ruleTypeData);
             }
         }
+    }
+
+    public static selectLanguage(language: Languages) {
+        CustomMigrationTarget.open();
+        click(actionSelectToggle);
+        clickByText("button", language);
     }
 
     public static uploadRules(rulePaths: string[]) {

@@ -188,3 +188,8 @@ export enum filterIssue {
     source = "Source",
     target = "Target",
 }
+
+export enum Languages {
+    Go = "Go",
+    Java = "Java",
+}

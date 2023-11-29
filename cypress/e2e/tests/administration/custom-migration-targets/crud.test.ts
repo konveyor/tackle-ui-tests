@@ -27,6 +27,7 @@ import {
     analyzeButton,
     button,
     CredentialType,
+    Languages,
     SEC,
     UserCredentials,
 } from "../../../types/constants";
@@ -39,10 +40,12 @@ import { Analysis } from "../../../models/migration/applicationinventory/analysi
 import { cancelButton } from "../../../views/common.view";
 
 describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operations", () => {
-    // Automates Polarion TC 300 & 305
-    beforeEach("Login", function () {
+    before("Login", function () {
         login();
+    });
 
+    // Automates Polarion TC 300 & 305
+    beforeEach("Fixtures and Interceptors", function () {
         cy.fixture("custom-rules").then(function (customMigrationTargets) {
             this.customMigrationTargets = customMigrationTargets;
         });
@@ -59,91 +62,102 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
         cy.intercept("GET", "/hub/targets*").as("getRule");
         cy.intercept("PUT", "/hub/targets*/*").as("putRule");
         cy.intercept("DELETE", "/hub/targets*/*").as("deleteRule");
+
+        CustomMigrationTarget.open(true);
     });
 
-    it("Custom Migration Targets CRUD with rules uploaded manually", function () {
-        const targetData = this.customMigrationTargets["manual_rules"];
-        const target = new CustomMigrationTarget(
-            data.getRandomWord(8),
-            data.getDescription(),
-            targetData.image,
-            getRulesData(targetData)
-        );
-        target.create();
-        cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
-        cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
-            "contain",
-            target.name
-        );
+    Object.values(Languages).forEach((language) => {
+        it(`${language} | Custom Migration Targets CRUD with rules uploaded manually`, function () {
+            const targetData = this.customMigrationTargets["manual_rules"];
+            const target = new CustomMigrationTarget(
+                data.getRandomWord(8),
+                data.getDescription(),
+                targetData.image,
+                getRulesData(targetData),
+                language
+            );
+            target.create();
+            cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
+            cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
+                "contain",
+                target.name
+            );
 
-        const newName = data.getRandomWord(8);
-        const newRules = {
-            ...target.ruleTypeData,
-            rulesetPaths: ["xml/javax-package-custom.windup.xml"],
-        };
+            const newName = data.getRandomWord(8);
+            const newRules = {
+                ...target.ruleTypeData,
+                rulesetPaths: ["xml/javax-package-custom.windup.xml"],
+            };
 
-        target.edit({
-            name: newName,
-            ruleTypeData: newRules,
+            target.edit({
+                name: newName,
+                ruleTypeData: newRules,
+            });
+            cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
+                "contain",
+                newName
+            );
+            target.name = newName;
+            target.ruleTypeData = newRules;
+
+            target.delete();
+            cy.wait("@deleteRule");
+            cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
+                "not.contain",
+                target.name
+            );
         });
-        cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should("contain", newName);
-        target.name = newName;
-        target.ruleTypeData = newRules;
-
-        target.delete();
-        cy.wait("@deleteRule");
-        cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
-            "not.contain",
-            target.name
-        );
     });
 
-    it("Bug MTA-1542: Create Custom Migration Target with rules from repository with credentials", function () {
-        const sourceCredential = new CredentialsSourceControlUsername(
-            data.getRandomCredentialsData(
-                CredentialType.sourceControl,
-                UserCredentials.usernamePassword,
-                Cypress.env("git_password") && Cypress.env("git_user")
-            )
-        );
+    Object.values(Languages).forEach((language) => {
+        it(`${language} | Create Custom Migration Target with rules from repository with credentials`, function () {
+            const sourceCredential = new CredentialsSourceControlUsername(
+                data.getRandomCredentialsData(
+                    CredentialType.sourceControl,
+                    UserCredentials.usernamePassword,
+                    Cypress.env("git_password") && Cypress.env("git_user")
+                )
+            );
 
-        sourceCredential.create();
-        const targetData = this.customMigrationTargets["rules_from_tackle_testApp"];
-        const repositoryData = {
-            ...getRulesData(targetData),
-            credentials: sourceCredential,
-        };
+            sourceCredential.create();
+            const targetData = this.customMigrationTargets["rules_from_tackle_testApp"];
+            const repositoryData = {
+                ...getRulesData(targetData),
+                credentials: sourceCredential,
+            };
 
-        const target = new CustomMigrationTarget(
-            data.getRandomWord(8),
-            data.getDescription(),
-            targetData.image,
-            repositoryData
-        );
+            const target = new CustomMigrationTarget(
+                data.getRandomWord(8),
+                data.getDescription(),
+                targetData.image,
+                repositoryData,
+                language
+            );
 
-        target.create();
-        cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
-        cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
-            "contain",
-            target.name
-        );
+            target.create();
+            cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
+            cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
+                "contain",
+                target.name
+            );
 
-        // TC MTA-403
-        target.openEditDialog();
-        cy.get(CustomMigrationTargetView.credentialsInput).should(
-            "have.value",
-            sourceCredential.name
-        );
-        click(cancelButton);
+            // TC MTA-403
+            target.openEditDialog();
+            cy.get(CustomMigrationTargetView.credentialsInput).should(
+                "have.value",
+                sourceCredential.name
+            );
+            click(cancelButton);
 
-        target.delete();
-        cy.wait("@deleteRule");
-        cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
-            "not.contain",
-            target.name
-        );
+            target.delete();
+            cy.wait("@deleteRule");
+            cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
+                "not.contain",
+                target.name
+            );
 
-        sourceCredential.delete();
+            sourceCredential.delete();
+        });
     });
 
     it("Change layout", function () {
