@@ -16,13 +16,13 @@ describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
         cy.readFile(filePath).then((fileContent) => {
             try {
                 yaml.load(fileContent);
-                fileContent.should("contain", "Test questionnaire  (SAMPLE)");
                 // Parsing successful, file is in YAML format
             } catch (error) {
                 // Parsing failed, file is not in YAML format
                 throw new Error(`File is not in YAML format: ${filePath}`);
             }
         });
+        cy.readFile(filePath).should("contain", "Test questionnaire  (SAMPLE)");
     });
 
     after("Cleaning up", function () {
