@@ -49,6 +49,7 @@ import {
     JiraType,
     migration,
     businessServiceLower,
+    filterIssue,
 } from "../e2e/types/constants";
 import {
     actionButton,
@@ -66,17 +67,20 @@ import {
     filterDropDownContainer,
     firstPageButton,
     lastPageButton,
+    liTag,
     modal,
     nextPageButton,
     pageNumInput,
     prevPageButton,
+    searchButton,
+    span,
     specialFilter,
     standardFilter,
 } from "../e2e/views/common.view";
 import { tagLabels, tagMenuButton } from "../e2e/views/tags.view";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
 import { Assessment } from "../e2e/models/migration/applicationinventory/assessment";
-import { analysisData, applicationData, JiraConnectionData } from "../e2e/types/types";
+import { analysisData, AppIssue, applicationData, JiraConnectionData } from "../e2e/types/types";
 import { CredentialsProxy } from "../e2e/models/administration/credentials/credentialsProxy";
 import {
     getJiraConnectionData,
@@ -95,6 +99,12 @@ import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCr
 import { closeModal } from "../e2e/views/assessment.view";
 import { Application } from "../e2e/models/migration/applicationinventory/application";
 import { stakeHoldersTable } from "../e2e/views/stakeholders.view";
+import {
+    bsFilterName,
+    searchInput,
+    singleApplicationColumns,
+    tagFilterName,
+} from "../e2e/views/issue.view";
 
 const { _ } = Cypress;
 
@@ -337,6 +347,60 @@ export function filterInputText(searchTextValue: string, value: number): void {
 
 export function clearAllFilters(): void {
     cy.contains(button, "Clear all filters").click({ force: true });
+}
+
+export function filterIssueBy(filterType: filterIssue, filterValue: string | string[]): void {
+    let selector = "";
+    selectFilter(filterType);
+    const isApplicableFilter =
+        filterType === filterIssue.appName ||
+        filterType === filterIssue.category ||
+        filterType === filterIssue.source ||
+        filterType === filterIssue.target;
+
+    if (isApplicableFilter) {
+        if (Array.isArray(filterValue)) {
+            filterValue.forEach((current) => {
+                inputText(searchInput, current);
+                click(searchButton);
+            });
+        } else {
+            inputText(searchInput, filterValue);
+            click(searchButton);
+        }
+    } else {
+        if (filterType == filterIssue.bs) {
+            selector = bsFilterName;
+        } else if (filterType == filterIssue.tags) {
+            selector = tagFilterName;
+        }
+        click(selector);
+        if (Array.isArray(filterValue)) {
+            filterValue.forEach((name) => {
+                clickByText(span, name);
+            });
+        } else {
+            clickByText(span, filterValue);
+        }
+        click(selector);
+    }
+}
+
+export function validateSingleAppIssue(issue: AppIssue): void {
+    cy.contains(issue.name)
+        .closest(trTag)
+        .within(() => {
+            validateTextPresence(singleApplicationColumns.issue, issue.name);
+            validateTextPresence(singleApplicationColumns.category, issue.category);
+            validateTextPresence(singleApplicationColumns.source, issue.source);
+            cy.get(singleApplicationColumns.target).within(() => {
+                issue.targets.forEach((currentTarget) => {
+                    validateTextPresence(liTag, currentTarget);
+                });
+            });
+            validateNumberPresence(singleApplicationColumns.effort, issue.effort);
+            validateNumberPresence(singleApplicationColumns.files, issue.affectedFiles);
+        });
 }
 
 export function applySelectFilter(filterId, filterName, filterText, isValid = true): void {
