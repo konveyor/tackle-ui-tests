@@ -143,9 +143,6 @@ export class Archetype {
         cy.get(commonView.actionMenuItem).contains("Delete").click();
         if (cancel) {
             cancelForm();
-        } else {
-            click(commonView.confirmButton);
-            cy.wait(2 * SEC);
-        }
+        } else click(commonView.confirmButton);
     }
 }
