@@ -72,3 +72,4 @@ export const specialFilter = "div.pf-v5-c-select__menu > fieldset > label > span
 export const filterDropDownContainer =
     "div.pf-v5-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show";
 export const filterDropDown = "div.pf-v5-c-select";
+export const actionSelectToggle = "#action-select-toggle";
