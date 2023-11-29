@@ -115,12 +115,13 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             .find(ArchivedQuestionnairesTableDataCell)
             .last()
             .should("not.have.text", cloudNative);
-
+        // todo: uncomment when the bug is fixed
         AssessmentQuestionnaire.delete(cloudNative);
     });
 
     after("Perform test data clean up", function () {
         deleteByList(stakeholderList);
         deleteByList(applicationList);
+        AssessmentQuestionnaire.delete(cloudNative);
     });
 });
