@@ -130,7 +130,8 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
                 data.getRandomWord(8),
                 data.getDescription(),
                 targetData.image,
-                repositoryData
+                repositoryData,
+                language
             );
 
             target.create();
