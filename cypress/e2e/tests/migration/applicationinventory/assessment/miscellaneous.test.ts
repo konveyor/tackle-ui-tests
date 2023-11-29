@@ -20,7 +20,7 @@ import {
     createMultipleApplications,
     deleteByList,
     checkSuccessAlert,
-    selectItemsPerPage,
+    getRandomApplicationData,
 } from "../../../../../utils/utils";
 
 import * as data from "../../../../../utils/data_utils";
@@ -28,13 +28,18 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { alertTitle } from "../../../../views/common.view";
-import { Application } from "../../../../models/migration/applicationinventory/application";
+const yamlFile = "questionnaire_import/cloud-native.yaml";
+
+import { legacyPathfinder, cloudNative, SEC } from "../../../../types/constants";
+import {
+    ArchivedQuestionnaires,
+    ArchivedQuestionnairesTableDataCell,
+} from "../../../../views/assessmentquestionnaire.view";
 
 const fileName = "Legacy Pathfinder";
 let stakeholderList: Array<Stakeholders> = [];
 let stakeholderNameList: Array<string> = [];
 let applicationList: Array<Assessment> = [];
-let applicationOpen: boolean;
 
 describe(["@tier3"], "Tests related to application assessment and review", () => {
     before("Perform application assessment and review", function () {
@@ -79,6 +84,39 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             `Success alert:Success! Review discarded for ${applicationList[0].name}.`
         );
         applicationList[0].verifyStatus("review", "Not started");
+    });
+
+    // Polarion TC MTA-392
+    it("View archived questionnaire", function () {
+        const application = new Assessment(getRandomApplicationData());
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
+
+        application.perform_assessment("high", stakeholderNameList);
+        cy.wait(2 * SEC);
+
+        application.verifyStatus("assessment", "Completed");
+        AssessmentQuestionnaire.disable(legacyPathfinder);
+
+        application.clickAssessButton();
+
+        cy.contains("table", ArchivedQuestionnaires)
+            .find(ArchivedQuestionnairesTableDataCell)
+            .should("have.text", legacyPathfinder);
+
+        // Bug: https://issues.redhat.com/browse/MTA-1722
+
+        AssessmentQuestionnaire.import(yamlFile);
+        AssessmentQuestionnaire.disable(cloudNative);
+
+        application.clickAssessButton();
+        cy.contains("table", ArchivedQuestionnaires)
+            .find(ArchivedQuestionnairesTableDataCell)
+            .last()
+            .should("not.have.text", cloudNative);
+
+        AssessmentQuestionnaire.delete(cloudNative);
     });
 
     after("Perform test data clean up", function () {

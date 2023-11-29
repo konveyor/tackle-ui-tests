@@ -21,13 +21,7 @@ import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import {
-    legacyPathfinder,
-    cloudNative,
-    SEC,
-    ArchivedQuestionnaires,
-    ArchivedQuestionnairesTableDataCell,
-} from "../../../../types/constants";
+import { legacyPathfinder, cloudNative, SEC } from "../../../../types/constants";
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
@@ -171,26 +165,6 @@ describe(["@tier1"], "Application assessment and review tests", () => {
 
         // todo: Automate the bug once it's fixed
         // bug: https://issues.redhat.com/browse/MTA-1751
-    });
-
-    // Polarion TC MTA-392
-    it("View archived assessments", function () {
-        const application = new Assessment(getRandomApplicationData());
-        application.create();
-        cy.wait("@getApplication");
-        cy.wait(2 * SEC);
-
-        application.perform_assessment("high", stakeholdersNameList);
-        cy.wait(2 * SEC);
-
-        application.verifyStatus("assessment", "Completed");
-        AssessmentQuestionnaire.disable(legacyPathfinder);
-
-        application.clickAssessButton();
-
-        cy.contains("table", ArchivedQuestionnaires)
-            .find(ArchivedQuestionnairesTableDataCell)
-            .should("have.text", legacyPathfinder);
     });
 
     after("Perform test data clean up", function () {
