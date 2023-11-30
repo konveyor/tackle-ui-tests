@@ -13,6 +13,7 @@ describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
         // Polarion TC MTA-397
         AssessmentQuestionnaire.open();
         click(downloadYamlTemplate);
+        cy.wait(6000);
         cy.readFile(filePath).then((fileContent) => {
             try {
                 yaml.load(fileContent);
