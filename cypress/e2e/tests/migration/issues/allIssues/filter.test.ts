@@ -30,7 +30,7 @@ import * as data from "../../../../../utils/data_utils";
 let applicationsList: Array<Analysis> = [];
 let businessService: BusinessServices;
 
-describe(["@tier2"], "Issues filtering", () => {
+describe(["@tier2"], "1 Bug: Issues filtering", () => {
     before("Login", function () {
         login();
         businessService = new BusinessServices(data.getCompanyName(), data.getDescription());

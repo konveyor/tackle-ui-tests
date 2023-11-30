@@ -32,7 +32,7 @@ import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 let stakeholdersList: Array<Stakeholders> = [];
 let applicationsList: Array<Assessment> = [];
 
-describe(["@tier2"], "Application risks tests", () => {
+describe(["@tier2"], "1 Bug: Application risks tests", () => {
     let riskType = ["low", "medium", "high"];
 
     before("Login and Create Test Data", function () {

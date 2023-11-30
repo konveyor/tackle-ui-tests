@@ -40,7 +40,7 @@ import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { User } from "../../models/keycloak/users/user";
 
-describe(["tier2", "@dc"], "Custom Migration Targets RBAC operations", function () {
+describe(["tier2", "@dc"], "1 Bug: Custom Migration Targets RBAC operations", function () {
     // Polarion TC 317 & 319
     let analysis: Analysis;
     let target: CustomMigrationTarget;

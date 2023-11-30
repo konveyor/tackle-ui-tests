@@ -11,7 +11,7 @@ const yamlFileName = "questionnaire_import/cloud-native.yaml";
 const importedQuestionnaire = "Cloud Native";
 const legacyQuestionnaire = "Legacy Pathfinder";
 
-describe(["@tier2"], "Questionnaire CRUD operations", () => {
+describe(["@tier2"], "1 Bug: Questionnaire CRUD operations", () => {
     before("Login", function () {
         login();
         // This test will fail if there are preexisting questionnaire.

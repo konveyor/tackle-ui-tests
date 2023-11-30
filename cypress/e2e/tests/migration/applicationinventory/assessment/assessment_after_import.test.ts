@@ -33,7 +33,7 @@ const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
 let appdata = { name: "Customers" };
 
-describe(["@tier2"], "Operations after application import", () => {
+describe(["@tier2"], "2 Bugs :Operations after application import", () => {
     before("Login and create test data", function () {
         login();
 
@@ -55,7 +55,7 @@ describe(["@tier2"], "Operations after application import", () => {
         exists("Gateway");
     });
 
-    it.skip(
+    it(
         "Bug MTA-1425:Perform application assessment after a successful application import",
         { tags: "@dc" },
         function () {
