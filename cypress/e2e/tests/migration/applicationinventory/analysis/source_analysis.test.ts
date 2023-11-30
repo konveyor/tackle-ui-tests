@@ -38,7 +38,7 @@ let source_credential: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;
 let applicationsList: Array<Analysis> = [];
 
-describe(["@tier1"], "Source Analysis", () => {
+describe(["@tier1"], "1 Bug: Source Analysis", () => {
     before("Login", function () {
         login();
 
