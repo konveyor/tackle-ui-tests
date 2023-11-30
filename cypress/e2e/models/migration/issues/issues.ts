@@ -35,11 +35,6 @@ export class Issues {
         clickByText(button, applicationName);
     }
 
-    private static filterBy(filterType: filterIssue, filterValue: string | string[]): void {
-        Issues.openList();
-        filterIssueBy(filterType, filterValue);
-    }
-
     public static validateFilter(
         issues: AppIssue[],
         filterType: filterIssue,
@@ -53,10 +48,10 @@ export class Issues {
                 filterType === filterIssue.target;
 
             if (isApplicableFilter) {
-                Issues.filterBy(filterType, issue[filterValue]);
-            } else {
-                Issues.filterBy(filterType, filterValue);
+                filterValue = issue[filterValue];
             }
+            Issues.openList();
+            filterIssueBy(filterType, filterValue);
             cy.get("tr").should("not.contain", "No data available");
             validateTextPresence(singleApplicationColumns.issue, issue["name"]);
         });

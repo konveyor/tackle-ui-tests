@@ -196,3 +196,10 @@ export type AppIssue = {
     affectedFiles: number;
     tags?: string[];
 };
+
+export type AppDependency = {
+    name: string;
+    foundIn?: number;
+    language: string;
+    labels: string[];
+};

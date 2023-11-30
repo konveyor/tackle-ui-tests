@@ -14,6 +14,28 @@
                 "affectedFiles": 1,
                 "tags": ["EJB XML", "Java EE Batch", "EJB XML"]
             }
+        ],
+        "dependencies": [
+            {
+                "name": "com.fasterxml.classmate",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.apache.logging.log4j.log4j-api",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.apache.tomcat.embed.tomcat-embed-core",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.hibernate.validator.hibernate-validator",
+                "language": "java",
+                "labels": ["open-source"]
+            }
         ]
     },
 
