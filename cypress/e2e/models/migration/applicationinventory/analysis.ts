@@ -14,9 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {
+    AnalysisStatuses,
     analyzeAppButton,
     analyzeButton,
     button,
+    Languages,
     ReportTypeSelectors,
     RepositoryType,
     save,
@@ -41,7 +43,12 @@ import {
     uploadApplications,
     uploadXml,
 } from "../../../../utils/utils";
-import { analysisData, applicationData, RbacValidationRules } from "../../../types/types";
+import {
+    analysisData,
+    applicationData,
+    RbacValidationRules,
+    RulesRepositoryFields,
+} from "../../../types/types";
 import { Application } from "./application";
 import {
     addButton,
@@ -49,13 +56,15 @@ import {
     analysisColumn,
     analysisDetails,
     analyzeManuallyButton,
-    enableTransactionAnalysis,
+    effortColumn,
     enableAutomatedTagging,
+    enableTransactionAnalysis,
     enterPackageName,
     enterPackageNameToExclude,
     excludePackagesSwitch,
     expandAll,
     fileName,
+    kebabTopMenuButton,
     manageCredentials,
     mavenCredential,
     panelBody,
@@ -64,16 +73,14 @@ import {
     sourceCredential,
     sourceDropdown,
     tabsPanel,
-    kebabTopMenuButton,
-    effortColumn,
 } from "../../../views/analysis.view";
 import {
     bulkApplicationSelectionCheckBox,
     kebabMenu,
 } from "../../../views/applicationinventory.view";
-import { AnalysisStatuses } from "../../../types/constants";
-import { RulesRepositoryFields } from "../../../types/types";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
+import { actionSelectToggle } from "../../../views/common.view";
+import { CustomMigrationTarget } from "../../administration/custom-migration-targets/custom-migration-target";
 
 export class Analysis extends Application {
     name: string;
@@ -93,6 +100,7 @@ export class Analysis extends Application {
     manuallyAnalyzePackages?: string[];
     excludedPackagesList?: string[];
     openSourceLibraries?: boolean;
+    language: Languages = Languages.Java;
     incidents?: {
         mandatory?: number;
         optional?: number;
@@ -125,6 +133,7 @@ export class Analysis extends Application {
             incidents,
             openSourceLibraries,
             customRuleRepository,
+            language,
         } = analysisData;
         this.name = appData.name;
         this.source = source;
@@ -144,10 +153,16 @@ export class Analysis extends Application {
         if (excludedPackagesList) this.excludedPackagesList = excludedPackagesList;
         if (incidents) this.incidents = incidents;
         if (openSourceLibraries) this.openSourceLibraries = openSourceLibraries;
+        if (language) this.language = language;
     }
 
     public selectSourceofAnalysis(source: string): void {
         selectFormItems(sourceDropdown, source);
+    }
+
+    public static selectLanguage(language: Languages) {
+        click(actionSelectToggle);
+        clickByText("button", language);
     }
 
     protected selectTarget(target: string[]): void {
@@ -265,6 +280,7 @@ export class Analysis extends Application {
         if (this.binary) this.uploadBinary();
         this.isNextEnabled();
         next();
+        Analysis.selectLanguage(this.language);
         this.selectTarget(this.target);
         next();
         this.scopeSelect();
