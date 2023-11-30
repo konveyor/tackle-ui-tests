@@ -9,6 +9,6 @@ This file specifies the code owners of the project.
 - Shveta Sachdeva ([sshveta](https://github.com/sshveta))
 - Igor Braginsky ([ibragins](https://github.com/ibragins))
 - Alejandro Brugarolas ([abrugaro](https://github.com/abrugaro))
-- Tiger Kaovilai ([kaovilai](https://github.com/kaovilai))
-
+- Mohamed Idays ([midays](https://github.com/midays))
+- Karishma Punwatkar ([kpunwatk](https://github.com/kpunwatk))
 
