@@ -1,5 +1,10 @@
-import { click, clickByText, selectUserPerspective } from "../../../../utils/utils";
-import { SEC, assessmentQuestionnaires, deleteAction } from "../../../types/constants";
+import {
+    click,
+    clickByText,
+    selectItemsPerPage,
+    selectUserPerspective,
+} from "../../../../utils/utils";
+import { SEC, assessmentQuestionnaires, deleteAction, trTag } from "../../../types/constants";
 import {
     questionnaireUpload,
     confirmDeletion,
@@ -9,7 +14,7 @@ import {
 import { navMenu } from "../../../views/menu.view";
 import { button } from "../../../../e2e/types/constants";
 import { actionButton } from "../../../views/applicationinventory.view";
-import { controlsForm } from "../../../views/common.view";
+import * as commonView from "../../../views/common.view";
 
 export class AssessmentQuestionnaire {
     public static fullUrl = Cypress.env("tackleUrl") + "/assessment";
@@ -39,7 +44,7 @@ export class AssessmentQuestionnaire {
         cy.get(questionnaireUpload, { timeout: 2 * SEC }).attachFile(fileName, {
             subjectType: "drag-n-drop",
         });
-        cy.get(controlsForm, { timeout: 5 * SEC })
+        cy.get(commonView.controlsForm, { timeout: 5 * SEC })
             .find("button")
             .contains("Import")
             .click();
@@ -75,6 +80,35 @@ export class AssessmentQuestionnaire {
                             click(switchToggle);
                         }
                     });
+            });
+    }
+
+    public static deleteAllQuesionnaire() {
+        AssessmentQuestionnaire.open();
+        selectItemsPerPage(100);
+        cy.get(commonView.commonTable)
+            .find(trTag)
+            .then(($rows) => {
+                for (let i = 0; i < $rows.length - 1; i++) {
+                    cy.get(actionButton).eq(0).click({ force: true });
+                    cy.get("li.pf-v5-c-menu__list-item")
+                        .contains("Delete")
+                        .then(($delete_btn) => {
+                            if (!$delete_btn.parent().hasClass("pf-m-aria-disabled")) {
+                                const row_name = $delete_btn
+                                    .closest("td")
+                                    .parent(trTag)
+                                    .find('td[data-label="Name"]')
+                                    .text();
+                                clickByText(button, "Delete", true);
+                                cy.get(confirmDeletion).click().focused().clear().type(row_name);
+                                clickByText(button, deleteAction);
+                            } else {
+                                // close menu if nothing to do
+                                cy.get(actionButton).eq(0).click({ force: true });
+                            }
+                        });
+                }
             });
     }
 

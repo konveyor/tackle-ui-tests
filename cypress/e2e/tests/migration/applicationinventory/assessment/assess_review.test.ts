@@ -30,6 +30,8 @@ const yamlFile = "questionnaire_import/cloud-native.yaml";
 describe(["@tier1"], "Application assessment and review tests", () => {
     before("Login and Create Test Data", function () {
         login();
+        // This test will fail if there are preexisting questionnaire.
+        AssessmentQuestionnaire.deleteAllQuesionnaire();
         AssessmentQuestionnaire.enable(legacyPathfinder);
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
