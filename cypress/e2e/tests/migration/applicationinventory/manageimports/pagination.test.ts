@@ -35,7 +35,7 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 const filePath = "app_import/csv/";
 const filesToImport = "valid_application_rows.csv";
 
-describe(["@tier3"], "Manage imports pagination validations", function () {
+describe(["@tier3"], "1 Bug: Manage imports pagination validations", function () {
     before("Login and Create Test Data", function () {
         // Import multiple csv files
         function importMultipleFiles(num): void {

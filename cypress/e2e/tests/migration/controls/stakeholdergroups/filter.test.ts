@@ -45,7 +45,7 @@ let stakeholdersList: Array<Stakeholders> = [];
 let stakeholderGroupsList: Array<Stakeholdergroups> = [];
 const invalidSearchInput = `${data.getRandomNumber()}`;
 
-describe(["@tier2"], "Stakeholder groups filter validations", function () {
+describe(["@tier2"], "3 Bugs: Stakeholder groups filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
 

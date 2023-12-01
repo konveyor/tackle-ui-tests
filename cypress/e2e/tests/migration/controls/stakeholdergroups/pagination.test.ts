@@ -26,7 +26,7 @@ import {
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { lastPageButton, pageNumInput, prevPageButton } from "../../../../views/common.view";
 
-describe(["@tier3"], "Stakeholder groups pagination validations", function () {
+describe(["@tier3"], "2 Bugs: Stakeholder groups pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
         createMultipleStakeholderGroups(11);

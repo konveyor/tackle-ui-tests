@@ -69,6 +69,7 @@ export class Proxy {
             this.fillExcludeList();
         }
         submitForm();
+        cy.wait(2 * SEC);
     }
 
     unConfigureProxy(): void {

@@ -41,7 +41,7 @@ let stakeholderList: Array<Stakeholders> = [];
 let stakeholderNameList: Array<string> = [];
 let applicationList: Array<Assessment> = [];
 
-describe(["@tier3"], "Tests related to application assessment and review", () => {
+describe(["@tier3"], "1 Bug: Tests related to application assessment and review", () => {
     before("Perform application assessment and review", function () {
         login();
         cy.intercept("GET", "/hub/application*").as("getApplication");
