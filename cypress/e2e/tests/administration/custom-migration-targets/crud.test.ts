@@ -205,7 +205,7 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
             cy.contains(button, "Next", { timeout: 200 }).click();
 
             Analysis.selectLanguage(language);
-            cy.wait(2 * SEC);
+            cy.wait(5 * SEC);
             cy.get(".pf-v5-c-card__body", { timeout: 12 * SEC })
                 .first()
                 .should("contain", target.name);
