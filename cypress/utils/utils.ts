@@ -801,6 +801,17 @@ export function clickItemInKebabMenu(rowItem, itemName: string): void {
     cy.get(commonView.actionMenuItem).contains(itemName).click();
 }
 
+export function clickKebabMenuOptionArchetype(rowItem: string, itemName: string): void {
+    // The clickItemInKebabMenu() fn can't be used on the Archetype page just yet because the
+    // the individual archetypes don't have an id for their kebab menu.
+    cy.contains(rowItem)
+        .closest(trTag)
+        .within(() => {
+            click(sideKebabMenu);
+        });
+    cy.get(commonView.actionMenuItem).contains(itemName).click();
+}
+
 export function createMultipleJiraConnections(
     numberOfJiras: number,
     jiraCredential: JiraCredentials,
