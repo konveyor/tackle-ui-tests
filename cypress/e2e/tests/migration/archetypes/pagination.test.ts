@@ -15,10 +15,17 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-
-import { createMultipleArchetypes, deleteAllArchetypes, deleteAllRows, goToLastPage, itemsPerPageValidation, login, selectItemsPerPage, validatePagination } from "../../../../utils/utils";
+import {
+    createMultipleArchetypes,
+    deleteAllArchetypes,
+    deleteAllRows,
+    goToLastPage,
+    itemsPerPageValidation,
+    login,
+    selectItemsPerPage,
+    validatePagination,
+} from "../../../../utils/utils";
 import { Archetype } from "../../../models/migration/archetypes/archetype";
-
 
 describe(["@tier3"], "Archetypes pagination validations", function () {
     before("Login and Create Test Data", function () {
@@ -50,5 +57,5 @@ describe(["@tier3"], "Archetypes pagination validations", function () {
 
     after("Perform test data clean up", function () {
         deleteAllArchetypes();
-     });
+    });
 });
