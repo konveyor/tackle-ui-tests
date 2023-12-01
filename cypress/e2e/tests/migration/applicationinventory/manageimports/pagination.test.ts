@@ -18,24 +18,24 @@ limitations under the License.
 import {
     login,
     selectItemsPerPage,
-    click,
     importApplication,
     openManageImportsPage,
     deleteApplicationTableRows,
-    goToPage,
     goToLastPage,
     deleteAppImportsTableRows,
     validatePagination,
+    itemsPerPageValidation,
+    deleteAllImports,
 } from "../../../../../utils/utils";
-import { sideKebabMenu } from "../../../../views/applicationinventory.view";
 
 import * as commonView from "../../../../views/common.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { trTag } from "../../../../types/constants";
 
 const filePath = "app_import/csv/";
 const filesToImport = "valid_application_rows.csv";
 
-describe(["@tier3"], "1 Bug: Manage imports pagination validations", function () {
+describe(["@tier3"], "Manage imports pagination validations", function () {
     before("Login and Create Test Data", function () {
         // Import multiple csv files
         function importMultipleFiles(num): void {
@@ -69,43 +69,10 @@ describe(["@tier3"], "1 Bug: Manage imports pagination validations", function ()
     it("Items per page validations", function () {
         openManageImportsPage();
         selectItemsPerPage(10);
-        cy.wait(2000);
-
-        // Verify that only 10 items are displayed
-        cy.get(commonView.appTable)
-            .find("td[data-label='File name']")
-            .then(($rowCount) => {
-                cy.wrap($rowCount.length).should("eq", 10);
-            });
-
-        selectItemsPerPage(20);
-        cy.wait(2000);
-
-        // Verify that items less than or equal to 20 and greater than 10 are displayed
-        cy.get(commonView.appTable)
-            .find("td[data-label='File name']")
-            .then(($rowCount) => {
-                cy.wrap($rowCount.length).should("be.lte", 20).and("be.gt", 10);
-            });
+        itemsPerPageValidation(commonView.appTable, "Filename");
     });
 
-    it("Page number validations", function () {
-        openManageImportsPage();
-        selectItemsPerPage(10);
-        cy.wait(2000);
-
-        goToPage(2);
-
-        // Verify that page number has changed, as previous page nav button got enabled
-        cy.get(commonView.prevPageButton).each(($previousBtn) => {
-            cy.wrap($previousBtn).should("not.be.disabled");
-        });
-
-        // Back to page 1
-        goToPage(1);
-    });
-
-    it("Bug MTA-1693: Last page item(s) deletion, impact on page reload validation", function () {
+    it("Last page item(s) deletion, impact on page reload validation", function () {
         openManageImportsPage();
         selectItemsPerPage(10);
         cy.wait("@getImports");
@@ -115,20 +82,11 @@ describe(["@tier3"], "1 Bug: Manage imports pagination validations", function ()
         cy.wait("@getImports");
 
         // Delete all items of last page
-        cy.get(commonView.appTable)
-            .get("tbody")
-            .find("td[data-label='File name']")
-            .each(($tableRow) => {
-                click(sideKebabMenu);
-                cy.get("ul[role=menu] > li").contains("Delete").click();
-                click(commonView.confirmButton);
-                cy.wait("@deleteImport");
-                cy.wait(4000);
-            });
+        deleteAllImports();
 
         // Verify that page is re-directed to previous page
         cy.get(commonView.appTable)
-            .find("td[data-label='File name']")
+            .find("td[data-label='Filename']")
             .then(($rows) => {
                 cy.wrap($rows.length).should("eq", 10);
             });
