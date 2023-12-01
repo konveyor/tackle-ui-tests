@@ -135,7 +135,7 @@ export class Archetype {
 
     delete(cancel = false): void {
         Archetype.open();
-        cy.contains(this.name, { timeout: 10 * SEC })
+        cy.contains(this.name)
             .closest(trTag)
             .within(() => {
                 click(sideKebabMenu);
