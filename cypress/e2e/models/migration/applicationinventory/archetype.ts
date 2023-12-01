@@ -22,7 +22,7 @@ import {
     selectUserPerspective,
     submitForm,
     click,
-    clickItemInKebabMenu,
+    clickKebabMenuOptionArchetype,
 } from "../../../../utils/utils";
 import { migration, SEC, trTag } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
@@ -133,14 +133,64 @@ export class Archetype {
 
     delete(cancel = false): void {
         Archetype.open();
-        cy.contains(this.name)
-            .closest(trTag)
-            .within(() => {
-                click(sideKebabMenu);
-            });
-        cy.get(commonView.actionMenuItem).contains("Delete").click();
+        clickKebabMenuOptionArchetype(this.name, "Delete");
         if (cancel) {
             cancelForm();
         } else click(commonView.confirmButton);
+    }
+
+    edit(
+        updatedValues: {
+            name?: string;
+            criteriaTags?: string[];
+            archetypeTags?: string[];
+            description?: string;
+            stakeholders?: Stakeholders[];
+            stakeholderGroups?: Stakeholdergroups[];
+            comments?: string;
+        },
+        cancel = false
+    ): void {
+        Archetype.open();
+        clickKebabMenuOptionArchetype(this.name, "Edit");
+
+        if (cancel) {
+            cancelForm();
+        } else {
+            if (updatedValues.name && updatedValues.name != this.name) {
+                this.fillName(updatedValues.name);
+                this.name = updatedValues.name;
+            }
+            if (updatedValues.description && updatedValues.description != this.description) {
+                this.fillDescription(updatedValues.description);
+                this.description = updatedValues.description;
+            }
+            if (updatedValues.criteriaTags && updatedValues.criteriaTags != this.criteriaTags) {
+                this.selectCriteriaTags(updatedValues.criteriaTags);
+                this.criteriaTags = updatedValues.criteriaTags;
+            }
+            if (updatedValues.archetypeTags && updatedValues.archetypeTags != this.archetypeTags) {
+                this.selectArchetypeTags(updatedValues.archetypeTags);
+                this.archetypeTags = updatedValues.archetypeTags;
+            }
+            if (updatedValues.stakeholders && updatedValues.stakeholders != this.stakeholders) {
+                this.selectStakeholders(updatedValues.stakeholders);
+                this.stakeholders = updatedValues.stakeholders;
+            }
+            if (
+                updatedValues.stakeholderGroups &&
+                updatedValues.stakeholderGroups != this.stakeholderGroups
+            ) {
+                this.selectStakeholderGroups(updatedValues.stakeholderGroups);
+                this.stakeholderGroups = updatedValues.stakeholderGroups;
+            }
+            if (updatedValues.comments && updatedValues.comments != this.comments) {
+                this.fillComment(updatedValues.comments);
+                this.comments = updatedValues.comments;
+            }
+            if (updatedValues) {
+                submitForm();
+            }
+        }
     }
 }
