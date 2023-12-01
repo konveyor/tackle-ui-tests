@@ -17,50 +17,20 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
-    inputText,
     exists,
-    createMultipleBusinessServices,
-    selectFormItems,
-    getRandomApplicationData,
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
-    expandRowDetails,
-    existsWithinRow,
-    closeRowDetails,
-    deleteByList,
     checkSuccessAlert,
     createMultipleTags,
     notExists,
 } from "../../../../../utils/utils";
-import {
-    button,
-    minCharsMsg,
-    max120CharsMsg,
-    max250CharsMsg,
-    duplicateApplication,
-    createNewButton,
-    tdTag,
-} from "../../../../types/constants";
-import {
-    applicationDescriptionInput,
-    applicationNameInput,
-    applicationBusinessServiceSelect,
-    applicationContributorsInput,
-    applicationOwnerInput,
-    applicationContributorsText,
-    applicationContributorsAction,
-} from "../../../../views/applicationinventory.view";
 
 import { successAlertMessage } from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
-import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Archetype } from "../../../../models/migration/applicationinventory/archetype";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { Tag } from "../../../../models/migration/controls/tags";
-import { isNull } from "util";
-import { isNonNullChain } from "typescript";
 
 let stakeholders: Stakeholders[];
 let stakeholderGroups: Stakeholdergroups[];
