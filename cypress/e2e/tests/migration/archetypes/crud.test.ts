@@ -16,21 +16,20 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    exists,
-    createMultipleStakeholders,
-    createMultipleStakeholderGroups,
     checkSuccessAlert,
+    createMultipleStakeholderGroups,
+    createMultipleStakeholders,
     createMultipleTags,
+    exists,
+    login,
     notExists,
-} from "../../../../../utils/utils";
-
-import { successAlertMessage } from "../../../../views/common.view";
-import * as data from "../../../../../utils/data_utils";
-import { Archetype } from "../../../../models/migration/applicationinventory/archetype";
-import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
-import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
-import { Tag } from "../../../../models/migration/controls/tags";
+} from "../../../../utils/utils";
+import { Archetype } from "../../../models/migration/archetypes/archetype";
+import { Stakeholdergroups } from "../../../models/migration/controls/stakeholdergroups";
+import { Stakeholders } from "../../../models/migration/controls/stakeholders";
+import { Tag } from "../../../models/migration/controls/tags";
+import { successAlertMessage } from "../../../views/common.view";
+import * as data from "../../../../utils/data_utils";
 
 let stakeholders: Stakeholders[];
 let stakeholderGroups: Stakeholdergroups[];
