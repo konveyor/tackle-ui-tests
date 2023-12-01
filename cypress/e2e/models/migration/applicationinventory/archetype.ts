@@ -21,12 +21,16 @@ import {
     selectItemsPerPage,
     selectUserPerspective,
     submitForm,
+    click,
+    clickItemInKebabMenu,
 } from "../../../../utils/utils";
-import { migration } from "../../../types/constants";
+import { migration, SEC, trTag } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
+import { sideKebabMenu } from "../../../views/applicationinventory.view";
 import * as archetype from "../../../views/archetype.view";
+import * as commonView from "../../../views/common.view";
 
 export interface Archetype {
     name: string;
@@ -112,9 +116,7 @@ export class Archetype {
 
     create(cancel = false): void {
         Archetype.open();
-        cy.contains("button", "Create new archetype", { timeout: 20000 })
-            .should("be.enabled")
-            .click();
+        cy.contains("button", "Create new archetype").should("be.enabled").click();
         if (cancel) {
             cancelForm();
         } else {
@@ -127,5 +129,18 @@ export class Archetype {
         }
         if (this.comments) this.fillComment(this.comments);
         submitForm();
+    }
+
+    delete(cancel = false): void {
+        Archetype.open();
+        cy.contains(this.name)
+            .closest(trTag)
+            .within(() => {
+                click(sideKebabMenu);
+            });
+        cy.get(commonView.actionMenuItem).contains("Delete").click();
+        if (cancel) {
+            cancelForm();
+        } else click(commonView.confirmButton);
     }
 }
