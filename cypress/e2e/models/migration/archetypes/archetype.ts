@@ -21,12 +21,15 @@ import {
     selectItemsPerPage,
     selectUserPerspective,
     submitForm,
+    click,
 } from "../../../../utils/utils";
-import { migration } from "../../../types/constants";
+import { migration, trTag } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
 import * as archetype from "../../../views/archetype.view";
+import { sideKebabMenu } from "../../../views/applicationinventory.view";
+import { actionMenuItem, confirmButton } from "../../../views/common.view";
 
 export interface Archetype {
     name: string;
@@ -125,5 +128,18 @@ export class Archetype {
         }
         if (this.comments) this.fillComment(this.comments);
         submitForm();
+    }
+
+    delete(cancel = false): void {
+        Archetype.open();
+        cy.contains(this.name)
+            .closest(trTag)
+            .within(() => {
+                click(sideKebabMenu);
+            });
+        cy.get(actionMenuItem).contains("Delete").click();
+        if (cancel) {
+            cancelForm();
+        } else click(confirmButton);
     }
 }
