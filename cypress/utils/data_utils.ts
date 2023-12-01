@@ -299,7 +299,7 @@ export function getJiraCredentialData(
 
 export function getRandomProxyData(credentials?: CredentialsData): ProxyData {
     return {
-        excludeList: ["127.0.0.1", "cnn.com"],
+        excludeList: ["127.0.0.1", "cnn.com", getRandomWord(6)],
         credentials: credentials,
         httpEnabled: false,
         hostname: getRandomWord(6),

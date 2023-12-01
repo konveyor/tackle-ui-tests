@@ -58,7 +58,7 @@ let applicationsList: Array<Application> = [];
 let businessServicesList: Array<BusinessServices> = [];
 let tagList: Array<Tag> = [];
 
-describe(["@tier2"], "Application inventory filter validations", function () {
+describe(["@tier2"], "1 Bug: Application inventory filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
 
