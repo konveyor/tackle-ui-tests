@@ -20,11 +20,9 @@ import {
     selectItemsPerPage,
     deleteByList,
     createMultipleApplications,
-    goToPage,
     validatePagination,
     itemsPerPageValidation,
 } from "../../../../../utils/utils";
-import * as commonView from "../../../../views/common.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
 let applicationsList: Array<Application> = [];
