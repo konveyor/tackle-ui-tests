@@ -753,7 +753,7 @@ export function verifyAppImport(
 ): void {
     // Verify the app import features for a single row
     cy.get("table > tbody > tr").as("firstRow");
-    cy.get("@firstRow").find("td[data-label='File name']").should("contain", fileName);
+    cy.get("@firstRow").find("td[data-label='Filename']").should("contain", fileName);
     cy.get("@firstRow").find("td[data-label='Status']").find("div").should("contain", status);
     cy.get("@firstRow").find("td[data-label='column-4']").should("contain", accepted);
     cy.get("@firstRow").find("td[data-label='column-5']").should("contain", rejected);
