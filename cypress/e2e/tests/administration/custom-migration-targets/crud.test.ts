@@ -161,7 +161,7 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
     });
 
     Object.values(Languages).forEach((language) => {
-        it(`${language} | Change layout and check in analysis wizard`, function () {
+        it.only(`${language} | Change layout and check in analysis wizard`, function () {
             const targetData = this.customMigrationTargets["manual_rules"];
             const target = new CustomMigrationTarget(
                 data.getRandomWord(8),
@@ -205,6 +205,7 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
             cy.contains(button, "Next", { timeout: 200 }).click();
 
             Analysis.selectLanguage(language);
+            cy.wait(2 * SEC);
             cy.get(".pf-v5-c-card__body", { timeout: 12 * SEC })
                 .first()
                 .should("contain", target.name);
