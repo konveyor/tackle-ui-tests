@@ -31,6 +31,7 @@ import {
     cleanupDownloads,
     click,
     clickByText,
+    clickJs,
     clickTab,
     clickWithin,
     doesExistSelector,
@@ -161,7 +162,7 @@ export class Analysis extends Application {
     }
 
     public static selectLanguage(language: Languages) {
-        click(actionSelectToggle);
+        clickJs(actionSelectToggle);
         clickByText("button", language);
     }
 
