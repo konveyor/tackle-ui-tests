@@ -44,10 +44,10 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
         tagList = createMultipleTags(2);
     });
 
+    // Automates Polarion MTA-395
     it("Archetype CRUD operations", function () {
-        // Create archetype
         const archetype = new Archetype(
-            data.getAppName(),
+            data.getRandomWord(8),
             [tagList[0].name],
             [tagList[1].name],
             null,
@@ -62,8 +62,7 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
         );
         exists(archetype.name);
 
-        // Edit archetype name
-        const updatedArchetypeName = data.getAppName();
+        const updatedArchetypeName = data.getRandomWord(8);
         archetype.edit({ name: updatedArchetypeName });
         checkSuccessAlert(
             successAlertMessage,
@@ -72,7 +71,6 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
         );
         exists(updatedArchetypeName);
 
-        // Delete archetype
         archetype.delete();
         checkSuccessAlert(
             successAlertMessage,
