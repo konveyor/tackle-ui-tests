@@ -15,16 +15,10 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    autoPageChangeValidations,
-    createMultipleArchetypes,
-    deleteAllArchetypes,
-    itemsPerPageValidation,
-    login,
-    selectItemsPerPage,
-    validatePagination,
-} from "../../../../utils/utils";
+
+import { createMultipleArchetypes, deleteAllArchetypes, deleteAllRows, goToLastPage, itemsPerPageValidation, login, selectItemsPerPage, validatePagination } from "../../../../utils/utils";
 import { Archetype } from "../../../models/migration/archetypes/archetype";
+
 
 describe(["@tier3"], "Archetypes pagination validations", function () {
     before("Login and Create Test Data", function () {
@@ -45,10 +39,16 @@ describe(["@tier3"], "Archetypes pagination validations", function () {
 
     it("Last page item(s) deletion, impact on page reload validation", function () {
         Archetype.open();
-        autoPageChangeValidations();
+        selectItemsPerPage(10);
+        goToLastPage();
+        deleteAllRows();
+        // Verify that page is re-directed to previous page
+        cy.get("td[data-label=Name]").then(($rows) => {
+            cy.wrap($rows.length).should("eq", 10);
+        });
     });
 
     after("Perform test data clean up", function () {
         deleteAllArchetypes();
-    });
+     });
 });

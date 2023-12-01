@@ -172,7 +172,7 @@ export function clickJs(fieldId: string, isForced = true, log = false, number = 
 export function submitForm(): void {
     cy.get(commonView.submitButton).should("not.be.disabled");
     cy.get(commonView.controlsForm).submit();
-    cy.wait(2 * SEC);
+    cy.wait(2*SEC);
 }
 
 export function cancelForm(): void {
@@ -920,10 +920,10 @@ export function createMultipleJobFunctions(num): Array<Jobfunctions> {
 }
 
 export function createMultipleArchetypes(number): Archetype[] {
-    const randomTagName = "3rd party / Apache Aries";
+    const randomTagName = "3rd party / Apache Aries"
     let archetypesList: Archetype[] = [];
     for (let i = 0; i < number; i++) {
-        const archetype = new Archetype(data.getRandomWord(6), [randomTagName], [randomTagName]);
+        const archetype = new Archetype(data.getRandomWord(6),[randomTagName],[randomTagName]);
         archetype.create();
         archetypesList.push(archetype);
     }
@@ -1190,7 +1190,6 @@ export function isTableEmpty(
 export function deleteAllRows(tableSelector: string = commonView.commonTable) {
     // This method if for pages that have delete button inside Kebab menu
     // like Applications and Imports page
-    // selectItemsPerPage(100);
     isTableEmpty().then((empty) => {
         if (!empty) {
             cy.get(tableSelector)
@@ -1404,7 +1403,7 @@ export function validatePagination(): void {
     cy.get(firstPageButton).eq(0).click();
 }
 
-export function itemsPerPageValidation(tableSelector = commonView.appTable): void {
+export function itemsPerPageValidation(tableSelector = commonView.appTable): void{
     selectItemsPerPage(10);
     cy.wait(2000);
 
@@ -1426,7 +1425,7 @@ export function itemsPerPageValidation(tableSelector = commonView.appTable): voi
         });
 }
 
-export function autoPageChangeValidations(): void {
+export function autoPageChangeValidations(): void{
     selectItemsPerPage(10);
     goToLastPage();
     deleteAllRows();
