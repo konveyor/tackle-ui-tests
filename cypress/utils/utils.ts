@@ -105,6 +105,7 @@ import {
     singleApplicationColumns,
     tagFilterName,
 } from "../e2e/views/issue.view";
+import { Archetype } from "../e2e/models/migration/archetypes/archetype";
 
 const { _ } = Cypress;
 
@@ -171,6 +172,7 @@ export function clickJs(fieldId: string, isForced = true, log = false, number = 
 export function submitForm(): void {
     cy.get(commonView.submitButton).should("not.be.disabled");
     cy.get(commonView.controlsForm).submit();
+    cy.wait(2 * SEC);
 }
 
 export function cancelForm(): void {
@@ -917,6 +919,17 @@ export function createMultipleJobFunctions(num): Array<Jobfunctions> {
     return jobFunctionsList;
 }
 
+export function createMultipleArchetypes(number): Archetype[] {
+    const randomTagName = "3rd party / Apache Aries";
+    let archetypesList: Archetype[] = [];
+    for (let i = 0; i < number; i++) {
+        const archetype = new Archetype(data.getRandomWord(6), [randomTagName], [randomTagName]);
+        archetype.create();
+        archetypesList.push(archetype);
+    }
+    return archetypesList;
+}
+
 export function createMultipleStakeholderGroups(
     numberofstakeholdergroup: number,
     stakeholdersList?: Array<Stakeholders>
@@ -1177,13 +1190,13 @@ export function isTableEmpty(
 export function deleteAllRows(tableSelector: string = commonView.commonTable) {
     // This method if for pages that have delete button inside Kebab menu
     // like Applications and Imports page
-    selectItemsPerPage(100);
+    // selectItemsPerPage(100);
     isTableEmpty().then((empty) => {
         if (!empty) {
             cy.get(tableSelector)
                 .find(trTag)
                 .then(($rows) => {
-                    for (let i = 0; i < $rows.length - 2; i++) {
+                    for (let i = 0; i < $rows.length - 1; i++) {
                         cy.get(sideKebabMenu, { timeout: 10000 }).first().click();
                         cy.get("ul[role=menu] > li").contains("Delete").click();
                         cy.get(commonView.confirmButton).click();
@@ -1239,13 +1252,21 @@ export function deleteAllStakeholders(): void {
     deleteAllItems(stakeHoldersTable);
 }
 
+export function deleteAllArchetypes() {
+    Archetype.open();
+    selectItemsPerPage(100);
+    deleteAllRows();
+}
+
 export function deleteApplicationTableRows(): void {
     navigate_to_application_inventory();
+    selectItemsPerPage(100);
     deleteAllRows();
 }
 
 export function deleteAppImportsTableRows() {
     openManageImportsPage();
+    selectItemsPerPage(100);
     deleteAllRows();
 }
 
@@ -1381,6 +1402,38 @@ export function validatePagination(): void {
 
     // Moving back to the first page
     cy.get(firstPageButton).eq(0).click();
+}
+
+export function itemsPerPageValidation(tableSelector = commonView.appTable): void {
+    selectItemsPerPage(10);
+    cy.wait(2000);
+
+    // Verify that only 10 items are displayed
+    cy.get(tableSelector)
+        .find("td[data-label=Name]")
+        .then(($rows) => {
+            cy.wrap($rows.length).should("eq", 10);
+        });
+
+    selectItemsPerPage(20);
+    cy.wait(2000);
+
+    // Verify that items less than or equal to 20 and greater than 10 are displayed
+    cy.get(tableSelector)
+        .find("td[data-label=Name]")
+        .then(($rows) => {
+            cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
+        });
+}
+
+export function autoPageChangeValidations(): void {
+    selectItemsPerPage(10);
+    goToLastPage();
+    deleteAllRows();
+    // Verify that page is re-directed to previous page
+    cy.get("td[data-label=Name]").then(($rows) => {
+        cy.wrap($rows.length).should("eq", 10);
+    });
 }
 
 export function goToLastPage(): void {
