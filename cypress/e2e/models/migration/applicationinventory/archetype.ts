@@ -151,7 +151,6 @@ export class Archetype {
         },
         cancel = false
     ): void {
-        cy.wait(2000);
         Archetype.open();
         clickKebabMenuOptionArchetype(this.name, "Edit");
 
