@@ -19,6 +19,7 @@ import {
     createMultipleArchetypes,
     deleteAllArchetypes,
     deleteAllRows,
+    deleteByList,
     goToLastPage,
     itemsPerPageValidation,
     login,
@@ -26,11 +27,12 @@ import {
     validatePagination,
 } from "../../../../utils/utils";
 import { Archetype } from "../../../models/migration/archetypes/archetype";
+let archetypeList: Archetype[] = [];
 
 describe(["@tier3"], "Archetypes pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
-        createMultipleArchetypes(11);
+        archetypeList = createMultipleArchetypes(11);
     });
 
     it("Navigation button validations", function () {
@@ -56,6 +58,6 @@ describe(["@tier3"], "Archetypes pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        deleteAllArchetypes();
+        deleteByList(archetypeList);
     });
 });

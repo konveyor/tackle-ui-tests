@@ -45,7 +45,7 @@ let stakeholdersList: Array<Stakeholders> = [];
 let stakeholderGroupsList: Array<Stakeholdergroups> = [];
 const invalidSearchInput = `${data.getRandomNumber()}`;
 
-describe(["@tier2"], "3 Bugs: Stakeholder groups filter validations", function () {
+describe(["@tier2"], "Stakeholder groups filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
 
@@ -57,7 +57,7 @@ describe(["@tier2"], "3 Bugs: Stakeholder groups filter validations", function (
         cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholderGroups");
     });
 
-    it("Bug MTA-1715: Name filter validations", function () {
+    it("Name filter validations", function () {
         Stakeholdergroups.openList();
         cy.get("@getStakeholderGroups");
 
@@ -74,13 +74,13 @@ describe(["@tier2"], "3 Bugs: Stakeholder groups filter validations", function (
 
         applySearchFilter(name, invalidSearchInput);
 
-        cy.get("h2").contains("No stakeholder groups available");
+        cy.get("h2").contains("No stakeholder group available");
 
         clickByText(button, clearAllFilters);
         cy.get("@getStakeholderGroups");
     });
 
-    it("Bug MTA-1715: Description filter validations", function () {
+    it("Description filter validations", function () {
         Stakeholdergroups.openList();
         cy.get("@getStakeholderGroups");
 
@@ -98,13 +98,13 @@ describe(["@tier2"], "3 Bugs: Stakeholder groups filter validations", function (
 
         applySearchFilter(description, invalidSearchInput);
 
-        cy.get("h2").contains("No stakeholder groups available");
+        cy.get("h2").contains("No stakeholder group available");
 
         clickByText(button, clearAllFilters);
         cy.get("@getStakeholderGroups");
     });
 
-    it("Bug MTA-1715: Member filter validations", function () {
+    it("Member filter validations", function () {
         Stakeholdergroups.openList();
         cy.get("@getStakeholderGroups");
 
@@ -130,7 +130,7 @@ describe(["@tier2"], "3 Bugs: Stakeholder groups filter validations", function (
 
         applySearchFilter(stakeholders, invalidSearchInput);
 
-        cy.get("h2").contains("No stakeholder groups available");
+        cy.get("h2").contains("No stakeholder group available");
 
         clickByText(button, clearAllFilters);
         cy.get("@getStakeholderGroups");

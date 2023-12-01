@@ -21,12 +21,12 @@ import {
     createMultipleStakeholderGroups,
     validatePagination,
     deleteAllStakeholderGroups,
-    deleteAllItems,
+    itemsPerPageValidation,
+    autoPageChangeValidations,
 } from "../../../../../utils/utils";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
-import { lastPageButton, pageNumInput, prevPageButton } from "../../../../views/common.view";
 
-describe(["@tier3"], "2 Bugs: Stakeholder groups pagination validations", function () {
+describe(["@tier3"], "Stakeholder groups pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
         createMultipleStakeholderGroups(11);
@@ -38,76 +38,25 @@ describe(["@tier3"], "2 Bugs: Stakeholder groups pagination validations", functi
     });
 
     it("Navigation button validations", function () {
-        // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
         selectItemsPerPage(10);
         validatePagination();
     });
 
-    it("Bug MTA-1694: Items per page validations", function () {
-        // Navigate to stakeholder groups tab
+    it("Items per page validations", function () {
         Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
-
-        // Select 10 items per page
-        selectItemsPerPage(10);
-        cy.wait(2000);
-
-        // Verify that only 10 items are displayed
-        cy.get("td[data-label=Name]").then(($rows) => {
-            cy.wrap($rows.length).should("eq", 10);
-        });
-
-        // Select 20 items per page
-        selectItemsPerPage(20);
-        cy.wait(2000);
-
-        // Verify that items less than or equal to 20 and greater than 10 are displayed
-        cy.get("td[data-label=Name]").then(($rows) => {
-            cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
-        });
+        itemsPerPageValidation();
     });
 
-    it("Page number validations", function () {
-        // Navigate to stakeholder groups tab
-        Stakeholdergroups.openList();
-        cy.get("@getStakeholdergroups");
-
-        // Select 10 items per page
-        selectItemsPerPage(10);
-        cy.wait(2000);
-
-        // Go to page number 2
-        cy.get(pageNumInput).eq(0).clear().type("2").type("{enter}");
-
-        // Verify that page number has changed, as previous page nav button got enabled
-        cy.get(prevPageButton).each(($previousBtn) => {
-            cy.wrap($previousBtn).should("not.be.disabled");
-        });
-    });
-
-    it("Bug MTA-1694: Last page item(s) deletion, impact on page reload validation", function () {
+    it("Last page item(s) deletion, impact on page reload validation", function () {
         // Issue - https://issues.redhat.com/browse/TACKLE-155
         // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
-
-        // Select 10 items per page
         selectItemsPerPage(10);
-        cy.wait(2000);
-
-        // Navigate to last page
-        cy.get(lastPageButton).eq(0).click();
-        cy.wait(2000);
-
-        // Delete all items of last page
-        deleteAllItems();
-
-        // Verify that page is re-directed to previous page
-        cy.get("td[data-label=Name]").then(($rows) => {
-            cy.wrap($rows.length).should("eq", 10);
-        });
+        autoPageChangeValidations();
     });
 
     after("Perform test data clean up", function () {

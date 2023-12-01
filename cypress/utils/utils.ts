@@ -753,7 +753,7 @@ export function verifyAppImport(
 ): void {
     // Verify the app import features for a single row
     cy.get("table > tbody > tr").as("firstRow");
-    cy.get("@firstRow").find("td[data-label='File name']").should("contain", fileName);
+    cy.get("@firstRow").find("td[data-label='Filename']").should("contain", fileName);
     cy.get("@firstRow").find("td[data-label='Status']").find("div").should("contain", status);
     cy.get("@firstRow").find("td[data-label='column-4']").should("contain", accepted);
     cy.get("@firstRow").find("td[data-label='column-5']").should("contain", rejected);
@@ -1207,10 +1207,31 @@ export function deleteAllRows(tableSelector: string = commonView.commonTable) {
                 .find(trTag)
                 .then(($rows) => {
                     for (let i = 0; i < $rows.length - 1; i++) {
-                        cy.get(sideKebabMenu, { timeout: 10000 }).first().click();
+                        if (!isTableEmpty()) {
+                            cy.get(sideKebabMenu, { timeout: 10000 }).first().click();
+                            cy.get("ul[role=menu] > li").contains("Delete").click();
+                            cy.get(commonView.confirmButton).click();
+                            cy.wait(5000);
+                        }
+                    }
+                });
+        }
+    });
+}
+
+export function deleteAllImports(tableSelector: string = commonView.commonTable) {
+    isTableEmpty().then((empty) => {
+        if (!empty) {
+            cy.get(tableSelector)
+                .find(trTag)
+                .then(($rows) => {
+                    for (let i = 0; i < $rows.length - 1; i++) {
+                        cy.get(commonView.manageImportsActionsButton, { timeout: 10000 })
+                            .eq(1)
+                            .click();
                         cy.get("ul[role=menu] > li").contains("Delete").click();
                         cy.get(commonView.confirmButton).click();
-                        cy.wait(5000);
+                        cy.wait(2 * SEC);
                     }
                 });
         }
@@ -1277,7 +1298,7 @@ export function deleteApplicationTableRows(): void {
 export function deleteAppImportsTableRows() {
     openManageImportsPage();
     selectItemsPerPage(100);
-    deleteAllRows();
+    deleteAllImports();
 }
 
 export const deleteFromArray = <T>(array: T[], el: T): T[] => {
@@ -1414,13 +1435,16 @@ export function validatePagination(): void {
     cy.get(firstPageButton).eq(0).click();
 }
 
-export function itemsPerPageValidation(tableSelector = commonView.appTable): void {
+export function itemsPerPageValidation(
+    tableSelector = commonView.appTable,
+    columnName = "Name"
+): void {
     selectItemsPerPage(10);
     cy.wait(2000);
 
     // Verify that only 10 items are displayed
     cy.get(tableSelector)
-        .find("td[data-label=Name]")
+        .find(`td[data-label='${columnName}']`)
         .then(($rows) => {
             cy.wrap($rows.length).should("eq", 10);
         });
@@ -1430,18 +1454,21 @@ export function itemsPerPageValidation(tableSelector = commonView.appTable): voi
 
     // Verify that items less than or equal to 20 and greater than 10 are displayed
     cy.get(tableSelector)
-        .find("td[data-label=Name]")
+        .find(`td[data-label='${columnName}']`)
         .then(($rows) => {
             cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
         });
 }
 
-export function autoPageChangeValidations(): void {
+export function autoPageChangeValidations(
+    tableSelector = commonView.appTable,
+    columnName = "Name"
+): void {
     selectItemsPerPage(10);
     goToLastPage();
-    deleteAllRows();
+    deleteAllItems(tableSelector);
     // Verify that page is re-directed to previous page
-    cy.get("td[data-label=Name]").then(($rows) => {
+    cy.get(`td[data-label='${columnName}']`).then(($rows) => {
         cy.wrap($rows.length).should("eq", 10);
     });
 }
