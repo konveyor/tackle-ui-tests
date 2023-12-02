@@ -58,7 +58,7 @@ let applicationsList: Array<Application> = [];
 let businessServicesList: Array<BusinessServices> = [];
 let tagList: Array<Tag> = [];
 
-describe(["@tier2"], "1 Bug: Application inventory filter validations", function () {
+describe(["@tier2"], "Application inventory filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
 
@@ -135,7 +135,7 @@ describe(["@tier2"], "1 Bug: Application inventory filter validations", function
         clickByText(button, clearAllFilters);
     });
 
-    it("Bug MTA-1718: Business service filter validations", function () {
+    it("Business service filter validations", function () {
         // This is impacted by https://issues.redhat.com/browse/TACKLE-820
         Assessment.open();
 

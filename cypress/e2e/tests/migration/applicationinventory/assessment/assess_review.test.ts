@@ -113,8 +113,8 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2 * SEC);
     });
 
-    // Polarion TC MTA-382
     it("Application with multiple assessments", function () {
+        // Polarion TC MTA-382
         AssessmentQuestionnaire.import(yamlFile);
         AssessmentQuestionnaire.enable(cloudNative);
 
@@ -142,8 +142,8 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2 * SEC);
     });
 
-    // Polarion TC MTA-422
     it("Perform application review during assessment", function () {
+        // Polarion TC MTA-422
         const application = new Assessment(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");

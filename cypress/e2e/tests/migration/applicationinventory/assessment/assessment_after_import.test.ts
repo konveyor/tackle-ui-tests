@@ -56,7 +56,7 @@ describe(["@tier2"], "2 Bugs :Operations after application import", () => {
     });
 
     it(
-        "Bug MTA-1425:Perform application assessment after a successful application import",
+        "Perform application assessment after a successful application import",
         { tags: "@dc" },
         function () {
             const application = new Assessment(appdata);
