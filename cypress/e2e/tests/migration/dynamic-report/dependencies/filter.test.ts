@@ -23,14 +23,15 @@ import {
     clearAllFilters,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { SEC, filterIssue } from "../../../../types/constants";
-import { Issues } from "../../../../models/migration/issues/issues";
+import { SEC, filterIssue, filterDependency } from "../../../../types/constants";
+import { Issues } from "../../../../models/migration/dynamic-report/issues/issues";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import * as data from "../../../../../utils/data_utils";
+import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
 let applicationsList: Array<Analysis> = [];
 let businessService: BusinessServices;
 
-describe(["@tier2"], "1 Bug: Issues filtering", () => {
+describe(["@tier2"], "Dependency filtering", () => {
     before("Login", function () {
         login();
         businessService = new BusinessServices(data.getCompanyName(), data.getDescription());
@@ -46,7 +47,7 @@ describe(["@tier2"], "1 Bug: Issues filtering", () => {
         });
     });
 
-    it("Running analysis and filtering issues by app name", function () {
+    it("Running analysis and filtering dependencies by app name", function () {
         const application = new Analysis(
             getRandomApplicationData("bookserverApp", {
                 sourceData: this.appData["bookserver-app"],
@@ -60,55 +61,46 @@ describe(["@tier2"], "1 Bug: Issues filtering", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
 
-        Issues.validateFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-            filterIssue.appName,
+        Dependencies.validateFilter(
+            this.analysisData["source_analysis_on_bookserverapp"]["dependencies"],
+            filterDependency.appName,
             application.name
         );
         clearAllFilters();
     });
 
-    it("Filtering issues by BS", function () {
-        Issues.validateFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-            filterIssue.bs,
+    it("Filtering dependencies by BS", function () {
+        Dependencies.validateFilter(
+            this.analysisData["source_analysis_on_bookserverapp"]["dependencies"],
+            filterDependency.bs,
             businessService.name
         );
         clearAllFilters();
     });
 
-    it("Filtering issues by tags", function () {
-        Issues.validateFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-            filterIssue.tags,
+    it("Filtering dependencies by tags", function () {
+        Dependencies.validateFilter(
+            this.analysisData["source_analysis_on_bookserverapp"]["dependencies"],
+            filterDependency.tags,
             "tags"
         );
         clearAllFilters();
     });
 
-    it("Filtering issues by category", function () {
-        Issues.validateFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-            filterIssue.category,
-            "category"
+    it("Filtering dependencies by dependency name", function () {
+        Dependencies.validateFilter(
+            this.analysisData["source_analysis_on_bookserverapp"]["dependencies"],
+            filterDependency.deppName,
+            "name"
         );
         clearAllFilters();
     });
 
-    it("Bug MTA-1779 - Filtering issues by source", function () {
-        Issues.validateFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-            filterIssue.source,
-            "source"
-        );
-        clearAllFilters();
-    });
-
-    it("Filtering issues by target", function () {
-        Issues.validateFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-            filterIssue.target,
-            "targets"
+    it("Filtering dependencies by language", function () {
+        Dependencies.validateFilter(
+            this.analysisData["source_analysis_on_bookserverapp"]["dependencies"],
+            filterDependency.language,
+            "language"
         );
         clearAllFilters();
     });

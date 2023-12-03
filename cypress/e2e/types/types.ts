@@ -202,4 +202,5 @@ export type AppDependency = {
     foundIn?: number;
     language: string;
     labels: string[];
+    tags?: string[];
 };

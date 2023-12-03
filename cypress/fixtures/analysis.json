@@ -19,7 +19,8 @@
             {
                 "name": "com.fasterxml.classmate",
                 "language": "java",
-                "labels": ["open-source"]
+                "labels": ["open-source"],
+                "tags": ["EJB XML", "Java EE Batch", "EJB XML"]
             },
             {
                 "name": "org.apache.logging.log4j.log4j-api",

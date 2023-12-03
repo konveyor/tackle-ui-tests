@@ -6,11 +6,17 @@ import {
     selectItemsPerPage,
     selectUserPerspective,
     validateTextPresence,
-} from "../../../../utils/utils";
-import { button, filterIssue, migration, SEC, singleApplication } from "../../../types/constants";
-import { navMenu } from "../../../views/menu.view";
-import { singleAppDropList, singleApplicationColumns } from "../../../views/issue.view";
-import { AppIssue } from "../../../types/types";
+} from "../../../../../utils/utils";
+import {
+    button,
+    filterIssue,
+    migration,
+    SEC,
+    singleApplication,
+} from "../../../../types/constants";
+import { navMenu } from "../../../../views/menu.view";
+import { singleAppDropList, singleApplicationColumns } from "../../../../views/issue.view";
+import { AppIssue } from "../../../../types/types";
 
 export class Issues {
     /** Contains URL of issues web page */
