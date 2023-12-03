@@ -22,6 +22,8 @@ export const applicationContributorsInput =
 export const applicationContributorsText = ".pf-v5-c-chip__text";
 export const applicationContributorsAction = ".pf-v5-c-chip__actions";
 export const applicationOwnerInput = "#owner-toggle-select-typeahead";
+export const modalBoxDialog = "#confirm-dialog";
+export const modalBoxMessage = "#pf-v5-c-modal-box__body";
 export const repoTypeSelect = "button[id='repo-type-toggle']";
 export const applicationTagsSelect = "[placeholder='Select tags']";
 export const applicationCommentInput = "textarea[name=comments]";

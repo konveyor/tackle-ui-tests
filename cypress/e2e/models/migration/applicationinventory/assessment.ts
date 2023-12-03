@@ -206,6 +206,12 @@ export class Assessment extends Application {
         clickItemInKebabMenu(this.name, "Assess");
     }
 
+    clickReviewButton() {
+        Application.open();
+        this.selectApplication();
+        clickItemInKebabMenu(this.name, "Review");
+    }
+
     retake_questionnaire(
         risk,
         stakeholders?: Array<string>,
