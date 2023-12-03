@@ -27,7 +27,11 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { legacyPathfinder, cloudNative, SEC } from "../../../../types/constants";
-import { modalBoxDialog, modalBoxMessage } from "../../../../views/applicationinventory.view";
+import {
+    modalBoxDialog,
+    modalBoxMessage,
+    reviewConfirmationText,
+} from "../../../../views/applicationinventory.view";
 import { confirmCancelButton } from "../../../../views/common.view";
 
 const stakeholdersList: Array<Stakeholders> = [];
@@ -173,15 +177,8 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.verifyStatus("review", "Completed");
 
         // Automates bug: https://issues.redhat.com/browse/MTA
-
         application.clickReviewButton();
-
-        cy.get(modalBoxDialog).within(() => {
-            cy.find(modalBoxMessage).should(
-                "contain.text",
-                "This application has already been reviewed. Do you want to continue?"
-            );
-        });
+        cy.get(modalBoxDialog).find(modalBoxMessage).should("contain.text", reviewConfirmationText);
         clickByText(confirmCancelButton, "Cancel");
     });
 
