@@ -15,13 +15,24 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { login, getRandomApplicationData, deleteByList } from "../../../../../utils/utils";
+import {
+    login,
+    getRandomApplicationData,
+    deleteByList,
+    clickByText,
+} from "../../../../../utils/utils";
 
 import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { legacyPathfinder, cloudNative, SEC } from "../../../../types/constants";
+import {
+    modalBoxDialog,
+    modalBoxMessage,
+    reviewConfirmationText,
+} from "../../../../views/applicationinventory.view";
+import { confirmCancelButton } from "../../../../views/common.view";
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
@@ -165,8 +176,10 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.verifyStatus("assessment", "Completed");
         application.verifyStatus("review", "Completed");
 
-        // todo: Automate the bug once it's fixed
-        // bug: https://issues.redhat.com/browse/MTA-1751
+        // Automates bug: https://issues.redhat.com/browse/MTA
+        application.clickReviewButton();
+        cy.get(modalBoxDialog).find(modalBoxMessage).should("contain.text", reviewConfirmationText);
+        clickByText(confirmCancelButton, "Cancel");
     });
 
     after("Perform test data clean up", function () {
