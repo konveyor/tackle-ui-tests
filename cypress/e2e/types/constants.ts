@@ -183,11 +183,21 @@ export enum SortType {
 
 export enum filterIssue {
     appName = "Application name",
+    archetype = "Archetype",
     bs = "Business service",
     tags = "Tags",
     category = "Category",
     source = "Source",
     target = "Target",
+}
+
+export enum dependencyFilter {
+    appName = "Application name",
+    archetype = "Archetype",
+    bs = "Business service",
+    tags = "Tags",
+    deppName = "Name",
+    language = "Language",
 }
 
 export enum Languages {

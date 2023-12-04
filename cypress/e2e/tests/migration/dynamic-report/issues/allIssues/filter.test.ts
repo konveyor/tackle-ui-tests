@@ -21,12 +21,12 @@ import {
     getRandomAnalysisData,
     deleteByList,
     clearAllFilters,
-} from "../../../../../utils/utils";
-import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { SEC, filterIssue } from "../../../../types/constants";
-import { Issues } from "../../../../models/migration/issues/issues";
-import { BusinessServices } from "../../../../models/migration/controls/businessservices";
-import * as data from "../../../../../utils/data_utils";
+} from "../../../../../../utils/utils";
+import { Analysis } from "../../../../../models/migration/applicationinventory/analysis";
+import { SEC, filterIssue } from "../../../../../types/constants";
+import { Issues } from "../../../../../models/migration/dynamic-report/issues/issues";
+import { BusinessServices } from "../../../../../models/migration/controls/businessservices";
+import * as data from "../../../../../../utils/data_utils";
 let applicationsList: Array<Analysis> = [];
 let businessService: BusinessServices;
 

@@ -21,9 +21,9 @@ import {
     getRandomAnalysisData,
     deleteByList,
     clearAllFilters,
-} from "../../../../../utils/utils";
-import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { SEC, filterIssue } from "../../../../types/constants";
+} from "../../../../../../utils/utils";
+import { Analysis } from "../../../../../models/migration/applicationinventory/analysis";
+import { SEC, filterIssue } from "../../../../../types/constants";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 

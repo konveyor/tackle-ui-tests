@@ -6,11 +6,17 @@ import {
     selectItemsPerPage,
     selectUserPerspective,
     validateTextPresence,
-} from "../../../../utils/utils";
-import { button, filterIssue, migration, SEC, singleApplication } from "../../../types/constants";
-import { navMenu } from "../../../views/menu.view";
-import { singleAppDropList, singleApplicationColumns } from "../../../views/issue.view";
-import { AppIssue } from "../../../types/types";
+} from "../../../../../utils/utils";
+import {
+    button,
+    filterIssue,
+    migration,
+    SEC,
+    singleApplication,
+} from "../../../../types/constants";
+import { navMenu } from "../../../../views/menu.view";
+import { singleAppDropList, singleApplicationColumns } from "../../../../views/issue.view";
+import { AppIssue } from "../../../../types/types";
 
 export class Issues {
     /** Contains URL of issues web page */
@@ -35,11 +41,6 @@ export class Issues {
         clickByText(button, applicationName);
     }
 
-    private static filterBy(filterType: filterIssue, filterValue: string | string[]): void {
-        Issues.openList();
-        filterIssueBy(filterType, filterValue);
-    }
-
     public static validateFilter(
         issues: AppIssue[],
         filterType: filterIssue,
@@ -53,10 +54,10 @@ export class Issues {
                 filterType === filterIssue.target;
 
             if (isApplicableFilter) {
-                Issues.filterBy(filterType, issue[filterValue]);
-            } else {
-                Issues.filterBy(filterType, filterValue);
+                filterValue = issue[filterValue];
             }
+            Issues.openList();
+            filterIssueBy(filterType, filterValue);
             cy.get("tr").should("not.contain", "No data available");
             validateTextPresence(singleApplicationColumns.issue, issue["name"]);
         });

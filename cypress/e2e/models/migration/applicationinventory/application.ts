@@ -73,10 +73,8 @@ import {
 } from "../../../../utils/utils";
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
 import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
-import { Issues } from "../issues/issues";
-import { singleAppLabels } from "../../../views/issue.view";
-import { liTag } from "../../../views/common.view";
 import { MigrationWave } from "../migration-waves/migration-wave";
+import { Issues } from "../dynamic-report/issues/issues";
 
 export class Application {
     name: string;
