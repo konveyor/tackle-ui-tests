@@ -29,14 +29,16 @@ import { button, clearAllFilters, name } from "../../../types/constants";
 
 let archetypeList: Archetype[];
 
-describe(["@tier1"], "Archetype filter validation", () => {
+describe(["@tier2"], "Archetype filter validation", () => {
     before("Login", function () {
         login();
         archetypeList = createMultipleArchetypes(2);
     });
 
-    // Automates Polarion MTA-412
     it("Name filter validation", function () {
+
+        // Automates Polarion MTA-412
+
         Archetype.open();
 
         let searchInput = archetypeList[0].name;
