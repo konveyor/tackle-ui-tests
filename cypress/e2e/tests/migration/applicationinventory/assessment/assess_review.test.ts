@@ -176,7 +176,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.verifyStatus("assessment", "Completed");
         application.verifyStatus("review", "Completed");
 
-        // Automates bug: https://issues.redhat.com/browse/MTA
+        // Automates bug: https://issues.redhat.com/browse/MTA-1751
         application.clickReviewButton();
         cy.get(modalBoxDialog).find(modalBoxMessage).should("contain.text", reviewConfirmationText);
         clickByText(confirmCancelButton, "Cancel");
