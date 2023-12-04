@@ -36,7 +36,6 @@ describe(["@tier2"], "Archetype filter validation", () => {
     });
 
     it("Name filter validation", function () {
-
         // Automates Polarion MTA-412
 
         Archetype.open();
