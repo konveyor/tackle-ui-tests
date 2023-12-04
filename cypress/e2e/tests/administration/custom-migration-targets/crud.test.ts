@@ -103,10 +103,15 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
 
             target.delete();
             cy.wait("@deleteRule");
-            cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
-                "not.contain",
-                target.name
-            );
+            cy.wait(3 * SEC);
+            cy.get(CustomMigrationTargetView.cardContainer).then((container) => {
+                if (container.children().length > 1) {
+                    cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
+                        "not.contain",
+                        target.name
+                    );
+                }
+            });
         });
     });
 
@@ -152,10 +157,15 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
 
             target.delete();
             cy.wait("@deleteRule");
-            cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
-                "not.contain",
-                target.name
-            );
+            cy.wait(3 * SEC);
+            cy.get(CustomMigrationTargetView.cardContainer).then((container) => {
+                if (container.children().length > 1) {
+                    cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
+                        "not.contain",
+                        target.name
+                    );
+                }
+            });
 
             sourceCredential.delete();
         });

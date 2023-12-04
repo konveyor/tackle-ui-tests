@@ -20,4 +20,5 @@ export enum CustomMigrationTargetView {
     retrieveFromARepositoryRadio = "#repository",
     dragButton = "#drag-button",
     card = ".pf-v5-c-card",
+    cardContainer = "div.dnd-grid",
 }
