@@ -38,6 +38,7 @@ import { CredentialsSourceControlUsername } from "../../../models/administration
 import { getRulesData } from "../../../../utils/data_utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { cancelButton } from "../../../views/common.view";
+import * as commonView from "../../../views/common.view";
 
 describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operations", () => {
     before("Login", function () {
@@ -161,7 +162,7 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
     });
 
     Object.values(Languages).forEach((language) => {
-        it.only(`${language} | Change layout and check in analysis wizard`, function () {
+        it(`${language} | Change layout and check in analysis wizard`, function () {
             const targetData = this.customMigrationTargets["manual_rules"];
             const target = new CustomMigrationTarget(
                 data.getRandomWord(8),
@@ -178,9 +179,8 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
 
             // Moves the custom migration target to the first place
             cy.wait(SEC);
-            dragButton.move({
-                deltaX: Number.MIN_SAFE_INTEGER,
-                deltaY: Number.MIN_SAFE_INTEGER,
+            cy.wait("@getRule");
+            dragButton.drag(commonView.optionMenu, {
                 force: true,
                 waitForAnimations: false,
             });
