@@ -26,6 +26,7 @@ import {
     reviewAppButton,
     migration,
     filterIssue,
+    details,
 } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import {
@@ -46,6 +47,8 @@ import {
     packaging,
     kebabMenu,
     repoTypeSelect,
+    profileEdit,
+    appContributorSelect,
 } from "../../../views/applicationinventory.view";
 import { appDetailsView } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
@@ -71,6 +74,9 @@ import {
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
 import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
 import { Issues } from "../issues/issues";
+import { singleAppLabels } from "../../../views/issue.view";
+import { liTag } from "../../../views/common.view";
+import { MigrationWave } from "../migration-waves/migration-wave";
 
 export class Application {
     name: string;
@@ -88,6 +94,7 @@ export class Application {
     artifact?: string;
     version?: string;
     packaging?: string;
+    contributor?: string;
 
     static fullUrl = Cypress.env("tackleUrl") + "/applications/";
 
@@ -112,6 +119,7 @@ export class Application {
             artifact,
             version,
             packaging,
+            contributor,
         } = appData;
         this.name = name;
         if (business) this.business = business;
@@ -128,6 +136,7 @@ export class Application {
         if (artifact) this.artifact = artifact;
         if (version) this.version = version;
         if (packaging) this.packaging = packaging;
+        if (contributor) this.contributor = contributor;
     }
 
     public static open(forceReload = false): void {
@@ -171,6 +180,10 @@ export class Application {
 
     protected selectOwner(owner: string): void {
         selectFormItems(applicationOwnerInput, owner);
+    }
+
+    protected selectContributor(contributor: string): void {
+        selectFormItems(appContributorSelect, contributor);
     }
 
     protected selectRepoType(repoType: string): void {
@@ -222,11 +235,18 @@ export class Application {
             owner?: string;
             comment?: string;
             repoType?: string;
+            sourceRepo?: string;
+            group?: string;
         },
+        updateAppInfo = false,
         cancel = false
     ): void {
         cy.wait(2000);
-        performRowActionByIcon(this.name, editButton);
+        if (updateAppInfo) {
+            this.editApplicationFromApplicationProfile();
+        } else {
+            performRowActionByIcon(this.name, editButton);
+        }
 
         if (cancel) {
             cancelForm();
@@ -254,6 +274,18 @@ export class Application {
             if (updatedValues.repoType && updatedValues.repoType != this.repoType) {
                 this.selectRepoType(updatedValues.repoType);
                 this.repoType = updatedValues.repoType;
+            }
+            if (updatedValues.owner && updatedValues.owner != this.owner) {
+                this.selectOwner(updatedValues.owner);
+                this.owner = updatedValues.owner;
+            }
+            if (updatedValues.group && updatedValues.group != this.group) {
+                this.fillBinaryModeFields();
+                this.group = updatedValues.group;
+            }
+            if (updatedValues.sourceRepo && updatedValues.sourceRepo != this.repoType) {
+                this.selectRepoType(updatedValues.sourceRepo);
+                this.repoType = updatedValues.sourceRepo;
             }
             if (updatedValues) {
                 submitForm();
@@ -436,5 +468,45 @@ export class Application {
             filterIssueBy(filterType, currentIssue[filterValue]);
             validateSingleApplicationIssue(currentIssue);
         });
+    }
+    editApplicationFromApplicationProfile(): void {
+        this.applicationDetailsTab(details);
+        cy.wait(2000);
+        cy.get(profileEdit).click();
+    }
+
+    validateAppInformationExist(appData: applicationData, migrationWave?: MigrationWave): void {
+        Application.open();
+        selectItemsPerPage(100);
+        cy.wait(5 * SEC);
+        cy.get(tdTag)
+            .contains(this.name)
+            .closest(trTag)
+            .click()
+            .get(rightSideMenu)
+            .within(() => {
+                if (appData.owner) {
+                    cy.contains(appData.owner, { timeout: 5 * SEC });
+                }
+                if (appData.contributor) {
+                    cy.contains(appData.contributor, { timeout: 5 * SEC });
+                }
+                if (appData.sourceRepo) {
+                    cy.contains(appData.sourceRepo, { timeout: 5 * SEC });
+                }
+                if (appData.group) {
+                    cy.contains(appData.group, { timeout: 5 * SEC });
+                }
+                if (appData.business) {
+                    cy.contains(appData.business, { timeout: 5 * SEC });
+                }
+
+                if (appData.comment) {
+                    cy.contains(appData.comment, { timeout: 5 * SEC });
+                }
+                if (migrationWave) {
+                    cy.contains(migrationWave.name, { timeout: 5 * SEC });
+                }
+            });
     }
 }
