@@ -4,6 +4,7 @@
         "target": ["Containerization"],
         "appName": "book-server",
         "storyPoints": 5,
+        "tags": ["EJB XML", "Java EE Batch", "EJB XML"],
         "issues": [
             {
                 "name": "File system - Java IO",
@@ -19,8 +20,7 @@
             {
                 "name": "com.fasterxml.classmate",
                 "language": "java",
-                "labels": ["open-source"],
-                "tags": ["EJB XML", "Java EE Batch", "EJB XML"]
+                "labels": ["open-source"]
             },
             {
                 "name": "org.apache.logging.log4j.log4j-api",

@@ -191,7 +191,7 @@ export enum filterIssue {
     target = "Target",
 }
 
-export enum filterDependency {
+export enum dependencyFilter {
     appName = "Application name",
     archetype = "Archetype",
     bs = "Business service",

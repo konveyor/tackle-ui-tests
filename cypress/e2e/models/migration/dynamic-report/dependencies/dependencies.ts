@@ -8,12 +8,12 @@ import {
     selectUserPerspective,
     validateTextPresence,
 } from "../../../../../utils/utils";
-import { filterDependency, migration, SEC } from "../../../../types/constants";
+import { dependencyFilter, migration, SEC } from "../../../../types/constants";
 import { navMenu } from "../../../../views/menu.view";
 import { AppDependency } from "../../../../types/types";
 import { bsFilterName, searchInput, tagFilterName } from "../../../../views/issue.view";
 import { searchButton, span } from "../../../../views/common.view";
-import { depemdencyColumns } from "../../../../views/dependency.view";
+import { dependencyColumns } from "../../../../views/dependency.view";
 
 export class Dependencies {
     /** Contains URL of dependencies web page */
@@ -31,54 +31,36 @@ export class Dependencies {
         selectItemsPerPage(itemsPerPage);
     }
 
-    public static validateFilter(
-        dependencies: AppDependency[],
-        filterType: filterDependency,
-        filterValue: string
-    ): void {
-        dependencies.forEach((dependency) => {
-            let selector = "";
-            const isDataMember =
-                filterType === filterDependency.tags ||
-                filterType === filterDependency.language ||
-                filterType === filterDependency.deppName;
+    public static applyFilter(filterType: dependencyFilter, filterValue: string): void {
+        let selector = "";
+        Dependencies.openList();
+        selectFilter(filterType);
+        const isApplicableFilter =
+            filterType === dependencyFilter.appName ||
+            filterType === dependencyFilter.deppName ||
+            filterType === dependencyFilter.language;
 
-            if (isDataMember) {
-                filterValue = dependency[filterValue];
+        if (isApplicableFilter) {
+            inputText(searchInput, filterValue);
+            click(searchButton);
+        } else {
+            if (filterType == dependencyFilter.bs) {
+                selector = bsFilterName;
+            } else if (filterType == dependencyFilter.tags) {
+                selector = tagFilterName;
             }
+            click(selector);
+            clickByText(span, filterValue);
+            click(selector);
+        }
+    }
 
-            cy.log(`<<<<---- Filter value = ${filterValue}`);
-            cy.pause();
-
-            const isApplicableFilter =
-                filterType === filterDependency.appName ||
-                filterType === filterDependency.deppName ||
-                filterType === filterDependency.language;
-
-            Dependencies.openList();
-            selectFilter(filterType);
-
-            if (isApplicableFilter) {
-                inputText(searchInput, filterValue);
-                click(searchButton);
-            } else {
-                if (filterType == filterDependency.bs) {
-                    selector = bsFilterName;
-                } else if (filterType == filterDependency.tags) {
-                    selector = tagFilterName;
-                }
-                click(selector);
-                if (Array.isArray(filterValue)) {
-                    filterValue.forEach((name) => {
-                        clickByText(span, name);
-                    });
-                } else {
-                    clickByText(span, filterValue);
-                }
-                click(selector);
-            }
-            cy.get("tr").should("not.contain", "No data available");
-            validateTextPresence(depemdencyColumns.name, dependency["name"]);
+    public static validateFilter(dependency: AppDependency): void {
+        cy.get("tr").should("not.contain", "No data available");
+        validateTextPresence(dependencyColumns.name, dependency.name);
+        validateTextPresence(dependencyColumns.language, dependency.language);
+        dependency.labels.forEach((label) => {
+            validateTextPresence(dependencyColumns.labels, label);
         });
     }
 }

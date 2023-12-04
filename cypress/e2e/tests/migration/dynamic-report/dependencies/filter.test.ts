@@ -16,18 +16,19 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    getRandomApplicationData,
-    getRandomAnalysisData,
-    deleteByList,
     clearAllFilters,
+    deleteByList,
+    getRandomAnalysisData,
+    getRandomApplicationData,
+    login,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { SEC, filterIssue, filterDependency } from "../../../../types/constants";
-import { Issues } from "../../../../models/migration/dynamic-report/issues/issues";
+import { dependencyFilter, SEC } from "../../../../types/constants";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import * as data from "../../../../../utils/data_utils";
 import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
+import { AppDependency } from "../../../../types/types";
+
 let applicationsList: Array<Analysis> = [];
 let businessService: BusinessServices;
 
@@ -61,48 +62,57 @@ describe(["@tier2"], "Dependency filtering", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
 
-        Dependencies.validateFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["dependencies"],
-            filterDependency.appName,
-            application.name
+        Dependencies.applyFilter(dependencyFilter.appName, application.name);
+        this.analysisData["source_analysis_on_bookserverapp"]["dependencies"].forEach(
+            (dependency: AppDependency) => {
+                Dependencies.validateFilter(dependency);
+            }
         );
         clearAllFilters();
     });
 
     it("Filtering dependencies by BS", function () {
-        Dependencies.validateFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["dependencies"],
-            filterDependency.bs,
-            businessService.name
+        Dependencies.applyFilter(dependencyFilter.bs, businessService.name);
+        this.analysisData["source_analysis_on_bookserverapp"]["dependencies"].forEach(
+            (dependency: AppDependency) => {
+                Dependencies.validateFilter(dependency);
+            }
         );
         clearAllFilters();
     });
 
     it("Filtering dependencies by tags", function () {
-        Dependencies.validateFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["dependencies"],
-            filterDependency.tags,
-            "tags"
+        this.analysisData["source_analysis_on_bookserverapp"]["tags"].forEach(
+            (currentTag: string) => {
+                Dependencies.applyFilter(dependencyFilter.tags, currentTag);
+                this.analysisData["source_analysis_on_bookserverapp"]["dependencies"].forEach(
+                    (dependency: AppDependency) => {
+                        Dependencies.validateFilter(dependency);
+                    }
+                );
+                clearAllFilters();
+            }
         );
-        clearAllFilters();
     });
 
     it("Filtering dependencies by dependency name", function () {
-        Dependencies.validateFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["dependencies"],
-            filterDependency.deppName,
-            "name"
+        this.analysisData["source_analysis_on_bookserverapp"]["dependencies"].forEach(
+            (dependency: AppDependency) => {
+                Dependencies.applyFilter(dependencyFilter.deppName, dependency.name);
+                Dependencies.validateFilter(dependency);
+                clearAllFilters();
+            }
         );
-        clearAllFilters();
     });
 
-    it("Filtering dependencies by language", function () {
-        Dependencies.validateFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["dependencies"],
-            filterDependency.language,
-            "language"
+    it("Filtering dependencies by dependency language", function () {
+        this.analysisData["source_analysis_on_bookserverapp"]["dependencies"].forEach(
+            (dependency: AppDependency) => {
+                Dependencies.applyFilter(dependencyFilter.language, dependency.language);
+                Dependencies.validateFilter(dependency);
+                clearAllFilters();
+            }
         );
-        clearAllFilters();
     });
 
     after("Perform test data clean up", function () {
