@@ -33,7 +33,7 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 
 const filePath = "app_import/csv/";
 
-describe(["@tier2"], "9 Bugs: Application import operations", () => {
+describe(["@tier2"], "Application import operations", () => {
     before("Login and create test data", function () {
         login();
     });
