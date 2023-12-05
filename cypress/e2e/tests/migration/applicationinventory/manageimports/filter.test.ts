@@ -56,7 +56,7 @@ describe(["@tier2"], "Manage applications import filter validations", function (
         cy.intercept("GET", "/hub/application*").as("getApplications");
     });
 
-    it("File name filter validations", function () {
+    it("Bug MTA-1828: File name filter validations", function () {
         // Navigate to application inventory page and open manage imports
         Application.open();
         cy.wait("@getApplications");
