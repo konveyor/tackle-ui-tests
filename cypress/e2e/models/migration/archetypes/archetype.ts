@@ -24,13 +24,12 @@ import {
     click,
     clickKebabMenuOptionArchetype,
 } from "../../../../utils/utils";
-import { migration, trTag } from "../../../types/constants";
+import { migration } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
 import * as archetype from "../../../views/archetype.view";
-import { sideKebabMenu } from "../../../views/applicationinventory.view";
-import { actionMenuItem, confirmButton } from "../../../views/common.view";
+import { confirmButton } from "../../../views/common.view";
 
 export interface Archetype {
     name: string;
@@ -134,7 +133,6 @@ export class Archetype {
     delete(cancel = false): void {
         Archetype.open();
         clickKebabMenuOptionArchetype(this.name, "Delete");
-        cy.get(actionMenuItem).contains("Delete").click();
         if (cancel) {
             cancelForm();
         } else click(confirmButton);
