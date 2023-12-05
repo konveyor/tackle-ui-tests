@@ -172,7 +172,6 @@ export function clickJs(fieldId: string, isForced = true, log = false, number = 
 export function submitForm(): void {
     cy.get(commonView.submitButton).should("not.be.disabled");
     cy.get(commonView.controlsForm).submit();
-    cy.wait(2 * SEC);
 }
 
 export function cancelForm(): void {
@@ -737,39 +736,6 @@ export function openManageImportsPage(): void {
         .contains("Application imports");
 }
 
-export function openErrorReport(): void {
-    // Open error report for the first row
-    cy.get("table > tbody > tr").eq(0).as("firstRow");
-    cy.get("@firstRow").find(sideKebabMenu).click();
-    cy.get("@firstRow").find(button).contains("View error report").click();
-    cy.get("h1", { timeout: 5 * SEC }).contains("Error report");
-}
-
-export function verifyAppImport(
-    fileName: string,
-    status: string,
-    accepted: number,
-    rejected: number
-): void {
-    // Verify the app import features for a single row
-    cy.get("table > tbody > tr").as("firstRow");
-    cy.get("@firstRow").find("td[data-label='Filename']").should("contain", fileName);
-    cy.get("@firstRow").find("td[data-label='Status']").find("div").should("contain", status);
-    cy.get("@firstRow").find("td[data-label='column-4']").should("contain", accepted);
-    cy.get("@firstRow").find("td[data-label='column-5']").should("contain", rejected);
-}
-
-export function verifyImportErrorMsg(errorMsg: any): void {
-    // Verifies if the error message appears in the error report table
-    if (Array.isArray(errorMsg)) {
-        errorMsg.forEach(function (message) {
-            cy.get("table > tbody > tr > td").should("contain", message);
-        });
-    } else {
-        cy.get("table > tbody > tr > td").should("contain", errorMsg);
-    }
-}
-
 // Perform edit/delete action on the specified row selector by clicking a text button
 export function performRowAction(itemName: string, action: string): void {
     // itemName is text to be searched on the screen (like credentials name, stakeholder name, etc)
@@ -936,6 +902,7 @@ export function createMultipleArchetypes(number): Archetype[] {
     for (let i = 0; i < number; i++) {
         const archetype = new Archetype(data.getRandomWord(6), [randomTagName], [randomTagName]);
         archetype.create();
+        cy.wait(2 * SEC);
         archetypesList.push(archetype);
     }
     return archetypesList;
@@ -1193,9 +1160,12 @@ export function deleteAllTagsAndTagCategories(): void {
 export function isTableEmpty(
     tableSelector: string = commonView.commonTable
 ): Cypress.Chainable<boolean> {
-    return cy.get(tableSelector).then(($element) => {
-        return $element.hasClass("pf-c-empty-state");
-    });
+    return cy
+        .get(tableSelector)
+        .find("div")
+        .then(($element) => {
+            return $element.hasClass("pf-v5-c-empty-state");
+        });
 }
 
 export function deleteAllRows(tableSelector: string = commonView.commonTable) {
@@ -1207,12 +1177,13 @@ export function deleteAllRows(tableSelector: string = commonView.commonTable) {
                 .find(trTag)
                 .then(($rows) => {
                     for (let i = 0; i < $rows.length - 1; i++) {
-                        if (!isTableEmpty()) {
-                            cy.get(sideKebabMenu, { timeout: 10000 }).first().click();
-                            cy.get("ul[role=menu] > li").contains("Delete").click();
-                            cy.get(commonView.confirmButton).click();
-                            cy.wait(5000);
-                        }
+                        cy.get(sideKebabMenu, { timeout: 10000 }).first().click();
+                        cy.get("ul[role=menu] > li").contains("Delete").click();
+                        cy.get(commonView.confirmButton).click();
+                        cy.wait(5000);
+                        isTableEmpty().then((empty) => {
+                            if (empty) return;
+                        });
                     }
                 });
         }

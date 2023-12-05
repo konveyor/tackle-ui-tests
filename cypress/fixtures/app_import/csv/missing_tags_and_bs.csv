@@ -1,2 +1,2 @@
 Record Type 1,Application Name,Description,Comments,Business Service,Dependency,Dependency Direction,Binary Group,Binary Artifact,Binary Version,Binary Packaging,Repository Type,Repository URL,Repository Branch,Repository Path,Owner,Contributors,Tag Category 1,Tag 1,Tag Category 2,Tag 2,Tag Category 3,Tag 3,Tag Category 4,Tag 4
-1,,Legacy Customers management service,,Retail,,,corp.acme.demo,customers-tomcat,0.0.1-SNAPSHOT,war,git,https://git-acme.local/customers.git,,,,,Operating System,RHEL 8,Database,Oracle,Language,Java,Runtime,Tomcat
+1,Customers,Legacy Customers management service,,Finance,,,corp.acme.demo,customers-tomcat,0.0.1-SNAPSHOT,war,git,https://git-acme.local/customers.git,,,,,Operating System,RHEL 8,Database,Oracle,Language,TypeScript,Runtime,Tomcat
