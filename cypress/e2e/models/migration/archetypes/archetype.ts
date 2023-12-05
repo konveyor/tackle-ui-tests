@@ -23,13 +23,23 @@ import {
     submitForm,
     click,
     clickKebabMenuOptionArchetype,
+    clickJs,
 } from "../../../../utils/utils";
-import { migration } from "../../../types/constants";
+import { legacyPathfinder, migration, SEC } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
 import * as archetype from "../../../views/archetype.view";
-import { confirmButton } from "../../../views/common.view";
+import * as commonView from "../../../views/common.view";
+import {
+    questionBlock,
+    radioInput,
+    stakeholdergroupsSelect,
+    stakeholderSelect,
+    continueButton,
+    stack,
+    assessmentBlock,
+} from "../../../views/assessment.view";
 
 export interface Archetype {
     name: string;
@@ -191,5 +201,96 @@ export class Archetype {
                 submitForm();
             }
         }
+    }
+
+    take_questionnaire(questionnaireName = legacyPathfinder): void {
+        cy.contains(questionnaireName).siblings("td").contains("button", "Take").click();
+    }
+
+    clickAssessButton() {
+        Archetype.open();
+        clickKebabMenuOptionArchetype(this.name, "Assess");
+    }
+
+    protected clickRadioOption(questionSelector, optionToSelect) {
+        cy.wrap(questionSelector)
+            .find(stack)
+            .children("div")
+            .eq(optionToSelect)
+            .find(radioInput)
+            .check();
+    }
+
+    protected selectAnswers(risk: string, saveAndReview = false): void {
+        cy.get(assessmentBlock)
+            .its("length")
+            .then((count) => {
+                let lastStep = count - 2;
+
+                for (let i = 0; i <= lastStep; i++) {
+                    cy.get(questionBlock).each(($question) => {
+                        let totalOptions = $question.find(stack).children("div").length;
+                        let optionToSelect: number;
+                        if (risk === "low") {
+                            optionToSelect = totalOptions - 1;
+                            this.clickRadioOption($question, optionToSelect);
+                        } else if (risk === "medium") {
+                            cy.wrap($question)
+                                .children()
+                                .find("div.pf-v5-l-split__item")
+                                .then(($questionLine) => {
+                                    /* These 3 questions generate high risk with mean options,
+                                    hence to keep risk to medium, select last options for these set of specific questions */
+                                    if (
+                                        $questionLine.text() ===
+                                            "Does the application have legal and/or licensing requirements?" ||
+                                        $questionLine.text() ===
+                                            "Does the application require specific hardware?" ||
+                                        $questionLine.text() ===
+                                            "How is the application clustering managed?"
+                                    ) {
+                                        optionToSelect = totalOptions - 1;
+                                    } else {
+                                        optionToSelect = Math.floor(totalOptions / 2);
+                                    }
+                                    this.clickRadioOption($question, optionToSelect);
+                                });
+                        } else {
+                            optionToSelect = 1;
+                            this.clickRadioOption($question, optionToSelect);
+                        }
+                    });
+
+                    if (saveAndReview && i == lastStep) {
+                        clickJs(commonView.saveAndReviewButton);
+                    } else {
+                        clickJs(commonView.nextButton);
+                    }
+                }
+            });
+    }
+    perform_assessment(
+        risk,
+        stakeholders?: Array<string>,
+        stakeholderGroups?: Array<string>,
+        questionnaireName = legacyPathfinder,
+        saveAndReview = false
+    ): void {
+        if (stakeholders == undefined && stakeholderGroups == undefined) {
+            expect(
+                false,
+                "At least one arg out of stakeholder or stakeholder groups must be provided !"
+            ).to.equal(true);
+        } else {
+                this.clickAssessButton();
+                cy.wait(SEC);
+                this.take_questionnaire(questionnaireName);
+                cy.wait(SEC);
+            }
+            if (stakeholders) this.selectStakeholders(stakeholders);
+            if (stakeholderGroups) this.selectStakeholderGroups(stakeholderGroups);
+            clickJs(commonView.nextButton);
+            cy.wait(SEC);
+            this.selectAnswers(risk, saveAndReview);
     }
 }
