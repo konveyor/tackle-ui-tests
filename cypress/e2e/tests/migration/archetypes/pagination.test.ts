@@ -19,7 +19,6 @@ import {
     createMultipleArchetypes,
     deleteAllArchetypes,
     deleteAllRows,
-    deleteByList,
     goToLastPage,
     itemsPerPageValidation,
     login,
@@ -58,6 +57,6 @@ describe(["@tier3"], "Archetypes pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        deleteByList(archetypeList);
+        deleteAllArchetypes();
     });
 });
