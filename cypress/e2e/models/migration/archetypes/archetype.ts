@@ -24,8 +24,9 @@ import {
     click,
     clickKebabMenuOptionArchetype,
     clickJs,
+    clickTab,
 } from "../../../../utils/utils";
-import { legacyPathfinder, migration, SEC } from "../../../types/constants";
+import { legacyPathfinder, migration, SEC, tdTag, trTag } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
@@ -34,12 +35,10 @@ import * as commonView from "../../../views/common.view";
 import {
     questionBlock,
     radioInput,
-    stakeholdergroupsSelect,
-    stakeholderSelect,
-    continueButton,
     stack,
     assessmentBlock,
 } from "../../../views/assessment.view";
+import { rightSideMenu } from "../../../views/analysis.view";
 
 export interface Archetype {
     name: string;
@@ -145,7 +144,7 @@ export class Archetype {
         clickKebabMenuOptionArchetype(this.name, "Delete");
         if (cancel) {
             cancelForm();
-        } else click(confirmButton);
+        } else click(commonView.confirmButton);
     }
 
     edit(
@@ -269,10 +268,11 @@ export class Archetype {
                 }
             });
     }
+
     perform_assessment(
         risk,
-        stakeholders?: Array<string>,
-        stakeholderGroups?: Array<string>,
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[],
         questionnaireName = legacyPathfinder,
         saveAndReview = false
     ): void {
@@ -287,10 +287,35 @@ export class Archetype {
                 this.take_questionnaire(questionnaireName);
                 cy.wait(SEC);
             }
+            cy.wait(SEC);
             if (stakeholders) this.selectStakeholders(stakeholders);
             if (stakeholderGroups) this.selectStakeholderGroups(stakeholderGroups);
             clickJs(commonView.nextButton);
             cy.wait(SEC);
             this.selectAnswers(risk, saveAndReview);
     }
+
+    verifyStatus(): void {
+        Archetype.open();
+        selectItemsPerPage(100);
+        this.archetypeDetailsTab("Details");
+        click("button[aria-label='Close drawer panel']");
+    }
+
+    archetypeDetailsTab(tab: string): void {
+        this.selectArchetype();
+        cy.get(rightSideMenu).within(() => {
+            clickTab(tab);
+        });
+        cy.get("h3.pf-v5-c-title pf-m-md").contains('Archetype risk');
+        cy.get("span.pf-v5-c-label__content").contains('Low');
+    }
+
+    selectArchetype(): void {
+        cy.get(tdTag, { timeout: 10 * SEC })
+            .contains(this.name)
+            .closest(trTag)
+            .click();
+    }
+
 }
