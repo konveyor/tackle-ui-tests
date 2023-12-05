@@ -28,6 +28,7 @@ import { BusinessServices } from "../../../../models/migration/controls/business
 import * as data from "../../../../../utils/data_utils";
 import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
 import { AppDependency } from "../../../../types/types";
+import { randomWordGenerator } from "../../../../../utils/data_utils";
 
 let applicationsList: Array<Analysis> = [];
 let businessService: BusinessServices;
@@ -69,6 +70,11 @@ describe(["@tier2"], "Dependency filtering", () => {
             }
         );
         clearAllFilters();
+
+        // Negative test, filtering by not existing data
+        Dependencies.applyFilter(dependencyFilter.appName, randomWordGenerator(6));
+        cy.get("tr").should("contain", "No data available");
+        clearAllFilters();
     });
 
     it("Filtering dependencies by BS", function () {
@@ -103,6 +109,11 @@ describe(["@tier2"], "Dependency filtering", () => {
                 clearAllFilters();
             }
         );
+
+        // Negative test, filtering by not existing data
+        Dependencies.applyFilter(dependencyFilter.deppName, randomWordGenerator(6));
+        cy.get("tr").should("contain", "No data available");
+        clearAllFilters();
     });
 
     it("Filtering dependencies by dependency language", function () {
@@ -113,6 +124,11 @@ describe(["@tier2"], "Dependency filtering", () => {
                 clearAllFilters();
             }
         );
+
+        // Negative test, filtering by not existing data
+        Dependencies.applyFilter(dependencyFilter.language, randomWordGenerator(6));
+        cy.get("tr").should("contain", "No data available");
+        clearAllFilters();
     });
 
     after("Perform test data clean up", function () {
