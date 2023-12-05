@@ -83,7 +83,7 @@ export class CustomMigrationTarget {
     }
 
     public delete() {
-        CustomMigrationTarget.open();
+        CustomMigrationTarget.selectLanguage(this.language);
         this.expandActionsMenu();
         cy.contains(button, deleteAction).click();
     }

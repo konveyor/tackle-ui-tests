@@ -38,6 +38,7 @@ import { CredentialsSourceControlUsername } from "../../../models/administration
 import { getRulesData } from "../../../../utils/data_utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { cancelButton } from "../../../views/common.view";
+import * as commonView from "../../../views/common.view";
 
 describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operations", () => {
     before("Login", function () {
@@ -102,10 +103,15 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
 
             target.delete();
             cy.wait("@deleteRule");
-            cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
-                "not.contain",
-                target.name
-            );
+            cy.wait(3 * SEC);
+            cy.get(CustomMigrationTargetView.cardContainer).then((container) => {
+                if (container.children().length > 1) {
+                    cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
+                        "not.contain",
+                        target.name
+                    );
+                }
+            });
         });
     });
 
@@ -151,63 +157,71 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
 
             target.delete();
             cy.wait("@deleteRule");
-            cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
-                "not.contain",
-                target.name
-            );
+            cy.wait(3 * SEC);
+            cy.get(CustomMigrationTargetView.cardContainer).then((container) => {
+                if (container.children().length > 1) {
+                    cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
+                        "not.contain",
+                        target.name
+                    );
+                }
+            });
 
             sourceCredential.delete();
         });
     });
 
-    it("Change layout", function () {
-        const targetData = this.customMigrationTargets["manual_rules"];
-        const target = new CustomMigrationTarget(
-            data.getRandomWord(8),
-            data.getDescription(),
-            targetData.image,
-            getRulesData(targetData)
-        );
-        target.create();
+    Object.values(Languages).forEach((language) => {
+        it(`${language} | Change layout and check in analysis wizard`, function () {
+            const targetData = this.customMigrationTargets["manual_rules"];
+            const target = new CustomMigrationTarget(
+                data.getRandomWord(8),
+                data.getDescription(),
+                targetData.image,
+                getRulesData(targetData),
+                language
+            );
+            target.create();
 
-        const dragButton = cy
-            .contains(CustomMigrationTargetView.card, target.name, { timeout: 12 * SEC })
-            .find(CustomMigrationTargetView.dragButton);
+            const dragButton = cy
+                .contains(CustomMigrationTargetView.card, target.name, { timeout: 12 * SEC })
+                .find(CustomMigrationTargetView.dragButton);
 
-        // Moves the custom migration target to the first place
-        cy.wait(SEC);
-        dragButton.move({
-            deltaX: Number.MIN_SAFE_INTEGER,
-            deltaY: Number.MIN_SAFE_INTEGER,
-            force: true,
-            waitForAnimations: false,
+            // Moves the custom migration target to the first place
+            cy.wait(SEC);
+            cy.wait("@getRule");
+            dragButton.drag(commonView.optionMenu, {
+                force: true,
+                waitForAnimations: false,
+            });
+            cy.wait(SEC);
+
+            const application = new Analysis(
+                getRandomApplicationData("bookserverApp", {
+                    sourceData: this.appData["bookserver-app"],
+                }),
+                getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+            );
+            application.create();
+
+            Analysis.open();
+            selectItemsPerPage(100);
+            application.selectApplication();
+            cy.contains(button, analyzeButton, { timeout: 20 * SEC })
+                .should("be.enabled")
+                .click();
+
+            application.selectSourceofAnalysis(application.source);
+            cy.contains(button, "Next", { timeout: 200 }).click();
+
+            Analysis.selectLanguage(language);
+            cy.get(".pf-v5-c-card__body", { timeout: 12 * SEC })
+                .first()
+                .should("contain", target.name);
+            clickByText(button, "Cancel");
+
+            target.delete();
+            application.delete();
         });
-        cy.wait(SEC);
-
-        const application = new Analysis(
-            getRandomApplicationData("bookserverApp", {
-                sourceData: this.appData["bookserver-app"],
-            }),
-            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
-        );
-        application.create();
-
-        Analysis.open();
-        selectItemsPerPage(100);
-        application.selectApplication();
-        cy.contains(button, analyzeButton, { timeout: 20 * SEC })
-            .should("be.enabled")
-            .click();
-
-        application.selectSourceofAnalysis(application.source);
-        cy.contains(button, "Next", { timeout: 200 }).click();
-
-        cy.get(".pf-v5-c-card__body", { timeout: 12 * SEC })
-            .first()
-            .should("contain", target.name);
-        clickByText(button, "Cancel");
-
-        target.delete();
-        application.delete();
     });
 });

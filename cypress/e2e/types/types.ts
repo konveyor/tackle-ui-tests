@@ -1,4 +1,4 @@
-import { CustomRuleType, RepositoryType } from "./constants";
+import { CustomRuleType, Languages, RepositoryType } from "./constants";
 import { CredentialsSourceControl } from "../models/administration/credentials/credentialsSourceControl";
 import { JiraCredentials } from "../models/administration/credentials/JiraCredentials";
 
@@ -116,6 +116,7 @@ export type analysisData = {
     manuallyAnalyzePackages?: string[];
     excludedPackagesList?: string[];
     openSourceLibraries?: boolean;
+    language?: Languages;
     incidents?: {
         mandatory?: number;
         optional?: number;
