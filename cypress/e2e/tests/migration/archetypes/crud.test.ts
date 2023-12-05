@@ -20,6 +20,7 @@ import {
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
     createMultipleTags,
+    deleteByList,
     exists,
     login,
     notExists,
@@ -33,22 +34,22 @@ import * as data from "../../../../utils/data_utils";
 
 let stakeholders: Stakeholders[];
 let stakeholderGroups: Stakeholdergroups[];
-let tagList: Tag[];
+let tags: Tag[];
 
 describe(["@tier1"], "Archetype CRUD operations", () => {
     before("Login", function () {
         login();
         stakeholders = createMultipleStakeholders(2);
         stakeholderGroups = createMultipleStakeholderGroups(2);
-        tagList = createMultipleTags(2);
+        tags = createMultipleTags(2);
     });
 
     // Automates Polarion MTA-395
     it("Archetype CRUD operations", function () {
         const archetype = new Archetype(
             data.getRandomWord(8),
-            [tagList[0].name],
-            [tagList[1].name],
+            [tags[0].name],
+            [tags[1].name],
             null,
             stakeholders,
             stakeholderGroups
@@ -77,5 +78,11 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
             true
         );
         notExists(archetype.name);
+    });
+
+    after("Clear test data", function () {
+        deleteByList(stakeholders);
+        deleteByList(stakeholderGroups);
+        deleteByList(tags);
     });
 });
