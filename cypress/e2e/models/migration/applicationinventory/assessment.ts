@@ -15,16 +15,6 @@ limitations under the License.
 */
 import { Application } from "./application";
 import { tdTag, trTag, button, review, SEC, legacyPathfinder } from "../../../types/constants";
-import {
-    actionButton,
-    selectBox,
-    closeForm,
-    copy,
-    kebabMenu,
-    northdependenciesDropdownBtn,
-    southdependenciesDropdownBtn,
-    copyAssessmentModal,
-} from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
     clickByText,
@@ -55,26 +45,21 @@ import {
     proposedActionSelect,
     reviewColumnSelector,
 } from "../../../views/review.view";
-import { applicationData } from "../../../types/types";
 
-export class Assessment extends Application {
-    constructor(appData: applicationData) {
-        super(appData);
-    }
-
-    protected selectStakeholders(stakeholders: Array<string>): void {
+export class Assessment {
+    public static selectStakeholders(stakeholders: Array<string>): void {
         stakeholders.forEach(function (stakeholder) {
             selectFormItems(stakeholderSelect, stakeholder);
         });
     }
 
-    protected selectStakeholderGroups(stakeholderGroups: Array<string>): void {
+    public static selectStakeholderGroups(stakeholderGroups: Array<string>): void {
         stakeholderGroups.forEach(function (stakeholderGroup) {
             selectFormItems(stakeholdergroupsSelect, stakeholderGroup);
         });
     }
 
-    protected selectMigrationAction(risk: string): void {
+    public static selectMigrationAction(risk: string): void {
         let action: string;
         if (risk === "low") {
             const migrationActions = ["Replatform", "Refactor", "Rehost", "Retain"];
@@ -90,7 +75,7 @@ export class Assessment extends Application {
         cy.contains(button, action).click();
     }
 
-    protected selectEffortEstimate(risk: string): void {
+    public static selectEffortEstimate(risk: string): void {
         let effort: string;
         if (risk === "low") {
             effort = "Small";
@@ -104,7 +89,7 @@ export class Assessment extends Application {
         cy.contains(button, effort).click();
     }
 
-    protected getNumByRisk(risk: string): number {
+    public static getNumByRisk(risk: string): number {
         let num: number;
         if (risk === "low") {
             num = data.getRandomNumber(1, 4);
@@ -116,19 +101,19 @@ export class Assessment extends Application {
         return num;
     }
 
-    protected fillCriticality(risk: string): void {
+    public static fillCriticality(risk: string): void {
         const criticality = this.getNumByRisk(risk);
         cy.get(criticalityInput).type(`{selectAll}${criticality}`).blur();
         cy.wait(SEC);
     }
 
-    protected fillPriority(risk: string): void {
+    public static fillPriority(risk: string): void {
         const priority = this.getNumByRisk(risk);
         cy.get(priorityInput).type(`{selectAll}${priority}`).blur();
         cy.wait(SEC);
     }
 
-    protected clickRadioOption(questionSelector, optionToSelect) {
+    public static clickRadioOption(questionSelector, optionToSelect) {
         cy.wrap(questionSelector)
             .find(stack)
             .children("div")
@@ -137,7 +122,7 @@ export class Assessment extends Application {
             .check();
     }
 
-    protected selectAnswers(risk: string, saveAndReview = false): void {
+    public static selectAnswers(risk: string, saveAndReview = false): void {
         cy.get(assessmentBlock)
             .its("length")
             .then((count) => {
@@ -186,90 +171,59 @@ export class Assessment extends Application {
             });
     }
 
-    edit(
-        updatedValues: {
-            name?: string;
-            description?: string;
-            business?: string;
-            tags?: Array<string>;
-            comment?: string;
-        },
-        cancel = false
-    ): void {
-        Application.open();
-        super.edit(updatedValues);
-    }
-
-    clickAssessButton() {
-        Application.open();
-        this.selectApplication();
-        clickItemInKebabMenu(this.name, "Assess");
-    }
-
-    clickReviewButton() {
-        Application.open();
-        this.selectApplication();
-        clickItemInKebabMenu(this.name, "Review");
-    }
-
-    retake_questionnaire(
+    public static retake_questionnaire(
         risk,
         stakeholders?: Array<string>,
         stakeholderGroups?: Array<string>
     ): void {
-        this.clickAssessButton();
-        cy.wait(SEC);
+        // // this.clickAssessButton();
+        // clickItemInKebabMenu(name, "Assess");
+        // cy.wait(SEC);
         clickByText(button, "Retake");
         // This check can't be done from the test because the alert message is displayed for a short time
         // and we are in the midddle of answering a questionnaire at this point.
         checkSuccessAlert(
             commonView.alertTitle,
-            `Success alert:Success! Assessment discarded for ${this.name}.`
+            `Success alert:Success! Assessment discarded for "abcd".`
         );
-        this.perform_assessment(risk, stakeholders, stakeholderGroups, false);
+        this.fill_assessment_form(risk, stakeholders, stakeholderGroups);
     }
 
-    take_questionnaire(questionnaireName = legacyPathfinder): void {
+    public static take_questionnaire(questionnaireName = legacyPathfinder): void {
         cy.contains(questionnaireName).siblings("td").contains("button", "Take").click();
     }
 
-    perform_assessment(
+    public static perform_assessment(
         risk,
         stakeholders?: Array<string>,
         stakeholderGroups?: Array<string>,
-        applicationOpen = true,
         questionnaireName = legacyPathfinder,
         saveAndReview = false
     ): void {
-        if (stakeholders == undefined && stakeholderGroups == undefined) {
-            expect(
-                false,
-                "At least one arg out of stakeholder or stakeholder groups must be provided !"
-            ).to.equal(true);
-        } else {
-            // These steps are not required for a questionnaire retake.
-            if (applicationOpen) {
-                this.clickAssessButton();
-                cy.wait(SEC);
-                this.take_questionnaire(questionnaireName);
-                cy.wait(SEC);
-            }
-            if (stakeholders) this.selectStakeholders(stakeholders);
-            if (stakeholderGroups) this.selectStakeholderGroups(stakeholderGroups);
-            clickJs(commonView.nextButton);
-            cy.wait(SEC);
-            this.selectAnswers(risk, saveAndReview);
-        }
+        // These steps are not required for a questionnaire retake.
+        // clickItemInKebabMenu(name, "Assess");
+        // cy.wait(SEC);
+        this.take_questionnaire(questionnaireName);
+        cy.wait(SEC);
+        this.fill_assessment_form(risk, stakeholders, stakeholderGroups, saveAndReview);
     }
 
-    perform_review(risk, openApplication = true): void {
-        if (openApplication) {
-            Application.open();
-            selectItemsPerPage(100);
-            this.selectApplication();
-            clickItemInKebabMenu(this.name, "Review");
-            cy.wait(8 * SEC);
-        }
+    public static fill_assessment_form(
+        risk,
+        stakeholders?: Array<string>,
+        stakeholderGroups?: Array<string>,
+        saveAndReview = false
+    ): void {
+        if (stakeholders) this.selectStakeholders(stakeholders);
+        if (stakeholderGroups) this.selectStakeholderGroups(stakeholderGroups);
+        clickJs(commonView.nextButton);
+        cy.wait(SEC);
+        this.selectAnswers(risk, saveAndReview);
+    }
+
+    public static perform_review(risk, openApplication = true): void {
+        // clickItemInKebabMenu(name, "Review");
+        // cy.wait(8 * SEC);
         this.selectMigrationAction(risk);
         this.selectEffortEstimate(risk);
         this.fillCriticality(risk);
@@ -278,9 +232,7 @@ export class Assessment extends Application {
         cy.wait(2 * SEC);
     }
 
-    // Method to verify the status of Assessment and Review
-    verifyStatus(column, status): void {
-        Application.open();
+    public static verifyStatus(name, column, status): void {
         let columnSelector: string;
 
         if (column === "assessment") columnSelector = assessmentColumnSelector;
@@ -288,211 +240,10 @@ export class Assessment extends Application {
 
         selectItemsPerPage(100);
         cy.get(tdTag)
-            .contains(this.name)
+            .contains(name)
             .parent(trTag)
             .within(() => {
                 cy.get(columnSelector).contains(status, { timeout: 30 * SEC });
             });
-    }
-
-    // Opens the manage dependencies dialog from application inventory page
-    openManageDependencies(): void {
-        Application.open();
-        selectItemsPerPage(100);
-        performRowActionByIcon(this.name, kebabMenu);
-        clickByText(button, "Manage dependencies");
-    }
-
-    // Selects the application as dependency from dropdown. Arg dropdownNum value 0 selects northbound, whereas value 1 selects southbound
-    selectNorthDependency(appNameList: Array<string>): void {
-        appNameList.forEach(function (app) {
-            cy.get(northdependenciesDropdownBtn).click();
-            cy.contains("button", app).click();
-        });
-    }
-
-    // Selects the application as dependency from dropdown. Arg dropdownNum value 0 selects northbound, whereas value 1 selects southbound
-    selectDependency(dropdownLocator: string, appNameList: Array<string>): void {
-        appNameList.forEach(function (app) {
-            cy.get(dropdownLocator).click();
-            cy.contains("button", app).click();
-        });
-    }
-
-    // Add north or south bound dependency for an application
-    addDependencies(northbound?: Array<string>, southbound?: Array<string>): void {
-        if (northbound || southbound) {
-            this.openManageDependencies();
-            if (northbound.length > 0) {
-                this.selectDependency(northdependenciesDropdownBtn, northbound);
-                cy.wait(SEC);
-            }
-            if (southbound.length > 0) {
-                this.selectDependency(southdependenciesDropdownBtn, southbound);
-                cy.wait(SEC);
-            }
-            cy.wait(2 * SEC);
-            click(closeForm);
-        }
-    }
-
-    removeDep(dependency, dependencyType) {
-        cy.get("div")
-            .contains(`Add ${dependencyType} dependencies`)
-            .parent("div")
-            .siblings()
-            .find("span")
-            .should("contain.text", dependency)
-            .parent("div")
-            .find("button")
-            .trigger("click");
-        if (dependencyType === "northbound") cy.get(northdependenciesDropdownBtn).click();
-        else cy.get(southdependenciesDropdownBtn).click();
-    }
-
-    // Remove north or south bound dependency for an application
-    removeDependencies(northbound?: Array<string>, southbound?: Array<string>): void {
-        if (northbound || southbound) {
-            this.openManageDependencies();
-            if (northbound.length > 0) {
-                this.removeDep(northbound[0], "northbound");
-                cy.wait(SEC);
-            }
-            if (southbound.length > 0) {
-                this.removeDep(southbound[0], "southbound");
-                cy.wait(SEC);
-            }
-            cy.wait(2 * SEC);
-            click(closeForm);
-        }
-    }
-
-    // Verifies if the north or south bound dependencies exist for an application
-    verifyDependencies(northboundApps?: Array<string>, southboundApps?: Array<string>): void {
-        if (northboundApps || southboundApps) {
-            this.openManageDependencies();
-            cy.wait(2 * SEC);
-            if (northboundApps && northboundApps.length > 0) {
-                northboundApps.forEach((app) => {
-                    this.dependencyExists("northbound", app);
-                });
-            }
-            if (southboundApps && southboundApps.length > 0) {
-                southboundApps.forEach((app) => {
-                    this.dependencyExists("southbound", app);
-                });
-            }
-            click(closeForm);
-        }
-    }
-
-    // Checks if app name is displayed in the dropdown under respective dependency
-    protected dependencyExists(dependencyType: string, appName: string): void {
-        cy.get("div")
-            .contains(`Add ${dependencyType} dependencies`)
-            .parent("div")
-            .siblings()
-            .find("span")
-            .should("contain.text", appName);
-    }
-
-    verifyCopyAssessmentDisabled(): void {
-        Application.open();
-        selectItemsPerPage(100);
-        cy.wait(2 * SEC);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(actionButton);
-                cy.wait(500);
-                cy.get("ul > li").find(button).should("not.contain", "Copy assessment");
-            });
-    }
-
-    copy_assessment(applicationList: Array<Application>, cancel = false): void {
-        this.openCopyAssessmentModel();
-        this.selectApps(applicationList);
-        if (cancel) {
-            cancelForm();
-        } else {
-            click(copy);
-            checkSuccessAlert(
-                commonView.successAlertMessage,
-                `Success! Assessment copied to selected applications`
-            );
-        }
-    }
-
-    copy_assessment_review(applicationList: Array<Application>, cancel = false): void {
-        this.openCopyAssessmentModel(true);
-        this.selectApps(applicationList);
-
-        if (cancel) {
-            cancelForm();
-        } else {
-            click(copy);
-            cy.wait(2 * SEC);
-        }
-    }
-
-    selectKebabMenuItem(selection: string): void {
-        Application.open();
-        selectItemsPerPage(100);
-        this.selectApplication();
-        clickItemInKebabMenu(this.name, selection);
-        cy.get(continueButton).click();
-    }
-
-    selectApps(applicationList: Array<Application>): void {
-        cy.wait(4 * SEC);
-        for (let i = 0; i < applicationList.length; i++) {
-            if (applicationList[i].name != this.name) {
-                cy.get(".pf-m-compact> tbody > tr > td")
-                    .contains(applicationList[i].name)
-                    .parent(trTag)
-                    .within(() => {
-                        click(selectBox);
-                        cy.wait(2 * SEC);
-                    });
-            }
-        }
-    }
-
-    openCopyAssessmentModel(review = false, items = 100): void {
-        let action = "Copy assessment";
-        if (review) {
-            action += " and review";
-        }
-        Application.open();
-        selectItemsPerPage(items);
-        cy.wait(2 * SEC);
-        cy.get(tdTag)
-            .contains(this.name)
-            .closest(trTag)
-            .within(() => {
-                click(actionButton);
-                cy.wait(500);
-                clickByText(button, action);
-            });
-        cy.get(copyAssessmentModal).within(() => {
-            selectItemsPerPage(items);
-        });
-    }
-
-    selectItemsPerPage(items: number): void {
-        cy.get(copyAssessmentModal).within(() => {
-            selectItemsPerPage(items);
-        });
-    }
-
-    // Method to verify review button is disabled
-    verifyReviewButtonDisabled(): void {
-        Application.open();
-        selectItemsPerPage(100);
-        cy.wait(2 * SEC);
-        this.selectApplication();
-        cy.get(button).contains(review).should("be.disabled");
     }
 }

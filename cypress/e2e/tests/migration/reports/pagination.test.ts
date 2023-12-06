@@ -26,7 +26,6 @@ import {
 } from "../../../../utils/utils";
 import { navMenu } from "../../../views/menu.view";
 import { migration, reports, SEC } from "../../../types/constants";
-import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import {
     expandArticle,
     selectItemsPerPageInReports,
@@ -37,8 +36,9 @@ import {
     applicationConfidenceandRiskTitle,
     identiFiedRisksTitle,
 } from "../../../views/reports.view";
+import { Application } from "../../../models/migration/applicationinventory/application";
 
-let applicationsList: Array<Assessment> = [];
+let applicationsList: Array<Application> = [];
 let stakeholdersList: Array<Stakeholders> = [];
 
 describe.skip(["@tier3"], "Bug MTA-1762: Reports pagination validations", () => {

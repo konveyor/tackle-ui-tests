@@ -19,13 +19,13 @@ import { getRandomApplicationData, login, logout } from "../../../utils/utils";
 import * as data from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { User } from "../../models/keycloak/users/user";
-import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import { SEC } from "../../types/constants";
+import { Application } from "../../models/migration/applicationinventory/application";
 
 describe(["@tier2"], "Assess review with RBAC operations", function () {
     // Polarion TC 312
     const architect = new UserArchitect(data.getRandomUserData());
-    const application = new Assessment(getRandomApplicationData());
+    const application = new Application(getRandomApplicationData());
 
     before("Create test data", function () {
         User.loginKeycloakAdmin();

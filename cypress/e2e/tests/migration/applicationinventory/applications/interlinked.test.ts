@@ -39,14 +39,13 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import { applicationInventory, button, legacyPathfinder, SEC } from "../../../../types/constants";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import * as data from "../../../../../utils/data_utils";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Tag } from "../../../../models/migration/controls/tags";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let stakeholderGroupsList: Array<Stakeholdergroups> = [];
-let applicationList: Array<Assessment> = [];
+let applicationList: Array<Application> = [];
 let tagList: Array<Tag> = [];
 let businessServicesList: Array<BusinessServices> = [];
 
@@ -76,7 +75,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
             tags: [tagList[0].name],
             comment: data.getDescription(),
         };
-        const application = new Assessment(appdata);
+        const application = new Application(appdata);
         applicationList.push(application);
         application.create();
         cy.get("@getApplication");
@@ -128,7 +127,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
             description: data.getDescription(),
             comment: data.getDescription(),
         };
-        const application = new Assessment(appdata);
+        const application = new Application(appdata);
         applicationList.push(application);
         application.create();
         cy.get("@getApplication");

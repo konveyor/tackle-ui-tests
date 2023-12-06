@@ -22,7 +22,6 @@ import {
     createMultipleApplicationsWithBSandTags,
     createMultipleStakeholders,
 } from "../../../../utils/utils";
-import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import {
     manageApplications,
     button,
@@ -37,13 +36,14 @@ import { MigrationWave } from "../../../models/migration/migration-waves/migrati
 import { BusinessServices } from "../../../models/migration/controls/businessservices";
 import { Tag } from "../../../models/migration/controls/tags";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
+import { Application } from "../../../models/migration/applicationinventory/application";
 
 const now = new Date();
 now.setDate(now.getDate() + 1);
 const end = new Date(now.getTime());
 
 end.setFullYear(end.getFullYear() + 1);
-let applicationsList: Assessment[] = [];
+let applicationsList: Application[] = [];
 let businessservicesList: BusinessServices[] = [];
 let tagList: Tag[] = [];
 let stakeholders: Stakeholders[] = [];

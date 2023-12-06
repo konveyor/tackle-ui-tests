@@ -27,6 +27,7 @@ import {
     migration,
     filterIssue,
     details,
+    legacyPathfinder,
 } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import {
@@ -49,6 +50,12 @@ import {
     repoTypeSelect,
     profileEdit,
     appContributorSelect,
+    actionButton,
+    copyAssessmentModal,
+    copy,
+    northdependenciesDropdownBtn,
+    southdependenciesDropdownBtn,
+    closeForm,
 } from "../../../views/applicationinventory.view";
 import { appDetailsView } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
@@ -70,11 +77,14 @@ import {
     clickWithin,
     validateSingleApplicationIssue,
     filterIssueBy,
+    checkSuccessAlert,
 } from "../../../../utils/utils";
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
 import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
 import { MigrationWave } from "../migration-waves/migration-wave";
 import { Issues } from "../dynamic-report/issues/issues";
+import { Assessment } from "./assessment";
+import { continueButton } from "../../../views/assessment.view";
 
 export class Application {
     name: string;
@@ -506,5 +516,243 @@ export class Application {
                     cy.contains(migrationWave.name, { timeout: 5 * SEC });
                 }
             });
+    }
+
+    clickAssessButton() {
+        Application.open();
+        clickItemInKebabMenu(this.name, "Assess");
+    }
+
+    clickReviewButton() {
+        Application.open();
+        clickItemInKebabMenu(this.name, "Review");
+    }
+
+    perform_assessment(
+        risk,
+        stakeholders?: Array<string>,
+        stakeholderGroups?: Array<string>,
+        questionnaireName = legacyPathfinder,
+        saveAndReview = false
+    ) {
+        Application.open();
+        selectItemsPerPage(100);
+        clickItemInKebabMenu(this.name, "Assess");
+        cy.wait(SEC);
+        Assessment.perform_assessment(
+            risk,
+            stakeholders,
+            stakeholderGroups,
+            questionnaireName,
+            saveAndReview
+        );
+    }
+
+    perform_review(risk): void {
+        Application.open();
+        clickItemInKebabMenu(this.name, "Review");
+        cy.wait(8 * SEC);
+        Assessment.perform_review(risk);
+    }
+
+    verifyStatus(column, status): void {
+        Application.open();
+        Assessment.verifyStatus(this.name, column, status);
+    }
+
+    retake_questionnaire(
+        risk,
+        stakeholders?: Array<string>,
+        stakeholderGroups?: Array<string>
+    ): void {
+        this.clickAssessButton();
+        cy.wait(SEC);
+        Assessment.retake_questionnaire(risk, stakeholders, stakeholderGroups);
+    }
+
+    verifyCopyAssessmentDisabled(): void {
+        Application.open();
+        selectItemsPerPage(100);
+        cy.wait(2 * SEC);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(tdTag)
+            .parent(trTag)
+            .within(() => {
+                click(actionButton);
+                cy.wait(500);
+                cy.get("ul > li").find(button).should("not.contain", "Copy assessment");
+            });
+    }
+
+    copy_assessment(applicationList: Array<Application>, cancel = false): void {
+        this.openCopyAssessmentModel();
+        this.selectApps(applicationList);
+        if (cancel) {
+            cancelForm();
+        } else {
+            click(copy);
+            checkSuccessAlert(
+                commonView.successAlertMessage,
+                `Success! Assessment copied to selected applications`
+            );
+        }
+    }
+
+    copy_assessment_review(applicationList: Array<Application>, cancel = false): void {
+        this.openCopyAssessmentModel(true);
+        this.selectApps(applicationList);
+
+        if (cancel) {
+            cancelForm();
+        } else {
+            click(copy);
+            cy.wait(2 * SEC);
+        }
+    }
+
+    selectKebabMenuItem(selection: string): void {
+        Application.open();
+        selectItemsPerPage(100);
+        this.selectApplication();
+        clickItemInKebabMenu(this.name, selection);
+        cy.get(continueButton).click();
+    }
+
+    selectApps(applicationList: Array<Application>): void {
+        cy.wait(4 * SEC);
+        for (let i = 0; i < applicationList.length; i++) {
+            if (applicationList[i].name != this.name) {
+                cy.get(".pf-m-compact> tbody > tr > td")
+                    .contains(applicationList[i].name)
+                    .parent(trTag)
+                    .within(() => {
+                        click(selectBox);
+                        cy.wait(2 * SEC);
+                    });
+            }
+        }
+    }
+
+    openCopyAssessmentModel(review = false, items = 100): void {
+        let action = "Copy assessment";
+        if (review) {
+            action += " and review";
+        }
+        Application.open();
+        selectItemsPerPage(items);
+        cy.wait(2 * SEC);
+        cy.get(tdTag)
+            .contains(this.name)
+            .closest(trTag)
+            .within(() => {
+                click(actionButton);
+                cy.wait(500);
+                clickByText(button, action);
+            });
+        cy.get(copyAssessmentModal).within(() => {
+            selectItemsPerPage(items);
+        });
+    }
+
+    // Opens the manage dependencies dialog from application inventory page
+    openManageDependencies(): void {
+        Application.open();
+        selectItemsPerPage(100);
+        performRowActionByIcon(this.name, kebabMenu);
+        clickByText(button, "Manage dependencies");
+    }
+
+    // Selects the application as dependency from dropdown. Arg dropdownNum value 0 selects northbound, whereas value 1 selects southbound
+    selectNorthDependency(appNameList: Array<string>): void {
+        appNameList.forEach(function (app) {
+            cy.get(northdependenciesDropdownBtn).click();
+            cy.contains("button", app).click();
+        });
+    }
+
+    // Selects the application as dependency from dropdown. Arg dropdownNum value 0 selects northbound, whereas value 1 selects southbound
+    selectDependency(dropdownLocator: string, appNameList: Array<string>): void {
+        appNameList.forEach(function (app) {
+            cy.get(dropdownLocator).click();
+            cy.contains("button", app).click();
+        });
+    }
+
+    // Add north or south bound dependency for an application
+    addDependencies(northbound?: Array<string>, southbound?: Array<string>): void {
+        if (northbound || southbound) {
+            this.openManageDependencies();
+            if (northbound.length > 0) {
+                this.selectDependency(northdependenciesDropdownBtn, northbound);
+                cy.wait(SEC);
+            }
+            if (southbound.length > 0) {
+                this.selectDependency(southdependenciesDropdownBtn, southbound);
+                cy.wait(SEC);
+            }
+            cy.wait(2 * SEC);
+            click(closeForm);
+        }
+    }
+
+    removeDep(dependency, dependencyType) {
+        cy.get("div")
+            .contains(`Add ${dependencyType} dependencies`)
+            .parent("div")
+            .siblings()
+            .find("span")
+            .should("contain.text", dependency)
+            .parent("div")
+            .find("button")
+            .trigger("click");
+        if (dependencyType === "northbound") cy.get(northdependenciesDropdownBtn).click();
+        else cy.get(southdependenciesDropdownBtn).click();
+    }
+
+    // Remove north or south bound dependency for an application
+    removeDependencies(northbound?: Array<string>, southbound?: Array<string>): void {
+        if (northbound || southbound) {
+            this.openManageDependencies();
+            if (northbound.length > 0) {
+                this.removeDep(northbound[0], "northbound");
+                cy.wait(SEC);
+            }
+            if (southbound.length > 0) {
+                this.removeDep(southbound[0], "southbound");
+                cy.wait(SEC);
+            }
+            cy.wait(2 * SEC);
+            click(closeForm);
+        }
+    }
+
+    // Verifies if the north or south bound dependencies exist for an application
+    verifyDependencies(northboundApps?: Array<string>, southboundApps?: Array<string>): void {
+        if (northboundApps || southboundApps) {
+            this.openManageDependencies();
+            cy.wait(2 * SEC);
+            if (northboundApps && northboundApps.length > 0) {
+                northboundApps.forEach((app) => {
+                    this.dependencyExists("northbound", app);
+                });
+            }
+            if (southboundApps && southboundApps.length > 0) {
+                southboundApps.forEach((app) => {
+                    this.dependencyExists("southbound", app);
+                });
+            }
+            click(closeForm);
+        }
+    }
+
+    // Checks if app name is displayed in the dropdown under respective dependency
+    protected dependencyExists(dependencyType: string, appName: string): void {
+        cy.get("div")
+            .contains(`Add ${dependencyType} dependencies`)
+            .parent("div")
+            .siblings()
+            .find("span")
+            .should("contain.text", appName);
     }
 }

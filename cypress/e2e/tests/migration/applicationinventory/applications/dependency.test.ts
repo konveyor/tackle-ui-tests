@@ -17,7 +17,6 @@ limitations under the License.
 
 import { click, login, createMultipleApplications, deleteByList } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import {
     closeForm,
     cyclicDependenciesErrorMsg,
@@ -26,7 +25,7 @@ import {
 } from "../../../../views/applicationinventory.view";
 import { helper } from "../../../../views/common.view";
 
-var applicationsList: Array<Assessment> = [];
+var applicationsList: Array<Application> = [];
 
 describe(["@tier3"], "Manage application dependencies", () => {
     before("Login and Create Test Data", function () {

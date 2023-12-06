@@ -26,7 +26,7 @@ import { button, CredentialType, JiraType, SEC } from "../../../types/constants"
 import { JiraConnectionData } from "../../../types/types";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
-import { Assessment } from "../../../models/migration/applicationinventory/assessment";
+import { Application } from "../../../models/migration/applicationinventory/application";
 
 describe(["@tier2"], "Jira connection negative tests", () => {
     const expectedToFail = true;
@@ -41,7 +41,7 @@ describe(["@tier2"], "Jira connection negative tests", () => {
     let jiraCloudConnection: Jira;
     let jiraCloudConnectionIncorrect: Jira;
     let jiraStageConnectionIncorrect: Jira;
-    let applicationList: Array<Assessment> = [];
+    let applicationList: Array<Application> = [];
     const now = new Date();
     now.setDate(now.getDate() + 1);
     const end = new Date(now.getTime());

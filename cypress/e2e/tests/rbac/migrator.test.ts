@@ -23,7 +23,6 @@ import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType, legacyPathfinder, SEC } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
-import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import * as data from "../../../utils/data_utils";
@@ -33,7 +32,7 @@ const stakeholdersNameList: Array<string> = [];
 
 describe(["@tier2", "@rhsso"], "1 Bug: Migrator RBAC operations", () => {
     let userMigrator = new UserMigrator(getRandomUserData());
-    const application = new Assessment(getRandomApplicationData());
+    const application = new Application(getRandomApplicationData());
 
     let appCredentials = new CredentialsSourceControlUsername(
         getRandomCredentialsData(CredentialType.sourceControl)

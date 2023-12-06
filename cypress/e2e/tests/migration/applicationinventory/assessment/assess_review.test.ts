@@ -24,7 +24,6 @@ import {
 
 import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { legacyPathfinder, cloudNative, SEC } from "../../../../types/constants";
 import {
@@ -33,6 +32,8 @@ import {
     reviewConfirmationText,
 } from "../../../../views/applicationinventory.view";
 import { confirmCancelButton } from "../../../../views/common.view";
+import { Application } from "../../../../models/migration/applicationinventory/application";
+import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
@@ -60,7 +61,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
 
     it("Application assessment and review with low risk", function () {
         // Navigate to application inventory tab and create new application
-        const application = new Assessment(getRandomApplicationData());
+        const application = new Application(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
@@ -82,7 +83,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
 
     it(["@interop"], "Application assessment and review with medium risk", function () {
         // Navigate to application inventory tab and create new application
-        const application = new Assessment(getRandomApplicationData());
+        const application = new Application(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
@@ -104,7 +105,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
 
     it("Application assessment and review with high risk", function () {
         // Navigate to application inventory tab and create new application
-        const application = new Assessment(getRandomApplicationData());
+        const application = new Application(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
@@ -129,7 +130,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         AssessmentQuestionnaire.import(yamlFile);
         AssessmentQuestionnaire.enable(cloudNative);
 
-        const application = new Assessment(getRandomApplicationData());
+        const application = new Application(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
@@ -140,7 +141,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.clickAssessButton();
         cy.contains("tr", legacyPathfinder).find("button.retake-button").should("have.length", 1);
 
-        application.perform_assessment("high", stakeholdersNameList, null, true, cloudNative);
+        application.perform_assessment("high", stakeholdersNameList, null, cloudNative);
         cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
         application.clickAssessButton();
@@ -155,22 +156,15 @@ describe(["@tier1"], "Application assessment and review tests", () => {
 
     it("Perform application review during assessment", function () {
         // Polarion TC MTA-422
-        const application = new Assessment(getRandomApplicationData());
+        const application = new Application(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
 
-        application.perform_assessment(
-            "high",
-            stakeholdersNameList,
-            null,
-            true,
-            legacyPathfinder,
-            true
-        );
+        application.perform_assessment("high", stakeholdersNameList, null, legacyPathfinder, true);
         cy.wait(2 * SEC);
 
-        application.perform_review("high", false);
+        Assessment.perform_review("high");
         cy.wait(2 * SEC);
 
         application.verifyStatus("assessment", "Completed");

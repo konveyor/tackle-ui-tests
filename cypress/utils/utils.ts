@@ -79,7 +79,6 @@ import {
 } from "../e2e/views/common.view";
 import { tagLabels, tagMenuButton } from "../e2e/views/tags.view";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
-import { Assessment } from "../e2e/models/migration/applicationinventory/assessment";
 import { analysisData, AppIssue, applicationData, JiraConnectionData } from "../e2e/types/types";
 import { CredentialsProxy } from "../e2e/models/administration/credentials/credentialsProxy";
 import {
@@ -1054,11 +1053,11 @@ export function getRandomAnalysisData(analysisdata): analysisData {
     };
 }
 
-export function createMultipleApplications(numberofapplications: number): Array<Assessment> {
-    let applicationList: Array<Assessment> = [];
+export function createMultipleApplications(numberofapplications: number): Array<Application> {
+    let applicationList: Array<Application> = [];
     for (let i = 0; i < numberofapplications; i++) {
         // Navigate to application inventory tab and create new application
-        const application = new Assessment(getRandomApplicationData());
+        const application = new Application(getRandomApplicationData());
         application.create();
         applicationList.push(application);
         cy.wait(2000);
@@ -1071,8 +1070,8 @@ export function createMultipleApplicationsWithBSandTags(
     businessservice?: Array<BusinessServices>,
     tagList?: Array<Tag>,
     stakeholder?: Array<Stakeholders>
-): Array<Assessment> {
-    let applicationList: Array<Assessment> = [];
+): Array<Application> {
+    let applicationList: Array<Application> = [];
     let tags: string[];
     let business = "";
     let owner = "";
@@ -1089,7 +1088,7 @@ export function createMultipleApplicationsWithBSandTags(
             comment: data.getDescription(),
             owner: owner,
         };
-        const application = new Assessment(appdata);
+        const application = new Application(appdata);
         application.create();
         applicationList.push(application);
         cy.wait(2000);
