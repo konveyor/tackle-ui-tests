@@ -33,7 +33,6 @@ import {
 } from "../../../../views/applicationinventory.view";
 import { confirmCancelButton } from "../../../../views/common.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
@@ -164,7 +163,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.perform_assessment("high", stakeholdersNameList, null, legacyPathfinder, true);
         cy.wait(2 * SEC);
 
-        Assessment.perform_review("high");
+        application.perform_review("high");
         cy.wait(2 * SEC);
 
         application.verifyStatus("assessment", "Completed");

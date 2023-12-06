@@ -19,7 +19,6 @@ import {
     createMultipleApplications,
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
-    deleteAllStakeholderGroups,
     deleteAllStakeholders,
     deleteByList,
     login,
@@ -35,11 +34,11 @@ import {
     MigrationWavesSpecialColumns,
     MigrationWaveView,
 } from "../../../views/migration-wave.view";
-import { Assessment } from "../../../models/migration/applicationinventory/assessment";
+import { Application } from "../../../models/migration/applicationinventory/application";
 
 let stakeHolders: Stakeholders[];
 let stakeHolderGroups: Stakeholdergroups[];
-let applications: Assessment[];
+let applications: Application[];
 
 const now = new Date();
 now.setDate(now.getDate() + 1);
