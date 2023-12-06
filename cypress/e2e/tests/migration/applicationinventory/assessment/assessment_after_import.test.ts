@@ -26,14 +26,14 @@ import {
 
 import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
+import { Application } from "../../../../models/migration/applicationinventory/application";
 
 const filePath = "app_import/csv/";
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
 let appdata = { name: "Customers" };
 
-describe(["@tier2"], "2 Bugs :Operations after application import", () => {
+describe(["@tier2"], "Operations after application import", () => {
     before("Login and create test data", function () {
         login();
 
@@ -59,7 +59,7 @@ describe(["@tier2"], "2 Bugs :Operations after application import", () => {
         "Perform application assessment after a successful application import",
         { tags: "@dc" },
         function () {
-            const application = new Assessment(appdata);
+            const application = new Application(appdata);
 
             // Perform assessment of application
             application.perform_assessment("low", stakeholdersNameList);
@@ -68,9 +68,9 @@ describe(["@tier2"], "2 Bugs :Operations after application import", () => {
         }
     );
 
-    it("Bug MTA-1716: Perform application review after a successful application import", function () {
+    it("Perform application review after a successful application import", function () {
         // Automates Polarion TC MTA-295
-        const application = new Assessment(appdata);
+        const application = new Application(appdata);
 
         // Perform application review
         application.perform_review("low");

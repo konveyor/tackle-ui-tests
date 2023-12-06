@@ -47,7 +47,6 @@ import {
     articleCard,
     identiFiedRisksTitle,
 } from "../../../views/reports.view";
-import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import * as data from "../../../../utils/data_utils";
 import {
     expandArticle,
@@ -55,8 +54,9 @@ import {
     selectItemsPerPageInReports,
 } from "../../../models/migration/reports/reports";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
+import { Application } from "../../../models/migration/applicationinventory/application";
 
-let applicationsList: Array<Assessment> = [];
+let applicationsList: Array<Application> = [];
 let stakeholdersList: Array<Stakeholders> = [];
 let invalidSearchInput = String(data.getRandomNumber());
 

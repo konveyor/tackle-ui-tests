@@ -39,9 +39,9 @@ import {
     SortType,
     SEC,
 } from "../../../types/constants";
-import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
-let applicationsList: Array<Assessment> = [];
+import { Application } from "../../../models/migration/applicationinventory/application";
+let applicationsList: Array<Application> = [];
 let stakeholdersList: Array<Stakeholders> = [];
 
 describe.skip(["@tier2"], "Bug MTA-1762: Reports sort validations", () => {

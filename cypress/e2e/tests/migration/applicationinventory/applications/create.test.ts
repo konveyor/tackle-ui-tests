@@ -52,7 +52,6 @@ import {
 import * as commonView from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Tag } from "../../../../models/migration/controls/tags";
 import { Application } from "../../../../models/migration/applicationinventory/application";
@@ -75,7 +74,7 @@ describe(["@tier2"], "Application validations", () => {
     });
 
     it("Application field validations", function () {
-        Assessment.open();
+        Application.open();
         clickByText(button, createNewButton);
         selectFormItems(applicationBusinessServiceSelect, businessservicesList[0].name);
 
@@ -147,7 +146,7 @@ describe(["@tier2"], "Application validations", () => {
 
     it("Application button validations", function () {
         // Navigate to application inventory page and click create new button
-        Assessment.open();
+        Application.open();
         clickByText(button, createNewButton);
 
         // Check "Create" and "Cancel" button status
@@ -169,8 +168,8 @@ describe(["@tier2"], "Application validations", () => {
     });
 
     it("Application success alert and unique constraint validation", function () {
-        Assessment.open();
-        const application = new Assessment(getRandomApplicationData());
+        Application.open();
+        const application = new Application(getRandomApplicationData());
 
         // Create a new application
         application.create();
@@ -194,7 +193,7 @@ describe(["@tier2"], "Application validations", () => {
 
     it("Create tag from application side drawer", function () {
         // Automates Polarion MTA-321
-        const application = new Assessment(getRandomApplicationData());
+        const application = new Application(getRandomApplicationData());
         const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagCategory());
 
         application.create();

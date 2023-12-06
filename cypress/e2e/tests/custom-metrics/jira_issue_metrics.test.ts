@@ -19,11 +19,11 @@ import { createMultipleApplications, login } from "../../../utils/utils";
 import { CredentialType, JiraType, SEC } from "../../types/constants";
 import * as data from "../../../utils/data_utils";
 import { MigrationWave } from "../../models/migration/migration-waves/migration-wave";
-import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import { Jira } from "../../models/administration/jira-connection/jira";
 import { JiraIssue } from "../../models/administration/jira-connection/jira-api.interface";
 import { JiraCredentials } from "../../models/administration/credentials/JiraCredentials";
 import { Metrics } from "../../models/migration/custom-metrics/custom-metrics";
+import { Application } from "../../models/migration/applicationinventory/application";
 
 const now = new Date();
 now.setDate(now.getDate() + 1);
@@ -31,7 +31,7 @@ now.setDate(now.getDate() + 1);
 const end = new Date(now.getTime());
 end.setFullYear(end.getFullYear() + 1);
 
-let applications: Assessment[];
+let applications: Application[];
 let migrationWave: MigrationWave;
 let jiraInstance: Jira;
 let jiraCredentials: JiraCredentials;

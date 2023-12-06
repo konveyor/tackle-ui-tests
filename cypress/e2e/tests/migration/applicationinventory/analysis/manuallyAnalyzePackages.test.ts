@@ -21,7 +21,6 @@ import { AnalysisStatuses, CredentialType, UserCredentials } from "../../../../t
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { analysisDetailsEditor } from "../../../../views/analysis.view";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 
 let source_credential: CredentialsSourceControlUsername;
 let application: Analysis;

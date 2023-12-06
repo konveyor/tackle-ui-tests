@@ -20,14 +20,13 @@ import {
     deleteByList,
     login,
 } from "../../../utils/utils";
-import { Assessment } from "../../models/migration/applicationinventory/assessment";
 import { Metrics } from "../../models/migration/custom-metrics/custom-metrics";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Application } from "../../models/migration/applicationinventory/application";
 const metrics = new Metrics();
 const metricName = "konveyor_assessments_initiated_total";
-let applicationList: Array<Assessment> = [];
+let applicationList: Array<Application> = [];
 let stakeholdersList: Array<Stakeholders> = [];
 let counter: number;
 const fileName = "Legacy Pathfinder";

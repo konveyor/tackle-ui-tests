@@ -17,7 +17,7 @@ limitations under the License.
 
 import { exists, login, notExists, getRandomApplicationData } from "../../../../../utils/utils";
 import * as data from "../../../../../utils/data_utils";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
+import { Application } from "../../../../models/migration/applicationinventory/application";
 
 describe(["@tier1"], "Application crud operations", () => {
     beforeEach("Login", function () {
@@ -29,7 +29,7 @@ describe(["@tier1"], "Application crud operations", () => {
     });
 
     it("Application crud", function () {
-        const application = new Assessment(getRandomApplicationData());
+        const application = new Application(getRandomApplicationData());
 
         // Create new application
         application.create();

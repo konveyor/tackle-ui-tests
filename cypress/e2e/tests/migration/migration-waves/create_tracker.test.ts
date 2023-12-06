@@ -13,7 +13,6 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { login, getRandomApplicationData } from "../../../../utils/utils";
-import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import * as data from "../../../../utils/data_utils";
 import { Application } from "../../../models/migration/applicationinventory/application";
@@ -31,7 +30,7 @@ let migrationWave: MigrationWave;
 describe(["@tier1"], "Testing the creation of a tracker in migration waves", function () {
     before("Login & Create new application", () => {
         login();
-        application = new Assessment(getRandomApplicationData());
+        application = new Application(getRandomApplicationData());
         application.create();
     });
 

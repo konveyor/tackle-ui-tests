@@ -26,11 +26,10 @@ import {
 } from "../../../../../utils/utils";
 import { name, tags, SortType, businessService } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
-var applicationsList: Array<Assessment> = [];
+var applicationsList: Array<Application> = [];
 let businessServicesList: Array<BusinessServices> = [];
 
 describe(["@tier2"], "Application inventory sort validations", function () {
@@ -45,7 +44,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
                 tags: tagsList,
                 business: businessServicesList[i].name,
             };
-            const application = new Assessment(appdata);
+            const application = new Application(appdata);
             application.create();
             applicationsList.push(application);
             tagsList.pop();
@@ -59,7 +58,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
 
     it("Name sort validations", function () {
         // Navigate to application inventory page
-        Assessment.open();
+        Application.open();
         cy.wait("@getApplications");
 
         // get unsorted list when page loads
@@ -84,7 +83,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
 
     it("Business service sort validations", function () {
         // Navigate to application inventory page
-        Assessment.open();
+        Application.open();
         cy.wait("@getApplications");
 
         // get unsorted list when page loads
@@ -109,7 +108,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
 
     it("Tag count sort validations", function () {
         // Navigate to application inventory page
-        Assessment.open();
+        Application.open();
         cy.wait("@getApplications");
 
         // get unsorted list when page loads

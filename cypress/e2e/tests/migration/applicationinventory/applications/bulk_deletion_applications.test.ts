@@ -23,17 +23,17 @@ import {
     click,
 } from "../../../../../utils/utils";
 
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import * as commonView from "../../../../views/common.view";
 import {
     actionButton,
     bulkApplicationSelectionCheckBox,
 } from "../../../../views/applicationinventory.view";
+import { Application } from "../../../../models/migration/applicationinventory/application";
 
 describe(["@tier2"], "Bulk deletion of applications", () => {
     before("Login", function () {
         login();
-        Assessment.open(true);
+        Application.open(true);
         createMultipleApplications(1);
         cy.get("tr.pf-m-clickable").then(($rows) => {
             if ($rows.length > 1) {
@@ -43,7 +43,7 @@ describe(["@tier2"], "Bulk deletion of applications", () => {
     });
 
     beforeEach("Interceptors", function () {
-        Assessment.open(true);
+        Application.open(true);
         createMultipleApplications(11);
         cy.intercept("POST", "/hub/tag*").as("postTag");
         cy.intercept("POST", "/hub/application*").as("postApplication");

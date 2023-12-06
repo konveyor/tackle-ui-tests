@@ -21,25 +21,26 @@ import {
     deleteByList,
     checkSuccessAlert,
     getRandomApplicationData,
+    clickItemInKebabMenu,
+    clickByText,
 } from "../../../../../utils/utils";
-
 import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { alertTitle } from "../../../../views/common.view";
-const yamlFile = "questionnaire_import/cloud-native.yaml";
-
-import { legacyPathfinder, cloudNative, SEC } from "../../../../types/constants";
+import { legacyPathfinder, cloudNative, SEC, button } from "../../../../types/constants";
 import {
     ArchivedQuestionnaires,
     ArchivedQuestionnairesTableDataCell,
 } from "../../../../views/assessmentquestionnaire.view";
+import { Application } from "../../../../models/migration/applicationinventory/application";
+import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 
 const fileName = "Legacy Pathfinder";
 let stakeholderList: Array<Stakeholders> = [];
 let stakeholderNameList: Array<string> = [];
-let applicationList: Array<Assessment> = [];
+let applicationList: Array<Application> = [];
+const yamlFile = "questionnaire_import/cloud-native.yaml";
 
 describe(["@tier3"], "1 Bug: Tests related to application assessment and review", () => {
     before("Perform application assessment and review", function () {
@@ -64,7 +65,14 @@ describe(["@tier3"], "1 Bug: Tests related to application assessment and review"
     });
 
     it("Retake Assessment questionnaire", function () {
-        applicationList[0].retake_questionnaire("low", stakeholderNameList);
+        clickItemInKebabMenu(applicationList[0].name, "Assess");
+        cy.wait(SEC);
+        clickByText(button, "Retake");
+        checkSuccessAlert(
+            alertTitle,
+            `Success alert:Success! Assessment discarded for ${applicationList[0].name}.`
+        );
+        Assessment.fill_assessment_form("low", stakeholderNameList);
         applicationList[0].verifyStatus("assessment", "Completed");
     });
 
@@ -86,11 +94,10 @@ describe(["@tier3"], "1 Bug: Tests related to application assessment and review"
         applicationList[0].verifyStatus("review", "Not started");
     });
 
-    // Polarion TC MTA-392
     it("Bug MTA-1722: View archived questionnaire", function () {
-        const application = new Assessment(getRandomApplicationData());
+        // Polarion TC MTA-392
+        const application = new Application(getRandomApplicationData());
         application.create();
-        cy.wait("@getApplication");
         cy.wait(2 * SEC);
 
         application.perform_assessment("high", stakeholderNameList);
@@ -98,7 +105,6 @@ describe(["@tier3"], "1 Bug: Tests related to application assessment and review"
 
         application.verifyStatus("assessment", "Completed");
         AssessmentQuestionnaire.disable(legacyPathfinder);
-
         application.clickAssessButton();
 
         cy.contains("table", ArchivedQuestionnaires)

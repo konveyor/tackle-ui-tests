@@ -22,7 +22,6 @@ import {
     deleteByList,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { AnalysisStatuses } from "../../../../types/constants";
 import { Metrics } from "../../../../models/migration/custom-metrics/custom-metrics";
 

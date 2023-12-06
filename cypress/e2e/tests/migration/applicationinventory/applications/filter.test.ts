@@ -48,7 +48,6 @@ import { BusinessServices } from "../../../../models/migration/controls/business
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Tag } from "../../../../models/migration/controls/tags";
 
 var invalidSearchInput = String(data.getRandomNumber());
@@ -104,7 +103,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
     });
 
     it("Name filter validations", function () {
-        Assessment.open();
+        Application.open();
 
         // Enter an existing name substring and assert
         var validSearchInput = applicationsList[0].name.substring(0, 11);
@@ -137,7 +136,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
 
     it("Business service filter validations", function () {
         // This is impacted by https://issues.redhat.com/browse/TACKLE-820
-        Assessment.open();
+        Application.open();
 
         // Enter an existing businessservice and assert
         var validSearchInput = applicationsList[0].business;
@@ -149,7 +148,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
     });
 
     it("Tag filter validations", function () {
-        Assessment.open();
+        Application.open();
 
         // Filter on a tag applied to applicationsList[0] and verify that only that application is listed
         // in the results
