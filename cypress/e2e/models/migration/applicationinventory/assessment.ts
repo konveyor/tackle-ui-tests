@@ -47,6 +47,7 @@ import {
 } from "../../../views/review.view";
 
 export class Assessment {
+    
     public static selectStakeholders(stakeholders: Array<string>): void {
         stakeholders.forEach(function (stakeholder) {
             selectFormItems(stakeholderSelect, stakeholder);
@@ -176,16 +177,7 @@ export class Assessment {
         stakeholders?: Array<string>,
         stakeholderGroups?: Array<string>
     ): void {
-        // // this.clickAssessButton();
-        // clickItemInKebabMenu(name, "Assess");
-        // cy.wait(SEC);
         clickByText(button, "Retake");
-        // This check can't be done from the test because the alert message is displayed for a short time
-        // and we are in the midddle of answering a questionnaire at this point.
-        checkSuccessAlert(
-            commonView.alertTitle,
-            `Success alert:Success! Assessment discarded for "abcd".`
-        );
         this.fill_assessment_form(risk, stakeholders, stakeholderGroups);
     }
 
@@ -200,20 +192,16 @@ export class Assessment {
         questionnaireName = legacyPathfinder,
         saveAndReview = false
     ): void {
-        // These steps are not required for a questionnaire retake.
-        // clickItemInKebabMenu(name, "Assess");
-        // cy.wait(SEC);
         this.take_questionnaire(questionnaireName);
         cy.wait(SEC);
         this.fill_assessment_form(risk, stakeholders, stakeholderGroups, saveAndReview);
+        
     }
 
-    public static fill_assessment_form(
-        risk,
+    public static fill_assessment_form(risk, 
         stakeholders?: Array<string>,
         stakeholderGroups?: Array<string>,
-        saveAndReview = false
-    ): void {
+        saveAndReview = false): void {
         if (stakeholders) this.selectStakeholders(stakeholders);
         if (stakeholderGroups) this.selectStakeholderGroups(stakeholderGroups);
         clickJs(commonView.nextButton);
@@ -221,9 +209,7 @@ export class Assessment {
         this.selectAnswers(risk, saveAndReview);
     }
 
-    public static perform_review(risk, openApplication = true): void {
-        // clickItemInKebabMenu(name, "Review");
-        // cy.wait(8 * SEC);
+    public static perform_review(risk): void {
         this.selectMigrationAction(risk);
         this.selectEffortEstimate(risk);
         this.fillCriticality(risk);
@@ -234,10 +220,8 @@ export class Assessment {
 
     public static verifyStatus(name, column, status): void {
         let columnSelector: string;
-
         if (column === "assessment") columnSelector = assessmentColumnSelector;
         else columnSelector = reviewColumnSelector;
-
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(name)
