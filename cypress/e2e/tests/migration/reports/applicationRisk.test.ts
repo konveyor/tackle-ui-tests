@@ -24,13 +24,13 @@ import {
     deleteByList,
 } from "../../../../utils/utils";
 import { verifyApplicationRisk } from "../../../models/migration/reports/reports";
-import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import { navMenu } from "../../../views/menu.view";
 import { migration, reports, SEC } from "../../../types/constants";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
+import { Application } from "../../../models/migration/applicationinventory/application";
 
 let stakeholdersList: Array<Stakeholders> = [];
-let applicationsList: Array<Assessment> = [];
+let applicationsList: Array<Application> = [];
 
 describe(["@tier2"], "1 Bug: Application risks tests", () => {
     let riskType = ["low", "medium", "high"];

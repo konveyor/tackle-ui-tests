@@ -19,10 +19,10 @@ import { createMultipleApplications, login } from "../../../../utils/utils";
 import { CredentialType, JiraIssueTypes, JiraType, SEC } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
-import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 import { JiraIssue } from "../../../models/administration/jira-connection/jira-api.interface";
 import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
+import { Application } from "../../../models/migration/applicationinventory/application";
 
 const now = new Date();
 now.setDate(now.getDate() + 1);
@@ -32,7 +32,7 @@ end.setFullYear(end.getFullYear() + 1);
 
 let jiraCloudCredentials: JiraCredentials;
 let jiraCloudInstance: Jira;
-const applications: Assessment[] = [];
+const applications: Application[] = [];
 const wavesMap = {};
 let projectName = "";
 
