@@ -47,7 +47,6 @@ import {
 } from "../../../views/review.view";
 
 export class Assessment {
-    
     public static selectStakeholders(stakeholders: Array<string>): void {
         stakeholders.forEach(function (stakeholder) {
             selectFormItems(stakeholderSelect, stakeholder);
@@ -195,13 +194,14 @@ export class Assessment {
         this.take_questionnaire(questionnaireName);
         cy.wait(SEC);
         this.fill_assessment_form(risk, stakeholders, stakeholderGroups, saveAndReview);
-        
     }
 
-    public static fill_assessment_form(risk, 
+    public static fill_assessment_form(
+        risk,
         stakeholders?: Array<string>,
         stakeholderGroups?: Array<string>,
-        saveAndReview = false): void {
+        saveAndReview = false
+    ): void {
         if (stakeholders) this.selectStakeholders(stakeholders);
         if (stakeholderGroups) this.selectStakeholderGroups(stakeholderGroups);
         clickJs(commonView.nextButton);
