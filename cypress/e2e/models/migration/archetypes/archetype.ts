@@ -192,4 +192,46 @@ export class Archetype {
             }
         }
     }
+
+    duplicate(
+        name?: string,
+        criteriaTags?: string[],
+        archetypeTags?: string[],
+        description?: string,
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[],
+        comments?: string,
+        cancel = false
+    ) {
+        Archetype.open();
+
+        clickKebabMenuOptionArchetype(this.name, "Duplicate");
+
+        if (cancel) {
+            cancelForm();
+            return;
+        }
+
+        if (name) this.fillName(name);
+        if (criteriaTags) this.selectCriteriaTags(criteriaTags);
+        if (archetypeTags) this.selectArchetypeTags(archetypeTags);
+        if (description) this.fillDescription(description);
+        if (stakeholders) this.selectStakeholders(stakeholders);
+        if (stakeholderGroups) this.selectStakeholderGroups(stakeholderGroups);
+        if (comments) this.fillComment(comments);
+
+        const duplicatedArchetype = new Archetype(
+            name,
+            criteriaTags,
+            archetypeTags,
+            description,
+            stakeholders,
+            stakeholderGroups,
+            comments
+        );
+
+        click(confirmButton);
+
+        return duplicatedArchetype;
+    }
 }

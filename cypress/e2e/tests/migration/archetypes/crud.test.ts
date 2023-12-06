@@ -44,8 +44,9 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
         tags = createMultipleTags(2);
     });
 
-    // Automates Polarion MTA-395
     it("Archetype CRUD operations", function () {
+        // Automates Polarion MTA-395
+
         const archetype = new Archetype(
             data.getRandomWord(8),
             [tags[0].name],
@@ -84,5 +85,39 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
         deleteByList(stakeholders);
         deleteByList(stakeholderGroups);
         deleteByList(tags);
+    });
+
+    it("Duplicate archetype", function () {
+        // Automates Polarion MTA-399
+
+        const archetype = new Archetype(
+            data.getRandomWord(8),
+            [tags[0].name],
+            [tags[1].name],
+            null,
+            stakeholders,
+            stakeholderGroups
+        );
+        archetype.create();
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success alert:Archetype ${archetype.name} was successfully created.`,
+            true
+        );
+        exists(archetype.name);
+
+        const archetypeDuplicate = archetype.duplicate();
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success alert:Archetype ${archetypeDuplicate.name} was successfully created.`,
+            true
+        );
+        exists(archetypeDuplicate.name);
+
+        archetype.delete();
+        archetypeDuplicate.delete();
+
+        notExists(archetype.name);
+        notExists(archetypeDuplicate.name);
     });
 });
