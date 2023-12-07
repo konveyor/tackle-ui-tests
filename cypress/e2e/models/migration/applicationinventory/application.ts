@@ -572,6 +572,12 @@ export class Application {
         Assessment.retake_questionnaire(risk, stakeholders, stakeholderGroups);
     }
 
+    validateAssessmentField(risk: string): void {
+        Application.open();
+        selectItemsPerPage(100);
+        Assessment.validateAssessmentField(this.name, "Application", risk);
+    }
+
     verifyCopyAssessmentDisabled(): void {
         Application.open();
         selectItemsPerPage(100);

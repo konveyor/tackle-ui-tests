@@ -68,6 +68,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.perform_review("low");
         cy.wait(2 * SEC);
         application.verifyStatus("review", "Completed");
+        application.validateAssessmentField("Low");
 
         // Delete application
         application.delete();
@@ -90,6 +91,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.perform_review("medium");
         cy.wait(2 * SEC);
         application.verifyStatus("review", "Completed");
+        application.validateAssessmentField("Medium");
 
         // Delete application
         application.delete();
@@ -112,6 +114,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.perform_review("high");
         cy.wait(2 * SEC);
         application.verifyStatus("review", "Completed");
+        application.validateAssessmentField("High");
 
         // Delete application
         application.delete();

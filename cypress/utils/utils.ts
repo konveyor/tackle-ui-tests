@@ -281,6 +281,14 @@ export function selectFormItems(fieldId: string, item: string): void {
     cy.contains("button", item).click();
 }
 
+export function selectRow(name: string): void {
+    // Clicks on a particular row on any table
+    cy.get(tdTag, { timeout: 10 * SEC })
+        .contains(name)
+        .closest(trTag)
+        .click();
+}
+
 export function checkSuccessAlert(fieldId: string, message: string, close = false): void {
     validateTextPresence(fieldId, message);
     if (close) {
