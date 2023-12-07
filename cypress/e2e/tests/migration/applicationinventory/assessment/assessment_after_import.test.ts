@@ -23,15 +23,14 @@ import {
     deleteApplicationTableRows,
     deleteAppImportsTableRows,
     notExists,
+    deleteByList,
 } from "../../../../../utils/utils";
 
-import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
 const filePath = "app_import/csv/";
 let stakeholders: Stakeholders[];
-const stakeholdersNameList: Array<string> = [];
 let appdata = { name: "Customers" };
 
 describe(["@tier2"], "Operations after application import", () => {
@@ -82,5 +81,6 @@ describe(["@tier2"], "Operations after application import", () => {
     after("Perform test data clean up", function () {
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
+        deleteByList(stakeholders);
     });
 });
