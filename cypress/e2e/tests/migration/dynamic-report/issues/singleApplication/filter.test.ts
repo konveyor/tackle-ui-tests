@@ -23,7 +23,7 @@ import {
     clearAllFilters,
 } from "../../../../../../utils/utils";
 import { Analysis } from "../../../../../models/migration/applicationinventory/analysis";
-import { SEC, filterIssue } from "../../../../../types/constants";
+import { SEC, issueFilter } from "../../../../../types/constants";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 
@@ -56,7 +56,7 @@ describe(["@tier2"], "1 Bug: Single application issues filtering", () => {
 
         application.validateIssueFilter(
             this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-            filterIssue.category,
+            issueFilter.category,
             "category"
         );
         clearAllFilters();
@@ -65,7 +65,7 @@ describe(["@tier2"], "1 Bug: Single application issues filtering", () => {
     it("Bug MTA-1779 - Filtering issues by source", function () {
         application.validateIssueFilter(
             this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-            filterIssue.source,
+            issueFilter.source,
             "source"
         );
         clearAllFilters();
@@ -74,7 +74,7 @@ describe(["@tier2"], "1 Bug: Single application issues filtering", () => {
     it("Filtering issues by target", function () {
         application.validateIssueFilter(
             this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-            filterIssue.target,
+            issueFilter.target,
             "targets"
         );
         clearAllFilters();

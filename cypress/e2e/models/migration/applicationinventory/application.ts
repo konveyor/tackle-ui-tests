@@ -25,7 +25,7 @@ import {
     analyzeButton,
     reviewAppButton,
     migration,
-    filterIssue,
+    issueFilter,
     details,
     legacyPathfinder,
 } from "../../../types/constants";
@@ -470,7 +470,7 @@ export class Application {
         });
     }
 
-    validateIssueFilter(issues: AppIssue[], filterType: filterIssue, filterValue: string): void {
+    validateIssueFilter(issues: AppIssue[], filterType: issueFilter, filterValue: string): void {
         Issues.openSingleApplication(this.name);
         issues.forEach((currentIssue) => {
             filterIssueBy(filterType, currentIssue[filterValue]);

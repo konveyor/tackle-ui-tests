@@ -49,8 +49,7 @@ import {
     JiraType,
     migration,
     businessServiceLower,
-    filterIssue,
-    appName,
+    issueFilter,
 } from "../e2e/types/constants";
 import {
     actionButton,
@@ -309,6 +308,14 @@ export function validateNumberPresence(fieldId: string, value: number): void {
         });
 }
 
+export function validateAnyNumberPresence(fieldId: string): void {
+    cy.get(fieldId)
+        .invoke("text")
+        .then((text) => {
+            expect(parseFloat(text)).to.not.be.NaN;
+        });
+}
+
 export function closeSuccessAlert(): void {
     cy.get(closeSuccessNotification, { timeout: 10 * SEC })
         .first()
@@ -358,14 +365,14 @@ export function clearAllFilters(): void {
     cy.contains(button, "Clear all filters").click({ force: true });
 }
 
-export function filterIssueBy(filterType: filterIssue, filterValue: string | string[]): void {
+export function filterIssueBy(filterType: issueFilter, filterValue: string | string[]): void {
     let selector = "";
     selectFilter(filterType);
     const isApplicableFilter =
-        filterType === filterIssue.appName ||
-        filterType === filterIssue.category ||
-        filterType === filterIssue.source ||
-        filterType === filterIssue.target;
+        filterType === issueFilter.appName ||
+        filterType === issueFilter.category ||
+        filterType === issueFilter.source ||
+        filterType === issueFilter.target;
 
     if (isApplicableFilter) {
         if (Array.isArray(filterValue)) {
@@ -378,9 +385,9 @@ export function filterIssueBy(filterType: filterIssue, filterValue: string | str
             click(searchButton);
         }
     } else {
-        if (filterType == filterIssue.bs) {
+        if (filterType == issueFilter.bs) {
             selector = bsFilterName;
-        } else if (filterType == filterIssue.tags) {
+        } else if (filterType == issueFilter.tags) {
             selector = tagFilterName;
         }
         click(selector);

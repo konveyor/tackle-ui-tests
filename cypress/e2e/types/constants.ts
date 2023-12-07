@@ -182,7 +182,7 @@ export enum SortType {
     descending = "descending",
 }
 
-export enum filterIssue {
+export enum issueFilter {
     appName = "Application name",
     archetype = "Archetype",
     bs = "Business service",
