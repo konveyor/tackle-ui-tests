@@ -23,8 +23,8 @@ import {
     getRandomApplicationData,
     clickItemInKebabMenu,
     clickByText,
+    createMultipleStakeholders,
 } from "../../../../../utils/utils";
-import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { alertTitle } from "../../../../views/common.view";
@@ -38,7 +38,6 @@ import { Assessment } from "../../../../models/migration/applicationinventory/as
 
 const fileName = "Legacy Pathfinder";
 let stakeholderList: Array<Stakeholders> = [];
-let stakeholderNameList: Array<string> = [];
 let applicationList: Array<Application> = [];
 const yamlFile = "questionnaire_import/cloud-native.yaml";
 
@@ -48,15 +47,10 @@ describe(["@tier3"], "1 Bug: Tests related to application assessment and review"
         cy.intercept("GET", "/hub/application*").as("getApplication");
 
         AssessmentQuestionnaire.enable(fileName);
-
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-        stakeholder.create();
-        cy.wait(2000);
-        stakeholderList.push(stakeholder);
-        stakeholderNameList.push(stakeholder.name);
+        stakeholderList = createMultipleStakeholders(1);
 
         applicationList = createMultipleApplications(1);
-        applicationList[0].perform_assessment("low", stakeholderNameList);
+        applicationList[0].perform_assessment("low", stakeholderList);
         cy.wait(2000);
         applicationList[0].verifyStatus("assessment", "Completed");
         applicationList[0].perform_review("low");
@@ -72,7 +66,7 @@ describe(["@tier3"], "1 Bug: Tests related to application assessment and review"
             alertTitle,
             `Success alert:Success! Assessment discarded for ${applicationList[0].name}.`
         );
-        Assessment.fill_assessment_form("low", stakeholderNameList);
+        Assessment.fill_assessment_form("low", stakeholderList);
         applicationList[0].verifyStatus("assessment", "Completed");
     });
 
@@ -100,7 +94,7 @@ describe(["@tier3"], "1 Bug: Tests related to application assessment and review"
         application.create();
         cy.wait(2 * SEC);
 
-        application.perform_assessment("high", stakeholderNameList);
+        application.perform_assessment("high", stakeholderList);
         cy.wait(2 * SEC);
 
         application.verifyStatus("assessment", "Completed");

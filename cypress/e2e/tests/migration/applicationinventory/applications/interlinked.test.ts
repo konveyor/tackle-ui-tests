@@ -133,11 +133,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         cy.get("@getApplication");
         cy.wait(2 * SEC);
         // Perform assessment of application
-        application.perform_assessment(
-            "low",
-            [stakeholdersList[0].name],
-            [stakeholderGroupsList[0].name]
-        );
+        application.perform_assessment("low", stakeholdersList, stakeholderGroupsList);
         application.verifyStatus("assessment", "Completed");
 
         // Delete the stakeholders, group and removing them from the list where they were added before

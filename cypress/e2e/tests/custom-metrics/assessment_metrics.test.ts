@@ -53,7 +53,7 @@ describe(["@tier2"], "Custom Metrics - The total number of initiated assessments
     it("Perform Assessment-Validate metrics assessment count increased", function () {
         // Perform assessment of application
         for (let i = 0; i < applicationList.length; i++) {
-            applicationList[i].perform_assessment("low", [stakeholdersList[0].name]);
+            applicationList[i].perform_assessment("low", stakeholdersList);
             cy.wait(2000);
             applicationList[i].verifyStatus("assessment", "Completed");
             counter++;

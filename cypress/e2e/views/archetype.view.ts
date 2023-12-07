@@ -20,3 +20,10 @@ export const archetypeTags = "#tags";
 export const stakeholders = "input[aria-label='stakeholder-select-toggle']";
 export const stakeholderGroups = "input[aria-label='stakeholder-groups-select-toggle']";
 export const comments = "#comments";
+
+//Fields related to archetype side drawer
+export enum sideDrawer {
+    risk = "h3.pf-v5-c-title.pf-m-md",
+    riskValue = "span.pf-v5-c-label__content",
+    closeDrawer = "button[aria-label='Close drawer panel']",
+}
