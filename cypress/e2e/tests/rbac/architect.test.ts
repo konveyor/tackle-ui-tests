@@ -18,7 +18,13 @@ limitations under the License.
 import { User } from "../../models/keycloak/users/user";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
-import { deleteByList, getRandomApplicationData, login, logout } from "../../../utils/utils";
+import {
+    createMultipleStakeholders,
+    deleteByList,
+    getRandomApplicationData,
+    login,
+    logout,
+} from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType, legacyPathfinder, SEC } from "../../types/constants";
@@ -27,8 +33,7 @@ import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import * as data from "../../../utils/data_utils";
 
-const stakeholdersList: Array<Stakeholders> = [];
-const stakeholdersNameList: Array<string> = [];
+let stakeholders: Array<Stakeholders> = [];
 
 describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
     let userArchitect = new UserArchitect(getRandomUserData());
@@ -42,17 +47,12 @@ describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
         login();
         AssessmentQuestionnaire.enable(legacyPathfinder);
         // Navigate to stakeholders control tab and create new stakeholder
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-        stakeholder.create();
-        cy.wait(2 * SEC);
-
-        stakeholdersList.push(stakeholder);
-        stakeholdersNameList.push(stakeholder.name);
+        stakeholders = createMultipleStakeholders(1);
 
         appCredentials.create();
         application.create();
         application.perform_review("low");
-        application.perform_assessment("low", stakeholdersNameList);
+        application.perform_assessment("low", stakeholders);
 
         logout();
         User.loginKeycloakAdmin();
@@ -95,7 +95,7 @@ describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
         userArchitect.logout();
         login();
         appCredentials.delete();
-        deleteByList(stakeholdersList);
+        deleteByList(stakeholders);
         application.delete();
         logout();
         User.loginKeycloakAdmin();

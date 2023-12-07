@@ -20,9 +20,9 @@ import {
     getRandomApplicationData,
     deleteByList,
     clickByText,
+    createMultipleStakeholders,
 } from "../../../../../utils/utils";
 
-import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { legacyPathfinder, cloudNative, SEC } from "../../../../types/constants";
@@ -34,8 +34,7 @@ import {
 import { confirmCancelButton } from "../../../../views/common.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
-const stakeholdersList: Array<Stakeholders> = [];
-const stakeholdersNameList: Array<string> = [];
+let stakeholders: Stakeholders[];
 const yamlFile = "questionnaire_import/cloud-native.yaml";
 
 describe(["@tier1"], "Application assessment and review tests", () => {
@@ -44,13 +43,8 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         // This test will fail if there are preexisting questionnaire.
         AssessmentQuestionnaire.deleteAllQuesionnaire();
         AssessmentQuestionnaire.enable(legacyPathfinder);
-        // Navigate to stakeholders control tab and create new stakeholder
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-        stakeholder.create();
-        cy.wait(2 * SEC);
 
-        stakeholdersList.push(stakeholder);
-        stakeholdersNameList.push(stakeholder.name);
+        stakeholders = createMultipleStakeholders(1);
     });
 
     beforeEach("Interceptors", function () {
@@ -66,7 +60,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2 * SEC);
 
         // Perform assessment of application
-        application.perform_assessment("low", stakeholdersNameList);
+        application.perform_assessment("low", stakeholders);
         cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
 
@@ -88,7 +82,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2 * SEC);
 
         // Perform assessment of application
-        application.perform_assessment("medium", stakeholdersNameList);
+        application.perform_assessment("medium", stakeholders);
         cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
 
@@ -110,7 +104,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2 * SEC);
 
         // Perform assessment of application
-        application.perform_assessment("high", stakeholdersNameList);
+        application.perform_assessment("high", stakeholders);
         cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
 
@@ -134,13 +128,13 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
 
-        application.perform_assessment("high", stakeholdersNameList);
+        application.perform_assessment("high", stakeholders);
         cy.wait(2 * SEC);
         application.verifyStatus("assessment", "In-progress");
         application.clickAssessButton();
         cy.contains("tr", legacyPathfinder).find("button.retake-button").should("have.length", 1);
 
-        application.perform_assessment("high", stakeholdersNameList, null, cloudNative);
+        application.perform_assessment("high", stakeholders, null, cloudNative);
         cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
         application.clickAssessButton();
@@ -160,7 +154,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
 
-        application.perform_assessment("high", stakeholdersNameList, null, legacyPathfinder, true);
+        application.perform_assessment("high", stakeholders, null, legacyPathfinder, true);
         cy.wait(2 * SEC);
 
         application.perform_review("high");
@@ -173,9 +167,11 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.clickReviewButton();
         cy.get(modalBoxDialog).find(modalBoxMessage).should("contain.text", reviewConfirmationText);
         clickByText(confirmCancelButton, "Cancel");
+
+        application.delete();
     });
 
     after("Perform test data clean up", function () {
-        deleteByList(stakeholdersList);
+        deleteByList(stakeholders);
     });
 });

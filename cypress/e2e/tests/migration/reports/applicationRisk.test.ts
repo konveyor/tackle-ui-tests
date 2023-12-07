@@ -42,7 +42,7 @@ describe(["@tier2"], "1 Bug: Application risks tests", () => {
         applicationsList = createMultipleApplications(3);
         for (let i = 0; i < applicationsList.length; i++) {
             // Perform assessment of application
-            applicationsList[i].perform_assessment(riskType[i], [stakeholdersList[0].name]);
+            applicationsList[i].perform_assessment(riskType[i], stakeholdersList);
             applicationsList[i].verifyStatus("assessment", "Completed");
 
             // Perform application review

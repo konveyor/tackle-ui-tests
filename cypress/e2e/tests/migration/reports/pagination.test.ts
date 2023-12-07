@@ -54,7 +54,7 @@ describe.skip(["@tier3"], "Bug MTA-1762: Reports pagination validations", () => 
         // Get the last extra application created
         let newApplication = applicationsList[applicationsList.length - 1];
         // Perform assessment of application
-        newApplication.perform_assessment("high", [stakeholdersList[0].name]);
+        newApplication.perform_assessment("high", stakeholdersList);
         newApplication.verifyStatus("assessment", "Completed");
         cy.wait(4 * SEC);
         // Perform application review

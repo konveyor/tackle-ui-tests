@@ -237,4 +237,11 @@ export class Archetype {
             .closest(trTag)
             .click();
     }
+
+    perform_review(risk): void {
+        Archetype.open();
+        clickKebabMenuOptionArchetype(this.name, "Review");
+        cy.wait(8 * SEC);
+        Assessment.perform_review(risk);
+    }
 }

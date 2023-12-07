@@ -16,6 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    createMultipleStakeholders,
     exists,
     importApplication,
     login,
@@ -29,7 +30,7 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
 const filePath = "app_import/csv/";
-const stakeholdersList: Array<Stakeholders> = [];
+let stakeholders: Stakeholders[];
 const stakeholdersNameList: Array<string> = [];
 let appdata = { name: "Customers" };
 
@@ -37,12 +38,7 @@ describe(["@tier2"], "Operations after application import", () => {
     before("Login and create test data", function () {
         login();
 
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-        stakeholder.create();
-        cy.wait(2000);
-
-        stakeholdersList.push(stakeholder);
-        stakeholdersNameList.push(stakeholder.name);
+        stakeholders = createMultipleStakeholders(1);
 
         // Import applications through valid .CSV file
         const fileName = "template_application_import.csv";
@@ -62,7 +58,7 @@ describe(["@tier2"], "Operations after application import", () => {
             const application = new Application(appdata);
 
             // Perform assessment of application
-            application.perform_assessment("low", stakeholdersNameList);
+            application.perform_assessment("low", stakeholders);
             cy.wait(2000);
             application.verifyStatus("assessment", "Completed");
         }

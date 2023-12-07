@@ -55,7 +55,7 @@ describe.skip(["@tier2"], "Bug MTA-1762: Reports sort validations", () => {
         let risks = ["low", "medium", "high"];
         for (let i = 0; i < applicationsList.length; i++) {
             // Perform assessment of application
-            applicationsList[i].perform_assessment(risks[i], [stakeholdersList[0].name]);
+            applicationsList[i].perform_assessment(risks[i], stakeholdersList);
             applicationsList[i].verifyStatus("assessment", "Completed");
             cy.wait(4 * SEC);
             // Perform application review

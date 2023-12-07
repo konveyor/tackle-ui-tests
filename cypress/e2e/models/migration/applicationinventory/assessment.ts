@@ -13,20 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { Application } from "./application";
-import { tdTag, trTag, button, review, SEC, legacyPathfinder } from "../../../types/constants";
+import { tdTag, trTag, button, SEC, legacyPathfinder } from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
-import {
-    clickByText,
-    click,
-    selectItemsPerPage,
-    cancelForm,
-    selectFormItems,
-    performRowActionByIcon,
-    checkSuccessAlert,
-    clickJs,
-    clickItemInKebabMenu,
-} from "../../../../utils/utils";
+import { clickByText, selectItemsPerPage, selectFormItems, clickJs } from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import {
     assessmentColumnSelector,
@@ -34,7 +23,6 @@ import {
     radioInput,
     stakeholdergroupsSelect,
     stakeholderSelect,
-    continueButton,
     stack,
     assessmentBlock,
 } from "../../../views/assessment.view";
@@ -45,17 +33,19 @@ import {
     proposedActionSelect,
     reviewColumnSelector,
 } from "../../../views/review.view";
+import { Stakeholdergroups } from "../controls/stakeholdergroups";
+import { Stakeholders } from "../controls/stakeholders";
 
 export class Assessment {
-    public static selectStakeholders(stakeholders: Array<string>): void {
+    public static selectStakeholders(stakeholders: Stakeholders[]): void {
         stakeholders.forEach(function (stakeholder) {
-            selectFormItems(stakeholderSelect, stakeholder);
+            selectFormItems(stakeholderSelect, stakeholder.name);
         });
     }
 
-    public static selectStakeholderGroups(stakeholderGroups: Array<string>): void {
+    public static selectStakeholderGroups(stakeholderGroups: Stakeholdergroups[]): void {
         stakeholderGroups.forEach(function (stakeholderGroup) {
-            selectFormItems(stakeholdergroupsSelect, stakeholderGroup);
+            selectFormItems(stakeholdergroupsSelect, stakeholderGroup.name);
         });
     }
 
@@ -173,8 +163,8 @@ export class Assessment {
 
     public static retake_questionnaire(
         risk,
-        stakeholders?: Array<string>,
-        stakeholderGroups?: Array<string>
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[]
     ): void {
         clickByText(button, "Retake");
         this.fill_assessment_form(risk, stakeholders, stakeholderGroups);
@@ -186,8 +176,8 @@ export class Assessment {
 
     public static perform_assessment(
         risk,
-        stakeholders?: Array<string>,
-        stakeholderGroups?: Array<string>,
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[],
         questionnaireName = legacyPathfinder,
         saveAndReview = false
     ): void {
@@ -198,8 +188,8 @@ export class Assessment {
 
     public static fill_assessment_form(
         risk,
-        stakeholders?: Array<string>,
-        stakeholderGroups?: Array<string>,
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[],
         saveAndReview = false
     ): void {
         if (stakeholders) this.selectStakeholders(stakeholders);

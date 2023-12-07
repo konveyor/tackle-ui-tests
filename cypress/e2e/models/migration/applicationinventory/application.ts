@@ -85,6 +85,8 @@ import { MigrationWave } from "../migration-waves/migration-wave";
 import { Issues } from "../dynamic-report/issues/issues";
 import { Assessment } from "./assessment";
 import { continueButton } from "../../../views/assessment.view";
+import { Stakeholdergroups } from "../controls/stakeholdergroups";
+import { Stakeholders } from "../controls/stakeholders";
 
 export class Application {
     name: string;
@@ -530,8 +532,8 @@ export class Application {
 
     perform_assessment(
         risk,
-        stakeholders?: Array<string>,
-        stakeholderGroups?: Array<string>,
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[],
         questionnaireName = legacyPathfinder,
         saveAndReview = false
     ) {
@@ -562,8 +564,8 @@ export class Application {
 
     retake_questionnaire(
         risk,
-        stakeholders?: Array<string>,
-        stakeholderGroups?: Array<string>
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[]
     ): void {
         this.clickAssessButton();
         cy.wait(SEC);
