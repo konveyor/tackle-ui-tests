@@ -32,10 +32,9 @@ import { Tag } from "../../../models/migration/controls/tags";
 let stakeholders: Stakeholders[];
 let tags: Tag[];
 
-describe(["@tier1"], "Archetype assessment tests", () => {
+describe(["@tier1"], "Archetype assessment and review tests", () => {
     before("Login and Create Test Data", function () {
         login();
-
         AssessmentQuestionnaire.deleteAllQuesionnaire();
         AssessmentQuestionnaire.enable(legacyPathfinder);
 
@@ -43,7 +42,7 @@ describe(["@tier1"], "Archetype assessment tests", () => {
         tags = createMultipleTags(2);
     });
 
-    it("Archetype assessment with low risk", function () {
+    it("Archetype assessment and review with low risk", function () {
         const archetype = new Archetype(
             data.getRandomWord(8),
             [tags[0].name],
@@ -66,7 +65,7 @@ describe(["@tier1"], "Archetype assessment tests", () => {
         cy.wait(2 * SEC);
     });
 
-    it("Archetype assessment with medium risk", function () {
+    it("Archetype assessment and review with medium risk", function () {
         const archetype = new Archetype(
             data.getRandomWord(8),
             [tags[0].name],
@@ -89,7 +88,7 @@ describe(["@tier1"], "Archetype assessment tests", () => {
         cy.wait(2 * SEC);
     });
 
-    it("Archetype assessment with high risk", function () {
+    it("Archetype assessment and review with high risk", function () {
         const archetype = new Archetype(
             data.getRandomWord(8),
             [tags[0].name],

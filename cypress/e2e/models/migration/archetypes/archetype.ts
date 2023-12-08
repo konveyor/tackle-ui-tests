@@ -246,7 +246,6 @@ export class Archetype {
     }
 
     validateReviewFields(): void {
-        // let list = ['Proposed action', 'Effort estimate', 'Business criticality', 'Work priority', 'Comments'];
         let actionList = [
             `Archetype - ${this.name}-Rehost`,
             `Archetype - ${this.name}-Replatform`,
