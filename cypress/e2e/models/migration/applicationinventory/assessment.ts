@@ -15,7 +15,15 @@ limitations under the License.
 */
 import { tdTag, trTag, button, SEC, legacyPathfinder } from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
-import { clickByText, selectItemsPerPage, selectFormItems, clickJs } from "../../../../utils/utils";
+import {
+    clickByText,
+    selectItemsPerPage,
+    selectFormItems,
+    clickJs,
+    selectRow,
+    clickTab,
+    click,
+} from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import {
     assessmentColumnSelector,
@@ -35,6 +43,7 @@ import {
 } from "../../../views/review.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
+import { rightSideMenu } from "../../../views/analysis.view";
 
 export class Assessment {
     public static selectStakeholders(stakeholders: Stakeholders[]): void {
@@ -219,5 +228,19 @@ export class Assessment {
             .within(() => {
                 cy.get(columnSelector).contains(status, { timeout: 30 * SEC });
             });
+    }
+
+    public static validateAssessmentField(name: string, page: string, risk: string): void {
+        this.sidedrawerTab(name, "Details");
+        cy.get(commonView.sideDrawer.risk).contains(`${page} risk`);
+        cy.get(commonView.sideDrawer.riskValue).contains(risk);
+        click(commonView.sideDrawer.closeDrawer);
+    }
+
+    public static sidedrawerTab(name: string, tab: string): void {
+        selectRow(name);
+        cy.get(rightSideMenu).within(() => {
+            clickTab(tab);
+        });
     }
 }

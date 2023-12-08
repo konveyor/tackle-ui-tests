@@ -44,7 +44,6 @@ describe("Source Analysis without credentials", () => {
 
     it(["@tier0"], "Source Analysis on bookserver app and its issues validation", function () {
         // For source code analysis application must have source code URL git or svn
-        cy.log(this.analysisData[0]);
         application = new Analysis(
             getRandomApplicationData("bookserverApp", {
                 sourceData: this.appData["bookserver-app"],

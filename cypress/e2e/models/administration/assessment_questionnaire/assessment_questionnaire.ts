@@ -4,7 +4,13 @@ import {
     selectItemsPerPage,
     selectUserPerspective,
 } from "../../../../utils/utils";
-import { SEC, assessmentQuestionnaires, deleteAction, trTag } from "../../../types/constants";
+import {
+    SEC,
+    assessmentQuestionnaires,
+    deleteAction,
+    legacyPathfinder,
+    trTag,
+} from "../../../types/constants";
 import {
     questionnaireUpload,
     confirmDeletion,
@@ -86,11 +92,18 @@ export class AssessmentQuestionnaire {
     public static deleteAllQuesionnaire() {
         AssessmentQuestionnaire.open();
         selectItemsPerPage(100);
+        var row_name;
         cy.get(commonView.commonTable)
+            .find('tbody[class="pf-v5-c-table__tbody"]')
             .find(trTag)
             .then(($rows) => {
-                for (let i = 0; i < $rows.length - 1; i++) {
-                    cy.get(actionButton).eq(0).click({ force: true });
+                for (let i = 0; i < $rows.length; i++) {
+                    row_name = $rows.eq(i).find('td[data-label="Name"]').text();
+                    if (row_name == legacyPathfinder && $rows.length == 1) continue;
+                    if (row_name == legacyPathfinder && $rows.length > 1)
+                        cy.get(actionButton).eq(1).click({ force: true });
+                    else cy.get(actionButton).eq(0).click({ force: true });
+
                     cy.get("li.pf-v5-c-menu__list-item")
                         .contains("Delete")
                         .then(($delete_btn) => {
