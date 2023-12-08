@@ -558,6 +558,38 @@ export class Application {
         Assessment.verifyStatus(this.name, column, status);
     }
 
+    validateReviewFields(): void {
+        let actionList = [
+            `Application - ${this.name}-Rehost`,
+            `Application - ${this.name}-Replatform`,
+            `Application - ${this.name}-Refactor`,
+            `Application - ${this.name}-Retain`,
+            `Application - ${this.name}-Repurchase`,
+            `Application - ${this.name}-Retire`,
+        ];
+        let effortEstimateList = [
+            `Application - ${this.name}-Small`,
+            `Application - ${this.name}-Medium`,
+            `Application - ${this.name}-Large`,
+            `Application - ${this.name}-Extra Large`,
+        ];
+        let criticalityList = [
+            `Application - ${this.name}-1`,
+            `Application - ${this.name}-2`,
+            `Application - ${this.name}-3`,
+            `Application - ${this.name}-4`,
+            `Application - ${this.name}-5`,
+            `Application - ${this.name}-6`,
+            `Application - ${this.name}-7`,
+            `Application - ${this.name}-8`,
+            `Application - ${this.name}-9`,
+            `Application - ${this.name}-10`,
+        ];
+
+        Application.open();
+        Assessment.validateReviewFields(this.name, actionList, effortEstimateList, criticalityList);
+    }
+
     retake_questionnaire(
         risk,
         stakeholders?: Stakeholders[],

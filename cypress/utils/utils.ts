@@ -248,6 +248,17 @@ export function resetURL(): void {
     Application.open(true);
 }
 
+/**
+ * Select a row on any table
+ * @param name entity name whose row is to be selected
+ */
+export function selectRow(name: string): void {
+    cy.get(tdTag, { timeout: 10 * SEC })
+        .contains(name)
+        .closest(trTag)
+        .click();
+}
+
 export function selectItemsPerPage(items: number): void {
     cy.log(`Select ${items} per page`);
     cy.get(commonView.itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(

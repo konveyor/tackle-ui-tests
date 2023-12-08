@@ -74,8 +74,10 @@ export const filterDropDownContainer =
 export const filterDropDown = "div.pf-v5-c-select";
 export const actionSelectToggle = "#action-select-toggle";
 
+// Application/Archetype side drawer
 export enum sideDrawer {
     risk = "h3.pf-v5-c-title.pf-m-md",
     riskValue = "span.pf-v5-c-label__content",
     closeDrawer = "button[aria-label='Close drawer panel']",
+    pageDrawerContent = "#page-drawer-content",
 }

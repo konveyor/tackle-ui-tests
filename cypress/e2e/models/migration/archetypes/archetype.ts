@@ -244,4 +244,37 @@ export class Archetype {
         cy.wait(8 * SEC);
         Assessment.perform_review(risk);
     }
+
+    validateReviewFields(): void {
+        // let list = ['Proposed action', 'Effort estimate', 'Business criticality', 'Work priority', 'Comments'];
+        let actionList = [
+            `Archetype - ${this.name}-Rehost`,
+            `Archetype - ${this.name}-Replatform`,
+            `Archetype - ${this.name}-Refactor`,
+            `Archetype - ${this.name}-Retain`,
+            `Archetype - ${this.name}-Repurchase`,
+            `Archetype - ${this.name}-Retire`,
+        ];
+        let effortEstimateList = [
+            `Archetype - ${this.name}-Small`,
+            `Archetype - ${this.name}-Medium`,
+            `Archetype - ${this.name}-Large`,
+            `Archetype -$ {this.name}-Extra Large`,
+        ];
+        let criticalityList = [
+            `Archetype - ${this.name}-1`,
+            `Archetype - ${this.name}-2`,
+            `Archetype - ${this.name}-3`,
+            `Archetype - ${this.name}-4`,
+            `Archetype - ${this.name}-5`,
+            `Archetype - ${this.name}-6`,
+            `Archetype - ${this.name}-7`,
+            `Archetype - ${this.name}-8`,
+            `Archetype - ${this.name}-9`,
+            `Archetype - ${this.name}-10`,
+        ];
+
+        Archetype.open(true);
+        Assessment.validateReviewFields(this.name, actionList, effortEstimateList, criticalityList);
+    }
 }

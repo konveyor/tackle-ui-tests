@@ -35,6 +35,7 @@ let tags: Tag[];
 describe(["@tier1"], "Archetype assessment tests", () => {
     before("Login and Create Test Data", function () {
         login();
+
         AssessmentQuestionnaire.deleteAllQuesionnaire();
         AssessmentQuestionnaire.enable(legacyPathfinder);
 
@@ -57,6 +58,10 @@ describe(["@tier1"], "Archetype assessment tests", () => {
         cy.wait(2 * SEC);
         archetype.validateAssessmentField();
 
+        archetype.perform_review("low");
+        cy.wait(2 * SEC);
+        archetype.validateReviewFields();
+
         archetype.delete();
         cy.wait(2 * SEC);
     });
@@ -76,6 +81,10 @@ describe(["@tier1"], "Archetype assessment tests", () => {
         cy.wait(2 * SEC);
         archetype.validateAssessmentField();
 
+        archetype.perform_review("medium");
+        cy.wait(2 * SEC);
+        archetype.validateReviewFields();
+
         archetype.delete();
         cy.wait(2 * SEC);
     });
@@ -94,6 +103,10 @@ describe(["@tier1"], "Archetype assessment tests", () => {
         archetype.perform_assessment("high", stakeholders);
         cy.wait(2 * SEC);
         archetype.validateAssessmentField();
+
+        archetype.perform_review("high");
+        cy.wait(2 * SEC);
+        archetype.validateReviewFields();
 
         archetype.delete();
         cy.wait(2 * SEC);

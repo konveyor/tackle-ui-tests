@@ -91,7 +91,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.perform_review("medium");
         cy.wait(2 * SEC);
         application.verifyStatus("review", "Completed");
-        application.validateAssessmentField("Medium");
+        application.validateReviewFields();
 
         // Delete application
         application.delete();
@@ -115,6 +115,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2 * SEC);
         application.verifyStatus("review", "Completed");
         application.validateAssessmentField("High");
+        application.validateReviewFields();
 
         // Delete application
         application.delete();
@@ -165,6 +166,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
 
         application.verifyStatus("assessment", "Completed");
         application.verifyStatus("review", "Completed");
+        application.validateReviewFields();
 
         // Automates bug: https://issues.redhat.com/browse/MTA-1751
         application.clickReviewButton();

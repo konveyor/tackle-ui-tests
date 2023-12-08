@@ -217,6 +217,47 @@ export class Assessment {
         cy.wait(2 * SEC);
     }
 
+    public static validateReviewFields(
+        name: string,
+        actionList: string[],
+        effortEstimateList: string[],
+        criticalityList: string[]
+    ): void {
+        let list = [
+            "Proposed action",
+            "Effort estimate",
+            "Business criticality",
+            "Work priority",
+            "Comments",
+        ];
+
+        this.sidedrawerTab(name, "Review");
+        for (let i in list) {
+            cy.get("dt")
+                .contains(list[i])
+                .closest("div")
+                .within(() => {
+                    cy.get("dd").then(($value) => {
+                        let text = $value.text();
+                        if (list[i] == "Proposed action") expect(text).to.be.oneOf(actionList);
+                        if (list[i] == "Effort estimate")
+                            expect(text).to.be.oneOf(effortEstimateList);
+                        if (list[i] == "Business criticality" || list[i] == "Work priority")
+                            expect(text).to.be.oneOf(criticalityList);
+                        if (list[i] == "Comments") expect(text).not.equal("Not yet reviewed");
+                    });
+                });
+        }
+        click(commonView.sideDrawer.closeDrawer);
+    }
+
+    public static sidedrawerTab(name: string, tab: string): void {
+        selectRow(name);
+        cy.get(commonView.sideDrawer.pageDrawerContent).within(() => {
+            clickTab(tab);
+        });
+    }
+
     public static verifyStatus(name, column, status): void {
         let columnSelector: string;
         if (column === "assessment") columnSelector = assessmentColumnSelector;
