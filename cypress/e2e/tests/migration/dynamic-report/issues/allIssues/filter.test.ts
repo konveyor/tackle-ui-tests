@@ -95,32 +95,36 @@ describe(["@tier2"], "1 Bug: Issues filtering", () => {
         );
     });
     //
-    // it("Filtering issues by category", function () {
-    //     Issues.validateFilter(
-    //         this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-    //         issueFilter.category,
-    //         "category"
-    //     );
-    //     clearAllFilters();
-    // });
-    //
-    // it("Bug MTA-1779 - Filtering issues by source", function () {
-    //     Issues.validateFilter(
-    //         this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-    //         issueFilter.source,
-    //         "source"
-    //     );
-    //     clearAllFilters();
-    // });
-    //
-    // it("Filtering issues by target", function () {
-    //     Issues.validateFilter(
-    //         this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-    //         issueFilter.target,
-    //         "targets"
-    //     );
-    //     clearAllFilters();
-    // });
+    it("Filtering issues by category", function () {
+        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+            (issue: AppIssue) => {
+                Issues.applyFilter(issueFilter.category, issue.category);
+                Issues.validateFilter(issue);
+                clearAllFilters();
+            }
+        );
+    });
+
+    it("Filtering issues by source", function () {
+        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+            (issue: AppIssue) => {
+                Issues.applyFilter(issueFilter.source, issue.source);
+                Issues.validateFilter(issue);
+                clearAllFilters();
+            }
+        );
+    });
+
+    it("Filtering issues by target", function () {
+        let issues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
+        issues.forEach((issue: AppIssue) => {
+            issue.targets.forEach((target: string) => {
+                Issues.applyFilter(issueFilter.target, target);
+                Issues.validateFilter(issue);
+                clearAllFilters();
+            });
+        });
+    });
 
     after("Perform test data clean up", function () {
         deleteByList(applicationsList);

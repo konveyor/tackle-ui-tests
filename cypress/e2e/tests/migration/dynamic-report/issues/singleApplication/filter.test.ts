@@ -24,6 +24,8 @@ import {
 } from "../../../../../../utils/utils";
 import { Analysis } from "../../../../../models/migration/applicationinventory/analysis";
 import { SEC, issueFilter } from "../../../../../types/constants";
+import { Issues } from "../../../../../models/migration/dynamic-report/issues/issues";
+import { AppIssue } from "../../../../../types/types";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 
@@ -54,30 +56,37 @@ describe(["@tier2"], "1 Bug: Single application issues filtering", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
 
-        application.validateIssueFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-            issueFilter.category,
-            "category"
+        Issues.openSingleApplication(application.name);
+        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+            (issue: AppIssue) => {
+                Issues.applyFilter(issueFilter.category, issue.category, true);
+                Issues.validateFilter(issue, true);
+                clearAllFilters();
+            }
         );
-        clearAllFilters();
     });
 
-    it("Bug MTA-1779 - Filtering issues by source", function () {
-        application.validateIssueFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-            issueFilter.source,
-            "source"
+    it("Filtering issues by source", function () {
+        Issues.openSingleApplication(application.name);
+        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+            (issue: AppIssue) => {
+                Issues.applyFilter(issueFilter.source, issue.source, true);
+                Issues.validateFilter(issue, true);
+                clearAllFilters();
+            }
         );
-        clearAllFilters();
     });
 
     it("Filtering issues by target", function () {
-        application.validateIssueFilter(
-            this.analysisData["source_analysis_on_bookserverapp"]["issues"],
-            issueFilter.target,
-            "targets"
-        );
-        clearAllFilters();
+        Issues.openSingleApplication(application.name);
+        let issues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
+        issues.forEach((issue: AppIssue) => {
+            issue.targets.forEach((target: string) => {
+                Issues.applyFilter(issueFilter.target, target, true);
+                Issues.validateFilter(issue, true);
+                clearAllFilters();
+            });
+        });
     });
 
     after("Perform test data clean up", function () {

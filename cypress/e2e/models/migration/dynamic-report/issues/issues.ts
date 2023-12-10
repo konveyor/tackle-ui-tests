@@ -23,6 +23,7 @@ import {
     bsFilterName,
     issueColumns,
     singleAppDropList,
+    singleApplicationColumns,
     tagFilterName,
 } from "../../../../views/issue.view";
 import { AppIssue } from "../../../../types/types";
@@ -51,7 +52,7 @@ export class Issues {
         clickByText(button, applicationName);
     }
 
-    public static validateFilter(issue: AppIssue): void {
+    public static validateFilter(issue: AppIssue, isSingle = false): void {
         cy.contains(issue.name)
             .closest(trTag)
             .within(() => {
@@ -64,14 +65,24 @@ export class Issues {
                     });
                 });
                 validateNumberPresence(issueColumns.effort, issue.effort);
-                validateAnyNumberPresence(issueColumns.applications);
+                if (!isSingle) {
+                    validateAnyNumberPresence(issueColumns.applications);
+                } else {
+                    validateAnyNumberPresence(singleApplicationColumns.files);
+                }
             });
     }
 
-    public static applyFilter(filterType: issueFilter, filterValue: string): void {
+    public static applyFilter(
+        filterType: issueFilter,
+        filterValue: string,
+        isSingle = false
+    ): void {
         let selector = "";
-        Issues.openList();
-        selectFilter(filterType);
+        if (!isSingle) {
+            Issues.openList();
+            selectFilter(filterType);
+        }
 
         const isApplicableFilter =
             filterType === issueFilter.appName ||
