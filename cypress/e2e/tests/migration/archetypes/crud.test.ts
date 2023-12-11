@@ -31,6 +31,7 @@ import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { Tag } from "../../../models/migration/controls/tags";
 import { successAlertMessage } from "../../../views/common.view";
 import * as data from "../../../../utils/data_utils";
+import { getRandomWord } from "../../../../utils/data_utils";
 
 let stakeholders: Stakeholders[];
 let stakeholderGroups: Stakeholdergroups[];
@@ -81,12 +82,6 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
         notExists(archetype.name);
     });
 
-    after("Clear test data", function () {
-        deleteByList(stakeholders);
-        deleteByList(stakeholderGroups);
-        deleteByList(tags);
-    });
-
     it("Duplicate archetype", function () {
         // Automates Polarion MTA-399
 
@@ -98,6 +93,9 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
             stakeholders,
             stakeholderGroups
         );
+
+        cy.log(`Tags: ${archetype.criteriaTags[0]}`);
+
         archetype.create();
         checkSuccessAlert(
             successAlertMessage,
@@ -106,7 +104,7 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
         );
         exists(archetype.name);
 
-        const archetypeDuplicate = archetype.duplicate();
+        const archetypeDuplicate = archetype.duplicate(getRandomWord(6));
         checkSuccessAlert(
             successAlertMessage,
             `Success alert:Archetype ${archetypeDuplicate.name} was successfully created.`,
@@ -119,5 +117,11 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
 
         notExists(archetype.name);
         notExists(archetypeDuplicate.name);
+    });
+
+    after("Clear test data", function () {
+        deleteByList(stakeholders);
+        deleteByList(stakeholderGroups);
+        deleteByList(tags);
     });
 });

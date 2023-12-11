@@ -23,7 +23,6 @@ import {
     submitForm,
     click,
     clickKebabMenuOptionArchetype,
-    clickJs,
     clickTab,
 } from "../../../../utils/utils";
 import { legacyPathfinder, migration, SEC, tdTag, trTag } from "../../../types/constants";
@@ -120,6 +119,7 @@ export class Archetype {
     create(cancel = false): void {
         Archetype.open();
         cy.contains("button", "Create new archetype").should("be.enabled").click();
+
         if (cancel) {
             cancelForm();
         } else {
@@ -129,8 +129,8 @@ export class Archetype {
             if (this.description) this.fillDescription(this.description);
             if (this.stakeholders) this.selectStakeholders(this.stakeholders);
             if (this.stakeholderGroups) this.selectStakeholderGroups(this.stakeholderGroups);
+            if (this.comments) this.fillComment(this.comments);
         }
-        if (this.comments) this.fillComment(this.comments);
         submitForm();
     }
 
@@ -246,7 +246,7 @@ export class Archetype {
     }
 
     duplicate(
-        name?: string,
+        name: string,
         criteriaTags?: string[],
         archetypeTags?: string[],
         description?: string,
@@ -255,8 +255,6 @@ export class Archetype {
         comments?: string,
         cancel = false
     ) {
-        Archetype.open();
-
         clickKebabMenuOptionArchetype(this.name, "Duplicate");
 
         if (cancel) {
@@ -282,7 +280,7 @@ export class Archetype {
             comments
         );
 
-        click(commonView.confirmButton);
+        submitForm();
 
         return duplicatedArchetype;
     }
