@@ -262,6 +262,8 @@ export class Archetype {
             return;
         }
 
+        // if a new parameter is passed then fill it, else just take the old one and assign to the peer parameter in the new duplicated object
+
         criteriaTags ? this.selectCriteriaTags(criteriaTags) : (criteriaTags = this.criteriaTags);
         archetypeTags
             ? this.selectArchetypeTags(archetypeTags)
