@@ -53,7 +53,6 @@ describe(["@tier1"], "Application assessment and review tests", () => {
     });
 
     it("Application assessment and review with low risk", function () {
-        // Navigate to application inventory tab and create new application
         const application = new Application(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
@@ -63,20 +62,19 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.perform_assessment("low", stakeholders);
         cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
+        application.validateAssessmentField("Low");
 
         // Perform application review
         application.perform_review("low");
         cy.wait(2 * SEC);
         application.verifyStatus("review", "Completed");
-        application.validateAssessmentField("Low");
+        application.validateReviewFields();
 
-        // Delete application
         application.delete();
         cy.wait(2 * SEC);
     });
 
     it(["@interop"], "Application assessment and review with medium risk", function () {
-        // Navigate to application inventory tab and create new application
         const application = new Application(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
@@ -86,6 +84,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.perform_assessment("medium", stakeholders);
         cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
+        application.validateAssessmentField("Medium");
 
         // Perform application review
         application.perform_review("medium");
@@ -93,13 +92,11 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.verifyStatus("review", "Completed");
         application.validateReviewFields();
 
-        // Delete application
         application.delete();
         cy.wait(2 * SEC);
     });
 
     it("Application assessment and review with high risk", function () {
-        // Navigate to application inventory tab and create new application
         const application = new Application(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
@@ -109,15 +106,14 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.perform_assessment("high", stakeholders);
         cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
+        application.validateAssessmentField("High");
 
         // Perform application review
         application.perform_review("high");
         cy.wait(2 * SEC);
         application.verifyStatus("review", "Completed");
-        application.validateAssessmentField("High");
         application.validateReviewFields();
 
-        // Delete application
         application.delete();
         cy.wait(2 * SEC);
     });
