@@ -32,7 +32,7 @@ import { AppIssue } from "../../../../../types/types";
 let applicationsList: Array<Analysis> = [];
 let businessService: BusinessServices;
 
-describe(["@tier2"], "1 Bug: Issues filtering", () => {
+describe(["@tier2"], "Issues filtering", () => {
     before("Login", function () {
         login();
         businessService = new BusinessServices(data.getCompanyName(), data.getDescription());
@@ -94,7 +94,7 @@ describe(["@tier2"], "1 Bug: Issues filtering", () => {
             }
         );
     });
-    //
+
     it("Filtering issues by category", function () {
         this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
             (issue: AppIssue) => {

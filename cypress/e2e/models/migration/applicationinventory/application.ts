@@ -25,7 +25,6 @@ import {
     analyzeButton,
     reviewAppButton,
     migration,
-    issueFilter,
     details,
     legacyPathfinder,
 } from "../../../types/constants";
@@ -76,7 +75,6 @@ import {
     doesExistButton,
     clickWithin,
     validateSingleApplicationIssue,
-    filterIssueBy,
     checkSuccessAlert,
 } from "../../../../utils/utils";
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
@@ -470,13 +468,6 @@ export class Application {
         });
     }
 
-    validateIssueFilter(issues: AppIssue[], filterType: issueFilter, filterValue: string): void {
-        Issues.openSingleApplication(this.name);
-        issues.forEach((currentIssue) => {
-            filterIssueBy(filterType, currentIssue[filterValue]);
-            validateSingleApplicationIssue(currentIssue);
-        });
-    }
     editApplicationFromApplicationProfile(): void {
         this.applicationDetailsTab(details);
         cy.wait(2000);

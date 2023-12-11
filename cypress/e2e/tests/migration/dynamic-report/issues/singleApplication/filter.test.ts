@@ -29,7 +29,7 @@ import { AppIssue } from "../../../../../types/types";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 
-describe(["@tier2"], "1 Bug: Single application issues filtering", () => {
+describe(["@tier2"], "Single application issues filtering", () => {
     before("Login", function () {
         login();
     });

@@ -12,8 +12,7 @@
                 "source": "None",
                 "targets": ["cloud-readiness"],
                 "effort": 1,
-                "affectedFiles": 1,
-                "tags": ["EJB XML", "Java EE Batch", "EJB XML"]
+                "affectedFiles": 1
             }
         ],
         "dependencies": [
