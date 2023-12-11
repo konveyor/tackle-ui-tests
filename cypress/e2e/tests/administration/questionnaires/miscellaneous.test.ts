@@ -1,7 +1,7 @@
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { cleanupDownloads, click, login } from "../../../../utils/utils";
 import { downloadYamlTemplate } from "../../../views/assessmentquestionnaire.view";
-const filePath = "/home/sshveta/Downloads/questionnaire-template.yaml";
+const filePath = "cypress/downloads/questionnaire-template.yaml";
 const yaml = require("js-yaml");
 
 describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
