@@ -549,6 +549,11 @@ export class Application {
         Assessment.verifyStatus(this.name, column, status);
     }
 
+    validateReviewFields(): void {
+        Application.open();
+        Assessment.validateReviewFields(this.name, "Application");
+    }
+
     retake_questionnaire(
         risk,
         stakeholders?: Stakeholders[],
