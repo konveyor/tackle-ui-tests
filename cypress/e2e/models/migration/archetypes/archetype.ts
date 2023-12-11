@@ -262,13 +262,12 @@ export class Archetype {
             return;
         }
 
-        if (name) this.fillName(name);
-        if (criteriaTags) this.selectCriteriaTags(criteriaTags);
-        if (archetypeTags) this.selectArchetypeTags(archetypeTags);
-        if (description) this.fillDescription(description);
-        if (stakeholders) this.selectStakeholders(stakeholders);
-        if (stakeholderGroups) this.selectStakeholderGroups(stakeholderGroups);
-        if (comments) this.fillComment(comments);
+        criteriaTags ? this.selectCriteriaTags(criteriaTags) : criteriaTags = this.criteriaTags
+        archetypeTags ? this.selectArchetypeTags(archetypeTags) : archetypeTags = this.archetypeTags
+        description ? this.fillDescription(description) : description = this.description
+        stakeholders ? this.selectStakeholders(stakeholders) : stakeholders = this.stakeholders
+        stakeholderGroups ? this.selectStakeholderGroups(stakeholderGroups) : stakeholderGroups = this.stakeholderGroups
+        comments ? this.fillComment(comments) : comments = this.comments
 
         const duplicatedArchetype = new Archetype(
             name,
