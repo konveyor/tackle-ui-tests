@@ -25,19 +25,20 @@ import {
 } from "../../../../utils/utils";
 import { verifyApplicationRisk } from "../../../models/migration/reports/reports";
 import { navMenu } from "../../../views/menu.view";
-import { migration, reports, SEC } from "../../../types/constants";
+import { legacyPathfinder, migration, reports, SEC } from "../../../types/constants";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { Application } from "../../../models/migration/applicationinventory/application";
+import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let applicationsList: Array<Application> = [];
 
-describe(["@tier2"], "1 Bug: Application risks tests", () => {
+describe(["@tier2"], "Application risks tests", () => {
     let riskType = ["low", "medium", "high"];
 
     before("Login and Create Test Data", function () {
         login();
-
+        AssessmentQuestionnaire.enable(legacyPathfinder);
         stakeholdersList = createMultipleStakeholders(1);
         applicationsList = createMultipleApplications(3);
         for (let i = 0; i < applicationsList.length; i++) {
@@ -51,7 +52,7 @@ describe(["@tier2"], "1 Bug: Application risks tests", () => {
         }
     });
 
-    it("Bug MTA-1746: Application risk validation", function () {
+    it("Application risk validation", function () {
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(3 * SEC);

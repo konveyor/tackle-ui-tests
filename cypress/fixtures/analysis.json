@@ -100,11 +100,10 @@
         "storyPoints": 5
     },
 
-    "analysis_for_DIVA-report": {
+    "analysis_for_spring_petclinic_app": {
         "source": "Upload a local binary",
         "target": ["Jakarta EE 9"],
         "binary": ["spring-petclinic-2.4.0.BUILD-SNAPSHOT.jar"],
-        "enableTransaction": true,
         "appName": "spring-petclinic-2.4.0.BUILD-SNAPSHOT.jar",
         "storyPoints": 42
     },

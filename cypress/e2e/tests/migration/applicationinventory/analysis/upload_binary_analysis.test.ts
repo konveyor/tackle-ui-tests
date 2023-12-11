@@ -71,10 +71,10 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it("DIVA report generation", function () {
+    it("Analysis for spring-petclinic application", function () {
         const application = new Analysis(
-            getRandomApplicationData("DIVA"),
-            getRandomAnalysisData(this.analysisData["analysis_for_DIVA-report"])
+            getRandomApplicationData("spring"),
+            getRandomAnalysisData(this.analysisData["analysis_for_spring_petclinic_app"])
         );
         application.create();
         applicationsList.push(application);
