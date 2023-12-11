@@ -356,6 +356,15 @@ export class Application {
         });
     }
 
+    unlinkFromWave(): void {
+        this.applicationDetailsTab("Detail");
+        cy.contains("small", "Ticket")
+            .next("small")
+            .within(() => {
+                click(button);
+            });
+    }
+
     closeApplicationDetails(): void {
         click(appDetailsView.closeDetailsPage);
     }
