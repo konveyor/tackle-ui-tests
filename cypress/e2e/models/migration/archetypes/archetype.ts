@@ -23,13 +23,17 @@ import {
     submitForm,
     click,
     clickKebabMenuOptionArchetype,
+    clickJs,
+    clickTab,
 } from "../../../../utils/utils";
-import { migration } from "../../../types/constants";
+import { legacyPathfinder, migration, SEC, tdTag, trTag } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
 import * as archetype from "../../../views/archetype.view";
-import { confirmButton } from "../../../views/common.view";
+import * as commonView from "../../../views/common.view";
+import { rightSideMenu } from "../../../views/analysis.view";
+import { Assessment } from "../applicationinventory/assessment";
 
 export interface Archetype {
     name: string;
@@ -135,7 +139,7 @@ export class Archetype {
         clickKebabMenuOptionArchetype(this.name, "Delete");
         if (cancel) {
             cancelForm();
-        } else click(confirmButton);
+        } else click(commonView.confirmButton);
     }
 
     edit(
@@ -193,6 +197,54 @@ export class Archetype {
         }
     }
 
+    perform_assessment(
+        risk,
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[],
+        questionnaireName = legacyPathfinder,
+        saveAndReview = false
+    ) {
+        Archetype.open();
+        clickKebabMenuOptionArchetype(this.name, "Assess");
+        cy.wait(SEC);
+        Assessment.perform_assessment(
+            risk,
+            stakeholders,
+            stakeholderGroups,
+            questionnaireName,
+            saveAndReview
+        );
+    }
+
+    validateAssessmentField(): void {
+        Archetype.open(true);
+        this.sidedrawerTab("Details");
+        cy.get(archetype.sideDrawer.risk).contains("Archetype risk");
+        cy.get(archetype.sideDrawer.riskValue).contains(/High|Medium|Low/g);
+        click(archetype.sideDrawer.closeDrawer);
+    }
+
+    sidedrawerTab(tab: string): void {
+        this.selectArchetype();
+        cy.get(rightSideMenu).within(() => {
+            clickTab(tab);
+        });
+    }
+
+    selectArchetype(): void {
+        cy.get(tdTag, { timeout: 10 * SEC })
+            .contains(this.name)
+            .closest(trTag)
+            .click();
+    }
+
+    perform_review(risk): void {
+        Archetype.open();
+        clickKebabMenuOptionArchetype(this.name, "Review");
+        cy.wait(8 * SEC);
+        Assessment.perform_review(risk);
+    }
+
     duplicate(
         name?: string,
         criteriaTags?: string[],
@@ -230,7 +282,7 @@ export class Archetype {
             comments
         );
 
-        click(confirmButton);
+        click(commonView.confirmButton);
 
         return duplicatedArchetype;
     }

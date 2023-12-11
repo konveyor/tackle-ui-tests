@@ -73,3 +73,9 @@ export const filterDropDownContainer =
     "div.pf-v5-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show";
 export const filterDropDown = "div.pf-v5-c-select";
 export const actionSelectToggle = "#action-select-toggle";
+
+export enum sideDrawer {
+    risk = "h3.pf-v5-c-title.pf-m-md",
+    riskValue = "span.pf-v5-c-label__content",
+    closeDrawer = "button[aria-label='Close drawer panel']",
+}

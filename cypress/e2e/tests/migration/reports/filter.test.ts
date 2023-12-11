@@ -69,7 +69,7 @@ describe.skip(["@tier2"], "Bug MTA-1762: Reports filter validations", () => {
         applicationsList = createMultipleApplications(2);
 
         // Perform assessment of application
-        applicationsList[0].perform_assessment("high", [stakeholdersList[0].name]);
+        applicationsList[0].perform_assessment("high", stakeholdersList);
         applicationsList[0].verifyStatus("assessment", "Completed");
         cy.wait(4 * SEC);
         // Perform application review

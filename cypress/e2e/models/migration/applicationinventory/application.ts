@@ -85,6 +85,8 @@ import { MigrationWave } from "../migration-waves/migration-wave";
 import { Issues } from "../dynamic-report/issues/issues";
 import { Assessment } from "./assessment";
 import { continueButton } from "../../../views/assessment.view";
+import { Stakeholdergroups } from "../controls/stakeholdergroups";
+import { Stakeholders } from "../controls/stakeholders";
 
 export class Application {
     name: string;
@@ -159,9 +161,9 @@ export class Application {
             if ($url != Application.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, applicationInventory);
-                selectItemsPerPage(100);
             }
         });
+        selectItemsPerPage(100);
     }
 
     protected fillName(name: string): void {
@@ -421,7 +423,6 @@ export class Application {
 
     validateAppContextMenu(rbacRules: RbacValidationRules): void {
         Application.open();
-        selectItemsPerPage(100);
         cy.wait(SEC);
         cy.get(tdTag)
             .contains(this.name)
@@ -453,7 +454,6 @@ export class Application {
 
     validateUploadBinary(rbacRules: RbacValidationRules): void {
         Application.open();
-        selectItemsPerPage(100);
         this.selectApplication();
         cy.contains("button", analyzeButton, { timeout: 20 * SEC })
             .should("be.enabled")
@@ -485,7 +485,6 @@ export class Application {
 
     validateAppInformationExist(appData: applicationData, migrationWave?: MigrationWave): void {
         Application.open();
-        selectItemsPerPage(100);
         cy.wait(5 * SEC);
         cy.get(tdTag)
             .contains(this.name)
@@ -530,13 +529,12 @@ export class Application {
 
     perform_assessment(
         risk,
-        stakeholders?: Array<string>,
-        stakeholderGroups?: Array<string>,
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[],
         questionnaireName = legacyPathfinder,
         saveAndReview = false
     ) {
         Application.open();
-        selectItemsPerPage(100);
         clickItemInKebabMenu(this.name, "Assess");
         cy.wait(SEC);
         Assessment.perform_assessment(
@@ -562,17 +560,21 @@ export class Application {
 
     retake_questionnaire(
         risk,
-        stakeholders?: Array<string>,
-        stakeholderGroups?: Array<string>
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[]
     ): void {
         this.clickAssessButton();
         cy.wait(SEC);
         Assessment.retake_questionnaire(risk, stakeholders, stakeholderGroups);
     }
 
+    validateAssessmentField(risk: string): void {
+        Application.open();
+        Assessment.validateAssessmentField(this.name, "Application", risk);
+    }
+
     verifyCopyAssessmentDisabled(): void {
         Application.open();
-        selectItemsPerPage(100);
         cy.wait(2 * SEC);
         cy.get(tdTag)
             .contains(this.name)
@@ -602,7 +604,6 @@ export class Application {
     copy_assessment_review(applicationList: Array<Application>, cancel = false): void {
         this.openCopyAssessmentModel(true);
         this.selectApps(applicationList);
-
         if (cancel) {
             cancelForm();
         } else {
@@ -613,7 +614,6 @@ export class Application {
 
     selectKebabMenuItem(selection: string): void {
         Application.open();
-        selectItemsPerPage(100);
         this.selectApplication();
         clickItemInKebabMenu(this.name, selection);
         cy.get(continueButton).click();
@@ -658,7 +658,6 @@ export class Application {
     // Opens the manage dependencies dialog from application inventory page
     openManageDependencies(): void {
         Application.open();
-        selectItemsPerPage(100);
         performRowActionByIcon(this.name, kebabMenu);
         clickByText(button, "Manage dependencies");
     }
