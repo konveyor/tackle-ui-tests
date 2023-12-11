@@ -56,6 +56,7 @@ export const jobFunction = "Job function";
 export const member = "Member";
 export const memberCount = "Member count";
 export const name = "Name";
+export const appName = "Name";
 export const next = "Next";
 export const priority = "Priority";
 export const question = "Question";

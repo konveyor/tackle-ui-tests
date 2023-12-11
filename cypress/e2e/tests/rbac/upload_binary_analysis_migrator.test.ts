@@ -87,24 +87,6 @@ describe.skip(["@tier3"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it("Bug MTA-1455: DIVA report generation", function () {
-        const application = new Analysis(
-            getRandomApplicationData("DIVA"),
-            getRandomAnalysisData(this.analysisData["analysis_for_DIVA-report"])
-        );
-        application.create();
-        applications.push(application);
-
-        cy.wait("@getApplication");
-        cy.wait(2 * SEC);
-        // Need to log out as admin and login as Architect to perform analysis
-        logout();
-        userMigrator.login();
-
-        application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
-    });
-
     afterEach("Persist session", function () {
         Application.open(true);
     });

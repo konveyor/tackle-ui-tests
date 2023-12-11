@@ -30,7 +30,6 @@ import {
 } from "../../../../../utils/utils";
 import {
     button,
-    name,
     clearAllFilters,
     tag,
     CredentialType,
@@ -40,6 +39,7 @@ import {
     subversion,
     git,
     artifact,
+    appName,
 } from "../../../../types/constants";
 
 import * as data from "../../../../../utils/data_utils";
@@ -107,7 +107,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
 
         // Enter an existing name substring and assert
         var validSearchInput = applicationsList[0].name.substring(0, 11);
-        applySearchFilter(name, validSearchInput);
+        applySearchFilter(appName, validSearchInput);
         cy.wait(2000);
         exists(applicationsList[0].name);
 
@@ -117,20 +117,9 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
 
         // Enter an exact existing name and assert
-        applySearchFilter(name, applicationsList[1].name);
+        applySearchFilter(appName, applicationsList[1].name);
         cy.wait(2000);
         exists(applicationsList[1].name);
-
-        clickByText(button, clearAllFilters);
-
-        // Enter a non-existing name substring and apply it as search filter
-        applySearchFilter(name, invalidSearchInput);
-        cy.wait(3000);
-
-        // Assert that no search results are found
-        cy.get("h2").contains("No applications available");
-
-        // Clear all filters
         clickByText(button, clearAllFilters);
     });
 

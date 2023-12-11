@@ -23,7 +23,10 @@ describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
                 throw new Error(`File is not in YAML format: ${filePath}`);
             }
         });
-        cy.readFile(filePath).should("contain", "Test questionnaire  (SAMPLE)");
+        cy.readFile(filePath).should(
+            "contain",
+            "Uploadable Cloud Readiness Questionnaire Template"
+        );
     });
 
     after("Cleaning up", function () {

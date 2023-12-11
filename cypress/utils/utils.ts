@@ -50,6 +50,7 @@ import {
     migration,
     businessServiceLower,
     filterIssue,
+    appName,
 } from "../e2e/types/constants";
 import {
     actionButton,
@@ -431,6 +432,7 @@ export function applySearchFilter(
 ): void {
     selectFilter(filterName, identifiedRisk, value);
     const isStandardKnownFilter = [
+        appName,
         businessServiceLower,
         businessService,
         repositoryType,

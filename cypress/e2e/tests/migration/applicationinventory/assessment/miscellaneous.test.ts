@@ -41,7 +41,7 @@ let stakeholderList: Array<Stakeholders> = [];
 let applicationList: Array<Application> = [];
 const yamlFile = "questionnaire_import/cloud-native.yaml";
 
-describe(["@tier3"], "1 Bug: Tests related to application assessment and review", () => {
+describe(["@tier3"], "Tests related to application assessment and review", () => {
     before("Perform application assessment and review", function () {
         login();
         cy.intercept("GET", "/hub/application*").as("getApplication");
@@ -88,7 +88,7 @@ describe(["@tier3"], "1 Bug: Tests related to application assessment and review"
         applicationList[0].verifyStatus("review", "Not started");
     });
 
-    it("Bug MTA-1722: View archived questionnaire", function () {
+    it("View archived questionnaire", function () {
         // Polarion TC MTA-392
         const application = new Application(getRandomApplicationData());
         application.create();
