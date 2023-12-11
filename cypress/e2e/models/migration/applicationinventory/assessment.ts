@@ -235,7 +235,7 @@ export class Assessment {
         let effortEstimateList = [
             `${entityName} - ${name}-Small`,
             `${entityName} - ${name}-Medium`,
-            `${entityName} - ${name}-Large`,
+            `${entityName} - ${name}-large`,
             `${entityName} - ${name}-Extra Large`,
         ];
         let criticalityList = [
