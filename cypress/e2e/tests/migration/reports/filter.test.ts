@@ -60,7 +60,7 @@ let applicationsList: Array<Application> = [];
 let stakeholdersList: Array<Stakeholders> = [];
 let invalidSearchInput = String(data.getRandomNumber());
 
-describe.skip(["@tier2"], "Bug MTA-1762: Reports filter validations", () => {
+describe(["@tier2"], "Reports filter validations", () => {
     before("Login and create test data", function () {
         // Perform login
         login();
@@ -77,7 +77,7 @@ describe.skip(["@tier2"], "Bug MTA-1762: Reports filter validations", () => {
         applicationsList[0].verifyStatus("review", "Completed");
     });
 
-    it("Bug MTA-1762: Name field validations", function () {
+    it("Name field validations", function () {
         // Navigate to reports
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -133,7 +133,7 @@ describe.skip(["@tier2"], "Bug MTA-1762: Reports filter validations", () => {
         clickByText(button, clearAllFilters);
     });
 
-    it("Bug MTA-1762: Identified risk - Application name field validations", function () {
+    it("Identified risk - Application name field validations", function () {
         // Navigate to reports
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -187,7 +187,7 @@ describe.skip(["@tier2"], "Bug MTA-1762: Reports filter validations", () => {
         clickByText(button, clearAllFilters);
     });
 
-    it("Bug MTA-1762: Identified risk - Category field validations", function () {
+    it("Identified risk - Category field validations", function () {
         // Navigate to reports
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -237,7 +237,7 @@ describe.skip(["@tier2"], "Bug MTA-1762: Reports filter validations", () => {
         clickByText(button, clearAllFilters);
     });
 
-    it("Bug MTA-1762: Identified risk - Question field validations", function () {
+    it("Identified risk - Question field validations", function () {
         // Navigate to reports
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -286,7 +286,7 @@ describe.skip(["@tier2"], "Bug MTA-1762: Reports filter validations", () => {
         clickByText(button, clearAllFilters);
     });
 
-    it("Bug MTA-1762: Identified risk - Answer field validations", function () {
+    it("Identified risk - Answer field validations", function () {
         // Navigate to reports
         selectUserPerspective(migration);
         clickByText(navMenu, reports);

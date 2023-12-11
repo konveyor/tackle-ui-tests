@@ -44,7 +44,7 @@ import { Application } from "../../../models/migration/applicationinventory/appl
 let applicationsList: Array<Application> = [];
 let stakeholdersList: Array<Stakeholders> = [];
 
-describe.skip(["@tier2"], "Bug MTA-1762: Reports sort validations", () => {
+describe(["@tier2"], "Reports sort validations", () => {
     before("Login and create test data", function () {
         // Perform login
         login();
@@ -64,7 +64,7 @@ describe.skip(["@tier2"], "Bug MTA-1762: Reports sort validations", () => {
         }
     });
 
-    it("Bug MTA-1762: Adoption candidate distribution - Application name sort validations", function () {
+    it("Adoption candidate distribution - Application name sort validations", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -90,7 +90,7 @@ describe.skip(["@tier2"], "Bug MTA-1762: Reports sort validations", () => {
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
-    it("Bug MTA-1762: Adoption candidate distribution - Criticality sort validations", function () {
+    it("Adoption candidate distribution - Criticality sort validations", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -116,7 +116,7 @@ describe.skip(["@tier2"], "Bug MTA-1762: Reports sort validations", () => {
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
-    it("Bug MTA-1762: Adoption candidate distribution - Priority sort validations", function () {
+    it("Adoption candidate distribution - Priority sort validations", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -142,7 +142,7 @@ describe.skip(["@tier2"], "Bug MTA-1762: Reports sort validations", () => {
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
-    it("Bug MTA-1762: Adoption candidate distribution - Confidence sort validations", function () {
+    it("Adoption candidate distribution - Confidence sort validations", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -168,7 +168,7 @@ describe.skip(["@tier2"], "Bug MTA-1762: Reports sort validations", () => {
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
-    it("Bug MTA-1762: Adoption candidate distribution - Effort sort validations", function () {
+    it("Adoption candidate distribution - Effort sort validations", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);

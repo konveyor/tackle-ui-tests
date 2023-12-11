@@ -32,7 +32,7 @@ import { Application } from "../../../models/migration/applicationinventory/appl
 let stakeholdersList: Array<Stakeholders> = [];
 let applicationsList: Array<Application> = [];
 
-describe(["@tier2"], "1 Bug: Application risks tests", () => {
+describe(["@tier2"], "Application risks tests", () => {
     let riskType = ["low", "medium", "high"];
 
     before("Login and Create Test Data", function () {
@@ -51,7 +51,7 @@ describe(["@tier2"], "1 Bug: Application risks tests", () => {
         }
     });
 
-    it("Bug MTA-1746: Application risk validation", function () {
+    it("Application risk validation", function () {
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
         cy.wait(3 * SEC);

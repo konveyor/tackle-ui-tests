@@ -41,7 +41,7 @@ import { Application } from "../../../models/migration/applicationinventory/appl
 let applicationsList: Array<Application> = [];
 let stakeholdersList: Array<Stakeholders> = [];
 
-describe.skip(["@tier3"], "Bug MTA-1762: Reports pagination validations", () => {
+describe(["@tier3"], "Reports pagination validations", () => {
     before("Login and create test data", function () {
         // Perform login
         login();
@@ -62,7 +62,7 @@ describe.skip(["@tier3"], "Bug MTA-1762: Reports pagination validations", () => 
         newApplication.verifyStatus("review", "Completed");
     });
 
-    it("Bug MTA-1762: Adoption candidate distribution - Navigation button validations", function () {
+    it("Adoption candidate distribution - Navigation button validations", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -99,7 +99,7 @@ describe.skip(["@tier3"], "Bug MTA-1762: Reports pagination validations", () => 
         cy.get(commonView.firstPageButton).should("not.be.disabled");
     });
 
-    it("Bug MTA-1762: Adoption candidate distribution - Items per page validations", function () {
+    it("Adoption candidate distribution - Items per page validations", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -124,7 +124,7 @@ describe.skip(["@tier3"], "Bug MTA-1762: Reports pagination validations", () => 
         });
     });
 
-    it("Bug MTA-1762: Adoption candidate distribution - Page number validations", function () {
+    it("Adoption candidate distribution - Page number validations", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -143,7 +143,7 @@ describe.skip(["@tier3"], "Bug MTA-1762: Reports pagination validations", () => 
         });
     });
 
-    it("Bug MTA-1762: Identified risks - Navigation button validations", function () {
+    it("Identified risks - Navigation button validations", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -181,7 +181,7 @@ describe.skip(["@tier3"], "Bug MTA-1762: Reports pagination validations", () => 
         cy.get(commonView.firstPageButton).eq(2).should("not.be.disabled");
     });
 
-    it("Bug MTA-1762: Identified risks - Items per page validations", function () {
+    it("Identified risks - Items per page validations", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
@@ -210,7 +210,7 @@ describe.skip(["@tier3"], "Bug MTA-1762: Reports pagination validations", () => 
         });
     });
 
-    it("Bug MTA-1762: Identified risks - Page number validations", function () {
+    it("Identified risks - Page number validations", function () {
         // Navigate to reports page
         selectUserPerspective(migration);
         clickByText(navMenu, reports);
