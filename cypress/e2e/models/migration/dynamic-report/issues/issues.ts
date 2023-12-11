@@ -1,22 +1,33 @@
 import {
     click,
     clickByText,
-    filterIssueBy,
     getUrl,
+    inputText,
+    selectFilter,
     selectItemsPerPage,
     selectUserPerspective,
+    validateAnyNumberPresence,
+    validateNumberPresence,
     validateTextPresence,
 } from "../../../../../utils/utils";
 import {
     button,
-    filterIssue,
+    issueFilter,
     migration,
     SEC,
     singleApplication,
+    trTag,
 } from "../../../../types/constants";
 import { navMenu } from "../../../../views/menu.view";
-import { singleAppDropList, singleApplicationColumns } from "../../../../views/issue.view";
+import {
+    bsFilterName,
+    issueColumns,
+    singleAppDropList,
+    singleApplicationColumns,
+    tagFilterName,
+} from "../../../../views/issue.view";
 import { AppIssue } from "../../../../types/types";
+import { liTag, searchButton, searchInput, span } from "../../../../views/common.view";
 
 export class Issues {
     /** Contains URL of issues web page */
@@ -41,25 +52,56 @@ export class Issues {
         clickByText(button, applicationName);
     }
 
-    public static validateFilter(
-        issues: AppIssue[],
-        filterType: filterIssue,
-        filterValue: string
-    ): void {
-        issues.forEach((issue: AppIssue) => {
-            const isApplicableFilter =
-                filterType === filterIssue.tags ||
-                filterType === filterIssue.category ||
-                filterType === filterIssue.source ||
-                filterType === filterIssue.target;
+    public static validateFilter(issue: AppIssue, isSingle = false): void {
+        cy.contains(issue.name)
+            .closest(trTag)
+            .within(() => {
+                validateTextPresence(issueColumns.issue, issue.name);
+                validateTextPresence(issueColumns.category, issue.category);
+                validateTextPresence(issueColumns.source, issue.source);
+                cy.get(issueColumns.target).within(() => {
+                    issue.targets.forEach((currentTarget) => {
+                        validateTextPresence(liTag, currentTarget);
+                    });
+                });
+                validateNumberPresence(issueColumns.effort, issue.effort);
+                if (!isSingle) {
+                    validateAnyNumberPresence(issueColumns.applications);
+                } else {
+                    validateAnyNumberPresence(singleApplicationColumns.files);
+                }
+            });
+    }
 
-            if (isApplicableFilter) {
-                filterValue = issue[filterValue];
-            }
+    public static applyFilter(
+        filterType: issueFilter,
+        filterValue: string,
+        isSingle = false
+    ): void {
+        let selector = "";
+        if (!isSingle) {
             Issues.openList();
-            filterIssueBy(filterType, filterValue);
-            cy.get("tr").should("not.contain", "No data available");
-            validateTextPresence(singleApplicationColumns.issue, issue["name"]);
-        });
+            selectFilter(filterType);
+        }
+
+        const isApplicableFilter =
+            filterType === issueFilter.appName ||
+            filterType === issueFilter.category ||
+            filterType === issueFilter.source ||
+            filterType === issueFilter.target;
+
+        if (isApplicableFilter) {
+            inputText(searchInput, filterValue);
+            click(searchButton);
+        } else {
+            if (filterType == issueFilter.bs) {
+                selector = bsFilterName;
+            } else if (filterType == issueFilter.tags) {
+                selector = tagFilterName;
+            }
+            click(selector);
+            clickByText(span, filterValue);
+            click(selector);
+        }
     }
 }

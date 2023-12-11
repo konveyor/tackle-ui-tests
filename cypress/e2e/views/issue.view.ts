@@ -11,3 +11,12 @@ export enum singleApplicationColumns {
     effort = 'td[data-label="Effort"]',
     files = 'td[data-label="Affected files"]',
 }
+
+export enum issueColumns {
+    issue = 'td[data-label="Issue"]',
+    category = 'td[data-label="Category"]',
+    source = 'td[data-label="Source"]',
+    target = 'td[data-label="Target(s)"]',
+    effort = 'td[data-label="Effort"]',
+    applications = 'td[data-label="Affected applications"]',
+}
