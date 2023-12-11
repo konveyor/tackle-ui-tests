@@ -43,7 +43,6 @@ import {
 } from "../../../views/review.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
-import { rightSideMenu } from "../../../views/analysis.view";
 
 export class Assessment {
     public static selectStakeholders(stakeholders: Stakeholders[]): void {
@@ -272,13 +271,6 @@ export class Assessment {
         click(commonView.sideDrawer.closeDrawer);
     }
 
-    public static sidedrawerTab(name: string, tab: string): void {
-        selectRow(name);
-        cy.get(commonView.sideDrawer.pageDrawerContent).within(() => {
-            clickTab(tab);
-        });
-    }
-
     public static verifyStatus(name, column, status): void {
         let columnSelector: string;
         if (column === "assessment") columnSelector = assessmentColumnSelector;
@@ -301,7 +293,7 @@ export class Assessment {
 
     public static sidedrawerTab(name: string, tab: string): void {
         selectRow(name);
-        cy.get(rightSideMenu).within(() => {
+        cy.get(commonView.sideDrawer.pageDrawerContent).within(() => {
             clickTab(tab);
         });
     }
