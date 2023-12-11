@@ -217,18 +217,39 @@ export class Assessment {
         cy.wait(2 * SEC);
     }
 
-    public static validateReviewFields(
-        name: string,
-        actionList: string[],
-        effortEstimateList: string[],
-        criticalityList: string[]
-    ): void {
+    public static validateReviewFields(name: string, entityName: string): void {
         let list = [
             "Proposed action",
             "Effort estimate",
             "Business criticality",
             "Work priority",
             "Comments",
+        ];
+        let actionList = [
+            `${entityName} - ${name}-Rehost`,
+            `${entityName} - ${name}-Replatform`,
+            `${entityName} - ${name}-Refactor`,
+            `${entityName} - ${name}-Retain`,
+            `${entityName} - ${name}-Repurchase`,
+            `${entityName} - ${name}-Retire`,
+        ];
+        let effortEstimateList = [
+            `${entityName} - ${name}-Small`,
+            `${entityName} - ${name}-Medium`,
+            `${entityName} - ${name}-Large`,
+            `${entityName} - ${name}-Extra Large`,
+        ];
+        let criticalityList = [
+            `${entityName} - ${name}-1`,
+            `${entityName} - ${name}-2`,
+            `${entityName} - ${name}-3`,
+            `${entityName} - ${name}-4`,
+            `${entityName} - ${name}-5`,
+            `${entityName} - ${name}-6`,
+            `${entityName} - ${name}-7`,
+            `${entityName} - ${name}-8`,
+            `${entityName} - ${name}-9`,
+            `${entityName} - ${name}-10`,
         ];
 
         this.sidedrawerTab(name, "Review");
