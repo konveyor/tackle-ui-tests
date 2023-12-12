@@ -77,7 +77,7 @@ describe(["@tier4"], "Source Analysis of big applications", () => {
         target.delete();
     });
 
-    it.skip("Bug MTA-1647: Source Analysis on Nexus app", function () {
+    it("Source Analysis on Nexus app", function () {
         const application = new Analysis(
             getRandomApplicationData("Nexus Source", {
                 sourceData: this.appData["nexus"],
@@ -92,7 +92,7 @@ describe(["@tier4"], "Source Analysis of big applications", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it.skip("Bug MTA-1647: Source Analysis on OpenMRS app", function () {
+    it("Source Analysis on OpenMRS app", function () {
         const application = new Analysis(
             getRandomApplicationData("OpenMRS Source", {
                 sourceData: this.appData["openmrs"],

@@ -39,7 +39,7 @@ import {
     subversion,
     git,
     artifact,
-    appName,
+    name,
 } from "../../../../types/constants";
 
 import * as data from "../../../../../utils/data_utils";
@@ -107,7 +107,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
 
         // Enter an existing name substring and assert
         var validSearchInput = applicationsList[0].name.substring(0, 11);
-        applySearchFilter(appName, validSearchInput);
+        applySearchFilter(name, validSearchInput);
         cy.wait(2000);
         exists(applicationsList[0].name);
 
@@ -117,7 +117,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
 
         // Enter an exact existing name and assert
-        applySearchFilter(appName, applicationsList[1].name);
+        applySearchFilter(name, applicationsList[1].name);
         cy.wait(2000);
         exists(applicationsList[1].name);
         clickByText(button, clearAllFilters);

@@ -43,7 +43,7 @@ describe(["@tier2"], "Migration waves filter validations", function () {
         const validSearchInput = migrationWavesList[0].name.substring(0, 3);
         applySearchFilter(name, validSearchInput);
         cy.get("td").should("contain", migrationWavesList[0].name);
-
+        cy.log(migrationWavesList[1].name);
         if (migrationWavesList[1].name.indexOf(validSearchInput) >= 0) {
             cy.get("td").should("contain", migrationWavesList[1].name);
         }
