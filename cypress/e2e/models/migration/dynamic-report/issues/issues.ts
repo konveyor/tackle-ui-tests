@@ -20,6 +20,7 @@ import {
 } from "../../../../types/constants";
 import { navMenu } from "../../../../views/menu.view";
 import {
+    archetypeFilterName,
     bsFilterName,
     issueColumns,
     singleAppDropList,
@@ -98,6 +99,8 @@ export class Issues {
                 selector = bsFilterName;
             } else if (filterType == issueFilter.tags) {
                 selector = tagFilterName;
+            } else if (filterType == issueFilter.archetype) {
+                selector = archetypeFilterName;
             }
             click(selector);
             clickByText(span, filterValue);

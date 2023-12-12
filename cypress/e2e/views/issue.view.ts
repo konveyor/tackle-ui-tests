@@ -1,6 +1,7 @@
 export const searchInput = "#search-input";
 export const bsFilterName = "#businessService\\.name-filter-value-select";
 export const tagFilterName = "#tag\\.id-filter-value-select";
+export const archetypeFilterName = "#application\\.id-filter-value-select";
 export const singleAppDropList = "#application-select";
 
 export enum singleApplicationColumns {
