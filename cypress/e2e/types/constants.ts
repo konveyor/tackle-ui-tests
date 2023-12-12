@@ -56,7 +56,6 @@ export const jobFunction = "Job function";
 export const member = "Member";
 export const memberCount = "Member count";
 export const name = "Name";
-export const appName = "Name";
 export const next = "Next";
 export const priority = "Priority";
 export const question = "Question";
@@ -182,7 +181,7 @@ export enum SortType {
     descending = "descending",
 }
 
-export enum filterIssue {
+export enum issueFilter {
     appName = "Application name",
     archetype = "Archetype",
     bs = "Business service",

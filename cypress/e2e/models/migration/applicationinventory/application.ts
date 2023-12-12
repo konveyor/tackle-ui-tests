@@ -25,7 +25,6 @@ import {
     analyzeButton,
     reviewAppButton,
     migration,
-    filterIssue,
     details,
     legacyPathfinder,
 } from "../../../types/constants";
@@ -76,7 +75,6 @@ import {
     doesExistButton,
     clickWithin,
     validateSingleApplicationIssue,
-    filterIssueBy,
     checkSuccessAlert,
 } from "../../../../utils/utils";
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
@@ -106,7 +104,7 @@ export class Application {
     packaging?: string;
     contributor?: string;
 
-    static fullUrl = Cypress.env("tackleUrl") + "/applications/";
+    static fullUrl = Cypress.env("tackleUrl") + "/applications";
 
     constructor(appData: applicationData) {
         this.init(appData);
@@ -470,13 +468,6 @@ export class Application {
         });
     }
 
-    validateIssueFilter(issues: AppIssue[], filterType: filterIssue, filterValue: string): void {
-        Issues.openSingleApplication(this.name);
-        issues.forEach((currentIssue) => {
-            filterIssueBy(filterType, currentIssue[filterValue]);
-            validateSingleApplicationIssue(currentIssue);
-        });
-    }
     editApplicationFromApplicationProfile(): void {
         this.applicationDetailsTab(details);
         cy.wait(2000);
@@ -556,6 +547,11 @@ export class Application {
     verifyStatus(column, status): void {
         Application.open();
         Assessment.verifyStatus(this.name, column, status);
+    }
+
+    validateReviewFields(): void {
+        Application.open();
+        Assessment.validateReviewFields(this.name, "Application");
     }
 
     retake_questionnaire(

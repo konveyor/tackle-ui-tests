@@ -23,6 +23,7 @@ import {
     submitForm,
     click,
     clickKebabMenuOptionArchetype,
+    clickJs,
     clickTab,
 } from "../../../../utils/utils";
 import { legacyPathfinder, migration, SEC, tdTag, trTag } from "../../../types/constants";
@@ -119,7 +120,6 @@ export class Archetype {
     create(cancel = false): void {
         Archetype.open();
         cy.contains("button", "Create new archetype").should("be.enabled").click();
-
         if (cancel) {
             cancelForm();
         } else {
@@ -216,19 +216,9 @@ export class Archetype {
         );
     }
 
-    validateAssessmentField(): void {
+    validateAssessmentField(risk: string): void {
         Archetype.open(true);
-        this.sidedrawerTab("Details");
-        cy.get(archetype.sideDrawer.risk).contains("Archetype risk");
-        cy.get(archetype.sideDrawer.riskValue).contains(/High|Medium|Low/g);
-        click(archetype.sideDrawer.closeDrawer);
-    }
-
-    sidedrawerTab(tab: string): void {
-        this.selectArchetype();
-        cy.get(rightSideMenu).within(() => {
-            clickTab(tab);
-        });
+        Assessment.validateAssessmentField(this.name, "Archetype", risk);
     }
 
     selectArchetype(): void {
@@ -243,6 +233,11 @@ export class Archetype {
         clickKebabMenuOptionArchetype(this.name, "Review");
         cy.wait(8 * SEC);
         Assessment.perform_review(risk);
+    }
+
+    validateReviewFields(): void {
+        Archetype.open(true);
+        Assessment.validateReviewFields(this.name, "Archetype");
     }
 
     duplicate(

@@ -49,8 +49,7 @@ import {
     JiraType,
     migration,
     businessServiceLower,
-    filterIssue,
-    appName,
+    issueFilter,
 } from "../e2e/types/constants";
 import {
     actionButton,
@@ -309,6 +308,14 @@ export function validateNumberPresence(fieldId: string, value: number): void {
         });
 }
 
+export function validateAnyNumberPresence(fieldId: string): void {
+    cy.get(fieldId)
+        .invoke("text")
+        .then((text) => {
+            expect(parseFloat(text)).to.not.be.NaN;
+        });
+}
+
 export function closeSuccessAlert(): void {
     cy.get(closeSuccessNotification, { timeout: 10 * SEC })
         .first()
@@ -358,14 +365,14 @@ export function clearAllFilters(): void {
     cy.contains(button, "Clear all filters").click({ force: true });
 }
 
-export function filterIssueBy(filterType: filterIssue, filterValue: string | string[]): void {
+export function filterIssueBy(filterType: issueFilter, filterValue: string | string[]): void {
     let selector = "";
     selectFilter(filterType);
     const isApplicableFilter =
-        filterType === filterIssue.appName ||
-        filterType === filterIssue.category ||
-        filterType === filterIssue.source ||
-        filterType === filterIssue.target;
+        filterType === issueFilter.appName ||
+        filterType === issueFilter.category ||
+        filterType === issueFilter.source ||
+        filterType === issueFilter.target;
 
     if (isApplicableFilter) {
         if (Array.isArray(filterValue)) {
@@ -378,9 +385,9 @@ export function filterIssueBy(filterType: filterIssue, filterValue: string | str
             click(searchButton);
         }
     } else {
-        if (filterType == filterIssue.bs) {
+        if (filterType == issueFilter.bs) {
             selector = bsFilterName;
-        } else if (filterType == filterIssue.tags) {
+        } else if (filterType == issueFilter.tags) {
             selector = tagFilterName;
         }
         click(selector);
@@ -432,7 +439,6 @@ export function applySearchFilter(
 ): void {
     selectFilter(filterName, identifiedRisk, value);
     const isStandardKnownFilter = [
-        appName,
         businessServiceLower,
         businessService,
         repositoryType,
@@ -440,27 +446,40 @@ export function applySearchFilter(
         owner,
     ].includes(filterName);
     const isSpecialKnownFilter = [tag, credentialType].includes(filterName);
-
+    let filterValue = [];
     if (!Array.isArray(searchText)) {
-        searchText = [searchText];
-    }
+        filterValue = [searchText];
+    } else filterValue = searchText;
 
-    if (!isStandardKnownFilter && !isSpecialKnownFilter) {
-        searchText.forEach((searchTextValue) => filterInputText(searchTextValue, +identifiedRisk));
-        cy.wait(4000);
-        return;
-    }
-
+    cy.url().then(($url) => {
+        if (!isStandardKnownFilter && !isSpecialKnownFilter) {
+            if ($url == Application.fullUrl && filterName == "Name") {
+                // Only on application page you can select multiple
+                // applications from dropdown.
+                cy.get(filterDropDownContainer).find(filterDropDown).click();
+                filterValue.forEach((searchTextValue) => {
+                    cy.get(specialFilter).contains(searchTextValue).click();
+                });
+                return;
+            } else {
+                filterValue.forEach((searchTextValue) =>
+                    filterInputText(searchTextValue, +identifiedRisk)
+                );
+                cy.wait(4000);
+                return;
+            }
+        }
+    });
     cy.get(filterDropDownContainer).find(filterDropDown).click();
 
     if (isStandardKnownFilter) {
-        searchText.forEach((searchTextValue) => {
+        filterValue.forEach((searchTextValue) => {
             cy.get(standardFilter).contains(searchTextValue).click();
         });
     }
 
     if (isSpecialKnownFilter) {
-        searchText.forEach((searchTextValue) => {
+        filterValue.forEach((searchTextValue) => {
             cy.get(specialFilter).contains(searchTextValue).click();
         });
     }

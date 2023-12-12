@@ -43,7 +43,6 @@ import {
 } from "../../../views/review.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
-import { rightSideMenu } from "../../../views/analysis.view";
 
 export class Assessment {
     public static selectStakeholders(stakeholders: Stakeholders[]): void {
@@ -217,6 +216,61 @@ export class Assessment {
         cy.wait(2 * SEC);
     }
 
+    public static validateReviewFields(name: string, entityName: string): void {
+        let list = [
+            "Proposed action",
+            "Effort estimate",
+            "Business criticality",
+            "Work priority",
+            "Comments",
+        ];
+        let actionList = [
+            `${entityName} - ${name}-Rehost`,
+            `${entityName} - ${name}-Replatform`,
+            `${entityName} - ${name}-Refactor`,
+            `${entityName} - ${name}-Retain`,
+            `${entityName} - ${name}-Repurchase`,
+            `${entityName} - ${name}-Retire`,
+        ];
+        let effortEstimateList = [
+            `${entityName} - ${name}-Small`,
+            `${entityName} - ${name}-Medium`,
+            `${entityName} - ${name}-Large`,
+            `${entityName} - ${name}-Extra large`,
+        ];
+        let criticalityList = [
+            `${entityName} - ${name}-1`,
+            `${entityName} - ${name}-2`,
+            `${entityName} - ${name}-3`,
+            `${entityName} - ${name}-4`,
+            `${entityName} - ${name}-5`,
+            `${entityName} - ${name}-6`,
+            `${entityName} - ${name}-7`,
+            `${entityName} - ${name}-8`,
+            `${entityName} - ${name}-9`,
+            `${entityName} - ${name}-10`,
+        ];
+
+        this.sidedrawerTab(name, "Review");
+        for (let i in list) {
+            cy.get("dt")
+                .contains(list[i])
+                .closest("div")
+                .within(() => {
+                    cy.get("dd").then(($value) => {
+                        let text = $value.text();
+                        if (list[i] == "Proposed action") expect(text).to.be.oneOf(actionList);
+                        if (list[i] == "Effort estimate")
+                            expect(text).to.be.oneOf(effortEstimateList);
+                        if (list[i] == "Business criticality" || list[i] == "Work priority")
+                            expect(text).to.be.oneOf(criticalityList);
+                        if (list[i] == "Comments") expect(text).not.equal("Not yet reviewed");
+                    });
+                });
+        }
+        click(commonView.sideDrawer.closeDrawer);
+    }
+
     public static verifyStatus(name, column, status): void {
         let columnSelector: string;
         if (column === "assessment") columnSelector = assessmentColumnSelector;
@@ -239,7 +293,7 @@ export class Assessment {
 
     public static sidedrawerTab(name: string, tab: string): void {
         selectRow(name);
-        cy.get(rightSideMenu).within(() => {
+        cy.get(commonView.sideDrawer.pageDrawerContent).within(() => {
             clickTab(tab);
         });
     }
