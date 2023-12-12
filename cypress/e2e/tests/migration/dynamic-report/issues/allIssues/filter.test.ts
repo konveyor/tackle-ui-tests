@@ -35,6 +35,7 @@ import { Archetype } from "../../../../../models/migration/archetypes/archetype"
 import { Stakeholders } from "../../../../../models/migration/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../../models/migration/controls/stakeholdergroups";
 import { Tag } from "../../../../../models/migration/controls/tags";
+import { randomWordGenerator } from "../../../../../../utils/data_utils";
 
 let applicationsList: Array<Analysis> = [];
 let businessService: BusinessServices;
@@ -95,6 +96,11 @@ describe(["@tier2"], "Issues filtering", () => {
             }
         );
         clearAllFilters();
+
+        // Negative test, filtering by not existing data
+        Issues.applyFilter(issueFilter.appName, randomWordGenerator(6));
+        cy.get("tr").should("contain", "No data available");
+        clearAllFilters();
     });
 
     it("Filtering issues by Archetype", function () {
@@ -118,17 +124,15 @@ describe(["@tier2"], "Issues filtering", () => {
     });
 
     it("Filtering issues by tags", function () {
-        this.analysisData["source_analysis_on_bookserverapp"]["tags"].forEach(
-            (currentTag: string) => {
-                Issues.applyFilter(issueFilter.tags, currentTag);
-                this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
-                    (issue: AppIssue) => {
-                        Issues.validateFilter(issue);
-                    }
-                );
-                clearAllFilters();
-            }
-        );
+        tagNames.forEach((currentTag: string) => {
+            Issues.applyFilter(issueFilter.tags, currentTag);
+            this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+                (issue: AppIssue) => {
+                    Issues.validateFilter(issue);
+                }
+            );
+            clearAllFilters();
+        });
     });
 
     it("Filtering issues by category", function () {
@@ -139,6 +143,11 @@ describe(["@tier2"], "Issues filtering", () => {
                 clearAllFilters();
             }
         );
+
+        // Negative test, filtering by not existing data
+        Issues.applyFilter(issueFilter.category, randomWordGenerator(6));
+        cy.get("tr").should("contain", "No data available");
+        clearAllFilters();
     });
 
     it("Filtering issues by source", function () {
@@ -149,6 +158,11 @@ describe(["@tier2"], "Issues filtering", () => {
                 clearAllFilters();
             }
         );
+
+        // Negative test, filtering by not existing data
+        Issues.applyFilter(issueFilter.source, randomWordGenerator(6));
+        cy.get("tr").should("contain", "No data available");
+        clearAllFilters();
     });
 
     it("Filtering issues by target", function () {
@@ -160,6 +174,11 @@ describe(["@tier2"], "Issues filtering", () => {
                 clearAllFilters();
             });
         });
+
+        // Negative test, filtering by not existing data
+        Issues.applyFilter(issueFilter.target, randomWordGenerator(6));
+        cy.get("tr").should("contain", "No data available");
+        clearAllFilters();
     });
 
     after("Perform test data clean up", function () {
