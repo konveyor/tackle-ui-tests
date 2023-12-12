@@ -36,12 +36,12 @@ describe(["@tier2"], "2 Bug: Questionnaire CRUD operations", () => {
 
     it("Bug MTA 1721: Export questionnaire and Import it back", function () {
         AssessmentQuestionnaire.export(legacyQuestionnaire);
-        cy.readFile("/home/sshveta/Downloads/questionnaire-1.yaml").should(
+        cy.readFile("cypress/downloads/questionnaire-1.yaml").should(
             "contain",
             legacyQuestionnaire
         );
         // Polarion TC MTA-423
-        AssessmentQuestionnaire.import("/home/sshveta/Downloads/questionnaire-1.yaml");
+        AssessmentQuestionnaire.import("cypress/downloads/questionnaire-1.yaml");
         checkSuccessAlert(
             alertTitle,
             `Success alert:Questionnaire "Legacy Pathfinder" was successfully created.`,
