@@ -23,8 +23,6 @@ import {
     submitForm,
     click,
     clickKebabMenuOptionArchetype,
-    clickJs,
-    clickTab,
 } from "../../../../utils/utils";
 import { legacyPathfinder, migration, SEC, tdTag, trTag } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
@@ -32,7 +30,6 @@ import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
 import * as archetype from "../../../views/archetype.view";
 import * as commonView from "../../../views/common.view";
-import { rightSideMenu } from "../../../views/analysis.view";
 import { Assessment } from "../applicationinventory/assessment";
 
 export interface Archetype {
