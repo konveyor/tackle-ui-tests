@@ -470,7 +470,7 @@ export function applySearchFilter(
             }
         }
     });
-    
+
     if (isStandardKnownFilter) {
         cy.get(filterDropDownContainer).find(filterDropDown).click();
         filterValue.forEach((searchTextValue) => {
