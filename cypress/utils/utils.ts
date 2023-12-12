@@ -470,15 +470,16 @@ export function applySearchFilter(
             }
         }
     });
-    cy.get(filterDropDownContainer).find(filterDropDown).click();
-
+    
     if (isStandardKnownFilter) {
+        cy.get(filterDropDownContainer).find(filterDropDown).click();
         filterValue.forEach((searchTextValue) => {
             cy.get(standardFilter).contains(searchTextValue).click();
         });
     }
 
     if (isSpecialKnownFilter) {
+        cy.get(filterDropDownContainer).find(filterDropDown).click();
         filterValue.forEach((searchTextValue) => {
             cy.get(specialFilter).contains(searchTextValue).click();
         });
