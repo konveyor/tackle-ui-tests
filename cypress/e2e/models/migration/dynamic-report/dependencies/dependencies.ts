@@ -11,7 +11,12 @@ import {
 import { dependencyFilter, migration, SEC } from "../../../../types/constants";
 import { navMenu } from "../../../../views/menu.view";
 import { AppDependency } from "../../../../types/types";
-import { bsFilterName, searchInput, tagFilterName } from "../../../../views/issue.view";
+import {
+    archetypeFilterName,
+    bsFilterName,
+    searchInput,
+    tagFilterName,
+} from "../../../../views/issue.view";
 import { searchButton, span } from "../../../../views/common.view";
 import { dependencyColumns } from "../../../../views/dependency.view";
 
@@ -48,6 +53,8 @@ export class Dependencies {
                 selector = bsFilterName;
             } else if (filterType == dependencyFilter.tags) {
                 selector = tagFilterName;
+            } else if (filterType == dependencyFilter.archetype) {
+                selector = archetypeFilterName;
             }
             click(selector);
             clickByText(span, filterValue);
