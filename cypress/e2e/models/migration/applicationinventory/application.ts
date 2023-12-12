@@ -104,7 +104,7 @@ export class Application {
     packaging?: string;
     contributor?: string;
 
-    static fullUrl = Cypress.env("tackleUrl") + "/applications/";
+    static fullUrl = Cypress.env("tackleUrl") + "/applications";
 
     constructor(appData: applicationData) {
         this.init(appData);

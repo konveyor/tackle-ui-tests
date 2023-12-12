@@ -439,7 +439,6 @@ export function applySearchFilter(
 ): void {
     selectFilter(filterName, identifiedRisk, value);
     const isStandardKnownFilter = [
-        appName,
         businessServiceLower,
         businessService,
         repositoryType,
@@ -447,27 +446,40 @@ export function applySearchFilter(
         owner,
     ].includes(filterName);
     const isSpecialKnownFilter = [tag, credentialType].includes(filterName);
-
+    let filterValue = [];
     if (!Array.isArray(searchText)) {
-        searchText = [searchText];
-    }
+        filterValue = [searchText];
+    } else filterValue = searchText;
 
-    if (!isStandardKnownFilter && !isSpecialKnownFilter) {
-        searchText.forEach((searchTextValue) => filterInputText(searchTextValue, +identifiedRisk));
-        cy.wait(4000);
-        return;
-    }
-
+    cy.url().then(($url) => {
+        if (!isStandardKnownFilter && !isSpecialKnownFilter) {
+            if ($url == Application.fullUrl && filterName == "Name") {
+                // Only on application page you can select multiple
+                // applications from dropdown.
+                cy.get(filterDropDownContainer).find(filterDropDown).click();
+                filterValue.forEach((searchTextValue) => {
+                    cy.get(specialFilter).contains(searchTextValue).click();
+                });
+                return;
+            } else {
+                filterValue.forEach((searchTextValue) =>
+                    filterInputText(searchTextValue, +identifiedRisk)
+                );
+                cy.wait(4000);
+                return;
+            }
+        }
+    });
     cy.get(filterDropDownContainer).find(filterDropDown).click();
 
     if (isStandardKnownFilter) {
-        searchText.forEach((searchTextValue) => {
+        filterValue.forEach((searchTextValue) => {
             cy.get(standardFilter).contains(searchTextValue).click();
         });
     }
 
     if (isSpecialKnownFilter) {
-        searchText.forEach((searchTextValue) => {
+        filterValue.forEach((searchTextValue) => {
             cy.get(specialFilter).contains(searchTextValue).click();
         });
     }

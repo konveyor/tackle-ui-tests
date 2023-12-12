@@ -38,7 +38,7 @@ let source_credential: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;
 let applicationsList: Array<Analysis> = [];
 
-describe(["@tier1"], "1 Bug: Source Analysis", () => {
+describe(["@tier1"], "Source Analysis", () => {
     before("Login", function () {
         login();
 
@@ -93,7 +93,7 @@ describe(["@tier1"], "1 Bug: Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it("Bug MTA-1664: Source + dependencies analysis on daytrader app", function () {
+    it("Source + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies", {
