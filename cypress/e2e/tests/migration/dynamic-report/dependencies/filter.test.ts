@@ -82,6 +82,7 @@ describe(["@tier2"], "Dependency filtering", () => {
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         application.business = businessService.name;
+        application.tags = tagNames;
         application.create();
         applicationsList.push(application);
         cy.wait(2 * SEC);
@@ -123,17 +124,15 @@ describe(["@tier2"], "Dependency filtering", () => {
     });
 
     it("Filtering dependencies by tags", function () {
-        this.analysisData["source_analysis_on_bookserverapp"]["tags"].forEach(
-            (currentTag: string) => {
-                Dependencies.applyFilter(dependencyFilter.tags, currentTag);
-                this.analysisData["source_analysis_on_bookserverapp"]["dependencies"].forEach(
-                    (dependency: AppDependency) => {
-                        Dependencies.validateFilter(dependency);
-                    }
-                );
-                clearAllFilters();
-            }
-        );
+        tagNames.forEach((currentTag: string) => {
+            Dependencies.applyFilter(dependencyFilter.tags, currentTag);
+            this.analysisData["source_analysis_on_bookserverapp"]["dependencies"].forEach(
+                (dependency: AppDependency) => {
+                    Dependencies.validateFilter(dependency);
+                }
+            );
+            clearAllFilters();
+        });
     });
 
     it("Filtering dependencies by dependency name", function () {
