@@ -41,7 +41,7 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
             legacyQuestionnaire
         );
         cy.exec(
-            "cp cypress/downloads/questionnaire-1.yaml questionnaire_import/questionnaire-1.yaml"
+            "cp cypress/downloads/questionnaire-1.yaml cypress/fixtures/questionnaire_import/questionnaire-1.yaml"
         ).then((result) => {
             cy.log(result.stdout);
         });
