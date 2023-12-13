@@ -50,7 +50,6 @@ import {
     migration,
     businessServiceLower,
     issueFilter,
-    appName,
 } from "../e2e/types/constants";
 import {
     actionButton,

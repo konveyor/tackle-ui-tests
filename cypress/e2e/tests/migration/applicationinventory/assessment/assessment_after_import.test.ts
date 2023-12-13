@@ -28,6 +28,8 @@ import {
 
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { legacyPathfinder } from "../../../../types/constants";
 
 const filePath = "app_import/csv/";
 let stakeholders: Stakeholders[];
@@ -36,7 +38,9 @@ let appdata = { name: "Customers" };
 describe(["@tier2"], "Operations after application import", () => {
     before("Login and create test data", function () {
         login();
-
+        // This test will fail if there are preexisting questionnaire.
+        AssessmentQuestionnaire.deleteAllQuesionnaire();
+        AssessmentQuestionnaire.enable(legacyPathfinder);
         stakeholders = createMultipleStakeholders(1);
 
         // Import applications through valid .CSV file

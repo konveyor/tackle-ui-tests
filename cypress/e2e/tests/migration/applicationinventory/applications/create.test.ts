@@ -255,8 +255,8 @@ describe(["@tier2"], "Application validations", () => {
         application.edit(appdata1, true);
         application.validateAppInformationExist(appdata1);
         application.closeApplicationDetails();
-        application.delete();
         migrationWave.delete();
+        application.delete();
     });
 
     after("Perform test data clean up", function () {
