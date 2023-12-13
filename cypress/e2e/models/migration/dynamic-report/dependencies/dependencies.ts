@@ -59,6 +59,7 @@ export class Dependencies {
             click(selector);
             clickByText(span, filterValue);
             click(selector);
+            cy.wait(SEC);
         }
     }
 
