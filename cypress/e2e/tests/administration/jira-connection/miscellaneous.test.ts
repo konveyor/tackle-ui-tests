@@ -52,7 +52,6 @@ describe(["@tier2"], "Jira connection negative tests", () => {
         jiraBasicCredential = new JiraCredentials(
             getJiraCredentialData(CredentialType.jiraBasic, useTestingAccount)
         );
-
         jiraBasicCredential.create();
 
         // Defining Jira Cloud connection data with correct credentials
@@ -62,20 +61,17 @@ describe(["@tier2"], "Jira connection negative tests", () => {
             isSecure,
             useTestingAccount
         );
-
         jiraCloudConnection = new Jira(jiraCloudConnectionData);
 
         // Defining and creating dummy credentials to be used further in tests
         jiraBasicCredentialInvalid = new JiraCredentials(
             getJiraCredentialData(CredentialType.jiraBasic, !useTestingAccount)
         );
-
         jiraBasicCredentialInvalid.create();
 
         jiraBearerCredentialInvalid = new JiraCredentials(
             getJiraCredentialData(CredentialType.jiraToken, !useTestingAccount)
         );
-
         jiraBearerCredentialInvalid.create();
 
         // Defining Jira Cloud connection data with incorrect credentials
@@ -85,7 +81,6 @@ describe(["@tier2"], "Jira connection negative tests", () => {
             isSecure,
             useTestingAccount
         );
-
         jiraCloudConnectionIncorrect = new Jira(jiraCloudConnectionDataIncorrect);
 
         // Defining Jira Stage connection data with incorrect credentials
@@ -95,7 +90,6 @@ describe(["@tier2"], "Jira connection negative tests", () => {
             isSecure,
             useTestingAccount
         );
-
         jiraStageConnectionIncorrect = new Jira(jiraStageConnectionDataIncorrect);
 
         applicationList = createMultipleApplications(2);
@@ -112,10 +106,12 @@ describe(["@tier2"], "Jira connection negative tests", () => {
          */
         jiraCloudConnectionIncorrect.create();
         jiraCloudConnectionIncorrect.validateState(expectedToFail);
-        cy.wait(30 * SEC);
+        cy.wait(10 * SEC);
         clickByText(button, "Not connected");
         cy.get("#code-content").then(($code) => {
-            expect($code.text()).to.contain("401 Unauthorized");
+            expect($code.text()).to.contain(
+                "Client must be authenticated to access this resource."
+            );
             expect($code.text().toLowerCase()).not.to.contain("html");
             expect($code.text()).not.to.contain("403");
         });
@@ -128,10 +124,12 @@ describe(["@tier2"], "Jira connection negative tests", () => {
          */
         jiraStageConnectionIncorrect.create();
         jiraStageConnectionIncorrect.validateState(expectedToFail);
-        cy.wait(30 * SEC);
+        cy.wait(10 * SEC);
         clickByText(button, "Not connected");
         cy.get("#code-content").then(($code) => {
-            expect($code.text()).to.contain("401 Unauthorized");
+            expect($code.text()).to.contain(
+                "Client must be authenticated to access this resource."
+            );
             expect($code.text().toLowerCase()).not.to.contain("html");
             expect($code.text()).not.to.contain("403");
         });
