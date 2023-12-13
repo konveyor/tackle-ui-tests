@@ -84,10 +84,11 @@
         "storyPoints": 1,
         "techTags": [
             ["HTTP", "Servlet"],
-            ["Processing", "Java EE Batch"],
-            ["Java EE", "Java EE Batch"],
-            ["Execute", "Java EE Batch"],
-            ["Connect", "Servlet"]
+            ["Bean", "EJB XML"],
+            ["Java EE", "EJB XML"],
+            ["Embedded", "Properties"],
+            ["Connect", "Servlet"],
+            ["Sustain", "Properties"]
         ]
     },
 
