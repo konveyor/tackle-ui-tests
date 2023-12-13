@@ -82,9 +82,9 @@ export class Issues {
         let selector = "";
         if (!isSingle) {
             Issues.openList();
-            selectFilter(filterType);
         }
 
+        selectFilter(filterType);
         const isApplicableFilter =
             filterType === issueFilter.appName ||
             filterType === issueFilter.category ||
