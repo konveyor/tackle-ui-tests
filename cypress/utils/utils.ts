@@ -289,6 +289,13 @@ export function selectRow(name: string): void {
         .click();
 }
 
+export function sidedrawerTab(name: string, tab: string): void {
+    selectRow(name);
+    cy.get(commonView.sideDrawer.pageDrawerContent).within(() => {
+        clickTab(tab);
+    });
+}
+
 export function checkSuccessAlert(fieldId: string, message: string, close = false): void {
     validateTextPresence(fieldId, message);
     if (close) {
