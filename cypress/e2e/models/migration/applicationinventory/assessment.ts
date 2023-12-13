@@ -23,6 +23,7 @@ import {
     selectRow,
     clickTab,
     click,
+    sidedrawerTab,
 } from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import {
@@ -251,7 +252,7 @@ export class Assessment {
             `${entityName} - ${name}-10`,
         ];
 
-        this.sidedrawerTab(name, "Review");
+        sidedrawerTab(name, "Review");
         for (let i in list) {
             cy.get("dt")
                 .contains(list[i])
@@ -285,16 +286,10 @@ export class Assessment {
     }
 
     public static validateAssessmentField(name: string, page: string, risk: string): void {
-        this.sidedrawerTab(name, "Details");
+        sidedrawerTab(name, "Details");
         cy.get(commonView.sideDrawer.risk).contains(`${page} risk`);
         cy.get(commonView.sideDrawer.riskValue).contains(risk);
         click(commonView.sideDrawer.closeDrawer);
     }
 
-    public static sidedrawerTab(name: string, tab: string): void {
-        selectRow(name);
-        cy.get(commonView.sideDrawer.pageDrawerContent).within(() => {
-            clickTab(tab);
-        });
-    }
 }

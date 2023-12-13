@@ -41,6 +41,7 @@ import {
     performRowActionByIcon,
     selectCheckBox,
     selectFormItems,
+    sidedrawerTab,
     uploadApplications,
     uploadXml,
 } from "../../../../utils/utils";
@@ -81,7 +82,7 @@ import {
 } from "../../../views/applicationinventory.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { actionSelectToggle } from "../../../views/common.view";
-import { CustomMigrationTarget } from "../../administration/custom-migration-targets/custom-migration-target";
+import * as commonView from "../../../views/common.view";
 
 export class Analysis extends Application {
     name: string;
@@ -368,8 +369,12 @@ export class Analysis extends Application {
     }
 
     openReport() {
-        // TODO: Update once the new reports feature is implemented
-        return;
+        sidedrawerTab(this.name, "Reports");
+        clickByText(button, "View analysis details");
+        cy.wait(2*SEC);
+        clickByText(button, "Close");
+        cy.wait(2*SEC);
+        commonView.sideDrawer.closeDrawer;
     }
 
     downloadReport(type: ReportTypeSelectors) {
@@ -390,9 +395,11 @@ export class Analysis extends Application {
 
     openAnalysisDetails() {
         cy.wait(2000);
-        performRowActionByIcon(this.name, kebabMenu);
+        sidedrawerTab(this.name, "Reports");
         clickByText(button, analysisDetails);
-        cy.wait(2000);
+        cy.wait(2*SEC);
+        commonView.sideDrawer.closeDrawer;
+        cy.wait(5*SEC);
     }
 
     manageCredentials(sourceCred?: string, mavenCred?: string): void {
