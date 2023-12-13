@@ -17,6 +17,9 @@ limitations under the License.
 
 import {
     clearAllFilters,
+    createMultipleStakeholderGroups,
+    createMultipleStakeholders,
+    createMultipleTags,
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
@@ -29,15 +32,37 @@ import * as data from "../../../../../utils/data_utils";
 import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
 import { AppDependency } from "../../../../types/types";
 import { randomWordGenerator } from "../../../../../utils/data_utils";
+import { Archetype } from "../../../../models/migration/archetypes/archetype";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
+import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
+import { Tag } from "../../../../models/migration/controls/tags";
 
 let applicationsList: Array<Analysis> = [];
 let businessService: BusinessServices;
+let archetype: Archetype;
+let stakeholders: Stakeholders[];
+let stakeholderGroups: Stakeholdergroups[];
+let tags: Tag[];
+let tagNames: string[];
 
 describe(["@tier2"], "Dependency filtering", () => {
     before("Login", function () {
         login();
         businessService = new BusinessServices(data.getCompanyName(), data.getDescription());
         businessService.create();
+        stakeholders = createMultipleStakeholders(2);
+        stakeholderGroups = createMultipleStakeholderGroups(2);
+        tags = createMultipleTags(2);
+        tagNames = tags.map((tag) => tag.name);
+        archetype = new Archetype(
+            data.getRandomWord(8),
+            [tagNames[0]],
+            [tagNames[1]],
+            null,
+            stakeholders,
+            stakeholderGroups
+        );
+        archetype.create();
     });
 
     beforeEach("Load data", function () {
@@ -74,6 +99,16 @@ describe(["@tier2"], "Dependency filtering", () => {
         // Negative test, filtering by not existing data
         Dependencies.applyFilter(dependencyFilter.appName, randomWordGenerator(6));
         cy.get("tr").should("contain", "No data available");
+        clearAllFilters();
+    });
+
+    it("Filtering dependencies by Archetype", function () {
+        Dependencies.applyFilter(dependencyFilter.archetype, archetype.name);
+        this.analysisData["source_analysis_on_bookserverapp"]["dependencies"].forEach(
+            (dependency: AppDependency) => {
+                Dependencies.validateFilter(dependency);
+            }
+        );
         clearAllFilters();
     });
 
@@ -132,7 +167,11 @@ describe(["@tier2"], "Dependency filtering", () => {
     });
 
     after("Perform test data clean up", function () {
+        archetype.delete();
         deleteByList(applicationsList);
+        deleteByList(stakeholders);
+        deleteByList(stakeholderGroups);
+        deleteByList(tags);
         businessService.delete();
     });
 });
