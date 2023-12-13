@@ -31,6 +31,7 @@ import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { Tag } from "../../../models/migration/controls/tags";
 import { successAlertMessage } from "../../../views/common.view";
 import * as data from "../../../../utils/data_utils";
+import { getRandomWord } from "../../../../utils/data_utils";
 
 let stakeholders: Stakeholders[];
 let stakeholderGroups: Stakeholdergroups[];
@@ -44,8 +45,9 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
         tags = createMultipleTags(2);
     });
 
-    // Automates Polarion MTA-395
     it("Archetype CRUD operations", function () {
+        // Automates Polarion MTA-395
+
         const archetype = new Archetype(
             data.getRandomWord(8),
             [tags[0].name],
@@ -78,6 +80,43 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
             true
         );
         notExists(archetype.name);
+    });
+
+    it("Duplicate archetype", function () {
+        // Automates Polarion MTA-399
+
+        const archetype = new Archetype(
+            data.getRandomWord(8),
+            [tags[0].name],
+            [tags[1].name],
+            null,
+            stakeholders,
+            stakeholderGroups
+        );
+
+        cy.log(`Tags: ${archetype.criteriaTags[0]}`);
+
+        archetype.create();
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success alert:Archetype ${archetype.name} was successfully created.`,
+            true
+        );
+        exists(archetype.name);
+
+        const archetypeDuplicate = archetype.duplicate(getRandomWord(6));
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success alert:Archetype ${archetypeDuplicate.name} was successfully created.`,
+            true
+        );
+        exists(archetypeDuplicate.name);
+
+        archetype.delete();
+        archetypeDuplicate.delete();
+
+        notExists(archetype.name);
+        notExists(archetypeDuplicate.name);
     });
 
     after("Clear test data", function () {

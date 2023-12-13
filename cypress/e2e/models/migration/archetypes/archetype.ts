@@ -23,8 +23,6 @@ import {
     submitForm,
     click,
     clickKebabMenuOptionArchetype,
-    clickJs,
-    clickTab,
 } from "../../../../utils/utils";
 import { legacyPathfinder, migration, SEC, tdTag, trTag } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
@@ -32,7 +30,6 @@ import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
 import * as archetype from "../../../views/archetype.view";
 import * as commonView from "../../../views/common.view";
-import { rightSideMenu } from "../../../views/analysis.view";
 import { Assessment } from "../applicationinventory/assessment";
 
 export interface Archetype {
@@ -129,8 +126,8 @@ export class Archetype {
             if (this.description) this.fillDescription(this.description);
             if (this.stakeholders) this.selectStakeholders(this.stakeholders);
             if (this.stakeholderGroups) this.selectStakeholderGroups(this.stakeholderGroups);
+            if (this.comments) this.fillComment(this.comments);
         }
-        if (this.comments) this.fillComment(this.comments);
         submitForm();
     }
 
@@ -238,5 +235,50 @@ export class Archetype {
     validateReviewFields(): void {
         Archetype.open(true);
         Assessment.validateReviewFields(this.name, "Archetype");
+    }
+
+    duplicate(
+        name?: string,
+        criteriaTags?: string[],
+        archetypeTags?: string[],
+        description?: string,
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[],
+        comments?: string,
+        cancel = false
+    ) {
+        clickKebabMenuOptionArchetype(this.name, "Duplicate");
+
+        if (cancel) {
+            cancelForm();
+            return;
+        }
+
+        // if a new parameter is passed then fill it, else just take the old one and assign to the peer parameter in the new duplicated object
+        name ? this.fillName(name) : (name = `${this.name} (duplicate)`);
+        criteriaTags ? this.selectCriteriaTags(criteriaTags) : (criteriaTags = this.criteriaTags);
+        archetypeTags
+            ? this.selectArchetypeTags(archetypeTags)
+            : (archetypeTags = this.archetypeTags);
+        description ? this.fillDescription(description) : (description = this.description);
+        stakeholders ? this.selectStakeholders(stakeholders) : (stakeholders = this.stakeholders);
+        stakeholderGroups
+            ? this.selectStakeholderGroups(stakeholderGroups)
+            : (stakeholderGroups = this.stakeholderGroups);
+        comments ? this.fillComment(comments) : (comments = this.comments);
+
+        const duplicatedArchetype = new Archetype(
+            name,
+            criteriaTags,
+            archetypeTags,
+            description,
+            stakeholders,
+            stakeholderGroups,
+            comments
+        );
+
+        submitForm();
+
+        return duplicatedArchetype;
     }
 }
