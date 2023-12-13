@@ -291,5 +291,4 @@ export class Assessment {
         cy.get(commonView.sideDrawer.riskValue).contains(risk);
         click(commonView.sideDrawer.closeDrawer);
     }
-
 }

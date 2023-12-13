@@ -40,7 +40,9 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
             "contain",
             legacyQuestionnaire
         );
-        cy.exec("cp cypress/downloads/questionnaire-1.yaml questionnaire_import/questionnaire-1.yaml").then((result) => {
+        cy.exec(
+            "cp cypress/downloads/questionnaire-1.yaml questionnaire_import/questionnaire-1.yaml"
+        ).then((result) => {
             cy.log(result.stdout);
         });
         // Polarion TC MTA-423

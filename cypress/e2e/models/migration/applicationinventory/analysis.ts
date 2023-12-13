@@ -371,9 +371,9 @@ export class Analysis extends Application {
     openReport() {
         sidedrawerTab(this.name, "Reports");
         clickByText(button, "View analysis details");
-        cy.wait(2*SEC);
+        cy.wait(2 * SEC);
         clickByText(button, "Close");
-        cy.wait(2*SEC);
+        cy.wait(2 * SEC);
         commonView.sideDrawer.closeDrawer;
     }
 
@@ -397,9 +397,9 @@ export class Analysis extends Application {
         cy.wait(2000);
         sidedrawerTab(this.name, "Reports");
         clickByText(button, analysisDetails);
-        cy.wait(2*SEC);
+        cy.wait(2 * SEC);
         commonView.sideDrawer.closeDrawer;
-        cy.wait(5*SEC);
+        cy.wait(5 * SEC);
     }
 
     manageCredentials(sourceCred?: string, mavenCred?: string): void {
