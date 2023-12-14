@@ -83,7 +83,7 @@ describe(["@tier2", "@rhsso"], "1 Bug: Migrator RBAC operations", () => {
         Analysis.validateAnalyzeButton(this.rbacRules);
     });
 
-    it("BUG MTA-1640 - Migrator, validate content of application kebab menu", function () {
+    it("Migrator, validate content of application kebab menu", function () {
         application.validateAppContextMenu(this.rbacRules);
     });
 
