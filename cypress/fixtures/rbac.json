@@ -40,7 +40,7 @@
             "Delete": false,
             "Manage dependencies": true,
             "Manage credentials": false,
-            "Analysis details": true
+            "Analysis details": false
         }
     }
 }
