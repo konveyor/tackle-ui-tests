@@ -1,7 +1,7 @@
 import { click, clickByText, selectUserPerspective } from "../../../../utils/utils";
 import { administration, general } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
-import { switchToggle } from "../../../views/reports.view";
+import { switchToggle } from "../../../views/reportsTab.view";
 
 export class GeneralConfig {
     static fullUrl = Cypress.env("tackleUrl") + "/general";

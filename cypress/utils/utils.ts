@@ -90,7 +90,7 @@ import {
 import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../e2e/models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../e2e/models/administration/credentials/credentialsSourceControlKey";
-import { switchToggle } from "../e2e/views/reports.view";
+import { switchToggle } from "../e2e/views/reportsTab.view";
 import Chainable = Cypress.Chainable;
 import { MigrationWave } from "../e2e/models/migration/migration-waves/migration-wave";
 import { Jira } from "../e2e/models/administration/jira-connection/jira";
