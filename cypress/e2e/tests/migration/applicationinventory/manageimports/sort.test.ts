@@ -26,6 +26,7 @@ import {
     deleteApplicationTableRows,
     deleteAppImportsTableRows,
     clickOnSortButton,
+    deleteAllMigrationWaves,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
 import { SortType, applicationInventory } from "../../../../types/constants";
@@ -167,6 +168,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
     });
 
     after("Perform test data clean up", function () {
+        deleteAllMigrationWaves();
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
     });

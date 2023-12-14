@@ -17,31 +17,38 @@ limitations under the License.
 
 import {
     login,
-    clickByText,
     createMultipleStakeholders,
     createMultipleApplications,
-    selectUserPerspective,
     deleteByList,
+    deleteApplicationTableRows,
+    deleteAllMigrationWaves,
 } from "../../../../utils/utils";
-import { verifyApplicationRisk } from "../../../models/migration/reports/reports";
-import { navMenu } from "../../../views/menu.view";
-import { legacyPathfinder, migration, reports, SEC } from "../../../types/constants";
+import { legacyPathfinder } from "../../../types/constants";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { Application } from "../../../models/migration/applicationinventory/application";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { Reports } from "../../../models/migration/reports-tab/reports-tab";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let applicationsList: Array<Application> = [];
+const totalApplications = "8";
+const highRiskApps = 3;
+const mediumRiskApps = 1;
+const lowRiskApps = 2;
+const unknownRiskApps = 2;
 
-describe(["@tier2"], "Application risks tests", () => {
-    let riskType = ["low", "medium", "high"];
+let riskType = ["low", "medium", "high", "low", "high", "high"];
 
+describe(["@tier2"], "Reports tests", () => {
     before("Login and Create Test Data", function () {
         login();
+        AssessmentQuestionnaire.deleteAllQuesionnaire();
         AssessmentQuestionnaire.enable(legacyPathfinder);
+        deleteAllMigrationWaves();
+        deleteApplicationTableRows();
         stakeholdersList = createMultipleStakeholders(1);
-        applicationsList = createMultipleApplications(3);
-        for (let i = 0; i < applicationsList.length; i++) {
+        applicationsList = createMultipleApplications(8);
+        for (let i = 0; i < 6; i++) {
             // Perform assessment of application
             applicationsList[i].perform_assessment(riskType[i], stakeholdersList);
             applicationsList[i].verifyStatus("assessment", "Completed");
@@ -52,14 +59,14 @@ describe(["@tier2"], "Application risks tests", () => {
         }
     });
 
-    it("Application risk validation", function () {
-        selectUserPerspective(migration);
-        clickByText(navMenu, reports);
-        cy.wait(3 * SEC);
-
-        for (let i = 0; i < 3; i++) {
-            verifyApplicationRisk(riskType[i], applicationsList[i].name);
-        }
+    it("Number of Application risk validation", function () {
+        Reports.verifyRisk(
+            highRiskApps,
+            mediumRiskApps,
+            lowRiskApps,
+            unknownRiskApps,
+            totalApplications
+        );
     });
 
     after("Perform test data clean up", function () {

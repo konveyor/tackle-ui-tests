@@ -24,6 +24,7 @@ import {
     deleteAppImportsTableRows,
     notExists,
     deleteByList,
+    deleteAllMigrationWaves,
 } from "../../../../../utils/utils";
 
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
@@ -83,6 +84,7 @@ describe(["@tier2"], "Operations after application import", () => {
     });
 
     after("Perform test data clean up", function () {
+        deleteAllMigrationWaves();
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
         deleteByList(stakeholders);
