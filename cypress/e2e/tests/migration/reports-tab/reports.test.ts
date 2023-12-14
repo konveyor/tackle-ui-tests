@@ -21,6 +21,7 @@ import {
     createMultipleApplications,
     deleteByList,
     deleteApplicationTableRows,
+    deleteAllMigrationWaves,
 } from "../../../../utils/utils";
 import { legacyPathfinder } from "../../../types/constants";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
@@ -36,46 +37,29 @@ const mediumRiskApps = 1;
 const lowRiskApps = 2;
 const unknownRiskApps = 2;
 
-describe(["@tier2"], "Application risks tests", () => {
+let riskType = ["low", "medium", "high", "low", "high", "high"];
+
+describe(["@tier2"], "Reports tests", () => {
     before("Login and Create Test Data", function () {
         login();
         AssessmentQuestionnaire.deleteAllQuesionnaire();
         AssessmentQuestionnaire.enable(legacyPathfinder);
+        deleteAllMigrationWaves();
         deleteApplicationTableRows();
         stakeholdersList = createMultipleStakeholders(1);
-        applicationsList = createMultipleApplications(5);
-        for (let i = 0; i < highRiskApps; i++) {
+        applicationsList = createMultipleApplications(8);
+        for (let i = 0; i < 6; i++) {
             // Perform assessment of application
-            applicationsList[i].perform_assessment("high", stakeholdersList);
+            applicationsList[i].perform_assessment(riskType[i], stakeholdersList);
             applicationsList[i].verifyStatus("assessment", "Completed");
 
             // Perform application review
-            applicationsList[i].perform_review("high");
-            applicationsList[i].verifyStatus("review", "Completed");
-        }
-
-        for (let i = 0; i < mediumRiskApps; i++) {
-            // Perform assessment of application
-            applicationsList[i].perform_assessment("medium", stakeholdersList);
-            applicationsList[i].verifyStatus("assessment", "Completed");
-
-            // Perform application review
-            applicationsList[i].perform_review("medium");
-            applicationsList[i].verifyStatus("review", "Completed");
-        }
-
-        for (let i = 0; i < lowRiskApps; i++) {
-            // Perform assessment of application
-            applicationsList[i].perform_assessment("low", stakeholdersList);
-            applicationsList[i].verifyStatus("assessment", "Completed");
-
-            // Perform application review
-            applicationsList[i].perform_review("low");
+            applicationsList[i].perform_review(riskType[i]);
             applicationsList[i].verifyStatus("review", "Completed");
         }
     });
 
-    it("Application risk validation", function () {
+    it("Number of Application risk validation", function () {
         Reports.verifyRisk(
             highRiskApps,
             mediumRiskApps,

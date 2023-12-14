@@ -105,6 +105,10 @@ import {
     tagFilterName,
 } from "../e2e/views/issue.view";
 import { Archetype } from "../e2e/models/migration/archetypes/archetype";
+import {
+    MigrationWaveView,
+    getSpecialMigrationWavesTableSelector,
+} from "../e2e/views/migration-wave.view";
 
 const { _ } = Cypress;
 
@@ -1300,6 +1304,28 @@ export function deleteApplicationTableRows(): void {
     navigate_to_application_inventory();
     selectItemsPerPage(100);
     deleteAllRows();
+}
+
+export function deleteAllMigrationWaves() {
+    MigrationWave.open();
+    selectItemsPerPage(100);
+    // This method if for pages that have delete button inside Kebab menu
+    // like Applications and Imports page
+    isTableEmpty().then((empty) => {
+        if (!empty) {
+            cy.get("tbody tr").then(($rows) => {
+                for (let i = 0; i < $rows.length; i++) {
+                    cy.get(MigrationWaveView.actionsButton, { timeout: 10000 }).first().click();
+                    cy.contains("Delete").click();
+                    cy.get(commonView.confirmButton).click();
+                    cy.wait(5000);
+                    isTableEmpty().then((empty) => {
+                        if (empty) return;
+                    });
+                }
+            });
+        }
+    });
 }
 
 export function deleteAppImportsTableRows() {
