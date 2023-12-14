@@ -16,6 +16,7 @@ import {
     migration,
     SEC,
     singleApplication,
+    tdTag,
     trTag,
 } from "../../../../types/constants";
 import { navMenu } from "../../../../views/menu.view";
@@ -106,5 +107,17 @@ export class Issues {
             clickByText(span, filterValue);
             click(selector);
         }
+    }
+
+    public static unfold(name: string) {
+        cy.contains(tdTag, name)
+            .closest(trTag)
+            .within(() => {
+                cy.get("[id^=expandable]").then(($button) => {
+                    if (!$button.hasClass("pf-m-expanded")) {
+                        $button.trigger("click");
+                    }
+                });
+            });
     }
 }
