@@ -25,7 +25,7 @@ import { analysisDetailsEditor } from "../../../../views/analysis.view";
 let source_credential: CredentialsSourceControlUsername;
 let application: Analysis;
 
-describe(["@tier2"], "Source Analysis", () => {
+describe(["@tier2"], "Bug MTA-1890: Source Analysis", () => {
     before("Login", function () {
         login();
 
@@ -51,7 +51,7 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Exclude a package in analysis", function () {
+    it("Bug MTA-1890: Exclude a package in analysis", function () {
         const analysisData = this.analysisData["analysis_for_exclude_packages"];
         application = new Analysis(
             getRandomApplicationData("testapp-excludePackages", {

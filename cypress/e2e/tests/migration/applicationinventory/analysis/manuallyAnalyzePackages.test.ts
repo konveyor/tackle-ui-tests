@@ -25,7 +25,7 @@ import { analysisDetailsEditor } from "../../../../views/analysis.view";
 let source_credential: CredentialsSourceControlUsername;
 let application: Analysis;
 
-describe(["@tier2"], "Select the list of packages to be analyzed manually", () => {
+describe(["@tier2"], "Bug MTA-1890: Select the list of packages to be analyzed manually", () => {
     before("Login", function () {
         login();
         // Create source Credentials
@@ -50,7 +50,7 @@ describe(["@tier2"], "Select the list of packages to be analyzed manually", () =
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Analyze the packages manually with excluded packages", function () {
+    it("Bug MTA-1890: Analyze the packages manually with excluded packages", function () {
         const analysisData = this.analysisData["analysis_for_manuallyAnalyzePackages"];
         application = new Analysis(
             getRandomApplicationData("testapp-excludePackages", {
