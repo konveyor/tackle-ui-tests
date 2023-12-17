@@ -120,4 +120,37 @@ export class Issues {
                 });
             });
     }
+
+    public static validateAllFields(issue: AppIssue): void {
+        Issues.unfold(issue.name);
+        Issues.validateTotalAffectedApps();
+        Issues.validateTarget(issue.targets);
+        Issues.validateSource(issue.source);
+    }
+
+    private static validateTotalAffectedApps(): void {
+        cy.contains("h4", "Total affected applications")
+            .next("div")
+            .within(() => {
+                cy.contains(button, /\d - View affected applications/);
+            });
+    }
+
+    private static validateTarget(targets: string[]): void {
+        cy.contains("h4", "Target technologies")
+            .next("div")
+            .within(() => {
+                targets.forEach((currentTarget) => {
+                    cy.contains(span, currentTarget);
+                });
+            });
+    }
+
+    private static validateSource(source: string): void {
+        cy.contains("h4", "Source technologies")
+            .next("div")
+            .within(() => {
+                cy.contains("div", source);
+            });
+    }
 }

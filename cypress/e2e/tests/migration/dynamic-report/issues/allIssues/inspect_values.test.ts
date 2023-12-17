@@ -16,11 +16,11 @@ describe(["@tier2"], "Issues filtering", () => {
         });
     });
 
-    it("", function () {
+    it("Testing issue content", function () {
         Issues.openList();
         let issueList = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
         issueList.forEach((issue: AppIssue) => {
-            Issues.unfold(issue.name);
+            Issues.validateAllFields(issue);
         });
     });
 });
