@@ -12,7 +12,10 @@
                 "source": "None",
                 "targets": ["cloud-readiness"],
                 "effort": 1,
-                "affectedFiles": 1
+                "affectedFiles": 1,
+                "ruleSet": "cloud-readiness",
+                "rule": "local-storage-00001",
+                "labels": ["konveyor.io/source", "storage"]
             }
         ],
         "dependencies": [
