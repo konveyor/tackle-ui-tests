@@ -465,6 +465,7 @@ export class Application {
         Issues.openSingleApplication(this.name);
         appIssues.forEach((currentIssue) => {
             validateSingleApplicationIssue(currentIssue);
+            Issues.validateAllFields(currentIssue);
         });
     }
 

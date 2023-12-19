@@ -29,7 +29,7 @@ import {
     tagFilterName,
 } from "../../../../views/issue.view";
 import { AppIssue } from "../../../../types/types";
-import { liTag, searchButton, searchInput, span } from "../../../../views/common.view";
+import { div, liTag, searchButton, searchInput, span } from "../../../../views/common.view";
 
 export class Issues {
     /** Contains URL of issues web page */
@@ -122,35 +122,37 @@ export class Issues {
     }
 
     public static validateAllFields(issue: AppIssue): void {
+        const sections = {
+            totalAffectedApps: "Total affected",
+            targetTechnologies: "Target technologies",
+            sourceTechnologies: "Source technologies",
+            ruleSet: "Rule set",
+            rule: /^Rule$/,
+            labels: "Labels",
+        };
+
         Issues.unfold(issue.name);
-        Issues.validateTotalAffectedApps();
-        Issues.validateTarget(issue.targets);
-        Issues.validateSource(issue.source);
+        Issues.validateSection(sections.totalAffectedApps, button, /\d - View affected /);
+        Issues.validateSection(sections.targetTechnologies, span, issue.targets);
+        Issues.validateSection(sections.sourceTechnologies, div, issue.source);
+        Issues.validateSection(sections.ruleSet, div, issue.ruleSet);
+        Issues.validateSection(sections.rule, div, issue.rule);
+        Issues.validateSection(sections.labels, span, issue.labels);
     }
 
-    private static validateTotalAffectedApps(): void {
-        cy.contains("h4", "Total affected applications")
+    private static validateSection(
+        title: string | RegExp,
+        contentSelector: string,
+        content: string | string[] | RegExp
+    ): void {
+        cy.contains("h4", title)
             .next("div")
             .within(() => {
-                cy.contains(button, /\d - View affected applications/);
-            });
-    }
-
-    private static validateTarget(targets: string[]): void {
-        cy.contains("h4", "Target technologies")
-            .next("div")
-            .within(() => {
-                targets.forEach((currentTarget) => {
-                    cy.contains(span, currentTarget);
-                });
-            });
-    }
-
-    private static validateSource(source: string): void {
-        cy.contains("h4", "Source technologies")
-            .next("div")
-            .within(() => {
-                cy.contains("div", source);
+                if (Array.isArray(content)) {
+                    content.forEach((item) => cy.contains(contentSelector, item));
+                } else {
+                    cy.contains(contentSelector, content);
+                }
             });
     }
 }

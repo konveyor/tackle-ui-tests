@@ -196,6 +196,9 @@ export type AppIssue = {
     effort: number;
     affectedFiles: number;
     tags?: string[];
+    ruleSet?: string;
+    rule?: string;
+    labels?: string[];
 };
 
 export type AppDependency = {
