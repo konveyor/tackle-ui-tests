@@ -40,8 +40,7 @@ const applications: Application[] = [];
 let migrationWave: MigrationWave;
 let projectName = "";
 
-// Automates Polarion TC 414 & 415
-describe(["@tier1"], "Export Migration Wave to Jira Cloud", function () {
+describe(["@tier1"], "Unlink application from exported migration waves", function () {
     before("Create test data", function () {
         if (
             !Cypress.env("jira_atlassian_cloud_project") ||
@@ -81,6 +80,7 @@ describe(["@tier1"], "Export Migration Wave to Jira Cloud", function () {
         migrationWave.create();
     });
 
+    // Automates Polarion TC 414
     it("Export to Jira Cloud and unlink applications from wave", function () {
         exportWave().then(() => {
             migrationWave.clickWaveStatus();
@@ -89,6 +89,7 @@ describe(["@tier1"], "Export Migration Wave to Jira Cloud", function () {
         });
     });
 
+    // Automates Polarion TC 415
     it("Export to Jira Cloud and unlink applications from App Inventory", function () {
         exportWave().then(() => {
             applications.forEach((app) => app.unlinkJiraTicket());
