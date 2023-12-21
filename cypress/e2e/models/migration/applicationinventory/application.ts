@@ -76,6 +76,7 @@ import {
     clickWithin,
     validateSingleApplicationIssue,
     checkSuccessAlert,
+    validateTextPresence,
 } from "../../../../utils/utils";
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
 import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
@@ -467,6 +468,11 @@ export class Application {
             validateSingleApplicationIssue(currentIssue);
             Issues.validateAllFields(currentIssue);
         });
+    }
+
+    validateAffected(appIssue: AppIssue): void {
+        Issues.openAffectedApplications(appIssue.name);
+        validateTextPresence('td[data-label="Name"]', this.name);
     }
 
     editApplicationFromApplicationProfile(): void {
