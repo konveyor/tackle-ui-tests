@@ -360,6 +360,22 @@ export class MigrationWave {
         this.removeApplicationsFromModel(applications);
     }
 
+    public unlinkApplications(applications: Application[]) {
+        this.isExpanded().then((expanded) => {
+            expect(expanded).to.be.true;
+        });
+
+        applications.forEach((application) => {
+            cy.contains(application.name)
+                .parent()
+                .within(() => {
+                    cy.get(MigrationWaveView.unlinkApplicationButton).click();
+                    // Need to wait until the application is unlinked from Jira and reflected in the wave
+                    cy.wait(3 * SEC);
+                });
+        });
+    }
+
     private removeApplicationsFromModel(applicationsList) {
         this.applications = this.applications.filter(
             (application) => !applicationsList.some((app) => app.name === application.name)

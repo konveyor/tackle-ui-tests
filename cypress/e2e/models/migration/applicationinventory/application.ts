@@ -742,6 +742,15 @@ export class Application {
         }
     }
 
+    unlinkJiraTicket(): void {
+        Application.open();
+        this.applicationDetailsTab(details);
+        cy.contains("small", "Ticket").next().children("button.pf-m-link").eq(0).click();
+        // Need to wait until the application is unlinked from Jira and reflected in the wave
+        cy.wait(3 * SEC);
+        this.closeApplicationDetails();
+    }
+
     // Checks if app name is displayed in the dropdown under respective dependency
     protected dependencyExists(dependencyType: string, appName: string): void {
         cy.get("div")
