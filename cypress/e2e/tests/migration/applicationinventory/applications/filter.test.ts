@@ -265,7 +265,6 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
     });
     it("Risk filter validations", function () {
-        // For application must have Binary group,artifact and version
         const application = new Application(getRandomApplicationData());
         const application1 = new Application(getRandomApplicationData());
         application.create();
@@ -282,16 +281,14 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
 
-        // Apply artifact filter check with associated artifact field
-        // Check application exists and applicationList[0] doesn't exist
+        // Apply search filter Risk - Low
         applySearchFilter(risk, "Low");
         cy.wait(2000);
         exists(application.name);
         notExists(application1.name);
         clickByText(button, clearAllFilters);
 
-        // Apply artifact filter check with 'No associated artifact' field
-        // Check applicationList[0] exists and application doesn't exist
+        // apply search filter Risk - Unknown
         applySearchFilter(risk, "Unknown");
         cy.wait(2000);
         exists(application1.name);
