@@ -62,7 +62,6 @@ let businessServicesList: Array<BusinessServices> = [];
 let tagList: Array<Tag> = [];
 let stakeholders: Array<Stakeholders> = [];
 
-
 describe(["@tier2"], "Application inventory filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
@@ -282,8 +281,6 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         application.perform_assessment("low", stakeholders);
         cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
-
-
 
         // Apply artifact filter check with associated artifact field
         // Check application exists and applicationList[0] doesn't exist

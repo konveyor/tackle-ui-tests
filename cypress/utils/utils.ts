@@ -458,7 +458,7 @@ export function applySearchFilter(
         artifact,
         owner,
     ].includes(filterName);
-    const isSpecialKnownFilter = [tag, credentialType,risk,name].includes(filterName);
+    const isSpecialKnownFilter = [tag, credentialType, risk, name].includes(filterName);
     let filterValue = [];
     if (!Array.isArray(searchText)) {
         filterValue = [searchText];
