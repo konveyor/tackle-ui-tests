@@ -53,6 +53,7 @@ import { CredentialsMaven } from "../../../../models/administration/credentials/
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Tag } from "../../../../models/migration/controls/tags";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
+import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 
 var invalidSearchInput = String(data.getRandomNumber());
 let source_credential;
@@ -61,6 +62,7 @@ let applicationsList: Array<Application> = [];
 let businessServicesList: Array<BusinessServices> = [];
 let tagList: Array<Tag> = [];
 let stakeholders: Array<Stakeholders> = [];
+const fileName = "Legacy Pathfinder";
 
 describe(["@tier2"], "Application inventory filter validations", function () {
     before("Login and Create Test Data", function () {
@@ -69,6 +71,8 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         //Create Multiple Application with Business service and Tags
         let businessServicesList = createMultipleBusinessServices(2);
         stakeholders = createMultipleStakeholders(1);
+
+        AssessmentQuestionnaire.enable(fileName);
 
         let tagList = createMultipleTags(2);
         applicationsList = createMultipleApplicationsWithBSandTags(
