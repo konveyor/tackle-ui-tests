@@ -271,7 +271,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         application1.create();
 
         cy.get("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Check application exists on the page
         exists(application.name);
@@ -283,14 +283,14 @@ describe(["@tier2"], "Application inventory filter validations", function () {
 
         // Apply search filter Risk - Low
         applySearchFilter(risk, "Low");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         exists(application.name);
         notExists(application1.name);
         clickByText(button, clearAllFilters);
 
         // apply search filter Risk - Unknown
         applySearchFilter(risk, "Unknown");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         exists(application1.name);
         notExists(application.name);
         clickByText(button, clearAllFilters);
