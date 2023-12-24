@@ -12,6 +12,7 @@
                 "source": "None",
                 "targets": ["cloud-readiness"],
                 "effort": 1,
+                "incidents": 2,
                 "affectedFiles": 1,
                 "ruleSet": "cloud-readiness",
                 "rule": "local-storage-00001",

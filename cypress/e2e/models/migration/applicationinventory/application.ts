@@ -77,6 +77,8 @@ import {
     validateSingleApplicationIssue,
     checkSuccessAlert,
     validateTextPresence,
+    validateNumberPresence,
+    performWithin,
 } from "../../../../utils/utils";
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
 import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
@@ -472,7 +474,45 @@ export class Application {
 
     validateAffected(appIssue: AppIssue): void {
         Issues.openAffectedApplications(appIssue.name);
-        validateTextPresence('td[data-label="Name"]', this.name);
+        this.validateAffectedValues(appIssue);
+        this.validateAffectedFiles(appIssue);
+    }
+
+    private validateAffectedValues(appIssue: AppIssue): void {
+        performWithin(this.name, () => {
+            validateTextPresence('td[data-label="Name"]', this.name);
+            if (this.description) {
+                validateTextPresence('td[data-label="Description"]', this.description);
+            }
+            if (this.business) {
+                validateTextPresence('td[data-label="Business serice"]', this.business);
+            }
+            // Validating total effort for fixing issue, it is basic effort from main issue page multiplied on incidents amount
+            validateNumberPresence('td[data-label="Effort"]', appIssue.effort * appIssue.incidents);
+            validateNumberPresence('td[data-label="Incidents"]', appIssue.incidents);
+        });
+    }
+
+    validateAffectedFiles(appIssue: AppIssue): void {
+        this.selectApplicationRow();
+        cy.get("#page-drawer-content").within(() => {
+            cy.wait(SEC);
+            // Check amount of rows in the file list
+            cy.get("tbody").find("tr").should("have.length", appIssue.affectedFiles);
+            cy.get("tbody")
+                .find("tr")
+                .each(($row) => {
+                    cy.wrap($row).within(() => {
+                        cy.get('td[data-label="File"]').should("have.descendants", button);
+                        validateNumberPresence('td[data-label="Incidents"]', appIssue.incidents);
+                        validateNumberPresence(
+                            'td[data-label="Effort"]',
+                            appIssue.effort * appIssue.incidents
+                        );
+                        // click(button);
+                    });
+                });
+        });
     }
 
     editApplicationFromApplicationProfile(): void {
