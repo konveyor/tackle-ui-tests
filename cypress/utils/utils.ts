@@ -50,6 +50,8 @@ import {
     migration,
     businessServiceLower,
     issueFilter,
+    risk,
+    name,
 } from "../e2e/types/constants";
 import {
     actionButton,
@@ -456,7 +458,7 @@ export function applySearchFilter(
         artifact,
         owner,
     ].includes(filterName);
-    const isSpecialKnownFilter = [tag, credentialType].includes(filterName);
+    const isSpecialKnownFilter = [tag, credentialType,risk,name].includes(filterName);
     let filterValue = [];
     if (!Array.isArray(searchText)) {
         filterValue = [searchText];
