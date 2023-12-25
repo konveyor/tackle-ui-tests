@@ -42,6 +42,7 @@ import * as data from "../../../../../utils/data_utils";
 import { Tag } from "../../../../models/migration/controls/tags";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { Archetype } from "../../../../models/migration/archetypes/archetype";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let stakeholderGroupsList: Array<Stakeholdergroups> = [];
@@ -153,6 +154,76 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         cy.get(stakeholdergroupsSelect).should("have.value", "");
         clickByText(button, "Cancel");
         cy.get(continueButton).click();
+    });
+
+    it("Validates association application tags to  archetype tags ", function () {
+        //automates polarion MTA-401
+        //create archytype
+        tagList = createMultipleTags(3);
+        const archetype = new Archetype(
+            data.getRandomWord(8),
+            [tagList[0].name, tagList[2].name],
+            [tagList[1].name],
+            null
+        );
+        archetype.create();
+        cy.wait(2 * SEC);
+
+        //Create 3 appdatas containing different tags
+        let appdata1 = {
+            name: data.getAppName(),
+            description: data.getDescription(),
+            tags: [tagList[0].name, tagList[2].name],
+            comment: data.getDescription(),
+        };
+        let appdata2 = {
+            name: data.getAppName(),
+            description: data.getDescription(),
+            tags: [tagList[0].name, tagList[1].name],
+            comment: data.getDescription(),
+        };
+        let appdata3 = {
+            name: data.getAppName(),
+            description: data.getDescription(),
+            tags: [tagList[0].name, tagList[2].name],
+            comment: data.getDescription(),
+        };
+
+        //assign different appdata to each app and check if tags are present
+        const application1 = new Application(appdata1);
+        applicationList.push(application1);
+        application1.create();
+        cy.get("@getApplication");
+        cy.wait(2 * SEC);
+        application1.applicationDetailsTab("Tags");
+        appdata1.tags.forEach((tag) => {
+            application1.tagAndCategoryExists(tag);
+        });
+
+        const application2 = new Application(appdata2);
+        applicationList.push(application2);
+        application2.create();
+        cy.get("@getApplication");
+        cy.wait(2 * SEC);
+        application2.applicationDetailsTab("Tags");
+        appdata2.tags.forEach((tag) => {
+            application2.tagAndCategoryExists(tag);
+        });
+
+        const application3 = new Application(appdata3);
+        applicationList.push(application3);
+        application3.create();
+        cy.get("@getApplication");
+        cy.wait(2 * SEC);
+        application3.applicationDetailsTab("Tags");
+        appdata3.tags.forEach((tag) => {
+            application3.tagAndCategoryExists(tag);
+        });
+
+        //validate app count on archytpe
+        archetype.getAssociatedAppsCount().then((appCount) => {
+            expect(appCount).to.equal(2);
+        });
     });
 
     after("Perform test data clean up", function () {

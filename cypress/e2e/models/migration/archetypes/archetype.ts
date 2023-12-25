@@ -281,4 +281,23 @@ export class Archetype {
 
         return duplicatedArchetype;
     }
+
+    getAssociatedAppsCount() {
+        Archetype.open();
+        return cy
+            .get(tdTag)
+            .contains(this.name)
+            .closest(trTag)
+            .find('[data-label="Applications"] p')
+            .invoke("text")
+            .then((text) => {
+                const numberMatch = text.match(/\d+/);
+                if (numberMatch) {
+                    const appCount = parseInt(numberMatch[0], 10);
+                    cy.wrap(appCount).as("appCount");
+                } else {
+                    cy.wrap(null).as("appCount");
+                }
+            });
+    }
 }
