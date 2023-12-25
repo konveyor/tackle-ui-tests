@@ -123,7 +123,6 @@ export class Issues {
         Issues.openList();
         performWithin(name, () => {
             cy.get(issueColumns.applications).within(() => {
-                // clickWithFocus(button);
                 click("a");
             });
         });

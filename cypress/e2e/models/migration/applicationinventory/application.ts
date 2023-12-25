@@ -495,12 +495,21 @@ export class Application {
 
     validateAffectedFiles(appIssue: AppIssue): void {
         this.selectApplicationRow();
+        this.validateAffectedFilesTable(appIssue);
+        this.validateAffectedFilesModal(appIssue);
+    }
+
+    private validateAffectedFilesTable(appIssue: AppIssue): void {
+        // Check amount of rows in the file list at right-side bar
+        cy.get('table[aria-label="Affected files table"] tbody > tr').should(
+            "have.length",
+            appIssue.affectedFiles
+        );
+        // validating content of files table
         cy.get("#page-drawer-content").within(() => {
             cy.wait(SEC);
-            // Check amount of rows in the file list
-            cy.get("tbody").find("tr").should("have.length", appIssue.affectedFiles);
             cy.get("tbody")
-                .find("tr")
+                .find(trTag)
                 .each(($row) => {
                     cy.wrap($row).within(() => {
                         cy.get('td[data-label="File"]').should("have.descendants", button);
@@ -509,10 +518,42 @@ export class Application {
                             'td[data-label="Effort"]',
                             appIssue.effort * appIssue.incidents
                         );
-                        // click(button);
                     });
                 });
         });
+    }
+
+    // Validating content of modal window with list of affected files and incidents
+    private validateAffectedFilesModal(appIssue: AppIssue): void {
+        // Iterating through affected files
+        for (let affectedFile = 0; affectedFile < appIssue.affectedFiles; affectedFile++) {
+            cy.get('td[data-label="File"]').within(() => {
+                click(button, false, true, affectedFile);
+            });
+            cy.wait(SEC);
+            cy.get("[id^=pf-modal-part-]")
+                .first()
+                .within(() => {
+                    // Checking amount of tabs for incidents in particular file
+                    cy.get("ul[role=tablist]").within(() => {
+                        cy.get("li").should("have.length", appIssue.incidents);
+                    });
+                    // Iterating through incidents list to click on each and validate content
+                    for (let incident = 0; incident < appIssue.incidents; incident++) {
+                        cy.get("ul[role=tablist]").within(() => {
+                            // Clicking on particular incident
+                            click(button, false, true, incident);
+                        });
+                        // Asserting that content of text field has at least 100 symbols
+                        cy.get("div.monaco-scrollable-element.editor-scrollable.vs-dark")
+                            .invoke("text")
+                            .then((text) => {
+                                expect(text.length).to.be.at.least(100);
+                            });
+                    }
+                    clickByText(button, "Close");
+                });
+        }
     }
 
     editApplicationFromApplicationProfile(): void {
