@@ -27,6 +27,7 @@ import {
     getRandomApplicationData,
     getRandomAnalysisData,
     notExists,
+    createMultipleStakeholders,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -40,6 +41,8 @@ import {
     git,
     artifact,
     name,
+    risk,
+    SEC,
 } from "../../../../types/constants";
 
 import * as data from "../../../../../utils/data_utils";
@@ -49,6 +52,8 @@ import { CredentialsSourceControlUsername } from "../../../../models/administrat
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Tag } from "../../../../models/migration/controls/tags";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
+import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 
 var invalidSearchInput = String(data.getRandomNumber());
 let source_credential;
@@ -56,6 +61,8 @@ let maven_credential;
 let applicationsList: Array<Application> = [];
 let businessServicesList: Array<BusinessServices> = [];
 let tagList: Array<Tag> = [];
+let stakeholders: Array<Stakeholders> = [];
+const fileName = "Legacy Pathfinder";
 
 describe(["@tier2"], "Application inventory filter validations", function () {
     before("Login and Create Test Data", function () {
@@ -63,6 +70,10 @@ describe(["@tier2"], "Application inventory filter validations", function () {
 
         //Create Multiple Application with Business service and Tags
         let businessServicesList = createMultipleBusinessServices(2);
+        stakeholders = createMultipleStakeholders(1);
+
+        AssessmentQuestionnaire.enable(fileName);
+
         let tagList = createMultipleTags(2);
         applicationsList = createMultipleApplicationsWithBSandTags(
             2,
@@ -257,10 +268,44 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         notExists(application.name);
         clickByText(button, clearAllFilters);
     });
+    it("Risk filter validations", function () {
+        const application = new Application(getRandomApplicationData());
+        const application1 = new Application(getRandomApplicationData());
+        application.create();
+        application1.create();
+
+        cy.get("@getApplication");
+        cy.wait(2 * SEC);
+
+        // Check application exists on the page
+        exists(application.name);
+        exists(application1.name);
+
+        application.perform_assessment("low", stakeholders);
+        cy.wait(2 * SEC);
+        application.verifyStatus("assessment", "Completed");
+
+        // Apply search filter Risk - Low
+        applySearchFilter(risk, "Low");
+        cy.wait(2 * SEC);
+        exists(application.name);
+        notExists(application1.name);
+        clickByText(button, clearAllFilters);
+
+        // apply search filter Risk - Unknown
+        applySearchFilter(risk, "Unknown");
+        cy.wait(2 * SEC);
+        exists(application1.name);
+        notExists(application.name);
+        clickByText(button, clearAllFilters);
+        application.delete();
+        application1.delete();
+    });
 
     after("Perform test data clean up", function () {
         deleteByList(tagList);
         deleteByList(businessServicesList);
         deleteByList(applicationsList);
+        deleteByList(stakeholders);
     });
 });
