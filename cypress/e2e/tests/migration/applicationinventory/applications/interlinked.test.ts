@@ -199,6 +199,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         appdata1.tags.forEach((tag) => {
             application1.tagAndCategoryExists(tag);
         });
+        application1.closeApplicationDetails();
 
         const application2 = new Application(appdata2);
         applicationList.push(application2);
@@ -209,6 +210,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         appdata2.tags.forEach((tag) => {
             application2.tagAndCategoryExists(tag);
         });
+        application2.closeApplicationDetails();
 
         const application3 = new Application(appdata3);
         applicationList.push(application3);
@@ -219,6 +221,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         appdata3.tags.forEach((tag) => {
             application3.tagAndCategoryExists(tag);
         });
+        application3.closeApplicationDetails();
 
         //validate app count on archytpe
         archetype.getAssociatedAppsCount().then((appCount) => {
