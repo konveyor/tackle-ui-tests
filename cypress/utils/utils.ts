@@ -1718,3 +1718,11 @@ export function closeModalWindow(): void {
 export function next(): void {
     clickByText(button, "Next");
 }
+
+export function performWithin(applicationName: string, actionFunction: () => void): void {
+    cy.contains(tdTag, applicationName)
+        .closest(trTag)
+        .within(() => {
+            actionFunction();
+        });
+}

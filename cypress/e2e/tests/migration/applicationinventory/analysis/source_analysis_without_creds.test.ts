@@ -24,6 +24,7 @@ import {
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { infoAlertMessage } from "../../../../views/common.view";
+import { AppIssue } from "../../../../types/types";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 
@@ -58,6 +59,11 @@ describe("Source Analysis without credentials", () => {
         checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
         application.verifyAnalysisStatus("Completed");
         application.validateIssues(this.analysisData["source_analysis_on_bookserverapp"]["issues"]);
+        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+            (currentIssue: AppIssue) => {
+                application.validateAffected(currentIssue);
+            }
+        );
     });
 
     after("Perform test data clean up", function () {

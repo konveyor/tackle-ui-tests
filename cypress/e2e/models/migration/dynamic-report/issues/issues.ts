@@ -3,6 +3,7 @@ import {
     clickByText,
     getUrl,
     inputText,
+    performWithin,
     selectFilter,
     selectItemsPerPage,
     selectUserPerspective,
@@ -16,7 +17,6 @@ import {
     migration,
     SEC,
     singleApplication,
-    tdTag,
     trTag,
 } from "../../../../types/constants";
 import { navMenu } from "../../../../views/menu.view";
@@ -109,16 +109,23 @@ export class Issues {
         }
     }
 
-    public static unfold(name: string) {
-        cy.contains(tdTag, name)
-            .closest(trTag)
-            .within(() => {
-                cy.get("[id^=expandable]").then(($button) => {
-                    if (!$button.hasClass("pf-m-expanded")) {
-                        $button.trigger("click");
-                    }
-                });
+    public static unfold(name: string): void {
+        performWithin(name, () => {
+            cy.get("[id^=expandable]").then(($button) => {
+                if (!$button.hasClass("pf-m-expanded")) {
+                    $button.trigger("click");
+                }
             });
+        });
+    }
+
+    public static openAffectedApplications(name: string): void {
+        Issues.openList();
+        performWithin(name, () => {
+            cy.get(issueColumns.applications).within(() => {
+                click("a");
+            });
+        });
     }
 
     public static validateAllFields(issue: AppIssue): void {

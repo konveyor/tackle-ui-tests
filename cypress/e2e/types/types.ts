@@ -194,6 +194,7 @@ export type AppIssue = {
     source: string;
     targets: string[];
     effort: number;
+    incidents: number;
     affectedFiles: number;
     tags?: string[];
     ruleSet?: string;

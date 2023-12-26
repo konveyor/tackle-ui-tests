@@ -76,6 +76,9 @@ import {
     clickWithin,
     validateSingleApplicationIssue,
     checkSuccessAlert,
+    validateTextPresence,
+    validateNumberPresence,
+    performWithin,
 } from "../../../../utils/utils";
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
 import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
@@ -467,6 +470,90 @@ export class Application {
             validateSingleApplicationIssue(currentIssue);
             Issues.validateAllFields(currentIssue);
         });
+    }
+
+    validateAffected(appIssue: AppIssue): void {
+        Issues.openAffectedApplications(appIssue.name);
+        this.validateAffectedValues(appIssue);
+        this.validateAffectedFiles(appIssue);
+    }
+
+    private validateAffectedValues(appIssue: AppIssue): void {
+        performWithin(this.name, () => {
+            validateTextPresence('td[data-label="Name"]', this.name);
+            if (this.description) {
+                validateTextPresence('td[data-label="Description"]', this.description);
+            }
+            if (this.business) {
+                validateTextPresence('td[data-label="Business serice"]', this.business);
+            }
+            // Validating total effort for fixing issue, it is basic effort from main issue page multiplied on incidents amount
+            validateNumberPresence('td[data-label="Effort"]', appIssue.effort * appIssue.incidents);
+            validateNumberPresence('td[data-label="Incidents"]', appIssue.incidents);
+        });
+    }
+
+    validateAffectedFiles(appIssue: AppIssue): void {
+        this.selectApplicationRow();
+        this.validateAffectedFilesTable(appIssue);
+        this.validateAffectedFilesModal(appIssue);
+    }
+
+    private validateAffectedFilesTable(appIssue: AppIssue): void {
+        // Check amount of rows in the file list at right-side bar
+        cy.get('table[aria-label="Affected files table"] tbody > tr').should(
+            "have.length",
+            appIssue.affectedFiles
+        );
+        // validating content of files table
+        cy.get("#page-drawer-content").within(() => {
+            cy.wait(SEC);
+            cy.get("tbody")
+                .find(trTag)
+                .each(($row) => {
+                    cy.wrap($row).within(() => {
+                        cy.get('td[data-label="File"]').should("have.descendants", button);
+                        validateNumberPresence('td[data-label="Incidents"]', appIssue.incidents);
+                        validateNumberPresence(
+                            'td[data-label="Effort"]',
+                            appIssue.effort * appIssue.incidents
+                        );
+                    });
+                });
+        });
+    }
+
+    // Validating content of modal window with list of affected files and incidents
+    private validateAffectedFilesModal(appIssue: AppIssue): void {
+        // Iterating through affected files
+        for (let affectedFile = 0; affectedFile < appIssue.affectedFiles; affectedFile++) {
+            cy.get('td[data-label="File"]').within(() => {
+                click(button, false, true, affectedFile);
+            });
+            cy.wait(SEC);
+            cy.get("[id^=pf-modal-part-]")
+                .first()
+                .within(() => {
+                    // Checking amount of tabs for incidents in particular file
+                    cy.get("ul[role=tablist]").within(() => {
+                        cy.get("li").should("have.length", appIssue.incidents);
+                    });
+                    // Iterating through incidents list to click on each and validate content
+                    for (let incident = 0; incident < appIssue.incidents; incident++) {
+                        cy.get("ul[role=tablist]").within(() => {
+                            // Clicking on particular incident
+                            click(button, false, true, incident);
+                        });
+                        // Asserting that content of text field has at least 100 symbols
+                        cy.get("div.monaco-scrollable-element.editor-scrollable.vs-dark")
+                            .invoke("text")
+                            .then((text) => {
+                                expect(text.length).to.be.at.least(100);
+                            });
+                    }
+                    clickByText(button, "Close");
+                });
+        }
     }
 
     editApplicationFromApplicationProfile(): void {
