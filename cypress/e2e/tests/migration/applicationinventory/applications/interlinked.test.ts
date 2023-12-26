@@ -66,95 +66,95 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    // it("Business service, tag update and delete dependency on application", function () {
-    //     businessServicesList = createMultipleBusinessServices(2);
-    //     tagList = createMultipleTags(2);
-    //     let appdata = {
-    //         name: data.getAppName(),
-    //         business: businessServicesList[0].name,
-    //         description: data.getDescription(),
-    //         tags: [tagList[0].name],
-    //         comment: data.getDescription(),
-    //     };
-    //     const application = new Application(appdata);
-    //     applicationList.push(application);
-    //     application.create();
-    //     cy.get("@getApplication");
-    //     cy.wait(2 * SEC);
+    it("Business service, tag update and delete dependency on application", function () {
+        businessServicesList = createMultipleBusinessServices(2);
+        tagList = createMultipleTags(2);
+        let appdata = {
+            name: data.getAppName(),
+            business: businessServicesList[0].name,
+            description: data.getDescription(),
+            tags: [tagList[0].name],
+            comment: data.getDescription(),
+        };
+        const application = new Application(appdata);
+        applicationList.push(application);
+        application.create();
+        cy.get("@getApplication");
+        cy.wait(2 * SEC);
 
-    //     application.applicationDetailsTab("Tags");
-    //     application.tagAndCategoryExists(tagList[0].name);
-    //     application.closeApplicationDetails();
+        application.applicationDetailsTab("Tags");
+        application.tagAndCategoryExists(tagList[0].name);
+        application.closeApplicationDetails();
 
-    //     // Remove the BS and tags
-    //     application.removeBusinessService();
-    //     tagList[0].delete();
-    //     deleteFromArrayByIndex(tagList, 0);
+        // Remove the BS and tags
+        application.removeBusinessService();
+        tagList[0].delete();
+        deleteFromArrayByIndex(tagList, 0);
 
-    //     // Navigate to application inventory
-    //     clickByText(navMenu, applicationInventory);
-    //     cy.wait(100);
-    //     cy.get("@getApplication");
+        // Navigate to application inventory
+        clickByText(navMenu, applicationInventory);
+        cy.wait(100);
+        cy.get("@getApplication");
 
-    //     // Assert that deleted business service is removed from application
-    //     application.getColumnText(businessColumnSelector, "");
-    //     cy.wait(100);
+        // Assert that deleted business service is removed from application
+        application.getColumnText(businessColumnSelector, "");
+        cy.wait(100);
 
-    //     // Assert that deleted tag is removed
-    //     application.applicationDetailsTab("Tags");
-    //     application.noTagExists();
-    //     application.closeApplicationDetails();
+        // Assert that deleted tag is removed
+        application.applicationDetailsTab("Tags");
+        application.noTagExists();
+        application.closeApplicationDetails();
 
-    //     application.edit({
-    //         business: businessServicesList[1].name,
-    //         tags: [tagList[1].name],
-    //     });
-    //     cy.get("@getApplication");
+        application.edit({
+            business: businessServicesList[1].name,
+            tags: [tagList[1].name],
+        });
+        cy.get("@getApplication");
 
-    //     // Assert that business service is updated
-    //     application.getColumnText(businessColumnSelector, businessServicesList[1].name);
-    //     cy.wait(SEC);
+        // Assert that business service is updated
+        application.getColumnText(businessColumnSelector, businessServicesList[1].name);
+        cy.wait(SEC);
 
-    //     // Assert that created tag exists
-    //     application.applicationDetailsTab("Tags");
-    //     application.tagAndCategoryExists(tagList[1].name);
-    //     application.closeApplicationDetails();
-    // });
+        // Assert that created tag exists
+        application.applicationDetailsTab("Tags");
+        application.tagAndCategoryExists(tagList[1].name);
+        application.closeApplicationDetails();
+    });
 
-    // it("Stakeholder and stakeholder group delete dependency on application", function () {
-    //     //Create application
-    //     let appdata = {
-    //         name: data.getAppName(),
-    //         description: data.getDescription(),
-    //         comment: data.getDescription(),
-    //     };
-    //     const application = new Application(appdata);
-    //     applicationList.push(application);
-    //     application.create();
-    //     cy.get("@getApplication");
-    //     cy.wait(2 * SEC);
-    //     // Perform assessment of application
-    //     application.perform_assessment("low", stakeholdersList, stakeholderGroupsList);
-    //     application.verifyStatus("assessment", "Completed");
+    it("Stakeholder and stakeholder group delete dependency on application", function () {
+        //Create application
+        let appdata = {
+            name: data.getAppName(),
+            description: data.getDescription(),
+            comment: data.getDescription(),
+        };
+        const application = new Application(appdata);
+        applicationList.push(application);
+        application.create();
+        cy.get("@getApplication");
+        cy.wait(2 * SEC);
+        // Perform assessment of application
+        application.perform_assessment("low", stakeholdersList, stakeholderGroupsList);
+        application.verifyStatus("assessment", "Completed");
 
-    //     // Delete the stakeholders, group and removing them from the list where they were added before
-    //     stakeholdersList[0].delete();
-    //     deleteFromArrayByIndex(stakeholdersList, 0);
-    //     stakeholderGroupsList[0].delete();
-    //     deleteFromArrayByIndex(stakeholderGroupsList, 0);
+        // Delete the stakeholders, group and removing them from the list where they were added before
+        stakeholdersList[0].delete();
+        deleteFromArrayByIndex(stakeholdersList, 0);
+        stakeholderGroupsList[0].delete();
+        deleteFromArrayByIndex(stakeholderGroupsList, 0);
 
-    //     clickByText(navMenu, applicationInventory);
-    //     selectItemsPerPage(100);
-    //     application.selectApplication();
-    //     clickItemInKebabMenu(application.name, "Assess");
-    //     clickByText(button, "Retake");
+        clickByText(navMenu, applicationInventory);
+        selectItemsPerPage(100);
+        application.selectApplication();
+        clickItemInKebabMenu(application.name, "Assess");
+        clickByText(button, "Retake");
 
-    //     //Verify that values show blank
-    //     cy.get(stakeholderSelect).should("have.value", "");
-    //     cy.get(stakeholdergroupsSelect).should("have.value", "");
-    //     clickByText(button, "Cancel");
-    //     cy.get(continueButton).click();
-    // });
+        //Verify that values show blank
+        cy.get(stakeholderSelect).should("have.value", "");
+        cy.get(stakeholdergroupsSelect).should("have.value", "");
+        clickByText(button, "Cancel");
+        cy.get(continueButton).click();
+    });
 
     it("Validates association application tags to  archetype tags ", function () {
         //automates polarion MTA-401
