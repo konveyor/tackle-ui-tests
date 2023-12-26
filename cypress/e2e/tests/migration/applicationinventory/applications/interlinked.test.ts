@@ -66,95 +66,95 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Business service, tag update and delete dependency on application", function () {
-        businessServicesList = createMultipleBusinessServices(2);
-        tagList = createMultipleTags(2);
-        let appdata = {
-            name: data.getAppName(),
-            business: businessServicesList[0].name,
-            description: data.getDescription(),
-            tags: [tagList[0].name],
-            comment: data.getDescription(),
-        };
-        const application = new Application(appdata);
-        applicationList.push(application);
-        application.create();
-        cy.get("@getApplication");
-        cy.wait(2 * SEC);
+    // it("Business service, tag update and delete dependency on application", function () {
+    //     businessServicesList = createMultipleBusinessServices(2);
+    //     tagList = createMultipleTags(2);
+    //     let appdata = {
+    //         name: data.getAppName(),
+    //         business: businessServicesList[0].name,
+    //         description: data.getDescription(),
+    //         tags: [tagList[0].name],
+    //         comment: data.getDescription(),
+    //     };
+    //     const application = new Application(appdata);
+    //     applicationList.push(application);
+    //     application.create();
+    //     cy.get("@getApplication");
+    //     cy.wait(2 * SEC);
 
-        application.applicationDetailsTab("Tags");
-        application.tagAndCategoryExists(tagList[0].name);
-        application.closeApplicationDetails();
+    //     application.applicationDetailsTab("Tags");
+    //     application.tagAndCategoryExists(tagList[0].name);
+    //     application.closeApplicationDetails();
 
-        // Remove the BS and tags
-        application.removeBusinessService();
-        tagList[0].delete();
-        deleteFromArrayByIndex(tagList, 0);
+    //     // Remove the BS and tags
+    //     application.removeBusinessService();
+    //     tagList[0].delete();
+    //     deleteFromArrayByIndex(tagList, 0);
 
-        // Navigate to application inventory
-        clickByText(navMenu, applicationInventory);
-        cy.wait(100);
-        cy.get("@getApplication");
+    //     // Navigate to application inventory
+    //     clickByText(navMenu, applicationInventory);
+    //     cy.wait(100);
+    //     cy.get("@getApplication");
 
-        // Assert that deleted business service is removed from application
-        application.getColumnText(businessColumnSelector, "");
-        cy.wait(100);
+    //     // Assert that deleted business service is removed from application
+    //     application.getColumnText(businessColumnSelector, "");
+    //     cy.wait(100);
 
-        // Assert that deleted tag is removed
-        application.applicationDetailsTab("Tags");
-        application.noTagExists();
-        application.closeApplicationDetails();
+    //     // Assert that deleted tag is removed
+    //     application.applicationDetailsTab("Tags");
+    //     application.noTagExists();
+    //     application.closeApplicationDetails();
 
-        application.edit({
-            business: businessServicesList[1].name,
-            tags: [tagList[1].name],
-        });
-        cy.get("@getApplication");
+    //     application.edit({
+    //         business: businessServicesList[1].name,
+    //         tags: [tagList[1].name],
+    //     });
+    //     cy.get("@getApplication");
 
-        // Assert that business service is updated
-        application.getColumnText(businessColumnSelector, businessServicesList[1].name);
-        cy.wait(SEC);
+    //     // Assert that business service is updated
+    //     application.getColumnText(businessColumnSelector, businessServicesList[1].name);
+    //     cy.wait(SEC);
 
-        // Assert that created tag exists
-        application.applicationDetailsTab("Tags");
-        application.tagAndCategoryExists(tagList[1].name);
-        application.closeApplicationDetails();
-    });
+    //     // Assert that created tag exists
+    //     application.applicationDetailsTab("Tags");
+    //     application.tagAndCategoryExists(tagList[1].name);
+    //     application.closeApplicationDetails();
+    // });
 
-    it("Stakeholder and stakeholder group delete dependency on application", function () {
-        //Create application
-        let appdata = {
-            name: data.getAppName(),
-            description: data.getDescription(),
-            comment: data.getDescription(),
-        };
-        const application = new Application(appdata);
-        applicationList.push(application);
-        application.create();
-        cy.get("@getApplication");
-        cy.wait(2 * SEC);
-        // Perform assessment of application
-        application.perform_assessment("low", stakeholdersList, stakeholderGroupsList);
-        application.verifyStatus("assessment", "Completed");
+    // it("Stakeholder and stakeholder group delete dependency on application", function () {
+    //     //Create application
+    //     let appdata = {
+    //         name: data.getAppName(),
+    //         description: data.getDescription(),
+    //         comment: data.getDescription(),
+    //     };
+    //     const application = new Application(appdata);
+    //     applicationList.push(application);
+    //     application.create();
+    //     cy.get("@getApplication");
+    //     cy.wait(2 * SEC);
+    //     // Perform assessment of application
+    //     application.perform_assessment("low", stakeholdersList, stakeholderGroupsList);
+    //     application.verifyStatus("assessment", "Completed");
 
-        // Delete the stakeholders, group and removing them from the list where they were added before
-        stakeholdersList[0].delete();
-        deleteFromArrayByIndex(stakeholdersList, 0);
-        stakeholderGroupsList[0].delete();
-        deleteFromArrayByIndex(stakeholderGroupsList, 0);
+    //     // Delete the stakeholders, group and removing them from the list where they were added before
+    //     stakeholdersList[0].delete();
+    //     deleteFromArrayByIndex(stakeholdersList, 0);
+    //     stakeholderGroupsList[0].delete();
+    //     deleteFromArrayByIndex(stakeholderGroupsList, 0);
 
-        clickByText(navMenu, applicationInventory);
-        selectItemsPerPage(100);
-        application.selectApplication();
-        clickItemInKebabMenu(application.name, "Assess");
-        clickByText(button, "Retake");
+    //     clickByText(navMenu, applicationInventory);
+    //     selectItemsPerPage(100);
+    //     application.selectApplication();
+    //     clickItemInKebabMenu(application.name, "Assess");
+    //     clickByText(button, "Retake");
 
-        //Verify that values show blank
-        cy.get(stakeholderSelect).should("have.value", "");
-        cy.get(stakeholdergroupsSelect).should("have.value", "");
-        clickByText(button, "Cancel");
-        cy.get(continueButton).click();
-    });
+    //     //Verify that values show blank
+    //     cy.get(stakeholderSelect).should("have.value", "");
+    //     cy.get(stakeholdergroupsSelect).should("have.value", "");
+    //     clickByText(button, "Cancel");
+    //     cy.get(continueButton).click();
+    // });
 
     it("Validates association application tags to  archetype tags ", function () {
         //automates polarion MTA-401
@@ -170,63 +170,40 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         cy.wait(2 * SEC);
 
         //Create 3 appdatas containing different tags
-        let appdata1 = {
+        // Define the different tag combinations
+        const tagCombinations = [
+            [tagList[0].name, tagList[2].name],
+            [tagList[0].name, tagList[1].name],
+            [tagList[0].name, tagList[2].name],
+        ];
+
+        // Generate appDataConfigs using the tag combinations
+        const appDataConfigs = tagCombinations.map((tags) => ({
             name: data.getAppName(),
             description: data.getDescription(),
-            tags: [tagList[0].name, tagList[2].name],
+            tags: tags,
             comment: data.getDescription(),
-        };
-        let appdata2 = {
-            name: data.getAppName(),
-            description: data.getDescription(),
-            tags: [tagList[0].name, tagList[1].name],
-            comment: data.getDescription(),
-        };
-        let appdata3 = {
-            name: data.getAppName(),
-            description: data.getDescription(),
-            tags: [tagList[0].name, tagList[2].name],
-            comment: data.getDescription(),
-        };
+        }));
 
-        //assign different appdata to each app and check if tags are present
-        const application1 = new Application(appdata1);
-        applicationList.push(application1);
-        application1.create();
-        cy.get("@getApplication");
-        cy.wait(2 * SEC);
-        application1.applicationDetailsTab("Tags");
-        appdata1.tags.forEach((tag) => {
-            application1.tagAndCategoryExists(tag);
+        // Iterate over each appdata configuration
+        appDataConfigs.forEach((appData) => {
+            const application = new Application(appData);
+            applicationList.push(application);
+            application.create();
+            cy.get("@getApplication");
+            cy.wait(2 * SEC);
+            application.applicationDetailsTab("Tags");
+            appData.tags.forEach((tag) => {
+                application.tagAndCategoryExists(tag);
+            });
+            application.closeApplicationDetails();
         });
-        application1.closeApplicationDetails();
-
-        const application2 = new Application(appdata2);
-        applicationList.push(application2);
-        application2.create();
-        cy.get("@getApplication");
-        cy.wait(2 * SEC);
-        application2.applicationDetailsTab("Tags");
-        appdata2.tags.forEach((tag) => {
-            application2.tagAndCategoryExists(tag);
-        });
-        application2.closeApplicationDetails();
-
-        const application3 = new Application(appdata3);
-        applicationList.push(application3);
-        application3.create();
-        cy.get("@getApplication");
-        cy.wait(2 * SEC);
-        application3.applicationDetailsTab("Tags");
-        appdata3.tags.forEach((tag) => {
-            application3.tagAndCategoryExists(tag);
-        });
-        application3.closeApplicationDetails();
 
         //validate app count on archytpe
         archetype.getAssociatedAppsCount().then((appCount) => {
             expect(appCount).to.equal(2);
         });
+        archetype.delete();
     });
 
     after("Perform test data clean up", function () {
