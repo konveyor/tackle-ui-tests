@@ -292,12 +292,8 @@ export class Archetype {
             .invoke("text")
             .then((text) => {
                 const numberMatch = text.match(/\d+/);
-                if (numberMatch) {
-                    const appCount = parseInt(numberMatch[0], 10);
-                    cy.wrap(appCount).as("appCount");
-                } else {
-                    cy.wrap(null).as("appCount");
-                }
+                const number = parseInt(numberMatch[0], 10);
+                cy.wrap(isNaN(number) ? null : number).as("appCount");
             });
     }
 }

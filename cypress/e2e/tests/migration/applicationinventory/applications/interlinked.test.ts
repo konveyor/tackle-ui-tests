@@ -158,7 +158,6 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
 
     it("Validates association application tags to  archetype tags ", function () {
         //automates polarion MTA-401
-        //create archytype
         tagList = createMultipleTags(3);
         const archetype = new Archetype(
             data.getRandomWord(8),
@@ -169,15 +168,12 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         archetype.create();
         cy.wait(2 * SEC);
 
-        //Create 3 appdatas containing different tags
-        // Define the different tag combinations
         const tagCombinations = [
             [tagList[0].name, tagList[2].name],
             [tagList[0].name, tagList[1].name],
             [tagList[0].name, tagList[2].name],
         ];
 
-        // Generate appDataConfigs using the tag combinations
         const appDataConfigs = tagCombinations.map((tags) => ({
             name: data.getAppName(),
             description: data.getDescription(),
@@ -185,7 +181,6 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
             comment: data.getDescription(),
         }));
 
-        // Iterate over each appdata configuration
         appDataConfigs.forEach((appData) => {
             const application = new Application(appData);
             applicationList.push(application);
