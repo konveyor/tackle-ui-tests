@@ -75,6 +75,7 @@ export class AssessmentQuestionnaire {
     }
     public static enable(fileName: string, enable = true) {
         AssessmentQuestionnaire.open();
+        cy.wait(3 * SEC);
         let selector = enable ? ".pf-m-on" : ".pf-m-off";
         cy.contains(fileName, { timeout: 2 * SEC })
             .closest("tr")

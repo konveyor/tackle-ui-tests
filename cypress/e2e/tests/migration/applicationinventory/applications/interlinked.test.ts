@@ -42,6 +42,7 @@ import * as data from "../../../../../utils/data_utils";
 import { Tag } from "../../../../models/migration/controls/tags";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { Archetype } from "../../../../models/migration/archetypes/archetype";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let stakeholderGroupsList: Array<Stakeholdergroups> = [];
@@ -153,6 +154,51 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         cy.get(stakeholdergroupsSelect).should("have.value", "");
         clickByText(button, "Cancel");
         cy.get(continueButton).click();
+    });
+
+    it("Validates association application tags to  archetype tags ", function () {
+        //automates polarion MTA-401
+        tagList = createMultipleTags(3);
+        const archetype = new Archetype(
+            data.getRandomWord(8),
+            [tagList[0].name, tagList[2].name],
+            [tagList[1].name],
+            null
+        );
+        archetype.create();
+        cy.wait(2 * SEC);
+
+        const tagCombinations = [
+            [tagList[0].name, tagList[2].name],
+            [tagList[0].name, tagList[1].name],
+            [tagList[0].name, tagList[2].name],
+        ];
+
+        const appDataConfigs = tagCombinations.map((tags) => ({
+            name: data.getAppName(),
+            description: data.getDescription(),
+            tags: tags,
+            comment: data.getDescription(),
+        }));
+
+        appDataConfigs.forEach((appData) => {
+            const application = new Application(appData);
+            applicationList.push(application);
+            application.create();
+            cy.get("@getApplication");
+            cy.wait(2 * SEC);
+            application.applicationDetailsTab("Tags");
+            appData.tags.forEach((tag) => {
+                application.tagAndCategoryExists(tag);
+            });
+            application.closeApplicationDetails();
+        });
+
+        //validate app count on archytpe
+        archetype.getAssociatedAppsCount().then((appCount) => {
+            expect(appCount).to.equal(2);
+        });
+        archetype.delete();
     });
 
     after("Perform test data clean up", function () {
