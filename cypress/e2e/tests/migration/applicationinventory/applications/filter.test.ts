@@ -345,7 +345,6 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         selectFilter("Archetypes");
         cy.get(filterDropDownContainer).find(filterDropDown).click();
         notExists(archetype2.name);
-        clickByText(button, clearAllFilters);
 
         const archetypesList: Array<Archetype> = [archetype1, archetype2];
         deleteByList(archetypesList);
