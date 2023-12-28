@@ -62,6 +62,7 @@ export const question = "Question";
 export const rank = "Rank";
 export const review = "Review";
 export const risk = "Risk";
+export const archetypes = "Archetypes";
 export const owner = "Owner";
 export const createdBy = "Created By";
 export const reports = "Reports";

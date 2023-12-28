@@ -52,6 +52,7 @@ import {
     issueFilter,
     risk,
     name,
+    archetypes,
 } from "../e2e/types/constants";
 import {
     actionButton,
@@ -457,6 +458,7 @@ export function applySearchFilter(
         repositoryType,
         artifact,
         owner,
+        archetypes,
     ].includes(filterName);
     const isSpecialKnownFilter = [tag, credentialType, risk, name].includes(filterName);
     let filterValue = [];

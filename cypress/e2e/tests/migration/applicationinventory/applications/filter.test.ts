@@ -28,6 +28,7 @@ import {
     getRandomAnalysisData,
     notExists,
     createMultipleStakeholders,
+    selectFilter,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -54,6 +55,8 @@ import { Analysis } from "../../../../models/migration/applicationinventory/anal
 import { Tag } from "../../../../models/migration/controls/tags";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { Archetype } from "../../../../models/migration/archetypes/archetype";
+import { filterDropDown, filterDropDownContainer } from "../../../../views/common.view";
 
 var invalidSearchInput = String(data.getRandomNumber());
 let source_credential;
@@ -111,6 +114,51 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
+    });
+
+    it("Archetype filter validations", function () {
+        const tagList = createMultipleTags(2);
+
+        //validate archetype1 is shown in applications archetype filter and application1 is present
+        const archetype1 = new Archetype(
+            data.getRandomWord(8),
+            [tagList[0].name],
+            [tagList[1].name],
+            null
+        );
+        archetype1.create();
+        cy.wait(2 * SEC);
+        const appdata = {
+            name: data.getAppName(),
+            description: data.getDescription(),
+            tags: [tagList[0].name],
+            comment: data.getDescription(),
+        };
+        const application1 = new Application(appdata);
+        applicationsList.push(application1);
+        application1.create();
+        cy.get("@getApplication");
+        cy.wait(2 * SEC);
+        const validSearchInput = archetype1.name;
+        applySearchFilter("Archetypes", validSearchInput);
+        exists(application1.name);
+
+        //validate archetype2 is not present in applications archetype filter
+        const archetype2 = new Archetype(
+            data.getRandomWord(8),
+            [tagList[1].name],
+            [tagList[0].name],
+            null
+        );
+        archetype2.create();
+        cy.wait(2 * SEC);
+        Application.open();
+        selectFilter("Archetypes");
+        cy.get(filterDropDownContainer).find(filterDropDown).click();
+        notExists(archetype2.name);
+        const archetypesList: Array<Archetype> = [archetype1, archetype2];
+        deleteByList(archetypesList);
+        deleteByList(tagList);
     });
 
     it("Name filter validations", function () {
