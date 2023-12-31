@@ -52,6 +52,7 @@ import {
     issueFilter,
     risk,
     name,
+    save,
 } from "../e2e/types/constants";
 import {
     actionButton,
@@ -111,6 +112,7 @@ import {
     MigrationWaveView,
     getSpecialMigrationWavesTableSelector,
 } from "../e2e/views/migration-wave.view";
+import { manageCredentials, mavenCredential, sourceCredential } from "../e2e/views/analysis.view";
 
 const { _ } = Cypress;
 
@@ -1725,4 +1727,33 @@ export function performWithin(applicationName: string, actionFunction: () => voi
         .within(() => {
             actionFunction();
         });
+}
+
+/**
+ * Assigns credential to the list of applications
+ * @param appList is a list of applications where credential will be assigned
+ * @param credential is a credential to assign to those applications
+ */
+export function manageCredentialsForMultipleApplications(
+    appList: Application[],
+    credential: Credentials
+): void {
+    let selector: string;
+    Application.open();
+    appList.forEach((currentApp: Application) => {
+        currentApp.selectApplication();
+    });
+    clickWithin("#toolbar-kebab", button, false, true);
+    clickByText(button, manageCredentials);
+    // TODO: Add validation of application list, should be separated with coma
+    if (credential.type == CredentialType.sourceControl) {
+        selector = sourceCredential;
+    } else {
+        selector = mavenCredential;
+    }
+    selectFormItems(selector, credential.name);
+    clickByText(button, save);
+    appList.forEach((currentApp: Application) => {
+        currentApp.selectApplication();
+    });
 }
