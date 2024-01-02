@@ -15,14 +15,23 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { createMultipleApplications, login } from "../../../../utils/utils";
-import { CredentialType, JiraIssueTypes, JiraType, SEC } from "../../../types/constants";
+import { createMultipleApplications, login, performRowActionByIcon } from "../../../../utils/utils";
+import {
+    application,
+    button,
+    CredentialType,
+    JiraIssueTypes,
+    JiraType,
+    SEC,
+} from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 import { JiraIssue } from "../../../models/administration/jira-connection/jira-api.interface";
 import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
 import { Application } from "../../../models/migration/applicationinventory/application";
+import { kebabMenu } from "../../../views/applicationinventory.view";
+import * as commonView from "../../../views/common.view";
 
 const now = new Date();
 now.setDate(now.getDate() + 1);
@@ -34,6 +43,7 @@ let jiraCloudCredentials: JiraCredentials;
 let jiraCloudInstance: Jira;
 const applications: Application[] = [];
 const wavesMap = {};
+const appsMap = {};
 let projectName = "";
 
 // Automates Polarion TC 340, 359, 360 and 361 for Jira Cloud
@@ -75,6 +85,7 @@ describe(["@tier1", "@interop"], "Export Migration Wave to Jira Cloud", function
         it(`Create wave to export as ${issueType}`, function () {
             const apps = createMultipleApplications(2);
             applications.push(...apps);
+            appsMap[issueType] = apps;
 
             const migrationWave = new MigrationWave(
                 data.getRandomWord(8),
@@ -131,6 +142,21 @@ describe(["@tier1", "@interop"], "Export Migration Wave to Jira Cloud", function
                         issue.fields.issuetype.name.toUpperCase() ===
                             (issueType as string).toUpperCase()
                     );
+                });
+
+                Application.open();
+                appsMap[issueType].forEach((app) => {
+                    performRowActionByIcon(app.name, kebabMenu);
+                    cy.get(commonView.actionMenuItem)
+                        .contains("Delete")
+                        .closest(button)
+                        .then(($btn) => {
+                            expect(
+                                $btn,
+                                "Application with a linked Jira ticked could be deleted, this is probably a product bug"
+                            ).to.be.disabled;
+                        });
+                    performRowActionByIcon(app.name, kebabMenu);
                 });
 
                 jiraCloudInstance.deleteIssues(waveIssues.map((issue) => issue.id));

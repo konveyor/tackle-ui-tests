@@ -26,7 +26,8 @@ let application: Application;
 let migrationWave: MigrationWave;
 
 //Automates Polarion TC 358
-
+// TODO: THIS TEST SHOULD BE REMOVED IN THE NEXT VERSION
+// @see https://issues.redhat.com/browse/MTA-1847 comments
 describe(["@tier1"], "Testing the creation of a tracker in migration waves", function () {
     before("Login & Create new application", () => {
         login();
