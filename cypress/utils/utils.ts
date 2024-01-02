@@ -1745,7 +1745,7 @@ export function manageCredentialsForMultipleApplications(
     });
     clickWithin("#toolbar-kebab", button, false, true);
     clickByText(button, manageCredentials);
-    // TODO: Add validation of application list, should be separated with coma
+    // TODO: Add validation of application list, should be separated with coma in management's modal
     if (credential.type == CredentialType.sourceControl) {
         selector = sourceCredential;
     } else {

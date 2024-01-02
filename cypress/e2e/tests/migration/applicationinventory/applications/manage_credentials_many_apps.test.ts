@@ -28,8 +28,8 @@ import { CredentialsMaven } from "../../../../models/administration/credentials/
 import { Application } from "../../../../models/migration/applicationinventory/application";
 let source_credential: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;
-let sourceApplicationsList: Array<Analysis> = [];
-let mavenApplicationsList: Array<Analysis> = [];
+const sourceApplicationsList: Array<Analysis> = [];
+const mavenApplicationsList: Array<Analysis> = [];
 
 describe(["@tier1"], "Source Analysis", () => {
     before("Login", function () {
@@ -61,7 +61,6 @@ describe(["@tier1"], "Source Analysis", () => {
         });
 
         // Interceptors
-        cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
