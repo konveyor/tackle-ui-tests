@@ -182,13 +182,15 @@ export class MigrationWave {
      * @param date
      */
     public fillStartDate(date: Date): void {
-        const nowTime = new Date().setHours(0, 0, 0, 0);
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        yesterday.setHours(0, 0, 0, 0);
         date.setHours(0, 0, 0, 0);
         this.startDate.setHours(0, 0, 0, 0);
-        if (nowTime >= date.getTime()) {
+        if (yesterday.getTime() >= date.getTime()) {
             expect(
                 true,
-                "Start Date should be greater than actual Date. If you want to assert the validation, enter the date manually"
+                "Start Date should be greater than yesterday's Date. If you want to assert the validation, enter the date manually"
             ).to.eq(false);
         }
 

@@ -41,7 +41,6 @@ let stakeHolderGroups: Stakeholdergroups[];
 let applications: Application[];
 
 const now = new Date();
-now.setDate(now.getDate() + 1);
 
 const end = new Date(now.getTime());
 end.setFullYear(end.getFullYear() + 1);
