@@ -23,6 +23,7 @@ import {
     submitForm,
     click,
     clickKebabMenuOptionArchetype,
+    confirm,
 } from "../../../../utils/utils";
 import { legacyPathfinder, migration, SEC, tdTag, trTag } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
@@ -237,6 +238,11 @@ export class Archetype {
         Assessment.validateReviewFields(this.name, "Archetype");
     }
 
+    validateNotReviewed(): void {
+        Archetype.open(true);
+        Assessment.validateNotReviewed(this.name);
+    }
+
     duplicate(
         name?: string,
         criteriaTags?: string[],
@@ -295,5 +301,10 @@ export class Archetype {
                 const number = parseInt(numberMatch[0], 10);
                 cy.wrap(isNaN(number) ? null : number).as("appCount");
             });
+    }
+
+    discardReview() {
+        clickKebabMenuOptionArchetype(this.name, "Discard review");
+        confirm();
     }
 }

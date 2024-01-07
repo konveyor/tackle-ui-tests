@@ -20,3 +20,12 @@ export const archetypeTags = "#tags";
 export const stakeholders = "input[aria-label='stakeholder-select-toggle']";
 export const stakeholderGroups = "input[aria-label='stakeholder-groups-select-toggle']";
 export const comments = "#comments";
+export const notYetReviewed = "Not yet reviewed";
+
+export const reviewItems = [
+    "proposed-action",
+    "effort-estimate",
+    "business-criticality",
+    "work-priority",
+    "comments",
+];
