@@ -54,72 +54,72 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         stakeholderList = createMultipleStakeholders(1);
 
         applicationList = createMultipleApplications(1);
-        // applicationList[0].perform_assessment("low", stakeholderList);
-        // cy.wait(2000);
-        // applicationList[0].verifyStatus("assessment", "Completed");
-        // applicationList[0].perform_review("low");
-        // cy.wait(2000);
-        // applicationList[0].verifyStatus("review", "Completed");
+        applicationList[0].perform_assessment("low", stakeholderList);
+        cy.wait(2000);
+        applicationList[0].verifyStatus("assessment", "Completed");
+        applicationList[0].perform_review("low");
+        cy.wait(2000);
+        applicationList[0].verifyStatus("review", "Completed");
     });
 
-    // it("Retake Assessment questionnaire", function () {
-    //     clickItemInKebabMenu(applicationList[0].name, "Assess");
-    //     cy.wait(SEC);
-    //     clickByText(button, "Retake");
-    //     checkSuccessAlert(
-    //         alertTitle,
-    //         `Success alert:Success! Assessment discarded for ${applicationList[0].name}.`
-    //     );
-    //     Assessment.fill_assessment_form("low", stakeholderList);
-    //     applicationList[0].verifyStatus("assessment", "Completed");
-    // });
-    //
-    // it("Discard Assessment", function () {
-    //     applicationList[0].selectKebabMenuItem("Discard assessment(s)");
-    //     checkSuccessAlert(
-    //         alertTitle,
-    //         `Success alert:Success! Assessment discarded for ${applicationList[0].name}.`
-    //     );
-    //     applicationList[0].verifyStatus("assessment", "Not started");
-    // });
-    //
-    // it("Discard Review", function () {
-    //     applicationList[0].selectKebabMenuItem("Discard review");
-    //     checkSuccessAlert(
-    //         alertTitle,
-    //         `Success alert:Success! Review discarded for ${applicationList[0].name}.`
-    //     );
-    //     applicationList[0].verifyStatus("review", "Not started");
-    // });
-    //
-    // it("View archived questionnaire", function () {
-    //     // Polarion TC MTA-392
-    //     const application = new Application(getRandomApplicationData());
-    //     application.create();
-    //     cy.wait(2 * SEC);
-    //
-    //     application.perform_assessment("high", stakeholderList);
-    //     cy.wait(2 * SEC);
-    //
-    //     application.verifyStatus("assessment", "Completed");
-    //     AssessmentQuestionnaire.disable(legacyPathfinder);
-    //     application.clickAssessButton();
-    //
-    //     cy.contains("table", ArchivedQuestionnaires)
-    //         .find(ArchivedQuestionnairesTableDataCell)
-    //         .should("have.text", legacyPathfinder);
-    //
-    //     AssessmentQuestionnaire.import(yamlFile);
-    //     AssessmentQuestionnaire.disable(cloudNative);
-    //
-    //     application.clickAssessButton();
-    //     cy.contains("table", ArchivedQuestionnaires)
-    //         .find(ArchivedQuestionnairesTableDataCell)
-    //         .last()
-    //         .should("not.have.text", cloudNative);
-    //     // todo: uncomment when the bug is fixed
-    //     // AssessmentQuestionnaire.delete(cloudNative);
-    // });
+    it("Retake Assessment questionnaire", function () {
+        clickItemInKebabMenu(applicationList[0].name, "Assess");
+        cy.wait(SEC);
+        clickByText(button, "Retake");
+        checkSuccessAlert(
+            alertTitle,
+            `Success alert:Success! Assessment discarded for ${applicationList[0].name}.`
+        );
+        Assessment.fill_assessment_form("low", stakeholderList);
+        applicationList[0].verifyStatus("assessment", "Completed");
+    });
+
+    it("Discard Assessment", function () {
+        applicationList[0].selectKebabMenuItem("Discard assessment(s)");
+        checkSuccessAlert(
+            alertTitle,
+            `Success alert:Success! Assessment discarded for ${applicationList[0].name}.`
+        );
+        applicationList[0].verifyStatus("assessment", "Not started");
+    });
+
+    it("Discard Review", function () {
+        applicationList[0].selectKebabMenuItem("Discard review");
+        checkSuccessAlert(
+            alertTitle,
+            `Success alert:Success! Review discarded for ${applicationList[0].name}.`
+        );
+        applicationList[0].verifyStatus("review", "Not started");
+    });
+
+    it("View archived questionnaire", function () {
+        // Polarion TC MTA-392
+        const application = new Application(getRandomApplicationData());
+        application.create();
+        cy.wait(2 * SEC);
+
+        application.perform_assessment("high", stakeholderList);
+        cy.wait(2 * SEC);
+
+        application.verifyStatus("assessment", "Completed");
+        AssessmentQuestionnaire.disable(legacyPathfinder);
+        application.clickAssessButton();
+
+        cy.contains("table", ArchivedQuestionnaires)
+            .find(ArchivedQuestionnairesTableDataCell)
+            .should("have.text", legacyPathfinder);
+
+        AssessmentQuestionnaire.import(yamlFile);
+        AssessmentQuestionnaire.disable(cloudNative);
+
+        application.clickAssessButton();
+        cy.contains("table", ArchivedQuestionnaires)
+            .find(ArchivedQuestionnairesTableDataCell)
+            .last()
+            .should("not.have.text", cloudNative);
+        // todo: uncomment when the bug is fixed
+        // AssessmentQuestionnaire.delete(cloudNative);
+    });
     it("assess application and overide assessment for that archetype", function () {
         // Polarion TC MTA-390
         const archetypesList = [];
