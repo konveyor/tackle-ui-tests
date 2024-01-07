@@ -111,6 +111,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             tags: [tags[0].name],
             comment: data.getDescription(),
         };
+
         const application1 = new Application(appdata);
         applicationList.push(application1);
         application1.create();
