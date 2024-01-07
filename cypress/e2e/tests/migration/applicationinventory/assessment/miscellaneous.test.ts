@@ -115,7 +115,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         const application1 = new Application(appdata);
         applicationList.push(application1);
         application1.create();
-        cy.get("@getApplication");
         cy.wait(2 * SEC);
         archetype1.perform_assessment("low", stakeholderList);
         application1.clickAssessButton();
