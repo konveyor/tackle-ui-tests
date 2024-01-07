@@ -853,7 +853,7 @@ export class Application {
                 const normalizedExpectedText = alertTitleMessage.replace(/\s+/g, " ").trim();
                 expect(normalizedActualText).to.contain(normalizedExpectedText);
             });
-
+        //remove previous code once the bug has been resolved and add the below code
         // validateTextPresence(alertTitle,alertTitleMessage);
         const alertBodyMessage = `Do you want to create a dedicated assessment for this application and override the inherited archetype assessment(s)?`;
         validateTextPresence(alertBody, alertBodyMessage);

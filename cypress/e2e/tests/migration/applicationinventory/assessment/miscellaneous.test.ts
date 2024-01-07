@@ -62,6 +62,39 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("review", "Completed");
     });
 
+    it("assess application and overide assessment for that archetype", function () {
+        // Polarion TC MTA-390
+        const archetypesList = [];
+        const tags = createMultipleTags(2);
+        const archetype1 = new Archetype(
+            data.getRandomWord(8),
+            [tags[0].name],
+            [tags[1].name],
+            null
+        );
+        archetype1.create();
+        cy.wait(2 * SEC);
+        archetypesList.push(archetype1);
+        const appdata = {
+            name: data.getAppName(),
+            description: data.getDescription(),
+            tags: [tags[0].name],
+            comment: data.getDescription(),
+        };
+        const application1 = new Application(appdata);
+        applicationList.push(application1);
+        application1.create();
+        cy.get("@getApplication");
+        cy.wait(2 * SEC);
+        archetype1.perform_assessment("low", stakeholderList);
+        application1.clickAssessButton();
+        application1.validateOverrideAssessmentMessage(archetypesList);
+        click(confirmButton);
+        cy.contains("button", "Take", { timeout: 10 * SEC })
+            .should("have.text", "Take")
+            .and("not.have.attr", "aria-disabled", "true");
+    });
+
     it("Retake Assessment questionnaire", function () {
         clickItemInKebabMenu(applicationList[0].name, "Assess");
         cy.wait(SEC);
@@ -119,38 +152,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             .should("not.have.text", cloudNative);
         // todo: uncomment when the bug is fixed
         // AssessmentQuestionnaire.delete(cloudNative);
-    });
-    it("assess application and overide assessment for that archetype", function () {
-        // Polarion TC MTA-390
-        const archetypesList = [];
-        const tags = createMultipleTags(2);
-        const archetype1 = new Archetype(
-            data.getRandomWord(8),
-            [tags[0].name],
-            [tags[1].name],
-            null
-        );
-        archetype1.create();
-        cy.wait(2 * SEC);
-        archetypesList.push(archetype1);
-        const appdata = {
-            name: data.getAppName(),
-            description: data.getDescription(),
-            tags: [tags[0].name],
-            comment: data.getDescription(),
-        };
-        const application1 = new Application(appdata);
-        applicationList.push(application1);
-        application1.create();
-        cy.get("@getApplication");
-        cy.wait(2 * SEC);
-        archetype1.perform_assessment("low", stakeholderList);
-        application1.clickAssessButton();
-        application1.validateOverrideAssessmentMessage(archetypesList);
-        click(confirmButton);
-        cy.contains("button", "Take")
-            .should("have.text", "Take")
-            .and("not.have.attr", "aria-disabled", "true");
     });
 
     after("Perform test data clean up", function () {
