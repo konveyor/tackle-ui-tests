@@ -848,12 +848,12 @@ export class Application {
         cy.get(alertTitle)
             .invoke("text")
             .then((text) => {
-                //remove whitespace chars causing the text compare to fail - BUG MTA-1968
+                // remove whitespace chars causing the text compare to fail - BUG MTA-1968
                 const normalizedActualText = text.replace(/\s+/g, " ").trim();
                 const normalizedExpectedText = alertTitleMessage.replace(/\s+/g, " ").trim();
                 expect(normalizedActualText).to.contain(normalizedExpectedText);
             });
-        //remove previous code once the bug has been resolved and add the below code
+        // todo: remove previous code once the bug has been resolved and uncomment the below code
         // validateTextPresence(alertTitle,alertTitleMessage);
         const alertBodyMessage = `Do you want to create a dedicated assessment for this application and override the inherited archetype assessment(s)?`;
         validateTextPresence(alertBody, alertBodyMessage);
