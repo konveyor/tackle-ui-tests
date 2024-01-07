@@ -841,20 +841,22 @@ export class Application {
     }
 
     validateOverrideAssessmentMessage(archetypes: Array<Archetype>): void {
-        cy.wait(2*SEC);
-        const archetypeNames = archetypes.map(archetype => archetype.name);
-        const joinedArchetypes = archetypeNames.join(', ');
+        cy.wait(2 * SEC);
+        const archetypeNames = archetypes.map((archetype) => archetype.name);
+        const joinedArchetypes = archetypeNames.join(", ");
         const alertTitleMessage = `The application already is associated with archetypes: ${joinedArchetypes}`;
-        cy.get(alertTitle).invoke('text').then((text) => {
-            //remove whitespace chars causing the text compare to fail - BUG MTA-1968
-            const normalizedActualText = text.replace(/\s+/g, ' ').trim();
-            const normalizedExpectedText = alertTitleMessage.replace(/\s+/g, ' ').trim();
-            expect(normalizedActualText).to.contain(normalizedExpectedText);
-        });
+        cy.get(alertTitle)
+            .invoke("text")
+            .then((text) => {
+                //remove whitespace chars causing the text compare to fail - BUG MTA-1968
+                const normalizedActualText = text.replace(/\s+/g, " ").trim();
+                const normalizedExpectedText = alertTitleMessage.replace(/\s+/g, " ").trim();
+                expect(normalizedActualText).to.contain(normalizedExpectedText);
+            });
 
         // validateTextPresence(alertTitle,alertTitleMessage);
         const alertBodyMessage = `Do you want to create a dedicated assessment for this application and override the inherited archetype assessment(s)?`;
-        validateTextPresence(alertBody,alertBodyMessage);
+        validateTextPresence(alertBody, alertBodyMessage);
     }
 
     // Checks if app name is displayed in the dropdown under respective dependency

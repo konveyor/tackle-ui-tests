@@ -23,7 +23,9 @@ import {
     getRandomApplicationData,
     clickItemInKebabMenu,
     clickByText,
-    createMultipleStakeholders, createMultipleTags, click
+    createMultipleStakeholders,
+    createMultipleTags,
+    click,
 } from "../../../../../utils/utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
@@ -142,19 +144,14 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         application1.create();
         cy.get("@getApplication");
         cy.wait(2 * SEC);
-        archetype1.perform_assessment("low",stakeholderList);
+        archetype1.perform_assessment("low", stakeholderList);
         application1.clickAssessButton();
         application1.validateOverrideAssessmentMessage(archetypesList);
         click(confirmButton);
-        cy.contains('button', 'Take')
-            .should('have.text', 'Take')
-            .and('not.have.attr', 'aria-disabled', 'true');
+        cy.contains("button", "Take")
+            .should("have.text", "Take")
+            .and("not.have.attr", "aria-disabled", "true");
     });
-
-
-
-
-
 
     after("Perform test data clean up", function () {
         deleteByList(stakeholderList);
