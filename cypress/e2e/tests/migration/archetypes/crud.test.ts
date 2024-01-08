@@ -149,6 +149,8 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
         archetype.discardReview();
         cy.wait(2 * SEC);
         archetype.validateNotReviewed();
+
+        archetype.delete();
     });
 
     after("Clear test data", function () {
