@@ -24,10 +24,12 @@ import {
     clickItemInKebabMenu,
     clickByText,
     createMultipleStakeholders,
+    createMultipleTags,
+    click,
 } from "../../../../../utils/utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { alertTitle } from "../../../../views/common.view";
+import { alertTitle, confirmButton } from "../../../../views/common.view";
 import { legacyPathfinder, cloudNative, SEC, button } from "../../../../types/constants";
 import {
     ArchivedQuestionnaires,
@@ -35,6 +37,8 @@ import {
 } from "../../../../views/assessmentquestionnaire.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
+import { Archetype } from "../../../../models/migration/archetypes/archetype";
+import * as data from "../../../../../utils/data_utils";
 
 const fileName = "Legacy Pathfinder";
 let stakeholderList: Array<Stakeholders> = [];
@@ -86,6 +90,38 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             `Success alert:Success! Review discarded for ${applicationList[0].name}.`
         );
         applicationList[0].verifyStatus("review", "Not started");
+    });
+    it("assess application and overide assessment for that archetype", function () {
+        // Polarion TC MTA-390
+        const archetypesList = [];
+        const tags = createMultipleTags(2);
+        const archetype1 = new Archetype(
+            data.getRandomWord(8),
+            [tags[0].name],
+            [tags[1].name],
+            null
+        );
+        archetype1.create();
+        cy.wait(2 * SEC);
+        archetypesList.push(archetype1);
+        const appdata = {
+            name: data.getAppName(),
+            description: data.getDescription(),
+            tags: [tags[0].name],
+            comment: data.getDescription(),
+        };
+
+        const application1 = new Application(appdata);
+        applicationList.push(application1);
+        application1.create();
+        cy.wait(2 * SEC);
+        archetype1.perform_assessment("low", stakeholderList);
+        application1.clickAssessButton();
+        application1.validateOverrideAssessmentMessage(archetypesList);
+        click(confirmButton);
+        cy.contains("button", "Take", { timeout: 30 * SEC })
+            .should("have.text", "Take")
+            .and("not.have.attr", "aria-disabled", "true");
     });
 
     it("View archived questionnaire", function () {

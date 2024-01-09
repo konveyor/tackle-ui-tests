@@ -88,6 +88,8 @@ import { Assessment } from "./assessment";
 import { continueButton } from "../../../views/assessment.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
+import { Archetype } from "../archetypes/archetype";
+import { alertBody, alertTitle } from "../../../views/common.view";
 
 export class Application {
     name: string;
@@ -836,6 +838,24 @@ export class Application {
         // Need to wait until the application is unlinked from Jira and reflected in the wave
         cy.wait(3 * SEC);
         this.closeApplicationDetails();
+    }
+    validateOverrideAssessmentMessage(archetypes: Array<Archetype>): void {
+        cy.wait(2 * SEC);
+        const archetypeNames = archetypes.map((archetype) => archetype.name);
+        const joinedArchetypes = archetypeNames.join(", ");
+        const alertTitleMessage = `The application already is associated with archetypes: ${joinedArchetypes}`;
+        cy.get(alertTitle)
+            .invoke("text")
+            .then((text) => {
+                // remove whitespace chars causing the text compare to fail - BUG MTA-1968
+                const normalizedActualText = text.replace(/\s+/g, " ").trim();
+                const normalizedExpectedText = alertTitleMessage.replace(/\s+/g, " ").trim();
+                expect(normalizedActualText).to.contain(normalizedExpectedText);
+            });
+        // todo: remove previous code once the bug has been resolved and uncomment the below code
+        // validateTextPresence(alertTitle,alertTitleMessage);
+        const alertBodyMessage = `Do you want to create a dedicated assessment for this application and override the inherited archetype assessment(s)?`;
+        validateTextPresence(alertBody, alertBodyMessage);
     }
 
     // Checks if app name is displayed in the dropdown under respective dependency
