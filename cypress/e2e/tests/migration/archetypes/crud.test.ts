@@ -31,6 +31,7 @@ import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { Tag } from "../../../models/migration/controls/tags";
 import { successAlertMessage } from "../../../views/common.view";
 import * as data from "../../../../utils/data_utils";
+import { SEC } from "../../../types/constants";
 import { getRandomWord } from "../../../../utils/data_utils";
 
 let stakeholders: Stakeholders[];
@@ -94,8 +95,6 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
             stakeholderGroups
         );
 
-        cy.log(`Tags: ${archetype.criteriaTags[0]}`);
-
         archetype.create();
         checkSuccessAlert(
             successAlertMessage,
@@ -117,6 +116,35 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
 
         notExists(archetype.name);
         notExists(archetypeDuplicate.name);
+    });
+
+    it("Discard archetype review", function () {
+        // Automates Polarion MTA-428
+
+        const archetype = new Archetype(
+            data.getRandomWord(8),
+            [tags[0].name],
+            [tags[1].name],
+            null,
+            stakeholders,
+            stakeholderGroups
+        );
+
+        archetype.create();
+        exists(archetype.name);
+
+        archetype.perform_review("high");
+        cy.wait(2 * SEC);
+        archetype.validateReviewFields();
+
+        archetype.discardReview();
+        cy.wait(2 * SEC);
+        archetype.validateNotReviewed();
+
+        cy.wait(2 * SEC);
+        archetype.delete();
+
+        notExists(archetype.name);
     });
 
     after("Clear test data", function () {

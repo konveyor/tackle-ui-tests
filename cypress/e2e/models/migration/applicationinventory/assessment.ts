@@ -20,8 +20,6 @@ import {
     selectItemsPerPage,
     selectFormItems,
     clickJs,
-    selectRow,
-    clickTab,
     click,
     sidedrawerTab,
 } from "../../../../utils/utils";
@@ -44,6 +42,7 @@ import {
 } from "../../../views/review.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
+import { notYetReviewed, reviewItems } from "../../../views/archetype.view";
 
 export class Assessment {
     public static selectStakeholders(stakeholders: Stakeholders[]): void {
@@ -269,6 +268,18 @@ export class Assessment {
                     });
                 });
         }
+        click(commonView.sideDrawer.closeDrawer);
+    }
+
+    public static validateNotReviewed(name: string) {
+        sidedrawerTab(name, "Review");
+        cy.wait(SEC * 2);
+        reviewItems.forEach((listItem) => {
+            cy.get(`[cy-data="${listItem}"]`).then(($element) => {
+                const foundText = $element.text();
+                expect(foundText).to.contains(notYetReviewed);
+            });
+        });
         click(commonView.sideDrawer.closeDrawer);
     }
 
