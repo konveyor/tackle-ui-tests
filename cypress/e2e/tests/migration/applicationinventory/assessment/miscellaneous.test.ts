@@ -122,6 +122,8 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         cy.contains("button", "Take", { timeout: 30 * SEC })
             .should("have.text", "Take")
             .and("not.have.attr", "aria-disabled", "true");
+        deleteByList(tags);
+        deleteByList(archetypesList);
     });
 
     it("View archived questionnaire", function () {
