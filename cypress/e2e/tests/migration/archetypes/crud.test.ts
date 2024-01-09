@@ -95,8 +95,6 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
             stakeholderGroups
         );
 
-        cy.log(`Tags: ${archetype.criteriaTags[0]}`);
-
         archetype.create();
         checkSuccessAlert(
             successAlertMessage,
@@ -132,8 +130,6 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
             stakeholderGroups
         );
 
-        cy.log(`Tags: ${archetype.criteriaTags[0]}`);
-
         archetype.create();
         exists(archetype.name);
 
@@ -147,6 +143,8 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
 
         cy.wait(2 * SEC);
         archetype.delete();
+
+        notExists(archetype.name);
     });
 
     after("Clear test data", function () {
