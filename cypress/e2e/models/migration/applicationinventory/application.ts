@@ -839,7 +839,7 @@ export class Application {
         cy.wait(3 * SEC);
         this.closeApplicationDetails();
     }
-    validateOverrideAssessmentMessage(archetypes: Array<Archetype>): void {
+    validateOverrideAssessmentMessage(archetypes: Archetype[]): void {
         cy.wait(2 * SEC);
         const archetypeNames = archetypes.map((archetype) => archetype.name);
         const joinedArchetypes = archetypeNames.join(", ");

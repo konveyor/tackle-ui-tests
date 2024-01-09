@@ -91,7 +91,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         );
         applicationList[0].verifyStatus("review", "Not started");
     });
-    it("assess application and overide assessment for that archetype", function () {
+    it("Assess application and overide assessment for that archetype", function () {
         // Polarion TC MTA-390
         const archetypesList = [];
         const tags = createMultipleTags(2);
@@ -119,9 +119,11 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         application1.clickAssessButton();
         application1.validateOverrideAssessmentMessage(archetypesList);
         click(confirmButton);
-        cy.contains("button", "Take", { timeout: 30 * SEC })
-            .should("have.text", "Take")
-            .and("not.have.attr", "aria-disabled", "true");
+        cy.contains("button", "Take", { timeout: 30 * SEC }).should(
+            "not.have.attr",
+            "aria-disabled",
+            "true"
+        );
         deleteByList(tags);
         deleteByList(archetypesList);
     });
