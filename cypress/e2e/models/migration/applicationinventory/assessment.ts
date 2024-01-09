@@ -280,6 +280,7 @@ export class Assessment {
                 expect(foundText).to.contains(notYetReviewed);
             });
         });
+        click(commonView.sideDrawer.closeDrawer);
     }
 
     public static verifyStatus(name, column, status): void {

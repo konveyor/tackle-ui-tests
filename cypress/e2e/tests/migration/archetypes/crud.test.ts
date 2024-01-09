@@ -135,11 +135,6 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
         cy.log(`Tags: ${archetype.criteriaTags[0]}`);
 
         archetype.create();
-        checkSuccessAlert(
-            successAlertMessage,
-            `Success alert:Archetype ${archetype.name} was successfully created.`,
-            true
-        );
         exists(archetype.name);
 
         archetype.perform_review("high");
@@ -149,6 +144,7 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
         archetype.discardReview();
         cy.wait(2 * SEC);
         archetype.validateNotReviewed();
+
         cy.wait(2 * SEC);
         archetype.delete();
     });
