@@ -362,7 +362,6 @@ export function notExists(value: string, tableSelector = commonView.appTable): v
 }
 
 export function selectFilter(filterName: string, identifiedRisk?: boolean, value = 0): void {
-    cy.log("=========here=======");
     cy.get(commonView.selectFilter)
         .eq(value)
         .within(() => {
