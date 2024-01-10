@@ -830,7 +830,13 @@ export class Application {
     unlinkJiraTicket(): void {
         Application.open();
         this.applicationDetailsTab(details);
-        cy.contains("small", "Ticket").next().children("button.pf-m-link").eq(0).click();
+        cy.contains("small", "Ticket")
+            .next()
+            .children("div")
+            .eq(0)
+            .children("button.pf-m-link")
+            .eq(0)
+            .click();
         // Need to wait until the application is unlinked from Jira and reflected in the wave
         cy.wait(3 * SEC);
         this.closeApplicationDetails();

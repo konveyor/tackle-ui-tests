@@ -22,7 +22,7 @@ export enum MigrationWaveView {
     createTrackerButton = "#create-tracker",
     waveExpanded = "pf-m-expanded",
     removeApplicationButton = ".pf-v5-u-text-align-right > button.pf-m-plain",
-    unlinkApplicationButton = ".pf-v5-u-text-align-right > button.pf-m-link",
+    unlinkApplicationButton = ".pf-v5-u-text-align-right button.pf-m-link",
 }
 
 export enum MigrationWavesSpecialColumns {
