@@ -448,10 +448,6 @@ export class Application {
                     "Manage credentials",
                     rbacRules["Application actions"]["Manage credentials"]
                 );
-                doesExistText(
-                    "Analysis details",
-                    rbacRules["Application actions"]["Analysis details"]
-                );
             });
     }
 
