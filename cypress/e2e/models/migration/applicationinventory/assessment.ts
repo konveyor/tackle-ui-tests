@@ -272,7 +272,7 @@ export class Assessment {
     }
 
     public static validateNotReviewed(name: string) {
-        cy.wait(SEC * 2);
+        cy.wait(SEC * 10);
         sidedrawerTab(name, "Review");
         reviewItems.forEach((listItem) => {
             cy.get(`[cy-data="${listItem}"]`).then(($element) => {
