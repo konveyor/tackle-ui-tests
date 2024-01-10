@@ -59,7 +59,7 @@ describe(["@tier2"], "1 Bug: Manage applications import filter validations", fun
     it("File name filter validations", function () {
         // Navigate to application inventory page and open manage imports
         Application.open();
-        // cy.wait("@getApplications");
+        cy.wait("@getApplications");
         openManageImportsPage();
 
         // Enter an existing file name substring and apply it as search filter
