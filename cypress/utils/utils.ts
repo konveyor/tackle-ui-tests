@@ -362,6 +362,7 @@ export function notExists(value: string, tableSelector = commonView.appTable): v
 }
 
 export function selectFilter(filterName: string, identifiedRisk?: boolean, value = 0): void {
+    cy.log("=========here=======");
     cy.get(commonView.selectFilter)
         .eq(value)
         .within(() => {
@@ -462,7 +463,7 @@ export function applySearchFilter(
         owner,
         archetypes,
     ].includes(filterName);
-    const isSpecialKnownFilter = [tag, credentialType, risk, name].includes(filterName);
+    const isSpecialKnownFilter = [tag, credentialType, risk].includes(filterName);
     let filterValue = [];
     if (!Array.isArray(searchText)) {
         filterValue = [searchText];
@@ -710,7 +711,6 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
         .attachFile(fileName, {
             subjectType: "drag-n-drop",
         });
-
     //Uncheck createEntitiesCheckbox if auto creation of entities is disabled
     if (disableAutoCreation)
         cy.get(createEntitiesCheckbox).then((enabled) => {

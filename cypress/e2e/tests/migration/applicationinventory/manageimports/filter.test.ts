@@ -56,10 +56,10 @@ describe(["@tier2"], "1 Bug: Manage applications import filter validations", fun
         cy.intercept("GET", "/hub/application*").as("getApplications");
     });
 
-    it("Bug MTA-1828: File name filter validations", function () {
+    it("File name filter validations", function () {
         // Navigate to application inventory page and open manage imports
         Application.open();
-        cy.wait("@getApplications");
+        // cy.wait("@getApplications");
         openManageImportsPage();
 
         // Enter an existing file name substring and apply it as search filter
@@ -80,7 +80,7 @@ describe(["@tier2"], "1 Bug: Manage applications import filter validations", fun
         applySearchFilter(FileName, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No data available");
+        cy.get("h2").contains("No import summary available");
     });
 
     after("Perform test data clean up", function () {
