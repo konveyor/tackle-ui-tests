@@ -26,6 +26,8 @@ import {
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
     deleteByList,
+    selectFilter,
+    filterInputText,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -92,7 +94,8 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
 
         // Enter an existing display name substring and apply it as search filter
         let validSearchInput = stakeholdersList[0].name.substring(0, 3);
-        applySearchFilter(name, validSearchInput);
+        selectFilter(name);
+        filterInputText(validSearchInput, 0);
 
         // Assert that stakeholder row(s) containing the search text is/are displayed
         exists(stakeholdersList[0].name, stakeHoldersTable);
@@ -104,7 +107,8 @@ describe(["@tier2"], "Stakeholder filter validations", function () {
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing display name substring and apply it as search filter
-        applySearchFilter(name, invalidSearchInput);
+        selectFilter(name);
+        filterInputText(invalidSearchInput, 0);
 
         // Assert that no search results are found
         cy.get("h2").contains("No stakeholder available");

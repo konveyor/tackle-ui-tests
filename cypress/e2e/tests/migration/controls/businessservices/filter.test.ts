@@ -21,6 +21,8 @@ import {
     createMultipleStakeholders,
     createMultipleBusinessServices,
     deleteByList,
+    filterInputText,
+    selectFilter,
 } from "../../../../../utils/utils";
 import { description, button, name, clearAllFilters, createdBy } from "../../../../types/constants";
 
@@ -44,7 +46,8 @@ describe(["@tier2"], "Business services filter validations", function () {
 
         // Enter an existing display name substring and assert
         let validSearchInput = businessServicesList[0].name.substring(0, 3);
-        applySearchFilter(name, validSearchInput);
+        selectFilter(name);
+        filterInputText(validSearchInput, 0);
         exists(businessServicesList[0].name);
 
         if (businessServicesList[1].name.indexOf(validSearchInput) >= 0) {
@@ -53,14 +56,16 @@ describe(["@tier2"], "Business services filter validations", function () {
         clickByText(button, clearAllFilters);
 
         // Enter an existing exact name and assert
-        applySearchFilter(name, businessServicesList[1].name);
+        selectFilter(name);
+        filterInputText(businessServicesList[1].name, 0);
         exists(businessServicesList[1].name);
         notExists(businessServicesList[0].name);
 
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing name substring and apply it as search filter
-        applySearchFilter(name, invalidSearchInput);
+        selectFilter(name);
+        filterInputText(invalidSearchInput, 0);
 
         // Assert that no search results are found
         cy.get("h2").contains("No business service available");

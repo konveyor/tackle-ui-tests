@@ -25,6 +25,8 @@ import {
     createMultipleStakeholders,
     createMultipleStakeholderGroups,
     deleteByList,
+    selectFilter,
+    filterInputText,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -62,7 +64,8 @@ describe(["@tier2"], "Stakeholder groups filter validations", function () {
         cy.get("@getStakeholderGroups");
 
         const validSearchInput = stakeholderGroupsList[0].name.substring(0, 5);
-        applySearchFilter(name, validSearchInput);
+        selectFilter(name);
+        filterInputText(validSearchInput, 0);
 
         exists(stakeholderGroupsList[0].name);
         if (stakeholderGroupsList[1].name.indexOf(validSearchInput) >= 0) {
@@ -72,7 +75,8 @@ describe(["@tier2"], "Stakeholder groups filter validations", function () {
         clickByText(button, clearAllFilters);
         cy.get("@getStakeholderGroups");
 
-        applySearchFilter(name, invalidSearchInput);
+        selectFilter(name);
+        filterInputText(invalidSearchInput, 0);
 
         cy.get("h2").contains("No stakeholder group available");
 

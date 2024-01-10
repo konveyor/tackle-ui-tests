@@ -19,9 +19,10 @@ import {
     login,
     clickByText,
     exists,
-    applySearchFilter,
     createMultipleJobFunctions,
     deleteByList,
+    selectFilter,
+    filterInputText,
 } from "../../../../../utils/utils";
 import { button, name, clearAllFilters } from "../../../../types/constants";
 
@@ -42,16 +43,20 @@ describe(["@tier2"], "Job function filter validations", function () {
 
         // Enter an existing display name substring and assert
         let validSearchInput = jobFunctionsList[0].name.substring(0, 3);
-        applySearchFilter(name, validSearchInput);
+        selectFilter(name);
+        filterInputText(validSearchInput, 0);
+
         exists(jobFunctionsList[0].name);
         clickByText(button, clearAllFilters);
 
-        applySearchFilter(name, jobFunctionsList[1].name);
+        selectFilter(name);
+        filterInputText(jobFunctionsList[1].name, 0);
         exists(jobFunctionsList[1].name);
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing display name substring and apply it as search filter
-        applySearchFilter(name, invalidSearchInput);
+        selectFilter(name);
+        filterInputText(invalidSearchInput, 0);
 
         // Assert that no search results are found
         cy.get("h2").contains("No job functions available");
