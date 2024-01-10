@@ -83,7 +83,7 @@ describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
         Analysis.validateAnalyzeButton(this.rbacRules);
     });
 
-    it("BUG MTA-1903 - Architect, validate content of application kebab menu", function () {
+    it("Architect, validate content of application kebab menu", function () {
         application.validateAppContextMenu(this.rbacRules);
     });
 
@@ -91,7 +91,7 @@ describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
         application.validateUploadBinary(this.rbacRules);
     });
 
-    after("", function () {
+    after("Clean up", function () {
         userArchitect.logout();
         login();
         appCredentials.delete();

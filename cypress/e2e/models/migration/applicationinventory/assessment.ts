@@ -70,8 +70,8 @@ export class Assessment {
             const migrationActions = ["Repurchase", "Retire"];
             action = migrationActions[Math.floor(Math.random() * migrationActions.length)];
         }
-        cy.get(proposedActionSelect).click();
-        cy.contains(button, action).click();
+        click(proposedActionSelect, false);
+        clickByText(button, action);
     }
 
     public static selectEffortEstimate(risk: string): void {
