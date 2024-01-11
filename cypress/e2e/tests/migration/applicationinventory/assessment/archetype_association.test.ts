@@ -16,20 +16,14 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import * as data from "../../../../../utils/data_utils";
-import {
-    login,
-    createMultipleTags,
-    deleteByList,
-    sidedrawerTab
-} from "../../../../../utils/utils";
-import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
+import * as commonView from "../../../../views/common.view";
+import { login, createMultipleTags, deleteByList, sidedrawerTab } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import { SEC } from "../../../../types/constants";
 
-
-let stakeholderList: Array<Stakeholders> = [];
 let applicationList: Array<Application> = [];
+let archetypeList: Array<Archetype> = [];
 
 describe(["@tier2"], "Tests related to application-archetype association ", () => {
     before("Login", function () {
@@ -51,7 +45,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         application.create();
         cy.wait(2 * SEC);
 
-        const archetypesList = [];
+        const archetypeList = [];
         const archetype1 = new Archetype(
             data.getRandomWord(8),
             [tags[0].name],
@@ -60,15 +54,16 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         );
         archetype1.create();
         cy.wait(2 * SEC);
-        archetypesList.push(archetype1);
+        archetypeList.push(archetype1);
 
         Application.open();
-        sidedrawerTab(name, "Details");
-        cy.get("pf-v5-c-description-list__text").contains("Associated archetypes");
-        cy.get("span.pf-v5-c-label__content").contains(archetype1.name);
+        sidedrawerTab(application.name, "Details");
+        cy.get(commonView.sideDrawer.associatedArchetypes).contains("Associated archetypes");
+        cy.get(commonView.sideDrawer.riskValue).contains(archetype1.name);
     });
 
     after("Perform test data clean up", function () {
-        deleteByList(stakeholderList);
+        deleteByList(applicationList);
+        deleteByList(archetypeList);
     });
 });
