@@ -1,8 +1,10 @@
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { cleanupDownloads, click, login } from "../../../../utils/utils";
+import { cleanupDownloads, click, login, notExists } from "../../../../utils/utils";
 import { downloadYamlTemplate } from "../../../views/assessmentquestionnaire.view";
+import { sampleQuestionnaire } from "../../../types/constants";
 const filePath = "cypress/downloads/questionnaire-template.yaml";
 const yaml = require("js-yaml");
+const yamlFile = "questionnaire_import/questionnaire-template-sample.yaml";
 
 describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
     before("Login", function () {
@@ -27,6 +29,18 @@ describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
             "contain",
             "Uploadable Cloud Readiness Questionnaire Template"
         );
+    });
+
+    it("Delete imported sample questionnaire", function () {
+        // Automates bugs: https://issues.redhat.com/browse/MTA-1725 and https://issues.redhat.com/browse/MTA-1781
+
+        AssessmentQuestionnaire.open();
+
+        AssessmentQuestionnaire.import(yamlFile);
+
+        AssessmentQuestionnaire.delete(sampleQuestionnaire);
+
+        notExists(sampleQuestionnaire);
     });
 
     after("Cleaning up", function () {
