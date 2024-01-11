@@ -21,19 +21,20 @@ import { login, createMultipleTags, deleteByList, sidedrawerTab } from "../../..
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import { SEC } from "../../../../types/constants";
+import { Tag } from "../../../../models/migration/controls/tags";
 
 let applicationList: Array<Application> = [];
 let archetypeList: Array<Archetype> = [];
+let tags: Tag[];
 
 describe(["@tier2"], "Tests related to application-archetype association ", () => {
     before("Login", function () {
         login();
-        cy.intercept("GET", "/hub/application*").as("getApplication");
+        tags = createMultipleTags(2);
     });
 
     it("Archetype association - Application creation before archetype creation ", function () {
         // Automates Polarion MTA-400
-        const tags = createMultipleTags(2);
         const appdata = {
             name: data.getAppName(),
             description: data.getDescription(),
@@ -47,24 +48,26 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         cy.wait(2 * SEC);
 
         const archetypeList = [];
-        const archetype1 = new Archetype(
+        const archetype = new Archetype(
             data.getRandomWord(8),
             [tags[0].name],
             [tags[1].name],
             null
         );
-        archetype1.create();
+        archetype.create();
         cy.wait(2 * SEC);
-        archetypeList.push(archetype1);
+        archetypeList.push(archetype);
 
+        // Assert that associated archetypes are listed after application gets associated with archetype(s)
         Application.open();
         sidedrawerTab(application.name, "Details");
         cy.get(commonView.sideDrawer.associatedArchetypes).contains("Associated archetypes");
-        cy.get(commonView.sideDrawer.riskValue).contains(archetype1.name);
+        cy.get(commonView.sideDrawer.labelContent).contains(archetype.name);
     });
 
     after("Perform test data clean up", function () {
         deleteByList(applicationList);
         deleteByList(archetypeList);
+        deleteByList(tags);
     });
 });
