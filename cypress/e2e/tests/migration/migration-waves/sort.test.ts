@@ -27,7 +27,6 @@ import {
     clickOnSortButton,
     createMultipleStakeholders,
     createMultipleBusinessServices,
-    generateRandomDateRange,
     cancelForm,
 } from "../../../../utils/utils";
 import { startDate, endDate, SortType } from "../../../types/constants";
@@ -118,10 +117,8 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
             application.create();
             applicationsList.push(application);
         }
-        const { start: startDate, end: endDate } = generateRandomDateRange();
-        const migrationWave = new MigrationWave(data.getRandomWord(4), startDate, endDate);
-        migrationWave.create();
-        migrationWave.openManageApplications();
+
+        migrationWavesList[0].openManageApplications();
         const unsortedAppList = getTableColumnData("Application Name");
         const unsortedBusinessList = getTableColumnData("Business service");
         const unsortedOwnerList = getTableColumnData("Owner");
@@ -163,7 +160,6 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
         const afterDescSortOwnerList = getTableColumnData("Owner");
         verifyDateSortDesc(afterDescSortOwnerList, unsortedOwnerList);
         cancelForm();
-        migrationWavesList.push(migrationWave);
     });
 
     after("Perform test data clean up", function () {
