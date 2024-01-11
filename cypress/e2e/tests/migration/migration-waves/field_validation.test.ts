@@ -18,8 +18,8 @@ limitations under the License.
 import {
     checkSuccessAlert,
     clickJs,
+    createMultipleMigrationWaves,
     deleteByList,
-    generateRandomDateRange,
     login,
     validateTooLongInput,
     validateTooShortInput,
@@ -92,23 +92,14 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         clickJs(cancelButton);
     });
     it("Duplicate Migration wave name validation", function () {
-        const migrationWavesList: MigrationWave[] = [];
-        const name = data.getRandomWord(8);
-        const { start: startDate, end: endDate } = generateRandomDateRange();
-        const migrationWave1 = new MigrationWave(name, startDate, endDate, null, null, null);
-        migrationWave1.create();
-        migrationWavesList.push(migrationWave1);
-        //create another MW with same params
-        migrationWave1.create();
+        const migrationWavesList: MigrationWave[] = createMultipleMigrationWaves(2);
+
+        migrationWavesList[0].create();
         checkSuccessAlert(commonView.alertTitle, duplicateMigrationWaveError);
 
-        const migrationWave3 = new MigrationWave(null, startDate, endDate, null, null, null);
-        migrationWave3.create();
-        migrationWave3.create();
+        migrationWavesList[1].create();
         checkSuccessAlert(commonView.alertTitle, duplicateMigrationWaveError);
-        migrationWavesList.push(migrationWave3);
 
-        //migrationwave3 name is null, so it can't be deleted by list
         deleteByList(migrationWavesList);
     });
 
