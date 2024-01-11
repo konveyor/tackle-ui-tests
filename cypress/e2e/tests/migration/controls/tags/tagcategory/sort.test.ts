@@ -60,7 +60,7 @@ describe(["@tier2"], "1 Bug: Tag category sort validations", function () {
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
-    it("Bug MTA-1787: Rank sort validations", function () {
+    it("Rank sort validations", function () {
         TagCategory.openList();
         cy.get("@getTagCategories");
 
