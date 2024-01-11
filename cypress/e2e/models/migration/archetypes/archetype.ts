@@ -24,6 +24,7 @@ import {
     click,
     clickKebabMenuOptionArchetype,
     confirm,
+    sidedrawerTab,
 } from "../../../../utils/utils";
 import { legacyPathfinder, migration, SEC, tdTag, trTag } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
@@ -83,13 +84,13 @@ export class Archetype {
 
     protected selectCriteriaTags(tags: string[]): void {
         tags.forEach(function (tag) {
-            selectFormItems(archetype.criteriaTags, tag);
+            selectFormItems(archetype.criteriaTagsSelector, tag);
         });
     }
 
     protected selectArchetypeTags(tags: string[]): void {
         tags.forEach(function (tag) {
-            selectFormItems(archetype.archetypeTags, tag);
+            selectFormItems(archetype.archetypeTagsSelector, tag);
         });
     }
 
@@ -301,6 +302,23 @@ export class Archetype {
                 const number = parseInt(numberMatch[0], 10);
                 cy.wrap(isNaN(number) ? null : number).as("appCount");
             });
+    }
+
+    assertsTagsMatch(tagsType: string, tagsList: string[], openDrawer = true, closeDrawer = true) {
+        if (openDrawer) sidedrawerTab(this.name, "Details");
+
+        cy.contains(tagsType)
+            .closest("div")
+            .within(() => {
+                cy.get("li").then(($lis) => {
+                    const foundTags = $lis.map((i, li) => Cypress.$(li).text().trim()).get();
+                    const sortedFoundTagsList = foundTags.slice().sort();
+                    const sortedTagsList = tagsList.slice().sort();
+                    expect(sortedFoundTagsList).to.deep.equal(sortedTagsList);
+                });
+            });
+
+        if (closeDrawer) click(commonView.sideDrawer.closeDrawer);
     }
 
     discardReview() {
