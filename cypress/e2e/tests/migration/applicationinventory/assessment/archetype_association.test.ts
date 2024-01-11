@@ -32,6 +32,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
     });
 
     it("Archetype association - Application creation before archetype creation ", function () {
+        // Automates Polarion MTA-400
         const tags = createMultipleTags(2);
         const appdata = {
             name: data.getAppName(),
