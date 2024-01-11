@@ -173,11 +173,12 @@ describe(["@tier2"], "Application validations", () => {
 
         // Create a new application
         application.create();
+        cy.wait("@getApplication");
         checkSuccessAlert(
             commonView.successAlertMessage,
             `Application ${application.name} was successfully created.`
         );
-        cy.wait("@postApplication");
+        cy.wait("@getApplication");
         exists(application.name);
 
         // Navigate to application inventory page and click create new button
