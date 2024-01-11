@@ -33,6 +33,7 @@ import { successAlertMessage } from "../../../views/common.view";
 import * as data from "../../../../utils/data_utils";
 import { SEC } from "../../../types/constants";
 import { getRandomWord } from "../../../../utils/data_utils";
+import { archetypeTags, criteriaTags } from "../../../views/archetype.view";
 
 let stakeholders: Stakeholders[];
 let stakeholderGroups: Stakeholdergroups[];
@@ -110,6 +111,9 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
             true
         );
         exists(archetypeDuplicate.name);
+
+        archetypeDuplicate.assertsTagsMatch(archetypeTags, archetype.archetypeTags, true, false);
+        archetypeDuplicate.assertsTagsMatch(criteriaTags, archetype.criteriaTags, false, true);
 
         archetype.delete();
         archetypeDuplicate.delete();
