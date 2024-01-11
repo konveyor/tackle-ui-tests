@@ -1,7 +1,7 @@
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { cleanupDownloads, click, login, notExists } from "../../../../utils/utils";
 import { downloadYamlTemplate } from "../../../views/assessmentquestionnaire.view";
-import { sampleQuestionnaire } from "../../../types/constants";
+import { sampleQuestionnaireTemplate } from "../../../types/constants";
 const filePath = "cypress/downloads/questionnaire-template.yaml";
 const yaml = require("js-yaml");
 const yamlFile = "questionnaire_import/questionnaire-template-sample.yaml";
@@ -38,9 +38,9 @@ describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
 
         AssessmentQuestionnaire.import(yamlFile);
 
-        AssessmentQuestionnaire.delete(sampleQuestionnaire);
+        AssessmentQuestionnaire.delete(sampleQuestionnaireTemplate);
 
-        notExists(sampleQuestionnaire);
+        notExists(sampleQuestionnaireTemplate);
     });
 
     after("Cleaning up", function () {
