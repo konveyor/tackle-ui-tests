@@ -299,7 +299,7 @@ export class Assessment {
     public static validateAssessmentField(name: string, page: string, risk: string): void {
         sidedrawerTab(name, "Details");
         cy.get(commonView.sideDrawer.risk).contains(`${page} risk`);
-        cy.get(commonView.sideDrawer.riskValue).contains(risk);
+        cy.get(commonView.sideDrawer.labelContent).contains(risk);
         click(commonView.sideDrawer.closeDrawer);
     }
 }
