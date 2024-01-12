@@ -62,7 +62,8 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
     });
 
     // test that when the insecure repository is enabled, then the analysis on a http repo should be completed successfully
-    it("Analysis on insecure subversion Repository(http) for tackle test app when insecure repository is allowed", function () {
+    // Skipped until a svn server is provided in https://issues.redhat.com/browse/MTA-1717
+    it.skip("Analysis on insecure subversion Repository(http) for tackle test app when insecure repository is allowed", function () {
         subversionConfiguration.enableInsecureSubversionRepositories();
 
         const application = new Analysis(

@@ -167,7 +167,8 @@ describe(["@tier1"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it("Source Analysis on tackle testapp for svn repo type", function () {
+    // Skipped until a svn server is provided in https://issues.redhat.com/browse/MTA-1717
+    it.skip("Source Analysis on tackle testapp for svn repo type", function () {
         // For tackle test app source credentials are required.
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_svnRepo", {
