@@ -21,6 +21,7 @@ import {
     click,
     login,
     createMultipleTags,
+    createMultipleArchetypes,
     deleteByList,
     sidedrawerTab,
 } from "../../../../../utils/utils";
@@ -30,7 +31,7 @@ import { SEC } from "../../../../types/constants";
 import { Tag } from "../../../../models/migration/controls/tags";
 
 let applicationList: Array<Application> = [];
-let archetypeList: Array<Archetype> = [];
+let archetypes: Array<Archetype> = [];
 let tags: Tag[];
 
 describe(["@tier2"], "Tests related to application-archetype association ", () => {
@@ -69,6 +70,34 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         sidedrawerTab(application.name, "Details");
         cy.get(commonView.sideDrawer.associatedArchetypes).contains("Associated archetypes");
         cy.get(commonView.sideDrawer.labelContent).contains(archetype.name);
+        click(commonView.sideDrawer.closeDrawer);
+    });
+
+    it("Verify application review from multiple archetypes", function () {
+        // Automates MTA-420
+        const appdata = {
+            name: data.getAppName(),
+            description: data.getDescription(),
+            tags: [tags[0].name],
+            comment: data.getDescription(),
+        };
+
+        const application = new Application(appdata);
+        applicationList.push(application);
+        application.create();
+        cy.wait(2 * SEC);
+
+        archetypes = createMultipleArchetypes(2);
+
+        // Assert that 'Archetypes reviewed' is populated on app drawer after review inheritance
+        Application.open();
+        sidedrawerTab(application.name, "Details");
+        cy.get(commonView.sideDrawer.associatedArchetypes).contains("Associated archetypes");
+        cy.get(commonView.sideDrawer.labelContent).contains(archetype.name);
+        cy.get(commonView.sideDrawer.associatedArchetypes).contains("Archetypes reviewed");
+
+        // Assert that inherited review details are listed on the 'Reviews' tab
+        sidedrawerTab(application.name, "Details");
         click(commonView.sideDrawer.closeDrawer);
     });
 

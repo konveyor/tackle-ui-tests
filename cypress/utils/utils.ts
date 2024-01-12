@@ -944,8 +944,9 @@ export function createMultipleJobFunctions(num): Array<Jobfunctions> {
 export function createMultipleArchetypes(number): Archetype[] {
     const randomTagName = "3rd party / Apache Aries";
     let archetypesList: Archetype[] = [];
+    let tags = createMultipleTags(number);
     for (let i = 0; i < number; i++) {
-        const archetype = new Archetype(data.getRandomWord(6), [randomTagName], [randomTagName]);
+        const archetype = new Archetype(data.getRandomWord(6), [tags[i].name], [tags[i].name]);
         archetype.create();
         cy.wait(2 * SEC);
         archetypesList.push(archetype);
