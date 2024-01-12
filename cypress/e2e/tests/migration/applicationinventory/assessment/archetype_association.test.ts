@@ -64,7 +64,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         cy.wait(2 * SEC);
         archetypeList.push(archetype);
 
-        // Assert that associated archetypes are listed after application gets associated with archetype(s)
+        // Assert that associated archetypes are listed on app drawer after application gets associated with archetype(s)
         Application.open();
         sidedrawerTab(application.name, "Details");
         cy.get(commonView.sideDrawer.associatedArchetypes).contains("Associated archetypes");
