@@ -17,7 +17,13 @@ limitations under the License.
 
 import * as data from "../../../../../utils/data_utils";
 import * as commonView from "../../../../views/common.view";
-import { login, createMultipleTags, deleteByList, sidedrawerTab } from "../../../../../utils/utils";
+import {
+    click,
+    login,
+    createMultipleTags,
+    deleteByList,
+    sidedrawerTab,
+} from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import { SEC } from "../../../../types/constants";
@@ -63,6 +69,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         sidedrawerTab(application.name, "Details");
         cy.get(commonView.sideDrawer.associatedArchetypes).contains("Associated archetypes");
         cy.get(commonView.sideDrawer.labelContent).contains(archetype.name);
+        click(commonView.sideDrawer.closeDrawer);
     });
 
     after("Perform test data clean up", function () {
