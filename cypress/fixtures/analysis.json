@@ -117,7 +117,11 @@
         "target": ["Containerization"],
         "appName": "tackle-testapp",
         "excludePackages": "io.konveyor.demo.ordermanagement.model",
-        "storyPoints": 1
+        "issues": [
+            {
+                "name": ["File system - Java IO", "Java Servlet"]
+            }
+        ]
     },
 
     "analysis_for_excludeRuleTags": {
@@ -135,10 +139,14 @@
         "appName": "tackle-testapp",
         "manuallyAnalyzePackages": "io.konveyor.demo.ordermanagement",
         "excludedPackagesList": [
-            " io.konveyor.demo.ordermanagement.OrderManagementAppInitializer",
-            " io.konveyor.demo.ordermanagement.model.Customer "
+            " io.konveyor.demo.ordermanagement",
+            " io.konveyor.demo.ordermanagement.model "
         ],
-        "storyPoints": 1
+        "issues": [
+            {
+                "name": ["Java Servlet"]
+            }
+        ]
     },
 
     "analysis_and_incident_validation_jeeExample_app": {

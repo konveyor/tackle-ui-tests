@@ -424,24 +424,6 @@ export class Analysis extends Application {
         });
     }
 
-    validateExcludedPackages(text?: string): void {
-        // Click on App name
-        // then Application Details tab
-        // and the html link to exclude packages should not be present
-        cy.get(fileName + " > a")
-            .should("contain", this.appName)
-            .click();
-        cy.get(tabsPanel).contains("Application Details").click();
-        click(expandAll);
-        if (this.excludePackages) {
-            cy.get(panelBody).should("not.contain.html", `${this.excludePackages}.${text}`);
-        }
-        if (this.manuallyAnalyzePackages) {
-            // for "Select the list of packages to be analyzed manually" option
-            cy.get(panelBody).should("not.contain.html", this.excludedPackagesList);
-        }
-    }
-
     static validateTopActionMenu(rbacRules: RbacValidationRules) {
         Application.open();
         if (rbacRules["Top action menu"]["Not available"]) {
