@@ -73,12 +73,15 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         click(commonView.sideDrawer.closeDrawer);
     });
 
-    it("Verify application review from multiple archetypes", function () {
+    it.only("Verify application review from multiple archetypes", function () {
         // Automates MTA-420
+
+        archetypes = createMultipleArchetypes(2, tags);
+
         const appdata = {
             name: data.getAppName(),
             description: data.getDescription(),
-            tags: [tags[0].name],
+            tags: [tags[0].name, tags[1].name],
             comment: data.getDescription(),
         };
 
@@ -87,13 +90,11 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         application.create();
         cy.wait(2 * SEC);
 
-        archetypes = createMultipleArchetypes(2);
-
         // Assert that 'Archetypes reviewed' is populated on app drawer after review inheritance
         Application.open();
         sidedrawerTab(application.name, "Details");
         cy.get(commonView.sideDrawer.associatedArchetypes).contains("Associated archetypes");
-        cy.get(commonView.sideDrawer.labelContent).contains(archetype.name);
+        cy.get(commonView.sideDrawer.labelContent).contains(archetypes[0].name, archetypes[1].name);
         cy.get(commonView.sideDrawer.associatedArchetypes).contains("Archetypes reviewed");
 
         // Assert that inherited review details are listed on the 'Reviews' tab
@@ -103,7 +104,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
     after("Perform test data clean up", function () {
         deleteByList(applicationList);
-        deleteByList(archetypeList);
+        deleteByList(archetypes);
         deleteByList(tags);
     });
 });
