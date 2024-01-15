@@ -20,12 +20,11 @@ import { Analysis } from "../../../../models/migration/applicationinventory/anal
 import { AnalysisStatuses, CredentialType, UserCredentials } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
-import { analysisDetailsEditor } from "../../../../views/analysis.view";
 
 let source_credential: CredentialsSourceControlUsername;
 let application: Analysis;
 
-describe(["@tier2"], "Bug MTA-1890: Select the list of packages to be analyzed manually", () => {
+describe(["@tier2"], "Select the list of packages to be analyzed manually", () => {
     before("Login", function () {
         login();
         // Create source Credentials
@@ -50,7 +49,7 @@ describe(["@tier2"], "Bug MTA-1890: Select the list of packages to be analyzed m
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Bug MTA-1890: Analyze the packages manually with excluded packages", function () {
+    it("Analyze the packages manually with excluded packages", function () {
         const analysisData = this.analysisData["analysis_for_manuallyAnalyzePackages"];
         application = new Analysis(
             getRandomApplicationData("testapp-excludePackages", {
@@ -64,8 +63,9 @@ describe(["@tier2"], "Bug MTA-1890: Select the list of packages to be analyzed m
 
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
-        application.openAnalysisDetails();
-        cy.get(analysisDetailsEditor).should("contain.text", analysisData.manuallyAnalyzePackages);
+        application.validateExcludedIssues(
+            this.analysisData["analysis_for_manuallyAnalyzePackages"]["issues"]
+        );
     });
 
     after("Perform test data clean up", function () {
