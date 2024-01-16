@@ -2,9 +2,12 @@ import { AssessmentQuestionnaire } from "../../../models/administration/assessme
 import { cleanupDownloads, click, login, notExists } from "../../../../utils/utils";
 import { downloadYamlTemplate } from "../../../views/assessmentquestionnaire.view";
 import { sampleQuestionnaireTemplate } from "../../../types/constants";
+import { alertTitle } from "../../../views/common.view";
+import { closeModal } from "../../../views/assessment.view";
 const filePath = "cypress/downloads/questionnaire-template.yaml";
 const yaml = require("js-yaml");
 const yamlFile = "questionnaire_import/questionnaire-template-sample.yaml";
+const invalidYamlFile = "questionnaire_import/invalid-questionnaire-template.yaml";
 
 describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
     before("Login", function () {
@@ -41,6 +44,24 @@ describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
         AssessmentQuestionnaire.delete(sampleQuestionnaireTemplate);
 
         notExists(sampleQuestionnaireTemplate);
+    });
+
+    it("Import invalid questionnaire", function () {
+        // Automates bug https://issues.redhat.com/browse/MTA-1349
+
+        AssessmentQuestionnaire.open();
+
+        AssessmentQuestionnaire.import(invalidYamlFile);
+
+        cy.get(alertTitle).then(($element) => {
+            let text = $element.text();
+            expect(text).to.contain(
+                "Error:Field validation",
+                `Error: expected the alert popup to contain text [Error:Field validation] but it didn't.\nInstead found: ${text}`
+            );
+        });
+
+        click(closeModal);
     });
 
     after("Cleaning up", function () {
