@@ -31,7 +31,7 @@ import { SEC } from "../../../../types/constants";
 import { Tag } from "../../../../models/migration/controls/tags";
 
 let applicationList: Array<Application> = [];
-let archetypes: Array<Archetype> = [];
+let archetypeList: Array<Archetype> = [];
 let tags: Tag[];
 
 describe(["@tier2"], "Tests related to application-archetype association ", () => {
@@ -75,7 +75,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
     it("Verify application review from multiple archetypes", function () {
         // Automates MTA-420
-        archetypes = createMultipleArchetypes(2, tags);
+        archetypeList = createMultipleArchetypes(2, tags);
 
         const appdata = {
             name: data.getAppName(),
@@ -89,8 +89,8 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         application.create();
         cy.wait(2 * SEC);
 
-        archetypes[0].perform_review("low");
-        archetypes[1].perform_review("medium");
+        archetypeList[0].perform_review("low");
+        archetypeList[1].perform_review("medium");
 
         // Assert that 'Archetypes reviewed' is populated on app drawer after review inheritance
         Application.open();
@@ -102,17 +102,17 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
             .within(() => {
                 cy.get("dd").then(($value) => {
                     let text = $value.text();
-                    expect(text).to.equal(archetypes[0].name + archetypes[1].name);
+                    expect(text).to.equal(archetypeList[0].name + archetypeList[1].name);
                 });
             });
 
-        // Assert that inherited review details are listed on the 'Reviews' tab
-        application.validateInheritedReviewFields(archetypes);
+        // Assert that inherited review inheritance details are listed on the 'Reviews' tab
+        application.validateInheritedReviewFields(archetypeList);
     });
 
     after("Perform test data clean up", function () {
         deleteByList(applicationList);
-        deleteByList(archetypes);
+        deleteByList(archetypeList);
         deleteByList(tags);
     });
 });
