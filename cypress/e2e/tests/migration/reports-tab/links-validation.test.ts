@@ -23,7 +23,6 @@ import {
     getTableColumnData,
     deleteApplicationTableRows,
     deleteAllMigrationWaves,
-    selectItemsPerPage,
 } from "../../../../utils/utils";
 import { name, legacyPathfinder, SEC } from "../../../types/constants";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
