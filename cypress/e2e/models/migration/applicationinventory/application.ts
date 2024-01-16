@@ -640,6 +640,13 @@ export class Application {
         Assessment.validateReviewFields(this.name, "Application");
     }
 
+    validateInheritedReviewFields(archetypes): void {
+        Application.open();
+        for (let i in archetypes) {
+            Assessment.validateReviewFields(this.name, "Archetype", archetypes[i].name);
+        }
+    }
+
     retake_questionnaire(
         risk,
         stakeholders?: Stakeholders[],
