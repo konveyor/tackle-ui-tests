@@ -54,7 +54,7 @@ describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
         AssessmentQuestionnaire.import(invalidYamlFile);
 
         cy.get(alertTitle).then(($element) => {
-            let text = $element.text();
+            const text = $element.text();
             expect(text).to.contain(
                 "Error:Field validation",
                 `Error: expected the alert popup to contain text [Error:Field validation] but it didn't.\nInstead found: ${text}`
