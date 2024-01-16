@@ -14,7 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { clickByText, getUrl, selectUserPerspective } from "../../../../utils/utils";
+import {
+    clickByText,
+    getUrl,
+    selectItemsPerPage,
+    selectUserPerspective,
+} from "../../../../utils/utils";
 import { SEC, migration } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import {
@@ -27,12 +32,15 @@ import {
 export class Reports {
     static fullUrl = Cypress.env("tackleUrl") + "/reports";
 
-    public static open(): void {
+    public static open(itemsPerPage?: number): void {
         if (!getUrl().includes(Reports.fullUrl)) {
             selectUserPerspective(migration);
         }
         clickByText(navMenu, "Reports");
         cy.wait(2 * SEC);
+        if (itemsPerPage) {
+            selectItemsPerPage(itemsPerPage);
+        }
     }
 
     public static verifyRisk(

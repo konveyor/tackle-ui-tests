@@ -60,14 +60,32 @@ describe(["@tier2"], "Reports tests", () => {
             Reports.open();
             cy.contains("a", `${risk} risk`, { matchCase: false, timeout: 10 * SEC }).click();
             cy.wrap(getTableColumnData(name)).then((appNames) =>
-                expect(appNames).to.be.deep.equal([applicationsList[i].name])
+                expect(appNames, `${risk} risk link validation`).to.be.deep.equal([
+                    applicationsList[i].name,
+                ])
             );
         });
 
         Reports.open();
         cy.contains("a", "Unassessed", { timeout: 10 * SEC }).click();
         cy.wrap(getTableColumnData(name)).then((appNames) =>
-            expect(appNames).to.be.deep.equal([applicationsList.at(-1).name])
+            expect(appNames, "Unassessed link validation").to.be.deep.equal([
+                applicationsList.at(-1).name,
+            ])
+        );
+    });
+
+    it("Identified Risks links validation", function () {
+        Reports.open(100);
+        cy.contains("a", "1 application").click();
+        cy.wrap(getTableColumnData(name)).then((appNames) =>
+            expect(appNames.length, "1 app link validation").equal(1)
+        );
+
+        Reports.open(100);
+        cy.contains("a", "2 applications").click();
+        cy.wrap(getTableColumnData(name)).then((appNames) =>
+            expect(appNames.length, "2 apps link validation").equal(2)
         );
     });
 
