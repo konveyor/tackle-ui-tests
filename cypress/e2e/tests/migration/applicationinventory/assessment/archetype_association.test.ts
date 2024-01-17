@@ -73,7 +73,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         click(commonView.sideDrawer.closeDrawer);
     });
 
-    it.only("Verify application review inherotance from multiple archetypes ", function () {
+    it("Verify application review inheritance from multiple archetypes ", function () {
         /* Automates MTA-420
         This also verifies: Archetype association - Application creation after archetype creation.
         */

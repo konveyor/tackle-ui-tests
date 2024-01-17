@@ -947,7 +947,7 @@ export function createMultipleArchetypes(number, tags?: Tag[]): Archetype[] {
     for (let i = 0; i < number; i++) {
         let archetype: Archetype;
         if (tags) archetype = new Archetype(data.getRandomWord(6), [tags[i].name], [tags[i].name]);
-        else archetype = new Archetype(randomTagName, [tags[i].name], [tags[i].name]);
+        else archetype = new Archetype(data.getRandomWord(6), [randomTagName], [randomTagName]);
         archetype.create();
         cy.wait(2 * SEC);
         archetypesList.push(archetype);
