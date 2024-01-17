@@ -657,6 +657,13 @@ export class Application {
         click(commonView.sideDrawer.closeDrawer);
     }
 
+    validateInheritedReviewFields(archetypes: string[]): void {
+        Application.open();
+        for (let archetype of archetypes) {
+            Assessment.validateReviewFields(this.name, "Archetype", archetype);
+        }
+    }
+
     retake_questionnaire(
         risk,
         stakeholders?: Stakeholders[],
