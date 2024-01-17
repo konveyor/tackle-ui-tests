@@ -21,6 +21,7 @@ import {
     click,
     login,
     createMultipleTags,
+    createMultipleArchetypes,
     deleteByList,
     sidedrawerTab,
 } from "../../../../../utils/utils";
@@ -70,6 +71,31 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         cy.get(commonView.sideDrawer.associatedArchetypes).contains("Associated archetypes");
         cy.get(commonView.sideDrawer.labelContent).contains(archetype.name);
         click(commonView.sideDrawer.closeDrawer);
+    });
+
+    it("Verify application review inheritance from multiple archetypes ", function () {
+        /* Automates MTA-420
+        This also verifies: Archetype association - Application creation after archetype creation.
+        */
+        archetypeList = createMultipleArchetypes(2, tags);
+
+        const appdata = {
+            name: data.getAppName(),
+            description: data.getDescription(),
+            tags: [tags[0].name, tags[1].name],
+            comment: data.getDescription(),
+        };
+
+        const application = new Application(appdata);
+        applicationList.push(application);
+        application.create();
+        cy.wait(2 * SEC);
+
+        archetypeList[0].perform_review("low");
+        archetypeList[1].perform_review("medium");
+
+        // Assert that 'Archetypes reviewed' is populated on app drawer after review inheritance
+        application.verifyArchetypeReviewedList(archetypeList);
     });
 
     after("Perform test data clean up", function () {

@@ -941,11 +941,13 @@ export function createMultipleJobFunctions(num): Array<Jobfunctions> {
     return jobFunctionsList;
 }
 
-export function createMultipleArchetypes(number): Archetype[] {
+export function createMultipleArchetypes(number, tags?: Tag[]): Archetype[] {
     const randomTagName = "3rd party / Apache Aries";
     let archetypesList: Archetype[] = [];
     for (let i = 0; i < number; i++) {
-        const archetype = new Archetype(data.getRandomWord(6), [randomTagName], [randomTagName]);
+        let archetype: Archetype;
+        if (tags) archetype = new Archetype(data.getRandomWord(6), [tags[i].name], [tags[i].name]);
+        else archetype = new Archetype(data.getRandomWord(6), [randomTagName], [randomTagName]);
         archetype.create();
         cy.wait(2 * SEC);
         archetypesList.push(archetype);

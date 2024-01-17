@@ -79,6 +79,7 @@ import {
     validateTextPresence,
     validateNumberPresence,
     performWithin,
+    sidedrawerTab,
 } from "../../../../utils/utils";
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
 import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
@@ -638,6 +639,22 @@ export class Application {
     validateReviewFields(): void {
         Application.open();
         Assessment.validateReviewFields(this.name, "Application");
+    }
+
+    verifyArchetypeReviewedList(archetypeList): void {
+        Application.open();
+        sidedrawerTab(this.name, "Details");
+        cy.get(commonView.sideDrawer.associatedArchetypes).contains("Archetypes reviewed");
+        cy.get("dt")
+            .contains("Archetypes reviewed")
+            .closest("div")
+            .within(() => {
+                cy.get("dd").then(($value) => {
+                    const text = $value.text();
+                    expect(text).to.equal(archetypeList[0].name + archetypeList[1].name);
+                });
+            });
+        click(commonView.sideDrawer.closeDrawer);
     }
 
     retake_questionnaire(
