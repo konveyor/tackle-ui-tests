@@ -43,7 +43,6 @@ import {
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
 import { notYetReviewed, reviewItems } from "../../../views/archetype.view";
-import { Archetype } from "../archetypes/archetype";
 
 export class Assessment {
     public static selectStakeholders(stakeholders: Stakeholders[]): void {
