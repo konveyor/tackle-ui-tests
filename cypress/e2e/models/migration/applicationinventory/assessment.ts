@@ -217,8 +217,7 @@ export class Assessment {
         cy.wait(2 * SEC);
     }
 
-    public static validateReviewFields(name: string, entityName: string, archetype?: string): void {
-        if (archetype) name = archetype;
+    public static validateReviewFields(name: string, entityName: string): void {
         let list = [
             "Proposed action",
             "Effort estimate",
