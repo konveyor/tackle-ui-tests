@@ -10,6 +10,7 @@ import { Issues } from "../../../../../models/migration/dynamic-report/issues/is
 
 describe(["@tier2"], "Issues sort validations", function () {
     let application: Analysis;
+    const sortByList = ["Issue", "Category", "Effort", "Affected files"];
 
     before("Load data, create Analysis instance and run analysis", function () {
         login();
@@ -23,8 +24,7 @@ describe(["@tier2"], "Issues sort validations", function () {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("BUG MTA-2067 - Source Analysis on daytrader app and its issues sorting validation", function () {
-        // Create Analysis instance in before hook
+    it("Source Analysis on daytrader application", function () {
         application = new Analysis(
             getRandomApplicationData("daytrader-app", {
                 sourceData: this.appData["daytrader-app"],
@@ -36,23 +36,15 @@ describe(["@tier2"], "Issues sort validations", function () {
         application.analyze();
         cy.wait(2 * SEC);
         application.verifyAnalysisStatus("Completed");
-        Issues.openSingleApplication(application.name);
-        validateSortBy("Issue");
     });
 
-    it("Sort issues by category", function () {
-        Issues.openSingleApplication(application.name);
-        validateSortBy("Category");
-    });
-
-    it("Sort issues by effort", function () {
-        Issues.openSingleApplication(application.name);
-        validateSortBy("Effort");
-    });
-
-    it("Sort issues by affected files", function () {
-        Issues.openSingleApplication(application.name);
-        validateSortBy("Affected files");
+    sortByList.forEach((column) => {
+        it(`${
+            column == "Issue" ? "BUG MTA-2067 - " : ""
+        }Sort single application issues by ${column}`, function () {
+            Issues.openSingleApplication(application.name);
+            validateSortBy(column);
+        });
     });
 
     after("Perform test data clean up", function () {
