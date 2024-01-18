@@ -21,8 +21,8 @@ import {
     createMultipleStakeholders,
     deleteAllMigrationWaves,
     deleteApplicationTableRows,
-    getTableColumnData,
     login,
+    validateSortBy,
     verifySortAsc,
     verifySortDesc,
 } from "../../../../utils/utils";
@@ -69,13 +69,7 @@ describe(["@tier2"], "Reports tests", () => {
                 columnDataLabel = questionnaireNameColumnDataLabel;
             }
 
-            const unsorted = getTableColumnData(columnDataLabel);
-
-            clickOnSortButton(column, SortType.ascending);
-            verifySortAsc(getTableColumnData(columnDataLabel), unsorted);
-
-            clickOnSortButton(column, SortType.descending);
-            verifySortDesc(getTableColumnData(columnDataLabel), unsorted);
+            validateSortBy(column, columnDataLabel);
         });
     });
 
