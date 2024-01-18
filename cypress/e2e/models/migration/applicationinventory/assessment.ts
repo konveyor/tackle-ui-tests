@@ -262,7 +262,6 @@ export class Assessment {
                 .closest("div")
                 .within(() => {
                     let item;
-                    console.log();
                     cy.get("span.pf-v5-c-label__text").each((item) => {
                         if (Cypress.$(item).text().includes(name)) {
                             if (list[i] == "Proposed action")
