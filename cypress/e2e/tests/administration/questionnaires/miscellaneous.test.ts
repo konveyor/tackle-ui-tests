@@ -8,6 +8,7 @@ const filePath = "cypress/downloads/questionnaire-template.yaml";
 const yaml = require("js-yaml");
 const yamlFile = "questionnaire_import/questionnaire-template-sample.yaml";
 const invalidYamlFile = "questionnaire_import/invalid-questionnaire-template.yaml";
+const legacyQuestionnaire = "Legacy Pathfinder";
 
 describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
     before("Login", function () {
@@ -62,6 +63,17 @@ describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
         });
 
         click(closeModal);
+    });
+
+    it("Performs question search on questionnaires", function () {
+        // Automates Polarion - MTA 435
+        AssessmentQuestionnaire.open();
+        AssessmentQuestionnaire.view(legacyQuestionnaire);
+        const textInput = "Production";
+        AssessmentQuestionnaire.searchQuestions(textInput);
+        AssessmentQuestionnaire.validateNumberOfMatches("Application details", 4);
+        AssessmentQuestionnaire.validateNumberOfMatches("Application cross-cutting concerns", 1);
+        AssessmentQuestionnaire.validateSearchWordInRows(textInput);
     });
 
     after("Cleaning up", function () {

@@ -18,7 +18,7 @@ import {
     switchToggle,
 } from "../../../views/assessmentquestionnaire.view";
 import { navMenu } from "../../../views/menu.view";
-import { button } from "../../../../e2e/types/constants";
+import { button } from "../../../types/constants";
 import { actionButton } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 
@@ -120,6 +120,53 @@ export class AssessmentQuestionnaire {
                             } else {
                                 // close menu if nothing to do
                                 cy.get(actionButton).eq(0).click({ force: true });
+                            }
+                        });
+                }
+            });
+    }
+    public static searchQuestions(inputText: string): void {
+        cy.get(".pf-v5-c-text-input-group__text-input")
+            .type(inputText, { force: true })
+            .should("have.value", inputText);
+    }
+    static validateNumberOfMatches(section: string, expectedMatches: number): void {
+        cy.get(".pf-v5-c-tabs__item-text")
+            .contains(section)
+            .parent()
+            .find("span.pf-v5-c-badge")
+            .then(($badge) => {
+                const text = $badge.text();
+                const match = text.match(/(\d+) match(es)?/);
+                const actualMatches = match ? parseInt(match[1]) : 0;
+                expect(actualMatches).to.equal(expectedMatches);
+            });
+    }
+    static validateSearchWordInRows(textInput: string): void {
+        const lowerCaseInput = textInput.toLowerCase();
+        //loop over each row and if a row does not contain the text then click and check subtitle then close it
+        cy.get(".pf-v5-c-table > tbody > tr", { timeout: 5 * SEC })
+            .not(".pf-v5-c-table__expandable-row")
+            .each(($row) => {
+                if ($row.is(":visible")) {
+                    cy.wrap($row.find('td[data-label="Name"]'))
+                        .invoke("text")
+                        .then((cellText) => {
+                            if (!cellText.toLowerCase().includes(lowerCaseInput)) {
+                                cy.wrap($row).find("td:first").find("button").click();
+
+                                cy.wrap($row).next().invoke("is", ":visible").should("be.true");
+
+                                cy.wrap($row)
+                                    .next()
+                                    .invoke("text")
+                                    .then((expandedText) => {
+                                        expect(expandedText.toLowerCase()).to.include(
+                                            lowerCaseInput
+                                        );
+                                    });
+
+                                cy.wrap($row).find("td:first").find("button").click();
                             }
                         });
                 }
