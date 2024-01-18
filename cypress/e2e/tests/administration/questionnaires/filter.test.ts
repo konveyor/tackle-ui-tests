@@ -16,21 +16,25 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { applySearchFilter, clickByText, exists, login, notExists } from "../../../../utils/utils";
-import { button, clearAllFilters, name } from "../../../types/constants";
+import {
+    button,
+    clearAllFilters,
+    cloudNative,
+    legacyPathfinder,
+    name,
+} from "../../../types/constants";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 
 const yamlFileName = "questionnaire_import/cloud-native.yaml";
-const importedQuestionnaire = "Cloud Native";
-const legacyQuestionnaire = "Legacy Pathfinder";
 let assessmentQuestionnaireList: Array<string> = [];
 
-describe(["@tier2"], "Assessment Questionnaire filter validation", () => {
+describe(["@tier3"], "Assessment Questionnaire filter validation", () => {
     before("Login", function () {
         login();
         AssessmentQuestionnaire.import(yamlFileName);
-        AssessmentQuestionnaire.enable(importedQuestionnaire, false);
-        assessmentQuestionnaireList.push(importedQuestionnaire);
-        assessmentQuestionnaireList.push(legacyQuestionnaire);
+        AssessmentQuestionnaire.enable(cloudNative, false);
+        assessmentQuestionnaireList.push(cloudNative);
+        assessmentQuestionnaireList.push(legacyPathfinder);
     });
 
     it("Name filter validation", function () {
@@ -54,6 +58,6 @@ describe(["@tier2"], "Assessment Questionnaire filter validation", () => {
     });
 
     after("Perform test data clean up", function () {
-        AssessmentQuestionnaire.delete(importedQuestionnaire);
+        AssessmentQuestionnaire.delete(cloudNative);
     });
 });
