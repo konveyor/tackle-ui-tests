@@ -1,6 +1,5 @@
 import { Analysis } from "../../../../../models/migration/applicationinventory/analysis";
 import {
-    deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
@@ -10,7 +9,6 @@ import { SEC } from "../../../../../types/constants";
 import { Issues } from "../../../../../models/migration/dynamic-report/issues/issues";
 
 describe(["@tier2"], "Issues sort validations", function () {
-    let applicationsList: Array<Analysis> = [];
     let application: Analysis;
 
     before("Load data, create Analysis instance and run analysis", function () {
@@ -22,8 +20,6 @@ describe(["@tier2"], "Issues sort validations", function () {
             this.analysisData = analysisData;
         });
 
-        // Interceptors
-        cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
@@ -36,7 +32,6 @@ describe(["@tier2"], "Issues sort validations", function () {
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
         application.create();
-        applicationsList.push(application);
         cy.wait("@getApplication");
         application.analyze();
         cy.wait(2 * SEC);
@@ -62,6 +57,6 @@ describe(["@tier2"], "Issues sort validations", function () {
 
     after("Perform test data clean up", function () {
         Analysis.open(true);
-        deleteByList(applicationsList);
+        application.delete();
     });
 });

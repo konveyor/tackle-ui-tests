@@ -1767,19 +1767,19 @@ export function manageCredentialsForMultipleApplications(
 export function validateSortBy(sortBy: string) {
     const unsortedList = getTableColumnData(sortBy);
 
-    // Sort the application inventory by name in ascending order
+    // Sort the table by column title in ascending order
     clickOnSortButton(sortBy, SortType.ascending);
     cy.wait(2 * SEC);
 
-    // Verify that the application inventory table rows are displayed in ascending order
+    // Verify that the table rows are displayed in ascending order
     const afterAscSortList = getTableColumnData(sortBy);
     verifySortAsc(afterAscSortList, unsortedList);
 
-    // Sort the application inventory by name in descending order
+    // Sort the table by column title in descending order
     clickOnSortButton(sortBy, SortType.descending);
     cy.wait(2 * SEC);
 
-    // Verify that the application inventory table rows are displayed in descending order
+    // Verify that the table rows are displayed in descending order
     const afterDescSortList = getTableColumnData(sortBy);
     verifySortDesc(afterDescSortList, unsortedList);
 }
