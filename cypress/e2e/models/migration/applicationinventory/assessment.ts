@@ -265,19 +265,31 @@ export class Assessment {
                 .contains(list[i])
                 .closest("div")
                 .within(() => {
-                    let item;
-                    cy.get("span.pf-v5-c-label__text").each((item) => {
-                        if (Cypress.$(item).text().includes(name)) {
-                            if (list[i] == "Proposed action")
-                                expect(Cypress.$(item).text()).to.be.oneOf(actionList);
+                    if (archetypeName) {
+                        let item;
+                        cy.get("span.pf-v5-c-label__text").each((item) => {
+                            if (Cypress.$(item).text().includes(name)) {
+                                if (list[i] == "Proposed action")
+                                    expect(Cypress.$(item).text()).to.be.oneOf(actionList);
+                                if (list[i] == "Effort estimate")
+                                    expect(Cypress.$(item).text()).to.be.oneOf(effortEstimateList);
+                                if (list[i] == "Business criticality" || list[i] == "Work priority")
+                                    expect(Cypress.$(item).text()).to.be.oneOf(criticalityList);
+                                if (list[i] == "Comments")
+                                    expect(Cypress.$(item).text()).not.equal("Not yet reviewed");
+                            }
+                        });
+                    } else {
+                        cy.get("dd").then(($value) => {
+                            let text = $value.text();
+                            if (list[i] == "Proposed action") expect(text).to.be.oneOf(actionList);
                             if (list[i] == "Effort estimate")
-                                expect(Cypress.$(item).text()).to.be.oneOf(effortEstimateList);
+                                expect(text).to.be.oneOf(effortEstimateList);
                             if (list[i] == "Business criticality" || list[i] == "Work priority")
-                                expect(Cypress.$(item).text()).to.be.oneOf(criticalityList);
-                            if (list[i] == "Comments")
-                                expect(Cypress.$(item).text()).not.equal("Not yet reviewed");
-                        }
-                    });
+                                expect(text).to.be.oneOf(criticalityList);
+                            if (list[i] == "Comments") expect(text).not.equal("Not yet reviewed");
+                        });
+                    }
                 });
         }
         click(commonView.sideDrawer.closeDrawer);
