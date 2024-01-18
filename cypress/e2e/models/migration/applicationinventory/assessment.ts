@@ -219,7 +219,13 @@ export class Assessment {
         cy.wait(2 * SEC);
     }
 
-    public static validateReviewFields(name: string, entityName: string): void {
+    public static validateReviewFields(
+        name: string,
+        entityName: string,
+        archetypeName?: string
+    ): void {
+        sidedrawerTab(name, "Review");
+        if (archetypeName) name = archetypeName;
         let list = [
             "Proposed action",
             "Effort estimate",
@@ -254,21 +260,36 @@ export class Assessment {
             `${entityName} - ${name}-10`,
         ];
 
-        sidedrawerTab(name, "Review");
         for (let i in list) {
             cy.get("dt")
                 .contains(list[i])
                 .closest("div")
                 .within(() => {
-                    cy.get("dd").then(($value) => {
-                        let text = $value.text();
-                        if (list[i] == "Proposed action") expect(text).to.be.oneOf(actionList);
-                        if (list[i] == "Effort estimate")
-                            expect(text).to.be.oneOf(effortEstimateList);
-                        if (list[i] == "Business criticality" || list[i] == "Work priority")
-                            expect(text).to.be.oneOf(criticalityList);
-                        if (list[i] == "Comments") expect(text).not.equal("Not yet reviewed");
-                    });
+                    if (archetypeName) {
+                        let item;
+                        cy.get("span.pf-v5-c-label__text").each((item) => {
+                            if (Cypress.$(item).text().includes(name)) {
+                                if (list[i] == "Proposed action")
+                                    expect(Cypress.$(item).text()).to.be.oneOf(actionList);
+                                if (list[i] == "Effort estimate")
+                                    expect(Cypress.$(item).text()).to.be.oneOf(effortEstimateList);
+                                if (list[i] == "Business criticality" || list[i] == "Work priority")
+                                    expect(Cypress.$(item).text()).to.be.oneOf(criticalityList);
+                                if (list[i] == "Comments")
+                                    expect(Cypress.$(item).text()).not.equal("Not yet reviewed");
+                            }
+                        });
+                    } else {
+                        cy.get("dd").then(($value) => {
+                            let text = $value.text();
+                            if (list[i] == "Proposed action") expect(text).to.be.oneOf(actionList);
+                            if (list[i] == "Effort estimate")
+                                expect(text).to.be.oneOf(effortEstimateList);
+                            if (list[i] == "Business criticality" || list[i] == "Work priority")
+                                expect(text).to.be.oneOf(criticalityList);
+                            if (list[i] == "Comments") expect(text).not.equal("Not yet reviewed");
+                        });
+                    }
                 });
         }
         click(commonView.sideDrawer.closeDrawer);

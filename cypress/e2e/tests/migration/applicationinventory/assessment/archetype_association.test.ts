@@ -77,7 +77,9 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         /* Automates MTA-420
         This also verifies: Archetype association - Application creation after archetype creation.
         */
+
         archetypeList = createMultipleArchetypes(2, tags);
+        const archetypeNames = [archetypeList[0].name, archetypeList[1].name];
 
         const appdata = {
             name: data.getAppName(),
@@ -96,6 +98,9 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         // Assert that 'Archetypes reviewed' is populated on app drawer after review inheritance
         application.verifyArchetypeReviewedList(archetypeList);
+
+        // Validate 'Reviews' field on app drawer after review inheritance
+        application.validateInheritedReviewFields(archetypeNames);
     });
 
     after("Perform test data clean up", function () {
