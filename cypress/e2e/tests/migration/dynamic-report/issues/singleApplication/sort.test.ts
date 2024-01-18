@@ -10,7 +10,7 @@ import { Issues } from "../../../../../models/migration/dynamic-report/issues/is
 
 describe(["@tier2"], "Issues sort validations", function () {
     let application: Analysis;
-    const sortByList = ["Issue", "Category", "Effort", "Affected applications"];
+    const sortByList = ["Issue", "Category", "Effort", "Affected files"];
 
     before("Load data", function () {
         login();
@@ -39,8 +39,10 @@ describe(["@tier2"], "Issues sort validations", function () {
     });
 
     sortByList.forEach((column) => {
-        it(`${column == "Issue" ? "BUG MTA-2067 - " : ""}Sort issues by ${column}`, function () {
-            Issues.openList();
+        it(`${
+            column == "Issue" ? "BUG MTA-2067 - " : ""
+        }Sort single application issues by ${column}`, function () {
+            Issues.openSingleApplication(application.name);
             validateSortBy(column);
         });
     });
