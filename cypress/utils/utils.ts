@@ -1760,6 +1760,10 @@ export function manageCredentialsForMultipleApplications(
     });
 }
 
+/**
+ * Applies and validates sorting by particular column
+ * @param sortBy is column title used for sorting
+ */
 export function validateSortBy(sortBy: string) {
     const unsortedList = getTableColumnData(sortBy);
 
