@@ -144,33 +144,29 @@ export class AssessmentQuestionnaire {
     }
     static validateSearchWordInRows(textInput: string): void {
         const lowerCaseInput = textInput.toLowerCase();
-        //loop over each row and if a row does not contain the text then click and check subtitle then close it
-        cy.get(".pf-v5-c-table > tbody > tr", { timeout: 5 * SEC })
-            .not(".pf-v5-c-table__expandable-row")
-            .each(($row) => {
-                if ($row.is(":visible")) {
-                    cy.wrap($row.find('td[data-label="Name"]'))
-                        .invoke("text")
-                        .then((cellText) => {
-                            if (!cellText.toLowerCase().includes(lowerCaseInput)) {
-                                cy.wrap($row).find("td:first").find("button").click();
 
-                                cy.wrap($row).next().invoke("is", ":visible").should("be.true");
+        cy.get(".pf-v5-c-table > tbody > tr:not(.pf-v5-c-table__expandable-row):visible").each(
+            ($row) => {
+                cy.wrap($row)
+                    .find('td[data-label="Name"]')
+                    .invoke("text")
+                    .then((cellText) => {
+                        if (!cellText.toLowerCase().includes(lowerCaseInput)) {
+                            cy.wrap($row).find("td:first button").click();
 
-                                cy.wrap($row)
-                                    .next()
-                                    .invoke("text")
-                                    .then((expandedText) => {
-                                        expect(expandedText.toLowerCase()).to.include(
-                                            lowerCaseInput
-                                        );
-                                    });
+                            cy.wrap($row)
+                                .next("tr.pf-v5-c-table__expandable-row")
+                                .find(".pf-v5-c-table__expandable-row-content")
+                                .invoke("text")
+                                .then((expandedText) => {
+                                    expect(expandedText.toLowerCase()).to.include(lowerCaseInput);
+                                });
 
-                                cy.wrap($row).find("td:first").find("button").click();
-                            }
-                        });
-                }
-            });
+                            cy.wrap($row).find("td:first button").click();
+                        }
+                    });
+            }
+        );
     }
 
     public downloadYamlTemplate() {
