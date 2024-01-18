@@ -1766,15 +1766,18 @@ export function manageCredentialsForMultipleApplications(
  * Applies and validates sorting by particular column
  * @param sortBy is column title used for sorting
  */
-export function validateSortBy(sortBy: string) {
-    const unsortedList = getTableColumnData(sortBy);
+export function validateSortBy(sortBy: string, tdSelector?: string) {
+    if (!tdSelector) {
+        tdSelector = sortBy;
+    }
+    const unsortedList = getTableColumnData(tdSelector);
 
     // Sort the table by column title in ascending order
     clickOnSortButton(sortBy, SortType.ascending);
     cy.wait(2 * SEC);
 
     // Verify that the table rows are displayed in ascending order
-    const afterAscSortList = getTableColumnData(sortBy);
+    const afterAscSortList = getTableColumnData(tdSelector);
     verifySortAsc(afterAscSortList, unsortedList);
 
     // Sort the table by column title in descending order
@@ -1782,6 +1785,6 @@ export function validateSortBy(sortBy: string) {
     cy.wait(2 * SEC);
 
     // Verify that the table rows are displayed in descending order
-    const afterDescSortList = getTableColumnData(sortBy);
+    const afterDescSortList = getTableColumnData(tdSelector);
     verifySortDesc(afterDescSortList, unsortedList);
 }
