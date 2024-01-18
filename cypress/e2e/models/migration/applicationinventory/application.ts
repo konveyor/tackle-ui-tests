@@ -657,10 +657,10 @@ export class Application {
         click(commonView.sideDrawer.closeDrawer);
     }
 
-    validateInheritedReviewFields(archetypes: string[]): void {
+    validateInheritedReviewFields(archetypeNames: string[]): void {
         Application.open();
-        for (let archetype of archetypes) {
-            Assessment.validateReviewFields(this.name, "Archetype", archetype);
+        for (let archetypeName of archetypeNames) {
+            Assessment.validateReviewFields(this.name, "Archetype", archetypeName);
         }
     }
 

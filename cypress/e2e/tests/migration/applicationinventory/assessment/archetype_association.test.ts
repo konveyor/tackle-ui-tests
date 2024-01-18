@@ -75,7 +75,8 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
     it.only("Verify application review inheritance from multiple archetypes ", function () {
         /* Automates MTA-420
-        This also verifies: Archetype association - Application creation after archetype creation. */
+        This also verifies: Archetype association - Application creation after archetype creation.
+        */
 
         archetypeList = createMultipleArchetypes(2, tags);
         const archetypeNames = [archetypeList[0].name, archetypeList[1].name];
