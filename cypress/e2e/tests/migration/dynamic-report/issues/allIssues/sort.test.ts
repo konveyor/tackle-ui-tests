@@ -44,9 +44,20 @@ describe(["@tier2"], "Issues sort validations", function () {
         Issues.openList();
         validateSortBy("Issue");
     });
+
     it("Sort issues by category", function () {
         Issues.openList();
         validateSortBy("Category");
+    });
+
+    it("Sort issues by effort", function () {
+        Issues.openList();
+        validateSortBy("Effort");
+    });
+
+    it("Sort issues by affected applications", function () {
+        Issues.openList();
+        validateSortBy("Affected applications");
     });
 
     after("Perform test data clean up", function () {
