@@ -32,3 +32,13 @@ export const highRiskDonut = "#landscape-donut-red";
 export const mediumRiskDonut = "#landscape-donut-yellow";
 export const lowRiskDonut = "#landscape-donut-green";
 export const unknownRiskDonut = "#landscape-donut-unassessed";
+export const questionnaireNameColumnDataLabel = "Questionnaire Name";
+
+export enum IdentifiedRiskTableHeaders {
+    questionnaireName = "Questionnaire name",
+    section = "Section",
+    question = "Question",
+    answer = "Answer",
+    risk = "Risk",
+    applications = "Applications",
+}
