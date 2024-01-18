@@ -12,7 +12,7 @@ describe(["@tier2"], "Issues sort validations", function () {
     let application: Analysis;
     const sortByList = ["Issue", "Category", "Effort", "Affected applications"];
 
-    before("Load data, create Analysis instance and run analysis", function () {
+    before("Load data", function () {
         login();
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
@@ -24,7 +24,7 @@ describe(["@tier2"], "Issues sort validations", function () {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Source Analysis on daytrader application", function () {
+    it("Creating data for sorting", function () {
         application = new Analysis(
             getRandomApplicationData("daytrader-app", {
                 sourceData: this.appData["daytrader-app"],
