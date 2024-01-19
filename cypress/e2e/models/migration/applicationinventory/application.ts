@@ -664,7 +664,7 @@ export class Application {
         }
     }
 
-    verifyArchetypeAssessedList(archetypeList): void {
+    verifyArchetypeAssessedList(archetypeNames: string[]): void {
         Application.open();
         sidedrawerTab(this.name, "Details");
         cy.get(commonView.sideDrawer.associatedArchetypes).contains("Archetypes assessed");
@@ -672,9 +672,8 @@ export class Application {
             .contains("Archetypes assessed")
             .closest("div")
             .within(() => {
-                cy.get("dd").then(($value) => {
-                    const text = $value.text();
-                    expect(text).to.equal(archetypeList[0].name + archetypeList[1].name);
+                cy.get("span.pf-v5-c-label__text").each((item) => {
+                    expect(item).to.be.oneOf(archetypeNames);
                 });
             });
         click(commonView.sideDrawer.closeDrawer);
