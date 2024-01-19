@@ -16,6 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    exists,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
@@ -30,6 +31,7 @@ import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { User } from "../../models/keycloak/users/user";
+import { Issues } from "../../models/migration/dynamic-report/issues/issues";
 
 describe(["@tier2"], "Custom Rules RBAC operations", function () {
     // Polarion TC 318
@@ -42,6 +44,7 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
     let analysisWithPublicRules: Analysis;
     let analysisWithPrivateRules: Analysis;
     let analysisWithPrivateRulesNoCred: Analysis;
+    let analysisWithCheck: Analysis;
 
     let sourceCredential: CredentialsSourceControlUsername;
     const architect = new UserArchitect(data.getRandomUserData());
@@ -76,6 +79,17 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         cy.fixture("analysis").then(function (analysisData) {
             this.analysisData = analysisData;
         });
+    });
+
+    it("Verify triggered rule", function () {
+        analysisWithCheck = new Analysis(
+            getRandomApplicationData("customRule_customTarget"),
+            getRandomAnalysisData(this.analysisData["upload_binary_analysis_on_jee_app"])
+        );
+        analysisWithCheck.create();
+        analyzeAndVerify(analysisWithCheck, AnalysisStatuses.completed);
+        Issues.openSingleApplication(analysisWithCheck.name);
+        exists("CUSTOM RULE");
     });
 
     it("Admin, Rules from public repository", function () {
