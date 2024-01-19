@@ -101,6 +101,16 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         // Validate 'Reviews' field on app drawer after review inheritance
         application.validateInheritedReviewFields(archetypeNames);
+
+        // Verify assessment inheritance from multiple archetypes
+        archetypeList[0].perform_assessment("low");
+        application.verifyStatus("assessment", "In progress");
+
+        archetypeList[1].perform_assessment("medium");
+        application.verifyStatus("assessment", "Completed");
+
+        application.verifyArchetypeAssessedList(archetypeList);
+        application.validateAssessmentField("medium");
     });
 
     after("Perform test data clean up", function () {

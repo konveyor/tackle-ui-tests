@@ -664,6 +664,22 @@ export class Application {
         }
     }
 
+    verifyArchetypeAssessedList(archetypeList): void {
+        Application.open();
+        sidedrawerTab(this.name, "Details");
+        cy.get(commonView.sideDrawer.associatedArchetypes).contains("Archetypes assessed");
+        cy.get("dt")
+            .contains("Archetypes assessed")
+            .closest("div")
+            .within(() => {
+                cy.get("dd").then(($value) => {
+                    const text = $value.text();
+                    expect(text).to.equal(archetypeList[0].name + archetypeList[1].name);
+                });
+            });
+        click(commonView.sideDrawer.closeDrawer);
+    }
+
     retake_questionnaire(
         risk,
         stakeholders?: Stakeholders[],
