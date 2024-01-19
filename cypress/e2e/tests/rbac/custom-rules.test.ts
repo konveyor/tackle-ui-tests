@@ -177,6 +177,7 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         analysisWithPublicRules.delete();
         analysisWithPrivateRules.delete();
         analysisWithPrivateRulesNoCred.delete();
+        analysisWithCheck.delete();
         User.loginKeycloakAdmin();
         architect.delete();
         migrator.delete();
