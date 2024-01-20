@@ -27,8 +27,9 @@ import {
 } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
-import { SEC } from "../../../../types/constants";
 import { Tag } from "../../../../models/migration/controls/tags";
+import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { legacyPathfinder, SEC } from "../../../../types/constants";
 
 let applicationList: Array<Application> = [];
 let archetypeList: Array<Archetype> = [];
@@ -38,6 +39,8 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
     before("Login", function () {
         login();
         tags = createMultipleTags(2);
+        AssessmentQuestionnaire.deleteAllQuesionnaire();
+        AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
     it("Archetype association - Application creation before archetype creation ", function () {
@@ -73,7 +76,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         click(commonView.sideDrawer.closeDrawer);
     });
 
-    it("Verify application review inheritance from multiple archetypes ", function () {
+    it.only("Verify application assessment and review inheritance from multiple archetypes ", function () {
         /* Automates MTA-420
         This also verifies: Archetype association - Application creation after archetype creation.
         */
@@ -93,8 +96,11 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         application.create();
         cy.wait(2 * SEC);
 
+        application.verifyStatus("review", "Not started");
         archetypeList[0].perform_review("low");
+        application.verifyStatus("review", "In progress");
         archetypeList[1].perform_review("medium");
+        application.verifyStatus("review", "Completed");
 
         // Assert that 'Archetypes reviewed' is populated on app drawer after review inheritance
         application.verifyArchetypeReviewedList(archetypeList);
