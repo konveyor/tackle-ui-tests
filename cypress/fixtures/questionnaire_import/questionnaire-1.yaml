@@ -1,0 +1,1160 @@
+name: Legacy Pathfinder
+description: ''
+sections:
+  - order: 1
+    name: Application details
+    questions:
+      - order: 1
+        text: >-
+          Does the application development team understand and actively develop
+          the application?
+        explanation: >-
+          How much knowledge does the team have about the application's
+          development or usage?
+        answers:
+          - order: 2
+            text: >-
+              Maintenance mode, no SME knowledge or adequate documentation
+              available
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: >-
+              Little knowledge, no development (example: third-party or
+              commercial off-the-shelf application)
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: Maintenance mode, SME knowledge is available
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: Actively developed, SME knowledge is available
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: greenfield application
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 2
+        text: How is the application supported in production?
+        explanation: >-
+          Does the team have sufficient knowledge to support the application in
+          production?
+        answers:
+          - order: 3
+            text: >-
+              Multiple teams provide support using an established escalation
+              model
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: >-
+              External support provider with a ticket-driven escalation process;
+              no inhouse support resources
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: >-
+              Separate internal support team, separate from the development
+              team, with little interaction between the teams
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: >-
+              SRE (Site Reliability Engineering) approach with a knowledgeable
+              and experienced operations team
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: >-
+              DevOps approach with the same team building the application and
+              supporting it in production
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 3
+        text: >-
+          How much time passes from when code is committed until the application
+          is deployed to production?
+        explanation: What is the development latency?
+        answers:
+          - order: 3
+            text: 2-6 months
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: Not tracked
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: More than 6 months
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: 8-30 days
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: 1-7 days
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 6
+            text: Less than 1 day
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 4
+        text: How often is the application deployed to production?
+        explanation: Deployment frequency
+        answers:
+          - order: 3
+            text: Between once a month and once every 6 months
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: Not tracked
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: Less than once every 6 months
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: Weekly
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: Daily
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 6
+            text: Several times a day
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 5
+        text: >-
+          What is the application's mean time to recover (MTTR) from failure in
+          a production environment?
+        explanation: Average time for the application to recover from failure
+        answers:
+          - order: 5
+            text: Less than 1 hour
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: Not tracked
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: 1-7 days
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: 1 month or more
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: 1-24 hours
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 6
+        text: Does the application have legal and/or licensing requirements?
+        explanation: >-
+          Legal and licensing requirements must be assessed to determine their
+          possible impact (cost, fault reporting) on the container platform
+          hosting the application. Examples of legal requirements: isolated
+          clusters, certifications, compliance with the Payment Card Industry
+          Data Security Standard or the Health Insurance Portability and
+          Accountability Act. Examples of licensing requirements: per server,
+          per CPU.
+        answers:
+          - order: 1
+            text: Multiple legal and licensing requirements
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: 'Licensing requirements (examples: per server, per CPU)'
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: >-
+              Legal requirements (examples: cluster isolation, hardware, PCI or
+              HIPAA compliance)
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: None
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 7
+        text: Which model best describes the application architecture?
+        explanation: Describe the application architecture in simple terms.
+        answers:
+          - order: 3
+            text: >-
+              Complex monolith, strict runtime dependency startup order,
+              non-resilient architecture
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: Independently deployable components
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: >-
+              Massive monolith (high memory and CPU usage), singleton
+              deployment, vertical scale only
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: >-
+              Massive monolith (high memory and CPU usage), non-singleton
+              deployment, complex to scale horizontally
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: 'Resilient monolith (examples: retries, circuit breakers)'
+            risk: green
+            rationale: ''
+            mitigation: ''
+  - order: 2
+    name: Application dependencies
+    questions:
+      - order: 1
+        text: Does the application require specific hardware?
+        explanation: >-
+          OpenShift Container Platform runs only on x86, IBM Power, or IBM Z
+          systems
+        answers:
+          - order: 3
+            text: 'Requires specific computer hardware (examples: GPUs, RAM, HDDs)'
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: Requires CPU that is not supported by red Hat
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: 'Requires custom or legacy hardware (example: USB device)'
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: Requires CPU that is supported by red Hat
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 2
+        text: What operating system does the application require?
+        explanation: >-
+          Only Linux and certain Microsoft Windows versions are supported in
+          containers. Check the latest versions and requirements.
+        answers:
+          - order: 4
+            text: Microsoft Windows
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: >-
+              Operating system that is not compatible with OpenShift Container
+              Platform (examples: OS X, AIX, Unix, Solaris)
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: Linux with custom kernel drivers or a specific kernel version
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: 'Linux with custom capabilities (examples: seccomp, root access)'
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: Standard Linux distribution
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 3
+        text: >-
+          Does the vendor provide support for a third-party component running in
+          a container?
+        explanation: Will the vendor support a component if you run it in a container?
+        answers:
+          - order: 2
+            text: No vendor support for containers
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: Not recommended to run the component in a container
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: >-
+              Vendor supports containers but with limitations (examples:
+              functionality is restricted, component has not been tested)
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: >-
+              Vendor supports their application running in containers but you
+              must build your own images
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: Vendor fully supports containers, provides certified images
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 6
+            text: No third-party components required
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 4
+        text: Incoming/northbound dependencies
+        explanation: Systems or applications that call the application
+        answers:
+          - order: 3
+            text: >-
+              Many dependencies exist, can be changed because the systems are
+              internally managed
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: Internal dependencies only
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: >-
+              Dependencies are difficult or expensive to change because they are
+              legacy or third-party
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: >-
+              Many dependencies exist, can be changed but the process is
+              expensive and time-consuming
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: No incoming/northbound dependencies
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 5
+        text: Outgoing/southbound dependencies
+        explanation: Systems or applications that the application calls
+        answers:
+          - order: 3
+            text: Application not ready until dependencies are verified available
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: >-
+              Dependency availability only verified when application is
+              processing traffic
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: Dependencies require a complex and strict startup order
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: Limited processing available if dependencies are unavailable
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: No outgoing/southbound dependencies
+            risk: green
+            rationale: ''
+            mitigation: ''
+  - order: 3
+    name: Application architecture
+    questions:
+      - order: 1
+        text: >-
+          How resilient is the application? How well does it recover from
+          outages and restarts?
+        explanation: >-
+          If the application or one of its dependencies fails, how does the
+          application recover from failure? Is manual intervention required?
+        answers:
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: >-
+              Application cannot be restarted cleanly after failure, requires
+              manual intervention
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: >-
+              Application fails when a soutbound dependency is unavailable and
+              does not recover automatically
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: >-
+              Application functionality is limited when a dependency is
+              unavailable but recovers when the dependency is available
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: >-
+              Application employs resilient architecture patterns (examples:
+              circuit breakers, retry mechanisms)
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: >-
+              Application containers are randomly terminated to test resiliency;
+              chaos engineering principles are followed
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 2
+        text: How does the external world communicate with the application?
+        explanation: >-
+          What protocols do external clients use to communicate with the
+          application?
+        answers:
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: 'Non-TCP/IP protocols (examples: serial, IPX, AppleTalk)'
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: TCP/IP, with host name or IP address encapsulated in the payload
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: 'TCP/UDP without host addressing (example: SSH)'
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: TCP/UDP encapsulated, using TLS with SNI header
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: HTTP/HTTPS
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 3
+        text: How does the application manage its internal state?
+        explanation: >-
+          If the application must manage or retain an internal state, how is
+          this done?
+        answers:
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: State maintained in non-shared, non-ephemeral storage
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: Application components use shared memory within a pod
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: >-
+              State is managed externally by another product (examples:
+              Zookeeper or red Hat Data Grid)
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: Disk shared between application instances
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: Stateless or ephemeral container storage
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 4
+        text: How does the application handle service discovery?
+        explanation: How does the application discover services?
+        answers:
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: >-
+              Uses technologies that are not compatible with Kubernetes
+              (examples: hardcoded IP addresses, custom cluster manager)
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: >-
+              Requires an application or cluster restart to discover new service
+              instances
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: >-
+              Uses technologies that are compatible with Kubernetes but require
+              specific libraries or services (examples: HashiCorp Consul,
+              Netflix Eureka)
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: Uses Kubernetes DNS name resolution
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: Does not require service discovery
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 5
+        text: How is the application clustering managed?
+        explanation: >-
+          Does the application require clusters? If so, how is clustering
+          managed?
+        answers:
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: 'Manually configured clustering (example: static clusters)'
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: Managed by an external off-PaaS cluster manager
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: >-
+              Managed by an application runtime that is compatible with
+              Kubernetes
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: No cluster management required
+            risk: green
+            rationale: ''
+            mitigation: ''
+  - order: 4
+    name: Application observability
+    questions:
+      - order: 1
+        text: How does the application use logging and how are the logs accessed?
+        explanation: How the application logs are accessed
+        answers:
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: Logs are unavailable or are internal with no way to export them
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: >-
+              Logs are in a custom binary format, exposed with non-standard
+              protocols
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: Logs are exposed using syslog
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: Logs are written to a file system, sometimes as multiple files
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: 'Logs are forwarded to an external logging system (example: Splunk)'
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 6
+            text: 'Logs are configurable (example: can be sent to stdout)'
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 2
+        text: Does the application provide metrics?
+        explanation: >-
+          Are application metrics available, if necessary (example: OpenShift
+          Container Platform collects CPU and memory metrics)?
+        answers:
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: No metrics available
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: Metrics collected but not exposed externally
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: 'Metrics exposed using binary protocols (examples: SNMP, JMX)'
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: >-
+              Metrics exposed using a third-party solution (examples: Dynatrace,
+              AppDynamics)
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: >-
+              Metrics collected and exposed with built-in Prometheus endpoint
+              support
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 3
+        text: >-
+          How easy is it to determine the application's health and readiness to
+          handle traffic?
+        explanation: >-
+          How do we determine an application's health (liveness) and readiness
+          to handle traffic?
+        answers:
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: No health or readiness query functionality available
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: Basic application health requires semi-complex scripting
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: Dedicated, independent liveness and readiness endpoints
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: Monitored and managed by a custom watchdog process
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: Health is verified by probes running synthetic transactions
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 4
+        text: What best describes the application's runtime characteristics?
+        explanation: >-
+          How would the profile of an application appear during runtime
+          (examples: graphs showing CPU and memory usage, traffic patterns,
+          latency)? What are the implications for a serverless application?
+        answers:
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: >-
+              Deterministic and predictable real-time execution or control
+              requirements
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: >-
+              Sensitive to latency (examples: voice applications, high frequency
+              trading applications)
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: Constant traffic with a broad range of CPU and memory usage
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: Intermittent traffic with predictable CPU and memory usage
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: Constant traffic with predictable CPU and memory usage
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 5
+        text: How long does it take the application to be ready to handle traffic?
+        explanation: How long the application takes to boot
+        answers:
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: More than 5 minutes
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: 2-5 minutes
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: 1-2 minutes
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: 10-60 seconds
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: Less than 10 seconds
+            risk: green
+            rationale: ''
+            mitigation: ''
+  - order: 5
+    name: Application cross-cutting concerns
+    questions:
+      - order: 1
+        text: How is the application tested?
+        explanation: >-
+          Is the application is tested? Is it easy to test (example: automated
+          testing)? Is it tested in production?
+        answers:
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: No testing or minimal manual testing only
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: Minimal automated testing, focused on the user interface
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: >-
+              Some automated unit and regression testing, basic CI/CD pipeline
+              testing; modern test practices are not followed
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: >-
+              Highly repeatable automated testing (examples: unit, integration,
+              smoke tests) before deploying to production; modern test practices
+              are followed
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: >-
+              Chaos engineering approach, constant testing in production
+              (example: A/B testing + experimentation)
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 2
+        text: How is the application configured?
+        explanation: >-
+          How is the application configured? Is the configuration method
+          appropriate for a container? External servers are runtime
+          dependencies.
+        answers:
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: >-
+              Configuration files compiled during installation and configured
+              using a user interface
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: >-
+              Configuration files are stored externally (example: in a database)
+              and accessed using specific environment keys (examples: host name,
+              IP address)
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: Multiple configuration files in multiple file system locations
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: >-
+              Configuration files built into the application and enabled using
+              system properties at runtime
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: >-
+              Configuration retrieved from an external server (examples: Spring
+              Cloud Config Server, HashiCorp Consul)
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 6
+            text: >-
+              Configuration loaded from files in a single configurable location;
+              environment variables used
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 4
+        text: How is the application deployed?
+        explanation: >-
+          How the application is deployed and whether the deployment process is
+          suitable for a container platform
+        answers:
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: Simple automated deployment scripts
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: Manual deployment using a user interface
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: Manual deployment with some automation
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: >-
+              Automated deployment with manual intervention or complex promotion
+              through pipeline stages
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: >-
+              Automated deployment with a full CI/CD pipeline, minimal
+              intervention for promotion through pipeline stages
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 6
+            text: Fully automated (GitOps), blue-green, or canary deployment
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 5
+        text: Where is the application deployed?
+        explanation: Where does the application run?
+        answers:
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: Bare metal server
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: 'Virtual machine (examples: red Hat Virtualization, VMware)'
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: 'Private cloud (example: red Hat OpenStack Platform)'
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: >-
+              Public cloud provider (examples: Amazon Web Services, Microsoft
+              Azure, Google Cloud Platform)
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: >-
+              Platform as a service (examples: Heroku, Force.com, Google App
+              Engine)
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 7
+            text: Other. Specify in the comments field
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 6
+            text: Hybrid cloud (public and private cloud providers)
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 6
+        text: How mature is the containerization process, if any?
+        explanation: If the team has used containers in the past, how was it done?
+        answers:
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: Application runs in a container on a laptop or desktop
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: Some experience with containers but not yet fully defined
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: >-
+              Proficient with containers and container platforms (examples:
+              Swarm, Kubernetes)
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: Application containerization has not yet been attempted
+            risk: green
+            rationale: ''
+            mitigation: ''
+      - order: 3
+        text: How does the application acquire security keys or certificates?
+        explanation: >-
+          How does the application retrieve credentials, keys, or certificates?
+          External systems are runtime dependencies.
+        answers:
+          - order: 0
+            text: unknown
+            risk: unknown
+            rationale: ''
+            mitigation: ''
+          - order: 1
+            text: Hardware security modules or encryption devices
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 2
+            text: >-
+              Keys/certificates bound to IP addresses and generated at runtime
+              for each application instance
+            risk: red
+            rationale: ''
+            mitigation: ''
+          - order: 3
+            text: Keys/certificates compiled into the application
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 4
+            text: Loaded from a shared disk
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 5
+            text: >-
+              Retrieved from an external server (examples: HashiCorp Vault,
+              CyberArk Conjur)
+            risk: yellow
+            rationale: ''
+            mitigation: ''
+          - order: 6
+            text: Loaded from files
+            risk: green
+            rationale: ''
+            mitigation: ''
+          - order: 7
+            text: Not required
+            risk: green
+            rationale: ''
+            mitigation: ''
+thresholds:
+  red: 5
+  yellow: 30
+  unknown: 5
+riskMessages:
+  red: ''
+  yellow: ''
+  green: ''
+  unknown: ''
+builtin: true
