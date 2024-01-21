@@ -73,6 +73,10 @@ describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
         AssessmentQuestionnaire.validateNumberOfMatches("Application details", 4);
         AssessmentQuestionnaire.validateNumberOfMatches("Application cross-cutting concerns", 1);
         AssessmentQuestionnaire.validateSearchWordInRows(textInput);
+        const invalidTextInput = "invalidTextInput";
+        AssessmentQuestionnaire.searchQuestions(invalidTextInput);
+        AssessmentQuestionnaire.validateNoMatchesFound();
+        AssessmentQuestionnaire.backToQuestionnaire();
     });
 
     after("Cleaning up", function () {

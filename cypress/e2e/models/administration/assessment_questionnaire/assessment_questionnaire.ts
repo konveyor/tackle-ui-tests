@@ -127,6 +127,8 @@ export class AssessmentQuestionnaire {
     }
     public static searchQuestions(inputText: string): void {
         cy.get(".pf-v5-c-text-input-group__text-input")
+            .dblclick() // Double-clicks the input field
+            .clear()
             .type(inputText, { force: true })
             .should("have.value", inputText);
     }
@@ -141,6 +143,18 @@ export class AssessmentQuestionnaire {
                 const actualMatches = match ? parseInt(match[1]) : 0;
                 expect(actualMatches).to.equal(expectedMatches);
             });
+    }
+    static validateNoMatchesFound(): void {
+        cy.get(".pf-v5-c-empty-state__content")
+            .find("h2.pf-v5-c-title.pf-m-lg")
+            .invoke("text")
+            .then((text) => {
+                expect(text.trim()).to.match(/^No questions match your search/);
+            });
+    }
+    static backToQuestionnaire(): void {
+        cy.get("button.pf-v5-c-button.pf-m-link").contains("Back to questionnaire").click();
+        cy.get(".pf-v5-c-content > h1").invoke("text").should("equal", "Assessment questionnaires");
     }
     static validateSearchWordInRows(textInput: string): void {
         const lowerCaseInput = textInput.toLowerCase();
