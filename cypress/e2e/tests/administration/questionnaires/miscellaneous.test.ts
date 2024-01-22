@@ -19,7 +19,7 @@ const yaml = require("js-yaml");
 const yamlFile = "questionnaire_import/questionnaire-template-sample.yaml";
 const invalidYamlFile = "questionnaire_import/invalid-questionnaire-template.yaml";
 const cloudNativePath = "questionnaire_import/cloud-native.yaml";
-const cloudNativeDownloadPath = "cypress/downloads/questionnaire-5.yaml";
+const cloudNativeDownloadPath = "cypress/downloads/questionnaire-2.yaml";
 describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
     before("Login", function () {
         login();
