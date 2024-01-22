@@ -36,21 +36,29 @@ describe(
         });
 
         it("Creating data for sorting", function () {
-            if (!this.analysisData["source_analysis_on_bookserverapp"]["issues"][0]) cy.pause();
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 2; i++) {
                 let businessService = new BusinessServices(
                     data.getCompanyName(),
                     data.getDescription()
                 );
-                let application = new Analysis(
+                let bookServerApp = new Analysis(
                     getRandomApplicationData(getRandomWord(8), {
                         sourceData: this.appData["bookserver-app"],
                     }),
                     getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
                 );
-                application.business = businessService.name;
+                let dayTraderApp = new Analysis(
+                    getRandomApplicationData("daytrader-app", {
+                        sourceData: this.appData["daytrader-app"],
+                    }),
+                    getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
+                );
+
+                bookServerApp.business = businessService.name;
+                dayTraderApp.business = businessService.name;
                 businessServiceList.push(businessService);
-                applicationsList.push(application);
+                applicationsList.push(bookServerApp);
+                applicationsList.push(dayTraderApp);
             }
             businessServiceList.forEach((businessService) => {
                 businessService.create();
@@ -67,16 +75,9 @@ describe(
 
         sortByList.forEach((column) => {
             it(`Sort applications by ${column}`, function () {
-                // this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
-                //     (currentIssue: AppIssue) => {
-                //         applicationsList[0].validateAffected(currentIssue);
-                //         validateSortBy(column);
-                //     }
-                // );
-                //     applicationsList[0].validateAffected(
-                //         this.analysisData["source_analysis_on_bookserverapp"]["issues"][0]
-                //     );
-                Issues.openAffectedApplications(applicationsList[0].name);
+                Issues.openAffectedApplications(
+                    this.analysisData["source_analysis_on_bookserverapp"]["issues"][0]["name"]
+                );
                 validateSortBy(column);
             });
         });
