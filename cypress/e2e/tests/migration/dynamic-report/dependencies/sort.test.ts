@@ -16,29 +16,28 @@ describe(["@tier2"], "Dependencies sort validations", function () {
         login();
 
         cy.intercept("GET", "/hub/application*").as("getApplication");
-    });
-
-    beforeEach("Test title", function () {
-        cy.fixture("application").then(function (appData) {
-            this.appData = appData;
-        });
-        cy.fixture("analysis").then(function (analysisData) {
-            this.analysisData = analysisData;
-        });
-    });
-
-    it("Creating data for sorting", function () {
-        application = new Analysis(
-            getRandomApplicationData("daytrader-app", {
-                sourceData: this.appData["daytrader-app"],
-            }),
-            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
-        );
-        application.create();
-        cy.wait("@getApplication");
-        application.analyze();
-        cy.wait(2 * SEC);
-        application.verifyAnalysisStatus("Completed");
+        cy.fixture("application")
+            .then(function (appData) {
+                this.appData = appData;
+            })
+            .then(function () {
+                cy.fixture("analysis").then(function (analysisData) {
+                    this.analysisData = analysisData;
+                });
+            })
+            .then(function () {
+                application = new Analysis(
+                    getRandomApplicationData("daytrader-app", {
+                        sourceData: this.appData["daytrader-app"],
+                    }),
+                    getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
+                );
+                application.create();
+                cy.wait("@getApplication");
+                application.analyze();
+                cy.wait(2 * SEC);
+                application.verifyAnalysisStatus("Completed");
+            });
     });
 
     sortByList.forEach((column) => {
