@@ -24,21 +24,26 @@ import {
     createMultipleArchetypes,
     deleteByList,
     sidedrawerTab,
+    createMultipleStakeholders,
 } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import { Tag } from "../../../../models/migration/controls/tags";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { legacyPathfinder, SEC } from "../../../../types/constants";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
 let applicationList: Array<Application> = [];
 let archetypeList: Array<Archetype> = [];
 let tags: Tag[];
+let stakeholders: Stakeholders[];
 
 describe(["@tier2"], "Tests related to application-archetype association ", () => {
     before("Login", function () {
         login();
         tags = createMultipleTags(2);
+        stakeholders = createMultipleStakeholders(1);
+
         AssessmentQuestionnaire.deleteAllQuesionnaire();
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
@@ -98,7 +103,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         application.verifyStatus("review", "Not started");
         archetypeList[0].perform_review("low");
-        application.verifyStatus("review", "In progress");
+        application.verifyStatus("review", "In-progress");
         archetypeList[1].perform_review("medium");
         application.verifyStatus("review", "Completed");
 
@@ -113,11 +118,11 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         Note that the application is associated with 2 archetypes. Its 'Assessment' status shows 'In progress' 
         until all associated archetypes have been assessed. */
         application.verifyStatus("assessment", "Not started");
-        archetypeList[0].perform_assessment("low");
-        application.verifyStatus("assessment", "In progress");
+        archetypeList[0].perform_assessment("low", stakeholders);
+        application.verifyStatus("assessment", "In-progress");
         application.validateAssessmentField("Unknown");
 
-        archetypeList[1].perform_assessment("medium");
+        archetypeList[1].perform_assessment("medium", stakeholders);
         application.verifyStatus("assessment", "Completed");
 
         application.verifyArchetypeAssessedList(archetypeNames);
@@ -128,5 +133,6 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         deleteByList(applicationList);
         deleteByList(archetypeList);
         deleteByList(tags);
+        deleteByList(stakeholders);
     });
 });
