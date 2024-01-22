@@ -18,7 +18,7 @@ import {
     switchToggle,
 } from "../../../views/assessmentquestionnaire.view";
 import { navMenu } from "../../../views/menu.view";
-import { button } from "../../../../e2e/types/constants";
+import { button } from "../../../types/constants";
 import { actionButton } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 
@@ -124,6 +124,63 @@ export class AssessmentQuestionnaire {
                         });
                 }
             });
+    }
+    public static searchQuestions(inputText: string): void {
+        cy.get(".pf-v5-c-text-input-group__text-input")
+            .dblclick() // Double-clicks the input field
+            .clear()
+            .type(inputText, { force: true })
+            .should("have.value", inputText);
+    }
+    static validateNumberOfMatches(section: string, expectedMatches: number): void {
+        cy.get(".pf-v5-c-tabs__item-text")
+            .contains(section)
+            .parent()
+            .find("span.pf-v5-c-badge")
+            .then(($badge) => {
+                const text = $badge.text();
+                const match = text.match(/(\d+) match(es)?/);
+                const actualMatches = match ? parseInt(match[1]) : 0;
+                expect(actualMatches).to.equal(expectedMatches);
+            });
+    }
+    static validateNoMatchesFound(): void {
+        cy.get(".pf-v5-c-empty-state__content")
+            .find("h2.pf-v5-c-title.pf-m-lg")
+            .invoke("text")
+            .then((text) => {
+                expect(text.trim()).to.match(/^No questions match your search/);
+            });
+    }
+    static backToQuestionnaire(): void {
+        cy.get("button.pf-v5-c-button.pf-m-link").contains("Back to questionnaire").click();
+        cy.get(".pf-v5-c-content > h1").invoke("text").should("equal", "Assessment questionnaires");
+    }
+    static validateSearchWordInRows(textInput: string): void {
+        const lowerCaseInput = textInput.toLowerCase();
+
+        cy.get(".pf-v5-c-table > tbody > tr:not(.pf-v5-c-table__expandable-row):visible").each(
+            ($row) => {
+                cy.wrap($row)
+                    .find('td[data-label="Name"]')
+                    .invoke("text")
+                    .then((cellText) => {
+                        if (!cellText.toLowerCase().includes(lowerCaseInput)) {
+                            cy.wrap($row).find("td:first button").click();
+
+                            cy.wrap($row)
+                                .next("tr.pf-v5-c-table__expandable-row")
+                                .find(".pf-v5-c-table__expandable-row-content")
+                                .invoke("text")
+                                .then((expandedText) => {
+                                    expect(expandedText.toLowerCase()).to.include(lowerCaseInput);
+                                });
+
+                            cy.wrap($row).find("td:first button").click();
+                        }
+                    });
+            }
+        );
     }
 
     public downloadYamlTemplate() {

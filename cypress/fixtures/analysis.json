@@ -258,5 +258,24 @@
         "appName": "tackle-testapp",
         "customRule": "01-custom-rule-example.windup.yaml",
         "openSourceLibraries": true
+    },
+    "affected_files_on_day_trader_app": {
+        "source": "Source code + dependencies",
+        "target": ["Application server migration to"],
+        "appName": "deps",
+        "issues": [
+            {
+                "name": "Hibernate Search 5 - Changes in indexing numeric and date values",
+                "category": "optional",
+                "source": "eap",
+                "targets": ["eap"],
+                "effort": 1,
+                "incidents": 2,
+                "affectedFiles": 64,
+                "ruleSet": "eap7/weblogic/tests/data",
+                "rule": "hsearch-00116",
+                "labels": ["hibernate", "hibernate-search"]
+            }
+        ]
     }
 }

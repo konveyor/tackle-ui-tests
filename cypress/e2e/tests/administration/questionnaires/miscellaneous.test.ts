@@ -1,7 +1,7 @@
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { cleanupDownloads, click, login, notExists } from "../../../../utils/utils";
 import { downloadYamlTemplate } from "../../../views/assessmentquestionnaire.view";
-import { sampleQuestionnaireTemplate } from "../../../types/constants";
+import { legacyPathfinder, sampleQuestionnaireTemplate } from "../../../types/constants";
 import { alertTitle } from "../../../views/common.view";
 import { closeModal } from "../../../views/assessment.view";
 const filePath = "cypress/downloads/questionnaire-template.yaml";
@@ -62,6 +62,21 @@ describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
         });
 
         click(closeModal);
+    });
+
+    it("Performs question search on questionnaires", function () {
+        // Automates Polarion - MTA 435
+        AssessmentQuestionnaire.open();
+        AssessmentQuestionnaire.view(legacyPathfinder);
+        const textInput = "Production";
+        AssessmentQuestionnaire.searchQuestions(textInput);
+        AssessmentQuestionnaire.validateNumberOfMatches("Application details", 4);
+        AssessmentQuestionnaire.validateNumberOfMatches("Application cross-cutting concerns", 1);
+        AssessmentQuestionnaire.validateSearchWordInRows(textInput);
+        const invalidTextInput = "invalidTextInput";
+        AssessmentQuestionnaire.searchQuestions(invalidTextInput);
+        AssessmentQuestionnaire.validateNoMatchesFound();
+        AssessmentQuestionnaire.backToQuestionnaire();
     });
 
     after("Cleaning up", function () {
