@@ -1,6 +1,13 @@
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { cleanupDownloads, click, login, notExists } from "../../../../utils/utils";
+import {
+    checkSuccessAlert,
+    cleanupDownloads,
+    click,
+    login,
+    notExists,
+} from "../../../../utils/utils";
 import { downloadYamlTemplate } from "../../../views/assessmentquestionnaire.view";
+import { cloudNative } from "../../../types/constants";
 import { legacyPathfinder, sampleQuestionnaireTemplate } from "../../../types/constants";
 import { alertTitle } from "../../../views/common.view";
 import { closeModal } from "../../../views/assessment.view";
@@ -8,6 +15,9 @@ const filePath = "cypress/downloads/questionnaire-template.yaml";
 const yaml = require("js-yaml");
 const yamlFile = "questionnaire_import/questionnaire-template-sample.yaml";
 const invalidYamlFile = "questionnaire_import/invalid-questionnaire-template.yaml";
+const cloudNativePath = "questionnaire_import/cloud-native.yaml";
+
+const cloudNativeDownloadPath = "cypress/downloads/questionnaire-5.yaml";
 
 describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
     before("Login", function () {
@@ -62,6 +72,33 @@ describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
         });
 
         click(closeModal);
+    });
+    it("Exports and imports existing questionnaire after updating name in file", function () {
+        // Automates polarion MTA-437
+        const targetNewName = "Cloud Native1";
+        const updatedFileName = "cloud-native-updated.yaml";
+        const fixturesPath = "cypress/fixtures/" + updatedFileName;
+
+        AssessmentQuestionnaire.import(cloudNativePath);
+        AssessmentQuestionnaire.export(cloudNative);
+        cy.readFile(cloudNativeDownloadPath).then((fileContent) => {
+            const updatedContent = AssessmentQuestionnaire.updateYamlContent(
+                fileContent,
+                cloudNative
+            );
+            cy.writeFile(fixturesPath, updatedContent);
+        });
+
+        cy.readFile(fixturesPath).then(() => {
+            AssessmentQuestionnaire.import(updatedFileName);
+        });
+        checkSuccessAlert(
+            alertTitle,
+            `Success alert:Questionnaire ${targetNewName} was successfully created.`,
+            true
+        );
+        AssessmentQuestionnaire.delete(cloudNative);
+        AssessmentQuestionnaire.delete(targetNewName);
     });
 
     it("Performs question search on questionnaires", function () {

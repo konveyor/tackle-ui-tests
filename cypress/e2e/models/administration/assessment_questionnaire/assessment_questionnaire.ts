@@ -89,6 +89,17 @@ export class AssessmentQuestionnaire {
                     });
             });
     }
+    public static updateYamlContent(yamlContent, nameToUpdate) {
+        //adds "1" to the name - method can be modified
+        let lines = yamlContent.split("\n");
+        let updatedLines = lines.map((line) => {
+            if (line.trim().startsWith("name: " + nameToUpdate)) {
+                return line + "1"; // Append '1' to the line
+            }
+            return line;
+        });
+        return updatedLines.join("\n");
+    }
 
     public static deleteAllQuesionnaire() {
         AssessmentQuestionnaire.open();
