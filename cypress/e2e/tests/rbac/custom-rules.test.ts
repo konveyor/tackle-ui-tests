@@ -84,7 +84,9 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
     it("Verify triggered rule", function () {
         analysisWithCheck = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
-            getRandomAnalysisData(this.analysisData["upload_binary_analysis_on_jee_app"])
+            getRandomAnalysisData(
+                this.analysisData["upload_binary_analysis_on_jee_app_custom_rules"]
+            )
         );
         analysisWithCheck.create();
         analyzeAndVerify(analysisWithCheck, AnalysisStatuses.completed);
