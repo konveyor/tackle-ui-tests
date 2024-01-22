@@ -1,7 +1,17 @@
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { checkSuccessAlert, cleanupDownloads, click, login, notExists } from "../../../../utils/utils";
+import {
+    checkSuccessAlert,
+    cleanupDownloads,
+    click,
+    login,
+    notExists,
+} from "../../../../utils/utils";
 import { downloadYamlTemplate } from "../../../views/assessmentquestionnaire.view";
-import { cloudNative, legacyPathfinder, sampleQuestionnaireTemplate } from "../../../types/constants";
+import {
+    cloudNative,
+    legacyPathfinder,
+    sampleQuestionnaireTemplate,
+} from "../../../types/constants";
 import { alertTitle } from "../../../views/common.view";
 import { closeModal } from "../../../views/assessment.view";
 const filePath = "cypress/downloads/questionnaire-template.yaml";
