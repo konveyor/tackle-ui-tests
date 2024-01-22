@@ -94,7 +94,7 @@ export class AssessmentQuestionnaire {
         let lines = yamlContent.split("\n");
         let updatedLines = lines.map((line) => {
             if (line.trim().startsWith("name: " + nameToUpdate)) {
-                return line + "1"; // Append '1' to the line
+                return line + "1";
             }
             return line;
         });
