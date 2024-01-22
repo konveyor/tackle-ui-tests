@@ -132,6 +132,17 @@ export class AssessmentQuestionnaire {
             .type(inputText, { force: true })
             .should("have.value", inputText);
     }
+    public static updateYamlContent(yamlContent, nameToUpdate) {
+        //adds "1" to the name - method can be modified
+        let lines = yamlContent.split("\n");
+        let updatedLines = lines.map((line) => {
+            if (line.trim().startsWith("name: " + nameToUpdate)) {
+                return line + "1";
+            }
+            return line;
+        });
+        return updatedLines.join("\n");
+    }
     static validateNumberOfMatches(section: string, expectedMatches: number): void {
         cy.get(".pf-v5-c-tabs__item-text")
             .contains(section)
