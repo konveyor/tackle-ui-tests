@@ -664,10 +664,10 @@ export class Application {
         }
     }
 
-    verifyArchetypeAssessedList(archetypeNames: string[]): void {
+    verifyArchetypeList(archetypeNames: string[], listName: string): void {
         Application.open();
         sidedrawerTab(this.name, "Details");
-        cy.get(commonView.sideDrawer.associatedArchetypes).contains("Archetypes assessed");
+        cy.get(commonView.sideDrawer.associatedArchetypes).contains(listName);
         cy.get("dt")
             .contains("Archetypes assessed")
             .closest("div")

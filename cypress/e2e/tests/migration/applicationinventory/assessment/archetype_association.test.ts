@@ -74,14 +74,10 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         archetypeList.push(archetype);
 
         // Assert that associated archetypes are listed on app drawer after application gets associated with archetype(s)
-        Application.open();
-        sidedrawerTab(application.name, "Details");
-        cy.get(commonView.sideDrawer.associatedArchetypes).contains("Associated archetypes");
-        cy.get(commonView.sideDrawer.labelContent).contains(archetype.name);
-        click(commonView.sideDrawer.closeDrawer);
+        application.verifyArchetypeList([archetype.name], "Associated archetypes");
     });
 
-    it.only("Verify application assessment and review inheritance from multiple archetypes ", function () {
+    it("Verify application assessment and review inheritance from multiple archetypes ", function () {
         /* Automates MTA-420
         This also verifies: Archetype association - Application creation after archetype creation.
         */
@@ -115,8 +111,9 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         /* Verify assessment inheritance from multiple archetypes
 
-        Note that the application is associated with 2 archetypes. Its 'Assessment' status shows 'In progress' 
+        Note that the application is associated with 2 archetypes. Its 'Assessment' status shows 'In progress'
         until all associated archetypes have been assessed. */
+        application.verifyArchetypeList(archetypeNames, "Associated archetypes");
         application.verifyStatus("assessment", "Not started");
         archetypeList[0].perform_assessment("low", stakeholders);
         application.verifyStatus("assessment", "In-progress");
@@ -125,7 +122,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         archetypeList[1].perform_assessment("medium", stakeholders);
         application.verifyStatus("assessment", "Completed");
 
-        application.verifyArchetypeAssessedList(archetypeNames);
+        application.verifyArchetypeList(archetypeNames, "Archetypes assessed");
         application.validateAssessmentField("medium");
     });
 
