@@ -34,8 +34,6 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
     const applications: Analysis[] = [];
     let sourceCredential: CredentialsSourceControlUsername;
     let mavenCredential: CredentialsMaven;
-    let appData: any;
-    let analysisData: any;
 
     before("Create test data", function () {
         login();
@@ -53,20 +51,24 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
             data.getRandomCredentialsData(CredentialType.maven, null, true)
         );
         mavenCredential.create();
+    });
 
-        cy.fixture("application").then(function (data) {
-            appData = data;
+    beforeEach("Load data", function () {
+        cy.fixture("application").then(function (appData) {
+            this.appData = appData;
         });
 
-        cy.fixture("analysis").then(function (data) {
-            analysisData = data;
+        cy.fixture("analysis").then(function (analysisData) {
+            this.analysisData = analysisData;
         });
     });
 
     it("Verify triggered rule", function () {
         const app = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
-            getRandomAnalysisData(analysisData["upload_binary_analysis_on_jee_app_custom_rules"])
+            getRandomAnalysisData(
+                this.analysisData["upload_binary_analysis_on_jee_app_custom_rules"]
+            )
         );
         applications.push(app);
         app.create();
@@ -80,9 +82,9 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
     it("Verify triggered rule for dependency", function () {
         const app = new Analysis(
             getRandomApplicationData("tackle-testapp-custom-rules", {
-                sourceData: appData["tackle-testapp-git"],
+                sourceData: this.appData["tackle-testapp-git"],
             }),
-            getRandomAnalysisData(analysisData["tackle_test_app_custom_rules"])
+            getRandomAnalysisData(this.analysisData["tackle_test_app_custom_rules"])
         );
         applications.push(app);
         app.create();
