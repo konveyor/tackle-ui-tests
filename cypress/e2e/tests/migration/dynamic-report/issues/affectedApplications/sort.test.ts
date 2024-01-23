@@ -20,13 +20,13 @@ describe(
         let businessServiceList: Array<BusinessServices> = [];
         const sortByList = ["Name", "Business serice", "Effort", "Incidents"];
 
-        before("Load data", function () {
+        before("Login", function () {
             login();
 
             cy.intercept("GET", "/hub/application*").as("getApplication");
         });
 
-        beforeEach("Before each test section", function () {
+        beforeEach("Loading fixtures", function () {
             cy.fixture("application").then(function (appData) {
                 this.appData = appData;
             });
