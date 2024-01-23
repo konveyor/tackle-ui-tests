@@ -82,5 +82,6 @@ export enum sideDrawer {
     labelContent = "span.pf-v5-c-label__content",
     closeDrawer = "button[aria-label='Close drawer panel']",
     pageDrawerContent = "#page-drawer-content",
-    associatedArchetypes = "span.pf-v5-c-description-list__text",
+    listText = "span.pf-v5-c-description-list__text",
+    labelText = "span.pf-v5-c-label__text",
 }

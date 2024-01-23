@@ -644,7 +644,7 @@ export class Application {
     verifyArchetypeReviewedList(archetypeList): void {
         Application.open();
         sidedrawerTab(this.name, "Details");
-        cy.get(commonView.sideDrawer.associatedArchetypes).contains("Archetypes reviewed");
+        cy.get(commonView.sideDrawer.listText).contains("Archetypes reviewed");
         cy.get("dt")
             .contains("Archetypes reviewed")
             .closest("div")
@@ -667,12 +667,12 @@ export class Application {
     verifyArchetypeList(archetypeNames: string[], listName: string): void {
         Application.open();
         sidedrawerTab(this.name, "Details");
-        cy.get(commonView.sideDrawer.associatedArchetypes).contains(listName);
+        cy.get(commonView.sideDrawer.listText).contains(listName);
         cy.get("dt")
-            .contains("Archetypes assessed")
+            .contains(listName)
             .closest("div")
             .within(() => {
-                cy.get("span.pf-v5-c-label__text").each((item) => {
+                cy.get(commonView.sideDrawer.labelText).each((item) => {
                     expect(item).to.be.oneOf(archetypeNames);
                 });
             });
