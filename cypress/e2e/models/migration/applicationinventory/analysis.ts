@@ -206,7 +206,8 @@ export class Analysis extends Application {
 
     protected uploadCustomRule() {
         cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
-        uploadXml("xml/" + this.customRule);
+        const folder = this.customRule.split(".").pop();
+        uploadXml(`${folder}/${this.customRule}`);
         cy.wait(2000);
         cy.get("span.pf-v5-c-progress__measure", { timeout: 150000 }).should("contain", "100%");
         cy.wait(2000);
