@@ -33,8 +33,8 @@ describe(
     ["@tier2"],
     "Validating application sorting in Issues -> affected applications",
     function () {
-        let applicationsList: Array<Analysis> = [];
-        let businessServiceList: Array<BusinessServices> = [];
+        const applicationsList: Array<Analysis> = [];
+        const businessServiceList: Array<BusinessServices> = [];
         const sortByList = ["Name", "Business serice", "Effort", "Incidents"];
 
         before("Login", function () {
@@ -54,17 +54,17 @@ describe(
 
         it("Creating data for sorting", function () {
             for (let i = 0; i < 2; i++) {
-                let businessService = new BusinessServices(
+                const businessService = new BusinessServices(
                     data.getCompanyName(),
                     data.getDescription()
                 );
-                let bookServerApp = new Analysis(
+                const bookServerApp = new Analysis(
                     getRandomApplicationData(getRandomWord(8), {
                         sourceData: this.appData["bookserver-app"],
                     }),
                     getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
                 );
-                let dayTraderApp = new Analysis(
+                const dayTraderApp = new Analysis(
                     getRandomApplicationData("daytrader-app", {
                         sourceData: this.appData["daytrader-app"],
                     }),
