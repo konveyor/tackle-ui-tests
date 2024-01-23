@@ -78,7 +78,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
         exists("CUSTOM RULE");
     });
 
-    // Automates Bug 2001
+    // Automates Bug MTA-2001
     it("Verify triggered rule for dependency", function () {
         const app = new Analysis(
             getRandomApplicationData("tackle-testapp-custom-rules", {
