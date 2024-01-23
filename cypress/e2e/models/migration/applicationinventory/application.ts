@@ -673,7 +673,8 @@ export class Application {
             .closest("div")
             .within(() => {
                 cy.get(commonView.sideDrawer.labelText).each((item) => {
-                    expect(item).to.be.oneOf(archetypeNames);
+                    expect(Cypress.$(item).text()).to.be.oneOf(archetypeNames);
+                    // expect(item).to.be.oneOf(archetypeNames);
                 });
             });
         click(commonView.sideDrawer.closeDrawer);
