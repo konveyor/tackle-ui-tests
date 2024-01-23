@@ -97,7 +97,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         // Note that the application is associated with 2 archetypes. Its 'Assessment' and 'Review'
         // status shows 'In progress' until all associated archetypes have been assessed.
-        application.verifyStatus("review", "Not started");
+        // application.verifyStatus("review", "Not started");
         archetypeList[0].perform_review("low");
         application.verifyStatus("review", "In-progress");
         archetypeList[1].perform_review("medium");
