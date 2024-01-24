@@ -93,18 +93,20 @@ export class AssessmentQuestionnaire {
     public static deleteAllQuesionnaire() {
         AssessmentQuestionnaire.open();
         selectItemsPerPage(100);
-        var row_name;
         cy.get(commonView.commonTable)
             .find('tbody[class="pf-v5-c-table__tbody"]')
             .find(trTag)
             .then(($rows) => {
-                for (let i = 0; i < $rows.length; i++) {
-                    row_name = $rows.eq(i).find('td[data-label="Name"]').text();
-                    if (row_name == legacyPathfinder && $rows.length == 1) continue;
-                    if (row_name == legacyPathfinder && $rows.length > 1)
-                        cy.get(actionButton).eq(1).click({ force: true });
-                    else cy.get(actionButton).eq(0).click({ force: true });
+                if ($rows.length === 1) {
+                    return;
+                }
 
+                for (let i = 0; i < $rows.length; i++) {
+                    const rowName = $rows.eq(i).find('td[data-label="Name"]').text();
+                    if (rowName == legacyPathfinder) {
+                        continue;
+                    }
+                    cy.wrap($rows.eq(i).find(actionButton)).click({ force: true });
                     cy.get("li.pf-v5-c-menu__list-item")
                         .contains("Delete")
                         .then(($delete_btn) => {

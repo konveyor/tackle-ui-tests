@@ -60,6 +60,7 @@ describe(["@tier2"], "Reports tests", () => {
     });
 
     it("Number of Application risk validation", function () {
+        Reports.open();
         Reports.verifyRisk(
             highRiskApps,
             mediumRiskApps,

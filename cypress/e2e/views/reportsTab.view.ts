@@ -33,6 +33,7 @@ export const mediumRiskDonut = "#landscape-donut-yellow";
 export const lowRiskDonut = "#landscape-donut-green";
 export const unknownRiskDonut = "#landscape-donut-unassessed";
 export const questionnaireNameColumnDataLabel = "Questionnaire Name";
+export const landscapeFilterDropdown = "button[aria-label='select questionnaires dropdown toggle']";
 
 export enum IdentifiedRiskTableHeaders {
     questionnaireName = "Questionnaire name",
