@@ -88,7 +88,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         const application = new Application(appdata);
         applicationList.push(application);
         application.create();
-        cy.wait(4 * SEC);
+        cy.wait(6 * SEC);
 
         // Note that the application is associated with 2 archetypes. Its 'Assessment' and 'Review'
         // status show 'In progress' until all associated archetypes have been assessed.
