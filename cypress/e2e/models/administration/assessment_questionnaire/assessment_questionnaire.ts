@@ -106,7 +106,7 @@ export class AssessmentQuestionnaire {
                     if (rowName == legacyPathfinder) {
                         continue;
                     }
-                    cy.wrap($rows.eq(i).find(actionButton)).click({ force: true });
+                    cy.wrap($rows.eq(i).find(actionButton)).click();
                     cy.get("li.pf-v5-c-menu__list-item")
                         .contains("Delete")
                         .then(($delete_btn) => {
