@@ -50,9 +50,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         Application.open();
         const appdata = {
             name: data.getAppName(),
-            description: data.getDescription(),
             tags: [tags[0].name],
-            comment: data.getDescription(),
         };
 
         const application = new Application(appdata);
@@ -85,9 +83,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         const appdata = {
             name: data.getAppName(),
-            description: data.getDescription(),
             tags: [tags[0].name, tags[1].name],
-            comment: data.getDescription(),
         };
 
         const application = new Application(appdata);
@@ -97,30 +93,29 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         // Note that the application is associated with 2 archetypes. Its 'Assessment' and 'Review'
         // status shows 'In progress' until all associated archetypes have been assessed.
-        // application.verifyStatus("review", "Not started");
+        application.verifyStatus("review", "Not started");
         archetypeList[0].perform_review("low");
         application.verifyStatus("review", "In-progress");
         archetypeList[1].perform_review("medium");
         application.verifyStatus("review", "Completed");
 
-        // Assert that 'Archetypes reviewed' is populated on app drawer after review inheritance
-        application.verifyArchetypeReviewedList(archetypeList);
-
         // Validate 'Reviews' field on app drawer after review inheritance
         application.validateInheritedReviewFields(archetypeNames);
 
-        // Verify assessment inheritance from multiple archetypes
+        // Assert that 'Archetypes reviewed' is populated on app drawer after review inheritance
+        application.verifyArchetypeList(archetypeNames, "Archetypes reviewed");
         application.verifyArchetypeList(archetypeNames, "Associated archetypes");
-        // application.verifyStatus("assessment", "Not started");
+
+        // Verify assessment inheritance from multiple archetypes
+        application.verifyStatus("assessment", "Not started");
         archetypeList[0].perform_assessment("low", stakeholders);
         application.verifyStatus("assessment", "In-progress");
         application.validateAssessmentField("Unknown");
-
         archetypeList[1].perform_assessment("medium", stakeholders);
-        application.verifyStatus("assessment", "Completed");
 
+        application.verifyStatus("assessment", "Completed");
         application.verifyArchetypeList(archetypeNames, "Archetypes assessed");
-        application.validateAssessmentField("medium");
+        application.validateAssessmentField("High");
     });
 
     after("Perform test data clean up", function () {

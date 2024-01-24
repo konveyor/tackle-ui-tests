@@ -641,22 +641,6 @@ export class Application {
         Assessment.validateReviewFields(this.name, "Application");
     }
 
-    verifyArchetypeReviewedList(archetypeList): void {
-        Application.open();
-        sidedrawerTab(this.name, "Details");
-        cy.get(commonView.sideDrawer.listText).contains("Archetypes reviewed");
-        cy.get("dt")
-            .contains("Archetypes reviewed")
-            .closest("div")
-            .within(() => {
-                cy.get("dd").then(($value) => {
-                    const text = $value.text();
-                    expect(text).to.equal(archetypeList[0].name + archetypeList[1].name);
-                });
-            });
-        click(commonView.sideDrawer.closeDrawer);
-    }
-
     validateInheritedReviewFields(archetypeNames: string[]): void {
         Application.open();
         for (let archetypeName of archetypeNames) {
