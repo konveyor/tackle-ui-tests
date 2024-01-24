@@ -43,11 +43,12 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         AssessmentQuestionnaire.deleteAllQuesionnaire();
         AssessmentQuestionnaire.enable(legacyPathfinder);
+
+        cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     it("Archetype association - Application creation before archetype creation ", function () {
         // Automates Polarion MTA-400
-        Application.open();
         const appdata = {
             name: data.getAppName(),
             tags: [tags[0].name],
@@ -56,6 +57,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         const application = new Application(appdata);
         applicationList.push(application);
         application.create();
+        cy.wait("@getApplication");
         cy.wait(2 * SEC);
 
         const archetypeList = [];
@@ -89,10 +91,11 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         const application = new Application(appdata);
         applicationList.push(application);
         application.create();
-        cy.wait(2 * SEC);
+        cy.wait("@getApplication");
+        cy.wait(4 * SEC);
 
         // Note that the application is associated with 2 archetypes. Its 'Assessment' and 'Review'
-        // status shows 'In progress' until all associated archetypes have been assessed.
+        // status show 'In progress' until all associated archetypes have been assessed.
         application.verifyStatus("review", "Not started");
         archetypeList[0].perform_review("low");
         application.verifyStatus("review", "In-progress");
