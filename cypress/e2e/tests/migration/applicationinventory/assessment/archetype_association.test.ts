@@ -57,7 +57,6 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         application.create();
         cy.wait(2 * SEC);
 
-        const archetypeList = [];
         const archetype = new Archetype(
             data.getRandomWord(8),
             [tags[0].name],
@@ -66,10 +65,10 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         );
         archetype.create();
         cy.wait(2 * SEC);
-        archetypeList.push(archetype);
 
         // Assert that associated archetypes are listed on app drawer after application gets associated with archetype(s)
         application.verifyArchetypeList([archetype.name], "Associated archetypes");
+        archetype.delete();
     });
 
     it("Verify application assessment and review inheritance from multiple archetypes ", function () {
