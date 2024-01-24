@@ -43,8 +43,6 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         AssessmentQuestionnaire.deleteAllQuesionnaire();
         AssessmentQuestionnaire.enable(legacyPathfinder);
-
-        cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     it("Archetype association - Application creation before archetype creation ", function () {
@@ -57,7 +55,6 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         const application = new Application(appdata);
         applicationList.push(application);
         application.create();
-        cy.wait("@getApplication");
         cy.wait(2 * SEC);
 
         const archetypeList = [];
@@ -91,7 +88,6 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         const application = new Application(appdata);
         applicationList.push(application);
         application.create();
-        cy.wait("@getApplication");
         cy.wait(4 * SEC);
 
         // Note that the application is associated with 2 archetypes. Its 'Assessment' and 'Review'
