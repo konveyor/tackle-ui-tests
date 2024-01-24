@@ -88,10 +88,11 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         const application = new Application(appdata);
         applicationList.push(application);
         application.create();
-        cy.wait(6 * SEC);
+        cy.wait(2 * SEC);
 
         // Note that the application is associated with 2 archetypes. Its 'Assessment' and 'Review'
         // status show 'In progress' until all associated archetypes have been assessed.
+        application.verifyArchetypeList(archetypeNames, "Associated archetypes");
         application.verifyStatus("review", "Not started");
         archetypeList[0].perform_review("low");
         application.verifyStatus("review", "In-progress");
@@ -103,7 +104,6 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         // Assert that 'Archetypes reviewed' is populated on app drawer after review inheritance
         application.verifyArchetypeList(archetypeNames, "Archetypes reviewed");
-        application.verifyArchetypeList(archetypeNames, "Associated archetypes");
 
         // Verify assessment inheritance from multiple archetypes
         application.verifyStatus("assessment", "Not started");
