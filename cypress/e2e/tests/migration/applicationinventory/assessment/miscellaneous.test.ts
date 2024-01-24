@@ -25,6 +25,7 @@ import {
     clickByText,
     createMultipleStakeholders,
     createMultipleTags,
+    createMultipleArchetypes,
     click,
 } from "../../../../../utils/utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
@@ -155,6 +156,40 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             .should("not.have.text", cloudNative);
         // todo: uncomment when the bug is fixed
         // AssessmentQuestionnaire.delete(cloudNative);
+    });
+
+    it("Assess and review application associated with unassessed archetypes", function () {
+        // Polarion TC MTA-456
+        const stakeholders = createMultipleStakeholders(1);
+        const archetypesList = [];
+        const tags = createMultipleTags(2);
+        const archetypeList = createMultipleArchetypes(2, tags);
+
+        const appdata = {
+            name: data.getAppName(),
+            description: data.getDescription(),
+            tags: [tags[0].name],
+            comment: data.getDescription(),
+        };
+        const application = new Application(appdata);
+        applicationList.push(application);
+        application.create();
+        cy.wait(2 * SEC);
+
+        application.perform_assessment("medium", stakeholders);
+        cy.wait(2 * SEC);
+        application.verifyStatus("assessment", "Completed");
+        application.validateAssessmentField("Medium");
+
+        application.perform_review("medium");
+        cy.wait(2 * SEC);
+        application.verifyStatus("review", "Completed");
+        application.validateReviewFields();
+
+        application.delete();
+        cy.wait(2 * SEC);
+        deleteByList(tags);
+        deleteByList(archetypesList);
     });
 
     after("Perform test data clean up", function () {
