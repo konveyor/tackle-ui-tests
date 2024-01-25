@@ -49,7 +49,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         // Automates Polarion MTA-400
         const appdata = {
             name: data.getAppName(),
-            tags: [tags[0].name],
+            tags: ["Web / WebSocket"],
         };
 
         const application = new Application(appdata);
@@ -59,8 +59,8 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         const archetype = new Archetype(
             data.getRandomWord(8),
-            [tags[0].name],
-            [tags[1].name],
+            ["Web / WebSocket"],
+            ["Web / WebSocket"],
             null
         );
         archetype.create();
@@ -84,36 +84,36 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
             tags: [tags[0].name, tags[1].name],
         };
 
-        const application = new Application(appdata);
-        applicationList.push(application);
-        application.create();
+        const application2 = new Application(appdata);
+        applicationList.push(application2);
+        application2.create();
         cy.wait(2 * SEC);
 
         // Note that the application is associated with 2 archetypes. Its 'Assessment' and 'Review'
         // status show 'In progress' until all associated archetypes have been assessed.
-        application.verifyArchetypeList(["None"], "Archetypes reviewed");
-        application.verifyStatus("review", "Not started");
+        application2.verifyArchetypeList(["None"], "Archetypes reviewed");
+        application2.verifyStatus("review", "Not started");
         archetypeList[0].perform_review("low");
-        application.verifyStatus("review", "In-progress");
+        application2.verifyStatus("review", "In-progress");
         archetypeList[1].perform_review("medium");
-        application.verifyStatus("review", "Completed");
+        application2.verifyStatus("review", "Completed");
 
         // Validate 'Reviews' field on app drawer after review inheritance
-        application.validateInheritedReviewFields(archetypeNames);
+        application2.validateInheritedReviewFields(archetypeNames);
 
         // Assert that 'Archetypes reviewed' is populated on app drawer after review inheritance
-        application.verifyArchetypeList(archetypeNames, "Archetypes reviewed");
+        application2.verifyArchetypeList(archetypeNames, "Archetypes reviewed");
 
         // Verify assessment inheritance from multiple archetypes
-        application.verifyStatus("assessment", "Not started");
+        application2.verifyStatus("assessment", "Not started");
         archetypeList[0].perform_assessment("low", stakeholders);
-        application.verifyStatus("assessment", "In-progress");
-        application.validateAssessmentField("Unknown");
+        application2.verifyStatus("assessment", "In-progress");
+        application2.validateAssessmentField("Unknown");
         archetypeList[1].perform_assessment("medium", stakeholders);
 
-        application.verifyStatus("assessment", "Completed");
-        application.verifyArchetypeList(archetypeNames, "Archetypes assessed");
-        application.validateAssessmentField("High");
+        application2.verifyStatus("assessment", "Completed");
+        application2.verifyArchetypeList(archetypeNames, "Archetypes assessed");
+        application2.validateAssessmentField("High");
     });
 
     after("Perform test data clean up", function () {
