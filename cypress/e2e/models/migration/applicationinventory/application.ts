@@ -897,4 +897,9 @@ export class Application {
         Issues.openSingleApplication(this.name);
         cy.get(commonView.appTable).should("not.contain.text", appIssues);
     }
+    discardAssessment(): void {
+        Application.open();
+        this.clickAssessButton();
+        cy.get(".pf-v5-c-table__tr.actions-row").find("button.pf-v5-c-button.pf-m-plain").click();
+    }
 }

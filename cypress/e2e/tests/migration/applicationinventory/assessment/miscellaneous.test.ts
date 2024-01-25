@@ -29,7 +29,7 @@ import {
 } from "../../../../../utils/utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { alertTitle, confirmButton } from "../../../../views/common.view";
+import { alertTitle, confirmButton, successAlertMessage } from "../../../../views/common.view";
 import { legacyPathfinder, cloudNative, SEC, button } from "../../../../types/constants";
 import {
     ArchivedQuestionnaires,
@@ -155,6 +155,22 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             .should("not.have.text", cloudNative);
         // todo: uncomment when the bug is fixed
         // AssessmentQuestionnaire.delete(cloudNative);
+    });
+
+    it("Discards application assessment through Assessment Actions page", function () {
+        // Polarion TC MTA-440
+        Application.open();
+        const application1 = new Application(getRandomApplicationData());
+        applicationList.push(application1);
+        application1.create();
+        application1.perform_assessment("low", stakeholderList);
+        application1.discardAssessment();
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success! Assessment discarded for ${application1.name}.`,
+            true
+        );
+        application1.validateAssessmentField("Unknown");
     });
 
     after("Perform test data clean up", function () {
