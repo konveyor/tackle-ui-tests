@@ -159,6 +159,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
     it("Discards application assessment through Assessment Actions page", function () {
         // Polarion TC MTA-440
+        AssessmentQuestionnaire.enable(legacyPathfinder);
         Application.open();
         const application1 = new Application(getRandomApplicationData());
         applicationList.push(application1);
