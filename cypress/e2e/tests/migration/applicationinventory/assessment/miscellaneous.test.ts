@@ -163,7 +163,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         const tags = createMultipleTags(2);
         const archetypeList = createMultipleArchetypes(2, tags);
 
-        AssessmentQuestionnaire.deleteAllQuesionnaire();
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
 
         const appdata = {

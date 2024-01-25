@@ -40,7 +40,7 @@ describe(["@tier2"], "Operations after application import", () => {
     before("Login and create test data", function () {
         login();
         // This test will fail if there are preexisting questionnaire.
-        AssessmentQuestionnaire.deleteAllQuesionnaire();
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
         stakeholders = createMultipleStakeholders(1);
 

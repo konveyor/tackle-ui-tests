@@ -42,7 +42,7 @@ let riskType = ["low", "medium", "high", "low", "high", "high"];
 describe(["@tier2"], "Reports tests", () => {
     before("Login and Create Test Data", function () {
         login();
-        AssessmentQuestionnaire.deleteAllQuesionnaire();
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
         deleteAllMigrationWaves();
         deleteApplicationTableRows();

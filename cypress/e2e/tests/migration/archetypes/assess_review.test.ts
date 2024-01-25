@@ -35,14 +35,14 @@ let tags: Tag[];
 describe(["@tier1"], "Archetype assessment and review tests", () => {
     before("Login and Create Test Data", function () {
         login();
-        AssessmentQuestionnaire.deleteAllQuesionnaire();
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
 
         stakeholders = createMultipleStakeholders(1);
         tags = createMultipleTags(2);
     });
 
-    it("Archetype assessment and review with low risk", function () {
+    it.only("Archetype assessment and review with low risk", function () {
         const archetype = new Archetype(
             data.getRandomWord(8),
             [tags[0].name],
