@@ -51,6 +51,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         login();
         cy.intercept("GET", "/hub/application*").as("getApplication");
 
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(fileName);
         stakeholderList = createMultipleStakeholders(1);
 
