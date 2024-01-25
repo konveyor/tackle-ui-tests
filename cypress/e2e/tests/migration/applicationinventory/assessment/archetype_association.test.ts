@@ -91,7 +91,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         // Note that the application is associated with 2 archetypes. Its 'Assessment' and 'Review'
         // status show 'In progress' until all associated archetypes have been assessed.
-        application2.verifyArchetypeList(["None"], "Archetypes reviewed");
+        application2.verifyArchetypeList(archetypeNames, "Associated archetypes");
         application2.verifyStatus("review", "Not started");
         archetypeList[0].perform_review("low");
         application2.verifyStatus("review", "In-progress");
@@ -113,7 +113,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         application2.verifyStatus("assessment", "Completed");
         application2.verifyArchetypeList(archetypeNames, "Archetypes assessed");
-        application2.validateAssessmentField("High");
+        application2.validateAssessmentField("Medium");
     });
 
     after("Perform test data clean up", function () {
