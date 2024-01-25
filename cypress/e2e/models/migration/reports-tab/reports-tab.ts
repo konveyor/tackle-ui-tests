@@ -50,7 +50,6 @@ export class Reports {
         unknownRiskValue: number,
         totalApps: string
     ): void {
-        Reports.open();
         this.getRiskValue(highRiskDonut, highRiskValue);
         this.getTotalApplicationsValue(highRiskDonut, totalApps);
         this.getRiskValue(mediumRiskDonut, mediumRiskValue);
@@ -61,7 +60,7 @@ export class Reports {
         this.getTotalApplicationsValue(unknownRiskDonut, totalApps);
     }
 
-    public static getRiskValue(selector, value): void {
+    public static getRiskValue(selector: string, value: number): void {
         cy.get(selector)
             .eq(0)
             .find("tspan")
@@ -72,7 +71,7 @@ export class Reports {
             });
     }
 
-    public static getTotalApplicationsValue(selector, value): void {
+    public static getTotalApplicationsValue(selector: string, value: string): void {
         cy.get(selector)
             .eq(0)
             .find("tspan")
