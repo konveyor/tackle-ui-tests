@@ -165,6 +165,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         application1.create();
         application1.perform_assessment("low", stakeholderList);
         application1.discardAssessment();
+        application1.verifyAssessmentTakeButtonEnabled();
         checkSuccessAlert(
             successAlertMessage,
             `Success! Assessment discarded for ${application1.name}.`,
