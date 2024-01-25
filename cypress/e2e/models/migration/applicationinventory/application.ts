@@ -641,27 +641,26 @@ export class Application {
         Assessment.validateReviewFields(this.name, "Application");
     }
 
-    verifyArchetypeReviewedList(archetypeList): void {
-        Application.open();
-        sidedrawerTab(this.name, "Details");
-        cy.get(commonView.sideDrawer.associatedArchetypes).contains("Archetypes reviewed");
-        cy.get("dt")
-            .contains("Archetypes reviewed")
-            .closest("div")
-            .within(() => {
-                cy.get("dd").then(($value) => {
-                    const text = $value.text();
-                    expect(text).to.equal(archetypeList[0].name + archetypeList[1].name);
-                });
-            });
-        click(commonView.sideDrawer.closeDrawer);
-    }
-
     validateInheritedReviewFields(archetypeNames: string[]): void {
         Application.open();
         for (let archetypeName of archetypeNames) {
             Assessment.validateReviewFields(this.name, "Archetype", archetypeName);
         }
+    }
+
+    verifyArchetypeList(archetypeNames: string[], listName: string): void {
+        Application.open();
+        sidedrawerTab(this.name, "Details");
+        cy.get(commonView.sideDrawer.listText).contains(listName);
+        cy.get("dt")
+            .contains(listName)
+            .closest("div")
+            .within(() => {
+                cy.get(commonView.sideDrawer.labelText).each((item) => {
+                    expect(Cypress.$(item).text()).to.be.oneOf(archetypeNames);
+                });
+            });
+        click(commonView.sideDrawer.closeDrawer);
     }
 
     retake_questionnaire(

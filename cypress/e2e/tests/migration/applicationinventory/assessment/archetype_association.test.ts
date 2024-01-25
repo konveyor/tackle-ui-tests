@@ -16,37 +16,40 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import * as data from "../../../../../utils/data_utils";
-import * as commonView from "../../../../views/common.view";
 import {
-    click,
     login,
     createMultipleTags,
     createMultipleArchetypes,
     deleteByList,
-    sidedrawerTab,
+    createMultipleStakeholders,
 } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
-import { SEC } from "../../../../types/constants";
 import { Tag } from "../../../../models/migration/controls/tags";
+import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { legacyPathfinder, SEC } from "../../../../types/constants";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
 let applicationList: Array<Application> = [];
 let archetypeList: Array<Archetype> = [];
 let tags: Tag[];
+let stakeholders: Stakeholders[];
 
 describe(["@tier2"], "Tests related to application-archetype association ", () => {
     before("Login", function () {
         login();
         tags = createMultipleTags(2);
+        stakeholders = createMultipleStakeholders(1);
+
+        AssessmentQuestionnaire.deleteAllQuesionnaire();
+        AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
     it("Archetype association - Application creation before archetype creation ", function () {
         // Automates Polarion MTA-400
         const appdata = {
             name: data.getAppName(),
-            description: data.getDescription(),
-            tags: [tags[0].name],
-            comment: data.getDescription(),
+            tags: ["Web / WebSocket"],
         };
 
         const application = new Application(appdata);
@@ -54,26 +57,21 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         application.create();
         cy.wait(2 * SEC);
 
-        const archetypeList = [];
         const archetype = new Archetype(
             data.getRandomWord(8),
-            [tags[0].name],
-            [tags[1].name],
+            ["Web / WebSocket"],
+            ["Web / WebSocket"],
             null
         );
         archetype.create();
         cy.wait(2 * SEC);
-        archetypeList.push(archetype);
 
         // Assert that associated archetypes are listed on app drawer after application gets associated with archetype(s)
-        Application.open();
-        sidedrawerTab(application.name, "Details");
-        cy.get(commonView.sideDrawer.associatedArchetypes).contains("Associated archetypes");
-        cy.get(commonView.sideDrawer.labelContent).contains(archetype.name);
-        click(commonView.sideDrawer.closeDrawer);
+        application.verifyArchetypeList([archetype.name], "Associated archetypes");
+        archetype.delete();
     });
 
-    it("Verify application review inheritance from multiple archetypes ", function () {
+    it("Verify application assessment and review inheritance from multiple archetypes ", function () {
         /* Automates MTA-420
         This also verifies: Archetype association - Application creation after archetype creation.
         */
@@ -83,29 +81,45 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         const appdata = {
             name: data.getAppName(),
-            description: data.getDescription(),
             tags: [tags[0].name, tags[1].name],
-            comment: data.getDescription(),
         };
 
-        const application = new Application(appdata);
-        applicationList.push(application);
-        application.create();
+        const application2 = new Application(appdata);
+        applicationList.push(application2);
+        application2.create();
         cy.wait(2 * SEC);
 
+        // Note that the application is associated with 2 archetypes. Its 'Assessment' and 'Review'
+        // status show 'In progress' until all associated archetypes have been assessed.
+        application2.verifyArchetypeList(archetypeNames, "Associated archetypes");
+        application2.verifyStatus("review", "Not started");
         archetypeList[0].perform_review("low");
+        application2.verifyStatus("review", "In-progress");
         archetypeList[1].perform_review("medium");
-
-        // Assert that 'Archetypes reviewed' is populated on app drawer after review inheritance
-        application.verifyArchetypeReviewedList(archetypeList);
+        application2.verifyStatus("review", "Completed");
 
         // Validate 'Reviews' field on app drawer after review inheritance
-        application.validateInheritedReviewFields(archetypeNames);
+        application2.validateInheritedReviewFields(archetypeNames);
+
+        // Assert that 'Archetypes reviewed' is populated on app drawer after review inheritance
+        application2.verifyArchetypeList(archetypeNames, "Archetypes reviewed");
+
+        // Verify assessment inheritance from multiple archetypes
+        application2.verifyStatus("assessment", "Not started");
+        archetypeList[0].perform_assessment("low", stakeholders);
+        application2.verifyStatus("assessment", "In-progress");
+        application2.validateAssessmentField("Unknown");
+        archetypeList[1].perform_assessment("medium", stakeholders);
+
+        application2.verifyStatus("assessment", "Completed");
+        application2.verifyArchetypeList(archetypeNames, "Archetypes assessed");
+        application2.validateAssessmentField("Medium");
     });
 
     after("Perform test data clean up", function () {
         deleteByList(applicationList);
         deleteByList(archetypeList);
         deleteByList(tags);
+        deleteByList(stakeholders);
     });
 });
