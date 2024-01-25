@@ -896,6 +896,21 @@ export class Application {
         Issues.openSingleApplication(this.name);
         cy.get(commonView.appTable).should("not.contain.text", appIssues);
     }
+    verifyAssessmentTakeButtonEnabled(): void {
+        //first check if we are the assessment actions page
+        cy.get("section.pf-v5-c-page__main-section.pf-m-light h1").then((h1) => {
+            if (!h1.text().includes("Assessment Actions")) {
+                Application.open();
+                this.clickAssessButton();
+            }
+        });
+        cy.contains("button", "Take", { timeout: 30 * SEC }).should(
+            "not.have.attr",
+            "aria-disabled",
+            "true"
+        );
+    }
+
     discardAssessment(): void {
         Application.open();
         this.clickAssessButton();
