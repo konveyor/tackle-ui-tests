@@ -187,8 +187,8 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
         application2.delete();
         cy.wait(2 * SEC);
-        deleteByList(tags);
         deleteByList(archetypeList);
+        deleteByList(tags);
     });
 
     after("Perform test data clean up", function () {
