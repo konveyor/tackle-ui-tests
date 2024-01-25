@@ -158,38 +158,33 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         // AssessmentQuestionnaire.delete(cloudNative);
     });
 
-    it("Assess and review application associated with unassessed archetypes", function () {
+    it("Assess and review application associated with unassessed/unreviewed archetypes", function () {
         // Polarion TC MTA-456
-        const stakeholders = createMultipleStakeholders(1);
-        const archetypesList = [];
         const tags = createMultipleTags(2);
         const archetypeList = createMultipleArchetypes(2, tags);
 
         const appdata = {
             name: data.getAppName(),
-            description: data.getDescription(),
-            tags: [tags[0].name],
-            comment: data.getDescription(),
+            tags: [tags[0].name, tags[1].name],
         };
-        const application = new Application(appdata);
-        applicationList.push(application);
-        application.create();
+        const application2 = new Application(appdata);
+        application2.create();
         cy.wait(2 * SEC);
 
-        application.perform_assessment("medium", stakeholders);
+        application2.perform_assessment("medium", stakeholderList);
         cy.wait(2 * SEC);
-        application.verifyStatus("assessment", "Completed");
-        application.validateAssessmentField("Medium");
+        application2.verifyStatus("assessment", "Completed");
+        application2.validateAssessmentField("Medium");
 
-        application.perform_review("medium");
+        application2.perform_review("medium");
         cy.wait(2 * SEC);
-        application.verifyStatus("review", "Completed");
-        application.validateReviewFields();
+        application2.verifyStatus("review", "Completed");
+        application2.validateReviewFields();
 
-        application.delete();
+        application2.delete();
         cy.wait(2 * SEC);
         deleteByList(tags);
-        deleteByList(archetypesList);
+        deleteByList(archetypeList);
     });
 
     after("Perform test data clean up", function () {
