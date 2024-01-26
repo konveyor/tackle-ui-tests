@@ -31,7 +31,15 @@ import {
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { alertTitle, confirmButton, successAlertMessage } from "../../../../views/common.view";
-import { legacyPathfinder, cloudNative, SEC, button } from "../../../../types/constants";
+import {
+    legacyPathfinder,
+    cloudNative,
+    SEC,
+    button,
+    archetypes,
+    application,
+    review,
+} from "../../../../types/constants";
 import {
     ArchivedQuestionnaires,
     ArchivedQuestionnairesTableDataCell,
@@ -183,8 +191,11 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         // AssessmentQuestionnaire.delete(cloudNative);
     });
 
-    it("Assess and review application associated with unassessed/unreviewed archetypes", function () {
-        // Polarion TC MTA-456
+    it("Test inheritance after discarding application assessment and review", function () {
+        /* Polarion TC MTA-456 Assess and review application associated with unassessed/unreviewed archetypes
+        1. Create an application.
+        2. Associate it with unassessed/unreviewed archetypes()
+        3. Assess and review the application. */
         const tags = createMultipleTags(2);
         const archetypeList = createMultipleArchetypes(2, tags);
 
@@ -208,6 +219,26 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         cy.wait(2 * SEC);
         application2.verifyStatus("review", "Completed");
         application2.validateReviewFields();
+
+        /* Polarion TC 458
+        Test steps:
+        1. Create an application.
+        2. Associate it with unassessed/unreviewed archetypes()
+        3. Assess and review the application.
+        4. Assess and review the associated archetypeList. Application should retain its individual assessment and review.
+        5. Discard application assessment and review. Application should inherit assessment and review from archetype
+        */
+        archetypeList[0].perform_review("low");
+        application2.validateReviewFields();
+
+        archetypeList[0].perform_assessment("low");
+        application2.validateAssessmentField("Medium");
+
+        application2.selectKebabMenuItem("Discard review");
+        application2.validateInheritedReviewFields([archetypeList[0].name]);
+
+        application2.selectKebabMenuItem("Discard assessment");
+        application2.validateAssessmentField("Low");
 
         application2.delete();
         cy.wait(2 * SEC);
