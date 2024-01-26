@@ -15,7 +15,7 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
     before("Login", function () {
         login();
         // This test will fail if there are preexisting questionnaire.
-        AssessmentQuestionnaire.deleteAllQuesionnaire();
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
     });
 
     it("Import questionnaire", function () {

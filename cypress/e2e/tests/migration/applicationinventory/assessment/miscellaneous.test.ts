@@ -25,6 +25,7 @@ import {
     clickByText,
     createMultipleStakeholders,
     createMultipleTags,
+    createMultipleArchetypes,
     click,
 } from "../../../../../utils/utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
@@ -50,6 +51,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         login();
         cy.intercept("GET", "/hub/application*").as("getApplication");
 
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(fileName);
         stakeholderList = createMultipleStakeholders(1);
 
@@ -157,9 +159,41 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         // AssessmentQuestionnaire.delete(cloudNative);
     });
 
+    it("Assess and review application associated with unassessed/unreviewed archetypes", function () {
+        // Polarion TC MTA-456
+        const tags = createMultipleTags(2);
+        const archetypeList = createMultipleArchetypes(2, tags);
+
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
+        AssessmentQuestionnaire.enable(legacyPathfinder);
+
+        const appdata = {
+            name: data.getAppName(),
+            tags: [tags[0].name, tags[1].name],
+        };
+        const application2 = new Application(appdata);
+        application2.create();
+        cy.wait(2 * SEC);
+
+        application2.perform_assessment("medium", stakeholderList);
+        cy.wait(2 * SEC);
+        application2.verifyStatus("assessment", "Completed");
+        application2.validateAssessmentField("Medium");
+
+        application2.perform_review("medium");
+        cy.wait(2 * SEC);
+        application2.verifyStatus("review", "Completed");
+        application2.validateReviewFields();
+
+        application2.delete();
+        cy.wait(2 * SEC);
+        deleteByList(archetypeList);
+        deleteByList(tags);
+    });
+
     after("Perform test data clean up", function () {
         deleteByList(stakeholderList);
         deleteByList(applicationList);
-        AssessmentQuestionnaire.delete(cloudNative);
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
     });
 });

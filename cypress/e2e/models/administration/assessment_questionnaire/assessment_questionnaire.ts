@@ -90,7 +90,7 @@ export class AssessmentQuestionnaire {
             });
     }
 
-    public static deleteAllQuesionnaire() {
+    public static deleteAllQuestionnaires() {
         AssessmentQuestionnaire.open();
         selectItemsPerPage(100);
         cy.get(commonView.commonTable)

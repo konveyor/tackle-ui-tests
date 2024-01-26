@@ -41,7 +41,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
     before("Login and Create Test Data", function () {
         login();
         // This test will fail if there are preexisting questionnaire.
-        AssessmentQuestionnaire.deleteAllQuesionnaire();
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
 
         stakeholders = createMultipleStakeholders(1);

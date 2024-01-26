@@ -81,7 +81,7 @@ describe(["@tier2"], "Reports Tab filter validations", function () {
         login();
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
-        AssessmentQuestionnaire.deleteAllQuesionnaire();
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.import("questionnaire_import/cloud-native.yaml");
         AssessmentQuestionnaire.enable(cloudNative);
         AssessmentQuestionnaire.enable(legacyPathfinder);

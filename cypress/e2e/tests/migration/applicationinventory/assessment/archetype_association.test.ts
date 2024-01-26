@@ -41,7 +41,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         tags = createMultipleTags(2);
         stakeholders = createMultipleStakeholders(1);
 
-        AssessmentQuestionnaire.deleteAllQuesionnaire();
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 

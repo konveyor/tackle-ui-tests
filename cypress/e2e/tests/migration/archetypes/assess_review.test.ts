@@ -35,7 +35,7 @@ let tags: Tag[];
 describe(["@tier1"], "Archetype assessment and review tests", () => {
     before("Login and Create Test Data", function () {
         login();
-        AssessmentQuestionnaire.deleteAllQuesionnaire();
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
 
         stakeholders = createMultipleStakeholders(1);

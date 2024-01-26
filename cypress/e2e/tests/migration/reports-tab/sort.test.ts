@@ -51,7 +51,7 @@ describe(["@tier2"], "Reports tests", () => {
         login();
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
-        AssessmentQuestionnaire.deleteAllQuesionnaire();
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
         stakeholder = createMultipleStakeholders(1)[0];
         application = createMultipleApplications(1)[0];
