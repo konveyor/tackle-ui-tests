@@ -26,6 +26,7 @@ import {
     createMultipleStakeholders,
     createMultipleTags,
     click,
+    createMultipleArchetypes,
 } from "../../../../../utils/utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
@@ -43,6 +44,7 @@ import * as data from "../../../../../utils/data_utils";
 const fileName = "Legacy Pathfinder";
 let stakeholderList: Array<Stakeholders> = [];
 let applicationList: Array<Application> = [];
+let archetypeList: Archetype[];
 const yamlFile = "questionnaire_import/cloud-native.yaml";
 
 describe(["@tier3"], "Tests related to application assessment and review", () => {
@@ -52,8 +54,9 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
         AssessmentQuestionnaire.enable(fileName);
         stakeholderList = createMultipleStakeholders(1);
-
+        archetypeList = createMultipleArchetypes(1);
         applicationList = createMultipleApplications(1);
+
         applicationList[0].perform_assessment("low", stakeholderList);
         cy.wait(2000);
         applicationList[0].verifyStatus("assessment", "Completed");
@@ -74,7 +77,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("assessment", "Completed");
     });
 
-    it("Discard Assessment from kebabMenu and AssessPage", function () {
+    it("Discard Assessment from kebabMenu, AssessPage and ArchetypePage", function () {
         applicationList[0].selectKebabMenuItem("Discard assessment(s)");
         checkSuccessAlert(
             alertTitle,
@@ -90,6 +93,15 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             true
         );
         applicationList[0].validateAssessmentField("Unknown");
+        archetypeList[0].perform_assessment("low", stakeholderList);
+        archetypeList[0].discardAssessments();
+        archetypeList[0].verifyAssessmentTakeButtonEnabled();
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success! Assessment discarded for ${archetypeList[0].name}.`,
+            true
+        );
+        archetypeList[0].validateAssessmentField("Unknown");
     });
 
     it("Discard Review", function () {
@@ -170,6 +182,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
     after("Perform test data clean up", function () {
         deleteByList(stakeholderList);
         deleteByList(applicationList);
+        deleteByList(archetypeList);
         AssessmentQuestionnaire.delete(cloudNative);
     });
 });

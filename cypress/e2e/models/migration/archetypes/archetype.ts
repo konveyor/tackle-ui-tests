@@ -325,4 +325,23 @@ export class Archetype {
         clickKebabMenuOptionArchetype(this.name, "Discard review");
         confirm();
     }
+    clickAssessButton() {
+        Archetype.open();
+        clickKebabMenuOptionArchetype(this.name, "Assess");
+    }
+    discardAssessments(): void {
+        Archetype.open();
+        this.clickAssessButton();
+        Assessment.discardAssessments();
+    }
+    verifyAssessmentTakeButtonEnabled(): void {
+        //validates current page
+        cy.get("section.pf-v5-c-page__main-section.pf-m-light h1").then((h1) => {
+            if (!h1.text().includes("Assessment Actions")) {
+                Archetype.open();
+                this.clickAssessButton();
+            }
+        });
+        Assessment.verifyAssessmentTakeButtonEnabled();
+    }
 }
