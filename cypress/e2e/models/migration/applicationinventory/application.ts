@@ -90,7 +90,7 @@ import { continueButton } from "../../../views/assessment.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
 import { Archetype } from "../archetypes/archetype";
-import { alertBody, alertTitle } from "../../../views/common.view";
+import { alertBody, alertTitle, plainButton, tableRowActions } from "../../../views/common.view";
 
 export class Application {
     name: string;
@@ -911,9 +911,11 @@ export class Application {
         );
     }
 
-    discardAssessment(): void {
+    discardAssessments(): void {
         Application.open();
         this.clickAssessButton();
-        cy.get(".pf-v5-c-table__tr.actions-row").find("button.pf-v5-c-button.pf-m-plain").click();
+        cy.get(tableRowActions).each(($el) => {
+            cy.wrap($el).find(plainButton).click();
+        });
     }
 }

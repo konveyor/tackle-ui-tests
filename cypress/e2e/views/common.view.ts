@@ -32,6 +32,8 @@ export const infoAlertMessage = ".pf-m-info";
 export const alertBody = 'div[id*="pf-modal-part"]';
 export const alertTitle = "h4[class*='alert__title']";
 export const appTable = ".pf-v5-c-table";
+export const tableRowActions = ".pf-v5-c-table__tr.actions-row";
+export const plainButton = "button.pf-v5-c-button.pf-m-plain";
 export const expandableRow = ".pf-c-expandable-row";
 export const helper = "span.pf-v5-c-helper-text__item-text";
 export const filterToggleButton = "div.pf-c-dropdown > button.pf-c-dropdown__toggle";
