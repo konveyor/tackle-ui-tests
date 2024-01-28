@@ -57,6 +57,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         stakeholderList = createMultipleStakeholders(1);
         archetypeList = createMultipleArchetypes(1);
         applicationList = createMultipleApplications(1);
+
         applicationList[0].perform_assessment("low", stakeholderList);
         cy.wait(2000);
         applicationList[0].verifyStatus("assessment", "Completed");
@@ -176,6 +177,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             .should("not.have.text", cloudNative);
         // todo: uncomment when the bug is fixed
         // AssessmentQuestionnaire.delete(cloudNative);
+        AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
     it("Assess and review application associated with unassessed/unreviewed archetypes", function () {
@@ -213,6 +215,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
     after("Perform test data clean up", function () {
         deleteByList(stakeholderList);
         deleteByList(applicationList);
+        deleteByList(archetypeList);
         AssessmentQuestionnaire.deleteAllQuestionnaires();
     });
 });
