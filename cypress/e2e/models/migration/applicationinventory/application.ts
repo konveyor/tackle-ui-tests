@@ -898,7 +898,7 @@ export class Application {
         cy.get(commonView.appTable).should("not.contain.text", appIssues);
     }
     verifyAssessmentTakeButtonEnabled(): void {
-        //first check if we are the assessment actions page
+        //validates current page
         cy.get("section.pf-v5-c-page__main-section.pf-m-light h1").then((h1) => {
             if (!h1.text().includes("Assessment Actions")) {
                 Application.open();
