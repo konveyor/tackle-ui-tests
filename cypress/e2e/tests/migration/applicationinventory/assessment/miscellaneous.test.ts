@@ -74,13 +74,22 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("assessment", "Completed");
     });
 
-    it("Discard Assessment", function () {
+    it("Discard Assessment from kebabMenu and AssessPage", function () {
         applicationList[0].selectKebabMenuItem("Discard assessment(s)");
         checkSuccessAlert(
             alertTitle,
             `Success alert:Success! Assessment discarded for ${applicationList[0].name}.`
         );
         applicationList[0].verifyStatus("assessment", "Not started");
+        applicationList[0].perform_assessment("low", stakeholderList);
+        applicationList[0].discardAssessments();
+        applicationList[0].verifyAssessmentTakeButtonEnabled();
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success! Assessment discarded for ${applicationList[0].name}.`,
+            true
+        );
+        applicationList[0].validateAssessmentField("Unknown");
     });
 
     it("Discard Review", function () {
@@ -155,24 +164,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             .should("not.have.text", cloudNative);
         // todo: uncomment when the bug is fixed
         // AssessmentQuestionnaire.delete(cloudNative);
-    });
-
-    it("Discards application assessment through Assessment Actions page", function () {
-        // Polarion TC MTA-440
         AssessmentQuestionnaire.enable(legacyPathfinder);
-        Application.open();
-        const application1 = new Application(getRandomApplicationData());
-        applicationList.push(application1);
-        application1.create();
-        application1.perform_assessment("low", stakeholderList);
-        application1.discardAssessment();
-        application1.verifyAssessmentTakeButtonEnabled();
-        checkSuccessAlert(
-            successAlertMessage,
-            `Success! Assessment discarded for ${application1.name}.`,
-            true
-        );
-        application1.validateAssessmentField("Unknown");
     });
 
     after("Perform test data clean up", function () {
