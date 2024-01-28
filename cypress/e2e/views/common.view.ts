@@ -56,6 +56,8 @@ export const stakeHolderGroupHelper = "div.pf-v5-c-helper-text";
 export const actionMenuItem = "span.pf-v5-c-menu__item-text";
 export const kebabMenuItem = "a.pf-c-dropdown__menu-item";
 export const commonTable = "table.pf-v5-c-table.pf-m-grid-md";
+export const tableRowActions = ".pf-v5-c-table__tr.actions-row";
+export const plainButton = "button.pf-v5-c-button.pf-m-plain";
 export const dropdownClearSelection = "pf-v5-c-select__toggle-clear";
 export const footer = "footer";
 export const manageImportsActionsButton = "button[aria-label='Table toolbar actions kebab toggle']";
