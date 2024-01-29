@@ -110,7 +110,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         binaryApplication.name = binaryApplicationName;
 
         const uploadBinaryApplication = new Analysis(
-            getRandomApplicationData("customRule_customTarget"),
+            getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
         );
         uploadBinaryApplication.name = uploadBinaryApplicationName;
@@ -120,14 +120,17 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         exists(binaryApplicationName);
         exists(uploadBinaryApplicationName);
 
-        sourceApplication.analyze();
-        sourceApplication.verifyAnalysisStatus("Completed");
+        uploadBinaryApplication.analyze();
+        uploadBinaryApplication.verifyAnalysisStatus("Completed");
+        uploadBinaryApplication.selectApplication();
 
         binaryApplication.analyze();
         binaryApplication.verifyAnalysisStatus("Completed");
+        binaryApplication.selectApplication();
 
-        uploadBinaryApplication.analyze();
-        uploadBinaryApplication.verifyAnalysisStatus("Completed");
+        sourceApplication.analyze();
+        sourceApplication.verifyAnalysisStatus("Completed");
+        sourceApplication.selectApplication();
     });
 
     it("Enabling RWX, validating it works, disabling it", function () {

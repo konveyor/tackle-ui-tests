@@ -49,6 +49,8 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         cy.fixture("upgrade-data").then((upgradeData: UpgradeData) => {
             this.upgradeData = upgradeData;
         });
+
+        cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     it("Creating credentials", function () {
@@ -102,6 +104,21 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         tag.create();
     });
 
+    it("Creating Upload Binary Analysis", function () {
+        const uploadBinaryApplication = new Analysis(
+            getRandomApplicationData("uploadBinary"),
+            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
+        );
+        uploadBinaryApplication.name = this.upgradeData.uploadBinaryApplicationName;
+        uploadBinaryApplication.create();
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
+        // No credentials required for uploaded binary.
+        uploadBinaryApplication.analyze();
+        uploadBinaryApplication.verifyAnalysisStatus("Completed");
+        uploadBinaryApplication.selectApplication();
+    });
+
     it("Creating source applications", function () {
         const sourceApplication = new Analysis(
             getRandomApplicationData("bookserverApp", {
@@ -114,19 +131,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         cy.wait(2 * SEC);
         sourceApplication.analyze();
         sourceApplication.verifyAnalysisStatus("Completed");
-    });
-
-    it("Creating Upload Binary Analysis", function () {
-        const uploadBinaryApplication = new Analysis(
-            getRandomApplicationData("customRule_customTarget"),
-            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
-        );
-        uploadBinaryApplication.name = this.upgradeData.uploadBinaryApplicationName;
-        uploadBinaryApplication.create();
-        cy.wait(2 * SEC);
-        // No credentials required for uploaded binary.
-        uploadBinaryApplication.analyze();
-        uploadBinaryApplication.verifyAnalysisStatus("Completed");
+        sourceApplication.selectApplication();
     });
 
     it("Binary Analysis", function () {
@@ -147,5 +152,6 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         );
         binaryApplication.analyze();
         binaryApplication.verifyAnalysisStatus("Completed");
+        binaryApplication.selectApplication();
     });
 });
