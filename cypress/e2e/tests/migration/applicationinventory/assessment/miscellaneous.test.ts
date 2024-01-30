@@ -86,9 +86,10 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             `Success alert:Success! Assessment discarded for ${applicationList[0].name}.`
         );
         applicationList[0].verifyStatus("assessment", "Not started");
-        cy.wait(4 * SEC);
+        cy.wait(2 * SEC);
         applicationList[0].perform_assessment("low", stakeholderList);
         applicationList[0].discardAssessments();
+        cy.wait(2 * SEC);
         applicationList[0].verifyAssessmentTakeButtonEnabled();
         checkSuccessAlert(
             successAlertMessage,
@@ -96,8 +97,10 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             true
         );
         applicationList[0].validateAssessmentField("Unknown");
+        cy.wait(2 * SEC);
         archetypeList[0].perform_assessment("low", stakeholderList);
         archetypeList[0].discardAssessments();
+        cy.wait(2 * SEC);
         archetypeList[0].verifyAssessmentTakeButtonEnabled();
         checkSuccessAlert(
             successAlertMessage,
