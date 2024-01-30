@@ -48,6 +48,8 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import * as data from "../../../../../utils/data_utils";
+import { exists } from "../../../../../utils/utils";
+import { Tag } from "../../../../models/migration/controls/tags";
 
 const fileName = "Legacy Pathfinder";
 let stakeholderList: Array<Stakeholders> = [];
@@ -64,15 +66,19 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(fileName);
         stakeholderList = createMultipleStakeholders(1);
+<<<<<<< HEAD
         archetypeList = createMultipleArchetypes(1);
 
+=======
+        /*
+>>>>>>> aaa79c43 (Minor changes)
         applicationList = createMultipleApplications(1);
         applicationList[0].perform_assessment("low", stakeholderList);
         cy.wait(2000);
         applicationList[0].verifyStatus("assessment", "Completed");
         applicationList[0].perform_review("low");
         cy.wait(2000);
-        applicationList[0].verifyStatus("review", "Completed");
+        applicationList[0].verifyStatus("review", "Completed"); */
     });
 
     it("Retake Assessment questionnaire", function () {
@@ -125,6 +131,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         );
         applicationList[0].verifyStatus("review", "Not started");
     });
+
     it("Assess application and overide assessment for that archetype", function () {
         // Polarion TC MTA-390
         const archetypesList = [];
@@ -225,20 +232,26 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         1. Create an application.
         2. Associate it with unassessed/unreviewed archetypes()
         3. Assess and review the application.
-        4. Assess and review the associated archetypeList. Application should retain its individual assessment and review.
-        5. Discard application assessment and review. Application should inherit assessment and review from archetype
+        4. Assess and review the associated archetypeList. Application should retain its individual assessment and review despite
+           its assovciation with archetype(s) because application assessment/review has precedence over archetype assessment/review.
+        5. Discard application assessment and review. Application should now inherit assessment and review from archetype
+        Steps 1 - 3 are performed in the first half of the test and only steps 4 - 5 are performed through the below code.
         */
+        tags[1].delete; // Disassociate app from archetypeList[1].name
+
         archetypeList[0].perform_review("low");
-        application2.validateReviewFields();
+        application2.validateReviewFields(); // Application should retain its individual review.
 
-        archetypeList[0].perform_assessment("low");
-        application2.validateAssessmentField("Medium");
+        archetypeList[0].perform_assessment("low", stakeholderList);
+        application2.validateAssessmentField("Medium"); // Application should retain its individual assessment.
 
+        // Inheritance happens only after application assessment/review is discarded.
         application2.selectKebabMenuItem("Discard review");
         application2.validateInheritedReviewFields([archetypeList[0].name]);
 
         application2.selectKebabMenuItem("Discard assessment");
         application2.validateAssessmentField("Low");
+        application2.verifyStatus("assessment", "Completed");
 
         application2.delete();
         cy.wait(2 * SEC);
