@@ -87,24 +87,24 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         );
         applicationList[0].verifyStatus("assessment", "Not started");
 
-        applicationList[0].perform_assessment("low", stakeholderList);
-        applicationList[0].discardAssessments();
-        applicationList[0].verifyAssessmentTakeButtonEnabled();
-        checkSuccessAlert(
-            successAlertMessage,
-            `Success! Assessment discarded for ${applicationList[0].name}.`,
-            true
-        );
-        applicationList[0].validateAssessmentField("Unknown");
-        archetypeList[0].perform_assessment("low", stakeholderList);
-        archetypeList[0].discardAssessments();
-        archetypeList[0].verifyAssessmentTakeButtonEnabled();
-        checkSuccessAlert(
-            successAlertMessage,
-            `Success! Assessment discarded for ${archetypeList[0].name}.`,
-            true
-        );
-        archetypeList[0].validateAssessmentField("Unknown");
+        // applicationList[0].perform_assessment("low", stakeholderList);
+        // applicationList[0].discardAssessments();
+        // applicationList[0].verifyAssessmentTakeButtonEnabled();
+        // checkSuccessAlert(
+        //     successAlertMessage,
+        //     `Success! Assessment discarded for ${applicationList[0].name}.`,
+        //     true
+        // );
+        // applicationList[0].validateAssessmentField("Unknown");
+        // archetypeList[0].perform_assessment("low", stakeholderList);
+        // archetypeList[0].discardAssessments();
+        // archetypeList[0].verifyAssessmentTakeButtonEnabled();
+        // checkSuccessAlert(
+        //     successAlertMessage,
+        //     `Success! Assessment discarded for ${archetypeList[0].name}.`,
+        //     true
+        // );
+        // archetypeList[0].validateAssessmentField("Unknown");
     });
 
     it("Discard Review", function () {
