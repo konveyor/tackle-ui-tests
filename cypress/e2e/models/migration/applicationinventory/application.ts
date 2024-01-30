@@ -908,8 +908,8 @@ export class Application {
         });
     }
 
-    deleteAssessment(): void {
+    deleteAssessments(): void {
         this.clickAssessButton();
-        Assessment.deleteAssessment();
+        Assessment.deleteAssessments();
     }
 }
