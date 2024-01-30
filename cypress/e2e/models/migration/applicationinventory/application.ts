@@ -80,6 +80,7 @@ import {
     validateNumberPresence,
     performWithin,
     sidedrawerTab,
+    validatePageTitle,
 } from "../../../../utils/utils";
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
 import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
@@ -895,5 +896,20 @@ export class Application {
     validateExcludedIssues(appIssues: AppIssue[]): void {
         Issues.openSingleApplication(this.name);
         cy.get(commonView.appTable).should("not.contain.text", appIssues);
+    }
+    verifyAssessmentTakeButtonEnabled(): void {
+        //validates current page
+        validatePageTitle("Assessment Actions").then((titleMatches) => {
+            if (!titleMatches) {
+                Application.open();
+                this.clickAssessButton();
+            }
+            Assessment.verifyAssessmentTakeButtonEnabled();
+        });
+    }
+
+    deleteAssessments(): void {
+        this.clickAssessButton();
+        Assessment.deleteAssessments();
     }
 }

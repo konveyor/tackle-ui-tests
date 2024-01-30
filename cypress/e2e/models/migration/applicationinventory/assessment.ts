@@ -43,6 +43,7 @@ import {
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
 import { notYetReviewed, reviewItems } from "../../../views/archetype.view";
+import { plainButton, tableRowActions } from "../../../views/common.view";
 
 export class Assessment {
     public static selectStakeholders(stakeholders: Stakeholders[]): void {
@@ -325,5 +326,17 @@ export class Assessment {
         cy.get(commonView.sideDrawer.risk).contains(`${page} risk`);
         cy.get(commonView.sideDrawer.labelContent).contains(risk);
         click(commonView.sideDrawer.closeDrawer);
+    }
+    public static deleteAssessments(): void {
+        cy.get(tableRowActions).each(($el) => {
+            cy.wrap($el).find(plainButton).click();
+        });
+    }
+    public static verifyAssessmentTakeButtonEnabled(): void {
+        cy.contains("button", "Take", { timeout: 30 * SEC }).should(
+            "not.have.attr",
+            "aria-disabled",
+            "true"
+        );
     }
 }

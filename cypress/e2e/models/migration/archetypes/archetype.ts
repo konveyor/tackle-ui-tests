@@ -25,6 +25,7 @@ import {
     clickKebabMenuOptionArchetype,
     confirm,
     sidedrawerTab,
+    validatePageTitle,
 } from "../../../../utils/utils";
 import { legacyPathfinder, migration, SEC, tdTag, trTag } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
@@ -324,5 +325,23 @@ export class Archetype {
     discardReview() {
         clickKebabMenuOptionArchetype(this.name, "Discard review");
         confirm();
+    }
+    clickAssessButton() {
+        Archetype.open();
+        clickKebabMenuOptionArchetype(this.name, "Assess");
+    }
+    deleteAssessments(): void {
+        this.clickAssessButton();
+        Assessment.deleteAssessments();
+    }
+    verifyAssessmentTakeButtonEnabled(): void {
+        //validates current page
+        validatePageTitle("Assessment Actions").then((titleMatches) => {
+            if (!titleMatches) {
+                Archetype.open();
+                this.clickAssessButton();
+            }
+            Assessment.verifyAssessmentTakeButtonEnabled();
+        });
     }
 }
