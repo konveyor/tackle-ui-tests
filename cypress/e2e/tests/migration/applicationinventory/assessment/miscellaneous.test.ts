@@ -79,19 +79,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("assessment", "Completed");
     });
 
-    it("Discard Assessment from ArchetypePage", function () {
-        archetypeList[0].perform_assessment("low", stakeholderList);
-        archetypeList[0].discardAssessments();
-        archetypeList[0].verifyAssessmentTakeButtonEnabled();
-        checkSuccessAlert(
-            successAlertMessage,
-            `Success! Assessment discarded for ${archetypeList[0].name}.`,
-            true
-        );
-        archetypeList[0].validateAssessmentField("Unknown");
-    });
-
-    it("Discard Assessment from kebabMenu and AssessPage", function () {
+    it("Discard Assessment from kebabMenu, AssessPage and ArchetypePage", function () {
         applicationList[0].selectKebabMenuItem("Discard assessment(s)");
         checkSuccessAlert(
             alertTitle,
@@ -100,6 +88,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("assessment", "Not started");
 
         applicationList[0].perform_assessment("low", stakeholderList);
+        Application.open(true);
         applicationList[0].discardAssessments();
         applicationList[0].verifyAssessmentTakeButtonEnabled();
         checkSuccessAlert(
@@ -108,6 +97,16 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             true
         );
         applicationList[0].validateAssessmentField("Unknown");
+        archetypeList[0].perform_assessment("low", stakeholderList);
+        Archetype.open(true);
+        archetypeList[0].discardAssessments();
+        archetypeList[0].verifyAssessmentTakeButtonEnabled();
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success! Assessment discarded for ${archetypeList[0].name}.`,
+            true
+        );
+        archetypeList[0].validateAssessmentField("Unknown");
     });
 
     it("Discard Review", function () {
