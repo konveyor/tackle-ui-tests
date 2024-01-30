@@ -86,6 +86,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             `Success alert:Success! Assessment discarded for ${applicationList[0].name}.`
         );
         applicationList[0].verifyStatus("assessment", "Not started");
+
         applicationList[0].perform_assessment("low", stakeholderList);
         applicationList[0].discardAssessments();
         applicationList[0].verifyAssessmentTakeButtonEnabled();
