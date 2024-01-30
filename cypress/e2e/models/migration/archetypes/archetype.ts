@@ -330,9 +330,9 @@ export class Archetype {
         Archetype.open();
         clickKebabMenuOptionArchetype(this.name, "Assess");
     }
-    discardAssessments(): void {
+    discardAssessmentsAssessmentActions(): void {
         this.clickAssessButton();
-        Assessment.discardAssessments();
+        Assessment.discardAssessmentsAssessmentActions();
     }
     verifyAssessmentTakeButtonEnabled(): void {
         //validates current page

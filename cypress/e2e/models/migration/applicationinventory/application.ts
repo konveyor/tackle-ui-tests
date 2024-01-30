@@ -908,8 +908,8 @@ export class Application {
         });
     }
 
-    discardAssessments(): void {
+    discardAssessmentsAssessmentActions(): void {
         this.clickAssessButton();
-        Assessment.discardAssessments();
+        Assessment.discardAssessmentsAssessmentActions();
     }
 }
