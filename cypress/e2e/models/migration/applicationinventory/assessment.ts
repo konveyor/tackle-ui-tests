@@ -327,7 +327,7 @@ export class Assessment {
         cy.get(commonView.sideDrawer.labelContent).contains(risk);
         click(commonView.sideDrawer.closeDrawer);
     }
-    public static discardAssessmentsAssessmentActions(): void {
+    public static deleteAssessment(): void {
         cy.get(tableRowActions).each(($el) => {
             cy.wrap($el).find(plainButton).click();
         });

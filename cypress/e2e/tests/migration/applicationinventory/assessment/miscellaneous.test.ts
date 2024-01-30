@@ -89,7 +89,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
         applicationList[0].perform_assessment("low", stakeholderList);
         Application.open(true);
-        applicationList[0].discardAssessmentsAssessmentActions();
+        applicationList[0].deleteAssessment();
         applicationList[0].verifyAssessmentTakeButtonEnabled();
         checkSuccessAlert(
             successAlertMessage,
@@ -99,7 +99,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].validateAssessmentField("Unknown");
         archetypeList[0].perform_assessment("low", stakeholderList);
         Archetype.open(true);
-        archetypeList[0].discardAssessmentsAssessmentActions();
+        archetypeList[0].deleteAssessment();
         archetypeList[0].verifyAssessmentTakeButtonEnabled();
         checkSuccessAlert(
             successAlertMessage,
