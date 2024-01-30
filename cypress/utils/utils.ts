@@ -1313,6 +1313,11 @@ export function deleteApplicationTableRows(): void {
     selectItemsPerPage(100);
     deleteAllRows();
 }
+export function validatePageTitle(pageTitle: string) {
+    return cy.get(commonView.pageTitle).then((h1) => {
+        return h1.text().includes(pageTitle);
+    });
+}
 
 export function deleteAllMigrationWaves() {
     MigrationWave.open();

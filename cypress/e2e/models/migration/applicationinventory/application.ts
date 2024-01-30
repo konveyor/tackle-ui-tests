@@ -80,6 +80,7 @@ import {
     validateNumberPresence,
     performWithin,
     sidedrawerTab,
+    validatePageTitle,
 } from "../../../../utils/utils";
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
 import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
@@ -898,13 +899,13 @@ export class Application {
     }
     verifyAssessmentTakeButtonEnabled(): void {
         //validates current page
-        cy.get("section.pf-v5-c-page__main-section.pf-m-light h1").then((h1) => {
-            if (!h1.text().includes("Assessment Actions")) {
+        validatePageTitle("Assessment Actions").then((titleMatches) => {
+            if (!titleMatches) {
                 Application.open();
                 this.clickAssessButton();
             }
+            Assessment.verifyAssessmentTakeButtonEnabled();
         });
-        Assessment.verifyAssessmentTakeButtonEnabled();
     }
 
     discardAssessments(): void {

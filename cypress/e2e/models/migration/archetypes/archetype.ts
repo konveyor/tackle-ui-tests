@@ -25,6 +25,7 @@ import {
     clickKebabMenuOptionArchetype,
     confirm,
     sidedrawerTab,
+    validatePageTitle,
 } from "../../../../utils/utils";
 import { legacyPathfinder, migration, SEC, tdTag, trTag } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
@@ -335,12 +336,12 @@ export class Archetype {
     }
     verifyAssessmentTakeButtonEnabled(): void {
         //validates current page
-        cy.get("section.pf-v5-c-page__main-section.pf-m-light h1").then((h1) => {
-            if (!h1.text().includes("Assessment Actions")) {
+        validatePageTitle("Assessment Actions").then((titleMatches) => {
+            if (!titleMatches) {
                 Archetype.open();
                 this.clickAssessButton();
             }
+            Assessment.verifyAssessmentTakeButtonEnabled();
         });
-        Assessment.verifyAssessmentTakeButtonEnabled();
     }
 }
