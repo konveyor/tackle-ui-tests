@@ -79,7 +79,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("assessment", "Completed");
     });
 
-    it("Discard Assessment", function () {
+    it("Discard Assessment from kebabMenu", function () {
         applicationList[0].selectKebabMenuItem("Discard assessment(s)");
         checkSuccessAlert(
             alertTitle,
