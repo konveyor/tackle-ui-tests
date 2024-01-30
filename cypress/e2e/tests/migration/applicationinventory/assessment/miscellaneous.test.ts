@@ -142,6 +142,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         application1.create();
         cy.wait(2 * SEC);
         archetype1.perform_assessment("low", stakeholderList);
+        Application.open(true);
         application1.clickAssessButton();
         application1.validateOverrideAssessmentMessage(archetypesList);
         click(confirmButton);
