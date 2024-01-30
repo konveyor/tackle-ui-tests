@@ -98,6 +98,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             true
         );
         applicationList[0].validateAssessmentField("Unknown");
+
         archetypeList[0].perform_assessment("low", stakeholderList);
         archetypeList[0].discardAssessments();
         archetypeList[0].verifyAssessmentTakeButtonEnabled();
