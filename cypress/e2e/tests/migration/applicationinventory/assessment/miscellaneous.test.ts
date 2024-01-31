@@ -31,15 +31,7 @@ import {
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { alertTitle, confirmButton, successAlertMessage } from "../../../../views/common.view";
-import {
-    legacyPathfinder,
-    cloudNative,
-    SEC,
-    button,
-    archetypes,
-    application,
-    review,
-} from "../../../../types/constants";
+import { legacyPathfinder, cloudNative, SEC, button } from "../../../../types/constants";
 import {
     ArchivedQuestionnaires,
     ArchivedQuestionnairesTableDataCell,
@@ -48,8 +40,6 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import * as data from "../../../../../utils/data_utils";
-import { exists } from "../../../../../utils/utils";
-import { Tag } from "../../../../models/migration/controls/tags";
 
 const fileName = "Legacy Pathfinder";
 let stakeholderList: Array<Stakeholders> = [];
@@ -195,10 +185,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
     });
 
     it("Test inheritance after discarding application assessment and review", function () {
-        /* Polarion TC MTA-456 Assess and review application associated with unassessed/unreviewed archetypes
-        1. Create an application.
-        2. Associate it with unassessed/unreviewed archetypes()
-        3. Assess and review the application. */
+        // Polarion TC MTA-456 Assess and review application associated with unassessed/unreviewed archetypes
         const tags = createMultipleTags(2);
         const archetypeList = createMultipleArchetypes(2, tags);
 
@@ -223,23 +210,14 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         application2.verifyStatus("review", "Completed");
         application2.validateReviewFields();
 
-        /* Polarion TC 496 Verify assessment and review inheritance after discarding application assessment and review
-        Test steps:
-        1. Create an application.
-        2. Associate it with unassessed/unreviewed archetypes()
-        3. Assess and review the application.
-        4. Assess and review the associated archetypeList. Application should retain its individual assessment and review despite
-           its assovciation with archetype(s) because application assessment/review has precedence over archetype assessment/review.
-        5. Discard application assessment and review. Application should now inherit assessment and review from archetype
-        Steps 1 - 3 are performed in the first half of the test and only steps 4 - 5 are performed through the below code.
-        */
-        tags[1].delete; // Disassociate app from archetypeList[1].name
-
+        // Polarion TC 496 Verify assessment and review inheritance after discarding application assessment and review
         archetypeList[0].perform_review("low");
         application2.validateReviewFields(); // Application should retain its individual review.
 
         archetypeList[0].perform_assessment("low", stakeholderList);
         application2.validateAssessmentField("Medium"); // Application should retain its individual assessment.
+
+        archetypeList[1].delete(); // Disassociate app from archetypeList[1].name
 
         // Inheritance happens only after application assessment/review is discarded.
         application2.selectKebabMenuItem("Discard review");
