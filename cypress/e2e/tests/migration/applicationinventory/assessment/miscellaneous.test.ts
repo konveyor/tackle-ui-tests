@@ -66,19 +66,15 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(fileName);
         stakeholderList = createMultipleStakeholders(1);
-<<<<<<< HEAD
         archetypeList = createMultipleArchetypes(1);
 
-=======
-        /*
->>>>>>> aaa79c43 (Minor changes)
         applicationList = createMultipleApplications(1);
         applicationList[0].perform_assessment("low", stakeholderList);
         cy.wait(2000);
         applicationList[0].verifyStatus("assessment", "Completed");
         applicationList[0].perform_review("low");
         cy.wait(2000);
-        applicationList[0].verifyStatus("review", "Completed"); */
+        applicationList[0].verifyStatus("review", "Completed");
     });
 
     it("Retake Assessment questionnaire", function () {
