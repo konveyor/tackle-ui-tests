@@ -227,7 +227,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         application2.verifyStatus("review", "Completed");
         application2.validateReviewFields();
 
-        /* Polarion TC 458
+        /* Polarion TC 496 Verify assessment and review inheritance after discarding application assessment and review
         Test steps:
         1. Create an application.
         2. Associate it with unassessed/unreviewed archetypes()
