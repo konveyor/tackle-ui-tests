@@ -41,7 +41,6 @@ import { Assessment } from "../../../../models/migration/applicationinventory/as
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import * as data from "../../../../../utils/data_utils";
 
-const fileName = "Legacy Pathfinder";
 let stakeholderList: Array<Stakeholders> = [];
 let applicationList: Array<Application> = [];
 let archetypeList: Archetype[];
@@ -54,7 +53,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         cy.intercept("GET", "/hub/application*").as("getApplication");
 
         AssessmentQuestionnaire.deleteAllQuestionnaires();
-        AssessmentQuestionnaire.enable(fileName);
+        AssessmentQuestionnaire.enable(legacyPathfinder);
         stakeholderList = createMultipleStakeholders(1);
         archetypeList = createMultipleArchetypes(1);
 
@@ -117,6 +116,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         );
         applicationList[0].verifyStatus("review", "Not started");
     });
+
     it("Assess application and overide assessment for that archetype", function () {
         // Polarion TC MTA-390
         const archetypesList = [];
@@ -183,10 +183,10 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         // AssessmentQuestionnaire.delete(cloudNative);
     });
 
-    it("Assess and review application associated with unassessed/unreviewed archetypes", function () {
-        // Polarion TC MTA-456
+    it("Test inheritance after discarding application assessment and review", function () {
+        // Polarion TC MTA-456 Assess and review application associated with unassessed/unreviewed archetypes
         const tags = createMultipleTags(2);
-        const archetypeList = createMultipleArchetypes(2, tags);
+        const archetypes = createMultipleArchetypes(2, tags);
 
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
@@ -209,9 +209,26 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         application2.verifyStatus("review", "Completed");
         application2.validateReviewFields();
 
+        // Polarion TC 496 Verify assessment and review inheritance after discarding application assessment and review
+        archetypes[0].perform_review("low");
+        application2.validateReviewFields(); // Application should retain its individual review.
+
+        archetypes[0].perform_assessment("low", stakeholderList);
+        application2.validateAssessmentField("Medium"); // Application should retain its individual assessment.
+
+        archetypes[1].delete(); // Disassociate app from archetypes[1].name
+
+        // Inheritance happens only after application assessment/review is discarded.
+        application2.selectKebabMenuItem("Discard review");
+        application2.validateInheritedReviewFields([archetypes[0].name]);
+
+        application2.selectKebabMenuItem("Discard assessment");
+        application2.validateAssessmentField("Low");
+        application2.verifyStatus("assessment", "Completed");
+
         application2.delete();
         cy.wait(2 * SEC);
-        deleteByList(archetypeList);
+        archetypes[0].delete();
         deleteByList(tags);
     });
 
