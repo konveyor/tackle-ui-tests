@@ -22,6 +22,7 @@ import {
     createMultipleArchetypes,
     deleteByList,
     createMultipleStakeholders,
+    createMultipleApplicationsWithBSandTags,
 } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
@@ -45,29 +46,28 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
-    it("Archetype association - Application creation before archetype creation ", function () {
-        // Automates Polarion MTA-400
-        const appdata = {
-            name: data.getAppName(),
-            tags: ["Web / WebSocket"],
-        };
+    it("Verify multiple applications inherit assessment and review inheritance from an archetype", function () {
+        // Automates Polarion MTA-400 Archetype association - Application creation before archetype creation.
+        applicationList = createMultipleApplicationsWithBSandTags(2, null, [tags[0]], null);
 
-        const application = new Application(appdata);
-        applicationList.push(application);
-        application.create();
-        cy.wait(2 * SEC);
-
-        const archetype = new Archetype(
-            data.getRandomWord(8),
-            ["Web / WebSocket"],
-            ["Web / WebSocket"],
-            null
-        );
+        const archetype = new Archetype(data.getRandomWord(8), [tags[0].name, tags[1].name], null);
         archetype.create();
         cy.wait(2 * SEC);
 
         // Assert that associated archetypes are listed on app drawer after application gets associated with archetype(s)
-        application.verifyArchetypeList([archetype.name], "Associated archetypes");
+        applicationList[0].verifyArchetypeList([archetype.name], "Associated archetypes");
+        applicationList[1].verifyArchetypeList([archetype.name], "Associated archetypes");
+
+        // Automates TC MTA-456 Verify multiple applications inherit assessment and review inheritance from an archetype
+        archetype.perform_review("low");
+        applicationList[0].verifyArchetypeList([archetype.name], "Archetypes reviewed");
+        applicationList[0].validateInheritedReviewFields([archetype.name]);
+        applicationList[1].validateInheritedReviewFields([archetype.name]);
+
+        archetype.perform_assessment("low", stakeholders);
+        applicationList[0].verifyArchetypeList([archetype.name], "Archetypes assessed");
+        applicationList[0].validateAssessmentField("Low");
+
         archetype.delete();
     });
 
