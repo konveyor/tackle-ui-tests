@@ -1,4 +1,5 @@
 {
+    "assessmentName": "upgrade-assessment",
     "jobFunctionName": "upgrade-jobFunction",
     "stakeHolderGroupName": "upgrade-stakeHolderGroup",
     "stakeHolderName": "upgrade-stakeHolder",
