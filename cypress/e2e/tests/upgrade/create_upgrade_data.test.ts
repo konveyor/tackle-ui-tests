@@ -34,10 +34,13 @@ import { getRandomCredentialsData } from "../../../utils/data_utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { UpgradeData } from "../../types/types";
 import { CredentialsMaven } from "../../models/administration/credentials/credentialsMaven";
+import { Assessment } from "../../models/migration/applicationinventory/assessment";
 
 describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     let mavenCredentialsUsername: CredentialsMaven;
     let sourceControlUsernameCredentials: CredentialsSourceControlUsername;
+    const assessment = new Assessment(getRandomApplicationData());
+    let stakeHolder: Stakeholders;
 
     before("Login", function () {
         // Perform login
@@ -92,7 +95,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         // Defining stakeholder groups
         const stakeHolderGroup = new Stakeholdergroups(stakeHolderGroupName);
         // Defining stakeholders
-        const stakeHolder = new Stakeholders("test@gmail.com", stakeHolderName, jobFunctionName, [
+        stakeHolder = new Stakeholders("test@gmail.com", stakeHolderName, jobFunctionName, [
             stakeHolderGroupName,
         ]);
         // Defining business Service
@@ -122,6 +125,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         cy.wait(2 * SEC);
         sourceApplication.analyze();
         sourceApplication.verifyAnalysisStatus("Completed");
+        sourceApplication.selectApplicationRow();
     });
 
     it("Creating Upload Binary Analysis", function () {
@@ -135,6 +139,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         // No credentials required for uploaded binary.
         uploadBinaryApplication.analyze();
         uploadBinaryApplication.verifyAnalysisStatus("Completed");
+        uploadBinaryApplication.selectApplicationRow();
     });
 
     it("Binary Analysis", function () {
@@ -155,5 +160,12 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         );
         binaryApplication.analyze();
         binaryApplication.verifyAnalysisStatus("Completed");
+        binaryApplication.selectApplicationRow();
+    });
+
+    it("Assess application", function () {
+        assessment.name = this.upgradeData.assessmentName;
+        assessment.create();
+        assessment.perform_assessment("low", [stakeHolder.name]);
     });
 });
