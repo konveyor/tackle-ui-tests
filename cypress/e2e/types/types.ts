@@ -162,6 +162,7 @@ export type RbacValidationRules = {
 };
 
 export type UpgradeData = {
+    assessmentName?: string;
     jobFunctionName?: string;
     stakeHolderGroupName?: string;
     stakeHolderName?: string;
