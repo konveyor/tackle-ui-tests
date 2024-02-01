@@ -39,7 +39,7 @@ import { archetypeDropdown } from "../../../../views/archetype.view";
 
 let applicationList: Array<Application> = [];
 let archetypeList: Array<Archetype> = [];
-let inhiritanceTags: Tag[];
+let inheritenceTags: Tag[];
 let assosiationTags: Tag[];
 let stakeholderGroups: Stakeholdergroups[];
 let stakeholders: Stakeholders[];
@@ -47,7 +47,7 @@ let stakeholders: Stakeholders[];
 describe(["@tier2"], "Tests related to application-archetype association ", () => {
     before("Login", function () {
         login();
-        inhiritanceTags = createMultipleTags(2);
+        inheritenceTags = createMultipleTags(2);
         assosiationTags = createMultipleTags(2);
         stakeholderGroups = createMultipleStakeholderGroups(2);
         stakeholders = createMultipleStakeholders(1);
@@ -87,12 +87,12 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         This also verifies: Archetype association - Application creation after archetype creation.
         */
 
-        archetypeList = createMultipleArchetypes(2, inhiritanceTags);
+        archetypeList = createMultipleArchetypes(2, inheritenceTags);
         const archetypeNames = [archetypeList[0].name, archetypeList[1].name];
 
         const appdata = {
             name: data.getAppName(),
-            tags: [inhiritanceTags[0].name, inhiritanceTags[1].name],
+            tags: [inheritenceTags[0].name, inheritenceTags[1].name],
         };
 
         const application2 = new Application(appdata);
@@ -169,9 +169,6 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
             tags: assosiationTags.map((tag) => tag.name),
         };
 
-        cy.log("tag0: " + appdata.tags[0]);
-        cy.log("tag1: " + appdata.tags[1]);
-
         const application = new Application(appdata);
 
         applicationList.push(application);
@@ -179,13 +176,11 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         cy.wait(2 * SEC);
 
         application.clickAssessButton();
-        cy.wait(2 * SEC);
 
         clickByText(customActionButton, ViewArchetypes);
-        cy.wait(2 * SEC);
 
         selectFromDropListByText(archetypeDropdown, archetype1.name);
-        cy.wait(2 * SEC);
+        cy.wait(SEC);
 
         selectFromDropListByText(archetypeDropdown, archetype2.name);
 
@@ -196,7 +191,8 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
     after("Perform test data clean up", function () {
         deleteByList(applicationList);
         deleteByList(archetypeList);
-        deleteByList(inhiritanceTags);
+        deleteByList(inheritenceTags);
+        deleteByList(assosiationTags);
         deleteByList(stakeholders);
     });
 });
