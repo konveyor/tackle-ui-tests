@@ -232,7 +232,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         deleteByList(tags);
     });
     it("Deletes assessments from an archived questionnaire from an archetype and application", function () {
-        //automated polarion MTA-441 and MTA-442
+        //automates polarion MTA-441 and MTA-442
         const applications = createMultipleApplications(1);
         const archetypes = createMultipleArchetypes(1);
 
