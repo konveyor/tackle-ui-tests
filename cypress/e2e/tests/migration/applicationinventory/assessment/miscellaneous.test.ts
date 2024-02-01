@@ -231,6 +231,30 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         archetypes[0].delete();
         deleteByList(tags);
     });
+    it("Deletes assessments from an archived questionnaire from an archetype and application", function () {
+        //automated polarion MTA-441 and MTA-442
+        const applications = createMultipleApplications(1);
+        const archetypes = createMultipleArchetypes(1);
+
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
+        AssessmentQuestionnaire.enable(legacyPathfinder);
+        applications[0].perform_assessment("low", stakeholderList);
+        Application.open(true);
+        AssessmentQuestionnaire.disable(legacyPathfinder);
+        applications[0].validateAssessmentField("Unknown");
+        applications[0].deleteAssessments();
+
+        AssessmentQuestionnaire.enable(legacyPathfinder);
+        archetypes[0].perform_assessment("low", stakeholderList);
+        Archetype.open(true);
+        AssessmentQuestionnaire.disable(legacyPathfinder);
+        archetypes[0].validateAssessmentField("Unknown");
+        archetypes[0].deleteAssessments();
+
+        AssessmentQuestionnaire.enable(legacyPathfinder);
+        deleteByList(applications);
+        deleteByList(archetypes);
+    });
 
     after("Perform test data clean up", function () {
         deleteByList(stakeholderList);
