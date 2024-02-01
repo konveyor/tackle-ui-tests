@@ -54,19 +54,20 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         archetype.create();
         cy.wait(2 * SEC);
 
-        // Assert that associated archetypes are listed on app drawer after application gets associated with archetype(s)
-        applicationList[0].verifyArchetypeList([archetype.name], "Associated archetypes");
-        applicationList[1].verifyArchetypeList([archetype.name], "Associated archetypes");
-
         // Automates TC MTA-456 Verify multiple applications inherit assessment and review inheritance from an archetype
         archetype.perform_review("low");
-        applicationList[0].verifyArchetypeList([archetype.name], "Archetypes reviewed");
-        applicationList[0].validateInheritedReviewFields([archetype.name]);
-        applicationList[1].validateInheritedReviewFields([archetype.name]);
+        archetype.perform_assessment("low");
 
-        archetype.perform_assessment("low", stakeholders);
-        applicationList[0].verifyArchetypeList([archetype.name], "Archetypes assessed");
-        applicationList[0].validateAssessmentField("Low");
+        for (let i = 0; i < applicationList.length; i++) {
+            // Assert that associated archetypes are listed on app drawer after application gets associated with archetype(s)
+            applicationList[i].verifyArchetypeList([archetype.name], "Associated archetypes");
+            applicationList[i].verifyArchetypeList([archetype.name], "Archetypes reviewed");
+            applicationList[i].validateInheritedReviewFields([archetype.name]);
+            applicationList[i].verifyStatus("review", "Completed");
+            applicationList[i].verifyArchetypeList([archetype.name], "Archetypes assessed");
+            applicationList[i].validateAssessmentField("Low");
+            applicationList[i].verifyStatus("assessment", "Completed");
+        }
 
         archetype.delete();
     });
