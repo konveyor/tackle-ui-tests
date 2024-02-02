@@ -29,9 +29,9 @@
         "repoType": "Git",
         "sourceRepo": "http://github.com/konveyor/tackle-testapp"
     },
-    "tackle-testapp-svn-insecure": {
+    "bookserver-svn-insecure": {
         "repoType": "Subversion",
-        "sourceRepo": "http://github.com/konveyor/tackle-testapp"
+        "sourceRepo": "http://10.0.188.129/svn/mtaqe-svn/book-server"
     },
     "konveyor-exampleapp": {
         "repoType": "Git",
