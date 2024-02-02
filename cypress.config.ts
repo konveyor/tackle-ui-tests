@@ -10,6 +10,8 @@ export default defineConfig({
         pass: "Dog8code",
         git_user: "",
         git_password: "",
+        svn_user: "qe-admin",
+        svn_password: "Dog8code",
         jira_stage_datacenter_url: "https://issues.stage.redhat.com/",
         jira_stage_bearer_token: "",
         jira_stage_basic_login: "",
