@@ -22,7 +22,7 @@ import {
     createMultipleArchetypes,
     deleteByList,
     createMultipleStakeholders,
-    createMultipleApplicationsWithBSandTags,
+    createMultipleApplications,
 } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
@@ -31,8 +31,8 @@ import { AssessmentQuestionnaire } from "../../../../models/administration/asses
 import { legacyPathfinder, SEC } from "../../../../types/constants";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
-let applicationList: Array<Application> = [];
-let archetypeList: Array<Archetype> = [];
+let applicationList: Application[];
+let archetypeList: Archetype[];
 let tags: Tag[];
 let stakeholders: Stakeholders[];
 
@@ -48,13 +48,18 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
     it("Verify multiple applications inherit assessment and review inheritance from an archetype", function () {
         // Automates Polarion MTA-400 Archetype association - Application creation before archetype creation.
-        applicationList = createMultipleApplicationsWithBSandTags(2, null, [tags[0]], null);
+        applicationList = createMultipleApplications(2, [tags[0].name]);
 
-        const archetype = new Archetype(data.getRandomWord(8), [tags[0].name, tags[1].name], null);
+        const archetype = new Archetype(
+            data.getRandomWord(8),
+            [tags[0].name],
+            [tags[1].name],
+            null
+        );
         archetype.create();
         cy.wait(2 * SEC);
 
-        // Automates TC MTA-456 Verify multiple applications inherit assessment and review inheritance from an archetype
+        //Automates Polarion MTA-499 Verify multiple applications inherit assessment and review inheritance from an archetype
         archetype.perform_review("low");
         archetype.perform_assessment("low");
 
