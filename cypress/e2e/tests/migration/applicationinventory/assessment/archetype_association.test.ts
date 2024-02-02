@@ -22,6 +22,7 @@ import {
     createMultipleArchetypes,
     deleteByList,
     createMultipleStakeholders,
+    createMultipleApplications,
 } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
@@ -30,8 +31,8 @@ import { AssessmentQuestionnaire } from "../../../../models/administration/asses
 import { legacyPathfinder, SEC } from "../../../../types/constants";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
-let applicationList: Array<Application> = [];
-let archetypeList: Array<Archetype> = [];
+let applicationList: Application[];
+let archetypeList: Archetype[];
 let tags: Tag[];
 let stakeholders: Stakeholders[];
 
@@ -45,29 +46,34 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
-    it("Archetype association - Application creation before archetype creation ", function () {
-        // Automates Polarion MTA-400
-        const appdata = {
-            name: data.getAppName(),
-            tags: ["Web / WebSocket"],
-        };
-
-        const application = new Application(appdata);
-        applicationList.push(application);
-        application.create();
-        cy.wait(2 * SEC);
+    it("Verify multiple applications inherit assessment and review inheritance from an archetype", function () {
+        // Automates Polarion MTA-400 Archetype association - Application creation before archetype creation.
+        applicationList = createMultipleApplications(2, [tags[0].name]);
 
         const archetype = new Archetype(
             data.getRandomWord(8),
-            ["Web / WebSocket"],
-            ["Web / WebSocket"],
+            [tags[0].name],
+            [tags[1].name],
             null
         );
         archetype.create();
         cy.wait(2 * SEC);
 
-        // Assert that associated archetypes are listed on app drawer after application gets associated with archetype(s)
-        application.verifyArchetypeList([archetype.name], "Associated archetypes");
+        //Automates Polarion MTA-499 Verify multiple applications inherit assessment and review inheritance from an archetype
+        archetype.perform_review("low");
+        archetype.perform_assessment("low");
+
+        for (let i = 0; i < applicationList.length; i++) {
+            // Assert that associated archetypes are listed on app drawer after application gets associated with archetype(s)
+            applicationList[i].verifyArchetypeList([archetype.name], "Associated archetypes");
+            applicationList[i].verifyArchetypeList([archetype.name], "Archetypes reviewed");
+            applicationList[i].validateInheritedReviewFields([archetype.name]);
+            applicationList[i].verifyStatus("review", "Completed");
+            applicationList[i].verifyArchetypeList([archetype.name], "Archetypes assessed");
+            applicationList[i].validateAssessmentField("Low");
+            applicationList[i].verifyStatus("assessment", "Completed");
+        }
+
         archetype.delete();
     });
 
