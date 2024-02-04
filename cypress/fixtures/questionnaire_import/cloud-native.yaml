@@ -20,10 +20,10 @@ sections:
               rationale: ""
               mitigation: ""
               applyTags:
-                - category: Technology
+                - category: Runtime
                   tag: Quarkus
               autoAnswerFor:
-                - category: Technology
+                - category: Runtime
                   tag: Quarkus
             - order: 0
               text: Spring Boot
@@ -31,10 +31,10 @@ sections:
               rationale: ""
               mitigation: ""
               applyTags:
-                - category: Technology
+                - category: Runtime
                   tag: Spring Boot
               autoAnswerFor:
-                - category: Technology
+                - category: Runtime
                   tag: Spring Boot
             - order: 0
               text: Java EE
@@ -42,10 +42,10 @@ sections:
               rationale: This might not be the most cloud friendly technology.
               mitigation: Maybe start thinking about migrating to Quarkus or Jakarta EE.
               applyTags:
-                - category: Technology
+                - category: Runtime
                   tag: Java EE
               autoAnswerFor:
-                - category: Technology
+                - category: Runtime
                   tag: Java EE
             - order: 0
               text: J2EE
@@ -53,16 +53,16 @@ sections:
               rationale: This is obsolete.
               mitigation: Maybe start thinking about migrating to Quarkus or Jakarta EE.
               applyTags:
-                - category: Technology
+                - category: Runtime
                   tag: J2EE
               autoAnswerFor:
-                - category: Technology
+                - category: Runtime
                   tag: J2EE
         - order: 0
           text: What version of Java EE does the application use?
           explanation: What version of the Java EE specification is your application using?
           includeFor:
-            - category: Technology
+            - category: Runtime
               tag: Java EE
           answers:
             - order: 0
@@ -112,9 +112,9 @@ sections:
           text: What implementation of JAX-WS does your application use?
           explanation: ""
           excludeFor:
-            - category: Technology
+            - category: Runtime
               tag: Spring Boot
-            - category: Technology
+            - category: Runtime
               tag: Quarkus
           answers:
             - order: 0
@@ -150,10 +150,10 @@ sections:
               rationale: ""
               mitigation: ""
               applyTags:
-                - category: Technology
+                - category: Runtime
                   tag: Quarkus
               autoAnswerFor:
-                - category: Technology
+                - category: Runtime
                   tag: Quarkus
             - order: 0
               text: Spring Boot
@@ -161,10 +161,10 @@ sections:
               rationale: ""
               mitigation: ""
               applyTags:
-                - category: Technology
+                - category: Runtime
                   tag: Spring Boot
               autoAnswerFor:
-                - category: Technology
+                - category: Runtime
                   tag: Spring Boot
             - order: 0
               text: Java EE
@@ -172,10 +172,10 @@ sections:
               rationale: This might not be the most cloud friendly technology.
               mitigation: Maybe start thinking about migrating to Quarkus or Jakarta EE.
               applyTags:
-                - category: Technology
+                - category: Runtime
                   tag: Java EE
               autoAnswerFor:
-                - category: Technology
+                - category: Runtime
                   tag: Java EE
             - order: 0
               text: J2EE
@@ -183,16 +183,16 @@ sections:
               rationale: This is obsolete.
               mitigation: Maybe start thinking about migrating to Quarkus or Jakarta EE.
               applyTags:
-                - category: Technology
+                - category: Runtime
                   tag: J2EE
               autoAnswerFor:
-                - category: Technology
+                - category: Runtime
                   tag: J2EE
         - order: 0
           text: What version of Java EE does the application use?
           explanation: What version of the Java EE specification is your application using?
           includeFor:
-            - category: Technology
+            - category: Runtime
               tag: Java EE
           answers:
             - order: 0
@@ -242,9 +242,9 @@ sections:
           text: What implementation of JAX-WS does your application use?
           explanation: ""
           excludeFor:
-            - category: Technology
+            - category: Runtime
               tag: Spring Boot
-            - category: Technology
+            - category: Runtime
               tag: Quarkus
           answers:
             - order: 0
