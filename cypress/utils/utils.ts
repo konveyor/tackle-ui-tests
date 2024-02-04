@@ -1102,11 +1102,16 @@ export function getRandomAnalysisData(analysisdata): analysisData {
     };
 }
 
-export function createMultipleApplications(numberofapplications: number): Array<Application> {
+export function createMultipleApplications(
+    numberofapplications: number,
+    tags?: [string]
+): Array<Application> {
     let applicationList: Array<Application> = [];
+    let application: Application;
     for (let i = 0; i < numberofapplications; i++) {
         // Navigate to application inventory tab and create new application
-        const application = new Application(getRandomApplicationData());
+        if (tags) application = new Application(getRandomApplicationData(tags));
+        else application = new Application(getRandomApplicationData());
         application.create();
         applicationList.push(application);
         cy.wait(2000);
@@ -1312,6 +1317,11 @@ export function deleteApplicationTableRows(): void {
     navigate_to_application_inventory();
     selectItemsPerPage(100);
     deleteAllRows();
+}
+export function validatePageTitle(pageTitle: string) {
+    return cy.get(commonView.pageTitle).then((h1) => {
+        return h1.text().includes(pageTitle);
+    });
 }
 
 export function deleteAllMigrationWaves() {

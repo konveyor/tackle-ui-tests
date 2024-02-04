@@ -18,58 +18,41 @@ limitations under the License.
 import {
     applySelectFilter,
     clearAllFilters,
+    clickItemInKebabMenu,
     createMultipleApplications,
     createMultipleStakeholders,
-    deleteAllMigrationWaves,
-    deleteApplicationTableRows,
-    deleteByList,
     exists,
     login,
     notExists,
-    selectFromDropListByText,
-} from "../../../../utils/utils";
-import { cloudNative, legacyPathfinder } from "../../../types/constants";
-import { Stakeholders } from "../../../models/migration/controls/stakeholders";
-import { Application } from "../../../models/migration/applicationinventory/application";
-import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { Reports } from "../../../models/migration/reports-tab/reports-tab";
-import {
-    identifiedRisksFilterValidations,
-    landscapeFilterDropdown,
-} from "../../../views/reportsTab.view";
+} from "../../../../../../utils/utils";
+import { cloudNative, legacyPathfinder, review } from "../../../../../types/constants";
+import { Stakeholders } from "../../../../../models/migration/controls/stakeholders";
+import { Application } from "../../../../../models/migration/applicationinventory/application";
+import { AssessmentQuestionnaire } from "../../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { identifiedRisksFilterValidations } from "../../../../../views/reportsTab.view";
 
-let applications: Application[];
+let application: Application;
 let stakeholder: Stakeholders;
 
-// Polarion TC 469
-describe(["@tier2"], "Reports Tab filter validations", function () {
+// Polarion TC 495
+describe(["@tier2"], "Review Identified Risks filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
-        deleteAllMigrationWaves();
-        deleteApplicationTableRows();
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.import("questionnaire_import/cloud-native.yaml");
         AssessmentQuestionnaire.enable(cloudNative);
         AssessmentQuestionnaire.enable(legacyPathfinder);
 
         stakeholder = createMultipleStakeholders(1)[0];
-        applications = createMultipleApplications(2);
-        applications[0].perform_assessment("high", [stakeholder]);
-        applications[0].perform_assessment("medium", [stakeholder], null, cloudNative);
-        applications[1].perform_assessment("low", [stakeholder], null, cloudNative);
-        AssessmentQuestionnaire.disable(legacyPathfinder);
-    });
-
-    it.skip("Bug MTA-2093: Filter landscape by questionnaire", function () {
-        Reports.open(100);
-        Reports.verifyRisk(1, 0, 1, 0, "2");
-        selectFromDropListByText(landscapeFilterDropdown, legacyPathfinder);
-        Reports.verifyRisk(0, 0, 1, 1, "2");
+        application = createMultipleApplications(1)[0];
+        application.perform_assessment("high", [stakeholder]);
+        application.perform_assessment("medium", [stakeholder], null, cloudNative);
     });
 
     identifiedRisksFilterValidations.forEach((validation) => {
         it(`Filtering identified risks by ${validation.name}`, function () {
-            Reports.open(100);
+            Application.open();
+            clickItemInKebabMenu(application.name, review);
             applySelectFilter(validation.id, new RegExp(`^${validation.name}$`), validation.text);
             exists(validation.should);
             notExists(validation.shouldNot);
@@ -78,7 +61,7 @@ describe(["@tier2"], "Reports Tab filter validations", function () {
     });
 
     after("Clear test data", function () {
-        deleteByList(applications);
+        application.delete();
         stakeholder.delete();
     });
 });

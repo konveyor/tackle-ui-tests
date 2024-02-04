@@ -22,6 +22,7 @@ import {
     createMultipleArchetypes,
     deleteByList,
     createMultipleStakeholders,
+    createMultipleApplications,
     exists,
     createMultipleStakeholderGroups,
     clickByText,
@@ -37,8 +38,8 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import { customActionButton, ViewArchetypes } from "../../../../views/applicationinventory.view";
 import { archetypeDropdown } from "../../../../views/archetype.view";
 
-let applicationList: Array<Application> = [];
-let archetypeList: Array<Archetype> = [];
+let applicationList: Application[];
+let archetypeList: Archetype[];
 let inheritenceTags: Tag[];
 let assosiationTags: Tag[];
 let stakeholderGroups: Stakeholdergroups[];
@@ -49,7 +50,6 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         login();
         inheritenceTags = createMultipleTags(2);
         assosiationTags = createMultipleTags(2);
-        stakeholderGroups = createMultipleStakeholderGroups(2);
         stakeholders = createMultipleStakeholders(1);
 
         AssessmentQuestionnaire.deleteAllQuestionnaires();
@@ -60,29 +60,34 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         cy.wait(2 * SEC);
     });
 
-    it("Archetype association - Application creation before archetype creation ", function () {
-        // Automates Polarion MTA-400
-        const appdata = {
-            name: data.getAppName(),
-            tags: ["Web / WebSocket"],
-        };
-
-        const application = new Application(appdata);
-        applicationList.push(application);
-        application.create();
-        cy.wait(2 * SEC);
+    it("Verify multiple applications inherit assessment and review inheritance from an archetype", function () {
+        // Automates Polarion MTA-400 Archetype association - Application creation before archetype creation.
+        applicationList = createMultipleApplications(2, [inheritenceTags[0].name]);
 
         const archetype = new Archetype(
             data.getRandomWord(8),
-            ["Web / WebSocket"],
-            ["Web / WebSocket"],
+            [inheritenceTags[0].name],
+            [inheritenceTags[1].name],
             null
         );
         archetype.create();
         cy.wait(2 * SEC);
 
-        // Assert that associated archetypes are listed on app drawer after application gets associated with archetype(s)
-        application.verifyArchetypeList([archetype.name], "Associated archetypes");
+        //Automates Polarion MTA-499 Verify multiple applications inherit assessment and review inheritance from an archetype
+        archetype.perform_review("low");
+        archetype.perform_assessment("low");
+
+        for (let i = 0; i < applicationList.length; i++) {
+            // Assert that associated archetypes are listed on app drawer after application gets associated with archetype(s)
+            applicationList[i].verifyArchetypeList([archetype.name], "Associated archetypes");
+            applicationList[i].verifyArchetypeList([archetype.name], "Archetypes reviewed");
+            applicationList[i].validateInheritedReviewFields([archetype.name]);
+            applicationList[i].verifyStatus("review", "Completed");
+            applicationList[i].verifyArchetypeList([archetype.name], "Archetypes assessed");
+            applicationList[i].validateAssessmentField("Low");
+            applicationList[i].verifyStatus("assessment", "Completed");
+        }
+
         archetype.delete();
     });
 

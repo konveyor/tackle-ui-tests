@@ -167,24 +167,6 @@ describe(["@tier1"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    // Skipped until a svn server is provided in https://issues.redhat.com/browse/MTA-1717
-    it.skip("Source Analysis on tackle testapp for svn repo type", function () {
-        // For tackle test app source credentials are required.
-        const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_svnRepo", {
-                sourceData: this.appData["tackle-testapp-svn"],
-            }),
-            getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
-        );
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication");
-        cy.wait(2 * SEC);
-        application.manageCredentials(source_credential.name, null);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-    });
-
     it("Analysis for known Open Source libraries on tackleTest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(

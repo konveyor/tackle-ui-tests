@@ -43,3 +43,41 @@ export enum IdentifiedRiskTableHeaders {
     risk = "Risk",
     applications = "Applications",
 }
+
+export const identifiedRisksFilterValidations: {
+    id: string;
+    name: string;
+    text: string;
+    should: string;
+    shouldNot: string;
+}[] = [
+    {
+        id: "section",
+        name: "Section",
+        text: "Application details",
+        should: "Application details",
+        shouldNot: "Application technologies",
+    },
+    {
+        id: "question",
+        name: "Question",
+        text: "How is the application supported in production?",
+        should: "External support provider with a ticket-driven escalation process; no inhouse support resources",
+        shouldNot: "How often is the application deployed to production?",
+    },
+    {
+        id: "answer",
+        name: "Answer",
+        text: "Multiple legal and licensing requirements",
+        should: "Does the application have legal and/or licensing requirements?",
+        shouldNot: "Not tracked",
+    },
+    {
+        id: "questionnaireName",
+        name: "Questionnaire",
+        text: "Cloud Native",
+        should: "What is the main technology in your application?",
+        shouldNot: "Legacy Pathfinder",
+    },
+    { id: "risk", name: "Risk", text: "Low", should: "Spring Boot", shouldNot: "Not tracked" },
+];
