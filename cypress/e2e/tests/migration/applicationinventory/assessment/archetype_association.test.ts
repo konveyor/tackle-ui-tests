@@ -23,8 +23,6 @@ import {
     deleteByList,
     createMultipleStakeholders,
     createMultipleApplications,
-    exists,
-    createMultipleStakeholderGroups,
     clickByText,
     selectFromDropListByText,
 } from "../../../../../utils/utils";
@@ -34,7 +32,6 @@ import { Tag } from "../../../../models/migration/controls/tags";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { legacyPathfinder, SEC } from "../../../../types/constants";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
-import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { customActionButton, ViewArchetypes } from "../../../../views/applicationinventory.view";
 import { archetypeDropdown } from "../../../../views/archetype.view";
 
@@ -42,7 +39,6 @@ let applicationList: Application[];
 let archetypeList: Archetype[];
 let inheritenceTags: Tag[];
 let assosiationTags: Tag[];
-let stakeholderGroups: Stakeholdergroups[];
 let stakeholders: Stakeholders[];
 
 describe(["@tier2"], "Tests related to application-archetype association ", () => {
@@ -134,44 +130,20 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         application2.verifyStatus("assessment", "Completed");
         application2.verifyArchetypeList(archetypeNames, "Archetypes assessed");
         application2.validateAssessmentField("Medium");
+
+        deleteByList(archetypeList);
     });
 
     it("View Archetypes from application assessment popup", function () {
         // Automates Polarion MTA-436
 
-        const archetype1 = new Archetype(
-            data.getRandomWord(8),
-            [assosiationTags[0].name],
-            [assosiationTags[1].name],
-            null,
-            stakeholders,
-            stakeholderGroups
-        );
+        archetypeList = createMultipleArchetypes(2, assosiationTags);
 
-        archetype1.create();
-        exists(archetype1.name);
+        archetypeList[0].perform_assessment("low", stakeholders);
+        archetypeList[0].validateAssessmentField("Low");
 
-        archetype1.perform_assessment("low", stakeholders);
-        cy.wait(2 * SEC);
-
-        archetype1.validateAssessmentField("Low");
-
-        const archetype2 = new Archetype(
-            data.getRandomWord(8),
-            [assosiationTags[0].name],
-            [assosiationTags[1].name],
-            null,
-            stakeholders,
-            stakeholderGroups
-        );
-
-        archetype2.create();
-        exists(archetype2.name);
-
-        archetype2.perform_assessment("low", stakeholders);
-        cy.wait(2 * SEC);
-
-        archetype2.validateAssessmentField("Low");
+        archetypeList[1].perform_assessment("low", stakeholders);
+        archetypeList[1].validateAssessmentField("Low");
 
         const appdata = {
             name: data.getAppName(),
@@ -179,27 +151,20 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         };
 
         const application = new Application(appdata);
-
         applicationList.push(application);
         application.create();
         cy.wait(2 * SEC);
-
         application.clickAssessButton();
 
         clickByText(customActionButton, ViewArchetypes);
+        selectFromDropListByText(archetypeDropdown, archetypeList[0].name);
+        selectFromDropListByText(archetypeDropdown, archetypeList[1].name);
 
-        selectFromDropListByText(archetypeDropdown, archetype1.name);
-        cy.wait(SEC);
-
-        selectFromDropListByText(archetypeDropdown, archetype2.name);
-
-        archetype1.delete();
-        archetype2.delete();
+        deleteByList(archetypeList);
     });
 
     after("Perform test data clean up", function () {
         deleteByList(applicationList);
-        deleteByList(archetypeList);
         deleteByList(inheritenceTags);
         deleteByList(assosiationTags);
         deleteByList(stakeholders);
