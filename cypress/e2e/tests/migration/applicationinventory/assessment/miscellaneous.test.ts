@@ -257,6 +257,21 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         deleteByList(archetypes);
     });
 
+    it("Validates auto tagging of applications based on assessment answers", function () {
+        //automates polarion MTA-387
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
+        AssessmentQuestionnaire.import(yamlFile);
+        AssessmentQuestionnaire.enable(cloudNative);
+        AssessmentQuestionnaire.disable(legacyPathfinder);
+
+        const applications = createMultipleApplications(1);
+        applications[0].perform_assessment("medium", stakeholderList, null, cloudNative);
+        applications[0].validateTagsCount("1");
+        applications[0].applicationDetailsTab("Tags");
+        applications[0].tagAndCategoryExists("Spring Boot");
+        applications[0].closeApplicationDetails();
+    });
+
     after("Perform test data clean up", function () {
         deleteByList(stakeholderList);
         deleteByList(applicationList);

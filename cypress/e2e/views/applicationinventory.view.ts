@@ -17,6 +17,8 @@ export const actionButton = "button[aria-label='kebab dropdown toggle']";
 export const applicationNameInput = "input[name=name]";
 export const applicationDescriptionInput = "input[name=description]";
 export const applicationBusinessServiceSelect = "[placeholder='Select a business service']";
+export const tagsColumnSelector = "td[data-label='Tags']";
+
 export const applicationContributorsInput =
     "#contributors-select-toggle-select-multi-typeahead-typeahead";
 export const applicationContributorsText = ".pf-v5-c-chip__text";

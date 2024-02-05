@@ -55,6 +55,7 @@ import {
     northdependenciesDropdownBtn,
     southdependenciesDropdownBtn,
     closeForm,
+    tagsColumnSelector,
 } from "../../../views/applicationinventory.view";
 import { appDetailsView } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
@@ -906,6 +907,16 @@ export class Application {
             }
             Assessment.verifyAssessmentTakeButtonEnabled();
         });
+    }
+
+    validateTagsCount(tagsCount): void {
+        Application.open();
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(trTag)
+            .within(() => {
+                cy.get(tagsColumnSelector).contains(tagsCount, { timeout: 30 * SEC });
+            });
     }
 
     deleteAssessments(): void {
