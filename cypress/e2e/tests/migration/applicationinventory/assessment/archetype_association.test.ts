@@ -36,15 +36,14 @@ import { customActionButton, ViewArchetypes } from "../../../../views/applicatio
 import { archetypeDropdown } from "../../../../views/archetype.view";
 
 let applicationList: Application[];
-let archetypeList: Archetype[];
-let inheritenceTags: Tag[];
-let assosiationTags: Tag[];
+let inheritanceTags: Tag[];
+let associationTags: Tag[];
 let stakeholders: Stakeholders[];
 describe(["@tier2"], "Tests related to application-archetype association ", () => {
     before("Login", function () {
         login();
-        inheritenceTags = createMultipleTags(2);
-        assosiationTags = createMultipleTags(2);
+        inheritanceTags = createMultipleTags(2);
+        associationTags = createMultipleTags(2);
         stakeholders = createMultipleStakeholders(1);
 
         AssessmentQuestionnaire.deleteAllQuestionnaires();
@@ -57,12 +56,12 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
     it("Verify multiple applications inherit assessment and review inheritance from an archetype", function () {
         // Automates Polarion MTA-400 Archetype association - Application creation before archetype creation.
-        applicationList = createMultipleApplications(2, [inheritenceTags[0].name]);
+        applicationList = createMultipleApplications(2, [inheritanceTags[0].name]);
 
         const archetype = new Archetype(
             data.getRandomWord(8),
-            [inheritenceTags[0].name],
-            [inheritenceTags[1].name],
+            [inheritanceTags[0].name],
+            [inheritanceTags[1].name],
             null
         );
         archetype.create();
@@ -91,12 +90,12 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         This also verifies: Archetype association - Application creation after archetype creation.
         */
 
-        archetypeList = createMultipleArchetypes(2, inheritenceTags);
+        const archetypeList = createMultipleArchetypes(2, inheritanceTags);
         const archetypeNames = [archetypeList[0].name, archetypeList[1].name];
 
         const appdata = {
             name: data.getAppName(),
-            tags: [inheritenceTags[0].name, inheritenceTags[1].name],
+            tags: [inheritanceTags[0].name, inheritanceTags[1].name],
         };
 
         const application2 = new Application(appdata);
@@ -136,7 +135,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
     it("View Archetypes from application assessment popup", function () {
         // Automates Polarion MTA-436
 
-        archetypeList = createMultipleArchetypes(2, assosiationTags);
+        const archetypeList = createMultipleArchetypes(2, associationTags);
 
         archetypeList[0].perform_assessment("low", stakeholders);
         archetypeList[0].validateAssessmentField("Low");
@@ -146,7 +145,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         const appdata = {
             name: data.getAppName(),
-            tags: assosiationTags.map((tag) => tag.name),
+            tags: associationTags.map((tag) => tag.name),
         };
 
         const application = new Application(appdata);
@@ -164,8 +163,8 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
     after("Perform test data clean up", function () {
         deleteByList(applicationList);
-        deleteByList(inheritenceTags);
-        deleteByList(assosiationTags);
+        deleteByList(inheritanceTags);
+        deleteByList(associationTags);
         deleteByList(stakeholders);
     });
 });
