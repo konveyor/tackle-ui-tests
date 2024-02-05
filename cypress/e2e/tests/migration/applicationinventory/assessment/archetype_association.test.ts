@@ -40,7 +40,6 @@ let archetypeList: Archetype[];
 let inheritenceTags: Tag[];
 let assosiationTags: Tag[];
 let stakeholders: Stakeholders[];
-
 describe(["@tier2"], "Tests related to application-archetype association ", () => {
     before("Login", function () {
         login();
@@ -71,7 +70,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         //Automates Polarion MTA-499 Verify multiple applications inherit assessment and review inheritance from an archetype
         archetype.perform_review("low");
-        archetype.perform_assessment("low");
+        archetype.perform_assessment("low", stakeholders);
 
         for (let i = 0; i < applicationList.length; i++) {
             // Assert that associated archetypes are listed on app drawer after application gets associated with archetype(s)
