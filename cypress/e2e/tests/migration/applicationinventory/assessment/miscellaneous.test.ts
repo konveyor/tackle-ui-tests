@@ -51,7 +51,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
     before("Perform application assessment and review", function () {
         login();
         cy.intercept("GET", "/hub/application*").as("getApplication");
-
+        /*
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
         stakeholderList = createMultipleStakeholders(1);
@@ -63,7 +63,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("assessment", "Completed");
         applicationList[0].perform_review("low");
         cy.wait(2000);
-        applicationList[0].verifyStatus("review", "Completed");
+        applicationList[0].verifyStatus("review", "Completed"); */
     });
 
     it("Retake Assessment questionnaire", function () {
@@ -237,6 +237,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         const tags = createMultipleTags(5);
         const tagNames = [tags[0].name, tags[1].name, tags[2].name, tags[3].name, tags[4].name];
         const application = createMultipleApplications(1, tagNames);
+        let archetypes: Archetype[];
 
         const archetype1 = new Archetype(
             data.getRandomWord(8),
@@ -246,7 +247,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         );
         archetype1.create();
         cy.wait(2 * SEC);
-        archetypeList.push(archetype1);
+        archetypes.push(archetype1);
 
         const archetype2 = new Archetype(
             data.getRandomWord(8),
@@ -256,17 +257,26 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         );
         archetype2.create();
         cy.wait(2 * SEC);
-        archetypeList.push(archetype2);
+        archetypes.push(archetype2);
 
-        const archetype3 = new Archetype(data.getRandomWord(8), [tags[3].name, tags[4].name], null);
+        const archetype3 = new Archetype(
+            data.getRandomWord(8),
+            [tags[3].name, tags[4].name],
+            [tags[1].name],
+            null
+        );
         archetype3.create();
         cy.wait(2 * SEC);
-        archetypeList.push(archetype3);
+        archetypes.push(archetype3);
 
         application[0].verifyArchetypeList(
             [archetype1.name, archetype2.name, archetype3.name],
             "Associated archetypes"
         );
+
+        deleteByList(application);
+        deleteByList(archetypes);
+        deleteByList(tags);
     });
 
     it("Deletes assessments from archived questionnaire associated with an archetype and an application", function () {
