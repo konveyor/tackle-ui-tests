@@ -50,10 +50,6 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
-    beforeEach("Wait 2 seconds before running the test", function () {
-        cy.wait(2 * SEC);
-    });
-
     it("Verify multiple applications inherit assessment and review inheritance from an archetype", function () {
         // Automates Polarion MTA-400 Archetype association - Application creation before archetype creation.
         applicationList = createMultipleApplications(2, [inheritanceTags[0].name]);
