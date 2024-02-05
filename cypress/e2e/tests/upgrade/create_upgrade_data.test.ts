@@ -19,7 +19,7 @@ import { getRandomAnalysisData, getRandomApplicationData, login } from "../../..
 import { TagCategory } from "../../models/migration/controls/tagcategory";
 import * as data from "../../../utils/data_utils";
 import { Tag } from "../../models/migration/controls/tags";
-import { CredentialType, SEC, UserCredentials } from "../../types/constants";
+import { CredentialType, legacyPathfinder, SEC, UserCredentials } from "../../types/constants";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Jobfunctions } from "../../models/migration/controls/jobfunctions";
 import { BusinessServices } from "../../models/migration/controls/businessservices";
@@ -29,14 +29,16 @@ import { getRandomCredentialsData } from "../../../utils/data_utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { UpgradeData } from "../../types/types";
 import { CredentialsMaven } from "../../models/administration/credentials/credentialsMaven";
+import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 
 describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     let mavenCredentialsUsername: CredentialsMaven;
     let sourceControlUsernameCredentials: CredentialsSourceControlUsername;
+    let stakeHolder: Stakeholders;
 
     before("Login", function () {
-        // Perform login
         login();
+        AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
     beforeEach("Persist session", function () {
@@ -83,17 +85,12 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
             tagName,
         } = this.upgradeData;
         const jobFunction = new Jobfunctions(jobFunctionName);
-        // Defining stakeholder groups
         const stakeHolderGroup = new Stakeholdergroups(stakeHolderGroupName);
-        // Defining stakeholders
-        const stakeHolder = new Stakeholders("test@gmail.com", stakeHolderName, jobFunctionName, [
+        stakeHolder = new Stakeholders("test@gmail.com", stakeHolderName, jobFunctionName, [
             stakeHolderGroupName,
         ]);
-        // Defining business Service
         const businessService = new BusinessServices(businessServiceName);
-        // Defining tag category
         const tagType = new TagCategory(tagTypeName, data.getColor(), data.getRandomNumber(5, 15));
-        // Defining tag
         const tag = new Tag(tagName, tagTypeName);
 
         jobFunction.create();
@@ -113,9 +110,10 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         uploadBinaryApplication.create();
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
-        // No credentials required for uploaded binary.
+        uploadBinaryApplication.perform_assessment("low", [stakeHolder]);
         uploadBinaryApplication.analyze();
         uploadBinaryApplication.verifyAnalysisStatus("Completed");
+        uploadBinaryApplication.verifyStatus("assessment", "Completed");
         uploadBinaryApplication.selectApplication();
     });
 
@@ -128,6 +126,8 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         );
         sourceApplication.name = this.upgradeData.sourceApplicationName;
         sourceApplication.create();
+        sourceApplication.perform_assessment("low", [stakeHolder]);
+        sourceApplication.verifyStatus("assessment", "Completed");
         cy.wait(2 * SEC);
         sourceApplication.analyze();
         sourceApplication.verifyAnalysisStatus("Completed");
@@ -135,7 +135,6 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     });
 
     it("Binary Analysis", function () {
-        // For binary analysis application must have group,artifact and version.
         const binaryApplication = new Analysis(
             getRandomApplicationData("tackletestApp_binary", {
                 binaryData: this.appData["tackle-testapp-binary"],
@@ -145,13 +144,27 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         binaryApplication.name = this.upgradeData.binaryApplicationName;
         binaryApplication.create();
         cy.wait(2 * SEC);
-        // Both source and maven credentials required for binary.
         binaryApplication.manageCredentials(
             sourceControlUsernameCredentials.name,
             mavenCredentialsUsername.name
         );
+        binaryApplication.perform_assessment("low", [stakeHolder]);
         binaryApplication.analyze();
         binaryApplication.verifyAnalysisStatus("Completed");
+        binaryApplication.verifyStatus("assessment", "Completed");
         binaryApplication.selectApplication();
+    });
+
+    it("Assess application", function () {
+        const assessmentApplication = new Analysis(
+            getRandomApplicationData("tackletestApp_binary", {
+                binaryData: this.appData["tackle-testapp-binary"],
+            }),
+            getRandomAnalysisData(this.analysisData["binary_analysis_on_tackletestapp"])
+        );
+        assessmentApplication.name = this.upgradeData.assessmentApplicationName;
+        assessmentApplication.create();
+        assessmentApplication.perform_assessment("low", [stakeHolder]);
+        assessmentApplication.verifyStatus("assessment", "Completed");
     });
 });

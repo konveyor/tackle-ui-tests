@@ -172,6 +172,7 @@ export type UpgradeData = {
     sourceApplicationName?: string;
     binaryApplicationName?: string;
     uploadBinaryApplicationName?: string;
+    assessmentApplicationName?: string;
 };
 
 export type RulesRepositoryFields = {
