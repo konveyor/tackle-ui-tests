@@ -51,7 +51,6 @@ import {
     businessServiceLower,
     issueFilter,
     risk,
-    name,
     save,
     archetypes,
     SortType,
@@ -1110,7 +1109,7 @@ export function createMultipleApplications(
     let application: Application;
     for (let i = 0; i < numberofapplications; i++) {
         // Navigate to application inventory tab and create new application
-        if (tags) application = new Application(getRandomApplicationData(tags));
+        if (tags) application = new Application(getRandomApplicationData(null, null, tags));
         else application = new Application(getRandomApplicationData());
         application.create();
         applicationList.push(application);

@@ -30,3 +30,5 @@ export const reviewItems = [
     "work-priority",
     "comments",
 ];
+
+export const archetypeDropdown = "button[id^='pf-select-toggle']";
