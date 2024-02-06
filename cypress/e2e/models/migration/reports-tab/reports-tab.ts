@@ -50,17 +50,17 @@ export class Reports {
         unknownRiskValue: number,
         totalApps: string
     ): void {
-        this.getRiskValue(highRiskDonut, highRiskValue);
+        this.verifyRiskValue(highRiskDonut, highRiskValue);
         this.getTotalApplicationsValue(highRiskDonut, totalApps);
-        this.getRiskValue(mediumRiskDonut, mediumRiskValue);
+        this.verifyRiskValue(mediumRiskDonut, mediumRiskValue);
         this.getTotalApplicationsValue(mediumRiskDonut, totalApps);
-        this.getRiskValue(lowRiskDonut, lowRiskValue);
+        this.verifyRiskValue(lowRiskDonut, lowRiskValue);
         this.getTotalApplicationsValue(lowRiskDonut, totalApps);
-        this.getRiskValue(unknownRiskDonut, unknownRiskValue);
+        this.verifyRiskValue(unknownRiskDonut, unknownRiskValue);
         this.getTotalApplicationsValue(unknownRiskDonut, totalApps);
     }
 
-    public static getRiskValue(selector: string, value: number): void {
+    public static verifyRiskValue(selector: string, value: number): void {
         cy.get(selector)
             .eq(0)
             .find("tspan")
@@ -69,6 +69,11 @@ export class Reports {
             .then(($text) => {
                 cy.wrap(parseFloat($text)).should("eq", value);
             });
+    }
+
+    public static getRiskValue(riskDonutSelector: string): Cypress.Chainable<string> {
+        Reports.open();
+        return cy.get(riskDonutSelector).eq(0).find("tspan").eq(0).invoke("text");
     }
 
     public static getTotalApplicationsValue(selector: string, value: string): void {
