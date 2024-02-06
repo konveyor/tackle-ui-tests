@@ -40,6 +40,8 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import * as data from "../../../../../utils/data_utils";
+import { Reports } from "../../../../models/migration/reports-tab/reports-tab";
+import { mediumRiskDonut } from "../../../../views/reportsTab.view";
 
 let stakeholderList: Array<Stakeholders> = [];
 let applicationList: Array<Application> = [];
@@ -270,6 +272,30 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applications[0].applicationDetailsTab("Tags");
         applications[0].tagAndCategoryExists("Spring Boot");
         applications[0].closeApplicationDetails();
+    });
+
+    it("Validates applications that inherit assessment gets displayed on Reports tab", function () {
+        //automates polarion MTA-500
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
+        AssessmentQuestionnaire.enable(legacyPathfinder);
+        Reports.getRiskAppNumber(mediumRiskDonut).then((currentRiskValue) => {
+            const numericRiskValue = parseInt(currentRiskValue, 10);
+            const tags = createMultipleTags(2);
+            const archetype = new Archetype(
+                data.getRandomWord(8),
+                [tags[0].name],
+                [tags[1].name],
+                null
+            );
+            archetype.create();
+            archetype.perform_assessment("medium", stakeholderList);
+            const applications = createMultipleApplications(1, [tags[0].name]);
+            Reports.open();
+            Reports.getRiskValue(mediumRiskDonut, numericRiskValue + 1);
+            archetype.delete();
+            deleteByList(tags);
+            deleteByList(applications);
+        });
     });
 
     after("Perform test data clean up", function () {

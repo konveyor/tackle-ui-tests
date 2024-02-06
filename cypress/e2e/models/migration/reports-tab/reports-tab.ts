@@ -71,6 +71,11 @@ export class Reports {
             });
     }
 
+    public static getRiskAppNumber(riskDonutSelector: string): Cypress.Chainable<string> {
+        Reports.open();
+        return cy.get(riskDonutSelector).eq(0).find("tspan").eq(0).invoke("text");
+    }
+
     public static getTotalApplicationsValue(selector: string, value: string): void {
         cy.get(selector)
             .eq(0)
