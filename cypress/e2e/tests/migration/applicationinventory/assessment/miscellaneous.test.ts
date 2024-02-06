@@ -237,7 +237,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         const tags = createMultipleTags(5);
         const tagNames = [tags[0].name, tags[1].name, tags[2].name, tags[3].name, tags[4].name];
         const application = createMultipleApplications(1, tagNames);
-        let archetypes: Archetype[];
+        let archetypes: Archetype[] = [];
 
         const archetype1 = new Archetype(
             data.getRandomWord(8),
@@ -246,8 +246,8 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             null
         );
         archetype1.create();
-        cy.wait(2 * SEC);
         archetypes.push(archetype1);
+        cy.wait(2 * SEC);
 
         const archetype2 = new Archetype(
             data.getRandomWord(8),
@@ -256,8 +256,8 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             null
         );
         archetype2.create();
-        cy.wait(2 * SEC);
         archetypes.push(archetype2);
+        cy.wait(2 * SEC);
 
         const archetype3 = new Archetype(
             data.getRandomWord(8),
@@ -266,8 +266,8 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             null
         );
         archetype3.create();
-        cy.wait(2 * SEC);
         archetypes.push(archetype3);
+        cy.wait(2 * SEC);
 
         application[0].verifyArchetypeList(
             [archetype1.name, archetype2.name, archetype3.name],
