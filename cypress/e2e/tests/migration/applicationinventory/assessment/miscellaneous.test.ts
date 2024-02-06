@@ -232,6 +232,53 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         deleteByList(tags);
     });
 
+    it("Test application association when an archetype contains a subset  of the tags of another  archetype", function () {
+        // Automates Polarion TC MTA-501
+        const tags = createMultipleTags(5);
+        const tagNames = [tags[0].name, tags[1].name, tags[2].name, tags[3].name, tags[4].name];
+        const application = createMultipleApplications(1, tagNames);
+        let archetypes: Archetype[] = [];
+
+        const archetype1 = new Archetype(
+            data.getRandomWord(8),
+            [tags[0].name, tags[1].name, tags[2].name],
+            [tags[1].name],
+            null
+        );
+        archetype1.create();
+        archetypes.push(archetype1);
+        cy.wait(2 * SEC);
+
+        const archetype2 = new Archetype(
+            data.getRandomWord(8),
+            [tags[0].name, tags[1].name, tags[2].name],
+            [tags[1].name],
+            null
+        );
+        archetype2.create();
+        archetypes.push(archetype2);
+        cy.wait(2 * SEC);
+
+        const archetype3 = new Archetype(
+            data.getRandomWord(8),
+            [tags[3].name, tags[4].name],
+            [tags[1].name],
+            null
+        );
+        archetype3.create();
+        archetypes.push(archetype3);
+        cy.wait(2 * SEC);
+
+        application[0].verifyArchetypeList(
+            [archetype1.name, archetype2.name, archetype3.name],
+            "Associated archetypes"
+        );
+
+        deleteByList(application);
+        deleteByList(archetypes);
+        deleteByList(tags);
+    });
+
     it("Deletes assessments from archived questionnaire associated with an archetype and an application", function () {
         //automates polarion MTA-441 and MTA-442
         const applications = createMultipleApplications(1);

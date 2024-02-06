@@ -1103,7 +1103,7 @@ export function getRandomAnalysisData(analysisdata): analysisData {
 
 export function createMultipleApplications(
     numberofapplications: number,
-    tags?: [string]
+    tags?: string[]
 ): Array<Application> {
     let applicationList: Array<Application> = [];
     let application: Application;
