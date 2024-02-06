@@ -278,6 +278,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         //automates polarion MTA-500
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
+
         Reports.getRiskAppNumber(mediumRiskDonut).then((currentRiskValue) => {
             const numericRiskValue = parseInt(currentRiskValue, 10);
             const tags = createMultipleTags(2);
