@@ -120,7 +120,7 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
         application.openAnalysisDetails();
 
         cy.intercept("GET", "/hub/tasks/*?merged=1").as("applicationDetails");
-        cy.get("#merged").click();
+        click("#merged");
 
         cy.wait("@applicationDetails").then((interception) => {
             expect(interception.response.body).to.contain(
