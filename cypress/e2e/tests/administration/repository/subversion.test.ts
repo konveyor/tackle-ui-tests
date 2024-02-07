@@ -103,6 +103,7 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
         clickWithinByText(footer, button, "Close");
     });
 
+    // Automates customer bug MTA-1717
     it("Analysis on SVN Repository without trunk folder", function () {
         subversionConfiguration.enableInsecureSubversionRepositories();
 
