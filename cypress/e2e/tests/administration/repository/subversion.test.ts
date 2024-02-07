@@ -24,21 +24,16 @@ import {
 } from "../../../../utils/utils";
 import { SubversionConfiguration } from "../../../models/administration/repositories/subversion";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
-import {
-    AnalysisStatuses,
-    button,
-    CredentialType,
-    SEC,
-    UserCredentials,
-} from "../../../types/constants";
+import { AnalysisStatuses, button, CredentialType } from "../../../types/constants";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { footer } from "../../../views/common.view";
 import { getDescription, getRandomWord } from "../../../../utils/data_utils";
+import { analysisDetailsEditor } from "../../../views/analysis.view";
 
 describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
     const subversionConfiguration = new SubversionConfiguration();
     let sourceCredential: CredentialsSourceControlUsername;
-    let applicationsList: Analysis[] = [];
+    const applicationsList: Analysis[] = [];
 
     before("Login", function () {
         login();
@@ -96,6 +91,43 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.failed);
         application.openAnalysisDetails();
+        cy.get(analysisDetailsEditor)
+            .eq(0)
+            .then(($editor) => {
+                expect($editor.text()).to.contain(
+                    "http URL used with snv.insecure.enabled = FALSE",
+                    "Analysis details don't contains the expected error message"
+                );
+            });
+        clickWithinByText(footer, button, "Close");
+    });
+
+    it("Analysis on SVN Repository without trunk folder", function () {
+        subversionConfiguration.enableInsecureSubversionRepositories();
+
+        const application = new Analysis(
+            getRandomApplicationData("svn bookserver app no trunk", {
+                sourceData: this.appData["bookserver-svn-insecure-no-trunk"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        application.manageCredentials(sourceCredential.name, null);
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.failed);
+        application.openAnalysisDetails();
+
+        cy.intercept("GET", "/hub/tasks/*?merged=1").as("applicationDetails");
+        cy.get("#merged").click();
+
+        cy.wait("@applicationDetails").then((interception) => {
+            expect(interception.response.body).to.contain(
+                "trunk'' non-existent",
+                "Analysis details don't contains the expected error message"
+            );
+        });
         clickWithinByText(footer, button, "Close");
     });
 
