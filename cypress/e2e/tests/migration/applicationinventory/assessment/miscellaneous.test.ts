@@ -27,16 +27,10 @@ import {
     createMultipleTags,
     createMultipleArchetypes,
     click,
-    clickJs,
 } from "../../../../../utils/utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import {
-    alertTitle,
-    confirmButton,
-    nextButton,
-    successAlertMessage,
-} from "../../../../views/common.view";
+import { alertTitle, confirmButton, successAlertMessage } from "../../../../views/common.view";
 import { legacyPathfinder, cloudNative, SEC, button } from "../../../../types/constants";
 import {
     ArchivedQuestionnaires,
@@ -46,7 +40,6 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import * as data from "../../../../../utils/data_utils";
-import { questionBlock } from "../../../../views/assessment.view";
 
 let stakeholderList: Array<Stakeholders> = [];
 let applicationList: Array<Application> = [];
@@ -324,42 +317,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applications[0].applicationDetailsTab("Tags");
         applications[0].tagAndCategoryExists("Spring Boot");
         applications[0].closeApplicationDetails();
-    });
-
-    it("Test conditional questions based on existing tags for applications", function () {
-        //automates polarion MTA-385
-        AssessmentQuestionnaire.deleteAllQuestionnaires();
-        AssessmentQuestionnaire.import(yamlFile);
-        AssessmentQuestionnaire.enable(cloudNative);
-        AssessmentQuestionnaire.disable(legacyPathfinder);
-
-        const appdata = {
-            name: data.getAppName(),
-            tags: ["Technology / Java EE"],
-        };
-        const appConditionalQuestion = new Application(appdata);
-        appConditionalQuestion.create();
-        cy.wait(2 * SEC);
-
-        Application.open();
-        clickItemInKebabMenu(appConditionalQuestion, "Assess");
-        Assessment.take_questionnaire(cloudNative);
-        Assessment.selectStakeholders(stakeholderList);
-        clickJs(nextButton);
-        cy.wait(SEC);
-        cy.get(questionBlock)
-            .eq(0)
-            .then(($question) => {
-                cy.wrap($question)
-                    .children()
-                    .find("div.pf-v5-l-split__item")
-                    .then(($questionLine) => {
-                        expect($questionLine.text()).to.be(
-                            "What is the main technology in your application?"
-                        );
-                    });
-            });
-        click("Cancel");
     });
 
     after("Perform test data clean up", function () {

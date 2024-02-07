@@ -33,6 +33,7 @@ import {
     SEC,
     button,
     cloudReadinessQuestionnaire,
+    cloudReadinessFilePath,
 } from "../../../../types/constants";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
@@ -41,8 +42,6 @@ import { questionBlock } from "../../../../views/assessment.view";
 
 let stakeholderList: Array<Stakeholders> = [];
 
-const yamlFile = "questionnaire_import/cloudReadiness_7.0.1.yaml";
-
 describe(["@tier3"], "Tests related to questionnaire features", () => {
     before("Import and enable Cloud readiness questionnaire template", function () {
         login();
@@ -50,13 +49,13 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
 
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.disable(legacyPathfinder);
-        AssessmentQuestionnaire.import(yamlFile);
+        AssessmentQuestionnaire.import(cloudReadinessFilePath);
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
         stakeholderList = createMultipleStakeholders(1);
     });
 
-    it("Test conditional questions based on existing tags for applications", function () {
-        //Automates polarion MTA-385
+    it("1) Test conditional questions based on existing tags for applications; 2) Cancel assessment", function () {
+        //Automates Polarion MTA-385
 
         const appdata = {
             name: data.getAppName(),
@@ -84,12 +83,14 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
                         console.log("Hello");
                         expect($questionLine.text()).equal(
                             "What is the main technology in your application?",
-                            "Conditional q missing"
+                            "Conditional question missing"
                         );
                     });
                 Assessment.clickRadioOption($question, 1);
                 cy.wait(2000);
             });
+
+        // Automates Polarion MTA-505
         clickByText(button, "Cancel");
         click(confirmButton);
         Assessment.verifyAssessmentTakeButtonEnabled();
