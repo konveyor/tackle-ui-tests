@@ -16,6 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    click,
     clickWithinByText,
     deleteByList,
     getRandomAnalysisData,
