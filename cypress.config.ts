@@ -1,5 +1,6 @@
 import { defineConfig } from "cypress";
 import { tagify } from "cypress-tags";
+import { exec } from "child_process";
 
 export default defineConfig({
     viewportWidth: 1920,
@@ -50,6 +51,26 @@ export default defineConfig({
         setupNodeEvents(on, config) {
             require("./cypress/plugins/index.js")(on, config);
             on("file:preprocessor", tagify(config));
+            on("task", {
+                exec: (command) => {
+                    return new Promise((resolve, reject) => {
+                        const child = exec(command, (error, stdout, stderr) => {
+                            if (error) {
+                                reject(error);
+                            } else {
+                                resolve({ stdout, stderr });
+                            }
+                        });
+
+                        // Ловим ошибку при выполнении команды
+                        child.on("exit", (code) => {
+                            if (code !== 0) {
+                                reject(new Error(`Command '${command}' exited with code ${code}`));
+                            }
+                        });
+                    });
+                },
+            });
         },
         experimentalMemoryManagement: true,
         numTestsKeptInMemory: 15,

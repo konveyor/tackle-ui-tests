@@ -23,6 +23,7 @@ import {
     getRandomApplicationData,
     isEnabled,
     login,
+    getPodsList,
 } from "../../../utils/utils";
 import { UpgradeData } from "../../types/types";
 import { Credentials } from "../../models/administration/credentials/credentials";
@@ -51,6 +52,15 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         });
         cy.fixture("upgrade-data").then((upgradeData: UpgradeData) => {
             this.upgradeData = upgradeData;
+        });
+    });
+
+    it("Getting pods and their statuses", function () {
+        const projectName = "openshift-mta";
+        getPodsList(projectName).then((pods: Pod[]) => {
+            pods.forEach((pod) => {
+                cy.log(pod.name);
+            });
         });
     });
 

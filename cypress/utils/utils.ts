@@ -1797,3 +1797,24 @@ export function validateSortBy(sortBy: string, tdSelector?: string) {
     const afterDescSortList = getTableColumnData(tdSelector);
     verifySortDesc(afterDescSortList, unsortedList);
 }
+
+export const getPodsList = (projectName: string): Cypress.Chainable<Pod[]> => {
+    const command = `oc get pods -o json -n ${projectName}`;
+
+    return cy.task("exec", command).then((result: any) => {
+        console.log(result.stdout);
+        cy.log(result.stdout);
+        const pods: Pod[] = result.stdout.map((podData: any) => {
+            const podStatus = podData.status.conditions.find(
+                (condition: any) => condition.type === "Ready"
+            );
+            const status = podStatus ? "Running" : "Pending"; // TODO: Check if more statuses should be added
+
+            return {
+                name: podData.metadata.name,
+                status: status,
+            };
+        });
+        return pods;
+    });
+};
