@@ -87,6 +87,7 @@ export const assessmentQuestionnaires = "Assessment questionnaires";
 export const legacyPathfinder = "Legacy Pathfinder";
 export const cloudNative = "Cloud Native";
 export const sampleQuestionnaireTemplate = "Questionnaire Template ( Sample )";
+export const cloudReadinessQuestionnaire = "Uploadable Cloud Readiness Questionnaire Template";
 export const createAppButton = "#create-application";
 export const assessAppButton = "Assess";
 export const reviewAppButton = "Review";
