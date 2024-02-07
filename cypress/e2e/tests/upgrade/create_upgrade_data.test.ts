@@ -164,7 +164,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     });
 
     it("Assess application", function () {
-        assessment.name = this.upgradeData.assessmentName;
+        assessment.name = this.upgradeData.assessmentApplicationName;
         assessment.create();
         assessment.perform_assessment("low", [stakeHolder.name]);
     });

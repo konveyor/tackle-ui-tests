@@ -1,5 +1,4 @@
 {
-    "assessmentName": "upgrade-assessment",
     "jobFunctionName": "upgrade-jobFunction",
     "stakeHolderGroupName": "upgrade-stakeHolderGroup",
     "stakeHolderName": "upgrade-stakeHolder",
@@ -10,5 +9,6 @@
     "mavenUsernameCredentialName": "upgrade-mavenUsername",
     "sourceApplicationName": "upgrade-sourceApp",
     "binaryApplicationName": "upgrade-binaryApp",
-    "uploadBinaryApplicationName": "upgrade-uploadBinaryApp"
+    "uploadBinaryApplicationName": "upgrade-uploadBinaryApp",
+    "assessmentApplicationName": "upgrade-assessmentApplication"
 }
