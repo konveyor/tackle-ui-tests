@@ -54,7 +54,7 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
     });
 
     it("1) Test conditional questions based on existing tags for applications; 2) Cancel assessment", function () {
-        //Automates Polarion MTA-385
+        //Automates Polarion MTA-385 Test conditional questions based on existing tags for applications
 
         const appdata = {
             name: data.getAppName(),
@@ -67,7 +67,7 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
         Application.open();
         cy.wait(2 * SEC);
         clickItemInKebabMenu(appConditionalQuestion.name, "Assess");
-        Assessment.take_questionnaire(cloudNative);
+        Assessment.take_questionnaire(cloudReadinessQuestionnaire);
         Assessment.selectStakeholders(stakeholderList);
         clickJs(nextButton);
         cy.wait(SEC);
@@ -89,7 +89,7 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
                 cy.wait(2000);
             });
 
-        // Automates Polarion MTA-505
+        // Automates Polarion MTA-505: Cancel assessment
         clickByText(button, "Cancel");
         click(confirmButton);
         Assessment.verifyAssessmentTakeButtonEnabled();
