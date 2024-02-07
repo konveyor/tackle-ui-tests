@@ -163,7 +163,6 @@ export type RbacValidationRules = {
 };
 
 export type UpgradeData = {
-    assessmentName?: string;
     jobFunctionName?: string;
     stakeHolderGroupName?: string;
     stakeHolderName?: string;
@@ -174,6 +173,7 @@ export type UpgradeData = {
     sourceApplicationName?: string;
     binaryApplicationName?: string;
     uploadBinaryApplicationName?: string;
+    assessmentApplicationName?: string;
 };
 
 export type RulesRepositoryFields = {
