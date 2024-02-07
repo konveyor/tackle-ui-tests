@@ -375,7 +375,6 @@ export class Analysis extends Application {
         cy.wait(2 * SEC);
         clickByText(button, "Close");
         cy.wait(2 * SEC);
-        commonView.sideDrawer.closeDrawer;
     }
 
     downloadReport(type: ReportTypeSelectors) {
@@ -399,8 +398,6 @@ export class Analysis extends Application {
         sidedrawerTab(this.name, "Reports");
         clickByText(button, analysisDetails);
         cy.wait(2 * SEC);
-        commonView.sideDrawer.closeDrawer;
-        cy.wait(5 * SEC);
     }
 
     manageCredentials(sourceCred?: string, mavenCred?: string): void {
