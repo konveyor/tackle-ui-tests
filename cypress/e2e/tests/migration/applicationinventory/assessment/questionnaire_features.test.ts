@@ -45,7 +45,6 @@ let stakeholderList: Array<Stakeholders> = [];
 describe(["@tier3"], "Tests related to questionnaire features", () => {
     before("Import and enable Cloud readiness questionnaire template", function () {
         login();
-        cy.intercept("GET", "/hub/application*").as("getApplication");
 
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.disable(legacyPathfinder);
