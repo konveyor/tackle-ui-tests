@@ -74,7 +74,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2 * SEC);
     });
 
-    it(["@interop"], "Application assessment and review with medium risk", function () {
+    it("Application assessment and review with medium risk", function () {
         const application = new Application(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
