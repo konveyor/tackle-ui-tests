@@ -184,7 +184,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
     });
 
     it(
-        ["@interop"],
+        ["@interop", "@tier0"],
         "Test inheritance after discarding application assessment and review",
         function () {
             // Polarion TC MTA-456 Assess and review application associated with unassessed/unreviewed archetypes
