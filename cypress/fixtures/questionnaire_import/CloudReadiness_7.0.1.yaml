@@ -1,0 +1,92 @@
+name: Uploadable Cloud Readiness Questionnaire Template
+description: This questionnaire is an example template for assessing cloud readiness. It serves as a guide for users to create and customize their own questionnaire templates.
+required: true
+sections:
+  - order: 1
+    name: Application Technologies
+    questions:
+      - order: 1
+        text: What is the main technology in your application?
+        explanation: Identify the main framework or technology used in your application.
+        includeFor:
+          - category: Language
+            tag: Java
+        answers:
+          - order: 1
+            text: Quarkus
+            risk: green
+            rationale: Quarkus is a modern, container-friendly framework.
+            mitigation: No mitigation needed.
+            applyTags:
+              - category: Runtime
+                tag: Quarkus
+            autoAnswerFor:
+              - category: Runtime
+                tag: Quarkus
+          - order: 2
+            text: Spring Boot
+            risk: green
+            rationale: Spring Boot is versatile and widely used.
+            mitigation: Ensure container compatibility.
+            applyTags:
+              - category: Runtime
+                tag: Spring Boot
+            autoAnswerFor:
+              - category: Runtime
+                tag: Spring Boot
+          - order: 3
+            text: Legacy Monolithic Application
+            risk: red
+            rationale: Legacy monoliths are challenging for cloud adaptation.
+            mitigation: Consider refactoring into microservices.
+      - order: 2
+        text: Does your application use a microservices architecture?
+        explanation: Assess if the application is built using a microservices architecture.
+        answers:
+          - order: 1
+            text: Yes
+            risk: green
+            rationale: Microservices are well-suited for cloud environments.
+            mitigation: Continue monitoring service dependencies.
+          - order: 2
+            text: No
+            risk: yellow
+            rationale: Non-microservices architectures may face scalability issues.
+            mitigation: Assess the feasibility of transitioning to microservices.
+          - order: 3
+            text: Unknown
+            risk: unknown
+            rationale: Lack of clarity on architecture can lead to unplanned issues.
+            mitigation: Conduct an architectural review.
+
+      - order: 3
+        text: Is your application's data storage cloud-optimized?
+        explanation: Evaluate if the data storage solution is optimized for cloud usage.
+        includeFor:
+          - category: Language
+            tag: Java
+        answers:
+          - order: 1
+            text: Cloud-Native Storage Solution
+            risk: green
+            rationale: Cloud-native solutions offer scalability and resilience.
+            mitigation: Ensure regular backups and disaster recovery plans.
+          - order: 2
+            text: Traditional On-Premises Storage
+            risk: red
+            rationale: Traditional storage might not scale well in the cloud.
+            mitigation: Explore cloud-based storage solutions.
+          - order: 3
+            text: Hybrid Storage Approach
+            risk: yellow
+            rationale: Hybrid solutions may have integration complexities.
+            mitigation: Evaluate and optimize cloud integration points.
+thresholds:
+  red: 1
+  yellow: 30
+  unknown: 15
+riskMessages:
+  red: Requires deep changes in architecture or lifecycle
+  yellow: Cloud friendly but needs minor changes
+  green: Cloud Native
+  unknown: More information needed
