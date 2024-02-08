@@ -277,5 +277,65 @@
                 "labels": ["hibernate", "hibernate-search"]
             }
         ]
+    },
+
+    "affected_files_on_bookserverapp": {
+        "source": "Source code",
+        "target": ["Quarkus"],
+        "appName": "book-server",
+        "issues": [
+            {
+                "name": "Add Maven profile to run the Quarkus native build",
+                "category": "mandatory",
+                "source": "java-ee",
+                "targets": ["quarkus"],
+                "effort": 1,
+                "incidents": 2,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00060",
+                "labels": "None"
+            }
+        ]
+    },
+
+    "affected_files_on_tackleTestapp": {
+        "source": "Source code",
+        "target": ["Quarkus"],
+        "appName": "tackle-testapp",
+        "issues": [
+            {
+                "name": "Adopt Maven Surefire plugin",
+                "category": "mandatory",
+                "source": "java-ee",
+                "targets": ["quarkus"],
+                "effort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00040",
+                "labels": "None"
+            }
+        ]
+    },
+
+    "affected_files_on_tackleTestapp_deps": {
+        "source": "Source code + dependencies",
+        "target": ["Camel"],
+        "appName": "tackle-testapp",
+        "issues": [
+            {
+                "name": "'jaxb-core' Maven dependency missing",
+                "category": "potential",
+                "source": "camel",
+                "targets": ["camel"],
+                "effort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "camel3/camel2",
+                "rule": "xml-java-versions-00002",
+                "labels": "None"
+            }
+        ]
     }
 }
