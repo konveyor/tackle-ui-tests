@@ -58,7 +58,6 @@ import { AssessmentQuestionnaire } from "../../../../models/administration/asses
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import { filterDropDown, filterDropDownContainer } from "../../../../views/common.view";
 
-var invalidSearchInput = String(data.getRandomNumber());
 let source_credential;
 let maven_credential;
 let applicationsList: Array<Application> = [];

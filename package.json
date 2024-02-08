@@ -30,7 +30,7 @@
         "@testing-library/cypress": "^9.0.0",
         "@types/node": "^20.1.0",
         "cy-verify-downloads": "^0.1.13",
-        "cypress": "^12.11.0",
+        "cypress": "^13.6.4",
         "cypress-downloadfile": "^1.2.3",
         "cypress-mochawesome-reporter": "^3.2.2",
         "cypress-tags": "^1.1.2",
