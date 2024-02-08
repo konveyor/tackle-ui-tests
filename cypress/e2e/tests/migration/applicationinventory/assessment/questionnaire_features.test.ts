@@ -29,7 +29,6 @@ import { AssessmentQuestionnaire } from "../../../../models/administration/asses
 import { confirmButton, nextButton } from "../../../../views/common.view";
 import {
     legacyPathfinder,
-    cloudNative,
     SEC,
     button,
     cloudReadinessQuestionnaire,
@@ -53,8 +52,8 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
         stakeholderList = createMultipleStakeholders(1);
     });
 
-    it("1) Test conditional questions based on existing tags for applications; 2) Cancel assessment", function () {
-        //Automates Polarion MTA-385 Test conditional questions based on existing tags for applications
+    it("1) Test conditional questions during application assessment; 2) Cancel assessment", function () {
+        //Automates Polarion MTA-385: Test conditional questions
 
         const appdata = {
             name: data.getAppName(),
