@@ -33,6 +33,7 @@ import {
     button,
     cloudReadinessQuestionnaire,
     cloudReadinessFilePath,
+    application,
 } from "../../../../types/constants";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
@@ -40,32 +41,32 @@ import * as data from "../../../../../utils/data_utils";
 import { questionBlock } from "../../../../views/assessment.view";
 
 let stakeholderList: Array<Stakeholders> = [];
+let testApplication: Application;
 
 describe(["@tier3"], "Tests related to questionnaire features", () => {
     before("Import and enable Cloud readiness questionnaire template", function () {
         login();
-
+        stakeholderList = createMultipleStakeholders(1);
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.disable(legacyPathfinder);
         AssessmentQuestionnaire.import(cloudReadinessFilePath);
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
         stakeholderList = createMultipleStakeholders(1);
+
+        const appdata = {
+            name: data.getAppName(),
+            tags: ["Language / Java", "Runtime / Quarkus"],
+        };
+        testApplication = new Application(appdata);
+        testApplication.create();
+        cy.wait(2 * SEC);
     });
 
     it("1) Test conditional questions during application assessment; 2) Cancel assessment", function () {
         //Automates Polarion MTA-385: Test conditional questions
-
-        const appdata = {
-            name: data.getAppName(),
-            tags: ["Language / Java"],
-        };
-        const appConditionalQuestion = new Application(appdata);
-        appConditionalQuestion.create();
-        cy.wait(2 * SEC);
-
         Application.open();
         cy.wait(2 * SEC);
-        clickItemInKebabMenu(appConditionalQuestion.name, "Assess");
+        clickItemInKebabMenu(testApplication.name, "Assess");
         Assessment.take_questionnaire(cloudReadinessQuestionnaire);
         Assessment.selectStakeholders(stakeholderList);
         clickJs(nextButton);
@@ -77,8 +78,6 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
                     .children()
                     .find("div.pf-v5-l-split__item")
                     .then(($questionLine) => {
-                        console.log($questionLine.text());
-                        console.log("Hello");
                         expect($questionLine.text()).equal(
                             "What is the main technology in your application?",
                             "Conditional question missing"
@@ -92,11 +91,47 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
         clickByText(button, "Cancel");
         click(confirmButton);
         Assessment.verifyAssessmentTakeButtonEnabled();
-        appConditionalQuestion.delete();
+    });
+
+    it("1) Test auto answer feature of questionnaires; 2) Save assessment", function () {
+        //Automates Polarion MTA-388: Auto answer
+        Application.open();
+        cy.wait(2 * SEC);
+        clickItemInKebabMenu(testApplication.name, "Assess");
+        Assessment.take_questionnaire(cloudReadinessQuestionnaire);
+        Assessment.selectStakeholders(stakeholderList);
+        clickJs(nextButton);
+        cy.wait(SEC);
+
+        // Automates Polarion MTA-
+        cy.get("div.pf-v5-l-split__item")
+            .contains("What is the main technology in your application?")
+            .closest(questionBlock)
+            .within(() => {
+                cy.get("div.pf-v5-c-radio")
+                    .contains("Quarkus")
+                    .closest("div.pf-v5-c-radio")
+                    .within(() => {
+                        cy.get('*[class^="pf-v5-c-radio__input"]').invoke("is", ":checked");
+                    });
+
+                // Even when an answer is auto selected, it should be possible to select other answer choices.
+                cy.get("div.pf-v5-c-radio")
+                    .contains("Spring Boot")
+                    .parent()
+                    .within(() => {
+                        cy.get('*[class^="pf-v5-c-radio__input"]').click();
+                    });
+            });
+
+        // Automates Polarion MTA-506: Save assessment
+        clickByText(button, "Save as draft");
+        Assessment.verifyAssessmentContinueButtonEnabled();
     });
 
     after("Perform test data clean up", function () {
         deleteByList(stakeholderList);
         AssessmentQuestionnaire.deleteAllQuestionnaires();
+        testApplication.delete();
     });
 });

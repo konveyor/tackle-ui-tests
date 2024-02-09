@@ -339,4 +339,12 @@ export class Assessment {
             "true"
         );
     }
+
+    public static verifyAssessmentContinueButtonEnabled(): void {
+        cy.contains("button", "Continue", { timeout: 30 * SEC }).should(
+            "not.have.attr",
+            "aria-disabled",
+            "true"
+        );
+    }
 }
