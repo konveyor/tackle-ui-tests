@@ -33,7 +33,6 @@ import {
     button,
     cloudReadinessQuestionnaire,
     cloudReadinessFilePath,
-    application,
 } from "../../../../types/constants";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
@@ -46,7 +45,6 @@ let testApplication: Application;
 describe(["@tier3"], "Tests related to questionnaire features", () => {
     before("Import and enable Cloud readiness questionnaire template", function () {
         login();
-        stakeholderList = createMultipleStakeholders(1);
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.disable(legacyPathfinder);
         AssessmentQuestionnaire.import(cloudReadinessFilePath);
