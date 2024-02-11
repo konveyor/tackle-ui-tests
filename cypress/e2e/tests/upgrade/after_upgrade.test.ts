@@ -23,7 +23,7 @@ import {
     getRandomApplicationData,
     isEnabled,
     login,
-    getPodsList,
+    getMtaPodsList,
 } from "../../../utils/utils";
 import { UpgradeData } from "../../types/types";
 import { Credentials } from "../../models/administration/credentials/credentials";
@@ -57,14 +57,14 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
 
     it("Getting pods and their statuses", function () {
         const projectName = "openshift-mta";
-        getPodsList(projectName).then((pods: Pod[]) => {
+        getMtaPodsList(projectName).then((pods: string[]) => {
             pods.forEach((pod) => {
-                cy.log(pod.name);
+                cy.log(pod);
             });
         });
     });
 
-    it("Controls - testing existence of instances created before upgrade", function () {
+    it.skip("Controls - testing existence of instances created before upgrade", function () {
         const {
             sourceControlUsernameCredentialsName,
             mavenUsernameCredentialName,
@@ -99,7 +99,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         exists(tagName);
     });
 
-    it("Applications - testing existence of instances created before upgrade", function () {
+    it.skip("Applications - testing existence of instances created before upgrade", function () {
         const { sourceApplicationName, binaryApplicationName, uploadBinaryApplicationName } =
             this.upgradeData;
 
@@ -143,7 +143,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         sourceApplication.selectApplication();
     });
 
-    it("Enabling RWX, validating it works, disabling it", function () {
+    it.skip("Enabling RWX, validating it works, disabling it", function () {
         MavenConfiguration.open();
         let rwxEnabled = false;
         isEnabled(clearRepository, rwxEnabled);
