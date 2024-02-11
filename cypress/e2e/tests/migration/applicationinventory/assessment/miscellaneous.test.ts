@@ -31,7 +31,14 @@ import {
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { alertTitle, confirmButton, successAlertMessage } from "../../../../views/common.view";
-import { legacyPathfinder, cloudNative, SEC, button } from "../../../../types/constants";
+import {
+    legacyPathfinder,
+    cloudNative,
+    SEC,
+    button,
+    cloudReadinessFilePath,
+    cloudReadinessQuestionnaire,
+} from "../../../../types/constants";
 import {
     ArchivedQuestionnaires,
     ArchivedQuestionnairesTableDataCell,
@@ -310,17 +317,25 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
     it("Validates auto tagging of applications based on assessment answers", function () {
         //automates polarion MTA-387
+        const appdata = { name: "test1", tags: ["Language / Java"] };
+        const application = new Application(appdata);
+        application.create();
         AssessmentQuestionnaire.deleteAllQuestionnaires();
-        AssessmentQuestionnaire.import(yamlFile);
-        AssessmentQuestionnaire.enable(cloudNative);
+        AssessmentQuestionnaire.import(cloudReadinessFilePath);
+        AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
         AssessmentQuestionnaire.disable(legacyPathfinder);
 
-        const applications = createMultipleApplications(1);
-        applications[0].perform_assessment("medium", stakeholderList, null, cloudNative);
-        applications[0].validateTagsCount("1");
-        applications[0].applicationDetailsTab("Tags");
-        applications[0].tagAndCategoryExists("Spring Boot");
-        applications[0].closeApplicationDetails();
+        application.perform_assessment(
+            "medium",
+            stakeholderList,
+            null,
+            cloudReadinessQuestionnaire
+        );
+        application.validateTagsCount("2");
+        application.applicationDetailsTab("Tags");
+        application.tagAndCategoryExists("Spring Boot");
+        application.closeApplicationDetails();
+        application.delete();
     });
 
     after("Perform test data clean up", function () {
