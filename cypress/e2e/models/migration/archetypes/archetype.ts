@@ -34,6 +34,7 @@ import { Stakeholders } from "../controls/stakeholders";
 import * as archetype from "../../../views/archetype.view";
 import * as commonView from "../../../views/common.view";
 import { Assessment } from "../applicationinventory/assessment";
+import { tagsColumnSelector } from "../../../views/applicationinventory.view";
 
 export interface Archetype {
     name: string;
@@ -342,6 +343,17 @@ export class Archetype {
                 this.clickAssessButton();
             }
             Assessment.verifyAssessmentTakeButtonEnabled();
+        });
+    }
+    validateTagsColumn(tagsNames: string[]): void {
+        Archetype.open();
+        tagsNames.forEach((tag) => {
+            cy.get(tdTag)
+                .contains(this.name)
+                .parent(trTag)
+                .within(() => {
+                    cy.get(tagsColumnSelector).contains(tag, { timeout: 30 * SEC });
+                });
         });
     }
 }

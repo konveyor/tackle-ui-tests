@@ -316,7 +316,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
     });
 
     it("Validates auto tagging of applications based on assessment answers", function () {
-        //automates polarion MTA-387
+        //automates polarion MTA-387 and MTA-502
         const appdata = { name: "test1", tags: ["Language / Java"] };
         const application = new Application(appdata);
         application.create();
@@ -335,6 +335,17 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         application.applicationDetailsTab("Tags");
         application.tagAndCategoryExists("Spring Boot");
         application.closeApplicationDetails();
+        const archetype = new Archetype(
+            data.getRandomWord(8),
+            ["Language / Java"],
+            ["Language / Java"],
+            null
+        );
+        archetype.create();
+        archetype.perform_assessment("medium", stakeholderList, null, cloudReadinessQuestionnaire);
+        archetype.validateTagsColumn(["Spring Boot"]);
+        archetype.assertsTagsMatch("Assessment Tags", ["Spring Boot"], true, false);
+        archetype.delete();
         application.delete();
     });
 
