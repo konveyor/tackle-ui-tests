@@ -343,6 +343,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         );
         archetype.create();
         archetype.perform_assessment("medium", stakeholderList, null, cloudReadinessQuestionnaire);
+        Archetype.open(true);
         archetype.validateTagsColumn(["Spring Boot"]);
         archetype.assertsTagsMatch("Assessment Tags", ["Spring Boot"], true, true);
         archetype.delete();
