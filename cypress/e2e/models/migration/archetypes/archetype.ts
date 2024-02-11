@@ -345,6 +345,7 @@ export class Archetype {
             Assessment.verifyAssessmentTakeButtonEnabled();
         });
     }
+
     validateTagsColumn(tagsNames: string[]): void {
         Archetype.open();
         tagsNames.forEach((tag) => {
