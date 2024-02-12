@@ -179,7 +179,7 @@ export function clickJs(fieldId: string, isForced = true, log = false, number = 
 
 export function submitForm(): void {
     cy.get(commonView.submitButton).should("not.be.disabled");
-    cy.get(commonView.controlsForm).submit();
+    clickJs(commonView.submitButton);
 }
 
 export function cancelForm(): void {

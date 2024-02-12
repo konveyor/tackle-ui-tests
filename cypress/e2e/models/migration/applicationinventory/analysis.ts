@@ -31,7 +31,6 @@ import {
     cleanupDownloads,
     click,
     clickByText,
-    clickJs,
     clickTab,
     clickWithin,
     doesExistSelector,
@@ -82,7 +81,6 @@ import {
 } from "../../../views/applicationinventory.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { actionSelectToggle } from "../../../views/common.view";
-import * as commonView from "../../../views/common.view";
 
 export class Analysis extends Application {
     name: string;
@@ -170,7 +168,10 @@ export class Analysis extends Application {
 
     protected selectTarget(target: string[]): void {
         for (let i = 0; i < target.length; i++) {
-            cy.get("div.pf-v5-c-empty-state__content").children("h4").contains(target[i]).click();
+            cy.get("div.pf-v5-c-empty-state__content", { timeout: 60 * SEC })
+                .children("h4")
+                .contains(target[i])
+                .click();
         }
     }
 
@@ -285,6 +286,7 @@ export class Analysis extends Application {
         this.isNextEnabled();
         next();
         Analysis.selectLanguage(this.language);
+        cy.wait(2 * SEC);
         this.selectTarget(this.target);
         next();
         this.scopeSelect();
