@@ -46,11 +46,10 @@ describe(["@tier2"], "Review Archetypes Assessment summary filter validations", 
         archetype.perform_assessment("high", [stakeholder]);
         archetype.perform_assessment("medium", [stakeholder], null, cloudNative);
         Archetype.open(true);
+        clickKebabMenuOptionArchetype(archetype.name, review);
     });
     identifiedRisksFilterValidations.forEach((validation) => {
-        Archetype.open(true);
         it(`Filtering Archetypes Assessment summary by ${validation.name}`, function () {
-            clickKebabMenuOptionArchetype(archetype.name, review);
             applySelectFilter(validation.id, new RegExp(`^${validation.name}$`), validation.text);
             exists(validation.should);
             notExists(validation.shouldNot);
