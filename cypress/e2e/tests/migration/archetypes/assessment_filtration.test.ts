@@ -59,6 +59,7 @@ describe(["@tier2"], "Review Archetypes Assessment summary filter validations", 
     });
 
     after("Clear test data", function () {
+        Archetype.open(true);
         archetype.delete();
         stakeholder.delete();
     });
