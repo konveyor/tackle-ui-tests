@@ -41,17 +41,15 @@ describe(["@tier2"], "Review Archetypes Assessment summary filter validations", 
         AssessmentQuestionnaire.import("questionnaire_import/cloud-native.yaml");
         AssessmentQuestionnaire.enable(cloudNative);
         AssessmentQuestionnaire.enable(legacyPathfinder);
-
         stakeholder = createMultipleStakeholders(1)[0];
         archetype = createMultipleArchetypes(1)[0];
+    });
+
+    it(`Filtering Archetypes Assessment summary`, function () {
         archetype.perform_assessment("high", [stakeholder]);
         archetype.perform_assessment("medium", [stakeholder], null, cloudNative);
         Archetype.open(true);
-    });
-
-    identifiedRisksFilterValidations.forEach((validation) => {
-        it(`Filtering Archetypes Assessment summary by ${validation.name}`, function () {
-            Archetype.open(true);
+        identifiedRisksFilterValidations.forEach((validation) => {
             clickKebabMenuOptionArchetype(archetype.name, review);
             applySelectFilter(validation.id, new RegExp(`^${validation.name}$`), validation.text);
             exists(validation.should);
