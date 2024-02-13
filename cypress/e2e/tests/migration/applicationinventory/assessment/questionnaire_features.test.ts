@@ -129,7 +129,7 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
 
         // Automates Polarion MTA-506: Save assessment
         clickByText(button, "Save as draft");
-        Assessment.verifyAssessmentContinueButtonEnabled();
+        Assessment.verifyContinueButtonEnabled();
     });
 
     after("Perform test data clean up", function () {
