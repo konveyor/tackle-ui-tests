@@ -204,7 +204,7 @@ export class Archetype {
         questionnaireName = legacyPathfinder,
         saveAndReview = false
     ) {
-        Archetype.open(true);
+        Archetype.open();
         clickKebabMenuOptionArchetype(this.name, "Assess");
         cy.wait(SEC);
         Assessment.perform_assessment(
