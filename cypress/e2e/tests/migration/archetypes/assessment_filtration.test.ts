@@ -46,6 +46,7 @@ describe(["@tier2"], "Review Archetypes Assessment summary filter validations", 
         archetype = createMultipleArchetypes(1)[0];
         archetype.perform_assessment("high", [stakeholder]);
         archetype.perform_assessment("medium", [stakeholder], null, cloudNative);
+        Archetype.open(true);
     });
 
     identifiedRisksFilterValidations.forEach((validation) => {
