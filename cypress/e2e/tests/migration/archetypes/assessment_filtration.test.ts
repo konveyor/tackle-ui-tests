@@ -44,6 +44,7 @@ describe(["@tier2"], "Review Archetypes Assessment summary filter validations", 
         stakeholder = createMultipleStakeholders(1)[0];
         archetype = createMultipleArchetypes(1)[0];
         archetype.perform_assessment("high", [stakeholder]);
+        Archetype.open(true);
         archetype.perform_assessment("medium", [stakeholder], null, cloudNative);
         Archetype.open(true);
         clickKebabMenuOptionArchetype(archetype.name, review);
