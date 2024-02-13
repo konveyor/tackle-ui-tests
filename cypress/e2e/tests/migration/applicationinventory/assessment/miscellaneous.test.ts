@@ -333,7 +333,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         );
         application.validateTagsCount("2");
         application.applicationDetailsTab("Tags");
-        application.tagAndCategoryExists("Spring Boot");
+        application.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
         application.closeApplicationDetails();
         const archetype = new Archetype(
             data.getRandomWord(8),
@@ -346,8 +346,15 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         Archetype.open(true);
         archetype.validateTagsColumn(["Spring Boot"]);
         archetype.assertsTagsMatch("Assessment Tags", ["Spring Boot"], true, true);
+        const appdata2 = { name: "test2", tags: ["Language / Java"] };
+        const application2 = new Application(appdata2);
+        application2.create();
+        application2.applicationDetailsTab("Tags");
+        application2.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
+
         archetype.delete();
         application.delete();
+        application2.delete();
     });
 
     after("Perform test data clean up", function () {
