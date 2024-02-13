@@ -34,7 +34,7 @@ import { Archetype } from "../../../models/migration/archetypes/archetype";
 let archetype: Archetype;
 let stakeholder: Stakeholders;
 
-describe(["@tier2"], "Review Identified Risks filter validations", function () {
+describe(["@tier2"], "Review Archetypes Assessment summary filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
         AssessmentQuestionnaire.deleteAllQuestionnaires();
@@ -49,8 +49,8 @@ describe(["@tier2"], "Review Identified Risks filter validations", function () {
     });
 
     identifiedRisksFilterValidations.forEach((validation) => {
-        it(`Filtering Assessment summary by ${validation.name}`, function () {
-            Archetype.open();
+        it(`Filtering Archetypes Assessment summary by ${validation.name}`, function () {
+            Archetype.open(true);
             clickKebabMenuOptionArchetype(archetype.name, review);
             applySelectFilter(validation.id, new RegExp(`^${validation.name}$`), validation.text);
             exists(validation.should);
