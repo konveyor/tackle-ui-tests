@@ -26,7 +26,13 @@ import {
 } from "../../../../../utils/utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { confirmButton, nextButton } from "../../../../views/common.view";
+import {
+    confirmButton,
+    nextButton,
+    radioButton,
+    radioButtonLabel,
+    splitItem,
+} from "../../../../views/common.view";
 import {
     legacyPathfinder,
     SEC,
@@ -74,7 +80,7 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
             .then(($question) => {
                 cy.wrap($question)
                     .children()
-                    .find("div.pf-v5-l-split__item")
+                    .find(splitItem)
                     .then(($questionLine) => {
                         expect($questionLine.text()).equal(
                             "What is the main technology in your application?",
@@ -101,24 +107,23 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
         clickJs(nextButton);
         cy.wait(SEC);
 
-        // Automates Polarion MTA-
-        cy.get("div.pf-v5-l-split__item")
+        cy.get(splitItem)
             .contains("What is the main technology in your application?")
             .closest(questionBlock)
             .within(() => {
-                cy.get("div.pf-v5-c-radio")
+                cy.get(radioButtonLabel)
                     .contains("Quarkus")
-                    .closest("div.pf-v5-c-radio")
+                    .parent()
                     .within(() => {
-                        cy.get('*[class^="pf-v5-c-radio__input"]').invoke("is", ":checked");
+                        cy.get(radioButton).invoke("is", ":checked");
                     });
 
                 // Even when an answer is auto selected, it should be possible to select other answer choices.
-                cy.get("div.pf-v5-c-radio")
+                cy.get(radioButtonLabel)
                     .contains("Spring Boot")
                     .parent()
                     .within(() => {
-                        cy.get('*[class^="pf-v5-c-radio__input"]').click();
+                        cy.get(radioButton).click();
                     });
             });
 
