@@ -241,6 +241,24 @@ describe(["@tier1"], "Source Analysis", () => {
         application.verifyEffort(2);
     });
 
+    it("JWS6 target Source + deps analysis on tackletest app", function () {
+        // Source code analysis require both source and maven credentials
+        const application = new Analysis(
+            getRandomApplicationData("tackleTestApp_Source+dependencies_jws6", {
+                sourceData: this.appData["tackle-testapp-git"],
+            }),
+            getRandomAnalysisData(this.analysisData["jws6_source+dep_analysis_on_tackletestapp"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
+        application.manageCredentials(source_credential.name, maven_credential.name);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(3);
+    });
+
     after("Perform test data clean up", function () {
         deleteByList(applicationsList);
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));

@@ -337,5 +337,11 @@
                 "labels": "None"
             }
         ]
+    },
+
+    "jws6_source+dep_analysis_on_tackletestapp": {
+        "source": "Source code + dependencies",
+        "target": ["JBoss Web Server 6"],
+        "appName": "tackle-testapp"
     }
 }
