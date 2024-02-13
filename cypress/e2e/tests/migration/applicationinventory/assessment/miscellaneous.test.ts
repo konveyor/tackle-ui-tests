@@ -183,54 +183,58 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         // AssessmentQuestionnaire.delete(cloudNative);
     });
 
-    it("Test inheritance after discarding application assessment and review", function () {
-        // Polarion TC MTA-456 Assess and review application associated with unassessed/unreviewed archetypes
-        const tags = createMultipleTags(2);
-        const archetypes = createMultipleArchetypes(2, tags);
+    it(
+        ["@interop", "@tier0"],
+        "Test inheritance after discarding application assessment and review",
+        function () {
+            // Polarion TC MTA-456 Assess and review application associated with unassessed/unreviewed archetypes
+            const tags = createMultipleTags(2);
+            const archetypes = createMultipleArchetypes(2, tags);
 
-        AssessmentQuestionnaire.deleteAllQuestionnaires();
-        AssessmentQuestionnaire.enable(legacyPathfinder);
+            AssessmentQuestionnaire.deleteAllQuestionnaires();
+            AssessmentQuestionnaire.enable(legacyPathfinder);
 
-        const appdata = {
-            name: data.getAppName(),
-            tags: [tags[0].name, tags[1].name],
-        };
-        const application2 = new Application(appdata);
-        application2.create();
-        cy.wait(2 * SEC);
+            const appdata = {
+                name: data.getAppName(),
+                tags: [tags[0].name, tags[1].name],
+            };
+            const application2 = new Application(appdata);
+            application2.create();
+            cy.wait(2 * SEC);
 
-        application2.perform_assessment("medium", stakeholderList);
-        cy.wait(2 * SEC);
-        application2.verifyStatus("assessment", "Completed");
-        application2.validateAssessmentField("Medium");
+            application2.perform_assessment("medium", stakeholderList);
+            cy.wait(2 * SEC);
+            application2.verifyStatus("assessment", "Completed");
+            application2.validateAssessmentField("Medium");
 
-        application2.perform_review("medium");
-        cy.wait(2 * SEC);
-        application2.verifyStatus("review", "Completed");
-        application2.validateReviewFields();
+            application2.perform_review("medium");
+            cy.wait(2 * SEC);
+            application2.verifyStatus("review", "Completed");
+            application2.validateReviewFields();
 
-        // Polarion TC 496 Verify assessment and review inheritance after discarding application assessment and review
-        archetypes[0].perform_review("low");
-        application2.validateReviewFields(); // Application should retain its individual review.
+            // Polarion TC 496 Verify assessment and review inheritance after discarding application assessment and review
+            archetypes[0].perform_review("low");
+            application2.validateReviewFields(); // Application should retain its individual review.
 
-        archetypes[0].perform_assessment("low", stakeholderList);
-        application2.validateAssessmentField("Medium"); // Application should retain its individual assessment.
+            archetypes[0].perform_assessment("low", stakeholderList);
+            application2.validateAssessmentField("Medium"); // Application should retain its individual assessment.
 
-        archetypes[1].delete(); // Disassociate app from archetypes[1].name
+            archetypes[1].delete(); // Disassociate app from archetypes[1].name
 
-        // Inheritance happens only after application assessment/review is discarded.
-        application2.selectKebabMenuItem("Discard review");
-        application2.validateInheritedReviewFields([archetypes[0].name]);
+            // Inheritance happens only after application assessment/review is discarded.
+            application2.selectKebabMenuItem("Discard review");
+            application2.validateInheritedReviewFields([archetypes[0].name]);
 
-        application2.selectKebabMenuItem("Discard assessment");
-        application2.validateAssessmentField("Low");
-        application2.verifyStatus("assessment", "Completed");
+            application2.selectKebabMenuItem("Discard assessment");
+            application2.validateAssessmentField("Low");
+            application2.verifyStatus("assessment", "Completed");
 
-        application2.delete();
-        cy.wait(2 * SEC);
-        archetypes[0].delete();
-        deleteByList(tags);
-    });
+            application2.delete();
+            cy.wait(2 * SEC);
+            archetypes[0].delete();
+            deleteByList(tags);
+        }
+    );
 
     it("Test application association when an archetype contains a subset  of the tags of another  archetype", function () {
         // Automates Polarion TC MTA-501
