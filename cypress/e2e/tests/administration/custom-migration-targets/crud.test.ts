@@ -40,7 +40,7 @@ import { Analysis } from "../../../models/migration/applicationinventory/analysi
 import { cancelButton } from "../../../views/common.view";
 import * as commonView from "../../../views/common.view";
 
-describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operations", () => {
+describe(["@tier1", "@dc"], "Custom Migration Targets CRUD operations", () => {
     before("Login", function () {
         login();
     });
