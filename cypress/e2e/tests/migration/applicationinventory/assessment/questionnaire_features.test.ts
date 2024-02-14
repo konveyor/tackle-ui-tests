@@ -46,7 +46,7 @@ import * as data from "../../../../../utils/data_utils";
 import { questionBlock } from "../../../../views/assessment.view";
 
 let stakeholderList: Array<Stakeholders> = [];
-let testApplication: Application;
+let application: Application;
 
 describe(["@tier3"], "Tests related to questionnaire features", () => {
     before("Import and enable Cloud readiness questionnaire template", function () {
@@ -61,8 +61,8 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
             name: data.getAppName(),
             tags: ["Language / Java", "Runtime / Quarkus"],
         };
-        testApplication = new Application(appdata);
-        testApplication.create();
+        application = new Application(appdata);
+        application.create();
         cy.wait(2 * SEC);
     });
 
@@ -70,7 +70,7 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
         //Automates Polarion MTA-385: Test conditional questions
         Application.open();
         cy.wait(2 * SEC);
-        clickItemInKebabMenu(testApplication.name, "Assess");
+        clickItemInKebabMenu(application.name, "Assess");
         Assessment.take_questionnaire(cloudReadinessQuestionnaire);
         Assessment.selectStakeholders(stakeholderList);
         clickJs(nextButton);
@@ -94,7 +94,7 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
         // Automates Polarion MTA-505: Cancel assessment
         clickByText(button, "Cancel");
         click(confirmButton);
-        testApplication.selectKebabMenuItem("Discard assessment(s)");
+        application.selectKebabMenuItem("Discard assessment(s)");
         /* Needs further investigation; Occassionally fails
         Assessment.verifyAssessmentTakeButtonEnabled(); */
     });
@@ -103,7 +103,7 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
         //Automates Polarion MTA-388: Auto answer
         Application.open();
         cy.wait(2 * SEC);
-        clickItemInKebabMenu(testApplication.name, "Assess");
+        clickItemInKebabMenu(application.name, "Assess");
         Assessment.take_questionnaire(cloudReadinessQuestionnaire);
         Assessment.selectStakeholders(stakeholderList);
         clickJs(nextButton);
@@ -137,6 +137,6 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
     after("Perform test data clean up", function () {
         deleteByList(stakeholderList);
         AssessmentQuestionnaire.deleteAllQuestionnaires();
-        testApplication.delete();
+        application.delete();
     });
 });
