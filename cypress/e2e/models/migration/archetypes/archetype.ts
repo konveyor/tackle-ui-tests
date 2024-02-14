@@ -326,22 +326,25 @@ export class Archetype {
         clickKebabMenuOptionArchetype(this.name, "Discard review");
         confirm();
     }
+
     clickAssessButton() {
         Archetype.open();
         clickKebabMenuOptionArchetype(this.name, "Assess");
     }
+
     deleteAssessments(): void {
         this.clickAssessButton();
         Assessment.deleteAssessments();
     }
-    verifyAssessmentTakeButtonEnabled(): void {
+
+    verifyButtonEnabled(button: string): void {
         //validates current page
         validatePageTitle("Assessment Actions").then((titleMatches) => {
             if (!titleMatches) {
                 Archetype.open();
                 this.clickAssessButton();
             }
-            Assessment.verifyAssessmentTakeButtonEnabled();
+            Assessment.verifyButtonEnabled(button);
         });
     }
 }

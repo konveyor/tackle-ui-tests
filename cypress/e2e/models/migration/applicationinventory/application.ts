@@ -898,14 +898,15 @@ export class Application {
         Issues.openSingleApplication(this.name);
         cy.get(commonView.appTable).should("not.contain.text", appIssues);
     }
-    verifyAssessmentTakeButtonEnabled(): void {
+
+    verifyButtonEnabled(button: string): void {
         //validates current page
         validatePageTitle("Assessment Actions").then((titleMatches) => {
             if (!titleMatches) {
                 Application.open();
                 this.clickAssessButton();
             }
-            Assessment.verifyAssessmentTakeButtonEnabled();
+            Assessment.verifyButtonEnabled(button);
         });
     }
 

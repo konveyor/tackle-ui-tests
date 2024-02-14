@@ -331,16 +331,9 @@ export class Assessment {
             cy.wrap($el).find(plainButton).click();
         });
     }
-    public static verifyAssessmentTakeButtonEnabled(): void {
-        cy.contains("button", "Take", { timeout: 30 * SEC }).should(
-            "not.have.attr",
-            "aria-disabled",
-            "true"
-        );
-    }
 
-    public static verifyContinueButtonEnabled(): void {
-        cy.contains("button", "Continue", { timeout: 30 * SEC }).should(
+    public static verifyButtonEnabled(button: string): void {
+        cy.contains("button", button, { timeout: 30 * SEC }).should(
             "not.have.attr",
             "aria-disabled",
             "true"
