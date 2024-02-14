@@ -1661,7 +1661,7 @@ export function getNamespace(): string {
 }
 
 export function patchTackleCR(option: string, isEnabled = true): void {
-    let value = "";
+    let value: string;
     if (isEnabled) {
         value = "true";
     } else {
