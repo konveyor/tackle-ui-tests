@@ -894,6 +894,7 @@ export class Application {
             .find("span")
             .should("contain.text", appName);
     }
+
     validateExcludedIssues(appIssues: AppIssue[]): void {
         Issues.openSingleApplication(this.name);
         cy.get(commonView.appTable).should("not.contain.text", appIssues);
