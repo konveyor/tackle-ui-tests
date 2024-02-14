@@ -43,7 +43,7 @@ import {
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
 import { notYetReviewed, reviewItems } from "../../../views/archetype.view";
-import { plainButton, tableRowActions } from "../../../views/common.view";
+import { plainButton, tableRowActions, splitItem } from "../../../views/common.view";
 
 export class Assessment {
     public static selectStakeholders(stakeholders: Stakeholders[]): void {
@@ -137,7 +137,7 @@ export class Assessment {
                         } else if (risk === "medium") {
                             cy.wrap($question)
                                 .children()
-                                .find("div.pf-v5-l-split__item")
+                                .find(splitItem)
                                 .then(($questionLine) => {
                                     /* These 3 questions generate high risk with mean options,
                                     hence to keep risk to medium, select last options for these set of specific questions */
@@ -334,6 +334,14 @@ export class Assessment {
     }
     public static verifyAssessmentTakeButtonEnabled(): void {
         cy.contains("button", "Take", { timeout: 30 * SEC }).should(
+            "not.have.attr",
+            "aria-disabled",
+            "true"
+        );
+    }
+
+    public static verifyContinueButtonEnabled(): void {
+        cy.contains("button", "Continue", { timeout: 30 * SEC }).should(
             "not.have.attr",
             "aria-disabled",
             "true"
