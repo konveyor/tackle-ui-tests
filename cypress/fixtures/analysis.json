@@ -342,6 +342,24 @@
     "jws6_source+dep_analysis_on_tackletestapp": {
         "source": "Source code + dependencies",
         "target": ["JBoss Web Server 6"],
-        "appName": "tackle-testapp"
+        "appName": "tackle-testapp",
+        "openSourceLibraries": true,
+        "effort": 3
+    },
+
+    "openJDK17_source+dep_analysis_on_tackletestapp": {
+        "source": "Source code + dependencies",
+        "target": ["OpenJDK 17"],
+        "appName": "tackle-testapp",
+        "openSourceLibraries": true,
+        "effort": 4104
+    },
+
+    "openJDK21_source+dep_analysis_on_dayTrader": {
+        "source": "Source code + dependencies",
+        "target": ["OpenJDK 21"],
+        "appName": "deps",
+        "openSourceLibraries": true,
+        "effort": 596
     }
 }
