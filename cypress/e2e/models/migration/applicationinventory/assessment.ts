@@ -326,21 +326,15 @@ export class Assessment {
         cy.get(commonView.sideDrawer.labelContent).contains(risk);
         click(commonView.sideDrawer.closeDrawer);
     }
+
     public static deleteAssessments(): void {
         cy.get(tableRowActions).each(($el) => {
             cy.wrap($el).find(plainButton).click();
         });
     }
-    public static verifyAssessmentTakeButtonEnabled(): void {
-        cy.contains("button", "Take", { timeout: 30 * SEC }).should(
-            "not.have.attr",
-            "aria-disabled",
-            "true"
-        );
-    }
 
-    public static verifyContinueButtonEnabled(): void {
-        cy.contains("button", "Continue", { timeout: 30 * SEC }).should(
+    public static verifyButtonEnabled(button: string): void {
+        cy.contains("button", button, { timeout: 30 * SEC }).should(
             "not.have.attr",
             "aria-disabled",
             "true"
