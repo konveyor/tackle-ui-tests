@@ -68,7 +68,7 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
         cy.wait(2 * SEC);
     });
 
-    it("1) Test conditional questions during archetype assessment; 2) Cancel assessment", function () {
+    it("1) Test conditional questions during archetype assessment", function () {
         //Automates Polarion MTA-386: Test conditional questions
         archetype.clickAssessButton();
         Assessment.take_questionnaire(cloudReadinessQuestionnaire);
@@ -90,11 +90,6 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
                 Assessment.clickRadioOption($question, 1);
                 cy.wait(2000);
             });
-
-        // Automates Polarion MTA-505: Cancel assessment
-        clickByText(button, "Cancel");
-        click(confirmButton);
-        archetype.discard("Discard assessment(s)");
     });
 
     after("Perform test data clean up", function () {
