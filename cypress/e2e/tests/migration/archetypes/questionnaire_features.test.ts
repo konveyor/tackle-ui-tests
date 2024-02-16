@@ -68,7 +68,7 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
         cy.wait(2 * SEC);
     });
 
-    it("1) Test conditional questions during archetype assessment", function () {
+    it("Test conditional questions during archetype assessment", function () {
         //Automates Polarion MTA-386: Test conditional questions
         archetype.clickAssessButton();
         Assessment.take_questionnaire(cloudReadinessQuestionnaire);
@@ -90,6 +90,7 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
                 Assessment.clickRadioOption($question, 1);
                 cy.wait(2000);
             });
+        archetype.discard("Discard assessment(s)");
     });
 
     after("Perform test data clean up", function () {
