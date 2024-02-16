@@ -141,7 +141,7 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
         cy.wait(2 * SEC);
         archetype.validateReviewFields();
 
-        archetype.discardReview();
+        archetype.discard("Discard review");
         cy.wait(2 * SEC);
         archetype.validateNotReviewed();
 
