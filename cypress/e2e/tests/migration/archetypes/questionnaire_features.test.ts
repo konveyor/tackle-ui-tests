@@ -23,6 +23,7 @@ import {
     createMultipleStakeholders,
     click,
     clickJs,
+    clickKebabMenuOptionArchetype,
 } from "../../../../utils/utils";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
@@ -57,9 +58,10 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
         stakeholderList = createMultipleStakeholders(1);
 
-        const archetype1 = new Archetype(
+        archetype = new Archetype(
             data.getRandomWord(8),
-            ["Language / Java", "Runtime / Quarkus"]["Language / Java"],
+            ["Language / Java", "Runtime / Quarkus"],
+            ["Language / Java"],
             null
         );
         archetype.create();
@@ -67,10 +69,8 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
     });
 
     it("1) Test conditional questions during archetype assessment; 2) Cancel assessment", function () {
-        //Automates Polarion MTA-385: Test conditional questions
-        Archetype.open();
-        cy.wait(2 * SEC);
-        clickItemInKebabMenu(archetype.name, "Assess");
+        //Automates Polarion MTA-386: Test conditional questions
+        archetype.clickAssessButton();
         Assessment.take_questionnaire(cloudReadinessQuestionnaire);
         Assessment.selectStakeholders(stakeholderList);
         clickJs(nextButton);
@@ -94,9 +94,7 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
         // Automates Polarion MTA-505: Cancel assessment
         clickByText(button, "Cancel");
         click(confirmButton);
-        archetype.selectKebabMenuItem("Discard assessment(s)");
-        /* Needs further investigation; Occassionally fails
-        Assessment.verifyAssessmentTakeButtonEnabled(); */
+        archetype.discard("Discard assessment(s)");
     });
 
     after("Perform test data clean up", function () {

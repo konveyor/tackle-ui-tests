@@ -323,8 +323,9 @@ export class Archetype {
         if (closeDrawer) click(commonView.sideDrawer.closeDrawer);
     }
 
-    discardReview() {
-        clickKebabMenuOptionArchetype(this.name, "Discard review");
+    discard(option: string) {
+        Archetype.open();
+        clickKebabMenuOptionArchetype(this.name, option);
         confirm();
     }
 
