@@ -31,7 +31,14 @@ import {
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { alertTitle, confirmButton, successAlertMessage } from "../../../../views/common.view";
-import { legacyPathfinder, cloudNative, SEC, button } from "../../../../types/constants";
+import {
+    legacyPathfinder,
+    cloudNative,
+    SEC,
+    button,
+    cloudReadinessFilePath,
+    cloudReadinessQuestionnaire,
+} from "../../../../types/constants";
 import {
     ArchivedQuestionnaires,
     ArchivedQuestionnairesTableDataCell,
@@ -308,19 +315,47 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         deleteByList(archetypes);
     });
 
-    it("Validates auto tagging of applications based on assessment answers", function () {
-        //automates polarion MTA-387
+    it("Validates auto tagging of applications and archetypes based on assessment answers", function () {
+        //automates polarion MTA-387 and MTA-502
+        const appdata = { name: "test1", tags: ["Language / Java"] };
+        const application = new Application(appdata);
+        application.create();
         AssessmentQuestionnaire.deleteAllQuestionnaires();
-        AssessmentQuestionnaire.import(yamlFile);
-        AssessmentQuestionnaire.enable(cloudNative);
+        AssessmentQuestionnaire.import(cloudReadinessFilePath);
+        AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
         AssessmentQuestionnaire.disable(legacyPathfinder);
 
-        const applications = createMultipleApplications(1);
-        applications[0].perform_assessment("medium", stakeholderList, null, cloudNative);
-        applications[0].validateTagsCount("1");
-        applications[0].applicationDetailsTab("Tags");
-        applications[0].tagAndCategoryExists("Spring Boot");
-        applications[0].closeApplicationDetails();
+        application.perform_assessment(
+            "medium",
+            stakeholderList,
+            null,
+            cloudReadinessQuestionnaire
+        );
+        application.validateTagsCount("2");
+        application.applicationDetailsTab("Tags");
+        application.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
+        application.closeApplicationDetails();
+        // Automates Polarion MTA-502
+        const archetype = new Archetype(
+            data.getRandomWord(8),
+            ["Language / Java"],
+            ["Language / Java"],
+            null
+        );
+        archetype.create();
+        archetype.perform_assessment("medium", stakeholderList, null, cloudReadinessQuestionnaire);
+        Archetype.open(true);
+        archetype.validateTagsColumn(["Spring Boot"]);
+        archetype.assertsTagsMatch("Assessment Tags", ["Spring Boot"], true, true);
+        const appdata2 = { name: "test2", tags: ["Language / Java"] };
+        const application2 = new Application(appdata2);
+        application2.create();
+        application2.applicationDetailsTab("Tags");
+        application2.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
+
+        archetype.delete();
+        application.delete();
+        application2.delete();
     });
 
     after("Perform test data clean up", function () {
