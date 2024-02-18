@@ -1797,3 +1797,7 @@ export function validateSortBy(sortBy: string, tdSelector?: string) {
     const afterDescSortList = getTableColumnData(tdSelector);
     verifySortDesc(afterDescSortList, unsortedList);
 }
+
+export function waitUntilSpinnerIsGone(timeout = 300): void {
+    cy.get('[class*="spinner"]', { timeout: timeout * SEC }).should("not.exist");
+}

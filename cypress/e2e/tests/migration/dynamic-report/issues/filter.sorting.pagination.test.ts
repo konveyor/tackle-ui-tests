@@ -93,7 +93,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         //     application.selectApplication();
         // });
         cy.wait(5 * SEC);
-        Analysis.analyzeAll(applicationsList[0]);
+        Analysis.analyzeAll(applicationsList[1]);
         Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
     });
 
