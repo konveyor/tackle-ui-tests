@@ -44,6 +44,7 @@ export class Issues {
         }
         clickByText(navMenu, "Issues");
         cy.wait(2 * SEC);
+        cy.get('[class*="spinner"]', { timeout: 30 * SEC }).should("not.exist");
         selectItemsPerPage(itemsPerPage);
     }
 
