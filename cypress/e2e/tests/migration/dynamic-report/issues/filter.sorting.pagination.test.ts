@@ -19,7 +19,7 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import { Tag } from "../../../../models/migration/controls/tags";
 import { Issues } from "../../../../models/migration/dynamic-report/issues/issues";
 import { AppIssue } from "../../../../types/types";
-import { issueFilter, SEC } from "../../../../types/constants";
+import { AnalysisStatuses, issueFilter, SEC } from "../../../../types/constants";
 import { getRandomWord, randomWordGenerator } from "../../../../../utils/data_utils";
 
 describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
@@ -86,14 +86,14 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             applicationsList.push(bookServerApp);
             applicationsList.push(dayTraderApp);
         }
-        applicationsList.forEach((application) => {
-            // application.create();
-            // cy.wait("@getApplication");
-            application.analyze();
-            cy.wait(2 * SEC);
-            application.verifyAnalysisStatus("Completed");
-            application.selectApplication();
-        });
+        // applicationsList.forEach((application) => {
+        //     application.analyze();
+        //     cy.wait(2 * SEC);
+        //     application.verifyAnalysisStatus("Completed");
+        //     application.selectApplication();
+        // });
+        Analysis.analyzeAll(applicationsList[0]);
+        Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
     });
 
     it("All issues - Filtering issues by app name", function () {
