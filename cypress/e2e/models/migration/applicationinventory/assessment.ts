@@ -340,4 +340,20 @@ export class Assessment {
             "true"
         );
     }
+    public static validateReviewDonutChart(): void {
+        cy.get(".pf-v5-c-chart").should("be.visible");
+        cy.get(".pf-v5-c-chart svg").should("have.attr", "role", "img").and("be.visible");
+        cy.get('[id*="victory-container"]').should("contain", "risk-donut-chart");
+
+        // validate number of section in chart match the legend text
+        cy.get(".pf-v5-c-chart").within(() => {
+            cy.get("g")
+                .first()
+                .find('path[role="presentation"][d]')
+                .its("length")
+                .then((numberOfPathsInFirstG) => {
+                    cy.get("text").should("have.length", numberOfPathsInFirstG);
+                });
+        });
+    }
 }

@@ -64,6 +64,8 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.verifyStatus("assessment", "Completed");
         application.validateAssessmentField("Low");
 
+        application.validateReviewDonutChart();
+
         // Perform application review
         application.perform_review("low");
         cy.wait(2 * SEC);
