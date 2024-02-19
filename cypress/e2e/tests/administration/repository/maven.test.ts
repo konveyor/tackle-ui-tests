@@ -81,7 +81,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
             getRandomApplicationData("binary_test_app", {
                 binaryData: this.appData["tackle-testapp-binary"],
             }),
-            getRandomAnalysisData(this.analysisData["binary_analysis_on_tackletestapp"])
+            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_with_customrule"])
         );
 
         application.create();
@@ -108,7 +108,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
             getRandomApplicationData("binary_test_app", {
                 binaryData: this.appData["tackle-testapp-binary"],
             }),
-            getRandomAnalysisData(this.analysisData["binary_analysis_on_tackletestapp"])
+            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_with_customrule"])
         );
 
         application.create();
