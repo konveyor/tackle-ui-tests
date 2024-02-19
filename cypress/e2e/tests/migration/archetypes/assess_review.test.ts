@@ -50,6 +50,7 @@ describe(["@tier1"], "Archetype assessment and review tests", () => {
             null,
             stakeholders
         );
+        Archetype.open(true);
         archetype.create();
         cy.wait(2 * SEC);
 
