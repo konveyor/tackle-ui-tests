@@ -98,6 +98,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     });
 
     it("All issues - Filtering issues by app name", function () {
+        Issues.openList(10, true);
         Issues.applyFilter(issueFilter.appName, applicationsList[0].name);
         this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
             (issue: AppIssue) => {
