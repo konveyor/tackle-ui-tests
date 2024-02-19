@@ -34,7 +34,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
     before("Login", function () {
         login();
-        cy.intercept("GET", "/hub/application*").as("getApplication");
+        // cy.intercept("GET", "/hub/application*").as("getApplication");
 
         businessService = new BusinessServices(data.getCompanyName(), data.getDescription());
         businessService.create();
@@ -72,7 +72,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             );
             bookServerApp.business = businessService.name;
             bookServerApp.create();
-            cy.wait("@getApplication");
+            // cy.wait("@getApplication");
             const dayTraderApp = new Analysis(
                 getRandomApplicationData("daytrader-app", {
                     sourceData: this.appData["daytrader-app"],
@@ -81,17 +81,11 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             );
             dayTraderApp.tags = tagNames;
             dayTraderApp.create();
-            cy.wait("@getApplication");
+            // cy.wait("@getApplication");
 
             applicationsList.push(bookServerApp);
             applicationsList.push(dayTraderApp);
         }
-        // applicationsList.forEach((application) => {
-        //     application.analyze();
-        //     cy.wait(2 * SEC);
-        //     application.verifyAnalysisStatus("Completed");
-        //     application.selectApplication();
-        // });
         cy.wait(5 * SEC);
         Analysis.analyzeAll(applicationsList[1]);
         Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
