@@ -76,15 +76,12 @@ describe(["@tier1"], "Archetype assessment and review tests", () => {
             null,
             stakeholders
         );
-        Archetype.open(true);
         archetype.create();
         cy.wait(2 * SEC);
 
         archetype.perform_assessment("medium", stakeholders);
-        Archetype.open(true);
         cy.wait(2 * SEC);
         archetype.validateAssessmentField("Medium");
-        Archetype.open(true);
         archetype.perform_review("medium");
         cy.wait(2 * SEC);
         archetype.validateReviewFields();
@@ -105,7 +102,6 @@ describe(["@tier1"], "Archetype assessment and review tests", () => {
         cy.wait(2 * SEC);
 
         archetype.perform_assessment("high", stakeholders);
-        Archetype.open(true);
         cy.wait(2 * SEC);
         archetype.validateAssessmentField("High");
 
