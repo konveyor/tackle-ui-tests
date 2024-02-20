@@ -138,6 +138,7 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
                         cy.get(radioButton).invoke("is", ":checked");
                     });
             });
+        archetype.discard("Discard assessment(s)");
     });
 
     after("Perform test data clean up", function () {
