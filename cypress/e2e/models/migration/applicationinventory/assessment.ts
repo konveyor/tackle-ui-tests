@@ -13,7 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { tdTag, trTag, button, SEC, legacyPathfinder } from "../../../types/constants";
+import {
+    tdTag,
+    trTag,
+    button,
+    SEC,
+    legacyPathfinder,
+    text,
+    riskDonutChart,
+} from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
 import {
     clickByText,
@@ -32,6 +40,9 @@ import {
     stakeholderSelect,
     stack,
     assessmentBlock,
+    victoryContainer,
+    donutChart,
+    donutChartImage,
 } from "../../../views/assessment.view";
 import {
     criticalityInput,
@@ -341,18 +352,18 @@ export class Assessment {
         );
     }
     public static validateReviewDonutChart(): void {
-        cy.get(".pf-v5-c-chart").should("be.visible");
-        cy.get(".pf-v5-c-chart svg").should("have.attr", "role", "img").and("be.visible");
-        cy.get('[id*="victory-container"]').should("contain", "risk-donut-chart");
+        cy.get(donutChart).should("be.visible");
+        cy.get(donutChartImage).should("have.attr", "role", "img").and("be.visible");
+        cy.get(victoryContainer).should("contain", riskDonutChart);
 
-        // validate number of section in chart match the legend text
-        cy.get(".pf-v5-c-chart").within(() => {
+        // Validate number of sections in chart match the number of legend text items
+        cy.get(donutChart).within(() => {
             cy.get("g")
                 .first()
                 .find('path[role="presentation"][d]')
                 .its("length")
                 .then((numberOfPathsInFirstG) => {
-                    cy.get("text").should("have.length", numberOfPathsInFirstG);
+                    cy.get(text).should("have.length", numberOfPathsInFirstG);
                 });
         });
     }

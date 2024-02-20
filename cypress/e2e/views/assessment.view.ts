@@ -22,3 +22,6 @@ export const assessmentColumnSelector = "td[data-label='Assessment']";
 export const continueButton = "button[aria-label=confirm]";
 export const closeModal = "[aria-label='Close']";
 export const stack = "div.pf-v5-l-stack";
+export const victoryContainer = '[id*="victory-container"]';
+export const donutChart = ".pf-v5-c-chart";
+export const donutChartImage = ".pf-v5-c-chart svg";

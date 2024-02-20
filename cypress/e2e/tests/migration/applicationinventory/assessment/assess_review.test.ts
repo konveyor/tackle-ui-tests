@@ -63,7 +63,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
         application.validateAssessmentField("Low");
-
+        //Polarion MTA-518
         application.validateReviewDonutChart();
 
         // Perform application review
