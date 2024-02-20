@@ -27,6 +27,7 @@ import {
     migration,
     details,
     legacyPathfinder,
+    review,
 } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import {
@@ -641,6 +642,12 @@ export class Application {
     validateReviewFields(): void {
         Application.open();
         Assessment.validateReviewFields(this.name, "Application");
+    }
+
+    validateReviewDonutChart(): void {
+        Application.open();
+        clickItemInKebabMenu(this.name, review);
+        Assessment.validateReviewDonutChart();
     }
 
     validateInheritedReviewFields(archetypeNames: string[]): void {
