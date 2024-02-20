@@ -42,7 +42,8 @@ describe(["@tier1"], "Archetype assessment and review tests", () => {
         tags = createMultipleTags(2);
     });
 
-    it("Archetype assessment and review with low risk", function () {
+    it("Validate archetype assessment and review with low risk and donut chart on review page", function () {
+        //Polarion MTA-518 - Verify donut chart on archetype review page
         const archetype = new Archetype(
             data.getRandomWord(8),
             [tags[0].name],
@@ -58,7 +59,7 @@ describe(["@tier1"], "Archetype assessment and review tests", () => {
         Archetype.open(true);
         cy.wait(2 * SEC);
         archetype.validateAssessmentField("Low");
-        //Polarion MTA-518
+
         archetype.validateReviewDonutChart();
 
         Archetype.open(true);
