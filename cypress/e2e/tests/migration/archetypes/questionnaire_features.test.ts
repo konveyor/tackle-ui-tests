@@ -121,9 +121,23 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
                     });
             });
 
-        // Automates Polarion MTA-506: Save assessment
+        // Automates Polarion MTA-516: Save archetype assessment
         clickByText(button, "Save as draft");
         archetype.verifyButtonEnabled("Continue");
+        archetype.clickAssessButton();
+        clickByText(button, "Continue");
+
+        cy.get(splitItem)
+            .contains("What is the main technology in your application?")
+            .closest(questionBlock)
+            .within(() => {
+                cy.get(radioButtonLabel)
+                    .contains("Spring Boot")
+                    .parent()
+                    .within(() => {
+                        cy.get(radioButton).invoke("is", ":checked");
+                    });
+            });
     });
 
     after("Perform test data clean up", function () {
