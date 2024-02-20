@@ -19,7 +19,9 @@ import {
     applySelectFilter,
     clearAllFilters,
     clickItemInKebabMenu,
+    clickKebabMenuOptionArchetype,
     createMultipleApplications,
+    createMultipleArchetypes,
     createMultipleStakeholders,
     exists,
     login,
@@ -30,12 +32,14 @@ import { Stakeholders } from "../../../../../models/migration/controls/stakehold
 import { Application } from "../../../../../models/migration/applicationinventory/application";
 import { AssessmentQuestionnaire } from "../../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { identifiedRisksFilterValidations } from "../../../../../views/reportsTab.view";
+import { Archetype } from "../../../../../models/migration/archetypes/archetype";
 
 let application: Application;
 let stakeholder: Stakeholders;
+let archetype: Archetype;
 
-// Polarion TC 495
-describe(["@tier2"], "Review Identified Risks filter validations", function () {
+// Polarion TC 495 and TC 541
+describe(["@tier3"], "Review Identified Risks filter validations for assessments", function () {
     before("Login and Create Test Data", function () {
         login();
         AssessmentQuestionnaire.deleteAllQuestionnaires();
@@ -44,23 +48,40 @@ describe(["@tier2"], "Review Identified Risks filter validations", function () {
         AssessmentQuestionnaire.enable(legacyPathfinder);
 
         stakeholder = createMultipleStakeholders(1)[0];
+        archetype = createMultipleArchetypes(1)[0];
         application = createMultipleApplications(1)[0];
         application.perform_assessment("high", [stakeholder]);
         application.perform_assessment("medium", [stakeholder], null, cloudNative);
+        archetype.perform_assessment("high", [stakeholder]);
+        Archetype.open(true);
+        archetype.perform_assessment("medium", [stakeholder], null, cloudNative);
     });
 
     identifiedRisksFilterValidations.forEach((validation) => {
         it(`Filtering identified risks by ${validation.name}`, function () {
+            const commonActions = () => {
+                applySelectFilter(
+                    validation.id,
+                    new RegExp(`^${validation.name}$`),
+                    validation.text
+                );
+                exists(validation.should);
+                notExists(validation.shouldNot);
+                clearAllFilters();
+            };
+
             Application.open();
             clickItemInKebabMenu(application.name, review);
-            applySelectFilter(validation.id, new RegExp(`^${validation.name}$`), validation.text);
-            exists(validation.should);
-            notExists(validation.shouldNot);
-            clearAllFilters();
+            commonActions();
+            Archetype.open(true);
+            clickKebabMenuOptionArchetype(archetype.name, review);
+            commonActions();
         });
     });
 
     after("Clear test data", function () {
+        Archetype.open(true);
+        archetype.delete();
         application.delete();
         stakeholder.delete();
     });
