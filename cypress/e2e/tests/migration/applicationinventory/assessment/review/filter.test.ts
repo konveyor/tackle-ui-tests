@@ -69,6 +69,7 @@ describe(["@tier3"], "Review Identified Risks filter validations for assessments
                 notExists(validation.shouldNot);
                 clearAllFilters();
             };
+
             Application.open();
             clickItemInKebabMenu(application.name, review);
             commonActions();
