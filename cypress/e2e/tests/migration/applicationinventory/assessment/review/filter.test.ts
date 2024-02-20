@@ -39,7 +39,7 @@ let stakeholder: Stakeholders;
 let archetype: Archetype;
 
 // Polarion TC 495 and TC 541
-describe(["@tier2"], "Review Identified Risks filter validations", function () {
+describe(["@tier3"], "Review Identified Risks filter validations for assessments", function () {
     before("Login and Create Test Data", function () {
         login();
         AssessmentQuestionnaire.deleteAllQuestionnaires();
