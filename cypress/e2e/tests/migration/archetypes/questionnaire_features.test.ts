@@ -124,9 +124,8 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
         // Automates Polarion MTA-516: Save archetype assessment
         clickByText(button, "Save as draft");
         archetype.verifyButtonEnabled("Continue");
-        archetype.clickAssessButton();
         clickByText(button, "Continue");
-
+        clickJs(nextButton);
         cy.get(splitItem)
             .contains("What is the main technology in your application?")
             .closest(questionBlock)
@@ -135,6 +134,7 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
                     .contains("Spring Boot")
                     .parent()
                     .within(() => {
+                        // Verify selection from first take is saved
                         cy.get(radioButton).invoke("is", ":checked");
                     });
             });
