@@ -318,6 +318,14 @@ export class Analysis extends Application {
         params.startAnalysis();
     }
 
+    public static analyzeByList(analysisList: Analysis[]): void {
+        Application.open();
+        analysisList.forEach((currentApp) => {
+            currentApp.selectApplication();
+        });
+        analysisList[0].startAnalysis();
+    }
+
     static validateAnalyzeButton(rbacRules: RbacValidationRules) {
         Application.open();
         doesExistSelector(analyzeAppButton, rbacRules["Analyze"]);

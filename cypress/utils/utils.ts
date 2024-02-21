@@ -1787,6 +1787,7 @@ export function validateSortBy(sortBy: string, tdSelector?: string) {
 
     // Verify that the table rows are displayed in ascending order
     const afterAscSortList = getTableColumnData(tdSelector);
+    console.log(afterAscSortList);
     verifySortAsc(afterAscSortList, unsortedList);
 
     // Sort the table by column title in descending order
@@ -1795,6 +1796,7 @@ export function validateSortBy(sortBy: string, tdSelector?: string) {
 
     // Verify that the table rows are displayed in descending order
     const afterDescSortList = getTableColumnData(tdSelector);
+    console.log(afterDescSortList);
     verifySortDesc(afterDescSortList, unsortedList);
 }
 

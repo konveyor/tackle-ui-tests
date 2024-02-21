@@ -24,6 +24,8 @@ import { getRandomWord, randomWordGenerator } from "../../../../../utils/data_ut
 
 describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
     let applicationsList: Array<Analysis> = [];
+    let dayTraderAppList: Array<Analysis> = [];
+    let bookServerAppList: Array<Analysis> = [];
     let businessService: BusinessServices;
     let archetype: Archetype;
     let stakeholders: Stakeholders[];
@@ -73,6 +75,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             );
             bookServerApp.business = businessService.name;
             bookServerApp.create();
+            bookServerAppList.push(bookServerApp);
             const dayTraderApp = new Analysis(
                 getRandomApplicationData("daytrader-app", {
                     sourceData: this.appData["daytrader-app"],
@@ -81,12 +84,15 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             );
             dayTraderApp.tags = tagNames;
             dayTraderApp.create();
+            dayTraderAppList.push(dayTraderApp);
 
             applicationsList.push(bookServerApp);
             applicationsList.push(dayTraderApp);
         }
         cy.wait(5 * SEC);
-        Analysis.analyzeAll(applicationsList[1]);
+        // Analysis.analyzeAll(applicationsList[1]);
+        Analysis.analyzeByList(dayTraderAppList);
+        Analysis.analyzeByList(bookServerAppList);
         Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
     });
 
@@ -249,15 +255,13 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     });
 
     singleApplicationSortByList.forEach((column) => {
-        it(`${
-            column == "Issue" ? "BUG MTA-2067 - " : ""
-        }Sort single application issues by ${column}`, function () {
+        it(`Single application - sort by ${column}`, function () {
             Issues.openSingleApplication(applicationsList[0].name);
             validateSortBy(column);
         });
     });
 
-    after("Perform test data clean up", function () {
+    it("Perform test data clean up", function () {
         archetype.delete();
         deleteByList(applicationsList);
         deleteByList(stakeholders);
