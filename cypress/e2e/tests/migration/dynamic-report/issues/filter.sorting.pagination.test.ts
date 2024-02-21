@@ -19,7 +19,7 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import { Tag } from "../../../../models/migration/controls/tags";
 import { Issues } from "../../../../models/migration/dynamic-report/issues/issues";
 import { AppIssue } from "../../../../types/types";
-import { AnalysisStatuses, issueFilter, SEC } from "../../../../types/constants";
+import { AnalysisStatuses, issueFilter, SEC, trTag } from "../../../../types/constants";
 import { getRandomWord, randomWordGenerator } from "../../../../../utils/data_utils";
 
 describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
@@ -30,11 +30,12 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     let stakeholderGroups: Stakeholdergroups[];
     let tags: Tag[];
     let tagNames: string[];
-    const sortByList = ["Issue", "Category", "Effort", "Affected applications"];
+    const allIssuesSortByList = ["Issue", "Category", "Effort", "Affected applications"];
+    const affectedApplicationSortByList = ["Name", "Business serice", "Effort", "Incidents"];
+    const singleApplicationSortByList = ["Issue", "Category", "Effort", "Affected files"];
 
     before("Login", function () {
         login();
-        // cy.intercept("GET", "/hub/application*").as("getApplication");
 
         businessService = new BusinessServices(data.getCompanyName(), data.getDescription());
         businessService.create();
@@ -72,7 +73,6 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             );
             bookServerApp.business = businessService.name;
             bookServerApp.create();
-            // cy.wait("@getApplication");
             const dayTraderApp = new Analysis(
                 getRandomApplicationData("daytrader-app", {
                     sourceData: this.appData["daytrader-app"],
@@ -81,7 +81,6 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             );
             dayTraderApp.tags = tagNames;
             dayTraderApp.create();
-            // cy.wait("@getApplication");
 
             applicationsList.push(bookServerApp);
             applicationsList.push(dayTraderApp);
@@ -181,11 +180,11 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
         // Negative test, filtering by not existing data
         Issues.applyFilter(issueFilter.target, randomWordGenerator(6));
-        cy.get("tr").should("contain", "No data available");
+        cy.get(trTag).should("contain", "No data available");
         clearAllFilters();
     });
 
-    sortByList.forEach((column) => {
+    allIssuesSortByList.forEach((column) => {
         it(`${
             column == "Issue" ? "BUG MTA-2067 - " : ""
         }All issues - Sort issues by ${column}`, function () {
@@ -197,6 +196,65 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     it("All issues - Pagination validation", function () {
         Issues.openList(10);
         validatePagination();
+    });
+
+    affectedApplicationSortByList.forEach((column) => {
+        it(`Affected applications - sort by ${column}`, function () {
+            Issues.openAffectedApplications(
+                this.analysisData["source_analysis_on_bookserverapp"]["issues"][0]["name"]
+            );
+            validateSortBy(column);
+        });
+    });
+
+    it("Affected applications - pagination validation", function () {
+        Issues.openAffectedApplications(
+            this.analysisData["source_analysis_on_bookserverapp"]["issues"][0]["name"]
+        );
+        validatePagination();
+    });
+
+    it("Single application - filtering issues by category", function () {
+        Issues.openSingleApplication(applicationsList[0].name);
+        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+            (issue: AppIssue) => {
+                Issues.applyFilter(issueFilter.category, issue.category, true);
+                Issues.validateFilter(issue, true);
+                clearAllFilters();
+            }
+        );
+    });
+
+    it("Single application - filtering issues by source", function () {
+        Issues.openSingleApplication(applicationsList[0].name);
+        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+            (issue: AppIssue) => {
+                Issues.applyFilter(issueFilter.source, issue.source, true);
+                Issues.validateFilter(issue, true);
+                clearAllFilters();
+            }
+        );
+    });
+
+    it("Single application - filtering issues by target", function () {
+        Issues.openSingleApplication(applicationsList[0].name);
+        let issues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
+        issues.forEach((issue: AppIssue) => {
+            issue.targets.forEach((target: string) => {
+                Issues.applyFilter(issueFilter.target, target, true);
+                Issues.validateFilter(issue, true);
+                clearAllFilters();
+            });
+        });
+    });
+
+    singleApplicationSortByList.forEach((column) => {
+        it(`${
+            column == "Issue" ? "BUG MTA-2067 - " : ""
+        }Sort single application issues by ${column}`, function () {
+            Issues.openSingleApplication(applicationsList[0].name);
+            validateSortBy(column);
+        });
     });
 
     after("Perform test data clean up", function () {
