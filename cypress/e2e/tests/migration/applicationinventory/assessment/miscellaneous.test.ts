@@ -60,10 +60,10 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         login();
         cy.intercept("GET", "/hub/application*").as("getApplication");
 
-        // AssessmentQuestionnaire.deleteAllQuestionnaires();
-        // AssessmentQuestionnaire.enable(legacyPathfinder);
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
+        AssessmentQuestionnaire.enable(legacyPathfinder);
         stakeholderList = createMultipleStakeholders(1);
-        /*archetypeList = createMultipleArchetypes(1);
+        archetypeList = createMultipleArchetypes(1);
 
         applicationList = createMultipleApplications(1);
         applicationList[0].perform_assessment("low", stakeholderList);
@@ -71,7 +71,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("assessment", "Completed");
         applicationList[0].perform_review("low");
         cy.wait(2000);
-        applicationList[0].verifyStatus("review", "Completed"); */
+        applicationList[0].verifyStatus("review", "Completed");
     });
 
     it("Retake Assessment questionnaire", function () {
