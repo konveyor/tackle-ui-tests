@@ -1,5 +1,5 @@
 import {
-    clearAllFilters,
+    clearAllFilters, createMultipleBusinessServices,
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
     createMultipleTags,
@@ -24,9 +24,9 @@ import { getRandomWord, randomWordGenerator } from "../../../../../utils/data_ut
 
 describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
     let applicationsList: Array<Analysis> = [];
-    let dayTraderAppList: Array<Analysis> = [];
-    let bookServerAppList: Array<Analysis> = [];
-    let businessService: BusinessServices;
+    // let dayTraderAppList: Array<Analysis> = [];
+    // let bookServerAppList: Array<Analysis> = [];
+    let businessServiceList: BusinessServices[];
     let archetype: Archetype;
     let stakeholders: Stakeholders[];
     let stakeholderGroups: Stakeholdergroups[];
@@ -39,10 +39,9 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     before("Login", function () {
         login();
 
-        businessService = new BusinessServices(data.getCompanyName(), data.getDescription());
-        businessService.create();
         stakeholders = createMultipleStakeholders(2);
         stakeholderGroups = createMultipleStakeholderGroups(2);
+        businessServiceList = createMultipleBusinessServices(2);
         tags = createMultipleTags(2);
         tagNames = tags.map((tag) => tag.name);
         archetype = new Archetype(
@@ -73,9 +72,9 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
                 }),
                 getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
             );
-            bookServerApp.business = businessService.name;
+            bookServerApp.business = businessServiceList[0].name;
             bookServerApp.create();
-            bookServerAppList.push(bookServerApp);
+            // bookServerAppList.push(bookServerApp);
             const dayTraderApp = new Analysis(
                 getRandomApplicationData("daytrader-app", {
                     sourceData: this.appData["daytrader-app"],
@@ -83,20 +82,21 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
                 getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
             );
             dayTraderApp.tags = tagNames;
+            dayTraderApp.business = businessServiceList[1].name;
             dayTraderApp.create();
-            dayTraderAppList.push(dayTraderApp);
+            // dayTraderAppList.push(dayTraderApp);
 
             applicationsList.push(bookServerApp);
             applicationsList.push(dayTraderApp);
         }
         cy.wait(5 * SEC);
-        // Analysis.analyzeAll(applicationsList[1]);
-        Analysis.analyzeByList(dayTraderAppList);
-        Analysis.analyzeByList(bookServerAppList);
+        Analysis.analyzeAll(applicationsList[1]);
+        // Analysis.analyzeByList(dayTraderAppList);
+        // Analysis.analyzeByList(bookServerAppList);
         Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
     });
 
-    it("All issues - Filtering issues by app name", function () {
+    it("All issues - Filtering issues by name", function () {
         Issues.openList(10, true);
         Issues.applyFilter(issueFilter.appName, applicationsList[0].name);
         this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
@@ -123,7 +123,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     });
 
     it("All issues - Filtering issues by BS", function () {
-        Issues.applyFilter(issueFilter.bs, businessService.name);
+        Issues.applyFilter(issueFilter.bs, businessServiceList[0].name);
         this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
             (issue: AppIssue) => {
                 Issues.validateFilter(issue);
@@ -267,6 +267,6 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         deleteByList(stakeholders);
         deleteByList(stakeholderGroups);
         deleteByList(tags);
-        businessService.delete();
+        deleteByList(businessServiceList);
     });
 });

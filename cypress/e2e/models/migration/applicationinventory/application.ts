@@ -155,10 +155,10 @@ export class Application {
         if (contributor) this.contributor = contributor;
     }
 
-    public static open(forceReload = false): void {
+    public static open(itemsPerPage = 100, forceReload = false): void {
         if (forceReload) {
             cy.visit(Application.fullUrl, { timeout: 15 * SEC }).then((_) =>
-                selectItemsPerPage(100)
+                selectItemsPerPage(itemsPerPage)
             );
             return;
         }
@@ -169,7 +169,7 @@ export class Application {
                 clickByText(navMenu, applicationInventory);
             }
         });
-        selectItemsPerPage(100);
+        selectItemsPerPage(itemsPerPage);
     }
 
     protected fillName(name: string): void {
@@ -239,6 +239,7 @@ export class Application {
             if (this.sourceRepo) this.fillSourceModeFields();
             if (this.group) this.fillBinaryModeFields();
             submitForm();
+            cy.get("[id^=pf-modal-part]").should('not.exist');
         }
     }
 

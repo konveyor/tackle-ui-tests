@@ -324,6 +324,9 @@ export class Analysis extends Application {
             currentApp.selectApplication();
         });
         analysisList[0].startAnalysis();
+        analysisList.forEach((currentApp) => {
+            currentApp.selectApplication();
+        });
     }
 
     static validateAnalyzeButton(rbacRules: RbacValidationRules) {

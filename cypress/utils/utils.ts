@@ -253,7 +253,7 @@ export function logout(userName?: string): void {
 }
 
 export function resetURL(): void {
-    Application.open(true);
+    Application.open(100, true);
 }
 
 export function selectItemsPerPage(items: number): void {
@@ -1787,7 +1787,6 @@ export function validateSortBy(sortBy: string, tdSelector?: string) {
 
     // Verify that the table rows are displayed in ascending order
     const afterAscSortList = getTableColumnData(tdSelector);
-    console.log(afterAscSortList);
     verifySortAsc(afterAscSortList, unsortedList);
 
     // Sort the table by column title in descending order
@@ -1796,7 +1795,6 @@ export function validateSortBy(sortBy: string, tdSelector?: string) {
 
     // Verify that the table rows are displayed in descending order
     const afterDescSortList = getTableColumnData(tdSelector);
-    console.log(afterDescSortList);
     verifySortDesc(afterDescSortList, unsortedList);
 }
 
