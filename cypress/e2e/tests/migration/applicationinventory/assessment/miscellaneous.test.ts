@@ -47,6 +47,7 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import * as data from "../../../../../utils/data_utils";
+import { appDetailsView } from "../../../../views/applicationinventory.view";
 
 let stakeholderList: Array<Stakeholders> = [];
 let applicationList: Array<Application> = [];
@@ -332,9 +333,20 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             cloudReadinessQuestionnaire
         );
         application.validateTagsCount("2");
-        application.applicationDetailsTab("Tags");
+        application.filterTags("assessment");
         application.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
+        // application.applicationDetailsTab("Tags");
+        // application.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
+        // Assessment tag should get discarded after application assessment is discarded
+        application.selectKebabMenuItem("Discard assessment(s)");
+        application.applicationDetailsTab("Tags");
+        cy.get(appDetailsView.tagCategory).should("not.contain", "Runtime");
+        cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
+            "not.contain",
+            "Spring Boot"
+        );
         application.closeApplicationDetails();
+
         // Automates Polarion MTA-502
         const archetype = new Archetype(
             data.getRandomWord(8),
@@ -351,6 +363,10 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         const application2 = new Application(appdata2);
         application2.create();
         application2.applicationDetailsTab("Tags");
+        application2.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
+
+        application2.filterTags("archetype");
+        application2.tagAndCategoryExists([["Language", "Java"]]);
         application2.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
 
         archetype.delete();
