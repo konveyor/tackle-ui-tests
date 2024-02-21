@@ -357,6 +357,7 @@ export class Application {
 
     applicationDetailsTab(tab: string): void {
         // Navigate to the application details page and click desired tab
+        Application.open();
         this.selectApplicationRow();
         cy.get(rightSideMenu).within(() => {
             clickTab(tab);

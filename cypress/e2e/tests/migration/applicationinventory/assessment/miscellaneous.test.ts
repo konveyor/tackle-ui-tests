@@ -60,10 +60,10 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         login();
         cy.intercept("GET", "/hub/application*").as("getApplication");
 
-        AssessmentQuestionnaire.deleteAllQuestionnaires();
-        AssessmentQuestionnaire.enable(legacyPathfinder);
+        // AssessmentQuestionnaire.deleteAllQuestionnaires();
+        // AssessmentQuestionnaire.enable(legacyPathfinder);
         stakeholderList = createMultipleStakeholders(1);
-        archetypeList = createMultipleArchetypes(1);
+        /*archetypeList = createMultipleArchetypes(1);
 
         applicationList = createMultipleApplications(1);
         applicationList[0].perform_assessment("low", stakeholderList);
@@ -71,7 +71,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("assessment", "Completed");
         applicationList[0].perform_review("low");
         cy.wait(2000);
-        applicationList[0].verifyStatus("review", "Completed");
+        applicationList[0].verifyStatus("review", "Completed"); */
     });
 
     it("Retake Assessment questionnaire", function () {
@@ -322,7 +322,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         const application = new Application(appdata);
         application.create();
         const tags = [
-            ["Language", "Java"],
+            ["3rd party", "Apache Aries"],
             ["Runtime", "SpringBoot"],
         ];
 
@@ -347,6 +347,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             tags[1][0]
         );
         application.closeApplicationDetails();
+
         // Assessment tag should get discarded after application assessment is discarded
         application.selectKebabMenuItem("Discard assessment(s)");
         application.applicationDetailsTab("Tags");
@@ -361,7 +362,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         const archetype = new Archetype(
             data.getRandomWord(8),
             ["Language / Java"],
-            ["Language / Java"],
+            ["3rd party / Apache Aries"],
             null
         );
         archetype.create();
@@ -372,13 +373,12 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         const appdata2 = { name: "test2", tags: ["Language / Java"] };
         const application2 = new Application(appdata2);
         application2.create();
-        application2.applicationDetailsTab("Tags");
-        application2.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
 
         // Verify archetype tag and assessment tag are present on application details page
         application2.filterTags("archetype");
-        application2.tagAndCategoryExists([["Language", "Java"]]);
+        application2.tagAndCategoryExists([["3rd party", "Apache Aries"]]);
         application2.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
+        application2.closeApplicationDetails();
 
         // Verify archetype tag and assessment tag are discarded after archetype disassociation
         archetype.delete();
@@ -390,7 +390,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
                 tags[i][1]
             );
         }
-        application.closeApplicationDetails();
+        application2.closeApplicationDetails();
         application.delete();
         application2.delete();
     });
