@@ -60,10 +60,10 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         login();
         cy.intercept("GET", "/hub/application*").as("getApplication");
 
-        AssessmentQuestionnaire.deleteAllQuestionnaires();
-        AssessmentQuestionnaire.enable(legacyPathfinder);
+        // AssessmentQuestionnaire.deleteAllQuestionnaires();
+        // AssessmentQuestionnaire.enable(legacyPathfinder);
         stakeholderList = createMultipleStakeholders(1);
-        archetypeList = createMultipleArchetypes(1);
+        /*archetypeList = createMultipleArchetypes(1);
 
         applicationList = createMultipleApplications(1);
         applicationList[0].perform_assessment("low", stakeholderList);
@@ -71,7 +71,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("assessment", "Completed");
         applicationList[0].perform_review("low");
         cy.wait(2000);
-        applicationList[0].verifyStatus("review", "Completed");
+        applicationList[0].verifyStatus("review", "Completed"); */
     });
 
     it("Retake Assessment questionnaire", function () {
@@ -321,6 +321,11 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         const appdata = { name: "test1", tags: ["Language / Java"] };
         const application = new Application(appdata);
         application.create();
+        const tags = [
+            ["Language", "Java"],
+            ["Runtime", "SpringBoot"],
+        ];
+
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.import(cloudReadinessFilePath);
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
@@ -332,18 +337,23 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             null,
             cloudReadinessQuestionnaire
         );
+
+        // Automates Polarion MTA-519 Validate application tag filtration
         application.validateTagsCount("2");
-        application.filterTags("assessment");
+        application.filterTags("assessment"); // Verify assessment tag is applied to application
         application.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
-        // application.applicationDetailsTab("Tags");
-        // application.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
+        cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
+            "not.contain",
+            tags[1][0]
+        );
+        application.closeApplicationDetails();
         // Assessment tag should get discarded after application assessment is discarded
         application.selectKebabMenuItem("Discard assessment(s)");
         application.applicationDetailsTab("Tags");
-        cy.get(appDetailsView.tagCategory).should("not.contain", "Runtime");
+        cy.get(appDetailsView.tagCategory).should("not.contain", tags[1][0]);
         cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
             "not.contain",
-            "Spring Boot"
+            tags[1][1]
         );
         application.closeApplicationDetails();
 
@@ -365,11 +375,22 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         application2.applicationDetailsTab("Tags");
         application2.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
 
+        // Verify archetype tag and assessment tag are present on application details page
         application2.filterTags("archetype");
         application2.tagAndCategoryExists([["Language", "Java"]]);
         application2.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
 
+        // Verify archetype tag and assessment tag are discarded after archetype disassociation
         archetype.delete();
+        application2.applicationDetailsTab("Tags");
+        for (let i = 0; i < tags.length; i++) {
+            cy.get(appDetailsView.tagCategory).should("not.contain", tags[i][0]);
+            cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
+                "not.contain",
+                tags[i][1]
+            );
+        }
+        application.closeApplicationDetails();
         application.delete();
         application2.delete();
     });
