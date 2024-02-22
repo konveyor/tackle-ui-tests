@@ -413,6 +413,20 @@ export class Application {
         else cy.get(appDetailsView.applicationTag).should("contain", tags);
     }
 
+    /**
+     * Verify that tags and categories don't exist on Application details -> Tags page
+     * @param tags list of tags
+     */
+    tagAndCategoryDontExist(tags: string[][]): void {
+        tags.forEach(function (tag) {
+            cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
+                "not.contain",
+                tags[1]
+            );
+            cy.get(appDetailsView.tagCategory).should("not.contain", tags[0]);
+        });
+    }
+
     noTagExists(): void {
         cy.contains("h2", "No tags available", { timeout: 2 * SEC });
     }

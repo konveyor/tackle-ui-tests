@@ -48,6 +48,7 @@ import { Assessment } from "../../../../models/migration/applicationinventory/as
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import * as data from "../../../../../utils/data_utils";
 import { appDetailsView } from "../../../../views/applicationinventory.view";
+import { archetypeTags } from "../../../../views/archetype.view";
 
 let stakeholderList: Array<Stakeholders> = [];
 let applicationList: Array<Application> = [];
@@ -322,7 +323,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         const application = new Application(appdata);
         application.create();
         const archetypeTag = ["3rd party", "Apache Aries"];
-        const assessmentTag = ["Runtime", "SpringBoot"];
+        const assessmentTag = ["Runtime", "Spring Boot"];
 
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.import(cloudReadinessFilePath);
@@ -340,20 +341,14 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         application.validateTagsCount("2");
         application.filterTags("assessment"); // Verify assessment tag is applied to application
         application.tagAndCategoryExists([assessmentTag]);
-        cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
-            "not.contain",
-            archetypeTag[1]
-        );
+        application.tagAndCategoryDontExist([archetypeTag, ["Language", "C"]]);
         application.closeApplicationDetails();
 
         // Assessment tag should get discarded after application assessment is discarded
         application.selectKebabMenuItem("Discard assessment(s)");
         application.applicationDetailsTab("Tags");
-        cy.get(appDetailsView.tagCategory).should("not.contain", assessmentTag[0]);
-        cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
-            "not.contain",
-            assessmentTag[1]
-        );
+        application.tagAndCategoryDontExist([assessmentTag]);
+        application.closeApplicationDetails();
         application.closeApplicationDetails();
 
         // Automates Polarion MTA-502
@@ -375,24 +370,18 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         // Verify archetype tag and assessment tag are present on application details page
         application2.filterTags("archetype");
         application2.tagAndCategoryExists([archetypeTag]);
+        application2.tagAndCategoryDontExist([assessmentTag, ["Language", "Java"]]);
+        application2.closeApplicationDetails();
+
+        application2.filterTags("assessment");
         application2.tagAndCategoryExists([assessmentTag]);
-        cy.get(appDetailsView.tagCategory).should("not.contain", "Language");
-        cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should("not.contain", "Java");
+        application2.tagAndCategoryDontExist([archetypeTag, ["Language", "Java"]]);
         application2.closeApplicationDetails();
 
         // Verify archetype tag and assessment tag are discarded after archetype disossociation
         archetype.delete();
         application2.applicationDetailsTab("Tags");
-        cy.get(appDetailsView.tagCategory).should("not.contain", archetypeTag[0]);
-        cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
-            "not.contain",
-            archetypeTag[1]
-        );
-        cy.get(appDetailsView.tagCategory).should("not.contain", assessmentTag[0]);
-        cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
-            "not.contain",
-            assessmentTag[1]
-        );
+        application.tagAndCategoryDontExist([assessmentTag, archetypeTag]);
 
         application2.closeApplicationDetails();
         application.delete();
