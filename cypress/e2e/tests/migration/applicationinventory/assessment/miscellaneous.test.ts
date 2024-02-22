@@ -321,10 +321,8 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         const appdata = { name: "test1", tags: ["Language / Java"] };
         const application = new Application(appdata);
         application.create();
-        const tags = [
-            ["3rd party", "Apache Aries"],
-            ["Runtime", "SpringBoot"],
-        ];
+        const archetypeTag = ["3rd party", "Apache Aries"];
+        const assessmentTag = ["Runtime", "SpringBoot"];
 
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.import(cloudReadinessFilePath);
@@ -341,20 +339,20 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         // Automates Polarion MTA-519 Validate application tag filtration
         application.validateTagsCount("2");
         application.filterTags("assessment"); // Verify assessment tag is applied to application
-        application.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
+        application.tagAndCategoryExists([assessmentTag]);
         cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
             "not.contain",
-            tags[1][0]
+            archetypeTag[1]
         );
         application.closeApplicationDetails();
 
         // Assessment tag should get discarded after application assessment is discarded
         application.selectKebabMenuItem("Discard assessment(s)");
         application.applicationDetailsTab("Tags");
-        cy.get(appDetailsView.tagCategory).should("not.contain", tags[1][0]);
+        cy.get(appDetailsView.tagCategory).should("not.contain", assessmentTag[0]);
         cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
             "not.contain",
-            tags[1][1]
+            assessmentTag[1]
         );
         application.closeApplicationDetails();
 
@@ -376,20 +374,26 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
         // Verify archetype tag and assessment tag are present on application details page
         application2.filterTags("archetype");
-        application2.tagAndCategoryExists([["3rd party", "Apache Aries"]]);
-        application2.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
+        application2.tagAndCategoryExists([archetypeTag]);
+        application2.tagAndCategoryExists([assessmentTag]);
+        cy.get(appDetailsView.tagCategory).should("not.contain", "Language");
+        cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should("not.contain", "Java");
         application2.closeApplicationDetails();
 
-        // Verify archetype tag and assessment tag are discarded after archetype disassociation
+        // Verify archetype tag and assessment tag are discarded after archetype disossociation
         archetype.delete();
         application2.applicationDetailsTab("Tags");
-        for (let i = 0; i < tags.length; i++) {
-            cy.get(appDetailsView.tagCategory).should("not.contain", tags[i][0]);
-            cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
-                "not.contain",
-                tags[i][1]
-            );
-        }
+        cy.get(appDetailsView.tagCategory).should("not.contain", archetypeTag[0]);
+        cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
+            "not.contain",
+            archetypeTag[1]
+        );
+        cy.get(appDetailsView.tagCategory).should("not.contain", assessmentTag[0]);
+        cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
+            "not.contain",
+            assessmentTag[1]
+        );
+
         application2.closeApplicationDetails();
         application.delete();
         application2.delete();
