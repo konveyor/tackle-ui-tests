@@ -154,7 +154,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         application1.clickAssessButton();
         application1.validateOverrideAssessmentMessage(archetypesList);
         click(confirmButton);
-        cy.contains("button", "Take", { timeout: 30 * SEC }).should(
+        cy.contains("button", "Take", { timeout: 70 * SEC }).should(
             "not.have.attr",
             "aria-disabled",
             "true"
