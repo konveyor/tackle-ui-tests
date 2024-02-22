@@ -24,8 +24,6 @@ import { getRandomWord, randomWordGenerator } from "../../../../../utils/data_ut
 
 describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
     let applicationsList: Array<Analysis> = [];
-    // let dayTraderAppList: Array<Analysis> = [];
-    // let bookServerAppList: Array<Analysis> = [];
     let businessServiceList: BusinessServices[];
     let archetype: Archetype;
     let stakeholders: Stakeholders[];
@@ -67,14 +65,13 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     it("Preparing applications before running actually tests", function () {
         for (let i = 0; i < 6; i++) {
             const bookServerApp = new Analysis(
-                getRandomApplicationData(getRandomWord(8), {
+                getRandomApplicationData(getRandomWord(8).toLowerCase(), {
                     sourceData: this.appData["bookserver-app"],
                 }),
                 getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
             );
             bookServerApp.business = businessServiceList[0].name;
             bookServerApp.create();
-            // bookServerAppList.push(bookServerApp);
             const dayTraderApp = new Analysis(
                 getRandomApplicationData("daytrader-app", {
                     sourceData: this.appData["daytrader-app"],
@@ -84,15 +81,12 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             dayTraderApp.tags = tagNames;
             dayTraderApp.business = businessServiceList[1].name;
             dayTraderApp.create();
-            // dayTraderAppList.push(dayTraderApp);
 
             applicationsList.push(bookServerApp);
             applicationsList.push(dayTraderApp);
         }
         cy.wait(5 * SEC);
         Analysis.analyzeAll(applicationsList[1]);
-        // Analysis.analyzeByList(dayTraderAppList);
-        // Analysis.analyzeByList(bookServerAppList);
         Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
     });
 
@@ -262,11 +256,18 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     });
 
     it("Perform test data clean up", function () {
-        archetype.delete();
+        cy.reload();
+        cy.log("Deleting app list")
         deleteByList(applicationsList);
+        cy.log("Deleting archetype")
+        archetype.delete();
+        cy.log("Deleting stakeholders")
         deleteByList(stakeholders);
+        cy.log("Deleting stakeholder groups")
         deleteByList(stakeholderGroups);
+        cy.log("Deleting tags")
         deleteByList(tags);
+        cy.log("Deleting bs")
         deleteByList(businessServiceList);
     });
 });
