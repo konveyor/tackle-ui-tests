@@ -31,7 +31,6 @@ import {
     cleanupDownloads,
     click,
     clickByText,
-    clickJs,
     clickTab,
     clickWithin,
     doesExistSelector,
@@ -41,6 +40,7 @@ import {
     performRowActionByIcon,
     selectCheckBox,
     selectFormItems,
+    selectFromDropList,
     sidedrawerTab,
     uploadApplications,
     uploadXml,
@@ -58,6 +58,8 @@ import {
     analysisColumn,
     analysisDetails,
     analyzeManuallyButton,
+    camelToggleButton,
+    dropDownMenu,
     effortColumn,
     enableAutomatedTagging,
     enableTransactionAnalysis,
@@ -69,6 +71,7 @@ import {
     kebabTopMenuButton,
     manageCredentials,
     mavenCredential,
+    openjdkToggleButton,
     panelBody,
     reportStoryPoints,
     rightSideMenu,
@@ -82,7 +85,6 @@ import {
 } from "../../../views/applicationinventory.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { actionSelectToggle } from "../../../views/common.view";
-import * as commonView from "../../../views/common.view";
 
 export class Analysis extends Application {
     name: string;
@@ -98,7 +100,7 @@ export class Analysis extends Application {
     enableTransaction?: boolean;
     disableTagging?: boolean;
     appName?: string;
-    storyPoints?: number;
+    effort?: number;
     manuallyAnalyzePackages?: string[];
     excludedPackagesList?: string[];
     openSourceLibraries?: boolean;
@@ -129,7 +131,7 @@ export class Analysis extends Application {
             enableTransaction,
             disableTagging,
             appName,
-            storyPoints,
+            effort,
             manuallyAnalyzePackages,
             excludedPackagesList,
             incidents,
@@ -149,7 +151,7 @@ export class Analysis extends Application {
         if (enableTransaction) this.enableTransaction = enableTransaction;
         if (disableTagging) this.disableTagging = disableTagging;
         if (appName) this.appName = appName;
-        if (storyPoints) this.storyPoints = storyPoints;
+        if (effort) this.effort = effort;
         if (excludePackages) this.excludePackages = excludePackages;
         if (manuallyAnalyzePackages) this.manuallyAnalyzePackages = manuallyAnalyzePackages;
         if (excludedPackagesList) this.excludedPackagesList = excludedPackagesList;
@@ -170,7 +172,14 @@ export class Analysis extends Application {
 
     protected selectTarget(target: string[]): void {
         for (let i = 0; i < target.length; i++) {
-            cy.get("div.pf-v5-c-empty-state__content").children("h4").contains(target[i]).click();
+            if (["OpenJDK 11", "OpenJDK 17", "OpenJDK 21"].includes(target[i])) {
+                click(openjdkToggleButton);
+                clickByText(dropDownMenu, target[i]);
+            } else if (["camel:3", "camel:4"].includes(target[i])) {
+                click(camelToggleButton);
+                clickByText(dropDownMenu, target[i]);
+            }
+            cy.get("div.pf-v5-c-empty-state__content").contains(target[i]).click();
         }
     }
 
@@ -412,14 +421,6 @@ export class Analysis extends Application {
         }
         clickByText(button, save);
         cy.wait(2000);
-    }
-
-    validateStoryPoints(): void {
-        cy.get(fileName).should("contain", this.appName);
-        //Validating that this field contains number
-        cy.get(reportStoryPoints).should((value) => {
-            expect(Number.isNaN(parseInt(value.text(), 10))).to.eq(false);
-        });
     }
 
     static validateTopActionMenu(rbacRules: RbacValidationRules) {

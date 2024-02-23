@@ -1091,7 +1091,7 @@ export function getRandomAnalysisData(analysisdata): analysisData {
         enableTransaction: analysisdata.enableTransaction,
         disableTagging: analysisdata.disableTagging,
         appName: analysisdata.appName,
-        storyPoints: analysisdata.storyPoints,
+        effort: analysisdata.effort,
         excludePackages: analysisdata.excludePackages,
         excludeRuleTags: analysisdata.excludeRuleTags,
         manuallyAnalyzePackages: analysisdata.manuallyAnalyzePackages,

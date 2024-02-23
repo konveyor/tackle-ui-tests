@@ -13,10 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-export const actionButton = "div > button[aria-label='Actions']";
-export const applicationNameInput = "input[name=name]";
-export const applicationDescriptionInput = "input[name=description]";
-export const sourceofAnalysiSelect = "[placeholder='Select a business service']";
 export const sourceDropdown = "#analysis-mode-toggle";
 export const analysisColumn = "td[data-label='Analysis']";
 export const effortColumn = "td[data-label='Effort']";
@@ -41,4 +37,6 @@ export const analysisDetailsEditor = ".monaco-editor";
 export const rightSideMenu = "#page-drawer-content";
 export const enableAutomatedTagging = "input[name=autoTaggingEnabled]";
 export const kebabTopMenuButton = "#toolbar-kebab";
-export const kebabButton = 'button[aria-label="Kebab toggle"]';
+export const camelToggleButton = "#Camel-toggle";
+export const openjdkToggleButton = "#OpenJDK-toggle";
+export const dropDownMenu = "ul.pf-v5-c-select__menu";
