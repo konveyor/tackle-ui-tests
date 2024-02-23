@@ -357,6 +357,7 @@ export class Application {
 
     applicationDetailsTab(tab: string): void {
         // Navigate to the application details page and click desired tab
+        Application.open();
         this.selectApplicationRow();
         cy.get(rightSideMenu).within(() => {
             clickTab(tab);
@@ -381,7 +382,12 @@ export class Application {
     filterTags(source: string): void {
         this.applicationDetailsTab("Tags");
         cy.wait(2000);
-        if (source != "Manual" && source != "Analysis")
+        if (
+            source != "Manual" &&
+            source != "Analysis" &&
+            source != "archetype" &&
+            source != "assessment"
+        )
             cy.get(appDetailsView.tagCategoryFilter).click();
         else cy.get(appDetailsView.tagFilter).click();
 
@@ -405,6 +411,20 @@ export class Application {
         }
         // For Tags
         else cy.get(appDetailsView.applicationTag).should("contain", tags);
+    }
+
+    /**
+     * Verify that tags and categories don't exist on Application details -> Tags page
+     * @param tags list of tags
+     */
+    tagAndCategoryDontExist(tags: string[][]): void {
+        tags.forEach(function (tag) {
+            cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
+                "not.contain",
+                tags[1]
+            );
+            cy.get(appDetailsView.tagCategory).should("not.contain", tags[0]);
+        });
     }
 
     noTagExists(): void {

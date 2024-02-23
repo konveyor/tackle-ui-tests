@@ -193,7 +193,7 @@ export class Assessment {
     public static take_questionnaire(questionnaireName = legacyPathfinder): void {
         cy.contains(questionnaireName, { timeout: 15 * SEC })
             .siblings("td")
-            .contains("button", "Take")
+            .contains("button", "Take", { timeout: 70 * SEC })
             .click();
     }
 

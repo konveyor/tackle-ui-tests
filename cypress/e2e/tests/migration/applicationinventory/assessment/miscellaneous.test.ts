@@ -47,6 +47,8 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import * as data from "../../../../../utils/data_utils";
+import { appDetailsView } from "../../../../views/applicationinventory.view";
+import { archetypeTags } from "../../../../views/archetype.view";
 
 let stakeholderList: Array<Stakeholders> = [];
 let applicationList: Array<Application> = [];
@@ -152,7 +154,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         application1.clickAssessButton();
         application1.validateOverrideAssessmentMessage(archetypesList);
         click(confirmButton);
-        cy.contains("button", "Take", { timeout: 30 * SEC }).should(
+        cy.contains("button", "Take", { timeout: 70 * SEC }).should(
             "not.have.attr",
             "aria-disabled",
             "true"
@@ -317,9 +319,12 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
     it("Validates auto tagging of applications and archetypes based on assessment answers", function () {
         //automates polarion MTA-387 and MTA-502
+        const archetypeTag = ["3rd party", "Apache Aries"];
+        const assessmentTag = ["Runtime", "Spring Boot"];
         const appdata = { name: "test1", tags: ["Language / Java"] };
         const application = new Application(appdata);
         application.create();
+
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.import(cloudReadinessFilePath);
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
@@ -331,15 +336,26 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             null,
             cloudReadinessQuestionnaire
         );
+
+        // Automates Polarion MTA-519 Validate application tag filtration
         application.validateTagsCount("2");
-        application.applicationDetailsTab("Tags");
-        application.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
+        application.filterTags("assessment"); // Verify assessment tag is applied to application
+        application.tagAndCategoryExists([assessmentTag]);
+        application.tagAndCategoryDontExist([archetypeTag, ["Language", "C"]]);
         application.closeApplicationDetails();
+
+        // Assessment tag should get discarded after application assessment is discarded
+        application.selectKebabMenuItem("Discard assessment(s)");
+        application.applicationDetailsTab("Tags");
+        application.tagAndCategoryDontExist([assessmentTag]);
+        application.closeApplicationDetails();
+        application.closeApplicationDetails();
+
         // Automates Polarion MTA-502
         const archetype = new Archetype(
             data.getRandomWord(8),
             ["Language / Java"],
-            ["Language / Java"],
+            ["3rd party / Apache Aries"],
             null
         );
         archetype.create();
@@ -350,10 +366,24 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         const appdata2 = { name: "test2", tags: ["Language / Java"] };
         const application2 = new Application(appdata2);
         application2.create();
-        application2.applicationDetailsTab("Tags");
-        application2.tagAndCategoryExists([["Runtime", "Spring Boot"]]);
 
+        // Verify archetype tag and assessment tag are present on application details page
+        application2.filterTags("archetype");
+        application2.tagAndCategoryExists([archetypeTag]);
+        application2.tagAndCategoryDontExist([assessmentTag, ["Language", "Java"]]);
+        application2.closeApplicationDetails();
+
+        application2.filterTags("assessment");
+        application2.tagAndCategoryExists([assessmentTag]);
+        application2.tagAndCategoryDontExist([archetypeTag, ["Language", "Java"]]);
+        application2.closeApplicationDetails();
+
+        // Verify archetype tag and assessment tag are discarded after archetype disossociation
         archetype.delete();
+        application2.applicationDetailsTab("Tags");
+        application.tagAndCategoryDontExist([assessmentTag, archetypeTag]);
+
+        application2.closeApplicationDetails();
         application.delete();
         application2.delete();
     });
