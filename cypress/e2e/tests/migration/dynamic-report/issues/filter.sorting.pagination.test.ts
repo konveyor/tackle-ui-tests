@@ -259,15 +259,25 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         cy.reload();
         cy.log("Deleting app list")
         deleteByList(applicationsList);
-        cy.log("Deleting archetype")
+    });
+
+    it('Deleting archetype', () => {
         archetype.delete();
-        cy.log("Deleting stakeholders")
+    });
+
+    it("Deleting stakeholders", function () {
         deleteByList(stakeholders);
-        cy.log("Deleting stakeholder groups")
+    });
+
+    it("Deleting stakeholder groups", function () {
         deleteByList(stakeholderGroups);
-        cy.log("Deleting tags")
+    });
+
+    it("Deleting tags", function () {
         deleteByList(tags);
-        cy.log("Deleting bs")
+    });
+
+    it("Deleting bs", function () {
         deleteByList(businessServiceList);
     });
 });
