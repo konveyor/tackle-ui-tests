@@ -50,9 +50,6 @@ import {
     repoTypeSelect,
     profileEdit,
     appContributorSelect,
-    actionButton,
-    copyAssessmentModal,
-    copy,
     northdependenciesDropdownBtn,
     southdependenciesDropdownBtn,
     closeForm,
@@ -707,45 +704,6 @@ export class Application {
         Assessment.validateAssessmentField(this.name, "Application", risk);
     }
 
-    verifyCopyAssessmentDisabled(): void {
-        Application.open();
-        cy.wait(2 * SEC);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(actionButton);
-                cy.wait(500);
-                cy.get("ul > li").find(button).should("not.contain", "Copy assessment");
-            });
-    }
-
-    copy_assessment(applicationList: Array<Application>, cancel = false): void {
-        this.openCopyAssessmentModel();
-        this.selectApps(applicationList);
-        if (cancel) {
-            cancelForm();
-        } else {
-            click(copy);
-            checkSuccessAlert(
-                commonView.successAlertMessage,
-                `Success! Assessment copied to selected applications`
-            );
-        }
-    }
-
-    copy_assessment_review(applicationList: Array<Application>, cancel = false): void {
-        this.openCopyAssessmentModel(true);
-        this.selectApps(applicationList);
-        if (cancel) {
-            cancelForm();
-        } else {
-            click(copy);
-            cy.wait(2 * SEC);
-        }
-    }
-
     selectKebabMenuItem(selection: string): void {
         Application.open();
         this.selectApplication();
@@ -766,27 +724,6 @@ export class Application {
                     });
             }
         }
-    }
-
-    openCopyAssessmentModel(review = false, items = 100): void {
-        let action = "Copy assessment";
-        if (review) {
-            action += " and review";
-        }
-        Application.open();
-        selectItemsPerPage(items);
-        cy.wait(2 * SEC);
-        cy.get(tdTag)
-            .contains(this.name)
-            .closest(trTag)
-            .within(() => {
-                click(actionButton);
-                cy.wait(500);
-                clickByText(button, action);
-            });
-        cy.get(copyAssessmentModal).within(() => {
-            selectItemsPerPage(items);
-        });
     }
 
     // Opens the manage dependencies dialog from application inventory page
