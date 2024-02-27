@@ -361,5 +361,13 @@
         "appName": "deps",
         "openSourceLibraries": true,
         "effort": 596
+    },
+
+    "analysis_with_camel_cbr_migrated": {
+        "source": "Upload a local binary",
+        "target": ["camel:4"],
+        "binary": ["camel-cbr-migrated.zip"],
+        "appName": "camel-cbr-migrated.zip",
+        "effort": 21
     }
 }
