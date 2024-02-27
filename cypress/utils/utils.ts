@@ -756,7 +756,9 @@ export function application_inventory_kebab_menu(menu: string): void {
     // The value for menu could be one of {Import, Manage imports, Delete, Manage credentials}
     navigate_to_application_inventory();
 
-    cy.get(actionButton).eq(0).click({ force: true });
+    cy.get(actionButton, { timeout: 60 * SEC })
+        .eq(0)
+        .click({ force: true });
     if (menu == "Import") {
         clickByText(button, "Import");
     } else {
