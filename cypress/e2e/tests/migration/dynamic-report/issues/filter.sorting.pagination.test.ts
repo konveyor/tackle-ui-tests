@@ -1,5 +1,6 @@
 import {
-    clearAllFilters, createMultipleBusinessServices,
+    clearAllFilters,
+    createMultipleBusinessServices,
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
     createMultipleTags,
@@ -257,27 +258,12 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
     it("Perform test data clean up", function () {
         cy.reload();
-        cy.log("Deleting app list")
+        cy.log("Deleting app list");
         deleteByList(applicationsList);
-    });
-
-    it('Deleting archetype', () => {
         archetype.delete();
-    });
-
-    it("Deleting stakeholders", function () {
         deleteByList(stakeholders);
-    });
-
-    it("Deleting stakeholder groups", function () {
         deleteByList(stakeholderGroups);
-    });
-
-    it("Deleting tags", function () {
         deleteByList(tags);
-    });
-
-    it("Deleting bs", function () {
         deleteByList(businessServiceList);
     });
 });

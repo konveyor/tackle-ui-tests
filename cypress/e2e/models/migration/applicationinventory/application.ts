@@ -239,7 +239,7 @@ export class Application {
             if (this.sourceRepo) this.fillSourceModeFields();
             if (this.group) this.fillBinaryModeFields();
             submitForm();
-            cy.get("[id^=pf-modal-part]").should('not.exist');
+            cy.get("[id^=pf-modal-part]").should("not.exist");
         }
     }
 
