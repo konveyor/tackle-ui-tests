@@ -111,6 +111,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         });
 
         cy.intercept("GET", "/hub/application*").as("getApplication");
+        Application.open(true);
     });
 
     it("Name filter validations", function () {
@@ -135,11 +136,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
     });
 
     it("Business service filter validations", function () {
-        // This is impacted by https://issues.redhat.com/browse/TACKLE-820
-        Application.open();
-
-        // Enter an existing businessservice and assert
-        var validSearchInput = applicationsList[0].business;
+        const validSearchInput = applicationsList[0].business;
         applySearchFilter("Business service", validSearchInput);
         cy.wait(2000);
 
@@ -150,9 +147,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
     it("Tag filter validations", function () {
         Application.open();
 
-        // Filter on a tag applied to applicationsList[0] and verify that only that application is listed
-        // in the results
-        var validSearchInput = applicationsList[0].tags[0];
+        const validSearchInput = applicationsList[0].tags[0];
         applySearchFilter(tag, validSearchInput);
         cy.wait(2000);
 
@@ -160,8 +155,6 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         notExists(applicationsList[1].name);
         clickByText(button, clearAllFilters);
 
-        // Filter on a tag applied to applicationsList[1] and verify that only that application is listed
-        // in the results
         applySearchFilter(tag, applicationsList[1].tags[0]);
         exists(applicationsList[1].name);
         notExists(applicationsList[0].name);
@@ -292,7 +285,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Archetype filter validations", function () {
+    it("Bug MTA-2322: Archetype filter validations", function () {
         const tags = createMultipleTags(2);
 
         //validate archetype1 is shown in applications archetype filter and application1 is present
