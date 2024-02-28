@@ -437,14 +437,14 @@ export function validateSingleApplicationIssue(issue: AppIssue): void {
 
 export function applySelectFilter(filterId, filterName, filterText, isValid = true): void {
     selectFilter(filterName);
-    click("#" + filterId + "-filter-value-select");
-    inputText(".pf-v5-c-select__menu-search > input", filterText);
+    click(".pf-v5-c-menu-toggle__button");
+    inputText(".pf-v5-c-text-input-group__text-input", filterText);
     if (isValid) {
-        clickByText(".pf-v5-c-check", filterText);
+        clickByText(".pf-v5-c-menu__item", filterText);
     } else {
-        cy.contains("button.pf-v5-c-select__menu-item.pf-m-disabled", "No results found");
+        cy.contains("span.pf-v5-c-menu__item-text", "No results");
     }
-    click("#" + filterId + "-filter-value-select");
+    click(".pf-v5-c-text-input-group__text-input");
 }
 
 export function applySearchFilter(
