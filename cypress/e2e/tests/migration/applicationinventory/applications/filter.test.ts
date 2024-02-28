@@ -101,17 +101,15 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         maven_credential.create();
     });
 
-    beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
+    beforeEach("Load Fixtures & Interceptors", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
+
         cy.fixture("analysis").then(function (analysisData) {
             this.analysisData = analysisData;
         });
 
-        // Interceptors
-        cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
@@ -171,7 +169,6 @@ describe(["@tier2"], "Application inventory filter validations", function () {
     });
 
     it("Credential type filter validations", function () {
-        // For application must have source code URL git or svn and group,artifcat and version
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source_Binary", {
                 sourceData: this.appData["tackle-testapp"],
@@ -180,24 +177,21 @@ describe(["@tier2"], "Application inventory filter validations", function () {
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
         );
         application.create();
+        applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
 
-        // Attach Maven credential
         application.manageCredentials(null, maven_credential.name);
         exists(application.name);
 
-        // Enter Maven and assert
         applySearchFilter(credentialType, "Maven");
         cy.wait(2000);
         exists(application.name);
         clickByText(button, clearAllFilters);
 
-        // Change the credentials to Source and test
         application.manageCredentials(source_credential.name, null);
         exists(application.name);
 
-        // Enter Source and assert
         applySearchFilter(credentialType, "Source");
         cy.wait(2000);
         exists(application.name);
@@ -270,14 +264,10 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         notExists(application.name);
         clickByText(button, clearAllFilters);
     });
-    it("Risk filter validations", function () {
-        const application = new Application(getRandomApplicationData());
-        const application1 = new Application(getRandomApplicationData());
-        application.create();
-        application1.create();
 
-        cy.get("@getApplication");
-        cy.wait(2 * SEC);
+    it("Risk filter validations", function () {
+        const application = applicationsList[0];
+        const application1 = applicationsList[1];
 
         // Check application exists on the page
         exists(application.name);
@@ -300,9 +290,8 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         exists(application1.name);
         notExists(application.name);
         clickByText(button, clearAllFilters);
-        application.delete();
-        application1.delete();
     });
+
     it("Archetype filter validations", function () {
         const tags = createMultipleTags(2);
 
@@ -345,8 +334,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         cy.get(filterDropDownContainer).find(filterDropDown).click();
         notExists(archetype2.name);
 
-        const archetypesList: Array<Archetype> = [archetype1, archetype2];
-        deleteByList(archetypesList);
+        deleteByList([archetype1, archetype2]);
         deleteByList(tags);
     });
 
