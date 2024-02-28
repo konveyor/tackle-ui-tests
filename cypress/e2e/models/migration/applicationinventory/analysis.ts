@@ -294,6 +294,7 @@ export class Analysis extends Application {
         this.isNextEnabled();
         next();
         Analysis.selectLanguage(this.language);
+        cy.wait(2 * SEC);
         this.selectTarget(this.target);
         next();
         this.scopeSelect();
@@ -323,6 +324,17 @@ export class Analysis extends Application {
         Application.open();
         selectCheckBox(bulkApplicationSelectionCheckBox);
         params.startAnalysis();
+    }
+
+    public static analyzeByList(analysisList: Analysis[]): void {
+        Application.open();
+        analysisList.forEach((currentApp) => {
+            currentApp.selectApplication();
+        });
+        analysisList[0].startAnalysis();
+        analysisList.forEach((currentApp) => {
+            currentApp.selectApplication();
+        });
     }
 
     static validateAnalyzeButton(rbacRules: RbacValidationRules) {

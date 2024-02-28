@@ -48,7 +48,7 @@ describe(["@tier2"], "Issues sort validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        Analysis.open(true);
+        Analysis.open(100, true);
         application.delete();
     });
 });

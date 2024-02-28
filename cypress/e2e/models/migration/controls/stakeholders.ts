@@ -21,6 +21,7 @@ import {
     editAction,
     deleteAction,
     migration,
+    SEC,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -66,6 +67,7 @@ export class Stakeholders {
                 clickByText(navTab, stakeholders);
             }
         });
+        cy.get("h1", { timeout: 30 * SEC }).should("contain.text", "Controls");
         selectItemsPerPage(itemsPerPage);
     }
 

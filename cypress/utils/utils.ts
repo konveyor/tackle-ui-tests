@@ -179,7 +179,7 @@ export function clickJs(fieldId: string, isForced = true, log = false, number = 
 
 export function submitForm(): void {
     cy.get(commonView.submitButton).should("not.be.disabled");
-    cy.get(commonView.controlsForm).submit();
+    clickJs(commonView.submitButton);
 }
 
 export function cancelForm(): void {
@@ -253,7 +253,7 @@ export function logout(userName?: string): void {
 }
 
 export function resetURL(): void {
-    Application.open(true);
+    Application.open(100, true);
 }
 
 export function selectItemsPerPage(items: number): void {
@@ -1798,4 +1798,8 @@ export function validateSortBy(sortBy: string, tdSelector?: string) {
     // Verify that the table rows are displayed in descending order
     const afterDescSortList = getTableColumnData(tdSelector);
     verifySortDesc(afterDescSortList, unsortedList);
+}
+
+export function waitUntilSpinnerIsGone(timeout = 300): void {
+    cy.get('[class*="spinner"]', { timeout: timeout * SEC }).should("not.exist");
 }
