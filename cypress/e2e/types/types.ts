@@ -111,7 +111,7 @@ export type analysisData = {
     enableTransaction?: boolean;
     disableTagging?: boolean;
     appName?: string;
-    storyPoints?: number;
+    effort?: number;
     excludePackages?: string[];
     manuallyAnalyzePackages?: string[];
     excludedPackagesList?: string[];

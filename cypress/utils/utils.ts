@@ -437,14 +437,14 @@ export function validateSingleApplicationIssue(issue: AppIssue): void {
 
 export function applySelectFilter(filterId, filterName, filterText, isValid = true): void {
     selectFilter(filterName);
-    click("#" + filterId + "-filter-value-select");
-    inputText(".pf-v5-c-select__menu-search > input", filterText);
+    click(".pf-v5-c-menu-toggle__button");
+    inputText(".pf-v5-c-text-input-group__text-input", filterText);
     if (isValid) {
-        clickByText(".pf-v5-c-check", filterText);
+        clickByText(".pf-v5-c-menu__item", filterText);
     } else {
-        cy.contains("button.pf-v5-c-select__menu-item.pf-m-disabled", "No results found");
+        cy.contains("span.pf-v5-c-menu__item-text", "No results");
     }
-    click("#" + filterId + "-filter-value-select");
+    click(".pf-v5-c-text-input-group__text-input");
 }
 
 export function applySearchFilter(
@@ -756,7 +756,9 @@ export function application_inventory_kebab_menu(menu: string): void {
     // The value for menu could be one of {Import, Manage imports, Delete, Manage credentials}
     navigate_to_application_inventory();
 
-    cy.get(actionButton).eq(0).click({ force: true });
+    cy.get(actionButton, { timeout: 60 * SEC })
+        .eq(0)
+        .click({ force: true });
     if (menu == "Import") {
         clickByText(button, "Import");
     } else {
@@ -1091,7 +1093,7 @@ export function getRandomAnalysisData(analysisdata): analysisData {
         enableTransaction: analysisdata.enableTransaction,
         disableTagging: analysisdata.disableTagging,
         appName: analysisdata.appName,
-        storyPoints: analysisdata.storyPoints,
+        effort: analysisdata.effort,
         excludePackages: analysisdata.excludePackages,
         excludeRuleTags: analysisdata.excludeRuleTags,
         manuallyAnalyzePackages: analysisdata.manuallyAnalyzePackages,

@@ -256,7 +256,48 @@ describe(["@tier1"], "Source Analysis", () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.verifyEffort(3);
+        application.verifyEffort(
+            this.analysisData["jws6_source+dep_analysis_on_tackletestapp"]["effort"]
+        );
+    });
+
+    it("Openjdk17 Source + dependencies analysis on tackletest app", function () {
+        const application = new Analysis(
+            getRandomApplicationData("tackleTestApp_Source+dependencies_openjdk17", {
+                sourceData: this.appData["tackle-testapp-git"],
+            }),
+            getRandomAnalysisData(
+                this.analysisData["openJDK17_source+dep_analysis_on_tackletestapp"]
+            )
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
+        application.manageCredentials(source_credential.name, maven_credential.name);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(
+            this.analysisData["openJDK17_source+dep_analysis_on_tackletestapp"]["effort"]
+        );
+    });
+
+    it("OpenJDK21 Source + dependencies analysis on daytrader app", function () {
+        const application = new Analysis(
+            getRandomApplicationData("dayTraderApp_Source+dependencies_openjdk21", {
+                sourceData: this.appData["daytrader-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["openJDK21_source+dep_analysis_on_dayTrader"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(
+            this.analysisData["openJDK21_source+dep_analysis_on_dayTrader"]["effort"]
+        );
     });
 
     after("Perform test data clean up", function () {

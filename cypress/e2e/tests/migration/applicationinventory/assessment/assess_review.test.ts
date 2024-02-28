@@ -52,7 +52,8 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Application assessment and review with low risk", function () {
+    it("Validate application assessment and review with low risk and donut chart on review page", function () {
+        //Polarion MTA-517 - Verify donut chart on applications review page
         const application = new Application(getRandomApplicationData());
         application.create();
         cy.wait("@getApplication");
@@ -63,6 +64,8 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
         application.validateAssessmentField("Low");
+
+        application.validateReviewDonutChart();
 
         // Perform application review
         application.perform_review("low");

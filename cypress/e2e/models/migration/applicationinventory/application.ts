@@ -27,6 +27,7 @@ import {
     migration,
     details,
     legacyPathfinder,
+    review,
 } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import {
@@ -49,9 +50,6 @@ import {
     repoTypeSelect,
     profileEdit,
     appContributorSelect,
-    actionButton,
-    copyAssessmentModal,
-    copy,
     northdependenciesDropdownBtn,
     southdependenciesDropdownBtn,
     closeForm,
@@ -357,6 +355,7 @@ export class Application {
 
     applicationDetailsTab(tab: string): void {
         // Navigate to the application details page and click desired tab
+        Application.open();
         this.selectApplicationRow();
         cy.get(rightSideMenu).within(() => {
             clickTab(tab);
@@ -381,7 +380,12 @@ export class Application {
     filterTags(source: string): void {
         this.applicationDetailsTab("Tags");
         cy.wait(2000);
-        if (source != "Manual" && source != "Analysis")
+        if (
+            source != "Manual" &&
+            source != "Analysis" &&
+            source != "archetype" &&
+            source != "assessment"
+        )
             cy.get(appDetailsView.tagCategoryFilter).click();
         else cy.get(appDetailsView.tagFilter).click();
 
@@ -405,6 +409,20 @@ export class Application {
         }
         // For Tags
         else cy.get(appDetailsView.applicationTag).should("contain", tags);
+    }
+
+    /**
+     * Verify that tags and categories don't exist on Application details -> Tags page
+     * @param tags list of tags
+     */
+    tagAndCategoryDontExist(tags: string[][]): void {
+        tags.forEach(function (tag) {
+            cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
+                "not.contain",
+                tags[1]
+            );
+            cy.get(appDetailsView.tagCategory).should("not.contain", tags[0]);
+        });
     }
 
     noTagExists(): void {
@@ -644,6 +662,12 @@ export class Application {
         Assessment.validateReviewFields(this.name, "Application");
     }
 
+    validateReviewDonutChart(): void {
+        Application.open();
+        clickItemInKebabMenu(this.name, review);
+        Assessment.validateReviewDonutChart();
+    }
+
     validateInheritedReviewFields(archetypeNames: string[]): void {
         Application.open();
         for (let archetypeName of archetypeNames) {
@@ -681,45 +705,6 @@ export class Application {
         Assessment.validateAssessmentField(this.name, "Application", risk);
     }
 
-    verifyCopyAssessmentDisabled(): void {
-        Application.open();
-        cy.wait(2 * SEC);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(actionButton);
-                cy.wait(500);
-                cy.get("ul > li").find(button).should("not.contain", "Copy assessment");
-            });
-    }
-
-    copy_assessment(applicationList: Array<Application>, cancel = false): void {
-        this.openCopyAssessmentModel();
-        this.selectApps(applicationList);
-        if (cancel) {
-            cancelForm();
-        } else {
-            click(copy);
-            checkSuccessAlert(
-                commonView.successAlertMessage,
-                `Success! Assessment copied to selected applications`
-            );
-        }
-    }
-
-    copy_assessment_review(applicationList: Array<Application>, cancel = false): void {
-        this.openCopyAssessmentModel(true);
-        this.selectApps(applicationList);
-        if (cancel) {
-            cancelForm();
-        } else {
-            click(copy);
-            cy.wait(2 * SEC);
-        }
-    }
-
     selectKebabMenuItem(selection: string): void {
         Application.open();
         this.selectApplication();
@@ -740,27 +725,6 @@ export class Application {
                     });
             }
         }
-    }
-
-    openCopyAssessmentModel(review = false, items = 100): void {
-        let action = "Copy assessment";
-        if (review) {
-            action += " and review";
-        }
-        Application.open();
-        selectItemsPerPage(items);
-        cy.wait(2 * SEC);
-        cy.get(tdTag)
-            .contains(this.name)
-            .closest(trTag)
-            .within(() => {
-                click(actionButton);
-                cy.wait(500);
-                clickByText(button, action);
-            });
-        cy.get(copyAssessmentModal).within(() => {
-            selectItemsPerPage(items);
-        });
     }
 
     // Opens the manage dependencies dialog from application inventory page

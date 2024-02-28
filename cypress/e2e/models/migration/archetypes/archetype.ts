@@ -27,7 +27,7 @@ import {
     sidedrawerTab,
     validatePageTitle,
 } from "../../../../utils/utils";
-import { legacyPathfinder, migration, SEC, tdTag, trTag } from "../../../types/constants";
+import { legacyPathfinder, migration, review, SEC, tdTag, trTag } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
@@ -220,6 +220,11 @@ export class Archetype {
     validateAssessmentField(risk: string): void {
         Archetype.open(true);
         Assessment.validateAssessmentField(this.name, "Archetype", risk);
+    }
+    validateReviewDonutChart(): void {
+        Archetype.open();
+        clickKebabMenuOptionArchetype(this.name, review);
+        Assessment.validateReviewDonutChart();
     }
 
     selectArchetype(): void {

@@ -93,6 +93,54 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
         archetype.discard("Discard assessment(s)");
     });
 
+    it("1) Test auto answer feature of questionnaires; 2) Save assessment", function () {
+        //Automates Polarion MTA-388: Auto answer
+        archetype.clickAssessButton();
+        Assessment.take_questionnaire(cloudReadinessQuestionnaire);
+        Assessment.selectStakeholders(stakeholderList);
+        clickJs(nextButton);
+        cy.wait(SEC);
+
+        cy.get(splitItem)
+            .contains("What is the main technology in your application?")
+            .closest(questionBlock)
+            .within(() => {
+                cy.get(radioButtonLabel)
+                    .contains("Quarkus")
+                    .parent()
+                    .within(() => {
+                        cy.get(radioButton).invoke("is", ":checked");
+                    });
+
+                // Even when an answer is auto selected, it should be possible to select other answer choices.
+                cy.get(radioButtonLabel)
+                    .contains("Spring Boot")
+                    .parent()
+                    .within(() => {
+                        cy.get(radioButton).click();
+                    });
+            });
+
+        // Automates Polarion MTA-516: Save archetype assessment
+        clickByText(button, "Save as draft");
+        archetype.verifyButtonEnabled("Continue");
+        clickByText(button, "Continue");
+        clickJs(nextButton);
+        cy.get(splitItem)
+            .contains("What is the main technology in your application?")
+            .closest(questionBlock)
+            .within(() => {
+                cy.get(radioButtonLabel)
+                    .contains("Spring Boot")
+                    .parent()
+                    .within(() => {
+                        // Verify selection from first take is saved
+                        cy.get(radioButton).invoke("is", ":checked");
+                    });
+            });
+        archetype.discard("Discard assessment(s)");
+    });
+
     after("Perform test data clean up", function () {
         deleteByList(stakeholderList);
         AssessmentQuestionnaire.deleteAllQuestionnaires();
