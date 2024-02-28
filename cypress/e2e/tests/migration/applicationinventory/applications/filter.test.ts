@@ -114,7 +114,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         Application.open(true);
     });
 
-    it("Name filter validations", function () {
+    it("Bug MTA-2322: Name filter validations", function () {
         Application.open();
 
         // Enter an existing name substring and assert
@@ -135,7 +135,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Business service filter validations", function () {
+    it("Bug MTA-2322: Business service filter validations", function () {
         const validSearchInput = applicationsList[0].business;
         applySearchFilter("Business service", validSearchInput);
         cy.wait(2000);
@@ -144,7 +144,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Tag filter validations", function () {
+    it("Bug MTA-2322: Tag filter validations", function () {
         Application.open();
 
         const validSearchInput = applicationsList[0].tags[0];
