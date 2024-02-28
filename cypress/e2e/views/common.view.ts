@@ -73,10 +73,10 @@ export const searchInput = "#search-input";
  * span.pf-c-check__label is for the Copy assessment page.
  */
 export const standardFilter = "ul[role=listbox] > li, span.pf-v5-c-check__label";
-export const specialFilter = "div.pf-v5-c-select__menu > fieldset > label > span";
+export const specialFilter = "#select-multi-typeahead-checkbox-listbox";
 export const filterDropDownContainer =
     "div.pf-v5-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show";
-export const filterDropDown = "div.pf-v5-c-select";
+export const filterDropDown = '[id^="filter-control-"]';
 export const actionSelectToggle = "#action-select-toggle";
 export const radioButtonLabel = "div.pf-v5-c-radio";
 export const radioButton = '*[class^="pf-v5-c-radio__input"]';
