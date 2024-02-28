@@ -1,6 +1,7 @@
 import {
     click,
     clickByText,
+    clickJs,
     selectItemsPerPage,
     selectUserPerspective,
 } from "../../../../utils/utils";
@@ -73,6 +74,7 @@ export class AssessmentQuestionnaire {
     public static disable(fileName: string) {
         this.enable(fileName, false);
     }
+
     public static enable(fileName: string, enable = true) {
         AssessmentQuestionnaire.open();
         cy.wait(3 * SEC);
@@ -84,7 +86,7 @@ export class AssessmentQuestionnaire {
                     .invoke("css", "display")
                     .then((display) => {
                         if (display.toString() == "none") {
-                            click(switchToggle);
+                            clickJs(switchToggle);
                         }
                     });
             });
