@@ -100,7 +100,7 @@ describe(
         });
 
         after("Perform test data clean up", function () {
-            Analysis.open(100, true);
+            Analysis.open(true);
             deleteByList(applicationsList);
             deleteByList(businessServiceList);
         });

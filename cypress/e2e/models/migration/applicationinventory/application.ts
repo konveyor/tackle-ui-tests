@@ -153,7 +153,8 @@ export class Application {
         if (contributor) this.contributor = contributor;
     }
 
-    public static open(itemsPerPage = 100, forceReload = false): void {
+    public static open(forceReload = false): void {
+        const itemsPerPage = 100;
         if (forceReload) {
             cy.visit(Application.fullUrl, { timeout: 15 * SEC }).then((_) =>
                 selectItemsPerPage(itemsPerPage)
