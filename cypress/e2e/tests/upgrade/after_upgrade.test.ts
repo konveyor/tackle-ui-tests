@@ -23,6 +23,7 @@ import {
     getRandomApplicationData,
     isEnabled,
     login,
+    validateTackleCr,
 } from "../../../utils/utils";
 import { UpgradeData } from "../../types/types";
 import { Credentials } from "../../models/administration/credentials/credentials";
@@ -40,6 +41,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     before("Login", function () {
         // Perform login
         login();
+        validateTackleCr();
     });
 
     beforeEach("Persist session", function () {
