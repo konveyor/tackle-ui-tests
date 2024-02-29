@@ -1,6 +1,7 @@
 import {
     click,
     clickByText,
+    clickJs,
     selectItemsPerPage,
     selectUserPerspective,
 } from "../../../../utils/utils";
@@ -73,6 +74,7 @@ export class AssessmentQuestionnaire {
     public static disable(fileName: string) {
         this.enable(fileName, false);
     }
+
     public static enable(fileName: string, enable = true) {
         AssessmentQuestionnaire.open();
         cy.wait(3 * SEC);
@@ -84,7 +86,7 @@ export class AssessmentQuestionnaire {
                     .invoke("css", "display")
                     .then((display) => {
                         if (display.toString() == "none") {
-                            click(switchToggle);
+                            clickJs(switchToggle);
                         }
                     });
             });
@@ -127,6 +129,7 @@ export class AssessmentQuestionnaire {
                 }
             });
     }
+
     public static searchQuestions(inputText: string): void {
         cy.get(".pf-v5-c-text-input-group__text-input")
             .dblclick() // Double-clicks the input field
@@ -134,6 +137,7 @@ export class AssessmentQuestionnaire {
             .type(inputText, { force: true })
             .should("have.value", inputText);
     }
+
     public static updateYamlContent(yamlContent, nameToUpdate) {
         //adds "1" to the name - method can be modified
         let lines = yamlContent.split("\n");
@@ -145,6 +149,7 @@ export class AssessmentQuestionnaire {
         });
         return updatedLines.join("\n");
     }
+
     static validateNumberOfMatches(section: string, expectedMatches: number): void {
         cy.get(".pf-v5-c-tabs__item-text")
             .contains(section)
@@ -157,6 +162,7 @@ export class AssessmentQuestionnaire {
                 expect(actualMatches).to.equal(expectedMatches);
             });
     }
+
     static validateNoMatchesFound(): void {
         cy.get(".pf-v5-c-empty-state__content")
             .find("h2.pf-v5-c-title.pf-m-lg")
@@ -165,10 +171,12 @@ export class AssessmentQuestionnaire {
                 expect(text.trim()).to.match(/^No questions match your search/);
             });
     }
+
     static backToQuestionnaire(): void {
         cy.get("button.pf-v5-c-button.pf-m-link").contains("Back to questionnaire").click();
         cy.get(".pf-v5-c-content > h1").invoke("text").should("equal", "Assessment questionnaires");
     }
+
     static validateSearchWordInRows(textInput: string): void {
         const lowerCaseInput = textInput.toLowerCase();
 
