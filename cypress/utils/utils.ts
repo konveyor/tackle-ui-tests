@@ -1810,13 +1810,23 @@ export function getCommandOutput(command: string): Cypress.Chainable<Cypress.Exe
     });
 }
 
-export function validateCr(): void {
-    getCommandOutput("oc get tackle tackle -nopenshift-mta -o json").then((result) => {
-        // !expect(result.stdout).to.contain();
+export function validateTackleCr(): void {
+    let namespace = getNamespace();
+    let tackleCr;
+    let command = `tackleCR=$(oc get tackle -n${namespace}|grep -vi name|cut -d ' ' -f 1);`;
+    command += `oc get tackle $tackleCr -n${namespace} -o json`;
+    getCommandOutput(command).then((result) => {
         try {
-            const tackleCr = JSON.parse(result.stdout);
+            tackleCr = JSON.parse(result.stdout);
         } catch (error) {
             throw new Error("Failed to parse Tackle CR");
         }
+        const condition = tackleCr["items"][0]["status"]["conditions"][1];
+        const failures = condition["ansibleResult"]["failures"];
+        const type = condition["type"];
+        cy.log(`Failures: ${failures}`);
+        cy.log(`Condition type: ${type}`);
+        expect(failures).be.equal(0);
+        expect(type).be.equal("Running");
     });
 }
