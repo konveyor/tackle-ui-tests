@@ -1803,3 +1803,20 @@ export function validateSortBy(sortBy: string, tdSelector?: string) {
 export function waitUntilSpinnerIsGone(timeout = 300): void {
     cy.get('[class*="spinner"]', { timeout: timeout * SEC }).should("not.exist");
 }
+
+export function getCommandOutput(command: string): Cypress.Chainable<Cypress.Exec> {
+    return cy.exec(command, { timeout: 30 * SEC }).then((result) => {
+        return result;
+    });
+}
+
+export function validateCr(): void {
+    getCommandOutput("oc get tackle tackle -nopenshift-mta -o json").then((result) => {
+        // !expect(result.stdout).to.contain();
+        try {
+            const tackleCr = JSON.parse(result.stdout);
+        } catch (error) {
+            throw new Error("Failed to parse Tackle CR");
+        }
+    });
+}
