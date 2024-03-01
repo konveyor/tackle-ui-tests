@@ -330,7 +330,7 @@ export class Archetype {
     }
 
     discard(option: string) {
-        Archetype.open(true);
+        Archetype.open();
         clickKebabMenuOptionArchetype(this.name, option);
         confirm();
     }
