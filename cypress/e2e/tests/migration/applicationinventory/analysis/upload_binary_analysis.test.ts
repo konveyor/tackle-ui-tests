@@ -23,7 +23,7 @@ import {
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
-import { AnalysisStatuses } from "../../../../types/constants";
+import {AnalysisStatuses, SEC} from "../../../../types/constants";
 
 const applicationsList: Analysis[] = [];
 describe(["@tier1"], "Upload Binary Analysis", () => {
@@ -128,6 +128,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
 
     afterEach("Persist session", function () {
         Application.open(true);
+        cy.wait(10*SEC);
     });
 
     after("Perform test data clean up", function () {

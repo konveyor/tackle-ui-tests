@@ -733,11 +733,12 @@ export function uploadXml(fileName: string, selector = 'input[type="file"]'): vo
 }
 
 export function uploadApplications(fileName: string): void {
-    cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(
+    cy.wait(2 * SEC);
+    cy.get('input[type="file"]', { timeout: 10 * SEC }).attachFile(
         { filePath: fileName, encoding: "binary" },
         { subjectType: "drag-n-drop" }
     );
-    cy.wait(2000);
+    cy.wait(20 * SEC);
 }
 
 export function uploadFile(fileName: string): void {

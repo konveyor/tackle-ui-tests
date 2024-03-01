@@ -182,6 +182,7 @@ export class Analysis extends Application {
     }
 
     protected uploadBinary() {
+        cy.wait(2 * SEC);
         this.binary.forEach((binaryList) => {
             uploadApplications(binaryList);
             cy.get("span.pf-v5-c-progress__measure", { timeout: 5000 * SEC }).should(
