@@ -58,5 +58,10 @@
     "pet-clinic": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/konveyor/spring-framework-petclinic"
+    },
+    "tackle-testapp-public-jdk9": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/konveyor/tackle-testapp-public",
+        "branch": "feature/test-java9-removed-packagek"
     }
 }
