@@ -21,6 +21,7 @@ import {
     deleteAction,
     editAction,
     migration,
+    SEC,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -58,6 +59,7 @@ export class Stakeholdergroups {
             if ($url != Stakeholdergroups.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, controls);
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", "Controls");
                 clickByText(navTab, stakeholderGroups);
             }
         });

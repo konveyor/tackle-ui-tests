@@ -75,6 +75,7 @@ export class Archetype {
             if (!$url.includes(Archetype.fullUrl)) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, "Archetypes");
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", "Archetypes");
                 selectItemsPerPage(100);
             }
         });

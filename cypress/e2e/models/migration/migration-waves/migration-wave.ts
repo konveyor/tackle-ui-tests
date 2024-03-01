@@ -71,6 +71,7 @@ export class MigrationWave {
             if ($url != MigrationWave.fullUrl) {
                 selectUserPerspective("Migration");
                 clickByText(navMenu, migrationWaves);
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", migrationWaves);
                 selectItemsPerPage(100);
             }
         });

@@ -21,6 +21,7 @@ import {
     editAction,
     deleteAction,
     migration,
+    SEC,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { jobfunctionNameInput } from "../../../views/jobfunctions.view";
@@ -49,6 +50,7 @@ export class Jobfunctions {
             if ($url != Jobfunctions.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, controls);
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", "Controls");
                 clickByText(navTab, jobFunctions);
             }
         });
