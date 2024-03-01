@@ -40,6 +40,7 @@ import { clearRepository } from "../../views/repository.view";
 import { stakeHoldersTable } from "../../views/stakeholders.view";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { legacyPathfinder } from "../../types/constants";
+import { Application } from "../../models/migration/applicationinventory/application";
 
 describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     before("Login", function () {
@@ -140,14 +141,10 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         sourceApplication.selectApplication();
     });
 
-    it("Verify that assessed application exists and is assessed", function () {
-        const assessmentApplication = new Analysis(
-            getRandomApplicationData("tackletestApp_binary", {
-                binaryData: this.appData["tackle-testapp-binary"],
-            }),
-            getRandomAnalysisData(this.analysisData["binary_analysis_on_tackletestapp"])
-        );
-        assessmentApplication.name = this.upgradeData.assessmentApplicationName;
+    it("Verify that assessed application is migrated", function () {
+        const assessmentApplication = new Application({
+            name: this.upgradeData.assessmentApplicationName,
+        });
         assessmentApplication.verifyStatus("assessment", "Completed");
     });
 
