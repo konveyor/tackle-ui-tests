@@ -126,6 +126,19 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
+    it("Analysis for camel-cbr-migrated app ", function () {
+        const application = new Analysis(
+            getRandomApplicationData("uploadBinary"),
+            getRandomAnalysisData(this.analysisData["analysis_with_camel_cbr_migrated"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+    });
+
     afterEach("Persist session", function () {
         Application.open(true);
     });
