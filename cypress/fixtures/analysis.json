@@ -361,5 +361,12 @@
         "appName": "deps",
         "openSourceLibraries": true,
         "effort": 596
+    },
+
+    "jdk9_source_dep_analysis_on_tackletestapp": {
+        "source": "Source code + dependencies",
+        "target": ["Containerization"],
+        "appName": "tackle testapp public jdk 9",
+        "openSourceLibraries": true
     }
 }
