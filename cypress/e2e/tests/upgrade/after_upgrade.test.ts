@@ -24,6 +24,8 @@ import {
     isEnabled,
     login,
     validateTackleCr,
+    getCommandOutput,
+    getNamespace,
 } from "../../../utils/utils";
 import { UpgradeData } from "../../types/types";
 import { Credentials } from "../../models/administration/credentials/credentials";
@@ -36,12 +38,16 @@ import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { MavenConfiguration } from "../../models/administration/repositories/maven";
 import { clearRepository } from "../../views/repository.view";
 import { stakeHoldersTable } from "../../views/stakeholders.view";
+import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { legacyPathfinder } from "../../types/constants";
+import { Application } from "../../models/migration/applicationinventory/application";
 
 describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     before("Login", function () {
         // Perform login
         login();
         validateTackleCr();
+        AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
     beforeEach("Persist session", function () {
@@ -133,6 +139,30 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         sourceApplication.analyze();
         sourceApplication.verifyAnalysisStatus("Completed");
         sourceApplication.selectApplication();
+    });
+
+    it("Verify that assessed application is migrated", function () {
+        const assessmentApplication = new Application({
+            name: this.upgradeData.assessmentApplicationName,
+        });
+        assessmentApplication.verifyStatus("assessment", "Completed");
+    });
+
+    it("Validating pods after upgrade", function () {
+        const allowedPodsList = [
+            "keycloak-0",
+            "mta-hub",
+            "mta-keycloak-postgresql",
+            "mta-operator",
+            "mta-ui",
+            "rhsso-operator",
+        ];
+        getCommandOutput(`oc get pods -n${getNamespace()}`).then((result) => {
+            allowedPodsList.forEach((podName) => {
+                expect(result.stdout).contains(podName);
+            });
+            expect(result.stdout).not.contain("pathfinder");
+        });
     });
 
     it("Enabling RWX, validating it works, disabling it", function () {
