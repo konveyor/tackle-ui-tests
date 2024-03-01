@@ -300,6 +300,23 @@ describe(["@tier1"], "Source Analysis", () => {
         );
     });
 
+    // Automates customer bug MTA-1785
+    it("JDK<11 Source + dependencies analysis on tackle app public", function () {
+        const application = new Analysis(
+            getRandomApplicationData("tackle testapp public jdk 9", {
+                sourceData: this.appData["tackle-testapp-public-jdk9"],
+            }),
+            getRandomAnalysisData(this.analysisData["jdk9_source_dep_analysis_on_tackletestapp"])
+        );
+        application.create();
+        application.manageCredentials(null, maven_credential.name);
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+    });
+
     after("Perform test data clean up", function () {
         deleteByList(applicationsList);
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
