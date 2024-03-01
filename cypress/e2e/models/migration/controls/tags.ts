@@ -72,6 +72,7 @@ export class Tag {
             if ($url != Tag.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, controls);
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", "Controls");
                 clickByText(navTab, tags);
             }
         });

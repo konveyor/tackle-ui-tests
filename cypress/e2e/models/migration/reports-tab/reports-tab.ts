@@ -37,7 +37,7 @@ export class Reports {
             selectUserPerspective(migration);
         }
         clickByText(navMenu, "Reports");
-        cy.wait(2 * SEC);
+        cy.get("h1", { timeout: 60 * SEC }).should("contain", "Reports");
         if (itemsPerPage) {
             selectItemsPerPage(itemsPerPage);
         }

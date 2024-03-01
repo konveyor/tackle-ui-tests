@@ -49,6 +49,7 @@ export class TagCategory {
             if ($url != TagCategory.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, controls);
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", "Controls");
                 clickByText(navTab, tags);
             }
         });

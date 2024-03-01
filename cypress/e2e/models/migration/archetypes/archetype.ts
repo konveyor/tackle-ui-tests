@@ -75,6 +75,7 @@ export class Archetype {
             if (!$url.includes(Archetype.fullUrl)) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, "Archetypes");
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", "Archetypes");
                 selectItemsPerPage(100);
             }
         });
@@ -329,7 +330,7 @@ export class Archetype {
     }
 
     discard(option: string) {
-        Archetype.open(true);
+        Archetype.open();
         clickKebabMenuOptionArchetype(this.name, option);
         confirm();
     }
