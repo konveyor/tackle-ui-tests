@@ -362,7 +362,7 @@ export class Application {
         cy.get(rightSideMenu).within(() => {
             clickTab(tab);
         });
-        // Make sure application 'Tags' tab page is loaded before proceeding
+        // Make sure application 'Tags' tab page is loaded before proceeding with anything
         if ((tab = "Tags")) cy.get("div[class='pf-v5-c-toolbar__item']", { timeout: 60 * SEC });
     }
 
