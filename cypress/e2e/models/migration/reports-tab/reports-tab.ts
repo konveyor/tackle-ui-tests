@@ -37,7 +37,7 @@ export class Reports {
             selectUserPerspective(migration);
         }
         clickByText(navMenu, "Reports");
-        cy.wait(2 * SEC);
+        cy.wait(60 * SEC);
         if (itemsPerPage) {
             selectItemsPerPage(itemsPerPage);
         }
