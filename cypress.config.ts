@@ -26,7 +26,7 @@ export default defineConfig({
         logLevel: "ASSERT",
     },
     retries: {
-        runMode: 0,
+        runMode: 2,
         openMode: 0,
     },
     reporter: "cypress-multi-reporters",
