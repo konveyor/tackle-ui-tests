@@ -1830,3 +1830,11 @@ export function validateTackleCr(): void {
         expect(type).be.equal("Running");
     });
 }
+
+export function validateTackleOperatorLog(): void {
+    let command = `oc logs $(oc get pods | grep mta-operator | cut -d " " -f 1) | grep failed | tail -n 1| awk -F 'failed=' '{print $2}'|cut -d " " -f 1`;
+    getCommandOutput(command).then((result) => {
+        const failedCount = parseInt(result.stdout.trim());
+        expect(failedCount).equal(0);
+    });
+}
