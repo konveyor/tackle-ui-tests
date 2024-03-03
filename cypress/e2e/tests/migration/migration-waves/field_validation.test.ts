@@ -18,8 +18,6 @@ limitations under the License.
 import {
     checkSuccessAlert,
     clickJs,
-    createMultipleMigrationWaves,
-    deleteByList,
     login,
     validateTooLongInput,
     validateTooShortInput,
@@ -29,9 +27,13 @@ import { MigrationWave } from "../../../models/migration/migration-waves/migrati
 import { MigrationWaveView } from "../../../views/migration-wave.view";
 import { cancelButton } from "../../../views/common.view";
 import * as commonView from "../../../views/common.view";
-import { duplicateMigrationWaveError } from "../../../types/constants";
+import { duplicateMigrationWaveError, SEC } from "../../../types/constants";
 
 let migrationWave: MigrationWave;
+const now = new Date();
+
+const end = new Date(now.getTime());
+end.setFullYear(end.getFullYear() + 1);
 
 // Automates validations for Polarion TC 332
 // This suite is only for fields validations, see crud.test.ts for CRUD operations
@@ -92,15 +94,22 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         clickJs(cancelButton);
     });
     it("Duplicate Migration wave name validation", function () {
-        const migrationWavesList: MigrationWave[] = createMultipleMigrationWaves(2);
+        const migrationWave1 = new MigrationWave(data.getRandomWord(8), now, end);
+        migrationWave1.create();
+        cy.wait(2 * SEC);
 
-        migrationWavesList[0].create();
+        const migrationWave2 = new MigrationWave(data.getRandomWord(8), now, end);
+        migrationWave2.create();
+        cy.wait(2 * SEC);
+
+        migrationWave1.create();
         checkSuccessAlert(commonView.alertTitle, duplicateMigrationWaveError);
 
-        migrationWavesList[1].create();
+        migrationWave2.create();
         checkSuccessAlert(commonView.alertTitle, duplicateMigrationWaveError);
 
-        deleteByList(migrationWavesList);
+        migrationWave1.delete();
+        migrationWave2.delete();
     });
 
     after("Delete test data", function () {
