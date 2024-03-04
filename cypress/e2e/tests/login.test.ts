@@ -26,7 +26,5 @@ describe("Log In", () => {
 
         // Assert that home page has loaded after login
         cy.get("h1").should("contain", "Application inventory");
-        // Clean up any previous existing applications
-        deleteApplicationTableRows();
     });
 });
