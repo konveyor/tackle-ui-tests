@@ -26,6 +26,7 @@ import {
     validateTackleCr,
     getCommandOutput,
     getNamespace,
+    validateTackleOperatorLog,
 } from "../../../utils/utils";
 import { UpgradeData } from "../../types/types";
 import { Credentials } from "../../models/administration/credentials/credentials";
@@ -47,6 +48,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         // Perform login
         login();
         validateTackleCr();
+        validateTackleOperatorLog();
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
