@@ -74,13 +74,11 @@ import {
     doesExistButton,
     clickWithin,
     validateSingleApplicationIssue,
-    checkSuccessAlert,
     validateTextPresence,
     validateNumberPresence,
     performWithin,
     sidedrawerTab,
     validatePageTitle,
-    clickJs,
 } from "../../../../utils/utils";
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
 import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
