@@ -21,10 +21,10 @@ import { Tag } from "../../../../models/migration/controls/tags";
 import { Issues } from "../../../../models/migration/dynamic-report/issues/issues";
 import { AppIssue } from "../../../../types/types";
 import { AnalysisStatuses, issueFilter, SEC, trTag } from "../../../../types/constants";
-import { getRandomWord, randomWordGenerator } from "../../../../../utils/data_utils";
+import { randomWordGenerator } from "../../../../../utils/data_utils";
 
 describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
-    let applicationsList: Array<Analysis> = [];
+    const applicationsList: Analysis[] = [];
     let businessServiceList: BusinessServices[];
     let archetype: Archetype;
     let stakeholders: Stakeholders[];
@@ -52,6 +52,38 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             stakeholderGroups
         );
         archetype.create();
+        cy.fixture("application").then((appData) => {
+            cy.fixture("analysis").then((analysisData) => {
+                for (let i = 0; i < 6; i++) {
+                    applicationsList.push(
+                        new Analysis(
+                            getRandomApplicationData("IssuesFilteringApp1_" + i, {
+                                sourceData: appData["bookserver-app"],
+                            }),
+                            getRandomAnalysisData(analysisData["analysis_for_openSourceLibraries"])
+                        )
+                    );
+                }
+            });
+        });
+        cy.fixture("application").then((appData) => {
+            cy.fixture("analysis").then((analysisData) => {
+                for (let i = 0; i < 6; i++) {
+                    applicationsList.push(
+                        new Analysis(
+                            getRandomApplicationData("IssuesFilteringApp2_" + i, {
+                                sourceData: appData["daytrader-app"],
+                            }),
+                            getRandomAnalysisData(
+                                analysisData["source+dep_analysis_on_daytrader-app"]
+                            )
+                        )
+                    );
+                }
+
+                applicationsList.forEach((application) => application.create());
+            });
+        });
     });
 
     beforeEach("Load data", function () {
@@ -63,35 +95,9 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         });
     });
 
-    it("Preparing applications before running actually tests", function () {
-        for (let i = 0; i < 6; i++) {
-            const bookServerApp = new Analysis(
-                getRandomApplicationData(getRandomWord(8).toLowerCase(), {
-                    sourceData: this.appData["bookserver-app"],
-                }),
-                getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
-            );
-            bookServerApp.business = businessServiceList[0].name;
-            bookServerApp.create();
-            const dayTraderApp = new Analysis(
-                getRandomApplicationData("daytrader-app", {
-                    sourceData: this.appData["daytrader-app"],
-                }),
-                getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
-            );
-            dayTraderApp.tags = tagNames;
-            dayTraderApp.business = businessServiceList[1].name;
-            dayTraderApp.create();
-
-            applicationsList.push(bookServerApp);
-            applicationsList.push(dayTraderApp);
-        }
-        cy.wait(5 * SEC);
-        Analysis.analyzeAll(applicationsList[1]);
-        Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
-    });
-
     it("All issues - Filtering issues by name", function () {
+        Analysis.analyzeAll(applicationsList[0]);
+        Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
         Issues.openList(10, true);
         Issues.applyFilter(issueFilter.appName, applicationsList[0].name);
         this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
@@ -256,7 +262,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         });
     });
 
-    it("Perform test data clean up", function () {
+    after("Perform test data clean up", function () {
         cy.reload();
         cy.log("Deleting app list");
         deleteByList(applicationsList);

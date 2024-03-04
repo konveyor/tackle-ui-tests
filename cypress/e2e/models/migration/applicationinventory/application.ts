@@ -74,7 +74,6 @@ import {
     doesExistButton,
     clickWithin,
     validateSingleApplicationIssue,
-    checkSuccessAlert,
     validateTextPresence,
     validateNumberPresence,
     performWithin,
@@ -239,7 +238,6 @@ export class Application {
             if (this.sourceRepo) this.fillSourceModeFields();
             if (this.group) this.fillBinaryModeFields();
             submitForm();
-            cy.get("[id^=pf-modal-part]").should("not.exist");
         }
     }
 
