@@ -15,7 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { deleteApplicationTableRows, login, selectUserPerspective } from "../../utils/utils";
+import { login, selectUserPerspective } from "../../utils/utils";
 import { migration } from "../types/constants";
 
 describe("Log In", () => {
