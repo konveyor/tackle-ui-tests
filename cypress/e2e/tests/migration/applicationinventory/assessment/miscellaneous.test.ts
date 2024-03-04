@@ -47,8 +47,6 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import * as data from "../../../../../utils/data_utils";
-import { appDetailsView } from "../../../../views/applicationinventory.view";
-import { archetypeTags } from "../../../../views/archetype.view";
 
 let stakeholderList: Array<Stakeholders> = [];
 let applicationList: Array<Application> = [];
@@ -194,7 +192,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
     it(
         ["@interop", "@tier0"],
-        "Test inheritance after discarding application assessment and review",
+        "BUG MTA-2346: Test inheritance after discarding application assessment and review",
         function () {
             // Polarion TC MTA-456 Assess and review application associated with unassessed/unreviewed archetypes
             const tags = createMultipleTags(2);
@@ -292,7 +290,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         deleteByList(tags);
     });
 
-    it("Deletes assessments from archived questionnaire associated with an archetype and an application", function () {
+    it("BUG MTA-2347: Deletes assessments from archived questionnaire associated with an archetype and an application", function () {
         //automates polarion MTA-441 and MTA-442
         const applications = createMultipleApplications(1);
         const archetypes = createMultipleArchetypes(1);
