@@ -15,7 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { login, selectUserPerspective } from "../../utils/utils";
+import { deleteApplicationTableRows, login, selectUserPerspective } from "../../utils/utils";
 import { migration } from "../types/constants";
 
 describe("Log In", () => {
@@ -26,5 +26,7 @@ describe("Log In", () => {
 
         // Assert that home page has loaded after login
         cy.get("h1").should("contain", "Application inventory");
+        // Clean up any previous existing applications
+        deleteApplicationTableRows();
     });
 });

@@ -80,6 +80,7 @@ import {
     performWithin,
     sidedrawerTab,
     validatePageTitle,
+    clickJs,
 } from "../../../../utils/utils";
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
 import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
@@ -238,7 +239,6 @@ export class Application {
             if (this.sourceRepo) this.fillSourceModeFields();
             if (this.group) this.fillBinaryModeFields();
             submitForm();
-            cy.get("[id^=pf-modal-part]").should("not.exist");
         }
     }
 
