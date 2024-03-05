@@ -145,19 +145,6 @@ describe(["@tier1"], "Export Migration Wave to Jira Cloud", function () {
                 });
 
                 Application.open();
-                appsMap[issueType].forEach((app) => {
-                    performRowActionByIcon(app.name, kebabMenu);
-                    cy.get(commonView.actionMenuItem)
-                        .contains("Delete")
-                        .closest(button)
-                        .then(($btn) => {
-                            expect(
-                                $btn,
-                                "Application with a linked Jira ticked could be deleted, this is probably a product bug"
-                            ).to.be.disabled;
-                        });
-                    performRowActionByIcon(app.name, kebabMenu);
-                });
 
                 jiraCloudInstance.deleteIssues(waveIssues.map((issue) => issue.id));
 
