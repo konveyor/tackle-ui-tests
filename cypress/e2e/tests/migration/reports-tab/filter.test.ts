@@ -55,16 +55,18 @@ describe(["@tier2"], "Reports Tab filter validations", function () {
         stakeholder = createMultipleStakeholders(1)[0];
         applications = createMultipleApplications(2);
         applications[0].perform_assessment("high", [stakeholder]);
-        applications[0].perform_assessment("medium", [stakeholder], null, cloudNative);
+        applications[1].perform_assessment("medium", [stakeholder]);
         applications[1].perform_assessment("low", [stakeholder], null, cloudNative);
-        AssessmentQuestionnaire.disable(legacyPathfinder);
+        AssessmentQuestionnaire.disable(cloudNative);
     });
 
-    it.skip("Bug MTA-2093: Filter landscape by questionnaire", function () {
+    it("Filter landscape by questionnaire", function () {
         Reports.open(100);
-        Reports.verifyRisk(1, 0, 1, 0, "2");
+        Reports.verifyRisk(1, 1, 0, 0, "2");
         selectFromDropListByText(landscapeFilterDropdown, legacyPathfinder);
-        Reports.verifyRisk(0, 0, 1, 1, "2");
+        Reports.verifyRisk(1, 1, 0, 0, "2");
+        selectFromDropListByText(landscapeFilterDropdown, cloudNative);
+        Reports.verifyRisk(1, 0, 0, 1, "2");
     });
 
     identifiedRisksFilterValidations.forEach((validation) => {

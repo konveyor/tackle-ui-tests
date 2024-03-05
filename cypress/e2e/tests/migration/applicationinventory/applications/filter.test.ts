@@ -114,7 +114,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         Application.open(true);
     });
 
-    it("Bug MTA-2322: Name filter validations", function () {
+    it("Name filter validations", function () {
         Application.open();
 
         // Enter an existing name substring and assert
@@ -135,7 +135,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Bug MTA-2322: Business service filter validations", function () {
+    it("Business service filter validations", function () {
         const validSearchInput = applicationsList[0].business;
         applySearchFilter("Business service", validSearchInput);
         cy.wait(2000);
@@ -144,7 +144,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Bug MTA-2322: Tag filter validations", function () {
+    it("Tag filter validations", function () {
         Application.open();
 
         const validSearchInput = applicationsList[0].tags[0];
@@ -285,7 +285,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Bug MTA-2322: Archetype filter validations", function () {
+    it("Archetype filter validations", function () {
         const tags = createMultipleTags(2);
 
         //validate archetype1 is shown in applications archetype filter and application1 is present
