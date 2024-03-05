@@ -87,11 +87,11 @@
         "appName": "tackle-testapp",
         "storyPoints": 1,
         "techTags": [
-            ["HTTP", "Servlet"],
+            ["Other", "Properties"],
             ["Bean", "EJB XML"],
             ["Java EE", "EJB XML"],
             ["Embedded", "Properties"],
-            ["Connect", "Servlet"],
+            ["Connect", "EJB XML"],
             ["Sustain", "Properties"]
         ]
     },
