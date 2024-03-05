@@ -79,5 +79,11 @@ export const identifiedRisksFilterValidations: {
         should: "What is the main technology in your application?",
         shouldNot: "Legacy Pathfinder",
     },
-    { id: "risk", name: "Risk", text: "Low", should: "Spring Boot", shouldNot: "Not tracked" },
+    {
+        id: "risk",
+        name: "Risk",
+        text: "Low",
+        should: "Bare metal server",
+        shouldNot: "Not tracked",
+    },
 ];
