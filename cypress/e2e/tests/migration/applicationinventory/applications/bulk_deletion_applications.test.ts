@@ -26,6 +26,7 @@ import {
 import * as commonView from "../../../../views/common.view";
 import {
     actionButton,
+    appSelectionButton,
     bulkApplicationSelectionCheckBox,
 } from "../../../../views/applicationinventory.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
@@ -52,7 +53,7 @@ describe(["@tier2"], "Bulk deletion of applications", () => {
 
     it("Bulk deletion of applications - Select page ", function () {
         navigate_to_application_inventory();
-        cy.get("button.pf-v5-c-menu-toggle__button").click();
+        cy.get(appSelectionButton).eq(0).click();
         cy.get("ul[role=menu] > li").contains("Select page").click();
         application_inventory_kebab_menu("Delete");
         click(commonView.confirmButton);
@@ -60,7 +61,7 @@ describe(["@tier2"], "Bulk deletion of applications", () => {
 
     it("Bulk deletion of applications - Select all ", function () {
         navigate_to_application_inventory();
-        cy.get("button.pf-v5-c-menu-toggle__button").click();
+        cy.get(appSelectionButton).eq(0).click();
         cy.get("ul[role=menu] > li").contains("Select all").click();
         application_inventory_kebab_menu("Delete");
         click(commonView.confirmButton);
@@ -74,7 +75,7 @@ describe(["@tier2"], "Bulk deletion of applications", () => {
     });
 
     const verifyDeleteButton = () => {
-        cy.get("button.pf-v5-c-menu-toggle__button").eq(0).click();
+        cy.get(appSelectionButton).eq(0).click();
         cy.get("ul[role=menu] > li").contains("Select all").click();
         cy.get(actionButton).eq(0).click({ force: true });
         cy.get("li.pf-v5-c-menu__list-item")

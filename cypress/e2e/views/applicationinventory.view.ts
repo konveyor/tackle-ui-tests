@@ -51,6 +51,7 @@ export const kebabMenuItem = "span.pf-v5-c-menu__item-text";
 export const bulkApplicationSelectionCheckBox = "input[name='bulk-selected-items-checkbox']";
 export const profileEdit = ".pf-m-1-col > .pf-v5-c-button";
 export const appContributorSelect = "#contributors-select-toggle-select-multi-typeahead-typeahead";
+export const appSelectionButton = "button.pf-v5-c-menu-toggle__button";
 // This is on the Application imports page.
 export const sideKebabMenu = "button[aria-label='Kebab toggle']";
 
