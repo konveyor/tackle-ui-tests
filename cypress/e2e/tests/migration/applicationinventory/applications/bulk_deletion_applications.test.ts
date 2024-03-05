@@ -74,7 +74,7 @@ describe(["@tier2"], "Bulk deletion of applications", () => {
     });
 
     const verifyDeleteButton = () => {
-        cy.get("button.pf-v5-c-menu-toggle__button").click();
+        cy.get("button.pf-v5-c-menu-toggle__button").eq(0).click();
         cy.get("ul[role=menu] > li").contains("Select all").click();
         cy.get(actionButton).eq(0).click({ force: true });
         cy.get("li.pf-v5-c-menu__list-item")
