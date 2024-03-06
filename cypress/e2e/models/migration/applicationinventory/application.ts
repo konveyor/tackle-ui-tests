@@ -821,7 +821,7 @@ export class Application {
 
     unlinkJiraTicket(): void {
         Application.open();
-        sidedrawerTab(this.name, "Details");
+        sidedrawerTab(this.name, details);
         cy.contains("small", "Ticket")
             .next()
             .children("div")
