@@ -192,7 +192,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
     it(
         ["@interop", "@tier0"],
-        "BUG MTA-2346: Test inheritance after discarding application assessment and review",
+        "Test inheritance after discarding application assessment and review",
         function () {
             // Polarion TC MTA-456 Assess and review application associated with unassessed/unreviewed archetypes
             const tags = createMultipleTags(2);
@@ -290,7 +290,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         deleteByList(tags);
     });
 
-    it("BUG MTA-2347: Deletes assessments from archived questionnaire associated with an archetype and an application", function () {
+    it("Deletes assessments from archived questionnaire associated with an archetype and an application", function () {
         //automates polarion MTA-441 and MTA-442
         const applications = createMultipleApplications(1);
         const archetypes = createMultipleArchetypes(1);
@@ -299,7 +299,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         AssessmentQuestionnaire.enable(legacyPathfinder);
         applications[0].perform_assessment("low", stakeholderList);
         AssessmentQuestionnaire.disable(legacyPathfinder);
-        applications[0].verifyStatus("assessment", "In-progress");
+        applications[0].verifyStatus("assessment", "Not started");
         applications[0].validateAssessmentField("Unknown");
         applications[0].deleteAssessments();
         applications[0].verifyStatus("assessment", "Not started");
