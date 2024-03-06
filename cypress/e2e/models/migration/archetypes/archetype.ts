@@ -330,14 +330,7 @@ export class Archetype {
     }
 
     discard(option: string) {
-        /* Forcing Reload since 1) this could be invoked from the  
-        https://mta-openshift-mta.apps.xyz/archetypes/assessment-actions/ page 
-        and 2) .open() doesn't distinguish between the followng pages :
-        
-        https://mta-openshift-mta.apps.xyz/archetypes
-        https://mta-openshift-mta.apps.xyz/archetypes/assessment-actions/
-        */
-        Archetype.open(true);
+        Archetype.open();
         clickKebabMenuOptionArchetype(this.name, option);
         confirm();
     }
