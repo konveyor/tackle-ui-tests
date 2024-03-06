@@ -98,21 +98,15 @@ describe(["@tier2"], "Proxy operations", () => {
         httpProxy.configureProxy();
     });
 
-    it("Disable HTTP proxy with valid configuration", function () {
-        httpProxy.disable();
-    });
-
     it("Enable HTTPS proxy with valid configuration", () => {
         httpsProxy.excludeList = ["127.0.0.1", "github.com"];
         httpsProxy.credentials = httpsProxyCredentials;
         httpsProxy.configureProxy();
     });
 
-    it("Disable HTTPS proxy with valid configuration", () => {
-        httpsProxy.disable();
-    });
-
     after("Perform test data clean up", function () {
+        httpProxy.disable();
+        httpsProxy.disable();
         httpsProxyCredentials.delete();
         httpProxyCredentials.delete();
     });

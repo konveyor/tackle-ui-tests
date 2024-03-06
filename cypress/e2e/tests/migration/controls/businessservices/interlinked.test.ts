@@ -30,7 +30,7 @@ import { tdTag, businessServices, migration, SEC } from "../../../../types/const
 import * as data from "../../../../../utils/data_utils";
 import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
-describe(["@tier1"], "Business service linked to stakeholder", () => {
+describe(["@tier1"], "r", () => {
     beforeEach("Login", function () {
         login();
 

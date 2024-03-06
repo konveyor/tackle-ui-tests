@@ -98,13 +98,7 @@ export class Issues {
             inputText(searchInput, filterValue);
             click(searchButton);
         } else {
-            if (filterType == issueFilter.bs) {
-                selector = bsFilterName;
-            } else if (filterType == issueFilter.tags) {
-                selector = tagFilterName;
-            } else if (filterType == issueFilter.archetype) {
-                selector = archetypeFilterName;
-            }
+            selector = archetypeFilterName;
             click(selector);
             clickByText(span, filterValue);
             click(selector);
