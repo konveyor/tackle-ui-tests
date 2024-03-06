@@ -18,22 +18,13 @@ limitations under the License.
 import {
     login,
     deleteByList,
-    clickItemInKebabMenu,
     clickByText,
     createMultipleStakeholders,
-    click,
     clickJs,
-    clickKebabMenuOptionArchetype,
 } from "../../../../utils/utils";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import {
-    confirmButton,
-    nextButton,
-    radioButton,
-    radioButtonLabel,
-    splitItem,
-} from "../../../views/common.view";
+import { nextButton, radioButton, radioButtonLabel, splitItem } from "../../../views/common.view";
 import {
     legacyPathfinder,
     SEC,
@@ -90,6 +81,8 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
                 Assessment.clickRadioOption($question, 1);
                 cy.wait(2000);
             });
+        clickByText(button, "Cancel");
+        Archetype.open(true);
         archetype.discard("Discard assessment(s)");
     });
 
@@ -138,6 +131,8 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
                         cy.get(radioButton).invoke("is", ":checked");
                     });
             });
+        clickByText(button, "Save as draft");
+        Archetype.open(true);
         archetype.discard("Discard assessment(s)");
     });
 
