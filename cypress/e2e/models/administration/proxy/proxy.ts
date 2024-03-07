@@ -114,6 +114,7 @@ export class Proxy {
             if ($checkbox.prop("checked")) {
                 click(selector);
                 submitForm();
+                cy.wait(2 * SEC);
             }
         });
     }

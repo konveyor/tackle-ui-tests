@@ -38,7 +38,6 @@ describe(["@tier2"], "Proxy operations", () => {
     );
 
     before("Login", function () {
-        // Perform login
         login();
         httpProxyCredentials.create();
         httpsProxyCredentials.create();
