@@ -32,7 +32,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     let tags: Tag[];
     let tagNames: string[];
     const allIssuesSortByList = ["Issue", "Category", "Effort", "Affected applications"];
-    const affectedApplicationSortByList = ["Name", "Business serice", "Effort", "Incidents"];
+    const affectedApplicationSortByList = ["Name", "Business service", "Effort", "Incidents"];
     const singleApplicationSortByList = ["Issue", "Category", "Effort", "Affected files"];
 
     before("Login", function () {
@@ -55,30 +55,29 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
                 for (let i = 0; i < 6; i++) {
-                    applicationsList.push(
-                        new Analysis(
-                            getRandomApplicationData("IssuesFilteringApp1_" + i, {
-                                sourceData: appData["bookserver-app"],
-                            }),
-                            getRandomAnalysisData(analysisData["analysis_for_openSourceLibraries"])
-                        )
+                    const bookServerApp = new Analysis(
+                        getRandomApplicationData("IssuesFilteringApp1_" + i, {
+                            sourceData: appData["bookserver-app"],
+                        }),
+                        getRandomAnalysisData(analysisData["analysis_for_openSourceLibraries"])
                     );
+                    bookServerApp.business = businessServiceList[0].name;
+                    applicationsList.push(bookServerApp);
                 }
             });
         });
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
                 for (let i = 0; i < 6; i++) {
-                    applicationsList.push(
-                        new Analysis(
-                            getRandomApplicationData("IssuesFilteringApp2_" + i, {
-                                sourceData: appData["daytrader-app"],
-                            }),
-                            getRandomAnalysisData(
-                                analysisData["source+dep_analysis_on_daytrader-app"]
-                            )
-                        )
+                    const dayTraderApp = new Analysis(
+                        getRandomApplicationData("IssuesFilteringApp2_" + i, {
+                            sourceData: appData["daytrader-app"],
+                        }),
+                        getRandomAnalysisData(analysisData["source+dep_analysis_on_daytrader-app"])
                     );
+                    dayTraderApp.tags = tagNames;
+                    dayTraderApp.business = businessServiceList[1].name;
+                    applicationsList.push(dayTraderApp);
                 }
 
                 applicationsList.forEach((application) => application.create());
