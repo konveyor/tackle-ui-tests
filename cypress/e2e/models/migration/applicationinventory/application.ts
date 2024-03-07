@@ -361,7 +361,7 @@ export class Application {
             clickTab(tab);
         });
         // Make sure application 'Tags' tab page is loaded before proceeding with anything
-        if ((tab = "Tags")) cy.get("div[class='pf-v5-c-toolbar__item']", { timeout: 60 * SEC });
+        if (tab == "Tags") cy.get("div[class='pf-v5-c-toolbar__item']", { timeout: 60 * SEC });
     }
 
     closeApplicationDetails(): void {
