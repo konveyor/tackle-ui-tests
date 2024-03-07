@@ -24,6 +24,7 @@ import {
     exists,
     deleteApplicationTableRows,
     deleteAppImportsTableRows,
+    deleteAllMigrationWaves,
 } from "../../../../../utils/utils";
 import { button, clearAllFilters } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
@@ -38,6 +39,15 @@ const filesToImport = [
     "non_existing_tags_business_service_rows.csv",
 ];
 const invalidSearchInput = String(data.getRandomNumber());
+let applications: Array<Application> = [];
+const appNames = [
+    "Import-app-1",
+    "Import-app-2",
+    "Import-app-5",
+    "Import-app-6",
+    "Import-app-3",
+    "Import-app-4",
+];
 
 describe(["@tier2"], "1 Bug: Manage applications import filter validations", function () {
     before("Login and create test data", function () {
@@ -49,6 +59,14 @@ describe(["@tier2"], "1 Bug: Manage applications import filter validations", fun
             importApplication(filePath + csvFile);
             cy.wait(2000);
         });
+
+        for (let i = 0; i < appNames.length; i++) {
+            const appdata = {
+                name: appNames[i],
+            };
+            const application = new Application(appdata);
+            applications.push(application);
+        }
     });
 
     beforeEach("Interceptors", function () {
@@ -83,6 +101,7 @@ describe(["@tier2"], "1 Bug: Manage applications import filter validations", fun
     });
 
     after("Perform test data clean up", function () {
+        deleteAllMigrationWaves();
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
     });
