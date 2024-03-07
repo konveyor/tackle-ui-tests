@@ -1803,3 +1803,38 @@ export function validateSortBy(sortBy: string, tdSelector?: string) {
 export function waitUntilSpinnerIsGone(timeout = 300): void {
     cy.get('[class*="spinner"]', { timeout: timeout * SEC }).should("not.exist");
 }
+
+export function getCommandOutput(command: string): Cypress.Chainable<Cypress.Exec> {
+    return cy.exec(command, { timeout: 30 * SEC }).then((result) => {
+        return result;
+    });
+}
+
+export function validateTackleCr(): void {
+    let namespace = getNamespace();
+    let tackleCr;
+    let command = `tackleCR=$(oc get tackle -n${namespace}|grep -vi name|cut -d ' ' -f 1);`;
+    command += `oc get tackle $tackleCr -n${namespace} -o json`;
+    getCommandOutput(command).then((result) => {
+        try {
+            tackleCr = JSON.parse(result.stdout);
+        } catch (error) {
+            throw new Error("Failed to parse Tackle CR");
+        }
+        const condition = tackleCr["items"][0]["status"]["conditions"][1];
+        const failures = condition["ansibleResult"]["failures"];
+        const type = condition["type"];
+        cy.log(`Failures: ${failures}`);
+        cy.log(`Condition type: ${type}`);
+        expect(failures).be.equal(0);
+        expect(type).be.equal("Running");
+    });
+}
+
+export function validateTackleOperatorLog(): void {
+    let command = `oc logs $(oc get pods | grep mta-operator | cut -d " " -f 1) | grep failed | tail -n 1| awk -F 'failed=' '{print $2}'|cut -d " " -f 1`;
+    getCommandOutput(command).then((result) => {
+        const failedCount = parseInt(result.stdout.trim());
+        expect(failedCount).equal(0);
+    });
+}
