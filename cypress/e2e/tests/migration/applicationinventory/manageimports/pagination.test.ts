@@ -26,11 +26,11 @@ import {
     validatePagination,
     itemsPerPageValidation,
     deleteAllImports,
+    deleteAllMigrationWaves,
 } from "../../../../../utils/utils";
 
 import * as commonView from "../../../../views/common.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
-import { trTag } from "../../../../types/constants";
 
 const filePath = "app_import/csv/";
 const filesToImport = "valid_application_rows.csv";
@@ -93,6 +93,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
+        deleteAllMigrationWaves();
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
     });

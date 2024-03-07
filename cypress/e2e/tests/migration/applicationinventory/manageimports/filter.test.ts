@@ -24,6 +24,7 @@ import {
     exists,
     deleteApplicationTableRows,
     deleteAppImportsTableRows,
+    deleteAllMigrationWaves,
 } from "../../../../../utils/utils";
 import { button, clearAllFilters } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
@@ -39,7 +40,7 @@ const filesToImport = [
 ];
 const invalidSearchInput = String(data.getRandomNumber());
 
-describe(["@tier2"], "1 Bug: Manage applications import filter validations", function () {
+describe(["@tier2"], "Manage applications import filter validations", function () {
     before("Login and create test data", function () {
         login();
         Application.open();
@@ -83,6 +84,7 @@ describe(["@tier2"], "1 Bug: Manage applications import filter validations", fun
     });
 
     after("Perform test data clean up", function () {
+        deleteAllMigrationWaves();
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
     });
