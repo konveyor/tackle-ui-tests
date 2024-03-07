@@ -49,13 +49,7 @@ export class Dependencies {
             inputText(searchInput, filterValue);
             click(searchButton);
         } else {
-            if (filterType == dependencyFilter.bs) {
-                selector = bsFilterName;
-            } else if (filterType == dependencyFilter.tags) {
-                selector = tagFilterName;
-            } else if (filterType == dependencyFilter.archetype) {
-                selector = archetypeFilterName;
-            }
+            selector = archetypeFilterName;
             click(selector);
             clickByText(span, filterValue);
             click(selector);
