@@ -15,32 +15,42 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { checkSuccessAlert, createMultipleTags, exists, getRandomApplicationData, login, logout, notExists } from "../../../utils/utils";
+import {
+    createMultipleStakeholders,
+    createMultipleTags,
+    createMultipleApplications,
+    getRandomApplicationData,
+    login,
+    logout,
+    notExists,
+} from "../../../utils/utils";
 import * as data from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { User } from "../../models/keycloak/users/user";
 import { SEC } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Archetype } from "../../models/migration/archetypes/archetype";
+import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Tag } from "../../models/migration/controls/tags";
-import { successAlertMessage } from "../../views/common.view";
 
 let tags: Tag[];
+let stakeholders: Stakeholders[];
+let application: Application[];
 
 describe(["@tier2"], "Assess review with RBAC operations", function () {
     // Polarion TC 312
     const architect = new UserArchitect(data.getRandomUserData());
-    const application = new Application(getRandomApplicationData());
 
     before("Create test data", function () {
         User.loginKeycloakAdmin();
         architect.create();
 
-        login();
-        application.create();
+        architect.login();
         cy.wait(2 * SEC);
         tags = createMultipleTags(2);
-        logout();
+        stakeholders = createMultipleStakeholders(1);
+        application = createMultipleApplications(1, [tags[0].name]);
+        architect.logout();
     });
 
     beforeEach("Load fixtures", function () {
@@ -49,44 +59,45 @@ describe(["@tier2"], "Assess review with RBAC operations", function () {
         });
     });
 
-    it("Architect, Application assessment and review", function () {
+    it("As Architect, perform application assessment and review", function () {
         architect.login();
-
-        application.perform_review("medium");
+        application[0].perform_assessment("medium", stakeholders);
+        application[0].perform_review("medium");
         cy.wait(2000);
-        application.verifyStatus("review", "Completed");
-
-        architect.logout();
+        application[0].verifyStatus("review", "Completed");
     });
 
-    it("As Architect, create archetype", function () {
+    it("As Architect, perform archetype assessment and review", function () {
         architect.login();
         const archetype = new Archetype(
             data.getRandomWord(8),
             [tags[0].name],
             [tags[1].name],
             null,
+            stakeholders
         );
-        archetype.create();
-        checkSuccessAlert(
-            successAlertMessage,
-            `Success alert:Archetype ${archetype.name} was successfully created.`,
-            true
-        );
-        exists(archetype.name);
 
+        archetype.perform_assessment("low", stakeholders);
+        cy.wait(2 * SEC);
+        archetype.validateAssessmentField("Low");
+        archetype.perform_review("low");
+        cy.wait(2 * SEC);
+        archetype.validateReviewFields();
+
+        application[0].verifyArchetypeList([archetype.name], "Associated archetypes");
+        application[0].verifyArchetypeList([archetype.name], "Archetypes reviewed");
+        application[0].validateInheritedReviewFields([archetype.name]);
+        application[0].verifyStatus("review", "Completed");
+        application[0].verifyArchetypeList([archetype.name], "Archetypes assessed");
+        application[0].validateAssessmentField("Low");
+        application[0].verifyStatus("assessment", "Completed");
         archetype.delete();
-        checkSuccessAlert(
-            successAlertMessage,
-            `Success alert:Archetype ${archetype.name} was successfully deleted.`,
-            true
-        );
-        notExists(archetype.name);
+        cy.wait(2 * SEC);
     });
 
     after("Clear test data", () => {
         login();
-        application.delete();
+        application[0].delete();
         User.loginKeycloakAdmin();
         architect.delete();
     });
