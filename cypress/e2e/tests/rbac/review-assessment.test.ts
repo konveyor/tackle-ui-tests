@@ -27,11 +27,12 @@ import {
 import * as data from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { User } from "../../models/keycloak/users/user";
-import { SEC } from "../../types/constants";
+import { legacyPathfinder, SEC } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Archetype } from "../../models/migration/archetypes/archetype";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Tag } from "../../models/migration/controls/tags";
+import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 
 let tags: Tag[];
 let stakeholders: Stakeholders[];
@@ -43,8 +44,10 @@ describe(["@tier2"], "Assess review with RBAC operations", function () {
 
     before("Create test data", function () {
         User.loginKeycloakAdmin();
-        architect.create();
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
+        AssessmentQuestionnaire.enable(legacyPathfinder);
 
+        architect.create();
         architect.login();
         cy.wait(2 * SEC);
         tags = createMultipleTags(2);
@@ -62,13 +65,19 @@ describe(["@tier2"], "Assess review with RBAC operations", function () {
     it("As Architect, perform application assessment and review", function () {
         architect.login();
         application[0].perform_assessment("medium", stakeholders);
+        cy.wait(2 * SEC);
+        application[0].verifyStatus("assessment", "Completed");
+        application[0].validateAssessmentField("Low");
+
         application[0].perform_review("medium");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         application[0].verifyStatus("review", "Completed");
+        application[0].validateReviewFields();
     });
 
-    it("As Architect, perform archetype assessment and review", function () {
+    it("1. As Architect, perform archetype assessment and review 2. Verify inheritance", function () {
         architect.login();
+        // Automates P0larion MTA-522
         const archetype = new Archetype(
             data.getRandomWord(8),
             [tags[0].name],
@@ -76,6 +85,8 @@ describe(["@tier2"], "Assess review with RBAC operations", function () {
             null,
             stakeholders
         );
+        archetype.create();
+        cy.wait(2 * SEC);
 
         archetype.perform_assessment("low", stakeholders);
         cy.wait(2 * SEC);
