@@ -59,8 +59,9 @@ describe(["@tier2"], "Running analysis with incorrect proxy configuration", () =
     });
 
     after("Perform test data clean up", function () {
-        httpProxy.disable();
-        httpsProxy.disable();
+        Proxy.open();
+        httpProxy.unConfigureProxy();
+        httpsProxy.unConfigureProxy();
         application.delete();
     });
 });
