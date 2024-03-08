@@ -15,26 +15,42 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { getRandomApplicationData, login, logout } from "../../../utils/utils";
+import {
+    createMultipleStakeholders,
+    createMultipleTags,
+    createMultipleApplications,
+    login,
+} from "../../../utils/utils";
 import * as data from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { User } from "../../models/keycloak/users/user";
-import { SEC } from "../../types/constants";
+import { legacyPathfinder, SEC } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
+import { Archetype } from "../../models/migration/archetypes/archetype";
+import { Stakeholders } from "../../models/migration/controls/stakeholders";
+import { Tag } from "../../models/migration/controls/tags";
+import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 
-describe(["@tier2"], "Assess review with RBAC operations", function () {
-    // Polarion TC 312
+let tags: Tag[];
+let stakeholders: Stakeholders[];
+let application: Application[];
+
+describe(["@tier2"], "Perform assessment and review as Architect", function () {
     const architect = new UserArchitect(data.getRandomUserData());
-    const application = new Application(getRandomApplicationData());
 
     before("Create test data", function () {
         User.loginKeycloakAdmin();
         architect.create();
-
         login();
-        application.create();
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
+        AssessmentQuestionnaire.enable(legacyPathfinder);
+
+        architect.login();
         cy.wait(2 * SEC);
-        logout();
+        tags = createMultipleTags(2);
+        stakeholders = createMultipleStakeholders(1);
+        application = createMultipleApplications(1, [tags[0].name]);
+        architect.logout();
     });
 
     beforeEach("Load fixtures", function () {
@@ -43,19 +59,46 @@ describe(["@tier2"], "Assess review with RBAC operations", function () {
         });
     });
 
-    it("Architect, Application assessment and review", function () {
+    it("As Architect, perform application assessment and review", function () {
+        // Polarion TC 312
         architect.login();
+        application[0].perform_assessment("medium", stakeholders);
+        cy.wait(2 * SEC);
+        application[0].verifyStatus("assessment", "Completed");
+        application[0].validateAssessmentField("Medium");
 
-        application.perform_review("medium");
-        cy.wait(2000);
-        application.verifyStatus("review", "Completed");
+        application[0].perform_review("medium");
+        cy.wait(2 * SEC);
+        application[0].verifyStatus("review", "Completed");
+        application[0].validateReviewFields();
+    });
 
-        architect.logout();
+    it("As Architect, create archetype, perform archetype assessment and review", function () {
+        architect.login();
+        // Automates P0larion MTA-522
+        const archetype = new Archetype(
+            data.getRandomWord(8),
+            [tags[0].name],
+            [tags[1].name],
+            null,
+            stakeholders
+        );
+        archetype.create();
+        cy.wait(2 * SEC);
+
+        archetype.perform_assessment("low", stakeholders);
+        cy.wait(2 * SEC);
+        archetype.validateAssessmentField("Low");
+        archetype.perform_review("low");
+        cy.wait(2 * SEC);
+        archetype.validateReviewFields();
+        archetype.delete();
+        cy.wait(2 * SEC);
     });
 
     after("Clear test data", () => {
         login();
-        application.delete();
+        application[0].delete();
         User.loginKeycloakAdmin();
         architect.delete();
     });
