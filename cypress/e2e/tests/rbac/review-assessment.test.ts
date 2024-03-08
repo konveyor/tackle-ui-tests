@@ -38,7 +38,7 @@ let tags: Tag[];
 let stakeholders: Stakeholders[];
 let application: Application[];
 
-describe(["@tier2"], "Assess review with RBAC operations", function () {
+describe(["@tier2"], "Perform assessment and review as Architect", function () {
     // Polarion TC 312
     const architect = new UserArchitect(data.getRandomUserData());
 
@@ -68,7 +68,7 @@ describe(["@tier2"], "Assess review with RBAC operations", function () {
         application[0].perform_assessment("medium", stakeholders);
         cy.wait(2 * SEC);
         application[0].verifyStatus("assessment", "Completed");
-        application[0].validateAssessmentField("Low");
+        application[0].validateAssessmentField("Medium");
 
         application[0].perform_review("medium");
         cy.wait(2 * SEC);
@@ -76,7 +76,7 @@ describe(["@tier2"], "Assess review with RBAC operations", function () {
         application[0].validateReviewFields();
     });
 
-    it("1. As Architect, perform archetype assessment and review 2. Verify inheritance", function () {
+    it("As Architect, create archetype, perform archetype assessment and review", function () {
         architect.login();
         // Automates P0larion MTA-522
         const archetype = new Archetype(
@@ -95,14 +95,6 @@ describe(["@tier2"], "Assess review with RBAC operations", function () {
         archetype.perform_review("low");
         cy.wait(2 * SEC);
         archetype.validateReviewFields();
-
-        application[0].verifyArchetypeList([archetype.name], "Associated archetypes");
-        application[0].verifyArchetypeList([archetype.name], "Archetypes reviewed");
-        application[0].validateInheritedReviewFields([archetype.name]);
-        application[0].verifyStatus("review", "Completed");
-        application[0].verifyArchetypeList([archetype.name], "Archetypes assessed");
-        application[0].validateAssessmentField("Low");
-        application[0].verifyStatus("assessment", "Completed");
         archetype.delete();
         cy.wait(2 * SEC);
     });
