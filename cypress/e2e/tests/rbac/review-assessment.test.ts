@@ -19,10 +19,7 @@ import {
     createMultipleStakeholders,
     createMultipleTags,
     createMultipleApplications,
-    getRandomApplicationData,
     login,
-    logout,
-    notExists,
 } from "../../../utils/utils";
 import * as data from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
@@ -39,7 +36,6 @@ let stakeholders: Stakeholders[];
 let application: Application[];
 
 describe(["@tier2"], "Perform assessment and review as Architect", function () {
-    // Polarion TC 312
     const architect = new UserArchitect(data.getRandomUserData());
 
     before("Create test data", function () {
@@ -64,6 +60,7 @@ describe(["@tier2"], "Perform assessment and review as Architect", function () {
     });
 
     it("As Architect, perform application assessment and review", function () {
+        // Polarion TC 312
         architect.login();
         application[0].perform_assessment("medium", stakeholders);
         cy.wait(2 * SEC);
