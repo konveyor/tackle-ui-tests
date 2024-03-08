@@ -127,7 +127,7 @@ export class CustomMigrationTarget {
 
     public static selectLanguage(language: Languages) {
         CustomMigrationTarget.open();
-        cy.get(actionSelectToggle, { timeout: 2 * SEC }).click()
+        cy.get(actionSelectToggle, { timeout: 2 * SEC }).click();
         clickByText("button", language);
     }
 
