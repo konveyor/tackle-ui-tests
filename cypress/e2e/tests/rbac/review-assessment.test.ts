@@ -44,10 +44,11 @@ describe(["@tier2"], "Assess review with RBAC operations", function () {
 
     before("Create test data", function () {
         User.loginKeycloakAdmin();
+        architect.create();
+        login();
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
 
-        architect.create();
         architect.login();
         cy.wait(2 * SEC);
         tags = createMultipleTags(2);
