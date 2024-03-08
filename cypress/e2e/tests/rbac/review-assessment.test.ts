@@ -15,12 +15,17 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { getRandomApplicationData, login, logout } from "../../../utils/utils";
+import { checkSuccessAlert, createMultipleTags, exists, getRandomApplicationData, login, logout, notExists } from "../../../utils/utils";
 import * as data from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { User } from "../../models/keycloak/users/user";
 import { SEC } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
+import { Archetype } from "../../models/migration/archetypes/archetype";
+import { Tag } from "../../models/migration/controls/tags";
+import { successAlertMessage } from "../../views/common.view";
+
+let tags: Tag[];
 
 describe(["@tier2"], "Assess review with RBAC operations", function () {
     // Polarion TC 312
@@ -34,6 +39,7 @@ describe(["@tier2"], "Assess review with RBAC operations", function () {
         login();
         application.create();
         cy.wait(2 * SEC);
+        tags = createMultipleTags(2);
         logout();
     });
 
@@ -51,6 +57,31 @@ describe(["@tier2"], "Assess review with RBAC operations", function () {
         application.verifyStatus("review", "Completed");
 
         architect.logout();
+    });
+
+    it("As Architect, create archetype", function () {
+        architect.login();
+        const archetype = new Archetype(
+            data.getRandomWord(8),
+            [tags[0].name],
+            [tags[1].name],
+            null,
+        );
+        archetype.create();
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success alert:Archetype ${archetype.name} was successfully created.`,
+            true
+        );
+        exists(archetype.name);
+
+        archetype.delete();
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success alert:Archetype ${archetype.name} was successfully deleted.`,
+            true
+        );
+        notExists(archetype.name);
     });
 
     after("Clear test data", () => {
