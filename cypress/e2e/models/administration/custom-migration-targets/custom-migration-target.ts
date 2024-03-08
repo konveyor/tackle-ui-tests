@@ -15,6 +15,7 @@ import {
     RepositoryType,
     CustomRuleType,
     Languages,
+    SEC,
 } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
@@ -43,7 +44,7 @@ export class CustomMigrationTarget {
         this.language = language;
     }
 
-    public static fullUrl = Cypress.env("tackleUrl") + "/migration-targets";
+    public static fullUrl = Cypress.env("tackleUrl") + "migration-targets";
 
     public static open(forceReload = false) {
         if (forceReload) {
@@ -126,7 +127,7 @@ export class CustomMigrationTarget {
 
     public static selectLanguage(language: Languages) {
         CustomMigrationTarget.open();
-        click(actionSelectToggle);
+        cy.get(actionSelectToggle, { timeout: 2 * SEC }).click();
         clickByText("button", language);
     }
 
