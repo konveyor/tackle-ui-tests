@@ -22,6 +22,7 @@ import {
     deleteApplicationTableRows,
     deleteAllBusinessServices,
     deleteAppImportsTableRows,
+    deleteAllMigrationWaves,
 } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { ManageImports } from "../../../../models/migration/applicationinventory/manageImports";
@@ -32,6 +33,7 @@ const filePath = "app_import/csv/";
 describe(["@tier2"], "Application import operations", () => {
     before("Login and create test data", function () {
         login();
+        deleteAllMigrationWaves();
         deleteApplicationTableRows();
     });
 
