@@ -121,7 +121,32 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         cy.wait(2 * SEC);
     });
 
-    it("Application with multiple assessments", function () {
+    it("Perform application review during assessment", function () {
+        // Polarion TC MTA-422
+        const application = new Application(getRandomApplicationData());
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
+
+        application.perform_assessment("high", stakeholders, null, legacyPathfinder, true);
+        cy.wait(2 * SEC);
+
+        application.perform_review("high");
+        cy.wait(2 * SEC);
+
+        application.verifyStatus("assessment", "Completed");
+        application.verifyStatus("review", "Completed");
+        application.validateReviewFields();
+
+        // Automates bug: https://issues.redhat.com/browse/MTA-1751
+        application.clickReviewButton();
+        cy.get(modalBoxDialog).find(modalBoxMessage).should("contain.text", reviewConfirmationText);
+        clickByText(confirmCancelButton, "Cancel");
+
+        application.delete();
+    });
+
+    it("Bug MTA-2409: Application with multiple assessments", function () {
         // Polarion TC MTA-382
         AssessmentQuestionnaire.import(yamlFile);
         AssessmentQuestionnaire.enable(cloudNative);
@@ -148,31 +173,6 @@ describe(["@tier1"], "Application assessment and review tests", () => {
 
         AssessmentQuestionnaire.delete(cloudNative);
         cy.wait(2 * SEC);
-    });
-
-    it("Perform application review during assessment", function () {
-        // Polarion TC MTA-422
-        const application = new Application(getRandomApplicationData());
-        application.create();
-        cy.wait("@getApplication");
-        cy.wait(2 * SEC);
-
-        application.perform_assessment("high", stakeholders, null, legacyPathfinder, true);
-        cy.wait(2 * SEC);
-
-        application.perform_review("high");
-        cy.wait(2 * SEC);
-
-        application.verifyStatus("assessment", "Completed");
-        application.verifyStatus("review", "Completed");
-        application.validateReviewFields();
-
-        // Automates bug: https://issues.redhat.com/browse/MTA-1751
-        application.clickReviewButton();
-        cy.get(modalBoxDialog).find(modalBoxMessage).should("contain.text", reviewConfirmationText);
-        clickByText(confirmCancelButton, "Cancel");
-
-        application.delete();
     });
 
     after("Perform test data clean up", function () {
