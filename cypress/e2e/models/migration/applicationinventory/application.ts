@@ -516,7 +516,7 @@ export class Application {
                         cy.get('td[data-label="File"]').should("have.descendants", button);
                         validateNumberPresence('td[data-label="Incidents"]', appIssue.incidents);
                         validateNumberPresence(
-                            'td[data-label="Effort"]',
+                            'td[data-label="Total Effort"]',
                             appIssue.effort * appIssue.incidents
                         );
                     });
