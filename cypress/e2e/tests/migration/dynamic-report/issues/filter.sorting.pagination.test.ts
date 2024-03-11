@@ -95,7 +95,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     });
 
     it("All issues - Filtering issues by name", function () {
-        Analysis.analyzeAll(applicationsList[0]);
+        Analysis.analyzeAll(applicationsList[1]);
         Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
         Issues.openList(10, true);
         Issues.applyFilter(issueFilter.appName, applicationsList[0].name);

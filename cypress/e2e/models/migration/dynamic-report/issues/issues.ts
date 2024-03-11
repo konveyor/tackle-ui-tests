@@ -22,12 +22,10 @@ import {
 } from "../../../../types/constants";
 import { navMenu } from "../../../../views/menu.view";
 import {
-    archetypeFilterName,
-    bsFilterName,
     issueColumns,
+    searchMenuToggle,
     singleAppDropList,
     singleApplicationColumns,
-    tagFilterName,
 } from "../../../../views/issue.view";
 import { AppIssue } from "../../../../types/types";
 import { div, liTag, searchButton, searchInput, span } from "../../../../views/common.view";
@@ -98,7 +96,7 @@ export class Issues {
             inputText(searchInput, filterValue);
             click(searchButton);
         } else {
-            selector = archetypeFilterName;
+            selector = searchMenuToggle;
             click(selector);
             clickByText(span, filterValue);
             click(selector);
