@@ -2,6 +2,7 @@ export const searchInput = "#search-input";
 export const bsFilterName = "#businessService\\.name-filter-value-select";
 export const tagFilterName = "#tag\\.id-filter-value-select";
 export const archetypeFilterName = "input[class='pf-v5-c-text-input-group__text-input']";
+export const searchMenuToggle = 'button[aria-label="Menu toggle"]';
 export const singleAppDropList = "#application-select";
 
 export enum singleApplicationColumns {
