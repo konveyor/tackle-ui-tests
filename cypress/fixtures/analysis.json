@@ -85,7 +85,7 @@
         "source": "Source code",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "tackle-testapp",
-        "storyPoints": 1,
+        "effort": 18,
         "techTags": [
             ["Other", "Properties"],
             ["Bean", "EJB XML"],
@@ -93,6 +93,30 @@
             ["Embedded", "Properties"],
             ["Connect", "EJB XML"],
             ["Sustain", "Properties"]
+        ],
+        "issues": [
+            {
+                "name": "File system - Java IO",
+                "category": "mandatory",
+                "source": "None",
+                "targets": ["cloud-readiness"],
+                "effort": 1,
+                "affectedFiles": 1,
+                "ruleSet": "cloud-readiness",
+                "rule": "local-storage-00001",
+                "labels": ["konveyor.io/source", "storage"]
+            },
+            {
+                "name": "Hardcoded IP Address",
+                "category": "mandatory",
+                "source": "None",
+                "effort": 1,
+                "affectedFiles": 2,
+                "targets": ["cloud-readiness"],
+                "rule": "local-storage-00001",
+                "ruleSet": "cloud-readiness",
+                "labels": ["konveyor.io/source", "storage"]
+            }
         ]
     },
 
