@@ -913,6 +913,7 @@ export function createMultipleMigrationWaves(
     stakeholdersList?: Array<Stakeholders>,
     stakeholderGroupsList?: Array<Stakeholdergroups>
 ): Array<MigrationWave> {
+    cy.intercept("GET", "/hub/migrationwaves*").as("getWave");
     const migrationWaveList: Array<MigrationWave> = [];
     for (let i = 0; i < numberOfMigrationWaves; i++) {
         const now = new Date();
@@ -929,6 +930,8 @@ export function createMultipleMigrationWaves(
         );
         migrationWave.create();
         migrationWaveList.push(migrationWave);
+        cy.wait("@getWave");
+        cy.wait("@getWave", { timeout: 10 * SEC });
     }
     return migrationWaveList;
 }
