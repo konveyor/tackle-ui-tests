@@ -37,6 +37,10 @@ describe(["@tier1"], "Custom Migration Target Validations", () => {
         login();
     });
 
+    beforeEach("Clear state", function () {
+        CustomMigrationTarget.open(true);
+    });
+
     it("Name validations", function () {
         CustomMigrationTarget.openNewForm();
         cy.get(submitButton).should("be.disabled");
