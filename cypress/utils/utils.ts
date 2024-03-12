@@ -930,7 +930,6 @@ export function createMultipleMigrationWaves(
         );
         migrationWave.create();
         migrationWaveList.push(migrationWave);
-        cy.wait("@getWave");
         cy.wait("@getWave", { timeout: 10 * SEC });
     }
     return migrationWaveList;
