@@ -95,7 +95,8 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     });
 
     it("All issues - Filtering issues by name", function () {
-        Analysis.analyzeAll(applicationsList[1]);
+        // Analyzing daytrader app for pagination test to generate issues more than 10.
+        Analysis.analyzeAll(applicationsList[6]);
         Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
         Issues.openList(10, true);
         Issues.applyFilter(issueFilter.appName, applicationsList[0].name);
@@ -192,7 +193,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
     allIssuesSortByList.forEach((column) => {
         it(`${
-            column == "Issue" ? "BUG MTA-2067 - " : ""
+            column == "Issue" ? "BUG MTA-2432 - " : ""
         }All issues - Sort issues by ${column}`, function () {
             Issues.openList();
             validateSortBy(column);
