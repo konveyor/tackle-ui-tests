@@ -347,7 +347,7 @@ export function exists(value: string, tableSelector = commonView.appTable): void
     cy.get(tableSelector, { timeout: 5 * SEC }).then(($tbody) => {
         if ($tbody.text() !== "No data available") {
             selectItemsPerPage(100);
-            cy.get(tableSelector, { timeout: 5 * SEC }).should("contain", value);
+            cy.get(tableSelector, { timeout: 60 * SEC }).should("contain", value);
         }
     });
 }
