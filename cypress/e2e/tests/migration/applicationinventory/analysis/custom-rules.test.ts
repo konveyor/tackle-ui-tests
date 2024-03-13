@@ -30,7 +30,7 @@ import { deleteByList } from "../../../../../utils/utils";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
-describe(["@tier2"], "Custom Rules in analyses", function () {
+describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
     const applications: Analysis[] = [];
     let sourceCredential: CredentialsSourceControlUsername;
     let mavenCredential: CredentialsMaven;
@@ -93,6 +93,20 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
         app.verifyAnalysisStatus(AnalysisStatuses.completed);
         Issues.openSingleApplication(app.name);
         exists("CUSTOM RULE FOR DEPENDENCIES");
+    });
+
+    // Automates Bug MTA-2015
+    it("Bug MTA-2015: Custom rule with administracionEfectivo application", function () {
+        const app = new Analysis(
+            getRandomApplicationData("customRule_administracionEfectivo"),
+            getRandomAnalysisData(this.analysisData["administracionEfectivo_custom_rules"])
+        );
+        applications.push(app);
+        app.create();
+        app.analyze();
+        app.verifyAnalysisStatus(AnalysisStatuses.completed);
+        Issues.openSingleApplication(app.name);
+        exists("CUSTOM RULE");
     });
 
     afterEach("Reset state", function () {
