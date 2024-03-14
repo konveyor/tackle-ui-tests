@@ -42,7 +42,7 @@ describe(["@tier2"], "Application import operations", () => {
         deleteAppImportsTableRows();
     });
 
-    it("Valid applications import", function () {
+    it("Bug MTA-2451: Valid applications import", function () {
         Application.open();
 
         // Import valid csv
