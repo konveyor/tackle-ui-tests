@@ -224,4 +224,52 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
             application.delete();
         });
     });
+
+    Object.values(Languages).forEach((language) => {
+        it(`${language} | custom rule with source technology`, function () {
+            const targetData = this.customMigrationTargets["rules_with_source_element"];
+            const target = new CustomMigrationTarget(
+                data.getRandomWord(8),
+                data.getDescription(),
+                targetData.image,
+                getRulesData(targetData),
+                language,
+                targetData.sources
+            );
+            target.create();
+
+            const application = new Analysis(
+                getRandomApplicationData("bookserverApp", {
+                    sourceData: this.appData["bookserver-app"],
+                }),
+                getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+            );
+            application.create();
+
+            // TC MTA-404
+            Analysis.open();
+            selectItemsPerPage(100);
+            application.selectApplication();
+            cy.contains(button, analyzeButton, { timeout: 20 * SEC })
+                .should("be.enabled")
+                .click();
+
+            application.selectSourceofAnalysis(application.source);
+            cy.contains(button, "Next", { timeout: 200 }).click();
+
+            Analysis.selectLanguage(language);
+            cy.get("div.pf-v5-c-empty-state__content", { timeout: 12 * SEC })
+                .contains(target.name)
+                .click();
+            cy.contains(button, "Next", { timeout: 200 }).click();
+            cy.contains(button, "Next", { timeout: 200 }).click();
+            cy.contains(button, "Next", { timeout: 200 }).click();
+
+            target.validateSourceTechnology(targetData.sources);
+            clickByText(button, "Cancel");
+
+            target.delete();
+            application.delete();
+        });
+    });
 });
