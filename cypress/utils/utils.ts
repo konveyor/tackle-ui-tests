@@ -1814,6 +1814,25 @@ export function getCommandOutput(command: string): Cypress.Chainable<Cypress.Exe
     });
 }
 
+export function validateMtaVersionInCli(expectedMtaVersion: string): void {
+    // const expectedMtaVersion = Cypress.env("mtaVersion");
+    const namespace = getNamespace();
+    const podName = `$(oc get pods -n${namespace}| grep ui|cut -d " " -f 1)`;
+    const command = `oc describe pod ${podName} -n${namespace}| grep -i version|awk '{print $2}'`;
+    getCommandOutput(command).then((output) => {
+        if (expectedMtaVersion === output.stdout) {
+            console.log("CLI version is as expected.");
+        } else {
+            console.error(
+                `Expected CLI version: ${expectedMtaVersion}, Actual CLI version: ${output.stdout}`
+            );
+            throw new Error(
+                `Expected CLI version: ${expectedMtaVersion}, Actual CLI version: ${output.stdout}`
+            );
+        }
+    });
+}
+
 export function validateTackleCr(): void {
     let namespace = getNamespace();
     let tackleCr;
@@ -1843,7 +1862,7 @@ export function validateTackleOperatorLog(): void {
     });
 }
 
-export function validateUiVersion(expectedVersion: string): void {
+export function validateMtaVersionInUi(expectedVersion: string): void {
     click(aboutButton);
     cy.contains("dt", "Version")
         .closest("dl")
