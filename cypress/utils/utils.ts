@@ -115,6 +115,7 @@ import {
     getSpecialMigrationWavesTableSelector,
 } from "../e2e/views/migration-wave.view";
 import { manageCredentials, mavenCredential, sourceCredential } from "../e2e/views/analysis.view";
+import { string } from "@oozcitak/infra";
 
 const { _ } = Cypress;
 
@@ -1815,19 +1816,13 @@ export function getCommandOutput(command: string): Cypress.Chainable<Cypress.Exe
 }
 
 export function validateMtaVersionInCli(expectedMtaVersion: string): void {
-    // const expectedMtaVersion = Cypress.env("mtaVersion");
     const namespace = getNamespace();
     const podName = `$(oc get pods -n${namespace}| grep ui|cut -d " " -f 1)`;
     const command = `oc describe pod ${podName} -n${namespace}| grep -i version|awk '{print $2}'`;
     getCommandOutput(command).then((output) => {
-        if (expectedMtaVersion === output.stdout) {
-            console.log("CLI version is as expected.");
-        } else {
-            console.error(
-                `Expected CLI version: ${expectedMtaVersion}, Actual CLI version: ${output.stdout}`
-            );
+        if (expectedMtaVersion !== output.stdout) {
             throw new Error(
-                `Expected CLI version: ${expectedMtaVersion}, Actual CLI version: ${output.stdout}`
+                `Expected version in UI pod: ${expectedMtaVersion}, Actual version in UI pod: ${output.stdout}`
             );
         }
     });
