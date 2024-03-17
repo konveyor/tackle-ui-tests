@@ -68,6 +68,7 @@ export const span = "span";
 export const div = "div";
 export const liTag = "li";
 export const searchInput = "#search-input";
+export const aboutButton = "#about-button";
 /**
  * ul[role=listbox] > li is for the Application Inventory page.
  * span.pf-c-check__label is for the Copy assessment page.
