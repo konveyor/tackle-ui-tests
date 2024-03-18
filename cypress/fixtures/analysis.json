@@ -280,7 +280,10 @@
         "source": "Source code + dependencies",
         "target": [],
         "appName": "tackle-testapp",
-        "customRule": ["01-custom-rule-example.windup.yaml", "01-javax-package-custom-target.windup.yaml"],
+        "customRule": [
+            "01-custom-rule-example.windup.yaml",
+            "01-javax-package-custom-target.windup.yaml"
+        ],
         "openSourceLibraries": true
     },
     "affected_files_on_day_trader_app": {

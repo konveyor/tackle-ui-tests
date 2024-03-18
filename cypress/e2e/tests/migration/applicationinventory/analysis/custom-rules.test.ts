@@ -87,7 +87,7 @@ describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
             }),
             getRandomAnalysisData(this.analysisData["tackle_test_app_custom_rules"])
         );
-        tackleTestappName = app.name
+        tackleTestappName = app.name;
         applications.push(app);
         app.create();
         app.manageCredentials(sourceCredential.name, mavenCredential.name);
@@ -97,8 +97,8 @@ describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
         exists("CUSTOM RULE FOR DEPENDENCIES");
     });
 
-       // Automates Bug MTA-2000
-       it("Verify triggered rule for javax.* package import", function () {
+    // Automates Bug MTA-2000
+    it("Verify triggered rule for javax.* package import", function () {
         Issues.openSingleApplication(tackleTestappName);
         exists("CUSTOM RULE for javax.* package import");
     });
