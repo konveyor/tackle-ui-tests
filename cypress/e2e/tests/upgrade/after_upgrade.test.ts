@@ -27,6 +27,7 @@ import {
     getCommandOutput,
     getNamespace,
     validateTackleOperatorLog,
+    validateUiVersion,
 } from "../../../utils/utils";
 import { UpgradeData } from "../../types/types";
 import { Credentials } from "../../models/administration/credentials/credentials";
@@ -44,11 +45,13 @@ import { legacyPathfinder } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
 
 describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
+    const expectedMtaVersion = Cypress.env("mtaVersion");
     before("Login", function () {
         // Perform login
         login();
         validateTackleCr();
         validateTackleOperatorLog();
+        validateUiVersion(expectedMtaVersion);
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 

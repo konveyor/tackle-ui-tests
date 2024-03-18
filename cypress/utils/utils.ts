@@ -64,6 +64,7 @@ import {
     kebabMenu,
 } from "../e2e/views/applicationinventory.view";
 import {
+    aboutButton,
     closeSuccessNotification,
     confirmButton,
     divHeader,
@@ -1840,4 +1841,13 @@ export function validateTackleOperatorLog(): void {
         const failedCount = parseInt(result.stdout.trim());
         expect(failedCount).equal(0);
     });
+}
+
+export function validateUiVersion(expectedVersion: string): void {
+    click(aboutButton);
+    cy.contains("dt", "Version")
+        .closest("dl")
+        .within(() => {
+            cy.get("dd").should("contain.text", expectedVersion);
+        });
 }
