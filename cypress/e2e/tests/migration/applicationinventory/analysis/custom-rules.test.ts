@@ -32,6 +32,7 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 
 describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
     const applications: Analysis[] = [];
+    let tackleTestappName: string;
     let sourceCredential: CredentialsSourceControlUsername;
     let mavenCredential: CredentialsMaven;
 
@@ -86,6 +87,7 @@ describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
             }),
             getRandomAnalysisData(this.analysisData["tackle_test_app_custom_rules"])
         );
+        tackleTestappName = app.name
         applications.push(app);
         app.create();
         app.manageCredentials(sourceCredential.name, mavenCredential.name);
@@ -93,6 +95,12 @@ describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
         app.verifyAnalysisStatus(AnalysisStatuses.completed);
         Issues.openSingleApplication(app.name);
         exists("CUSTOM RULE FOR DEPENDENCIES");
+    });
+
+       // Automates Bug MTA-2000
+       it("Verify triggered rule for javax.* package import", function () {
+        Issues.openSingleApplication(tackleTestappName);
+        exists("CUSTOM RULE for javax.* package import");
     });
 
     // Automates Bug MTA-2015

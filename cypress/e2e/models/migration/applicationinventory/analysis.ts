@@ -91,7 +91,7 @@ export class Analysis extends Application {
     binary?: string[];
     scope?: string;
     excludePackages?: string[];
-    customRule?: string;
+    customRule?: string[];
     customRuleRepository?: RulesRepositoryFields;
     sources?: string;
     excludeRuleTags?: string;
@@ -212,13 +212,15 @@ export class Analysis extends Application {
     }
 
     protected uploadCustomRule() {
-        cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
-        const folder = this.customRule.split(".").pop();
-        uploadXml(`${folder}/${this.customRule}`);
-        cy.wait(2000);
-        cy.get("span.pf-v5-c-progress__measure", { timeout: 150000 }).should("contain", "100%");
-        cy.wait(2000);
-        cy.contains(addRules, "Add", { timeout: 2000 }).click();
+        for (let i = 0; i < this.customRule.length; i++) {
+            cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
+            const folder = this.customRule[i].split(".").pop();
+            uploadXml(`${folder}/${this.customRule[i]}`);
+            cy.wait(2000);
+            cy.get("span.pf-v5-c-progress__measure", { timeout: 150000 }).should("contain", "100%");
+            cy.wait(2000);
+            cy.contains(addRules, "Add", { timeout: 2000 }).click();
+        }
     }
 
     protected fetchCustomRules() {
