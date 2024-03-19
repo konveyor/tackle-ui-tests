@@ -20,6 +20,8 @@ import {
     getRandomApplicationData,
     login,
     preservecookies,
+    validateMtaVersionInCli,
+    validateMtaVersionInUi,
 } from "../../../utils/utils";
 import { TagCategory } from "../../models/migration/controls/tagcategory";
 import * as data from "../../../utils/data_utils";
@@ -41,10 +43,13 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     let sourceControlUsernameCredentials: CredentialsSourceControlUsername;
     const assessment = new Assessment(getRandomApplicationData());
     let stakeHolder: Stakeholders;
+    const expectedMtaVersion = Cypress.env("sourceMtaVersion");
 
     before("Login", function () {
         // Perform login
         login();
+        validateMtaVersionInCli(expectedMtaVersion);
+        validateMtaVersionInUi(expectedMtaVersion);
     });
 
     beforeEach("Persist session", function () {

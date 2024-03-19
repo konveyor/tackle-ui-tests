@@ -52,6 +52,7 @@ import {
 } from "../e2e/types/constants";
 import { actionButton, date, createEntitiesCheckbox } from "../e2e/views/applicationinventory.view";
 import {
+    aboutButton,
     closeSuccessNotification,
     confirmButton,
     divHeader,
@@ -1756,4 +1757,32 @@ export function selectAssessmentApplications(apps: string): void {
 
 export function closeModalWindow(): void {
     click(closeModal, false, true);
+}
+
+export function getCommandOutput(command: string): Cypress.Chainable<Cypress.Exec> {
+    return cy.exec(command, { timeout: 30 * SEC }).then((result) => {
+        return result;
+    });
+}
+
+export function validateMtaVersionInCli(expectedMtaVersion: string): void {
+    const namespace = getNamespace();
+    const podName = `$(oc get pods -n${namespace}| grep ui|cut -d " " -f 1)`;
+    const command = `oc describe pod ${podName} -n${namespace}| grep -i version|awk '{print $2}'`;
+    getCommandOutput(command).then((output) => {
+        if (expectedMtaVersion !== output.stdout) {
+            throw new Error(
+                `Expected version in UI pod: ${expectedMtaVersion}, Actual version in UI pod: ${output.stdout}`
+            );
+        }
+    });
+}
+
+export function validateMtaVersionInUi(expectedVersion: string): void {
+    click(aboutButton);
+    cy.contains("dt", "Version")
+        .closest("dl")
+        .within(() => {
+            cy.get("dd").should("contain.text", expectedVersion);
+        });
 }
