@@ -104,7 +104,7 @@ export type analysisData = {
     target: string[];
     binary?: string[];
     scope?: string;
-    customRule?: string;
+    customRule?: string[];
     customRuleRepository?: RulesRepositoryFields;
     sources?: string;
     excludeRuleTags?: string;
