@@ -70,12 +70,13 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         archetype.create();
         cy.wait(2 * SEC);
 
-        //Automates Polarion MTA-499 Verify multiple applications inherit assessment and review inheritance from an archetype
+        /*Automates Polarion MTA-499 Verify multiple applications inherit assessment and review inheritance from an archetype
+          and Polarion MTA-2464 Assess archetype with multiple questionnaires */
         archetype.perform_review("low");
         archetype.perform_assessment("low", stakeholders);
-        archetype.perform_assessment("Low", stakeholders);
-        archetype.perform_assessment("High", stakeholders, null, cloudReadinessQuestionnaire);
-        archetype.validateAssessmentField("High");
+        archetype.validateAssessmentField("Unknown");
+        archetype.perform_assessment("Medium", stakeholders, null, cloudReadinessQuestionnaire);
+        archetype.validateAssessmentField("Medium");
 
         for (let i = 0; i < applicationList.length; i++) {
             // Assert that associated archetypes are listed on app drawer after application gets associated with archetype(s)
@@ -84,7 +85,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
             applicationList[i].validateInheritedReviewFields([archetype.name]);
             applicationList[i].verifyStatus("review", "Completed");
             applicationList[i].verifyArchetypeList([archetype.name], "Archetypes assessed");
-            applicationList[i].validateAssessmentField("Low");
+            applicationList[i].validateAssessmentField("Medium");
             applicationList[i].verifyStatus("assessment", "Completed");
         }
 
@@ -135,7 +136,6 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         application2.verifyStatus("assessment", "Completed");
         application2.verifyArchetypeList(archetypeNames, "Archetypes assessed");
         application2.validateAssessmentField("Medium");
-
         deleteByList(archetypeList);
     });
 
