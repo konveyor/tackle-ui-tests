@@ -30,7 +30,12 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import { Tag } from "../../../../models/migration/controls/tags";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { legacyPathfinder, SEC } from "../../../../types/constants";
+import {
+    cloudReadinessQuestionnaire,
+    cloudReadinessFilePath,
+    legacyPathfinder,
+    SEC,
+} from "../../../../types/constants";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { customActionButton, ViewArchetypes } from "../../../../views/applicationinventory.view";
 import { archetypeDropdown } from "../../../../views/archetype.view";
@@ -52,6 +57,8 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
     it("Verify multiple applications inherit assessment and review inheritance from an archetype", function () {
         // Automates Polarion MTA-400 Archetype association - Application creation before archetype creation.
+        AssessmentQuestionnaire.import(cloudReadinessFilePath);
+        AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
         applicationList = createMultipleApplications(2, [inheritanceTags[0].name]);
 
         const archetype = new Archetype(
@@ -66,6 +73,9 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         //Automates Polarion MTA-499 Verify multiple applications inherit assessment and review inheritance from an archetype
         archetype.perform_review("low");
         archetype.perform_assessment("low", stakeholders);
+        archetype.perform_assessment("Low", stakeholders);
+        archetype.perform_assessment("High", stakeholders, null, cloudReadinessQuestionnaire);
+        archetype.validateAssessmentField("High");
 
         for (let i = 0; i < applicationList.length; i++) {
             // Assert that associated archetypes are listed on app drawer after application gets associated with archetype(s)
@@ -79,6 +89,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         }
 
         archetype.delete();
+        AssessmentQuestionnaire.delete(cloudReadinessQuestionnaire);
     });
 
     it("Bug MTA-2410: Verify application assessment and review inheritance from multiple archetypes ", function () {
