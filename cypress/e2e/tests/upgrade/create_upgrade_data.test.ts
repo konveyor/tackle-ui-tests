@@ -15,7 +15,13 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { getRandomAnalysisData, getRandomApplicationData, login } from "../../../utils/utils";
+import {
+    getRandomAnalysisData,
+    getRandomApplicationData,
+    login,
+    validateMtaVersionInCli,
+    validateMtaVersionInUi,
+} from "../../../utils/utils";
 import { TagCategory } from "../../models/migration/controls/tagcategory";
 import * as data from "../../../utils/data_utils";
 import { Tag } from "../../models/migration/controls/tags";
@@ -35,9 +41,12 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     let mavenCredentialsUsername: CredentialsMaven;
     let sourceControlUsernameCredentials: CredentialsSourceControlUsername;
     let stakeHolder: Stakeholders;
+    const expectedMtaVersion = Cypress.env("sourceMtaVersion");
 
     before("Login", function () {
         login();
+        validateMtaVersionInCli(expectedMtaVersion);
+        validateMtaVersionInUi(expectedMtaVersion);
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
