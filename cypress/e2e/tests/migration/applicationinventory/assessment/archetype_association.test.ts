@@ -75,8 +75,16 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         archetype.perform_review("low");
         archetype.perform_assessment("low", stakeholders);
         archetype.validateAssessmentField("Unknown");
+        archetype.clickAssessButton();
+        cy.contains("tr", legacyPathfinder).find("button.retake-button").should("have.length", 1);
+
+        Archetype.open(true);
         archetype.perform_assessment("Medium", stakeholders, null, cloudReadinessQuestionnaire);
         archetype.validateAssessmentField("Medium");
+        archetype.clickAssessButton();
+        cy.contains("tr", cloudReadinessQuestionnaire)
+            .find("button.retake-button")
+            .should("have.length", 1);
 
         for (let i = 0; i < applicationList.length; i++) {
             // Assert that associated archetypes are listed on app drawer after application gets associated with archetype(s)
