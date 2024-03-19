@@ -309,7 +309,10 @@ export class MigrationWave {
     }
 
     private static selectDateFromDatePicker(date: Date, currentMonth: string) {
-        cy.get(MigrationWaveView.yearInput).type(`{selectAll}${date.getFullYear()}`);
+        cy.get(MigrationWaveView.yearInput)
+            .type(`{selectAll}${date.getFullYear()}`)
+            .trigger("change");
+
         cy.contains("button", currentMonth).click();
         cy.contains("li", date.toLocaleString("en-us", { month: "long" })).click();
 

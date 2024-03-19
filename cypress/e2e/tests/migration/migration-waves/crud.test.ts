@@ -40,9 +40,32 @@ let stakeHolders: Stakeholders[];
 let stakeHolderGroups: Stakeholdergroups[];
 let applications: Application[];
 
-const now = new Date();
+function getRandomFutureDate(): Date {
+    const today = new Date();
+    const maxYear = 2099;
+    const futureYear =
+        today.getFullYear() + Math.floor(Math.random() * (maxYear - today.getFullYear()));
+    const futureMonth = Math.floor(Math.random() * 12);
+    const futureDay = Math.floor(Math.random() * 28) + 1;
+    return new Date(futureYear, futureMonth, futureDay);
+}
 
-const end = new Date(now.getTime());
+function addTimeToDate(date: Date, days: number, months: number, years: number): Date {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    result.setMonth(result.getMonth() + months);
+    result.setFullYear(result.getFullYear() + years);
+    return result;
+}
+
+const start = getRandomFutureDate();
+const end = addTimeToDate(
+    start,
+    Math.floor(Math.random() * 365) + 1,
+    0,
+    Math.floor(Math.random() * 2)
+);
+
 end.setFullYear(end.getFullYear() + 1);
 
 describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
