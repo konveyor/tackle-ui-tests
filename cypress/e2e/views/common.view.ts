@@ -92,3 +92,4 @@ export enum sideDrawer {
     listText = "span.pf-v5-c-description-list__text",
     labelText = "span.pf-v5-c-label__text",
 }
+export const closeAbout = "button[aria-label='Close Dialog'";

@@ -65,6 +65,7 @@ import {
 } from "../e2e/views/applicationinventory.view";
 import {
     aboutButton,
+    closeAbout,
     closeSuccessNotification,
     confirmButton,
     divHeader,
@@ -115,7 +116,6 @@ import {
     getSpecialMigrationWavesTableSelector,
 } from "../e2e/views/migration-wave.view";
 import { manageCredentials, mavenCredential, sourceCredential } from "../e2e/views/analysis.view";
-import { string } from "@oozcitak/infra";
 
 const { _ } = Cypress;
 
@@ -1864,4 +1864,5 @@ export function validateMtaVersionInUi(expectedVersion: string): void {
         .within(() => {
             cy.get("dd").should("contain.text", expectedVersion);
         });
+    click(closeAbout);
 }
