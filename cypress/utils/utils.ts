@@ -81,6 +81,7 @@ import {
     specialFilter,
     standardFilter,
     aboutButton,
+    closeAbout,
 } from "../e2e/views/common.view";
 import { tagLabels, tagMenuButton } from "../e2e/views/tags.view";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
@@ -1825,4 +1826,5 @@ export function validateMtaVersionInUi(expectedVersion: string): void {
         .within(() => {
             cy.get("dd").should("contain.text", expectedVersion);
         });
+    click(closeAbout);
 }
