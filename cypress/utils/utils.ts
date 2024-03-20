@@ -80,6 +80,8 @@ import {
     span,
     specialFilter,
     standardFilter,
+    aboutButton,
+    closeAbout,
 } from "../e2e/views/common.view";
 import { tagLabels, tagMenuButton } from "../e2e/views/tags.view";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
@@ -1796,4 +1798,33 @@ export function validateSortBy(sortBy: string, tdSelector?: string) {
     // Verify that the table rows are displayed in descending order
     const afterDescSortList = getTableColumnData(tdSelector);
     verifySortDesc(afterDescSortList, unsortedList);
+}
+
+export function getCommandOutput(command: string): Cypress.Chainable<Cypress.Exec> {
+    return cy.exec(command, { timeout: 30 * SEC }).then((result) => {
+        return result;
+    });
+}
+
+export function validateMtaVersionInCLI(expectedMtaVersion: string): void {
+    const namespace = getNamespace();
+    const podName = `$(oc get pods -n${namespace}| grep ui|cut -d " " -f 1)`;
+    const command = `oc describe pod ${podName} -n${namespace}| grep -i version|awk '{print $2}'`;
+    getCommandOutput(command).then((output) => {
+        if (expectedMtaVersion !== output.stdout) {
+            throw new Error(
+                `Expected version in UI pod: ${expectedMtaVersion}, Actual version in UI pod: ${output.stdout}`
+            );
+        }
+    });
+}
+
+export function validateMtaVersionInUI(expectedVersion: string): void {
+    click(aboutButton);
+    cy.contains("dt", "Version")
+        .closest("dl")
+        .within(() => {
+            cy.get("dd").should("contain.text", expectedVersion);
+        });
+    click(closeAbout);
 }

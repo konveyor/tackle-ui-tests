@@ -23,6 +23,8 @@ import {
     getRandomApplicationData,
     isEnabled,
     login,
+    validateMtaVersionInUI,
+    validateMtaVersionInCLI,
 } from "../../../utils/utils";
 import { UpgradeData } from "../../types/types";
 import { Credentials } from "../../models/administration/credentials/credentials";
@@ -37,9 +39,12 @@ import { clearRepository } from "../../views/repository.view";
 import { stakeHoldersTable } from "../../views/stakeholders.view";
 
 describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
+    const expectedMtaVersion = Cypress.env("mtaVersion");
     before("Login", function () {
         // Perform login
         login();
+        validateMtaVersionInCLI(expectedMtaVersion);
+        validateMtaVersionInUI(expectedMtaVersion);
     });
 
     beforeEach("Persist session", function () {
