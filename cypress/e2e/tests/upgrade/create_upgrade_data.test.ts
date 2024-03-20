@@ -194,4 +194,8 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         assessmentApplication.perform_assessment("low", [stakeHolder]);
         assessmentApplication.verifyStatus("assessment", "Completed");
     });
+
+    it("Assess archetype", function () {
+        archetype.perform_assessment("low", [stakeHolder], [stakeHolderGroup]);
+    });
 });
