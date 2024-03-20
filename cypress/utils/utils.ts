@@ -65,6 +65,7 @@ import {
 } from "../e2e/views/applicationinventory.view";
 import {
     aboutButton,
+    closeAbout,
     closeSuccessNotification,
     confirmButton,
     divHeader,
@@ -1814,6 +1815,19 @@ export function getCommandOutput(command: string): Cypress.Chainable<Cypress.Exe
     });
 }
 
+export function validateMtaVersionInCLI(expectedMtaVersion: string): void {
+    const namespace = getNamespace();
+    const podName = `$(oc get pods -n${namespace}| grep ui|cut -d " " -f 1)`;
+    const command = `oc describe pod ${podName} -n${namespace}| grep -i version|awk '{print $2}'`;
+    getCommandOutput(command).then((output) => {
+        if (expectedMtaVersion !== output.stdout) {
+            throw new Error(
+                `Expected version in UI pod: ${expectedMtaVersion}, Actual version in UI pod: ${output.stdout}`
+            );
+        }
+    });
+}
+
 export function validateTackleCr(): void {
     let namespace = getNamespace();
     let tackleCr;
@@ -1843,11 +1857,12 @@ export function validateTackleOperatorLog(): void {
     });
 }
 
-export function validateUiVersion(expectedVersion: string): void {
+export function validateMtaVersionInUI(expectedVersion: string): void {
     click(aboutButton);
     cy.contains("dt", "Version")
         .closest("dl")
         .within(() => {
             cy.get("dd").should("contain.text", expectedVersion);
         });
+    click(closeAbout);
 }

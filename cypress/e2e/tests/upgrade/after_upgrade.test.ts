@@ -27,7 +27,8 @@ import {
     getCommandOutput,
     getNamespace,
     validateTackleOperatorLog,
-    validateUiVersion,
+    validateMtaVersionInUI,
+    validateMtaVersionInCLI,
 } from "../../../utils/utils";
 import { UpgradeData } from "../../types/types";
 import { Credentials } from "../../models/administration/credentials/credentials";
@@ -49,9 +50,10 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     before("Login", function () {
         // Perform login
         login();
+        validateMtaVersionInCLI(expectedMtaVersion);
         validateTackleCr();
         validateTackleOperatorLog();
-        validateUiVersion(expectedMtaVersion);
+        validateMtaVersionInUI(expectedMtaVersion);
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
