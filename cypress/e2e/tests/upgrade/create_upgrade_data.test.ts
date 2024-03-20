@@ -19,8 +19,8 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    validateMtaVersionInCli,
-    validateMtaVersionInUi,
+    validateMtaVersionInCLI,
+    validateMtaVersionInUI,
 } from "../../../utils/utils";
 import { TagCategory } from "../../models/migration/controls/tagcategory";
 import * as data from "../../../utils/data_utils";
@@ -45,8 +45,8 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
 
     before("Login", function () {
         login();
-        validateMtaVersionInCli(expectedMtaVersion);
-        validateMtaVersionInUi(expectedMtaVersion);
+        validateMtaVersionInCLI(expectedMtaVersion);
+        validateMtaVersionInUI(expectedMtaVersion);
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
