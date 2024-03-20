@@ -18,7 +18,11 @@ import {
     SEC,
 } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
-import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
+import {
+    CustomMigrationTargetView,
+    sourcesList,
+    sourcesToggle,
+} from "../../../views/custom-migration-target.view";
 import { RulesManualFields, RulesRepositoryFields } from "../../../types/types";
 import { actionSelectToggle, submitButton } from "../../../views/common.view";
 
@@ -28,6 +32,7 @@ export interface CustomMigrationTarget {
     imagePath?: string;
     ruleTypeData: RulesRepositoryFields | RulesManualFields;
     language: Languages;
+    sources?: string[];
 }
 
 export class CustomMigrationTarget {
@@ -36,15 +41,17 @@ export class CustomMigrationTarget {
         description: string,
         imagePath: string,
         ruleTypeData: RulesRepositoryFields | RulesManualFields,
-        language = Languages.Java
+        language = Languages.Java,
+        sources?: string[]
     ) {
         this.name = name;
         this.description = description;
         this.ruleTypeData = ruleTypeData;
         this.language = language;
+        this.sources = sources;
     }
 
-    public static fullUrl = Cypress.env("tackleUrl") + "migration-targets";
+    public static fullUrl = Cypress.env("tackleUrl") + "/migration-targets";
 
     public static open(forceReload = false) {
         if (forceReload) {
@@ -183,5 +190,10 @@ export class CustomMigrationTarget {
                     }
                 });
             });
+    }
+
+    validateSourceTechnology(sources: string[]): void {
+        click(sourcesToggle);
+        cy.get(sourcesList).should("contain", sources);
     }
 }
