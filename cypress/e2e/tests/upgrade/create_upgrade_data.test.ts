@@ -114,9 +114,9 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     });
 
     it("Creating archetype", function () {
-        const { tagName } = this.upgradeData;
+        const { tagName, archetypeName } = this.upgradeData;
         archetype = new Archetype(
-            data.getRandomWord(8),
+            archetypeName,
             ["EJB XML", "Servlet"],
             [tagName],
             null,
