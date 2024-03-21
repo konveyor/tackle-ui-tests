@@ -173,6 +173,7 @@ export type UpgradeData = {
     binaryApplicationName?: string;
     uploadBinaryApplicationName?: string;
     assessmentApplicationName?: string;
+    archetypeName?: string;
 };
 
 export type RulesRepositoryFields = {

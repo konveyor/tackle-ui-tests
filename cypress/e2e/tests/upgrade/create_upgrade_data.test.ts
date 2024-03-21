@@ -19,8 +19,8 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    validateMtaVersionInCLI,
     validateMtaVersionInUI,
+    validateMtaVersionInCLI,
 } from "../../../utils/utils";
 import { TagCategory } from "../../models/migration/controls/tagcategory";
 import * as data from "../../../utils/data_utils";
@@ -36,11 +36,14 @@ import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { UpgradeData } from "../../types/types";
 import { CredentialsMaven } from "../../models/administration/credentials/credentialsMaven";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { Archetype } from "../../models/migration/archetypes/archetype";
 
 describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     let mavenCredentialsUsername: CredentialsMaven;
     let sourceControlUsernameCredentials: CredentialsSourceControlUsername;
     let stakeHolder: Stakeholders;
+    let archetype: Archetype;
+    let stakeHolderGroup: Stakeholdergroups;
     const expectedMtaVersion = Cypress.env("sourceMtaVersion");
 
     before("Login", function () {
@@ -94,7 +97,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
             tagName,
         } = this.upgradeData;
         const jobFunction = new Jobfunctions(jobFunctionName);
-        const stakeHolderGroup = new Stakeholdergroups(stakeHolderGroupName);
+        stakeHolderGroup = new Stakeholdergroups(stakeHolderGroupName);
         stakeHolder = new Stakeholders("test@gmail.com", stakeHolderName, jobFunctionName, [
             stakeHolderGroupName,
         ]);
@@ -108,6 +111,19 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         businessService.create();
         tagType.create();
         tag.create();
+    });
+
+    it("Creating archetype", function () {
+        const { tagName, archetypeName } = this.upgradeData;
+        archetype = new Archetype(
+            archetypeName,
+            ["EJB XML", "Servlet"],
+            [tagName],
+            null,
+            [stakeHolder],
+            [stakeHolderGroup]
+        );
+        archetype.create();
     });
 
     it("Creating Upload Binary Analysis", function () {
@@ -127,6 +143,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     });
 
     it("Creating source applications", function () {
+        const { tagName } = this.upgradeData;
         const sourceApplication = new Analysis(
             getRandomApplicationData("bookserverApp", {
                 sourceData: this.appData["bookserver-app"],
@@ -134,6 +151,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         sourceApplication.name = this.upgradeData.sourceApplicationName;
+        sourceApplication.tags = [tagName];
         sourceApplication.create();
         sourceApplication.perform_assessment("low", [stakeHolder]);
         sourceApplication.verifyStatus("assessment", "Completed");
@@ -175,5 +193,9 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         assessmentApplication.create();
         assessmentApplication.perform_assessment("low", [stakeHolder]);
         assessmentApplication.verifyStatus("assessment", "Completed");
+    });
+
+    it("Assess archetype", function () {
+        archetype.perform_assessment("low", [stakeHolder], [stakeHolderGroup]);
     });
 });
