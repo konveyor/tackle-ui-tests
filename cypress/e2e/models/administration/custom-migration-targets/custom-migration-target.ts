@@ -33,6 +33,7 @@ export interface CustomMigrationTarget {
     ruleTypeData: RulesRepositoryFields | RulesManualFields;
     language: Languages;
     sources?: string[];
+    targets?: string[];
 }
 
 export class CustomMigrationTarget {
@@ -42,7 +43,8 @@ export class CustomMigrationTarget {
         imagePath: string,
         ruleTypeData: RulesRepositoryFields | RulesManualFields,
         language = Languages.Java,
-        sources?: string[]
+        sources?: string[],
+        targets?: string[]
     ) {
         this.name = name;
         this.description = description;
@@ -134,7 +136,7 @@ export class CustomMigrationTarget {
 
     public static selectLanguage(language: Languages) {
         CustomMigrationTarget.open();
-        cy.get(actionSelectToggle, { timeout: 2 * SEC }).click();
+        cy.get(actionSelectToggle, { timeout: 30 * SEC }).click();
         clickByText("button", language);
     }
 
