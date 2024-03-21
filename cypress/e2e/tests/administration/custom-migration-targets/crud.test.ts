@@ -226,8 +226,8 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
     });
 
     Object.values(Languages).forEach((language) => {
-        it(`${language} | custom rule with source technology`, function () {
-            const targetData = this.customMigrationTargets["rules_with_source_element"];
+        it(`${language} | custom rule with source and target technology`, function () {
+            const targetData = this.customMigrationTargets["rules_with_source_target_element"];
             const target = new CustomMigrationTarget(
                 data.getRandomWord(8),
                 data.getDescription(),
@@ -266,6 +266,9 @@ describe(["@tier1", "@dc", "@interop"], "Custom Migration Targets CRUD operation
             cy.contains(button, "Next", { timeout: 200 }).click();
 
             target.validateSourceTechnology(targetData.sources);
+
+            // TC 405 - Validate Target technology
+            cy.get(".pf-v5-c-wizard__main-body").should("contain", targetData.targets);
             clickByText(button, "Cancel");
 
             target.delete();

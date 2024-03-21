@@ -26,9 +26,10 @@
         "rulesFiles": ["xml/hazelcast.windup.xml"]
     },
 
-    "rules_with_source_element": {
+    "rules_with_source_target_element": {
         "image": "img/cloud.png",
         "rulesFiles": ["xml/corporate-framework-config.windup.xml"],
-        "sources": ["traditional-corporate-framework"]
+        "sources": ["traditional-corporate-framework"],
+        "targets": ["cloud-corporate-framework"]
     }
 }
