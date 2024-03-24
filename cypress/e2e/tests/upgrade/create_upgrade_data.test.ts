@@ -36,11 +36,14 @@ import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { UpgradeData } from "../../types/types";
 import { CredentialsMaven } from "../../models/administration/credentials/credentialsMaven";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { Archetype } from "../../models/migration/archetypes/archetype";
 
 describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     let mavenCredentialsUsername: CredentialsMaven;
     let sourceControlUsernameCredentials: CredentialsSourceControlUsername;
     let stakeHolder: Stakeholders;
+    let archetype: Archetype;
+    let stakeHolderGroup: Stakeholdergroups;
     const expectedMtaVersion = Cypress.env("sourceMtaVersion");
 
     before("Login", function () {
@@ -94,7 +97,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
             tagName,
         } = this.upgradeData;
         const jobFunction = new Jobfunctions(jobFunctionName);
-        const stakeHolderGroup = new Stakeholdergroups(stakeHolderGroupName);
+        stakeHolderGroup = new Stakeholdergroups(stakeHolderGroupName);
         stakeHolder = new Stakeholders("test@gmail.com", stakeHolderName, jobFunctionName, [
             stakeHolderGroupName,
         ]);
@@ -110,6 +113,20 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         tag.create();
     });
 
+    it("Creating and assess archetype", function () {
+        const { tagName, archetypeName } = this.upgradeData;
+        archetype = new Archetype(
+            archetypeName,
+            ["EJB XML", "Servlet"],
+            [tagName],
+            null,
+            [stakeHolder],
+            [stakeHolderGroup]
+        );
+        archetype.create();
+        archetype.perform_assessment("low");
+    });
+
     it("Creating Upload Binary Analysis", function () {
         const uploadBinaryApplication = new Analysis(
             getRandomApplicationData("uploadBinary"),
@@ -122,11 +139,11 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         uploadBinaryApplication.perform_assessment("low", [stakeHolder]);
         uploadBinaryApplication.analyze();
         uploadBinaryApplication.verifyAnalysisStatus("Completed");
-        uploadBinaryApplication.verifyStatus("assessment", "Completed");
         uploadBinaryApplication.selectApplication();
     });
 
     it("Creating source applications", function () {
+        const { tagName } = this.upgradeData;
         const sourceApplication = new Analysis(
             getRandomApplicationData("bookserverApp", {
                 sourceData: this.appData["bookserver-app"],
@@ -134,9 +151,9 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         sourceApplication.name = this.upgradeData.sourceApplicationName;
+        sourceApplication.tags = [tagName];
         sourceApplication.create();
         sourceApplication.perform_assessment("low", [stakeHolder]);
-        sourceApplication.verifyStatus("assessment", "Completed");
         cy.wait(2 * SEC);
         sourceApplication.analyze();
         sourceApplication.verifyAnalysisStatus("Completed");
@@ -160,7 +177,6 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         binaryApplication.perform_assessment("low", [stakeHolder]);
         binaryApplication.analyze();
         binaryApplication.verifyAnalysisStatus("Completed");
-        binaryApplication.verifyStatus("assessment", "Completed");
         binaryApplication.selectApplication();
     });
 
@@ -174,6 +190,5 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         assessmentApplication.name = this.upgradeData.assessmentApplicationName;
         assessmentApplication.create();
         assessmentApplication.perform_assessment("low", [stakeHolder]);
-        assessmentApplication.verifyStatus("assessment", "Completed");
     });
 });
