@@ -113,7 +113,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         tag.create();
     });
 
-    it("Creating archetype", function () {
+    it("Creating and assess archetype", function () {
         const { tagName, archetypeName } = this.upgradeData;
         archetype = new Archetype(
             archetypeName,
@@ -124,6 +124,8 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
             [stakeHolderGroup]
         );
         archetype.create();
+        archetype.perform_assessment("Low", [stakeHolder], [stakeHolderGroup]);
+        archetype.validateAssessmentField("Low");
     });
 
     it("Creating Upload Binary Analysis", function () {
@@ -193,9 +195,5 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         assessmentApplication.create();
         assessmentApplication.perform_assessment("low", [stakeHolder]);
         assessmentApplication.verifyStatus("assessment", "Completed");
-    });
-
-    it("Assess archetype", function () {
-        archetype.perform_assessment("low", [stakeHolder], [stakeHolderGroup]);
     });
 });
