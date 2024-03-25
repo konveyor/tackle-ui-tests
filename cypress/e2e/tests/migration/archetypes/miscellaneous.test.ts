@@ -35,7 +35,6 @@ import {
 import { Archetype } from "../../../models/migration/archetypes/archetype";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import * as data from "../../../../utils/data_utils";
-import { questionBlock } from "../../../views/assessment.view";
 
 let stakeholderList: Array<Stakeholders> = [];
 let archetype: Archetype;
@@ -76,7 +75,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
     });
 
     it("Discard completed archetype assessment", function () {
-        //Automates Polarion MTA-1864
+        //Automates Polarion MTA-427
         archetype.discard("Discard assessment(s)");
         checkSuccessAlert(
             successAlertMessage,
