@@ -16,17 +16,15 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    alertTitle,
-    checkSuccessAlert,
     login,
     deleteByList,
     clickByText,
     createMultipleStakeholders,
-    clickJs,
+    checkSuccessAlert,
 } from "../../../../utils/utils";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { nextButton, radioButton, radioButtonLabel, splitItem } from "../../../views/common.view";
+import { successAlertMessage } from "../../../views/common.view";
 import {
     legacyPathfinder,
     SEC,
@@ -59,38 +57,31 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         );
         archetype.create();
         cy.wait(2 * SEC);
+        archetype.perform_assessment("high", stakeholderList, null, cloudReadinessQuestionnaire);
+        archetype.validateAssessmentField("High");
     });
 
-    it("Retake archetype assessment", function () {
-        //Automates Polarion MTA-386
-        archetype.perform_assessment("high", stakeholderList);
-        archetype.validateAssessmentField("High");
-
+    it("Retake questionnaire for Archetype", function () {
+        //Automates Polarion MTA-394
         archetype.clickAssessButton();
         cy.wait(SEC);
         clickByText(button, "Retake");
         checkSuccessAlert(
-            alertTitle,
-            `Success alert:Success! Assessment discarded for ${archetype.name}.`
+            successAlertMessage,
+            `Success! Assessment discarded for ${archetype.name}.`,
+            true
         );
-        Assessment.fill_assessment_form("low", stakeholderList);
-        archetype.validateAssessmentField("Low");
-
-        archetype.discard("Discard assessment(s)");
-        checkSuccessAlert(
-            alertTitle,
-            `Success alert:Success! Assessment discarded for ${archetype.name}.`
-        );
+        Assessment.fill_assessment_form("High", stakeholderList);
+        archetype.validateAssessmentField("High");
     });
 
-    it("Discard archetype assessment", function () {
-        //Automates Polarion MTA-386
-        archetype.perform_assessment("high", stakeholderList);
-        archetype.validateAssessmentField("High");
+    it("Discard completed archetype assessment", function () {
+        //Automates Polarion MTA-1864
         archetype.discard("Discard assessment(s)");
         checkSuccessAlert(
-            alertTitle,
-            `Success alert:Success! Assessment discarded for ${archetype.name}.`
+            successAlertMessage,
+            `Success! Assessment discarded for ${archetype.name}.`,
+            true
         );
     });
 
