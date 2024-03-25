@@ -61,6 +61,28 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         cy.wait(2 * SEC);
     });
 
+    it("Retake archetype assessment", function () {
+        //Automates Polarion MTA-386
+        archetype.perform_assessment("high", stakeholderList);
+        archetype.validateAssessmentField("High");
+
+        archetype.clickAssessButton();
+        cy.wait(SEC);
+        clickByText(button, "Retake");
+        checkSuccessAlert(
+            alertTitle,
+            `Success alert:Success! Assessment discarded for ${archetype.name}.`
+        );
+        Assessment.fill_assessment_form("low", stakeholderList);
+        archetype.validateAssessmentField("Low");
+
+        archetype.discard("Discard assessment(s)");
+        checkSuccessAlert(
+            alertTitle,
+            `Success alert:Success! Assessment discarded for ${archetype.name}.`
+        );
+    });
+
     it("Discard archetype assessment", function () {
         //Automates Polarion MTA-386
         archetype.perform_assessment("high", stakeholderList);
