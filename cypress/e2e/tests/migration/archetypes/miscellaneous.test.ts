@@ -35,6 +35,10 @@ import {
 import { Archetype } from "../../../models/migration/archetypes/archetype";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import * as data from "../../../../utils/data_utils";
+import {
+    ArchivedQuestionnaires,
+    ArchivedQuestionnairesTableDataCell,
+} from "../../../views/assessmentquestionnaire.view";
 
 let stakeholderList: Array<Stakeholders> = [];
 let archetype: Archetype;
@@ -82,6 +86,22 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
             `Success! Assessment discarded for ${archetype.name}.`,
             true
         );
+    });
+
+    it("View archived questionnaire", function () {
+        // Polarion TC MTA-392
+        AssessmentQuestionnaire.disable(cloudReadinessQuestionnaire);
+        archetype.clickAssessButton();
+        cy.contains("table", ArchivedQuestionnaires)
+            .find(ArchivedQuestionnairesTableDataCell)
+            .should("have.text", cloudReadinessQuestionnaire);
+
+        AssessmentQuestionnaire.enable(legacyPathfinder);
+        archetype.clickAssessButton();
+        cy.contains("table", ArchivedQuestionnaires)
+            .find(ArchivedQuestionnairesTableDataCell)
+            .last()
+            .should("not.have.text", legacyPathfinder);
     });
 
     after("Perform test data clean up", function () {
