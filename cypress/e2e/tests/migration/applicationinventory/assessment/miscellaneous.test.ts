@@ -85,7 +85,8 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("assessment", "Completed");
     });
 
-    it("Discard Assessment from kebabMenu, AssessPage and ArchetypePage", function () {
+    it("Discard application assessment from kebabMenu, Assessment actions Page", function () {
+        // Automates Polarion MTA-418 Discard assessment from kebab menu
         applicationList[0].selectKebabMenuItem("Discard assessment(s)");
         checkSuccessAlert(
             alertTitle,
@@ -93,6 +94,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         );
         applicationList[0].verifyStatus("assessment", "Not started");
 
+        // Automates Polarion MTA-440 Delete assessment from Assessment actions Page
         applicationList[0].perform_assessment("low", stakeholderList);
         Application.open(true);
         applicationList[0].deleteAssessments();
@@ -104,15 +106,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         );
         applicationList[0].validateAssessmentField("Unknown");
         archetypeList[0].perform_assessment("low", stakeholderList);
-        Archetype.open(true);
-        archetypeList[0].deleteAssessments();
-        archetypeList[0].verifyButtonEnabled("Take");
-        checkSuccessAlert(
-            successAlertMessage,
-            `Success! Assessment discarded for ${archetypeList[0].name}.`,
-            true
-        );
-        archetypeList[0].validateAssessmentField("Unknown");
     });
 
     it("Discard Review", function () {

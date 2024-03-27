@@ -68,17 +68,22 @@ export class Archetype {
     static fullUrl = Cypress.env("tackleUrl") + "/archetypes";
 
     public static open(forceReload = false) {
+        const itemsPerPage = 100;
         if (forceReload) {
-            cy.visit(Archetype.fullUrl);
+            cy.visit(Archetype.fullUrl, { timeout: 15 * SEC }).then((_) =>
+                selectItemsPerPage(itemsPerPage)
+            );
+            return;
         }
+
         cy.url().then(($url) => {
             if (!$url.includes(Archetype.fullUrl)) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, "Archetypes");
                 cy.get("h1", { timeout: 60 * SEC }).should("contain", "Archetypes");
-                selectItemsPerPage(100);
             }
         });
+        selectItemsPerPage(itemsPerPage);
     }
 
     protected fillName(name: string): void {

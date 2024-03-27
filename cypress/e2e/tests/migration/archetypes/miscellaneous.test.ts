@@ -35,6 +35,10 @@ import {
 import { Archetype } from "../../../models/migration/archetypes/archetype";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import * as data from "../../../../utils/data_utils";
+import {
+    ArchivedQuestionnaires,
+    ArchivedQuestionnairesTableDataCell,
+} from "../../../views/assessmentquestionnaire.view";
 
 let stakeholderList: Array<Stakeholders> = [];
 let archetype: Archetype;
@@ -74,14 +78,51 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         archetype.validateAssessmentField("High");
     });
 
-    it("Discard completed archetype assessment", function () {
-        //Automates Polarion MTA-427
+    it("View archived questionnaire for archetype", function () {
+        // Polarion TC MTA-391
+        AssessmentQuestionnaire.disable(cloudReadinessQuestionnaire);
+        archetype.clickAssessButton();
+        cy.contains("table", ArchivedQuestionnaires)
+            .find(ArchivedQuestionnairesTableDataCell)
+            .should("have.text", cloudReadinessQuestionnaire);
+
+        AssessmentQuestionnaire.enable(legacyPathfinder);
+        archetype.clickAssessButton();
+        cy.contains("table", ArchivedQuestionnaires)
+            .find(ArchivedQuestionnairesTableDataCell)
+            .last()
+            .should("not.have.text", legacyPathfinder);
+        cy.contains("table", "Required questionnaires")
+            .find('td[data-label="Required questionnaires"]')
+            .last()
+            .should("have.text", legacyPathfinder);
+
+        AssessmentQuestionnaire.disable(legacyPathfinder);
+        AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
+    });
+
+    it("Discard archetype assessment from kebab menu & Assessment Actions page", function () {
+        //Automates Polarion MTA-427 Discard assessment through kebab menu
         archetype.discard("Discard assessment(s)");
         checkSuccessAlert(
             successAlertMessage,
             `Success! Assessment discarded for ${archetype.name}.`,
             true
         );
+        archetype.validateAssessmentField("Unknown");
+
+        // Automates Polarion MTA-439 Delete assessment through Assessment Actions page
+        AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
+        archetype.perform_assessment("high", stakeholderList, null, cloudReadinessQuestionnaire);
+        Archetype.open(true);
+        archetype.deleteAssessments();
+        archetype.verifyButtonEnabled("Take");
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success! Assessment discarded for ${archetype.name}.`,
+            true
+        );
+        archetype.validateAssessmentField("Unknown");
     });
 
     after("Perform test data clean up", function () {
