@@ -20,7 +20,7 @@ import { Metrics } from "../../models/migration/custom-metrics/custom-metrics";
 const metrics = new Metrics();
 let metricsEnabled: boolean;
 
-describe(["@tier2"], "Custom Metrics - Disable metrics", function () {
+describe(["@tier3"], "Custom Metrics - Disable metrics", function () {
     it("Disable metrics in Tackle CR - Validate service is unavailable", function () {
         metricsEnabled = false;
         patchTackleCR("metrics", metricsEnabled);
