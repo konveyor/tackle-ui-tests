@@ -16,6 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    click,
     clickByText,
     getRandomAnalysisData,
     getRandomApplicationData,
@@ -26,7 +27,6 @@ import {
 } from "../../../utils/utils";
 import {
     analyzeButton,
-    application,
     button,
     SEC,
     CustomRuleType,
@@ -39,8 +39,9 @@ import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { User } from "../../models/keycloak/users/user";
+import { selectBox } from "../../views/applicationinventory.view";
 
-describe(["tier2", "@dc"], "1 Bug: Custom Migration Targets RBAC operations", function () {
+describe(["tier2", "@dc"], "Custom Migration Targets RBAC operations", function () {
     // Polarion TC 317 & 319
     let analysis: Analysis;
     let target: CustomMigrationTarget;
@@ -95,6 +96,7 @@ describe(["tier2", "@dc"], "1 Bug: Custom Migration Targets RBAC operations", fu
             .should("contain", target.name)
             .then((_) => {
                 assertTargetIsVisible(analysis, target);
+                click(selectBox);
                 analyzeAndVerify(analysis);
             });
 
@@ -104,13 +106,15 @@ describe(["tier2", "@dc"], "1 Bug: Custom Migration Targets RBAC operations", fu
     it("Look for created target on an analysis as architect user", function () {
         architect.login();
         assertTargetIsVisible(analysis, target);
+        click(selectBox);
         analyzeAndVerify(analysis);
         architect.logout();
     });
 
-    it("Bug MTA-1455: Look for created target on an analysis as migrator user", function () {
+    it("Look for created target on an analysis as migrator user", function () {
         migrator.login();
         assertTargetIsVisible(analysis, target);
+        click(selectBox);
         analyzeAndVerify(analysis);
         migrator.logout();
     });
