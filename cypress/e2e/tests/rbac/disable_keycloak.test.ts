@@ -14,7 +14,6 @@ limitations under the License.
 
 import {
     getRandomApplicationData,
-    login,
     patchTackleCR,
     createMultipleStakeholders,
     deleteByList,
@@ -29,6 +28,7 @@ import {
 } from "../../types/constants";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
+import { applicationInventory } from "../../types/constants";
 
 let application = new Application(getRandomApplicationData());
 let stakeholders: Stakeholders[];
@@ -36,8 +36,9 @@ let stakeholders: Stakeholders[];
 describe(["@tier5"], "Perform certain operations after disabling Keycloak", function () {
     // Automates Polarion MTA-293
     before("Disable Keycloak", function () {
-        login();
         patchTackleCR("keycloak", false);
+        cy.visit(Cypress.env("tackleUrl"), { timeout: 120 * SEC });
+        cy.get("h1", { timeout: 60 * SEC }).should("contain", applicationInventory);
         application.create();
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.import(cloudReadinessFilePath);
@@ -74,6 +75,7 @@ describe(["@tier5"], "Perform certain operations after disabling Keycloak", func
     });
 
     after("Clean up", function () {
+        // We are not re-enabling Keycloak because of Bug MTA-1152
         application.delete();
         deleteByList(stakeholders);
     });
