@@ -53,7 +53,7 @@ describe(["@tier3"], "Testing dependencies bugs", function () {
         });
     });
 
-    it("Testing bug MTA-2008", function () {
+    it("Check that dependencies filter by name is applied when navigating from app's right side panel", function () {
         // Validation of bug https://issues.redhat.com/browse/MTA-2008
         const application = applicationsList[0];
         Analysis.analyzeAll(application);
