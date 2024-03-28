@@ -15,7 +15,7 @@ import { Dependencies } from "../../../../models/migration/dynamic-report/depend
 describe(["@tier3"], "Testing dependencies bugs", function () {
     let applicationsList: Array<Analysis> = [];
 
-    before("Test title", function () {
+    before("Login and prerequisites", function () {
         login();
 
         cy.fixture("application").then((appData) => {
@@ -53,12 +53,12 @@ describe(["@tier3"], "Testing dependencies bugs", function () {
         });
     });
 
-    it("Testing bug MTA-2008", function () {
+    it("Validate dependencies filter is applied when drilling down from application page", function () {
         // Validation of bug https://issues.redhat.com/browse/MTA-2008
         const application = applicationsList[0];
         Analysis.analyzeAll(application);
         Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
-        application.selectApplicationRow();
+        application.applicationDetailsTab("Details");
         clickWithinByText(rightSideMenu, "a", "Dependencies");
         selectItemsPerPage(100);
         cy.contains('[id^="pf-random-id-"]', application.name);
