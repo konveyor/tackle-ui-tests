@@ -39,7 +39,7 @@ describe(["@tier5"], "Perform certain operations after disabling Keycloak", func
     before("Disable Keycloak", function () {
         patchTackleCR("keycloak", false);
         login();
-    
+
         application.create();
         stakeholders = createMultipleStakeholders(1);
 
@@ -56,9 +56,9 @@ describe(["@tier5"], "Perform certain operations after disabling Keycloak", func
         });
     });
 
-    it.skip("With Auth disabled, Perform application assessment and review", function () {
+    it("With Auth disabled, Perform application assessment and review", function () {
         application.perform_assessment("high", stakeholders, null, cloudReadinessQuestionnaire);
-        cy.wait(1000);
+        cy.wait(SEC);
         application.verifyStatus("assessment", "Completed");
 
         application.perform_review("low");
@@ -66,12 +66,12 @@ describe(["@tier5"], "Perform certain operations after disabling Keycloak", func
         application.verifyStatus("assessment", "Completed");
     });
 
-    it.skip("Validate content of top kebab menu", function () {
+    it("Validate content of top kebab menu", function () {
         // Import button should be available
         Analysis.validateTopActionMenu(this.rbacRules);
     });
 
-    it.skip("Validate content of application kebab menu", function () {
+    it("Validate content of application kebab menu", function () {
         application.validateAppContextMenu(this.rbacRules);
     });
 
