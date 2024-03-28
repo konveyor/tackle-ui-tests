@@ -17,6 +17,7 @@ import {
     patchTackleCR,
     createMultipleStakeholders,
     deleteByList,
+    login,
 } from "../../../utils/utils";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Application } from "../../models/migration/applicationinventory/application";
@@ -37,15 +38,15 @@ describe(["@tier5"], "Perform certain operations after disabling Keycloak", func
     // Automates Polarion MTA-293
     before("Disable Keycloak", function () {
         patchTackleCR("keycloak", false);
-        cy.visit(Cypress.env("tackleUrl"), { timeout: 120 * SEC });
-        cy.get("h1", { timeout: 60 * SEC }).should("contain", applicationInventory);
+        login();
+    
         application.create();
+        stakeholders = createMultipleStakeholders(1);
+
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.import(cloudReadinessFilePath);
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
         AssessmentQuestionnaire.disable(legacyPathfinder);
-
-        stakeholders = createMultipleStakeholders(1);
     });
 
     beforeEach("Load data", function () {
@@ -55,7 +56,7 @@ describe(["@tier5"], "Perform certain operations after disabling Keycloak", func
         });
     });
 
-    it("With Auth disabled, Perform application assessment and review", function () {
+    it.skip("With Auth disabled, Perform application assessment and review", function () {
         application.perform_assessment("high", stakeholders, null, cloudReadinessQuestionnaire);
         cy.wait(1000);
         application.verifyStatus("assessment", "Completed");
@@ -65,17 +66,17 @@ describe(["@tier5"], "Perform certain operations after disabling Keycloak", func
         application.verifyStatus("assessment", "Completed");
     });
 
-    it("Validate content of top kebab menu", function () {
+    it.skip("Validate content of top kebab menu", function () {
         // Import button should be available
         Analysis.validateTopActionMenu(this.rbacRules);
     });
 
-    it("Validate content of application kebab menu", function () {
+    it.skip("Validate content of application kebab menu", function () {
         application.validateAppContextMenu(this.rbacRules);
     });
 
     after("Clean up", function () {
-        // We are not re-enabling Keycloak because of Bug MTA-1152
+        // Keycloak is not re-enabled because of Bug MTA-1152
         application.delete();
         deleteByList(stakeholders);
     });

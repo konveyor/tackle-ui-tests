@@ -204,7 +204,12 @@ export function login(username?: string, password?: string, firstLogin = false):
         cy.visit(Cypress.env("tackleUrl"), { timeout: 120 * SEC });
         cy.wait(5000);
         cy.get("h1", { timeout: 120 * SEC, log: false }).then(($title) => {
-            if ($title.text().toString().trim() !== "Sign in to your account") {
+            // With auth disabled, login page is not displayed and users are taken straight
+            // to the Application Inventory page.
+            if (
+                $title.text().toString().trim() !== "Sign in to your account" &&
+                $title.text().toString().trim() === "Application inventory"
+            ) {
                 return;
             }
 
