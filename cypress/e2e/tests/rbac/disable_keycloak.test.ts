@@ -12,7 +12,6 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import * as data from "../../../utils/data_utils";
 import {
     getRandomApplicationData,
     login,
