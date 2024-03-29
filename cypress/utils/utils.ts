@@ -208,7 +208,7 @@ export function login(username?: string, password?: string, firstLogin = false):
             // to the Application Inventory page.
             if (
                 $title.text().toString().trim() !== "Sign in to your account" &&
-                $title.text().toString().trim() === "Application inventory"
+                $title.text().includes("Application inventory")
             ) {
                 return;
             }
