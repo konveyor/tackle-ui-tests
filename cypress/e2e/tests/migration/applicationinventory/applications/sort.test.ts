@@ -24,7 +24,7 @@ import {
     clickOnSortButton,
     deleteByList,
 } from "../../../../../utils/utils";
-import { name, tags, SortType, businessService } from "../../../../types/constants";
+import { name, tags, SortType, businessService, SEC } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Application } from "../../../../models/migration/applicationinventory/application";
@@ -51,22 +51,15 @@ describe(["@tier2"], "Application inventory sort validations", function () {
         }
     });
 
-    beforeEach("Interceptors", function () {
-        // Interceptors
-        cy.intercept("GET", "/hub/application*").as("getApplications");
-    });
-
     it("Name sort validations", function () {
-        // Navigate to application inventory page
         Application.open(true);
-        cy.wait("@getApplications");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(name);
 
         // Sort the application inventory by name in ascending order
         clickOnSortButton(name, SortType.ascending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the application inventory table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(name);
@@ -74,7 +67,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
 
         // Sort the application inventory by name in descending order
         clickOnSortButton(name, SortType.descending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the application inventory table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(name);
@@ -82,16 +75,14 @@ describe(["@tier2"], "Application inventory sort validations", function () {
     });
 
     it("Business service sort validations", function () {
-        // Navigate to application inventory page
         Application.open(true);
-        cy.wait("@getApplications");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(businessService);
 
         // Sort the application inventory by Tag count in ascending order
         clickOnSortButton(businessService, SortType.ascending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the application inventory table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(businessService);
@@ -107,9 +98,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
     });
 
     it("Tag count sort validations", function () {
-        // Navigate to application inventory page
         Application.open(true);
-        cy.wait("@getApplications");
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(tags);
