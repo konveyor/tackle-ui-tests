@@ -85,7 +85,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("assessment", "Completed");
     });
 
-    it("Discard application assessment from kebabMenu, Assessment actions Page", function () {
+    it("Bug MTA-2503: Discard application assessment from kebabMenu, Assessment actions Page", function () {
         // Automates Polarion MTA-418 Discard assessment from kebab menu
         applicationList[0].selectKebabMenuItem("Discard assessment(s)");
         checkSuccessAlert(
