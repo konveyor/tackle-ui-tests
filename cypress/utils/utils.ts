@@ -242,6 +242,7 @@ export function updatePassword(): void {
     // This is used in PR tester and Jenkins jobs.
     cy.get("h1", { timeout: 120 * SEC }).then(($a) => {
         if ($a.text().toString().trim() == "Update password") {
+            cy.log("Updating password for admin");
             inputText(loginView.changePasswordInput, "Dog8code");
             inputText(loginView.confirmPasswordInput, "Dog8code");
             click(loginView.submitButton);
