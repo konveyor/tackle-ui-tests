@@ -40,14 +40,14 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
 
     it("Navigation button validations", function () {
         // Navigate to Application inventory tab
-        Application.open();
+        Application.open(true);
         cy.wait("@getApplications");
         selectItemsPerPage(10);
         validatePagination();
     });
 
     it("Items per page validations", function () {
-        Application.open();
+        Application.open(true);
         cy.wait("@getApplications");
         itemsPerPageValidation();
     });
