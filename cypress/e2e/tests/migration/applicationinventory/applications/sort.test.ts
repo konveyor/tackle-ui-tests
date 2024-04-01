@@ -58,7 +58,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
 
     it("Name sort validations", function () {
         // Navigate to application inventory page
-        Application.open();
+        Application.open(true);
         cy.wait("@getApplications");
 
         // get unsorted list when page loads
@@ -83,7 +83,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
 
     it("Business service sort validations", function () {
         // Navigate to application inventory page
-        Application.open();
+        Application.open(true);
         cy.wait("@getApplications");
 
         // get unsorted list when page loads
@@ -108,7 +108,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
 
     it("Tag count sort validations", function () {
         // Navigate to application inventory page
-        Application.open();
+        Application.open(true);
         cy.wait("@getApplications");
 
         // get unsorted list when page loads
