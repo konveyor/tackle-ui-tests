@@ -52,7 +52,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
     });
 
     it("Name sort validations", function () {
-        Application.open(true);
+        Application.open();
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(name);
@@ -75,7 +75,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
     });
 
     it("Business service sort validations", function () {
-        Application.open(true);
+        Application.open();
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(businessService);
@@ -98,7 +98,7 @@ describe(["@tier2"], "Application inventory sort validations", function () {
     });
 
     it("Tag count sort validations", function () {
-        Application.open(true);
+        Application.open();
 
         // get unsorted list when page loads
         const unsortedList = getTableColumnData(tags);
