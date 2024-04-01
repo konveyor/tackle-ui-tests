@@ -85,7 +85,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("assessment", "Completed");
     });
 
-    it("Discard application assessment from kebabMenu, Assessment actions Page", function () {
+    it("BUG MTA-2503: Discard application assessment from kebabMenu, Assessment actions Page", function () {
         // Automates Polarion MTA-418 Discard assessment from kebab menu
         applicationList[0].selectKebabMenuItem("Discard assessment(s)");
         checkSuccessAlert(
@@ -283,7 +283,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         deleteByList(tags);
     });
 
-    it("Deletes assessments from archived questionnaire associated with an archetype and an application", function () {
+    it("BUG MTA-2505: Deletes assessments from archived questionnaire associated with an archetype and an application", function () {
         //automates polarion MTA-441 and MTA-442
         const applications = createMultipleApplications(1);
         const archetypes = createMultipleArchetypes(1);
