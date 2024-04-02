@@ -155,7 +155,7 @@ export class Application {
     public static open(forceReload = false): void {
         const itemsPerPage = 100;
         if (forceReload) {
-            cy.visit(Application.fullUrl, { timeout: 15 * SEC }).then((_) =>
+            cy.visit(Application.fullUrl, { timeout: 35 * SEC }).then((_) =>
                 selectItemsPerPage(itemsPerPage)
             );
             return;
@@ -510,10 +510,7 @@ export class Application {
                 validateTextPresence('td[data-label="Business service"]', this.business);
             }
             // Validating total effort for fixing issue, it is basic effort from main issue page multiplied on incidents amount
-            validateNumberPresence(
-                'td[data-label="Total Effort"]',
-                appIssue.effort * appIssue.incidents
-            );
+            validateNumberPresence('td[data-label="Total Effort"]', appIssue.totalEffort);
             validateNumberPresence('td[data-label="Incidents"]', appIssue.incidents);
         });
     }

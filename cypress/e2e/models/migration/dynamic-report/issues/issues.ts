@@ -138,7 +138,7 @@ export class Issues {
         Issues.validateSection(sections.sourceTechnologies, div, issue.source);
         Issues.validateSection(sections.ruleSet, div, issue.ruleSet);
         Issues.validateSection(sections.rule, div, issue.rule);
-        Issues.validateSection(sections.labels, span, issue.labels);
+        Issues.validateSection(sections.labels, div, issue.labels);
     }
 
     private static validateSection(
