@@ -44,7 +44,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     let stakeHolder: Stakeholders;
     let archetype: Archetype;
     let stakeHolderGroup: Stakeholdergroups;
-    const expectedMtaVersion = Cypress.env("sourceMtaVersion");
+    const expectedMtaVersion = Cypress.env("mtaVersion");
 
     before("Login", function () {
         login();
@@ -124,7 +124,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
             [stakeHolderGroup]
         );
         archetype.create();
-        archetype.perform_assessment("low");
+        archetype.perform_assessment("low", [stakeHolder], [stakeHolderGroup]);
     });
 
     it("Creating Upload Binary Analysis", function () {
