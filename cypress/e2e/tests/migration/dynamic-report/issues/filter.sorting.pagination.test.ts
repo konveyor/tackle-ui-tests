@@ -20,7 +20,7 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import { Tag } from "../../../../models/migration/controls/tags";
 import { Issues } from "../../../../models/migration/dynamic-report/issues/issues";
 import { AppIssue } from "../../../../types/types";
-import { AnalysisStatuses, issueFilter, SEC, trTag } from "../../../../types/constants";
+import { AnalysisStatuses, issueFilter, trTag } from "../../../../types/constants";
 import { randomWordGenerator } from "../../../../../utils/data_utils";
 
 describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
@@ -32,7 +32,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     let tags: Tag[];
     let tagNames: string[];
     const allIssuesSortByList = ["Issue", "Category", "Effort", "Affected applications"];
-    const affectedApplicationSortByList = ["Name", "Business service", "Effort", "Incidents"];
+    const affectedApplicationSortByList = ["Name", "Business service", "Total Effort", "Incidents"];
     const singleApplicationSortByList = ["Issue", "Category", "Effort", "Affected files"];
 
     before("Login", function () {
