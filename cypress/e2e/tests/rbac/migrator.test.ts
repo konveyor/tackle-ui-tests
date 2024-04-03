@@ -30,7 +30,7 @@ import * as data from "../../../utils/data_utils";
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
 
-describe(["@tier2", "@rhsso"], "1 Bug: Migrator RBAC operations", () => {
+describe(["@tier2", "@rhsso"], "Migrator RBAC operations", () => {
     let userMigrator = new UserMigrator(getRandomUserData());
     const application = new Application(getRandomApplicationData());
 
