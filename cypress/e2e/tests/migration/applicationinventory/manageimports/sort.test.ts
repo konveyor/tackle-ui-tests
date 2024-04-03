@@ -81,7 +81,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
     });
 
     it("User sort validations", function () {
-        Application.open();
+        Application.open(true);
         openManageImportsPage();
 
         // Get unsorted list when page loads
@@ -105,7 +105,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
     });
 
     it("File name sort validations", function () {
-        Application.open();
+        Application.open(true);
         openManageImportsPage();
 
         // Get unsorted list when page loads
@@ -129,7 +129,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
     });
 
     it("Import status sort validations", function () {
-        Application.open();
+        Application.open(true);
         openManageImportsPage();
 
         // Get unsorted list when page loads

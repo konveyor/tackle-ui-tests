@@ -41,7 +41,7 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
     });
 
     it("Items per page validations", function () {
-        Application.open();
+        Application.open(true);
         itemsPerPageValidation();
     });
 
