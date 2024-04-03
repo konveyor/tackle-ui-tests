@@ -44,7 +44,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     let stakeHolder: Stakeholders;
     let archetype: Archetype;
     let stakeHolderGroup: Stakeholdergroups;
-    const expectedMtaVersion = Cypress.env("sourceMtaVersion");
+    const expectedMtaVersion = Cypress.env("mtaVersion");
 
     before("Login", function () {
         login();
