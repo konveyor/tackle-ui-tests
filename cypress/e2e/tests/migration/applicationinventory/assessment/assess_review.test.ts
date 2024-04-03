@@ -146,7 +146,7 @@ describe(["@tier1"], "Application assessment and review tests", () => {
         application.delete();
     });
 
-    it("Bug MTA-2409: Application with multiple assessments", function () {
+    it("Application with multiple assessments", function () {
         // Polarion TC MTA-382
         AssessmentQuestionnaire.import(yamlFile);
         AssessmentQuestionnaire.enable(cloudNative);
