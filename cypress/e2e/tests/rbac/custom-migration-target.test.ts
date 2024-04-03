@@ -40,7 +40,7 @@ import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { User } from "../../models/keycloak/users/user";
 
-describe(["tier2"], "1 Bug: Custom Migration Targets RBAC operations", function () {
+describe(["tier2"], "Custom Migration Targets RBAC operations", function () {
     // Polarion TC 317 & 319
     let analysis: Analysis;
     let target: CustomMigrationTarget;
@@ -108,7 +108,7 @@ describe(["tier2"], "1 Bug: Custom Migration Targets RBAC operations", function 
         architect.logout();
     });
 
-    it("Bug MTA-1455: Look for created target on an analysis as migrator user", function () {
+    it("Look for created target on an analysis as migrator user", function () {
         migrator.login();
         assertTargetIsVisible(analysis, target);
         analyzeAndVerify(analysis);
@@ -143,6 +143,7 @@ describe(["tier2"], "1 Bug: Custom Migration Targets RBAC operations", function 
             .and("contain", "Custom");
 
         clickByText(button, "Cancel");
+        existingAnalysis.selectApplication();
     };
 
     const analyzeAndVerify = (analysis: Analysis) => {
