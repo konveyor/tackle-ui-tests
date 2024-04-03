@@ -124,7 +124,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
             [stakeHolderGroup]
         );
         archetype.create();
-        archetype.perform_assessment("low");
+        archetype.perform_assessment("low", [stakeHolder], [stakeHolderGroup]);
     });
 
     it("Creating Upload Binary Analysis", function () {
