@@ -44,6 +44,7 @@ import { stakeHoldersTable } from "../../views/stakeholders.view";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { legacyPathfinder } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
+import { Archetype } from "../../models/migration/archetypes/archetype";
 
 describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     const expectedMtaVersion = Cypress.env("mtaVersion");
@@ -102,6 +103,12 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
 
         expandRowDetails(tagTypeName);
         exists(tagName);
+    });
+
+    it("Archetype - testing existence of instance created before upgrade", function () {
+        const { archetypeName } = this.upgradeData;
+        Archetype.open();
+        exists(archetypeName);
     });
 
     it("Applications - testing existence of instances created before upgrade", function () {

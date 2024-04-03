@@ -204,7 +204,12 @@ export function login(username?: string, password?: string, firstLogin = false):
         cy.visit(Cypress.env("tackleUrl"), { timeout: 120 * SEC });
         cy.wait(5000);
         cy.get("h1", { timeout: 120 * SEC, log: false }).then(($title) => {
-            if ($title.text().toString().trim() !== "Sign in to your account") {
+            // With auth disabled, login page is not displayed and users are taken straight
+            // to the Application Inventory page.
+            if (
+                $title.text().toString().trim() !== "Sign in to your account" &&
+                $title.text().includes("Application inventory")
+            ) {
                 return;
             }
 
@@ -1652,7 +1657,7 @@ export function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O):
 }
 
 export function getUrl(): string {
-    return window.location.href;
+    return Cypress.env("tackleUrl");
 }
 
 export function getNamespace(): string {
@@ -1685,6 +1690,7 @@ export function patchTackleCR(option: string, isEnabled = true): void {
     if (option == "configureRWX") command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
     else if (option == "keycloak")
         command += `--patch '{"spec":{"feature_auth_required": ${value}}}'`;
+    else if (option == "metrics") command += `--patch '{"spec":{"hub_metrics_enabled": ${value}}}'`;
     cy.log(command);
     cy.exec(command).then((result) => {
         cy.log(result.stderr);
