@@ -104,7 +104,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         AssessmentQuestionnaire.delete(cloudReadinessQuestionnaire);
     });
 
-    it("Bug MTA-2410: Verify application assessment and review inheritance from multiple archetypes ", function () {
+    it("Verify application assessment and review inheritance from multiple archetypes ", function () {
         /* Automates MTA-420
         This also verifies: Archetype association - Application creation after archetype creation.
         */
