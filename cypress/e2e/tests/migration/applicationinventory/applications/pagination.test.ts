@@ -33,22 +33,15 @@ describe(["@tier3"], "Application inventory pagination validations", function ()
         applicationsList = createMultipleApplications(11);
     });
 
-    beforeEach("Persist session", function () {
-        // Interceptors for Applications
-        cy.intercept("GET", "/hub/application*").as("getApplications");
-    });
-
     it("Navigation button validations", function () {
         // Navigate to Application inventory tab
-        Application.open(true);
-        cy.wait("@getApplications");
+        Application.open();
         selectItemsPerPage(10);
         validatePagination();
     });
 
     it("Items per page validations", function () {
         Application.open(true);
-        cy.wait("@getApplications");
         itemsPerPageValidation();
     });
 
