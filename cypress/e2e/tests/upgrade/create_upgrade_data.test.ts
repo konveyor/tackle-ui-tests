@@ -38,7 +38,7 @@ import { CredentialsMaven } from "../../models/administration/credentials/creden
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Archetype } from "../../models/migration/archetypes/archetype";
 
-describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
+describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", { failFast: { enabled: true } }, () => {
     let mavenCredentialsUsername: CredentialsMaven;
     let sourceControlUsernameCredentials: CredentialsSourceControlUsername;
     let stakeHolder: Stakeholders;
@@ -48,8 +48,6 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
 
     before("Login", function () {
         login();
-        validateMtaVersionInUI(expectedMtaVersion);
-        validateMtaVersionInCLI(expectedMtaVersion);
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
@@ -66,6 +64,10 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
 
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
+
+        it("Validate MTA version in UI", () => validateMtaVersionInUI(expectedMtaVersion));
+
+        it("Validate MTA version in CLI", () => validateMtaVersionInCLI(expectedMtaVersion));
 
     it("Creating credentials", function () {
         const { sourceControlUsernameCredentialsName, mavenUsernameCredentialName } =
