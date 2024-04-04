@@ -224,10 +224,12 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             // Inheritance happens only after application assessment/review is discarded.
             application2.selectKebabMenuItem("Discard review");
             application2.validateInheritedReviewFields([archetypes[0].name]);
+            application2.verifyInheritanceStatus("review");
 
             application2.selectKebabMenuItem("Discard assessment");
             application2.validateAssessmentField("Low");
             application2.verifyStatus("assessment", "Completed");
+            application2.verifyInheritanceStatus("assessment");
 
             application2.delete();
             cy.wait(2 * SEC);

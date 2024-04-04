@@ -85,7 +85,8 @@ import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
 import { MigrationWave } from "../migration-waves/migration-wave";
 import { Issues } from "../dynamic-report/issues/issues";
 import { Assessment } from "./assessment";
-import { continueButton } from "../../../views/assessment.view";
+import { continueButton, assessmentColumnSelector } from "../../../views/assessment.view";
+import { reviewColumnSelector } from "../../../views/review.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
 import { Archetype } from "../archetypes/archetype";
@@ -660,6 +661,24 @@ export class Application {
     verifyStatus(column, status): void {
         Application.open();
         Assessment.verifyStatus(this.name, column, status);
+    }
+
+    verifyInheritanceStatus(column: string): void {
+        let columnSelector: string;
+        if (column === "assessment") columnSelector = assessmentColumnSelector;
+        else columnSelector = reviewColumnSelector;
+        selectItemsPerPage(100);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(trTag)
+            .within(() => {
+                cy.get(columnSelector).within(() => {
+                    cy.get(".pf-v5-svg")
+                        .last()
+                        .should("have.attr", "role", "img")
+                        .and("be.visible");
+                });
+            });
     }
 
     validateReviewFields(): void {
