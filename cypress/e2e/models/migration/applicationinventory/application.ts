@@ -664,9 +664,8 @@ export class Application {
     }
 
     verifyInheritanceStatus(column: string): void {
-        let columnSelector: string;
-        if (column === "assessment") columnSelector = assessmentColumnSelector;
-        else columnSelector = reviewColumnSelector;
+        const columnSelector =
+            column === "assessment" ? assessmentColumnSelector : reviewColumnSelector;
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(this.name)
