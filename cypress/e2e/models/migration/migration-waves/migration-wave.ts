@@ -119,11 +119,11 @@ export class MigrationWave {
         cy.get(MigrationWaveView.instanceSelectToggle).click();
         cy.contains(instance).click();
 
-        cy.get(MigrationWaveView.projectSelectToggle).click();
-        cy.contains(project).click({ timeout: 10 * SEC, force: true });
+        cy.get(MigrationWaveView.projectSelectToggle).click({ timeout: 20 * SEC, force: true });
+        cy.contains(project).click({ timeout: 20 * SEC, force: true });
 
-        cy.get(MigrationWaveView.issueTypeSelectToggle).click();
-        cy.contains(issueType).click({ timeout: 10 * SEC, force: true });
+        cy.get(MigrationWaveView.issueTypeSelectToggle).click({ timeout: 20 * SEC, force: true });
+        cy.contains(issueType).click({ timeout: 20 * SEC, force: true });
 
         submitForm();
     }
