@@ -102,6 +102,7 @@ describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
                 .then((issue) => {
                     expect(!!issue).to.eq(true);
 
+                    MigrationWave.open(true);
                     wavesMap[issueType].exportToIssueManager(
                         JiraType.server,
                         jiraInstance.name,
