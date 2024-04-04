@@ -24,6 +24,7 @@ export default defineConfig({
         tackleUrl: "https://tackle-konveyor-tackle.apps.mtv03.rhos-psi.cnv-qe.rhood.us",
         rwx_enabled: true,
         logLevel: "ASSERT",
+        mtaVersion: "",
     },
     retries: {
         runMode: 0,
