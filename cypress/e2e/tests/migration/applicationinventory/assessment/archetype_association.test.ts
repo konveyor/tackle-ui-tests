@@ -155,9 +155,9 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         for (let i = 0; i < archetypeList.length; i++) {
             archetypeList[i].discard("Discard review");
             archetypeList[i].discard("Discard assessment(s)");
-            application2.verifyStatus("assessment", "Not started");
-            application2.verifyStatus("review", "Not started");
         }
+        application2.verifyStatus("assessment", "Not started");
+        application2.verifyStatus("review", "Not started");
 
         deleteByList(archetypeList);
     });
