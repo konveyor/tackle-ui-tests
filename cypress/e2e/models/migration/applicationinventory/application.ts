@@ -672,10 +672,7 @@ export class Application {
             .parent(trTag)
             .within(() => {
                 cy.get(columnSelector).within(() => {
-                    cy.get(".pf-v5-svg")
-                        .last()
-                        .should("have.attr", "role", "img")
-                        .and("be.visible");
+                    cy.get(".pf-v5-svg").eq(1).should("have.attr", "role", "img").and("be.visible");
                 });
             });
     }
