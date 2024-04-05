@@ -93,16 +93,18 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
             applicationList[i].verifyArchetypeList([archetype.name], "Archetypes reviewed");
             applicationList[i].validateInheritedReviewFields([archetype.name]);
             applicationList[i].verifyStatus("review", "Completed");
+            applicationList[i].verifyInheritanceStatus("review");
             applicationList[i].verifyArchetypeList([archetype.name], "Archetypes assessed");
             applicationList[i].validateAssessmentField("Medium");
             applicationList[i].verifyStatus("assessment", "Completed");
+            applicationList[i].verifyInheritanceStatus("assessment");
         }
 
         archetype.delete();
         AssessmentQuestionnaire.delete(cloudReadinessQuestionnaire);
     });
 
-    it("Bug MTA-2410: Verify application assessment and review inheritance from multiple archetypes ", function () {
+    it("Verify application assessment and review inheritance from multiple archetypes ", function () {
         /* Automates MTA-420
         This also verifies: Archetype association - Application creation after archetype creation.
         */
@@ -128,6 +130,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         application2.verifyStatus("review", "In-progress");
         archetypeList[1].perform_review("medium");
         application2.verifyStatus("review", "Completed");
+        application2.verifyInheritanceStatus("review");
 
         // Validate 'Reviews' field on app drawer after review inheritance
         application2.validateInheritedReviewFields(archetypeNames);
@@ -145,6 +148,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         application2.verifyStatus("assessment", "Completed");
         application2.verifyArchetypeList(archetypeNames, "Archetypes assessed");
         application2.validateAssessmentField("Medium");
+        application2.verifyInheritanceStatus("assessment");
         deleteByList(archetypeList);
     });
 
