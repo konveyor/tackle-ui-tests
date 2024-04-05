@@ -122,35 +122,6 @@ describe(["@tier1"], "Archetype CRUD operations", () => {
         notExists(archetypeDuplicate.name);
     });
 
-    it("Discard archetype review", function () {
-        // Automates Polarion MTA-428
-
-        const archetype = new Archetype(
-            data.getRandomWord(8),
-            [tags[0].name],
-            [tags[1].name],
-            null,
-            stakeholders,
-            stakeholderGroups
-        );
-
-        archetype.create();
-        exists(archetype.name);
-
-        archetype.perform_review("high");
-        cy.wait(2 * SEC);
-        archetype.validateReviewFields();
-
-        archetype.discard("Discard review");
-        cy.wait(2 * SEC);
-        archetype.validateNotReviewed();
-
-        cy.wait(2 * SEC);
-        archetype.delete();
-
-        notExists(archetype.name);
-    });
-
     after("Clear test data", function () {
         deleteByList(stakeholders);
         deleteByList(stakeholderGroups);

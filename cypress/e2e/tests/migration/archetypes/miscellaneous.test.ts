@@ -62,6 +62,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         cy.wait(2 * SEC);
         archetype.perform_assessment("high", stakeholderList, null, cloudReadinessQuestionnaire);
         archetype.validateAssessmentField("High");
+        archetype.perform_review("high");
     });
 
     it("Retake questionnaire for Archetype", function () {
@@ -123,6 +124,18 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
             true
         );
         archetype.validateAssessmentField("Unknown");
+    });
+
+    it("Discard archetype review", function () {
+        // Automates Polarion MTA-428
+        archetype.discard("Discard review");
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success! Review discarded for ${archetype.name}.`,
+            true
+        );
+        cy.wait(2 * SEC);
+        archetype.validateNotReviewed();
     });
 
     after("Perform test data clean up", function () {
