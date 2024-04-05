@@ -149,6 +149,16 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         application2.verifyArchetypeList(archetypeNames, "Archetypes assessed");
         application2.validateAssessmentField("Medium");
         application2.verifyInheritanceStatus("assessment");
+
+        // Application Assessment and Review status should show 'Not started' when
+        // archetype assessment and review are discarded.
+        for (let i = 0; i < archetypeList.length; i++) {
+            archetypeList[i].discard("Discard review");
+            archetypeList[i].discard("Discard assessment(s)");
+            application2.verifyStatus("assessment", "Not started");
+            application2.verifyStatus("review", "Not started");
+        }
+
         deleteByList(archetypeList);
     });
 
