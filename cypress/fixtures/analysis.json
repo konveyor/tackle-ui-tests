@@ -54,7 +54,21 @@
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "deps",
-        "storyPoints": 24
+        "storyPoints": 24,
+        "issues": [
+            {
+                "name": "The package 'javax' has been replaced by 'jakarta'.",
+                "category": "mandatory",
+                "source": "None",
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+"],
+                "effort": 1,
+                "incidents": 2,
+                "affectedFiles": 92,
+                "ruleSet": "eap8/eap7",
+                "rule": "javax-to-jakarta-import-00001",
+                "labels": ["konveyor.io/source"]
+            }
+        ]
     },
 
     "binary_analysis_on_tackletestapp": {
