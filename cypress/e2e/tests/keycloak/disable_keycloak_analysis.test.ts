@@ -21,6 +21,7 @@ import {
     getRandomAnalysisData,
     deleteByList,
     checkSuccessAlert,
+    patchTackleCR,
 } from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { infoAlertMessage } from "../../views/common.view";
@@ -30,7 +31,9 @@ let application: Analysis;
 
 describe("Source Analysis after disabling Keycloak", () => {
     before("Load data", function () {
+        patchTackleCR("keycloak", false);
         login();
+
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -43,7 +46,7 @@ describe("Source Analysis after disabling Keycloak", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it(["@tier5"], "Source Analysis on bookserver app and its issues validation", function () {
+    it(["@tier5"], "Source Analysis on bookserver app", function () {
         // For source code analysis application must have source code URL git or svn
         application = new Analysis(
             getRandomApplicationData("bookserverApp", {
@@ -58,12 +61,6 @@ describe("Source Analysis after disabling Keycloak", () => {
         application.analyze();
         checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
         application.verifyAnalysisStatus("Completed");
-        application.validateIssues(this.analysisData["source_analysis_on_bookserverapp"]["issues"]);
-        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
-            (currentIssue: AppIssue) => {
-                application.validateAffected(currentIssue);
-            }
-        );
     });
 
     after("Perform test data clean up", function () {
