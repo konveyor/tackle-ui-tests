@@ -14,13 +14,13 @@ limitations under the License.
 
 import {
     getRandomApplicationData,
+    getRandomAnalysisData,
     patchTackleCR,
     createMultipleStakeholders,
     deleteByList,
     login,
 } from "../../../utils/utils";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
-import { Application } from "../../models/migration/applicationinventory/application";
 import {
     legacyPathfinder,
     cloudReadinessQuestionnaire,
@@ -29,9 +29,8 @@ import {
 } from "../../types/constants";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
-import { applicationInventory } from "../../types/constants";
 
-let application = new Application(getRandomApplicationData());
+let application: Analysis;
 let stakeholders: Stakeholders[];
 
 describe(["@tier5"], "Perform certain operations after disabling Keycloak", function () {
@@ -40,13 +39,27 @@ describe(["@tier5"], "Perform certain operations after disabling Keycloak", func
         patchTackleCR("keycloak", false);
         login();
 
-        application.create();
         stakeholders = createMultipleStakeholders(1);
 
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.import(cloudReadinessFilePath);
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
         AssessmentQuestionnaire.disable(legacyPathfinder);
+
+        cy.fixture("application").then(function (appData) {
+            this.appData = appData;
+        });
+        cy.fixture("analysis").then(function (analysisData) {
+            this.analysisData = analysisData;
+        });
+
+        application = new Analysis(
+            getRandomApplicationData("bookserverApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+        );
+        application.create();
     });
 
     beforeEach("Load data", function () {
@@ -54,6 +67,11 @@ describe(["@tier5"], "Perform certain operations after disabling Keycloak", func
         cy.fixture("rbac").then(function (rbacRules) {
             this.rbacRules = rbacRules["architect"];
         });
+    });
+
+    it("With Auth disabled, Perform application analysis", function () {
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
     });
 
     it("With Auth disabled, Perform application assessment and review", function () {
