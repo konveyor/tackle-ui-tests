@@ -73,9 +73,14 @@ export class CustomMigrationTarget {
         clickByText(button, createNewButton);
     }
 
-    public create() {
+    public openLanguageForm() {
+        CustomMigrationTarget.open();
         CustomMigrationTarget.selectLanguage(this.language);
-        CustomMigrationTarget.openNewForm();
+        clickByText(button, createNewButton);
+    }
+
+    public create() {
+        this.openLanguageForm();
         CustomMigrationTarget.fillForm(this);
         clickJs(submitButton);
     }
@@ -183,6 +188,7 @@ export class CustomMigrationTarget {
     }
 
     private expandActionsMenu() {
+        CustomMigrationTarget.selectLanguage(this.language);
         cy.contains(this.name)
             .parents(CustomMigrationTargetView.card)
             .within(() => {

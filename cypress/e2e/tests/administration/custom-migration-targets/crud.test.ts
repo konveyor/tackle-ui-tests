@@ -78,6 +78,7 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
                 language
             );
             target.create();
+            cy.wait(2 * SEC);
             cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
             cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
                 "contain",
