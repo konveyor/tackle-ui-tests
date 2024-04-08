@@ -1,5 +1,6 @@
 import {
     clearAllFilters,
+    clickByText,
     createMultipleBusinessServices,
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
@@ -22,6 +23,7 @@ import { Issues } from "../../../../models/migration/dynamic-report/issues/issue
 import { AppIssue } from "../../../../types/types";
 import { AnalysisStatuses, issueFilter, SEC, tdTag, trTag } from "../../../../types/constants";
 import { randomWordGenerator } from "../../../../../utils/data_utils";
+import { rightSideBar } from "../../../../views/issue.view";
 
 describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
     const applicationsList: Analysis[] = [];
@@ -206,10 +208,8 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"][0]["name"]
         );
         cy.wait(2 * SEC);
-        cy.get("table[aria-label='Affected applications table']").within(() => {
-            cy.get(tdTag).eq(0).click();
-        });
-        cy.get("div.pf-v5-c-drawer__panel-main").within(() => {
+        clickByText(tdTag, applicationsList[6].name);
+        cy.get(rightSideBar).within(() => {
             affectedFilesSortByList.forEach((column) => {
                 validateSortBy(column);
             });
