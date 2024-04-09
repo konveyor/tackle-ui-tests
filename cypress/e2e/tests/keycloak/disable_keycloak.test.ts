@@ -14,13 +14,13 @@ limitations under the License.
 
 import {
     getRandomApplicationData,
+    getRandomAnalysisData,
     patchTackleCR,
     createMultipleStakeholders,
     deleteByList,
     login,
 } from "../../../utils/utils";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
-import { Application } from "../../models/migration/applicationinventory/application";
 import {
     legacyPathfinder,
     cloudReadinessQuestionnaire,
@@ -29,8 +29,9 @@ import {
 } from "../../types/constants";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
-import { applicationInventory } from "../../types/constants";
+import { Application } from "../../models/migration/applicationinventory/application";
 
+let application1: Analysis;
 let application = new Application(getRandomApplicationData());
 let stakeholders: Stakeholders[];
 
@@ -39,6 +40,13 @@ describe(["@tier5"], "Perform certain operations after disabling Keycloak", func
     before("Disable Keycloak", function () {
         patchTackleCR("keycloak", false);
         login();
+
+        cy.fixture("application").then(function (appData) {
+            this.appData = appData;
+        });
+        cy.fixture("analysis").then(function (analysisData) {
+            this.analysisData = analysisData;
+        });
 
         application.create();
         stakeholders = createMultipleStakeholders(1);
@@ -54,6 +62,19 @@ describe(["@tier5"], "Perform certain operations after disabling Keycloak", func
         cy.fixture("rbac").then(function (rbacRules) {
             this.rbacRules = rbacRules["architect"];
         });
+    });
+
+    it("With Auth disabled, Perform application analysis", function () {
+        application1 = new Analysis(
+            getRandomApplicationData("bookserverApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+        );
+        application1.create();
+        application1.analyze();
+        application1.verifyAnalysisStatus("Completed");
+        application1.delete();
     });
 
     it("With Auth disabled, Perform application assessment and review", function () {
