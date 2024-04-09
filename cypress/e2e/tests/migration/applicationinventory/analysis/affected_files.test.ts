@@ -66,8 +66,26 @@ describe(["@tier2"], "Bug MTA-2006: Affected files validation", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    afterEach("Reset url", function () {
-        Application.open(true);
+    it("Bug MTA-2006: Affected files validation with Source + dependencies analysis on daytrader app", function () {
+        // Automate bug https://issues.redhat.com/browse/MTA-2006
+        const application = new Analysis(
+            getRandomApplicationData("affected_files_on_day_trader_app", {
+                sourceData: this.appData["daytrader-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["affected_files_on_day_trader_app"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.validateIssues(this.analysisData["affected_files_on_day_trader_app"]["issues"]);
+        this.analysisData["affected_files_on_day_trader_app"]["issues"].forEach(
+            (currentIssue: AppIssue) => {
+                application.validateAffected(currentIssue);
+            }
+        );
     });
 
     it("Affected files validation with source analysis on bookserver app", function () {
@@ -78,6 +96,7 @@ describe(["@tier2"], "Bug MTA-2006: Affected files validation", () => {
             }),
             getRandomAnalysisData(this.analysisData["affected_files_on_bookserverapp"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -100,6 +119,7 @@ describe(["@tier2"], "Bug MTA-2006: Affected files validation", () => {
             }),
             getRandomAnalysisData(this.analysisData["affected_files_on_tackleTestapp"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -123,6 +143,7 @@ describe(["@tier2"], "Bug MTA-2006: Affected files validation", () => {
             }),
             getRandomAnalysisData(this.analysisData["affected_files_on_tackleTestapp_deps"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -134,28 +155,6 @@ describe(["@tier2"], "Bug MTA-2006: Affected files validation", () => {
             this.analysisData["affected_files_on_tackleTestapp_deps"]["issues"]
         );
         this.analysisData["affected_files_on_tackleTestapp_deps"]["issues"].forEach(
-            (currentIssue: AppIssue) => {
-                application.validateAffected(currentIssue);
-            }
-        );
-    });
-
-    it("Bug MTA-2006: Affected files validation with Source + dependencies analysis on daytrader app", function () {
-        // Automate bug https://issues.redhat.com/browse/MTA-2006
-        const application = new Analysis(
-            getRandomApplicationData("affected_files_on_day_trader_app", {
-                sourceData: this.appData["daytrader-app"],
-            }),
-            getRandomAnalysisData(this.analysisData["affected_files_on_day_trader_app"])
-        );
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication");
-        cy.wait(2 * SEC);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.validateIssues(this.analysisData["affected_files_on_day_trader_app"]["issues"]);
-        this.analysisData["affected_files_on_day_trader_app"]["issues"].forEach(
             (currentIssue: AppIssue) => {
                 application.validateAffected(currentIssue);
             }
