@@ -1,5 +1,6 @@
 import {
     clearAllFilters,
+    clickByText,
     createMultipleBusinessServices,
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
@@ -20,8 +21,9 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import { Tag } from "../../../../models/migration/controls/tags";
 import { Issues } from "../../../../models/migration/dynamic-report/issues/issues";
 import { AppIssue } from "../../../../types/types";
-import { AnalysisStatuses, issueFilter, trTag } from "../../../../types/constants";
+import { AnalysisStatuses, issueFilter, SEC, tdTag, trTag } from "../../../../types/constants";
 import { randomWordGenerator } from "../../../../../utils/data_utils";
+import { rightSideBar } from "../../../../views/issue.view";
 
 describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
     const applicationsList: Analysis[] = [];
@@ -34,6 +36,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     const allIssuesSortByList = ["Issue", "Category", "Effort", "Affected applications"];
     const affectedApplicationSortByList = ["Name", "Business service", "Total Effort", "Incidents"];
     const singleApplicationSortByList = ["Issue", "Category", "Effort", "Affected files"];
+    const affectedFilesSortByList = ["File", "Incidents", "Effort"];
 
     before("Login", function () {
         login();
@@ -197,6 +200,19 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         }All issues - Sort issues by ${column}`, function () {
             Issues.openList();
             validateSortBy(column);
+        });
+    });
+
+    it("BUG MTA-2432 - All issues - Sorting affected files", function () {
+        Issues.openAffectedApplications(
+            this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"][0]["name"]
+        );
+        cy.wait(2 * SEC);
+        clickByText(tdTag, applicationsList[6].name);
+        cy.get(rightSideBar).within(() => {
+            affectedFilesSortByList.forEach((column) => {
+                validateSortBy(column);
+            });
         });
     });
 
