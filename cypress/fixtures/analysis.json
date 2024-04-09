@@ -3,7 +3,6 @@
         "source": "Source code",
         "target": ["Containerization"],
         "appName": "book-server",
-        "storyPoints": 5,
         "tags": ["EJB XML", "Java EE Batch", "EJB XML"],
         "issues": [
             {
@@ -12,6 +11,7 @@
                 "source": "None",
                 "targets": ["cloud-readiness"],
                 "effort": 1,
+                "totalEffort": 2,
                 "incidents": 2,
                 "affectedFiles": 1,
                 "ruleSet": "cloud-readiness",
