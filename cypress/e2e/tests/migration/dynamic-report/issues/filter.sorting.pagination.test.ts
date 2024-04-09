@@ -203,7 +203,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         });
     });
 
-    it("All issues - Sorting affected files", function () {
+    it("BUG MTA-2432 - All issues - Sorting affected files", function () {
         Issues.openAffectedApplications(
             this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"][0]["name"]
         );
