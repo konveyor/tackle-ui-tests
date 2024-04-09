@@ -20,6 +20,7 @@ import {
     createMultipleTags,
     createMultipleApplications,
     login,
+    deleteByList,
 } from "../../../utils/utils";
 import * as data from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
@@ -99,6 +100,7 @@ describe(["@tier2"], "Perform assessment and review as Architect", function () {
     after("Clear test data", () => {
         login();
         application[0].delete();
+        deleteByList(tags);
         User.loginKeycloakAdmin();
         architect.delete();
     });
