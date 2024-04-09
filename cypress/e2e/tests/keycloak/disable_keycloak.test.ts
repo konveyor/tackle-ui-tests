@@ -29,8 +29,10 @@ import {
 } from "../../types/constants";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
+import { Application } from "../../models/migration/applicationinventory/application";
 
-let application: Analysis;
+let application1: Analysis;
+let application = new Application(getRandomApplicationData());
 let stakeholders: Stakeholders[];
 
 describe(["@tier5"], "Perform certain operations after disabling Keycloak", function () {
@@ -39,13 +41,6 @@ describe(["@tier5"], "Perform certain operations after disabling Keycloak", func
         patchTackleCR("keycloak", false);
         login();
 
-        stakeholders = createMultipleStakeholders(1);
-
-        AssessmentQuestionnaire.deleteAllQuestionnaires();
-        AssessmentQuestionnaire.import(cloudReadinessFilePath);
-        AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
-        AssessmentQuestionnaire.disable(legacyPathfinder);
-
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -53,13 +48,13 @@ describe(["@tier5"], "Perform certain operations after disabling Keycloak", func
             this.analysisData = analysisData;
         });
 
-        application = new Analysis(
-            getRandomApplicationData("bookserverApp", {
-                sourceData: this.appData["bookserver-app"],
-            }),
-            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
-        );
         application.create();
+        stakeholders = createMultipleStakeholders(1);
+
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
+        AssessmentQuestionnaire.import(cloudReadinessFilePath);
+        AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
+        AssessmentQuestionnaire.disable(legacyPathfinder);
     });
 
     beforeEach("Load data", function () {
@@ -70,8 +65,16 @@ describe(["@tier5"], "Perform certain operations after disabling Keycloak", func
     });
 
     it("With Auth disabled, Perform application analysis", function () {
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application1 = new Analysis(
+            getRandomApplicationData("bookserverApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+        );
+        application1.create();
+        application1.analyze();
+        application1.verifyAnalysisStatus("Completed");
+        application1.delete();
     });
 
     it("With Auth disabled, Perform application assessment and review", function () {
