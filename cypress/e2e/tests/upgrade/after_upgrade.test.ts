@@ -46,7 +46,7 @@ import { legacyPathfinder } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Archetype } from "../../models/migration/archetypes/archetype";
 
-describe(["@post-upgrade"], "Performing post-upgrade validations", { failFast: { enabled: true } }, () => {
+describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     const expectedMtaVersion = Cypress.env("mtaVersion");
     before("Login", function () {
         // Perform login
@@ -66,13 +66,15 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", { failFast: {
         });
     });
 
-        it("Validate MTA version in UI", () => validateMtaVersionInUI(expectedMtaVersion));
+    it("Validate MTA version in UI", { failFast: { enabled: true } }, () =>
+        validateMtaVersionInUI(expectedMtaVersion)
+    );
 
-        it("Validate MTA version in CLI", () => validateMtaVersionInCLI(expectedMtaVersion));
+    it("Validate MTA version in CLI", () => validateMtaVersionInCLI(expectedMtaVersion));
 
-        it("Validate Tackle CR", () => validateTackleCr());
+    it("Validate Tackle CR", () => validateTackleCr());
 
-        it("Validate Tackle Operator Log", () => validateTackleOperatorLog());
+    it("Validate Tackle Operator Log", () => validateTackleOperatorLog());
 
     it("Controls - testing existence of instances created before upgrade", function () {
         const {
