@@ -25,6 +25,8 @@ export default defineConfig({
         rwx_enabled: true,
         logLevel: "ASSERT",
         mtaVersion: "",
+        FAIL_FAST_PLUGIN: true,
+        FAIL_FAST_ENABLED: false,
     },
     retries: {
         runMode: 0,
@@ -51,6 +53,8 @@ export default defineConfig({
         setupNodeEvents(on, config) {
             require("./cypress/plugins/index.js")(on, config);
             on("file:preprocessor", tagify(config));
+            require("cypress-fail-fast/plugin")(on, config);
+            return config;
         },
         experimentalMemoryManagement: true,
         numTestsKeptInMemory: 15,

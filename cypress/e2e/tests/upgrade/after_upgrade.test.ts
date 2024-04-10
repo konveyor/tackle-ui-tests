@@ -51,10 +51,6 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     before("Login", function () {
         // Perform login
         login();
-        validateMtaVersionInCLI(expectedMtaVersion);
-        validateTackleCr();
-        validateTackleOperatorLog();
-        validateMtaVersionInUI(expectedMtaVersion);
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
@@ -69,6 +65,17 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
             this.upgradeData = upgradeData;
         });
     });
+
+    // Enable fail fast, skip the rest of tests if this specific test fails.
+    it("Validate MTA version in UI", { failFast: { enabled: true } }, () =>
+        validateMtaVersionInUI(expectedMtaVersion)
+    );
+
+    it("Validate MTA version in CLI", () => validateMtaVersionInCLI(expectedMtaVersion));
+
+    it("Validate Tackle CR", () => validateTackleCr());
+
+    it("Validate Tackle Operator Log", () => validateTackleOperatorLog());
 
     it("Controls - testing existence of instances created before upgrade", function () {
         const {
