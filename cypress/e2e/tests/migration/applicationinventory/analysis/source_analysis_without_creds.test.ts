@@ -25,6 +25,7 @@ import {
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { infoAlertMessage } from "../../../../views/common.view";
 import { AppIssue } from "../../../../types/types";
+import { Application } from "../../../../models/migration/applicationinventory/application";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 
@@ -67,7 +68,8 @@ describe("Source Analysis without credentials", () => {
     });
 
     after("Perform test data clean up", function () {
-        Analysis.open(true);
+        cy.wait(2000);
+        Application.open(true);
         deleteByList(applicationsList);
     });
 });
