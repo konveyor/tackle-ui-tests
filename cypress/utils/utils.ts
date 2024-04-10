@@ -1830,6 +1830,8 @@ export function validateMtaVersionInCLI(expectedMtaVersion: string): void {
             throw new Error(
                 `Expected version in UI pod: ${expectedMtaVersion}, Actual version in UI pod: ${output.stdout}`
             );
+        } else {
+            throw { msg: `Version ${expectedMtaVersion} was found as expected` };
         }
     });
 }
