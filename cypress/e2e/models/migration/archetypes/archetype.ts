@@ -362,7 +362,6 @@ export class Archetype {
     }
 
     validateTagsColumn(tagsNames: string[]): void {
-        // Archetype.open();
         tagsNames.forEach((tag) => {
            Archetype.verifyColumnValue(this.name, "Tags", tag);
         }
