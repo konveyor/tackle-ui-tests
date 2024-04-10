@@ -32,6 +32,7 @@
         "cy-verify-downloads": "^0.1.13",
         "cypress": "^13.6.4",
         "cypress-downloadfile": "^1.2.3",
+        "cypress-fail-fast": "^7.1.0",
         "cypress-mochawesome-reporter": "^3.2.2",
         "cypress-tags": "^1.1.2",
         "license-check-and-add": "^4.0.5",
