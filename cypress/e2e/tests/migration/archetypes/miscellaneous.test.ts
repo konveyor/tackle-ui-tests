@@ -21,6 +21,7 @@ import {
     clickByText,
     createMultipleStakeholders,
     checkSuccessAlert,
+    createMultipleApplications,
 } from "../../../../utils/utils";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
@@ -32,6 +33,7 @@ import {
     cloudReadinessQuestionnaire,
     cloudReadinessFilePath,
 } from "../../../types/constants";
+import { Application } from "../../../models/migration/applicationinventory/application";
 import { Archetype } from "../../../models/migration/archetypes/archetype";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import * as data from "../../../../utils/data_utils";
@@ -40,8 +42,9 @@ import {
     ArchivedQuestionnairesTableDataCell,
 } from "../../../views/assessmentquestionnaire.view";
 
-let stakeholderList: Array<Stakeholders> = [];
+let stakeholderList: Stakeholders[];
 let archetype: Archetype;
+let applications: Application[];
 
 describe(["@tier3"], "Miscellaneous Archetype tests", () => {
     before("Import and enable Cloud readiness questionnaire template", function () {
@@ -63,6 +66,14 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         archetype.perform_assessment("high", stakeholderList, null, cloudReadinessQuestionnaire);
         archetype.validateAssessmentField("High");
         archetype.perform_review("high");
+
+        applications = createMultipleApplications(2, ["Language / Java"]);
+    });
+
+    it("Verify Applications column value before and after application association", function () {
+        archetype.verifyColumn("Applications", "No applications found");
+        applications = createMultipleApplications(2, ["Language / Java"]);
+        archetype.verifyColumn("Applications", "2 applications");
     });
 
     it("Retake questionnaire for Archetype", function () {

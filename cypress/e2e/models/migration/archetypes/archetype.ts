@@ -372,4 +372,14 @@ export class Archetype {
                 });
         });
     }
+
+    verifyColumn(value: string): void {
+        Archetype.open();
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(trTag)
+            .within(() => {
+                cy.get(archetype.applicationsColumn).contains(value, { timeout: 30 * SEC });
+            });
+    }
 }
