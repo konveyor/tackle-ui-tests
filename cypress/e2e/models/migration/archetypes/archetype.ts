@@ -362,24 +362,21 @@ export class Archetype {
     }
 
     validateTagsColumn(tagsNames: string[]): void {
-        Archetype.open();
+        // Archetype.open();
         tagsNames.forEach((tag) => {
-            cy.get(tdTag)
-                .contains(this.name)
-                .parent(trTag)
-                .within(() => {
-                    cy.get(tagsColumnSelector).contains(tag, { timeout: 30 * SEC });
-                });
-        });
+           Archetype.verifyColumnValue(this.name, "Tags", tag);
+        }
     }
 
-    verifyColumn(value: string): void {
+    public static verifyColumnValue(name: string, column: string, value: string): void {
+        const columnSelector =
+            column === "Tags" ? tagsColumnSelector : archetype.applicationsColumn;
         Archetype.open();
         cy.get(tdTag)
-            .contains(this.name)
+            .contains(name)
             .parent(trTag)
             .within(() => {
-                cy.get(archetype.applicationsColumn).contains(value, { timeout: 30 * SEC });
+                cy.get(columnSelector).contains(value, { timeout: 30 * SEC });
             });
     }
 }

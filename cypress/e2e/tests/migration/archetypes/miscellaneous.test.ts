@@ -22,6 +22,7 @@ import {
     createMultipleStakeholders,
     checkSuccessAlert,
     createMultipleApplications,
+    exists,
 } from "../../../../utils/utils";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
@@ -66,14 +67,16 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         archetype.perform_assessment("high", stakeholderList, null, cloudReadinessQuestionnaire);
         archetype.validateAssessmentField("High");
         archetype.perform_review("high");
-
-        applications = createMultipleApplications(2, ["Language / Java"]);
     });
 
-    it("Verify Applications column value before and after application association", function () {
-        archetype.verifyColumn("Applications", "No applications found");
-        applications = createMultipleApplications(2, ["Language / Java"]);
-        archetype.verifyColumn("Applications", "2 applications");
+    it.only("Verify Applications column value before and after application association", function () {
+        Archetype.verifyColumnValue(
+            archetype.name,
+            "Applications",
+            "No applications currently match the criteria tags."
+        );
+        applications = createMultipleApplications(2, ["Language / Java", "Runtime / Quarkus"]);
+        Archetype.verifyColumnValue(archetype.name, "Applications", "2 applications");
     });
 
     it("Retake questionnaire for Archetype", function () {
@@ -150,6 +153,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
     });
 
     after("Perform test data clean up", function () {
+        deleteByList(applications);
         deleteByList(stakeholderList);
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         archetype.delete();
