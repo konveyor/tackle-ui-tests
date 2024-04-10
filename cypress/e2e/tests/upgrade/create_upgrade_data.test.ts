@@ -65,6 +65,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
+    // Enable fail fast, skip the rest of tests if this specific test fails.
     it("Validate MTA version in UI", { failFast: { enabled: true } }, () =>
         validateMtaVersionInUI(expectedMtaVersion)
     );
