@@ -69,7 +69,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         archetype.perform_review("high");
     });
 
-    it.only("Verify Applications column value before and after application association", function () {
+    it("Verify Applications column value before and after application association", function () {
         Archetype.verifyColumnValue(
             archetype.name,
             "Applications",
