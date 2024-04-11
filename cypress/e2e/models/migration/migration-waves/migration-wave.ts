@@ -220,7 +220,9 @@ export class MigrationWave {
             ).to.eq(false);
         }
 
-        cy.get(MigrationWaveView.endDateInput).type(MigrationWave.formatDateMMddYYYY(date));
+        cy.get(MigrationWaveView.endDateInput).type(MigrationWave.formatDateMMddYYYY(date), {
+            delay: 0,
+        });
     }
 
     private fillForm(values: Partial<MigrationWave>) {
