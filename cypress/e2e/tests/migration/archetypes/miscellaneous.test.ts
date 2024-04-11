@@ -16,13 +16,15 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    click,
+    exists,
     login,
     deleteByList,
     clickByText,
     createMultipleStakeholders,
     checkSuccessAlert,
     createMultipleApplications,
-    exists,
+    selectRow,
 } from "../../../../utils/utils";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
@@ -50,6 +52,7 @@ let applications: Application[];
 describe(["@tier3"], "Miscellaneous Archetype tests", () => {
     before("Import and enable Cloud readiness questionnaire template", function () {
         login();
+
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.disable(legacyPathfinder);
         AssessmentQuestionnaire.import(cloudReadinessFilePath);
@@ -69,7 +72,8 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         archetype.perform_review("high");
     });
 
-    it("Verify Applications column value before and after application association", function () {
+    it("Verify associated application count and link", function () {
+        // Automates Polarion MTA-529
         Archetype.verifyColumnValue(
             archetype.name,
             "Applications",
@@ -77,6 +81,15 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         );
         applications = createMultipleApplications(2, ["Language / Java", "Runtime / Quarkus"]);
         Archetype.verifyColumnValue(archetype.name, "Applications", "2 applications");
+        selectRow(archetype.name);
+        cy.get("span.pf-v5-c-description-list__text")
+            .contains("Applications")
+            .closest("div")
+            .within(() => {
+                click("a");
+            });
+        exists(applications[0].name);
+        exists(applications[1].name);
     });
 
     it("Retake questionnaire for Archetype", function () {
