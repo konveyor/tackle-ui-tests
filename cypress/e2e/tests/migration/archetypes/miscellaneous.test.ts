@@ -89,6 +89,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
             });
         exists(applications[0].name);
         exists(applications[1].name);
+        deleteByList(applications);
     });
 
     it("Retake questionnaire for Archetype", function () {
@@ -160,7 +161,6 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
     });
 
     after("Perform test data clean up", function () {
-        deleteByList(applications);
         deleteByList(stakeholderList);
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         archetype.delete();
