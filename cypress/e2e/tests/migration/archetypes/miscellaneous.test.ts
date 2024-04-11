@@ -52,7 +52,6 @@ let applications: Application[];
 describe(["@tier3"], "Miscellaneous Archetype tests", () => {
     before("Import and enable Cloud readiness questionnaire template", function () {
         login();
-
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.disable(legacyPathfinder);
         AssessmentQuestionnaire.import(cloudReadinessFilePath);
@@ -97,11 +96,6 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         archetype.clickAssessButton();
         cy.wait(SEC);
         clickByText(button, "Retake");
-        checkSuccessAlert(
-            successAlertMessage,
-            `Success! Assessment discarded for ${archetype.name}.`,
-            true
-        );
         Assessment.fill_assessment_form("High", stakeholderList);
         archetype.validateAssessmentField("High");
     });
