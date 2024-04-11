@@ -363,8 +363,8 @@ export class Archetype {
 
     validateTagsColumn(tagsNames: string[]): void {
         tagsNames.forEach((tag) => {
-           Archetype.verifyColumnValue(this.name, "Tags", tag);
-        }
+            Archetype.verifyColumnValue(this.name, "Tags", tag);
+        });
     }
 
     public static verifyColumnValue(name: string, column: string, value: string): void {
