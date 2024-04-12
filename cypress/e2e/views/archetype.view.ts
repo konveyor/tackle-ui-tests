@@ -32,3 +32,4 @@ export const reviewItems = [
 ];
 
 export const archetypeDropdown = "button[id^='pf-select-toggle']";
+export const applicationsColumn = "td[data-label='Applications']";

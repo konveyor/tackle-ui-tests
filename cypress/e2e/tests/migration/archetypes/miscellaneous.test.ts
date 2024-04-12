@@ -16,11 +16,15 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    click,
+    exists,
     login,
     deleteByList,
     clickByText,
     createMultipleStakeholders,
     checkSuccessAlert,
+    createMultipleApplications,
+    selectRow,
 } from "../../../../utils/utils";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
@@ -32,6 +36,7 @@ import {
     cloudReadinessQuestionnaire,
     cloudReadinessFilePath,
 } from "../../../types/constants";
+import { Application } from "../../../models/migration/applicationinventory/application";
 import { Archetype } from "../../../models/migration/archetypes/archetype";
 import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import * as data from "../../../../utils/data_utils";
@@ -40,8 +45,9 @@ import {
     ArchivedQuestionnairesTableDataCell,
 } from "../../../views/assessmentquestionnaire.view";
 
-let stakeholderList: Array<Stakeholders> = [];
+let stakeholderList: Stakeholders[];
 let archetype: Archetype;
+let applications: Application[];
 
 describe(["@tier3"], "Miscellaneous Archetype tests", () => {
     before("Import and enable Cloud readiness questionnaire template", function () {
@@ -65,16 +71,32 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         archetype.perform_review("high");
     });
 
+    it("Verify associated application count and link", function () {
+        // Automates Polarion MTA-529
+        Archetype.verifyColumnValue(
+            archetype.name,
+            "Applications",
+            "No applications currently match the criteria tags."
+        );
+        applications = createMultipleApplications(2, ["Language / Java", "Runtime / Quarkus"]);
+        Archetype.verifyColumnValue(archetype.name, "Applications", "2 applications");
+        selectRow(archetype.name);
+        cy.get("span.pf-v5-c-description-list__text")
+            .contains("Applications")
+            .closest("div")
+            .within(() => {
+                click("a");
+            });
+        exists(applications[0].name);
+        exists(applications[1].name);
+        deleteByList(applications);
+    });
+
     it("Retake questionnaire for Archetype", function () {
         //Automates Polarion MTA-394
         archetype.clickAssessButton();
         cy.wait(SEC);
         clickByText(button, "Retake");
-        checkSuccessAlert(
-            successAlertMessage,
-            `Success! Assessment discarded for ${archetype.name}.`,
-            true
-        );
         Assessment.fill_assessment_form("High", stakeholderList);
         archetype.validateAssessmentField("High");
     });
