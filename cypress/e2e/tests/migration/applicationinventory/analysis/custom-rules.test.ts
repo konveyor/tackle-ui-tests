@@ -64,6 +64,20 @@ describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
         });
     });
 
+    it("Bug MTA-2015: Custom rule with administracionEfectivo application", function () {
+        const app = new Analysis(
+            getRandomApplicationData("customRule_administracionEfectivo"),
+            getRandomAnalysisData(this.analysisData["administracionEfectivo_custom_rules"])
+        );
+        Application.open();
+        applications.push(app);
+        app.create();
+        app.analyze();
+        app.verifyAnalysisStatus(AnalysisStatuses.completed);
+        Issues.openSingleApplication(app.name);
+        exists("CUSTOM RULE");
+    });
+
     it("Verify triggered rule", function () {
         const app = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
@@ -71,6 +85,7 @@ describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
                 this.analysisData["upload_binary_analysis_on_jee_app_custom_rules"]
             )
         );
+        Application.open();
         applications.push(app);
         app.create();
         app.analyze();
@@ -88,6 +103,7 @@ describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
             getRandomAnalysisData(this.analysisData["tackle_test_app_custom_rules"])
         );
         tackleTestappName = app.name;
+        Application.open();
         applications.push(app);
         app.create();
         app.manageCredentials(sourceCredential.name, mavenCredential.name);
@@ -101,24 +117,6 @@ describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
     it("Verify triggered rule for javax.* package import", function () {
         Issues.openSingleApplication(tackleTestappName);
         exists("CUSTOM RULE for javax.* package import");
-    });
-
-    // Automates Bug MTA-2015
-    it("Bug MTA-2015: Custom rule with administracionEfectivo application", function () {
-        const app = new Analysis(
-            getRandomApplicationData("customRule_administracionEfectivo"),
-            getRandomAnalysisData(this.analysisData["administracionEfectivo_custom_rules"])
-        );
-        applications.push(app);
-        app.create();
-        app.analyze();
-        app.verifyAnalysisStatus(AnalysisStatuses.completed);
-        Issues.openSingleApplication(app.name);
-        exists("CUSTOM RULE");
-    });
-
-    afterEach("Reset state", function () {
-        Application.open(true);
     });
 
     after("Clear test data", function () {
