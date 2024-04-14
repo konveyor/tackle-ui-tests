@@ -11,12 +11,7 @@ import {
 import { dependencyFilter, migration, SEC } from "../../../../types/constants";
 import { navMenu } from "../../../../views/menu.view";
 import { AppDependency } from "../../../../types/types";
-import {
-    archetypeFilterName,
-    bsFilterName,
-    searchInput,
-    tagFilterName,
-} from "../../../../views/issue.view";
+import { archetypeFilterName, searchInput } from "../../../../views/issue.view";
 import { searchButton, span } from "../../../../views/common.view";
 import { dependencyColumns } from "../../../../views/dependency.view";
 
@@ -41,9 +36,7 @@ export class Dependencies {
         Dependencies.openList();
         selectFilter(filterType);
         const isApplicableFilter =
-            filterType === dependencyFilter.appName ||
-            filterType === dependencyFilter.deppName ||
-            filterType === dependencyFilter.language;
+            filterType === dependencyFilter.deppName || filterType === dependencyFilter.language;
 
         if (isApplicableFilter) {
             inputText(searchInput, filterValue);
