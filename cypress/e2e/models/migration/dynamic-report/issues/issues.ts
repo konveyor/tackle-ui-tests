@@ -87,7 +87,6 @@ export class Issues {
 
         selectFilter(filterType);
         const isApplicableFilter =
-            filterType === issueFilter.appName ||
             filterType === issueFilter.category ||
             filterType === issueFilter.source ||
             filterType === issueFilter.target;
