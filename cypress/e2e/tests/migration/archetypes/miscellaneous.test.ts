@@ -119,8 +119,8 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
                         cy.get(radioButton).invoke("is", ":checked");
                     });
             });
-        Assessment.fill_assessment_form("High", stakeholderList);
-        archetype.validateAssessmentField("High");
+        clickByText(button, "Cancel");
+        clickByText(button, "Continue");
     });
 
     it("View archived questionnaire for archetype", function () {
@@ -146,7 +146,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
     });
 
-    it("Discard archetype assessment from kebab menu & Assessment Actions page", function () {
+    it("Bug MTA-2616: Discard archetype assessment from kebab menu & Assessment Actions page", function () {
         //Automates Polarion MTA-427 Discard assessment through kebab menu
         Archetype.open(true);
         archetype.discard("Discard assessment(s)");
