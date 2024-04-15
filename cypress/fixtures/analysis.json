@@ -420,5 +420,17 @@
         "target": ["Containerization"],
         "binary": ["administracionEfectivo.ear"],
         "customRule": ["test.windup.xml"]
+    },
+
+    "upload_binary_with_exculde_packages": {
+        "appName": "administracionEfectivo-app custom rules",
+        "source": "Upload a local binary",
+        "target": ["Containerization"],
+        "binary": ["administracionEfectivo.ear"],
+        "manuallyAnalyzePackages": "io.konveyor.demo.ordermanagement",
+        "excludedPackagesList": [
+            " io.konveyor.demo.ordermanagement",
+            " io.konveyor.demo.ordermanagement.model "
+        ]
     }
 }
