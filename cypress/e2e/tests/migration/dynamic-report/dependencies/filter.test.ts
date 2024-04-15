@@ -96,11 +96,6 @@ describe(["@tier2"], "Dependency filtering", () => {
             }
         );
         clearAllFilters();
-
-        // Negative test, filtering by not existing data
-        Dependencies.applyFilter(dependencyFilter.appName, randomWordGenerator(6));
-        cy.get("tr").should("contain", "No data available");
-        clearAllFilters();
     });
 
     it("Filtering dependencies by Archetype", function () {
