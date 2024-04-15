@@ -17,6 +17,7 @@ limitations under the License.
 
 import {
     click,
+    clickJs,
     exists,
     login,
     deleteByList,
@@ -28,7 +29,13 @@ import {
 } from "../../../../utils/utils";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { successAlertMessage } from "../../../views/common.view";
+import {
+    nextButton,
+    radioButton,
+    radioButtonLabel,
+    splitItem,
+    successAlertMessage,
+} from "../../../views/common.view";
 import {
     legacyPathfinder,
     SEC,
@@ -44,6 +51,7 @@ import {
     ArchivedQuestionnaires,
     ArchivedQuestionnairesTableDataCell,
 } from "../../../views/assessmentquestionnaire.view";
+import { questionBlock } from "../../../views/assessment.view";
 
 let stakeholderList: Stakeholders[];
 let archetype: Archetype;
@@ -98,6 +106,19 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         archetype.clickAssessButton();
         cy.wait(SEC);
         clickByText(button, "Retake");
+        clickJs(nextButton);
+        cy.get(splitItem)
+            .contains("What is the main technology in your application?")
+            .closest(questionBlock)
+            .within(() => {
+                cy.get(radioButtonLabel)
+                    .contains("Spring Boot")
+                    .parent()
+                    .within(() => {
+                        // Verify selection from first take is saved
+                        cy.get(radioButton).invoke("is", ":checked");
+                    });
+            });
         Assessment.fill_assessment_form("High", stakeholderList);
         archetype.validateAssessmentField("High");
     });
