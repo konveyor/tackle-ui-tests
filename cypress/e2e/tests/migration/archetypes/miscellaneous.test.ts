@@ -94,6 +94,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
 
     it("Retake questionnaire for Archetype", function () {
         //Automates Polarion MTA-394
+        Archetype.open(true);
         archetype.clickAssessButton();
         cy.wait(SEC);
         clickByText(button, "Retake");
@@ -126,6 +127,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
 
     it("Discard archetype assessment from kebab menu & Assessment Actions page", function () {
         //Automates Polarion MTA-427 Discard assessment through kebab menu
+        Archetype.open(true);
         archetype.discard("Discard assessment(s)");
         checkSuccessAlert(
             successAlertMessage,
@@ -150,6 +152,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
 
     it("Discard archetype review", function () {
         // Automates Polarion MTA-428
+        Archetype.open(true);
         archetype.discard("Discard review");
         checkSuccessAlert(
             successAlertMessage,
