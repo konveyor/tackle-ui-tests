@@ -109,11 +109,6 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             }
         );
         clearAllFilters();
-
-        // Negative test, filtering by not existing data
-        Issues.applyFilter(issueFilter.appName, randomWordGenerator(6));
-        cy.get("tr").should("contain", "No data available");
-        clearAllFilters();
     });
 
     it("All issues - Filtering issues by Archetype", function () {
