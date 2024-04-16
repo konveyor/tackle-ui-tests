@@ -80,6 +80,7 @@ describe(["@tier2"], "Reports Tab filter validations", function () {
     });
 
     after("Clear test data", function () {
+        Application.open(true);
         deleteByList(applications);
         stakeholder.delete();
     });
