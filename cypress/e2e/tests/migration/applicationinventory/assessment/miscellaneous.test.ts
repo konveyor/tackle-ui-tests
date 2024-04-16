@@ -198,7 +198,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         // AssessmentQuestionnaire.delete(cloudNative);
     });
 
-    it.only(
+    it(
         ["@interop", "@tier0"],
         "Test inheritance after discarding application assessment and review",
         function () {
