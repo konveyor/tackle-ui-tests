@@ -27,11 +27,15 @@ import {
     createMultipleTags,
     createMultipleArchetypes,
     click,
-    clickJs
+    clickJs,
 } from "../../../../../utils/utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { alertTitle, confirmButton, successAlertMessage, nextButton,
+import {
+    alertTitle,
+    confirmButton,
+    successAlertMessage,
+    nextButton,
     radioButton,
     radioButtonLabel,
     splitItem,
@@ -85,7 +89,9 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         clickByText(button, "Retake");
         clickJs(nextButton);
         cy.get(splitItem)
-            .contains("Does the application development team understand and actively develop the application?")
+            .contains(
+                "Does the application development team understand and actively develop the application?"
+            )
             .closest(questionBlock)
             .within(() => {
                 cy.get(radioButtonLabel)
