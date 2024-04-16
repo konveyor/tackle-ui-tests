@@ -70,7 +70,9 @@ describe(["@tier2"], "Reports Tab filter validations", function () {
     });
 
     identifiedRisksFilterValidations.forEach((validation) => {
-        it(`Filtering identified risks by ${validation.name}`, function () {
+        it(`${validation.name === "Risk" ? "Bug MTA-2652: " : ""} Filtering identified risks by ${
+            validation.name
+        }`, function () {
             Reports.open(100);
             applySelectFilter(validation.id, new RegExp(`^${validation.name}$`), validation.text);
             exists(validation.should);
@@ -80,6 +82,7 @@ describe(["@tier2"], "Reports Tab filter validations", function () {
     });
 
     after("Clear test data", function () {
+        Application.open(true);
         deleteByList(applications);
         stakeholder.delete();
     });

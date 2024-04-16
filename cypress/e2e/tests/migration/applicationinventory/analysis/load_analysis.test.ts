@@ -20,6 +20,8 @@ import {
     getRandomApplicationData,
     getRandomAnalysisData,
     deleteByList,
+    deleteAllMigrationWaves,
+    deleteApplicationTableRows,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { AnalysisStatuses, SEC } from "../../../../types/constants";
@@ -32,6 +34,8 @@ const applications: Analysis[] = [];
 describe(["@tier1"], "Source Analysis of big applications", () => {
     before("Login", function () {
         login();
+        deleteAllMigrationWaves();
+        deleteApplicationTableRows();
     });
 
     beforeEach("Load data", function () {

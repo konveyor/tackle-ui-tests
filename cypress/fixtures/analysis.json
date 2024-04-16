@@ -388,7 +388,7 @@
         "target": ["JBoss Web Server 6"],
         "appName": "tackle-testapp",
         "openSourceLibraries": true,
-        "effort": 3
+        "effort": 2
     },
 
     "openJDK17_source+dep_analysis_on_tackletestapp": {
