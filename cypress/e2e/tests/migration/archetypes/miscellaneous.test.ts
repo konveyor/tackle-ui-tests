@@ -17,6 +17,7 @@ limitations under the License.
 
 import {
     click,
+    clickJs,
     exists,
     login,
     deleteByList,
@@ -28,7 +29,13 @@ import {
 } from "../../../../utils/utils";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { successAlertMessage } from "../../../views/common.view";
+import {
+    nextButton,
+    radioButton,
+    radioButtonLabel,
+    splitItem,
+    successAlertMessage,
+} from "../../../views/common.view";
 import {
     legacyPathfinder,
     SEC,
@@ -44,6 +51,7 @@ import {
     ArchivedQuestionnaires,
     ArchivedQuestionnairesTableDataCell,
 } from "../../../views/assessmentquestionnaire.view";
+import { questionBlock } from "../../../views/assessment.view";
 
 let stakeholderList: Stakeholders[];
 let archetype: Archetype;
@@ -94,11 +102,25 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
 
     it("Retake questionnaire for Archetype", function () {
         //Automates Polarion MTA-394
+        Archetype.open(true);
         archetype.clickAssessButton();
         cy.wait(SEC);
         clickByText(button, "Retake");
-        Assessment.fill_assessment_form("High", stakeholderList);
-        archetype.validateAssessmentField("High");
+        clickJs(nextButton);
+        cy.get(splitItem)
+            .contains("What is the main technology in your application?")
+            .closest(questionBlock)
+            .within(() => {
+                cy.get(radioButtonLabel)
+                    .contains("Spring Boot")
+                    .parent()
+                    .within(() => {
+                        // Verify selection from first take is saved
+                        cy.get(radioButton).invoke("is", ":checked");
+                    });
+            });
+        clickByText(button, "Cancel");
+        clickByText(button, "Continue");
     });
 
     it("View archived questionnaire for archetype", function () {
@@ -124,8 +146,9 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
     });
 
-    it("Discard archetype assessment from kebab menu & Assessment Actions page", function () {
+    it("Bug MTA-2616: Discard archetype assessment from kebab menu & Assessment Actions page", function () {
         //Automates Polarion MTA-427 Discard assessment through kebab menu
+        Archetype.open(true);
         archetype.discard("Discard assessment(s)");
         checkSuccessAlert(
             successAlertMessage,
@@ -150,6 +173,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
 
     it("Discard archetype review", function () {
         // Automates Polarion MTA-428
+        Archetype.open(true);
         archetype.discard("Discard review");
         checkSuccessAlert(
             successAlertMessage,
