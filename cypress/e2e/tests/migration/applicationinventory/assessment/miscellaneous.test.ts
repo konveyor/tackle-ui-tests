@@ -27,10 +27,19 @@ import {
     createMultipleTags,
     createMultipleArchetypes,
     click,
+    clickJs,
 } from "../../../../../utils/utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { alertTitle, confirmButton, successAlertMessage } from "../../../../views/common.view";
+import {
+    alertTitle,
+    confirmButton,
+    successAlertMessage,
+    nextButton,
+    radioButton,
+    radioButtonLabel,
+    splitItem,
+} from "../../../../views/common.view";
 import {
     legacyPathfinder,
     cloudNative,
@@ -47,6 +56,7 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import * as data from "../../../../../utils/data_utils";
+import { questionBlock } from "../../../../views/assessment.view";
 
 let stakeholderList: Array<Stakeholders> = [];
 let applicationList: Array<Application> = [];
@@ -77,12 +87,23 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         clickItemInKebabMenu(applicationList[0].name, "Assess");
         cy.wait(SEC);
         clickByText(button, "Retake");
-        checkSuccessAlert(
-            alertTitle,
-            `Success alert:Success! Assessment discarded for ${applicationList[0].name}.`
-        );
-        Assessment.fill_assessment_form("low", stakeholderList);
-        applicationList[0].verifyStatus("assessment", "Completed");
+        clickJs(nextButton);
+        cy.get(splitItem)
+            .contains(
+                "Does the application development team understand and actively develop the application?"
+            )
+            .closest(questionBlock)
+            .within(() => {
+                cy.get(radioButtonLabel)
+                    .contains("adequate")
+                    .parent()
+                    .within(() => {
+                        // Verify selection from first take is saved
+                        cy.get(radioButton).invoke("is", ":checked");
+                    });
+            });
+        clickByText(button, "Cancel");
+        clickByText(button, "Continue");
     });
 
     it("Bug MTA-2503: Discard application assessment from kebabMenu, Assessment actions Page", function () {
