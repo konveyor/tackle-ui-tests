@@ -115,14 +115,20 @@ describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
 
     Object.values(JiraIssueTypes).forEach((issueType) => {
         it(`Assert exports for ${issueType}`, function () {
-            cy.wait(60 * SEC); // Enough time to create both tasks and for them to be available in the Jira API
+            cy.wait(40 * SEC); // Enough time to create both tasks and for them to be available in the Jira API
             jiraInstance.getIssues(projectName).then((issues: JiraIssue[]) => {
                 const waveIssues = issues.filter((issue) => {
                     return (
-                        (issue.fields.summary.includes(wavesMap[issueType].applications[0].name) ||
-                            issue.fields.summary.includes(
-                                wavesMap[issueType].applications[1].name
-                            )) &&
+                        (issue.fields.summary
+                            .toLowerCase()
+                            .includes(
+                                wavesMap[issueType].applications[0].name.toLowerCase().trim()
+                            ) ||
+                            issue.fields.summary
+                                .toLowerCase()
+                                .includes(
+                                    wavesMap[issueType].applications[1].name.toLowerCase().trim()
+                                )) &&
                         issue.fields.issuetype.name.toUpperCase() ===
                             (issueType as string).toUpperCase()
                     );
