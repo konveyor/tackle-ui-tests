@@ -119,9 +119,11 @@ describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
             jiraInstance.getIssues(projectName).then((issues: JiraIssue[]) => {
                 const waveIssues = issues.filter((issue) => {
                     return (
-                        (issue.fields.summary.includes(wavesMap[issueType].applications[0].name) ||
+                        (issue.fields.summary.includes(
+                            wavesMap[issueType].applications[0].name.trim()
+                        ) ||
                             issue.fields.summary.includes(
-                                wavesMap[issueType].applications[1].name
+                                wavesMap[issueType].applications[1].name.trim()
                             )) &&
                         issue.fields.issuetype.name.toUpperCase() ===
                             (issueType as string).toUpperCase()
