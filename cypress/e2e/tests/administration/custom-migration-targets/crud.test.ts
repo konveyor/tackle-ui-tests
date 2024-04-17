@@ -18,6 +18,7 @@ limitations under the License.
 import {
     click,
     clickByText,
+    closeSuccessAlert,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
@@ -80,6 +81,7 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
             target.create();
             cy.wait(2 * SEC);
             cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
+            closeSuccessAlert();
             cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
                 "contain",
                 target.name
@@ -143,6 +145,7 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
 
             target.create();
             cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
+            closeSuccessAlert();
             cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
                 "contain",
                 target.name
@@ -183,6 +186,7 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
                 language
             );
             target.create();
+            closeSuccessAlert();
 
             const dragButton = cy
                 .contains(CustomMigrationTargetView.card, target.name, { timeout: 12 * SEC })
@@ -238,6 +242,7 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
                 targetData.sources
             );
             target.create();
+            closeSuccessAlert();
 
             const application = new Analysis(
                 getRandomApplicationData("bookserverApp", {
