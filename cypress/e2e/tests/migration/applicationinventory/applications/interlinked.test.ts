@@ -204,6 +204,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
     after("Perform test data clean up", function () {
         Application.open(true);
         deleteByList(applicationList);
+        deleteByList(tagList);
         deleteByList(businessServicesList);
     });
 });
