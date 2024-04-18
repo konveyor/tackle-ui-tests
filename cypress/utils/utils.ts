@@ -319,8 +319,12 @@ export function checkSuccessAlert(fieldId: string, message: string, close = fals
     }
 }
 
-export function validateTextPresence(fieldId: string, message: string): void {
-    cy.get(fieldId, { timeout: 150 * SEC }).should("contain.text", message);
+export function validateTextPresence(fieldId: string, message: string, shouldBeFound = true): void {
+    if (shouldBeFound) {
+        cy.get(fieldId, { timeout: 150 * SEC }).should("contain.text", message);
+    } else {
+        cy.get(fieldId, { timeout: 150 * SEC }).should("not.contain.text", message);
+    }
 }
 
 export function validateNumberPresence(fieldId: string, value: number): void {
@@ -1787,6 +1791,7 @@ export function manageCredentialsForMultipleApplications(
 /**
  * Applies and validates sorting by particular column
  * @param sortBy is column title used for sorting
+ * @param tdSelector is an optional parameter that should be equal sortBy if not defined explicitly.
  */
 export function validateSortBy(sortBy: string, tdSelector?: string) {
     if (!tdSelector) {
@@ -1871,4 +1876,21 @@ export function validateMtaVersionInUI(expectedVersion: string): void {
             cy.get("dd").should("contain.text", expectedVersion);
         });
     click(closeAbout);
+}
+
+/**
+ * Takes 2 arrays of any type and returns array of elements, unique for a second array
+ * @param arrA is an array of any type
+ * @param arrB is an array of any type
+ * @return result
+ */
+export function getUniqueElementsFromSecondArray<T>(arrA: T[], arrB: T[]): T[] {
+    const result: T[] = [];
+
+    for (const item of arrB) {
+        if (!arrA.includes(item)) {
+            result.push(item);
+        }
+    }
+    return result;
 }
