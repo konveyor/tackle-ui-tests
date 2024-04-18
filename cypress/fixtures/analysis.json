@@ -36,11 +36,6 @@
                 "labels": ["open-source"]
             },
             {
-                "name": "javax.annotation.javax.annotation-api",
-                "language": "java",
-                "labels": ["open-source"]
-            },
-            {
                 "name": "org.hibernate.validator.hibernate-validator",
                 "language": "java",
                 "labels": ["open-source"]
@@ -62,19 +57,6 @@
         "storyPoints": 24,
         "issues": [
             {
-                "name": "File system - Java IO",
-                "category": "mandatory",
-                "source": "None",
-                "targets": ["cloud-readiness"],
-                "effort": 1,
-                "totalEffort": 2,
-                "incidents": 2,
-                "affectedFiles": 1,
-                "ruleSet": "cloud-readiness",
-                "rule": "local-storage-00001",
-                "labels": ["konveyor.io/source", "storage"]
-            },
-            {
                 "name": "The package 'javax' has been replaced by 'jakarta'.",
                 "category": "mandatory",
                 "source": "None",
@@ -85,38 +67,6 @@
                 "ruleSet": "eap8/eap7",
                 "rule": "javax-to-jakarta-import-00001",
                 "labels": ["konveyor.io/source"]
-            }
-        ],
-        "dependencies": [
-            {
-                "name": "javax.annotation.javax.annotation-api",
-                "language": "java",
-                "labels": []
-            },
-            {
-                "name": "javax.javaee-api",
-                "language": "java",
-                "labels": []
-            },
-            {
-                "name": "net.wasdev.wlp.sample.daytrader-ee7-ejb",
-                "language": "java",
-                "labels": []
-            },
-            {
-                "name": "net.wasdev.wlp.sample.daytrader-ee7-web",
-                "language": "java",
-                "labels": []
-            },
-            {
-                "name": "org.apache.derby.derby",
-                "language": "java",
-                "labels": []
-            },
-            {
-                "name": "taglibs.standard",
-                "language": "java",
-                "labels": []
             }
         ]
     },
@@ -470,5 +420,17 @@
         "target": ["Containerization"],
         "binary": ["administracionEfectivo.ear"],
         "customRule": ["test.windup.xml"]
+    },
+
+    "upload_binary_with_exculde_packages": {
+        "appName": "administracionEfectivo-app custom rules",
+        "source": "Upload a local binary",
+        "target": ["Containerization"],
+        "binary": ["administracionEfectivo.ear"],
+        "manuallyAnalyzePackages": "io.konveyor.demo.ordermanagement",
+        "excludedPackagesList": [
+            " io.konveyor.demo.ordermanagement",
+            " io.konveyor.demo.ordermanagement.model "
+        ]
     }
 }

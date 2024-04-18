@@ -8,7 +8,7 @@ import {
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
-    getUniqueElements,
+    getUniqueElementsFromSecondArray,
     login,
     validatePagination,
     validateSortBy,
@@ -113,11 +113,12 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             Issues.validateFilter(issue);
         });
 
-        // let deltaIssuesList = getUniqueElements(bookServerIssues, dayTraderIssues);
         // Getting list of issues unique for daytrader app and making sure they are not present in the list while filtering issues by book server app
-        getUniqueElements(bookServerIssues, dayTraderIssues).forEach((issue: AppIssue) => {
-            validateTextPresence(issueColumns.issue, issue.name, false);
-        });
+        getUniqueElementsFromSecondArray(bookServerIssues, dayTraderIssues).forEach(
+            (issue: AppIssue) => {
+                validateTextPresence(issueColumns.issue, issue.name, false);
+            }
+        );
 
         clearAllFilters();
     });

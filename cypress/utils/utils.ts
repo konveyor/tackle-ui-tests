@@ -1884,7 +1884,7 @@ export function validateMtaVersionInUI(expectedVersion: string): void {
  * @param arrB is an array of any type
  * @return result
  */
-export function getUniqueElements<T>(arrA: T[], arrB: T[]): T[] {
+export function getUniqueElementsFromSecondArray<T>(arrA: T[], arrB: T[]): T[] {
     const result: T[] = [];
 
     for (const item of arrB) {
