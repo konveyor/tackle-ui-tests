@@ -1,6 +1,7 @@
 import {
     click,
     clickByText,
+    getUniqueElementsFromSecondArray,
     getUrl,
     inputText,
     performWithin,
@@ -52,6 +53,29 @@ export class Issues {
         clickByText(button, singleApplication);
         click(singleAppDropList);
         clickByText(button, applicationName);
+    }
+
+    public static applyAndValidateFilter(
+        filterType: issueFilter,
+        filterValues: string[],
+        issuesExpected: AppIssue[],
+        issuesNotExpected?: AppIssue[],
+        isSingle = false
+    ) {
+        filterValues.forEach((value) => {
+            Issues.applyFilter(filterType, value, isSingle);
+        });
+        issuesExpected.forEach((issue) => {
+            Issues.validateFilter(issue, isSingle);
+        });
+
+        if (issuesNotExpected.length > 0) {
+            getUniqueElementsFromSecondArray(issuesExpected, issuesNotExpected).forEach(
+                (issue: AppIssue) => {
+                    validateTextPresence(issueColumns.issue, issue.name, false);
+                }
+            );
+        }
     }
 
     public static validateFilter(issue: AppIssue, isSingle = false): void {

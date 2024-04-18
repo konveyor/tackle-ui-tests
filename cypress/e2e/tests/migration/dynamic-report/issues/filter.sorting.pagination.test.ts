@@ -8,11 +8,9 @@ import {
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
-    getUniqueElementsFromSecondArray,
     login,
     validatePagination,
     validateSortBy,
-    validateTextPresence,
 } from "../../../../../utils/utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import * as data from "../../../../../utils/data_utils";
@@ -25,7 +23,7 @@ import { Issues } from "../../../../models/migration/dynamic-report/issues/issue
 import { AppIssue } from "../../../../types/types";
 import { AnalysisStatuses, issueFilter, SEC, tdTag, trTag } from "../../../../types/constants";
 import { randomWordGenerator } from "../../../../../utils/data_utils";
-import { issueColumns, rightSideBar } from "../../../../views/issue.view";
+import { rightSideBar } from "../../../../views/issue.view";
 
 describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
     const applicationsList: Analysis[] = [];
@@ -103,23 +101,38 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         // Analyzing daytrader app for pagination test to generate issues more than 10.
         const bookServerApp = applicationsList[0];
         const dayTraderApp = applicationsList[6];
-        Analysis.analyzeAll(dayTraderApp);
-        Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
-        Issues.openList(10, true);
-        Issues.applyFilter(issueFilter.appName, bookServerApp.name);
         const bookServerIssues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
         const dayTraderIssues = this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"];
-        bookServerIssues.forEach((issue: AppIssue) => {
-            Issues.validateFilter(issue);
-        });
 
-        // Getting list of issues unique for daytrader app and making sure they are not present in the list while filtering issues by book server app
-        getUniqueElementsFromSecondArray(bookServerIssues, dayTraderIssues).forEach(
-            (issue: AppIssue) => {
-                validateTextPresence(issueColumns.issue, issue.name, false);
-            }
+        Analysis.analyzeAll(dayTraderApp);
+        Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
+
+        Issues.openList(100, true);
+        // Issues.applyFilter(issueFilter.appName, bookServerApp.name);
+        // bookServerIssues.forEach((issue: AppIssue) => {
+        //     Issues.validateFilter(issue);
+        // });
+        //
+        // // Getting list of issues unique for daytrader app and making sure they are not present in the list while filtering issues by book server app
+        // getUniqueElementsFromSecondArray(bookServerIssues, dayTraderIssues).forEach(
+        //     (issue: AppIssue) => {
+        //         validateTextPresence(issueColumns.issue, issue.name, false);
+        //     }
+        // );
+        Issues.applyAndValidateFilter(
+            issueFilter.appName,
+            [bookServerApp.name],
+            bookServerIssues,
+            dayTraderIssues
         );
+        clearAllFilters();
 
+        Issues.applyAndValidateFilter(
+            issueFilter.appName,
+            [dayTraderApp.name],
+            dayTraderIssues,
+            bookServerIssues
+        );
         clearAllFilters();
     });
 
