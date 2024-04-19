@@ -386,8 +386,8 @@ export class Application {
         if (
             source != "Manual" &&
             source != "Analysis" &&
-            source != "archetype" &&
-            source != "assessment"
+            source != "Archetype" &&
+            source != "Assessment"
         )
             cy.get(appDetailsView.tagCategoryFilter).click();
         else cy.get(appDetailsView.tagFilter).click();
