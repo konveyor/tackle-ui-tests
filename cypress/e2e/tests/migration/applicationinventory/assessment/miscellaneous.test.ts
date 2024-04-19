@@ -382,12 +382,12 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         application2.create();
 
         // Verify archetype tag and assessment tag are present on application details page
-        application2.filterTags("archetype");
+        application2.filterTags("Archetype");
         application2.tagAndCategoryExists([archetypeTag]);
         application2.tagAndCategoryDontExist([assessmentTag, ["Language", "Java"]]);
         application2.closeApplicationDetails();
 
-        application2.filterTags("assessment");
+        application2.filterTags("Assessment");
         application2.tagAndCategoryExists([assessmentTag]);
         application2.tagAndCategoryDontExist([archetypeTag, ["Language", "Java"]]);
         application2.closeApplicationDetails();
