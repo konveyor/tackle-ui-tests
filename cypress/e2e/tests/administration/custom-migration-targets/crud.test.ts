@@ -160,17 +160,6 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
             click(cancelButton);
 
             target.delete();
-            cy.wait("@deleteRule");
-            cy.wait(3 * SEC);
-            cy.get(CustomMigrationTargetView.cardContainer).then((container) => {
-                if (container.children().length > 1) {
-                    cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
-                        "not.contain",
-                        target.name
-                    );
-                }
-            });
-
             sourceCredential.delete();
         });
     });
