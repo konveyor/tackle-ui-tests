@@ -176,7 +176,7 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
     });
 
     Object.values(Languages).forEach((language) => {
-        it.only(`${language} | Change layout and check in analysis wizard`, function () {
+        it(`${language} | Change layout and check in analysis wizard`, function () {
             const targetData = this.customMigrationTargets["manual_rules"];
             const target = new CustomMigrationTarget(
                 data.getRandomWord(8),
