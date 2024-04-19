@@ -119,7 +119,7 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
     });
 
     Object.values(Languages).forEach((language) => {
-        it.only(`${language} | Create Custom Migration Target with rules from repository with credentials`, function () {
+        it(`${language} | Create Custom Migration Target with rules from repository with credentials`, function () {
             const sourceCredential = new CredentialsSourceControlUsername(
                 data.getRandomCredentialsData(
                     CredentialType.sourceControl,
@@ -176,7 +176,7 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
     });
 
     Object.values(Languages).forEach((language) => {
-        it(`${language} | Change layout and check in analysis wizard`, function () {
+        it.only(`${language} | Change layout and check in analysis wizard`, function () {
             const targetData = this.customMigrationTargets["manual_rules"];
             const target = new CustomMigrationTarget(
                 data.getRandomWord(8),
