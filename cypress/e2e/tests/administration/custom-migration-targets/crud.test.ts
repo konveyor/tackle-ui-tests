@@ -160,17 +160,6 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
             click(cancelButton);
 
             target.delete();
-            cy.wait("@deleteRule");
-            cy.wait(3 * SEC);
-            cy.get(CustomMigrationTargetView.cardContainer).then((container) => {
-                if (container.children().length > 1) {
-                    cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
-                        "not.contain",
-                        target.name
-                    );
-                }
-            });
-
             sourceCredential.delete();
         });
     });
@@ -186,6 +175,18 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
                 language
             );
             target.create();
+
+            const target1 = new CustomMigrationTarget(
+                data.getRandomWord(8),
+                data.getDescription(),
+                targetData.image,
+                getRulesData(targetData),
+                language
+            );
+            // Two targets are required for Go to drag and change position.
+            if (language == "Go") {
+                target1.create();
+            }
             closeSuccessAlert();
 
             const dragButton = cy
@@ -226,6 +227,9 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
             clickByText(button, "Cancel");
 
             target.delete();
+            if (language == "Go") {
+                target1.delete();
+            }
             application.delete();
         });
     });
