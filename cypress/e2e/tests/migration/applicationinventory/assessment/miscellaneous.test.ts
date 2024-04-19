@@ -403,8 +403,9 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
     });
 
     after("Perform test data clean up", function () {
-        deleteByList(stakeholderList);
+        Application.open(true);
         deleteByList(applicationList);
+        deleteByList(stakeholderList);
         deleteByList(archetypeList);
         AssessmentQuestionnaire.deleteAllQuestionnaires();
     });
