@@ -106,7 +106,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         clickByText(button, "Continue");
     });
 
-    it("Bug MTA-2503: Discard application assessment from kebabMenu, Assessment actions Page", function () {
+    it("Discard application assessment from kebabMenu, Assessment actions Page", function () {
         // Automates Polarion MTA-418 Discard assessment from kebab menu
         applicationList[0].selectKebabMenuItem("Discard assessment(s)");
         checkSuccessAlert(
@@ -125,7 +125,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             `Success! Assessment discarded for ${applicationList[0].name}.`,
             true
         );
-        applicationList[0].validateAssessmentField("Unknown");
+        applicationList[0].validateAssessmentField("unassessed");
         archetypeList[0].perform_assessment("low", stakeholderList);
     });
 
@@ -306,7 +306,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         deleteByList(tags);
     });
 
-    it("BUG MTA-2505: Deletes assessments from archived questionnaire associated with an archetype and an application", function () {
+    it("Deletes assessments from archived questionnaire associated with an archetype and an application", function () {
         //automates polarion MTA-441 and MTA-442
         const applications = createMultipleApplications(1);
         const archetypes = createMultipleArchetypes(1);
@@ -316,14 +316,14 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applications[0].perform_assessment("low", stakeholderList);
         AssessmentQuestionnaire.disable(legacyPathfinder);
         applications[0].verifyStatus("assessment", "Not started");
-        applications[0].validateAssessmentField("Unknown");
+        applications[0].validateAssessmentField("unassessed");
         applications[0].deleteAssessments();
         applications[0].verifyStatus("assessment", "Not started");
 
         AssessmentQuestionnaire.enable(legacyPathfinder);
         archetypes[0].perform_assessment("low", stakeholderList);
         AssessmentQuestionnaire.disable(legacyPathfinder);
-        archetypes[0].validateAssessmentField("Unknown");
+        archetypes[0].validateAssessmentField("unassessed");
         archetypes[0].deleteAssessments();
 
         AssessmentQuestionnaire.enable(legacyPathfinder);
@@ -353,7 +353,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
         // Automates Polarion MTA-519 Validate application tag filtration
         application.validateTagsCount("2");
-        application.filterTags("assessment"); // Verify assessment tag is applied to application
+        application.filterTags("Assessment"); // Verify assessment tag is applied to application
         application.tagAndCategoryExists([assessmentTag]);
         application.tagAndCategoryDontExist([archetypeTag, ["Language", "C"]]);
         application.closeApplicationDetails();
@@ -382,12 +382,12 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         application2.create();
 
         // Verify archetype tag and assessment tag are present on application details page
-        application2.filterTags("archetype");
+        application2.filterTags("Archetype");
         application2.tagAndCategoryExists([archetypeTag]);
         application2.tagAndCategoryDontExist([assessmentTag, ["Language", "Java"]]);
         application2.closeApplicationDetails();
 
-        application2.filterTags("assessment");
+        application2.filterTags("Assessment");
         application2.tagAndCategoryExists([assessmentTag]);
         application2.tagAndCategoryDontExist([archetypeTag, ["Language", "Java"]]);
         application2.closeApplicationDetails();
