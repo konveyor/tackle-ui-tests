@@ -58,7 +58,7 @@ describe(["@tier3"], "Review Identified Risks filter validations for assessments
     });
 
     identifiedRisksFilterValidations.forEach((validation) => {
-        it(`Filtering identified risks by ${validation.name}`, function () {
+        it(`Bug MTA-2675: Filtering identified risks by ${validation.name}`, function () {
             const commonActions = () => {
                 applySelectFilter(
                     validation.id,
@@ -73,7 +73,7 @@ describe(["@tier3"], "Review Identified Risks filter validations for assessments
             Application.open();
             clickItemInKebabMenu(application.name, review);
             commonActions();
-            Archetype.open(true);
+            Archetype.open();
             clickKebabMenuOptionArchetype(archetype.name, review);
             commonActions();
         });
