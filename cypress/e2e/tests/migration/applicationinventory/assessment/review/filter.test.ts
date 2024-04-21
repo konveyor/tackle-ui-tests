@@ -58,7 +58,7 @@ describe(["@tier3"], "Review Identified Risks filter validations for assessments
     });
 
     identifiedRisksFilterValidations.forEach((validation) => {
-        it(`Bug MTA-2675: Filtering identified risks by ${validation.name}`, function () {
+        it(`Bug MTA-2652: Filtering identified risks by ${validation.name}`, function () {
             const commonActions = () => {
                 applySelectFilter(
                     validation.id,
