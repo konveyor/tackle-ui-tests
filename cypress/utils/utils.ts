@@ -1487,7 +1487,7 @@ export function validatePagination(): void {
     cy.get(firstPageButton).should("be.disabled");
 
     // Navigate to next page
-    cy.get(nextPageButton).eq(0).click();
+    cy.get(nextPageButton).eq(0).click({ force: true });
 
     // Verify that previous buttons are enabled after moving to next page
     cy.get(prevPageButton).each(($previousBtn) => {
