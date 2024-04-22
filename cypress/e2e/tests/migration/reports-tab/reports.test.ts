@@ -39,7 +39,7 @@ const unknownRiskApps = 2;
 
 let riskType = ["low", "medium", "high", "low", "high", "high"];
 
-describe(["@tier2"], "Reports tests", () => {
+describe(["@tier2"], "Bug MTA-2676: Reports tests", () => {
     before("Login and Create Test Data", function () {
         login();
         AssessmentQuestionnaire.deleteAllQuestionnaires();
