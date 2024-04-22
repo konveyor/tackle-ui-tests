@@ -179,7 +179,7 @@ export class MigrationWave {
 
     /**
      * This method should NOT be used to do assertions, if an invalid date is passed, it'll throw an exception
-     * It selects the date using the picker because it can't be manually entered right now due to bug MTA-706
+     * It selects the date using the picker.
      * @param date
      */
     public fillStartDate(date: Date): void {
@@ -208,7 +208,6 @@ export class MigrationWave {
 
     /**
      * This method should NOT be used to do assertions, if an invalid date is passed, it'll throw an exception
-     * It selects the date using the picker because it can't be manually entered right now due to bug MTA-706
      * @param date
      */
     public fillEndDate(date: Date) {
@@ -221,14 +220,9 @@ export class MigrationWave {
             ).to.eq(false);
         }
 
-        const currentEndDate =
-            this.endDate.getTime() !== date.getTime() ? this.endDate : new Date();
-        const currentMonth = currentEndDate.toLocaleString("en-us", { month: "long" });
-        cy.get(MigrationWaveView.endDateInput)
-            .closest(MigrationWaveView.generalDatePicker)
-            .find(MigrationWaveView.calendarButton)
-            .click();
-        MigrationWave.selectDateFromDatePicker(date, currentMonth);
+        cy.get(MigrationWaveView.endDateInput).type(MigrationWave.formatDateMMddYYYY(date), {
+            delay: 0,
+        });
     }
 
     private fillForm(values: Partial<MigrationWave>) {
@@ -268,11 +262,11 @@ export class MigrationWave {
     }
 
     static formatDateMMddYYYY(date: Date): string {
-        const day = String(date.getDate()).padStart(2, "0");
-        const month = String(date.getMonth() + 1).padStart(2, "0"); //January is 0!
-        const year = date.getFullYear();
-
-        return month + "/" + day + "/" + year;
+        return new Intl.DateTimeFormat("en-US", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+        }).format(date);
     }
 
     public expandActionsMenu() {
