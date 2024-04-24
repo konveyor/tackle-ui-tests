@@ -29,7 +29,7 @@ import { appTable } from "../../../../../views/common.view";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 import { tagCategory } from "../../../../../views/tags.view";
 
-describe(["@tier3"], "Tag category pagination validations", function () {
+describe(["@tier3"], "Bug MTA-2681: Tag category pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
         TagCategory.openList();
@@ -64,10 +64,10 @@ describe(["@tier3"], "Tag category pagination validations", function () {
         validatePagination();
     });
 
-    it("Items per page validations", function () {
+    it("Bug MTA-2681: Items per page validations", function () {
         TagCategory.openList();
         selectItemsPerPage(10);
-        itemsPerPageValidation();
+        itemsPerPageValidation(appTable, "Tag category");
     });
 
     after("Perform test data clean up", function () {
