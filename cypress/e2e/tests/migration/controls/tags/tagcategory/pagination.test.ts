@@ -67,7 +67,7 @@ describe(["@tier3"], "Tag category pagination validations", function () {
     it("Items per page validations", function () {
         TagCategory.openList();
         selectItemsPerPage(10);
-        itemsPerPageValidation(appTable, "Tag category");
+        itemsPerPageValidation();
     });
 
     after("Perform test data clean up", function () {
