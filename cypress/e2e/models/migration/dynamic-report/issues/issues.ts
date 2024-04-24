@@ -86,9 +86,13 @@ export class Issues {
                 validateTextPresence(issueColumns.category, issue.category);
                 validateTextPresence(issueColumns.source, issue.source);
                 cy.get(issueColumns.target).within(() => {
-                    issue.targets.forEach((currentTarget) => {
-                        validateTextPresence(liTag, currentTarget);
-                    });
+                    // issue.targets.forEach((currentTarget) => {
+                    //     validateTextPresence(liTag, currentTarget);
+                    // });
+                    validateTextPresence(liTag, issue.targets[0]);
+                    if (issue.targets.length > 1) {
+                        clickByText(span, /more/i);
+                    }
                 });
                 validateNumberPresence(issueColumns.effort, issue.effort);
                 if (!isSingle) {
@@ -97,6 +101,13 @@ export class Issues {
                     validateAnyNumberPresence(singleApplicationColumns.files);
                 }
             });
+        if (issue.targets.length > 1) {
+            for (let i = 1; i < issue.targets.length; i++) {
+                cy.get("div.pf-v5-c-popover__content").within(() => {
+                    validateTextPresence("span.pf-v5-c-label__text", issue.targets[i]);
+                });
+            }
+        }
     }
 
     public static applyFilter(

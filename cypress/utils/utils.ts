@@ -116,6 +116,7 @@ import {
     getSpecialMigrationWavesTableSelector,
 } from "../e2e/views/migration-wave.view";
 import { manageCredentials, mavenCredential, sourceCredential } from "../e2e/views/analysis.view";
+import * as ansiRegex from "ansi-regex";
 
 const { _ } = Cypress;
 
@@ -134,7 +135,7 @@ export function clearInput(fieldID: string): void {
 
 export function clickByText(
     fieldId: string,
-    buttonText: string,
+    buttonText: string | ansiRegex,
     isForced = true,
     log = false
 ): void {
