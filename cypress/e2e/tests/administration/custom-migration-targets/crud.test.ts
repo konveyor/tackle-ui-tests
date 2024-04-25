@@ -184,7 +184,7 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
                 language
             );
             // Two targets are required for Go to drag and change position.
-            if (language == "Go") {
+            if (language == Languages.Go) {
                 target1.create();
             }
             closeSuccessAlert();
@@ -200,8 +200,8 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
                 force: true,
                 waitForAnimations: false,
             });
-            cy.wait(SEC);
             cy.wait("@getRule");
+            cy.get("body").focus();
 
             const application = new Analysis(
                 getRandomApplicationData("bookserverApp", {
@@ -228,7 +228,7 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
             clickByText(button, "Cancel");
 
             target.delete();
-            if (language == "Go") {
+            if (language == Languages.Go) {
                 target1.delete();
             }
             application.delete();
