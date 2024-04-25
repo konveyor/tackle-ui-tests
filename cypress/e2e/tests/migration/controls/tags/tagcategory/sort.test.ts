@@ -22,10 +22,10 @@ import {
     getTableColumnData,
     clickOnSortButton,
 } from "../../../../../../utils/utils";
-import { tagCategory, rank, tagCount, SortType } from "../../../../../types/constants";
+import { rank, tagCount, SortType, tagCategory } from "../../../../../types/constants";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 
-describe(["@tier2"], "1 Bug: Tag category sort validations", function () {
+describe(["@tier2"], "Bug MTA-2681: Tag category sort validations", function () {
     before("Login", function () {
         login();
     });
@@ -35,7 +35,7 @@ describe(["@tier2"], "1 Bug: Tag category sort validations", function () {
         cy.intercept("GET", "/hub/tag-category*").as("getTagCategories");
     });
 
-    it("Tag category name sort validations", function () {
+    it("Bug MTA-2681: Tag category name sort validations", function () {
         // Navigate to Tags tab
         TagCategory.openList();
         cy.get("@getTagCategories");
