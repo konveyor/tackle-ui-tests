@@ -201,6 +201,7 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
                 waitForAnimations: false,
             });
             cy.wait(SEC);
+            cy.wait("@getRule");
 
             const application = new Analysis(
                 getRandomApplicationData("bookserverApp", {
