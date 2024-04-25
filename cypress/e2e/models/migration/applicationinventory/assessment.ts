@@ -36,13 +36,12 @@ import {
     assessmentColumnSelector,
     questionBlock,
     radioInput,
-    stakeholdergroupsSelect,
-    stakeholderSelect,
     stack,
     assessmentBlock,
     victoryContainer,
     donutChart,
     donutChartImage,
+    stakeholdersAndGroupsSelect,
 } from "../../../views/assessment.view";
 import {
     criticalityInput,
@@ -57,15 +56,15 @@ import { notYetReviewed, reviewItems } from "../../../views/archetype.view";
 import { plainButton, tableRowActions, splitItem } from "../../../views/common.view";
 
 export class Assessment {
-    public static selectStakeholders(stakeholders: Stakeholders[]): void {
-        stakeholders.forEach(function (stakeholder) {
-            selectFormItems(stakeholderSelect, stakeholder.name);
+    public static selectStakeholdersAndGroups(
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[]
+    ): void {
+        stakeholders?.forEach(function (stakeholder) {
+            selectFormItems(stakeholdersAndGroupsSelect, stakeholder.name);
         });
-    }
-
-    public static selectStakeholderGroups(stakeholderGroups: Stakeholdergroups[]): void {
-        stakeholderGroups.forEach(function (stakeholderGroup) {
-            selectFormItems(stakeholdergroupsSelect, stakeholderGroup.name);
+        stakeholderGroups?.forEach(function (stakeholderGroup) {
+            selectFormItems(stakeholdersAndGroupsSelect, stakeholderGroup.name);
         });
     }
 
@@ -215,8 +214,8 @@ export class Assessment {
         stakeholderGroups?: Stakeholdergroups[],
         saveAndReview = false
     ): void {
-        if (stakeholders) this.selectStakeholders(stakeholders);
-        if (stakeholderGroups) this.selectStakeholderGroups(stakeholderGroups);
+        if (stakeholders || stakeholderGroups)
+            this.selectStakeholdersAndGroups(stakeholders, stakeholderGroups);
         clickJs(commonView.nextButton);
         cy.wait(SEC);
         this.selectAnswers(risk, saveAndReview);

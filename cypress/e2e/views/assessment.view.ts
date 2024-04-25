@@ -13,8 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-export const stakeholderSelect = "input[aria-label='stakeholder-select-toggle']";
-export const stakeholdergroupsSelect = "input[aria-label='stakeholder-groups-select-toggle']";
+export const stakeholdersAndGroupsSelect =
+    "input[aria-label='stakeholders-and-groups-select-toggle']";
 export const questionBlock = "div[cy-data='question']";
 export const assessmentBlock = "li.pf-v5-c-wizard__nav-item";
 export const radioInput = "input[type='radio']";

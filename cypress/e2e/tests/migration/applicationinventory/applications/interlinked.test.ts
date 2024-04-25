@@ -28,11 +28,7 @@ import {
     selectItemsPerPage,
 } from "../../../../../utils/utils";
 import { businessColumnSelector } from "../../../../views/applicationinventory.view";
-import {
-    continueButton,
-    stakeholdergroupsSelect,
-    stakeholderSelect,
-} from "../../../../views/assessment.view";
+import { continueButton, stakeholdersAndGroupsSelect } from "../../../../views/assessment.view";
 import { navMenu } from "../../../../views/menu.view";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
@@ -150,8 +146,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         clickByText(button, "Retake");
 
         //Verify that values show blank
-        cy.get(stakeholderSelect).should("have.value", "");
-        cy.get(stakeholdergroupsSelect).should("have.value", "");
+        cy.get(stakeholdersAndGroupsSelect).should("have.value", "");
         clickByText(button, "Cancel");
         cy.get(continueButton).click();
     });
