@@ -194,15 +194,13 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
                 .find(CustomMigrationTargetView.dragButton);
 
             // Moves the custom migration target to the first place
-            cy.wait(SEC);
             cy.wait("@getRule");
             dragButton.drag(commonView.optionMenu, {
                 force: true,
                 waitForAnimations: false,
             });
-            cy.wait("@getRule");
-            cy.get("body").focus();
 
+            Analysis.open(true);
             const application = new Analysis(
                 getRandomApplicationData("bookserverApp", {
                     sourceData: this.appData["bookserver-app"],
