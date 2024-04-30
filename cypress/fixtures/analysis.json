@@ -57,6 +57,19 @@
         "storyPoints": 24,
         "issues": [
             {
+                "name": "File system - Java IO",
+                "category": "mandatory",
+                "source": "None",
+                "targets": ["cloud-readiness"],
+                "effort": 1,
+                "totalEffort": 2,
+                "incidents": 2,
+                "affectedFiles": 1,
+                "ruleSet": "cloud-readiness",
+                "rule": "local-storage-00001",
+                "labels": ["konveyor.io/source", "storage"]
+            },
+            {
                 "name": "The package 'javax' has been replaced by 'jakarta'.",
                 "category": "mandatory",
                 "source": "None",

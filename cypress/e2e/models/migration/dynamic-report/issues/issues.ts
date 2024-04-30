@@ -1,6 +1,7 @@
 import {
     click,
     clickByText,
+    getUniqueElementsFromSecondArray,
     getUrl,
     inputText,
     performWithin,
@@ -54,6 +55,29 @@ export class Issues {
         clickByText(button, applicationName);
     }
 
+    public static applyAndValidateFilter(
+        filterType: issueFilter,
+        filterValues: string[],
+        issuesExpected: AppIssue[],
+        issuesNotExpected?: AppIssue[],
+        isSingle = false
+    ) {
+        filterValues.forEach((value) => {
+            Issues.applyFilter(filterType, value, isSingle);
+        });
+        issuesExpected.forEach((issue) => {
+            Issues.validateFilter(issue, isSingle);
+        });
+
+        if (issuesNotExpected.length > 0) {
+            getUniqueElementsFromSecondArray(issuesExpected, issuesNotExpected).forEach(
+                (issue: AppIssue) => {
+                    validateTextPresence(issueColumns.issue, issue.name, false);
+                }
+            );
+        }
+    }
+
     public static validateFilter(issue: AppIssue, isSingle = false): void {
         cy.contains(issue.name)
             .closest(trTag)
@@ -62,9 +86,10 @@ export class Issues {
                 validateTextPresence(issueColumns.category, issue.category);
                 validateTextPresence(issueColumns.source, issue.source);
                 cy.get(issueColumns.target).within(() => {
-                    issue.targets.forEach((currentTarget) => {
-                        validateTextPresence(liTag, currentTarget);
-                    });
+                    validateTextPresence(liTag, issue.targets[0]);
+                    if (issue.targets.length > 1) {
+                        clickByText(span, /more/i);
+                    }
                 });
                 validateNumberPresence(issueColumns.effort, issue.effort);
                 if (!isSingle) {
@@ -73,6 +98,13 @@ export class Issues {
                     validateAnyNumberPresence(singleApplicationColumns.files);
                 }
             });
+        if (issue.targets.length > 1) {
+            for (let i = 1; i < issue.targets.length; i++) {
+                cy.get("div.pf-v5-c-popover__content").within(() => {
+                    validateTextPresence("span.pf-v5-c-label__text", issue.targets[i]);
+                });
+            }
+        }
     }
 
     public static applyFilter(

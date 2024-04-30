@@ -116,6 +116,7 @@ import {
     getSpecialMigrationWavesTableSelector,
 } from "../e2e/views/migration-wave.view";
 import { manageCredentials, mavenCredential, sourceCredential } from "../e2e/views/analysis.view";
+import * as ansiRegex from "ansi-regex";
 
 const { _ } = Cypress;
 
@@ -134,7 +135,7 @@ export function clearInput(fieldID: string): void {
 
 export function clickByText(
     fieldId: string,
-    buttonText: string,
+    buttonText: string | ansiRegex,
     isForced = true,
     log = false
 ): void {
@@ -1884,13 +1885,16 @@ export function validateMtaVersionInUI(expectedVersion: string): void {
  * @param arrB is an array of any type
  * @return result
  */
-export function getUniqueElementsFromSecondArray<T>(arrA: T[], arrB: T[]): T[] {
+export function getUniqueElementsFromSecondArray<T extends { name: string }>(
+    arrA: T[],
+    arrB: T[]
+): T[] {
     const result: T[] = [];
-
-    for (const item of arrB) {
-        if (!arrA.includes(item)) {
+    const namesInArrA = arrA.map((item) => item.name);
+    arrB.forEach((item: T) => {
+        if (!namesInArrA.includes(item.name)) {
             result.push(item);
         }
-    }
+    });
     return result;
 }
