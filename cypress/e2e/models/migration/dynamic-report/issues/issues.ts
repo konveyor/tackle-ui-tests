@@ -86,9 +86,6 @@ export class Issues {
                 validateTextPresence(issueColumns.category, issue.category);
                 validateTextPresence(issueColumns.source, issue.source);
                 cy.get(issueColumns.target).within(() => {
-                    // issue.targets.forEach((currentTarget) => {
-                    //     validateTextPresence(liTag, currentTarget);
-                    // });
                     validateTextPresence(liTag, issue.targets[0]);
                     if (issue.targets.length > 1) {
                         clickByText(span, /more/i);
