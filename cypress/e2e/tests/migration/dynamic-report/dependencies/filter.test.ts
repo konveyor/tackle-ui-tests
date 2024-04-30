@@ -17,6 +17,7 @@ limitations under the License.
 
 import {
     clearAllFilters,
+    clickWithinByText,
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
     createMultipleTags,
@@ -24,9 +25,10 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
+    selectItemsPerPage,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { dependencyFilter, SEC } from "../../../../types/constants";
+import { AnalysisStatuses, button, dependencyFilter, SEC } from "../../../../types/constants";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import * as data from "../../../../../utils/data_utils";
 import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
@@ -36,6 +38,7 @@ import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { Tag } from "../../../../models/migration/controls/tags";
+import { rightSideMenu } from "../../../../views/analysis.view";
 
 let applicationsList: Array<Analysis> = [];
 let businessService: BusinessServices;
@@ -158,6 +161,23 @@ describe(["@tier2"], "Dependency filtering", () => {
         Dependencies.applyFilter(dependencyFilter.language, randomWordGenerator(6));
         cy.get("tr").should("contain", "No data available");
         clearAllFilters();
+    });
+
+    it("Validate dependencies filter is applied when drilling down from application page", function () {
+        // Validation of bug https://issues.redhat.com/browse/MTA-2008
+        const application = applicationsList[0];
+        Analysis.analyzeAll(application);
+        Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
+        application.applicationDetailsTab("Details");
+        clickWithinByText(rightSideMenu, "a", "Dependencies");
+        selectItemsPerPage(100);
+        cy.contains('[id^="pf-random-id-"]', application.name);
+        cy.contains(button, "Clear all filters");
+        this.analysisData["source_analysis_on_bookserverapp"]["dependencies"].forEach(
+            (dependency: AppDependency) => {
+                Dependencies.validateFilter(dependency);
+            }
+        );
     });
 
     after("Perform test data clean up", function () {
