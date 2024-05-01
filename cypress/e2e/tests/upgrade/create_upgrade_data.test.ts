@@ -25,7 +25,14 @@ import {
 import { TagCategory } from "../../models/migration/controls/tagcategory";
 import * as data from "../../../utils/data_utils";
 import { Tag } from "../../models/migration/controls/tags";
-import { cloudReadinessFilePath, cloudReadinessQuestionnaire, CredentialType, legacyPathfinder, SEC, UserCredentials } from "../../types/constants";
+import {
+    cloudReadinessFilePath,
+    cloudReadinessQuestionnaire,
+    CredentialType,
+    legacyPathfinder,
+    SEC,
+    UserCredentials,
+} from "../../types/constants";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Jobfunctions } from "../../models/migration/controls/jobfunctions";
 import { BusinessServices } from "../../models/migration/controls/businessservices";
@@ -213,10 +220,14 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         );
         application.name = this.upgradeData.importedQuestionnaireAppName;
         application.create();
-        application.perform_assessment("Medium", [stakeHolder], [stakeHolderGroup], cloudReadinessQuestionnaire);
+        application.perform_assessment(
+            "Medium",
+            [stakeHolder],
+            [stakeHolderGroup],
+            cloudReadinessQuestionnaire
+        );
 
         application.verifyStatus("assessment", "Completed");
         AssessmentQuestionnaire.enable(legacyPathfinder);
-
-    })
+    });
 });
