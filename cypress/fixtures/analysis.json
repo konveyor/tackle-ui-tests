@@ -81,6 +81,33 @@
                 "rule": "javax-to-jakarta-import-00001",
                 "labels": ["konveyor.io/source"]
             }
+        ],
+        "dependencies": [
+            {
+                "name": "javax.javaee-api",
+                "language": "java",
+                "labels": []
+            },
+            {
+                "name": "net.wasdev.wlp.sample.daytrader-ee7-ejb",
+                "language": "java",
+                "labels": []
+            },
+            {
+                "name": "net.wasdev.wlp.sample.daytrader-ee7-web",
+                "language": "java",
+                "labels": []
+            },
+            {
+                "name": "org.apache.derby.derby",
+                "language": "java",
+                "labels": []
+            },
+            {
+                "name": "taglibs.standard",
+                "language": "java",
+                "labels": []
+            }
         ]
     },
 

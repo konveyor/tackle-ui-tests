@@ -1,6 +1,7 @@
 import {
     click,
     clickByText,
+    getUniqueElementsFromSecondArray,
     getUrl,
     inputText,
     selectFilter,
@@ -57,5 +58,27 @@ export class Dependencies {
         dependency.labels.forEach((label) => {
             validateTextPresence(dependencyColumns.labels, label);
         });
+    }
+
+    public static applyAndValidateFilter(
+        filterType: dependencyFilter,
+        filterValues: string[],
+        dependenciesExpected: AppDependency[],
+        dependenciesNotExpected?: AppDependency[]
+    ) {
+        filterValues.forEach((value) => {
+            Dependencies.applyFilter(filterType, value);
+        });
+        dependenciesExpected.forEach((dependency) => {
+            Dependencies.validateFilter(dependency);
+        });
+
+        if (dependenciesNotExpected.length > 0) {
+            getUniqueElementsFromSecondArray(dependenciesExpected, dependenciesNotExpected).forEach(
+                (dependency: AppDependency) => {
+                    validateTextPresence(dependencyColumns.name, dependency.name, false);
+                }
+            );
+        }
     }
 }
