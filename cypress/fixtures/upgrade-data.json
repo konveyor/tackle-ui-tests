@@ -12,5 +12,5 @@
     "uploadBinaryApplicationName": "upgrade-uploadBinaryApp",
     "assessmentApplicationName": "upgrade-assessmentApplication",
     "archetypeName": "upgrade-archetype",
-    "importedQuestionnaireAppName": "upgrade-assessmentImport"
+    "importedQuestionnaireAppName": "upgrade-questionnaireApplication"
 }

@@ -175,6 +175,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
             name: this.upgradeData.importedQuestionnaireAppName,
         });
         assessmentApplication.verifyStatus("assessment", "Completed");
+        assessmentApplication.validateAssessmentField("Medium");
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
