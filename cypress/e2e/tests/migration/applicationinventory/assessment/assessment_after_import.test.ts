@@ -37,7 +37,7 @@ let stakeholders: Stakeholders[];
 let appdata = { name: "Customers" };
 
 describe(["@tier2"], "Operations after application import", () => {
-    before("Bug MTA-2451: Login and create test data", function () {
+    before("Login and create test data", function () {
         login();
         // This test will fail if there are preexisting questionnaire.
         AssessmentQuestionnaire.deleteAllQuestionnaires();
