@@ -25,7 +25,14 @@ import {
 import { TagCategory } from "../../models/migration/controls/tagcategory";
 import * as data from "../../../utils/data_utils";
 import { Tag } from "../../models/migration/controls/tags";
-import { CredentialType, legacyPathfinder, SEC, UserCredentials } from "../../types/constants";
+import {
+    cloudReadinessFilePath,
+    cloudReadinessQuestionnaire,
+    CredentialType,
+    legacyPathfinder,
+    SEC,
+    UserCredentials,
+} from "../../types/constants";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Jobfunctions } from "../../models/migration/controls/jobfunctions";
 import { BusinessServices } from "../../models/migration/controls/businessservices";
@@ -200,5 +207,27 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         assessmentApplication.create();
         assessmentApplication.perform_assessment("low", [stakeHolder]);
         assessmentApplication.verifyStatus("assessment", "Completed");
+    });
+
+    it("Import questionnaire and assess application", function () {
+        AssessmentQuestionnaire.disable(legacyPathfinder);
+        AssessmentQuestionnaire.import(cloudReadinessFilePath);
+        AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
+
+        const application = new Analysis(
+            getRandomApplicationData(),
+            getRandomAnalysisData(this.analysisData)
+        );
+        application.name = this.upgradeData.importedQuestionnaireAppName;
+        application.create();
+        application.perform_assessment(
+            "Medium",
+            [stakeHolder],
+            [stakeHolderGroup],
+            cloudReadinessQuestionnaire
+        );
+
+        application.verifyStatus("assessment", "Completed");
+        AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 });

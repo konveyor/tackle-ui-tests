@@ -169,6 +169,16 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         assessmentApplication.verifyStatus("assessment", "Completed");
     });
 
+    it("Verify that imported questionnaire assessement is migrated", function () {
+        AssessmentQuestionnaire.disable(legacyPathfinder);
+        const assessmentApplication = new Application({
+            name: this.upgradeData.importedQuestionnaireAppName,
+        });
+        assessmentApplication.verifyStatus("assessment", "Completed");
+        assessmentApplication.validateAssessmentField("Medium");
+        AssessmentQuestionnaire.enable(legacyPathfinder);
+    });
+
     it("Validating pods after upgrade", function () {
         const allowedPodsList = [
             "keycloak-0",
