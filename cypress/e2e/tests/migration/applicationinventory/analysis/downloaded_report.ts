@@ -29,19 +29,18 @@ import { Analysis } from "../../../../models/migration/applicationinventory/anal
 import { AnalysisStatuses, ReportTypeSelectors, SEC } from "../../../../types/constants";
 import { singleApplicationColumns } from "../../../../views/issue.view";
 import { dependencies, issues, technologies } from "../../../../views/common.view";
-import * as data from "../../../../../utils/data_utils";
 
 let app: Analysis;
 const appName = "Downloaded-Report-Test-App";
 
-describe(["@tier2"], "UI Tests for downloaded analysis report", function () {
-    it("Prepare report UI", function () {
-        //cy.visit(`/cypress/downloads/analysis-report-app-SourceApp_test-app-quo48`);
+describe(["@tier2"], "Prepare Downloaded Report", function () {
+    it("Download and extract report", function () {
         login();
         cleanupDownloads();
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
         GeneralConfig.enableDownloadReport();
+
         cy.fixture("application").then(function (appData) {
             cy.fixture("analysis").then(function (analysisData) {
                 app = new Analysis(
@@ -65,7 +64,7 @@ describe(["@tier2"], "UI Tests for downloaded analysis report", function () {
     });
 });
 
-describe("Test", { baseUrl: null }, function () {
+describe("Test Downloaded Report UI", function () {
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
@@ -129,6 +128,15 @@ describe("Test", { baseUrl: null }, function () {
         cy.contains("nav > ul > a", dependencies).click();
         selectItemsPerPage(100);
         validateTextPresence('td[data-label="Name"]', dependenciesData[0].name);
+    });
+});
+
+describe(["@tier2"], "Delete Downloaded Report Data", function () {
+    it("Delete Downloaded Report Data", function () {
+        login();
+        cleanupDownloads();
+        deleteAllMigrationWaves();
+        deleteApplicationTableRows();
     });
 });
 
