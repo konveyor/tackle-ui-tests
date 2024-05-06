@@ -12,6 +12,7 @@
         "cypress-multi-reporters": "^1.5.0",
         "cypress-react-selector": "^2.3.17",
         "cypress-xpath": "^1.6.2",
+        "decompress": "^4.2.1",
         "faker": "^5.5.3",
         "js-yaml": "^4.1.0",
         "junit-report-merger": "^3.0.2",

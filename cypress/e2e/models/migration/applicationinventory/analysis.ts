@@ -408,8 +408,6 @@ export class Analysis extends Application {
             cy.get(type, { timeout: 30 * SEC });
             const extension = type === ReportTypeSelectors.YAML ? "yaml" : "tar";
             cy.verifyDownload(`analysis-report-app-${this.name}.${extension}`);
-            // Removing downloaded file after verifying it
-            cleanupDownloads();
         });
         this.closeApplicationDetails();
     }
