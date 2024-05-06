@@ -178,6 +178,7 @@ export function clickJs(fieldId: string, isForced = true, log = false, number = 
         .then(($obj) => {
             $obj[0].click();
         });
+    cy.wait(2 * SEC);
 }
 
 export function submitForm(): void {
