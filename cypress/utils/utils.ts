@@ -178,11 +178,10 @@ export function clickJs(fieldId: string, isForced = true, log = false, number = 
         .then(($obj) => {
             $obj[0].click();
         });
-    cy.wait(2 * SEC);
 }
 
 export function submitForm(): void {
-    cy.get(commonView.submitButton).should("not.be.disabled");
+    cy.get(commonView.submitButton, { timeout: 10 * SEC }).should("not.be.disabled");
     clickJs(commonView.submitButton);
 }
 
