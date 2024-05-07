@@ -4,6 +4,7 @@ import {
     clickJs,
     inputText,
     selectUserPerspective,
+    submitForm,
     uploadXml,
 } from "../../../../utils/utils";
 import {
@@ -82,7 +83,8 @@ export class CustomMigrationTarget {
     public create() {
         this.openLanguageForm();
         CustomMigrationTarget.fillForm(this);
-        clickJs(submitButton);
+        submitForm();
+        cy.get(submitButton, { timeout: 1 * SEC }).should("not.exist");
     }
 
     public openEditDialog() {
