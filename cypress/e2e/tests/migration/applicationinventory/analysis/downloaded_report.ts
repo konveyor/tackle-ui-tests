@@ -74,11 +74,9 @@ describe(["@tier2"], "Test Downloaded Report UI", () => {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
-
         cy.fixture("analysis").then(function (analysisData) {
             this.analysisData = analysisData;
         });
-
         cy.visit(`/cypress/downloads/analysis-report-app-${appName}/index.html`);
     });
 
