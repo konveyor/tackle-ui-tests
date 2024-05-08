@@ -61,7 +61,7 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
         });
     });
 });
-/*
+
 describe(["@tier2"], "Test Downloaded Report UI", function () {
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
@@ -73,7 +73,7 @@ describe(["@tier2"], "Test Downloaded Report UI", function () {
         cy.visit(`/cypress/downloads/analysis-report-app-${appName}/index.html`);
     });
 
-    it("Validate Application Menu", function () {
+    /*it("Validate Application Menu", function () {
         const issueData = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
         cy.get('td[data-label="Name"]').should("have.text", appName);
         cy.get('td[data-label="Tags"]').eq(0).click();
@@ -122,17 +122,17 @@ describe(["@tier2"], "Test Downloaded Report UI", function () {
         cy.contains("nav > ul > a", dependencies).click();
         selectItemsPerPage(100);
         validateTextPresence('td[data-label="Name"]', dependenciesData[0].name);
-    });
+    });*/
 });
 
-describe(["@tier2"], "Delete Downloaded Report Data", function () {
+/*describe(["@tier2"], "Delete Downloaded Report Data", function () {
     it("Delete Downloaded Report Data", function () {
         login();
         cleanupDownloads();
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
     });
-});
+});*/
 
 const selectItemsPerPage = (items: number) => {
     cy.log(`Select ${items} per page`);
@@ -146,4 +146,4 @@ const selectItemsPerPage = (items: number) => {
             log: false,
         });
     });
-};*/
+};
