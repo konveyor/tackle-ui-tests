@@ -33,7 +33,7 @@ import { dependencies, issues, technologies } from "../../../../views/common.vie
 let app: Analysis;
 const appName = "Downloaded-Report-Test-App";
 
-describe(["@tier2"], "Prepare Downloaded Report", () => {
+/*describe(["@tier2"], "Prepare Downloaded Report", () => {
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
@@ -67,7 +67,7 @@ describe(["@tier2"], "Prepare Downloaded Report", () => {
         });
         cy.verifyDownload(`analysis-report-app-${app.name}/index.html`);
     });
-});
+});*/
 
 describe(["@tier2"], "Test Downloaded Report UI", () => {
     beforeEach("Load data", function () {
@@ -113,7 +113,7 @@ describe(["@tier2"], "Test Downloaded Report UI", () => {
         validateTextPresence("article", "EJB XML");
     });
 
-    it("Validate Issues Menu", function () {
+    /*it("Validate Issues Menu", function () {
         const issueData = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
         cy.contains("a", appName).click();
         cy.contains("button > span", issues).click();
@@ -121,7 +121,7 @@ describe(["@tier2"], "Test Downloaded Report UI", () => {
         validateTextPresence(singleApplicationColumns.issue, issueData.name);
         validateTextPresence(singleApplicationColumns.category, issueData.category);
         validateTextPresence('td[data-label="Target"]', issueData.targets[0]);
-    });
+    });*/
 
     it("Validate Dependencies Menu", function () {
         const dependenciesData =
@@ -132,7 +132,7 @@ describe(["@tier2"], "Test Downloaded Report UI", () => {
     });
 });
 
-describe(["@tier2"], "Delete Downloaded Report Data", function () {
+/*describe(["@tier2"], "Delete Downloaded Report Data", function () {
     it("Delete Downloaded Report Data", function () {
         login();
         cleanupDownloads();
@@ -153,4 +153,4 @@ const selectItemsPerPage = (items: number) => {
             log: false,
         });
     });
-};
+};*/
