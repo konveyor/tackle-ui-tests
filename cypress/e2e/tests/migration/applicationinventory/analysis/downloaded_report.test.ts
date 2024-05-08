@@ -34,14 +34,13 @@ const appName = "Downloaded-Report-Test-App";
 
 describe(["@tier2"], "Prepare Downloaded Report", function () {
     it("Download and extract report", function () {
-        login();
-        cleanupDownloads();
-        deleteAllMigrationWaves();
-        deleteApplicationTableRows();
-        GeneralConfig.enableDownloadReport();
-
         cy.fixture("application").then(function (appData) {
             cy.fixture("analysis").then(function (analysisData) {
+                login();
+                cleanupDownloads();
+                deleteAllMigrationWaves();
+                deleteApplicationTableRows();
+                GeneralConfig.enableDownloadReport();
                 const app = new Analysis(
                     getRandomApplicationData("SourceApp", {
                         sourceData: appData["bookserver-app"],
