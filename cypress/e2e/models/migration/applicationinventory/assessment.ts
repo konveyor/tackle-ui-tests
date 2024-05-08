@@ -142,10 +142,10 @@ export class Assessment {
                     cy.get(questionBlock).each(($question) => {
                         let totalOptions = $question.find(stack).children("div").length;
                         let optionToSelect: number;
-                        if (risk === "low") {
+                        if (risk === "Low") {
                             optionToSelect = totalOptions - 1;
                             this.clickRadioOption($question, optionToSelect);
-                        } else if (risk === "medium") {
+                        } else if (risk === "Medium") {
                             cy.wrap($question)
                                 .children()
                                 .find(splitItem)
