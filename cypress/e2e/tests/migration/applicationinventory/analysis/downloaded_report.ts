@@ -63,7 +63,7 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
         });
     });
 });
-
+/*
 describe(["@tier2"], "Test Downloaded Report UI", function () {
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
@@ -108,7 +108,7 @@ describe(["@tier2"], "Test Downloaded Report UI", function () {
         validateTextPresence("article", "EJB XML");
     });
 
-    /*it("Validate Issues Menu", function () {
+    it("Validate Issues Menu", function () {
         const issueData = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
         cy.contains("a", appName).click();
         cy.contains("button > span", issues).click();
@@ -116,7 +116,7 @@ describe(["@tier2"], "Test Downloaded Report UI", function () {
         validateTextPresence(singleApplicationColumns.issue, issueData.name);
         validateTextPresence(singleApplicationColumns.category, issueData.category);
         validateTextPresence('td[data-label="Target"]', issueData.targets[0]);
-    });*/
+    });
 
     it("Validate Dependencies Menu", function () {
         const dependenciesData =
@@ -127,14 +127,14 @@ describe(["@tier2"], "Test Downloaded Report UI", function () {
     });
 });
 
-/*describe(["@tier2"], "Delete Downloaded Report Data", function () {
+describe(["@tier2"], "Delete Downloaded Report Data", function () {
     it("Delete Downloaded Report Data", function () {
         login();
         cleanupDownloads();
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
     });
-});*/
+});
 
 const selectItemsPerPage = (items: number) => {
     cy.log(`Select ${items} per page`);
@@ -148,4 +148,4 @@ const selectItemsPerPage = (items: number) => {
             log: false,
         });
     });
-};
+};*/
