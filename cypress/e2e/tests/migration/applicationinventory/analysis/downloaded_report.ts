@@ -33,7 +33,7 @@ import { dependencies, issues, technologies } from "../../../../views/common.vie
 let app: Analysis;
 const appName = "Downloaded-Report-Test-App";
 
-/*describe(["@tier2"], "Prepare Downloaded Report", () => {
+describe(["@tier2"], "Prepare Downloaded Report", () => {
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
@@ -67,7 +67,7 @@ const appName = "Downloaded-Report-Test-App";
         });
         cy.verifyDownload(`analysis-report-app-${app.name}/index.html`);
     });
-});*/
+});
 
 describe(["@tier2"], "Test Downloaded Report UI", () => {
     beforeEach("Load data", function () {
