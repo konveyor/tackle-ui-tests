@@ -1,5 +1,5 @@
 /*
-Copyright © 2021 the Konveyor Contributors (https://konveyor.io/)
+Copyright © 2024 the Konveyor Contributors (https://konveyor.io/)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ import { AnalysisStatuses, ReportTypeSelectors, SEC } from "../../../../types/co
 import { singleApplicationColumns } from "../../../../views/issue.view";
 import { dependencies, issues, technologies } from "../../../../views/common.view";
 
-let app: Analysis;
 const appName = "Downloaded-Report-Test-App";
 
 describe(["@tier2"], "Prepare Downloaded Report", function () {
@@ -43,7 +42,7 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
 
         cy.fixture("application").then(function (appData) {
             cy.fixture("analysis").then(function (analysisData) {
-                app = new Analysis(
+                const app = new Analysis(
                     getRandomApplicationData("SourceApp", {
                         sourceData: appData["bookserver-app"],
                     }),
