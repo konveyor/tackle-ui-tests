@@ -64,10 +64,12 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
 
 describe(["@tier2"], "Test Downloaded Report UI", function () {
     beforeEach("Load data", function () {
-        cy.fixture("analysis").then(function (analysisData) {
-            this.analysisData = analysisData;
+        cy.then(function () {
+            cy.fixture("analysis").then(function (analysisData) {
+                this.analysisData = analysisData;
+            });
+            cy.visit(`/cypress/downloads/analysis-report-app-${appName}/index.html`);
         });
-        cy.visit(`/cypress/downloads/analysis-report-app-${appName}/index.html`);
     });
 
     it("Validate Application Menu", function () {
