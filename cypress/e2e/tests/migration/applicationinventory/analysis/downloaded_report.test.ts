@@ -79,73 +79,70 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
 });
 
 describe(["@tier2"], "Test Downloaded Report UI", function () {
+    const reportData = {
+        name: "File system - Java IO",
+        category: "mandatory",
+        target: "cloud-readiness",
+        dependency: "com.fasterxml.classmate",
+        technology: "EJB XML",
+    };
+
     beforeEach("Load data", function () {
-        cy.then(function () {
-            cy.visit(`/cypress/downloads/analysis-report-app-${appName}/index.html`);
-        });
+        cy.visit(`/cypress/downloads/analysis-report-app-${appName}/index.html`);
     });
 
     it("Validate Application Menu", function () {
         cy.get('td[data-label="Name"]').should("have.text", appName);
         cy.get('td[data-label="Tags"]').eq(0).click();
-        validateTextPresence("td", "EJB XML");
+        validateTextPresence("td", reportData.technology);
         cy.get('td[data-label="Incidents"]').should("contain.text", "2");
     });
 
     it("Validate Issues Tab", function () {
-        const issueData = {
-            name: "File system - Java IO",
-            category: "mandatory",
-            target: "cloud-readiness",
-        };
         cy.contains("a", appName).click();
         cy.contains("button > span", issues).click();
         selectItemsPerPage(100);
-        validateTextPresence(singleApplicationColumns.issue, issueData.name);
-        validateTextPresence(singleApplicationColumns.category, issueData.category);
-        validateTextPresence('td[data-label="Target"]', issueData.target);
+        validateTextPresence(singleApplicationColumns.issue, reportData.name);
+        validateTextPresence(singleApplicationColumns.category, reportData.category);
+        validateTextPresence('td[data-label="Target"]', reportData.target);
     });
 
     it("Validate Dependencies Tab", function () {
         cy.contains("a", appName).click();
         cy.contains("button > span", dependencies).click();
         selectItemsPerPage(100);
-        validateTextPresence('td[data-label="Name"]', "com.fasterxml.classmate");
+        validateTextPresence('td[data-label="Name"]', reportData.dependency);
     });
 
     it("Validate Technologies Tab", function () {
         cy.contains("a", appName).click();
         cy.contains("button > span", technologies).click();
-        validateTextPresence("article", "EJB XML");
+        validateTextPresence("article", reportData.technology);
     });
 
     it("Validate Issues Menu", function () {
-        const issueData = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
-        cy.contains("a", appName).click();
-        cy.contains("button > span", issues).click();
+        cy.contains("nav > ul > a", issues).click();
         selectItemsPerPage(100);
-        validateTextPresence(singleApplicationColumns.issue, issueData.name);
-        validateTextPresence(singleApplicationColumns.category, issueData.category);
-        validateTextPresence('td[data-label="Target"]', issueData.targets[0]);
+        validateTextPresence(singleApplicationColumns.issue, reportData.name);
+        validateTextPresence(singleApplicationColumns.category, reportData.category);
+        validateTextPresence('td[data-label="Target"]', reportData.target);
     });
 
     it("Validate Dependencies Menu", function () {
-        const dependenciesData =
-            this.analysisData["source_analysis_on_bookserverapp"]["dependencies"];
         cy.contains("nav > ul > a", dependencies).click();
         selectItemsPerPage(100);
-        validateTextPresence('td[data-label="Name"]', dependenciesData[0].name);
+        validateTextPresence('td[data-label="Name"]', reportData.dependency);
     });
 });
 
-/*describe(["@tier2"], "Delete Downloaded Report Data", function () {
+describe(["@tier2"], "Delete Downloaded Report Data", function () {
     it("Delete Downloaded Report Data", function () {
         login();
         cleanupDownloads();
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
     });
-});*/
+});
 
 const selectItemsPerPage = (items: number) => {
     cy.log(`Select ${items} per page`);
