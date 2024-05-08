@@ -50,22 +50,26 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
         deleteApplicationTableRows();
         GeneralConfig.enableDownloadReport();
 
-        app = new Analysis(
-            getRandomApplicationData("SourceApp", {
-                sourceData: this.appData["bookserver-app"],
-            }),
-            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
-        );
-        app.name = appName;
-        app.create();
-        app.analyze();
-        app.verifyAnalysisStatus(AnalysisStatuses.completed);
-        app.downloadReport(ReportTypeSelectors.HTML);
-        cy.task("unzip", {
-            path: "cypress/downloads/",
-            file: `analysis-report-app-${app.name}.tar`,
+        cy.fixture("application").then(function (appData) {
+            cy.fixture("analysis").then(function (analysisData) {
+                app = new Analysis(
+                    getRandomApplicationData("SourceApp", {
+                        sourceData: appData["bookserver-app"],
+                    }),
+                    getRandomAnalysisData(analysisData["source_analysis_on_bookserverapp"])
+                );
+                app.name = appName;
+                app.create();
+                app.analyze();
+                app.verifyAnalysisStatus(AnalysisStatuses.completed);
+                app.downloadReport(ReportTypeSelectors.HTML);
+                cy.task("unzip", {
+                    path: "cypress/downloads/",
+                    file: `analysis-report-app-${app.name}.tar`,
+                });
+                cy.verifyDownload(`analysis-report-app-${app.name}/index.html`);
+            });
         });
-        cy.verifyDownload(`analysis-report-app-${app.name}/index.html`);
     });
 });
 
