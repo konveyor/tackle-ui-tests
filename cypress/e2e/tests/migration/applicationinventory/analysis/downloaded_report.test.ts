@@ -30,6 +30,22 @@ import { AnalysisStatuses, ReportTypeSelectors } from "../../../../types/constan
 import { singleApplicationColumns } from "../../../../views/issue.view";
 import { dependencies, issues, technologies } from "../../../../views/common.view";
 
+/**
+ *
+ * This test is divided into three suites due to its specific needs.
+ * The test must access an external URL, download a report, extract it, and open it locally for further testing.
+ *
+ * Cypress cannot handle requests to two different hosts within the same test unless using the cy.origin command.
+ * However, this command does not allow local files as an origin.
+ *
+ * Therefore, the only way to dynamically conduct the test is to split it into three parts:
+ * 1. Analyze an app, download, and extract the report
+ * 2. Conduct tests on the local interface of the report
+ * 3. Delete the test data.
+ *
+ * For this to work, the app's name must be static, as it needs to be shared across all three suites, and random variables would reset after each describe.
+ */
+
 const appName = "Downloaded-Report-Test-App";
 
 describe(["@tier2"], "Prepare Downloaded Report", function () {
@@ -65,38 +81,36 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
 describe(["@tier2"], "Test Downloaded Report UI", function () {
     beforeEach("Load data", function () {
         cy.then(function () {
-            cy.fixture("analysis").then(function (analysisData) {
-                this.analysisData = analysisData;
-            });
             cy.visit(`/cypress/downloads/analysis-report-app-${appName}/index.html`);
         });
     });
 
     it("Validate Application Menu", function () {
-        const issueData = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
         cy.get('td[data-label="Name"]').should("have.text", appName);
         cy.get('td[data-label="Tags"]').eq(0).click();
         validateTextPresence("td", "EJB XML");
-        cy.get('td[data-label="Incidents"]').should("contain.text", issueData.incidents);
+        cy.get('td[data-label="Incidents"]').should("contain.text", "2");
     });
 
     it("Validate Issues Tab", function () {
-        const issueData = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
+        const issueData = {
+            name: "File system - Java IO",
+            category: "mandatory",
+            target: "cloud-readiness",
+        };
         cy.contains("a", appName).click();
         cy.contains("button > span", issues).click();
         selectItemsPerPage(100);
         validateTextPresence(singleApplicationColumns.issue, issueData.name);
         validateTextPresence(singleApplicationColumns.category, issueData.category);
-        validateTextPresence('td[data-label="Target"]', issueData.targets[0]);
+        validateTextPresence('td[data-label="Target"]', issueData.target);
     });
 
     it("Validate Dependencies Tab", function () {
-        const dependenciesData =
-            this.analysisData["source_analysis_on_bookserverapp"]["dependencies"];
         cy.contains("a", appName).click();
         cy.contains("button > span", dependencies).click();
         selectItemsPerPage(100);
-        validateTextPresence('td[data-label="Name"]', dependenciesData[0].name);
+        validateTextPresence('td[data-label="Name"]', "com.fasterxml.classmate");
     });
 
     it("Validate Technologies Tab", function () {
@@ -124,14 +138,14 @@ describe(["@tier2"], "Test Downloaded Report UI", function () {
     });
 });
 
-describe(["@tier2"], "Delete Downloaded Report Data", function () {
+/*describe(["@tier2"], "Delete Downloaded Report Data", function () {
     it("Delete Downloaded Report Data", function () {
         login();
         cleanupDownloads();
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
     });
-});
+});*/
 
 const selectItemsPerPage = (items: number) => {
     cy.log(`Select ${items} per page`);
