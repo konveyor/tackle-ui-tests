@@ -33,7 +33,7 @@ import { dependencies, issues, technologies } from "../../../../views/common.vie
 let app: Analysis;
 const appName = "Downloaded-Report-Test-App";
 
-describe(["@tier2"], "Prepare Downloaded Report", function () {
+describe(["@tier2"], "Prepare Downloaded Report", () => {
     it("Download and extract report", function () {
         login();
         cleanupDownloads();
