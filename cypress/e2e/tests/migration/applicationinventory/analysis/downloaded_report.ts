@@ -138,7 +138,7 @@ describe("Test Downloaded Report UI", function () {
         validateTextPresence('td[data-label="Name"]', dependenciesData[0].name);
     });
 });*/
-/*
+
 describe(["@tier2"], "Delete Downloaded Report Data", function () {
     it("Delete Downloaded Report Data", function () {
         login();
@@ -161,4 +161,3 @@ const selectItemsPerPage = (items: number) => {
         });
     });
 };
-*/
