@@ -69,7 +69,7 @@ describe(["@tier2"], "Prepare Downloaded Report", () => {
     });
 });
 
-describe("Test Downloaded Report UI", function () {
+describe(["@tier2"], "Test Downloaded Report UI", () => {
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
@@ -79,9 +79,7 @@ describe("Test Downloaded Report UI", function () {
             this.analysisData = analysisData;
         });
 
-        cy.then(() => {
-            cy.visit(`/cypress/downloads/analysis-report-app-${appName}/index.html`);
-        });
+        cy.visit(`/cypress/downloads/analysis-report-app-${appName}/index.html`);
     });
 
     it("Validate Application Menu", function () {
