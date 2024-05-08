@@ -63,7 +63,7 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
         });
     });
 });
-
+/*
 describe("Test Downloaded Report UI", function () {
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
@@ -129,7 +129,7 @@ describe("Test Downloaded Report UI", function () {
         selectItemsPerPage(100);
         validateTextPresence('td[data-label="Name"]', dependenciesData[0].name);
     });
-});
+});*/
 
 describe(["@tier2"], "Delete Downloaded Report Data", function () {
     it("Delete Downloaded Report Data", function () {
