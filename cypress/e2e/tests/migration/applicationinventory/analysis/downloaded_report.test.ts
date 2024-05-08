@@ -26,7 +26,7 @@ import {
 } from "../../../../../utils/utils";
 import { GeneralConfig } from "../../../../models/administration/general/generalConfig";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { AnalysisStatuses, ReportTypeSelectors, SEC } from "../../../../types/constants";
+import { AnalysisStatuses, ReportTypeSelectors } from "../../../../types/constants";
 import { singleApplicationColumns } from "../../../../views/issue.view";
 import { dependencies, issues, technologies } from "../../../../views/common.view";
 
@@ -64,12 +64,9 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
 
 describe(["@tier2"], "Test Downloaded Report UI", function () {
     beforeEach("Load data", function () {
-        /*    cy.fixture("application").then(function (appData) {
-            this.appData = appData;
-        });
         cy.fixture("analysis").then(function (analysisData) {
             this.analysisData = analysisData;
-        });*/
+        });
         cy.visit(`/cypress/downloads/analysis-report-app-${appName}/index.html`);
     });
 
