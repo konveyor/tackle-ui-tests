@@ -73,7 +73,7 @@ describe(["@tier2"], "Test Downloaded Report UI", function () {
         cy.visit(`/cypress/downloads/analysis-report-app-${appName}/index.html`);
     });
 
-    /*it("Validate Application Menu", function () {
+    it("Validate Application Menu", function () {
         const issueData = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
         cy.get('td[data-label="Name"]').should("have.text", appName);
         cy.get('td[data-label="Tags"]').eq(0).click();
@@ -81,7 +81,7 @@ describe(["@tier2"], "Test Downloaded Report UI", function () {
         cy.get('td[data-label="Incidents"]').should("contain.text", issueData.incidents);
     });
 
-    it("Validate Issues Tab", function () {
+    /*it("Validate Issues Tab", function () {
         const issueData = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
         cy.contains("a", appName).click();
         cy.contains("button > span", issues).click();
