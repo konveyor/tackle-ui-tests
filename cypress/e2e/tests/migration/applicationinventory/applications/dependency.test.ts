@@ -50,7 +50,7 @@ describe(["@tier3"], "Manage application dependencies", () => {
         applicationsList[1].removeDependencies(northboundApps, southboundApps);
     });
 
-    it("Cyclic dependencies for applications", function () {
+    it("Bug MTA-2789: Cyclic dependencies for applications", function () {
         var northboundApps: Array<string> = [applicationsList[0].name];
         var southboundApps: Array<string> = [applicationsList[2].name];
 
