@@ -64,24 +64,24 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
 
 describe(["@tier2"], "Test Downloaded Report UI", function () {
     beforeEach("Load data", function () {
-        /*cy.fixture("application").then(function (appData) {
+        cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
         cy.fixture("analysis").then(function (analysisData) {
             this.analysisData = analysisData;
-        });*/
+        });
         cy.visit(`/cypress/downloads/analysis-report-app-${appName}/index.html`);
     });
 
     it("Validate Application Menu", function () {
-        //const issueData = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
+        const issueData = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
         cy.get('td[data-label="Name"]').should("have.text", appName);
         cy.get('td[data-label="Tags"]').eq(0).click();
         validateTextPresence("td", "EJB XML");
-        //cy.get('td[data-label="Incidents"]').should("contain.text", issueData.incidents);
+        cy.get('td[data-label="Incidents"]').should("contain.text", issueData.incidents);
     });
 
-    /*it("Validate Issues Tab", function () {
+    it("Validate Issues Tab", function () {
         const issueData = this.analysisData["source_analysis_on_bookserverapp"]["issues"][0];
         cy.contains("a", appName).click();
         cy.contains("button > span", issues).click();
@@ -122,17 +122,17 @@ describe(["@tier2"], "Test Downloaded Report UI", function () {
         cy.contains("nav > ul > a", dependencies).click();
         selectItemsPerPage(100);
         validateTextPresence('td[data-label="Name"]', dependenciesData[0].name);
-    });*/
+    });
 });
 
-/*describe(["@tier2"], "Delete Downloaded Report Data", function () {
+describe(["@tier2"], "Delete Downloaded Report Data", function () {
     it("Delete Downloaded Report Data", function () {
         login();
         cleanupDownloads();
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
     });
-});*/
+});
 
 const selectItemsPerPage = (items: number) => {
     cy.log(`Select ${items} per page`);
