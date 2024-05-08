@@ -42,6 +42,7 @@ describe(["@tier2"], "Prepare Downloaded Report", () => {
             this.analysisData = analysisData;
         });
     });
+
     it("Download and extract report", function () {
         login();
         cleanupDownloads();
@@ -49,29 +50,25 @@ describe(["@tier2"], "Prepare Downloaded Report", () => {
         deleteApplicationTableRows();
         GeneralConfig.enableDownloadReport();
 
-        /*cy.fixture("application").then(function (appData) {
-            cy.fixture("analysis").then(function (analysisData) {
-                app = new Analysis(
-                    getRandomApplicationData("SourceApp", {
-                        sourceData: appData["bookserver-app"],
-                    }),
-                    getRandomAnalysisData(analysisData["source_analysis_on_bookserverapp"])
-                );
-                app.name = appName;
-                app.create();
-                app.analyze();
-                app.verifyAnalysisStatus(AnalysisStatuses.completed);
-                app.downloadReport(ReportTypeSelectors.HTML);
-                cy.task("unzip", {
-                    path: "cypress/downloads/",
-                    file: `analysis-report-app-${app.name}.tar`,
-                });
-                cy.verifyDownload(`analysis-report-app-${app.name}/index.html`);
-            });
-        });*/
+        app = new Analysis(
+            getRandomApplicationData("SourceApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+        );
+        app.name = appName;
+        app.create();
+        app.analyze();
+        app.verifyAnalysisStatus(AnalysisStatuses.completed);
+        app.downloadReport(ReportTypeSelectors.HTML);
+        cy.task("unzip", {
+            path: "cypress/downloads/",
+            file: `analysis-report-app-${app.name}.tar`,
+        });
+        cy.verifyDownload(`analysis-report-app-${app.name}/index.html`);
     });
 });
-/*
+
 describe("Test Downloaded Report UI", function () {
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
@@ -137,7 +134,7 @@ describe("Test Downloaded Report UI", function () {
         selectItemsPerPage(100);
         validateTextPresence('td[data-label="Name"]', dependenciesData[0].name);
     });
-});*/
+});
 
 describe(["@tier2"], "Delete Downloaded Report Data", function () {
     it("Delete Downloaded Report Data", function () {
