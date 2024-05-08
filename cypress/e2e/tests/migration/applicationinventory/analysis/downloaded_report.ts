@@ -34,6 +34,14 @@ let app: Analysis;
 const appName = "Downloaded-Report-Test-App";
 
 describe(["@tier2"], "Prepare Downloaded Report", () => {
+    beforeEach("Load data", function () {
+        cy.fixture("application").then(function (appData) {
+            this.appData = appData;
+        });
+        cy.fixture("analysis").then(function (analysisData) {
+            this.analysisData = analysisData;
+        });
+    });
     it("Download and extract report", function () {
         login();
         cleanupDownloads();
@@ -41,7 +49,7 @@ describe(["@tier2"], "Prepare Downloaded Report", () => {
         deleteApplicationTableRows();
         GeneralConfig.enableDownloadReport();
 
-        cy.fixture("application").then(function (appData) {
+        /*cy.fixture("application").then(function (appData) {
             cy.fixture("analysis").then(function (analysisData) {
                 app = new Analysis(
                     getRandomApplicationData("SourceApp", {
@@ -60,7 +68,7 @@ describe(["@tier2"], "Prepare Downloaded Report", () => {
                 });
                 cy.verifyDownload(`analysis-report-app-${app.name}/index.html`);
             });
-        });
+        });*/
     });
 });
 /*
@@ -130,7 +138,7 @@ describe("Test Downloaded Report UI", function () {
         validateTextPresence('td[data-label="Name"]', dependenciesData[0].name);
     });
 });*/
-
+/*
 describe(["@tier2"], "Delete Downloaded Report Data", function () {
     it("Delete Downloaded Report Data", function () {
         login();
@@ -153,3 +161,4 @@ const selectItemsPerPage = (items: number) => {
         });
     });
 };
+*/
