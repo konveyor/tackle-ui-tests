@@ -139,7 +139,7 @@ describe(["@tier2"], "Test Downloaded Report UI", () => {
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
     });
-});
+});*/
 
 const selectItemsPerPage = (items: number) => {
     cy.log(`Select ${items} per page`);
@@ -153,4 +153,4 @@ const selectItemsPerPage = (items: number) => {
             log: false,
         });
     });
-};*/
+};
