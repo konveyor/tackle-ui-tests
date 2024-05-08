@@ -34,15 +34,6 @@ let app: Analysis;
 const appName = "Downloaded-Report-Test-App";
 
 describe(["@tier2"], "Prepare Downloaded Report", function () {
-    beforeEach("Load data", function () {
-        cy.fixture("application").then(function (appData) {
-            this.appData = appData;
-        });
-        cy.fixture("analysis").then(function (analysisData) {
-            this.analysisData = analysisData;
-        });
-    });
-
     it("Download and extract report", function () {
         login();
         cleanupDownloads();
