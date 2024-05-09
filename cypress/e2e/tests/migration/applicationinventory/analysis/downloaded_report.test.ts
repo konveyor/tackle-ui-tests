@@ -35,8 +35,8 @@ import { dependencies, issues, technologies } from "../../../../views/common.vie
  * This test is divided into three suites due to its specific needs.
  * The test must access an external URL, download a report, extract it, and open it locally for further testing.
  *
- * Cypress cannot handle requests to two different hosts within the same test unless using the cy.origin command.
- * However, this command does not allow local files as an origin.
+ * Cypress cannot handle requests to two different hosts within the same test unless using the cy.origin command. (see https://docs.cypress.io/api/commands/origin)
+ * However, this command does not allow local files as an origin. (see https://github.com/cypress-io/cypress/issues/26670)
  *
  * Therefore, the only way to dynamically conduct the test is to split it into three parts:
  * 1. Analyze an app, download, and extract the report
