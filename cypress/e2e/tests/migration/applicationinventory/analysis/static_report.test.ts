@@ -78,7 +78,7 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
     });
 });
 
-describe(["@tier2"], "Test Downloaded Report UI", function () {
+describe(["@tier2"], "Test Static Report UI", function () {
     const reportData = {
         name: "File system - Java IO",
         category: "mandatory",
