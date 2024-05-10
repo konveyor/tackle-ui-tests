@@ -48,7 +48,6 @@ export const modal = "[id^=pf-modal-part-]";
 export const navLink = ".pf-v5-c-nav__link";
 export const closeSuccessNotification = "button[aria-label^='Close Success alert:']";
 export const divHeader = "[id^=pf-random-id-]";
-export const divBottom = "#tags-pagination-bottom";
 export const selectFilter = "div.pf-m-toggle-group.pf-m-filter-group.pf-m-show";
 export const itemsSelectInsideDialog =
     "div[role='dialog'] button[class='pf-v5-c-menu-toggle__button']";
@@ -69,6 +68,9 @@ export const div = "div";
 export const liTag = "li";
 export const searchInput = "#search-input";
 export const aboutButton = "#about-button";
+export const issues = "Issues";
+export const dependencies = "Dependencies";
+export const technologies = "Technologies";
 /**
  * ul[role=listbox] > li is for the Application Inventory page.
  * span.pf-c-check__label is for the Copy assessment page.

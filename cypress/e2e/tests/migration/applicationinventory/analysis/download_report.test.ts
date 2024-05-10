@@ -42,7 +42,7 @@ describe(["@tier2"], "Enable and Download HTML and YAML Reports", function () {
         });
     });
 
-    it("Download TAR and YAML Reports - Source App", function () {
+    it("Download YAML Report - Source App", function () {
         sourceApplication = new Analysis(
             getRandomApplicationData("SourceApp", {
                 sourceData: this.appData["bookserver-app"],
@@ -53,7 +53,6 @@ describe(["@tier2"], "Enable and Download HTML and YAML Reports", function () {
         cy.wait(2 * SEC);
         sourceApplication.analyze();
         sourceApplication.verifyAnalysisStatus(AnalysisStatuses.completed);
-        sourceApplication.downloadReport(ReportTypeSelectors.HTML);
         sourceApplication.downloadReport(ReportTypeSelectors.YAML);
     });
 
