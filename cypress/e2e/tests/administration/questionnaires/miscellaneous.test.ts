@@ -57,7 +57,7 @@ describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
         notExists(sampleQuestionnaireTemplate);
     });
 
-    it("Import invalid questionnaire", function () {
+    it("Bug MTA-2782: Import invalid questionnaire", function () {
         // Automates bug https://issues.redhat.com/browse/MTA-1349
 
         AssessmentQuestionnaire.open();
