@@ -40,3 +40,4 @@ export const kebabTopMenuButton = "#toolbar-kebab";
 export const camelToggleButton = "#Camel-toggle";
 export const openjdkToggleButton = "#OpenJDK-toggle";
 export const dropDownMenu = "ul.pf-v5-c-select__menu";
+export const closeWizard = ".pf-v5-c-wizard__close > .pf-v5-c-button";

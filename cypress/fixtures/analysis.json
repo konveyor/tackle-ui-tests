@@ -472,5 +472,11 @@
             " io.konveyor.demo.ordermanagement",
             " io.konveyor.demo.ordermanagement.model "
         ]
+    },
+    "tackle_testapp_fileNotValidXML": {
+        "source": "Source code",
+        "target": [],
+        "appName": "fileNotValidXML custom rules",
+        "customRule": ["settings.xml"]
     }
 }

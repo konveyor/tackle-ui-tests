@@ -119,6 +119,17 @@ describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
         exists("CUSTOM RULE for javax.* package import");
     });
 
+    it("Verify a file is not a valid XML", function () {
+        const app = new Analysis(
+            getRandomApplicationData("tackle-testapp-fileNotValidXML", {
+                sourceData: this.appData["tackle-testapp-git"],
+            }),
+            getRandomAnalysisData(this.analysisData["tackle_testapp_fileNotValidXML"])
+        );
+        app.create();
+        app.verifyFileNotValidXML();
+    });
+
     after("Clear test data", function () {
         deleteByList(applications);
         mavenCredential.delete();
