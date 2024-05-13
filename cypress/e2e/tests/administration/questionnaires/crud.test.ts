@@ -28,13 +28,13 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
         AssessmentQuestionnaire.enable(importedQuestionnaire, false);
     });
 
-    it("Duplicate questionnaire Test", function () {
+    it("Bug MTA-2783: Duplicate questionnaire Test", function () {
         AssessmentQuestionnaire.import(yamlFileName);
         checkSuccessAlert(alertTitle, "UNIQUE constraint failed: Questionnaire.Name");
         closeModalWindow();
     });
 
-    it("Export questionnaire and Import it back", function () {
+    it("Bug MTA-2783: Export questionnaire and Import it back", function () {
         AssessmentQuestionnaire.export(legacyQuestionnaire);
         cy.readFile("cypress/downloads/questionnaire-1.yaml").should(
             "contain",
