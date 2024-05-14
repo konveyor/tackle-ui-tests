@@ -52,13 +52,15 @@ describe(["@tier3"], "Review Identified Risks filter validations for assessments
         application = createMultipleApplications(1)[0];
         application.perform_assessment("high", [stakeholder]);
         application.perform_assessment("medium", [stakeholder], null, cloudNative);
+        application.verifyStatus("assessment", "Completed");
         archetype.perform_assessment("high", [stakeholder]);
         Archetype.open(true);
         archetype.perform_assessment("medium", [stakeholder], null, cloudNative);
+        archetype.validateAssessmentField("High");
     });
 
     identifiedRisksFilterValidations.forEach((validation) => {
-        it(`Filtering identified risks by ${validation.name}`, function () {
+        it(`Bug MTA-2784: Filtering identified risks by ${validation.name}`, function () {
             const commonActions = () => {
                 applySelectFilter(
                     validation.id,
