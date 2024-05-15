@@ -136,7 +136,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
             [stakeHolderGroup]
         );
         archetype.create();
-        archetype.perform_assessment("Low", [stakeHolder], [stakeHolderGroup]);
+        archetype.perform_assessment("low", [stakeHolder], [stakeHolderGroup]);
         archetype.validateAssessmentField("Low");
     });
 
@@ -221,7 +221,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         application.name = this.upgradeData.importedQuestionnaireAppName;
         application.create();
         application.perform_assessment(
-            "Medium",
+            "medium",
             [stakeHolder],
             [stakeHolderGroup],
             cloudReadinessQuestionnaire
@@ -229,5 +229,6 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
 
         application.verifyStatus("assessment", "Completed");
         AssessmentQuestionnaire.enable(legacyPathfinder);
+        AssessmentQuestionnaire.disable(cloudReadinessQuestionnaire);
     });
 });

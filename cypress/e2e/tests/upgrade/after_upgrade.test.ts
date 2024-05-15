@@ -42,7 +42,7 @@ import { MavenConfiguration } from "../../models/administration/repositories/mav
 import { clearRepository } from "../../views/repository.view";
 import { stakeHoldersTable } from "../../views/stakeholders.view";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { legacyPathfinder } from "../../types/constants";
+import { cloudReadinessQuestionnaire, legacyPathfinder } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Archetype } from "../../models/migration/archetypes/archetype";
 
@@ -171,11 +171,13 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
 
     it("Verify that imported questionnaire assessement is migrated", function () {
         AssessmentQuestionnaire.disable(legacyPathfinder);
+        AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
         const assessmentApplication = new Application({
             name: this.upgradeData.importedQuestionnaireAppName,
         });
         assessmentApplication.verifyStatus("assessment", "Completed");
         assessmentApplication.validateAssessmentField("Medium");
+        AssessmentQuestionnaire.disable(cloudReadinessQuestionnaire);
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
