@@ -75,7 +75,7 @@ describe(["@tier2"], "Reports tests", () => {
         );
     });
 
-    it("Identified Risks links validation", function () {
+    it("Bug MTA-2816: Identified Risks links validation", function () {
         Reports.open(100);
         cy.contains("a", "1 application").click();
         cy.wrap(getTableColumnData(name)).then((appNames) =>
