@@ -42,18 +42,15 @@ import { MavenConfiguration } from "../../models/administration/repositories/mav
 import { clearRepository } from "../../views/repository.view";
 import { stakeHoldersTable } from "../../views/stakeholders.view";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { legacyPathfinder } from "../../types/constants";
+import { cloudReadinessQuestionnaire, legacyPathfinder } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
+import { Archetype } from "../../models/migration/archetypes/archetype";
 
 describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     const expectedMtaVersion = Cypress.env("mtaVersion");
     before("Login", function () {
         // Perform login
         login();
-        validateMtaVersionInCLI(expectedMtaVersion);
-        validateTackleCr();
-        validateTackleOperatorLog();
-        validateMtaVersionInUI(expectedMtaVersion);
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
@@ -68,6 +65,17 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
             this.upgradeData = upgradeData;
         });
     });
+
+    // Enable fail fast, skip the rest of tests if this specific test fails.
+    it("Validate MTA version in UI", { failFast: { enabled: true } }, () =>
+        validateMtaVersionInUI(expectedMtaVersion)
+    );
+
+    it("Validate MTA version in CLI", () => validateMtaVersionInCLI(expectedMtaVersion));
+
+    it("Validate Tackle CR", () => validateTackleCr());
+
+    it("Validate Tackle Operator Log", () => validateTackleOperatorLog());
 
     it("Controls - testing existence of instances created before upgrade", function () {
         const {
@@ -102,6 +110,12 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
 
         expandRowDetails(tagTypeName);
         exists(tagName);
+    });
+
+    it("Archetype - testing existence of instance created before upgrade", function () {
+        const { archetypeName } = this.upgradeData;
+        Archetype.open();
+        exists(archetypeName);
     });
 
     it("Applications - testing existence of instances created before upgrade", function () {
@@ -153,6 +167,18 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
             name: this.upgradeData.assessmentApplicationName,
         });
         assessmentApplication.verifyStatus("assessment", "Completed");
+    });
+
+    it("Verify that imported questionnaire assessement is migrated", function () {
+        AssessmentQuestionnaire.disable(legacyPathfinder);
+        AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
+        const assessmentApplication = new Application({
+            name: this.upgradeData.importedQuestionnaireAppName,
+        });
+        assessmentApplication.verifyStatus("assessment", "Completed");
+        assessmentApplication.validateAssessmentField("Medium");
+        AssessmentQuestionnaire.disable(cloudReadinessQuestionnaire);
+        AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
     it("Validating pods after upgrade", function () {
