@@ -174,6 +174,7 @@ export type UpgradeData = {
     uploadBinaryApplicationName?: string;
     assessmentApplicationName?: string;
     archetypeName?: string;
+    importedQuestionnaireAppName?: string;
 };
 
 export type RulesRepositoryFields = {

@@ -25,7 +25,14 @@ import {
 import { TagCategory } from "../../models/migration/controls/tagcategory";
 import * as data from "../../../utils/data_utils";
 import { Tag } from "../../models/migration/controls/tags";
-import { CredentialType, legacyPathfinder, SEC, UserCredentials } from "../../types/constants";
+import {
+    cloudReadinessFilePath,
+    cloudReadinessQuestionnaire,
+    CredentialType,
+    legacyPathfinder,
+    SEC,
+    UserCredentials,
+} from "../../types/constants";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Jobfunctions } from "../../models/migration/controls/jobfunctions";
 import { BusinessServices } from "../../models/migration/controls/businessservices";
@@ -48,8 +55,6 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
 
     before("Login", function () {
         login();
-        validateMtaVersionInUI(expectedMtaVersion);
-        validateMtaVersionInCLI(expectedMtaVersion);
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
@@ -66,6 +71,13 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
 
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
+
+    // Enable fail fast, skip the rest of tests if this specific test fails.
+    it("Validate MTA version in UI", { failFast: { enabled: true } }, () =>
+        validateMtaVersionInUI(expectedMtaVersion)
+    );
+
+    it("Validate MTA version in CLI", () => validateMtaVersionInCLI(expectedMtaVersion));
 
     it("Creating credentials", function () {
         const { sourceControlUsernameCredentialsName, mavenUsernameCredentialName } =
@@ -125,6 +137,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         );
         archetype.create();
         archetype.perform_assessment("low", [stakeHolder], [stakeHolderGroup]);
+        archetype.validateAssessmentField("Low");
     });
 
     it("Creating Upload Binary Analysis", function () {
@@ -139,6 +152,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         uploadBinaryApplication.perform_assessment("low", [stakeHolder]);
         uploadBinaryApplication.analyze();
         uploadBinaryApplication.verifyAnalysisStatus("Completed");
+        uploadBinaryApplication.verifyStatus("assessment", "Completed");
         uploadBinaryApplication.selectApplication();
     });
 
@@ -154,6 +168,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         sourceApplication.tags = [tagName];
         sourceApplication.create();
         sourceApplication.perform_assessment("low", [stakeHolder]);
+        sourceApplication.verifyStatus("assessment", "Completed");
         cy.wait(2 * SEC);
         sourceApplication.analyze();
         sourceApplication.verifyAnalysisStatus("Completed");
@@ -177,6 +192,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         binaryApplication.perform_assessment("low", [stakeHolder]);
         binaryApplication.analyze();
         binaryApplication.verifyAnalysisStatus("Completed");
+        binaryApplication.verifyStatus("assessment", "Completed");
         binaryApplication.selectApplication();
     });
 
@@ -190,5 +206,29 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         assessmentApplication.name = this.upgradeData.assessmentApplicationName;
         assessmentApplication.create();
         assessmentApplication.perform_assessment("low", [stakeHolder]);
+        assessmentApplication.verifyStatus("assessment", "Completed");
+    });
+
+    it("Import questionnaire and assess application", function () {
+        AssessmentQuestionnaire.disable(legacyPathfinder);
+        AssessmentQuestionnaire.import(cloudReadinessFilePath);
+        AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
+
+        const application = new Analysis(
+            getRandomApplicationData(),
+            getRandomAnalysisData(this.analysisData)
+        );
+        application.name = this.upgradeData.importedQuestionnaireAppName;
+        application.create();
+        application.perform_assessment(
+            "medium",
+            [stakeHolder],
+            [stakeHolderGroup],
+            cloudReadinessQuestionnaire
+        );
+
+        application.verifyStatus("assessment", "Completed");
+        AssessmentQuestionnaire.enable(legacyPathfinder);
+        AssessmentQuestionnaire.disable(cloudReadinessQuestionnaire);
     });
 });
