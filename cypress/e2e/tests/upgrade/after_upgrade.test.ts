@@ -205,10 +205,12 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
 
         rwxEnabled = true;
         patchTackleCR("configureRWX", rwxEnabled);
+        MavenConfiguration.open();
         isEnabled(clearRepository, rwxEnabled);
 
         rwxEnabled = false;
         patchTackleCR("configureRWX", rwxEnabled);
+        MavenConfiguration.open();
         isEnabled(clearRepository, rwxEnabled);
     });
 });
