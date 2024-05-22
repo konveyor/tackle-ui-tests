@@ -1824,6 +1824,13 @@ export function getCommandOutput(command: string): Cypress.Chainable<Cypress.Exe
     });
 }
 
+export function isCrKeyEnabled(command: string, searchString: string): Cypress.Chainable<boolean> {
+    return getCommandOutput(command).then((result) => {
+        const output = result.stdout; // Получаем стандартный вывод команды
+        return output.includes(searchString); // Проверяем, содержит ли вывод искомую строку
+    });
+}
+
 export function validateMtaVersionInCLI(expectedMtaVersion: string): void {
     const namespace = getNamespace();
     const podName = `$(oc get pods -n${namespace}| grep ui|cut -d " " -f 1)`;
