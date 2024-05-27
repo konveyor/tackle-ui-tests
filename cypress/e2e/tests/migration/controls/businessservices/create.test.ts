@@ -33,6 +33,7 @@ import {
     createNewButton,
     duplicateBusinessService,
     migration,
+    SEC,
 } from "../../../../types/constants";
 import {
     businessServiceNameInput,
@@ -44,7 +45,7 @@ import { BusinessServices } from "../../../../models/migration/controls/business
 import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
-describe(["@tier2"], "Bug MTA-2260: Business service validations", () => {
+describe(["@tier2"], "Business service validations", () => {
     before("Login", function () {
         login();
     });
@@ -129,6 +130,7 @@ describe(["@tier2"], "Bug MTA-2260: Business service validations", () => {
         businessService.delete();
         checkSuccessAlert(commonView.successAlertMessage, `Success alert:Business service deleted`);
         businessService1.delete();
+        cy.wait(2 * SEC);
         checkSuccessAlert(commonView.successAlertMessage, `Success alert:Business service deleted`);
         stakeholder.delete();
         notExists(businessService.name);
