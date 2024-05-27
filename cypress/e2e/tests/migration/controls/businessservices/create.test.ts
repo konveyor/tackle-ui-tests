@@ -91,7 +91,7 @@ describe(["@tier2"], "Bug MTA-2260: Business service validations", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("Bug MTA-2260: Business service success alert and unique constraint validation", function () {
+    it("Business service success alert and unique constraint validation", function () {
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
         const businessService = new BusinessServices(
