@@ -29,6 +29,7 @@ import {
     validateTackleOperatorLog,
     validateMtaVersionInUI,
     validateMtaVersionInCLI,
+    isRwxEnabled,
 } from "../../../utils/utils";
 import { UpgradeData } from "../../types/types";
 import { Credentials } from "../../models/administration/credentials/credentials";
@@ -200,17 +201,16 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
 
     it("Enabling RWX, validating it works, disabling it", function () {
         MavenConfiguration.open();
-        let rwxEnabled = false;
-        isEnabled(clearRepository, rwxEnabled);
+        isRwxEnabled().then((rwxEnabled) => {
+            expect(rwxEnabled).to.be.false;
+            isEnabled(clearRepository, rwxEnabled);
+            rwxEnabled = true;
+            patchTackleCR("configureRWX", rwxEnabled);
+            isEnabled(clearRepository, rwxEnabled);
 
-        rwxEnabled = true;
-        patchTackleCR("configureRWX", rwxEnabled);
-        MavenConfiguration.open();
-        isEnabled(clearRepository, rwxEnabled);
-
-        rwxEnabled = false;
-        patchTackleCR("configureRWX", rwxEnabled);
-        MavenConfiguration.open();
-        isEnabled(clearRepository, rwxEnabled);
+            rwxEnabled = false;
+            patchTackleCR("configureRWX", rwxEnabled);
+            isEnabled(clearRepository, rwxEnabled);
+        });
     });
 });

@@ -1824,6 +1824,18 @@ export function getCommandOutput(command: string): Cypress.Chainable<Cypress.Exe
     });
 }
 
+export function isRwxEnabled(): Cypress.Chainable<boolean> {
+    let command = "";
+    const namespace = getNamespace();
+    const tackleCr = `tackle=$(oc get tackle -n${namespace}|grep -iv name|awk '{print $1}'); `;
+    command += tackleCr;
+    command += `oc get tackle $tackle -n${namespace} -o jsonpath='{.spec.rwx_supported}'`;
+    return getCommandOutput(command).then((result) => {
+        if (result.stderr !== "") throw new Error(result.stderr.toString());
+        return result.stdout.trim().toLowerCase() === "true";
+    });
+}
+
 export function validateMtaVersionInCLI(expectedMtaVersion: string): void {
     const namespace = getNamespace();
     const podName = `$(oc get pods -n${namespace}| grep ui|cut -d " " -f 1)`;
