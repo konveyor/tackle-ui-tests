@@ -49,6 +49,10 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         migrationWave.create();
     });
 
+    beforeEach("Clear state", function () {
+        MigrationWave.open(true);
+    });
+
     it("Name validations", function () {
         const invalidMessage = "Name is invalid. The name must be between 3 and 120 characters";
         MigrationWave.openNewForm();
@@ -87,10 +91,14 @@ describe(["@tier1"], "Migration Waves Validations", () => {
             .click();
         // End date should be greater than start date
         cy.get(`button[aria-label="${nowDateLabel}"]`).should("be.disabled");
-        cy.get(`button[aria-label="${dateTomorrowLabel}"]`).should("be.enabled").click();
+        cy.get(`button[aria-label="${dateTomorrowLabel}"]`)
+            .eq(1)
+            .should("be.enabled")
+            .click({ force: true, multiple: true });
         cy.get(commonView.submitButton).should("be.enabled");
         clickJs(cancelButton);
     });
+
     it("Duplicate Migration wave name validation", function () {
         const migrationWavesList: MigrationWave[] = createMultipleMigrationWaves(2);
 
