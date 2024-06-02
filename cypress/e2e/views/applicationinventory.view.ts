@@ -14,6 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 export const actionButton = "button[aria-label='kebab dropdown toggle']";
+export const applicationsActionButton = "button[aria-label='Application actions']";
+
 export const applicationNameInput = "input[name=name]";
 export const applicationDescriptionInput = "input[name=description]";
 export const applicationBusinessServiceSelect = "[placeholder='Select a business service']";

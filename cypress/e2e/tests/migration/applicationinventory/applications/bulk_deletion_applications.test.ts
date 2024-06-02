@@ -25,7 +25,7 @@ import {
 
 import * as commonView from "../../../../views/common.view";
 import {
-    actionButton,
+    applicationsActionButton,
     appSelectionButton,
     bulkApplicationSelectionCheckBox,
 } from "../../../../views/applicationinventory.view";
@@ -77,7 +77,7 @@ describe(["@tier2"], "Bulk deletion of applications", () => {
     const verifyDeleteButton = () => {
         cy.get(appSelectionButton).eq(0).click();
         cy.get("ul[role=menu] > li").contains("Select all").click();
-        cy.get(actionButton).eq(0).click({ force: true });
+        cy.get(applicationsActionButton).eq(0).click({ force: true });
         cy.get("li.pf-v5-c-menu__list-item")
             .contains("Delete")
             .then(($deleteButton) => {
