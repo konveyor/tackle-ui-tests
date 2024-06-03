@@ -56,12 +56,12 @@ import {
     SortType,
 } from "../e2e/types/constants";
 import {
-    actionButton,
     date,
     createEntitiesCheckbox,
     sideKebabMenu,
     appImportForm,
     kebabMenu,
+    applicationsActionButton,
 } from "../e2e/views/applicationinventory.view";
 import {
     aboutButton,
@@ -765,7 +765,7 @@ export function application_inventory_kebab_menu(menu: string): void {
     // The value for menu could be one of {Import, Manage imports, Delete, Manage credentials}
     navigate_to_application_inventory();
 
-    cy.get(actionButton, { timeout: 60 * SEC })
+    cy.get(applicationsActionButton, { timeout: 60 * SEC })
         .eq(0)
         .click({ force: true });
     if (menu == "Import") {
@@ -778,7 +778,7 @@ export function application_inventory_kebab_menu(menu: string): void {
                     clickByText(button, menu, true);
                 } else {
                     // close menu if nothing to do
-                    cy.get(actionButton).eq(0).click({ force: true });
+                    cy.get(applicationsActionButton).eq(0).click({ force: true });
                 }
             });
     }
