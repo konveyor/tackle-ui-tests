@@ -182,6 +182,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(this.analysisData["analysis_for_openSourceLibraries"]["effort"]);
     });
 
     it("Automated tagging using Source Analysis on tackle testapp", function () {
@@ -219,6 +220,7 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.wait("@getApplication");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(this.analysisData["analysis_for_disableTagging"]["effort"]);
         application.applicationDetailsTab("Tags");
         cy.get("h2", { timeout: 5 * SEC }).should("contain", "No tags available");
     });
@@ -238,7 +240,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
         // Polarion TC 406
-        application.verifyEffort(2);
+        application.verifyEffort(this.analysisData["analysis_on_example-1-app"]["effort"]);
     });
 
     it("JWS6 target Source + deps analysis on tackletest app", function () {
