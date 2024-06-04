@@ -238,7 +238,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
         // Polarion TC 406
-        application.verifyEffort(2);
+        application.verifyEffort(this.analysisData["analysis_on_example-1-app"]["effort"]);
     });
 
     it("JWS6 target Source + deps analysis on tackletest app", function () {
