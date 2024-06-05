@@ -33,7 +33,7 @@ import { mediumRiskDonut } from "../../../views/reportsTab.view";
 
 let stakeholderList: Array<Stakeholders> = [];
 
-describe(["@tier2"], "Reports tests", () => {
+describe(["@tier2"], "Archetype association reports tests", () => {
     before("Login and Create Test Data", function () {
         login();
         AssessmentQuestionnaire.enable(legacyPathfinder);

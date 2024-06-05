@@ -48,7 +48,7 @@ import { questionBlock } from "../../../../views/assessment.view";
 let stakeholderList: Array<Stakeholders> = [];
 let application: Application;
 
-describe(["@tier3"], "Tests related to questionnaire features", () => {
+describe(["@tier3"], "Tests for assessment questionnaire features", () => {
     before("Import and enable Cloud readiness questionnaire template", function () {
         login();
         AssessmentQuestionnaire.deleteAllQuestionnaires();

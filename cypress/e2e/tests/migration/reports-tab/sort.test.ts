@@ -46,7 +46,7 @@ const sortableColumns = [
 ];
 
 // Automates Polarion TCs 452
-describe(["@tier2"], "Reports tests", () => {
+describe(["@tier2"], "Reports tab sort tests", () => {
     before("Login and Create Test Data", function () {
         login();
         deleteAllMigrationWaves();

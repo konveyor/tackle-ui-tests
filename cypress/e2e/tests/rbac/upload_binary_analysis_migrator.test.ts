@@ -29,7 +29,7 @@ import { getRandomUserData } from "../../../utils/data_utils";
 import { User } from "../../models/keycloak/users/user";
 import { Application } from "../../models/migration/applicationinventory/application";
 
-describe.skip(["@tier3"], "Upload Binary Analysis", () => {
+describe.skip(["@tier3"], "Migrator Upload Binary Analysis", () => {
     const userMigrator = new UserMigrator(getRandomUserData());
     const applications: Analysis[] = [];
 
