@@ -16,7 +16,7 @@ limitations under the License.
 
 import { clickByText, selectItemsPerPage, selectUserPerspective } from "../../../../utils/utils";
 import { SEC, applicationInventory, button, migration } from "../../../types/constants";
-import { actionButton } from "../../../views/applicationinventory.view";
+import { applicationsActionButton } from "../../../views/applicationinventory.view";
 import { manageImportsActionsButton } from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
 
@@ -35,7 +35,7 @@ export class ManageImports {
             if ($url != ManageImports.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, applicationInventory);
-                cy.get(actionButton).eq(0).click({ force: true });
+                cy.get(applicationsActionButton).click({ force: true });
                 clickByText(button, "Manage imports");
                 cy.wait(5 * SEC)
                     .get("h1", { timeout: 5 * SEC })
