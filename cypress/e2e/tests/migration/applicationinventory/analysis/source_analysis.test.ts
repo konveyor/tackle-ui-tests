@@ -72,10 +72,6 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    afterEach("Reset url", function () {
-        Application.open(true);
-    });
-
     it("Source + dependencies analysis on tackletest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
@@ -84,6 +80,7 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -101,6 +98,7 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -117,6 +115,7 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -134,6 +133,7 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -158,6 +158,7 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -175,6 +176,7 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_for_openSourceLibraries"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -192,6 +194,7 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -214,6 +217,7 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_for_disableTagging"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -231,6 +235,7 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_on_example-1-app"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -241,7 +246,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.verifyEffort(this.analysisData["analysis_on_example-1-app"]["effort"]);
     });
 
-    it("JWS6 target Source + deps analysis on tackletest app", function () {
+    it("Bug MTA-2916: JWS6 target Source + deps analysis on tackletest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies_jws6", {
@@ -249,6 +254,7 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["jws6_source+dep_analysis_on_tackletestapp"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -261,7 +267,7 @@ describe(["@tier1"], "Source Analysis", () => {
         );
     });
 
-    it("Openjdk17 Source + dependencies analysis on tackletest app", function () {
+    it("Bug MTA-2916: Openjdk17 Source + dependencies analysis on tackletest app", function () {
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies_openjdk17", {
                 sourceData: this.appData["tackle-testapp-git"],
@@ -270,6 +276,7 @@ describe(["@tier1"], "Source Analysis", () => {
                 this.analysisData["openJDK17_source+dep_analysis_on_tackletestapp"]
             )
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -282,13 +289,14 @@ describe(["@tier1"], "Source Analysis", () => {
         );
     });
 
-    it("OpenJDK21 Source + dependencies analysis on daytrader app", function () {
+    it("Bug MTA-2916: OpenJDK21 Source + dependencies analysis on daytrader app", function () {
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies_openjdk21", {
                 sourceData: this.appData["daytrader-app"],
             }),
             getRandomAnalysisData(this.analysisData["openJDK21_source+dep_analysis_on_dayTrader"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -308,6 +316,7 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["jdk9_source_dep_analysis_on_tackletestapp"])
         );
+        Application.open();
         application.create();
         application.manageCredentials(null, maven_credential.name);
         applicationsList.push(application);
