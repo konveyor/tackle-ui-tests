@@ -34,7 +34,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     let tags: Tag[];
     let tagNames: string[];
     const allIssuesSortByList = ["Issue", "Category", "Effort", "Affected applications"];
-    const affectedApplicationSortByList = ["Name", "Business service", "Total Effort", "Incidents"];
+    const affectedApplicationSortByList = ["Name", "Business service", "Effort", "Incidents"];
     const singleApplicationSortByList = ["Issue", "Category", "Effort", "Affected files"];
     const affectedFilesSortByList = ["File", "Incidents", "Effort"];
 
@@ -212,7 +212,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         });
     });
 
-    it("BUG MTA-2432 - All issues - Sorting affected files", function () {
+    it("All issues - Sorting affected files", function () {
         Issues.openAffectedApplications(
             this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"][0]["name"]
         );

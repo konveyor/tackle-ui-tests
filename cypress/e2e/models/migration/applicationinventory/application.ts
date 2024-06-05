@@ -511,7 +511,7 @@ export class Application {
                 validateTextPresence('td[data-label="Business service"]', this.business);
             }
             // Validating total effort for fixing issue, it is basic effort from main issue page multiplied on incidents amount
-            validateNumberPresence('td[data-label="Total Effort"]', appIssue.totalEffort);
+            validateNumberPresence('td[data-label="Effort"]', appIssue.totalEffort);
             validateNumberPresence('td[data-label="Incidents"]', appIssue.incidents);
         });
     }
