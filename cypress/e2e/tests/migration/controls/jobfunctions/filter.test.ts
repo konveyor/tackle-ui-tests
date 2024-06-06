@@ -54,7 +54,7 @@ describe(["@tier2"], "Job function filter validations", function () {
         applySearchFilter(name, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No job functions available");
+        cy.get("h2").contains("No job function available");
 
         clickByText(button, clearAllFilters);
     });
