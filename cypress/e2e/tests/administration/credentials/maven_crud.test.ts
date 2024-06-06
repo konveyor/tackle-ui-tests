@@ -20,7 +20,7 @@ import { CredentialsMaven } from "../../../models/administration/credentials/cre
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
 import { CredentialType } from "../../../types/constants";
 
-describe(["@tier2"], "Validation of Source Control Credentials", () => {
+describe(["@tier2"], "Validation of Maven Credentials", () => {
     const mavenCredentialsUsername = new CredentialsMaven(
         getRandomCredentialsData(CredentialType.maven)
     );

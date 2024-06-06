@@ -29,7 +29,7 @@ import { getRandomUserData } from "../../../utils/data_utils";
 import { User } from "../../models/keycloak/users/user";
 import { Application } from "../../models/migration/applicationinventory/application";
 
-describe(["@tier3"], "Upload Binary Analysis", () => {
+describe(["@tier3"], "Architect Upload Binary Analysis", () => {
     const userArchitect = new UserArchitect(getRandomUserData());
     const applications: Analysis[] = [];
 

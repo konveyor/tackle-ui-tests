@@ -31,7 +31,7 @@ let maven_credential: CredentialsMaven;
 const sourceApplicationsList: Array<Analysis> = [];
 const mavenApplicationsList: Array<Analysis> = [];
 
-describe(["@tier1"], "Source Analysis", () => {
+describe(["@tier1"], "Manage credentials source analysis", () => {
     before("Login", function () {
         login();
 

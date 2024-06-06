@@ -36,7 +36,7 @@ let applicationsList: Array<Application> = [];
 let riskType = ["high", "medium", "low"];
 
 // Automates Polarion TCs 429 & 430
-describe(["@tier2"], "Reports tests", () => {
+describe(["@tier2"], "Reports tab links validation tests", () => {
     before("Login and Create Test Data", function () {
         login();
         deleteAllMigrationWaves();
