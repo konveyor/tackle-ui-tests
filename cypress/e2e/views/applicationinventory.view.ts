@@ -75,10 +75,10 @@ export const createEntitiesCheckbox = "#create-entities-checkbox";
 export enum appDetailsView {
     applicationTag = "span.pf-v5-c-label__content",
     closeDetailsPage = "button[aria-label='Close drawer panel']",
-    tagFilter = "#filter-control-source",
+    tagFilter = "#filter-control-source-typeahead-select-input",
     tagCategory = "div[class='pf-v5-c-content'] > h4",
     filterSourceMenu = "span.pf-v5-c-menu__item-text",
-    tagCategoryFilter = "#filter-control-tagCategory > .pf-v5-c-menu-toggle > .pf-v5-c-menu-toggle__button",
+    tagCategoryFilter = "#filter-control-tagCategory-typeahead-select-input",
 }
 
 // Fields related to copy assessment modal
