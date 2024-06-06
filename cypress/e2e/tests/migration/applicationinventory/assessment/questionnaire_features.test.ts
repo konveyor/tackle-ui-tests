@@ -72,7 +72,7 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
         cy.wait(2 * SEC);
         clickItemInKebabMenu(application.name, "Assess");
         Assessment.take_questionnaire(cloudReadinessQuestionnaire);
-        Assessment.selectStakeholders(stakeholderList);
+        Assessment.selectStakeholdersAndGroups(stakeholderList);
         clickJs(nextButton);
         cy.wait(SEC);
         cy.get(questionBlock)
@@ -105,7 +105,7 @@ describe(["@tier3"], "Tests related to questionnaire features", () => {
         cy.wait(2 * SEC);
         clickItemInKebabMenu(application.name, "Assess");
         Assessment.take_questionnaire(cloudReadinessQuestionnaire);
-        Assessment.selectStakeholders(stakeholderList);
+        Assessment.selectStakeholdersAndGroups(stakeholderList);
         clickJs(nextButton);
         cy.wait(SEC);
 
