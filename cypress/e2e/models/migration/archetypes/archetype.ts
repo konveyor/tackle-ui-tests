@@ -378,4 +378,9 @@ export class Archetype {
                 cy.get(columnSelector).contains(value, { timeout: 30 * SEC });
             });
     }
+
+    verifyStatus(column, status): void {
+        Archetype.open();
+        Assessment.verifyStatus(this.name, column, status);
+    }
 }
