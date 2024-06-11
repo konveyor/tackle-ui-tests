@@ -80,7 +80,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         cy.contains("tr", legacyPathfinder).find("button.retake-button").should("have.length", 1);
 
         Archetype.open(true);
-        archetype.perform_assessment("Medium", stakeholders, null, cloudReadinessQuestionnaire);
+        archetype.perform_assessment("medium", stakeholders, null, cloudReadinessQuestionnaire);
         archetype.validateAssessmentField("Medium");
         archetype.clickAssessButton();
         cy.contains("tr", cloudReadinessQuestionnaire)
