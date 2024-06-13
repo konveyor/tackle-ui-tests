@@ -18,7 +18,7 @@
             "repositoryType": "git",
             "repositoryUrl": "https://github.com/ibraginsky/book-server",
             "branch": "",
-            "rootPath": "Custom rules"
+            "rootPath": "custom-rules"
         }
     }
 }
