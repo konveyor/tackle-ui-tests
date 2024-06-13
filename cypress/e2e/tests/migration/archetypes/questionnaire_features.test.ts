@@ -63,7 +63,7 @@ describe(["@tier3"], "Tests for archetype questionnaire features", () => {
         //Automates Polarion MTA-386: Test conditional questions
         archetype.clickAssessButton();
         Assessment.take_questionnaire(cloudReadinessQuestionnaire);
-        Assessment.selectStakeholders(stakeholderList);
+        Assessment.selectStakeholdersAndGroups(stakeholderList);
         clickJs(nextButton);
         cy.wait(SEC);
         cy.get(questionBlock)
@@ -90,7 +90,7 @@ describe(["@tier3"], "Tests for archetype questionnaire features", () => {
         //Automates Polarion MTA-388: Auto answer
         archetype.clickAssessButton();
         Assessment.take_questionnaire(cloudReadinessQuestionnaire);
-        Assessment.selectStakeholders(stakeholderList);
+        Assessment.selectStakeholdersAndGroups(stakeholderList);
         clickJs(nextButton);
         cy.wait(SEC);
 
