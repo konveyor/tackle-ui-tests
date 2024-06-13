@@ -132,7 +132,7 @@ export class Assessment {
     }
 
     public static selectAnswers(risk: string, saveAndReview = false): void {
-        // Allowed values for risk: low, medium, high
+        // Allowed values for risk: low, medium, high, unknown
         cy.get(assessmentBlock)
             .its("length")
             .then((count) => {
