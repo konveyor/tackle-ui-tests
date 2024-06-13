@@ -132,7 +132,7 @@ export class Assessment {
     }
 
     public static selectAnswers(risk: string, saveAndReview = false): void {
-        // Allowed values for risk: low, medium, high
+        // Allowed values for risk: low, medium, high, unknown
         cy.get(assessmentBlock)
             .its("length")
             .then((count) => {
@@ -166,8 +166,12 @@ export class Assessment {
                                     }
                                     this.clickRadioOption($question, optionToSelect);
                                 });
-                        } else {
+                        } else if (risk === "high") {
                             optionToSelect = 1;
+                            this.clickRadioOption($question, optionToSelect);
+                        } else {
+                            // if risk = 'unknown'
+                            optionToSelect = 0;
                             this.clickRadioOption($question, optionToSelect);
                         }
                     });
