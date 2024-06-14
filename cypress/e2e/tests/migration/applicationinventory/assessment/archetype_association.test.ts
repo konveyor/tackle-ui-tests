@@ -81,7 +81,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         cy.contains("tr", legacyPathfinder).find("button.retake-button").should("have.length", 1);
 
         Archetype.open(true);
-        archetype.verifyStatus("assessment", "In progress");
+        archetype.verifyStatus("assessment", "In-progress");
         archetype.perform_assessment("medium", stakeholders, null, cloudReadinessQuestionnaire);
         archetype.validateAssessmentField("Medium");
         archetype.verifyStatus("assessment", "Completed");
@@ -126,7 +126,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         cy.wait(2 * SEC);
 
         // Note that the application is associated with 2 archetypes. Its 'Assessment' and 'Review'
-        // status show 'In progress' until all associated archetypes have been assessed.
+        // status show 'In-progress' until all associated archetypes have been assessed.
         application2.verifyArchetypeList(archetypeNames, "Associated archetypes");
         application2.verifyStatus("review", "Not started");
         archetypeList[0].perform_review("low");
