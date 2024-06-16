@@ -73,6 +73,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         /*Automates Polarion MTA-499 Verify multiple applications inherit assessment and review inheritance from an archetype
           and Polarion MTA-2464 Assess archetype with multiple questionnaires */
         archetype.perform_review("low");
+        archetype.verifyStatus("review", "Completed");
         archetype.verifyStatus("assessment", "Not started");
         archetype.perform_assessment("low", stakeholders);
         // 'Archetype risk' field shows unassessed until all required questionnaires have been taken.
