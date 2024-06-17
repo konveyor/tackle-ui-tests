@@ -173,6 +173,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         for (let i = 0; i < archetypeList.length; i++) {
             archetypeList[i].perform_assessment("low", stakeholders);
+            cy.wait(2 * SEC);
             archetypeList[i].verifyStatus("assessment", "Completed");
         }
 
