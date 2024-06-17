@@ -58,7 +58,9 @@ describe(["@tier2"], "Reports tab links validation tests", () => {
     it("Risk links validation", function () {
         riskType.forEach((risk, i) => {
             Reports.open();
-            cy.contains("a", `${risk} risk`, { matchCase: false, timeout: 10 * SEC }).click();
+            if (risk == "unknown")
+                cy.contains("a", `${risk}`, { matchCase: false, timeout: 10 * SEC }).click();
+            else cy.contains("a", `${risk} risk`, { matchCase: false, timeout: 10 * SEC }).click();
             cy.wrap(getTableColumnData(name)).then((appNames) =>
                 expect(appNames, `${risk} risk link validation`).to.be.deep.equal([
                     applicationsList[i].name,
