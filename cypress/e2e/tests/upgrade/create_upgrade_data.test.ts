@@ -43,7 +43,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     let sourceControlUsernameCredentials: CredentialsSourceControlUsername;
     const assessment = new Assessment(getRandomApplicationData());
     let stakeHolder: Stakeholders;
-    const expectedMtaVersion = Cypress.env("sourceMtaVersion");
+    const expectedMtaVersion = Cypress.env("mtaVersion");
 
     before("Login", function () {
         // Perform login
