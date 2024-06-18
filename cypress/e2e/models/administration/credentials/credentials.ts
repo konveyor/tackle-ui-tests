@@ -36,11 +36,8 @@ import {
     filteredBy,
     passwordInput,
     usernameInput,
-    filterNameInput,
     filterSelectType,
-    filterSubmitButton,
     filterCatCreatedBy,
-    filterCreatedByInput,
     modalBoxBody,
 } from "../../../views/credentials.view";
 import {
@@ -48,6 +45,8 @@ import {
     confirmButton,
     closeSuccessNotification,
     confirmCancelButton,
+    searchButton,
+    searchInput,
 } from "../../../views/common.view";
 import { selectType } from "../../../views/credentials.view";
 import * as commonView from "../../../views/common.view";
@@ -176,8 +175,8 @@ export class Credentials {
 
     static ApplyFilterByName(value: string) {
         selectFromDropList(filteredBy, filterCategory);
-        inputText(filterNameInput, value);
-        click(filterSubmitButton);
+        inputText(searchInput, value);
+        click(searchButton);
     }
 
     static applyFilterByType(type: string) {
@@ -187,8 +186,8 @@ export class Credentials {
 
     static applyFilterCreatedBy(value: string) {
         selectFromDropList(filteredBy, filterCatCreatedBy);
-        inputText(filterCreatedByInput, value);
-        click(filterSubmitButton);
+        inputText(searchInput, value);
+        click(searchButton);
     }
 
     static filterByType(): void {

@@ -47,7 +47,8 @@ module.exports = (on, config) => {
     on("task", { downloadFile });
 };
 
+const unzipping = require("./unzip");
 const { isFileExist, findFiles } = require("cy-verify-downloads");
 module.exports = (on, config) => {
-    on("task", { isFileExist, findFiles });
+    on("task", { isFileExist, findFiles, unzip: unzipping.unzip });
 };

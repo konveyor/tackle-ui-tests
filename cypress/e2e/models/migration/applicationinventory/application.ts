@@ -19,17 +19,17 @@ import {
     trTag,
     button,
     createNewButton,
-    deleteAction,
-    assessment,
     assessAppButton,
     createAppButton,
     SEC,
-    analysis,
     analyzeButton,
     reviewAppButton,
     migration,
+    details,
+    legacyPathfinder,
+    review,
 } from "../../../types/constants";
-import { navMenu, navTab } from "../../../views/menu.view";
+import { navMenu } from "../../../views/menu.view";
 import {
     applicationNameInput,
     applicationDescriptionInput,
@@ -48,6 +48,12 @@ import {
     packaging,
     kebabMenu,
     repoTypeSelect,
+    profileEdit,
+    appContributorSelect,
+    northdependenciesDropdownBtn,
+    southdependenciesDropdownBtn,
+    closeForm,
+    tagsColumnSelector,
 } from "../../../views/applicationinventory.view";
 import { appDetailsView } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
@@ -64,9 +70,27 @@ import {
     doesExistSelector,
     doesExistText,
     clickTab,
+    clickItemInKebabMenu,
+    doesExistButton,
+    clickWithin,
+    validateSingleApplicationIssue,
+    validateTextPresence,
+    validateNumberPresence,
+    performWithin,
+    sidedrawerTab,
+    validatePageTitle,
 } from "../../../../utils/utils";
-import { applicationData, RbacValidationRules } from "../../../types/types";
-import { kebabButton, rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
+import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
+import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
+import { MigrationWave } from "../migration-waves/migration-wave";
+import { Issues } from "../dynamic-report/issues/issues";
+import { Assessment } from "./assessment";
+import { continueButton, assessmentColumnSelector } from "../../../views/assessment.view";
+import { reviewColumnSelector } from "../../../views/review.view";
+import { Stakeholdergroups } from "../controls/stakeholdergroups";
+import { Stakeholders } from "../controls/stakeholders";
+import { Archetype } from "../archetypes/archetype";
+import { alertBody, alertTitle } from "../../../views/common.view";
 
 export class Application {
     name: string;
@@ -84,6 +108,9 @@ export class Application {
     artifact?: string;
     version?: string;
     packaging?: string;
+    contributor?: string;
+
+    static fullUrl = Cypress.env("tackleUrl") + "/applications";
 
     constructor(appData: applicationData) {
         this.init(appData);
@@ -106,6 +133,7 @@ export class Application {
             artifact,
             version,
             packaging,
+            contributor,
         } = appData;
         this.name = name;
         if (business) this.business = business;
@@ -122,13 +150,26 @@ export class Application {
         if (artifact) this.artifact = artifact;
         if (version) this.version = version;
         if (packaging) this.packaging = packaging;
+        if (contributor) this.contributor = contributor;
     }
 
-    //Navigate to the Application inventory
-    public static open(): void {
-        selectUserPerspective(migration);
-        clickByText(navMenu, applicationInventory);
-        clickByText(navTab, assessment);
+    public static open(forceReload = false): void {
+        const itemsPerPage = 100;
+        if (forceReload) {
+            cy.visit(Application.fullUrl, { timeout: 35 * SEC }).then((_) =>
+                selectItemsPerPage(itemsPerPage)
+            );
+            return;
+        }
+
+        cy.url().then(($url) => {
+            if ($url != Application.fullUrl) {
+                selectUserPerspective(migration);
+                clickByText(navMenu, applicationInventory);
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", applicationInventory);
+            }
+        });
+        selectItemsPerPage(itemsPerPage);
     }
 
     protected fillName(name: string): void {
@@ -157,6 +198,10 @@ export class Application {
         selectFormItems(applicationOwnerInput, owner);
     }
 
+    protected selectContributor(contributor: string): void {
+        selectFormItems(appContributorSelect, contributor);
+    }
+
     protected selectRepoType(repoType: string): void {
         selectFormItems(repoTypeSelect, repoType);
     }
@@ -180,6 +225,7 @@ export class Application {
     }
 
     create(cancel = false): void {
+        Application.open();
         cy.contains("button", createNewButton, { timeout: 20000 }).should("be.enabled").click();
         if (cancel) {
             cancelForm();
@@ -205,11 +251,18 @@ export class Application {
             owner?: string;
             comment?: string;
             repoType?: string;
+            sourceRepo?: string;
+            group?: string;
         },
+        updateAppInfo = false,
         cancel = false
     ): void {
         cy.wait(2000);
-        performRowActionByIcon(this.name, editButton);
+        if (updateAppInfo) {
+            this.editApplicationFromApplicationProfile();
+        } else {
+            performRowActionByIcon(this.name, editButton);
+        }
 
         if (cancel) {
             cancelForm();
@@ -238,6 +291,18 @@ export class Application {
                 this.selectRepoType(updatedValues.repoType);
                 this.repoType = updatedValues.repoType;
             }
+            if (updatedValues.owner && updatedValues.owner != this.owner) {
+                this.selectOwner(updatedValues.owner);
+                this.owner = updatedValues.owner;
+            }
+            if (updatedValues.group && updatedValues.group != this.group) {
+                this.fillBinaryModeFields();
+                this.group = updatedValues.group;
+            }
+            if (updatedValues.sourceRepo && updatedValues.sourceRepo != this.repoType) {
+                this.selectRepoType(updatedValues.sourceRepo);
+                this.repoType = updatedValues.sourceRepo;
+            }
             if (updatedValues) {
                 submitForm();
             }
@@ -257,9 +322,9 @@ export class Application {
     }
 
     delete(cancel = false): void {
+        Application.open();
         cy.wait(2000);
-        performRowActionByIcon(this.name, kebabMenu);
-        clickByText(button, deleteAction);
+        clickItemInKebabMenu(this.name, "Delete");
         if (cancel) {
             cancelForm();
         } else {
@@ -272,7 +337,6 @@ export class Application {
         cy.wait(4000);
         cy.get(tdTag)
             .contains(this.name)
-            // .parent(tdTag)
             .closest(trTag)
             .within(() => {
                 click(selectBox);
@@ -284,23 +348,24 @@ export class Application {
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
+            .closest(trTag)
             .within(() => {
-                cy.get(columnSelector).find("span").should("contain", columnText);
+                cy.get(columnSelector).should("contain", columnText);
             });
     }
 
     applicationDetailsTab(tab: string): void {
         // Navigate to the application details page and click desired tab
+        Application.open();
         this.selectApplicationRow();
         cy.get(rightSideMenu).within(() => {
             clickTab(tab);
         });
+        // Make sure application 'Tags' tab page is loaded before proceeding with anything
+        if (tab == "Tags") cy.get("div[class='pf-v5-c-toolbar__item']", { timeout: 60 * SEC });
     }
 
     closeApplicationDetails(): void {
-        // closes application details page
         click(appDetailsView.closeDetailsPage);
     }
 
@@ -318,7 +383,12 @@ export class Application {
     filterTags(source: string): void {
         this.applicationDetailsTab("Tags");
         cy.wait(2000);
-        if (source != "Manual" && source != "Analysis")
+        if (
+            source != "Manual" &&
+            source != "Analysis" &&
+            source != "Archetype" &&
+            source != "Assessment"
+        )
             cy.get(appDetailsView.tagCategoryFilter).click();
         else cy.get(appDetailsView.tagFilter).click();
 
@@ -344,14 +414,34 @@ export class Application {
         else cy.get(appDetailsView.applicationTag).should("contain", tags);
     }
 
-    static validateAssessButton(rbacRules: RbacValidationRules) {
-        Application.open();
-        doesExistSelector(assessAppButton, rbacRules["Assess"]);
+    /**
+     * Verify that tags and categories don't exist on Application details -> Tags page
+     * @param tags list of tags
+     */
+    tagAndCategoryDontExist(tags: string[][]): void {
+        tags.forEach(function (tag) {
+            cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
+                "not.contain",
+                tags[1]
+            );
+            cy.get(appDetailsView.tagCategory).should("not.contain", tags[0]);
+        });
     }
 
-    static validateReviewButton(rbacRules: RbacValidationRules) {
+    noTagExists(): void {
+        cy.contains("h2", "No tags available", { timeout: 2 * SEC });
+    }
+
+    public validateAssessButton(rbacRules: RbacValidationRules) {
         Application.open();
-        doesExistSelector(reviewAppButton, rbacRules["Review"]);
+        performRowActionByIcon(this.name, kebabMenu);
+        doesExistButton(assessAppButton, rbacRules["Assess"]);
+    }
+
+    public validateReviewButton(rbacRules: RbacValidationRules) {
+        Application.open();
+        performRowActionByIcon(this.name, kebabMenu);
+        doesExistButton(reviewAppButton, rbacRules["Review"]);
     }
 
     static validateCreateAppButton(rbacRules: RbacValidationRules) {
@@ -359,62 +449,35 @@ export class Application {
         doesExistSelector(createAppButton, rbacRules["Create new"]);
     }
 
-    validateAnalysisAvailableActions(rbacRules: RbacValidationRules): void {
+    validateAppContextMenu(rbacRules: RbacValidationRules): void {
         Application.open();
-        clickByText(navTab, analysis);
-        selectItemsPerPage(100);
-        cy.wait(5 * SEC);
+        cy.wait(SEC);
         cy.get(tdTag)
             .contains(this.name)
             .closest(trTag)
             .within(() => {
-                click(selectBox);
-                cy.wait(SEC);
-                click('button[aria-label="Kebab toggle"]');
+                clickWithin("#row-actions", button);
+                doesExistButton(assessAppButton, rbacRules["Application actions"]["Assess"]);
+                doesExistButton(reviewAppButton, rbacRules["Application actions"]["Review"]);
                 doesExistText(
-                    "Analysis details",
-                    rbacRules["analysis applicable options"]["Analysis details"]
+                    "Discard assessment",
+                    rbacRules["Application actions"]["Discard assessment"]
                 );
+                doesExistText("Discard review", rbacRules["Application actions"]["Discard review"]);
+                doesExistText("Delete", rbacRules["Application actions"]["Delete"]);
                 doesExistText(
-                    "Cancel analysis",
-                    rbacRules["analysis applicable options"]["Cancel analysis"]
+                    "Manage dependencies",
+                    rbacRules["Application actions"]["Manage dependencies"]
                 );
                 doesExistText(
                     "Manage credentials",
-                    rbacRules["analysis applicable options"]["Manage credentials"]
+                    rbacRules["Application actions"]["Manage credentials"]
                 );
-                doesExistText("Delete", rbacRules["analysis applicable options"]["Delete"]);
             });
     }
 
-    validateAssessmentAvailableOptions(rbacRules: RbacValidationRules): void {
-        Application.open();
-        selectItemsPerPage(100);
-        cy.get(tdTag)
-            .contains(this.name)
-            .closest(trTag)
-            .within(() => {
-                click(selectBox);
-                cy.wait(SEC);
-                click(kebabButton);
-                doesExistText(
-                    "Discard assessment/review",
-                    rbacRules["assessment applicable options"]["Discard assessment"]
-                );
-                doesExistText(
-                    "Copy assessment",
-                    rbacRules["assessment applicable options"]["Copy assessment"]
-                );
-                doesExistText(
-                    "Manage dependencies",
-                    rbacRules["assessment applicable options"]["Manage dependencies"]
-                );
-            });
-    }
     validateUploadBinary(rbacRules: RbacValidationRules): void {
         Application.open();
-        clickByText(button, analysis);
-        selectItemsPerPage(100);
         this.selectApplication();
         cy.contains("button", analyzeButton, { timeout: 20 * SEC })
             .should("be.enabled")
@@ -422,5 +485,426 @@ export class Application {
         cy.get(sourceDropdown).click();
         doesExistText("Upload a local binary", rbacRules["Upload binary"]);
         clickByText(button, "Cancel");
+    }
+
+    validateIssues(appIssues: AppIssue[]): void {
+        Issues.openSingleApplication(this.name);
+        appIssues.forEach((currentIssue) => {
+            validateSingleApplicationIssue(currentIssue);
+            Issues.validateAllFields(currentIssue);
+        });
+    }
+
+    validateAffected(appIssue: AppIssue): void {
+        Issues.openAffectedApplications(appIssue.name);
+        this.validateAffectedValues(appIssue);
+        this.validateAffectedFiles(appIssue);
+    }
+
+    private validateAffectedValues(appIssue: AppIssue): void {
+        performWithin(this.name, () => {
+            validateTextPresence('td[data-label="Name"]', this.name);
+            if (this.description) {
+                validateTextPresence('td[data-label="Description"]', this.description);
+            }
+            if (this.business) {
+                validateTextPresence('td[data-label="Business service"]', this.business);
+            }
+            // Validating total effort for fixing issue, it is basic effort from main issue page multiplied on incidents amount
+            validateNumberPresence('td[data-label="Effort"]', appIssue.totalEffort);
+            validateNumberPresence('td[data-label="Incidents"]', appIssue.incidents);
+        });
+    }
+
+    validateAffectedFiles(appIssue: AppIssue): void {
+        this.selectApplicationRow();
+        this.validateAffectedFilesTable(appIssue);
+        this.validateAffectedFilesModal(appIssue);
+    }
+
+    private validateAffectedFilesTable(appIssue: AppIssue): void {
+        // Check amount of rows in the file list at right-side bar
+        cy.get('table[aria-label="Affected files table"] tbody > tr').should(
+            "have.length",
+            appIssue.affectedFiles
+        );
+        // validating content of files table
+        cy.get("#page-drawer-content").within(() => {
+            cy.wait(SEC);
+            cy.get("tbody")
+                .find(trTag)
+                .each(($row) => {
+                    cy.wrap($row).within(() => {
+                        cy.get('td[data-label="File"]').should("have.descendants", button);
+                        validateNumberPresence('td[data-label="Incidents"]', appIssue.incidents);
+                        validateNumberPresence(
+                            'td[data-label="Effort"]',
+                            appIssue.effort * appIssue.incidents
+                        );
+                    });
+                });
+        });
+    }
+
+    // Validating content of modal window with list of affected files and incidents
+    private validateAffectedFilesModal(appIssue: AppIssue): void {
+        // Iterating through affected files
+        for (let affectedFile = 0; affectedFile < appIssue.affectedFiles; affectedFile++) {
+            cy.get('td[data-label="File"]').within(() => {
+                click(button, false, true, affectedFile);
+            });
+            cy.wait(SEC);
+            cy.get("[id^=pf-modal-part-]")
+                .first()
+                .within(() => {
+                    // Checking amount of tabs for incidents in particular file
+                    cy.get("ul[role=tablist]").within(() => {
+                        cy.get("li").should("have.length", appIssue.incidents);
+                    });
+                    // Iterating through incidents list to click on each and validate content
+                    for (let incident = 0; incident < appIssue.incidents; incident++) {
+                        cy.get("ul[role=tablist]").within(() => {
+                            // Clicking on particular incident
+                            click(button, false, true, incident);
+                        });
+                        // Asserting that content of text field has at least 100 symbols
+                        cy.get("div.monaco-scrollable-element.editor-scrollable.vs-dark")
+                            .invoke("text")
+                            .then((text) => {
+                                expect(text.length).to.be.at.least(100);
+                            });
+                    }
+                    clickByText(button, "Close");
+                });
+        }
+    }
+
+    editApplicationFromApplicationProfile(): void {
+        this.applicationDetailsTab(details);
+        cy.wait(2000);
+        cy.get(profileEdit).click();
+    }
+
+    validateAppInformationExist(appData: applicationData, migrationWave?: MigrationWave): void {
+        Application.open();
+        cy.wait(5 * SEC);
+        cy.get(tdTag)
+            .contains(this.name)
+            .closest(trTag)
+            .click()
+            .get(rightSideMenu)
+            .within(() => {
+                if (appData.owner) {
+                    cy.contains(appData.owner, { timeout: 5 * SEC });
+                }
+                if (appData.contributor) {
+                    cy.contains(appData.contributor, { timeout: 5 * SEC });
+                }
+                if (appData.sourceRepo) {
+                    cy.contains(appData.sourceRepo, { timeout: 5 * SEC });
+                }
+                if (appData.group) {
+                    cy.contains(appData.group, { timeout: 5 * SEC });
+                }
+                if (appData.business) {
+                    cy.contains(appData.business, { timeout: 5 * SEC });
+                }
+
+                if (appData.comment) {
+                    cy.contains(appData.comment, { timeout: 5 * SEC });
+                }
+                if (migrationWave) {
+                    cy.contains(migrationWave.name, { timeout: 5 * SEC });
+                }
+            });
+    }
+
+    clickAssessButton() {
+        Application.open();
+        clickItemInKebabMenu(this.name, "Assess");
+    }
+
+    clickReviewButton() {
+        Application.open();
+        clickItemInKebabMenu(this.name, "Review");
+    }
+
+    perform_assessment(
+        risk,
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[],
+        questionnaireName = legacyPathfinder,
+        saveAndReview = false
+    ) {
+        Application.open();
+        clickItemInKebabMenu(this.name, "Assess");
+        cy.wait(SEC);
+        Assessment.perform_assessment(
+            risk,
+            stakeholders,
+            stakeholderGroups,
+            questionnaireName,
+            saveAndReview
+        );
+    }
+
+    perform_review(risk): void {
+        Application.open();
+        clickItemInKebabMenu(this.name, "Review");
+        cy.wait(8 * SEC);
+        Assessment.perform_review(risk);
+    }
+
+    verifyStatus(column, status): void {
+        Application.open();
+        Assessment.verifyStatus(this.name, column, status);
+    }
+
+    verifyInheritanceStatus(column: string): void {
+        const columnSelector =
+            column === "assessment" ? assessmentColumnSelector : reviewColumnSelector;
+        selectItemsPerPage(100);
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(trTag)
+            .within(() => {
+                cy.get(columnSelector).within(() => {
+                    cy.get(".pf-v5-svg").eq(1).should("have.attr", "role", "img").and("be.visible");
+                });
+            });
+    }
+
+    validateReviewFields(): void {
+        Application.open();
+        Assessment.validateReviewFields(this.name, "Application");
+    }
+
+    validateReviewDonutChart(): void {
+        Application.open();
+        clickItemInKebabMenu(this.name, review);
+        Assessment.validateReviewDonutChart();
+    }
+
+    validateInheritedReviewFields(archetypeNames: string[]): void {
+        Application.open();
+        for (let archetypeName of archetypeNames) {
+            Assessment.validateReviewFields(this.name, "Archetype", archetypeName);
+        }
+    }
+
+    verifyArchetypeList(archetypeNames: string[], listName: string): void {
+        Application.open();
+        sidedrawerTab(this.name, "Details");
+        cy.get(commonView.sideDrawer.listText).contains(listName);
+        cy.get("dt")
+            .contains(listName)
+            .closest("div")
+            .within(() => {
+                cy.get(commonView.sideDrawer.labelText).each((item) => {
+                    expect(Cypress.$(item).text()).to.be.oneOf(archetypeNames);
+                });
+            });
+        click(commonView.sideDrawer.closeDrawer);
+    }
+
+    retake_questionnaire(
+        risk,
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[]
+    ): void {
+        this.clickAssessButton();
+        cy.wait(SEC);
+        Assessment.retake_questionnaire(risk, stakeholders, stakeholderGroups);
+    }
+
+    validateAssessmentField(risk: string): void {
+        Application.open();
+        Assessment.validateAssessmentField(this.name, "Application", risk);
+    }
+
+    selectKebabMenuItem(selection: string): void {
+        Application.open();
+        this.selectApplication();
+        clickItemInKebabMenu(this.name, selection);
+        cy.get(continueButton).click();
+    }
+
+    selectApps(applicationList: Array<Application>): void {
+        cy.wait(4 * SEC);
+        for (let i = 0; i < applicationList.length; i++) {
+            if (applicationList[i].name != this.name) {
+                cy.get(".pf-m-compact> tbody > tr > td")
+                    .contains(applicationList[i].name)
+                    .parent(trTag)
+                    .within(() => {
+                        click(selectBox);
+                        cy.wait(2 * SEC);
+                    });
+            }
+        }
+    }
+
+    // Opens the manage dependencies dialog from application inventory page
+    openManageDependencies(): void {
+        Application.open();
+        performRowActionByIcon(this.name, kebabMenu);
+        clickByText(button, "Manage dependencies");
+    }
+
+    // Selects the application as dependency from dropdown. Arg dropdownNum value 0 selects northbound, whereas value 1 selects southbound
+    selectNorthDependency(appNameList: Array<string>): void {
+        appNameList.forEach(function (app) {
+            cy.get(northdependenciesDropdownBtn).click();
+            cy.contains("button", app).click();
+        });
+    }
+
+    // Selects the application as dependency from dropdown. Arg dropdownNum value 0 selects northbound, whereas value 1 selects southbound
+    selectDependency(dropdownLocator: string, appNameList: Array<string>): void {
+        appNameList.forEach(function (app) {
+            cy.get(dropdownLocator).click();
+            cy.contains("button", app).click();
+        });
+    }
+
+    // Add north or south bound dependency for an application
+    addDependencies(northbound?: Array<string>, southbound?: Array<string>): void {
+        if (northbound || southbound) {
+            this.openManageDependencies();
+            if (northbound.length > 0) {
+                this.selectDependency(northdependenciesDropdownBtn, northbound);
+                cy.wait(SEC);
+            }
+            if (southbound.length > 0) {
+                this.selectDependency(southdependenciesDropdownBtn, southbound);
+                cy.wait(SEC);
+            }
+            cy.wait(2 * SEC);
+            click(closeForm);
+        }
+    }
+
+    removeDep(dependency, dependencyType) {
+        cy.get("div")
+            .contains(`Add ${dependencyType} dependencies`)
+            .parent("div")
+            .siblings()
+            .find("span")
+            .should("contain.text", dependency)
+            .parent("div")
+            .find("button")
+            .trigger("click");
+        if (dependencyType === "northbound") cy.get(northdependenciesDropdownBtn).click();
+        else cy.get(southdependenciesDropdownBtn).click();
+    }
+
+    // Remove north or south bound dependency for an application
+    removeDependencies(northbound?: Array<string>, southbound?: Array<string>): void {
+        if (northbound || southbound) {
+            this.openManageDependencies();
+            if (northbound.length > 0) {
+                this.removeDep(northbound[0], "northbound");
+                cy.wait(SEC);
+            }
+            if (southbound.length > 0) {
+                this.removeDep(southbound[0], "southbound");
+                cy.wait(SEC);
+            }
+            cy.wait(2 * SEC);
+            click(closeForm);
+        }
+    }
+
+    // Verifies if the north or south bound dependencies exist for an application
+    verifyDependencies(northboundApps?: Array<string>, southboundApps?: Array<string>): void {
+        if (northboundApps || southboundApps) {
+            this.openManageDependencies();
+            cy.wait(2 * SEC);
+            if (northboundApps && northboundApps.length > 0) {
+                northboundApps.forEach((app) => {
+                    this.dependencyExists("northbound", app);
+                });
+            }
+            if (southboundApps && southboundApps.length > 0) {
+                southboundApps.forEach((app) => {
+                    this.dependencyExists("southbound", app);
+                });
+            }
+            click(closeForm);
+        }
+    }
+
+    unlinkJiraTicket(): void {
+        Application.open();
+        sidedrawerTab(this.name, details);
+        cy.contains("small", "Ticket")
+            .next()
+            .children("div")
+            .eq(0)
+            .children("button.pf-m-link")
+            .eq(0)
+            .click();
+        // Need to wait until the application is unlinked from Jira and reflected in the wave
+        cy.wait(3 * SEC);
+        this.closeApplicationDetails();
+    }
+    validateOverrideAssessmentMessage(archetypes: Archetype[]): void {
+        cy.wait(2 * SEC);
+        const archetypeNames = archetypes.map((archetype) => archetype.name);
+        const joinedArchetypes = archetypeNames.join(", ");
+        const alertTitleMessage = `The application already is associated with archetypes: ${joinedArchetypes}`;
+        cy.get(alertTitle)
+            .invoke("text")
+            .then((text) => {
+                // remove whitespace chars causing the text compare to fail - BUG MTA-1968
+                const normalizedActualText = text.replace(/\s+/g, " ").trim();
+                const normalizedExpectedText = alertTitleMessage.replace(/\s+/g, " ").trim();
+                expect(normalizedActualText).to.contain(normalizedExpectedText);
+            });
+        // todo: remove previous code once the bug has been resolved and uncomment the below code
+        // validateTextPresence(alertTitle,alertTitleMessage);
+        const alertBodyMessage = `Do you want to create a dedicated assessment for this application and override the inherited archetype assessment(s)?`;
+        validateTextPresence(alertBody, alertBodyMessage);
+    }
+
+    // Checks if app name is displayed in the dropdown under respective dependency
+    protected dependencyExists(dependencyType: string, appName: string): void {
+        cy.get("div")
+            .contains(`Add ${dependencyType} dependencies`)
+            .parent("div")
+            .siblings()
+            .find("span")
+            .should("contain.text", appName);
+    }
+
+    validateExcludedIssues(appIssues: AppIssue[]): void {
+        Issues.openSingleApplication(this.name);
+        cy.get(commonView.appTable).should("not.contain.text", appIssues);
+    }
+
+    verifyButtonEnabled(button: string): void {
+        //validates current page
+        validatePageTitle("Assessment Actions").then((titleMatches) => {
+            if (!titleMatches) {
+                Application.open();
+                this.clickAssessButton();
+            }
+            Assessment.verifyButtonEnabled(button);
+        });
+    }
+
+    validateTagsCount(tagsCount): void {
+        Application.open();
+        cy.get(tdTag)
+            .contains(this.name)
+            .parent(trTag)
+            .within(() => {
+                cy.get(tagsColumnSelector).contains(tagsCount, { timeout: 30 * SEC });
+            });
+    }
+
+    deleteAssessments(): void {
+        this.clickAssessButton();
+        Assessment.deleteAssessments();
     }
 }

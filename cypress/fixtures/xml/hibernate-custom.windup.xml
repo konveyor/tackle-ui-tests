@@ -1,0 +1,37 @@
+<ruleset xmlns="http://windup.jboss.org/schema/jboss-ruleset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         id="javax-package"
+         xsi:schemaLocation="http://windup.jboss.org/schema/jboss-ruleset http://windup.jboss.org/schema/jboss-ruleset/windup-jboss-ruleset.xsd">
+    <metadata>
+        <description>CUSTOM TEST RULE</description>
+        <dependencies>
+            <addon id="org.jboss.windup.rules,windup-rules-javaee,3.0.0.Final"/>
+            <addon id="org.jboss.windup.rules,windup-rules-java,3.0.0.Final"/>
+        </dependencies>
+        <sourceTechnology id="springboot"/>
+        <sourceTechnology id="weblogic"/>
+        <targetTechnology id="eap7" />
+        <targetTechnology id="eap8" />
+    </metadata>
+    <rules>
+        <rule id="hibernate4-00002-custom">
+            <when>
+                <javaclass references="org.hibernate.cfg.Configuration.add({*})">
+                    <location>METHOD_CALL</location>
+                </javaclass>
+            </when>
+            <perform>
+                <hint title="Hibernate 5 CUSTOM RULE - Deprecated method org.hibernate.cfg.Configuration.add()" effort="1" category-id="optional">
+                    <message>There is no direct replacement for method `org.hibernate.cfg.Configuration#add()`.</message>
+                    <link
+                        href="https://github.com/hibernate/hibernate-orm/blob/5.0/migration-guide.adoc#re-purposing-of-configuration"
+                        title="Changes in Configuration for Hibernate 5" />
+                    <link
+                        href="https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.0/html-single/migration_guide/#hibernate_and_jpa_migration_changes"
+                        title="Hibernate and JPA migration changes" />
+                    <tag>hibernate</tag>
+                    <tag>configuration</tag>
+                </hint>
+            </perform>
+        </rule>
+    </rules>
+</ruleset>

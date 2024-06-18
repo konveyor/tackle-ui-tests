@@ -29,14 +29,39 @@
         "repoType": "Git",
         "sourceRepo": "http://github.com/konveyor/tackle-testapp"
     },
-    "tackle-testapp-svn-insecure": {
+    "bookserver-svn-insecure": {
         "repoType": "Subversion",
-        "sourceRepo": "http://github.com/konveyor/tackle-testapp"
+        "sourceRepo": "http://10.0.188.129/svn/mtaqe-svn/book-server"
+    },
+    "bookserver-svn-insecure-no-trunk": {
+        "repoType": "Subversion",
+        "sourceRepo": "http://10.0.188.129/svn/mtaqe-svn/bookserver-no-trunk"
     },
     "konveyor-exampleapp": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/konveyor/example-applications",
         "branch": "main",
         "rootPath": "example-1"
+    },
+    "day-trader-app": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/WASdev/sample.daytrader7"
+    },
+    "nexus": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/sonatype/nexus-public"
+    },
+    "openmrs": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/openmrs/openmrs-core"
+    },
+    "pet-clinic": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/konveyor/spring-framework-petclinic"
+    },
+    "tackle-testapp-public-jdk9": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/konveyor/tackle-testapp-public",
+        "branch": "feature/test-java9-removed-packagek"
     }
 }

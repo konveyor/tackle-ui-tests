@@ -16,34 +16,33 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    createMultipleStakeholders,
     exists,
     importApplication,
     login,
     deleteApplicationTableRows,
     deleteAppImportsTableRows,
     notExists,
+    deleteByList,
+    deleteAllMigrationWaves,
 } from "../../../../../utils/utils";
 
-import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
+import { Application } from "../../../../models/migration/applicationinventory/application";
+import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { legacyPathfinder } from "../../../../types/constants";
 
 const filePath = "app_import/csv/";
-const stakeholdersList: Array<Stakeholders> = [];
-const stakeholdersNameList: Array<string> = [];
+let stakeholders: Stakeholders[];
 let appdata = { name: "Customers" };
 
 describe(["@tier2"], "Operations after application import", () => {
     before("Login and create test data", function () {
         login();
-
-        // Navigate to stakeholders control tab and create new stakeholder
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-        stakeholder.create();
-        cy.wait(2000);
-
-        stakeholdersList.push(stakeholder);
-        stakeholdersNameList.push(stakeholder.name);
+        // This test will fail if there are preexisting questionnaire.
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
+        AssessmentQuestionnaire.enable(legacyPathfinder);
+        stakeholders = createMultipleStakeholders(1);
 
         // Import applications through valid .CSV file
         const fileName = "template_application_import.csv";
@@ -60,18 +59,18 @@ describe(["@tier2"], "Operations after application import", () => {
         "Perform application assessment after a successful application import",
         { tags: "@dc" },
         function () {
-            const application = new Assessment(appdata);
+            const application = new Application(appdata);
 
             // Perform assessment of application
-            application.perform_assessment("low", stakeholdersNameList);
+            application.perform_assessment("low", stakeholders);
             cy.wait(2000);
             application.verifyStatus("assessment", "Completed");
         }
     );
 
     it("Perform application review after a successful application import", function () {
-        // Automates https://polarion.engineering.redhat.com/polarion/redirect/project/MTAPathfinder/workitem?id=MTA-295
-        const application = new Assessment(appdata);
+        // Automates Polarion TC MTA-295
+        const application = new Application(appdata);
 
         // Perform application review
         application.perform_review("low");
@@ -85,7 +84,9 @@ describe(["@tier2"], "Operations after application import", () => {
     });
 
     after("Perform test data clean up", function () {
+        deleteAllMigrationWaves();
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
+        deleteByList(stakeholders);
     });
 });

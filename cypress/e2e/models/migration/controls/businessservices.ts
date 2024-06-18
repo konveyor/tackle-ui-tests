@@ -53,7 +53,7 @@ export class BusinessServices {
     description: string;
     owner: string;
 
-    static fullUrl = Cypress.env("tackleUrl") + "/controls/business-services";
+    static fullUrl = Cypress.env("tackleUrl") + "controls/business-services";
 
     constructor(name: string, description?: string, owner?: string) {
         this.name = name;
@@ -66,6 +66,7 @@ export class BusinessServices {
             if ($url != BusinessServices.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, controls);
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", "Controls");
                 clickByText(navTab, businessServices);
             }
         });

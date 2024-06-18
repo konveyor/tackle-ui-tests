@@ -20,10 +20,10 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    resetURL,
-    writeGpgKey,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
+import { Application } from "../../../../models/migration/applicationinventory/application";
+import { AnalysisStatuses } from "../../../../types/constants";
 
 const applicationsList: Analysis[] = [];
 describe(["@tier1"], "Upload Binary Analysis", () => {
@@ -39,31 +39,24 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
             this.analysisData = analysisData;
         });
 
-        // Interceptors
-        cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    afterEach("Persist session", function () {
-        // Reset URL from report page to web UI
-        resetURL();
-    });
-
-    it(["@interop"], "Bug MTA-1175 | Upload Binary Analysis", function () {
+    it(["@interop"], "Analysis for acmeair app upload binary", function () {
         const application = new Analysis(
-            getRandomApplicationData("uploadBinary"),
+            getRandomApplicationData("acmeair_app"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
         );
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
-        // No credentials required for uploaded binary.
+
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it.skip("Bug MTA-1175 | Custom rules with custom targets", function () {
+    it("Custom rules with custom targets", function () {
         // Automated https://issues.redhat.com/browse/TACKLE-561
         const application = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
@@ -73,26 +66,26 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
-        // No credentials required for uploaded binary.
+
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it.skip("Bug MTA-1175 | DIVA report generation", function () {
+    it("Analysis for spring-petclinic application", function () {
         const application = new Analysis(
-            getRandomApplicationData("DIVA"),
-            getRandomAnalysisData(this.analysisData["analysis_for_DIVA-report"])
+            getRandomApplicationData("spring"),
+            getRandomAnalysisData(this.analysisData["analysis_for_spring_petclinic_app"])
         );
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
-        // No credentials required for uploaded binary.
+
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it.skip("Bug MTA-1175 | Analysis for jee-example-app upload binary ", function () {
+    it("Analysis for jee-example-app upload binary ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(
@@ -104,10 +97,10 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it.skip("Bug MTA-1175 | Analysis for camunda-bpm-spring-boot-starter", function () {
+    it("Analysis for camunda-bpm-spring-boot-starter", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_camunda_app"])
@@ -117,25 +110,10 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it.skip("Bug MTA-1175 | Analysis for complete-duke app upload binary ", function () {
-        const application = new Analysis(
-            getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(
-                this.analysisData["analysis_and_incident_validation_complete-duke"]
-            )
-        );
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication");
-        cy.wait(2000);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-    });
-
-    it.skip("Bug MTA-1175 | Analysis for kafka-clients-sb app ", function () {
+    it("Analysis for kafka-clients-sb app ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_kafka-app"])
@@ -145,11 +123,27 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+    });
+
+    it(["@tier2", "@dc"], "upload_binary_with_exculde_packages_scope", function () {
+        const application = new Analysis(
+            getRandomApplicationData("uploadBinary"),
+            getRandomAnalysisData(this.analysisData["upload_binary_with_exculde_packages"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+    });
+
+    afterEach("Persist session", function () {
+        Application.open(true);
     });
 
     after("Perform test data clean up", function () {
         deleteByList(applicationsList);
-        writeGpgKey("abcde");
     });
 });

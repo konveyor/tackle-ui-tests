@@ -1,4 +1,4 @@
-import { CustomRuleType, RepositoryType } from "./constants";
+import { CustomRuleType, Languages, RepositoryType } from "./constants";
 import { CredentialsSourceControl } from "../models/administration/credentials/credentialsSourceControl";
 import { JiraCredentials } from "../models/administration/credentials/JiraCredentials";
 
@@ -87,6 +87,7 @@ export type applicationData = {
     version?: string;
     packaging?: string;
     owner?: string;
+    contributor?: string;
 };
 
 export type ProxyData = {
@@ -103,18 +104,19 @@ export type analysisData = {
     target: string[];
     binary?: string[];
     scope?: string;
-    customRule?: string;
+    customRule?: string[];
     customRuleRepository?: RulesRepositoryFields;
     sources?: string;
     excludeRuleTags?: string;
     enableTransaction?: boolean;
     disableTagging?: boolean;
     appName?: string;
-    storyPoints?: number;
+    effort?: number;
     excludePackages?: string[];
     manuallyAnalyzePackages?: string[];
     excludedPackagesList?: string[];
     openSourceLibraries?: boolean;
+    language?: Languages;
     incidents?: {
         mandatory?: number;
         optional?: number;
@@ -139,26 +141,23 @@ export type RbacValidationRules = {
     "Create new"?: boolean;
     Analyze?: boolean;
     "Upload binary"?: boolean;
-    Assess?: boolean;
-    Review?: boolean;
     Import?: boolean;
-    "Action menu"?: {
+    "Top action menu"?: {
         "Not available": boolean;
         Import?: boolean;
         "Manage imports"?: boolean;
         "Manage credentials"?: boolean;
         Delete?: boolean;
     };
-    "analysis applicable options"?: {
-        "Analysis details"?: boolean;
-        "Cancel analysis"?: boolean;
-        "Manage credentials"?: boolean;
-        Delete?: boolean;
-    };
-    "assessment applicable options"?: {
+    "Application actions"?: {
+        Assess?: boolean;
+        Review?: boolean;
         "Discard assessment"?: boolean;
-        "Copy assessment"?: boolean;
+        "Discard review"?: boolean;
+        Delete?: boolean;
         "Manage dependencies"?: boolean;
+        "Manage credentials"?: boolean;
+        "Analysis details"?: boolean;
     };
 };
 
@@ -173,6 +172,9 @@ export type UpgradeData = {
     sourceApplicationName?: string;
     binaryApplicationName?: string;
     uploadBinaryApplicationName?: string;
+    assessmentApplicationName?: string;
+    archetypeName?: string;
+    importedQuestionnaireAppName?: string;
 };
 
 export type RulesRepositoryFields = {
@@ -187,4 +189,27 @@ export type RulesRepositoryFields = {
 export type RulesManualFields = {
     type: CustomRuleType.Manual;
     rulesetPaths: string[];
+};
+
+export type AppIssue = {
+    name: string;
+    category: string;
+    source: string;
+    targets: string[];
+    effort: number;
+    totalEffort?: number;
+    incidents: number;
+    affectedFiles: number;
+    tags?: string[];
+    ruleSet?: string;
+    rule?: string;
+    labels?: string[];
+};
+
+export type AppDependency = {
+    name: string;
+    foundIn?: number;
+    language: string;
+    labels: string[];
+    tags?: string[];
 };

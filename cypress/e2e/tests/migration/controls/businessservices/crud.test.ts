@@ -22,6 +22,7 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 import * as data from "../../../../../utils/data_utils";
 import { migration } from "../../../../types/constants";
 import { stakeHoldersTable } from "../../../../views/stakeholders.view";
+import * as commonView from "../../../../views/common.view";
 
 describe(["@tier1", "@interop"], "Business service CRUD operations", () => {
     before("Login", function () {

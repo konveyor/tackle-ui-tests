@@ -19,9 +19,7 @@ import {
     createMultipleApplications,
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
-    deleteAllStakeholderGroups,
     deleteAllStakeholders,
-    deleteApplicationTableRows,
     deleteByList,
     login,
 } from "../../../../utils/utils";
@@ -36,19 +34,18 @@ import {
     MigrationWavesSpecialColumns,
     MigrationWaveView,
 } from "../../../views/migration-wave.view";
-import { Assessment } from "../../../models/migration/applicationinventory/assessment";
+import { Application } from "../../../models/migration/applicationinventory/application";
 
 let stakeHolders: Stakeholders[];
 let stakeHolderGroups: Stakeholdergroups[];
-let applications: Assessment[];
+let applications: Application[];
 
 const now = new Date();
-now.setDate(now.getDate() + 1);
 
 const end = new Date(now.getTime());
 end.setFullYear(end.getFullYear() + 1);
 
-describe(["@tier1"], "Migration Waves CRUD operations", () => {
+describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
     before("Create test data", () => {
         login();
         stakeHolders = createMultipleStakeholders(2);
@@ -138,6 +135,7 @@ describe(["@tier1"], "Migration Waves CRUD operations", () => {
         // Delete all applications by clicking the delete buttons
         cy.get(applicationTableSelector + " td > button").each((btn) => {
             cy.wrap(btn).click();
+            cy.contains("Delete").click();
             cy.wait(3 * SEC);
         });
         migrationWave.applications = [];
@@ -149,7 +147,7 @@ describe(["@tier1"], "Migration Waves CRUD operations", () => {
 
     after("Clear test data", function () {
         deleteAllStakeholders();
-        deleteAllStakeholderGroups();
+        deleteByList(stakeHolderGroups);
         deleteByList(applications);
     });
 

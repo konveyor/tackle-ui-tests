@@ -1,0 +1,100 @@
+name: invalid Test questionnaire
+description: This is a sample questionnaire in YAML format
+required: true
+sections:
+  - order: 1
+    name: Section 1
+    questions:
+      - text:
+        explanation: Please select your favorite color.
+        includeFor:
+          - category: Category1
+            tag: Tag1
+        excludeFor: []
+        answers:
+          - order: 1
+            text: Red
+            risk: red
+            rationale: Red is a nice color.
+            mitigation: No mitigation needed.
+            applyTags: []
+            autoAnswerFor: [{ category: Category1, tag: Tag1 }]
+            selected: false
+          - order: 2
+            text: Blue
+            risk: green
+            rationale: Blue is a calming color.
+            mitigation: No mitigation needed.
+            applyTags: []
+            autoAnswerFor: []
+            selected: false
+      - order: 2
+        text: What is your favorite sport?
+        explanation: Please select your favorite sport.
+        excludeFor:
+          - category: Category1
+            tag: Tag1
+        answers:
+          - order: 1
+            text: Soccer
+            risk: red
+            rationale: There are other sports?
+            mitigation: Beware of crunching tackles. High risk of injury.
+            applyTags: []
+            autoAnswerFor: []
+            selected: false
+          - order: 2
+            text: Cycling
+            risk: red
+            rationale: Correct.
+            mitigation: High risk of decapitation by car.
+            applyTags: []
+            autoAnswerFor: []
+            selected: false
+          - text: Climbing
+            risk: yellow
+            rationale: Climbing is fun.
+            mitigation: Slight bit of mitigation needed.
+            applyTags: []
+            autoAnswerFor: []
+            selected: false
+          - order: 4
+            text: Swimming
+            risk: yellow
+            rationale: Swimming is fun, too.
+            mitigation: Slight bit of mitigation needed. Drowning can be a problem.
+            applyTags: []
+            autoAnswerFor: []
+            selected: false
+          - text: Running
+            risk: red
+            rationale: Oof.
+            mitigation: Some mitigation required. High risk of injury. Don't run with scissors (or at all).
+            applyTags: []
+            autoAnswerFor: []
+            selected: false
+      - order: 3
+        text: What is your favorite shape?
+        explanation: Please select your favorite shape.
+        includeFor:
+          - category: Category1
+            tag: Tag1
+        excludeFor: []
+        answers:
+          - order: 1
+            text: Circle
+            risk: red
+            selected: false
+          - order: 2
+            text: Square
+            risk: green
+            selected: false
+thresholds:
+  red: 5
+  yellow: 10
+  unknown: 15
+riskMessages:
+  red: High risk
+  yellow: Medium risk
+  green: Low risk
+  unknown: Unknown risk

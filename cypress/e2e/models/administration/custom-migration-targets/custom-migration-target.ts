@@ -4,6 +4,7 @@ import {
     clickJs,
     inputText,
     selectUserPerspective,
+    submitForm,
     uploadXml,
 } from "../../../../utils/utils";
 import {
@@ -14,17 +15,26 @@ import {
     editAction,
     RepositoryType,
     CustomRuleType,
+    Languages,
+    SEC,
 } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
-import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
+import {
+    CustomMigrationTargetView,
+    sourcesList,
+    sourcesToggle,
+} from "../../../views/custom-migration-target.view";
 import { RulesManualFields, RulesRepositoryFields } from "../../../types/types";
-import { submitButton } from "../../../views/common.view";
+import { actionSelectToggle, submitButton } from "../../../views/common.view";
 
 export interface CustomMigrationTarget {
     name: string;
     description?: string;
     imagePath?: string;
     ruleTypeData: RulesRepositoryFields | RulesManualFields;
+    language: Languages;
+    sources?: string[];
+    targets?: string[];
 }
 
 export class CustomMigrationTarget {
@@ -32,16 +42,25 @@ export class CustomMigrationTarget {
         name: string,
         description: string,
         imagePath: string,
-        ruleTypeData: RulesRepositoryFields | RulesManualFields
+        ruleTypeData: RulesRepositoryFields | RulesManualFields,
+        language = Languages.Java,
+        sources?: string[],
+        targets?: string[]
     ) {
         this.name = name;
         this.description = description;
         this.ruleTypeData = ruleTypeData;
+        this.language = language;
+        this.sources = sources;
     }
 
     public static fullUrl = Cypress.env("tackleUrl") + "/migration-targets";
 
-    public static open() {
+    public static open(forceReload = false) {
+        if (forceReload) {
+            cy.visit(CustomMigrationTarget.fullUrl);
+        }
+
         cy.url().then(($url) => {
             if ($url != CustomMigrationTarget.fullUrl) {
                 selectUserPerspective("Administration");
@@ -55,26 +74,35 @@ export class CustomMigrationTarget {
         clickByText(button, createNewButton);
     }
 
+    public openLanguageForm() {
+        CustomMigrationTarget.open();
+        CustomMigrationTarget.selectLanguage(this.language);
+        clickByText(button, createNewButton);
+    }
+
     public create() {
-        CustomMigrationTarget.openNewForm();
+        this.openLanguageForm();
         CustomMigrationTarget.fillForm(this);
-        clickJs(submitButton);
+        submitForm();
+        cy.get(submitButton, { timeout: 1 * SEC }).should("not.exist");
+    }
+
+    public openEditDialog() {
+        CustomMigrationTarget.open();
+        this.expandActionsMenu();
+        cy.contains(button, editAction).click();
     }
 
     public edit(updateValues: Partial<CustomMigrationTarget>) {
-        CustomMigrationTarget.open();
-        this.expandActionsMenu();
-        cy.contains("a", editAction).click();
-
+        this.openEditDialog();
         CustomMigrationTarget.fillForm(updateValues);
-
         clickJs(submitButton);
     }
 
     public delete() {
-        CustomMigrationTarget.open();
+        CustomMigrationTarget.selectLanguage(this.language);
         this.expandActionsMenu();
-        cy.contains("a", deleteAction).click();
+        cy.contains(button, deleteAction).click();
     }
 
     public static fillName(name: string) {
@@ -111,6 +139,12 @@ export class CustomMigrationTarget {
                 CustomMigrationTarget.fillRepositoryForm(values.ruleTypeData);
             }
         }
+    }
+
+    public static selectLanguage(language: Languages) {
+        CustomMigrationTarget.open();
+        cy.get(actionSelectToggle, { timeout: 30 * SEC }).click();
+        clickByText("button", language);
     }
 
     public static uploadRules(rulePaths: string[]) {
@@ -156,6 +190,7 @@ export class CustomMigrationTarget {
     }
 
     private expandActionsMenu() {
+        CustomMigrationTarget.selectLanguage(this.language);
         cy.contains(this.name)
             .parents(CustomMigrationTargetView.card)
             .within(() => {
@@ -165,5 +200,10 @@ export class CustomMigrationTarget {
                     }
                 });
             });
+    }
+
+    validateSourceTechnology(sources: string[]): void {
+        click(sourcesToggle);
+        cy.get(sourcesList).should("contain", sources);
     }
 }

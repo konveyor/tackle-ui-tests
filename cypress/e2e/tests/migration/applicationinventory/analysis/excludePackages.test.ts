@@ -20,13 +20,11 @@ import { Analysis } from "../../../../models/migration/applicationinventory/anal
 import { AnalysisStatuses, CredentialType, UserCredentials } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
-import { analysisDetailsEditor } from "../../../../views/analysis.view";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 
 let source_credential: CredentialsSourceControlUsername;
 let application: Analysis;
 
-describe(["@tier2"], "Source Analysis", () => {
+describe(["@tier2"], "Exclude package Analysis", () => {
     before("Login", function () {
         login();
 
@@ -67,8 +65,9 @@ describe(["@tier2"], "Source Analysis", () => {
 
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
-        application.openAnalysisDetails();
-        cy.get(analysisDetailsEditor).should("contain.text", analysisData.excludePackages);
+        application.validateExcludedIssues(
+            this.analysisData["analysis_for_exclude_packages"]["issues"]
+        );
     });
 
     after("Perform test data clean up", function () {

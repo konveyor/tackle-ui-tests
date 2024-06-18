@@ -22,7 +22,7 @@ import {
     getTableColumnData,
     clickOnSortButton,
 } from "../../../../../../utils/utils";
-import { tagCategory, rank, tagCount, SortType } from "../../../../../types/constants";
+import { rank, tagCount, SortType, tagCategory } from "../../../../../types/constants";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 
 describe(["@tier2"], "Tag category sort validations", function () {
@@ -61,7 +61,6 @@ describe(["@tier2"], "Tag category sort validations", function () {
     });
 
     it("Rank sort validations", function () {
-        // Navigate to Tags tab
         TagCategory.openList();
         cy.get("@getTagCategories");
 

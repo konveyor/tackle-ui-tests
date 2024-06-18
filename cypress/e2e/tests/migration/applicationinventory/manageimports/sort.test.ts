@@ -26,9 +26,10 @@ import {
     deleteApplicationTableRows,
     deleteAppImportsTableRows,
     clickOnSortButton,
+    deleteAllMigrationWaves,
 } from "../../../../../utils/utils";
 import { navMenu } from "../../../../views/menu.view";
-import { SortType, applicationInventory } from "../../../../types/constants";
+import { SortType, applicationInventory, SEC } from "../../../../types/constants";
 
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { csvFileName, date, importStatus, user } from "../../../../views/applicationinventory.view";
@@ -41,7 +42,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
 
         // Open the application inventory page
         clickByText(navMenu, applicationInventory);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Import multiple csv files
         const filesToImport = [
@@ -51,29 +52,20 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
         ];
         filesToImport.forEach(function (csvFile) {
             importApplication(filePath + csvFile);
-            cy.wait(2000);
+            cy.wait(2 * SEC);
         });
     });
 
-    beforeEach("Interceptors", function () {
-        // Interceptors
-        cy.intercept("GET", "/hub/application*").as("getApplications");
-        cy.intercept("GET", "/hub/import-summary*").as("getImportApplications");
-    });
-
     it("Date sort validations", function () {
-        // Navigate to application inventory page and open manage imports
         Application.open();
-        cy.wait("@getApplications");
         openManageImportsPage();
-        cy.get("@getImportApplications");
 
         // Get unsorted list when page loads
         const unsortedList = getTableColumnData(date);
 
         // Sort the manage imports by date in ascending order
         clickOnSortButton(date, SortType.ascending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the imports are date sorted in ascending order
         const afterAscSortList = getTableColumnData(date);
@@ -81,7 +73,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
 
         // Sort the manage imports by date in descending order
         clickOnSortButton(date, SortType.descending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the imports are date sorted in descending order
         const afterDescSortList = getTableColumnData(date);
@@ -89,9 +81,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
     });
 
     it("User sort validations", function () {
-        // Navigate to application inventory page and open manage imports
-        Application.open();
-        cy.wait("@getApplications");
+        Application.open(true);
         openManageImportsPage();
 
         // Get unsorted list when page loads
@@ -99,7 +89,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
 
         // Sort the manage imports by user in ascending order
         clickOnSortButton(user, SortType.ascending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the users are displayed in ascending order
         const afterAscSortList = getTableColumnData(user);
@@ -107,7 +97,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
 
         // Sort the manage imports by user in descending order
         clickOnSortButton(user, SortType.descending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the users are displayed in descending order
         const afterDescSortList = getTableColumnData(user);
@@ -115,9 +105,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
     });
 
     it("File name sort validations", function () {
-        // Navigate to application inventory page and open manage imports
-        Application.open();
-        cy.wait("@getApplications");
+        Application.open(true);
         openManageImportsPage();
 
         // Get unsorted list when page loads
@@ -125,7 +113,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
 
         // Sort the manage imports by file name in ascending order
         clickOnSortButton(csvFileName, SortType.ascending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the file names are displayed in ascending order
         const afterAscSortList = getTableColumnData(csvFileName);
@@ -133,7 +121,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
 
         // Sort the manage imports by file name in descending order
         clickOnSortButton(csvFileName, SortType.descending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the file names are displayed in descending order
         const afterDescSortList = getTableColumnData(csvFileName);
@@ -141,9 +129,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
     });
 
     it("Import status sort validations", function () {
-        // Navigate to application inventory page and open manage imports
-        Application.open();
-        cy.wait("@getApplications");
+        Application.open(true);
         openManageImportsPage();
 
         // Get unsorted list when page loads
@@ -151,7 +137,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
 
         // Sort the manage imports by status in ascending order
         clickOnSortButton(importStatus, SortType.ascending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the import status rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(importStatus);
@@ -159,7 +145,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
 
         // Sort the manage imports by status in descending order
         clickOnSortButton(importStatus, SortType.descending);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
 
         // Verify that the import status rows are displayed in descending order
         const afterDescSortList = getTableColumnData(importStatus);
@@ -167,6 +153,7 @@ describe(["@tier2"], "Manage applications import sort validations", function () 
     });
 
     after("Perform test data clean up", function () {
+        deleteAllMigrationWaves();
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
     });

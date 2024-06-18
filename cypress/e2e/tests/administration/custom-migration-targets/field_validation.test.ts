@@ -29,13 +29,16 @@ import { RepositoryType, SEC } from "../../../types/constants";
 import { cancelButton, submitButton } from "../../../views/common.view";
 
 describe(["@tier1"], "Custom Migration Target Validations", () => {
-    let target: CustomMigrationTarget;
     /**
      * Validations for Polarion TCs 299, 301, 303, 304 & 305
      * This suite is only for fields validations, see crud.test.ts for CRUD operations
      */
     before("Login", function () {
         login();
+    });
+
+    beforeEach("Clear state", function () {
+        CustomMigrationTarget.open(true);
     });
 
     it("Name validations", function () {

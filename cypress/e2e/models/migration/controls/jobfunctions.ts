@@ -21,6 +21,7 @@ import {
     editAction,
     deleteAction,
     migration,
+    SEC,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import { jobfunctionNameInput } from "../../../views/jobfunctions.view";
@@ -38,7 +39,7 @@ import * as commonView from "../../../views/common.view";
 
 export class Jobfunctions {
     name: string;
-    static fullUrl = Cypress.env("tackleUrl") + "/controls/job-functions";
+    static fullUrl = Cypress.env("tackleUrl") + "controls/job-functions";
 
     constructor(name: string) {
         this.name = name;
@@ -49,6 +50,7 @@ export class Jobfunctions {
             if ($url != Jobfunctions.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, controls);
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", "Controls");
                 clickByText(navTab, jobFunctions);
             }
         });
@@ -89,8 +91,6 @@ export class Jobfunctions {
 
     delete(cancel = false): void {
         Jobfunctions.openList();
-        selectItemsPerPage(100);
-        cy.wait(2000);
         performRowAction(this.name, deleteAction);
         if (cancel) {
             click(commonView.confirmCancelButton);

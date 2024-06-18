@@ -19,12 +19,20 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    preservecookies,
+    validateMtaVersionInUI,
+    validateMtaVersionInCLI,
 } from "../../../utils/utils";
 import { TagCategory } from "../../models/migration/controls/tagcategory";
 import * as data from "../../../utils/data_utils";
 import { Tag } from "../../models/migration/controls/tags";
-import { CredentialType, SEC, UserCredentials } from "../../types/constants";
+import {
+    cloudReadinessFilePath,
+    cloudReadinessQuestionnaire,
+    CredentialType,
+    legacyPathfinder,
+    SEC,
+    UserCredentials,
+} from "../../types/constants";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Jobfunctions } from "../../models/migration/controls/jobfunctions";
 import { BusinessServices } from "../../models/migration/controls/businessservices";
@@ -34,20 +42,23 @@ import { getRandomCredentialsData } from "../../../utils/data_utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { UpgradeData } from "../../types/types";
 import { CredentialsMaven } from "../../models/administration/credentials/credentialsMaven";
+import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { Archetype } from "../../models/migration/archetypes/archetype";
 
 describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     let mavenCredentialsUsername: CredentialsMaven;
     let sourceControlUsernameCredentials: CredentialsSourceControlUsername;
+    let stakeHolder: Stakeholders;
+    let archetype: Archetype;
+    let stakeHolderGroup: Stakeholdergroups;
+    const expectedMtaVersion = Cypress.env("mtaVersion");
 
     before("Login", function () {
-        // Perform login
         login();
+        AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
     beforeEach("Persist session", function () {
-        // Save the session and token cookie for maintaining one login session
-        preservecookies();
-
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -57,7 +68,16 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         cy.fixture("upgrade-data").then((upgradeData: UpgradeData) => {
             this.upgradeData = upgradeData;
         });
+
+        cy.intercept("GET", "/hub/application*").as("getApplication");
     });
+
+    // Enable fail fast, skip the rest of tests if this specific test fails.
+    it("Validate MTA version in UI", { failFast: { enabled: true } }, () =>
+        validateMtaVersionInUI(expectedMtaVersion)
+    );
+
+    it("Validate MTA version in CLI", () => validateMtaVersionInCLI(expectedMtaVersion));
 
     it("Creating credentials", function () {
         const { sourceControlUsernameCredentialsName, mavenUsernameCredentialName } =
@@ -89,17 +109,12 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
             tagName,
         } = this.upgradeData;
         const jobFunction = new Jobfunctions(jobFunctionName);
-        // Defining stakeholder groups
-        const stakeHolderGroup = new Stakeholdergroups(stakeHolderGroupName);
-        // Defining stakeholders
-        const stakeHolder = new Stakeholders("test@gmail.com", stakeHolderName, jobFunctionName, [
+        stakeHolderGroup = new Stakeholdergroups(stakeHolderGroupName);
+        stakeHolder = new Stakeholders("test@gmail.com", stakeHolderName, jobFunctionName, [
             stakeHolderGroupName,
         ]);
-        // Defining business Service
         const businessService = new BusinessServices(businessServiceName);
-        // Defining tag category
         const tagType = new TagCategory(tagTypeName, data.getColor(), data.getRandomNumber(5, 15));
-        // Defining tag
         const tag = new Tag(tagName, tagTypeName);
 
         jobFunction.create();
@@ -110,7 +125,39 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         tag.create();
     });
 
+    it("Creating and assess archetype", function () {
+        const { tagName, archetypeName } = this.upgradeData;
+        archetype = new Archetype(
+            archetypeName,
+            ["EJB XML", "Servlet"],
+            [tagName],
+            null,
+            [stakeHolder],
+            [stakeHolderGroup]
+        );
+        archetype.create();
+        archetype.perform_assessment("low", [stakeHolder], [stakeHolderGroup]);
+        archetype.validateAssessmentField("Low");
+    });
+
+    it("Creating Upload Binary Analysis", function () {
+        const uploadBinaryApplication = new Analysis(
+            getRandomApplicationData("uploadBinary"),
+            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
+        );
+        uploadBinaryApplication.name = this.upgradeData.uploadBinaryApplicationName;
+        uploadBinaryApplication.create();
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
+        uploadBinaryApplication.perform_assessment("low", [stakeHolder]);
+        uploadBinaryApplication.analyze();
+        uploadBinaryApplication.verifyAnalysisStatus("Completed");
+        uploadBinaryApplication.verifyStatus("assessment", "Completed");
+        uploadBinaryApplication.selectApplication();
+    });
+
     it("Creating source applications", function () {
+        const { tagName } = this.upgradeData;
         const sourceApplication = new Analysis(
             getRandomApplicationData("bookserverApp", {
                 sourceData: this.appData["bookserver-app"],
@@ -118,27 +165,17 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         sourceApplication.name = this.upgradeData.sourceApplicationName;
+        sourceApplication.tags = [tagName];
         sourceApplication.create();
+        sourceApplication.perform_assessment("low", [stakeHolder]);
+        sourceApplication.verifyStatus("assessment", "Completed");
         cy.wait(2 * SEC);
         sourceApplication.analyze();
         sourceApplication.verifyAnalysisStatus("Completed");
-    });
-
-    it("Creating Upload Binary Analysis", function () {
-        const uploadBinaryApplication = new Analysis(
-            getRandomApplicationData("customRule_customTarget"),
-            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
-        );
-        uploadBinaryApplication.name = this.upgradeData.uploadBinaryApplicationName;
-        uploadBinaryApplication.create();
-        cy.wait(2 * SEC);
-        // No credentials required for uploaded binary.
-        uploadBinaryApplication.analyze();
-        uploadBinaryApplication.verifyAnalysisStatus("Completed");
+        sourceApplication.selectApplication();
     });
 
     it("Binary Analysis", function () {
-        // For binary analysis application must have group,artifact and version.
         const binaryApplication = new Analysis(
             getRandomApplicationData("tackletestApp_binary", {
                 binaryData: this.appData["tackle-testapp-binary"],
@@ -148,12 +185,50 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         binaryApplication.name = this.upgradeData.binaryApplicationName;
         binaryApplication.create();
         cy.wait(2 * SEC);
-        // Both source and maven credentials required for binary.
         binaryApplication.manageCredentials(
             sourceControlUsernameCredentials.name,
             mavenCredentialsUsername.name
         );
+        binaryApplication.perform_assessment("low", [stakeHolder]);
         binaryApplication.analyze();
         binaryApplication.verifyAnalysisStatus("Completed");
+        binaryApplication.verifyStatus("assessment", "Completed");
+        binaryApplication.selectApplication();
+    });
+
+    it("Assess application", function () {
+        const assessmentApplication = new Analysis(
+            getRandomApplicationData("tackletestApp_binary", {
+                binaryData: this.appData["tackle-testapp-binary"],
+            }),
+            getRandomAnalysisData(this.analysisData["binary_analysis_on_tackletestapp"])
+        );
+        assessmentApplication.name = this.upgradeData.assessmentApplicationName;
+        assessmentApplication.create();
+        assessmentApplication.perform_assessment("low", [stakeHolder]);
+        assessmentApplication.verifyStatus("assessment", "Completed");
+    });
+
+    it("Import questionnaire and assess application", function () {
+        AssessmentQuestionnaire.disable(legacyPathfinder);
+        AssessmentQuestionnaire.import(cloudReadinessFilePath);
+        AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
+
+        const application = new Analysis(
+            getRandomApplicationData(),
+            getRandomAnalysisData(this.analysisData)
+        );
+        application.name = this.upgradeData.importedQuestionnaireAppName;
+        application.create();
+        application.perform_assessment(
+            "medium",
+            [stakeHolder],
+            [stakeHolderGroup],
+            cloudReadinessQuestionnaire
+        );
+
+        application.verifyStatus("assessment", "Completed");
+        AssessmentQuestionnaire.enable(legacyPathfinder);
+        AssessmentQuestionnaire.disable(cloudReadinessQuestionnaire);
     });
 });

@@ -26,7 +26,7 @@ import {
 import { navTab } from "../../../../views/menu.view";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
-import { tdTag, businessServices, migration } from "../../../../types/constants";
+import { tdTag, businessServices, migration, SEC } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
@@ -43,7 +43,7 @@ describe(["@tier1"], "Business service linked to stakeholder", () => {
         cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
     });
 
-    it("stakeholder attach, update and delete dependency on business service", function () {
+    it("Stakeholder attach, update and delete dependency on business service", function () {
         selectUserPerspective(migration);
 
         // Create new stakeholder
@@ -73,6 +73,7 @@ describe(["@tier1"], "Business service linked to stakeholder", () => {
         var updatedStakeholderName = data.getFullName();
         stakeholder.edit({ name: updatedStakeholderName });
         cy.wait("@getStakeholders");
+        cy.wait(2 * SEC);
 
         // Go to business services page
         clickByText(navTab, businessServices);

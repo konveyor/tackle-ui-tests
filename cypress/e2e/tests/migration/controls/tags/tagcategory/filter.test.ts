@@ -49,7 +49,7 @@ describe(["@tier2"], "Tag tagCategory filter validations", function () {
         applySearchFilter(color, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No tag categories available");
+        cy.get("h2").contains("No tags available");
 
         clickByText(button, clearAllFilters);
     });
@@ -74,7 +74,7 @@ describe(["@tier2"], "Tag tagCategory filter validations", function () {
         applySearchFilter(rank, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No tag categories available");
+        cy.get("h2").contains("No tags available");
 
         clickByText(button, clearAllFilters);
     });

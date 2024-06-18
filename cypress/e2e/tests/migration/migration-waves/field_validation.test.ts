@@ -18,8 +18,8 @@ limitations under the License.
 import {
     checkSuccessAlert,
     clickJs,
+    createMultipleMigrationWaves,
     deleteByList,
-    generateRandomDateRange,
     login,
     validateTooLongInput,
     validateTooShortInput,
@@ -49,6 +49,10 @@ describe(["@tier1"], "Migration Waves Validations", () => {
         migrationWave.create();
     });
 
+    beforeEach("Clear state", function () {
+        MigrationWave.open(true);
+    });
+
     it("Name validations", function () {
         const invalidMessage = "Name is invalid. The name must be between 3 and 120 characters";
         MigrationWave.openNewForm();
@@ -75,47 +79,35 @@ describe(["@tier1"], "Migration Waves Validations", () => {
             .closest(MigrationWaveView.generalDatePicker)
             .find(MigrationWaveView.calendarButton)
             .click();
+        // Start date can be today's date and after.
+        cy.get(`button[aria-label="${nowDateLabel}"]`).should("be.enabled").click();
+
         const tomorrow = new Date(now);
         tomorrow.setDate(now.getDate() + 1);
-
         const dateTomorrowLabel = new Intl.DateTimeFormat("en-GB", options).format(tomorrow);
-        // Start date should be greater than actual date
-        cy.get(`button[aria-label="${nowDateLabel}"]`).should("be.disabled");
-        cy.get(`button[aria-label="${dateTomorrowLabel}"]`).should("be.enabled").click();
-
         cy.get(MigrationWaveView.endDateInput)
             .closest(MigrationWaveView.generalDatePicker)
             .find(MigrationWaveView.calendarButton)
-            .click(); // End date should be greater than start date
-        cy.get(`button[aria-label="${dateTomorrowLabel}"]`).should("be.disabled");
-        const dayAfterTomorrow = new Date(now);
-        dayAfterTomorrow.setDate(now.getDate() + 2);
-        const dayAfterTomorrowLabel = new Intl.DateTimeFormat("en-GB", options).format(
-            dayAfterTomorrow
-        );
-        cy.get(`button[aria-label="${dayAfterTomorrowLabel}"]`).should("be.enabled").click();
-
+            .click();
+        // End date should be greater than start date
+        cy.get(`button[aria-label="${nowDateLabel}"]`).should("be.disabled");
+        cy.get(`button[aria-label="${dateTomorrowLabel}"]`)
+            .eq(1)
+            .should("be.enabled")
+            .click({ force: true, multiple: true });
         cy.get(commonView.submitButton).should("be.enabled");
         clickJs(cancelButton);
     });
+
     it("Duplicate Migration wave name validation", function () {
-        const migrationWavesList: MigrationWave[] = [];
-        const name = data.getRandomWord(8);
-        const { start: startDate, end: endDate } = generateRandomDateRange();
-        const migrationWave1 = new MigrationWave(name, startDate, endDate, null, null, null);
-        migrationWave1.create();
-        migrationWavesList.push(migrationWave1);
-        //create another MW with same params
-        migrationWave1.create();
-        checkSuccessAlert(commonView.duplicateNameWarning, duplicateMigrationWaveError);
+        const migrationWavesList: MigrationWave[] = createMultipleMigrationWaves(2);
 
-        const migrationWave3 = new MigrationWave(null, startDate, endDate, null, null, null);
-        migrationWave3.create();
-        migrationWave3.create();
-        checkSuccessAlert(commonView.duplicateNameWarning, duplicateMigrationWaveError);
-        migrationWavesList.push(migrationWave3);
+        migrationWavesList[0].create();
+        checkSuccessAlert(commonView.alertTitle, duplicateMigrationWaveError);
 
-        //migrationwave3 name is null, so it can't be deleted by list
+        migrationWavesList[1].create();
+        checkSuccessAlert(commonView.alertTitle, duplicateMigrationWaveError);
+
         deleteByList(migrationWavesList);
     });
 

@@ -21,6 +21,7 @@ import {
     deleteAction,
     editAction,
     migration,
+    SEC,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
@@ -45,7 +46,7 @@ export class Stakeholdergroups {
     name: string;
     description: string;
     members: Array<string>;
-    static fullUrl = Cypress.env("tackleUrl") + "/controls/stakeholder-groups";
+    static fullUrl = Cypress.env("tackleUrl") + "controls/stakeholder-groups";
 
     constructor(name: string, description?: string, members?: Array<string>) {
         this.name = name;
@@ -58,6 +59,7 @@ export class Stakeholdergroups {
             if ($url != Stakeholdergroups.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, controls);
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", "Controls");
                 clickByText(navTab, stakeholderGroups);
             }
         });
@@ -125,8 +127,6 @@ export class Stakeholdergroups {
 
     delete(cancel = false): void {
         Stakeholdergroups.openList();
-        selectItemsPerPage(100);
-        cy.wait(2000);
         performRowAction(this.name, deleteAction);
         if (cancel) {
             click(commonView.confirmCancelButton);

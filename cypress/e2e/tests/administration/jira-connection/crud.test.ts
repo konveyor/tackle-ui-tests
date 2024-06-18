@@ -46,7 +46,7 @@ describe(["@tier1"], "CRUD operations for Jira Cloud instance", () => {
         );
 
         jiraBasicStageCredential = new JiraCredentials(
-            getJiraCredentialData(CredentialType.jiraBasic, useTestingAccount, isStage)
+            getJiraCredentialData(CredentialType.jiraToken, useTestingAccount, isStage)
         );
 
         jiraBasicCredential.create();

@@ -24,14 +24,13 @@ import {
     validateTooLongInput,
     validateTooShortInput,
 } from "../../../../utils/utils";
-import { getJiraConnectionData, getJiraCredentialData } from "../../../../utils/data_utils";
+import { getJiraConnectionData, getRandomCredentialsData } from "../../../../utils/data_utils";
 import { CredentialType, JiraType } from "../../../types/constants";
-import { CredentialsData, JiraConnectionData } from "../../../types/types";
+import { JiraConnectionData } from "../../../types/types";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 import { createJiraButton, instanceName, instanceUrl } from "../../../views/jira.view";
 import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
 
-let validJiraBasicCredentials: CredentialsData;
 let jiraBasicCredential: JiraCredentials;
 let jiraServerConnectionData: JiraConnectionData;
 let jiraServerConnection: Jira;
@@ -40,23 +39,16 @@ const isInsecure = true;
 
 describe(["@tier3"], "Field validations for Jira Server connection instance", () => {
     before("Login", function () {
-        // Perform login
         login();
-        // Defining and creating credentials to be used in test
-        validJiraBasicCredentials = getJiraCredentialData(
-            CredentialType.jiraBasic,
-            useTestingAccount
+        jiraBasicCredential = new JiraCredentials(
+            getRandomCredentialsData(CredentialType.jiraBasic)
         );
-        jiraBasicCredential = new JiraCredentials(validJiraBasicCredentials);
-
         jiraBasicCredential.create();
-
-        // Defining correct data to create new Jira connection
         jiraServerConnectionData = getJiraConnectionData(
             jiraBasicCredential,
             JiraType.server,
             !isInsecure,
-            useTestingAccount
+            !useTestingAccount
         );
 
         jiraServerConnection = new Jira(jiraServerConnectionData);
@@ -66,7 +58,6 @@ describe(["@tier3"], "Field validations for Jira Server connection instance", ()
     it("Testing fields validation", () => {
         Jira.openList();
         click(createJiraButton);
-        // Validating too short and too long cases for name
         validateTooShortInput(instanceName);
         validateTooLongInput(instanceName);
         // Validating URL format and too long link
@@ -76,7 +67,6 @@ describe(["@tier3"], "Field validations for Jira Server connection instance", ()
             true
         );
         validateTooLongInput(instanceUrl, 251, null);
-        // Cancelling form after checks are done
         cancelForm();
     });
 

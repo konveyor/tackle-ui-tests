@@ -10,6 +10,8 @@ export default defineConfig({
         pass: "Dog8code",
         git_user: "",
         git_password: "",
+        svn_user: "qe-admin",
+        svn_password: "Dog8code",
         jira_stage_datacenter_url: "https://issues.stage.redhat.com/",
         jira_stage_bearer_token: "",
         jira_stage_basic_login: "",
@@ -18,13 +20,16 @@ export default defineConfig({
         jira_atlassian_cloud_token: "",
         jira_atlassian_cloud_url: "",
         jira_atlassian_cloud_project: "Test",
-        jira_stage_datacenter_project_id: 12339124,
+        jira_stage_datacenter_project_id: 12335626,
         tackleUrl: "https://tackle-konveyor-tackle.apps.mtv03.rhos-psi.cnv-qe.rhood.us",
         rwx_enabled: true,
         logLevel: "ASSERT",
+        mtaVersion: "",
+        FAIL_FAST_PLUGIN: true,
+        FAIL_FAST_ENABLED: false,
     },
     retries: {
-        runMode: 2,
+        runMode: 0,
         openMode: 0,
     },
     reporter: "cypress-multi-reporters",
@@ -48,6 +53,8 @@ export default defineConfig({
         setupNodeEvents(on, config) {
             require("./cypress/plugins/index.js")(on, config);
             on("file:preprocessor", tagify(config));
+            require("cypress-fail-fast/plugin")(on, config);
+            return config;
         },
         experimentalMemoryManagement: true,
         numTestsKeptInMemory: 15,

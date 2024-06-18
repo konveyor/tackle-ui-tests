@@ -9,7 +9,7 @@ export enum MigrationWaveView {
     endDateInput = "input[aria-label='endDateStr']",
     stakeHoldersInput = "#stakeholders-toggle-select-multi-typeahead-typeahead",
     stakeHolderGroupsInput = "#stakeholder-groups-toggle-select-multi-typeahead-typeahead",
-    actionsButton = "button[aria-label='Actions']",
+    actionsButton = "button[aria-label='row actions dropdown toggle']",
     waveStatusColumn = "td[data-label='Status']",
     yearInput = "input[aria-label='Select year']",
     migrationWavesTable = "table[aria-label='Migration waves table']",
@@ -21,7 +21,8 @@ export enum MigrationWaveView {
     waveTable = "table[aria-label='Migration waves table']",
     createTrackerButton = "#create-tracker",
     waveExpanded = "pf-m-expanded",
-    removeApplicationButton = ".pf-v5-u-text-align-right > button",
+    removeApplicationButton = ".pf-v5-u-text-align-right > button.pf-m-plain",
+    unlinkApplicationButton = ".pf-v5-u-text-align-right button.pf-m-link",
 }
 
 export enum MigrationWavesSpecialColumns {

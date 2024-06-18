@@ -20,8 +20,6 @@ import { Analysis } from "../../../../models/migration/applicationinventory/anal
 import { AnalysisStatuses, CredentialType, UserCredentials } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
-import { analysisDetailsEditor } from "../../../../views/analysis.view";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
 
 let source_credential: CredentialsSourceControlUsername;
 let application: Analysis;
@@ -65,8 +63,9 @@ describe(["@tier2"], "Select the list of packages to be analyzed manually", () =
 
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
-        application.openAnalysisDetails();
-        cy.get(analysisDetailsEditor).should("contain.text", analysisData.manuallyAnalyzePackages);
+        application.validateExcludedIssues(
+            this.analysisData["analysis_for_manuallyAnalyzePackages"]["issues"]
+        );
     });
 
     after("Perform test data clean up", function () {

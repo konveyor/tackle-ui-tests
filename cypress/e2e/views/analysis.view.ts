@@ -13,17 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-export const actionButton = "div > button[aria-label='Actions']";
-export const applicationNameInput = "input[name=name]";
-export const applicationDescriptionInput = "input[name=description]";
-export const sourceofAnalysiSelect = "[placeholder='Select a business service']";
 export const sourceDropdown = "#analysis-mode-toggle";
 export const analysisColumn = "td[data-label='Analysis']";
+export const effortColumn = "td[data-label='Effort']";
 export const manageCredentials = "Manage credentials";
 export const sourceCredential = "#source-credentials-toggle-select-typeahead";
 export const mavenCredential = "#maven-settings-toggle-select-typeahead";
 export const nextButton = "button[type=submit]";
-export const addRules = "div > footer[class='pf-c-modal-box__footer'] > button";
+export const addRules = "div > footer[class='pf-v5-c-modal-box__footer'] > button";
 export const fileName = "div[class='fileName']";
 export const reportStoryPoints = "div[class='effortPoints total'] > span[class='points']";
 export const enableTransactionAnalysis = "input[name=enableTransactionReport]";
@@ -39,5 +36,8 @@ export const analysisDetails = "Analysis details";
 export const analysisDetailsEditor = ".monaco-editor";
 export const rightSideMenu = "#page-drawer-content";
 export const enableAutomatedTagging = "input[name=autoTaggingEnabled]";
-export const kebabTopMenuButton = 'button[aria-label="Actions"]';
-export const kebabButton = 'button[aria-label="Kebab toggle"]';
+export const kebabTopMenuButton = "#toolbar-kebab";
+export const camelToggleButton = "#Camel-toggle";
+export const openjdkToggleButton = "#OpenJDK-toggle";
+export const dropDownMenu = "ul.pf-v5-c-select__menu";
+export const closeWizard = ".pf-v5-c-wizard__close > .pf-v5-c-button";

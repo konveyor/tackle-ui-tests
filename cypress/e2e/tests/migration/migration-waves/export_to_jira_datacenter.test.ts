@@ -19,10 +19,10 @@ import { createMultipleApplications, deleteByList, login } from "../../../../uti
 import { CredentialType, JiraIssueTypes, JiraType, SEC } from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
-import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 import { JiraIssue } from "../../../models/administration/jira-connection/jira-api.interface";
 import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
+import { Application } from "../../../models/migration/applicationinventory/application";
 
 const now = new Date();
 now.setDate(now.getDate() + 1);
@@ -32,7 +32,7 @@ end.setFullYear(end.getFullYear() + 1);
 
 let jiraCredentials: JiraCredentials;
 let jiraInstance: Jira;
-const applications: Assessment[] = [];
+const applications: Application[] = [];
 const wavesMap = {};
 let projectName = "";
 
@@ -44,6 +44,19 @@ let projectName = "";
  */
 describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
     before("Create test data", function () {
+        if (
+            !Cypress.env("jira_stage_datacenter_project_id") ||
+            !Cypress.env("jira_stage_bearer_token") ||
+            !Cypress.env("jira_stage_datacenter_url")
+        ) {
+            expect(
+                true,
+                `
+                    Some configurations required for this test are missing, please ensure that you've properly configured the following parameters in the cypress.config.ts file:\n
+                    jira_stage_datacenter_project_id\njira_stage_bearer_token\njira_stage_datacenter_url
+                `
+            ).to.eq(false);
+        }
         login();
 
         jiraCredentials = new JiraCredentials(
@@ -89,6 +102,7 @@ describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
                 .then((issue) => {
                     expect(!!issue).to.eq(true);
 
+                    MigrationWave.open(true);
                     wavesMap[issueType].exportToIssueManager(
                         JiraType.server,
                         jiraInstance.name,
@@ -105,9 +119,11 @@ describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
             jiraInstance.getIssues(projectName).then((issues: JiraIssue[]) => {
                 const waveIssues = issues.filter((issue) => {
                     return (
-                        (issue.fields.summary.includes(wavesMap[issueType].applications[0].name) ||
+                        (issue.fields.summary.includes(
+                            wavesMap[issueType].applications[0].name.trim()
+                        ) ||
                             issue.fields.summary.includes(
-                                wavesMap[issueType].applications[1].name
+                                wavesMap[issueType].applications[1].name.trim()
                             )) &&
                         issue.fields.issuetype.name.toUpperCase() ===
                             (issueType as string).toUpperCase()

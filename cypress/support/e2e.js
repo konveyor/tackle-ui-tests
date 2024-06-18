@@ -34,6 +34,9 @@ import "./commands";
 //Cypress-react-selector
 import "cypress-react-selector";
 
+// For more information, see: https://github.com/javierbrea/cypress-fail-fast/blob/main/README.md
+import "cypress-fail-fast";
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 require("cypress-xpath"); // Refer - https://www.npmjs.com/package/cypress-xpath

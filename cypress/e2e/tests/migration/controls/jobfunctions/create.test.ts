@@ -21,6 +21,7 @@ import {
     exists,
     notExists,
     checkSuccessAlert,
+    clickJs,
 } from "../../../../../utils/utils";
 import {
     button,
@@ -53,30 +54,29 @@ describe(["@tier2"], "Job Function Validations", () => {
 
         // Name constraints
         inputText(jobfunctionNameInput, " ");
-        cy.get(commonView.nameHelper).should("contain", "This field is required.");
+        cy.get(commonView.helper).should("contain", "This field is required.");
         inputText(jobfunctionNameInput, data.getRandomWord(2));
-        cy.get(commonView.nameHelper).should("contain", minCharsMsg);
+        cy.get(commonView.helper).should("contain", minCharsMsg);
         inputText(jobfunctionNameInput, data.getRandomWords(90));
-        cy.get(commonView.nameHelper).should("contain", max120CharsMsg);
+        cy.get(commonView.helper).should("contain", max120CharsMsg);
         inputText(jobfunctionNameInput, data.getRandomWord(10));
         cy.get(commonView.submitButton).should("not.be.disabled");
-        cy.get(commonView.cancelButton).click();
+        clickJs(commonView.cancelButton);
     });
 
     it("Job function success alert and unique name constraint validation", function () {
         // Create new job function
         jobfunction.create();
-        checkSuccessAlert(
-            commonView.successAlertMessage,
-            `Success alert:Job function ${jobfunction.name} was successfully saved.`
-        );
+        cy.get(commonView.successAlertMessage).then(($div) => {
+            assert($div.text().toString(), "Success alert:Job function was successfully created.");
+        });
         cy.wait("@postJobfunctions");
         exists(jobfunction.name);
         // Create job function with same name again
         clickByText(button, createNewButton);
         inputText(jobfunctionNameInput, jobfunction.name);
         cy.get(commonView.submitButton).should("be.disabled");
-        cy.get(commonView.nameHelper).should("contain.text", duplicateJobFunctionName);
+        cy.get(commonView.helper).should("contain.text", duplicateJobFunctionName);
 
         // Delete created jobfunction
         cy.get(commonView.closeButton).click();

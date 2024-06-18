@@ -41,13 +41,13 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
             this.analysisData = analysisData;
         });
 
-        // Interceptors
         cy.intercept("GET", "/hub/application*").as("getApplication");
 
         // Get the current counter value
         metrics.getValue(metricName).then((counterValue) => {
             counter = counterValue;
         });
+        Application.open(true);
     });
 
     it("Perform analyses - Validate the tasks initiated counter increased", function () {
@@ -66,6 +66,7 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
         counter++;
         applicationList.push(bookServerApp);
 
+        Application.open(true);
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])

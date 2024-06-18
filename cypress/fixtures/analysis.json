@@ -3,7 +3,44 @@
         "source": "Source code",
         "target": ["Containerization"],
         "appName": "book-server",
-        "storyPoints": 5
+        "tags": ["EJB XML", "Java EE Batch", "EJB XML"],
+        "issues": [
+            {
+                "name": "File system - Java IO",
+                "category": "mandatory",
+                "source": "None",
+                "targets": ["cloud-readiness"],
+                "effort": 1,
+                "totalEffort": 2,
+                "incidents": 2,
+                "affectedFiles": 1,
+                "ruleSet": "cloud-readiness",
+                "rule": "local-storage-00001",
+                "labels": ["konveyor.io/source", "storage"]
+            }
+        ],
+        "dependencies": [
+            {
+                "name": "com.fasterxml.classmate",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.apache.logging.log4j.log4j-api",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.apache.tomcat.embed.tomcat-embed-core",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.hibernate.validator.hibernate-validator",
+                "language": "java",
+                "labels": ["open-source"]
+            }
+        ]
     },
 
     "source+dep_analysis_on_tackletestapp": {
@@ -17,7 +54,61 @@
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "deps",
-        "storyPoints": 24
+        "storyPoints": 24,
+        "issues": [
+            {
+                "name": "File system - Java IO",
+                "category": "mandatory",
+                "source": "None",
+                "targets": ["cloud-readiness"],
+                "effort": 1,
+                "totalEffort": 2,
+                "incidents": 2,
+                "affectedFiles": 1,
+                "ruleSet": "cloud-readiness",
+                "rule": "local-storage-00001",
+                "labels": ["konveyor.io/source", "storage"]
+            },
+            {
+                "name": "The package 'javax' has been replaced by 'jakarta'.",
+                "category": "mandatory",
+                "source": "None",
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+"],
+                "effort": 1,
+                "incidents": 2,
+                "affectedFiles": 92,
+                "ruleSet": "eap8/eap7",
+                "rule": "javax-to-jakarta-import-00001",
+                "labels": ["konveyor.io/source"]
+            }
+        ],
+        "dependencies": [
+            {
+                "name": "javax.javaee-api",
+                "language": "java",
+                "labels": []
+            },
+            {
+                "name": "net.wasdev.wlp.sample.daytrader-ee7-ejb",
+                "language": "java",
+                "labels": []
+            },
+            {
+                "name": "net.wasdev.wlp.sample.daytrader-ee7-web",
+                "language": "java",
+                "labels": []
+            },
+            {
+                "name": "org.apache.derby.derby",
+                "language": "java",
+                "labels": []
+            },
+            {
+                "name": "taglibs.standard",
+                "language": "java",
+                "labels": []
+            }
+        ]
     },
 
     "binary_analysis_on_tackletestapp": {
@@ -39,7 +130,7 @@
         "source": "Upload a local binary",
         "target": ["Jakarta EE 9"],
         "binary": ["customers-tomcat-0.0.1-SNAPSHOT.war"],
-        "customRule": "javax-package-custom-target.windup.xml",
+        "customRule": ["javax-package-custom-target.windup.xml"],
         "appName": "customers-tomcat-0.0.1-SNAPSHOT.war",
         "storyPoints": 21
     },
@@ -48,13 +139,38 @@
         "source": "Source code",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "tackle-testapp",
-        "storyPoints": 1,
+        "effort": 18,
         "techTags": [
-            ["HTTP", "Servlet"],
-            ["Processing", "Java EE Batch"],
-            ["Java EE", "Java EE Batch"],
-            ["Execute", "Java EE Batch"],
-            ["Connect", "Servlet"]
+            ["Other", "Properties"],
+            ["Bean", "EJB XML"],
+            ["Java EE", "EJB XML"],
+            ["Embedded", "Properties"],
+            ["Connect", "EJB XML"],
+            ["Sustain", "Properties"]
+        ],
+        "issues": [
+            {
+                "name": "File system - Java IO",
+                "category": "mandatory",
+                "source": "None",
+                "targets": ["cloud-readiness"],
+                "effort": 1,
+                "affectedFiles": 1,
+                "ruleSet": "cloud-readiness",
+                "rule": "local-storage-00001",
+                "labels": ["konveyor.io/source", "storage"]
+            },
+            {
+                "name": "Hardcoded IP Address",
+                "category": "mandatory",
+                "source": "None",
+                "effort": 1,
+                "affectedFiles": 2,
+                "targets": ["cloud-readiness"],
+                "rule": "local-storage-00001",
+                "ruleSet": "cloud-readiness",
+                "labels": ["konveyor.io/source", "storage"]
+            }
         ]
     },
 
@@ -66,11 +182,10 @@
         "storyPoints": 5
     },
 
-    "analysis_for_DIVA-report": {
+    "analysis_for_spring_petclinic_app": {
         "source": "Upload a local binary",
         "target": ["Jakarta EE 9"],
         "binary": ["spring-petclinic-2.4.0.BUILD-SNAPSHOT.jar"],
-        "enableTransaction": true,
         "appName": "spring-petclinic-2.4.0.BUILD-SNAPSHOT.jar",
         "storyPoints": 42
     },
@@ -80,14 +195,18 @@
         "target": ["Containerization"],
         "appName": "tackle-testapp",
         "excludePackages": "io.konveyor.demo.ordermanagement.model",
-        "storyPoints": 1
+        "issues": [
+            {
+                "name": ["File system - Java IO", "Java Servlet"]
+            }
+        ]
     },
 
     "analysis_for_excludeRuleTags": {
         "source": "Source code",
         "target": ["Linux"],
         "appName": "tackle-testapp",
-        "customRule": "javax-package-custom.windup.xml",
+        "customRule": ["javax-package-custom.windup.xml"],
         "excludeRuleTags": "tag",
         "storyPoints": 1
     },
@@ -98,10 +217,14 @@
         "appName": "tackle-testapp",
         "manuallyAnalyzePackages": "io.konveyor.demo.ordermanagement",
         "excludedPackagesList": [
-            " io.konveyor.demo.ordermanagement.OrderManagementAppInitializer",
-            " io.konveyor.demo.ordermanagement.model.Customer "
+            " io.konveyor.demo.ordermanagement",
+            " io.konveyor.demo.ordermanagement.model "
         ],
-        "storyPoints": 1
+        "issues": [
+            {
+                "name": ["Java Servlet"]
+            }
+        ]
     },
 
     "analysis_and_incident_validation_jeeExample_app": {
@@ -184,6 +307,176 @@
         "source": "Source code",
         "target": ["Containerization"],
         "appName": "example-1",
-        "storyPoints": 1
+        "effort": 9
+    },
+    "source_analysis_on_nexus_app": {
+        "source": "Source code",
+        "target": ["OpenJDK", "Containerization"],
+        "appName": "nexus"
+    },
+    "source_analysis_on_openmrs_app": {
+        "source": "Source code",
+        "target": ["OpenJDK"],
+        "appName": "openmrs"
+    },
+    "source_analysis_on_pet_clinic_app": {
+        "source": "Source code",
+        "appName": "pet-clinic"
+    },
+    "upload_binary_analysis_on_jee_app_custom_rules": {
+        "source": "Upload a local binary",
+        "target": ["Application server migration"],
+        "binary": ["jee-example-app-1.0.0.ear"],
+        "customRule": ["hibernate-custom.windup.xml"],
+        "appName": "jee-example-app custom rules"
+    },
+    "tackle_test_app_custom_rules": {
+        "source": "Source code + dependencies",
+        "target": [],
+        "appName": "tackle-testapp",
+        "customRule": [
+            "01-custom-rule-example.windup.yaml",
+            "01-javax-package-custom-target.windup.yaml"
+        ],
+        "openSourceLibraries": true
+    },
+    "affected_files_on_day_trader_app": {
+        "source": "Source code + dependencies",
+        "target": ["Application server migration to"],
+        "appName": "deps",
+        "issues": [
+            {
+                "name": "Hibernate Search 5 - Changes in indexing numeric and date values",
+                "category": "optional",
+                "source": "eap",
+                "targets": ["eap"],
+                "effort": 1,
+                "incidents": 2,
+                "affectedFiles": 64,
+                "ruleSet": "eap7/weblogic/tests/data",
+                "rule": "hsearch-00116",
+                "labels": ["hibernate", "hibernate-search"]
+            }
+        ]
+    },
+
+    "affected_files_on_bookserverapp": {
+        "source": "Source code",
+        "target": ["Quarkus"],
+        "appName": "book-server",
+        "issues": [
+            {
+                "name": "Add Maven profile to run the Quarkus native build",
+                "category": "mandatory",
+                "source": "java-ee",
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 9,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00060",
+                "labels": "None"
+            }
+        ]
+    },
+
+    "affected_files_on_tackleTestapp": {
+        "source": "Source code",
+        "target": ["Quarkus"],
+        "appName": "tackle-testapp",
+        "issues": [
+            {
+                "name": "Adopt Maven Surefire plugin",
+                "category": "mandatory",
+                "source": "java-ee",
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 8,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00040",
+                "labels": "None"
+            }
+        ]
+    },
+
+    "affected_files_on_tackleTestapp_deps": {
+        "source": "Source code + dependencies",
+        "target": ["Camel"],
+        "appName": "tackle-testapp",
+        "issues": [
+            {
+                "name": "'jaxb-core' Maven dependency missing",
+                "category": "potential",
+                "source": "camel",
+                "targets": ["camel"],
+                "effort": 1,
+                "totalEffort": 4,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "camel3/camel2",
+                "rule": "xml-java-versions-00002",
+                "labels": "None"
+            }
+        ]
+    },
+
+    "jws6_source+dep_analysis_on_tackletestapp": {
+        "source": "Source code + dependencies",
+        "target": ["JBoss Web Server 6"],
+        "appName": "tackle-testapp",
+        "openSourceLibraries": true,
+        "effort": 2
+    },
+
+    "openJDK17_source+dep_analysis_on_tackletestapp": {
+        "source": "Source code + dependencies",
+        "target": ["OpenJDK 17"],
+        "appName": "tackle-testapp",
+        "openSourceLibraries": true,
+        "effort": 4104
+    },
+
+    "openJDK21_source+dep_analysis_on_dayTrader": {
+        "source": "Source code + dependencies",
+        "target": ["OpenJDK 21"],
+        "appName": "deps",
+        "openSourceLibraries": true,
+        "effort": 596
+    },
+
+    "jdk9_source_dep_analysis_on_tackletestapp": {
+        "source": "Source code + dependencies",
+        "target": ["Containerization"],
+        "appName": "tackle testapp public jdk 9",
+        "openSourceLibraries": true
+    },
+
+    "administracionEfectivo_custom_rules": {
+        "appName": "administracionEfectivo-app custom rules",
+        "source": "Upload a local binary",
+        "target": ["Containerization"],
+        "binary": ["administracionEfectivo.ear"],
+        "customRule": ["test.windup.xml"]
+    },
+
+    "upload_binary_with_exculde_packages": {
+        "appName": "administracionEfectivo-app custom rules",
+        "source": "Upload a local binary",
+        "target": ["Containerization"],
+        "binary": ["administracionEfectivo.ear"],
+        "manuallyAnalyzePackages": "io.konveyor.demo.ordermanagement",
+        "excludedPackagesList": [
+            " io.konveyor.demo.ordermanagement",
+            " io.konveyor.demo.ordermanagement.model "
+        ]
+    },
+    "tackle_testapp_fileNotValidXML": {
+        "source": "Source code",
+        "target": [],
+        "appName": "fileNotValidXML custom rules",
+        "customRule": ["settings.xml"]
     }
 }

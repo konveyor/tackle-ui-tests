@@ -14,38 +14,42 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {
-    analysis,
+    AnalysisStatuses,
     analyzeAppButton,
     analyzeButton,
-    applicationInventory,
     button,
-    migration,
-    next,
+    Languages,
+    ReportTypeSelectors,
     RepositoryType,
     save,
     SEC,
     tdTag,
     trTag,
 } from "../../../types/constants";
-import { navMenu } from "../../../views/menu.view";
 import {
     cancelForm,
     cleanupDownloads,
     click,
     clickByText,
     clickTab,
+    clickWithin,
     doesExistSelector,
     doesExistText,
     inputText,
+    next,
     performRowActionByIcon,
     selectCheckBox,
     selectFormItems,
-    selectItemsPerPage,
-    selectUserPerspective,
+    sidedrawerTab,
     uploadApplications,
     uploadXml,
 } from "../../../../utils/utils";
-import { analysisData, applicationData, RbacValidationRules } from "../../../types/types";
+import {
+    analysisData,
+    applicationData,
+    RbacValidationRules,
+    RulesRepositoryFields,
+} from "../../../types/types";
 import { Application } from "./application";
 import {
     addButton,
@@ -53,27 +57,33 @@ import {
     analysisColumn,
     analysisDetails,
     analyzeManuallyButton,
-    enableTransactionAnalysis,
+    camelToggleButton,
+    closeWizard,
+    dropDownMenu,
+    effortColumn,
     enableAutomatedTagging,
+    enableTransactionAnalysis,
     enterPackageName,
     enterPackageNameToExclude,
     excludePackagesSwitch,
     expandAll,
     fileName,
+    kebabTopMenuButton,
     manageCredentials,
     mavenCredential,
+    openjdkToggleButton,
     panelBody,
-    reportStoryPoints,
     rightSideMenu,
     sourceCredential,
     sourceDropdown,
     tabsPanel,
-    kebabTopMenuButton,
 } from "../../../views/analysis.view";
-import { kebabMenu } from "../../../views/applicationinventory.view";
-import { AnalysisStatuses } from "../../../types/constants";
-import { RulesRepositoryFields } from "../../../types/types";
+import {
+    bulkApplicationSelectionCheckBox,
+    kebabMenu,
+} from "../../../views/applicationinventory.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
+import { actionSelectToggle } from "../../../views/common.view";
 
 export class Analysis extends Application {
     name: string;
@@ -82,17 +92,18 @@ export class Analysis extends Application {
     binary?: string[];
     scope?: string;
     excludePackages?: string[];
-    customRule?: string;
+    customRule?: string[];
     customRuleRepository?: RulesRepositoryFields;
     sources?: string;
     excludeRuleTags?: string;
     enableTransaction?: boolean;
     disableTagging?: boolean;
     appName?: string;
-    storyPoints?: number;
+    effort?: number;
     manuallyAnalyzePackages?: string[];
     excludedPackagesList?: string[];
     openSourceLibraries?: boolean;
+    language: Languages = Languages.Java;
     incidents?: {
         mandatory?: number;
         optional?: number;
@@ -119,12 +130,13 @@ export class Analysis extends Application {
             enableTransaction,
             disableTagging,
             appName,
-            storyPoints,
+            effort,
             manuallyAnalyzePackages,
             excludedPackagesList,
             incidents,
             openSourceLibraries,
             customRuleRepository,
+            language,
         } = analysisData;
         this.name = appData.name;
         this.source = source;
@@ -138,38 +150,35 @@ export class Analysis extends Application {
         if (enableTransaction) this.enableTransaction = enableTransaction;
         if (disableTagging) this.disableTagging = disableTagging;
         if (appName) this.appName = appName;
-        if (storyPoints) this.storyPoints = storyPoints;
+        if (effort) this.effort = effort;
         if (excludePackages) this.excludePackages = excludePackages;
         if (manuallyAnalyzePackages) this.manuallyAnalyzePackages = manuallyAnalyzePackages;
         if (excludedPackagesList) this.excludedPackagesList = excludedPackagesList;
         if (incidents) this.incidents = incidents;
         if (openSourceLibraries) this.openSourceLibraries = openSourceLibraries;
-    }
-
-    //Navigate to the Application inventory
-    public static open(forceReload = false): void {
-        if (forceReload) {
-            cy.visit(Cypress.env("tackleUrl"));
-        }
-        selectUserPerspective(migration);
-        clickByText(navMenu, applicationInventory);
-        clickTab(analysis);
-        cy.wait(2 * SEC);
-        selectItemsPerPage(100);
-    }
-
-    create(): void {
-        Analysis.open();
-        super.create();
+        if (language) this.language = language;
     }
 
     public selectSourceofAnalysis(source: string): void {
         selectFormItems(sourceDropdown, source);
     }
 
+    public static selectLanguage(language: Languages) {
+        cy.wait(2 * SEC);
+        click(`${actionSelectToggle} > button`);
+        clickByText("button", language);
+    }
+
     protected selectTarget(target: string[]): void {
         for (let i = 0; i < target.length; i++) {
-            cy.get("div.pf-v5-c-empty-state__content").children("h4").contains(target[i]).click();
+            if (["OpenJDK 11", "OpenJDK 17", "OpenJDK 21"].includes(target[i])) {
+                click(openjdkToggleButton);
+                clickByText(dropDownMenu, target[i]);
+            } else if (["camel:3", "camel:4"].includes(target[i])) {
+                click(camelToggleButton);
+                clickByText(dropDownMenu, target[i]);
+            }
+            cy.get("div.pf-v5-c-empty-state__content").contains(target[i]).click();
         }
     }
 
@@ -204,12 +213,15 @@ export class Analysis extends Application {
     }
 
     protected uploadCustomRule() {
-        cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
-        uploadXml("xml/" + this.customRule);
-        cy.wait(2000);
-        cy.get("span.pf-v5-c-progress__measure", { timeout: 150000 }).should("contain", "100%");
-        cy.wait(2000);
-        cy.contains(addRules, "Add", { timeout: 2000 }).click();
+        for (let i = 0; i < this.customRule.length; i++) {
+            cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
+            const folder = this.customRule[i].split(".").pop();
+            uploadXml(`${folder}/${this.customRule[i]}`);
+            cy.wait(2000);
+            cy.get("span.pf-v5-c-progress__measure", { timeout: 150000 }).should("contain", "100%");
+            cy.wait(2000);
+            cy.contains(addRules, "Add", { timeout: 2000 }).click();
+        }
     }
 
     protected fetchCustomRules() {
@@ -247,15 +259,17 @@ export class Analysis extends Application {
             inputText(enterPackageName, this.manuallyAnalyzePackages);
             clickByText(addButton, "Add");
         }
+
         if (this.excludePackages) {
             click(excludePackagesSwitch);
             inputText(enterPackageNameToExclude, this.excludePackages);
             clickByText(addButton, "Add");
         }
+
         if (this.openSourceLibraries) {
             click("#oss");
         }
-        cy.contains("button", "Next", { timeout: 200 }).click();
+        next();
     }
 
     protected tagsToExclude() {
@@ -264,7 +278,7 @@ export class Analysis extends Application {
     }
 
     analyze(cancel = false): void {
-        Analysis.open();
+        Application.open();
         this.selectApplication();
         if (cancel) {
             cancelForm();
@@ -279,9 +293,11 @@ export class Analysis extends Application {
         this.selectSourceofAnalysis(this.source);
         if (this.binary) this.uploadBinary();
         this.isNextEnabled();
-        cy.contains(button, next).click();
+        next();
+        Analysis.selectLanguage(this.language);
+        cy.wait(2 * SEC);
         this.selectTarget(this.target);
-        cy.contains(button, next).click();
+        next();
         this.scopeSelect();
         if (this.customRule) {
             this.uploadCustomRule();
@@ -289,7 +305,7 @@ export class Analysis extends Application {
         if (this.customRuleRepository) {
             this.fetchCustomRules();
         }
-        cy.contains(button, next).click();
+        next();
         if (this.excludeRuleTags) {
             this.tagsToExclude();
         }
@@ -300,19 +316,30 @@ export class Analysis extends Application {
             this.disableAutomatedTagging();
         }
         if (!this.sources) {
-            cy.contains(button, next).click();
+            next();
         }
-        cy.contains(button, "Run").click();
+        clickByText(button, "Run");
     }
 
     public static analyzeAll(params: Analysis): void {
-        Analysis.open();
-        selectCheckBox("#bulk-selected-items-checkbox");
+        Application.open();
+        selectCheckBox(bulkApplicationSelectionCheckBox);
         params.startAnalysis();
     }
 
+    public static analyzeByList(analysisList: Analysis[]): void {
+        Application.open();
+        analysisList.forEach((currentApp) => {
+            currentApp.selectApplication();
+        });
+        analysisList[0].startAnalysis();
+        analysisList.forEach((currentApp) => {
+            currentApp.selectApplication();
+        });
+    }
+
     static validateAnalyzeButton(rbacRules: RbacValidationRules) {
-        Analysis.open();
+        Application.open();
         doesExistSelector(analyzeAppButton, rbacRules["Analyze"]);
     }
 
@@ -323,6 +350,15 @@ export class Analysis extends Application {
             .closest(trTag, { log: false })
             .within(() => {
                 Analysis.verifyStatus(cy.get(analysisColumn, { log: false }), status);
+            });
+    }
+
+    public verifyEffort(effort: number) {
+        cy.get(tdTag)
+            .contains(this.name)
+            .closest(trTag)
+            .within(() => {
+                cy.get(effortColumn).should("contain", `${effort}`);
             });
     }
 
@@ -356,37 +392,32 @@ export class Analysis extends Application {
     }
 
     openReport() {
-        // TODO: Update once the new reports feature is implemented
-        return;
+        sidedrawerTab(this.name, "Reports");
+        clickByText(button, "View analysis details");
+        cy.wait(2 * SEC);
+        clickByText(button, "Close");
+        cy.wait(2 * SEC);
     }
 
-    downloadReport(type: string, isEnabled = true) {
-        Analysis.open();
+    downloadReport(type: ReportTypeSelectors) {
+        Application.open();
         this.selectApplicationRow();
         cy.get(rightSideMenu, { timeout: 30 * SEC }).within(() => {
             clickTab("Reports");
-            if (isEnabled) {
-                clickByText("a", type);
-                cy.verifyDownload("report.tar.gz");
-                // Removing downloaded file after verifying it
-                cleanupDownloads();
-            } else {
-                doesExistText(type, isEnabled);
-            }
+            click(type);
+            // waits until the file is downloaded
+            cy.get(type, { timeout: 30 * SEC });
+            const extension = type === ReportTypeSelectors.YAML ? "yaml" : "tar";
+            cy.verifyDownload(`analysis-report-app-${this.name}.${extension}`);
         });
         this.closeApplicationDetails();
     }
 
     openAnalysisDetails() {
         cy.wait(2000);
-        performRowActionByIcon(this.name, kebabMenu);
+        sidedrawerTab(this.name, "Reports");
         clickByText(button, analysisDetails);
-        cy.wait(2000);
-    }
-
-    delete(cancel = false): void {
-        Analysis.open();
-        super.delete();
+        cy.wait(2 * SEC);
     }
 
     manageCredentials(sourceCred?: string, mavenCred?: string): void {
@@ -403,43 +434,9 @@ export class Analysis extends Application {
         cy.wait(2000);
     }
 
-    validateStoryPoints(): void {
-        cy.get(fileName).should("contain", this.appName);
-        //Validating that this field contains number
-        cy.get(reportStoryPoints).should((value) => {
-            expect(Number.isNaN(parseInt(value.text(), 10))).to.eq(false);
-        });
-    }
-
-    validateTransactionReport(): void {
-        cy.get(fileName + " > a")
-            .should("contain", this.appName)
-            .click();
-        cy.get(tabsPanel).contains("Transactions").click();
-        cy.get("div[class='main']").should("contain", "Transactions Report");
-    }
-
-    validateExcludedPackages(text?: string): void {
-        // Click on App name
-        // then Application Details tab
-        // and the html link to exclude packages should not be present
-        cy.get(fileName + " > a")
-            .should("contain", this.appName)
-            .click();
-        cy.get(tabsPanel).contains("Application Details").click();
-        click(expandAll);
-        if (this.excludePackages) {
-            cy.get(panelBody).should("not.contain.html", `${this.excludePackages}.${text}`);
-        }
-        if (this.manuallyAnalyzePackages) {
-            // for "Select the list of packages to be analyzed manually" option
-            cy.get(panelBody).should("not.contain.html", this.excludedPackagesList);
-        }
-    }
-
     static validateTopActionMenu(rbacRules: RbacValidationRules) {
-        Analysis.open();
-        if (rbacRules["Action menu"]["Not available"]) {
+        Application.open();
+        if (rbacRules["Top action menu"]["Not available"]) {
             cy.get(".pf-v5-c-page__main-section")
                 .eq(1)
                 .within(() => {
@@ -451,12 +448,12 @@ export class Analysis extends Application {
             cy.get(".pf-v5-c-page__main-section")
                 .eq(1)
                 .within(() => {
-                    click(kebabTopMenuButton);
+                    clickWithin(kebabTopMenuButton, button);
                 });
-            doesExistText("Import", rbacRules["Action menu"]["Import"]);
-            doesExistText("Manage imports", rbacRules["Action menu"]["Manage imports"]);
-            doesExistText("Manage credentials", rbacRules["Action menu"]["Manage credentials"]);
-            doesExistText("Delete", rbacRules["Action menu"]["Delete"]);
+            doesExistText("Import", rbacRules["Top action menu"]["Import"]);
+            doesExistText("Manage imports", rbacRules["Top action menu"]["Manage imports"]);
+            doesExistText("Manage credentials", rbacRules["Top action menu"]["Manage credentials"]);
+            doesExistText("Delete", rbacRules["Top action menu"]["Delete"]);
         }
     }
 
@@ -496,5 +493,28 @@ export class Analysis extends Application {
                     expect(this.incidents[index].information).equal(Number(count));
                 }
             });
+    }
+
+    verifyFileNotValidXML(): void {
+        this.selectApplication();
+        cy.contains(button, analyzeButton).should("be.enabled").click();
+        this.selectSourceofAnalysis(this.source);
+        next();
+        next();
+        next();
+        for (let i = 0; i < this.customRule.length; i++) {
+            cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
+            const folder = this.customRule[i].split(".").pop();
+            uploadXml(`${folder}/${this.customRule[i]}`);
+            cy.wait(2000);
+            cy.get("span.pf-v5-c-progress__measure", { timeout: 150000 }).should("contain", "100%");
+            cy.wait(2000);
+            cy.get("h4.pf-v5-c-alert__title").should(
+                "contain.text",
+                `Error: File "${this.customRule[i]}" is not a valid XML: `
+            );
+            cy.contains(addRules, "Add", { timeout: 2000 }).should("not.be.enabled");
+        }
+        cy.get(closeWizard).click({ force: true });
     }
 }

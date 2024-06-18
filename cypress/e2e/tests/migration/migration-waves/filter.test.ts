@@ -16,11 +16,10 @@ import {
     login,
     clickByText,
     applySearchFilter,
-    preservecookies,
     deleteByList,
     createMultipleMigrationWaves,
 } from "../../../../utils/utils";
-import { button, name, clearAllFilters, SEC } from "../../../types/constants";
+import { button, name, clearAllFilters } from "../../../types/constants";
 
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
@@ -44,7 +43,6 @@ describe(["@tier2"], "Migration waves filter validations", function () {
         const validSearchInput = migrationWavesList[0].name.substring(0, 3);
         applySearchFilter(name, validSearchInput);
         cy.get("td").should("contain", migrationWavesList[0].name);
-
         if (migrationWavesList[1].name.indexOf(validSearchInput) >= 0) {
             cy.get("td").should("contain", migrationWavesList[1].name);
         }

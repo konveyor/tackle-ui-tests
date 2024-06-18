@@ -25,7 +25,8 @@ export const analysis = "Analysis";
 export const analyzeButton = "Analyze";
 export const artifact = "Artifact";
 export const businessServices = "Business services";
-export const businessService = "Business service";
+export const businessService = "Business Service";
+export const businessServiceLower = "Business service";
 export const button = "button";
 export const category = "Category";
 export const clearAllFilters = "Clear all filters";
@@ -37,12 +38,13 @@ export const criticality = "Criticality";
 export const credentials = "Credentials";
 export const credentialType = "Credential type";
 export const deleteAction = "Delete";
+export const details = "Details";
 export const editAction = "Edit";
 export const startDate = "Start date";
 export const endDate = "End date";
 export const exportToIssueManagerAction = "Export to Issue Manager";
 export const description = "Description";
-export const displayName = "Display name";
+export const displayName = "Name";
 export const effort = "Effort";
 export const email = "Email";
 export const group = "Stakeholder groups";
@@ -60,6 +62,7 @@ export const question = "Question";
 export const rank = "Rank";
 export const review = "Review";
 export const risk = "Risk";
+export const archetypes = "Archetypes";
 export const owner = "Owner";
 export const createdBy = "Created By";
 export const reports = "Reports";
@@ -80,10 +83,17 @@ export const manageApplications = "Manage applications";
 export const adoptionCandidateDistribution = "Adoption candidate distribution";
 export const identiFiedRisks = "Identified risks";
 export const suggestedAdoptionPlan = "Suggested adoption plan";
-
+export const assessmentQuestionnaires = "Assessment questionnaires";
+export const legacyPathfinder = "Legacy Pathfinder";
+export const cloudNative = "Cloud Native";
+export const sampleQuestionnaireTemplate = "Questionnaire Template ( Sample )";
+export const cloudReadinessQuestionnaire = "Uploadable Cloud Readiness Questionnaire Template";
+export const cloudReadinessFilePath = "questionnaire_import/CloudReadiness_7.0.1.yaml";
 export const createAppButton = "#create-application";
-export const assessAppButton = "#assess-application";
-export const reviewAppButton = "#review-application";
+export const text = "text";
+export const riskDonutChart = "risk-donut-chart";
+export const assessAppButton = "Assess";
+export const reviewAppButton = "Review";
 export const analyzeAppButton = "#analyze-application";
 export const duplicateMigrationWaveError =
     "Danger alert:The migration wave could not be created due to a conflict with an existing wave. Make sure the name and start/end dates are unique and try again.";
@@ -117,7 +127,7 @@ export const general = "General";
 export const instanceName = "Instance name";
 export const cantDeleteJiraAlert =
     "Danger alert:This instance contains issues associated with applications and cannot be deleted";
-
+export const singleApplication = "Single application";
 export enum CredentialType {
     proxy = "Proxy",
     sourceControl = "Source Control",
@@ -157,6 +167,11 @@ export enum AnalysisStatuses {
     canceled = "Canceled",
 }
 
+export enum ReportTypeSelectors {
+    HTML = "#download-tar-button",
+    YAML = "#download-yaml-button",
+}
+
 export enum RepositoryType {
     git = "Git",
     subversion = "Subversion",
@@ -170,4 +185,28 @@ export enum CustomRuleType {
 export enum SortType {
     ascending = "ascending",
     descending = "descending",
+}
+
+export enum issueFilter {
+    appName = "Application name",
+    archetype = "Archetype",
+    bs = "Business service",
+    tags = "Tags",
+    category = "Category",
+    source = "Source",
+    target = "Target",
+}
+
+export enum dependencyFilter {
+    appName = "Application name",
+    archetype = "Archetype",
+    bs = "Business service",
+    tags = "Tags",
+    deppName = "Name",
+    language = "Language",
+}
+
+export enum Languages {
+    Go = "Go",
+    Java = "Java",
 }

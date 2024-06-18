@@ -20,12 +20,12 @@ import {
     selectItemsPerPage,
     createMultipleTags,
     deleteAllTagsAndTagCategories,
-    goToPage,
     validatePagination,
+    itemsPerPageValidation,
 } from "../../../../../../utils/utils";
 import { SEC } from "../../../../../types/constants";
 
-import { prevPageButton, appTable } from "../../../../../views/common.view";
+import { appTable } from "../../../../../views/common.view";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 import { tagCategory } from "../../../../../views/tags.view";
 
@@ -58,59 +58,19 @@ describe(["@tier3"], "Tag category pagination validations", function () {
             });
     });
 
-    after("Perform test data clean up", function () {
-        // Delete the tags created before the tests
-        deleteAllTagsAndTagCategories();
-    });
-
     it("Navigation button validations", function () {
-        // Navigate to Tags tab
         TagCategory.openList();
-
-        // select 10 items per page
         selectItemsPerPage(10);
-
-        // Run validation
         validatePagination();
     });
 
     it("Items per page validations", function () {
-        // Navigate to Tags tab
         TagCategory.openList();
-
-        // Select 10 items per page
         selectItemsPerPage(10);
-
-        // Verify that only 10 items are displayed
-        cy.get(tagCategory, { timeout: 2 * SEC }).then(($rows) => {
-            cy.wrap($rows.length).should("eq", 10);
-        });
-
-        // Select 20 items per page
-        selectItemsPerPage(20);
-
-        // Verify that items less than or equal to 20 and greater than 10 are displayed
-        cy.get(tagCategory, { timeout: 2 * SEC }).then(($rows) => {
-            cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
-        });
+        itemsPerPageValidation(appTable, "Tag category");
     });
 
-    it("Page number validations", function () {
-        // Navigate to Tags tab
-        TagCategory.openList();
-
-        // Select 10 items per page
-        selectItemsPerPage(10);
-
-        // Go to page number 2
-        goToPage(2);
-
-        // Verify that page number has changed, as previous page nav button got enabled
-        cy.get(prevPageButton).each(($previousBtn) => {
-            cy.wrap($previousBtn).should("not.be.disabled");
-        });
-
-        // Go back to page number 1
-        goToPage(1);
+    after("Perform test data clean up", function () {
+        deleteAllTagsAndTagCategories();
     });
 });

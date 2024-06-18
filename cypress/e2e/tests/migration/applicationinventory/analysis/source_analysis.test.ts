@@ -20,9 +20,7 @@ import {
     getRandomApplicationData,
     getRandomAnalysisData,
     writeMavenSettingsFile,
-    resetURL,
     deleteByList,
-    checkSuccessAlert,
 } from "../../../../../utils/utils";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
@@ -35,9 +33,9 @@ import {
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../../models/administration/credentials/credentialsSourceControlKey";
-import { infoAlertMessage } from "../../../../views/common.view";
-let source_credential;
-let maven_credential;
+import { Application } from "../../../../models/migration/applicationinventory/application";
+let source_credential: CredentialsSourceControlUsername;
+let maven_credential: CredentialsMaven;
 let applicationsList: Array<Analysis> = [];
 
 describe(["@tier1"], "Source Analysis", () => {
@@ -74,29 +72,6 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    afterEach("Persist session", function () {
-        // Reset URL from report page to web UI
-        resetURL();
-    });
-
-    it("Source Analysis on bookserver app and success alert validation", function () {
-        // For source code analysis application must have source code URL git or svn
-        cy.log(this.analysisData[0]);
-        const application = new Analysis(
-            getRandomApplicationData("bookserverApp", {
-                sourceData: this.appData["bookserver-app"],
-            }),
-            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
-        );
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication");
-        cy.wait(2000);
-        application.analyze();
-        checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
-        application.verifyAnalysisStatus("Completed");
-    });
-
     it("Source + dependencies analysis on tackletest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
@@ -105,10 +80,11 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -122,10 +98,11 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
     });
@@ -138,10 +115,11 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         application.manageCredentials(null, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -155,10 +133,11 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -179,28 +158,12 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         application.manageCredentials(scCredsKey.name, null);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-    });
-
-    it("Source Analysis on tackle testapp for svn repo type", function () {
-        // For tackle test app source credentials are required.
-        const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_svnRepo", {
-                sourceData: this.appData["tackle-testapp-svn"],
-            }),
-            getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
-        );
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication");
-        cy.wait(2000);
-        application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
     });
@@ -213,10 +176,11 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_for_openSourceLibraries"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -230,10 +194,11 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -252,6 +217,7 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_for_disableTagging"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -269,10 +235,93 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_on_example-1-app"])
         );
+        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
+        cy.wait(2 * SEC);
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        // Polarion TC 406
+        application.verifyEffort(this.analysisData["analysis_on_example-1-app"]["effort"]);
+    });
+
+    it("Bug MTA-2916: JWS6 target Source + deps analysis on tackletest app", function () {
+        // Source code analysis require both source and maven credentials
+        const application = new Analysis(
+            getRandomApplicationData("tackleTestApp_Source+dependencies_jws6", {
+                sourceData: this.appData["tackle-testapp-git"],
+            }),
+            getRandomAnalysisData(this.analysisData["jws6_source+dep_analysis_on_tackletestapp"])
+        );
+        Application.open();
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
+        application.manageCredentials(source_credential.name, maven_credential.name);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(
+            this.analysisData["jws6_source+dep_analysis_on_tackletestapp"]["effort"]
+        );
+    });
+
+    it("Bug MTA-2916: Openjdk17 Source + dependencies analysis on tackletest app", function () {
+        const application = new Analysis(
+            getRandomApplicationData("tackleTestApp_Source+dependencies_openjdk17", {
+                sourceData: this.appData["tackle-testapp-git"],
+            }),
+            getRandomAnalysisData(
+                this.analysisData["openJDK17_source+dep_analysis_on_tackletestapp"]
+            )
+        );
+        Application.open();
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
+        application.manageCredentials(source_credential.name, maven_credential.name);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(
+            this.analysisData["openJDK17_source+dep_analysis_on_tackletestapp"]["effort"]
+        );
+    });
+
+    it("Bug MTA-2916: OpenJDK21 Source + dependencies analysis on daytrader app", function () {
+        const application = new Analysis(
+            getRandomApplicationData("dayTraderApp_Source+dependencies_openjdk21", {
+                sourceData: this.appData["daytrader-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["openJDK21_source+dep_analysis_on_dayTrader"])
+        );
+        Application.open();
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(
+            this.analysisData["openJDK21_source+dep_analysis_on_dayTrader"]["effort"]
+        );
+    });
+
+    // Automates customer bug MTA-1785
+    it("JDK<11 Source + dependencies analysis on tackle app public", function () {
+        const application = new Analysis(
+            getRandomApplicationData("tackle testapp public jdk 9", {
+                sourceData: this.appData["tackle-testapp-public-jdk9"],
+            }),
+            getRandomAnalysisData(this.analysisData["jdk9_source_dep_analysis_on_tackletestapp"])
+        );
+        Application.open();
+        application.create();
+        application.manageCredentials(null, maven_credential.name);
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });

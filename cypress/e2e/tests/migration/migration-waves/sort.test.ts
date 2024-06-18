@@ -27,7 +27,6 @@ import {
     clickOnSortButton,
     createMultipleStakeholders,
     createMultipleBusinessServices,
-    generateRandomDateRange,
     cancelForm,
 } from "../../../../utils/utils";
 import { startDate, endDate, SortType } from "../../../types/constants";
@@ -35,13 +34,13 @@ import { startDate, endDate, SortType } from "../../../types/constants";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { name } from "../../../types/constants";
 import { MigrationWaveView } from "../../../views/migration-wave.view";
-import { Assessment } from "../../../models/migration/applicationinventory/assessment";
 import * as data from "../../../../utils/data_utils";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { BusinessServices } from "../../../models/migration/controls/businessservices";
+import { Application } from "../../../models/migration/applicationinventory/application";
 
 let migrationWavesList: MigrationWave[] = [];
-let applicationsList: Assessment[] = [];
+let applicationsList: Application[] = [];
 
 let stakeholdersList: Stakeholders[] = [];
 let businessServicesList: BusinessServices[] = [];
@@ -114,14 +113,12 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
                 owner: stakeholdersList[i].name,
                 business: businessServicesList[i].name,
             };
-            const application = new Assessment(appdata);
+            const application = new Application(appdata);
             application.create();
             applicationsList.push(application);
         }
-        const { start: startDate, end: endDate } = generateRandomDateRange();
-        const migrationWave = new MigrationWave(data.getRandomWord(4), startDate, endDate);
-        migrationWave.create();
-        migrationWave.openManageApplications();
+
+        migrationWavesList[0].openManageApplications();
         const unsortedAppList = getTableColumnData("Application Name");
         const unsortedBusinessList = getTableColumnData("Business service");
         const unsortedOwnerList = getTableColumnData("Owner");
@@ -163,7 +160,6 @@ describe(["@tier2"], "Migration Waves sort validations", function () {
         const afterDescSortOwnerList = getTableColumnData("Owner");
         verifyDateSortDesc(afterDescSortOwnerList, unsortedOwnerList);
         cancelForm();
-        migrationWavesList.push(migrationWave);
     });
 
     after("Perform test data clean up", function () {

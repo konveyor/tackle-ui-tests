@@ -38,7 +38,6 @@ import {
     criticality,
     priority,
     confidence,
-    deleteAction,
     applicationInventory,
     SEC,
     CredentialType,
@@ -46,32 +45,47 @@ import {
     credentialType,
     artifact,
     repositoryType,
-    analysis,
     owner,
     JiraType,
+    migration,
+    businessServiceLower,
+    issueFilter,
+    risk,
+    save,
+    archetypes,
+    SortType,
 } from "../e2e/types/constants";
 import {
-    actionButton,
     date,
     createEntitiesCheckbox,
-    sideKebabMenuImports,
+    sideKebabMenu,
     appImportForm,
+    kebabMenu,
+    applicationsActionButton,
 } from "../e2e/views/applicationinventory.view";
 import {
+    aboutButton,
+    closeAbout,
     closeSuccessNotification,
     confirmButton,
     divHeader,
+    filterDropDown,
+    filterDropDownContainer,
     firstPageButton,
     lastPageButton,
+    liTag,
     modal,
     nextPageButton,
     pageNumInput,
     prevPageButton,
+    searchButton,
+    span,
+    specialFilter,
+    standardFilter,
 } from "../e2e/views/common.view";
 import { tagLabels, tagMenuButton } from "../e2e/views/tags.view";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
-import { Assessment } from "../e2e/models/migration/applicationinventory/assessment";
-import { analysisData, applicationData, JiraConnectionData } from "../e2e/types/types";
+import { analysisData, AppIssue, applicationData, JiraConnectionData } from "../e2e/types/types";
 import { CredentialsProxy } from "../e2e/models/administration/credentials/credentialsProxy";
 import {
     getJiraConnectionData,
@@ -82,13 +96,27 @@ import {
 import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../e2e/models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../e2e/models/administration/credentials/credentialsSourceControlKey";
-import { switchToggle } from "../e2e/views/reports.view";
-import { MigrationWaveView } from "../e2e/views/migration-wave.view";
+import { switchToggle } from "../e2e/views/reportsTab.view";
 import Chainable = Cypress.Chainable;
 import { MigrationWave } from "../e2e/models/migration/migration-waves/migration-wave";
 import { Jira } from "../e2e/models/administration/jira-connection/jira";
 import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
 import { closeModal } from "../e2e/views/assessment.view";
+import { Application } from "../e2e/models/migration/applicationinventory/application";
+import { stakeHoldersTable } from "../e2e/views/stakeholders.view";
+import {
+    bsFilterName,
+    searchInput,
+    singleApplicationColumns,
+    tagFilterName,
+} from "../e2e/views/issue.view";
+import { Archetype } from "../e2e/models/migration/archetypes/archetype";
+import {
+    MigrationWaveView,
+    getSpecialMigrationWavesTableSelector,
+} from "../e2e/views/migration-wave.view";
+import { manageCredentials, mavenCredential, sourceCredential } from "../e2e/views/analysis.view";
+import * as ansiRegex from "ansi-regex";
 
 const { _ } = Cypress;
 
@@ -107,7 +135,7 @@ export function clearInput(fieldID: string): void {
 
 export function clickByText(
     fieldId: string,
-    buttonText: string,
+    buttonText: string | ansiRegex,
     isForced = true,
     log = false
 ): void {
@@ -153,8 +181,8 @@ export function clickJs(fieldId: string, isForced = true, log = false, number = 
 }
 
 export function submitForm(): void {
-    cy.get(commonView.submitButton).should("not.be.disabled");
-    cy.get(commonView.controlsForm).submit();
+    cy.get(commonView.submitButton, { timeout: 10 * SEC }).should("not.be.disabled");
+    clickJs(commonView.submitButton);
 }
 
 export function cancelForm(): void {
@@ -177,7 +205,12 @@ export function login(username?: string, password?: string, firstLogin = false):
         cy.visit(Cypress.env("tackleUrl"), { timeout: 120 * SEC });
         cy.wait(5000);
         cy.get("h1", { timeout: 120 * SEC, log: false }).then(($title) => {
-            if ($title.text().toString().trim() !== "Sign in to your account") {
+            // With auth disabled, login page is not displayed and users are taken straight
+            // to the Application Inventory page.
+            if (
+                $title.text().toString().trim() !== "Sign in to your account" &&
+                $title.text().includes("Application inventory")
+            ) {
                 return;
             }
 
@@ -228,11 +261,7 @@ export function logout(userName?: string): void {
 }
 
 export function resetURL(): void {
-    cy.url().then(($url) => {
-        if ($url.includes("report") || $url.includes("tasks")) {
-            login();
-        }
-    });
+    Application.open(true);
 }
 
 export function selectItemsPerPage(items: number): void {
@@ -269,21 +298,19 @@ export function selectFormItems(fieldId: string, item: string): void {
     cy.contains("button", item).click();
 }
 
-export function selectReactFormItems(
-    locator: string,
-    item: string,
-    formId?: string,
-    fieldId?: string
-): void {
-    if (!formId) {
-        formId = "FormGroup";
-    }
-    if (!fieldId) {
-        fieldId = "fieldId";
-    }
-    cy.waitForReact();
-    cy.react(formId, { props: { fieldId: locator } }).click();
-    cy.contains("button", item).click();
+export function selectRow(name: string): void {
+    // Clicks on a particular row on any table
+    cy.get(tdTag, { timeout: 10 * SEC })
+        .contains(name)
+        .closest(trTag)
+        .click();
+}
+
+export function sidedrawerTab(name: string, tab: string): void {
+    selectRow(name);
+    cy.get(commonView.sideDrawer.pageDrawerContent).within(() => {
+        clickTab(tab);
+    });
 }
 
 export function checkSuccessAlert(fieldId: string, message: string, close = false): void {
@@ -293,8 +320,28 @@ export function checkSuccessAlert(fieldId: string, message: string, close = fals
     }
 }
 
-export function validateTextPresence(fieldId: string, message: string): void {
-    cy.get(fieldId, { timeout: 150 * SEC }).should("contain.text", message);
+export function validateTextPresence(fieldId: string, message: string, shouldBeFound = true): void {
+    if (shouldBeFound) {
+        cy.get(fieldId, { timeout: 150 * SEC }).should("contain.text", message);
+    } else {
+        cy.get(fieldId, { timeout: 150 * SEC }).should("not.contain.text", message);
+    }
+}
+
+export function validateNumberPresence(fieldId: string, value: number): void {
+    cy.get(fieldId)
+        .invoke("text")
+        .then((text) => {
+            cy.wrap(parseFloat(text)).should("eq", value);
+        });
+}
+
+export function validateAnyNumberPresence(fieldId: string): void {
+    cy.get(fieldId)
+        .invoke("text")
+        .then((text) => {
+            expect(parseFloat(text)).to.not.be.NaN;
+        });
 }
 
 export function closeSuccessAlert(): void {
@@ -330,10 +377,8 @@ export function selectFilter(filterName: string, identifiedRisk?: boolean, value
     cy.get(commonView.selectFilter)
         .eq(value)
         .within(() => {
-            cy.get("#filtered-by").click();
-            cy.get("ul.pf-v5-c-dropdown__menu").within(() => {
-                clickByText("a", filterName);
-            });
+            click("#filtered-by");
+            clickWithinByText('div[class="pf-v5-c-menu__content"]', "button", filterName);
         });
 }
 
@@ -348,74 +393,127 @@ export function clearAllFilters(): void {
     cy.contains(button, "Clear all filters").click({ force: true });
 }
 
+export function filterIssueBy(filterType: issueFilter, filterValue: string | string[]): void {
+    let selector = "";
+    selectFilter(filterType);
+    const isApplicableFilter =
+        filterType === issueFilter.appName ||
+        filterType === issueFilter.category ||
+        filterType === issueFilter.source ||
+        filterType === issueFilter.target;
+
+    if (isApplicableFilter) {
+        if (Array.isArray(filterValue)) {
+            filterValue.forEach((current) => {
+                inputText(searchInput, current);
+                click(searchButton);
+            });
+        } else {
+            inputText(searchInput, filterValue);
+            click(searchButton);
+        }
+    } else {
+        if (filterType == issueFilter.bs) {
+            selector = bsFilterName;
+        } else if (filterType == issueFilter.tags) {
+            selector = tagFilterName;
+        }
+        click(selector);
+        if (Array.isArray(filterValue)) {
+            filterValue.forEach((name) => {
+                clickByText(span, name);
+            });
+        } else {
+            clickByText(span, filterValue);
+        }
+        click(selector);
+    }
+}
+
+export function validateSingleApplicationIssue(issue: AppIssue): void {
+    cy.contains(issue.name)
+        .closest(trTag)
+        .within(() => {
+            validateTextPresence(singleApplicationColumns.issue, issue.name);
+            validateTextPresence(singleApplicationColumns.category, issue.category);
+            validateTextPresence(singleApplicationColumns.source, issue.source);
+            cy.get(singleApplicationColumns.target).within(() => {
+                issue.targets.forEach((currentTarget) => {
+                    validateTextPresence(liTag, currentTarget);
+                });
+            });
+            validateNumberPresence(singleApplicationColumns.effort, issue.effort);
+            validateNumberPresence(singleApplicationColumns.files, issue.affectedFiles);
+        });
+}
+
 export function applySelectFilter(filterId, filterName, filterText, isValid = true): void {
     selectFilter(filterName);
-    click("#" + filterId + "-filter-value-select");
-    inputText("input.pf-c-form-control.pf-m-search", filterText);
+    click(".pf-v5-c-menu-toggle__button");
+    inputText(".pf-v5-c-text-input-group__text-input", filterText);
     if (isValid) {
-        clickByText("span.pf-c-check__label", filterText);
+        clickByText(".pf-v5-c-menu__item", filterText);
     } else {
-        cy.contains("div.pf-c-select__menu", "No results found");
+        cy.contains("span.pf-v5-c-menu__item-text", "No results");
     }
-    click("#" + filterId + "-filter-value-select");
+    click(".pf-v5-c-text-input-group__text-input");
 }
 
 export function applySearchFilter(
     filterName: string,
-    searchText: any,
-    identifiedRisk?: boolean,
+    searchText: string | string[],
+    identifiedRisk = false,
     value?: number
 ): void {
     selectFilter(filterName, identifiedRisk, value);
-    if (
-        filterName == businessService ||
-        filterName == tag ||
-        filterName == credentialType ||
-        filterName == artifact ||
-        filterName == repositoryType ||
-        filterName == owner
-    ) {
-        cy.get("div.pf-v5-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show")
-            .find("div.pf-v5-c-select")
-            .click();
-        if (
-            filterName == businessService ||
-            filterName == repositoryType ||
-            filterName == artifact ||
-            filterName == owner
-        ) {
-            // ul[role=listbox] > li is for the Application Inventory page.
-            // span.pf-c-check__label is for the Copy assessment page.
-            cy.get("ul[role=listbox] > li, span.pf-v5-c-check__label").contains(searchText).click();
-        }
-        if (filterName == tag || filterName == credentialType) {
-            if (Array.isArray(searchText)) {
-                searchText.forEach(function (searchTextValue) {
-                    cy.get("div.pf-v5-c-select__menu > fieldset > label > span")
-                        .contains(searchTextValue)
-                        .click();
+    const isStandardKnownFilter = [
+        businessServiceLower,
+        businessService,
+        repositoryType,
+        artifact,
+        owner,
+        archetypes,
+    ].includes(filterName);
+    const isSpecialKnownFilter = [tag, credentialType, risk].includes(filterName);
+    let filterValue = [];
+    if (!Array.isArray(searchText)) {
+        filterValue = [searchText];
+    } else filterValue = searchText;
+
+    cy.url().then(($url) => {
+        if (!isStandardKnownFilter && !isSpecialKnownFilter) {
+            if ($url == Application.fullUrl && filterName == "Name") {
+                // Only on application page you can select multiple
+                // applications from dropdown.
+                cy.get(filterDropDownContainer).find(filterDropDown).click();
+                filterValue.forEach((searchTextValue) => {
+                    cy.get(specialFilter).contains(searchTextValue).click();
                 });
+                return;
             } else {
-                cy.get("div.pf-v5-c-select__menu").contains(searchText).click();
+                filterValue.forEach((searchTextValue) =>
+                    filterInputText(searchTextValue, +identifiedRisk)
+                );
+                cy.wait(4000);
+                return;
             }
         }
-    } else {
-        if (Array.isArray(searchText)) {
-            searchText.forEach(function (searchTextValue) {
-                if (identifiedRisk) {
-                    filterInputText(searchTextValue, 1);
-                } else {
-                    filterInputText(searchTextValue, 0);
-                }
-            });
-        } else {
-            if (identifiedRisk) {
-                filterInputText(searchText, 1);
-            } else {
-                filterInputText(searchText, 0);
-            }
-        }
+    });
+
+    if (isStandardKnownFilter) {
+        cy.get(filterDropDownContainer).find(filterDropDown).click();
+        filterValue.forEach((searchTextValue) => {
+            cy.get(standardFilter).contains(searchTextValue).click();
+        });
     }
+
+    if (isSpecialKnownFilter) {
+        cy.get(filterDropDownContainer).find(filterDropDown).click();
+        filterValue.forEach((searchTextValue) => {
+            cy.get(specialFilter).contains(searchTextValue).click();
+        });
+    }
+
     cy.wait(4000);
 }
 
@@ -467,41 +565,6 @@ export function generateRandomDateRange(
         start: startDate,
         end: endDate,
     };
-}
-
-export function sortAscCopyAssessmentTable(sortCriteria: string): void {
-    cy.get(`.pf-m-compact > thead > tr > th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
-        if (
-            $tableHeader.attr("aria-sort") === "descending" ||
-            $tableHeader.attr("aria-sort") === "none"
-        ) {
-            $tableHeader.find("button").trigger("click");
-        }
-    });
-}
-
-export function sortDescCopyAssessmentTable(sortCriteria: string): void {
-    cy.get(`.pf-m-compact > thead > tr > th[data-label="${sortCriteria}"]`).then(($tableHeader) => {
-        if (
-            $tableHeader.attr("aria-sort") === "ascending" ||
-            $tableHeader.attr("aria-sort") === "none"
-        ) {
-            $tableHeader.find("button").trigger("click");
-        }
-    });
-}
-
-export function getColumnDataforCopyAssessmentTable(columnName: string): Array<string> {
-    selectItemsPerPage(100);
-    cy.wait(4000);
-    let itemList = [];
-    cy.get(".pf-m-compact > tbody > tr")
-        .not(".pf-c-table__expandable-row")
-        .find(`td[data-label="${columnName}"]`)
-        .each(($ele) => {
-            if ($ele.text() !== "") itemList.push($ele.text().toString().toLowerCase());
-        });
-    return itemList;
 }
 
 export function getTableColumnData(columnName: string): Array<string> {
@@ -651,50 +714,26 @@ export function notExistsWithinRow(
         .should("not.contain", valueToSearch);
 }
 
-export function deleteTableRows(tableSelector = commonView.appTable): void {
-    cy.get(tableSelector).get("tbody").find(trTag).as("rowsIdentifier");
-    cy.get("@rowsIdentifier").then(($tableRows) => {
-        for (let i = 0; i < $tableRows.length; i++) {
-            cy.get("@rowsIdentifier")
-                .eq(0)
-                .within(() => {
-                    click(commonView.deleteButton);
-                });
-            cy.get(commonView.confirmButton).click();
-            cy.wait(2 * SEC);
-        }
-    });
-}
-
 export function importApplication(fileName: string, disableAutoCreation?: boolean): void {
     // Performs application import via csv file upload
     application_inventory_kebab_menu("Import");
-    cy.get('input[type="file"]', { timeout: 2 * SEC }).attachFile(fileName, {
+    cy.get("#file-filename", { timeout: 2 * SEC }).attachFile(fileName, {
         subjectType: "drag-n-drop",
     });
-
     //Uncheck createEntitiesCheckbox if auto creation of entities is disabled
     if (disableAutoCreation)
-        cy.get(createEntitiesCheckbox)
-            .invoke("attr", "enabled")
-            .then((enabled) => {
-                enabled ? cy.log("Button is disabled") : cy.get(createEntitiesCheckbox).uncheck();
-            });
+        cy.get(createEntitiesCheckbox).then((enabled) => {
+            enabled.prop("checked") ? cy.log("Button is disabled") : click(createEntitiesCheckbox);
+        });
 
     cy.get(appImportForm, { timeout: 5 * SEC })
         .find("button")
         .contains("Import")
-        .trigger("click");
+        .click();
     checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
-    // unresolved bug https://issues.redhat.com/browse/TACKLE-927
 }
 
-export function uploadXml(fileName: string, customSelector?: string): void {
-    let selector = 'input[type="file"]';
-    if (customSelector) {
-        selector = customSelector;
-    }
-    // Uplaod any file
+export function uploadXml(fileName: string, selector = 'input[type="file"]'): void {
     cy.get(selector, { timeout: 5 * SEC }).attachFile(
         { filePath: fileName, mimeType: "text/xml", encoding: "utf-8" },
         { subjectType: "drag-n-drop" }
@@ -703,38 +742,32 @@ export function uploadXml(fileName: string, customSelector?: string): void {
 }
 
 export function uploadApplications(fileName: string): void {
-    // Uplaod any file
-    cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(
-        { filePath: fileName, encoding: "binary" },
-        { subjectType: "drag-n-drop" }
-    );
-    cy.wait(2000);
+    cy.get('input[type="file"]', { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
+        action: "drag-drop",
+        timeout: 120 * SEC,
+        force: true,
+    });
 }
 
 export function uploadFile(fileName: string): void {
-    // Uplaod any file
     cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(fileName, {
         subjectType: "drag-n-drop",
     });
     cy.wait(2000);
 }
 
-export function navigate_to_application_inventory(tab?): void {
-    cy.get("h1", { timeout: 5 * SEC }).then(($header) => {
-        if (!$header.text().includes("Application inventory")) {
-            selectUserPerspective("Migration");
-            clickByText(navMenu, applicationInventory);
-        }
-    });
-    if (tab == "Analysis") clickByText(navTab, analysis);
+export function navigate_to_application_inventory(): void {
+    selectUserPerspective(migration);
+    clickByText(navMenu, applicationInventory);
 }
 
-export function application_inventory_kebab_menu(menu, tab?): void {
+export function application_inventory_kebab_menu(menu: string): void {
     // The value for menu could be one of {Import, Manage imports, Delete, Manage credentials}
-    if (tab == "Analysis") navigate_to_application_inventory("Analysis");
-    else navigate_to_application_inventory();
+    navigate_to_application_inventory();
 
-    cy.get(actionButton).eq(0).click({ force: true });
+    cy.get(applicationsActionButton, { timeout: 60 * SEC })
+        .eq(0)
+        .click({ force: true });
     if (menu == "Import") {
         clickByText(button, "Import");
     } else {
@@ -745,7 +778,7 @@ export function application_inventory_kebab_menu(menu, tab?): void {
                     clickByText(button, menu, true);
                 } else {
                     // close menu if nothing to do
-                    cy.get(actionButton).eq(0).click({ force: true });
+                    cy.get(applicationsActionButton).eq(0).click({ force: true });
                 }
             });
     }
@@ -759,135 +792,12 @@ export function openManageImportsPage(): void {
         .contains("Application imports");
 }
 
-export function openErrorReport(): void {
-    // Open error report for the first row
-    cy.get("table > tbody > tr").eq(0).as("firstRow");
-    cy.get("@firstRow").find(sideKebabMenuImports).click();
-    cy.get("@firstRow").find(button).contains("View error report").click();
-    cy.get("h1", { timeout: 5 * SEC }).contains("Error report");
-}
-
-export function verifyAppImport(
-    fileName: string,
-    status: string,
-    accepted: number,
-    rejected: number
-): void {
-    // Verify the app import features for a single row
-    cy.get("table > tbody > tr").eq(0).as("firstRow");
-    cy.get("@firstRow").find("td[data-label='File name']").should("contain", fileName);
-    cy.get("@firstRow").find("td[data-label='Status']").find("div").should("contain", status);
-    cy.get("@firstRow").find("td[data-label='column-4']").should("contain", accepted);
-    cy.get("@firstRow").find("td[data-label='column-5']").should("contain", rejected);
-}
-
-export function verifyImportErrorMsg(errorMsg: any): void {
-    // Verifies if the error message appears in the error report table
-    if (Array.isArray(errorMsg)) {
-        errorMsg.forEach(function (message) {
-            cy.get("table > tbody > tr > td").should("contain", message);
-        });
-    } else {
-        cy.get("table > tbody > tr > td").should("contain", errorMsg);
-    }
-}
-
-export function migration_wave_kebab_menu(menu): void {
-    // The value for menu could be one of {Export to Issue Manager, Delete}
-    cy.get(actionButton).eq(1).click({ force: true });
-    cy.get(commonView.kebabMenuItem).contains(menu).click({ force: true });
-}
-
-export function deleteAllMigrationWaves(currentPage = false): void {
-    MigrationWave.open();
-    cy.wait(2000);
-    cy.get(MigrationWaveView.waveTable)
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.wait(1000);
-                cy.get("span.pf-c-options-menu__toggle-text")
-                    .eq(0)
-                    .then(($body) => {
-                        if (!$body.text().includes("of 0")) {
-                            if (currentPage) {
-                                cy.get(".pf-c-dropdown__toggle-button").click({ force: true });
-                                clickByText(button, "Select page");
-                            } else {
-                                cy.get("input#bulk-selected-items-checkbox", {
-                                    timeout: 10 * SEC,
-                                }).check({ force: true });
-                            }
-
-                            migration_wave_kebab_menu("Delete");
-                            clickByText(button, "Delete", true);
-                        }
-                    });
-            }
-        });
-}
-
-export function deleteApplicationTableRows(): void {
-    // Delete all rows one by one for which Delete button is enabled
-    // to be used only in manageImports tests as we don't know which apps
-    // are imported. For all other tests use deleteByList(appList)
-    navigate_to_application_inventory();
-    cy.get(commonView.appTable)
-        .find(trTag)
-        .each(($tableRow) => {
-            if ($tableRow.hasClass("pf-m-clickable")) {
-                cy.wrap($tableRow).within(() => {
-                    cy.get(sideKebabMenuImports, { timeout: 10000 }).click();
-                    cy.get("ul[role=menu] > li").contains("Delete").click();
-                });
-                cy.get(commonView.confirmButton).click();
-                cy.wait(4000);
-            }
-        });
-}
-
-export function deleteAppImportsTableRows() {
-    function deleteItems(rowCount: number): void {
-        if (rowCount < 1) return;
-        cy.get(sideKebabMenuImports, { timeout: 10000 }).first().click();
-        cy.get("ul[role=menu] > li").contains("Delete").click();
-        cy.get(commonView.confirmButton)
-            .click()
-            .then(() => {
-                cy.wait(4000);
-                deleteItems(--rowCount);
-            });
-    }
-
-    openManageImportsPage();
-    cy.get(commonView.appTable)
-        .find(trTag)
-        .then(($rows) => {
-            const rowCount = $rows.length - 1;
-
-            if (rowCount >= 1) deleteItems(rowCount);
-        });
-}
-
-// TODO: Delete calls to this method and then remove it
-export function preservecookies(): void {}
-
-// Checks if the hook has to be skipped, if the tag is not mentioned during test run
-export function hasToBeSkipped(tagName: string): boolean {
-    if (Cypress.env("grepTags")) {
-        if (!Cypress.env("grepTags").includes(tagName)) return true;
-    }
-    return false;
-}
-
 // Perform edit/delete action on the specified row selector by clicking a text button
 export function performRowAction(itemName: string, action: string): void {
     // itemName is text to be searched on the screen (like credentials name, stakeholder name, etc)
     // Action is the name of the action to be applied (usually edit or delete)
-
     cy.get(tdTag, { timeout: 120 * SEC })
         .contains(itemName, { timeout: 120 * SEC })
-        // .closest(tdTag)
         .closest(trTag)
         .within(() => {
             clickByText(button, action);
@@ -908,6 +818,22 @@ export function performRowActionByIcon(itemName: string, action: string): void {
         .within(() => {
             clickWithin(action, button);
         });
+}
+
+export function clickItemInKebabMenu(rowItem, itemName: string): void {
+    performRowActionByIcon(rowItem, kebabMenu);
+    cy.get(commonView.actionMenuItem).contains(itemName).click();
+}
+
+export function clickKebabMenuOptionArchetype(rowItem: string, itemName: string): void {
+    // The clickItemInKebabMenu() fn can't be used on the Archetype page just yet because the
+    // the individual archetypes don't have an id for their kebab menu.
+    cy.contains(rowItem)
+        .closest(trTag)
+        .within(() => {
+            click(sideKebabMenu);
+        });
+    cy.get(commonView.actionMenuItem).contains(itemName).click();
 }
 
 export function createMultipleJiraConnections(
@@ -996,6 +922,7 @@ export function createMultipleMigrationWaves(
     stakeholdersList?: Array<Stakeholders>,
     stakeholderGroupsList?: Array<Stakeholdergroups>
 ): Array<MigrationWave> {
+    cy.intercept("GET", "/hub/migrationwaves*").as("getWave");
     const migrationWaveList: Array<MigrationWave> = [];
     for (let i = 0; i < numberOfMigrationWaves; i++) {
         const now = new Date();
@@ -1012,6 +939,8 @@ export function createMultipleMigrationWaves(
         );
         migrationWave.create();
         migrationWaveList.push(migrationWave);
+        cy.wait("@getWave");
+        cy.wait("@getWave", { timeout: 10 * SEC });
     }
     return migrationWaveList;
 }
@@ -1024,6 +953,20 @@ export function createMultipleJobFunctions(num): Array<Jobfunctions> {
         jobFunctionsList.push(jobFunction);
     }
     return jobFunctionsList;
+}
+
+export function createMultipleArchetypes(number, tags?: Tag[]): Archetype[] {
+    const randomTagName = "3rd party / Apache Aries";
+    let archetypesList: Archetype[] = [];
+    for (let i = 0; i < number; i++) {
+        let archetype: Archetype;
+        if (tags) archetype = new Archetype(data.getRandomWord(6), [tags[i].name], [tags[i].name]);
+        else archetype = new Archetype(data.getRandomWord(6), [randomTagName], [randomTagName]);
+        archetype.create();
+        cy.wait(2 * SEC);
+        archetypesList.push(archetype);
+    }
+    return archetypesList;
 }
 
 export function createMultipleStakeholderGroups(
@@ -1114,15 +1057,6 @@ export function generateMultipleCredentials(amount: number): Credentials[] {
     return createdCredentialsList;
 }
 
-export function getRowsAmount(): number {
-    let amount: number;
-    cy.get(commonView.appTable).get("tbody").find(trTag).as("rowsIdentifier");
-    cy.get("@rowsIdentifier").then(($tableRows) => {
-        amount = $tableRows.length;
-    });
-    return amount;
-}
-
 export function getRandomApplicationData(
     appName?,
     options?: { sourceData?; binaryData? },
@@ -1171,7 +1105,7 @@ export function getRandomAnalysisData(analysisdata): analysisData {
         enableTransaction: analysisdata.enableTransaction,
         disableTagging: analysisdata.disableTagging,
         appName: analysisdata.appName,
-        storyPoints: analysisdata.storyPoints,
+        effort: analysisdata.effort,
         excludePackages: analysisdata.excludePackages,
         excludeRuleTags: analysisdata.excludeRuleTags,
         manuallyAnalyzePackages: analysisdata.manuallyAnalyzePackages,
@@ -1181,11 +1115,16 @@ export function getRandomAnalysisData(analysisdata): analysisData {
     };
 }
 
-export function createMultipleApplications(numberofapplications: number): Array<Assessment> {
-    let applicationList: Array<Assessment> = [];
+export function createMultipleApplications(
+    numberofapplications: number,
+    tags?: string[]
+): Array<Application> {
+    let applicationList: Array<Application> = [];
+    let application: Application;
     for (let i = 0; i < numberofapplications; i++) {
         // Navigate to application inventory tab and create new application
-        const application = new Assessment(getRandomApplicationData());
+        if (tags) application = new Application(getRandomApplicationData(null, null, tags));
+        else application = new Application(getRandomApplicationData());
         application.create();
         applicationList.push(application);
         cy.wait(2000);
@@ -1198,8 +1137,8 @@ export function createMultipleApplicationsWithBSandTags(
     businessservice?: Array<BusinessServices>,
     tagList?: Array<Tag>,
     stakeholder?: Array<Stakeholders>
-): Array<Assessment> {
-    let applicationList: Array<Assessment> = [];
+): Array<Application> {
+    let applicationList: Array<Application> = [];
     let tags: string[];
     let business = "";
     let owner = "";
@@ -1216,27 +1155,12 @@ export function createMultipleApplicationsWithBSandTags(
             comment: data.getDescription(),
             owner: owner,
         };
-        const application = new Assessment(appdata);
+        const application = new Application(appdata);
         application.create();
         applicationList.push(application);
         cy.wait(2000);
     }
     return applicationList;
-}
-
-export function createApplicationObjects(numberOfObjects: number): Array<Assessment> {
-    let applicationObjectsList: Array<Assessment> = [];
-    for (let i = 0; i < numberOfObjects; i++) {
-        // Create an object of application
-        const application = new Assessment(getRandomApplicationData());
-        applicationObjectsList.push(application);
-    }
-    return applicationObjectsList;
-}
-
-export function deleteAllJobfunctions(cancel = false): void {
-    Jobfunctions.openList();
-    deleteAllItems();
 }
 
 type Deletable = { delete: () => void };
@@ -1246,89 +1170,6 @@ export function deleteByList<T extends Deletable>(array: T[]): void {
         cy.wait(0.8 * SEC);
         element.delete();
     });
-}
-
-export function deleteAllStakeholders(): void {
-    Stakeholders.openList();
-    cy.get("table[aria-label='Stakeholders table']", { timeout: 2 * SEC }).then(($tbody) => {
-        if (!$tbody.text().includes("No data available")) {
-            selectItemsPerPage(100);
-            cy.get(commonView.deleteButton).then(($elems) => {
-                const elemsLength = $elems.length;
-                for (let i = 0; i < elemsLength; i++) {
-                    cy.get(commonView.deleteButton)
-                        .first()
-                        .click()
-                        .then((_) => {
-                            cy.wait(0.5 * SEC);
-                            click(commonView.confirmButton);
-                            cy.wait(SEC);
-                        });
-                }
-            });
-        }
-    });
-}
-
-export function deleteAllStakeholderGroups(cancel = false): void {
-    Stakeholdergroups.openList();
-    deleteAllItems();
-}
-
-export function deleteAllBusinessServices() {
-    BusinessServices.openList();
-    cy.get(commonView.appTable)
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
-                    .each(($tableRow) => {
-                        const name = $tableRow.find("td[data-label=Name]").text();
-                        cy.get(tdTag)
-                            .contains(name)
-                            .closest(trTag)
-                            .contains(button, deleteAction)
-                            .then(($delete_btn) => {
-                                if (!$delete_btn.hasClass("pf-m-aria-disabled")) {
-                                    $delete_btn.click();
-                                    cy.wait(800);
-                                    click(commonView.confirmButton);
-                                    cy.wait(2000);
-                                }
-                            });
-                    });
-            }
-        });
-}
-
-export function deleteAllTagCategory(cancel = false): void {
-    TagCategory.openList();
-    cy.get(commonView.appTable, { timeout: 2 * SEC })
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
-                    .each(($tableRow) => {
-                        cy.wait(1000);
-                        let name = $tableRow.find('td[data-label="Tag type"]').text();
-                        if (!(data.getDefaultTagCategories().indexOf(name) > -1)) {
-                            cy.get(tdTag)
-                                .contains(name)
-                                .parent(trTag)
-                                .within(() => {
-                                    click(commonView.deleteButton);
-                                    cy.wait(1000);
-                                });
-                            click(commonView.confirmButton);
-                            cy.wait(4000);
-                        }
-                    });
-            }
-        });
 }
 
 export function deleteAllTagsAndTagCategories(): void {
@@ -1382,37 +1223,146 @@ export function deleteAllTagsAndTagCategories(): void {
         });
 }
 
-export async function deleteAllCredentials() {
-    Credentials.openList();
-    deleteAllItems();
+export function isTableEmpty(
+    tableSelector: string = commonView.commonTable
+): Cypress.Chainable<boolean> {
+    return cy
+        .get(tableSelector)
+        .find("div")
+        .then(($element) => {
+            return $element.hasClass("pf-v5-c-empty-state");
+        });
 }
 
-export function deleteAllItems(amountPerPage = 100, pageNumber?: number) {
-    selectItemsPerPage(amountPerPage);
+export function deleteAllRows(tableSelector: string = commonView.commonTable) {
+    // This method if for pages that have delete button inside Kebab menu
+    // like Applications and Imports page
+    isTableEmpty().then((empty) => {
+        if (!empty) {
+            cy.get(tableSelector)
+                .find(trTag)
+                .then(($rows) => {
+                    for (let i = 0; i < $rows.length - 1; i++) {
+                        cy.get(sideKebabMenu, { timeout: 10000 }).first().click();
+                        cy.get("ul[role=menu] > li").contains("Delete").click();
+                        cy.get(commonView.confirmButton).click();
+                        cy.wait(5000);
+                        isTableEmpty().then((empty) => {
+                            if (empty) return;
+                        });
+                    }
+                });
+        }
+    });
+}
+
+export function deleteAllImports(tableSelector: string = commonView.commonTable) {
+    isTableEmpty().then((empty) => {
+        if (!empty) {
+            cy.get(tableSelector)
+                .find(trTag)
+                .then(($rows) => {
+                    for (let i = 0; i < $rows.length - 1; i++) {
+                        cy.get(commonView.manageImportsActionsButton, { timeout: 10000 })
+                            .eq(1)
+                            .click();
+                        cy.get("ul[role=menu] > li").contains("Delete").click();
+                        cy.get(commonView.confirmButton).click();
+                        cy.wait(2 * SEC);
+                    }
+                });
+        }
+    });
+}
+
+export function deleteAllItems(
+    tableSelector: string = commonView.commonTable,
+    pageNumber?: number
+) {
+    // This method if for pages like controls that do not have delete button inside kebabmenu
     if (pageNumber) {
         goToPage(pageNumber);
     }
-    cy.get(commonView.appTable, { timeout: 15 * SEC })
-        .next()
-        .then(($div) => {
-            if (!$div.hasClass("pf-c-empty-state")) {
-                cy.get("tbody")
-                    .find(trTag)
-                    .not(".pf-c-table__expandable-row")
-                    .each(($tableRow) => {
-                        let name = $tableRow.find("td[data-label=Name]").text();
-                        cy.get(tdTag)
-                            .contains(name)
-                            .closest(trTag)
-                            .within(() => {
-                                click(commonView.deleteButton);
-                                cy.wait(SEC);
+    isTableEmpty().then((empty) => {
+        if (!empty) {
+            cy.get(tableSelector)
+                .find(trTag)
+                .then(($rows) => {
+                    for (let i = 0; i < $rows.length - 1; i++) {
+                        cy.get(commonView.deleteButton, { timeout: 10000 })
+                            .first()
+                            .then(($delete_btn) => {
+                                if (!$delete_btn.hasClass("pf-m-aria-disabled")) {
+                                    $delete_btn.click();
+                                    cy.wait(0.5 * SEC);
+                                    click(commonView.confirmButton);
+                                    cy.wait(SEC);
+                                }
                             });
-                        click(commonView.confirmButton);
-                        cy.wait(SEC);
+                    }
+                });
+        }
+    });
+}
+
+export function deleteAllBusinessServices() {
+    BusinessServices.openList();
+    deleteAllItems();
+}
+
+export function deleteAllStakeholderGroups(cancel = false): void {
+    Stakeholdergroups.openList();
+    deleteAllItems();
+}
+
+export function deleteAllStakeholders(): void {
+    Stakeholders.openList();
+    deleteAllItems(stakeHoldersTable);
+}
+
+export function deleteAllArchetypes() {
+    Archetype.open();
+    selectItemsPerPage(100);
+    deleteAllRows();
+}
+
+export function deleteApplicationTableRows(): void {
+    navigate_to_application_inventory();
+    selectItemsPerPage(100);
+    deleteAllRows();
+}
+export function validatePageTitle(pageTitle: string) {
+    return cy.get(commonView.pageTitle).then((h1) => {
+        return h1.text().includes(pageTitle);
+    });
+}
+
+export function deleteAllMigrationWaves() {
+    MigrationWave.open();
+    selectItemsPerPage(100);
+    // This method if for pages that have delete button inside Kebab menu
+    // like Applications and Imports page
+    isTableEmpty().then((empty) => {
+        if (!empty) {
+            cy.get("tbody tr").then(($rows) => {
+                for (let i = 0; i < $rows.length; i++) {
+                    cy.get(MigrationWaveView.actionsButton, { timeout: 10000 }).first().click();
+                    cy.contains("Delete").click();
+                    cy.get(commonView.confirmButton).click();
+                    cy.wait(5000);
+                    isTableEmpty().then((empty) => {
+                        if (empty) return;
                     });
-            }
-        });
+                }
+            });
+        }
+    });
+}
+
+export function deleteAppImportsTableRows() {
+    openManageImportsPage();
+    selectItemsPerPage(100);
+    deleteAllImports();
 }
 
 export const deleteFromArray = <T>(array: T[], el: T): T[] => {
@@ -1444,19 +1394,8 @@ export function goToPage(page: number): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    cy.get(commonView.optionMenu, { timeout: 100 * SEC })
-        .eq(0)
-        .click()
-        .then(($a) => {
-            if (userType == "Migration") {
-                const adminBtn = $a.find('button:contains("Administration")');
-                if (adminBtn.length) {
-                    clickByText(commonView.userPerspectiveMenu, "Administration");
-                    $a.trigger("click");
-                }
-            }
-            clickByText(commonView.userPerspectiveMenu, userType);
-        });
+    cy.get(commonView.optionMenu).click();
+    cy.get(commonView.actionMenuItem).contains(userType).click();
 }
 
 export function selectWithinModal(selector: string): void {
@@ -1546,7 +1485,7 @@ export function validatePagination(): void {
     cy.get(firstPageButton).should("be.disabled");
 
     // Navigate to next page
-    cy.get(nextPageButton).eq(0).click();
+    cy.get(nextPageButton).eq(0).click({ force: true });
 
     // Verify that previous buttons are enabled after moving to next page
     cy.get(prevPageButton).each(($previousBtn) => {
@@ -1558,6 +1497,44 @@ export function validatePagination(): void {
 
     // Moving back to the first page
     cy.get(firstPageButton).eq(0).click();
+}
+
+export function itemsPerPageValidation(
+    tableSelector = commonView.appTable,
+    columnName = "Name"
+): void {
+    selectItemsPerPage(10);
+    cy.wait(2000);
+
+    // Verify that only 10 items are displayed
+    cy.get(tableSelector)
+        .find(`td[data-label='${columnName}']`)
+        .then(($rows) => {
+            cy.wrap($rows.length).should("eq", 10);
+        });
+
+    selectItemsPerPage(20);
+    cy.wait(2000);
+
+    // Verify that items less than or equal to 20 and greater than 10 are displayed
+    cy.get(tableSelector)
+        .find(`td[data-label='${columnName}']`)
+        .then(($rows) => {
+            cy.wrap($rows.length).should("be.lte", 20).and("be.gt", 10);
+        });
+}
+
+export function autoPageChangeValidations(
+    tableSelector = commonView.appTable,
+    columnName = "Name"
+): void {
+    selectItemsPerPage(10);
+    goToLastPage();
+    deleteAllItems(tableSelector);
+    // Verify that page is re-directed to previous page
+    cy.get(`td[data-label='${columnName}']`).then(($rows) => {
+        cy.wrap($rows.length).should("eq", 10);
+    });
 }
 
 export function goToLastPage(): void {
@@ -1590,9 +1567,10 @@ export function writeMavenSettingsFile(username: string, password: string, url?:
             cy.writeFile("cypress/fixtures/xml/settings.xml", "");
             return;
         }
-        var xml = data.toString();
         const parser = new DOMParser();
-        const xmlDOM = parser.parseFromString(xml, "text/xml");
+        const xmlDOM = parser.parseFromString(data.toString(), "text/xml");
+        const serializer = new XMLSerializer();
+
         xmlDOM.getElementsByTagName("username")[0].childNodes[0].nodeValue = username;
         xmlDOM.getElementsByTagName("password")[0].childNodes[0].nodeValue = password;
         if (url) {
@@ -1600,37 +1578,32 @@ export function writeMavenSettingsFile(username: string, password: string, url?:
                 .getElementsByTagName("repository")[1]
                 .getElementsByTagName("url")[0].childNodes[0].nodeValue = url;
         }
-        var serializer = new XMLSerializer();
-        var writetofile = serializer.serializeToString(xmlDOM);
-        cy.writeFile("cypress/fixtures/xml/settings.xml", writetofile);
+
+        cy.writeFile("cypress/fixtures/xml/settings.xml", serializer.serializeToString(xmlDOM));
     });
 }
 
 export function writeGpgKey(git_key): void {
     cy.readFile("cypress/fixtures/gpgkey").then((data) => {
-        var key = git_key;
-        var beginningKey: string = "-----BEGIN RSA PRIVATE KEY-----";
-        var endingKey: string = "-----END RSA PRIVATE KEY-----";
-        var keystring = key.toString().split(" ").join("\n");
-        var gpgkey = beginningKey + "\n" + keystring + "\n" + endingKey;
+        const key = git_key;
+        const beginningKey = "-----BEGIN RSA PRIVATE KEY-----";
+        const endingKey = "-----END RSA PRIVATE KEY-----";
+        const keystring = key.toString().split(" ").join("\n");
+        const gpgkey = beginningKey + "\n" + keystring + "\n" + endingKey;
         cy.writeFile("cypress/fixtures/gpgkey", gpgkey);
     });
 }
 
 export function doesExistSelector(selector: string, isAccessible: boolean): void {
-    if (isAccessible) {
-        cy.get(selector).should("exist");
-    } else {
-        cy.get(selector).should("not.exist");
-    }
+    cy.get(selector).should(isAccessible ? "exist" : "not.exist");
 }
 
 export function doesExistText(str: string, toBePresent: boolean): void {
-    if (toBePresent) {
-        cy.contains(str, { timeout: 120 * SEC }).should("exist");
-    } else {
-        cy.contains(str, { timeout: 120 * SEC }).should("not.exist");
-    }
+    cy.contains(str).should(toBePresent ? "exist" : "not.exist");
+}
+
+export function doesExistButton(str: string, toBePresent: boolean): void {
+    cy.contains(button, str).should(toBePresent ? "exist" : "not.exist");
 }
 
 export function enableSwitch(selector: string): void {
@@ -1685,12 +1658,8 @@ export function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O):
     return Object.keys(obj).filter((k) => Number.isNaN(+k)) as K[];
 }
 
-export function isRwxEnabled(): boolean {
-    return Cypress.env("rwx_enabled");
-}
-
 export function getUrl(): string {
-    return window.location.href;
+    return Cypress.env("tackleUrl");
 }
 
 export function getNamespace(): string {
@@ -1706,7 +1675,7 @@ export function getNamespace(): string {
 }
 
 export function patchTackleCR(option: string, isEnabled = true): void {
-    let value = "";
+    let value: string;
     if (isEnabled) {
         value = "true";
     } else {
@@ -1723,6 +1692,7 @@ export function patchTackleCR(option: string, isEnabled = true): void {
     if (option == "configureRWX") command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
     else if (option == "keycloak")
         command += `--patch '{"spec":{"feature_auth_required": ${value}}}'`;
+    else if (option == "metrics") command += `--patch '{"spec":{"hub_metrics_enabled": ${value}}}'`;
     cy.log(command);
     cy.exec(command).then((result) => {
         cy.log(result.stderr);
@@ -1773,4 +1743,168 @@ export function selectAssessmentApplications(apps: string): void {
 
 export function closeModalWindow(): void {
     click(closeModal, false, true);
+}
+
+export function next(): void {
+    clickByText(button, "Next");
+}
+
+export function performWithin(applicationName: string, actionFunction: () => void): void {
+    cy.contains(tdTag, applicationName)
+        .closest(trTag)
+        .within(() => {
+            actionFunction();
+        });
+}
+
+/**
+ * Assigns credential to the list of applications
+ * @param appList is a list of applications where credential will be assigned
+ * @param credential is a credential to assign to those applications
+ */
+export function manageCredentialsForMultipleApplications(
+    appList: Application[],
+    credential: Credentials
+): void {
+    let selector: string;
+    Application.open();
+    appList.forEach((currentApp: Application) => {
+        currentApp.selectApplication();
+    });
+    clickWithin("#toolbar-kebab", button, false, true);
+    clickByText(button, manageCredentials);
+    // TODO: Add validation of application list, should be separated with coma in management's modal
+    if (credential.type == CredentialType.sourceControl) {
+        selector = sourceCredential;
+    } else {
+        selector = mavenCredential;
+    }
+    selectFormItems(selector, credential.name);
+    clickByText(button, save);
+    appList.forEach((currentApp: Application) => {
+        currentApp.selectApplication();
+    });
+}
+
+/**
+ * Applies and validates sorting by particular column
+ * @param sortBy is column title used for sorting
+ * @param tdSelector is an optional parameter that should be equal sortBy if not defined explicitly.
+ */
+export function validateSortBy(sortBy: string, tdSelector?: string) {
+    if (!tdSelector) {
+        tdSelector = sortBy;
+    }
+    const unsortedList = getTableColumnData(tdSelector);
+
+    // Sort the table by column title in ascending order
+    clickOnSortButton(sortBy, SortType.ascending);
+    cy.wait(2 * SEC);
+
+    // Verify that the table rows are displayed in ascending order
+    const afterAscSortList = getTableColumnData(tdSelector);
+    verifySortAsc(afterAscSortList, unsortedList);
+
+    // Sort the table by column title in descending order
+    clickOnSortButton(sortBy, SortType.descending);
+    cy.wait(2 * SEC);
+
+    // Verify that the table rows are displayed in descending order
+    const afterDescSortList = getTableColumnData(tdSelector);
+    verifySortDesc(afterDescSortList, unsortedList);
+}
+
+export function waitUntilSpinnerIsGone(timeout = 300): void {
+    cy.get('[class*="spinner"]', { timeout: timeout * SEC }).should("not.exist");
+}
+
+export function getCommandOutput(command: string): Cypress.Chainable<Cypress.Exec> {
+    return cy.exec(command, { timeout: 30 * SEC }).then((result) => {
+        return result;
+    });
+}
+
+export function isRwxEnabled(): Cypress.Chainable<boolean> {
+    let command = "";
+    const namespace = getNamespace();
+    const tackleCr = `tackle=$(oc get tackle -n${namespace}|grep -iv name|awk '{print $1}'); `;
+    command += tackleCr;
+    command += `oc get tackle $tackle -n${namespace} -o jsonpath='{.spec.rwx_supported}'`;
+    return getCommandOutput(command).then((result) => {
+        if (result.stderr !== "") throw new Error(result.stderr.toString());
+        return result.stdout.trim().toLowerCase() === "true";
+    });
+}
+
+export function validateMtaVersionInCLI(expectedMtaVersion: string): void {
+    const namespace = getNamespace();
+    const podName = `$(oc get pods -n${namespace}| grep ui|cut -d " " -f 1)`;
+    const command = `oc describe pod ${podName} -n${namespace}| grep -i version|awk '{print $2}'`;
+    getCommandOutput(command).then((output) => {
+        if (expectedMtaVersion !== output.stdout) {
+            throw new Error(
+                `Expected version in UI pod: ${expectedMtaVersion}, Actual version in UI pod: ${output.stdout}`
+            );
+        }
+    });
+}
+
+export function validateTackleCr(): void {
+    let namespace = getNamespace();
+    let tackleCr;
+    let command = `tackleCR=$(oc get tackle -n${namespace}|grep -vi name|cut -d ' ' -f 1);`;
+    command += `oc get tackle $tackleCr -n${namespace} -o json`;
+    getCommandOutput(command).then((result) => {
+        try {
+            tackleCr = JSON.parse(result.stdout);
+        } catch (error) {
+            throw new Error("Failed to parse Tackle CR");
+        }
+        const condition = tackleCr["items"][0]["status"]["conditions"][1];
+        const failures = condition["ansibleResult"]["failures"];
+        const type = condition["type"];
+        cy.log(`Failures: ${failures}`);
+        cy.log(`Condition type: ${type}`);
+        expect(failures).be.equal(0);
+        expect(type).be.equal("Running");
+    });
+}
+
+export function validateTackleOperatorLog(): void {
+    cy.wait(30 * SEC);
+    let command = `oc logs $(oc get pods | grep mta-operator | cut -d " " -f 1) | grep failed | tail -n 1| awk -F 'failed=' '{print $2}'|cut -d " " -f 1`;
+    getCommandOutput(command).then((result) => {
+        const failedCount = parseInt(result.stdout.trim());
+        expect(failedCount).equal(0);
+    });
+}
+
+export function validateMtaVersionInUI(expectedVersion: string): void {
+    click(aboutButton);
+    cy.contains("dt", "Version")
+        .closest("dl")
+        .within(() => {
+            cy.get("dd").should("contain.text", expectedVersion);
+        });
+    click(closeAbout);
+}
+
+/**
+ * Takes 2 arrays of any type and returns array of elements, unique for a second array
+ * @param arrA is an array of any type
+ * @param arrB is an array of any type
+ * @return result
+ */
+export function getUniqueElementsFromSecondArray<T extends { name: string }>(
+    arrA: T[],
+    arrB: T[]
+): T[] {
+    const result: T[] = [];
+    const namesInArrA = arrA.map((item) => item.name);
+    arrB.forEach((item: T) => {
+        if (!namesInArrA.includes(item.name)) {
+            result.push(item);
+        }
+    });
+    return result;
 }

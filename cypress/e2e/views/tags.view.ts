@@ -18,14 +18,10 @@ export const createTagCategoryButton = "Create tag category";
 export const colorHelper = "div[id=color-helper]";
 export const dropdownMenuToggle = "button[id='tag-type-select-toggle']";
 export const dropdownMenuTypeToggle = "#type-select-toggle";
-export const tagCategoryNameHelper = "div[id=name-helper]";
-export const tagNameHelper = "#-helper";
+export const tagsHelper = "div.pf-v5-c-helper-text";
 export const nameInput = "input[name=name]";
 export const rankInput = "input[aria-label='rank']";
-export const rankHelper = "div[id=rank-helper]";
-export const tagTable = "table[aria-label='tag-table']";
 export const tagMenuButton = 'button[aria-label="Kebab toggle"]';
-export const tagCategoryHelper = "div[id=tagCategory-helper]";
 export const positiveRankMsg = "This field must be greater than 1.";
 export const tagCategory = "td[data-label='Tag category']";
 export enum tagLabels {

@@ -16,36 +16,36 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    click,
     clickWithinByText,
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    resetURL,
-    writeMavenSettingsFile,
 } from "../../../../utils/utils";
-import * as data from "../../../../utils/data_utils";
 import { SubversionConfiguration } from "../../../models/administration/repositories/subversion";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
-import { button, CredentialType, SEC, UserCredentials } from "../../../types/constants";
+import { AnalysisStatuses, button, CredentialType } from "../../../types/constants";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { footer } from "../../../views/common.view";
-
-let subversionConfiguration = new SubversionConfiguration();
-let source_credential: CredentialsSourceControlUsername;
-let applicationsList: Analysis[] = [];
+import { getDescription, getRandomWord } from "../../../../utils/data_utils";
+import { analysisDetailsEditor } from "../../../views/analysis.view";
 
 describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
+    const subversionConfiguration = new SubversionConfiguration();
+    let sourceCredential: CredentialsSourceControlUsername;
+    const applicationsList: Analysis[] = [];
+
     before("Login", function () {
         login();
-        source_credential = new CredentialsSourceControlUsername(
-            data.getRandomCredentialsData(
-                CredentialType.sourceControl,
-                UserCredentials.usernamePassword,
-                true
-            )
-        );
-        source_credential.create();
+        sourceCredential = new CredentialsSourceControlUsername({
+            type: CredentialType.sourceControl,
+            name: getRandomWord(6),
+            description: getDescription(),
+            username: Cypress.env("svn_user"),
+            password: Cypress.env("svn_password"),
+        });
+        sourceCredential.create();
     });
 
     beforeEach("Load data", function () {
@@ -56,60 +56,89 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
             this.analysisData = analysisData;
         });
 
-        // Interceptors
-        cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    // test that when the insecure repository is enabled, then the analysis on a http repo should be completed successfully
-    it("Analysis on insecure subversion Repository(http) for tackle test app when insecure repository is allowed", function () {
+    it("Analysis on insecure SVN Repository(http) when allowed", function () {
         subversionConfiguration.enableInsecureSubversionRepositories();
 
         const application = new Analysis(
-            getRandomApplicationData("Secure_enabled_tackle_test_app", {
-                sourceData: this.appData["tackle-testapp-svn-insecure"],
+            getRandomApplicationData("Insecure svn enabled bookserver app", {
+                sourceData: this.appData["bookserver-svn-insecure"],
             }),
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
-        application.manageCredentials(source_credential.name, null);
+        application.manageCredentials(sourceCredential.name, null);
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.openReport();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    // Negative test case, when the insecure repository is disabled, then the analysis on a http repo should fail
-    it("Analysis on insecure subversion Repository(http) for tackle test app when insecure repository is not allowed", function () {
+    it("Analysis on insecure SVN Repository(http) when not allowed", function () {
         subversionConfiguration.disableInsecureSubversionRepositories();
 
         const application = new Analysis(
-            getRandomApplicationData("Secure_disabled_tackle_test_app", {
-                sourceData: this.appData["tackle-testapp-svn-insecure"],
+            getRandomApplicationData("Insecure svn disabled bookserver app", {
+                sourceData: this.appData["bookserver-svn-insecure"],
             }),
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
-        application.manageCredentials(source_credential.name, null);
+        application.manageCredentials(sourceCredential.name, null);
         application.analyze();
-        application.verifyAnalysisStatus("Failed");
+        application.verifyAnalysisStatus(AnalysisStatuses.failed);
         application.openAnalysisDetails();
+        cy.get(analysisDetailsEditor)
+            .eq(0)
+            .then(($editor) => {
+                expect($editor.text()).to.contain(
+                    "http URL used with snv.insecure.enabled = FALSE",
+                    "Analysis details don't contains the expected error message"
+                );
+            });
         clickWithinByText(footer, button, "Close");
     });
 
-    afterEach("Persist session", function () {
-        // Reset URL from report page to web UI
-        resetURL();
+    // Automates customer bug MTA-1717
+    it("Analysis on SVN Repository without trunk folder", function () {
+        subversionConfiguration.enableInsecureSubversionRepositories();
+
+        const application = new Analysis(
+            getRandomApplicationData("svn bookserver app no trunk", {
+                sourceData: this.appData["bookserver-svn-insecure-no-trunk"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        application.manageCredentials(sourceCredential.name, null);
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.failed);
+        application.openAnalysisDetails();
+
+        cy.intercept("GET", "/hub/tasks/*?merged=1").as("applicationDetails");
+        click("#merged");
+
+        cy.wait("@applicationDetails").then((interception) => {
+            expect(interception.response.body).to.contain(
+                "trunk'' non-existent",
+                "Analysis details don't contains the expected error message"
+            );
+        });
+        clickWithinByText(footer, button, "Close");
+    });
+
+    afterEach("Clear state", function () {
+        Analysis.open(true);
     });
 
     after("Perform test data clean up", () => {
         deleteByList(applicationsList);
-        source_credential.delete();
-        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
+        sourceCredential.delete();
     });
 });

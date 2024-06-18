@@ -16,27 +16,29 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    clickByText,
     login,
     getRandomApplicationData,
     getRandomAnalysisData,
+    deleteByList,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import {
-    button,
-    clearAllFilters,
     CredentialType,
     UserCredentials,
     SEC,
+    AnalysisStatuses,
 } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { Tag } from "../../../../models/migration/controls/tags";
 import { TagCategory } from "../../../../models/migration/controls/tagcategory";
 import { appDetailsView } from "../../../../views/applicationinventory.view";
-let source_credential;
-let tagCategory;
-let tag;
+import { Application } from "../../../../models/migration/applicationinventory/application";
+
+let source_credential: CredentialsSourceControlUsername;
+let tagCategory: TagCategory;
+let tag: Tag;
+const applications: Application[] = [];
 
 describe(["@tier3"], "Filter tags on application details page", () => {
     before("Login", function () {
@@ -70,6 +72,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
             this.techTags = analysisData["analysis_for_enableTagging"]["techTags"];
         });
         cy.intercept("GET", "/hub/application*").as("getApplication");
+        Application.open(true);
     });
 
     it("Filter by automated tags generated after analysis", function () {
@@ -84,19 +87,15 @@ describe(["@tier3"], "Filter tags on application details page", () => {
             ),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
-        application.create();
-        cy.wait("@getApplication");
-        application.manageCredentials(source_credential.name, null);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        analyzeAndVerifyEnableTaggingApplication(application);
 
         application.filterTags("Analysis");
         application.tagAndCategoryExists(this.techTags);
         cy.get(appDetailsView.applicationTag).should("not.contain", tag.name);
-        clickByText(button, clearAllFilters);
-        application.closeApplicationDetails();
 
-        application.delete();
+        // Validate rules doesn't have effort=0 and should only appear as tags.
+        application.verifyEffort(this.analysisData["analysis_for_enableTagging"]["effort"]);
+        application.validateIssues(this.analysisData["analysis_for_enableTagging"]["issues"]);
     });
 
     it("Filter by manual tags", function () {
@@ -111,11 +110,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
             ),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
-        application.create();
-        cy.wait("@getApplication");
-        application.manageCredentials(source_credential.name, null);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        analyzeAndVerifyEnableTaggingApplication(application);
 
         application.filterTags("Manual");
         this.techTags.forEach(function (tag) {
@@ -125,9 +120,6 @@ describe(["@tier3"], "Filter tags on application details page", () => {
             );
         });
         cy.get(appDetailsView.applicationTag).should("contain", tag.name);
-        application.closeApplicationDetails();
-
-        application.delete();
     });
 
     it("Filter tags by tag category", function () {
@@ -142,11 +134,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
             ),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
-        application.create();
-        cy.wait("@getApplication");
-        application.manageCredentials(source_credential.name, null);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        analyzeAndVerifyEnableTaggingApplication(application);
 
         application.filterTags(tagCategory.name);
         this.techTags.forEach(function (tag) {
@@ -156,14 +144,22 @@ describe(["@tier3"], "Filter tags on application details page", () => {
             );
         });
         cy.get(appDetailsView.applicationTag).should("contain", tag.name);
-        application.closeApplicationDetails();
-
-        application.delete();
     });
 
     after("Perform test data clean up", function () {
+        Application.open(true);
+        deleteByList(applications);
         tag.delete();
         tagCategory.delete();
         source_credential.delete();
     });
+
+    const analyzeAndVerifyEnableTaggingApplication = (application: Analysis) => {
+        applications.push(application);
+        application.create();
+        cy.wait("@getApplication");
+        application.manageCredentials(source_credential.name, null);
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+    };
 });

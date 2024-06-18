@@ -41,126 +41,103 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import * as commonView from "../../../../../e2e/views/common.view";
 import * as data from "../../../../../utils/data_utils";
 
-var stakeholdersList: Array<Stakeholders> = [];
-var stakeholdergroupsList: Array<Stakeholdergroups> = [];
-var invalidSearchInput = data.getRandomNumber();
+let stakeholdersList: Array<Stakeholders> = [];
+let stakeholderGroupsList: Array<Stakeholdergroups> = [];
+const invalidSearchInput = `${data.getRandomNumber()}`;
 
 describe(["@tier2"], "Stakeholder groups filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
 
-        // Create multiple stakeholder groups and stakeholders
         stakeholdersList = createMultipleStakeholders(2);
-        stakeholdergroupsList = createMultipleStakeholderGroups(2, stakeholdersList);
+        stakeholderGroupsList = createMultipleStakeholderGroups(2, stakeholdersList);
     });
 
     beforeEach("Interceptors", function () {
-        // Interceptors
-        cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");
+        cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholderGroups");
     });
 
     it("Name filter validations", function () {
-        // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
-        cy.get("@getStakeholdergroups");
+        cy.get("@getStakeholderGroups");
 
-        // Enter an existing name substring and apply it as search filter
-        var validSearchInput = stakeholdergroupsList[0].name.substring(0, 5);
+        const validSearchInput = stakeholderGroupsList[0].name.substring(0, 5);
         applySearchFilter(name, validSearchInput);
 
-        // Assert that stakeholder groups row(s) containing the search text is/are displayed
-        exists(stakeholdergroupsList[0].name);
-        if (stakeholdergroupsList[1].name.indexOf(validSearchInput) >= 0) {
+        exists(stakeholderGroupsList[0].name);
+        if (stakeholderGroupsList[1].name.indexOf(validSearchInput) >= 0) {
             exists(stakeholdersList[1].name);
         }
 
-        // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.get("@getStakeholdergroups");
+        cy.get("@getStakeholderGroups");
 
-        // Enter a non-existing name substring and apply it as search filter
         applySearchFilter(name, invalidSearchInput);
 
-        // Assert that no search results are found
-        cy.get("h2").contains("No stakeholder groups available");
+        cy.get("h2").contains("No stakeholder group available");
 
-        // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.get("@getStakeholdergroups");
+        cy.get("@getStakeholderGroups");
     });
 
     it("Description filter validations", function () {
-        // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
-        cy.get("@getStakeholdergroups");
+        cy.get("@getStakeholderGroups");
 
-        // Enter an existing description substring and apply it as search filter
-        var validSearchInput = stakeholdergroupsList[0].description.substring(0, 3);
+        const validSearchInput = stakeholderGroupsList[0].description.substring(0, 3);
         applySearchFilter(description, validSearchInput);
 
         // Assert that stakeholder groups row(s) containing the search text is/are displayed
-        exists(stakeholdergroupsList[0].description);
-        if (stakeholdergroupsList[1].description.indexOf(validSearchInput) >= 0) {
-            exists(stakeholdergroupsList[1].description);
+        exists(stakeholderGroupsList[0].description);
+        if (stakeholderGroupsList[1].description.indexOf(validSearchInput) >= 0) {
+            exists(stakeholderGroupsList[1].description);
         }
 
-        // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.get("@getStakeholdergroups");
+        cy.get("@getStakeholderGroups");
 
-        // Enter a non-existing description substring and apply it as search filter
         applySearchFilter(description, invalidSearchInput);
 
-        // Assert that no search results are found
-        cy.get("h2").contains("No stakeholder groups available");
+        cy.get("h2").contains("No stakeholder group available");
 
-        // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.get("@getStakeholdergroups");
+        cy.get("@getStakeholderGroups");
     });
 
     it("Member filter validations", function () {
-        // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
-        cy.get("@getStakeholdergroups");
+        cy.get("@getStakeholderGroups");
 
-        // Enter an existing member substring and apply it as search filter
-        var validSearchInput = stakeholdergroupsList[0].members[0].substring(0, 3);
+        const validSearchInput = stakeholderGroupsList[0].members[0].substring(0, 3);
         applySearchFilter(stakeholders, validSearchInput);
 
-        // Assert that stakeholder groups row(s) containing the search text is/are displayed
         selectItemsPerPage(100);
         cy.get(tdTag)
-            .contains(stakeholdergroupsList[0].name)
-            .parent(tdTag)
+            .contains(stakeholderGroupsList[0].name)
             .parent(trTag)
             .within(() => {
                 click(commonView.expandRow);
             })
             .get("div > dd")
-            .should("contain", stakeholdergroupsList[0].members[0]);
+            .should("contain", stakeholderGroupsList[0].members[0]);
 
-        if (stakeholdergroupsList[1].members[0].indexOf(validSearchInput) >= 0) {
-            exists(stakeholdergroupsList[1].members[0]);
+        if (stakeholderGroupsList[1].members[0].indexOf(validSearchInput) >= 0) {
+            exists(stakeholderGroupsList[1].members[0]);
         }
 
-        // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.get("@getStakeholdergroups");
+        cy.get("@getStakeholderGroups");
 
-        // Enter a non-existing member substring and apply it as search filter
         applySearchFilter(stakeholders, invalidSearchInput);
 
-        // Assert that no search results are found
-        cy.get("h2").contains("No stakeholder groups available");
+        cy.get("h2").contains("No stakeholder group available");
 
-        // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.get("@getStakeholdergroups");
+        cy.get("@getStakeholderGroups");
     });
 
     after("Perform test data clean up", function () {
         deleteByList(stakeholdersList);
-        deleteByList(stakeholdergroupsList);
+        deleteByList(stakeholderGroupsList);
     });
 });

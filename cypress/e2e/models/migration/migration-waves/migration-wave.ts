@@ -71,6 +71,7 @@ export class MigrationWave {
             if ($url != MigrationWave.fullUrl) {
                 selectUserPerspective("Migration");
                 clickByText(navMenu, migrationWaves);
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", migrationWaves);
                 selectItemsPerPage(100);
             }
         });
@@ -118,11 +119,11 @@ export class MigrationWave {
         cy.get(MigrationWaveView.instanceSelectToggle).click();
         cy.contains(instance).click();
 
-        cy.get(MigrationWaveView.projectSelectToggle).click();
-        cy.contains(project).click({ timeout: 10 * SEC, force: true });
+        cy.get(MigrationWaveView.projectSelectToggle).click({ timeout: 20 * SEC });
+        cy.contains(button, project).click({ timeout: 20 * SEC, force: true });
 
-        cy.get(MigrationWaveView.issueTypeSelectToggle).click();
-        cy.contains(issueType).click({ timeout: 10 * SEC, force: true });
+        cy.get(MigrationWaveView.issueTypeSelectToggle).click({ timeout: 20 * SEC });
+        cy.contains(issueType).click({ timeout: 20 * SEC, force: true });
 
         submitForm();
     }
@@ -178,17 +179,19 @@ export class MigrationWave {
 
     /**
      * This method should NOT be used to do assertions, if an invalid date is passed, it'll throw an exception
-     * It selects the date using the picker because it can't be manually entered right now due to bug MTA-706
+     * It selects the date using the picker.
      * @param date
      */
     public fillStartDate(date: Date): void {
-        const nowTime = new Date().setHours(0, 0, 0, 0);
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        yesterday.setHours(0, 0, 0, 0);
         date.setHours(0, 0, 0, 0);
         this.startDate.setHours(0, 0, 0, 0);
-        if (nowTime >= date.getTime()) {
+        if (yesterday.getTime() >= date.getTime()) {
             expect(
                 true,
-                "Start Date should be greater than actual Date. If you want to assert the validation, enter the date manually"
+                "Start Date should be greater than yesterday's Date. If you want to assert the validation, enter the date manually"
             ).to.eq(false);
         }
 
@@ -205,7 +208,6 @@ export class MigrationWave {
 
     /**
      * This method should NOT be used to do assertions, if an invalid date is passed, it'll throw an exception
-     * It selects the date using the picker because it can't be manually entered right now due to bug MTA-706
      * @param date
      */
     public fillEndDate(date: Date) {
@@ -218,14 +220,9 @@ export class MigrationWave {
             ).to.eq(false);
         }
 
-        const currentEndDate =
-            this.endDate.getTime() !== date.getTime() ? this.endDate : new Date();
-        const currentMonth = currentEndDate.toLocaleString("en-us", { month: "long" });
-        cy.get(MigrationWaveView.endDateInput)
-            .closest(MigrationWaveView.generalDatePicker)
-            .find(MigrationWaveView.calendarButton)
-            .click();
-        MigrationWave.selectDateFromDatePicker(date, currentMonth);
+        cy.get(MigrationWaveView.endDateInput).type(MigrationWave.formatDateMMddYYYY(date), {
+            delay: 0,
+        });
     }
 
     private fillForm(values: Partial<MigrationWave>) {
@@ -265,11 +262,11 @@ export class MigrationWave {
     }
 
     static formatDateMMddYYYY(date: Date): string {
-        const day = String(date.getDate()).padStart(2, "0");
-        const month = String(date.getMonth() + 1).padStart(2, "0"); //January is 0!
-        const year = date.getFullYear();
-
-        return month + "/" + day + "/" + year;
+        return new Intl.DateTimeFormat("en-US", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+        }).format(date);
     }
 
     public expandActionsMenu() {
@@ -329,7 +326,9 @@ export class MigrationWave {
         cy.contains(this.name)
             .parents("tr")
             .within(() => {
-                cy.get(MigrationWaveView.waveStatusColumn).click();
+                cy.get(MigrationWaveView.waveStatusColumn)
+                    .should("not.contain", "N/A", { timeout: 10 * SEC })
+                    .click();
             });
     }
 
@@ -356,6 +355,22 @@ export class MigrationWave {
                 });
         });
         this.removeApplicationsFromModel(applications);
+    }
+
+    public unlinkApplications(applications: Application[]) {
+        this.isExpanded().then((expanded) => {
+            expect(expanded).to.be.true;
+        });
+
+        applications.forEach((application) => {
+            cy.contains(application.name)
+                .parent()
+                .within(() => {
+                    cy.get(MigrationWaveView.unlinkApplicationButton).click();
+                    // Need to wait until the application is unlinked from Jira and reflected in the wave
+                    cy.wait(3 * SEC);
+                });
+        });
     }
 
     private removeApplicationsFromModel(applicationsList) {

@@ -20,5 +20,16 @@
             "branch": "",
             "rootPath": "custom-rules"
         }
+    },
+    "hazelcast_target": {
+        "image": "img/cloud.png",
+        "rulesFiles": ["xml/hazelcast.windup.xml"]
+    },
+
+    "rules_with_source_target_element": {
+        "image": "img/cloud.png",
+        "rulesFiles": ["xml/corporate-framework-config.windup.xml"],
+        "sources": ["traditional-corporate-framework"],
+        "targets": ["cloud-corporate-framework"]
     }
 }

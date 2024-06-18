@@ -24,6 +24,7 @@ import {
     exists,
     deleteApplicationTableRows,
     deleteAppImportsTableRows,
+    deleteAllMigrationWaves,
 } from "../../../../../utils/utils";
 import { button, clearAllFilters } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
@@ -37,7 +38,7 @@ const filesToImport = [
     "mandatory_and_empty_rows.csv",
     "non_existing_tags_business_service_rows.csv",
 ];
-var invalidSearchInput = String(data.getRandomNumber());
+const invalidSearchInput = String(data.getRandomNumber());
 
 describe(["@tier2"], "Manage applications import filter validations", function () {
     before("Login and create test data", function () {
@@ -59,11 +60,10 @@ describe(["@tier2"], "Manage applications import filter validations", function (
     it("File name filter validations", function () {
         // Navigate to application inventory page and open manage imports
         Application.open();
-        cy.wait("@getApplications");
         openManageImportsPage();
 
         // Enter an existing file name substring and apply it as search filter
-        var validSearchInput = filesToImport[0].substring(0, 5);
+        const validSearchInput = filesToImport[0].substring(0, 5);
         applySearchFilter(FileName, validSearchInput);
 
         // Assert that application import row(s) containing the search text is/are displayed
@@ -80,10 +80,11 @@ describe(["@tier2"], "Manage applications import filter validations", function (
         applySearchFilter(FileName, invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No data available");
+        cy.get("h2").contains("No import summary available");
     });
 
     after("Perform test data clean up", function () {
+        deleteAllMigrationWaves();
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
     });

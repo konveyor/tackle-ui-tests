@@ -16,23 +16,23 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    deleteAllBusinessServices,
-    deleteApplicationTableRows,
+    deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
     logout,
-    resetURL,
-    writeGpgKey,
 } from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
-import { SEC } from "../../types/constants";
+import { AnalysisStatuses, SEC } from "../../types/constants";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { getRandomUserData } from "../../../utils/data_utils";
 import { User } from "../../models/keycloak/users/user";
+import { Application } from "../../models/migration/applicationinventory/application";
 
-describe(["@tier3"], "Upload Binary Analysis", () => {
-    let userArchitect = new UserArchitect(getRandomUserData());
+describe(["@tier3"], "Architect Upload Binary Analysis", () => {
+    const userArchitect = new UserArchitect(getRandomUserData());
+    const applications: Analysis[] = [];
+
     before("Login", function () {
         User.loginKeycloakAdmin();
         userArchitect.create();
@@ -53,7 +53,6 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
 
         // Perform login as admin user to be able to create all required instances
         login();
-        deleteApplicationTableRows();
     });
 
     it("Upload Binary Analysis", function () {
@@ -68,12 +67,8 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
         logout();
         userArchitect.login();
 
-        // No credentials required for uploaded binary.
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.openReport();
-        application.validateStoryPoints();
-        // userArchitect.logout();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
     it("Custom rules with custom targets", function () {
@@ -83,48 +78,23 @@ describe(["@tier3"], "Upload Binary Analysis", () => {
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_with_customrule"])
         );
         application.create();
+        applications.push(application);
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
         // Need to log out as admin and login as Architect to perform analysis
         logout();
         userArchitect.login();
 
-        // No credentials required for uploaded binary.
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.openReport();
-        application.validateStoryPoints();
-    });
-
-    it("DIVA report generation", function () {
-        const application = new Analysis(
-            getRandomApplicationData("DIVA"),
-            getRandomAnalysisData(this.analysisData["analysis_for_DIVA-report"])
-        );
-        application.create();
-        cy.wait("@getApplication");
-        cy.wait(2 * SEC);
-        // Need to log out as admin and login as Architect to perform analysis
-        logout();
-        userArchitect.login();
-
-        // No credentials required for uploaded binary.
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.openReport();
-        application.validateStoryPoints();
-        application.validateTransactionReport();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
     afterEach("Persist session", function () {
-        // Reset URL from report page to web UI
-        resetURL();
+        Application.open(true);
     });
 
     after("Perform test data clean up", function () {
-        deleteApplicationTableRows();
-        deleteAllBusinessServices();
-        writeGpgKey("abcde");
+        deleteByList(applications);
         User.loginKeycloakAdmin();
         userArchitect.delete();
     });

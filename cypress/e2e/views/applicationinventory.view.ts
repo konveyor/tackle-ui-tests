@@ -14,38 +14,48 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 export const actionButton = "button[aria-label='kebab dropdown toggle']";
+export const applicationsActionButton = "button[aria-label='Application actions']";
+
 export const applicationNameInput = "input[name=name]";
 export const applicationDescriptionInput = "input[name=description]";
 export const applicationBusinessServiceSelect = "[placeholder='Select a business service']";
+export const tagsColumnSelector = "td[data-label='Tags']";
+
 export const applicationContributorsInput =
     "#contributors-select-toggle-select-multi-typeahead-typeahead";
 export const applicationContributorsText = ".pf-v5-c-chip__text";
 export const applicationContributorsAction = ".pf-v5-c-chip__actions";
 export const applicationOwnerInput = "#owner-toggle-select-typeahead";
+export const modalBoxDialog = "#confirm-dialog";
+export const modalBoxMessage = ".pf-v5-c-modal-box__body";
+export const reviewConfirmationText =
+    "This application has already been reviewed. Do you want to continue?";
 export const repoTypeSelect = "button[id='repo-type-toggle']";
 export const applicationTagsSelect = "[placeholder='Select tags']";
 export const applicationCommentInput = "textarea[name=comments]";
-export const businessColumnSelector = "td[data-label='Business service']";
-export const csvFileName = "File name";
-export const FileName = "File Name";
+export const businessColumnSelector = "td[data-label='Business Service']";
+export const csvFileName = "Filename";
+export const FileName = "File name";
 export const closeForm = "button[aria-label='close']";
 export const copy = "button[aria-label='Copy']";
 export const cyclicDependenciesErrorMsg = "cyclic dependencies are not allowed";
 export const northdependenciesDropdownBtn = "button[aria-label='northbound-dependencies-toggle']";
 export const southdependenciesDropdownBtn = "button[aria-label='southbound-dependencies-toggle']";
-export const date = "Date";
+export const date = "Import Time";
 export const editButton = "#pencil-action";
 export const importStatus = "Status";
-export const northboundHelper = "div[id=northbound-dependencies-helper]";
-export const southboundHelper = "div[id=southbound-dependencies-helper]";
 export const selectBox = "input[type=checkbox]";
 export const tags = "span";
 export const user = "User";
 export const kebabMenu = "#row-actions";
 export const topKebabMenu = "#toolbar-kebab";
-export const kebabMenuItem = "a.pf-v5-c-dropdown__menu-item";
+export const kebabMenuItem = "span.pf-v5-c-menu__item-text";
+export const bulkApplicationSelectionCheckBox = "input[name='bulk-selected-items-checkbox']";
+export const profileEdit = ".pf-m-1-col > .pf-v5-c-button";
+export const appContributorSelect = "#contributors-select-toggle-select-multi-typeahead-typeahead";
+export const appSelectionButton = "button.pf-v5-c-menu-toggle__button";
 // This is on the Application imports page.
-export const sideKebabMenuImports = "button[aria-label='Kebab toggle']";
+export const sideKebabMenu = "button[aria-label='Kebab toggle']";
 
 //Fields related to analysis - source mode
 export const sourceRepository = "input[name=sourceRepository]";
@@ -65,10 +75,10 @@ export const createEntitiesCheckbox = "#create-entities-checkbox";
 export enum appDetailsView {
     applicationTag = "span.pf-v5-c-label__content",
     closeDetailsPage = "button[aria-label='Close drawer panel']",
-    tagFilter = "#source-filter-value-select",
+    tagFilter = "#filter-control-source-typeahead-select-input",
     tagCategory = "div[class='pf-v5-c-content'] > h4",
-    filterSourceMenu = "div.pf-v5-c-select__menu",
-    tagCategoryFilter = "#tagCategory-filter-value-select",
+    filterSourceMenu = "span.pf-v5-c-menu__item-text",
+    tagCategoryFilter = "#filter-control-tagCategory-typeahead-select-input",
 }
 
 // Fields related to copy assessment modal
@@ -79,3 +89,5 @@ export const copyAssessmentModal = "div.pf-v5-c-modal-box";
 
 // Fields related to application import
 export const appImportForm = "form.pf-v5-c-form";
+export const ViewArchetypes = "View archetypes";
+export const customActionButton = "#custom-action-button";

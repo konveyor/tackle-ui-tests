@@ -18,20 +18,26 @@ limitations under the License.
 import { User } from "../../models/keycloak/users/user";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
-import { deleteByList, getRandomApplicationData, login, logout } from "../../../utils/utils";
+import {
+    createMultipleStakeholders,
+    deleteByList,
+    getRandomApplicationData,
+    login,
+    logout,
+} from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
-import { CredentialType } from "../../types/constants";
+import { CredentialType, legacyPathfinder, SEC } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
-import { Assessment } from "../../models/migration/applicationinventory/assessment";
+import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import * as data from "../../../utils/data_utils";
+
+let stakeholders: Array<Stakeholders> = [];
 
 describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
     let userArchitect = new UserArchitect(getRandomUserData());
-    const application = new Assessment(getRandomApplicationData());
-    let stakeholdersList: Array<Stakeholders> = [];
-    let stakeholderNameList: Array<string> = [];
+    const application = new Application(getRandomApplicationData());
 
     let appCredentials = new CredentialsSourceControlUsername(
         getRandomCredentialsData(CredentialType.sourceControl)
@@ -39,15 +45,15 @@ describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
 
     before("Creating RBAC users, adding roles for them", function () {
         login();
+        AssessmentQuestionnaire.enable(legacyPathfinder);
         // Navigate to stakeholders control tab and create new stakeholder
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-        stakeholder.create();
-        stakeholdersList.push(stakeholder);
-        stakeholderNameList.push(stakeholder.name);
+        stakeholders = createMultipleStakeholders(1);
 
         appCredentials.create();
         application.create();
-        application.perform_assessment("low", stakeholderNameList);
+        application.perform_review("low");
+        application.perform_assessment("low", stakeholders);
+
         logout();
         User.loginKeycloakAdmin();
         userArchitect.create();
@@ -67,17 +73,7 @@ describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
         Application.validateCreateAppButton(this.rbacRules);
     });
 
-    it("Architect, validate assess application button", function () {
-        //Architect is allowed to create applications
-        Application.validateAssessButton(this.rbacRules);
-    });
-
-    it("Architect, validate review application button", function () {
-        //Architect is allowed to review applications
-        Application.validateReviewButton(this.rbacRules);
-    });
-
-    it("Architect, validate presence of import and manage imports", function () {
+    it("Architect, validate content of top kebab menu", function () {
         //Architect is allowed to import applications
         Analysis.validateTopActionMenu(this.rbacRules);
     });
@@ -87,24 +83,20 @@ describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
         Analysis.validateAnalyzeButton(this.rbacRules);
     });
 
-    it("Architect, validate analysis details and cancel analysis buttons presence", function () {
-        application.validateAnalysisAvailableActions(this.rbacRules);
-    });
-
-    it("Architect, validate assessment context menu buttons presence", function () {
-        application.validateAssessmentAvailableOptions(this.rbacRules);
+    it("Architect, validate content of application kebab menu", function () {
+        application.validateAppContextMenu(this.rbacRules);
     });
 
     it("Architect, validate availability of binary upload functionality", function () {
         application.validateUploadBinary(this.rbacRules);
     });
 
-    after("", function () {
+    after("Clean up", function () {
         userArchitect.logout();
         login();
         appCredentials.delete();
+        deleteByList(stakeholders);
         application.delete();
-        deleteByList(stakeholdersList);
         logout();
         User.loginKeycloakAdmin();
         userArchitect.delete();

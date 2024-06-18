@@ -13,51 +13,35 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { Application } from "./application";
 import {
-    applicationInventory,
     tdTag,
     trTag,
     button,
-    next,
-    review,
-    save,
-    assessment,
     SEC,
-    assessAppButton,
-    migration,
+    legacyPathfinder,
+    text,
+    riskDonutChart,
 } from "../../../types/constants";
-import { navMenu, navTab } from "../../../views/menu.view";
-import {
-    actionButton,
-    selectBox,
-    closeForm,
-    copy,
-    kebabMenu,
-    northdependenciesDropdownBtn,
-    southdependenciesDropdownBtn,
-    copyAssessmentModal,
-} from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
 import {
     clickByText,
-    click,
     selectItemsPerPage,
-    cancelForm,
     selectFormItems,
-    selectUserPerspective,
-    performRowActionByIcon,
-    checkSuccessAlert,
+    clickJs,
+    click,
+    sidedrawerTab,
 } from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import {
     assessmentColumnSelector,
     questionBlock,
     radioInput,
-    stakeholdergroupsSelect,
-    stakeholderSelect,
-    continueButton,
     stack,
+    assessmentBlock,
+    victoryContainer,
+    donutChart,
+    donutChartImage,
+    stakeholdersAndGroupsSelect,
 } from "../../../views/assessment.view";
 import {
     criticalityInput,
@@ -66,42 +50,25 @@ import {
     proposedActionSelect,
     reviewColumnSelector,
 } from "../../../views/review.view";
-import { applicationData } from "../../../types/types";
+import { Stakeholdergroups } from "../controls/stakeholdergroups";
+import { Stakeholders } from "../controls/stakeholders";
+import { notYetReviewed, reviewItems } from "../../../views/archetype.view";
+import { plainButton, tableRowActions, splitItem } from "../../../views/common.view";
 
-export class Assessment extends Application {
-    static fullUrl = Cypress.env("tackleUrl") + "/applications/assessment-tab";
-    constructor(appData: applicationData) {
-        super(appData);
-    }
-
-    //Navigate to the Application inventory->Assessment tab
-    public static open(itemsPerPage = 100, forceReload = false): void {
-        if (forceReload) {
-            cy.visit(Cypress.env("tackleUrl"));
-        }
-        cy.url().then(($url) => {
-            if ($url != Assessment.fullUrl) {
-                selectUserPerspective(migration);
-                clickByText(navMenu, applicationInventory);
-                clickByText(navTab, assessment);
-            }
+export class Assessment {
+    public static selectStakeholdersAndGroups(
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[]
+    ): void {
+        stakeholders?.forEach(function (stakeholder) {
+            selectFormItems(stakeholdersAndGroupsSelect, stakeholder.name);
         });
-        selectItemsPerPage(itemsPerPage);
-    }
-
-    protected selectStakeholders(stakeholders: Array<string>): void {
-        stakeholders.forEach(function (stakeholder) {
-            selectFormItems(stakeholderSelect, stakeholder);
+        stakeholderGroups?.forEach(function (stakeholderGroup) {
+            selectFormItems(stakeholdersAndGroupsSelect, stakeholderGroup.name);
         });
     }
 
-    protected selectStakeholderGroups(stakeholderGroups: Array<string>): void {
-        stakeholderGroups.forEach(function (stakeholderGroup) {
-            selectFormItems(stakeholdergroupsSelect, stakeholderGroup);
-        });
-    }
-
-    protected selectMigrationAction(risk: string): void {
+    public static selectMigrationAction(risk: string): void {
         let action: string;
         if (risk === "low") {
             const migrationActions = ["Replatform", "Refactor", "Rehost", "Retain"];
@@ -113,11 +80,11 @@ export class Assessment extends Application {
             const migrationActions = ["Repurchase", "Retire"];
             action = migrationActions[Math.floor(Math.random() * migrationActions.length)];
         }
-        cy.get(proposedActionSelect).click();
-        cy.contains(button, action).click();
+        click(proposedActionSelect, false);
+        clickByText(button, action);
     }
 
-    protected selectEffortEstimate(risk: string): void {
+    public static selectEffortEstimate(risk: string): void {
         let effort: string;
         if (risk === "low") {
             effort = "Small";
@@ -131,7 +98,7 @@ export class Assessment extends Application {
         cy.contains(button, effort).click();
     }
 
-    protected getNumByRisk(risk: string): number {
+    public static getNumByRisk(risk: string): number {
         let num: number;
         if (risk === "low") {
             num = data.getRandomNumber(1, 4);
@@ -143,19 +110,19 @@ export class Assessment extends Application {
         return num;
     }
 
-    protected fillCriticality(risk: string): void {
+    public static fillCriticality(risk: string): void {
         const criticality = this.getNumByRisk(risk);
         cy.get(criticalityInput).type(`{selectAll}${criticality}`).blur();
         cy.wait(SEC);
     }
 
-    protected fillPriority(risk: string): void {
+    public static fillPriority(risk: string): void {
         const priority = this.getNumByRisk(risk);
         cy.get(priorityInput).type(`{selectAll}${priority}`).blur();
         cy.wait(SEC);
     }
 
-    protected clickRadioOption(questionSelector, optionToSelect) {
+    public static clickRadioOption(questionSelector, optionToSelect) {
         cy.wrap(questionSelector)
             .find(stack)
             .children("div")
@@ -164,107 +131,102 @@ export class Assessment extends Application {
             .check();
     }
 
-    protected selectAnswers(risk: string): void {
-        for (let i = 0; i < 5; i++) {
-            cy.get(questionBlock).each(($question) => {
-                let totalOptions = $question.find(stack).children("div").length;
-                let optionToSelect: number;
-                if (risk === "low") {
-                    optionToSelect = totalOptions - 1;
-                    this.clickRadioOption($question, optionToSelect);
-                } else if (risk === "medium") {
-                    cy.wrap($question)
-                        .children()
-                        .find("div.pf-v5-l-split__item")
-                        .then(($questionLine) => {
-                            /* These 3 questions generate high risk with mean options, 
-                            hence to keep risk to medium, select last options for these set of specific questions */
-                            if (
-                                $questionLine.text() ===
-                                    "Does the application have legal and/or licensing requirements?" ||
-                                $questionLine.text() ===
-                                    "Does the application require specific hardware?" ||
-                                $questionLine.text() ===
-                                    "How is the application clustering managed?"
-                            ) {
-                                optionToSelect = totalOptions - 1;
-                            } else {
-                                optionToSelect = Math.floor(totalOptions / 2);
-                            }
+    public static selectAnswers(risk: string, saveAndReview = false): void {
+        // Allowed values for risk: low, medium, high, unknown
+        cy.get(assessmentBlock)
+            .its("length")
+            .then((count) => {
+                let lastStep = count - 2;
+
+                for (let i = 0; i <= lastStep; i++) {
+                    cy.get(questionBlock).each(($question) => {
+                        let totalOptions = $question.find(stack).children("div").length;
+                        let optionToSelect: number;
+                        if (risk === "low") {
+                            optionToSelect = totalOptions - 1;
                             this.clickRadioOption($question, optionToSelect);
-                        });
-                } else {
-                    optionToSelect = 1;
-                    this.clickRadioOption($question, optionToSelect);
+                        } else if (risk === "medium") {
+                            cy.wrap($question)
+                                .children()
+                                .find(splitItem)
+                                .then(($questionLine) => {
+                                    /* These 3 questions generate high risk with mean options,
+                                    hence to keep risk to medium, select last options for these set of specific questions */
+                                    if (
+                                        $questionLine.text() ===
+                                            "Does the application have legal and/or licensing requirements?" ||
+                                        $questionLine.text() ===
+                                            "Does the application require specific hardware?" ||
+                                        $questionLine.text() ===
+                                            "How is the application clustering managed?"
+                                    ) {
+                                        optionToSelect = totalOptions - 1;
+                                    } else {
+                                        optionToSelect = Math.floor(totalOptions / 2);
+                                    }
+                                    this.clickRadioOption($question, optionToSelect);
+                                });
+                        } else if (risk === "high") {
+                            optionToSelect = 1;
+                            this.clickRadioOption($question, optionToSelect);
+                        } else {
+                            // if risk = 'unknown'
+                            optionToSelect = 0;
+                            this.clickRadioOption($question, optionToSelect);
+                        }
+                    });
+
+                    if (saveAndReview && i == lastStep) {
+                        clickJs(commonView.saveAndReviewButton);
+                    } else {
+                        clickJs(commonView.nextButton);
+                    }
                 }
             });
-            if (i === 4) {
-                clickByText(button, save);
-            } else {
-                clickByText(button, next);
-            }
-        }
     }
 
-    create(): void {
-        Assessment.open();
-        super.create();
-    }
-
-    edit(
-        updatedValues: {
-            name?: string;
-            description?: string;
-            business?: string;
-            tags?: Array<string>;
-            comment?: string;
-        },
-        cancel = false
-    ): void {
-        Assessment.open();
-        super.edit(updatedValues);
-    }
-
-    delete(cancel = false): void {
-        Assessment.open();
-        super.delete();
-    }
-
-    click_assess_button(): void {
-        performRowActionByIcon(this.name, kebabMenu);
-        cy.get(commonView.actionMenuItem).contains("Assess").click();
-    }
-
-    perform_assessment(
+    public static retake_questionnaire(
         risk,
-        stakeholders?: Array<string>,
-        stakeholderGroups?: Array<string>
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[]
     ): void {
-        if (stakeholders == undefined && stakeholderGroups == undefined) {
-            expect(
-                false,
-                "At least one arg out of stakeholder or stakeholder groups must be provided !"
-            ).to.equal(true);
-        } else {
-            Assessment.open();
-            selectItemsPerPage(100);
-            this.selectApplication();
-            this.click_assess_button();
-            cy.wait(6000);
-            if (stakeholders) this.selectStakeholders(stakeholders);
-            if (stakeholderGroups) this.selectStakeholderGroups(stakeholderGroups);
-            clickByText(button, next);
-            cy.wait(SEC);
-            this.selectAnswers(risk);
-        }
+        clickByText(button, "Retake");
+        this.fill_assessment_form(risk, stakeholders, stakeholderGroups);
     }
 
-    perform_review(risk): void {
-        Assessment.open();
-        selectItemsPerPage(100);
-        this.selectApplication();
-        clickByText(button, review);
-        cy.wait(8 * SEC);
+    public static take_questionnaire(questionnaireName = legacyPathfinder): void {
+        cy.contains(questionnaireName, { timeout: 70 * SEC })
+            .siblings("td")
+            .contains("button", "Take", { timeout: 70 * SEC })
+            .click();
+    }
+
+    public static perform_assessment(
+        risk,
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[],
+        questionnaireName = legacyPathfinder,
+        saveAndReview = false
+    ): void {
+        this.take_questionnaire(questionnaireName);
+        cy.wait(SEC);
+        this.fill_assessment_form(risk, stakeholders, stakeholderGroups, saveAndReview);
+    }
+
+    public static fill_assessment_form(
+        risk,
+        stakeholders?: Stakeholders[],
+        stakeholderGroups?: Stakeholdergroups[],
+        saveAndReview = false
+    ): void {
+        if (stakeholders || stakeholderGroups)
+            this.selectStakeholdersAndGroups(stakeholders, stakeholderGroups);
+        clickJs(commonView.nextButton);
+        cy.wait(SEC);
+        this.selectAnswers(risk, saveAndReview);
+    }
+
+    public static perform_review(risk): void {
         this.selectMigrationAction(risk);
         this.selectEffortEstimate(risk);
         this.fillCriticality(risk);
@@ -273,232 +235,140 @@ export class Assessment extends Application {
         cy.wait(2 * SEC);
     }
 
-    // Method to verify the status of Assessment and Review
-    verifyStatus(column, status): void {
-        let columnSelector: string;
+    public static validateReviewFields(
+        name: string,
+        entityName: string,
+        archetypeName?: string
+    ): void {
+        sidedrawerTab(name, "Review");
+        if (archetypeName) name = archetypeName;
+        let list = [
+            "Proposed action",
+            "Effort estimate",
+            "Business criticality",
+            "Work priority",
+            "Comments",
+        ];
+        let actionList = [
+            `${entityName} - ${name}-Rehost`,
+            `${entityName} - ${name}-Replatform`,
+            `${entityName} - ${name}-Refactor`,
+            `${entityName} - ${name}-Retain`,
+            `${entityName} - ${name}-Repurchase`,
+            `${entityName} - ${name}-Retire`,
+        ];
+        let effortEstimateList = [
+            `${entityName} - ${name}-Small`,
+            `${entityName} - ${name}-Medium`,
+            `${entityName} - ${name}-Large`,
+            `${entityName} - ${name}-Extra large`,
+        ];
+        let criticalityList = [
+            `${entityName} - ${name}-1`,
+            `${entityName} - ${name}-2`,
+            `${entityName} - ${name}-3`,
+            `${entityName} - ${name}-4`,
+            `${entityName} - ${name}-5`,
+            `${entityName} - ${name}-6`,
+            `${entityName} - ${name}-7`,
+            `${entityName} - ${name}-8`,
+            `${entityName} - ${name}-9`,
+            `${entityName} - ${name}-10`,
+        ];
 
+        for (let i in list) {
+            cy.get("dt")
+                .contains(list[i])
+                .closest("div")
+                .within(() => {
+                    if (archetypeName) {
+                        cy.get("span.pf-v5-c-label__text").each((item) => {
+                            if (Cypress.$(item).text().includes(name)) {
+                                if (list[i] == "Proposed action")
+                                    expect(Cypress.$(item).text()).to.be.oneOf(actionList);
+                                if (list[i] == "Effort estimate")
+                                    expect(Cypress.$(item).text()).to.be.oneOf(effortEstimateList);
+                                if (list[i] == "Business criticality" || list[i] == "Work priority")
+                                    expect(Cypress.$(item).text()).to.be.oneOf(criticalityList);
+                                if (list[i] == "Comments")
+                                    expect(Cypress.$(item).text()).not.equal("Not yet reviewed");
+                            }
+                        });
+                    } else {
+                        cy.get("dd").then(($value) => {
+                            let text = $value.text();
+                            if (list[i] == "Proposed action") expect(text).to.be.oneOf(actionList);
+                            if (list[i] == "Effort estimate")
+                                expect(text).to.be.oneOf(effortEstimateList);
+                            if (list[i] == "Business criticality" || list[i] == "Work priority")
+                                expect(text).to.be.oneOf(criticalityList);
+                            if (list[i] == "Comments") expect(text).not.equal("Not yet reviewed");
+                        });
+                    }
+                });
+        }
+        click(commonView.sideDrawer.closeDrawer);
+    }
+
+    public static validateNotReviewed(name: string) {
+        cy.wait(SEC * 10);
+        sidedrawerTab(name, "Review");
+        reviewItems.forEach((listItem) => {
+            cy.get(`[cy-data="${listItem}"]`).then(($element) => {
+                const foundText = $element.text();
+                expect(foundText).to.contains(notYetReviewed);
+            });
+        });
+        click(commonView.sideDrawer.closeDrawer);
+    }
+
+    public static verifyStatus(name, column, status): void {
+        let columnSelector: string;
         if (column === "assessment") columnSelector = assessmentColumnSelector;
         else columnSelector = reviewColumnSelector;
-
         selectItemsPerPage(100);
         cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
+            .contains(name)
             .parent(trTag)
             .within(() => {
-                cy.get(columnSelector).contains(status, { timeout: 15000 });
+                cy.get(columnSelector).contains(status, { timeout: 30 * SEC });
             });
     }
 
-    // Opens the manage dependencies dialog from application inventory page
-    openManageDependencies(): void {
-        Assessment.open();
-        selectItemsPerPage(100);
-        performRowActionByIcon(this.name, kebabMenu);
-        clickByText(button, "Manage dependencies");
+    public static validateAssessmentField(name: string, page: string, risk: string): void {
+        sidedrawerTab(name, "Details");
+        cy.get(commonView.sideDrawer.risk).contains(`${page} risk`);
+        cy.get(commonView.sideDrawer.labelContent).contains(risk);
+        click(commonView.sideDrawer.closeDrawer);
     }
 
-    // Selects the application as dependency from dropdown. Arg dropdownNum value 0 selects northbound, whereas value 1 selects southbound
-    selectNorthDependency(appNameList: Array<string>): void {
-        appNameList.forEach(function (app) {
-            cy.get(northdependenciesDropdownBtn).click();
-            cy.contains("button", app).click();
+    public static deleteAssessments(): void {
+        cy.get(tableRowActions).each(($el) => {
+            cy.wrap($el).find(plainButton).click();
         });
     }
 
-    // Selects the application as dependency from dropdown. Arg dropdownNum value 0 selects northbound, whereas value 1 selects southbound
-    selectDependency(dropdownLocator: string, appNameList: Array<string>): void {
-        appNameList.forEach(function (app) {
-            cy.get(dropdownLocator).click();
-            cy.contains("button", app).click();
-        });
-    }
-
-    // Add north or south bound dependency for an application
-    addDependencies(northbound?: Array<string>, southbound?: Array<string>): void {
-        if (northbound || southbound) {
-            this.openManageDependencies();
-            if (northbound.length > 0) {
-                this.selectDependency(northdependenciesDropdownBtn, northbound);
-                cy.wait(SEC);
-            }
-            if (southbound.length > 0) {
-                this.selectDependency(southdependenciesDropdownBtn, southbound);
-                cy.wait(SEC);
-            }
-            cy.wait(2 * SEC);
-            click(closeForm);
-        }
-    }
-
-    removeDep(dependency, dependencyType) {
-        cy.get("div")
-            .contains(`Add ${dependencyType} dependencies`)
-            .parent("div")
-            .siblings()
-            .find("span")
-            .should("contain.text", dependency)
-            .parent("div")
-            .find("button")
-            .trigger("click");
-        if (dependencyType === "northbound") cy.get(northdependenciesDropdownBtn).click();
-        else cy.get(southdependenciesDropdownBtn).click();
-    }
-
-    // Remove north or south bound dependency for an application
-    removeDependencies(northbound?: Array<string>, southbound?: Array<string>): void {
-        if (northbound || southbound) {
-            this.openManageDependencies();
-            if (northbound.length > 0) {
-                this.removeDep(northbound[0], "northbound");
-                cy.wait(SEC);
-            }
-            if (southbound.length > 0) {
-                this.removeDep(southbound[0], "southbound");
-                cy.wait(SEC);
-            }
-            cy.wait(2 * SEC);
-            click(closeForm);
-        }
-    }
-    // Verifies if the north or south bound dependencies exist for an application
-    verifyDependencies(northboundApps?: Array<string>, southboundApps?: Array<string>): void {
-        if (northboundApps || southboundApps) {
-            this.openManageDependencies();
-            cy.wait(2 * SEC);
-            if (northboundApps && northboundApps.length > 0) {
-                northboundApps.forEach((app) => {
-                    this.dependencyExists("northbound", app);
-                });
-            }
-            if (southboundApps && southboundApps.length > 0) {
-                southboundApps.forEach((app) => {
-                    this.dependencyExists("southbound", app);
-                });
-            }
-            click(closeForm);
-        }
-    }
-
-    // Checks if app name is displayed in the dropdown under respective dependency
-    protected dependencyExists(dependencyType: string, appName: string): void {
-        cy.get("div")
-            .contains(`Add ${dependencyType} dependencies`)
-            .parent("div")
-            .siblings()
-            .find("span")
-            .should("contain.text", appName);
-    }
-
-    verifyCopyAssessmentDisabled(): void {
-        Assessment.open();
-        selectItemsPerPage(100);
-        cy.wait(2 * SEC);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(actionButton);
-                cy.wait(500);
-                cy.get("ul > li").find(button).should("not.contain", "Copy assessment");
-            });
-    }
-
-    copy_assessment(applicationList: Array<Application>, cancel = false): void {
-        this.openCopyAssessmentModel();
-        this.selectApps(applicationList);
-        if (cancel) {
-            cancelForm();
-        } else {
-            click(copy);
-            checkSuccessAlert(
-                commonView.successAlertMessage,
-                `Success! Assessment copied to selected applications`
-            );
-        }
-    }
-
-    copy_assessment_review(applicationList: Array<Application>, cancel = false): void {
-        this.openCopyAssessmentModel(true);
-        this.selectApps(applicationList);
-
-        if (cancel) {
-            cancelForm();
-        } else {
-            click(copy);
-            cy.wait(2 * SEC);
-        }
-    }
-
-    discard_assessment(): void {
-        Assessment.open();
-        selectItemsPerPage(100);
-        cy.wait(2 * SEC);
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(tdTag)
-            .parent(trTag)
-            .within(() => {
-                click(actionButton);
-                cy.wait(500);
-                clickByText(button, "Discard assessment");
-            });
-        cy.get(continueButton).click();
-        checkSuccessAlert(
-            commonView.successAlertMessage,
-            `Success! Assessment discarded for ${this.name}.`
+    public static verifyButtonEnabled(button: string): void {
+        cy.contains("button", button, { timeout: 30 * SEC }).should(
+            "not.have.attr",
+            "aria-disabled",
+            "true"
         );
     }
+    public static validateReviewDonutChart(): void {
+        cy.get(donutChart).should("be.visible");
+        cy.get(donutChartImage).should("have.attr", "role", "img").and("be.visible");
+        cy.get(victoryContainer).should("contain", riskDonutChart);
 
-    selectApps(applicationList: Array<Application>): void {
-        cy.wait(4 * SEC);
-        for (let i = 0; i < applicationList.length; i++) {
-            if (applicationList[i].name != this.name) {
-                cy.get(".pf-m-compact> tbody > tr > td")
-                    .contains(applicationList[i].name)
-                    .parent(trTag)
-                    .within(() => {
-                        click(selectBox);
-                        cy.wait(2 * SEC);
-                    });
-            }
-        }
-    }
-
-    openCopyAssessmentModel(review = false, items = 100): void {
-        let action = "Copy assessment";
-        if (review) {
-            action += " and review";
-        }
-        Assessment.open();
-        selectItemsPerPage(items);
-        cy.wait(2 * SEC);
-        cy.get(tdTag)
-            .contains(this.name)
-            .closest(trTag)
-            .within(() => {
-                click(actionButton);
-                cy.wait(500);
-                clickByText(button, action);
-            });
-        cy.get(copyAssessmentModal).within(() => {
-            selectItemsPerPage(items);
+        // Validate number of sections in chart match the number of legend text items
+        cy.get(donutChart).within(() => {
+            cy.get("g")
+                .first()
+                .find('path[role="presentation"][d]')
+                .its("length")
+                .then((numberOfPathsInFirstG) => {
+                    cy.get(text).should("have.length", numberOfPathsInFirstG);
+                });
         });
-    }
-
-    selectItemsPerPage(items: number): void {
-        cy.get(copyAssessmentModal).within(() => {
-            selectItemsPerPage(items);
-        });
-    }
-
-    // Method to verify review button is disabled
-    verifyReviewButtonDisabled(): void {
-        Assessment.open();
-        selectItemsPerPage(100);
-        cy.wait(2 * SEC);
-        this.selectApplication();
-        cy.get(button).contains(review).should("be.disabled");
     }
 }
