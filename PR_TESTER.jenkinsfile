@@ -63,34 +63,9 @@ pipeline{
             }   
             steps{
                 script{
-                    
-                    sh """ curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-                            chmod +x minikube
-                            minikube_homedir=/usr/local/bin/
-
-                            sudo install minikube /usr/local/bin
-
-                            minikube delete
-                            sleep 20s
-                            minikube start --driver=podman --memory=4g
-                            minikube addons enable dashboard
-                            minikube addons enable ingress
-                            minikube addons enable olm
-                            kubectl apply -f https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/crds.yaml
-                            kubectl apply -f https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/olm.yaml
-
-                            kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle2-operator/main/tackle-k8s.yaml
-
-                            while [ \$(kubectl get crd|grep tackle|wc -l) != 2 ]
-                            do echo "Waiting for Tackle CRDs..."
-                            sleep 5s
-                            done
-
-                            """
-
-                            echo "Applying tackle CR"
-                            tackle.applyTackleCR() //Tackle CR will be applied with using default password `Passw0rd!`.
-                    
+                    tackle.deployKonveyorOnMinikube()
+                    echo "Applying tackle CR"
+                    tackle.applyTackleCR()
                 }
             }
         }
