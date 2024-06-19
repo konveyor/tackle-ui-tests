@@ -73,6 +73,8 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         /*Automates Polarion MTA-499 Verify multiple applications inherit assessment and review inheritance from an archetype
           and Polarion MTA-2464 Assess archetype with multiple questionnaires */
         archetype.perform_review("low");
+        archetype.verifyStatus("review", "Completed");
+        archetype.verifyStatus("assessment", "Not started");
         archetype.perform_assessment("low", stakeholders);
         // 'Archetype risk' field shows unassessed until all required questionnaires have been taken.
         archetype.validateAssessmentField("unassessed");
@@ -80,8 +82,10 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         cy.contains("tr", legacyPathfinder).find("button.retake-button").should("have.length", 1);
 
         Archetype.open(true);
+        archetype.verifyStatus("assessment", "In-progress");
         archetype.perform_assessment("medium", stakeholders, null, cloudReadinessQuestionnaire);
         archetype.validateAssessmentField("Medium");
+        archetype.verifyStatus("assessment", "Completed");
         archetype.clickAssessButton();
         cy.contains("tr", cloudReadinessQuestionnaire)
             .find("button.retake-button")
@@ -123,7 +127,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         cy.wait(2 * SEC);
 
         // Note that the application is associated with 2 archetypes. Its 'Assessment' and 'Review'
-        // status show 'In progress' until all associated archetypes have been assessed.
+        // status show 'In-progress' until all associated archetypes have been assessed.
         application2.verifyArchetypeList(archetypeNames, "Associated archetypes");
         application2.verifyStatus("review", "Not started");
         archetypeList[0].perform_review("low");
@@ -167,11 +171,11 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
 
         const archetypeList = createMultipleArchetypes(2, associationTags);
 
-        archetypeList[0].perform_assessment("low", stakeholders);
-        archetypeList[0].validateAssessmentField("Low");
-
-        archetypeList[1].perform_assessment("low", stakeholders);
-        archetypeList[1].validateAssessmentField("Low");
+        for (let i = 0; i < archetypeList.length; i++) {
+            archetypeList[i].perform_assessment("low", stakeholders);
+            Archetype.open(true);
+            archetypeList[i].verifyStatus("assessment", "Completed");
+        }
 
         const appdata = {
             name: data.getAppName(),
