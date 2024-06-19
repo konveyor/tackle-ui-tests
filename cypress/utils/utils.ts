@@ -53,6 +53,7 @@ import {
 import { actionButton, date, createEntitiesCheckbox } from "../e2e/views/applicationinventory.view";
 import {
     aboutButton,
+    closeAbout,
     closeSuccessNotification,
     confirmButton,
     divHeader,
@@ -1785,4 +1786,5 @@ export function validateMtaVersionInUi(expectedVersion: string): void {
         .within(() => {
             cy.get("dd").should("contain.text", expectedVersion);
         });
+    click(closeAbout);
 }
