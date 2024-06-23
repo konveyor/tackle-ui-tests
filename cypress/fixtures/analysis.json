@@ -165,11 +165,11 @@
                 "category": "mandatory",
                 "source": "None",
                 "effort": 1,
-                "affectedFiles": 2,
-                "targets": ["cloud-readiness"],
-                "rule": "local-storage-00001",
-                "ruleSet": "cloud-readiness",
-                "labels": ["konveyor.io/source", "storage"]
+                "affectedFiles": 1,
+                "targets": ["cloud-readiness", "discovery"],
+                "rule": "hardcoded-ip-address",
+                "ruleSet": "discovery-rules",
+                "labels": ["discovery"]
             }
         ]
     },
