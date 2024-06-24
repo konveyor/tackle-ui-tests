@@ -167,8 +167,8 @@
                 "effort": 1,
                 "affectedFiles": 1,
                 "targets": ["cloud-readiness"],
-                "rule": "hardcoded-ip-address",
                 "ruleSet": "discovery-rules",
+                "rule": "hardcoded-ip-address",
                 "labels": ["discovery"]
             }
         ]
