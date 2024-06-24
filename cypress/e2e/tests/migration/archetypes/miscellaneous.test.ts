@@ -168,6 +168,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
             `Success! Assessment discarded for ${archetype.name}.`,
             true
         );
+        Archetype.open(true);
         archetype.verifyStatus("assessment", "Not started");
     });
 
