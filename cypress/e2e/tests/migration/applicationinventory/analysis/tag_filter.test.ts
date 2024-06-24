@@ -75,7 +75,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
         Application.open(true);
     });
 
-    it("Filter by automated tags generated after analysis", function () {
+    it("BUG MTA-2984: Filter by automated tags generated after analysis", function () {
         // Automates Polarion MTA-310
         const application = new Analysis(
             getRandomApplicationData(
