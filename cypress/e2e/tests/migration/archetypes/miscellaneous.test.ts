@@ -146,7 +146,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
     });
 
-    it("Bug MTA-2616: Discard archetype assessment from kebab menu & Assessment Actions page", function () {
+    it("Discard archetype assessment from kebab menu & Assessment Actions page", function () {
         //Automates Polarion MTA-427 Discard assessment through kebab menu
         Archetype.open(true);
         archetype.discard("Discard assessment(s)");
@@ -155,7 +155,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
             `Success! Assessment discarded for ${archetype.name}.`,
             true
         );
-        archetype.validateAssessmentField("Unknown");
+        archetype.verifyStatus("assessment", "Not started");
 
         // Automates Polarion MTA-439 Delete assessment through Assessment Actions page
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
@@ -168,7 +168,8 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
             `Success! Assessment discarded for ${archetype.name}.`,
             true
         );
-        archetype.validateAssessmentField("Unknown");
+        Archetype.open(true);
+        archetype.verifyStatus("assessment", "Not started");
     });
 
     it("Discard archetype review", function () {
@@ -181,7 +182,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
             true
         );
         cy.wait(2 * SEC);
-        archetype.validateNotReviewed();
+        archetype.verifyStatus("review", "Not started");
     });
 
     after("Perform test data clean up", function () {
