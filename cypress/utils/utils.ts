@@ -1307,7 +1307,7 @@ export function deleteAllItems(
 
 export function deleteAllBusinessServices() {
     BusinessServices.openList();
-    deleteAllItems();
+    deleteAllRows();
 }
 
 export function deleteAllStakeholderGroups(cancel = false): void {
