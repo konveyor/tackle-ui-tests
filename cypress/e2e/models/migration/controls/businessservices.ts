@@ -18,7 +18,6 @@ import {
     businessServices,
     button,
     createNewButton,
-    editAction,
     deleteAction,
     SEC,
     trTag,
@@ -42,10 +41,11 @@ import {
     submitForm,
     cancelForm,
     selectFormItems,
-    performRowAction,
     selectUserPerspective,
     goToPage,
     goToLastPage,
+    clickItemInKebabMenu,
+    performRowActionByIcon,
 } from "../../../../utils/utils";
 
 export class BusinessServices {
@@ -159,7 +159,7 @@ export class BusinessServices {
     ): void {
         BusinessServices.openList();
         cy.wait(2000);
-        performRowAction(this.name, editAction);
+        performRowActionByIcon(this.name, commonView.pencilIcon);
 
         if (cancel) {
             cancelForm();
@@ -184,7 +184,7 @@ export class BusinessServices {
 
     delete(cancel = false): void {
         BusinessServices.openList();
-        performRowAction(this.name, deleteAction);
+        clickItemInKebabMenu(this.name, deleteAction);
         if (cancel) {
             click(commonView.confirmCancelButton);
         } else {

@@ -33,6 +33,7 @@ import {
     createNewButton,
     duplicateBusinessService,
     migration,
+    SEC,
 } from "../../../../types/constants";
 import {
     businessServiceNameInput,
@@ -44,7 +45,7 @@ import { BusinessServices } from "../../../../models/migration/controls/business
 import * as data from "../../../../../utils/data_utils";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
-describe(["@tier2"], "Bug MTA-2260: Business service validations", () => {
+describe(["@tier2"], "Business service validations", () => {
     before("Login", function () {
         login();
     });
@@ -91,7 +92,7 @@ describe(["@tier2"], "Bug MTA-2260: Business service validations", () => {
         cy.contains(button, createNewButton).should("exist");
     });
 
-    it("Bug MTA-2260: Business service success alert and unique constraint validation", function () {
+    it("Bug MTA-3095: Business service success alert and unique constraint validation", function () {
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
         const businessService = new BusinessServices(
@@ -128,6 +129,8 @@ describe(["@tier2"], "Bug MTA-2260: Business service validations", () => {
         cy.get(commonView.closeButton).click();
         businessService.delete();
         checkSuccessAlert(commonView.successAlertMessage, `Success alert:Business service deleted`);
+        // TODO: Remove workaround (cy.wait) once bug is fixed MTA-3095
+        cy.wait(5 * SEC);
         businessService1.delete();
         checkSuccessAlert(commonView.successAlertMessage, `Success alert:Business service deleted`);
         stakeholder.delete();
