@@ -26,7 +26,13 @@ import {
     verifySortAsc,
     verifySortDesc,
 } from "../../../../utils/utils";
-import { legacyPathfinder, SEC, SortType } from "../../../types/constants";
+import {
+    cloudReadinessFilePath,
+    cloudReadinessQuestionnaire,
+    legacyPathfinder,
+    SEC,
+    SortType,
+} from "../../../types/constants";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { Application } from "../../../models/migration/applicationinventory/application";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
@@ -35,6 +41,7 @@ import {
     IdentifiedRiskTableHeaders,
     questionnaireNameColumnDataLabel,
 } from "../../../views/reportsTab.view";
+import * as data from "../../../../utils/data_utils";
 
 let stakeholder: Stakeholders;
 let application: Application;
@@ -52,10 +59,17 @@ describe(["@tier2"], "Reports tab sort tests", () => {
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
         AssessmentQuestionnaire.deleteAllQuestionnaires();
-        AssessmentQuestionnaire.enable(legacyPathfinder);
+        AssessmentQuestionnaire.disable(legacyPathfinder);
+        AssessmentQuestionnaire.import(cloudReadinessFilePath);
+        AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
         stakeholder = createMultipleStakeholders(1)[0];
-        application = createMultipleApplications(1)[0];
-        application.perform_assessment("high", [stakeholder]);
+        const appdata = {
+            name: data.getAppName(),
+            tags: ["Language / Java", "Runtime / Quarkus"],
+        };
+        application = new Application(appdata);
+        application.create();
+        application.perform_assessment("medium", [stakeholder], null, cloudReadinessQuestionnaire);
         application.verifyStatus("assessment", "Completed");
         application.perform_review("high");
         application.verifyStatus("review", "Completed");
