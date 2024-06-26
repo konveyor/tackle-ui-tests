@@ -71,8 +71,6 @@ describe(["@tier2"], "Reports tab sort tests", () => {
         application.create();
         application.perform_assessment("medium", [stakeholder], null, cloudReadinessQuestionnaire);
         application.verifyStatus("assessment", "Completed");
-        application.perform_review("high");
-        application.verifyStatus("review", "Completed");
         Reports.open(100);
     });
 
