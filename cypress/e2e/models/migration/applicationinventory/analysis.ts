@@ -166,6 +166,8 @@ export class Analysis extends Application {
     public static selectLanguage(language: Languages) {
         cy.wait(2 * SEC);
         click(actionSelectToggle);
+        click("div");
+        cy.wait(2 * SEC);
         clickByText("div", language);
         click(actionSelectToggle);
     }
