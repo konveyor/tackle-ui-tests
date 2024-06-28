@@ -42,7 +42,6 @@ export const cyclicDependenciesErrorMsg = "cyclic dependencies are not allowed";
 export const northdependenciesDropdownBtn = "button[aria-label='northbound-dependencies-toggle']";
 export const southdependenciesDropdownBtn = "button[aria-label='southbound-dependencies-toggle']";
 export const date = "Import Time";
-export const editButton = "#pencil-action";
 export const importStatus = "Status";
 export const selectBox = "input[type=checkbox]";
 export const tags = "span";
