@@ -3,3 +3,7 @@ LICENSE
 node_modules
 *.md
 license-checker-config.json
+
+cypress/downloads/
+cypress/reports/
+cypress/screenshots/
