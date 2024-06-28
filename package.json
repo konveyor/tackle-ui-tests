@@ -22,6 +22,8 @@
         "typescript": "^4.2.4"
     },
     "scripts": {
+        "e2e:run:local": "cypress run --env tackleUrl=http://localhost:9000",
+        "e2e:open:local": "cypress open --e2e --env tackleUrl=http://localhost:9000",
         "check": "prettier --check './**/*.{ts,js,json}'",
         "format": "prettier --write './**/*.{ts,js,json}'",
         "mergereports": "npx jrm ./cypress/reports/junitreport.xml ./cypress/reports/junit/*.xml"
