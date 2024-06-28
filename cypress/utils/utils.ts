@@ -815,14 +815,21 @@ export function performRowActionByIcon(itemName: string, action: string): void {
     // Action is the name of the action to be applied (For eg: edit or click kebab menu)
     cy.contains(itemName, { timeout: 120 * SEC })
         .closest(trTag)
-        .within(() => {
-            clickWithin(action, button);
-        });
+        .scrollIntoView()
+        .find(action)
+        .first()
+        .find("button", { log: true, timeout: 30 * SEC })
+        .first()
+        .click({ force: true });
 }
 
 export function clickItemInKebabMenu(rowItem, itemName: string): void {
     performRowActionByIcon(rowItem, kebabMenu);
-    cy.get(commonView.actionMenuItem).contains(itemName).click();
+    cy.get(commonView.actionMenuItem)
+        .contains(itemName)
+        .closest(button)
+        .first()
+        .click({ force: true });
 }
 
 export function clickKebabMenuOptionArchetype(rowItem: string, itemName: string): void {
