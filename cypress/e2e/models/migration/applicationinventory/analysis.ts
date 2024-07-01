@@ -163,10 +163,21 @@ export class Analysis extends Application {
         selectFormItems(sourceDropdown, source);
     }
 
+    /**
+     * Make sure our language is selected. It may already be selected if language-discovery
+     * added it, or if it was added manually.
+     */
     public static selectLanguage(language: Languages) {
         cy.wait(2 * SEC);
         click(actionSelectToggle);
-        clickByText("div", language);
+
+        // find the language's input checkbox and make sure it is checked
+        cy.get(`${actionSelectToggle} + .pf-v5-c-menu`)
+            .contains(language)
+            .closest(".pf-v5-c-menu__list-item")
+            .find("input[type=checkbox]")
+            .check();
+
         click(actionSelectToggle);
     }
 
