@@ -41,6 +41,7 @@ let projectName = "";
  * This test suite contains tests that are co-dependent, so they won't pass if they're executed separately
  * @see export_to_jira_cloud.test.ts for Jira Cloud tests
  * This suite is almost identical to jira_cloud but putting both tests in the same suite would make the code harder to read
+ * The only difference is that this test doesn't remove/archive the issues created since the token doesn't have enough permissions
  */
 describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
     before("Create test data", function () {
@@ -129,8 +130,6 @@ describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
                             (issueType as string).toUpperCase()
                     );
                 });
-
-                jiraInstance.archiveIssues(waveIssues.map((issue) => issue.id));
 
                 expect(waveIssues).to.have.length(2);
             });
