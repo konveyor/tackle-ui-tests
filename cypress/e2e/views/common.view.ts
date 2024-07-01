@@ -96,7 +96,3 @@ export enum sideDrawer {
 }
 export const closeAbout = "button[aria-label='Close Dialog'";
 export const pencilIcon = "#pencil-action";
-export function getCheckboxSelector(text: string) {
-    text = text.charAt(0).toLowerCase() + text.slice(1).replace(/\s+/g, "");
-    return `input[aria-labelledby='check-${text}']`;
-}

@@ -22,11 +22,11 @@ import {
     validateTextPresence,
     validateCheckBoxIsDisabled,
     clickByText,
+    getCheckboxSelector,
 } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
-import { button, save, SEC } from "../../../../types/constants";
+import { button, save, trTag } from "../../../../types/constants";
 import { manageColumnsModal } from "../../../../views/applicationinventory.view";
-import { getCheckboxSelector } from "../../../../views/common.view";
 
 const applicationInventoryTableColumns = [
     "Name",
@@ -37,14 +37,7 @@ const applicationInventoryTableColumns = [
     "Tags",
     "Effort",
 ];
-const columnsToShuffleAndTest = [
-    "Business Service",
-    "Assessment",
-    "Review",
-    "Analysis",
-    "Tags",
-    "Effort",
-];
+const columnsToShuffleAndTest = [...applicationInventoryTableColumns.slice(1)];
 
 describe(["@tier3"], "Application inventory managing columns validations", function () {
     //automates polarion MTA537
@@ -52,34 +45,27 @@ describe(["@tier3"], "Application inventory managing columns validations", funct
         login();
         Application.open();
         applicationInventoryTableColumns.forEach((column) =>
-            validateTextPresence("table > thead > tr", column, true)
+            validateTextPresence(trTag, column, true)
         );
     });
 
-    it("validates managing columns", function () {
-        // Navigate to Application inventory tab
+    it("Validates managing columns", function () {
         Application.open();
         validateManagingColumns();
-        cy.wait(2 * SEC);
         openManageColumns();
         validateCheckBoxIsDisabled("Name", true);
         clickByText(button, save, true);
     });
 
-    it("validates restoring columns to default", function () {
+    it("Validates restoring columns to default", function () {
         Application.open();
         restoreColumnsToDefault();
         applicationInventoryTableColumns.forEach((column) =>
-            validateTextPresence("table > thead > tr", column, true)
+            validateTextPresence(trTag, column, true)
         );
     });
 
-    after("Perform test data clean up", function () {
-        //no data created
-    });
-
     const validateManagingColumns = () => {
-        // Open manage columns modal
         openManageColumns();
         // randomly choose two columns and select them
         const shuffledColumns = Cypress._.shuffle(columnsToShuffleAndTest);
@@ -90,8 +76,6 @@ describe(["@tier3"], "Application inventory managing columns validations", funct
             });
             clickByText(button, save, true);
         });
-        selectedColumns.forEach((column) =>
-            validateTextPresence("table > thead > tr", column, false)
-        );
+        selectedColumns.forEach((column) => validateTextPresence(trTag, column, false));
     };
 });

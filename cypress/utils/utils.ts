@@ -72,7 +72,6 @@ import {
     filterDropDown,
     filterDropDownContainer,
     firstPageButton,
-    getCheckboxSelector,
     lastPageButton,
     liTag,
     modal,
@@ -1927,9 +1926,12 @@ export function openManageColumns(): void {
 }
 
 export function validateCheckBoxIsDisabled(checkBoxText: string, isChecked?: boolean): void {
-    if (isChecked) {
-        cy.get(getCheckboxSelector(checkBoxText)).should("be.disabled").and("be.checked");
-    } else {
-        cy.get(getCheckboxSelector(checkBoxText)).should("be.disabled").and("not.be.checked");
-    }
+    cy.get(getCheckboxSelector(checkBoxText))
+        .should("be.disabled")
+        .and(`${isChecked ? "" : "not."}be.checked`);
+}
+
+export function getCheckboxSelector(text: string) {
+    text = text.charAt(0).toLowerCase() + text.slice(1).replace(/\s+/g, "");
+    return `input[aria-labelledby='check-${text}']`;
 }
