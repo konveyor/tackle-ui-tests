@@ -72,6 +72,7 @@ import {
     filterDropDown,
     filterDropDownContainer,
     firstPageButton,
+    getCheckboxSelector,
     lastPageButton,
     liTag,
     modal,
@@ -1914,4 +1915,21 @@ export function getUniqueElementsFromSecondArray<T extends { name: string }>(
         }
     });
     return result;
+}
+
+export function restoreColumnsToDefault(): void {
+    openManageColumns();
+    clickByText(button, "Restore defaults", true);
+    clickByText(button, save, true);
+}
+export function openManageColumns(): void {
+    cy.get(".pf-v5-c-overflow-menu__group.pf-m-button-group").find("button").click();
+}
+
+export function validateCheckBoxIsDisabled(checkBoxText: string, isChecked?: boolean): void {
+    if (isChecked) {
+        cy.get(getCheckboxSelector(checkBoxText)).should("be.disabled").and("be.checked");
+    } else {
+        cy.get(getCheckboxSelector(checkBoxText)).should("be.disabled").and("not.be.checked");
+    }
 }
