@@ -112,7 +112,7 @@ export class Issues {
         filterValue: string,
         isSingle = false
     ): void {
-        let selector = "";
+        // let selector = "";
         if (!isSingle) {
             Issues.openList();
         }
@@ -127,11 +127,20 @@ export class Issues {
             inputText(searchInput, filterValue);
             click(searchButton);
         } else {
-            selector = searchMenuToggle;
-            click(selector);
+            // selector = searchMenuToggle;
+            click(searchMenuToggle);
             clickByText(span, filterValue);
-            click(selector);
+            click(searchMenuToggle);
         }
+    }
+
+    public static applyMultiFilter(filterType: issueFilter, filterValues: string[]): void {
+        selectFilter(filterType);
+        filterValues.forEach((filterValue) => {
+            click(searchMenuToggle);
+            clickByText(span, filterValue);
+            click(searchMenuToggle);
+        });
     }
 
     public static unfold(name: string): void {
