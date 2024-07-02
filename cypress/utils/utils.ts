@@ -1915,3 +1915,23 @@ export function getUniqueElementsFromSecondArray<T extends { name: string }>(
     });
     return result;
 }
+
+export function restoreColumnsToDefault(): void {
+    openManageColumns();
+    clickByText(button, "Restore defaults", true);
+    clickByText(button, save, true);
+}
+export function openManageColumns(): void {
+    cy.get(".pf-v5-c-overflow-menu__group.pf-m-button-group").find("button").click();
+}
+
+export function validateCheckBoxIsDisabled(checkBoxText: string, isChecked?: boolean): void {
+    cy.get(getCheckboxSelector(checkBoxText))
+        .should("be.disabled")
+        .and(`${isChecked ? "" : "not."}be.checked`);
+}
+
+export function getCheckboxSelector(text: string) {
+    text = text.charAt(0).toLowerCase() + text.slice(1).replace(/\s+/g, "");
+    return `input[aria-labelledby='check-${text}']`;
+}
