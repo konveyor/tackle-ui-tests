@@ -665,7 +665,7 @@ export class Application {
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(this.name)
-            .parent(trTag)
+            .closest(trTag)
             .within(() => {
                 cy.get(columnSelector).within(() => {
                     cy.get(".pf-v5-svg").eq(1).should("have.attr", "role", "img").and("be.visible");
@@ -734,7 +734,7 @@ export class Application {
             if (applicationList[i].name != this.name) {
                 cy.get(".pf-m-compact> tbody > tr > td")
                     .contains(applicationList[i].name)
-                    .parent(trTag)
+                    .closest(trTag)
                     .within(() => {
                         click(selectBox);
                         cy.wait(2 * SEC);
@@ -896,7 +896,7 @@ export class Application {
         Application.open();
         cy.get(tdTag)
             .contains(this.name)
-            .parent(trTag)
+            .closest(trTag)
             .within(() => {
                 cy.get(tagsColumnSelector).contains(tagsCount, { timeout: 30 * SEC });
             });
