@@ -329,7 +329,7 @@ export class Assessment {
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(name)
-            .parent(trTag)
+            .closest(trTag)
             .within(() => {
                 cy.get(columnSelector).contains(status, { timeout: 30 * SEC });
             });
