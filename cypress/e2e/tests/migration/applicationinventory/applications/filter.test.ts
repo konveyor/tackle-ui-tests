@@ -44,6 +44,7 @@ import {
     risk,
     SEC,
     tags,
+    archetypes,
 } from "../../../../types/constants";
 
 import * as data from "../../../../../utils/data_utils";
@@ -259,7 +260,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Risk filter validations", function () {
+    it("BUG MTA-3213: Risk filter validations", function () {
         const application = applicationsList[0];
         const application1 = applicationsList[1];
 
@@ -324,7 +325,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         archetype2.create();
         cy.wait(2 * SEC);
         Application.open();
-        selectFilter("Archetypes");
+        selectFilter(archetypes);
         cy.get(filterDropDownContainer).find(searchMenuToggle).click();
         notExists(archetype2.name);
 

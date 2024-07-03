@@ -480,13 +480,14 @@ export function applySearchFilter(
         owner,
         archetypes,
     ].includes(filterName);
+    const isSpecialKnownFilter = [artifact, repositoryType].includes(filterName);
     let filterValue = [];
     if (!Array.isArray(searchText)) {
         filterValue = [searchText];
     } else filterValue = searchText;
 
     cy.url().then(($url) => {
-        if (!isStandardKnownFilter) {
+        if (!isStandardKnownFilter && !isSpecialKnownFilter) {
             if ($url == Application.fullUrl && filterName == "Name") {
                 // Only on application page you can select multiple
                 // applications from dropdown.
@@ -511,7 +512,7 @@ export function applySearchFilter(
             cy.get(standardFilter).contains(searchTextValue).click();
         });
     }
-    if (filterName == artifact) {
+    if (isSpecialKnownFilter) {
         if (isStandardKnownFilter) {
             cy.get(filterDropDownContainer).find(filterSelectType).click();
             filterValue.forEach((searchTextValue) => {
