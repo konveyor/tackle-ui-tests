@@ -56,7 +56,8 @@ import { Tag } from "../../../../models/migration/controls/tags";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
-import { filterDropDown, filterDropDownContainer } from "../../../../views/common.view";
+import { filterDropDownContainer } from "../../../../views/common.view";
+import { searchMenuToggle } from "../../../../views/issue.view";
 
 let source_credential;
 let maven_credential;
@@ -324,7 +325,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         cy.wait(2 * SEC);
         Application.open();
         selectFilter("Archetypes");
-        cy.get(filterDropDownContainer).find(filterDropDown).click();
+        cy.get(filterDropDownContainer).find(searchMenuToggle).click();
         notExists(archetype2.name);
 
         deleteByList([archetype1, archetype2]);

@@ -119,6 +119,7 @@ import {
 } from "../e2e/views/migration-wave.view";
 import { manageCredentials, mavenCredential, sourceCredential } from "../e2e/views/analysis.view";
 import * as ansiRegex from "ansi-regex";
+import { filterSelectType } from "../e2e/views/credentials.view";
 
 const { _ } = Cypress;
 
@@ -476,7 +477,6 @@ export function applySearchFilter(
         businessServiceLower,
         businessService,
         repositoryType,
-        artifact,
         owner,
         archetypes,
     ].includes(filterName);
@@ -510,6 +510,14 @@ export function applySearchFilter(
         filterValue.forEach((searchTextValue) => {
             cy.get(standardFilter).contains(searchTextValue).click();
         });
+    }
+    if (filterName == artifact) {
+        if (isStandardKnownFilter) {
+            cy.get(filterDropDownContainer).find(filterSelectType).click();
+            filterValue.forEach((searchTextValue) => {
+                cy.get(standardFilter).contains(searchTextValue).click();
+            });
+        }
     }
     cy.wait(4000);
 }
