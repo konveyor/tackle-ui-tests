@@ -476,7 +476,6 @@ export function applySearchFilter(
         risk,
         businessServiceLower,
         businessService,
-        repositoryType,
         owner,
         archetypes,
     ].includes(filterName);

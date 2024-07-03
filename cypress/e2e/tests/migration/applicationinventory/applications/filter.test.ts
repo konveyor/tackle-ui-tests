@@ -229,7 +229,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Artifact type filter validations", function () {
+    it("BUG MTA-3215: Artifact type filter validations", function () {
         // For application must have Binary group,artifact and version
         const application = new Application(
             getRandomApplicationData("tackleTestApp_Binary", {
