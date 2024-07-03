@@ -27,7 +27,6 @@ import * as data from "../utils/data_utils";
 import "cypress-file-upload";
 import {
     businessService,
-    tag,
     groupCount,
     memberCount,
     tagCount,
@@ -54,6 +53,8 @@ import {
     save,
     archetypes,
     SortType,
+    displayName,
+    tags,
 } from "../e2e/types/constants";
 import {
     date,
@@ -107,6 +108,7 @@ import { stakeHoldersTable } from "../e2e/views/stakeholders.view";
 import {
     bsFilterName,
     searchInput,
+    searchMenuToggle,
     singleApplicationColumns,
     tagFilterName,
 } from "../e2e/views/issue.view";
@@ -467,6 +469,10 @@ export function applySearchFilter(
 ): void {
     selectFilter(filterName, identifiedRisk, value);
     const isStandardKnownFilter = [
+        displayName,
+        credentialType,
+        tags,
+        risk,
         businessServiceLower,
         businessService,
         repositoryType,
@@ -474,14 +480,13 @@ export function applySearchFilter(
         owner,
         archetypes,
     ].includes(filterName);
-    const isSpecialKnownFilter = [tag, credentialType, risk].includes(filterName);
     let filterValue = [];
     if (!Array.isArray(searchText)) {
         filterValue = [searchText];
     } else filterValue = searchText;
 
     cy.url().then(($url) => {
-        if (!isStandardKnownFilter && !isSpecialKnownFilter) {
+        if (!isStandardKnownFilter) {
             if ($url == Application.fullUrl && filterName == "Name") {
                 // Only on application page you can select multiple
                 // applications from dropdown.
@@ -501,19 +506,11 @@ export function applySearchFilter(
     });
 
     if (isStandardKnownFilter) {
-        cy.get(filterDropDownContainer).find(filterDropDown).click();
+        cy.get(filterDropDownContainer).find(searchMenuToggle).click();
         filterValue.forEach((searchTextValue) => {
             cy.get(standardFilter).contains(searchTextValue).click();
         });
     }
-
-    if (isSpecialKnownFilter) {
-        cy.get(filterDropDownContainer).find(filterDropDown).click();
-        filterValue.forEach((searchTextValue) => {
-            cy.get(specialFilter).contains(searchTextValue).click();
-        });
-    }
-
     cy.wait(4000);
 }
 

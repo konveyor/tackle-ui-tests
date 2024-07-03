@@ -33,7 +33,6 @@ import {
 import {
     button,
     clearAllFilters,
-    tag,
     CredentialType,
     UserCredentials,
     credentialType,
@@ -44,6 +43,7 @@ import {
     name,
     risk,
     SEC,
+    tags,
 } from "../../../../types/constants";
 
 import * as data from "../../../../../utils/data_utils";
@@ -148,14 +148,14 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         Application.open();
 
         const validSearchInput = applicationsList[0].tags[0];
-        applySearchFilter(tag, validSearchInput);
+        applySearchFilter(tags, validSearchInput);
         cy.wait(2000);
 
         exists(applicationsList[0].name);
         notExists(applicationsList[1].name);
         clickByText(button, clearAllFilters);
 
-        applySearchFilter(tag, applicationsList[1].tags[0]);
+        applySearchFilter(tags, applicationsList[1].tags[0]);
         exists(applicationsList[1].name);
         notExists(applicationsList[0].name);
         clickByText(button, clearAllFilters);
