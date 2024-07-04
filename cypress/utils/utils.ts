@@ -512,13 +512,11 @@ export function applySearchFilter(
         });
     }
     if (isSpecialKnownFilter) {
-        if (isStandardKnownFilter) {
             cy.get(filterDropDownContainer).find(filterSelectType).click();
             filterValue.forEach((searchTextValue) => {
                 cy.get(standardFilter).contains(searchTextValue).click();
             });
         }
-    }
     cy.wait(4000);
 }
 
