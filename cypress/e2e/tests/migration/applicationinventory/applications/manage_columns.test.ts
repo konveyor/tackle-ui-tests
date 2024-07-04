@@ -22,11 +22,10 @@ import {
     validateTextPresence,
     validateCheckBoxIsDisabled,
     clickByText,
-    getCheckboxSelector,
+    selectColumns,
 } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
-import { button, save, trTag } from "../../../../types/constants";
-import { manageColumnsModal } from "../../../../views/applicationinventory.view";
+import { button, cancel, save, trTag } from "../../../../types/constants";
 
 const applicationInventoryTableColumns = [
     "Name",
@@ -66,16 +65,16 @@ describe(["@tier3"], "Application inventory managing columns validations", funct
     });
 
     const validateManagingColumns = () => {
-        openManageColumns();
         // randomly choose two columns and select them
         const shuffledColumns = Cypress._.shuffle(columnsToShuffleAndTest);
         const selectedColumns = shuffledColumns.slice(0, 2);
-        cy.get(manageColumnsModal).within(() => {
-            selectedColumns.forEach((column) => {
-                cy.get(getCheckboxSelector(column)).click();
-            });
-            clickByText(button, save, true);
-        });
+        selectColumns(selectedColumns);
         selectedColumns.forEach((column) => validateTextPresence(trTag, column, false));
+        //validate cancel button
+        restoreColumnsToDefault();
+        selectColumns(selectedColumns, cancel);
+        applicationInventoryTableColumns.forEach((column) =>
+            validateTextPresence(trTag, column, true)
+        );
     };
 });
