@@ -1533,11 +1533,12 @@ export function itemsPerPageValidation(
 
 export function autoPageChangeValidations(
     tableSelector = commonView.appTable,
-    columnName = "Name"
+    columnName = "Name",
+    deleteInsideKebab: boolean = false
 ): void {
     selectItemsPerPage(10);
     goToLastPage();
-    deleteAllItems(tableSelector);
+    deleteInsideKebab ? deleteAllRows() : deleteAllItems(tableSelector);
     // Verify that page is re-directed to previous page
     cy.get(`td[data-label='${columnName}']`).then(($rows) => {
         cy.wrap($rows.length).should("eq", 10);

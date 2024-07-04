@@ -48,7 +48,7 @@ describe(["@tier3"], "Business services pagination validations", function () {
     it("Last page item(s) deletion, impact on page reload validation", function () {
         BusinessServices.openList();
         selectItemsPerPage(10);
-        autoPageChangeValidations();
+        autoPageChangeValidations(undefined, undefined, true);
     });
 
     after("Perform test data clean up", function () {
