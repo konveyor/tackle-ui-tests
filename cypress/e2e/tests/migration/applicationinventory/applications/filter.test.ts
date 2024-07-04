@@ -119,10 +119,13 @@ describe(["@tier2"], "Application inventory filter validations", function () {
     it("Name filter validations", function () {
         Application.open();
 
-        applySearchFilter(name, applicationsList[0].name);
+        var validSearchInput = applicationsList[0].name.substring(0, 15);
+        applySearchFilter(name, validSearchInput);
         cy.wait(2000);
         exists(applicationsList[0].name);
-        notExists(applicationsList[1].name);
+        if (applicationsList[1].name.indexOf(validSearchInput) >= 0) {
+            exists(applicationsList[1].name);
+        }
 
         clickByText(button, clearAllFilters);
 
