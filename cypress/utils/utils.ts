@@ -62,6 +62,7 @@ import {
     appImportForm,
     kebabMenu,
     applicationsActionButton,
+    manageColumnsModal,
 } from "../e2e/views/applicationinventory.view";
 import {
     aboutButton,
@@ -1934,4 +1935,16 @@ export function validateCheckBoxIsDisabled(checkBoxText: string, isChecked?: boo
 export function getCheckboxSelector(text: string) {
     text = text.charAt(0).toLowerCase() + text.slice(1).replace(/\s+/g, "");
     return `input[aria-labelledby='check-${text}']`;
+}
+
+export function selectColumns(selectedColumns: string[], buttonText: string = save) {
+    openManageColumns();
+    cy.get(manageColumnsModal)
+        .first()
+        .within(() => {
+            selectedColumns.forEach((column) => {
+                cy.get(getCheckboxSelector(column)).click();
+            });
+            clickByText(button, buttonText, true);
+        });
 }
