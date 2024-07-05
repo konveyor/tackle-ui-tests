@@ -363,6 +363,7 @@ export class Analysis extends Application {
             .within(() => {
                 Analysis.verifyStatus(cy.get(analysisColumn, { log: false }), status);
             });
+        this.selectApplication();
     }
 
     public verifyEffort(effort: number) {
