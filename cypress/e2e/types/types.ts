@@ -194,7 +194,7 @@ export type RulesManualFields = {
 export type AppIssue = {
     name: string;
     category: string;
-    source: string;
+    source: string[];
     targets: string[];
     effort: number;
     totalEffort?: number;

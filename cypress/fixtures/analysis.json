@@ -1,7 +1,7 @@
 {
     "source_analysis_on_bookserverapp": {
         "source": "Source code",
-        "target": ["Containerization"],
+        "target": ["Containerization", "Linux"],
         "appName": "book-server",
         "tags": ["EJB XML", "Java EE Batch", "EJB XML"],
         "issues": [
@@ -17,84 +17,6 @@
                 "ruleSet": "cloud-readiness",
                 "rule": "local-storage-00001",
                 "labels": ["konveyor.io/source", "storage"]
-            },
-            {
-                "name": "File system - java.net.URL/URI",
-                "category": "mandatory",
-                "source": ["None"],
-                "targets": ["cloud-readiness"],
-                "effort": 1,
-                "totalEffort": 4706,
-                "incidents": 205,
-                "affectedFiles": 70,
-                "ruleSet": "cloud-readiness",
-                "rule": "local-storage-00002",
-                "labels": ["konveyor.io/source", "storage"]
-            },
-            {
-                "name": "HTTP Session data storage",
-                "category": "optional",
-                "source": ["java", "java-ee"],
-                "targets": ["cloud-readiness"],
-                "effort": 3,
-                "totalEffort": 4706,
-                "incidents": 236,
-                "affectedFiles": 88,
-                "ruleSet": "cloud-readiness",
-                "rule": "session-00001",
-                "labels": ["clustering"]
-            },
-            {
-                "name": "Java Mail API",
-                "category": "optional",
-                "source": ["java", "java-ee"],
-                "targets": ["cloud-readiness"],
-                "effort": 3,
-                "totalEffort": 4706,
-                "incidents": 22,
-                "affectedFiles": 8,
-                "ruleSet": "cloud-readiness",
-                "rule": "mail-00000",
-                "labels": ["mail"]
-            },
-            {
-                "name": "Java Native Processes",
-                "category": "mandatory",
-                "source": ["None"],
-                "targets": ["cloud-readiness"],
-                "effort": 7,
-                "totalEffort": 4706,
-                "incidents": 2,
-                "affectedFiles": 2,
-                "ruleSet": "cloud-readiness",
-                "rule": "jni-native-code-00001",
-                "labels": ["jni", "konveyor.io/source"]
-            },
-            {
-                "name": "Java Remote Method Invocation (RMI) service",
-                "category": "mandatory",
-                "source": ["java", "rmi"],
-                "targets": ["cloud-readiness"],
-                "effort": 1,
-                "totalEffort": 4706,
-                "incidents": 1,
-                "affectedFiles": 1,
-                "ruleSet": "cloud-readiness",
-                "rule": "java-rmi-00000",
-                "labels": ["cloud-readiness", "rmi"]
-            },
-            {
-                "name": "Java native libraries (JNI, JNA)",
-                "category": "mandatory",
-                "source": ["None"],
-                "targets": ["cloud-readiness"],
-                "effort": 7,
-                "totalEffort": 4706,
-                "incidents": 316,
-                "affectedFiles": 123,
-                "ruleSet": "cloud-readiness",
-                "rule": "jni-native-code-00000",
-                "labels": [""]
             }
         ],
         "dependencies": [

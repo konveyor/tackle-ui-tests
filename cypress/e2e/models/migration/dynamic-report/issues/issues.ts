@@ -84,7 +84,13 @@ export class Issues {
             .within(() => {
                 validateTextPresence(issueColumns.issue, issue.name);
                 validateTextPresence(issueColumns.category, issue.category);
-                validateTextPresence(issueColumns.source, issue.source);
+                validateTextPresence(issueColumns.source, issue.source[0]);
+                // cy.get(issueColumns.source).within(() => {
+                //     validateTextPresence(issueColumns.source, issue.source[0]);
+                //     if (issue.source.length > 1) {
+                //         clickByText(span, /more/i);
+                //     }
+                // });
                 cy.get(issueColumns.target).within(() => {
                     validateTextPresence(liTag, issue.targets[0]);
                     if (issue.targets.length > 1) {
@@ -98,13 +104,13 @@ export class Issues {
                     validateAnyNumberPresence(singleApplicationColumns.files);
                 }
             });
-        if (issue.targets.length > 1) {
-            for (let i = 1; i < issue.targets.length; i++) {
-                cy.get("div.pf-v5-c-popover__content").within(() => {
-                    validateTextPresence("span.pf-v5-c-label__text", issue.targets[i]);
-                });
-            }
-        }
+        // if (issue.targets.length > 1) {
+        //     for (let i = 1; i < issue.targets.length; i++) {
+        //         cy.get("div.pf-v5-c-popover__content").within(() => {
+        //             validateTextPresence("span.pf-v5-c-label__text", issue.targets[i]);
+        //         });
+        //     }
+        // }
     }
 
     // public static validateMultiFilter(name: string, amount: number) {

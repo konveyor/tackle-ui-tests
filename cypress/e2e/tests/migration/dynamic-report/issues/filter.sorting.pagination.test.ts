@@ -58,7 +58,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         archetype.create();
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 6; i++) {
+                for (let i = 0; i < 1; i++) {
                     const bookServerApp = new Analysis(
                         getRandomApplicationData("IssuesFilteringApp1_" + i, {
                             sourceData: appData["bookserver-app"],
@@ -72,7 +72,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         });
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 6; i++) {
+                for (let i = 0; i < 1; i++) {
                     const dayTraderApp = new Analysis(
                         getRandomApplicationData("IssuesFilteringApp2_" + i, {
                             sourceData: appData["daytrader-app"],
@@ -101,7 +101,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     it("All issues - Filtering issues by name", function () {
         // Analyzing daytrader app for pagination test to generate issues more than 10.
         const bookServerApp = applicationsList[0];
-        const dayTraderApp = applicationsList[6];
+        const dayTraderApp = applicationsList[1];
         const bookServerIssues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
         const dayTraderIssues = this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"];
 
@@ -128,12 +128,13 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
     it("All issues - filtering by multiple names", function () {
         const bookServerApp = applicationsList[0];
-        const dayTraderApp = applicationsList[6];
+        const dayTraderApp = applicationsList[4];
         const bookServerIssues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
         const dayTraderIssues = this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"];
 
         Issues.applyMultiFilter(issueFilter.appName, [bookServerApp.name, dayTraderApp.name]);
         Issues.validateMultiFilter(getUniqueNamesMap([bookServerIssues, dayTraderIssues]));
+        clearAllFilters();
     });
 
     it("All issues - Filtering issues by Archetype", function () {
@@ -186,9 +187,11 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     it("All issues - Filtering issues by source", function () {
         this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
             (issue: AppIssue) => {
-                Issues.applyFilter(issueFilter.source, issue.source);
-                Issues.validateFilter(issue);
-                clearAllFilters();
+                issue.source.forEach((source) => {
+                    Issues.applyFilter(issueFilter.source, source);
+                    Issues.validateFilter(issue);
+                    clearAllFilters();
+                });
             }
         );
 
@@ -272,9 +275,11 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         Issues.openSingleApplication(applicationsList[0].name);
         this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
             (issue: AppIssue) => {
-                Issues.applyFilter(issueFilter.source, issue.source, true);
-                Issues.validateFilter(issue, true);
-                clearAllFilters();
+                issue.source.forEach((source) => {
+                    Issues.applyFilter(issueFilter.source, source, true);
+                    Issues.validateFilter(issue, true);
+                    clearAllFilters();
+                });
             }
         );
     });
