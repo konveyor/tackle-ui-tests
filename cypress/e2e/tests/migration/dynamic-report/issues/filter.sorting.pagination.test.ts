@@ -8,6 +8,7 @@ import {
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
+    getUniqueNamesMap,
     login,
     validatePagination,
     validateSortBy,
@@ -123,6 +124,16 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             bookServerIssues
         );
         clearAllFilters();
+    });
+
+    it("All issues - filtering by multiple names", function () {
+        const bookServerApp = applicationsList[0];
+        const dayTraderApp = applicationsList[6];
+        const bookServerIssues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
+        const dayTraderIssues = this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"];
+
+        Issues.applyMultiFilter(issueFilter.appName, [bookServerApp.name, dayTraderApp.name]);
+        Issues.validateMultiFilter(getUniqueNamesMap([bookServerIssues, dayTraderIssues]));
     });
 
     it("All issues - Filtering issues by Archetype", function () {

@@ -1949,3 +1949,19 @@ export function selectColumns(selectedColumns: string[], buttonText: string = sa
             clickByText(button, buttonText, true);
         });
 }
+export function getUniqueNamesMap<T extends { name: string }>(instanceArrays: T[][]) {
+    const instanceMap = {};
+
+    instanceArrays.forEach((instanceArray) => {
+        instanceArray.forEach((instance) => {
+            const name = instance.name;
+            if (instanceMap[name]) {
+                instanceMap[name] += 1;
+            } else {
+                instanceMap[name] = 1;
+            }
+        });
+    });
+
+    return instanceMap;
+}

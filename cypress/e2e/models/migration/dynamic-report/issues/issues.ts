@@ -107,6 +107,18 @@ export class Issues {
         }
     }
 
+    // public static validateMultiFilter(name: string, amount: number) {
+    public static validateMultiFilter(allIssues: { [key: string]: number }) {
+        Object.keys(allIssues).forEach((name) => {
+            cy.contains(name)
+                .closest(trTag)
+                .within(() => {
+                    validateTextPresence(issueColumns.issue, name);
+                    validateNumberPresence(issueColumns.applications, allIssues[name]);
+                });
+        });
+    }
+
     public static applyFilter(
         filterType: issueFilter,
         filterValue: string,
@@ -136,11 +148,9 @@ export class Issues {
 
     public static applyMultiFilter(filterType: issueFilter, filterValues: string[]): void {
         selectFilter(filterType);
-        filterValues.forEach((filterValue) => {
-            click(searchMenuToggle);
-            clickByText(span, filterValue);
-            click(searchMenuToggle);
-        });
+        click(searchMenuToggle);
+        filterValues.forEach((filterValue) => clickByText(span, filterValue));
+        click(searchMenuToggle);
     }
 
     public static unfold(name: string): void {
