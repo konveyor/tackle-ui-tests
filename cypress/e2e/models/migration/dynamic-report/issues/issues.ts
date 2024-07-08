@@ -85,12 +85,6 @@ export class Issues {
                 validateTextPresence(issueColumns.issue, issue.name);
                 validateTextPresence(issueColumns.category, issue.category);
                 validateTextPresence(issueColumns.source, issue.source[0]);
-                // cy.get(issueColumns.source).within(() => {
-                //     validateTextPresence(issueColumns.source, issue.source[0]);
-                //     if (issue.source.length > 1) {
-                //         clickByText(span, /more/i);
-                //     }
-                // });
                 cy.get(issueColumns.target).within(() => {
                     validateTextPresence(liTag, issue.targets[0]);
                     if (issue.targets.length > 1) {
@@ -104,16 +98,8 @@ export class Issues {
                     validateAnyNumberPresence(singleApplicationColumns.files);
                 }
             });
-        // if (issue.targets.length > 1) {
-        //     for (let i = 1; i < issue.targets.length; i++) {
-        //         cy.get("div.pf-v5-c-popover__content").within(() => {
-        //             validateTextPresence("span.pf-v5-c-label__text", issue.targets[i]);
-        //         });
-        //     }
-        // }
     }
 
-    // public static validateMultiFilter(name: string, amount: number) {
     public static validateMultiFilter(allIssues: { [key: string]: number }) {
         Object.keys(allIssues).forEach((name) => {
             cy.contains(name)
@@ -130,7 +116,6 @@ export class Issues {
         filterValue: string,
         isSingle = false
     ): void {
-        // let selector = "";
         if (!isSingle) {
             Issues.openList();
         }
@@ -145,7 +130,6 @@ export class Issues {
             inputText(searchInput, filterValue);
             click(searchButton);
         } else {
-            // selector = searchMenuToggle;
             click(searchMenuToggle);
             clickByText(span, filterValue);
             click(searchMenuToggle);
