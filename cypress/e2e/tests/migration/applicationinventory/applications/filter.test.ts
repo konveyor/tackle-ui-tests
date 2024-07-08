@@ -33,7 +33,6 @@ import {
 import {
     button,
     clearAllFilters,
-    tag,
     CredentialType,
     UserCredentials,
     credentialType,
@@ -44,6 +43,8 @@ import {
     name,
     risk,
     SEC,
+    tags,
+    archetypes,
 } from "../../../../types/constants";
 
 import * as data from "../../../../../utils/data_utils";
@@ -56,7 +57,8 @@ import { Tag } from "../../../../models/migration/controls/tags";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
-import { filterDropDown, filterDropDownContainer } from "../../../../views/common.view";
+import { filterDropDownContainer } from "../../../../views/common.view";
+import { searchMenuToggle } from "../../../../views/issue.view";
 
 let source_credential;
 let maven_credential;
@@ -117,21 +119,21 @@ describe(["@tier2"], "Application inventory filter validations", function () {
     it("Name filter validations", function () {
         Application.open();
 
-        // Enter an existing name substring and assert
-        var validSearchInput = applicationsList[0].name.substring(0, 11);
+        var validSearchInput = applicationsList[0].name.substring(0, 15);
         applySearchFilter(name, validSearchInput);
         cy.wait(2000);
         exists(applicationsList[0].name);
-
         if (applicationsList[1].name.indexOf(validSearchInput) >= 0) {
             exists(applicationsList[1].name);
         }
+
         clickByText(button, clearAllFilters);
 
         // Enter an exact existing name and assert
         applySearchFilter(name, applicationsList[1].name);
         cy.wait(2000);
         exists(applicationsList[1].name);
+        notExists(applicationsList[0].name);
         clickByText(button, clearAllFilters);
     });
 
@@ -148,14 +150,14 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         Application.open();
 
         const validSearchInput = applicationsList[0].tags[0];
-        applySearchFilter(tag, validSearchInput);
+        applySearchFilter(tags, validSearchInput);
         cy.wait(2000);
 
         exists(applicationsList[0].name);
         notExists(applicationsList[1].name);
         clickByText(button, clearAllFilters);
 
-        applySearchFilter(tag, applicationsList[1].tags[0]);
+        applySearchFilter(tags, applicationsList[1].tags[0]);
         exists(applicationsList[1].name);
         notExists(applicationsList[0].name);
         clickByText(button, clearAllFilters);
@@ -227,7 +229,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Artifact type filter validations", function () {
+    it("BUG MTA-3215: Artifact type filter validations", function () {
         // For application must have Binary group,artifact and version
         const application = new Application(
             getRandomApplicationData("tackleTestApp_Binary", {
@@ -258,7 +260,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Risk filter validations", function () {
+    it("BUG MTA-3213: Risk filter validations", function () {
         const application = applicationsList[0];
         const application1 = applicationsList[1];
 
@@ -323,8 +325,8 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         archetype2.create();
         cy.wait(2 * SEC);
         Application.open();
-        selectFilter("Archetypes");
-        cy.get(filterDropDownContainer).find(filterDropDown).click();
+        selectFilter(archetypes);
+        cy.get(filterDropDownContainer).find(searchMenuToggle).click();
         notExists(archetype2.name);
 
         deleteByList([archetype1, archetype2]);

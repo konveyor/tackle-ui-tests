@@ -26,8 +26,6 @@ import { navMenu, navTab } from "../e2e/views/menu.view";
 import * as data from "../utils/data_utils";
 import "cypress-file-upload";
 import {
-    businessService,
-    tag,
     groupCount,
     memberCount,
     tagCount,
@@ -42,17 +40,10 @@ import {
     SEC,
     CredentialType,
     UserCredentials,
-    credentialType,
-    artifact,
-    repositoryType,
-    owner,
     JiraType,
     migration,
-    businessServiceLower,
     issueFilter,
-    risk,
     save,
-    archetypes,
     SortType,
 } from "../e2e/types/constants";
 import {
@@ -70,7 +61,6 @@ import {
     closeSuccessNotification,
     confirmButton,
     divHeader,
-    filterDropDown,
     filterDropDownContainer,
     firstPageButton,
     lastPageButton,
@@ -81,7 +71,6 @@ import {
     prevPageButton,
     searchButton,
     span,
-    specialFilter,
     standardFilter,
 } from "../e2e/views/common.view";
 import { tagLabels, tagMenuButton } from "../e2e/views/tags.view";
@@ -108,6 +97,7 @@ import { stakeHoldersTable } from "../e2e/views/stakeholders.view";
 import {
     bsFilterName,
     searchInput,
+    searchMenuToggle,
     singleApplicationColumns,
     tagFilterName,
 } from "../e2e/views/issue.view";
@@ -118,6 +108,7 @@ import {
 } from "../e2e/views/migration-wave.view";
 import { manageCredentials, mavenCredential, sourceCredential } from "../e2e/views/analysis.view";
 import * as ansiRegex from "ansi-regex";
+import { filterSelectType } from "../e2e/views/credentials.view";
 
 const { _ } = Cypress;
 
@@ -467,54 +458,30 @@ export function applySearchFilter(
     value?: number
 ): void {
     selectFilter(filterName, identifiedRisk, value);
-    const isStandardKnownFilter = [
-        businessServiceLower,
-        businessService,
-        repositoryType,
-        artifact,
-        owner,
-        archetypes,
-    ].includes(filterName);
-    const isSpecialKnownFilter = [tag, credentialType, risk].includes(filterName);
     let filterValue = [];
     if (!Array.isArray(searchText)) {
         filterValue = [searchText];
     } else filterValue = searchText;
 
-    cy.url().then(($url) => {
-        if (!isStandardKnownFilter && !isSpecialKnownFilter) {
-            if ($url == Application.fullUrl && filterName == "Name") {
-                // Only on application page you can select multiple
-                // applications from dropdown.
-                cy.get(filterDropDownContainer).find(filterDropDown).click();
+    cy.get(filterDropDownContainer).then(($container) => {
+        if ($container.find(searchMenuToggle).length > 0) {
+            cy.get(searchMenuToggle).click();
+            filterValue.forEach((searchTextValue) => {
+                cy.get(standardFilter).contains(searchTextValue).click();
+            });
+        } else {
+            if ($container.find(filterSelectType).length > 0) {
+                cy.get(filterSelectType).click();
                 filterValue.forEach((searchTextValue) => {
-                    cy.get(specialFilter).contains(searchTextValue).click();
+                    cy.get(standardFilter).contains(searchTextValue).click();
                 });
-                return;
             } else {
-                filterValue.forEach((searchTextValue) =>
-                    filterInputText(searchTextValue, +identifiedRisk)
-                );
-                cy.wait(4000);
-                return;
+                filterValue.forEach((searchTextValue) => {
+                    filterInputText(searchTextValue, +identifiedRisk);
+                });
             }
         }
     });
-
-    if (isStandardKnownFilter) {
-        cy.get(filterDropDownContainer).find(filterDropDown).click();
-        filterValue.forEach((searchTextValue) => {
-            cy.get(standardFilter).contains(searchTextValue).click();
-        });
-    }
-
-    if (isSpecialKnownFilter) {
-        cy.get(filterDropDownContainer).find(filterDropDown).click();
-        filterValue.forEach((searchTextValue) => {
-            cy.get(specialFilter).contains(searchTextValue).click();
-        });
-    }
-
     cy.wait(4000);
 }
 
