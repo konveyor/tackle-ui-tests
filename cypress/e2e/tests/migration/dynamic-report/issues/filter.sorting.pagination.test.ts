@@ -58,7 +58,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         archetype.create();
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 1; i++) {
+                for (let i = 0; i < 6; i++) {
                     const bookServerApp = new Analysis(
                         getRandomApplicationData("IssuesFilteringApp1_" + i, {
                             sourceData: appData["bookserver-app"],
@@ -72,7 +72,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         });
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 1; i++) {
+                for (let i = 0; i < 6; i++) {
                     const dayTraderApp = new Analysis(
                         getRandomApplicationData("IssuesFilteringApp2_" + i, {
                             sourceData: appData["daytrader-app"],
@@ -101,7 +101,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     it("All issues - Filtering issues by name", function () {
         // Analyzing daytrader app for pagination test to generate issues more than 10.
         const bookServerApp = applicationsList[0];
-        const dayTraderApp = applicationsList[1];
+        const dayTraderApp = applicationsList[6];
         const bookServerIssues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
         const dayTraderIssues = this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"];
 
@@ -128,7 +128,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
     it("All issues - filtering by multiple names", function () {
         const bookServerApp = applicationsList[0];
-        const dayTraderApp = applicationsList[4];
+        const dayTraderApp = applicationsList[6];
         const bookServerIssues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
         const dayTraderIssues = this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"];
 
