@@ -84,7 +84,7 @@ export class Issues {
             .within(() => {
                 validateTextPresence(issueColumns.issue, issue.name);
                 validateTextPresence(issueColumns.category, issue.category);
-                validateTextPresence(issueColumns.source, issue.source[0]);
+                validateTextPresence(issueColumns.source, issue.sources[0]);
                 cy.get(issueColumns.target).within(() => {
                     validateTextPresence(liTag, issue.targets[0]);
                     if (issue.targets.length > 1) {
@@ -100,6 +100,10 @@ export class Issues {
             });
     }
 
+    /**
+     * Iterates through map of issue names and how many times they are expected to be found
+     * @param allIssues is the map where a key is an issue name and number is an amount of occurrences.
+     */
     public static validateMultiFilter(allIssues: { [key: string]: number }) {
         Object.keys(allIssues).forEach((name) => {
             cy.contains(name)
@@ -175,7 +179,7 @@ export class Issues {
         Issues.unfold(issue.name);
         Issues.validateSection(sections.totalAffectedApps, button, /\d - View affected /);
         Issues.validateSection(sections.targetTechnologies, span, issue.targets);
-        Issues.validateSection(sections.sourceTechnologies, div, issue.source);
+        Issues.validateSection(sections.sourceTechnologies, div, issue.sources);
         Issues.validateSection(sections.ruleSet, div, issue.ruleSet);
         Issues.validateSection(sections.rule, div, issue.rule);
         Issues.validateSection(sections.labels, div, issue.labels);

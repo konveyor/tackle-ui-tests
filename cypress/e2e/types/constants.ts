@@ -190,7 +190,7 @@ export enum SortType {
 }
 
 export enum issueFilter {
-    appName = "Application name",
+    applicationName = "Application name",
     archetype = "Archetype",
     bs = "Business service",
     tags = "Tags",

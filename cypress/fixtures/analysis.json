@@ -8,7 +8,7 @@
             {
                 "name": "File system - Java IO",
                 "category": "mandatory",
-                "source": ["None"],
+                "sources": ["None"],
                 "targets": ["cloud-readiness"],
                 "effort": 1,
                 "totalEffort": 38,
@@ -52,7 +52,7 @@
             {
                 "name": "File system - Java IO",
                 "category": "mandatory",
-                "source": ["None"],
+                "sources": ["None"],
                 "targets": ["cloud-readiness"],
                 "effort": 1,
                 "totalEffort": 750,
@@ -65,7 +65,7 @@
             {
                 "name": "File system - java.net.URL/URI",
                 "category": "mandatory",
-                "source": ["None"],
+                "sources": ["None"],
                 "targets": ["cloud-readiness"],
                 "effort": 1,
                 "totalEffort": 750,
@@ -78,7 +78,7 @@
             {
                 "name": "HTTP Session data storage",
                 "category": "optional",
-                "source": ["java"],
+                "sources": ["java"],
                 "targets": ["cloud-readiness"],
                 "effort": 3,
                 "totalEffort": 750,
@@ -91,7 +91,7 @@
             {
                 "name": "Local HTTP Calls",
                 "category": "mandatory",
-                "source": ["None"],
+                "sources": ["None"],
                 "targets": ["cloud-readiness"],
                 "effort": 7,
                 "totalEffort": 750,
@@ -104,7 +104,7 @@
             {
                 "name": "Replace the Java EE namespace, schemaLocation and version with the Jakarta equivalent",
                 "category": "mandatory",
-                "source": ["None"],
+                "sources": ["None"],
                 "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "effort": 1,
                 "totalEffort": 750,
@@ -117,7 +117,7 @@
             {
                 "name": "Replace the Java EE persistence namespace, schemaLocation and version with the Jakarta equivalent",
                 "category": "mandatory",
-                "source": ["None"],
+                "sources": ["None"],
                 "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "effort": 1,
                 "totalEffort": 750,
@@ -130,7 +130,7 @@
             {
                 "name": "Replace the Java EE version with the Jakarta equivalent",
                 "category": "mandatory",
-                "source": ["None"],
+                "sources": ["None"],
                 "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "effort": 1,
                 "totalEffort": 750,
@@ -143,7 +143,7 @@
             {
                 "name": "The 'javax' groupId has been replaced by 'jakarta' group id in dependencies.",
                 "category": "mandatory",
-                "source": ["None"],
+                "sources": ["None"],
                 "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "effort": 1,
                 "totalEffort": 750,
@@ -156,7 +156,7 @@
             {
                 "name": "The artifactIds starting with javax.*-api must be updated to their corresponding jakarta.*-api versions in dependency files",
                 "category": "mandatory",
-                "source": ["None"],
+                "sources": ["None"],
                 "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "effort": 1,
                 "totalEffort": 750,
@@ -169,7 +169,7 @@
             {
                 "name": "The package 'javax' has been replaced by 'jakarta'.",
                 "category": "mandatory",
-                "source": ["None"],
+                "sources": ["None"],
                 "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "effort": 1,
                 "totalEffort": 750,
@@ -182,7 +182,7 @@
             {
                 "name": "javax groupId has been replaced by jakarta.platform",
                 "category": "mandatory",
-                "source": ["None"],
+                "sources": ["None"],
                 "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "effort": 1,
                 "totalEffort": 750,
@@ -195,7 +195,7 @@
             {
                 "name": "javax javaee-api artifactId has been replaced by jakarta.platform jakarta.jakartaee-api",
                 "category": "mandatory",
-                "source": ["None"],
+                "sources": ["None"],
                 "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "effort": 1,
                 "totalEffort": 750,
@@ -208,7 +208,7 @@
             {
                 "name": "web.xml element references a javax-prefixed class name",
                 "category": "potential",
-                "source": ["None"],
+                "sources": ["None"],
                 "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "effort": 1,
                 "totalEffort": 750,

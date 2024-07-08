@@ -110,7 +110,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
         Issues.openList(100, true);
         Issues.applyAndValidateFilter(
-            issueFilter.appName,
+            issueFilter.applicationName,
             [bookServerApp.name],
             bookServerIssues,
             dayTraderIssues
@@ -118,7 +118,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         clearAllFilters();
 
         Issues.applyAndValidateFilter(
-            issueFilter.appName,
+            issueFilter.applicationName,
             [dayTraderApp.name],
             dayTraderIssues,
             bookServerIssues
@@ -132,7 +132,10 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         const bookServerIssues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
         const dayTraderIssues = this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"];
 
-        Issues.applyMultiFilter(issueFilter.appName, [bookServerApp.name, dayTraderApp.name]);
+        Issues.applyMultiFilter(issueFilter.applicationName, [
+            bookServerApp.name,
+            dayTraderApp.name,
+        ]);
         Issues.validateMultiFilter(getUniqueNamesMap([bookServerIssues, dayTraderIssues]));
         clearAllFilters();
     });
@@ -187,7 +190,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     it("All issues - Filtering issues by source", function () {
         this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
             (issue: AppIssue) => {
-                issue.source.forEach((source) => {
+                issue.sources.forEach((source) => {
                     Issues.applyFilter(issueFilter.source, source);
                     Issues.validateFilter(issue);
                     clearAllFilters();
@@ -275,7 +278,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         Issues.openSingleApplication(applicationsList[0].name);
         this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
             (issue: AppIssue) => {
-                issue.source.forEach((source) => {
+                issue.sources.forEach((source) => {
                     Issues.applyFilter(issueFilter.source, source, true);
                     Issues.validateFilter(issue, true);
                     clearAllFilters();
