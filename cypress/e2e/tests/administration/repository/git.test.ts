@@ -109,7 +109,7 @@ describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Failed");
         application.openAnalysisDetails();
-        clickByText(button, "Close");
+        // clickByText(button, "Close");
     });
 
     after("Perform test data clean up", () => {
