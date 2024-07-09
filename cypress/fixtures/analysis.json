@@ -1,17 +1,17 @@
 {
     "source_analysis_on_bookserverapp": {
         "source": "Source code",
-        "target": ["Containerization"],
+        "target": ["Containerization", "Linux"],
         "appName": "book-server",
         "tags": ["EJB XML", "Java EE Batch", "EJB XML"],
         "issues": [
             {
                 "name": "File system - Java IO",
                 "category": "mandatory",
-                "source": "None",
+                "sources": ["None"],
                 "targets": ["cloud-readiness"],
                 "effort": 1,
-                "totalEffort": 2,
+                "totalEffort": 38,
                 "incidents": 2,
                 "affectedFiles": 1,
                 "ruleSet": "cloud-readiness",
@@ -43,13 +43,6 @@
         ]
     },
 
-    "source+dep_analysis_on_tackletestapp": {
-        "source": "Source code + dependencies",
-        "target": ["Jakarta EE 9", "Containerization"],
-        "appName": "tackle-testapp",
-        "storyPoints": 1
-    },
-
     "source+dep_analysis_on_daytrader-app": {
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization"],
@@ -59,56 +52,180 @@
             {
                 "name": "File system - Java IO",
                 "category": "mandatory",
-                "source": "None",
+                "sources": ["None"],
                 "targets": ["cloud-readiness"],
                 "effort": 1,
-                "totalEffort": 2,
-                "incidents": 2,
-                "affectedFiles": 1,
+                "totalEffort": 750,
+                "incidents": 3,
+                "affectedFiles": 2,
                 "ruleSet": "cloud-readiness",
                 "rule": "local-storage-00001",
                 "labels": ["konveyor.io/source", "storage"]
             },
             {
+                "name": "File system - java.net.URL/URI",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["cloud-readiness"],
+                "effort": 1,
+                "totalEffort": 750,
+                "incidents": 2,
+                "affectedFiles": 2,
+                "ruleSet": "cloud-readiness",
+                "rule": "local-storage-00002",
+                "labels": ["konveyor.io/source", "storage"]
+            },
+            {
+                "name": "HTTP Session data storage",
+                "category": "optional",
+                "sources": ["java"],
+                "targets": ["cloud-readiness"],
+                "effort": 3,
+                "totalEffort": 750,
+                "incidents": 16,
+                "affectedFiles": 9,
+                "ruleSet": "cloud-readiness",
+                "rule": "session-00001",
+                "labels": ["clustering"]
+            },
+            {
+                "name": "Local HTTP Calls",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["cloud-readiness"],
+                "effort": 7,
+                "totalEffort": 750,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "cloud-readiness",
+                "rule": "localhost-http-00001",
+                "labels": ["konveyor.io/source", "localhost"]
+            },
+            {
+                "name": "Replace the Java EE namespace, schemaLocation and version with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 750,
+                "incidents": 9,
+                "affectedFiles": 4,
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00001",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "Replace the Java EE persistence namespace, schemaLocation and version with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 750,
+                "incidents": 6,
+                "affectedFiles": 3,
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00002",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "Replace the Java EE version with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 750,
+                "incidents": 6,
+                "affectedFiles": 3,
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00033",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "The 'javax' groupId has been replaced by 'jakarta' group id in dependencies.",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 750,
+                "incidents": 2,
+                "affectedFiles": 2,
+                "ruleSet": "eap8/eap7",
+                "rule": "javax-to-jakarta-dependencies-00001",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "The artifactIds starting with javax.*-api must be updated to their corresponding jakarta.*-api versions in dependency files",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 750,
+                "incidents": 2,
+                "affectedFiles": 2,
+                "ruleSet": "eap8/eap7",
+                "rule": "javax-to-jakarta-dependencies-00002",
+                "labels": ["konveyor.io/source"]
+            },
+            {
                 "name": "The package 'javax' has been replaced by 'jakarta'.",
                 "category": "mandatory",
-                "source": "None",
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+"],
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "effort": 1,
-                "incidents": 2,
+                "totalEffort": 750,
+                "incidents": 639,
                 "affectedFiles": 92,
                 "ruleSet": "eap8/eap7",
                 "rule": "javax-to-jakarta-import-00001",
                 "labels": ["konveyor.io/source"]
-            }
-        ],
-        "dependencies": [
-            {
-                "name": "javax.javaee-api",
-                "language": "java",
-                "labels": []
             },
             {
-                "name": "net.wasdev.wlp.sample.daytrader-ee7-ejb",
-                "language": "java",
-                "labels": []
+                "name": "javax groupId has been replaced by jakarta.platform",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 750,
+                "incidents": 2,
+                "affectedFiles": 2,
+                "ruleSet": "eap8/eap7",
+                "rule": "javax-to-jakarta-dependencies-00006",
+                "labels": ["konveyor.io/source"]
             },
             {
-                "name": "net.wasdev.wlp.sample.daytrader-ee7-web",
-                "language": "java",
-                "labels": []
+                "name": "javax javaee-api artifactId has been replaced by jakarta.platform jakarta.jakartaee-api",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 750,
+                "incidents": 2,
+                "affectedFiles": 2,
+                "ruleSet": "eap8/eap7",
+                "rule": "javax-to-jakarta-dependencies-00007",
+                "labels": ["konveyor.io/source"]
             },
             {
-                "name": "org.apache.derby.derby",
-                "language": "java",
-                "labels": []
-            },
-            {
-                "name": "taglibs.standard",
-                "language": "java",
-                "labels": []
+                "name": "web.xml element references a javax-prefixed class name",
+                "category": "potential",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 750,
+                "incidents": 7,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javax-to-jakarta-servlet-00130",
+                "labels": ["konveyor.io/source"]
             }
         ]
+    },
+
+    "source+dep_analysis_on_tackletestapp": {
+        "source": "Source code + dependencies",
+        "target": ["Jakarta EE 9", "Containerization"],
+        "appName": "tackle-testapp",
+        "storyPoints": 1
     },
 
     "binary_analysis_on_tackletestapp": {

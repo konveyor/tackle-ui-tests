@@ -84,7 +84,7 @@ export class Issues {
             .within(() => {
                 validateTextPresence(issueColumns.issue, issue.name);
                 validateTextPresence(issueColumns.category, issue.category);
-                validateTextPresence(issueColumns.source, issue.source);
+                validateTextPresence(issueColumns.source, issue.sources[0]);
                 cy.get(issueColumns.target).within(() => {
                     validateTextPresence(liTag, issue.targets[0]);
                     if (issue.targets.length > 1) {
@@ -98,13 +98,21 @@ export class Issues {
                     validateAnyNumberPresence(singleApplicationColumns.files);
                 }
             });
-        if (issue.targets.length > 1) {
-            for (let i = 1; i < issue.targets.length; i++) {
-                cy.get("div.pf-v5-c-popover__content").within(() => {
-                    validateTextPresence("span.pf-v5-c-label__text", issue.targets[i]);
+    }
+
+    /**
+     * Iterates through map of issue names and how many times they are expected to be found
+     * @param allIssues is the map where a key is an issue name and number is an amount of occurrences.
+     */
+    public static validateMultiFilter(allIssues: { [key: string]: number }) {
+        Object.keys(allIssues).forEach((name) => {
+            cy.contains(name)
+                .closest(trTag)
+                .within(() => {
+                    validateTextPresence(issueColumns.issue, name);
+                    validateNumberPresence(issueColumns.applications, allIssues[name]);
                 });
-            }
-        }
+        });
     }
 
     public static applyFilter(
@@ -112,7 +120,6 @@ export class Issues {
         filterValue: string,
         isSingle = false
     ): void {
-        let selector = "";
         if (!isSingle) {
             Issues.openList();
         }
@@ -127,11 +134,17 @@ export class Issues {
             inputText(searchInput, filterValue);
             click(searchButton);
         } else {
-            selector = searchMenuToggle;
-            click(selector);
+            click(searchMenuToggle);
             clickByText(span, filterValue);
-            click(selector);
+            click(searchMenuToggle);
         }
+    }
+
+    public static applyMultiFilter(filterType: issueFilter, filterValues: string[]): void {
+        selectFilter(filterType);
+        click(searchMenuToggle);
+        filterValues.forEach((filterValue) => clickByText(span, filterValue));
+        click(searchMenuToggle);
     }
 
     public static unfold(name: string): void {
@@ -166,7 +179,7 @@ export class Issues {
         Issues.unfold(issue.name);
         Issues.validateSection(sections.totalAffectedApps, button, /\d - View affected /);
         Issues.validateSection(sections.targetTechnologies, span, issue.targets);
-        Issues.validateSection(sections.sourceTechnologies, div, issue.source);
+        Issues.validateSection(sections.sourceTechnologies, div, issue.sources);
         Issues.validateSection(sections.ruleSet, div, issue.ruleSet);
         Issues.validateSection(sections.rule, div, issue.rule);
         Issues.validateSection(sections.labels, div, issue.labels);
