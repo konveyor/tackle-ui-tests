@@ -28,7 +28,6 @@ import {
 } from "../../../types/constants";
 import {
     cancelForm,
-    cleanupDownloads,
     click,
     clickByText,
     clickTab,
@@ -408,8 +407,6 @@ export class Analysis extends Application {
         sidedrawerTab(this.name, "Reports");
         clickByText(button, "View analysis details");
         cy.wait(2 * SEC);
-        // clickByText(button, "Close");
-        // cy.wait(2 * SEC);
     }
 
     downloadReport(type: ReportTypeSelectors) {
