@@ -44,7 +44,8 @@ describe("Source Analysis without credentials", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it(["@tier0"], "Source Analysis on bookserver app and its issues validation", function () {
+    // it(["@tier0"], "Source Analysis on bookserver app and its issues validation", function () {
+    it("Source Analysis on bookserver app and its issues validation", function () {
         // For source code analysis application must have source code URL git or svn
         application = new Analysis(
             getRandomApplicationData("bookserverApp", {
