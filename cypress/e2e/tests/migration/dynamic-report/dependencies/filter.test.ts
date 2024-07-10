@@ -29,7 +29,7 @@ import {
     selectItemsPerPage,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { AnalysisStatuses, button, dependencyFilter, SEC } from "../../../../types/constants";
+import { button, dependencyFilter, trTag } from "../../../../types/constants";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import * as data from "../../../../../utils/data_utils";
 import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
@@ -96,7 +96,6 @@ describe(["@tier2"], "Dependency filtering", () => {
                 applicationsList.forEach((application) => {
                     application.create();
                     application.analyze();
-                    application.selectApplication();
                     application.verifyAnalysisStatus("Completed");
                 });
             });
@@ -191,7 +190,7 @@ describe(["@tier2"], "Dependency filtering", () => {
 
         // Negative test, filtering by not existing data
         Dependencies.applyFilter(dependencyFilter.language, randomWordGenerator(6));
-        cy.get("tr").should("contain", "No data available");
+        cy.get(trTag).should("contain", "No data available");
         clearAllFilters();
     });
 
