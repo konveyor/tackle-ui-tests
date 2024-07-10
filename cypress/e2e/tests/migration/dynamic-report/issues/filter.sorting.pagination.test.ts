@@ -1,3 +1,20 @@
+/*
+Copyright © 2021 the Konveyor Contributors (https://konveyor.io/)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+/// <reference types="cypress" />
+
 import {
     clearAllFilters,
     clickByText,
@@ -8,6 +25,7 @@ import {
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
+    getUniqueNamesMap,
     login,
     validatePagination,
     validateSortBy,
@@ -109,7 +127,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
         Issues.openList(100, true);
         Issues.applyAndValidateFilter(
-            issueFilter.appName,
+            issueFilter.applicationName,
             [bookServerApp.name],
             bookServerIssues,
             dayTraderIssues
@@ -117,11 +135,25 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         clearAllFilters();
 
         Issues.applyAndValidateFilter(
-            issueFilter.appName,
+            issueFilter.applicationName,
             [dayTraderApp.name],
             dayTraderIssues,
             bookServerIssues
         );
+        clearAllFilters();
+    });
+
+    it("All issues - filtering by multiple names", function () {
+        const bookServerApp = applicationsList[0];
+        const dayTraderApp = applicationsList[6];
+        const bookServerIssues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
+        const dayTraderIssues = this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"];
+
+        Issues.applyMultiFilter(issueFilter.applicationName, [
+            bookServerApp.name,
+            dayTraderApp.name,
+        ]);
+        Issues.validateMultiFilter(getUniqueNamesMap([bookServerIssues, dayTraderIssues]));
         clearAllFilters();
     });
 
@@ -175,9 +207,11 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     it("All issues - Filtering issues by source", function () {
         this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
             (issue: AppIssue) => {
-                Issues.applyFilter(issueFilter.source, issue.source);
-                Issues.validateFilter(issue);
-                clearAllFilters();
+                issue.sources.forEach((source) => {
+                    Issues.applyFilter(issueFilter.source, source);
+                    Issues.validateFilter(issue);
+                    clearAllFilters();
+                });
             }
         );
 
@@ -261,9 +295,11 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         Issues.openSingleApplication(applicationsList[0].name);
         this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
             (issue: AppIssue) => {
-                Issues.applyFilter(issueFilter.source, issue.source, true);
-                Issues.validateFilter(issue, true);
-                clearAllFilters();
+                issue.sources.forEach((source) => {
+                    Issues.applyFilter(issueFilter.source, source, true);
+                    Issues.validateFilter(issue, true);
+                    clearAllFilters();
+                });
             }
         );
     });

@@ -389,7 +389,7 @@ export function filterIssueBy(filterType: issueFilter, filterValue: string | str
     let selector = "";
     selectFilter(filterType);
     const isApplicableFilter =
-        filterType === issueFilter.appName ||
+        filterType === issueFilter.applicationName ||
         filterType === issueFilter.category ||
         filterType === issueFilter.source ||
         filterType === issueFilter.target;
@@ -428,7 +428,7 @@ export function validateSingleApplicationIssue(issue: AppIssue): void {
         .within(() => {
             validateTextPresence(singleApplicationColumns.issue, issue.name);
             validateTextPresence(singleApplicationColumns.category, issue.category);
-            validateTextPresence(singleApplicationColumns.source, issue.source);
+            validateTextPresence(singleApplicationColumns.source, issue.sources[0]);
             cy.get(singleApplicationColumns.target).within(() => {
                 issue.targets.forEach((currentTarget) => {
                     validateTextPresence(liTag, currentTarget);
@@ -1915,4 +1915,33 @@ export function selectColumns(selectedColumns: string[], buttonText: string = sa
             });
             clickByText(button, buttonText, true);
         });
+}
+
+/**
+ * This function calculates the number of occurrences for each instance name.
+ * @param instanceArrays - A two-dimensional array, where each element is an array of instances (such as issues or dependencies).
+ * @return A map where the key is the name of each instance and the value is the number of occurrences of that name.
+ *
+ * The function works as follows:
+ * 1. It initializes an empty map to store the instance names and their counts.
+ * 2. It iterates over each array of instances.
+ * 3. For each instance, it checks if the name already exists in the map.
+ *    - If the name exists, it increments the count by 1.
+ *    - If the name does not exist, it initializes the count to 1.
+ * 4. Finally, it returns the map containing the names and their respective counts.
+ */
+export function getUniqueNamesMap<T extends { name: string }>(instanceArrays: T[][]): {} {
+    const instanceMap = {};
+
+    instanceArrays.forEach((instanceArray) => {
+        instanceArray.forEach((instance) => {
+            const name = instance.name;
+            if (!instanceMap[name]) {
+                instanceMap[name] = 0;
+            }
+            instanceMap[name] += 1;
+        });
+    });
+
+    return instanceMap;
 }
