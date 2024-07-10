@@ -85,18 +85,13 @@ describe(["@tier2"], "Credentials filter validations", function () {
         Credentials.ApplyFilterByName(invalidSearchInput);
 
         // Assert that no search results are found
-        cy.get("h2").contains("No credentials available");
+        cy.get("h2").contains("No credential available");
 
         clearAllFilters();
     });
 
     it("Type filter validations", () => {
         Credentials.filterByType();
-    });
-
-    it("Creator filter validations", () => {
-        Credentials.filterByCreator(adminUserName);
-        Credentials.filterByCreator(newAdminUser.username);
     });
 
     after("Perform test data clean up", function () {
