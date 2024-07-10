@@ -561,11 +561,10 @@ export function getTableColumnData(columnName: string): Array<string> {
     return itemList;
 }
 
-export function verifySortAsc(listToVerify: Array<any>, unsortedList: Array<any>): void {
+export function verifySortAsc(listToVerify: any[], unsortedList: any[]): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        let sortedList = unsortedList.sort((a, b) =>
+        const sortedList = unsortedList.sort((a, b) =>
             a.toString().localeCompare(b, "en-us", {
-                ignorePunctuation: true,
                 numeric: !unsortedList.some(isNaN),
             })
         );
@@ -573,11 +572,10 @@ export function verifySortAsc(listToVerify: Array<any>, unsortedList: Array<any>
     });
 }
 
-export function verifySortDesc(listToVerify: Array<any>, unsortedList: Array<any>): void {
+export function verifySortDesc(listToVerify: any[], unsortedList: any[]): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        let reverseSortedList = unsortedList.sort((a, b) =>
+        const reverseSortedList = unsortedList.sort((a, b) =>
             b.toString().localeCompare(a, "en-us", {
-                ignorePunctuation: true,
                 numeric: !unsortedList.some(isNaN),
             })
         );
