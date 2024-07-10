@@ -16,7 +16,6 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    clickByText,
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
@@ -28,7 +27,7 @@ import * as data from "../../../../utils/data_utils";
 import { GitConfiguration } from "../../../models/administration/repositories/git";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
-import { button, CredentialType, UserCredentials } from "../../../types/constants";
+import { CredentialType, UserCredentials } from "../../../types/constants";
 
 let gitConfiguration = new GitConfiguration();
 let source_credential: CredentialsSourceControlUsername;
@@ -109,7 +108,6 @@ describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Failed");
         application.openAnalysisDetails();
-        clickByText(button, "Close");
     });
 
     after("Perform test data clean up", () => {
