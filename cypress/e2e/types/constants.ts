@@ -212,3 +212,6 @@ export enum Languages {
     Go = "Go",
     Java = "Java",
 }
+
+export const itemsPerPage = 100;
+export const succeeded = "Succeeded";
