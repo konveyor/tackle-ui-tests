@@ -94,6 +94,11 @@ describe(["@tier2"], "Credentials filter validations", function () {
         Credentials.filterByType();
     });
 
+    it("Bug MTA-3143: Creator filter validations", () => {
+        Credentials.filterByCreator(adminUserName);
+        Credentials.filterByCreator(newAdminUser.username);
+    });
+
     after("Perform test data clean up", function () {
         // Deleting all credentials created before test
         deleteByList(credentialsListByDefaultAdmin);
