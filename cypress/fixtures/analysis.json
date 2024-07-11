@@ -21,7 +21,72 @@
         ],
         "dependencies": [
             {
+                "name": "ch.qos.logback.logback-classic",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "ch.qos.logback.logback-core",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
                 "name": "com.fasterxml.classmate",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "com.fasterxml.jackson.core.jackson-annotations",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "com.fasterxml.jackson.core.jackson-core",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "com.fasterxml.jackson.core.jackson-databind",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "com.fasterxml.jackson.dataformat.jackson-dataformat-xml",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "com.fasterxml.jackson.datatype.jackson-datatype-jdk8",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "com.fasterxml.jackson.datatype.jackson-datatype-jsr310",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "com.fasterxml.jackson.module.jackson-module-jaxb-annotations",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "com.fasterxml.jackson.module.jackson-module-parameter-names",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "com.fasterxml.woodstox.woodstox-core",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "javax.annotation.javax.annotation-api",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "javax.validation.validation-api",
                 "language": "java",
                 "labels": ["open-source"]
             },
@@ -31,12 +96,132 @@
                 "labels": ["open-source"]
             },
             {
+                "name": "org.apache.logging.log4j.log4j-to-slf4j",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
                 "name": "org.apache.tomcat.embed.tomcat-embed-core",
                 "language": "java",
                 "labels": ["open-source"]
             },
             {
+                "name": "org.apache.tomcat.embed.tomcat-embed-el",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.apache.tomcat.embed.tomcat-embed-websocket",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.codehaus.woodstox.stax2-api",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
                 "name": "org.hibernate.validator.hibernate-validator",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.jboss.logging.jboss-logging",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.projectlombok.lombok",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.slf4j.jul-to-slf4j",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.slf4j.slf4j-api",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.springframework.boot.spring-boot",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.springframework.boot.spring-boot-autoconfigure",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.springframework.boot.spring-boot-starter",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.springframework.boot.spring-boot-starter-json",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.springframework.boot.spring-boot-starter-logging",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.springframework.boot.spring-boot-starter-tomcat",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.springframework.boot.spring-boot-starter-web",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.springframework.spring-aop",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.springframework.spring-beans",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.springframework.spring-context",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.springframework.spring-core",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.springframework.spring-expression",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.springframework.spring-jcl",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.springframework.spring-web",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.springframework.spring-webmvc",
+                "language": "java",
+                "labels": ["open-source"]
+            },
+            {
+                "name": "org.yaml.snakeyaml",
                 "language": "java",
                 "labels": ["open-source"]
             }
@@ -217,6 +402,38 @@
                 "ruleSet": "eap8/eap7",
                 "rule": "javax-to-jakarta-servlet-00130",
                 "labels": ["konveyor.io/source"]
+            }
+        ],
+        "dependencies": [
+            {
+                "name": "javax.annotation.javax.annotation-api",
+                "language": "java",
+                "labels": []
+            },
+            {
+                "name": "javax.javaee-api",
+                "language": "java",
+                "labels": []
+            },
+            {
+                "name": "net.wasdev.wlp.sample.daytrader-ee7-ejb",
+                "language": "java",
+                "labels": []
+            },
+            {
+                "name": "net.wasdev.wlp.sample.daytrader-ee7-web",
+                "language": "java",
+                "labels": []
+            },
+            {
+                "name": "org.apache.derby.derby",
+                "language": "java",
+                "labels": []
+            },
+            {
+                "name": "taglibs.standard",
+                "language": "java",
+                "labels": []
             }
         ]
     },

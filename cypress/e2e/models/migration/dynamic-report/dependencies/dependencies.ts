@@ -73,7 +73,7 @@ export class Dependencies {
             Dependencies.validateFilter(dependency);
         });
 
-        if (dependenciesNotExpected.length > 0) {
+        if (dependenciesNotExpected && dependenciesNotExpected.length > 0) {
             getUniqueElementsFromSecondArray(dependenciesExpected, dependenciesNotExpected).forEach(
                 (dependency: AppDependency) => {
                     validateTextPresence(dependencyColumns.name, dependency.name, false);
