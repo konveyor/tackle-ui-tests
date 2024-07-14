@@ -31,7 +31,8 @@ import { TaskManager } from "../../../../models/migration/task-manager/task-mana
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 
-describe("Source Analysis without credentials", () => {
+// TODO (mguetta1): mark it as tier0 once enabling CI again
+describe(["@tier1"], "Source Analysis without credentials", () => {
     before("Load data", function () {
         login();
         cy.fixture("application").then(function (appData) {
@@ -46,7 +47,6 @@ describe("Source Analysis without credentials", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    // it(["@tier0"], "Source Analysis on bookserver app and its issues validation", function () {
     it("Source Analysis on bookserver app and its issues validation", function () {
         // For source code analysis application must have source code URL git or svn
         application = new Analysis(
