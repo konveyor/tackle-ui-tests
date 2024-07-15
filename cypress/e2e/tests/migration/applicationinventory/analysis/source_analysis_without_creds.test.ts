@@ -26,10 +26,13 @@ import { Analysis } from "../../../../models/migration/applicationinventory/anal
 import { infoAlertMessage } from "../../../../views/common.view";
 import { AppIssue } from "../../../../types/types";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { succeeded } from "../../../../types/constants";
+import { TaskManager } from "../../../../models/migration/task-manager/task-manager";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 
-describe("Source Analysis without credentials", () => {
+// TODO (mguetta1): mark it as tier0 once enabling CI again
+describe(["@tier1"], "Source Analysis without credentials", () => {
     before("Load data", function () {
         login();
         cy.fixture("application").then(function (appData) {
@@ -44,7 +47,6 @@ describe("Source Analysis without credentials", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    // it(["@tier0"], "Source Analysis on bookserver app and its issues validation", function () {
     it("Source Analysis on bookserver app and its issues validation", function () {
         // For source code analysis application must have source code URL git or svn
         application = new Analysis(
@@ -66,6 +68,10 @@ describe("Source Analysis without credentials", () => {
                 application.validateAffected(currentIssue);
             }
         );
+    });
+
+    it("Check the bookserver task status on task manager page", function () {
+        TaskManager.verifyStatus(application.name, succeeded);
     });
 
     after("Perform test data clean up", function () {
