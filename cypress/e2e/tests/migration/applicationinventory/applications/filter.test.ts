@@ -57,8 +57,9 @@ import { Tag } from "../../../../models/migration/controls/tags";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
-import { filterDropDownContainer } from "../../../../views/common.view";
+import { filterDropDownContainer, standardFilter } from "../../../../views/common.view";
 import { searchMenuToggle } from "../../../../views/issue.view";
+import * as commonView from "../../../../views/common.view";
 
 let source_credential;
 let maven_credential;
@@ -118,16 +119,8 @@ describe(["@tier2"], "Application inventory filter validations", function () {
 
     it("Name filter validations", function () {
         Application.open();
-
-        var validSearchInput = applicationsList[0].name.substring(0, 15);
-        applySearchFilter(name, validSearchInput);
-        cy.wait(2000);
-        exists(applicationsList[0].name);
-        if (applicationsList[1].name.indexOf(validSearchInput) >= 0) {
-            exists(applicationsList[1].name);
-        }
-
-        clickByText(button, clearAllFilters);
+        //filtering substring of apps and validating application exists
+        filterApplicationsBySubstring();
 
         // Enter an exact existing name and assert
         applySearchFilter(name, applicationsList[1].name);
@@ -339,4 +332,30 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         deleteByList(applicationsList);
         deleteByList(stakeholders);
     });
+    const filterApplicationsBySubstring = () => {
+        const [firstAppSubstring, secondAppSubstring] = applicationsList.map((app) =>
+            app.name.substring(0, 12)
+        );
+        selectFilter(name);
+        if (firstAppSubstring === secondAppSubstring) {
+            cy.get(commonView.inputText)
+                .click()
+                .focused()
+                .clear()
+                .type(firstAppSubstring)
+                .then(() => {
+                    [applicationsList[0].name, applicationsList[1].name].forEach((substring) => {
+                        cy.get(standardFilter).contains(substring).click();
+                    });
+                    exists(applicationsList[0].name);
+                    exists(applicationsList[1].name);
+                });
+        } else {
+            applySearchFilter(name, firstAppSubstring);
+            exists(applicationsList[0].name);
+            notExists(applicationsList[1].name);
+        }
+
+        clickByText(button, clearAllFilters);
+    };
 });
