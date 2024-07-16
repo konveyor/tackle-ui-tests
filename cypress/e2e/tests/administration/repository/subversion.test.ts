@@ -92,15 +92,27 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.failed);
         application.openAnalysisDetails();
+
+        cy.get(analysisDetailsEditor)
+            .eq(0)
+            .click()
+            .type("{ctrl}f")
+            .focused()
+            .clear()
+            .wait(1000)
+            // find the word 'snv.insecure.enabled'
+            .type("snv.insecure.enabled", { delay: 0, force: true })
+            .wait(3000);
+
         cy.get(analysisDetailsEditor)
             .eq(0)
             .then(($editor) => {
+                console.log("Editor Text:", $editor.text());
                 expect($editor.text()).to.contain(
                     "http URL used with snv.insecure.enabled = FALSE",
                     "Analysis details don't contains the expected error message"
                 );
             });
-        clickWithinByText(footer, button, "Close");
     });
 
     // Automates customer bug MTA-1717

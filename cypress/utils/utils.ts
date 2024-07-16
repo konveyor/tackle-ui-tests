@@ -258,7 +258,7 @@ export function resetURL(): void {
 
 export function selectItemsPerPage(items: number): void {
     cy.log(`Select ${items} per page`);
-    cy.get(commonView.itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(
+    cy.get(commonView.itemsPerPageToggleButton, { timeout: 120 * SEC, log: false }).then(
         ($toggleBtn) => {
             if (!$toggleBtn.eq(0).is(":disabled")) {
                 $toggleBtn.eq(0).trigger("click");
@@ -1913,6 +1913,15 @@ export function selectColumns(selectedColumns: string[], buttonText: string = sa
             });
             clickByText(button, buttonText, true);
         });
+}
+
+export function selectLogView(logName) {
+    cy.get("div.pf-v5-c-code-editor__controls").within(() => {
+        cy.get("button.pf-v5-c-menu-toggle").click();
+        cy.get("div.pf-v5-c-menu").within(() => {
+            clickByText(button, logName);
+        });
+    });
 }
 
 /**
