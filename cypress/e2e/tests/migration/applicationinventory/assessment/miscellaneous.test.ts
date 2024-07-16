@@ -335,7 +335,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         //automates polarion MTA-387 and MTA-502
         const archetypeTag = ["3rd party", "Apache Aries"];
         const assessmentTag = ["Runtime", "Spring Boot"];
-        const appdata = { name: "test1", tags: ["Language / Java"] };
+        const appdata = { name: data.getAppName(), tags: ["Language / Java"] };
         const application = new Application(appdata);
         application.create();
 
@@ -403,9 +403,10 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
     });
 
     after("Perform test data clean up", function () {
+        Archetype.open(true);
+        deleteByList(archetypeList);
         deleteByList(stakeholderList);
         deleteByList(applicationList);
-        deleteByList(archetypeList);
         AssessmentQuestionnaire.deleteAllQuestionnaires();
     });
 });
