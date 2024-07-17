@@ -19,7 +19,8 @@ import {
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
-    login, selectLogView,
+    login,
+    selectLogView,
 } from "../../../../utils/utils";
 import { SubversionConfiguration } from "../../../models/administration/repositories/subversion";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
@@ -131,7 +132,7 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
         application.openAnalysisDetails();
 
         cy.intercept("GET", "/hub/tasks/*?merged=1").as("applicationDetails");
-        selectLogView("Merged log view")
+        selectLogView("Merged log view");
 
         cy.wait("@applicationDetails").then((interception) => {
             expect(interception.response.body).to.contain(
