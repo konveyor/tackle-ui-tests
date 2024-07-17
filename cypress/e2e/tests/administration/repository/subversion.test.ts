@@ -16,18 +16,15 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    click,
-    clickWithinByText,
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
-    login,
+    login, selectLogView,
 } from "../../../../utils/utils";
 import { SubversionConfiguration } from "../../../models/administration/repositories/subversion";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
-import { AnalysisStatuses, button, CredentialType } from "../../../types/constants";
+import { AnalysisStatuses, CredentialType } from "../../../types/constants";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
-import { footer } from "../../../views/common.view";
 import { getDescription, getRandomWord } from "../../../../utils/data_utils";
 import { analysisDetailsEditor } from "../../../views/analysis.view";
 
@@ -134,7 +131,7 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
         application.openAnalysisDetails();
 
         cy.intercept("GET", "/hub/tasks/*?merged=1").as("applicationDetails");
-        click("#merged");
+        selectLogView("Merged log view")
 
         cy.wait("@applicationDetails").then((interception) => {
             expect(interception.response.body).to.contain(
@@ -142,7 +139,6 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
                 "Analysis details don't contains the expected error message"
             );
         });
-        clickWithinByText(footer, button, "Close");
     });
 
     afterEach("Clear state", function () {
