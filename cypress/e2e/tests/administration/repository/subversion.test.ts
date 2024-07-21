@@ -105,7 +105,6 @@ describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
         cy.get(analysisDetailsEditor)
             .eq(0)
             .then(($editor) => {
-                console.log("Editor Text:", $editor.text());
                 expect($editor.text()).to.contain(
                     "http URL used with snv.insecure.enabled = FALSE",
                     "Analysis details don't contains the expected error message"

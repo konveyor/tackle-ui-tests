@@ -1915,7 +1915,7 @@ export function selectColumns(selectedColumns: string[], buttonText: string = sa
         });
 }
 
-export function selectLogView(logName) {
+export function selectLogView(logName: string): void {
     cy.get("div.pf-v5-c-code-editor__controls").within(() => {
         cy.get("button.pf-v5-c-menu-toggle").click();
         cy.get("div.pf-v5-c-menu").within(() => {
