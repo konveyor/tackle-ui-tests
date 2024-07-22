@@ -24,6 +24,7 @@ import {
     isEnabled,
     login,
     writeMavenSettingsFile,
+    resetURL,
 } from "../../../../utils/utils";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import * as data from "../../../../utils/data_utils";
@@ -95,7 +96,6 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
     });
 
     it("Binary analysis with maven containing http url when insecure repository is not allowed", function () {
-
         mavenConfiguration.disableInsecureMavenRepositories();
 
         // For tackle test app source credentials are required.
@@ -139,8 +139,8 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         });
     });
 
-    afterEach("Clear state", function () {
-        Analysis.open(true);
+    afterEach("Reset Url", function () {
+        resetURL();
     });
 
     after("Perform test data clean up", () => {
