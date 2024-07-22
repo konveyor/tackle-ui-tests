@@ -258,7 +258,7 @@ export function resetURL(): void {
 
 export function selectItemsPerPage(items: number): void {
     cy.log(`Select ${items} per page`);
-    cy.get(commonView.itemsPerPageToggleButton, { timeout: 120 * SEC, log: false }).then(
+    cy.get(commonView.itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(
         ($toggleBtn) => {
             if (!$toggleBtn.eq(0).is(":disabled")) {
                 $toggleBtn.eq(0).trigger("click");
