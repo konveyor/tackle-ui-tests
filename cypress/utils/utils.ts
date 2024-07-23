@@ -457,7 +457,7 @@ export function applySearchFilter(
     identifiedRisk = false,
     value?: number
 ): void {
-    cy.get('body').then($body => {
+    cy.get("body").then(($body) => {
         if ($body.find('button:contains("Clear all filters")').length > 0) {
             clearAllFilters();
         }
