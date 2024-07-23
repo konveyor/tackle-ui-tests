@@ -106,7 +106,14 @@ import {
     MigrationWaveView,
     getSpecialMigrationWavesTableSelector,
 } from "../e2e/views/migration-wave.view";
-import { manageCredentials, mavenCredential, sourceCredential } from "../e2e/views/analysis.view";
+import {
+    codeEditorControls,
+    manageCredentials,
+    mavenCredential,
+    menuList,
+    menuToggle,
+    sourceCredential,
+} from "../e2e/views/analysis.view";
 import * as ansiRegex from "ansi-regex";
 import { filterSelectType } from "../e2e/views/credentials.view";
 
@@ -1913,6 +1920,15 @@ export function selectColumns(selectedColumns: string[], buttonText: string = sa
             });
             clickByText(button, buttonText, true);
         });
+}
+
+export function selectLogView(logName: string): void {
+    cy.get(codeEditorControls).within(() => {
+        cy.get(menuToggle).click();
+        cy.get(menuList).within(() => {
+            clickByText(button, logName);
+        });
+    });
 }
 
 /**
