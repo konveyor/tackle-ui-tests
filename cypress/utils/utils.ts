@@ -457,6 +457,11 @@ export function applySearchFilter(
     identifiedRisk = false,
     value?: number
 ): void {
+    cy.get('body').then($body => {
+        if ($body.find('button:contains("Clear all filters")').length > 0) {
+            clearAllFilters();
+        }
+    });
     selectFilter(filterName, identifiedRisk, value);
     let filterValue = [];
     if (!Array.isArray(searchText)) {
