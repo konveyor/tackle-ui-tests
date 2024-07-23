@@ -23,8 +23,8 @@ import {
     getRandomApplicationData,
     isEnabled,
     login,
-    resetURL,
     writeMavenSettingsFile,
+    resetURL,
 } from "../../../../utils/utils";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import * as data from "../../../../utils/data_utils";
@@ -73,7 +73,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Bug MTA-2925: Binary analysis with maven containing http url when insecure repository is allowed", function () {
+    it("Binary analysis with maven containing http url when insecure repository is allowed", function () {
         mavenConfiguration.enableInsecureMavenRepositories();
 
         // For tackle test app source credentials are required.
@@ -95,12 +95,7 @@ describe(["@tier1"], "Test secure and insecure maven repository analysis", () =>
         application.openReport();
     });
 
-    it("Bug MTA-2925: Binary analysis with maven containing http url when insecure repository is not allowed", function () {
-        // The following test case should verify if the analysis is failed rather than completed,
-        // but due to how maven structure works it will always pick the ( http ) link as ( https )
-        // which means, it will always pass regardless if the insecure toggle is disabled or not
-        // todo: find a workaround to this
-
+    it("Binary analysis with maven containing http url when insecure repository is not allowed", function () {
         mavenConfiguration.disableInsecureMavenRepositories();
 
         // For tackle test app source credentials are required.
