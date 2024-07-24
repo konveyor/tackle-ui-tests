@@ -70,6 +70,7 @@ describe(["@tier1"], "Source Analysis", () => {
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
+        Application.open(true);
     });
 
     it("Source + dependencies analysis on tackletest app", function () {
