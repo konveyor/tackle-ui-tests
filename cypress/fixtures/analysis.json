@@ -1,7 +1,7 @@
 {
     "source_analysis_on_bookserverapp": {
         "source": "Source code",
-        "target": ["Containerization", "Linux"],
+        "target": ["Containerization", "Linux", "Quarqus"],
         "appName": "book-server",
         "tags": ["EJB XML", "Java EE Batch", "EJB XML"],
         "issues": [
@@ -23,346 +23,387 @@
             {
                 "name": "ch.qos.logback.logback-classic",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "ch.qos.logback.logback-core",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "com.fasterxml.classmate",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "com.fasterxml.jackson.core.jackson-annotations",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "com.fasterxml.jackson.core.jackson-core",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "com.fasterxml.jackson.core.jackson-databind",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "com.fasterxml.jackson.dataformat.jackson-dataformat-xml",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "com.fasterxml.jackson.datatype.jackson-datatype-jdk8",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "com.fasterxml.jackson.datatype.jackson-datatype-jsr310",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "com.fasterxml.jackson.module.jackson-module-jaxb-annotations",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "com.fasterxml.jackson.module.jackson-module-parameter-names",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "com.fasterxml.woodstox.woodstox-core",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "javax.annotation.javax.annotation-api",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "javax.validation.validation-api",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.apache.logging.log4j.log4j-api",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.apache.logging.log4j.log4j-to-slf4j",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.apache.tomcat.embed.tomcat-embed-core",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.apache.tomcat.embed.tomcat-embed-el",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.apache.tomcat.embed.tomcat-embed-websocket",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.codehaus.woodstox.stax2-api",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.hibernate.validator.hibernate-validator",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.jboss.logging.jboss-logging",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.projectlombok.lombok",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.slf4j.jul-to-slf4j",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.slf4j.slf4j-api",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.springframework.boot.spring-boot",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.springframework.boot.spring-boot-autoconfigure",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.springframework.boot.spring-boot-starter",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.springframework.boot.spring-boot-starter-json",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.springframework.boot.spring-boot-starter-logging",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.springframework.boot.spring-boot-starter-tomcat",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.springframework.boot.spring-boot-starter-web",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.springframework.spring-aop",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.springframework.spring-beans",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.springframework.spring-context",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.springframework.spring-core",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.springframework.spring-expression",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.springframework.spring-jcl",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.springframework.spring-web",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.springframework.spring-webmvc",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             },
             {
                 "name": "org.yaml.snakeyaml",
                 "language": "java",
-                "labels": ["open-source"]
+                "license": "open-source",
+                "applications": 1
             }
         ]
     },
 
     "source+dep_analysis_on_daytrader-app": {
         "source": "Source code + dependencies",
-        "target": ["Jakarta EE 9", "Containerization"],
+        "target": ["Jakarta EE 9", "Containerization", "Quarqus"],
         "appName": "deps",
         "storyPoints": 24,
         "issues": [
             {
-                "name": "File system - Java IO",
+                "name": "@MessageDriven - EJBs are not supported in Quarkus",
                 "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["cloud-readiness"],
-                "effort": 1,
-                "totalEffort": 750,
-                "incidents": 3,
-                "affectedFiles": 2,
-                "ruleSet": "cloud-readiness",
-                "rule": "local-storage-00001",
-                "labels": ["konveyor.io/source", "storage"]
-            },
-            {
-                "name": "File system - java.net.URL/URI",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["cloud-readiness"],
-                "effort": 1,
-                "totalEffort": 750,
-                "incidents": 2,
-                "affectedFiles": 2,
-                "ruleSet": "cloud-readiness",
-                "rule": "local-storage-00002",
-                "labels": ["konveyor.io/source", "storage"]
-            },
-            {
-                "name": "HTTP Session data storage",
-                "category": "optional",
-                "sources": ["java"],
-                "targets": ["cloud-readiness"],
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
                 "effort": 3,
-                "totalEffort": 750,
-                "incidents": 16,
-                "affectedFiles": 9,
-                "ruleSet": "cloud-readiness",
-                "rule": "session-00001",
-                "labels": ["clustering"]
+                "totalEffort": 3,
+                "incidents": 3,
+                "affectedFiles": 3,
+                "ruleSet": "quarkus/springboot",
+                "rule": "jms-to-reactive-quarkus-00010",
+                "labels": []
             },
             {
-                "name": "Local HTTP Calls",
+                "name": "`beans.xml` descriptor content is ignored",
+                "category": "potential",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 3,
+                "totalEffort": 3,
+                "incidents": 3,
+                "affectedFiles": 3,
+                "ruleSet": "quarkus/springboot",
+                "rule": "cdi-to-quarkus-00030",
+                "labels": []
+            },
+            {
+                "name": "Add Maven profile to run the Quarkus native build",
                 "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["cloud-readiness"],
-                "effort": 7,
-                "totalEffort": 750,
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
                 "incidents": 1,
                 "affectedFiles": 1,
-                "ruleSet": "cloud-readiness",
-                "rule": "localhost-http-00001",
-                "labels": ["konveyor.io/source", "localhost"]
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00060",
+                "labels": []
             },
             {
-                "name": "Replace the Java EE namespace, schemaLocation and version with the Jakarta equivalent",
+                "name": "Adopt Maven Compiler plugin",
                 "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
                 "effort": 1,
-                "totalEffort": 750,
-                "incidents": 9,
-                "affectedFiles": 4,
-                "ruleSet": "eap8/eap7",
-                "rule": "javaee-to-jakarta-namespaces-00001",
-                "labels": ["konveyor.io/source"]
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00030",
+                "labels": []
             },
             {
-                "name": "Replace the Java EE persistence namespace, schemaLocation and version with the Jakarta equivalent",
+                "name": "Adopt Maven Failsafe plugin",
                 "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
                 "effort": 1,
-                "totalEffort": 750,
-                "incidents": 6,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00050",
+                "labels": []
+            },
+            {
+                "name": "Adopt Maven Surefire plugin",
+                "category": "mandatory",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00040",
+                "labels": []
+            },
+            {
+                "name": "Adopt Quarkus BOM",
+                "category": "mandatory",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00010",
+                "labels": []
+            },
+            {
+                "name": "Adopt Quarkus Maven plugin",
+                "category": "mandatory",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00020",
+                "labels": []
+            },
+            {
+                "name": "Configure message listener method with @Incoming",
+                "category": "mandatory",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 3,
+                "totalEffort": 3,
+                "incidents": 3,
+                "affectedFiles": 3,
+                "ruleSet": "quarkus/springboot",
+                "rule": "jms-to-reactive-quarkus-00020",
+                "labels": []
+            },
+            {
+                "name": "Implicit name determination for sequences and tables associated with identifier generation has changed",
+                "category": "potential",
+                "sources": ["None"],
+                "targets": ["eap", "eap8+", "hibernate", "hibernate6+", "quarkus", "quarkus3+"],
+                "effort": 3,
+                "totalEffort": 3,
+                "incidents": 3,
                 "affectedFiles": 3,
                 "ruleSet": "eap8/eap7",
-                "rule": "javaee-to-jakarta-namespaces-00002",
-                "labels": ["konveyor.io/source"]
-            },
-            {
-                "name": "Replace the Java EE version with the Jakarta equivalent",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 750,
-                "incidents": 6,
-                "affectedFiles": 3,
-                "ruleSet": "eap8/eap7",
-                "rule": "javaee-to-jakarta-namespaces-00033",
-                "labels": ["konveyor.io/source"]
-            },
-            {
-                "name": "The 'javax' groupId has been replaced by 'jakarta' group id in dependencies.",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 750,
-                "incidents": 2,
-                "affectedFiles": 2,
-                "ruleSet": "eap8/eap7",
-                "rule": "javax-to-jakarta-dependencies-00001",
-                "labels": ["konveyor.io/source"]
-            },
-            {
-                "name": "The artifactIds starting with javax.*-api must be updated to their corresponding jakarta.*-api versions in dependency files",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 750,
-                "incidents": 2,
-                "affectedFiles": 2,
-                "ruleSet": "eap8/eap7",
-                "rule": "javax-to-jakarta-dependencies-00002",
-                "labels": ["konveyor.io/source"]
-            },
-            {
-                "name": "The package 'javax' has been replaced by 'jakarta'.",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 750,
-                "incidents": 639,
-                "affectedFiles": 92,
-                "ruleSet": "eap8/eap7",
-                "rule": "javax-to-jakarta-import-00001",
-                "labels": ["konveyor.io/source"]
+                "rule": "hibernate-00005",
+                "labels": ["hibernate", "konveyor.io/source"]
             },
             {
                 "name": "javax groupId has been replaced by jakarta.platform",
@@ -370,9 +411,9 @@
                 "sources": ["None"],
                 "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "effort": 1,
-                "totalEffort": 750,
-                "incidents": 2,
-                "affectedFiles": 2,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
                 "ruleSet": "eap8/eap7",
                 "rule": "javax-to-jakarta-dependencies-00006",
                 "labels": ["konveyor.io/source"]
@@ -383,12 +424,311 @@
                 "sources": ["None"],
                 "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "effort": 1,
-                "totalEffort": 750,
-                "incidents": 2,
-                "affectedFiles": 2,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
                 "ruleSet": "eap8/eap7",
                 "rule": "javax-to-jakarta-dependencies-00007",
                 "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "JMS is not supported in Quarkus",
+                "category": "mandatory",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 5,
+                "totalEffort": 5,
+                "incidents": 5,
+                "affectedFiles": 5,
+                "ruleSet": "quarkus/springboot",
+                "rule": "jms-to-reactive-quarkus-00050",
+                "labels": []
+            },
+            {
+                "name": "JMS' Queue must be replaced with an Emitter",
+                "category": "mandatory",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 3,
+                "totalEffort": 3,
+                "incidents": 3,
+                "affectedFiles": 3,
+                "ruleSet": "quarkus/springboot",
+                "rule": "jms-to-reactive-quarkus-00030",
+                "labels": []
+            },
+            {
+                "name": "JMS' Topic must be replaced with an Emitter",
+                "category": "mandatory",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 3,
+                "totalEffort": 3,
+                "incidents": 3,
+                "affectedFiles": 3,
+                "ruleSet": "quarkus/springboot",
+                "rule": "jms-to-reactive-quarkus-00040",
+                "labels": []
+            },
+            {
+                "name": "Local HTTP Calls",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["cloud-readiness"],
+                "effort": 7,
+                "totalEffort": 7,
+                "incidents": 7,
+                "affectedFiles": 7,
+                "ruleSet": "cloud-readiness",
+                "rule": "localhost-http-00001",
+                "labels": ["konveyor.io/source", "localhost"]
+            },
+            {
+                "name": "Replace the Java EE namespace, schemaLocation and version with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00001",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "Replace the Java EE persistence namespace, schemaLocation and version with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00002",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "Replace the Java EE version with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00033",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "Replace the Java EE version with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00035",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "Replace the Java EE version with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00042",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "Replace the Java EE version with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00044",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "Replace the Java EE version with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00048",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "Replace the Java EE XSD with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00006",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "Replace the Java EE XSD with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00014",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "Replace the Java EE XSD with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00017",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "Replace the Java EE XSD with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00021",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "Replace the Java EE XSD with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00030",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "Stateless annotation can be replaced with scope",
+                "category": "potential",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "cdi-to-quarkus-00050",
+                "labels": []
+            },
+            {
+                "name": "Stateless annotation can be replaced with scope",
+                "category": "potential",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "jakarta-cdi-to-quarkus-00050",
+                "labels": []
+            },
+            {
+                "name": "The 'javax' groupId has been replaced by 'jakarta' group id in dependencies.",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javax-to-jakarta-dependencies-00001",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "The artifactIds starting with javax.*-api must be updated to their corresponding jakarta.*-api versions in dependency files",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javax-to-jakarta-dependencies-00002",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "The expected project artifact's extension is `jar`",
+                "category": "mandatory",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00000",
+                "labels": []
+            },
+            {
+                "name": "The package 'javax' has been replaced by 'jakarta'.",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javax-to-jakarta-import-00001",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "Using NativeQuery to call SQL functions and procedures is no longer supported",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8+", "hibernate", "hibernate6+", "quarkus", "quarkus3+"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "hibernate6-00190",
+                "labels": ["hibernate", "konveyor.io/source"]
             },
             {
                 "name": "web.xml element references a javax-prefixed class name",
@@ -396,8 +736,8 @@
                 "sources": ["None"],
                 "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "effort": 1,
-                "totalEffort": 750,
-                "incidents": 7,
+                "totalEffort": 1,
+                "incidents": 1,
                 "affectedFiles": 1,
                 "ruleSet": "eap8/eap7",
                 "rule": "javax-to-jakarta-servlet-00130",
