@@ -36,6 +36,7 @@ let stakeholderList: Array<Stakeholders> = [];
 describe(["@tier2"], "Archetype association reports tests", () => {
     before("Login and Create Test Data", function () {
         login();
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
         stakeholderList = createMultipleStakeholders(1);
     });
@@ -56,9 +57,9 @@ describe(["@tier2"], "Archetype association reports tests", () => {
             const applications = createMultipleApplications(1, [tags[0].name]);
             Reports.open();
             Reports.verifyRiskValue(mediumRiskDonut, numericRiskValue + 1);
-            archetype.delete();
+            // archetype.delete();
             deleteByList(tags);
-            deleteByList(applications);
+            // deleteByList(applications);
         });
     });
 
