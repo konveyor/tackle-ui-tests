@@ -83,10 +83,12 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
                         getRandomAnalysisData(analysisData["analysis_for_openSourceLibraries"])
                     );
                     bookServerApp.business = businessServiceList[0].name;
+                    // bookServerApp.name = "IssuesFilteringApp1_0_test-app-maxime194";
                     applicationsList.push(bookServerApp);
                 }
             });
         });
+
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
                 for (let i = 0; i < 6; i++) {
@@ -98,6 +100,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
                     );
                     dayTraderApp.tags = tagNames;
                     dayTraderApp.business = businessServiceList[1].name;
+                    // dayTraderApp.name = "IssuesFilteringApp2_0_test-app-et174";
                     applicationsList.push(dayTraderApp);
                 }
 
@@ -114,6 +117,9 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             this.analysisData = analysisData;
         });
     });
+    // afterEach("Test title", function () {
+    //     cy.pause();
+    // });
 
     it("All issues - Filtering issues by name", function () {
         // Analyzing daytrader app for pagination test to generate issues more than 10.
@@ -159,7 +165,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
     it("All issues - Filtering issues by Archetype", function () {
         Issues.applyFilter(issueFilter.archetype, archetype.name);
-        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+        this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"].forEach(
             (issue: AppIssue) => {
                 Issues.validateFilter(issue);
             }
@@ -180,7 +186,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     it("All issues - Filtering issues by tags", function () {
         tagNames.forEach((currentTag: string) => {
             Issues.applyFilter(issueFilter.tags, currentTag);
-            this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+            this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"].forEach(
                 (issue: AppIssue) => {
                     Issues.validateFilter(issue);
                 }
