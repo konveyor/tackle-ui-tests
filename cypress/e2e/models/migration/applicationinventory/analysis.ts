@@ -189,7 +189,7 @@ export class Analysis extends Application {
                 click(camelToggleButton);
                 clickByText(dropDownMenu, target[i]);
             }
-            cy.get("div.pf-v5-c-empty-state__content").contains(target[i]).click();
+            click(`#target-${target[i]}-select`);
         }
     }
 
