@@ -192,247 +192,247 @@
             {
                 "name": "ch.qos.logback.logback-classic",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "ch.qos.logback.logback-core",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "com.fasterxml.classmate",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "com.fasterxml.jackson.core.jackson-annotations",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "com.fasterxml.jackson.core.jackson-core",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "com.fasterxml.jackson.core.jackson-databind",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "com.fasterxml.jackson.dataformat.jackson-dataformat-xml",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "com.fasterxml.jackson.datatype.jackson-datatype-jdk8",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "com.fasterxml.jackson.datatype.jackson-datatype-jsr310",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "com.fasterxml.jackson.module.jackson-module-jaxb-annotations",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "com.fasterxml.jackson.module.jackson-module-parameter-names",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "com.fasterxml.woodstox.woodstox-core",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "javax.annotation.javax.annotation-api",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "javax.validation.validation-api",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.apache.logging.log4j.log4j-api",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.apache.logging.log4j.log4j-to-slf4j",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.apache.tomcat.embed.tomcat-embed-core",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.apache.tomcat.embed.tomcat-embed-el",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.apache.tomcat.embed.tomcat-embed-websocket",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.codehaus.woodstox.stax2-api",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.hibernate.validator.hibernate-validator",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.jboss.logging.jboss-logging",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.projectlombok.lombok",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.slf4j.jul-to-slf4j",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.slf4j.slf4j-api",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.springframework.boot.spring-boot",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.springframework.boot.spring-boot-autoconfigure",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.springframework.boot.spring-boot-starter",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.springframework.boot.spring-boot-starter-json",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.springframework.boot.spring-boot-starter-logging",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.springframework.boot.spring-boot-starter-tomcat",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.springframework.boot.spring-boot-starter-web",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.springframework.spring-aop",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.springframework.spring-beans",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.springframework.spring-context",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.springframework.spring-core",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.springframework.spring-expression",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.springframework.spring-jcl",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.springframework.spring-web",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.springframework.spring-webmvc",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             },
             {
                 "name": "org.yaml.snakeyaml",
                 "language": "java",
-                "license": "open-source",
+                "labels": ["open-source"],
                 "applications": 1
             }
         ]

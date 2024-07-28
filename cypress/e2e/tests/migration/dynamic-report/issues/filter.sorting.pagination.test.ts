@@ -83,7 +83,6 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
                         getRandomAnalysisData(analysisData["analysis_for_openSourceLibraries"])
                     );
                     bookServerApp.business = businessServiceList[0].name;
-                    // bookServerApp.name = "IssuesFilteringApp1_0_test-app-maxime194";
                     applicationsList.push(bookServerApp);
                 }
             });
@@ -100,7 +99,6 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
                     );
                     dayTraderApp.tags = tagNames;
                     dayTraderApp.business = businessServiceList[1].name;
-                    // dayTraderApp.name = "IssuesFilteringApp2_0_test-app-et174";
                     applicationsList.push(dayTraderApp);
                 }
 
@@ -117,9 +115,6 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             this.analysisData = analysisData;
         });
     });
-    // afterEach("Test title", function () {
-    //     cy.pause();
-    // });
 
     it("All issues - Filtering issues by name", function () {
         // Analyzing daytrader app for pagination test to generate issues more than 10.
