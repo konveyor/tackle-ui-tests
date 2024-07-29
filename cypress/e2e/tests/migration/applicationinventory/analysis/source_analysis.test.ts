@@ -70,6 +70,7 @@ describe(["@tier1"], "Source Analysis", () => {
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
+        Application.open(true);
     });
 
     it("Source + dependencies analysis on tackletest app", function () {
@@ -209,7 +210,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.closeApplicationDetails();
     });
 
-    it("Disable Automated tagging using Source Analysis on tackle testapp", function () {
+    it("Bug MTA-3418: Disable Automated tagging using Source Analysis on tackle testapp", function () {
         // Automates Polarion MTA-307
         const application = new Analysis(
             getRandomApplicationData("bookserverApp_Disable_autoTagging", {
