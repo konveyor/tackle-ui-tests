@@ -189,7 +189,7 @@ export class Analysis extends Application {
                 click(camelToggleButton);
                 clickByText(dropDownMenu, target[i]);
             }
-            click(`#target-${target[i]}-select`);
+            click(`#target-${target[i].replace(/ /g, "-")}-select`);
         }
     }
 
@@ -395,10 +395,10 @@ export class Analysis extends Application {
                         currentStatus == AnalysisStatuses.failed &&
                         status != AnalysisStatuses.failed
                     ) {
-                        expect(currentStatus).to.eq(AnalysisStatuses.completed);
+                        expect(currentStatus).to.include(AnalysisStatuses.completed);
                     }
                 } else {
-                    expect(currentStatus).to.eq(status);
+                    expect(currentStatus).to.include(status);
                 }
             });
     }

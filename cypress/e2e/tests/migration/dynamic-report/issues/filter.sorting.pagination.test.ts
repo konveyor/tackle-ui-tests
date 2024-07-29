@@ -87,6 +87,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
                 }
             });
         });
+
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
                 for (let i = 0; i < 6; i++) {
@@ -159,7 +160,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
     it("All issues - Filtering issues by Archetype", function () {
         Issues.applyFilter(issueFilter.archetype, archetype.name);
-        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+        this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"].forEach(
             (issue: AppIssue) => {
                 Issues.validateFilter(issue);
             }
@@ -180,7 +181,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     it("All issues - Filtering issues by tags", function () {
         tagNames.forEach((currentTag: string) => {
             Issues.applyFilter(issueFilter.tags, currentTag);
-            this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+            this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"].forEach(
                 (issue: AppIssue) => {
                     Issues.validateFilter(issue);
                 }
