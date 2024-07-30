@@ -91,3 +91,4 @@ export const appImportForm = "form.pf-v5-c-form";
 export const ViewArchetypes = "View archetypes";
 export const customActionButton = "#custom-action-button";
 export const manageColumnsModal = "[id*='pf-modal-part']";
+export const labelTagText = ".pf-v5-c-label__text";
