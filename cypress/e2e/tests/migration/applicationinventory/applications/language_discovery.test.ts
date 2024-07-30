@@ -27,7 +27,7 @@ import { labelTagText } from "../../../../views/applicationinventory.view";
 
 let applicationList: Application[];
 
-describe(["@tier2"], "Test if application language discovered correctly", () => {
+describe(["@tier2"], "Test if application language discovered and tagged correctly", () => {
     before("Login", function () {
         login();
         cy.fixture("application").then(function (appData) {
