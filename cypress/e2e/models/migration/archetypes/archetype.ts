@@ -308,7 +308,7 @@ export class Archetype {
             .get(tdTag)
             .contains(this.name)
             .closest(trTag)
-            .find('[data-label="Applications"] p')
+            .find('[data-label="Applications"] a')
             .invoke("text")
             .then((text) => {
                 const numberMatch = text.match(/\d+/);
