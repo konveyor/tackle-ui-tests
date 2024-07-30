@@ -26,11 +26,6 @@ import { SEC } from "../../../../types/constants";
 import { labelTagText } from "../../../../views/applicationinventory.view";
 
 let applicationList: Application[];
-let sectionsTags = {
-    Language: ["Java"],
-    Tooling: ["Maven"],
-    Framework: ["Quarkus"],
-};
 
 describe(["@tier2"], "Test if application language discovered correctly", () => {
     before("Login", function () {
@@ -43,6 +38,12 @@ describe(["@tier2"], "Test if application language discovered correctly", () => 
 
     it("Application written in java with maven tooling and quarkus framework", function () {
         // Automates Polarion MTA-586
+
+        const sectionsTags = {
+            Language: ["Java"],
+            Tooling: ["Maven"],
+            Framework: ["Quarkus"],
+        };
 
         const application = new Application(
             getRandomApplicationData("Java_language_maven_tooling_quarkus_framework", {
