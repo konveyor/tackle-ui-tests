@@ -15,25 +15,19 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    login,
-    deleteByList,
-    getRandomApplicationData,
-    sidedrawerTab,
-} from "../../../../../utils/utils";
+import { login, getRandomApplicationData, sidedrawerTab } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { SEC } from "../../../../types/constants";
 import { labelTagText } from "../../../../views/applicationinventory.view";
 
-let applicationList: Application[];
+let application: Application;
 
-describe(["@tier2"], "Test if application language discovered and tagged correctly", () => {
+describe(["@tier2"], "Test if application language is discovered and tagged correctly", () => {
     before("Login", function () {
         login();
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
-        applicationList = [];
     });
 
     it("Application written in java with maven tooling and quarkus framework", function () {
@@ -44,30 +38,27 @@ describe(["@tier2"], "Test if application language discovered and tagged correct
             Tooling: ["Maven"],
             Framework: ["Quarkus"],
         };
-
-        const application = new Application(
+        application = new Application(
             getRandomApplicationData("Java_language_maven_tooling_quarkus_framework", {
                 sourceData: this.appData["Java_language_maven_tooling_quarkus_framework"],
             })
         );
-
-        applicationList.push(application);
         application.create();
-
         cy.wait(2 * SEC);
-
         sidedrawerTab("Java_language_maven_tooling_quarkus_framework", "Tags");
-
         cy.contains("No tags available", { timeout: 60 * SEC }).should("not.exist");
-
         assertTagsInSection(sectionsTags);
     });
 
     after("Perform test data clean up", function () {
-        deleteByList(applicationList);
+        application.delete();
     });
 
-    function assertTagsInSection(sectionsTags): void {
+    function assertTagsInSection(sectionsTags: {
+        Language: string[];
+        Tooling: string[];
+        Framework: string[];
+    }): void {
         Cypress._.forEach(sectionsTags, (tags, section) => {
             cy.contains("h4", section)
                 .parentsUntil("section")
@@ -75,7 +66,6 @@ describe(["@tier2"], "Test if application language discovered and tagged correct
                 .within(() => {
                     tags.forEach((tag) => {
                         cy.contains(labelTagText, tag).should("have.length", 1);
-                        cy.log(`Found ${tag} in the ${section} section`);
                     });
                 });
         });
