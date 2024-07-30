@@ -27,6 +27,7 @@ import {
     getRandomApplicationData,
     getUniqueNamesMap,
     login,
+    selectItemsPerPage,
     validatePagination,
     validateSortBy,
 } from "../../../../../utils/utils";
@@ -239,9 +240,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     });
 
     allIssuesSortByList.forEach((column) => {
-        it(`${
-            column == "Issue" ? "BUG MTA-2432 - " : ""
-        }All issues - Sort issues by ${column}`, function () {
+        it("All issues - Sort issues by ${column}", function () {
             Issues.openList();
             validateSortBy(column);
         });
@@ -276,13 +275,14 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
     it("Affected applications - pagination validation", function () {
         Issues.openAffectedApplications(
-            this.analysisData["source_analysis_on_bookserverapp"]["issues"][0]["name"]
+            this.analysisData["source_analysis_on_bookserverapp"]["issues"][1]["name"]
         );
         validatePagination();
     });
 
     it("Single application - filtering issues by category", function () {
         Issues.openSingleApplication(applicationsList[0].name);
+        selectItemsPerPage(100);
         this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
             (issue: AppIssue) => {
                 Issues.applyFilter(issueFilter.category, issue.category, true);
@@ -294,6 +294,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
     it("Single application - filtering issues by source", function () {
         Issues.openSingleApplication(applicationsList[0].name);
+        selectItemsPerPage(100);
         this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
             (issue: AppIssue) => {
                 issue.sources.forEach((source) => {
@@ -307,6 +308,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
     it("Single application - filtering issues by target", function () {
         Issues.openSingleApplication(applicationsList[0].name);
+        selectItemsPerPage(100);
         let issues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
         issues.forEach((issue: AppIssue) => {
             issue.targets.forEach((target: string) => {
