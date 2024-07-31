@@ -133,8 +133,9 @@ describe(["@tier3"], "Tests for application questionnaire features", () => {
     });
 
     after("Perform test data clean up", function () {
+        Application.open(true);
+        application.delete();
         deleteByList(stakeholderList);
         AssessmentQuestionnaire.deleteAllQuestionnaires();
-        application.delete();
     });
 });
