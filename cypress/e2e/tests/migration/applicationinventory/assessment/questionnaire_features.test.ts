@@ -94,12 +94,10 @@ describe(["@tier3"], "Tests for application questionnaire features", () => {
         // Automates Polarion MTA-505: Cancel assessment
         clickByText(button, "Cancel");
         click(confirmButton);
-        application.selectKebabMenuItem("Discard assessment(s)");
-        /* Needs further investigation; Occassionally fails
-        Assessment.verifyAssessmentTakeButtonEnabled(); */
+        Assessment.verifyButtonEnabled("Take");
     });
 
-    it("1) Test auto answer feature of questionnaires; 2) Save assessment", function () {
+    it("Bug: MTA-3417 1) Test auto answer feature of questionnaires; 2) Save assessment", function () {
         //Automates Polarion MTA-388: Auto answer
         Application.open();
         cy.wait(2 * SEC);
