@@ -63,5 +63,9 @@
         "repoType": "Git",
         "sourceRepo": "https://github.com/konveyor/tackle-testapp-public",
         "branch": "feature/test-java9-removed-packagek"
+    },
+    "Java_language_maven_tooling_quarkus_framework": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/quarkusio/quarkus-super-heroes"
     }
 }
