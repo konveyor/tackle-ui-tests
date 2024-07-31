@@ -59,9 +59,6 @@ describe(["@tier1"], "Manage credentials source analysis", () => {
         cy.fixture("analysis").then(function (analysisData) {
             this.analysisData = analysisData;
         });
-
-        // Interceptors
-        cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     afterEach("Reset url", function () {
@@ -84,13 +81,11 @@ describe(["@tier1"], "Manage credentials source analysis", () => {
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
         sourceApplicationsList.push(application);
-        cy.wait("@getApplication");
 
         sourceApplicationsList.forEach((currentApplication) => {
             currentApplication.create();
         });
         manageCredentialsForMultipleApplications(sourceApplicationsList, source_credential);
-        cy.wait("@getApplication");
         cy.wait(2 * SEC);
         sourceApplicationsList.forEach((currentApplication) => {
             currentApplication.analyze();
@@ -114,7 +109,6 @@ describe(["@tier1"], "Manage credentials source analysis", () => {
             getRandomAnalysisData(this.analysisData["binary_analysis_on_tackletestapp"])
         );
         mavenApplicationsList.push(application);
-        cy.wait("@getApplication");
 
         mavenApplicationsList.forEach((currentApplication) => {
             currentApplication.create();
