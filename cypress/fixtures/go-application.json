@@ -1,0 +1,7 @@
+{
+    "go-example-app": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/konveyor/analyzer-lsp",
+        "rootPath": "examples/golang"
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "source_analysis": {
+        "source": "Source code",
+        "target": ["Containerization"],
+        "appName": "go-example-app"
+    },
+
+    "go_app_custom_rules": {
+        "source": "Source code + dependencies",
+        "target": [],
+        "appName": "golang-app",
+        "customRule": ["golang-dep-rules.yaml"]
+    }
+}

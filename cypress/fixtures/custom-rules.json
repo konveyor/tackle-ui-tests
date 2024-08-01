@@ -1,5 +1,5 @@
 {
-    "manual_rules": {
+    "java_manual_rules": {
         "image": "img/cloud.png",
         "rulesFiles": ["xml/javax-package-custom-target.windup.xml"]
     },
@@ -31,5 +31,9 @@
         "rulesFiles": ["xml/corporate-framework-config.windup.xml"],
         "sources": ["traditional-corporate-framework"],
         "targets": ["cloud-corporate-framework"]
+    },
+    "go_manual_rules": {
+        "image": "img/cloud.png",
+        "rulesFiles": ["yaml/golang-dep-rules.yaml"]
     }
 }

@@ -1,4 +1,9 @@
 {
+    "source_analysis": {
+        "source": "Source code",
+        "target": ["Containerization"],
+        "appName": "java-example-app"
+    },
     "source_analysis_on_bookserverapp": {
         "source": "Source code",
         "target": ["Containerization", "Linux", "Quarkus"],

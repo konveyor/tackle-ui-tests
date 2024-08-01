@@ -67,5 +67,9 @@
     "Java_language_maven_tooling_quarkus_framework": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/quarkusio/quarkus-super-heroes"
+    },
+    "java-example-app": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/ibraginsky/book-server"
     }
 }

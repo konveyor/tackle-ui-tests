@@ -166,9 +166,19 @@ export class Analysis extends Application {
      * Make sure our language is selected. It may already be selected if language-discovery
      * added it, or if it was added manually.
      */
-    public static selectLanguage(language: Languages) {
+    public static selectLanguage(language: Languages, removePreSelected = false) {
         cy.wait(2 * SEC);
         click(actionSelectToggle);
+
+        if (removePreSelected) {
+            cy.get("#filter-by-language input[type=checkbox]").each(($checkbox) => {
+                cy.wrap($checkbox).then((checkbox) => {
+                    if (checkbox.is(":checked")) {
+                        cy.wrap($checkbox).uncheck();
+                    }
+                });
+            });
+        }
 
         // find the language's input checkbox and make sure it is checked
         cy.get(`${actionSelectToggle} + .pf-v5-c-menu`)
@@ -180,7 +190,7 @@ export class Analysis extends Application {
         click(actionSelectToggle);
     }
 
-    protected selectTarget(target: string[]): void {
+    public selectTarget(target: string[]): void {
         for (let i = 0; i < target.length; i++) {
             if (["OpenJDK 11", "OpenJDK 17", "OpenJDK 21"].includes(target[i])) {
                 click(openjdkToggleButton);
