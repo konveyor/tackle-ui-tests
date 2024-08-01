@@ -245,7 +245,7 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
                 application.delete();
             });
 
-            it("ustom rule with source and target technology", function () {
+            it("Custom rule with source and target technology", function () {
                 const targetData = this.customMigrationTargets["rules_with_source_target_element"];
                 const target = new CustomMigrationTarget(
                     data.getRandomWord(8),
