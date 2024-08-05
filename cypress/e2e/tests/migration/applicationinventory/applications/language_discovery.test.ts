@@ -15,16 +15,22 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { login, getRandomApplicationData, sidedrawerTab } from "../../../../../utils/utils";
+import {
+    login,
+    getRandomApplicationData,
+    sidedrawerTab,
+    deleteByList,
+} from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { SEC } from "../../../../types/constants";
 import { labelTagText } from "../../../../views/applicationinventory.view";
 
-let application: Application;
+let applicationList: Application[];
 
 describe(["@tier2"], "Test if application language is discovered and tagged correctly", () => {
     before("Login", function () {
         login();
+        applicationList = [];
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -38,36 +44,59 @@ describe(["@tier2"], "Test if application language is discovered and tagged corr
             Tooling: ["Maven"],
             Framework: ["Quarkus"],
         };
-        application = new Application(
+        const application = new Application(
             getRandomApplicationData("Java_language_maven_tooling_quarkus_framework", {
                 sourceData: this.appData["Java_language_maven_tooling_quarkus_framework"],
             })
         );
         application.create();
+        applicationList.push(application);
         cy.wait(2 * SEC);
         sidedrawerTab("Java_language_maven_tooling_quarkus_framework", "Tags");
         cy.contains("No tags available", { timeout: 60 * SEC }).should("not.exist");
         assertTagsInSection(sectionsTags);
     });
 
+    it("Application written in java and typescript with Maven and NodeJS tooling ", function () {
+        // Automates Polarion MTA-582
+
+        const sectionsTags = {
+            Language: ["Java", "TypeScript"],
+            Tooling: ["Maven", "NodeJs", "Node.js"],
+        };
+        const application = new Application(
+            getRandomApplicationData("Java_TS_language_maven_nodeJS_tooling", {
+                sourceData: this.appData["Java_TS_language_maven_nodeJS_tooling"],
+            })
+        );
+        application.create();
+        applicationList.push(application);
+        cy.wait(2 * SEC);
+        sidedrawerTab("Java_TS_language_maven_nodeJS_tooling", "Tags");
+        cy.contains("No tags available", { timeout: 60 * SEC }).should("not.exist");
+        assertTagsInSection(sectionsTags);
+    });
+
     after("Perform test data clean up", function () {
-        application.delete();
+        deleteByList(applicationList);
     });
 
     function assertTagsInSection(sectionsTags: {
         Language: string[];
-        Tooling: string[];
-        Framework: string[];
+        Tooling?: string[];
+        Framework?: string[];
     }): void {
         Cypress._.forEach(sectionsTags, (tags, section) => {
-            cy.contains("h4", section)
-                .parentsUntil("section")
-                .next()
-                .within(() => {
-                    tags.forEach((tag) => {
-                        cy.contains(labelTagText, tag).should("have.length", 1);
+            if (section) {
+                cy.contains("h4", section)
+                    .parentsUntil("section")
+                    .next()
+                    .within(() => {
+                        tags.forEach((tag) => {
+                            cy.contains(labelTagText, tag).should("have.length", 1);
+                        });
                     });
-                });
+            }
         });
     }
 });
