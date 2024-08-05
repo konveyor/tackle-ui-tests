@@ -59,10 +59,14 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         bookServerApp.create();
+        // Counter increases by discovery tasks
+        counter += 2;
         cy.wait("@getApplication");
         cy.wait(2000);
         bookServerApp.analyze();
         bookServerApp.verifyAnalysisStatus("Completed");
+
+        // Counter increases by analyzer task
         counter++;
         applicationList.push(bookServerApp);
 
@@ -71,6 +75,8 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
         );
+
+        // Application with empty source code should not initiate the discovery tasks
         application.create();
         cy.wait("@getApplication");
         cy.wait(2000);
@@ -97,7 +103,7 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
         tackleTestApp.analyze();
         tackleTestApp.verifyAnalysisStatus("Failed");
 
-        counter++;
+        counter += 3;
         applicationList.push(tackleTestApp);
 
         // Validate the tasks initiated counter increased
