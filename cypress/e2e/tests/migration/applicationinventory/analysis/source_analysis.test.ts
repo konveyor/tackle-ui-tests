@@ -236,6 +236,7 @@ describe(["@tier1"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_on_example-1-app"])
         );
+        cy.wait(2 * SEC);
         Application.open();
         application.create();
         applicationsList.push(application);
