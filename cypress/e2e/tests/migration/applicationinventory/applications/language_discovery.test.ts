@@ -44,13 +44,13 @@ describe(["@tier2"], "Test if application language is discovered and tagged corr
             Tooling: ["Maven"],
             Framework: ["Quarkus"],
         };
-        const application = new Application(
-            getRandomApplicationData("Java_language_maven_tooling_quarkus_framework", {
-                sourceData: this.appData["Java_language_maven_tooling_quarkus_framework"],
-            })
-        );
-        application.create();
-        applicationList.push(application);
+        // const application = new Application(
+        //     getRandomApplicationData("Java_language_maven_tooling_quarkus_framework", {
+        //         sourceData: this.appData["Java_language_maven_tooling_quarkus_framework"],
+        //     })
+        // );
+        // application.create();
+        // applicationList.push(application);
         cy.wait(2 * SEC);
         sidedrawerTab("Java_language_maven_tooling_quarkus_framework", "Tags");
         cy.contains("No tags available", { timeout: 60 * SEC }).should("not.exist");
