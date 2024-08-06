@@ -273,7 +273,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         notExists(application1.name);
         clickByText(button, clearAllFilters);
 
-        // apply search filter Risk - Unknown
+        // apply search filter Risk - Unassessed
         applySearchFilter(risk, "Unassessed");
         cy.wait(2 * SEC);
         exists(application1.name);
