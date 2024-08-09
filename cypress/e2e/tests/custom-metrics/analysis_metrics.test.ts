@@ -28,88 +28,90 @@ const metricName = "konveyor_tasks_initiated_total";
 let applicationList: Array<Application> = [];
 let counter: number;
 
-describe(
-    ["@tier2"],
-    "Bug MTA-3320: Custom Metrics - Count the total number of initiated analyses",
-    function () {
-        before("Login", function () {
-            login();
+describe(["@tier2"], "Custom Metrics - Count the total number of initiated analyses", function () {
+    before("Login", function () {
+        login();
+    });
+
+    beforeEach("Load data and define interceptors", function () {
+        cy.fixture("application").then(function (appData) {
+            this.appData = appData;
+        });
+        cy.fixture("analysis").then(function (analysisData) {
+            this.analysisData = analysisData;
         });
 
-        beforeEach("Load data and define interceptors", function () {
-            cy.fixture("application").then(function (appData) {
-                this.appData = appData;
-            });
-            cy.fixture("analysis").then(function (analysisData) {
-                this.analysisData = analysisData;
-            });
+        cy.intercept("GET", "/hub/application*").as("getApplication");
 
-            cy.intercept("GET", "/hub/application*").as("getApplication");
-
-            // Get the current counter value
-            metrics.getValue(metricName).then((counterValue) => {
-                counter = counterValue;
-            });
-            Application.open(true);
+        // Get the current counter value
+        metrics.getValue(metricName).then((counterValue) => {
+            counter = counterValue;
         });
+        Application.open(true);
+    });
 
-        it("Perform analyses - Validate the tasks initiated counter increased", function () {
-            // For source code analysis application must have source code URL git or svn
-            const bookServerApp = new Analysis(
-                getRandomApplicationData("bookserverApp", {
-                    sourceData: this.appData["bookserver-app"],
-                }),
-                getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
-            );
-            bookServerApp.create();
-            cy.wait("@getApplication");
-            cy.wait(2000);
-            bookServerApp.analyze();
-            bookServerApp.verifyAnalysisStatus("Completed");
-            counter++;
-            applicationList.push(bookServerApp);
+    it("Perform analyses - Validate the tasks initiated counter increased", function () {
+        // For source code analysis application must have source code URL git or svn
+        const bookServerApp = new Analysis(
+            getRandomApplicationData("bookserverApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+        );
+        bookServerApp.create();
+        // Counter increases by discovery tasks
+        counter += 2;
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        bookServerApp.analyze();
+        bookServerApp.verifyAnalysisStatus("Completed");
 
-            Application.open(true);
-            const application = new Analysis(
-                getRandomApplicationData("uploadBinary"),
-                getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
-            );
-            application.create();
-            cy.wait("@getApplication");
-            cy.wait(2000);
-            application.analyze();
-            application.verifyAnalysisStatus("Completed");
-            counter++;
-            applicationList.push(application);
+        // Counter increases by analyzer task
+        counter++;
+        applicationList.push(bookServerApp);
 
-            // Validate the tasks initiated counter increased
-            metrics.validateMetric(metricName, counter);
-        });
+        Application.open(true);
+        const application = new Analysis(
+            getRandomApplicationData("uploadBinary"),
+            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
+        );
 
-        it("Perform analysis on tackle-testapp without credentials - Validate analysis failed but counter increased", function () {
-            // For tackle test app source credentials are required.
-            const tackleTestApp = new Analysis(
-                getRandomApplicationData("tackle-testapp", {
-                    sourceData: this.appData["tackle-testapp-git"],
-                }),
-                getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
-            );
-            tackleTestApp.create();
-            cy.wait("@getApplication");
-            cy.wait(2000);
-            tackleTestApp.analyze();
-            tackleTestApp.verifyAnalysisStatus("Failed");
+        // Application with empty source code should not initiate the discovery tasks
+        application.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        counter++;
+        applicationList.push(application);
 
-            counter++;
-            applicationList.push(tackleTestApp);
+        // Validate the tasks initiated counter increased
+        metrics.validateMetric(metricName, counter);
+    });
 
-            // Validate the tasks initiated counter increased
-            metrics.validateMetric(metricName, counter);
-        });
+    it("Perform analysis on tackle-testapp without credentials - Validate analysis failed but counter increased", function () {
+        // For tackle test app source credentials are required.
+        const tackleTestApp = new Analysis(
+            getRandomApplicationData("tackle-testapp", {
+                sourceData: this.appData["tackle-testapp-git"],
+            }),
+            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
+        );
+        tackleTestApp.create();
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        tackleTestApp.analyze();
+        tackleTestApp.verifyAnalysisStatus("Failed");
 
-        it("Delete applications - Validate the tasks initiated counter didn't change", function () {
-            deleteByList(applicationList);
-            metrics.validateMetric(metricName, counter);
-        });
-    }
-);
+        counter += 3;
+        applicationList.push(tackleTestApp);
+
+        // Validate the tasks initiated counter increased
+        metrics.validateMetric(metricName, counter);
+    });
+
+    it("Delete applications - Validate the tasks initiated counter didn't change", function () {
+        deleteByList(applicationList);
+        metrics.validateMetric(metricName, counter);
+    });
+});
