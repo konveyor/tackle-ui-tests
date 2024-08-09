@@ -254,7 +254,7 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("BUG MTA-3213: Risk filter validations", function () {
+    it("Risk filter validations", function () {
         const application = applicationsList[0];
         const application1 = applicationsList[1];
 
@@ -273,8 +273,8 @@ describe(["@tier2"], "Application inventory filter validations", function () {
         notExists(application1.name);
         clickByText(button, clearAllFilters);
 
-        // apply search filter Risk - Unknown
-        applySearchFilter(risk, "Unknown");
+        // apply search filter Risk - Unassessed
+        applySearchFilter(risk, "Unassessed");
         cy.wait(2 * SEC);
         exists(application1.name);
         notExists(application.name);
