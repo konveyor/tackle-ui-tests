@@ -68,6 +68,10 @@
         "repoType": "Git",
         "sourceRepo": "https://github.com/quarkusio/quarkus-super-heroes"
     },
+    "Java_TS_language_maven_nodeJS_tooling": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/pkaul/maven-typescript-example"
+    },
     "java-example-app": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/ibraginsky/book-server"
