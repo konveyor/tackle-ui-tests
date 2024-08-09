@@ -898,7 +898,7 @@
         "target": ["Containerization"],
         "appName": "book-server",
         "disableTagging": true,
-        "storyPoints": 5
+        "effort": 2
     },
 
     "analysis_for_spring_petclinic_app": {
@@ -1019,7 +1019,7 @@
         "target": ["Containerization"],
         "appName": "deps",
         "openSourceLibraries": true,
-        "storyPoints": "2,602"
+        "effort": "4741"
     },
 
     "analysis_on_example-1-app": {
