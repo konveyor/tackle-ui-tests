@@ -195,9 +195,27 @@ export class Issues {
             .within(() => {
                 if (Array.isArray(content)) {
                     content.forEach((item) => cy.contains(contentSelector, item));
+                    Issues.closeDropdownIfOpen();
                 } else {
                     cy.contains(contentSelector, content);
+                    Issues.closeDropdownIfOpen();
                 }
             });
+    }
+    private static closeDropdownIfOpen(): void {
+        cy.wait(2000); // Increase the wait time to ensure the element is present
+        cy.get("[id^='expandable']", { timeout: 30000 }).then(($item) => {
+            if ($item.length > 0) {
+                $item.each((index, item) => {
+                    cy.wrap(item)
+                        // .should('be.visible')
+                        .click({ force: true });
+                });
+            }
+
+            // if (!$item.hasClass("pf-m-expanded")) {
+            //     $item.trigger("click");
+            // }
+        });
     }
 }
