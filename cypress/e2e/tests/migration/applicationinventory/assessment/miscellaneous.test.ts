@@ -125,7 +125,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             `Success! Assessment discarded for ${applicationList[0].name}.`,
             true
         );
-        applicationList[0].validateAssessmentField("unassessed");
+        applicationList[0].validateAssessmentField("Unassessed");
         archetypeList[0].perform_assessment("low", stakeholderList);
     });
 
@@ -316,14 +316,14 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applications[0].perform_assessment("low", stakeholderList);
         AssessmentQuestionnaire.disable(legacyPathfinder);
         applications[0].verifyStatus("assessment", "Not started");
-        applications[0].validateAssessmentField("unassessed");
+        applications[0].validateAssessmentField("Unassessed");
         applications[0].deleteAssessments();
         applications[0].verifyStatus("assessment", "Not started");
 
         AssessmentQuestionnaire.enable(legacyPathfinder);
         archetypes[0].perform_assessment("low", stakeholderList);
         AssessmentQuestionnaire.disable(legacyPathfinder);
-        archetypes[0].validateAssessmentField("unassessed");
+        archetypes[0].validateAssessmentField("Unassessed");
         archetypes[0].deleteAssessments();
 
         AssessmentQuestionnaire.enable(legacyPathfinder);
