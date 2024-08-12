@@ -46,12 +46,25 @@ import { AssessmentQuestionnaire } from "../../models/administration/assessment_
 import { cloudReadinessQuestionnaire, legacyPathfinder } from "../../types/constants";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Archetype } from "../../models/migration/archetypes/archetype";
+import { UserAdmin } from "../../models/keycloak/users/userAdmin";
+import { getRandomUserData } from "../../../utils/data_utils";
 
 describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     const expectedMtaVersion = Cypress.env("mtaVersion");
-    before("Login", function () {
-        // Perform login
-        login();
+    before("Login as created admin user", function () {
+        const password = Cypress.env("pass");
+        let user: string;
+
+        cy.fixture("upgrade-data").then((upgradeData: UpgradeData) => {
+            this.upgradeData = upgradeData;
+            user = this.upgradeData.adminUser;
+            // Perform login
+            let userAdmin = new UserAdmin(getRandomUserData());
+            userAdmin.username = user;
+            userAdmin.password = password;
+            userAdmin.login();
+        });
+
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
