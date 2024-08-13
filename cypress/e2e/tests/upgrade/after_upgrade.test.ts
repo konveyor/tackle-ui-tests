@@ -76,7 +76,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
 
     it("Validate Tackle CR", () => validateTackleCr());
 
-    it("Validate Tackle Operator Log", () => validateMtaOperatorLog());
+    it("Validate MTA Operator Log", () => validateMtaOperatorLog());
 
     it("Controls - testing existence of instances created before upgrade", function () {
         const {
