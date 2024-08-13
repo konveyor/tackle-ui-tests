@@ -328,6 +328,24 @@ describe(["@tier1"], "Source Analysis", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
+    // Automates bug MTA-3422
+    it("4 targets source analysis on tackle app public", function () {
+        const application = new Analysis(
+            getRandomApplicationData("tackle-public-4-targets", {
+                sourceData: this.appData["tackle-testapp-public"],
+            }),
+            getRandomAnalysisData(this.analysisData["tackle-testapp-public-4-targets"])
+        );
+        cy.wait(2 * SEC);
+        Application.open();
+        application.create();
+        applicationsList.push(application);
+        cy.wait(5 * SEC);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(this.analysisData["tackle-testapp-public-4-targets"]["effort"]);
+    });
+
     after("Perform test data clean up", function () {
         deleteByList(applicationsList);
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));

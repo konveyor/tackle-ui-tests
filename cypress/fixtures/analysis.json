@@ -1197,5 +1197,11 @@
         "target": [],
         "appName": "fileNotValidXML custom rules",
         "customRule": ["settings.xml"]
+    },
+    "tackle-testapp-public-4-targets": {
+        "appName": "tackle-testapp-public",
+        "source": "Source code",
+        "target": ["Application server migration to", "OpenJDK", "Containerization", "Linux"],
+        "effort": 20
     }
 }
