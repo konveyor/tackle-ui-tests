@@ -238,9 +238,9 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     it("Create new admin user to use after upgrade", function () {
         const user = this.upgradeData.adminUser;
         const password = Cypress.env("pass");
-        let userAdmin = new UserAdmin(getRandomUserData());
-        userAdmin.username = user;
-        userAdmin.password = password;
+        const userAdmin = new UserAdmin(getRandomUserData());
+        userAdmin.username = this.upgradeData.adminUser;
+        userAdmin.password = Cypress.env("pass");
 
         //Logging in as keycloak admin to create new user
         User.loginKeycloakAdmin();

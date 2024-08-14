@@ -52,16 +52,11 @@ import { getRandomUserData } from "../../../utils/data_utils";
 describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     const expectedMtaVersion = Cypress.env("mtaVersion");
     before("Login as created admin user", function () {
-        const password = Cypress.env("pass");
-        let user: string;
-
         cy.fixture("upgrade-data").then((upgradeData: UpgradeData) => {
             this.upgradeData = upgradeData;
-            user = this.upgradeData.adminUser;
-            // Perform login
-            let userAdmin = new UserAdmin(getRandomUserData());
-            userAdmin.username = user;
-            userAdmin.password = password;
+            const userAdmin = new UserAdmin(getRandomUserData());
+            userAdmin.username = this.upgradeData.adminUser;
+            userAdmin.password = Cypress.env("pass");
             userAdmin.login();
         });
 
