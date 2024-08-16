@@ -867,7 +867,7 @@
         "target": ["Jakarta EE 9"],
         "binary": ["acmeair-webapp-1.0-SNAPSHOT.war"],
         "appName": "acmeair-webapp-1.0-SNAPSHOT.war",
-        "storyPoints": 78
+        "effort": 78
     },
 
     "uploadbinary_analysis_with_customrule": {
@@ -923,7 +923,7 @@
         "target": ["Containerization"],
         "appName": "book-server",
         "disableTagging": true,
-        "storyPoints": 5
+        "effort": 2
     },
 
     "analysis_for_spring_petclinic_app": {
@@ -976,7 +976,7 @@
         "binary": ["jee-example-app-1.0.0.ear"],
         "appsName": "jee-example-app-1.0.0.ear",
         "target": ["Quarkus"],
-        "storyPoints": 27,
+        "effort": 85,
         "incidents": [
             {
                 "mandatory": 27,
@@ -993,7 +993,7 @@
         "binary": ["camunda-bpm-spring-boot-starter-example-war-2.0.0.war"],
         "appName": "camunda-bpm-spring-boot-starter-example-war-2.0.0.war",
         "target": ["Quarkus"],
-        "storyPoints": 213,
+        "effort": 20,
         "incidents": [
             {
                 "mandatory": 86,
@@ -1005,29 +1005,12 @@
         ]
     },
 
-    "analysis_and_incident_validation_complete-duke": {
-        "source": "Upload a local binary",
-        "binary": ["complete-duke.zip"],
-        "appName": "complete-duke.zip",
-        "target": ["Jakarta EE 9"],
-        "storyPoints": 29,
-        "incidents": [
-            {
-                "mandatory": 29,
-                "optional": 0,
-                "potential": 0,
-                "information": 1,
-                "total": 30
-            }
-        ]
-    },
-
     "analysis_and_incident_validation_kafka-app": {
         "source": "Upload a local binary",
         "binary": ["kafka-clients-sb-sample.jar"],
         "appName": "kafka-clients-sb-sample.jar",
         "target": ["Quarkus"],
-        "storyPoints": 184,
+        "effort": 6,
         "incidents": [
             {
                 "mandatory": 20,
@@ -1051,7 +1034,7 @@
         "source": "Source code",
         "target": ["Containerization"],
         "appName": "example-1",
-        "effort": 2
+        "effort": 8
     },
     "source_analysis_on_nexus_app": {
         "source": "Source code",

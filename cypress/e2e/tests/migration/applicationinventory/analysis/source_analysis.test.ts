@@ -224,6 +224,7 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.wait("@getApplication");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(this.analysisData["analysis_for_disableTagging"]["effort"]);
         application.applicationDetailsTab("Tags");
         cy.get("h2", { timeout: 5 * SEC }).should("contain", "No tags available");
     });
