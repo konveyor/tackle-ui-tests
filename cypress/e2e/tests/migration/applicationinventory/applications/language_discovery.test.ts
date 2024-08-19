@@ -19,7 +19,7 @@ import {
     login,
     getRandomApplicationData,
     sidedrawerTab,
-    deleteByList, resetURL,
+    deleteByList,
 } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { SEC } from "../../../../types/constants";
@@ -31,14 +31,13 @@ describe(["@tier2"], "Test if application language is discovered and tagged corr
     before("Login", function () {
         login();
         applicationList = [];
+    });
+
+    beforeEach("Load Data", function () {
+        // Load Data
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
-    });
-
-    afterEach("Reset url", function () {
-        // Reset URL from report page to web UI
-        resetURL();
     });
 
     it("Application written in java with maven tooling and quarkus framework", function () {
@@ -79,6 +78,10 @@ describe(["@tier2"], "Test if application language is discovered and tagged corr
         sidedrawerTab("Java_TS_language_maven_nodeJS_tooling", "Tags");
         cy.contains("No tags available", { timeout: 60 * SEC }).should("not.exist");
         assertTagsInSection(sectionsTags);
+    });
+
+    afterEach("Persist session", function () {
+        Application.open(true);
     });
 
     after("Perform test data clean up", function () {
