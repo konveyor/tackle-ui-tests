@@ -36,7 +36,7 @@ describe(["@tier2"], "Test if application language is discovered and tagged corr
         });
     });
 
-    beforeEach("Load data", function () {
+    afterEach("Reset url", function () {
         Application.open(true);
     });
 
