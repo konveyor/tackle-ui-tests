@@ -44,6 +44,9 @@ import { UpgradeData } from "../../types/types";
 import { CredentialsMaven } from "../../models/administration/credentials/credentialsMaven";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Archetype } from "../../models/migration/archetypes/archetype";
+import { UserAdmin } from "../../models/keycloak/users/userAdmin";
+import { User } from "../../models/keycloak/users/user";
+import { getRandomUserData } from "../../../utils/data_utils";
 
 describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     let mavenCredentialsUsername: CredentialsMaven;
@@ -230,5 +233,17 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         application.verifyStatus("assessment", "Completed");
         AssessmentQuestionnaire.enable(legacyPathfinder);
         AssessmentQuestionnaire.disable(cloudReadinessQuestionnaire);
+    });
+
+    it("Create new admin user to use after upgrade", function () {
+        const user = this.upgradeData.adminUser;
+        const password = Cypress.env("pass");
+        const userAdmin = new UserAdmin(getRandomUserData());
+        userAdmin.username = this.upgradeData.adminUser;
+        userAdmin.password = Cypress.env("pass");
+
+        //Logging in as keycloak admin to create new user
+        User.loginKeycloakAdmin();
+        userAdmin.create();
     });
 });
