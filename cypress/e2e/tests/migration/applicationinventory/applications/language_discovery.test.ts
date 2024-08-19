@@ -25,12 +25,11 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import { SEC } from "../../../../types/constants";
 import { labelTagText } from "../../../../views/applicationinventory.view";
 
-let applicationList: Application[];
+let applicationList: Application[] = [];
 
 describe(["@tier2"], "Test if application language is discovered and tagged correctly", () => {
     before("Login", function () {
         login();
-        applicationList = [];
     });
 
     beforeEach("Load Data", function () {
