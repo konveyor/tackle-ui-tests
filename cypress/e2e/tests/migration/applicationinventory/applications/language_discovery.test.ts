@@ -19,7 +19,7 @@ import {
     login,
     getRandomApplicationData,
     sidedrawerTab,
-    deleteByList,
+    deleteByList, resetURL,
 } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { SEC } from "../../../../types/constants";
@@ -37,7 +37,8 @@ describe(["@tier2"], "Test if application language is discovered and tagged corr
     });
 
     afterEach("Reset url", function () {
-        Application.open(true);
+        // Reset URL from report page to web UI
+        resetURL();
     });
 
     it("Application written in java with maven tooling and quarkus framework", function () {
@@ -63,7 +64,6 @@ describe(["@tier2"], "Test if application language is discovered and tagged corr
 
     it("Application written in java and typescript with Maven and NodeJS tooling ", function () {
         // Automates Polarion MTA-582
-
         const sectionsTags = {
             Language: ["Java", "TypeScript"],
             Tooling: ["Maven", "NodeJs", "Node.js"],
