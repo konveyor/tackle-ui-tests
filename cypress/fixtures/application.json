@@ -75,5 +75,9 @@
     "java-example-app": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/ibraginsky/book-server"
+    },
+    "tackle-testapp-public": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/konveyor/tackle-testapp-public"
     }
 }

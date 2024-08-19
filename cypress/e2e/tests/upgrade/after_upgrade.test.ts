@@ -26,10 +26,10 @@ import {
     validateTackleCr,
     getCommandOutput,
     getNamespace,
-    validateTackleOperatorLog,
     validateMtaVersionInUI,
     validateMtaVersionInCLI,
     isRwxEnabled,
+    validateMtaOperatorLog,
 } from "../../../utils/utils";
 import { UpgradeData } from "../../types/types";
 import { Credentials } from "../../models/administration/credentials/credentials";
@@ -76,7 +76,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
 
     it("Validate Tackle CR", () => validateTackleCr());
 
-    it("Validate Tackle Operator Log", () => validateTackleOperatorLog());
+    it("Validate MTA Operator Log", () => validateMtaOperatorLog());
 
     it("Controls - testing existence of instances created before upgrade", function () {
         const {

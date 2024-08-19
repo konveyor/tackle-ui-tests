@@ -658,6 +658,45 @@
                 "labels": ["konveyor.io/source", "localhost"]
             },
             {
+                "name": "Method should be marked as @Transactional",
+                "category": "mandatory",
+                "sources": ["jakarta-ee", "java-ee"],
+                "targets": ["quarkus"],
+                "effort": 3,
+                "totalEffort": 3,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "ee-to-quarkus-00020",
+                "labels": []
+            },
+            {
+                "name": "Move persistence config to a properties file",
+                "category": "optional",
+                "sources": ["jakarta-ee", "java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "persistence-to-quarkus-00000",
+                "labels": []
+            },
+            {
+                "name": "Remote EJBs are not supported in Quarkus",
+                "category": "mandatory",
+                "sources": ["jakarta-ee", "java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "remote-ejb-to-quarkus-00000",
+                "labels": []
+            },
+            {
                 "name": "Replace the Java EE namespace, schemaLocation and version with the Jakarta equivalent",
                 "category": "mandatory",
                 "sources": ["None"],
@@ -696,19 +735,18 @@
                 "rule": "javaee-to-jakarta-namespaces-00033",
                 "labels": ["konveyor.io/source"]
             },
-
             {
-                "name": "Stateless annotation can be replaced with scope",
-                "category": "potential",
-                "sources": ["java-ee"],
-                "targets": ["quarkus"],
+                "name": "Replace the Java EE XSD with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "effort": 1,
                 "totalEffort": 1,
                 "incidents": 1,
                 "affectedFiles": 1,
-                "ruleSet": "quarkus/springboot",
-                "rule": "cdi-to-quarkus-00050",
-                "labels": []
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00030",
+                "labels": ["konveyor.io/source"]
             },
             {
                 "name": "The 'javax' groupId has been replaced by 'jakarta' group id in dependencies.",
@@ -761,19 +799,6 @@
                 "ruleSet": "eap8/eap7",
                 "rule": "javax-to-jakarta-import-00001",
                 "labels": ["konveyor.io/source"]
-            },
-            {
-                "name": "Using NativeQuery to call SQL functions and procedures is no longer supported",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8+", "hibernate", "hibernate6+", "quarkus", "quarkus3+"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
-                "ruleSet": "eap8/eap7",
-                "rule": "hibernate6-00190",
-                "labels": ["hibernate", "konveyor.io/source"]
             },
             {
                 "name": "web.xml element references a javax-prefixed class name",
@@ -842,7 +867,7 @@
         "target": ["Jakarta EE 9"],
         "binary": ["acmeair-webapp-1.0-SNAPSHOT.war"],
         "appName": "acmeair-webapp-1.0-SNAPSHOT.war",
-        "storyPoints": 78
+        "effort": 78
     },
 
     "uploadbinary_analysis_with_customrule": {
@@ -898,7 +923,7 @@
         "target": ["Containerization"],
         "appName": "book-server",
         "disableTagging": true,
-        "storyPoints": 5
+        "effort": 2
     },
 
     "analysis_for_spring_petclinic_app": {
@@ -951,7 +976,7 @@
         "binary": ["jee-example-app-1.0.0.ear"],
         "appsName": "jee-example-app-1.0.0.ear",
         "target": ["Quarkus"],
-        "storyPoints": 27,
+        "effort": 85,
         "incidents": [
             {
                 "mandatory": 27,
@@ -968,7 +993,7 @@
         "binary": ["camunda-bpm-spring-boot-starter-example-war-2.0.0.war"],
         "appName": "camunda-bpm-spring-boot-starter-example-war-2.0.0.war",
         "target": ["Quarkus"],
-        "storyPoints": 213,
+        "effort": 20,
         "incidents": [
             {
                 "mandatory": 86,
@@ -980,29 +1005,12 @@
         ]
     },
 
-    "analysis_and_incident_validation_complete-duke": {
-        "source": "Upload a local binary",
-        "binary": ["complete-duke.zip"],
-        "appName": "complete-duke.zip",
-        "target": ["Jakarta EE 9"],
-        "storyPoints": 29,
-        "incidents": [
-            {
-                "mandatory": 29,
-                "optional": 0,
-                "potential": 0,
-                "information": 1,
-                "total": 30
-            }
-        ]
-    },
-
     "analysis_and_incident_validation_kafka-app": {
         "source": "Upload a local binary",
         "binary": ["kafka-clients-sb-sample.jar"],
         "appName": "kafka-clients-sb-sample.jar",
         "target": ["Quarkus"],
-        "storyPoints": 184,
+        "effort": 6,
         "incidents": [
             {
                 "mandatory": 20,
@@ -1026,7 +1034,7 @@
         "source": "Source code",
         "target": ["Containerization"],
         "appName": "example-1",
-        "effort": 2
+        "effort": 8
     },
     "source_analysis_on_nexus_app": {
         "source": "Source code",
@@ -1197,5 +1205,11 @@
         "target": [],
         "appName": "fileNotValidXML custom rules",
         "customRule": ["settings.xml"]
+    },
+    "tackle-testapp-public-4-targets": {
+        "appName": "tackle-testapp-public",
+        "source": "Source code",
+        "target": ["Application server migration to", "OpenJDK", "Containerization", "Linux"],
+        "effort": 20
     }
 }

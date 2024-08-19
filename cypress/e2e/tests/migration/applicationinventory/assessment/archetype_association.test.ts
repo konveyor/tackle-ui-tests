@@ -77,7 +77,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         archetype.verifyStatus("assessment", "Not started");
         archetype.perform_assessment("low", stakeholders);
         // 'Archetype risk' field shows unassessed until all required questionnaires have been taken.
-        archetype.validateAssessmentField("unassessed");
+        archetype.validateAssessmentField("Unassessed");
         archetype.clickAssessButton();
         cy.contains("tr", legacyPathfinder).find("button.retake-button").should("have.length", 1);
 
@@ -146,7 +146,7 @@ describe(["@tier2"], "Tests related to application-archetype association ", () =
         application2.verifyStatus("assessment", "Not started");
         archetypeList[0].perform_assessment("low", stakeholders);
         application2.verifyStatus("assessment", "In-progress");
-        application2.validateAssessmentField("unassessed");
+        application2.validateAssessmentField("Unassessed");
         archetypeList[1].perform_assessment("medium", stakeholders);
 
         application2.verifyStatus("assessment", "Completed");
