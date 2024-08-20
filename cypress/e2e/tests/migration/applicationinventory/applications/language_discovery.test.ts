@@ -37,6 +37,8 @@ describe(["@tier2"], "Test if application language is discovered and tagged corr
 
         it(`test ${data.name.split("-").join(" ")}`, function () {
 
+            // Automates TCs 582, 583, 584, 585, 585, 586, 587
+
             const sectionsTags = data.sections_tags;
 
             const application = new Application(
