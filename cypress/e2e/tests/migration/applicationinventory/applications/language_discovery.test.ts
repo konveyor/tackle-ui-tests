@@ -33,7 +33,6 @@ describe(["@tier2"], "Test if application language is discovered and tagged corr
     });
 
     beforeEach("Load Data", function () {
-        // Load Data
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
