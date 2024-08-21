@@ -488,6 +488,7 @@ export class Application {
 
     validateIssues(appIssues: AppIssue[]): void {
         Issues.openSingleApplication(this.name);
+        selectItemsPerPage(100);
         appIssues.forEach((currentIssue) => {
             validateSingleApplicationIssue(currentIssue);
             Issues.validateAllFields(currentIssue);

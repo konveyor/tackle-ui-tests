@@ -19,6 +19,7 @@ import {
     migration,
     SEC,
     singleApplication,
+    tdTag,
     trTag,
 } from "../../../../types/constants";
 import { navMenu } from "../../../../views/menu.view";
@@ -30,6 +31,7 @@ import {
 } from "../../../../views/issue.view";
 import { AppIssue } from "../../../../types/types";
 import { div, liTag, searchButton, searchInput, span } from "../../../../views/common.view";
+import { title } from "process";
 
 export class Issues {
     /** Contains URL of issues web page */
@@ -177,21 +179,30 @@ export class Issues {
         };
 
         Issues.unfold(issue.name);
-        Issues.validateSection(sections.totalAffectedApps, button, /\d - View affected /);
-        Issues.validateSection(sections.targetTechnologies, span, issue.targets);
-        Issues.validateSection(sections.sourceTechnologies, div, issue.sources);
-        Issues.validateSection(sections.ruleSet, div, issue.ruleSet);
-        Issues.validateSection(sections.rule, div, issue.rule);
-        Issues.validateSection(sections.labels, div, issue.labels);
+        Issues.validateSection(
+            issue.name,
+            sections.totalAffectedApps,
+            button,
+            /\d - View affected /
+        );
+        Issues.validateSection(issue.name, sections.targetTechnologies, span, issue.targets);
+        Issues.validateSection(issue.name, sections.sourceTechnologies, div, issue.sources);
+        Issues.validateSection(issue.name, sections.ruleSet, div, issue.ruleSet);
+        Issues.validateSection(issue.name, sections.rule, div, issue.rule);
+        Issues.validateSection(issue.name, sections.labels, div, issue.labels);
     }
 
     private static validateSection(
+        name: string,
         title: string | RegExp,
         contentSelector: string,
         content: string | string[] | RegExp
     ): void {
-        cy.contains("h4", title)
-            .next("div")
+        cy.contains(tdTag, name)
+            .parent(trTag)
+            .next()
+            .contains("h4", title)
+            .next()
             .within(() => {
                 if (Array.isArray(content)) {
                     content.forEach((item) => cy.contains(contentSelector, item));
