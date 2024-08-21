@@ -1211,5 +1211,40 @@
         "source": "Source code",
         "target": ["Application server migration to", "OpenJDK", "Containerization", "Linux"],
         "effort": 20
+    },
+    "tackle-testapp-public-customRule": {
+        "appName": "tackle-testapp-public",
+        "source": "Source code",
+        "target": ["Containerization", "Linux", "OracleJDK to OpenJDK"],
+        "customRule": ["corporate-framework-config.windup.xml"],
+        "effort": 2,
+        "issues": [
+            {
+                "name": "Hardcoded IP Address",
+                "category": "mandatory",
+                "source": "None",
+                "targets": ["cloud-readiness", "discovery"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "discovery-rules",
+                "rule": "hardcoded-ip-address",
+                "labels": "discovery"
+            },
+            {
+                "name": "Legacy configuration with io.konveyor.demo.config.ApplicationConfiguration",
+                "category": "mandatory",
+                "sources": ["java", "java-ee"],
+                "targets": ["cloud-readiness"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "files",
+                "rule": "corporate-config-01000",
+                "labels": ["None"]
+            }
+        ]
     }
 }

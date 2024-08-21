@@ -34,6 +34,7 @@ import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../../models/administration/credentials/credentialsSourceControlKey";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { AppIssue } from "../../../../types/types";
 let source_credential: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;
 let applicationsList: Array<Analysis> = [];
@@ -345,6 +346,53 @@ describe(["@tier1"], "Source Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.verifyEffort(this.analysisData["tackle-testapp-public-4-targets"]["effort"]);
+    });
+
+    // Automates customer bug MTA-2973
+    it("Bug MTA-3163: Source analysis on tackle app public with custom rule", function () {
+        const applicationList = [
+            new Analysis(
+                getRandomApplicationData("tackle-public-customRule", {
+                    sourceData: this.appData["tackle-testapp-public"],
+                }),
+                getRandomAnalysisData(this.analysisData["tackle-testapp-public-customRule"])
+            ),
+        ];
+
+        // Analysis application with maven credential
+        cy.wait(2 * SEC);
+        Application.open();
+        applicationList[0].create();
+        applicationList[0].manageCredentials(null, maven_credential.name);
+        applicationsList.push(applicationList[0]);
+        cy.wait(5 * SEC);
+        applicationList[0].analyze();
+        applicationList[0].verifyAnalysisStatus("Completed");
+        applicationList[0].validateIssues(
+            this.analysisData["tackle-testapp-public-customRule"]["issues"]
+        );
+        this.analysisData["tackle-testapp-public-customRule"]["issues"].forEach(
+            (currentIssue: AppIssue) => {
+                applicationList[0].validateAffected(currentIssue);
+            }
+        );
+
+        // Analysis application without maven credential
+        cy.wait(2 * SEC);
+        Application.open();
+        applicationList[1].create();
+        applicationsList.push(applicationList[0]);
+        cy.wait(5 * SEC);
+        applicationList[1].analyze();
+        applicationList[1].verifyAnalysisStatus("Completed");
+        applicationList[1].validateIssues(
+            this.analysisData["tackle-testapp-public-customRule"]["issues"]
+        );
+        this.analysisData["tackle-testapp-public-customRule"]["issues"].forEach(
+            (currentIssue: AppIssue) => {
+                applicationList[1].validateAffected(currentIssue);
+            }
+        );
     });
 
     after("Perform test data clean up", function () {
