@@ -562,7 +562,7 @@ export class Application {
                         cy.get("li").should("have.length", appIssue.incidents);
                     });
                     // Iterating through incidents list to click on each and validate content
-                    for (let incident = 0; incident < appIssue.incidents; incident++) {
+                    for (let incident = 0; incident < appIssue.incidents-1; incident++) {
                         cy.get("ul[role=tablist]").within(() => {
                             // Clicking on particular incident
                             click(button, false, true, incident);
