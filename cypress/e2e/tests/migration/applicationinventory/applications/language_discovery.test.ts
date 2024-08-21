@@ -21,10 +21,10 @@ import {
     sidedrawerTab,
     deleteByList,
 } from "../../../../../utils/utils";
-import {Application} from "../../../../models/migration/applicationinventory/application";
-import {SEC} from "../../../../types/constants";
-import {labelTagText} from "../../../../views/applicationinventory.view";
-import {languageDiscoveryData} from "../../../../../fixtures/language_discovery.json"
+import { Application } from "../../../../models/migration/applicationinventory/application";
+import { SEC } from "../../../../types/constants";
+import { labelTagText } from "../../../../views/applicationinventory.view";
+import { languageDiscoveryData } from "../../../../../fixtures/language_discovery.json";
 
 let applicationList: Application[] = [];
 
@@ -34,33 +34,25 @@ describe(["@tier2"], "Test if application language is discovered and tagged corr
     });
 
     languageDiscoveryData.forEach((data) => {
-
         it(`test ${data.name.split("-").join(" ")}`, function () {
-
             // Automates TCs 582, 583, 584, 585, 585, 586, 587
 
             const sectionsTags = data.sections_tags;
-
             const application = new Application(
                 getRandomApplicationData(data.name, {
                     sourceData: {
                         repoType: data.repoType,
-                        sourceRepo: data.sourceRepo
-                    }
+                        sourceRepo: data.sourceRepo,
+                    },
                 })
             );
             application.create();
             applicationList.push(application);
-
             cy.wait(2 * SEC);
-
             sidedrawerTab(data.name, "Tags");
-
-            cy.contains("No tags available", {timeout: 60 * SEC}).should("not.exist");
-
+            cy.contains("No tags available", { timeout: 60 * SEC }).should("not.exist");
             assertTagsInSection(sectionsTags);
         });
-
     });
 
     afterEach("Persist session", function () {
