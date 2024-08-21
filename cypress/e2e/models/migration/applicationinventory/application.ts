@@ -562,17 +562,21 @@ export class Application {
                         cy.get("li").should("have.length", appIssue.incidents);
                     });
                     // Iterating through incidents list to click on each and validate content
-                    for (let incident = 0; incident < appIssue.incidents-1; incident++) {
+                    for (let incident = 0; incident < appIssue.incidents; incident++) {
                         cy.get("ul[role=tablist]").within(() => {
                             // Clicking on particular incident
                             click(button, false, true, incident);
                         });
-                        // Asserting that content of text field has at least 100 symbols
-                        cy.get("div.monaco-scrollable-element.editor-scrollable.vs-dark")
-                            .invoke("text")
-                            .then((text) => {
-                                expect(text.length).to.be.at.least(100);
-                            });
+                        cy.get("ul[role=tablist] >li >button").then((button) => {
+                            if (!button.text().includes("All incidents")) {
+                                // Asserting that content of text field has at least 100 symbols
+                                cy.get("div.monaco-scrollable-element.editor-scrollable.vs-dark")
+                                    .invoke("text")
+                                    .then((text) => {
+                                        expect(text.length).to.be.at.least(100);
+                                    });
+                            }
+                        });
                     }
                     clickByText(button, "Close");
                 });
