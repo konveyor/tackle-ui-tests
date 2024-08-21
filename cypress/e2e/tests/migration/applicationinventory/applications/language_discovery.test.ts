@@ -24,6 +24,7 @@ import {
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { SEC } from "../../../../types/constants";
 import { labelTagText } from "../../../../views/applicationinventory.view";
+import { languageDiscoveryData } from "../../../../../fixtures/language_discovery.json";
 
 let applicationList: Application[] = [];
 
@@ -32,50 +33,26 @@ describe(["@tier2"], "Test if application language is discovered and tagged corr
         login();
     });
 
-    beforeEach("Load Data", function () {
-        cy.fixture("application").then(function (appData) {
-            this.appData = appData;
+    languageDiscoveryData.forEach((data) => {
+        it(`test ${data.name.split("-").join(" ")}`, function () {
+            // Automates TCs 582, 583, 584, 585, 585, 586, 587
+
+            const sectionsTags = data.sections_tags;
+            const application = new Application(
+                getRandomApplicationData(data.name, {
+                    sourceData: {
+                        repoType: data.repoType,
+                        sourceRepo: data.sourceRepo,
+                    },
+                })
+            );
+            application.create();
+            applicationList.push(application);
+            cy.wait(2 * SEC);
+            sidedrawerTab(data.name, "Tags");
+            cy.contains("No tags available", { timeout: 60 * SEC }).should("not.exist");
+            assertTagsInSection(sectionsTags);
         });
-    });
-
-    it("Application written in java with maven tooling and quarkus framework", function () {
-        // Automates Polarion MTA-586
-
-        const sectionsTags = {
-            Language: ["Java"],
-            Tooling: ["Maven"],
-            Framework: ["Quarkus"],
-        };
-        const application = new Application(
-            getRandomApplicationData("Java_language_maven_tooling_quarkus_framework", {
-                sourceData: this.appData["Java_language_maven_tooling_quarkus_framework"],
-            })
-        );
-        application.create();
-        applicationList.push(application);
-        cy.wait(2 * SEC);
-        sidedrawerTab("Java_language_maven_tooling_quarkus_framework", "Tags");
-        cy.contains("No tags available", { timeout: 60 * SEC }).should("not.exist");
-        assertTagsInSection(sectionsTags);
-    });
-
-    it("Application written in java and typescript with Maven and NodeJS tooling ", function () {
-        // Automates Polarion MTA-582
-        const sectionsTags = {
-            Language: ["Java", "TypeScript"],
-            Tooling: ["Maven", "NodeJs", "Node.js"],
-        };
-        const application = new Application(
-            getRandomApplicationData("Java_TS_language_maven_nodeJS_tooling", {
-                sourceData: this.appData["Java_TS_language_maven_nodeJS_tooling"],
-            })
-        );
-        application.create();
-        applicationList.push(application);
-        cy.wait(2 * SEC);
-        sidedrawerTab("Java_TS_language_maven_nodeJS_tooling", "Tags");
-        cy.contains("No tags available", { timeout: 60 * SEC }).should("not.exist");
-        assertTagsInSection(sectionsTags);
     });
 
     afterEach("Persist session", function () {
