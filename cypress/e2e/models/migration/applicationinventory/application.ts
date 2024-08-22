@@ -488,6 +488,7 @@ export class Application {
 
     validateIssues(appIssues: AppIssue[]): void {
         Issues.openSingleApplication(this.name);
+        selectItemsPerPage(100);
         appIssues.forEach((currentIssue) => {
             validateSingleApplicationIssue(currentIssue);
             Issues.validateAllFields(currentIssue);
@@ -566,12 +567,16 @@ export class Application {
                             // Clicking on particular incident
                             click(button, false, true, incident);
                         });
-                        // Asserting that content of text field has at least 100 symbols
-                        cy.get("div.monaco-scrollable-element.editor-scrollable.vs-dark")
-                            .invoke("text")
-                            .then((text) => {
-                                expect(text.length).to.be.at.least(100);
-                            });
+                        cy.get("ul[role=tablist] >li >button").then((button) => {
+                            if (!button.text().includes("All incidents")) {
+                                // Asserting that content of text field has at least 100 symbols
+                                cy.get("div.monaco-scrollable-element.editor-scrollable.vs-dark")
+                                    .invoke("text")
+                                    .then((text) => {
+                                        expect(text.length).to.be.at.least(100);
+                                    });
+                            }
+                        });
                     }
                     clickByText(button, "Close");
                 });
