@@ -1,4 +1,4 @@
-FROM docker.io/cypress/included:13.6.4
+FROM docker.io/cypress/included:13.13.3
 
 # point Cypress at the /tmp/cache no matter what user account is used
 # see https://on.cypress.io/caching
