@@ -82,7 +82,7 @@ export const specialFilter = "#select-multi-typeahead-checkbox-listbox";
 export const filterDropDownContainer =
     "div.pf-v5-c-toolbar__group.pf-m-toggle-group.pf-m-filter-group.pf-m-show";
 export const filterDropDown = '[id^="filter-control-"]';
-export const actionSelectToggle = "#action-select-toggle";
+export const actionSelectToggle = "span.pf-v5-c-menu-toggle__controls";
 export const radioButtonLabel = "div.pf-v5-c-radio";
 export const radioButton = '*[class^="pf-v5-c-radio__input"]';
 export const splitItem = "div.pf-v5-l-split__item";

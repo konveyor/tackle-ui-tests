@@ -178,16 +178,15 @@ export class Analysis extends Application {
                     }
                 });
             });
+            // find the language's input checkbox and make sure it is checked
+            cy.get(`${actionSelectToggle} + .pf-v5-c-menu`)
+                .contains(language)
+                .closest(".pf-v5-c-menu__list-item")
+                .find("input[type=checkbox]")
+                .check();
+
+            click(actionSelectToggle);
         }
-
-        // find the language's input checkbox and make sure it is checked
-        cy.get(`${actionSelectToggle} + .pf-v5-c-menu`)
-            .contains(language)
-            .closest(".pf-v5-c-menu__list-item")
-            .find("input[type=checkbox]")
-            .check();
-
-        click(actionSelectToggle);
     }
 
     public selectTarget(target: string[]): void {
