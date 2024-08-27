@@ -44,3 +44,4 @@ export const closeWizard = ".pf-v5-c-wizard__close > .pf-v5-c-button";
 export const codeEditorControls = "div.pf-v5-c-code-editor__controls";
 export const menuToggle = "button.pf-v5-c-menu-toggle";
 export const menuList = "div.pf-v5-c-menu";
+export const languageSelectionDropdown = "#filter-control-name-Languages";

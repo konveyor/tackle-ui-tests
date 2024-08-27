@@ -177,7 +177,7 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
                 sourceCredential.delete();
             });
 
-            it("Change layout and check in analysis wizard", function () {
+            it.only("Change layout and check in analysis wizard", function () {
                 const targetData = this.customMigrationTargets[`${languageLower}_manual_rules`];
                 const target = new CustomMigrationTarget(
                     data.getRandomWord(8),

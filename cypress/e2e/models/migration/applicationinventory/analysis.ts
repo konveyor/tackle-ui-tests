@@ -18,6 +18,7 @@ import {
     analyzeAppButton,
     analyzeButton,
     button,
+    clearAllFilters,
     Languages,
     ReportTypeSelectors,
     RepositoryType,
@@ -32,6 +33,7 @@ import {
     clickByText,
     clickTab,
     clickWithin,
+    clickWithinByText,
     doesExistSelector,
     doesExistText,
     inputText,
@@ -68,6 +70,7 @@ import {
     expandAll,
     fileName,
     kebabTopMenuButton,
+    languageSelectionDropdown,
     manageCredentials,
     mavenCredential,
     openjdkToggleButton,
@@ -82,7 +85,6 @@ import {
     kebabMenu,
 } from "../../../views/applicationinventory.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
-import { actionSelectToggle } from "../../../views/common.view";
 
 export class Analysis extends Application {
     name: string;
@@ -168,25 +170,20 @@ export class Analysis extends Application {
      */
     public static selectLanguage(language: Languages, removePreSelected = false) {
         cy.wait(2 * SEC);
-        click(actionSelectToggle);
 
         if (removePreSelected) {
-            cy.get("#filter-by-language input[type=checkbox]").each(($checkbox) => {
-                cy.wrap($checkbox).then((checkbox) => {
-                    if (checkbox.is(":checked")) {
-                        cy.wrap($checkbox).uncheck();
-                    }
-                });
-            });
-            // find the language's input checkbox and make sure it is checked
-            cy.get(`${actionSelectToggle} + .pf-v5-c-menu`)
-                .contains(language)
-                .closest(".pf-v5-c-menu__list-item")
-                .find("input[type=checkbox]")
-                .check();
-
-            click(actionSelectToggle);
+            clickWithinByText(".pf-v5-c-wizard__main-body", "button", clearAllFilters);
         }
+
+        cy.get(languageSelectionDropdown).click();
+
+        cy.get(`#filter-control-name-select-typeahead-listbox > li`)
+            .contains(language)
+            .closest(".pf-v5-c-menu__list-item")
+            .find("input[type=checkbox]")
+            .check();
+
+        cy.get(languageSelectionDropdown).click();
     }
 
     public selectTarget(target: string[]): void {
