@@ -42,12 +42,12 @@ export class TaskManager {
         selectItemsPerPage(itemsPerPage);
     }
 
-    static verifyStatus(application: string, status: string): void {
+    static verifyTaskStatus(application: string, kind: string, status: string): void {
         TaskManager.open();
         selectItemsPerPage(itemsPerPage);
-        cy.get(tdTag)
-            .contains(application)
-            .closest(trTag)
+        cy.get(trTag)
+            .filter(':contains("' + application + '")')
+            .filter(':contains("' + kind + '")')
             .within(() => {
                 cy.get(tasksStatusColumn).contains(status, { timeout: 30 * SEC });
             });
