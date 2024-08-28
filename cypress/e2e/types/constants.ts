@@ -215,11 +215,11 @@ export enum Languages {
 
 export const itemsPerPage = 100;
 
-export enum TaskStatuses {
+export enum TaskStatus {
     succeeded = "Succeeded",
 }
 
-export enum TaskKinds {
+export enum TaskKind {
     analyzer = "analyzer",
     techDiscovery = "tech-discovery",
     languageDiscovery = "language-discovery",

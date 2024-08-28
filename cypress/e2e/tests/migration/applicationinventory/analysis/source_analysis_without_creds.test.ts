@@ -27,7 +27,7 @@ import { infoAlertMessage } from "../../../../views/common.view";
 import { AppIssue } from "../../../../types/types";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { TaskManager } from "../../../../models/migration/task-manager/task-manager";
-import { TaskKinds, TaskStatuses } from "../../../../types/constants";
+import { TaskKind, TaskStatus } from "../../../../types/constants";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 
@@ -71,16 +71,16 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
     });
 
     it("Check the bookserver task status on task manager page", function () {
-        TaskManager.verifyTaskStatus(application.name, TaskKinds.analyzer, TaskStatuses.succeeded);
+        TaskManager.verifyTaskStatus(application.name, TaskKind.analyzer, TaskStatus.succeeded);
         TaskManager.verifyTaskStatus(
             application.name,
-            TaskKinds.techDiscovery,
-            TaskStatuses.succeeded
+            TaskKind.techDiscovery,
+            TaskStatus.succeeded
         );
         TaskManager.verifyTaskStatus(
             application.name,
-            TaskKinds.languageDiscovery,
-            TaskStatuses.succeeded
+            TaskKind.languageDiscovery,
+            TaskStatus.succeeded
         );
     });
 

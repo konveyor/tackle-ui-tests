@@ -16,7 +16,14 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { clickByText, selectItemsPerPage, selectUserPerspective } from "../../../../utils/utils";
-import { SEC, itemsPerPage, migration, tdTag, trTag } from "../../../types/constants";
+import {
+    SEC,
+    TaskKind,
+    TaskStatus,
+    itemsPerPage,
+    migration,
+    trTag,
+} from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { tasksStatusColumn } from "../../../views/taskmanager.view";
 
@@ -42,7 +49,7 @@ export class TaskManager {
         selectItemsPerPage(itemsPerPage);
     }
 
-    static verifyTaskStatus(application: string, kind: string, status: string): void {
+    static verifyTaskStatus(application: string, kind: TaskKind, status: TaskStatus): void {
         TaskManager.open();
         selectItemsPerPage(itemsPerPage);
         cy.get(trTag)
