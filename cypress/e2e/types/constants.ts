@@ -214,4 +214,13 @@ export enum Languages {
 }
 
 export const itemsPerPage = 100;
-export const succeeded = "Succeeded";
+
+export enum TaskStatus {
+    succeeded = "Succeeded",
+}
+
+export enum TaskKind {
+    analyzer = "analyzer",
+    techDiscovery = "tech-discovery",
+    languageDiscovery = "language-discovery",
+}

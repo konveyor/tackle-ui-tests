@@ -16,7 +16,14 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { clickByText, selectItemsPerPage, selectUserPerspective } from "../../../../utils/utils";
-import { SEC, itemsPerPage, migration, tdTag, trTag } from "../../../types/constants";
+import {
+    SEC,
+    TaskKind,
+    TaskStatus,
+    itemsPerPage,
+    migration,
+    trTag,
+} from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import { tasksStatusColumn } from "../../../views/taskmanager.view";
 
@@ -42,12 +49,12 @@ export class TaskManager {
         selectItemsPerPage(itemsPerPage);
     }
 
-    static verifyStatus(application: string, status: string): void {
+    static verifyTaskStatus(application: string, kind: TaskKind, status: TaskStatus): void {
         TaskManager.open();
         selectItemsPerPage(itemsPerPage);
-        cy.get(tdTag)
-            .contains(application)
-            .closest(trTag)
+        cy.get(trTag)
+            .filter(':contains("' + application + '")')
+            .filter(':contains("' + kind + '")')
             .within(() => {
                 cy.get(tasksStatusColumn).contains(status, { timeout: 30 * SEC });
             });
