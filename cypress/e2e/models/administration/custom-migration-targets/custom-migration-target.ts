@@ -25,7 +25,7 @@ import {
     sourcesToggle,
 } from "../../../views/custom-migration-target.view";
 import { RulesManualFields, RulesRepositoryFields } from "../../../types/types";
-import { actionSelectToggle, submitButton } from "../../../views/common.view";
+import { submitButton } from "../../../views/common.view";
 
 export interface CustomMigrationTarget {
     name: string;
@@ -143,7 +143,7 @@ export class CustomMigrationTarget {
 
     public static selectLanguage(language: Languages) {
         CustomMigrationTarget.open();
-        cy.get(actionSelectToggle, { timeout: 30 * SEC }).click();
+        cy.get(CustomMigrationTargetView.languageDropdown, { timeout: 30 * SEC }).click();
         clickByText("button", language);
     }
 
