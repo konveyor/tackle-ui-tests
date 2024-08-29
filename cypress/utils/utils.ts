@@ -690,8 +690,9 @@ export function notExistsWithinRow(
 export function importApplication(fileName: string, disableAutoCreation?: boolean): void {
     // Performs application import via csv file upload
     application_inventory_kebab_menu("Import");
-    cy.get("#file-filename", { timeout: 2 * SEC }).attachFile(fileName, {
-        subjectType: "drag-n-drop",
+    cy.get('input[type="file"]', { timeout: 2 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
+        timeout: 120 * SEC,
+        force: true,
     });
     //Uncheck createEntitiesCheckbox if auto creation of entities is disabled
     if (disableAutoCreation)
@@ -707,24 +708,24 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
 }
 
 export function uploadXml(fileName: string, selector = 'input[type="file"]'): void {
-    cy.get(selector, { timeout: 5 * SEC }).attachFile(
-        { filePath: fileName, mimeType: "text/xml", encoding: "utf-8" },
-        { subjectType: "drag-n-drop" }
-    );
+    cy.get(selector, { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
+        timeout: 120 * SEC,
+        force: true,
+    });
     cy.wait(2000);
 }
 
 export function uploadApplications(fileName: string): void {
     cy.get('input[type="file"]', { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
-        action: "drag-drop",
         timeout: 120 * SEC,
         force: true,
     });
 }
 
 export function uploadFile(fileName: string): void {
-    cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(fileName, {
-        subjectType: "drag-n-drop",
+    cy.get('input[type="file"]', { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
+        timeout: 120 * SEC,
+        force: true,
     });
     cy.wait(2000);
 }

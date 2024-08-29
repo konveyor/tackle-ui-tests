@@ -42,7 +42,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it.only(["@interop"], "Analysis for acmeair app upload binary", function () {
+    it(["@interop"], "Analysis for acmeair app upload binary", function () {
         const application = new Analysis(
             getRandomApplicationData("acmeair_app"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
