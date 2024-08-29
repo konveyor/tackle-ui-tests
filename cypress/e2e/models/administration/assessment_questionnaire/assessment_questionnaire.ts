@@ -48,9 +48,13 @@ export class AssessmentQuestionnaire {
     public static import(fileName: string) {
         AssessmentQuestionnaire.open();
         click(importQuestionnaire);
-        cy.get(questionnaireUpload, { timeout: 2 * SEC }).attachFile(fileName, {
-            subjectType: "drag-n-drop",
-        });
+        cy.get('input[type="file"]', { timeout: 2 * SEC }).selectFile(
+            `cypress/fixtures/${fileName}`,
+            {
+                timeout: 120 * SEC,
+                force: true,
+            }
+        );
         cy.get(commonView.controlsForm, { timeout: 5 * SEC })
             .find("button")
             .contains("Import")
