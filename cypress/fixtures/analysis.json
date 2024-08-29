@@ -1008,7 +1008,7 @@
         "source": "Source code",
         "target": ["Containerization"],
         "appName": "example-1",
-        "effort": 8
+        "effort": 2
     },
     "source_analysis_on_nexus_app": {
         "source": "Source code",

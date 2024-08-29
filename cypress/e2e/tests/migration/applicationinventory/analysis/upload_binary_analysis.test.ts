@@ -23,7 +23,7 @@ import {
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
-import { AnalysisStatuses } from "../../../../types/constants";
+import { AnalysisStatuses, SEC } from "../../../../types/constants";
 
 const applicationsList: Analysis[] = [];
 describe(["@tier1"], "Upload Binary Analysis", () => {
@@ -98,7 +98,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyAnalysisStatus("Completed");
         application.verifyEffort(
             this.analysisData["analysis_and_incident_validation_jeeExample_app"]["effort"]
         );
@@ -114,7 +114,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyAnalysisStatus("Completed");
         application.verifyEffort(
             this.analysisData["analysis_and_incident_validation_camunda_app"]["effort"]
         );
