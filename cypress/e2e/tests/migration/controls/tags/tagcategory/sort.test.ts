@@ -25,7 +25,7 @@ import {
 import { rank, tagCount, SortType, tagCategory } from "../../../../../types/constants";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 
-describe(["@tier2"], "Tag category sort validations", function () {
+describe(["@tier3"], "Tag category sort validations", function () {
     before("Login", function () {
         login();
     });

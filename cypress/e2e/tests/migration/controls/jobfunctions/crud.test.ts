@@ -19,7 +19,7 @@ import { exists, login, notExists } from "../../../../../utils/utils";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import * as data from "../../../../../utils/data_utils";
 
-describe(["@tier1"], "Job Function CRUD operations", () => {
+describe(["@tier2"], "Job Function CRUD operations", () => {
     const jobfunction = new Jobfunctions(data.getJobTitle());
 
     before("Login", () => {

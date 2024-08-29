@@ -34,7 +34,7 @@ import * as data from "../../../../../utils/data_utils";
 let jobFunctionsList: Array<Jobfunctions> = [];
 let stakeholderGroupList: Array<Stakeholdergroups> = [];
 
-describe(["@tier1", "@interop"], "Stakeholder CRUD operations", () => {
+describe(["@tier2", "@interop"], "Stakeholder CRUD operations", () => {
     before("Login", function () {
         login();
     });

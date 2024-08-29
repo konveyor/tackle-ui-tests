@@ -43,7 +43,7 @@ let projectName = "";
  * This suite is almost identical to jira_cloud but putting both tests in the same suite would make the code harder to read
  * The only difference is that this test doesn't remove/archive the issues created since the token doesn't have enough permissions
  */
-describe(["@tier1"], "Export Migration Wave to Jira Datacenter", function () {
+describe(["@tier2"], "Export Migration Wave to Jira Datacenter", function () {
     before("Create test data", function () {
         if (
             !Cypress.env("jira_stage_datacenter_project_id") ||

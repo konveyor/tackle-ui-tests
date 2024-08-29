@@ -50,7 +50,7 @@ let stakeholders: Stakeholders[] = [];
 
 //Automates Polarion MTA-354
 describe(
-    ["@tier2"],
+    ["@tier3"],
     "Migration waves: Filter validations on Manage applications modal",
     function () {
         before("Login and Create Test Data", function () {

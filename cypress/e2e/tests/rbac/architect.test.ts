@@ -35,7 +35,7 @@ import * as data from "../../../utils/data_utils";
 
 let stakeholders: Array<Stakeholders> = [];
 
-describe(["@tier2", "@rhsso"], "Architect RBAC operations", function () {
+describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
     let userArchitect = new UserArchitect(getRandomUserData());
     const application = new Application(getRandomApplicationData());
 

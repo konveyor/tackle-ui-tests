@@ -42,7 +42,7 @@ import { Analysis } from "../../../models/migration/applicationinventory/analysi
 import { cancelButton } from "../../../views/common.view";
 import * as commonView from "../../../views/common.view";
 
-describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () => {
+describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () => {
     let appFixture: string;
     let analysisFixture: string;
     let languageLower: string;
@@ -207,7 +207,7 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
 
                 // Moves the custom migration target to the first place
                 cy.wait("@getRule");
-                dragButton.drag(commonView.optionMenu, {
+                dragButton.selectFile(commonView.optionMenu, {
                     force: true,
                     waitForAnimations: false,
                 });

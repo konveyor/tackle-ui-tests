@@ -21,7 +21,7 @@ import { button, clearAllFilters, color, rank } from "../../../../../types/const
 import * as data from "../../../../../../utils/data_utils";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 
-describe(["@tier2"], "Tag tagCategory filter validations", function () {
+describe(["@tier3"], "Tag tagCategory filter validations", function () {
     beforeEach("Login", function () {
         login();
 
