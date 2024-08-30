@@ -32,7 +32,7 @@ import { Tag } from "../../../models/migration/controls/tags";
 let stakeholders: Stakeholders[];
 let tags: Tag[];
 
-describe(["@tier1"], "Archetype assessment and review tests", () => {
+describe(["@tier2"], "Archetype assessment and review tests", () => {
     before("Login and Create Test Data", function () {
         login();
         AssessmentQuestionnaire.deleteAllQuestionnaires();

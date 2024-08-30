@@ -24,7 +24,7 @@ import { Credentials } from "../../../models/administration/credentials/credenti
 let source_credential: CredentialsSourceControlUsername;
 let application: Analysis;
 
-describe(["@tier1"], "Validation of credentials being used by app", () => {
+describe(["@tier3"], "Validation of credentials being used by app", () => {
     before("Login", function () {
         login();
         source_credential = new CredentialsSourceControlUsername(

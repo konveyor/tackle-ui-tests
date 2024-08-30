@@ -30,7 +30,7 @@ import { getJiraCredentialData } from "../../../../utils/data_utils";
 import * as data from "../../../../utils/data_utils";
 import { jiraTable } from "../../../views/jira.view";
 
-describe(["@tier2"], "Jira connection filter validations", () => {
+describe(["@tier3"], "Jira connection filter validations", () => {
     const useTestingAccount = true;
     let jiraBasicCredential: JiraCredentials;
     let jiraConnectionList: Jira[];

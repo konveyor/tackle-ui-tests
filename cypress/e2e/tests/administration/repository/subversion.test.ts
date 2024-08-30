@@ -29,7 +29,7 @@ import { Analysis } from "../../../models/migration/applicationinventory/analysi
 import { getDescription, getRandomWord } from "../../../../utils/data_utils";
 import { analysisDetailsEditor } from "../../../views/analysis.view";
 
-describe(["@tier1"], "Test secure and insecure svn repository analysis", () => {
+describe(["@tier2"], "Test secure and insecure svn repository analysis", () => {
     const subversionConfiguration = new SubversionConfiguration();
     let sourceCredential: CredentialsSourceControlUsername;
     const applicationsList: Analysis[] = [];

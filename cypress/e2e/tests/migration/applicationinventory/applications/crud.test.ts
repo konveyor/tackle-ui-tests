@@ -19,7 +19,7 @@ import { exists, login, notExists, getRandomApplicationData } from "../../../../
 import * as data from "../../../../../utils/data_utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
-describe(["@tier1"], "Application crud operations", () => {
+describe(["@tier2"], "Application crud operations", () => {
     beforeEach("Login", function () {
         // Perform login
         login();

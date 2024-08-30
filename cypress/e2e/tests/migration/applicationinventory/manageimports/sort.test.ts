@@ -36,7 +36,7 @@ import { csvFileName, date, importStatus, user } from "../../../../views/applica
 
 const filePath = "app_import/csv/";
 
-describe(["@tier2"], "Manage applications import sort validations", function () {
+describe(["@tier3"], "Manage applications import sort validations", function () {
     before("Login and create test data", function () {
         login();
 

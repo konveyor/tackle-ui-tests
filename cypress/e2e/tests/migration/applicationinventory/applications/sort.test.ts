@@ -32,7 +32,7 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 var applicationsList: Array<Application> = [];
 let businessServicesList: Array<BusinessServices> = [];
 
-describe(["@tier2"], "Application inventory sort validations", function () {
+describe(["@tier3"], "Application inventory sort validations", function () {
     before("Login and Create Test Data", function () {
         login();
 

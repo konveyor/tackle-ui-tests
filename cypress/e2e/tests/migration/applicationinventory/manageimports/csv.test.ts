@@ -20,7 +20,7 @@ import { kebabMenuItem } from "../../../../views/applicationinventory.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { manageImportsActionsButton } from "../../../../views/common.view";
 
-describe(["@tier2"], "Manage imports tests", function () {
+describe(["@tier3"], "Manage imports tests", function () {
     before("Login", function () {
         login();
         Application.open();

@@ -31,7 +31,7 @@ import {
 } from "../../../../views/applicationinventory.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
-describe(["@tier2"], "Bulk deletion of applications", () => {
+describe(["@tier3"], "Bulk deletion of applications", () => {
     before("Login", function () {
         login();
         Application.open(true);

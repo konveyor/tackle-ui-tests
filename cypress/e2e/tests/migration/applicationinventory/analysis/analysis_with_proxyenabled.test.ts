@@ -23,7 +23,7 @@ import { Analysis } from "../../../../models/migration/applicationinventory/anal
 
 let application: Analysis;
 
-describe(["@tier2"], "Running analysis with incorrect proxy configuration", () => {
+describe(["@tier3"], "Running analysis with incorrect proxy configuration", () => {
     let httpsProxy = new Proxy(getRandomProxyData(), ProxyType.https);
     let httpProxy = new Proxy(getRandomProxyData(), ProxyType.http);
 

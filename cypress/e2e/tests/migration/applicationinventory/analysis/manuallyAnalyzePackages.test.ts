@@ -24,7 +24,7 @@ import { CredentialsSourceControlUsername } from "../../../../models/administrat
 let source_credential: CredentialsSourceControlUsername;
 let application: Analysis;
 
-describe(["@tier2"], "Select the list of packages to be analyzed manually", () => {
+describe(["@tier3"], "Select the list of packages to be analyzed manually", () => {
     before("Login", function () {
         login();
         // Create source Credentials
