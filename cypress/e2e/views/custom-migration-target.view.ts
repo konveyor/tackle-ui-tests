@@ -24,4 +24,5 @@ export enum CustomMigrationTargetView {
     card = ".pf-v5-c-card",
     cardContainer = "div.dnd-grid",
     languageDropdown = "#action-select-toggle",
+    dragAndDropSection = ".dnd-grid",
 }

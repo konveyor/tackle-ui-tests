@@ -13,20 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// ***********************************************************
-// This example support/index.js is processed and
-// loaded automatically before your test files.
-//
-// This is a great place to put global configuration and
-// behavior that modifies Cypress.
-//
-// You can change the location of this file or turn off
-// automatically serving support files with the
-// 'supportFile' configuration option.
-//
-// You can read more here:
-// https://on.cypress.io/configuration
-// ***********************************************************
 
 // Import commands.js using ES2015 syntax:
 import "./commands";
@@ -49,6 +35,11 @@ require("cypress-grep")();
 // https://github.com/Brugui7/cypress-log-filter
 require("cypress-log-filter");
 
+// Allows to handle special actions like drag-n-drop
+// The use of this library is limited to Chromium-based browsers
+// https://github.com/dmtrKovalenko/cypress-real-events
+import "cypress-real-events";
+
 /** Hide XHR logs line */
 // TODO: Improve by implementing a configuration parameter
 const app = window.top;
@@ -59,4 +50,19 @@ if (app && !app.document.head.querySelector("[data-hide-command-log-request]")) 
     style.setAttribute("data-hide-command-log-request", "");
 
     app.document.head.appendChild(style);
+}
+
+declare global {
+    namespace Cypress {
+        interface Chainable {
+            /**
+             * Drags an element to a drop location.
+             * This custom command works only on Chromium-based browsers
+             * @example cy.dragAndDrop(cy.get('#source'), cy.get('#target'))
+             * @param dragElement
+             * @param dropElement
+             */
+            dragAndDrop(dragElement: Cypress.Chainable, dropElement: Cypress.Chainable): void;
+        }
+    }
 }

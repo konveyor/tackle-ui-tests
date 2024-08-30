@@ -41,3 +41,14 @@
 
 require("cy-verify-downloads").addCustomCommand();
 require("cypress-downloadfile/lib/downloadFileCommand");
+
+Cypress.Commands.add(
+    "dragAndDrop",
+    (dragElement: Cypress.Chainable, dropElement: Cypress.Chainable) => {
+        dragElement
+            .realMouseDown({ button: "left", position: "center" })
+            .realMouseMove(0, 10, { position: "center" })
+            .wait(200);
+        dropElement.realMouseMove(0, 0, { position: "topLeft" }).realMouseUp().wait(200);
+    }
+);
