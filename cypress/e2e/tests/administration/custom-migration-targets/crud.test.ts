@@ -200,17 +200,14 @@ describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () 
                     target1.create();
                 }
                 closeSuccessAlert();
+                cy.wait("@getRule");
 
                 const dragButton = cy
                     .contains(CustomMigrationTargetView.card, target.name, { timeout: 12 * SEC })
                     .find(CustomMigrationTargetView.dragButton);
 
                 // Moves the custom migration target to the first place
-                cy.wait("@getRule");
-                dragButton.drag(commonView.optionMenu, {
-                    force: true,
-                    waitForAnimations: false,
-                });
+                cy.dragAndDrop(dragButton, cy.get(CustomMigrationTargetView.dragAndDropSection));
 
                 Analysis.open(true);
                 const application = new Analysis(
