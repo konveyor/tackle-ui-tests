@@ -19,6 +19,8 @@ import {
     click,
     clickByText,
     closeSuccessAlert,
+    deleteAllMigrationWaves,
+    deleteApplicationTableRows,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
@@ -53,6 +55,8 @@ describe(["@tier2"], "Custom Migration Targets rules trigger validation", () => 
 
     before("Login", function () {
         login();
+        deleteAllMigrationWaves();
+        deleteApplicationTableRows();
     });
 
     beforeEach("Fixtures and Interceptors", function () {
@@ -71,8 +75,8 @@ describe(["@tier2"], "Custom Migration Targets rules trigger validation", () => 
         CustomMigrationTarget.open(true);
     });
 
-    it("Test same rules are triggered for custom rules and custom migiration target", function () {
-        const targetData = this.customMigrationTargets[`rules_from_bug_3330`];
+    it("Test same rules are triggered for custom rules and custom migration target", function () {
+        const targetData = this.customMigrationTargets["rules_from_bug_3330"];
         target = new CustomMigrationTarget(
             data.getRandomWord(8),
             data.getDescription(),
@@ -105,11 +109,12 @@ describe(["@tier2"], "Custom Migration Targets rules trigger validation", () => 
 
         applications.forEach((app) => {
             app.verifyAnalysisStatus(AnalysisStatuses.completed);
+            Application.open(true);
             app.verifyEffort(EXPECTED_EFFORT);
         });
     });
 
-    after("Test", function () {
+    after("Clear state", function () {
         Application.open(true);
         target.delete();
         applications.forEach((app) => app.delete());
