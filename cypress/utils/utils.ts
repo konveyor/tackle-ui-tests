@@ -102,10 +102,7 @@ import {
     tagFilterName,
 } from "../e2e/views/issue.view";
 import { Archetype } from "../e2e/models/migration/archetypes/archetype";
-import {
-    MigrationWaveView,
-    getSpecialMigrationWavesTableSelector,
-} from "../e2e/views/migration-wave.view";
+import { MigrationWaveView } from "../e2e/views/migration-wave.view";
 import {
     codeEditorControls,
     manageCredentials,

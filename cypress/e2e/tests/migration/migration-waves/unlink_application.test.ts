@@ -16,7 +16,16 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { createMultipleApplications, login } from "../../../../utils/utils";
-import { CredentialType, JiraIssueTypes, JiraType, SEC } from "../../../types/constants";
+import {
+    button,
+    CredentialType,
+    deleteAction,
+    JiraIssueTypes,
+    JiraType,
+    SEC,
+    tdTag,
+    trTag,
+} from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { Jira } from "../../../models/administration/jira-connection/jira";
@@ -85,7 +94,16 @@ describe(["@tier1"], "Unlink application from exported migration waves", functio
         exportWave().then(() => {
             migrationWave.clickWaveStatus();
             migrationWave.unlinkApplications(applications);
-            jiraCloudInstance.delete(true);
+            Jira.openList();
+            cy.get(tdTag)
+                .contains(jiraCloudInstance.name)
+                .closest(trTag)
+                .within(() => {
+                    cy.contains(button, deleteAction).should(
+                        "not.have.class",
+                        "pf-m-aria-disabled"
+                    );
+                });
         });
     });
 
@@ -93,7 +111,16 @@ describe(["@tier1"], "Unlink application from exported migration waves", functio
     it("Export to Jira Cloud and unlink applications from App Inventory", function () {
         exportWave().then(() => {
             applications.forEach((app) => app.unlinkJiraTicket());
-            jiraCloudInstance.delete(true);
+            Jira.openList();
+            cy.get(tdTag)
+                .contains(jiraCloudInstance.name)
+                .closest(trTag)
+                .within(() => {
+                    cy.contains(button, deleteAction).should(
+                        "not.have.class",
+                        "pf-m-aria-disabled"
+                    );
+                });
         });
     });
 
