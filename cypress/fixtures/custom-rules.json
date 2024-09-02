@@ -27,7 +27,7 @@
             "repositoryType": "git",
             "repositoryUrl": "https://github.com/abrugaro/book-server",
             "branch": "",
-            "rootPath": ""
+            "rootPath": "bug-3330-rules"
         }
     },
     "hazelcast_target": {

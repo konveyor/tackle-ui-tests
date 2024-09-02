@@ -47,8 +47,8 @@ import * as commonView from "../../../views/common.view";
 import { RulesRepositoryFields } from "../../../types/types";
 import { Application } from "../../../models/migration/applicationinventory/application";
 
-// Automates Bug MTA-3330
-describe(["@tier2"], "Custom Migration Targets rules trigger validation", () => {
+// Automates Bug MTA-3330 | Polarion TC MTA-601
+describe(["@tier3"], "Custom Migration Targets rules trigger validation", () => {
     let target: CustomMigrationTarget;
     const applications: Analysis[] = [];
     const EXPECTED_EFFORT = 5;
