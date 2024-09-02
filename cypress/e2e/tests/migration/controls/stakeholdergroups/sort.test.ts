@@ -32,7 +32,7 @@ import { Stakeholders } from "../../../../models/migration/controls/stakeholders
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var stakeholdersList: Array<Stakeholders> = [];
 
-describe(["@tier2"], "Stakeholder groups sort validations", function () {
+describe(["@tier3"], "Stakeholder groups sort validations", function () {
     before("Login and Create Test Data", function () {
         login();
 

@@ -39,7 +39,7 @@ let stakeholders: Stakeholders[];
 let stakeholderGroups: Stakeholdergroups[];
 let tags: Tag[];
 
-describe(["@tier1"], "Archetype CRUD operations", () => {
+describe(["@tier2"], "Archetype CRUD operations", () => {
     before("Login", function () {
         login();
         stakeholders = createMultipleStakeholders(2);

@@ -28,7 +28,7 @@ import { Jira } from "../../../models/administration/jira-connection/jira";
 import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
 import { Application } from "../../../models/migration/applicationinventory/application";
 
-describe(["@tier2"], "Bug MTA-2549: Jira connection negative tests", () => {
+describe(["@tier3"], "Bug MTA-2549: Jira connection negative tests", () => {
     const expectedToFail = true;
     const useTestingAccount = true;
     const isSecure = false;

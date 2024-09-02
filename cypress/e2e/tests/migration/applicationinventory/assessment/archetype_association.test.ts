@@ -44,7 +44,7 @@ let applicationList: Application[];
 let inheritanceTags: Tag[];
 let associationTags: Tag[];
 let stakeholders: Stakeholders[];
-describe(["@tier2"], "Tests related to application-archetype association ", () => {
+describe(["@tier3"], "Tests related to application-archetype association ", () => {
     before("Login", function () {
         login();
         inheritanceTags = createMultipleTags(2);

@@ -36,7 +36,7 @@ import { expandRow } from "../../../../views/common.view";
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var stakeholdergroupNames: Array<string> = [];
 
-describe(["@tier1"], "Stakeholder linked to stakeholder groups and job function", () => {
+describe(["@tier3"], "Stakeholder linked to stakeholder groups and job function", () => {
     before("Login", function () {
         login();
     });

@@ -36,7 +36,7 @@ import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 let stakeholdersList: Array<Stakeholders> = [];
 const membersList: Array<string> = [];
 
-describe(["@tier1"], "Stakeholder group linked to stakeholder members", () => {
+describe(["@tier3"], "Stakeholder group linked to stakeholder members", () => {
     before("Login and Create Test Data", function () {
         login();
 

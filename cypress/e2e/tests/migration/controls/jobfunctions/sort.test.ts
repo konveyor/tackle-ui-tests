@@ -29,7 +29,7 @@ import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions
 
 let jobFunctionsList: Array<Jobfunctions> = [];
 
-describe(["@tier2"], "Job function sorting", function () {
+describe(["@tier3"], "Job function sorting", function () {
     before("Login and Create Test Data", function () {
         login();
         jobFunctionsList = createMultipleJobFunctions(2);

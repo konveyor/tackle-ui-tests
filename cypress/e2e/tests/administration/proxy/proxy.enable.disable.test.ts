@@ -27,7 +27,7 @@ import { CredentialType } from "../../../types/constants";
 import { helper, port, ProxyType, ProxyViewSelectorsByType } from "../../../views/proxy.view";
 import { submitButton } from "../../../views/common.view";
 
-describe(["@tier2"], "Proxy operations", () => {
+describe(["@tier3"], "Proxy operations", () => {
     let httpsProxy = new Proxy(getRandomProxyData(), ProxyType.https);
     let httpProxy = new Proxy(getRandomProxyData(), ProxyType.http);
     const httpProxyCredentials = new CredentialsProxy(

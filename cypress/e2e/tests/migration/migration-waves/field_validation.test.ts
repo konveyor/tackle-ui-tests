@@ -35,7 +35,7 @@ let migrationWave: MigrationWave;
 
 // Automates validations for Polarion TC 332
 // This suite is only for fields validations, see crud.test.ts for CRUD operations
-describe(["@tier1"], "Migration Waves Validations", () => {
+describe(["@tier2"], "Migration Waves Validations", () => {
     before("Login and create test data", function () {
         login();
 

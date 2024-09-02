@@ -8,7 +8,7 @@ import {
 import { SEC } from "../../../../types/constants";
 import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
 
-describe(["@tier2"], "Dependencies sort validations", function () {
+describe(["@tier3"], "Dependencies sort validations", function () {
     let application: Analysis;
     const sortByList = ["Dependency name", "Labels", "Found in"];
 

@@ -30,7 +30,7 @@ import { ManageImports } from "../../../../models/migration/applicationinventory
 const imports = new ManageImports();
 const filePath = "app_import/csv/";
 
-describe(["@tier2"], "Application import operations", () => {
+describe(["@tier3"], "Application import operations", () => {
     before("Login and create test data", function () {
         login();
         deleteAllMigrationWaves();

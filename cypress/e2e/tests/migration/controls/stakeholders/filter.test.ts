@@ -50,7 +50,7 @@ let jobFunctionsList: Array<Jobfunctions> = [];
 let stakeholderGroupsList: Array<Stakeholdergroups> = [];
 let invalidSearchInput = "SomeInvalidInput";
 
-describe(["@tier2"], "Stakeholder filter validations", function () {
+describe(["@tier3"], "Stakeholder filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
 

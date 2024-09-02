@@ -30,7 +30,7 @@ import { getJiraCredentialData } from "../../../../utils/data_utils";
 import { CredentialType, instanceName, SEC, SortType } from "../../../types/constants";
 import { jiraTable } from "../../../views/jira.view";
 
-describe(["@tier2"], "Jira connections sort validations", function () {
+describe(["@tier3"], "Jira connections sort validations", function () {
     const useTestingAccount = true;
     let jiraBasicCredential: JiraCredentials;
     let jiraConnectionList: Jira[];

@@ -33,7 +33,7 @@ let gitConfiguration = new GitConfiguration();
 let source_credential: CredentialsSourceControlUsername;
 let applicationsList: Analysis[] = [];
 
-describe(["@tier1"], "Test secure and insecure git repository analysis", () => {
+describe(["@tier2"], "Test secure and insecure git repository analysis", () => {
     before("Login", function () {
         login();
         source_credential = new CredentialsSourceControlUsername(

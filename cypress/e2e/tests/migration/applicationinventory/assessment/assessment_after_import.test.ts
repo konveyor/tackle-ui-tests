@@ -36,7 +36,7 @@ const filePath = "app_import/csv/";
 let stakeholders: Stakeholders[];
 let appdata = { name: "Customers" };
 
-describe(["@tier2"], "Operations after application import", () => {
+describe(["@tier3"], "Operations after application import", () => {
     before("Login and create test data", function () {
         login();
         // This test will fail if there are preexisting questionnaire.

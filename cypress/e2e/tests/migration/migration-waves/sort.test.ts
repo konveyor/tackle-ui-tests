@@ -46,7 +46,7 @@ let stakeholdersList: Stakeholders[] = [];
 let businessServicesList: BusinessServices[] = [];
 
 //Automates Polarion TC 341
-describe(["@tier2"], "Migration Waves sort validations", function () {
+describe(["@tier3"], "Migration Waves sort validations", function () {
     before("Login and Create Test Data", function () {
         login();
 

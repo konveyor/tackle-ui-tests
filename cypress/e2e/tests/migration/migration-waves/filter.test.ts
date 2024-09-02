@@ -27,7 +27,7 @@ import { MigrationWaveView } from "../../../views/migration-wave.view";
 
 let migrationWavesList: Array<MigrationWave> = [];
 //Automates Polarion TC 343
-describe(["@tier2"], "Migration waves filter validations", function () {
+describe(["@tier3"], "Migration waves filter validations", function () {
     before("Login and Create Test Data", function () {
         // Peform login
         login();
