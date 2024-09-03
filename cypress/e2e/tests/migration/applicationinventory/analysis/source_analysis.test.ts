@@ -245,7 +245,7 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
         application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyAnalysisStatus("Completed");
         // Polarion TC 406
         application.verifyEffort(this.analysisData["analysis_on_example-1-app"]["effort"]);
     });
