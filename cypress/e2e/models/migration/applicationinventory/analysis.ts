@@ -387,7 +387,7 @@ export class Analysis extends Application {
         });
     }
 
-    private static verifyStatus(element: Cypress.Chainable, status: string) {
+    public static verifyStatus(element: Cypress.Chainable, status: string) {
         element
             .find("div > div:nth-child(2)", { timeout: 3600000, log: false }) // 1h
             .should("not.have.text", AnalysisStatuses.notStarted)

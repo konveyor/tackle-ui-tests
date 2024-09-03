@@ -7,7 +7,7 @@
     "source_analysis_on_bookserverapp": {
         "source": "Source code",
         "target": ["Containerization", "Linux", "Quarkus"],
-        "appName": "book-server",
+        "appName": "bookserver-app",
         "tags": ["EJB XML", "Java EE Batch", "EJB XML"],
         "issues": [
             {
@@ -1220,5 +1220,10 @@
                 "labels": ["None"]
             }
         ]
+    },
+    "eap8_bookserverApp": {
+        "appName": "bookserver-app",
+        "source": "Source code",
+        "target": ["Application server migration to"]
     }
 }

@@ -27,14 +27,17 @@ import { infoAlertMessage } from "../../../../views/common.view";
 import { AppIssue } from "../../../../types/types";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { TaskManager } from "../../../../models/migration/task-manager/task-manager";
-import { TaskKind, TaskStatus } from "../../../../types/constants";
+import { AnalysisStatuses, TaskKind, TaskStatus, tdTag, trTag } from "../../../../types/constants";
+import { analysisColumn } from "../../../../views/analysis.view";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 
 // TODO (mguetta1): mark it as tier0 once enabling CI again
 describe(["@tier1"], "Source Analysis without credentials", () => {
-    before("Load data", function () {
+    before("Login", function () {
         login();
+    });
+    beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -82,6 +85,32 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
             TaskKind.languageDiscovery,
             TaskStatus.succeeded
         );
+    });
+
+    // Automates Bug https://issues.redhat.com/browse/MTA-3440
+    it("Source analysis on bookserver app with EAP8 target", function () {
+        const application = new Analysis(
+            getRandomApplicationData("eap8-bookserverApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["eap8_bookserverApp"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        cy.wait(2000);
+        application.analyze();
+        cy.get(tdTag, { log: false })
+            .contains(application.name)
+            .closest(trTag, { log: false })
+            .within(() => {
+                Analysis.verifyStatus(
+                    cy
+                        .get(analysisColumn, { log: false })
+                        .should("not.have.text", "Completed with Errors"),
+                    AnalysisStatuses.completed
+                );
+            });
     });
 
     after("Perform test data clean up", function () {
