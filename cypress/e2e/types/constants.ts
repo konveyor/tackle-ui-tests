@@ -224,3 +224,11 @@ export enum TaskKind {
     techDiscovery = "tech-discovery",
     languageDiscovery = "language-discovery",
 }
+
+export enum taskFilter {
+    applicationName = "Application",
+    id = "ID",
+    status = "Status",
+    kind = "Kind",
+    createdBy = "Created By",
+}

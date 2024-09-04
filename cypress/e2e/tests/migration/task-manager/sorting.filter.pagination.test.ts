@@ -15,17 +15,23 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { randomWordGenerator } from "../../../../utils/data_utils";
 import {
+    clearAllFilters,
     deleteApplicationTableRows,
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
+    validateNumberPresence,
+    validatePagination,
     validateSortBy,
+    validateTextPresence,
 } from "../../../../utils/utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
-import { AnalysisStatuses } from "../../../types/constants";
+import { taskFilter, trTag } from "../../../types/constants";
+import { taskManagerColumns } from "../../../views/taskmanager.view";
 
 describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", function () {
     const applicationsList: Analysis[] = [];
@@ -36,9 +42,9 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         deleteApplicationTableRows();
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 6; i++) {
+                for (let i = 0; i < 3; i++) {
                     const bookServerApp = new Analysis(
-                        getRandomApplicationData("IssuesFilteringApp1_" + i, {
+                        getRandomApplicationData("TaskFilteringApp1_" + i, {
                             sourceData: appData["bookserver-app"],
                         }),
                         getRandomAnalysisData(analysisData["analysis_for_openSourceLibraries"])
@@ -50,9 +56,9 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
 
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 6; i++) {
+                for (let i = 0; i < 3; i++) {
                     const dayTraderApp = new Analysis(
-                        getRandomApplicationData("IssuesFilteringApp2_" + i, {
+                        getRandomApplicationData("TaskFilteringApp2_" + i, {
                             sourceData: appData["daytrader-app"],
                         }),
                         getRandomAnalysisData(analysisData["source+dep_analysis_on_daytrader-app"])
@@ -74,22 +80,93 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         });
     });
 
-    it("Filtering tasks by ID", function () {
+    it("Filtering tasks", function () {
         // Analyzing daytrader app for pagination test to generate issues more than 10.
-        const bookServerApp = applicationsList[0];
-        const dayTraderApp = applicationsList[6];
-        const bookServerIssues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
-        const dayTraderIssues = this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"];
+        const dayTraderApp = applicationsList[1];
 
         Analysis.analyzeAll(dayTraderApp);
-        Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
+        TaskManager.open();
+        // Filter by status
+        TaskManager.applyAndValidateFilter(taskFilter.status, "Pending");
+        validateTextPresence(taskManagerColumns.status, "Pending");
+        validateTextPresence(taskManagerColumns.status, "Running", false);
+        validateTextPresence(taskManagerColumns.status, "Succeeded", false);
+        clearAllFilters();
+        TaskManager.applyAndValidateFilter(taskFilter.status, "Running");
+        validateTextPresence(taskManagerColumns.status, "Running");
+        validateTextPresence(taskManagerColumns.status, "Pending", false);
+        validateTextPresence(taskManagerColumns.status, "Succeeded", false);
+        clearAllFilters();
+        TaskManager.applyAndValidateFilter(taskFilter.status, "Succeeded");
+        validateTextPresence(taskManagerColumns.status, "Succeeded");
+        validateTextPresence(taskManagerColumns.status, "Running", false);
+        validateTextPresence(taskManagerColumns.status, "Pending", false);
+        clearAllFilters();
+
+        // Filter by ID
+        TaskManager.applyAndValidateFilter(taskFilter.id, "1");
+        validateNumberPresence(taskManagerColumns.id, 1);
+        clearAllFilters();
+        TaskManager.applyAndValidateFilter(taskFilter.id, "2");
+        validateNumberPresence(taskManagerColumns.id, 2);
+        clearAllFilters();
+
+        // Filter by Applications
+        TaskManager.applyAndValidateFilter(taskFilter.applicationName, applicationsList[0].name);
+        validateTextPresence(taskManagerColumns.application, applicationsList[0].name);
+        validateTextPresence(taskManagerColumns.application, applicationsList[1].name, false);
+        validateTextPresence(taskManagerColumns.kind, "analyzer");
+        validateTextPresence(taskManagerColumns.kind, "language-discovery");
+        validateTextPresence(taskManagerColumns.kind, "tech-discovery");
+        validateTextPresence(taskManagerColumns.status, "Running");
+        validateTextPresence(taskManagerColumns.status, "Succeeded");
+        clearAllFilters();
+
+        TaskManager.applyAndValidateFilter(taskFilter.applicationName, applicationsList[1].name);
+        validateTextPresence(taskManagerColumns.application, applicationsList[1].name);
+        validateTextPresence(taskManagerColumns.kind, "analyzer");
+        validateTextPresence(taskManagerColumns.kind, "language-discovery");
+        validateTextPresence(taskManagerColumns.kind, "tech-discovery");
+        clearAllFilters();
+
+        // Filter by Kind
+        TaskManager.applyAndValidateFilter(taskFilter.kind, "analyzer");
+        validateTextPresence(taskManagerColumns.kind, "analyzer");
+        validateTextPresence(taskManagerColumns.kind, "language-discovery", false);
+        validateTextPresence(taskManagerColumns.kind, "tech-discovery", false);
+        clearAllFilters();
+        TaskManager.applyAndValidateFilter(taskFilter.kind, "language-discovery");
+        validateTextPresence(taskManagerColumns.kind, "language-discovery");
+        validateTextPresence(taskManagerColumns.kind, "analyzer", false);
+        validateTextPresence(taskManagerColumns.kind, "tech-discovery", false);
+        clearAllFilters();
+        TaskManager.applyAndValidateFilter(taskFilter.kind, "tech-discovery");
+        validateTextPresence(taskManagerColumns.kind, "tech-discovery");
+        validateTextPresence(taskManagerColumns.kind, "analyzer", false);
+        validateTextPresence(taskManagerColumns.kind, "language-discovery", false);
+        clearAllFilters();
+
+        // Filter by Created By
+        TaskManager.applyAndValidateFilter(taskFilter.createdBy, "admin");
+        validateTextPresence(taskManagerColumns.createdBy, "admin");
+        clearAllFilters();
+
+        // Negative test, filtering by not existing data
+        TaskManager.applyAndValidateFilter(taskFilter.applicationName, randomWordGenerator(6));
+        cy.get(trTag).should("contain", "No results found");
+        clearAllFilters();
     });
 
-    it("Sorting all tasks", function () {
+    it("Sorting tasks", function () {
         TaskManager.open();
         sortByList.forEach((column) => {
             validateSortBy(column);
         });
+    });
+
+    it("Pagination validation", function () {
+        TaskManager.open(10);
+        validatePagination();
     });
 
     after("Perform test data clean up", function () {
