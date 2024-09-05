@@ -15,15 +15,26 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { clickByText, selectItemsPerPage, selectUserPerspective } from "../../../../utils/utils";
+import {
+    clearAllFilters,
+    click,
+    clickByText,
+    inputText,
+    selectFilter,
+    selectItemsPerPage,
+    selectUserPerspective,
+    validateNumberPresence,
+} from "../../../../utils/utils";
 import {
     SEC,
     TaskKind,
     TaskStatus,
     itemsPerPage,
     migration,
+    TaskFilter,
     trTag,
 } from "../../../types/constants";
+import { searchButton, searchInput } from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
 import { tasksStatusColumn } from "../../../views/taskmanager.view";
 
@@ -31,7 +42,7 @@ export class TaskManager {
     static fullUrl = Cypress.env("tackleUrl") + "/tasks";
     static menuName = "Task Manager";
 
-    static open(forceReload = false) {
+    static open(itemsPerPage = 100, forceReload = false) {
         if (forceReload) {
             cy.visit(TaskManager.fullUrl, { timeout: 15 * SEC }).then((_) =>
                 selectItemsPerPage(itemsPerPage)
@@ -58,5 +69,12 @@ export class TaskManager {
             .within(() => {
                 cy.get(tasksStatusColumn).contains(status, { timeout: 30 * SEC });
             });
+    }
+
+    public static applyFilter(filterType: TaskFilter, filterValue: string) {
+        selectFilter(filterType);
+        inputText(searchInput, filterValue);
+        click(searchButton);
+        cy.wait(2 * SEC);
     }
 }
