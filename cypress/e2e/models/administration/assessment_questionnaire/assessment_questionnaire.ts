@@ -31,7 +31,8 @@ export class AssessmentQuestionnaire {
         cy.url().then(($url) => {
             if ($url != AssessmentQuestionnaire.fullUrl) {
                 cy.get("span.pf-v5-c-menu-toggle__text").then(($ele) => {
-                    if (!$ele.text().includes("Migration")) selectUserPerspective(migration);
+                    if (!$ele.text().includes("Administration"))
+                        selectUserPerspective("Administration");
                 });
                 clickByText(navMenu, assessmentQuestionnaires);
             }
