@@ -225,7 +225,7 @@ export enum TaskKind {
     languageDiscovery = "language-discovery",
 }
 
-export enum taskFilter {
+export enum TaskFilter {
     applicationName = "Application",
     id = "ID",
     status = "Status",

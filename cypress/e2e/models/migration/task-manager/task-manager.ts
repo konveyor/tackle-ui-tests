@@ -31,7 +31,7 @@ import {
     TaskStatus,
     itemsPerPage,
     migration,
-    taskFilter,
+    TaskFilter,
     trTag,
 } from "../../../types/constants";
 import { searchButton, searchInput } from "../../../views/common.view";
@@ -71,7 +71,7 @@ export class TaskManager {
             });
     }
 
-    public static applyAndValidateFilter(filterType: taskFilter, filterValue: string) {
+    public static applyFilter(filterType: TaskFilter, filterValue: string) {
         selectFilter(filterType);
         inputText(searchInput, filterValue);
         click(searchButton);

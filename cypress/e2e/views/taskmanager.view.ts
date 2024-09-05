@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 export const tasksStatusColumn = "td[data-label='Status']";
-export enum taskManagerColumns {
+export enum TaskManagerColumns {
     id = 'td[data-label="ID"]',
     application = 'td[data-label="Application"]',
     status = 'td[data-label="Status"]',

@@ -30,8 +30,8 @@ import {
 } from "../../../../utils/utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
-import { taskFilter, trTag } from "../../../types/constants";
-import { taskManagerColumns } from "../../../views/taskmanager.view";
+import { TaskFilter, trTag } from "../../../types/constants";
+import { TaskManagerColumns } from "../../../views/taskmanager.view";
 
 describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", function () {
     const applicationsList: Analysis[] = [];
@@ -50,13 +50,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
                         getRandomAnalysisData(analysisData["analysis_for_openSourceLibraries"])
                     );
                     applicationsList.push(bookServerApp);
-                }
-            });
-        });
 
-        cy.fixture("application").then((appData) => {
-            cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 3; i++) {
                     const dayTraderApp = new Analysis(
                         getRandomApplicationData("TaskFilteringApp2_" + i, {
                             sourceData: appData["daytrader-app"],
@@ -65,18 +59,8 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
                     );
                     applicationsList.push(dayTraderApp);
                 }
-
                 applicationsList.forEach((application) => application.create());
             });
-        });
-    });
-
-    beforeEach("Load data", function () {
-        cy.fixture("application").then(function (appData) {
-            this.appData = appData;
-        });
-        cy.fixture("analysis").then(function (analysisData) {
-            this.analysisData = analysisData;
         });
     });
 
@@ -87,72 +71,72 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         Analysis.analyzeAll(dayTraderApp);
         TaskManager.open();
         // Filter by status
-        TaskManager.applyAndValidateFilter(taskFilter.status, "Pending");
-        validateTextPresence(taskManagerColumns.status, "Pending");
-        validateTextPresence(taskManagerColumns.status, "Running", false);
-        validateTextPresence(taskManagerColumns.status, "Succeeded", false);
+        TaskManager.applyFilter(TaskFilter.status, "Pending");
+        validateTextPresence(TaskManagerColumns.status, "Pending");
+        validateTextPresence(TaskManagerColumns.status, "Running", false);
+        validateTextPresence(TaskManagerColumns.status, "Succeeded", false);
         clearAllFilters();
-        TaskManager.applyAndValidateFilter(taskFilter.status, "Running");
-        validateTextPresence(taskManagerColumns.status, "Running");
-        validateTextPresence(taskManagerColumns.status, "Pending", false);
-        validateTextPresence(taskManagerColumns.status, "Succeeded", false);
+        TaskManager.applyFilter(TaskFilter.status, "Running");
+        validateTextPresence(TaskManagerColumns.status, "Running");
+        validateTextPresence(TaskManagerColumns.status, "Pending", false);
+        validateTextPresence(TaskManagerColumns.status, "Succeeded", false);
         clearAllFilters();
-        TaskManager.applyAndValidateFilter(taskFilter.status, "Succeeded");
-        validateTextPresence(taskManagerColumns.status, "Succeeded");
-        validateTextPresence(taskManagerColumns.status, "Running", false);
-        validateTextPresence(taskManagerColumns.status, "Pending", false);
+        TaskManager.applyFilter(TaskFilter.status, "Succeeded");
+        validateTextPresence(TaskManagerColumns.status, "Succeeded");
+        validateTextPresence(TaskManagerColumns.status, "Running", false);
+        validateTextPresence(TaskManagerColumns.status, "Pending", false);
         clearAllFilters();
 
         // Filter by ID
-        TaskManager.applyAndValidateFilter(taskFilter.id, "1");
-        validateNumberPresence(taskManagerColumns.id, 1);
+        TaskManager.applyFilter(TaskFilter.id, "1");
+        validateNumberPresence(TaskManagerColumns.id, 1);
         clearAllFilters();
-        TaskManager.applyAndValidateFilter(taskFilter.id, "2");
-        validateNumberPresence(taskManagerColumns.id, 2);
+        TaskManager.applyFilter(TaskFilter.id, "2");
+        validateNumberPresence(TaskManagerColumns.id, 2);
         clearAllFilters();
 
         // Filter by Applications
-        TaskManager.applyAndValidateFilter(taskFilter.applicationName, applicationsList[0].name);
-        validateTextPresence(taskManagerColumns.application, applicationsList[0].name);
-        validateTextPresence(taskManagerColumns.application, applicationsList[1].name, false);
-        validateTextPresence(taskManagerColumns.kind, "analyzer");
-        validateTextPresence(taskManagerColumns.kind, "language-discovery");
-        validateTextPresence(taskManagerColumns.kind, "tech-discovery");
-        validateTextPresence(taskManagerColumns.status, "Running");
-        validateTextPresence(taskManagerColumns.status, "Succeeded");
+        TaskManager.applyFilter(TaskFilter.applicationName, applicationsList[0].name);
+        validateTextPresence(TaskManagerColumns.application, applicationsList[0].name);
+        validateTextPresence(TaskManagerColumns.application, applicationsList[1].name, false);
+        validateTextPresence(TaskManagerColumns.kind, "analyzer");
+        validateTextPresence(TaskManagerColumns.kind, "language-discovery");
+        validateTextPresence(TaskManagerColumns.kind, "tech-discovery");
+        validateTextPresence(TaskManagerColumns.status, "Running");
+        validateTextPresence(TaskManagerColumns.status, "Succeeded");
         clearAllFilters();
 
-        TaskManager.applyAndValidateFilter(taskFilter.applicationName, applicationsList[1].name);
-        validateTextPresence(taskManagerColumns.application, applicationsList[1].name);
-        validateTextPresence(taskManagerColumns.kind, "analyzer");
-        validateTextPresence(taskManagerColumns.kind, "language-discovery");
-        validateTextPresence(taskManagerColumns.kind, "tech-discovery");
+        TaskManager.applyFilter(TaskFilter.applicationName, applicationsList[1].name);
+        validateTextPresence(TaskManagerColumns.application, applicationsList[1].name);
+        validateTextPresence(TaskManagerColumns.kind, "analyzer");
+        validateTextPresence(TaskManagerColumns.kind, "language-discovery");
+        validateTextPresence(TaskManagerColumns.kind, "tech-discovery");
         clearAllFilters();
 
         // Filter by Kind
-        TaskManager.applyAndValidateFilter(taskFilter.kind, "analyzer");
-        validateTextPresence(taskManagerColumns.kind, "analyzer");
-        validateTextPresence(taskManagerColumns.kind, "language-discovery", false);
-        validateTextPresence(taskManagerColumns.kind, "tech-discovery", false);
+        TaskManager.applyFilter(TaskFilter.kind, "analyzer");
+        validateTextPresence(TaskManagerColumns.kind, "analyzer");
+        validateTextPresence(TaskManagerColumns.kind, "language-discovery", false);
+        validateTextPresence(TaskManagerColumns.kind, "tech-discovery", false);
         clearAllFilters();
-        TaskManager.applyAndValidateFilter(taskFilter.kind, "language-discovery");
-        validateTextPresence(taskManagerColumns.kind, "language-discovery");
-        validateTextPresence(taskManagerColumns.kind, "analyzer", false);
-        validateTextPresence(taskManagerColumns.kind, "tech-discovery", false);
+        TaskManager.applyFilter(TaskFilter.kind, "language-discovery");
+        validateTextPresence(TaskManagerColumns.kind, "language-discovery");
+        validateTextPresence(TaskManagerColumns.kind, "analyzer", false);
+        validateTextPresence(TaskManagerColumns.kind, "tech-discovery", false);
         clearAllFilters();
-        TaskManager.applyAndValidateFilter(taskFilter.kind, "tech-discovery");
-        validateTextPresence(taskManagerColumns.kind, "tech-discovery");
-        validateTextPresence(taskManagerColumns.kind, "analyzer", false);
-        validateTextPresence(taskManagerColumns.kind, "language-discovery", false);
+        TaskManager.applyFilter(TaskFilter.kind, "tech-discovery");
+        validateTextPresence(TaskManagerColumns.kind, "tech-discovery");
+        validateTextPresence(TaskManagerColumns.kind, "analyzer", false);
+        validateTextPresence(TaskManagerColumns.kind, "language-discovery", false);
         clearAllFilters();
 
         // Filter by Created By
-        TaskManager.applyAndValidateFilter(taskFilter.createdBy, "admin");
-        validateTextPresence(taskManagerColumns.createdBy, "admin");
+        TaskManager.applyFilter(TaskFilter.createdBy, "admin");
+        validateTextPresence(TaskManagerColumns.createdBy, "admin");
         clearAllFilters();
 
         // Negative test, filtering by not existing data
-        TaskManager.applyAndValidateFilter(taskFilter.applicationName, randomWordGenerator(6));
+        TaskManager.applyFilter(TaskFilter.applicationName, randomWordGenerator(6));
         cy.get(trTag).should("contain", "No results found");
         clearAllFilters();
     });
@@ -171,7 +155,6 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
 
     after("Perform test data clean up", function () {
         cy.reload();
-        cy.log("Deleting app list");
         deleteByList(applicationsList);
     });
 });
