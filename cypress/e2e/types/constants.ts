@@ -217,6 +217,8 @@ export const itemsPerPage = 100;
 
 export enum TaskStatus {
     succeeded = "Succeeded",
+    pending = "Pending",
+    running = "Running",
 }
 
 export enum TaskKind {

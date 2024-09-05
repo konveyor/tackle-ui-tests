@@ -30,7 +30,7 @@ import {
 } from "../../../../utils/utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
-import { TaskFilter, trTag } from "../../../types/constants";
+import { TaskFilter, TaskKind, TaskStatus, trTag } from "../../../types/constants";
 import { TaskManagerColumns } from "../../../views/taskmanager.view";
 
 describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", function () {
@@ -71,20 +71,20 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         Analysis.analyzeAll(dayTraderApp);
         TaskManager.open();
         // Filter by status
-        TaskManager.applyFilter(TaskFilter.status, "Pending");
-        validateTextPresence(TaskManagerColumns.status, "Pending");
-        validateTextPresence(TaskManagerColumns.status, "Running", false);
-        validateTextPresence(TaskManagerColumns.status, "Succeeded", false);
+        TaskManager.applyFilter(TaskFilter.status, TaskStatus.pending);
+        validateTextPresence(TaskManagerColumns.status, TaskStatus.pending);
+        validateTextPresence(TaskManagerColumns.status, TaskStatus.running, false);
+        validateTextPresence(TaskManagerColumns.status, TaskStatus.succeeded, false);
         clearAllFilters();
-        TaskManager.applyFilter(TaskFilter.status, "Running");
-        validateTextPresence(TaskManagerColumns.status, "Running");
-        validateTextPresence(TaskManagerColumns.status, "Pending", false);
-        validateTextPresence(TaskManagerColumns.status, "Succeeded", false);
+        TaskManager.applyFilter(TaskFilter.status, TaskStatus.running);
+        validateTextPresence(TaskManagerColumns.status, TaskStatus.running);
+        validateTextPresence(TaskManagerColumns.status, TaskStatus.pending, false);
+        validateTextPresence(TaskManagerColumns.status, TaskStatus.succeeded, false);
         clearAllFilters();
-        TaskManager.applyFilter(TaskFilter.status, "Succeeded");
-        validateTextPresence(TaskManagerColumns.status, "Succeeded");
-        validateTextPresence(TaskManagerColumns.status, "Running", false);
-        validateTextPresence(TaskManagerColumns.status, "Pending", false);
+        TaskManager.applyFilter(TaskFilter.status, TaskStatus.succeeded);
+        validateTextPresence(TaskManagerColumns.status, TaskStatus.succeeded);
+        validateTextPresence(TaskManagerColumns.status, TaskStatus.running, false);
+        validateTextPresence(TaskManagerColumns.status, TaskStatus.pending, false);
         clearAllFilters();
 
         // Filter by ID
@@ -99,35 +99,35 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         TaskManager.applyFilter(TaskFilter.applicationName, applicationsList[0].name);
         validateTextPresence(TaskManagerColumns.application, applicationsList[0].name);
         validateTextPresence(TaskManagerColumns.application, applicationsList[1].name, false);
-        validateTextPresence(TaskManagerColumns.kind, "analyzer");
-        validateTextPresence(TaskManagerColumns.kind, "language-discovery");
-        validateTextPresence(TaskManagerColumns.kind, "tech-discovery");
-        validateTextPresence(TaskManagerColumns.status, "Running");
-        validateTextPresence(TaskManagerColumns.status, "Succeeded");
+        validateTextPresence(TaskManagerColumns.kind, TaskKind.analyzer);
+        validateTextPresence(TaskManagerColumns.kind, TaskKind.languageDiscovery);
+        validateTextPresence(TaskManagerColumns.kind, TaskKind.techDiscovery);
+        validateTextPresence(TaskManagerColumns.status, TaskStatus.running);
+        validateTextPresence(TaskManagerColumns.status, TaskStatus.succeeded);
         clearAllFilters();
 
         TaskManager.applyFilter(TaskFilter.applicationName, applicationsList[1].name);
         validateTextPresence(TaskManagerColumns.application, applicationsList[1].name);
-        validateTextPresence(TaskManagerColumns.kind, "analyzer");
-        validateTextPresence(TaskManagerColumns.kind, "language-discovery");
-        validateTextPresence(TaskManagerColumns.kind, "tech-discovery");
+        validateTextPresence(TaskManagerColumns.kind, TaskKind.analyzer);
+        validateTextPresence(TaskManagerColumns.kind, TaskKind.languageDiscovery);
+        validateTextPresence(TaskManagerColumns.kind, TaskKind.techDiscovery);
         clearAllFilters();
 
         // Filter by Kind
-        TaskManager.applyFilter(TaskFilter.kind, "analyzer");
-        validateTextPresence(TaskManagerColumns.kind, "analyzer");
-        validateTextPresence(TaskManagerColumns.kind, "language-discovery", false);
-        validateTextPresence(TaskManagerColumns.kind, "tech-discovery", false);
+        TaskManager.applyFilter(TaskFilter.kind, TaskKind.analyzer);
+        validateTextPresence(TaskManagerColumns.kind, TaskKind.analyzer);
+        validateTextPresence(TaskManagerColumns.kind, TaskKind.languageDiscovery, false);
+        validateTextPresence(TaskManagerColumns.kind, TaskKind.techDiscovery, false);
         clearAllFilters();
-        TaskManager.applyFilter(TaskFilter.kind, "language-discovery");
-        validateTextPresence(TaskManagerColumns.kind, "language-discovery");
-        validateTextPresence(TaskManagerColumns.kind, "analyzer", false);
-        validateTextPresence(TaskManagerColumns.kind, "tech-discovery", false);
+        TaskManager.applyFilter(TaskFilter.kind, TaskKind.languageDiscovery);
+        validateTextPresence(TaskManagerColumns.kind, TaskKind.languageDiscovery);
+        validateTextPresence(TaskManagerColumns.kind, TaskKind.analyzer, false);
+        validateTextPresence(TaskManagerColumns.kind, TaskKind.techDiscovery, false);
         clearAllFilters();
-        TaskManager.applyFilter(TaskFilter.kind, "tech-discovery");
-        validateTextPresence(TaskManagerColumns.kind, "tech-discovery");
-        validateTextPresence(TaskManagerColumns.kind, "analyzer", false);
-        validateTextPresence(TaskManagerColumns.kind, "language-discovery", false);
+        TaskManager.applyFilter(TaskFilter.kind, TaskKind.techDiscovery);
+        validateTextPresence(TaskManagerColumns.kind, TaskKind.techDiscovery);
+        validateTextPresence(TaskManagerColumns.kind, TaskKind.analyzer, false);
+        validateTextPresence(TaskManagerColumns.kind, TaskKind.languageDiscovery, false);
         clearAllFilters();
 
         // Filter by Created By
