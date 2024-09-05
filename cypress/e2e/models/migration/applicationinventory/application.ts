@@ -155,9 +155,10 @@ export class Application {
     public static open(forceReload = false): void {
         const itemsPerPage = 100;
         if (forceReload) {
-            cy.visit(Application.fullUrl, { timeout: 35 * SEC }).then((_) =>
-                selectItemsPerPage(itemsPerPage)
-            );
+            cy.visit(Application.fullUrl, { timeout: 35 * SEC }).then((_) => {
+                cy.get("h1", { timeout: 75 * SEC }).should("contain", applicationInventory);
+                selectItemsPerPage(itemsPerPage);
+            });
             return;
         }
 
