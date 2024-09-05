@@ -10,6 +10,7 @@ import {
     assessmentQuestionnaires,
     deleteAction,
     legacyPathfinder,
+    migration,
     trTag,
 } from "../../../types/constants";
 import {
@@ -29,7 +30,9 @@ export class AssessmentQuestionnaire {
     public static open() {
         cy.url().then(($url) => {
             if ($url != AssessmentQuestionnaire.fullUrl) {
-                selectUserPerspective("Administration");
+                cy.get("span.pf-v5-c-menu-toggle__text").then(($ele) => {
+                    if (!$ele.text().includes("Migration")) selectUserPerspective(migration);
+                });
                 clickByText(navMenu, assessmentQuestionnaires);
             }
         });
@@ -62,6 +65,7 @@ export class AssessmentQuestionnaire {
     }
 
     public static delete(fileName: string) {
+        AssessmentQuestionnaire.open();
         AssessmentQuestionnaire.operation(fileName, deleteAction);
         cy.get(confirmDeletion).click().focused().clear().type(fileName);
         clickByText(button, deleteAction);
