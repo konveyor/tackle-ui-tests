@@ -66,7 +66,6 @@ export class AssessmentQuestionnaire {
     }
 
     public static delete(fileName: string) {
-        AssessmentQuestionnaire.open();
         AssessmentQuestionnaire.operation(fileName, deleteAction);
         cy.get(confirmDeletion).click().focused().clear().type(fileName);
         clickByText(button, deleteAction);
@@ -117,7 +116,7 @@ export class AssessmentQuestionnaire {
                     if (rowName == legacyPathfinder) {
                         continue;
                     }
-                    cy.wrap($rows.eq(i).find(actionButton)).click();
+                    cy.wrap($rows.eq(i).find(actionButton)).click({ force: true });
                     cy.get("li.pf-v5-c-menu__list-item")
                         .contains("Delete")
                         .then(($delete_btn) => {
