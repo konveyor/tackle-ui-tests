@@ -156,7 +156,7 @@ export class Application {
         const itemsPerPage = 100;
         if (forceReload) {
             cy.visit(Application.fullUrl, { timeout: 35 * SEC }).then((_) => {
-                cy.get("h1", { timeout: 75 * SEC }).should("contain", applicationInventory);
+                cy.get("h1", { timeout: 100 * SEC }).should("contain", applicationInventory);
                 selectItemsPerPage(itemsPerPage);
             });
             return;

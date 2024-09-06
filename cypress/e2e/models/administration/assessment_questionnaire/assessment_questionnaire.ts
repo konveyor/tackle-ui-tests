@@ -30,10 +30,7 @@ export class AssessmentQuestionnaire {
     public static open() {
         cy.url().then(($url) => {
             if ($url != AssessmentQuestionnaire.fullUrl) {
-                cy.get("span.pf-v5-c-menu-toggle__text").then(($ele) => {
-                    if (!$ele.text().includes("Administration"))
-                        selectUserPerspective("Administration");
-                });
+                selectUserPerspective("Administration");
                 clickByText(navMenu, assessmentQuestionnaires);
             }
         });

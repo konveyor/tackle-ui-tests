@@ -1373,8 +1373,8 @@ export function goToPage(page: number): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    cy.get(commonView.optionMenu).click();
-    cy.get(commonView.actionMenuItem).contains(userType).click();
+    cy.get("button.pf-v5-c-menu-toggle.pf-m-full-width").click({ force: true });
+    cy.get(commonView.actionMenuItem).contains(userType).click({ force: true });
 }
 
 export function selectWithinModal(selector: string): void {

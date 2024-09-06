@@ -62,9 +62,7 @@ export class Stakeholders {
     public static openList(itemsPerPage = 100): void {
         cy.url().then(($url) => {
             if ($url != Stakeholders.fullUrl) {
-                cy.get("span.pf-v5-c-menu-toggle__text").then(($ele) => {
-                    if (!$ele.text().includes("Migration")) selectUserPerspective(migration);
-                });
+                selectUserPerspective(migration);
                 clickByText(navMenu, controls);
                 cy.get("h1", { timeout: 60 * SEC }).should("contain", "Controls");
                 clickByText(navTab, stakeholders);
