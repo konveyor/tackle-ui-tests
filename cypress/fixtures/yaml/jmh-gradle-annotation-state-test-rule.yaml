@@ -1,0 +1,11 @@
+- category: mandatory
+  customVariables: []
+  description: State reference test rule for https://github.com/melix/jmh-gradle-example
+  effort: 1
+  message: |-
+    State reference test rule for https://github.com/melix/jmh-gradle-example
+  ruleID: jmh-gradle-annotation-state-test-rule
+  when:
+    java.referenced:
+      location: ANNOTATION
+      pattern: org.openjdk.jmh.annotations.State
