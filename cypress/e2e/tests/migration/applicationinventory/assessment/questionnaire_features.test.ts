@@ -97,7 +97,7 @@ describe(["@tier3"], "Tests for application questionnaire features", () => {
         Assessment.verifyButtonEnabled("Take");
     });
 
-    it("Bug MTA-3417: 1) Test auto answer feature of questionnaires; 2) Save assessment", function () {
+    it.only("Bug MTA-3417: 1) Test auto answer feature of questionnaires; 2) Save assessment", function () {
         //Automates Polarion MTA-388: Auto answer
         Application.open();
         cy.wait(2 * SEC);
@@ -135,7 +135,9 @@ describe(["@tier3"], "Tests for application questionnaire features", () => {
     after("Perform test data clean up", function () {
         Application.open(true);
         application.delete();
+        Stakeholders.openList(null, true);
         deleteByList(stakeholderList);
+        AssessmentQuestionnaire.open(true);
         AssessmentQuestionnaire.deleteAllQuestionnaires();
     });
 });

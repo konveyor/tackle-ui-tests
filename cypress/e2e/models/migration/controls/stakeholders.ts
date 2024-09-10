@@ -59,7 +59,15 @@ export class Stakeholders {
         if (groups) this.groups = groups;
     }
 
-    public static openList(itemsPerPage = 100): void {
+    public static openList(itemsPerPage = 100, forceReload?: boolean): void {
+        if (forceReload) {
+            cy.visit(Stakeholders.fullUrl, { timeout: 35 * SEC }).then((_) => {
+                cy.get("h1", { timeout: 30 * SEC }).should("contain.text", "Controls");
+                selectItemsPerPage(itemsPerPage);
+            });
+            return;
+        }
+
         cy.url().then(($url) => {
             if ($url != Stakeholders.fullUrl) {
                 selectUserPerspective(migration);
