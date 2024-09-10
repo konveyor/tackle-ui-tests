@@ -71,5 +71,9 @@
     "tackle-testapp-public": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/konveyor/tackle-testapp-public"
+    },
+    "jmh-gradle-example": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/melix/jmh-gradle-example"
     }
 }
