@@ -914,4 +914,11 @@ export class Application {
         this.clickAssessButton();
         Assessment.deleteAssessments();
     }
+
+    // Opens the task manager page from application inventory page
+    openAllTasksLink(): void {
+        Application.open();
+        cy.get(tdTag).contains(this.name).trigger("mouseenter").wait(4000);
+        cy.contains("View all tasks for the application").click({ force: true });
+    }
 }
