@@ -168,6 +168,15 @@ export class Issues {
         });
     }
 
+    public static openAffectedFiles(issueName: string): void {
+        Issues.openList();
+        performWithin(issueName, () => {
+            cy.get(singleApplicationColumns.files).within(() => {
+                click("a");
+            });
+        });
+    }
+
     public static validateAllFields(issue: AppIssue): void {
         const sections = {
             totalAffectedApps: "Total affected",

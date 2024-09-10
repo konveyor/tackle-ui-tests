@@ -25,6 +25,7 @@ import {
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { AnalysisStatuses } from "../../../../types/constants";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { Issues } from "../../../../models/migration/dynamic-report/issues/issues";
 
 const applications: Analysis[] = [];
 
@@ -63,6 +64,27 @@ describe(["@tier2"], "Gradle Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
         application.verifyEffort(application.effort);
+    });
+
+    // Automates TC 532
+    it("Analysis for Gradle JMH application with Open Source libraries", function () {
+        const application = new Analysis(
+            getRandomApplicationData("JMH Gradle", {
+                sourceData: this.appData["jmh-gradle-example"],
+            }),
+            {
+                source: "Source code + dependencies",
+                target: [],
+                openSourceLibraries: true,
+            }
+        );
+        application.customRule = ["jmh-gradle-serializable-test-rule.yaml"];
+        application.create();
+        applications.push(application);
+        cy.wait("@getApplication");
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        Issues.openSingleApplication(application.name);
     });
 
     after("Clear data", function () {
