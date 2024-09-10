@@ -5,6 +5,7 @@ export const archetypeFilterName = "input[class='pf-v5-c-text-input-group__text-
 export const searchMenuToggle = 'button[aria-label="Menu toggle"]';
 export const singleAppDropList = "#application-select";
 export const rightSideBar = "div.pf-v5-c-drawer__panel-main";
+export const affectedFilesTable = "table[aria-label='Affected files table']";
 export enum singleApplicationColumns {
     issue = 'td[data-label="Issue"]',
     category = 'td[data-label="Category"]',
