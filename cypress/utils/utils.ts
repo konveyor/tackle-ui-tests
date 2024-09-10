@@ -1214,7 +1214,7 @@ export function isTableEmpty(
 }
 
 export function deleteAllRows(tableSelector: string = commonView.commonTable) {
-    // This method if for pages that have delete button inside Kebab menu
+    // This method is for pages that have delete button inside Kebab menu
     // like Applications and Imports page
     isTableEmpty().then((empty) => {
         if (!empty) {
@@ -1258,7 +1258,7 @@ export function deleteAllItems(
     tableSelector: string = commonView.commonTable,
     pageNumber?: number
 ) {
-    // This method if for pages like controls that do not have delete button inside kebabmenu
+    // This method is for pages like controls that do not have delete button inside kebabmenu
     if (pageNumber) {
         goToPage(pageNumber);
     }
@@ -1296,7 +1296,7 @@ export function deleteAllStakeholderGroups(cancel = false): void {
 
 export function deleteAllStakeholders(): void {
     Stakeholders.openList();
-    deleteAllItems(stakeHoldersTable);
+    deleteAllRows(stakeHoldersTable);
 }
 
 export function deleteAllArchetypes() {
