@@ -60,11 +60,10 @@ export class Stakeholders {
     }
 
     public static openList(forceReload = false): void {
-        const itemsPerPage = 100;
         if (forceReload) {
             cy.visit(Stakeholders.fullUrl, { timeout: 35 * SEC }).then((_) => {
-                cy.get("h1", { timeout: 100 * SEC }).should("contain", "Controls");
-                selectItemsPerPage(itemsPerPage);
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", "Controls");
+                selectItemsPerPage(100);
             });
             return;
         }
@@ -78,7 +77,7 @@ export class Stakeholders {
             }
         });
         cy.get("h1", { timeout: 30 * SEC }).should("contain.text", "Controls");
-        selectItemsPerPage(itemsPerPage);
+        selectItemsPerPage(100);
     }
 
     protected fillName(name: string): void {

@@ -156,6 +156,7 @@ export class Application {
         const itemsPerPage = 100;
         if (forceReload) {
             cy.visit(Application.fullUrl, { timeout: 35 * SEC }).then((_) => {
+                // Bug MTA-3812 Application Inventory page takes long to load
                 cy.get("h1", { timeout: 100 * SEC }).should("contain", applicationInventory);
                 selectItemsPerPage(itemsPerPage);
             });
