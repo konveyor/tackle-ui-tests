@@ -10,7 +10,6 @@ import {
     assessmentQuestionnaires,
     deleteAction,
     legacyPathfinder,
-    migration,
     trTag,
 } from "../../../types/constants";
 import {

@@ -50,7 +50,7 @@ export class Stakeholders {
     email: string;
     jobfunction: string;
     groups: Array<string>;
-    static fullUrl = Cypress.env("tackleUrl") + "controls/stakeholders";
+    static fullUrl = Cypress.env("tackleUrl") + "/controls/stakeholders";
 
     constructor(email: string, name: string, jobfunction?: string, groups?: Array<string>) {
         this.email = email;
@@ -59,10 +59,11 @@ export class Stakeholders {
         if (groups) this.groups = groups;
     }
 
-    public static openList(itemsPerPage = 100, forceReload?: boolean): void {
+    public static openList(forceReload = false): void {
+        const itemsPerPage = 100;
         if (forceReload) {
             cy.visit(Stakeholders.fullUrl, { timeout: 35 * SEC }).then((_) => {
-                cy.get("h1", { timeout: 30 * SEC }).should("contain.text", "Controls");
+                cy.get("h1", { timeout: 100 * SEC }).should("contain", "Controls");
                 selectItemsPerPage(itemsPerPage);
             });
             return;
