@@ -19,7 +19,9 @@ import {
     clearAllFilters,
     click,
     clickByText,
+    clickKebabMenuOptionArchetype,
     inputText,
+    performRowActionByIcon,
     selectFilter,
     selectItemsPerPage,
     selectUserPerspective,
@@ -33,10 +35,13 @@ import {
     migration,
     TaskFilter,
     trTag,
+    button,
+    tdTag,
 } from "../../../types/constants";
-import { searchButton, searchInput } from "../../../views/common.view";
+import { sideKebabMenu } from "../../../views/applicationinventory.view";
+import { actionMenuItem, searchButton, searchInput } from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
-import { tasksStatusColumn } from "../../../views/taskmanager.view";
+import { kebabMenu, tasksStatusColumn } from "../../../views/taskmanager.view";
 
 export class TaskManager {
     static fullUrl = Cypress.env("tackleUrl") + "/tasks";
@@ -76,5 +81,20 @@ export class TaskManager {
         inputText(searchInput, filterValue);
         click(searchButton);
         cy.wait(2 * SEC);
+    }
+
+    public static enablePreemption(rowName: string): void {
+        TaskManager.open(10);
+        // clickKebabMenuOptionArchetype(rowName, "Enable preemption");
+        cy.contains(rowName)
+            .next(tdTag)
+            .contains("Pending")
+            .closest(trTag)
+            .within(() => {
+                click(sideKebabMenu);
+            });
+        cy.get(actionMenuItem).contains("Enable preemption").click();
+
+        // clickByText(button, "Enable preemption");
     }
 }
