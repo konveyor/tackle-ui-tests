@@ -83,9 +83,8 @@ export class TaskManager {
         cy.wait(2 * SEC);
     }
 
-    public static enablePreemption(rowName: string): void {
+    public static enablePreemption(rowName: string): void{
         TaskManager.open(10);
-        // clickKebabMenuOptionArchetype(rowName, "Enable preemption");
         cy.contains(rowName)
             .next(tdTag)
             .contains("Pending")
@@ -94,7 +93,5 @@ export class TaskManager {
                 click(sideKebabMenu);
             });
         cy.get(actionMenuItem).contains("Enable preemption").click();
-
-        // clickByText(button, "Enable preemption");
     }
 }
