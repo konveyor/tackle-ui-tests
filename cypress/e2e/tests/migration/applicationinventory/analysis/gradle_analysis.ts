@@ -69,7 +69,7 @@ describe(["@tier2"], "Gradle Analysis", () => {
     // Automates TC 546
     it("Bug MTA-3780: Analysis for Gradle JMH application with Open Source libraries", function () {
         const application = new Analysis(
-            getRandomApplicationData("JMH Gradle", {
+            getRandomApplicationData("JMH Gradle OS libs", {
                 sourceData: this.appData["jmh-gradle-example"],
             }),
             {
@@ -85,7 +85,7 @@ describe(["@tier2"], "Gradle Analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
         Issues.openSingleApplication(application.name);
-        // Checks that an incident was raised in triggered in an open source library with the provided custom rule
+        // Checks that an incident was raised in an open source library with the provided custom rule
         Issues.openAffectedFile("AbstractRealDistribution.java", "Serializable reference test");
     });
 
