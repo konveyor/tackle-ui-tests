@@ -18,7 +18,6 @@ import {
     stakeholders,
     button,
     createNewButton,
-    editAction,
     deleteAction,
     migration,
     SEC,
@@ -42,6 +41,8 @@ import {
     cancelForm,
     performRowAction,
     selectUserPerspective,
+    performRowActionByIcon,
+    clickItemInKebabMenu,
 } from "../../../../utils/utils";
 import * as commonView from "../../../views/common.view";
 
@@ -97,7 +98,7 @@ export class Stakeholders {
     }
 
     removeJobfunction(): void {
-        performRowAction(this.email, editAction);
+        performRowActionByIcon(this.email, commonView.pencilIcon);
         click(removeJobFunction);
         submitForm();
     }
@@ -132,7 +133,7 @@ export class Stakeholders {
         Stakeholders.openList();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowAction(this.email, editAction);
+        performRowActionByIcon(this.email, commonView.pencilIcon);
         if (cancel) {
             cancelForm();
         } else {
@@ -158,7 +159,7 @@ export class Stakeholders {
 
     delete(cancel = false): void {
         Stakeholders.openList();
-        performRowAction(this.email, deleteAction);
+        clickItemInKebabMenu(this.email, deleteAction);
         if (cancel) {
             click(commonView.confirmCancelButton);
         } else {

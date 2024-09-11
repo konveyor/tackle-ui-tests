@@ -15,3 +15,12 @@ limitations under the License.
 */
 
 export const tasksStatusColumn = "td[data-label='Status']";
+export enum TaskManagerColumns {
+    id = 'td[data-label="ID"]',
+    application = 'td[data-label="Application"]',
+    status = 'td[data-label="Status"]',
+    kind = 'td[data-label="Kind"]',
+    priority = 'td[data-label="Priority"]',
+    preemption = 'td[data-label="Preemption"]',
+    createdBy = 'td[data-label="Created By"]',
+}
