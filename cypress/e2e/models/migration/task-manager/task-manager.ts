@@ -83,7 +83,7 @@ export class TaskManager {
         cy.wait(2 * SEC);
     }
 
-    public static enablePreemption(rowName: string): void{
+    public static enablePreemption(rowName: string): void {
         TaskManager.open(10);
         cy.contains(rowName)
             .next(tdTag)
