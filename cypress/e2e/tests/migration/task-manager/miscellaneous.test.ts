@@ -36,7 +36,7 @@ describe(["@tier2"], "Enable Premeption in Task Manager Page", function () {
         deleteApplicationTableRows();
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 3; i++) {
+                for (let i = 0; i < 4; i++) {
                     const bookServerApp = new Analysis(
                         getRandomApplicationData("TaskFilteringApp1_" + i, {
                             sourceData: appData["bookserver-app"],
@@ -50,11 +50,12 @@ describe(["@tier2"], "Enable Premeption in Task Manager Page", function () {
         });
     });
 
-    it("Enable Premeption", function () {
-        const dayTraderApp = applicationsList[1];
-        Analysis.analyzeAll(dayTraderApp);
-        TaskManager.enablePreemption(applicationsList[0].name);
+    it("Test Enable and Disable Premeption", function () {
+        TaskManager.setPreemption(true);
         checkSuccessAlert(commonView.infoAlertMessage, "Update request submitted.");
         validateTextPresence(TaskManagerColumns.preemption, "true");
+        TaskManager.setPreemption(false);
+        checkSuccessAlert(commonView.infoAlertMessage, "Update request submitted.");
+        validateTextPresence(TaskManagerColumns.preemption, "false");
     });
 });

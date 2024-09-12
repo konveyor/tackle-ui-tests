@@ -16,16 +16,12 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    clearAllFilters,
     click,
     clickByText,
-    clickKebabMenuOptionArchetype,
     inputText,
-    performRowActionByIcon,
     selectFilter,
     selectItemsPerPage,
     selectUserPerspective,
-    validateNumberPresence,
 } from "../../../../utils/utils";
 import {
     SEC,
@@ -35,13 +31,11 @@ import {
     migration,
     TaskFilter,
     trTag,
-    button,
-    tdTag,
 } from "../../../types/constants";
 import { sideKebabMenu } from "../../../views/applicationinventory.view";
 import { actionMenuItem, searchButton, searchInput } from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
-import { kebabMenu, tasksStatusColumn } from "../../../views/taskmanager.view";
+import { tasksStatusColumn } from "../../../views/taskmanager.view";
 
 export class TaskManager {
     static fullUrl = Cypress.env("tackleUrl") + "/tasks";
@@ -83,15 +77,15 @@ export class TaskManager {
         cy.wait(2 * SEC);
     }
 
-    public static enablePreemption(rowName: string): void {
+    public static setPreemption(preemption: boolean): void {
+        const setPreemption = preemption === true ? "Enable preemption" : "Disable preemption";
+
         TaskManager.open(10);
-        cy.contains(rowName)
-            .next(tdTag)
-            .contains("Pending")
+        cy.contains("Pending")
             .closest(trTag)
             .within(() => {
                 click(sideKebabMenu);
             });
-        cy.get(actionMenuItem).contains("Enable preemption").click();
+        cy.get(actionMenuItem).contains(setPreemption).click();
     }
 }
