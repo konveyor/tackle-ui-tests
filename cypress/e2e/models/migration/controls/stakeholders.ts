@@ -51,7 +51,7 @@ export class Stakeholders {
     email: string;
     jobfunction: string;
     groups: Array<string>;
-    static fullUrl = Cypress.env("tackleUrl") + "controls/stakeholders";
+    static fullUrl = Cypress.env("tackleUrl") + "/controls/stakeholders";
 
     constructor(email: string, name: string, jobfunction?: string, groups?: Array<string>) {
         this.email = email;
@@ -60,7 +60,15 @@ export class Stakeholders {
         if (groups) this.groups = groups;
     }
 
-    public static openList(itemsPerPage = 100): void {
+    public static openList(forceReload = false): void {
+        if (forceReload) {
+            cy.visit(Stakeholders.fullUrl, { timeout: 35 * SEC }).then((_) => {
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", "Controls");
+                selectItemsPerPage(100);
+            });
+            return;
+        }
+
         cy.url().then(($url) => {
             if ($url != Stakeholders.fullUrl) {
                 selectUserPerspective(migration);
@@ -70,7 +78,7 @@ export class Stakeholders {
             }
         });
         cy.get("h1", { timeout: 30 * SEC }).should("contain.text", "Controls");
-        selectItemsPerPage(itemsPerPage);
+        selectItemsPerPage(100);
     }
 
     protected fillName(name: string): void {

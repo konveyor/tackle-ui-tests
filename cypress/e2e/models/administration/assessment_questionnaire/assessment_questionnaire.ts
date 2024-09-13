@@ -26,13 +26,21 @@ import * as commonView from "../../../views/common.view";
 export class AssessmentQuestionnaire {
     public static fullUrl = Cypress.env("tackleUrl") + "/assessment";
 
-    public static open() {
+    public static open(forceReload = false) {
+        const itemsPerPage = 100;
+        if (forceReload) {
+            cy.visit(AssessmentQuestionnaire.fullUrl, { timeout: 35 * SEC }).then((_) => {
+                selectItemsPerPage(itemsPerPage);
+            });
+            return;
+        }
         cy.url().then(($url) => {
             if ($url != AssessmentQuestionnaire.fullUrl) {
                 selectUserPerspective("Administration");
                 clickByText(navMenu, assessmentQuestionnaires);
             }
         });
+        selectItemsPerPage(itemsPerPage);
     }
 
     public static operation(fileName: string, operation: string) {
@@ -112,7 +120,7 @@ export class AssessmentQuestionnaire {
                     if (rowName == legacyPathfinder) {
                         continue;
                     }
-                    cy.wrap($rows.eq(i).find(actionButton)).click();
+                    cy.wrap($rows.eq(i).find(actionButton)).click({ force: true });
                     cy.get("li.pf-v5-c-menu__list-item")
                         .contains("Delete")
                         .then(($delete_btn) => {
