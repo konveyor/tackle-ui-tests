@@ -88,4 +88,23 @@ export class TaskManager {
             });
         cy.get(actionMenuItem).contains(setPreemption).click();
     }
+
+    public static cancelTask(status: string): void {
+        TaskManager.open(10);
+        cy.contains(status)
+            .closest(trTag)
+            .within(() => {
+                click(sideKebabMenu);
+            });
+        if (
+            status == TaskStatus.pending ||
+            status == TaskStatus.running ||
+            status == TaskStatus.ready ||
+            status == TaskStatus.postponed
+        ) {
+            cy.get(actionMenuItem).contains("Cancel").click();
+        } else {
+            cy.get(actionMenuItem).contains("Cancel").should("not.be.enabled");
+        }
+    }
 }

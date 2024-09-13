@@ -28,34 +28,54 @@ import { TaskManager } from "../../../models/migration/task-manager/task-manager
 import { TaskManagerColumns } from "../../../views/taskmanager.view";
 import * as commonView from "../../../views/common.view";
 
-describe(["@tier2"], "Enable Premeption in Task Manager Page", function () {
+describe(["@tier2"], "Actions in Task Manager Page", function () {
     const applicationsList: Analysis[] = [];
 
     before("Login", function () {
         login();
         deleteApplicationTableRows();
-        cy.fixture("application").then((appData) => {
-            cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 4; i++) {
-                    const bookServerApp = new Analysis(
-                        getRandomApplicationData("TaskFilteringApp1_" + i, {
-                            sourceData: appData["bookserver-app"],
-                        }),
-                        getRandomAnalysisData(analysisData["analysis_for_openSourceLibraries"])
-                    );
-                    applicationsList.push(bookServerApp);
-                }
-                applicationsList.forEach((application) => application.create());
-            });
+    });
+
+    beforeEach("Load data", function () {
+        cy.fixture("application").then(function (appData) {
+            this.appData = appData;
+        });
+        cy.fixture("analysis").then(function (analysisData) {
+            this.analysisData = analysisData;
         });
     });
 
     it("Test Enable and Disable Premeption", function () {
+        const bookServerApp = new Analysis(
+            getRandomApplicationData("TaskApp1_", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["analysis_for_openSourceLibraries"])
+        );
+        bookServerApp.create();
         TaskManager.setPreemption(true);
         checkSuccessAlert(commonView.infoAlertMessage, "Update request submitted.");
         validateTextPresence(TaskManagerColumns.preemption, "true");
         TaskManager.setPreemption(false);
         checkSuccessAlert(commonView.infoAlertMessage, "Update request submitted.");
         validateTextPresence(TaskManagerColumns.preemption, "false");
+    });
+
+    it("Cancel Task", function () {
+        const bookServerApp = new Analysis(
+            getRandomApplicationData("TaskApp1_", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["analysis_for_openSourceLibraries"])
+        );
+        bookServerApp.create();
+        TaskManager.cancelTask("Pending");
+        checkSuccessAlert(commonView.infoAlertMessage, "Cancelation request submitted");
+        validateTextPresence(TaskManagerColumns.status, "Canceled");
+        TaskManager.cancelTask("Running");
+        checkSuccessAlert(commonView.infoAlertMessage, "Cancelation request submitted");
+        validateTextPresence(TaskManagerColumns.status, "Canceled");
+        // Succeeded tasks cannot be cancelled.
+        TaskManager.cancelTask("Succeeded");
     });
 });
