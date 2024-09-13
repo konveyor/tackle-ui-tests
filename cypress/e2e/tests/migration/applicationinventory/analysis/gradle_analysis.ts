@@ -25,6 +25,7 @@ import {
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { AnalysisStatuses } from "../../../../types/constants";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { Issues } from "../../../../models/migration/dynamic-report/issues/issues";
 
 const applications: Analysis[] = [];
 
@@ -65,7 +66,31 @@ describe(["@tier2"], "Gradle Analysis", () => {
         application.verifyEffort(application.effort);
     });
 
+    // Automates TC 546
+    it("Bug MTA-3780: Analysis for Gradle JMH application with Open Source libraries", function () {
+        const application = new Analysis(
+            getRandomApplicationData("JMH Gradle OS libs", {
+                sourceData: this.appData["jmh-gradle-example"],
+            }),
+            {
+                source: "Source code + dependencies",
+                target: [],
+                openSourceLibraries: true,
+            }
+        );
+        application.customRule = ["jmh-gradle-serializable-test-rule.yaml"];
+        application.create();
+        applications.push(application);
+        cy.wait("@getApplication");
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        Issues.openSingleApplication(application.name);
+        // Checks that an incident was raised in an open source library with the provided custom rule
+        Issues.openAffectedFile("AbstractRealDistribution.java", "Serializable reference test");
+    });
+
     after("Clear data", function () {
+        Application.open(true);
         deleteByList(applications);
     });
 });

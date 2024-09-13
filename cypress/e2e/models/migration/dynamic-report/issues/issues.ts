@@ -24,6 +24,7 @@ import {
 } from "../../../../types/constants";
 import { navMenu } from "../../../../views/menu.view";
 import {
+    affectedFilesTable,
     issueColumns,
     searchMenuToggle,
     singleAppDropList,
@@ -165,6 +166,32 @@ export class Issues {
             cy.get(issueColumns.applications).within(() => {
                 click("a");
             });
+        });
+    }
+
+    /**
+     * Opens the side drawer that contains all the affected files of an issue
+     * @param issueName
+     */
+    public static openAffectedFiles(issueName: string): void {
+        performWithin(issueName, () => {
+            cy.get(singleApplicationColumns.files).within(() => {
+                cy.get(button).click({ force: true });
+            });
+        });
+    }
+
+    /**
+     * Opens the dialog of a single file affected by an Issue
+     * @param fileName
+     * @param issueName
+     */
+    public static openAffectedFile(fileName: string, issueName?: string): void {
+        if (issueName) {
+            Issues.openAffectedFiles(issueName);
+        }
+        cy.get(affectedFilesTable).within(() => {
+            cy.contains(fileName).click();
         });
     }
 
