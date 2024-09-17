@@ -20,9 +20,9 @@ import {
     selectItemsPerPage,
     createMultipleStakeholders,
     validatePagination,
-    deleteAllItems,
     itemsPerPageValidation,
     autoPageChangeValidations,
+    deleteAllRows,
 } from "../../../../../utils/utils";
 import { appTable } from "../../../../views/common.view";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
@@ -56,10 +56,10 @@ describe(["@tier3"], "Stakeholder pagination validations", function () {
         Stakeholders.openList();
         cy.get("@getStakeholders");
         selectItemsPerPage(10);
-        autoPageChangeValidations(appTable, "Email");
+        autoPageChangeValidations(appTable, "Email", true);
     });
 
     after("Perform test data clean up", function () {
-        deleteAllItems();
+        deleteAllRows();
     });
 });
