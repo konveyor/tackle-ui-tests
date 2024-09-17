@@ -16,14 +16,12 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    clearAllFilters,
     click,
     clickByText,
     inputText,
     selectFilter,
     selectItemsPerPage,
     selectUserPerspective,
-    validateNumberPresence,
 } from "../../../../utils/utils";
 import {
     SEC,
@@ -34,7 +32,8 @@ import {
     TaskFilter,
     trTag,
 } from "../../../types/constants";
-import { searchButton, searchInput } from "../../../views/common.view";
+import { sideKebabMenu } from "../../../views/applicationinventory.view";
+import { actionMenuItem, searchButton, searchInput } from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
 import { tasksStatusColumn } from "../../../views/taskmanager.view";
 
@@ -76,5 +75,36 @@ export class TaskManager {
         inputText(searchInput, filterValue);
         click(searchButton);
         cy.wait(2 * SEC);
+    }
+
+    public static setPreemption(preemption: boolean): void {
+        const setPreemption = preemption === true ? "Enable preemption" : "Disable preemption";
+
+        TaskManager.open(10);
+        cy.contains("Pending")
+            .closest(trTag)
+            .within(() => {
+                click(sideKebabMenu);
+            });
+        cy.get(actionMenuItem).contains(setPreemption).click();
+    }
+
+    public static cancelTask(status: string): void {
+        TaskManager.open(10);
+        cy.contains(status)
+            .closest(trTag)
+            .within(() => {
+                click(sideKebabMenu);
+            });
+        if (
+            status == TaskStatus.pending ||
+            status == TaskStatus.running ||
+            status == TaskStatus.ready ||
+            status == TaskStatus.postponed
+        ) {
+            cy.get(actionMenuItem).contains("Cancel").click();
+        } else {
+            cy.get(actionMenuItem).contains("Cancel").should("not.be.enabled");
+        }
     }
 }
