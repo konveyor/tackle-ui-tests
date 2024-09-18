@@ -71,6 +71,7 @@ export class Archetype {
         const itemsPerPage = 100;
         if (forceReload) {
             cy.visit(Archetype.fullUrl, { timeout: 15 * SEC }).then((_) =>
+            cy.get("h1", { timeout: 35 * SEC }).should("contain", 'Archetypes');
                 selectItemsPerPage(itemsPerPage)
             );
             return;
