@@ -26,6 +26,7 @@ import {
     confirm,
     sidedrawerTab,
     validatePageTitle,
+    performRowActionByIcon,
 } from "../../../../utils/utils";
 import { legacyPathfinder, migration, review, SEC, tdTag, trTag } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
@@ -162,7 +163,7 @@ export class Archetype {
         cancel = false
     ): void {
         Archetype.open();
-        clickKebabMenuOptionArchetype(this.name, "Edit");
+        performRowActionByIcon(this.name, commonView.pencilIcon);
 
         if (cancel) {
             cancelForm();
