@@ -110,10 +110,12 @@ export class CustomMigrationTarget {
     }
 
     public static uploadImage(imagePath: string, input = false) {
-        cy.get(CustomMigrationTargetView.imageInput).selectFile(`cypress/fixtures/${imagePath}`, {
-            timeout: 120 * SEC,
-            force: true,
-        });
+        cy.get("div[class='pf-v5-c-file-upload__file-details']")
+            .next('input[type="file"]', { timeout: 2 * SEC })
+            .selectFile(`cypress/fixtures/${imagePath}`, {
+                timeout: 120 * SEC,
+                force: true,
+            });
     }
 
     private static fillForm(values: Partial<CustomMigrationTarget>) {
