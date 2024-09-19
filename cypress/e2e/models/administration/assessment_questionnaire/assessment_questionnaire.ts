@@ -30,6 +30,7 @@ export class AssessmentQuestionnaire {
         const itemsPerPage = 100;
         if (forceReload) {
             cy.visit(AssessmentQuestionnaire.fullUrl, { timeout: 35 * SEC }).then((_) => {
+                cy.wait(10 * SEC);
                 selectItemsPerPage(itemsPerPage);
             });
             return;
