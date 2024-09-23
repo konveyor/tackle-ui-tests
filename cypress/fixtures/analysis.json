@@ -1225,5 +1225,11 @@
         "appName": "bookserver-app",
         "source": "Source code",
         "target": ["Application server migration to"]
+    },
+    "python_demo_application": {
+        "source": "Source code",
+        "target": [],
+        "appName": "python-app-custom-rules",
+        "customRule": ["python-rules.yaml"]
     }
 }
