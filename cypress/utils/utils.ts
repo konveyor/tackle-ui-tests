@@ -811,7 +811,7 @@ export function clickKebabMenuOptionArchetype(rowItem: string, itemName: string)
         .within(() => {
             click(sideKebabMenu);
         });
-    cy.get(commonView.actionMenuItem).contains(itemName).click();
+    cy.get(commonView.actionMenuItem).contains(itemName).click({ force: true });
 }
 
 export function createMultipleJiraConnections(

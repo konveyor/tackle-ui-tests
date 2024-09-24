@@ -70,9 +70,12 @@ export class Archetype {
     public static open(forceReload = false) {
         const itemsPerPage = 100;
         if (forceReload) {
-            cy.visit(Archetype.fullUrl, { timeout: 15 * SEC }).then((_) =>
-                selectItemsPerPage(itemsPerPage)
-            );
+            cy.visit(Archetype.fullUrl, { timeout: 15 * SEC }).then((_) => {
+                // This explicit wait is required in some cases.
+                cy.wait(10 * SEC);
+                cy.get("h1", { timeout: 35 * SEC }).should("contain", "Archetypes");
+                selectItemsPerPage(itemsPerPage);
+            });
             return;
         }
 

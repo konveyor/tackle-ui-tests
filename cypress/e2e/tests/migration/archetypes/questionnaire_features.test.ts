@@ -139,7 +139,9 @@ describe(["@tier3"], "Tests for archetype questionnaire features", () => {
     after("Perform test data clean up", function () {
         Archetype.open(true);
         archetype.delete();
+        Stakeholders.openList(true);
         deleteByList(stakeholderList);
+        AssessmentQuestionnaire.open(true);
         AssessmentQuestionnaire.deleteAllQuestionnaires();
     });
 });

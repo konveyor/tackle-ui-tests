@@ -63,6 +63,7 @@ export class Stakeholders {
     public static openList(forceReload = false): void {
         if (forceReload) {
             cy.visit(Stakeholders.fullUrl, { timeout: 35 * SEC }).then((_) => {
+                cy.wait(10 * SEC);
                 cy.get("h1", { timeout: 60 * SEC }).should("contain", "Controls");
                 selectItemsPerPage(100);
             });
