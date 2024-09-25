@@ -841,7 +841,7 @@
         "target": ["Jakarta EE 9"],
         "binary": ["acmeair-webapp-1.0-SNAPSHOT.war"],
         "appName": "acmeair-webapp-1.0-SNAPSHOT.war",
-        "effort": 80
+        "effort": 78
     },
 
     "uploadbinary_analysis_with_customrule": {
