@@ -138,10 +138,8 @@ describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
             getRandomAnalysisData(this.analysisData["python_demo_application"])
         );
         tackleTestappName = app.name;
-        Application.open();
         applications.push(app);
         app.create();
-        app.manageCredentials(sourceCredential.name, mavenCredential.name);
         app.analyze();
         app.verifyAnalysisStatus(AnalysisStatuses.completed);
         // TODO: add assertion to check if rules fired once obtained a rules file
