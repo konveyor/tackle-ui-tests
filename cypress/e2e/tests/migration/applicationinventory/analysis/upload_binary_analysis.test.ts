@@ -40,6 +40,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         });
 
         cy.intercept("GET", "/hub/application*").as("getApplication");
+        Application.open(true);
     });
 
     it(["@interop"], "Analysis for acmeair app upload binary", function () {
