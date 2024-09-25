@@ -75,5 +75,9 @@
     "jmh-gradle-example": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/melix/jmh-gradle-example"
+    },
+    "python-demo-app": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/Shopify/sample-django-app"
     }
 }

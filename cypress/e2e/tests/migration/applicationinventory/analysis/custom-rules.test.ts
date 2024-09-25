@@ -130,6 +130,21 @@ describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
         app.verifyFileNotValidXML();
     });
 
+    it("Python custom rules file analysis", function () {
+        const app = new Analysis(
+            getRandomApplicationData("python-app-custom-rules", {
+                sourceData: this.appData["python-demo-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["python_demo_application"])
+        );
+        tackleTestappName = app.name;
+        applications.push(app);
+        app.create();
+        app.analyze();
+        app.verifyAnalysisStatus(AnalysisStatuses.completed);
+        // TODO: add assertion to check if rules fired once obtained a rules file
+    });
+
     after("Clear test data", function () {
         deleteByList(applications);
         mavenCredential.delete();
