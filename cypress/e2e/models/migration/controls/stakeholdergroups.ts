@@ -19,7 +19,6 @@ import {
     button,
     createNewButton,
     deleteAction,
-    editAction,
     migration,
     SEC,
 } from "../../../types/constants";
@@ -38,8 +37,9 @@ import {
     submitForm,
     cancelForm,
     selectFormItems,
-    performRowAction,
     selectUserPerspective,
+    performRowActionByIcon,
+    clickItemInKebabMenu,
 } from "../../../../utils/utils";
 
 export class Stakeholdergroups {
@@ -105,7 +105,7 @@ export class Stakeholdergroups {
     ): void {
         Stakeholdergroups.openList();
         cy.wait(2000);
-        performRowAction(this.name, editAction);
+        performRowActionByIcon(this.name, commonView.pencilIcon);
         if (cancel) {
             cancelForm();
         } else {
@@ -127,7 +127,7 @@ export class Stakeholdergroups {
 
     delete(cancel = false): void {
         Stakeholdergroups.openList();
-        performRowAction(this.name, deleteAction);
+        clickItemInKebabMenu(this.name, deleteAction);
         if (cancel) {
             click(commonView.confirmCancelButton);
         } else {
