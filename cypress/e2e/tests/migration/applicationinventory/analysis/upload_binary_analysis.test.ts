@@ -68,9 +68,11 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
-
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyEffort(
+            this.analysisData["uploadbinary_analysis_with_customrule"]["effort"]
+        );
     });
 
     it("Analysis for spring-petclinic application", function () {
