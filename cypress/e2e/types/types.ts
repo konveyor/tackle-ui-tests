@@ -125,6 +125,7 @@ export type analysisData = {
         total?: number;
     };
     techTags?: string[][];
+    numberOfRules?: { [id: string]: Number };
 };
 
 export type UserData = {

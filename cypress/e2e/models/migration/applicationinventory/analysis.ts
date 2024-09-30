@@ -73,6 +73,7 @@ import {
     languageSelectionDropdown,
     manageCredentials,
     mavenCredential,
+    numberOfRulesColumn,
     openjdkToggleButton,
     panelBody,
     rightSideMenu,
@@ -112,6 +113,7 @@ export class Analysis extends Application {
         information?: number;
         total?: number;
     };
+    numberOfRules?: { [id: string]: Number };
 
     constructor(appData: applicationData, analysisData: analysisData) {
         super(appData);
@@ -138,6 +140,7 @@ export class Analysis extends Application {
             openSourceLibraries,
             customRuleRepository,
             language,
+            numberOfRules,
         } = analysisData;
         this.name = appData.name;
         this.source = source;
@@ -158,6 +161,7 @@ export class Analysis extends Application {
         if (incidents) this.incidents = incidents;
         if (openSourceLibraries) this.openSourceLibraries = openSourceLibraries;
         if (language) this.language = language;
+        if (numberOfRules) this.numberOfRules = numberOfRules;
     }
 
     public selectSourceofAnalysis(source: string): void {
@@ -530,6 +534,26 @@ export class Analysis extends Application {
                 `Error: File "${this.customRule[i]}" is not a valid XML: `
             );
             cy.contains(addRules, "Add", { timeout: 2000 }).should("not.be.enabled");
+        }
+        cy.get(closeWizard).click({ force: true });
+    }
+
+    verifyRulesNumber(): void {
+        Application.open();
+        this.selectApplication();
+        cy.contains(button, analyzeButton).should("be.enabled").click();
+        this.selectSourceofAnalysis(this.source);
+        next();
+        next();
+        next();
+        this.uploadCustomRule();
+        for (let ruleName in this.numberOfRules) {
+            let numOfrules = this.numberOfRules[ruleName];
+            cy.get(trTag)
+                .filter(':contains("' + ruleName + '")')
+                .within(() => {
+                    cy.get(numberOfRulesColumn).contains(numOfrules.toString());
+                });
         }
         cy.get(closeWizard).click({ force: true });
     }
