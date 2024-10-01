@@ -45,3 +45,4 @@ export const codeEditorControls = "div.pf-v5-c-code-editor__controls";
 export const menuToggle = "button.pf-v5-c-menu-toggle";
 export const menuList = "div.pf-v5-c-menu";
 export const languageSelectionDropdown = "#filter-control-name-Languages";
+export const numberOfRulesColumn = "td[data-label='Number of rules']";

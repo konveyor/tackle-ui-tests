@@ -73,6 +73,7 @@ import {
     languageSelectionDropdown,
     manageCredentials,
     mavenCredential,
+    numberOfRulesColumn,
     openjdkToggleButton,
     panelBody,
     rightSideMenu,
@@ -112,6 +113,7 @@ export class Analysis extends Application {
         information?: number;
         total?: number;
     };
+    ruleFileToQuantity?: { [id: string]: number };
 
     constructor(appData: applicationData, analysisData: analysisData) {
         super(appData);
@@ -138,6 +140,7 @@ export class Analysis extends Application {
             openSourceLibraries,
             customRuleRepository,
             language,
+            ruleFileToQuantity,
         } = analysisData;
         this.name = appData.name;
         this.source = source;
@@ -158,6 +161,7 @@ export class Analysis extends Application {
         if (incidents) this.incidents = incidents;
         if (openSourceLibraries) this.openSourceLibraries = openSourceLibraries;
         if (language) this.language = language;
+        if (ruleFileToQuantity) this.ruleFileToQuantity = ruleFileToQuantity;
     }
 
     public selectSourceofAnalysis(source: string): void {
@@ -530,6 +534,27 @@ export class Analysis extends Application {
                 `Error: File "${this.customRule[i]}" is not a valid XML: `
             );
             cy.contains(addRules, "Add", { timeout: 2000 }).should("not.be.enabled");
+        }
+        cy.get(closeWizard).click({ force: true });
+    }
+
+    // verifyRulesNumber verifies the number of rules found in an uploaded custom rules file
+    public verifyRulesNumber(): void {
+        Application.open();
+        this.selectApplication();
+        cy.contains(button, analyzeButton).should("be.enabled").click();
+        this.selectSourceofAnalysis(this.source);
+        next();
+        next();
+        next();
+        this.uploadCustomRule();
+        for (let fileName in this.numberOfRules) {
+            const numOfrules = this.numberOfRules[fileName];
+            cy.get(trTag)
+                .filter(':contains("' + fileName + '")')
+                .within(() => {
+                    cy.get(numberOfRulesColumn).contains(numOfrules.toString());
+                });
         }
         cy.get(closeWizard).click({ force: true });
     }
