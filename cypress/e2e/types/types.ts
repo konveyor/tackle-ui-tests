@@ -125,7 +125,7 @@ export type analysisData = {
         total?: number;
     };
     techTags?: string[][];
-    numberOfRules?: { [id: string]: Number };
+    ruleFileToQuantity?: { [id: string]: number };
 };
 
 export type UserData = {

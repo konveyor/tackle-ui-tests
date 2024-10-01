@@ -113,7 +113,7 @@ export class Analysis extends Application {
         information?: number;
         total?: number;
     };
-    numberOfRules?: { [id: string]: Number };
+    ruleFileToQuantity?: { [id: string]: number };
 
     constructor(appData: applicationData, analysisData: analysisData) {
         super(appData);
@@ -140,7 +140,7 @@ export class Analysis extends Application {
             openSourceLibraries,
             customRuleRepository,
             language,
-            numberOfRules,
+            ruleFileToQuantity,
         } = analysisData;
         this.name = appData.name;
         this.source = source;
@@ -161,7 +161,7 @@ export class Analysis extends Application {
         if (incidents) this.incidents = incidents;
         if (openSourceLibraries) this.openSourceLibraries = openSourceLibraries;
         if (language) this.language = language;
-        if (numberOfRules) this.numberOfRules = numberOfRules;
+        if (ruleFileToQuantity) this.ruleFileToQuantity = ruleFileToQuantity;
     }
 
     public selectSourceofAnalysis(source: string): void {
@@ -538,7 +538,8 @@ export class Analysis extends Application {
         cy.get(closeWizard).click({ force: true });
     }
 
-    verifyRulesNumber(): void {
+    // verifyRulesNumber verifies the number of rules found in an uploaded custom rules file
+    public verifyRulesNumber(): void {
         Application.open();
         this.selectApplication();
         cy.contains(button, analyzeButton).should("be.enabled").click();
@@ -547,10 +548,10 @@ export class Analysis extends Application {
         next();
         next();
         this.uploadCustomRule();
-        for (let ruleName in this.numberOfRules) {
-            let numOfrules = this.numberOfRules[ruleName];
+        for (let fileName in this.numberOfRules) {
+            const numOfrules = this.numberOfRules[fileName];
             cy.get(trTag)
-                .filter(':contains("' + ruleName + '")')
+                .filter(':contains("' + fileName + '")')
                 .within(() => {
                     cy.get(numberOfRulesColumn).contains(numOfrules.toString());
                 });
