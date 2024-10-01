@@ -95,7 +95,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
     });
 
     // Automates Bug MTA-2001
-    it("Verify triggered rule for dependency", function () {
+    it("Bug MTA-3863: Verify triggered rule for dependency", function () {
         const app = new Analysis(
             getRandomApplicationData("tackle-testapp-custom-rules", {
                 sourceData: this.appData["tackle-testapp-git"],
