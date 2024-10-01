@@ -82,6 +82,7 @@ describe(["@tier1"], "Binary Analysis", () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyEffort(this.analysisData["binary_analysis_on_tackletestapp"]["effort"]);
     });
 
     afterEach("Persist session", function () {

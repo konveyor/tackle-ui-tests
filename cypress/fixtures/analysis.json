@@ -826,14 +826,15 @@
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "tackle-testapp",
-        "storyPoints": 1
+        "effort": 30,
+        "openSourceLibraries": true
     },
 
     "binary_analysis_on_tackletestapp": {
         "source": "Binary",
         "target": ["Containerization"],
         "appName": "customers-tomcat-0.0.1-SNAPSHOT.war",
-        "storyPoints": 2
+        "effort": 1
     },
 
     "uploadbinary_analysis_on_acmeair": {
@@ -850,7 +851,7 @@
         "binary": ["customers-tomcat-0.0.1-SNAPSHOT.war"],
         "customRule": ["javax-package-custom-target.windup.xml"],
         "appName": "customers-tomcat-0.0.1-SNAPSHOT.war",
-        "storyPoints": 21
+        "effort": 16
     },
 
     "analysis_for_enableTagging": {
