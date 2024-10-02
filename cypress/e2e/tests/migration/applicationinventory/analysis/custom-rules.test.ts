@@ -80,10 +80,13 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
 
     it("Verify triggered rule", function () {
         const app = new Analysis(
-            getRandomApplicationData("customRule_customTarget"),
-            getRandomAnalysisData(
-                this.analysisData["upload_binary_analysis_on_jee_app_custom_rules"]
-            )
+            getRandomApplicationData("jee-example-app custom rule"),
+            getRandomAnalysisData({
+                source: "Upload a local binary",
+                target: ["Application server migration to"],
+                binary: ["jee-example-app-1.0.0.ear"],
+                customRule: ["basic-custom-rule.xml"],
+            })
         );
         Application.open();
         applications.push(app);

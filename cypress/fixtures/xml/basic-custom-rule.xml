@@ -13,21 +13,21 @@
         <targetTechnology id="eap8" />
     </metadata>
     <rules>
-        <rule id="hibernate4-00002-custom">
+        <rule id="basic-custom-rule">
             <when>
-                <javaclass references="org.hibernate.cfg.Configuration.add({*})">
-                    <location>METHOD_CALL</location>
+                <javaclass references="weblogic.servlet.security.ServletAuthentication">
+                    <location>IMPORT</location>
                 </javaclass>
             </when>
             <perform>
-                <hint title="Hibernate 5 CUSTOM RULE - Deprecated method org.hibernate.cfg.Configuration.add()" effort="1" category-id="optional">
-                    <message>There is no direct replacement for method `org.hibernate.cfg.Configuration#add()`.</message>
+                <hint title="ServletAuthentication CUSTOM RULE - ServletAuthentication" effort="1" category-id="optional">
+                    <message>This is a custom rule for testing that should trigger issues in imports of ServletAuthentication</message>
                     <link
-                        href="https://github.com/hibernate/hibernate-orm/blob/5.0/migration-guide.adoc#re-purposing-of-configuration"
-                        title="Changes in Configuration for Hibernate 5" />
+                        href="https://www.konveyor.io/"
+                        title="This link should take you to the Konveyor main page" />
                     <link
-                        href="https://access.redhat.com/documentation/en-us/red_hat_jboss_enterprise_application_platform/7.0/html-single/migration_guide/#hibernate_and_jpa_migration_changes"
-                        title="Hibernate and JPA migration changes" />
+                        href="https://github.com/konveyor"
+                        title="This link should take you to the Konveyor organization GitHub page" />
                     <tag>hibernate</tag>
                     <tag>configuration</tag>
                 </hint>

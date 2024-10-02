@@ -1091,7 +1091,7 @@ export function getRandomAnalysisData(analysisdata): analysisData {
         excludedPackagesList: analysisdata.excludedPackagesList,
         incidents: analysisdata.incidents,
         openSourceLibraries: analysisdata.openSourceLibraries,
-        numberOfRules: analysisdata.numberOfRules,
+        ruleFileToQuantity: analysisdata.ruleFileToQuantity,
     };
 }
 

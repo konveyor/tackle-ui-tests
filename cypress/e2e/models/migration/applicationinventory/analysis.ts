@@ -548,8 +548,8 @@ export class Analysis extends Application {
         next();
         next();
         this.uploadCustomRule();
-        for (let fileName in this.numberOfRules) {
-            const numOfrules = this.numberOfRules[fileName];
+        for (let fileName in this.ruleFileToQuantity) {
+            const numOfrules = this.ruleFileToQuantity[fileName];
             cy.get(trTag)
                 .filter(':contains("' + fileName + '")')
                 .within(() => {
