@@ -1025,13 +1025,6 @@
         "source": "Source code",
         "appName": "pet-clinic"
     },
-    "upload_binary_analysis_on_jee_app_custom_rules": {
-        "source": "Upload a local binary",
-        "target": ["Application server migration to"],
-        "binary": ["jee-example-app-1.0.0.ear"],
-        "customRule": ["hibernate-custom.windup.xml"],
-        "appName": "jee-example-app custom rules"
-    },
     "tackle_test_app_custom_rules": {
         "source": "Source code + dependencies",
         "target": [],
