@@ -421,7 +421,7 @@
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization", "Quarkus"],
         "appName": "deps",
-        "storyPoints": 24,
+        "effort": 402,
         "issues": [
             {
                 "name": "@MessageDriven - EJBs are not supported in Quarkus",
