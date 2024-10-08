@@ -17,7 +17,6 @@ import {
     button,
     controls,
     deleteAction,
-    editAction,
     migration,
     SEC,
     tags,
@@ -35,6 +34,7 @@ import {
     confirm,
     expandRowDetails,
     inputText,
+    performRowActionByIcon,
     selectItemsPerPage,
     selectUserPerspective,
     submitForm,
@@ -114,7 +114,7 @@ export class Tag {
     edit(updatedValue: { name?: string; tagcategory?: string }, cancel = false): void {
         Tag.openList();
         expandRowDetails(this.tagCategory);
-        this.clickTagAction(editAction);
+        performRowActionByIcon(this.name, commonView.pencilIcon);
         if (cancel) {
             cancelForm();
         } else {
