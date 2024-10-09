@@ -24,7 +24,7 @@ import {
     clickOnSortButton,
     deleteByList,
 } from "../../../../../utils/utils";
-import { name, tags, SortType, businessService, SEC } from "../../../../types/constants";
+import { name, tags, SortType, businessService, SEC, analysis } from "../../../../types/constants";
 import * as data from "../../../../../utils/data_utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Application } from "../../../../models/migration/applicationinventory/application";
@@ -71,6 +71,24 @@ describe(["@tier3"], "Application inventory sort validations", function () {
 
         // Verify that the application inventory table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(name);
+        verifySortDesc(afterDescSortList, unsortedList);
+    });
+
+    it("Analysis status sort validations", function () {
+        Application.open();
+        // get unsorted list when page loads
+        const unsortedList = getTableColumnData(analysis);
+        // Sort the application inventory by Tag count in ascending order
+        clickOnSortButton(analysis, SortType.ascending);
+        cy.wait(2 * SEC);
+        // Verify that the application inventory table rows are displayed in ascending order
+        const afterAscSortList = getTableColumnData(analysis);
+        verifySortAsc(afterAscSortList, unsortedList);
+        // Sort the application inventory by analysis in descending order
+        clickOnSortButton(analysis, SortType.descending);
+        cy.wait(2000);
+        // Verify that the application inventory table rows are displayed in descending order
+        const afterDescSortList = getTableColumnData(analysis);
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
