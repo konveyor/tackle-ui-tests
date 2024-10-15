@@ -36,6 +36,7 @@ import { CredentialsSourceControlKey } from "../../../../models/administration/c
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { AppIssue } from "../../../../types/types";
 let source_credential: CredentialsSourceControlUsername;
+let source_credential_1: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;
 let applicationsList: Array<Analysis> = [];
 
@@ -52,6 +53,16 @@ describe(["@tier1"], "Source Analysis", () => {
             )
         );
         source_credential.create();
+
+        // Create source Credentials with # in password
+        source_credential_1 = new CredentialsSourceControlUsername(
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                true
+            )
+        );
+        source_credential_1.create(null, true);
 
         // Create Maven credentials
         maven_credential = new CredentialsMaven(
@@ -399,6 +410,23 @@ describe(["@tier1"], "Source Analysis", () => {
                 applicationList[1].validateAffected(currentIssue);
             }
         );
+    });
+
+    it("Bug MTA-3701: Source analysis on tackle app with hash in Password", function () {
+        const application = new Analysis(
+            getRandomApplicationData("tackleTestApp_Source", {
+                sourceData: this.appData["tackle-testapp-git"],
+            }),
+            getRandomAnalysisData(this.analysisData["tackleTestApp_Source"])
+        );
+
+        // Analysis application with source credential created with hash
+        Application.open();
+        application.create();
+        application.manageCredentials(source_credential_1.name);
+        applicationsList.push(application);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
     });
 
     after("Perform test data clean up", function () {
