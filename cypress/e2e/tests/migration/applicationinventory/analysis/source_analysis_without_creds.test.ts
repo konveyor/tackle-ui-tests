@@ -27,7 +27,14 @@ import { infoAlertMessage } from "../../../../views/common.view";
 import { AppIssue } from "../../../../types/types";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { TaskManager } from "../../../../models/migration/task-manager/task-manager";
-import { AnalysisStatuses, TaskKind, TaskStatus, tdTag, trTag } from "../../../../types/constants";
+import {
+    AnalysisStatuses,
+    SEC,
+    TaskKind,
+    TaskStatus,
+    tdTag,
+    trTag,
+} from "../../../../types/constants";
 import { analysisColumn } from "../../../../views/analysis.view";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
@@ -111,6 +118,21 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
                     AnalysisStatuses.completed
                 );
             });
+    });
+
+    it("Cancel the analysis and check the status", function () {
+        const application = new Analysis(
+            getRandomApplicationData("eap8-bookserverApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["eap8_bookserverApp"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication", { timeout: 2 * SEC });
+        application.analyze();
+        application.cancelAnalysis();
+        application.verifyAnalysisStatus(AnalysisStatuses.canceled);
     });
 
     after("Perform test data clean up", function () {

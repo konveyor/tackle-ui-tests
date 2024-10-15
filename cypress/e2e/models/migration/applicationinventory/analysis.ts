@@ -558,4 +558,9 @@ export class Analysis extends Application {
         }
         cy.get(closeWizard).click({ force: true });
     }
+
+    cancelAnalysis(): void {
+        performRowActionByIcon(this.name, kebabMenu);
+        clickByText(button, "Cancel analysis");
+    }
 }
