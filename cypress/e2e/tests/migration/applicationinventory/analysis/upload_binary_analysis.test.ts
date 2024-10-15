@@ -139,7 +139,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         );
     });
 
-    it(["@tier2", "@dc"], "upload_binary_with_exculde_packages_scope", function () {
+    it(["@tier2"], "upload_binary_with_exculde_packages_scope", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["upload_binary_with_exculde_packages"])
