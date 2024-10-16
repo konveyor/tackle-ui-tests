@@ -314,7 +314,6 @@ export class Analysis extends Application {
         if (this.binary) this.uploadBinary();
         this.isNextEnabled();
         next();
-        cy.wait(2 * SEC);
         Analysis.selectLanguage(this.language);
         cy.wait(2 * SEC);
         this.selectTarget(this.target);
