@@ -174,14 +174,13 @@ export class Analysis extends Application {
      */
     public static selectLanguage(language: Languages, removePreSelected = false) {
         cy.wait(2 * SEC);
-
         if (removePreSelected) {
             clickWithinByText(".pf-v5-c-wizard__main-body", "button", clearAllFilters);
         }
 
         cy.get(languageSelectionDropdown).click();
 
-        cy.get(`#filter-control-name-select-typeahead-listbox > li`)
+        cy.get(`#filter-control-provider-select-typeahead-listbox > li`)
             .contains(language)
             .closest(".pf-v5-c-menu__list-item")
             .find("input[type=checkbox]")
@@ -315,6 +314,7 @@ export class Analysis extends Application {
         if (this.binary) this.uploadBinary();
         this.isNextEnabled();
         next();
+        cy.wait(2 * SEC);
         Analysis.selectLanguage(this.language);
         cy.wait(2 * SEC);
         this.selectTarget(this.target);
