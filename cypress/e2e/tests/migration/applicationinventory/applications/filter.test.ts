@@ -45,6 +45,7 @@ import {
     SEC,
     tags,
     archetypes,
+    analysis,
 } from "../../../../types/constants";
 
 import * as data from "../../../../../utils/data_utils";
@@ -139,6 +140,16 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         exists(applicationsList[0].business);
         clickByText(button, clearAllFilters);
     });
+
+    it("Analysis filter validations",function(){
+        Application.open();
+        getFirstAnalysisColumnValue().then((firstValue) => {
+            cy.log("First Analysis column value: ", firstValue);
+            applySearchFilter(analysis,firstValue);
+            cy.wait(2000);
+            exists(firstValue)
+        });
+     } );
 
     it("Tag filter validations", function () {
         Application.open();
@@ -367,4 +378,18 @@ const filterApplicationsBySubstring = (): void => {
     }
 
     clickByText(button, clearAllFilters);
+};
+
+// this function finds the analysis status of the first application
+const getFirstAnalysisColumnValue = (): Cypress.Chainable<string> => {
+    return cy.get('table').then(($table) => {
+        const analysisColumnIndex = $table.find('th').toArray().findIndex(th => th.innerText.trim() === "Analysis");
+        if (analysisColumnIndex >= 0) {
+            return cy.get(`tbody tr td:nth-child(${analysisColumnIndex + 1})`).first().invoke('text').then((text) => {
+                return text.trim();
+            });
+        } else {
+            return cy.wrap("").then(() => "");
+        }
+    });
 };
