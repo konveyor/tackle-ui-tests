@@ -18,14 +18,16 @@ import {
     cancelForm,
     click,
     clickByText,
+    clickItemInKebabMenu,
     confirm,
     inputText,
+    performRowActionByIcon,
     selectItemsPerPage,
     selectUserPerspective,
     submitForm,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
-import { button, controls, migration, SEC, tags, tdTag, trTag } from "../../../types/constants";
+import { button, controls, deleteAction, migration, SEC, tags, tdTag, trTag } from "../../../types/constants";
 import { createTagCategoryButton, rankInput } from "../../../views/tags.view";
 import * as commonView from "../../../views/common.view";
 import { clickTags, fillName } from "./tags";
@@ -90,12 +92,7 @@ export class TagCategory {
 
     edit(updatedValue: { name?: string; rank?: number; color?: string }, cancel = false): void {
         TagCategory.openList();
-        cy.get(tdTag)
-            .contains(this.name)
-            .parent(trTag)
-            .within(() => {
-                click(commonView.editButton);
-            });
+        performRowActionByIcon(this.name, commonView.pencilIcon);
         if (cancel) {
             cancelForm();
         } else {
@@ -118,12 +115,8 @@ export class TagCategory {
     delete(cancel = false): void {
         // Opening tags list only if another tab is opened
         TagCategory.openList();
-        cy.get(tdTag, { timeout: 2 * SEC })
-            .contains(this.name)
-            .parent(trTag)
-            .within(() => {
-                click(commonView.deleteButton);
-            });
+       
+        clickItemInKebabMenu(this.name, deleteAction);
         if (cancel) {
             click(commonView.confirmCancelButton);
         } else {
