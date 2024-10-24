@@ -48,7 +48,7 @@ import { dependencies, issues, technologies } from "../../../../views/common.vie
 
 const appName = "Downloaded-Report-Test-App";
 
-describe(["@tier2"], "Bug 636: Prepare Downloaded Report", function () {
+describe(["@tier2"], "Prepare Downloaded Report", function () {
     it("Download and extract report", function () {
         cy.fixture("application").then(function (appData) {
             cy.fixture("analysis").then(function (analysisData) {
@@ -78,7 +78,7 @@ describe(["@tier2"], "Bug 636: Prepare Downloaded Report", function () {
     });
 });
 
-describe.skip(["@tier2"], "Bug 636: Test Static Report UI", function () {
+describe(["@tier2"], "Test Static Report UI", function () {
     const reportData = {
         name: "File system - Java IO",
         category: "mandatory",
@@ -135,7 +135,7 @@ describe.skip(["@tier2"], "Bug 636: Test Static Report UI", function () {
     });
 });
 
-describe(["@tier2"], "Bug 636: Delete Downloaded Report Data", function () {
+describe(["@tier2"], "Delete Downloaded Report Data", function () {
     it("Delete Downloaded Report Data", function () {
         login();
         cleanupDownloads();
