@@ -33,8 +33,12 @@ export class CredentialsSourceControlUsername extends CredentialsSourceControl {
         inputText(usernameInput, this.username);
     }
 
-    protected fillPassword() {
-        inputText(passwordInput, this.password);
+    protected fillPassword(withHash = false) {
+        if (withHash == true) {
+            inputText(passwordInput, "#" + this.password);
+        } else {
+            inputText(passwordInput, this.password);
+        }
     }
 
     protected selectCredType() {
@@ -42,11 +46,11 @@ export class CredentialsSourceControlUsername extends CredentialsSourceControl {
         clickByText(button, "Username/Password");
     }
 
-    create(toBeCanceled = false) {
+    create(toBeCanceled = false, withHash = false) {
         super.create();
         this.selectCredType();
         this.fillUsername();
-        this.fillPassword();
+        this.fillPassword(withHash);
         if (!toBeCanceled) {
             submitForm();
             exists(this.name);
