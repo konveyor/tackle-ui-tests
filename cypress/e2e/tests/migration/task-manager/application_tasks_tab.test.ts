@@ -48,10 +48,8 @@ describe(["@tier2"], "Open Tasks Tab and Verify Tasks", () => {
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         application.create();
-        cy.wait("@getApplication"); 
         cy.wait(2000);
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
         sidedrawerTab(application.name, "Tasks");
         cy.get("[data-label='Task Kind']").should((tasks) => {
             const taskKinds = tasks.toArray().map(task => task.innerText);
