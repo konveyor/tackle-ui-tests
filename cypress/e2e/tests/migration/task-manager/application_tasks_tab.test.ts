@@ -52,8 +52,12 @@ describe(["@tier2"], "Open Tasks Tab and Verify Tasks", () => {
         application.analyze();
         sidedrawerTab(application.name, "Tasks");
         cy.get("[data-label='Task Kind']").should((tasks) => {
-            const taskKinds = tasks.toArray().map(task => task.innerText);
-            expect(taskKinds).to.include.members(["language-discovery", "tech-discovery", "analyzer"]);
+            const taskKinds = tasks.toArray().map((task) => task.innerText);
+            expect(taskKinds).to.include.members([
+                "language-discovery",
+                "tech-discovery",
+                "analyzer",
+            ]);
         });
     });
 
@@ -62,6 +66,6 @@ describe(["@tier2"], "Open Tasks Tab and Verify Tasks", () => {
     });
 
     after("Perform test data clean up", function () {
-        application.delete(); 
+        application.delete();
     });
 });
