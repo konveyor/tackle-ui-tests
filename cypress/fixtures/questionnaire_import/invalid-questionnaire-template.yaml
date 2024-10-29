@@ -90,7 +90,7 @@ sections:
             risk: green
             selected: false
 thresholds:
-  red: 5
+  red: "five"
   yellow: 10
   unknown: 15
 riskMessages:
