@@ -27,7 +27,16 @@ import {
     submitForm,
 } from "../../../../utils/utils";
 import { navMenu, navTab } from "../../../views/menu.view";
-import { button, controls, deleteAction, migration, SEC, tags, tdTag, trTag } from "../../../types/constants";
+import {
+    button,
+    controls,
+    deleteAction,
+    migration,
+    SEC,
+    tags,
+    tdTag,
+    trTag,
+} from "../../../types/constants";
 import { createTagCategoryButton, rankInput } from "../../../views/tags.view";
 import * as commonView from "../../../views/common.view";
 import { clickTags, fillName } from "./tags";
@@ -115,7 +124,7 @@ export class TagCategory {
     delete(cancel = false): void {
         // Opening tags list only if another tab is opened
         TagCategory.openList();
-       
+
         clickItemInKebabMenu(this.name, deleteAction);
         if (cancel) {
             click(commonView.confirmCancelButton);

@@ -62,7 +62,7 @@ export class Tag {
     tagCategory: string;
 
     constructor(name: string, tagCategory: string) {
-        this.name = name
+        this.name = name;
         this.tagCategory = tagCategory;
     }
 
