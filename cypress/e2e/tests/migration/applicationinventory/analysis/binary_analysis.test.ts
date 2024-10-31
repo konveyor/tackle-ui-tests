@@ -67,7 +67,7 @@ describe(["@tier1"], "Binary Analysis", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Binary Analysis", function () {
+    it("Bug MTA-4135: Binary Analysis", function () {
         // For binary analysis application must have group,artifcat and version.
         application = new Analysis(
             getRandomApplicationData("tackletestApp_binary", {
