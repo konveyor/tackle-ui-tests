@@ -26,8 +26,7 @@ import {
 } from "../../../../../utils/utils";
 import { GeneralConfig } from "../../../../models/administration/general/generalConfig";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { AnalysisStatuses, ReportTypeSelectors } from "../../../../types/constants";
-import { singleApplicationColumns } from "../../../../views/issue.view";
+import { AnalysisStatuses, ReportTypeSelectors, tdTag } from "../../../../types/constants";
 import { dependencies, issues, technologies } from "../../../../views/common.view";
 
 /**
@@ -80,10 +79,10 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
 
 describe(["@tier2"], "Test Static Report UI", function () {
     const reportData = {
-        name: "File system - Java IO",
+        name: "Adopt Maven Surefire plugin",
         category: "mandatory",
-        target: "cloud-readiness",
-        dependency: "com.fasterxml.classmate",
+        target: "quarkus",
+        dependency: "com.fasterxml.jackson.core.jackson-databind",
         technology: "EJB XML",
     };
 
@@ -92,46 +91,46 @@ describe(["@tier2"], "Test Static Report UI", function () {
     });
 
     it("Validate Application Menu", function () {
-        cy.get('td[data-label="Name"]').should("have.text", appName);
-        cy.get('td[data-label="Tags"]').eq(0).click();
-        validateTextPresence("td", reportData.technology);
-        cy.get('td[data-label="Incidents"]').should("contain.text", "2");
+        cy.get(tdTag).eq(0).should("have.text", appName);
+        cy.get(tdTag).eq(1).click(); // tags
+        validateTextPresence(tdTag, reportData.technology);
+        cy.get(tdTag).eq(2).should("contain.text", "10");
     });
 
     it("Validate Issues Tab", function () {
         cy.contains("a", appName).click();
         cy.contains("button > span", issues).click();
         selectItemsPerPage(100);
-        validateTextPresence(singleApplicationColumns.issue, reportData.name);
-        validateTextPresence(singleApplicationColumns.category, reportData.category);
-        validateTextPresence('td[data-label="Target"]', reportData.target);
+        validateTextPresence(tdTag, reportData.name);
+        validateTextPresence(tdTag, reportData.category);
+        validateTextPresence(tdTag, reportData.target);
     });
 
     it("Validate Dependencies Tab", function () {
         cy.contains("a", appName).click();
         cy.contains("button > span", dependencies).click();
         selectItemsPerPage(100);
-        validateTextPresence('td[data-label="Name"]', reportData.dependency);
+        validateTextPresence(tdTag, reportData.dependency);
     });
 
     it("Validate Technologies Tab", function () {
         cy.contains("a", appName).click();
         cy.contains("button > span", technologies).click();
-        validateTextPresence("article", reportData.technology);
+        validateTextPresence("div.pf-v5-c-label-group", reportData.technology);
     });
 
     it("Validate Issues Menu", function () {
         cy.contains("nav > ul > a", issues).click();
         selectItemsPerPage(100);
-        validateTextPresence(singleApplicationColumns.issue, reportData.name);
-        validateTextPresence(singleApplicationColumns.category, reportData.category);
-        validateTextPresence('td[data-label="Target"]', reportData.target);
+        validateTextPresence(tdTag, reportData.name);
+        validateTextPresence(tdTag, reportData.category);
+        validateTextPresence(tdTag, reportData.target);
     });
 
     it("Validate Dependencies Menu", function () {
         cy.contains("nav > ul > a", dependencies).click();
         selectItemsPerPage(100);
-        validateTextPresence('td[data-label="Name"]', reportData.dependency);
+        validateTextPresence(tdTag, reportData.dependency);
     });
 });
 
