@@ -86,7 +86,7 @@ describe(["@tier1"], "Source Analysis", () => {
         Application.open(true);
     });
 
-    it("Source + dependencies analysis on tackletest app", function () {
+    it("Bug MTA-4135: Source + dependencies analysis on tackletest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies", {
@@ -107,7 +107,7 @@ describe(["@tier1"], "Source Analysis", () => {
         );
     });
 
-    it("Source + dependencies analysis on daytrader app", function () {
+    it("Bug MTA-4135: Source + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies", {
@@ -248,7 +248,7 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.get("h2", { timeout: 5 * SEC }).should("contain", "No tags available");
     });
 
-    it("Analysis for Konveyor example1 application", function () {
+    it("Bug MTA-4135: Analysis for Konveyor example1 application", function () {
         // Automates https://github.com/konveyor/example-applications/tree/main/example-1
         const application = new Analysis(
             getRandomApplicationData("Example 1", {
@@ -349,7 +349,7 @@ describe(["@tier1"], "Source Analysis", () => {
     });
 
     // Automates bug MTA-3422
-    it("4 targets source analysis on tackle app public", function () {
+    it("Bug MTA-4135: 4 targets source analysis on tackle app public", function () {
         const application = new Analysis(
             getRandomApplicationData("tackle-public-4-targets", {
                 sourceData: this.appData["tackle-testapp-public"],
