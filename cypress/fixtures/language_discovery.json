@@ -1,0 +1,61 @@
+{
+    "languageDiscoveryData": [
+        {
+            "name": "java-language-maven-tooling-quarkus-framework",
+            "repoType": "Git",
+            "sourceRepo": "https://github.com/quarkusio/quarkus-super-heroes",
+            "sections_tags": {
+                "Language": ["Java"],
+                "Tooling": ["Maven"],
+                "Framework": ["Quarkus"]
+            }
+        },
+        {
+            "name": "java-ts-language-maven-nodeJS-tooling",
+            "repoType": "Git",
+            "sourceRepo": "https://github.com/pkaul/maven-typescript-example",
+            "sections_tags": {
+                "Language": ["Java", "TypeScript"],
+                "Tooling": ["Maven", "NodeJs", "Node.js"]
+            }
+        },
+        {
+            "name": "go-language-gin-framework",
+            "repoType": "Git",
+            "sourceRepo": "https://github.com/gothinkster/golang-gin-realworld-example-app",
+            "sections_tags": {
+                "Language": ["Go"],
+                "Framework": ["Gin"]
+            }
+        },
+        {
+            "name": "python-language-django-framework",
+            "repoType": "Git",
+            "sourceRepo": "https://github.com/Shopify/sample-django-app",
+            "sections_tags": {
+                "Language": ["Python"],
+                "Framework": ["Django"]
+            }
+        },
+        {
+            "name": "typescript-language-nodeJS-tooling-react-framework",
+            "repoType": "Git",
+            "sourceRepo": "https://github.com/CodelyTV/awesome-typescript-examples",
+            "sections_tags": {
+                "Language": ["TypeScript", "JavaScript"],
+                "Tooling": ["NodeJs", "Node.js"],
+                "Framework": ["React", "Express"]
+            }
+        },
+        {
+            "name": "java-Batchfile-languages-maven-tooling-spring+boot-framework",
+            "repoType": "Git",
+            "sourceRepo": "https://github.com/kirillesau/spring-demo-application",
+            "sections_tags": {
+                "Language": ["Java", "Batchfile"],
+                "Tooling": ["Maven"],
+                "Framework": ["Spring", "Spring Boot"]
+            }
+        }
+    ]
+}

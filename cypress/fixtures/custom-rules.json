@@ -21,6 +21,15 @@
             "rootPath": "custom-rules"
         }
     },
+    "rules_from_bug_3330": {
+        "image": "img/cloud.png",
+        "repository": {
+            "repositoryType": "git",
+            "repositoryUrl": "https://github.com/abrugaro/book-server",
+            "branch": "",
+            "rootPath": "bug-3330-rules"
+        }
+    },
     "hazelcast_target": {
         "image": "img/cloud.png",
         "rulesFiles": ["xml/hazelcast.windup.xml"]

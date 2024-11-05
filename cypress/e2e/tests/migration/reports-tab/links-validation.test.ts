@@ -36,7 +36,7 @@ let applicationsList: Array<Application> = [];
 let riskType = ["high", "medium", "low", "unknown"];
 
 // Automates Polarion TCs 429 & 430
-describe(["@tier2"], "Reports tab links validation tests", () => {
+describe(["@tier3"], "Reports tab links validation tests", () => {
     before("Login and Create Test Data", function () {
         login();
         deleteAllMigrationWaves();
@@ -44,7 +44,7 @@ describe(["@tier2"], "Reports tab links validation tests", () => {
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
         stakeholdersList = createMultipleStakeholders(1);
-        applicationsList = createMultipleApplications(4);
+        applicationsList = createMultipleApplications(5);
 
         for (let i = 0; i < riskType.length; i++) {
             applicationsList[i].perform_assessment(riskType[i], stakeholdersList);
@@ -58,9 +58,11 @@ describe(["@tier2"], "Reports tab links validation tests", () => {
     it("Risk links validation", function () {
         riskType.forEach((risk, i) => {
             Reports.open();
-            if (risk === "unknown")
-                cy.contains("a", `${risk}`, { matchCase: false, timeout: 10 * SEC }).click();
-            else cy.contains("a", `${risk} risk`, { matchCase: false, timeout: 10 * SEC }).click();
+            if (risk === "unknown") {
+                cy.contains("a", `${risk}`, { matchCase: false, timeout: 5 * SEC }).click();
+            } else {
+                cy.contains("a", `${risk} risk`, { matchCase: false, timeout: 5 * SEC }).click();
+            }
             cy.wrap(getTableColumnData(name)).then((appNames) =>
                 expect(appNames, `${risk} risk link validation`).to.be.deep.equal([
                     applicationsList[i].name,

@@ -51,7 +51,7 @@ let tagNames: string[];
 let bookServerApp: Analysis;
 let dayTraderApp: Analysis;
 
-describe(["@tier2"], "Dependency filtering", () => {
+describe(["@tier3"], "Dependency filtering", () => {
     before("Login", function () {
         login();
         businessServiceList = createMultipleBusinessServices(2);

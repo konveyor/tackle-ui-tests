@@ -25,7 +25,7 @@ import {
 } from "../../../../views/applicationinventory.view";
 import { helper } from "../../../../views/common.view";
 
-var applicationsList: Array<Application> = [];
+let applicationsList: Array<Application> = [];
 
 describe(["@tier3"], "Manage application dependencies", () => {
     before("Login and Create Test Data", function () {
@@ -34,8 +34,8 @@ describe(["@tier3"], "Manage application dependencies", () => {
     });
 
     it("Non-cyclic dependencies for applications", function () {
-        var northboundApps: Array<string> = [applicationsList[0].name];
-        var southboundApps: Array<string> = [applicationsList[2].name];
+        const northboundApps: Array<string> = [applicationsList[0].name];
+        const southboundApps: Array<string> = [applicationsList[2].name];
 
         // Add northbound and southbound dependencies for 2nd app from list
         applicationsList[1].addDependencies(northboundApps, southboundApps);
@@ -51,8 +51,8 @@ describe(["@tier3"], "Manage application dependencies", () => {
     });
 
     it("Bug MTA-2789: Cyclic dependencies for applications", function () {
-        var northboundApps: Array<string> = [applicationsList[0].name];
-        var southboundApps: Array<string> = [applicationsList[2].name];
+        const northboundApps: Array<string> = [applicationsList[0].name];
+        const southboundApps: Array<string> = [applicationsList[2].name];
 
         // Add northbound and southbound dependencies for 2nd app from list
         applicationsList[1].addDependencies(northboundApps, southboundApps);
@@ -76,7 +76,7 @@ describe(["@tier3"], "Manage application dependencies", () => {
         click(closeForm);
     });
 
-    after("Perform test data clean up", function () {
+    after("Bug MTA-2789: Perform test data clean up", function () {
         Application.open(true);
         deleteByList(applicationsList);
     });

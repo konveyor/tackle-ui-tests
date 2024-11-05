@@ -31,7 +31,7 @@ import * as data from "../../../../../utils/data_utils";
 import { getRulesData } from "../../../../../utils/data_utils";
 
 const applications: Analysis[] = [];
-describe(["@tier1"], "Source Analysis of big applications", () => {
+describe(["@tier2"], "Source Analysis of big applications", () => {
     before("Login", function () {
         login();
         deleteAllMigrationWaves();

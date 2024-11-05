@@ -18,6 +18,7 @@ import {
     analyzeAppButton,
     analyzeButton,
     button,
+    clearAllFilters,
     Languages,
     ReportTypeSelectors,
     RepositoryType,
@@ -32,6 +33,7 @@ import {
     clickByText,
     clickTab,
     clickWithin,
+    clickWithinByText,
     doesExistSelector,
     doesExistText,
     inputText,
@@ -68,8 +70,10 @@ import {
     expandAll,
     fileName,
     kebabTopMenuButton,
+    languageSelectionDropdown,
     manageCredentials,
     mavenCredential,
+    numberOfRulesColumn,
     openjdkToggleButton,
     panelBody,
     rightSideMenu,
@@ -82,7 +86,6 @@ import {
     kebabMenu,
 } from "../../../views/applicationinventory.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
-import { actionSelectToggle } from "../../../views/common.view";
 
 export class Analysis extends Application {
     name: string;
@@ -110,6 +113,7 @@ export class Analysis extends Application {
         information?: number;
         total?: number;
     };
+    ruleFileToQuantity?: { [id: string]: number };
 
     constructor(appData: applicationData, analysisData: analysisData) {
         super(appData);
@@ -136,6 +140,7 @@ export class Analysis extends Application {
             openSourceLibraries,
             customRuleRepository,
             language,
+            ruleFileToQuantity,
         } = analysisData;
         this.name = appData.name;
         this.source = source;
@@ -156,6 +161,7 @@ export class Analysis extends Application {
         if (incidents) this.incidents = incidents;
         if (openSourceLibraries) this.openSourceLibraries = openSourceLibraries;
         if (language) this.language = language;
+        if (ruleFileToQuantity) this.ruleFileToQuantity = ruleFileToQuantity;
     }
 
     public selectSourceofAnalysis(source: string): void {
@@ -168,26 +174,20 @@ export class Analysis extends Application {
      */
     public static selectLanguage(language: Languages, removePreSelected = false) {
         cy.wait(2 * SEC);
-        click(actionSelectToggle);
 
         if (removePreSelected) {
-            cy.get("#filter-by-language input[type=checkbox]").each(($checkbox) => {
-                cy.wrap($checkbox).then((checkbox) => {
-                    if (checkbox.is(":checked")) {
-                        cy.wrap($checkbox).uncheck();
-                    }
-                });
-            });
+            clickWithinByText(".pf-v5-c-wizard__main-body", "button", clearAllFilters);
         }
 
-        // find the language's input checkbox and make sure it is checked
-        cy.get(`${actionSelectToggle} + .pf-v5-c-menu`)
+        cy.get(languageSelectionDropdown).click();
+
+        cy.get(`#filter-control-name-select-typeahead-listbox > li`)
             .contains(language)
             .closest(".pf-v5-c-menu__list-item")
             .find("input[type=checkbox]")
             .check();
 
-        click(actionSelectToggle);
+        cy.get(languageSelectionDropdown).click();
     }
 
     public selectTarget(target: string[]): void {
@@ -391,7 +391,7 @@ export class Analysis extends Application {
         });
     }
 
-    private static verifyStatus(element: Cypress.Chainable, status: string) {
+    public static verifyStatus(element: Cypress.Chainable, status: string) {
         element
             .find("div > div:nth-child(2)", { timeout: 3600000, log: false }) // 1h
             .should("not.have.text", AnalysisStatuses.notStarted)
@@ -534,6 +534,27 @@ export class Analysis extends Application {
                 `Error: File "${this.customRule[i]}" is not a valid XML: `
             );
             cy.contains(addRules, "Add", { timeout: 2000 }).should("not.be.enabled");
+        }
+        cy.get(closeWizard).click({ force: true });
+    }
+
+    // verifyRulesNumber verifies the number of rules found in an uploaded custom rules file
+    public verifyRulesNumber(): void {
+        Application.open();
+        this.selectApplication();
+        cy.contains(button, analyzeButton).should("be.enabled").click();
+        this.selectSourceofAnalysis(this.source);
+        next();
+        next();
+        next();
+        this.uploadCustomRule();
+        for (let fileName in this.ruleFileToQuantity) {
+            const numOfrules = this.ruleFileToQuantity[fileName];
+            cy.get(trTag)
+                .filter(':contains("' + fileName + '")')
+                .within(() => {
+                    cy.get(numberOfRulesColumn).contains(numOfrules.toString());
+                });
         }
         cy.get(closeWizard).click({ force: true });
     }

@@ -37,7 +37,7 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 let stakeholders: Stakeholders[];
 const yamlFile = "questionnaire_import/cloud-native.yaml";
 
-describe(["@tier1"], "Application assessment and review tests", () => {
+describe(["@tier2"], "Application assessment and review tests", () => {
     before("Login and Create Test Data", function () {
         login();
         // This test will fail if there are preexisting questionnaire.

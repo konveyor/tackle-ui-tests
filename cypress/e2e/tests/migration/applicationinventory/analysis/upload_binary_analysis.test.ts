@@ -23,7 +23,7 @@ import {
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
-import { AnalysisStatuses } from "../../../../types/constants";
+import { AnalysisStatuses, SEC } from "../../../../types/constants";
 
 const applicationsList: Analysis[] = [];
 describe(["@tier1"], "Upload Binary Analysis", () => {
@@ -40,6 +40,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         });
 
         cy.intercept("GET", "/hub/application*").as("getApplication");
+        Application.open(true);
     });
 
     it(["@interop"], "Analysis for acmeair app upload binary", function () {
@@ -54,6 +55,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
 
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyEffort(this.analysisData["uploadbinary_analysis_on_acmeair"]["effort"]);
     });
 
     it("Custom rules with custom targets", function () {
@@ -66,9 +68,11 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         applicationsList.push(application);
         cy.wait("@getApplication");
         cy.wait(2000);
-
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyEffort(
+            this.analysisData["uploadbinary_analysis_with_customrule"]["effort"]
+        );
     });
 
     it("Analysis for spring-petclinic application", function () {
@@ -97,7 +101,10 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(
+            this.analysisData["analysis_and_incident_validation_jeeExample_app"]["effort"]
+        );
     });
 
     it("Analysis for camunda-bpm-spring-boot-starter", function () {
@@ -110,7 +117,10 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(
+            this.analysisData["analysis_and_incident_validation_camunda_app"]["effort"]
+        );
     });
 
     it("Analysis for kafka-clients-sb app ", function () {
@@ -124,6 +134,9 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyEffort(
+            this.analysisData["analysis_and_incident_validation_kafka-app"]["effort"]
+        );
     });
 
     it(["@tier2", "@dc"], "upload_binary_with_exculde_packages_scope", function () {

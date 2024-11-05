@@ -214,4 +214,23 @@ export enum Languages {
 }
 
 export const itemsPerPage = 100;
-export const succeeded = "Succeeded";
+
+export enum TaskStatus {
+    succeeded = "Succeeded",
+    pending = "Pending",
+    running = "Running",
+}
+
+export enum TaskKind {
+    analyzer = "analyzer",
+    techDiscovery = "tech-discovery",
+    languageDiscovery = "language-discovery",
+}
+
+export enum TaskFilter {
+    applicationName = "Application",
+    id = "ID",
+    status = "Status",
+    kind = "Kind",
+    createdBy = "Created By",
+}

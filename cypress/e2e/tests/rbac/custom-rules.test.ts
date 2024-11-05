@@ -31,7 +31,7 @@ import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { User } from "../../models/keycloak/users/user";
 
-describe(["@tier2"], "Custom Rules RBAC operations", function () {
+describe(["@tier1"], "Custom Rules RBAC operations", function () {
     // Polarion TC 318
 
     /**

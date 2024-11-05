@@ -32,7 +32,7 @@ let businessServicesList: Array<BusinessServices> = [];
 let stakeholdersList: Array<Stakeholders> = [];
 let invalidSearchInput = String(data.getRandomNumber());
 
-describe(["@tier2"], "Business services filter validations", function () {
+describe(["@tier3"], "Business services filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
         stakeholdersList = createMultipleStakeholders(3);

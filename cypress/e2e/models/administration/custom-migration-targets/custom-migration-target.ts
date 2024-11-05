@@ -25,7 +25,7 @@ import {
     sourcesToggle,
 } from "../../../views/custom-migration-target.view";
 import { RulesManualFields, RulesRepositoryFields } from "../../../types/types";
-import { actionSelectToggle, submitButton } from "../../../views/common.view";
+import { submitButton } from "../../../views/common.view";
 
 export interface CustomMigrationTarget {
     name: string;
@@ -110,10 +110,12 @@ export class CustomMigrationTarget {
     }
 
     public static uploadImage(imagePath: string, input = false) {
-        cy.get(CustomMigrationTargetView.imageInput).attachFile(
-            { filePath: imagePath },
-            { subjectType: input ? "input" : "drag-n-drop" }
-        );
+        cy.get("div[class='pf-v5-c-file-upload__file-details']")
+            .next('input[type="file"]', { timeout: 2 * SEC })
+            .selectFile(`cypress/fixtures/${imagePath}`, {
+                timeout: 120 * SEC,
+                force: true,
+            });
     }
 
     private static fillForm(values: Partial<CustomMigrationTarget>) {
@@ -143,7 +145,7 @@ export class CustomMigrationTarget {
 
     public static selectLanguage(language: Languages) {
         CustomMigrationTarget.open();
-        cy.get(actionSelectToggle, { timeout: 30 * SEC }).click();
+        cy.get(CustomMigrationTargetView.languageDropdown, { timeout: 30 * SEC }).click();
         clickByText("button", language);
     }
 

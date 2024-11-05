@@ -30,9 +30,9 @@ import { deleteByList } from "../../../../../utils/utils";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 
-describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
+describe(["@tier2"], "Custom Rules in analyses", function () {
     const applications: Analysis[] = [];
-    let tackleTestappName: string;
+    let tackleTestapp: Analysis;
     let sourceCredential: CredentialsSourceControlUsername;
     let mavenCredential: CredentialsMaven;
 
@@ -80,10 +80,13 @@ describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
 
     it("Verify triggered rule", function () {
         const app = new Analysis(
-            getRandomApplicationData("customRule_customTarget"),
-            getRandomAnalysisData(
-                this.analysisData["upload_binary_analysis_on_jee_app_custom_rules"]
-            )
+            getRandomApplicationData("jee-example-app custom rule"),
+            getRandomAnalysisData({
+                source: "Upload a local binary",
+                target: ["Application server migration to"],
+                binary: ["jee-example-app-1.0.0.ear"],
+                customRule: ["basic-custom-rule.xml"],
+            })
         );
         Application.open();
         applications.push(app);
@@ -95,14 +98,14 @@ describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
     });
 
     // Automates Bug MTA-2001
-    it("Verify triggered rule for dependency", function () {
+    it("Bug MTA-3863: Verify triggered rule for dependency", function () {
         const app = new Analysis(
             getRandomApplicationData("tackle-testapp-custom-rules", {
                 sourceData: this.appData["tackle-testapp-git"],
             }),
             getRandomAnalysisData(this.analysisData["tackle_test_app_custom_rules"])
         );
-        tackleTestappName = app.name;
+        tackleTestapp = app;
         Application.open();
         applications.push(app);
         app.create();
@@ -115,8 +118,13 @@ describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
 
     // Automates Bug MTA-2000
     it("Verify triggered rule for javax.* package import", function () {
-        Issues.openSingleApplication(tackleTestappName);
+        Issues.openSingleApplication(tackleTestapp.name);
         exists("CUSTOM RULE for javax.* package import");
+    });
+
+    // Automates Bug MTA-2003
+    it("Verify number of rules detected in uploaded yaml file", function () {
+        tackleTestapp.verifyRulesNumber();
     });
 
     it("Verify a file is not a valid XML", function () {
@@ -127,7 +135,22 @@ describe(["@tier2"], "Bug MTA-2015: Custom Rules in analyses", function () {
             getRandomAnalysisData(this.analysisData["tackle_testapp_fileNotValidXML"])
         );
         app.create();
+        applications.push(app);
         app.verifyFileNotValidXML();
+    });
+
+    it("Python custom rules file analysis", function () {
+        const app = new Analysis(
+            getRandomApplicationData("python-app-custom-rules", {
+                sourceData: this.appData["python-demo-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["python_demo_application"])
+        );
+        applications.push(app);
+        app.create();
+        app.analyze();
+        app.verifyAnalysisStatus(AnalysisStatuses.completed);
+        // TODO: add assertion to check if rules fired once obtained a rules file
     });
 
     after("Clear test data", function () {

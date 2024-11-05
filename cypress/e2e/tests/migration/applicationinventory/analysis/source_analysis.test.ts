@@ -34,6 +34,7 @@ import * as data from "../../../../../utils/data_utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsSourceControlKey } from "../../../../models/administration/credentials/credentialsSourceControlKey";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { AppIssue } from "../../../../types/types";
 let source_credential: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;
 let applicationsList: Array<Analysis> = [];
@@ -89,6 +90,9 @@ describe(["@tier1"], "Source Analysis", () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(
+            this.analysisData["source+dep_analysis_on_tackletestapp"]["effort"]
+        );
     });
 
     it("Source + dependencies analysis on daytrader app", function () {
@@ -224,6 +228,7 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.wait("@getApplication");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(this.analysisData["analysis_for_disableTagging"]["effort"]);
         application.applicationDetailsTab("Tags");
         cy.get("h2", { timeout: 5 * SEC }).should("contain", "No tags available");
     });
@@ -243,7 +248,7 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
         application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyAnalysisStatus("Completed");
         // Polarion TC 406
         application.verifyEffort(this.analysisData["analysis_on_example-1-app"]["effort"]);
     });
@@ -326,6 +331,71 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
+    });
+
+    // Automates bug MTA-3422
+    it("4 targets source analysis on tackle app public", function () {
+        const application = new Analysis(
+            getRandomApplicationData("tackle-public-4-targets", {
+                sourceData: this.appData["tackle-testapp-public"],
+            }),
+            getRandomAnalysisData(this.analysisData["tackle-testapp-public-4-targets"])
+        );
+        cy.wait(2 * SEC);
+        Application.open();
+        application.create();
+        applicationsList.push(application);
+        cy.wait(5 * SEC);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(this.analysisData["tackle-testapp-public-4-targets"]["effort"]);
+    });
+
+    // Automates customer bug MTA-2973
+    it("Bug MTA-3163: Source analysis on tackle app public with custom rule", function () {
+        const applicationList = [
+            new Analysis(
+                getRandomApplicationData("tackle-public-customRule", {
+                    sourceData: this.appData["tackle-testapp-public"],
+                }),
+                getRandomAnalysisData(this.analysisData["tackle-testapp-public-customRule"])
+            ),
+        ];
+
+        // Analysis application with maven credential
+        cy.wait(2 * SEC);
+        Application.open();
+        applicationList[0].create();
+        applicationList[0].manageCredentials(null, maven_credential.name);
+        applicationsList.push(applicationList[0]);
+        cy.wait(5 * SEC);
+        applicationList[0].analyze();
+        applicationList[0].verifyAnalysisStatus("Completed");
+        applicationList[0].validateIssues(
+            this.analysisData["tackle-testapp-public-customRule"]["issues"]
+        );
+        this.analysisData["tackle-testapp-public-customRule"]["issues"].forEach(
+            (currentIssue: AppIssue) => {
+                applicationList[0].validateAffected(currentIssue);
+            }
+        );
+
+        // Analysis application without maven credential
+        cy.wait(2 * SEC);
+        Application.open();
+        applicationList[1].create();
+        applicationsList.push(applicationList[0]);
+        cy.wait(5 * SEC);
+        applicationList[1].analyze();
+        applicationList[1].verifyAnalysisStatus("Completed");
+        applicationList[1].validateIssues(
+            this.analysisData["tackle-testapp-public-customRule"]["issues"]
+        );
+        this.analysisData["tackle-testapp-public-customRule"]["issues"].forEach(
+            (currentIssue: AppIssue) => {
+                applicationList[1].validateAffected(currentIssue);
+            }
+        );
     });
 
     after("Perform test data clean up", function () {

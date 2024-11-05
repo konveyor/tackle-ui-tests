@@ -21,7 +21,7 @@ import { CredentialsSourceControlKey } from "../../../models/administration/cred
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
 import { CredentialType, UserCredentials } from "../../../types/constants";
 
-describe(["@tier1"], "Validation of Source Control Credentials", () => {
+describe(["@tier2"], "Validation of Source Control Credentials", () => {
     let scCredsUsername;
     let scCredsKey;
     const toBeCanceled = true;

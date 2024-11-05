@@ -64,6 +64,7 @@
         "sourceRepo": "https://github.com/konveyor/tackle-testapp-public",
         "branch": "feature/test-java9-removed-packagek"
     },
+<<<<<<< HEAD
     "Java_language_maven_tooling_quarkus_framework": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/quarkusio/quarkus-super-heroes"
@@ -72,8 +73,22 @@
         "repoType": "Git",
         "sourceRepo": "https://github.com/pkaul/maven-typescript-example"
     },
+=======
+>>>>>>> 770d99d305e231bb9c4c5952e54bbbe6f6b3bc03
     "java-example-app": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/ibraginsky/book-server"
+    },
+    "tackle-testapp-public": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/konveyor/tackle-testapp-public"
+    },
+    "jmh-gradle-example": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/melix/jmh-gradle-example"
+    },
+    "python-demo-app": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/Shopify/sample-django-app"
     }
 }

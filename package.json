@@ -5,12 +5,12 @@
     "main": "index.js",
     "repository": "https://github.com/konveyor/tackle-ui-tests.git",
     "dependencies": {
-        "cypress-drag-drop": "^1.1.1",
         "cypress-file-upload": "^5.0.8",
         "cypress-grep": "^2.5.3",
         "cypress-log-filter": "^1.0.4",
         "cypress-multi-reporters": "^1.5.0",
         "cypress-react-selector": "^2.3.17",
+        "cypress-real-events": "^1.13.0",
         "cypress-xpath": "^1.6.2",
         "decompress": "^4.2.1",
         "faker": "^5.5.3",
@@ -29,11 +29,10 @@
         "mergereports": "npx jrm ./cypress/reports/junitreport.xml ./cypress/reports/junit/*.xml"
     },
     "devDependencies": {
-        "@4tw/cypress-drag-drop": "^2.2.3",
         "@testing-library/cypress": "^10.0.1",
         "@types/node": "^20.1.0",
         "cy-verify-downloads": "^0.1.13",
-        "cypress": "^13.6.4",
+        "cypress": "^13.13.3",
         "cypress-downloadfile": "^1.2.3",
         "cypress-fail-fast": "^7.1.0",
         "cypress-mochawesome-reporter": "^3.2.2",

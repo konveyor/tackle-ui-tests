@@ -29,7 +29,7 @@ import { button, clearAllFilters, name } from "../../../types/constants";
 
 let archetypeList: Archetype[];
 
-describe(["@tier2"], "Archetype filter validation", () => {
+describe(["@tier3"], "Archetype filter validation", () => {
     before("Login", function () {
         login();
         archetypeList = createMultipleArchetypes(2);

@@ -102,10 +102,7 @@ import {
     tagFilterName,
 } from "../e2e/views/issue.view";
 import { Archetype } from "../e2e/models/migration/archetypes/archetype";
-import {
-    MigrationWaveView,
-    getSpecialMigrationWavesTableSelector,
-} from "../e2e/views/migration-wave.view";
+import { MigrationWaveView } from "../e2e/views/migration-wave.view";
 import {
     codeEditorControls,
     manageCredentials,
@@ -690,8 +687,9 @@ export function notExistsWithinRow(
 export function importApplication(fileName: string, disableAutoCreation?: boolean): void {
     // Performs application import via csv file upload
     application_inventory_kebab_menu("Import");
-    cy.get("#file-filename", { timeout: 2 * SEC }).attachFile(fileName, {
-        subjectType: "drag-n-drop",
+    cy.get('input[type="file"]', { timeout: 2 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
+        timeout: 120 * SEC,
+        force: true,
     });
     //Uncheck createEntitiesCheckbox if auto creation of entities is disabled
     if (disableAutoCreation)
@@ -707,24 +705,24 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
 }
 
 export function uploadXml(fileName: string, selector = 'input[type="file"]'): void {
-    cy.get(selector, { timeout: 5 * SEC }).attachFile(
-        { filePath: fileName, mimeType: "text/xml", encoding: "utf-8" },
-        { subjectType: "drag-n-drop" }
-    );
+    cy.get(selector, { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
+        timeout: 120 * SEC,
+        force: true,
+    });
     cy.wait(2000);
 }
 
 export function uploadApplications(fileName: string): void {
     cy.get('input[type="file"]', { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
-        action: "drag-drop",
         timeout: 120 * SEC,
         force: true,
     });
 }
 
 export function uploadFile(fileName: string): void {
-    cy.get('input[type="file"]', { timeout: 5 * SEC }).attachFile(fileName, {
-        subjectType: "drag-n-drop",
+    cy.get('input[type="file"]', { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
+        timeout: 120 * SEC,
+        force: true,
     });
     cy.wait(2000);
 }
@@ -813,7 +811,7 @@ export function clickKebabMenuOptionArchetype(rowItem: string, itemName: string)
         .within(() => {
             click(sideKebabMenu);
         });
-    cy.get(commonView.actionMenuItem).contains(itemName).click();
+    cy.get(commonView.actionMenuItem).contains(itemName).click({ force: true });
 }
 
 export function createMultipleJiraConnections(
@@ -1093,6 +1091,7 @@ export function getRandomAnalysisData(analysisdata): analysisData {
         excludedPackagesList: analysisdata.excludedPackagesList,
         incidents: analysisdata.incidents,
         openSourceLibraries: analysisdata.openSourceLibraries,
+        ruleFileToQuantity: analysisdata.ruleFileToQuantity,
     };
 }
 
@@ -1216,7 +1215,7 @@ export function isTableEmpty(
 }
 
 export function deleteAllRows(tableSelector: string = commonView.commonTable) {
-    // This method if for pages that have delete button inside Kebab menu
+    // This method is for pages that have delete button inside Kebab menu
     // like Applications and Imports page
     isTableEmpty().then((empty) => {
         if (!empty) {
@@ -1260,7 +1259,7 @@ export function deleteAllItems(
     tableSelector: string = commonView.commonTable,
     pageNumber?: number
 ) {
-    // This method if for pages like controls that do not have delete button inside kebabmenu
+    // This method is for pages like controls that do not have delete button inside kebabmenu
     if (pageNumber) {
         goToPage(pageNumber);
     }
@@ -1298,7 +1297,7 @@ export function deleteAllStakeholderGroups(cancel = false): void {
 
 export function deleteAllStakeholders(): void {
     Stakeholders.openList();
-    deleteAllItems(stakeHoldersTable);
+    deleteAllRows(stakeHoldersTable);
 }
 
 export function deleteAllArchetypes() {
@@ -1376,7 +1375,7 @@ export function goToPage(page: number): void {
 
 export function selectUserPerspective(userType: string): void {
     cy.get(commonView.optionMenu).click();
-    cy.get(commonView.actionMenuItem).contains(userType).click();
+    cy.get(commonView.actionMenuItem).contains(userType).click({ force: true });
 }
 
 export function selectWithinModal(selector: string): void {
@@ -1852,11 +1851,16 @@ export function validateTackleCr(): void {
     });
 }
 
-export function validateTackleOperatorLog(): void {
+export function validateMtaOperatorLog(): void {
     cy.wait(30 * SEC);
     let command = `oc logs $(oc get pods | grep mta-operator | cut -d " " -f 1) | grep failed | tail -n 1| awk -F 'failed=' '{print $2}'|cut -d " " -f 1`;
     getCommandOutput(command).then((result) => {
         const failedCount = parseInt(result.stdout.trim());
+        if (Number.isNaN(failedCount)) {
+            throw `Debugging output\n
+            result.stdout: ${result.stdout}EOV\n
+            failedCount: ${failedCount}EOV`;
+        }
         expect(failedCount).equal(0);
     });
 }

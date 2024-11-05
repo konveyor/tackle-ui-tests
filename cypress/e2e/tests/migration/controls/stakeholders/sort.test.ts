@@ -37,7 +37,7 @@ let stakeholdersList: Array<Stakeholders> = [];
 let jobFunctionsList: Array<Jobfunctions> = [];
 let stakeholderGroupList: Array<Stakeholdergroups> = [];
 
-describe(["@tier2"], "Stakeholder sort validations", function () {
+describe(["@tier3"], "Stakeholder sort validations", function () {
     before("Login and Create Test Data", function () {
         login();
         jobFunctionsList = createMultipleJobFunctions(2);

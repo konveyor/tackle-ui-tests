@@ -18,7 +18,6 @@ import {
     stakeholders,
     button,
     createNewButton,
-    editAction,
     deleteAction,
     migration,
     SEC,
@@ -42,6 +41,8 @@ import {
     cancelForm,
     performRowAction,
     selectUserPerspective,
+    performRowActionByIcon,
+    clickItemInKebabMenu,
 } from "../../../../utils/utils";
 import * as commonView from "../../../views/common.view";
 
@@ -50,7 +51,7 @@ export class Stakeholders {
     email: string;
     jobfunction: string;
     groups: Array<string>;
-    static fullUrl = Cypress.env("tackleUrl") + "controls/stakeholders";
+    static fullUrl = Cypress.env("tackleUrl") + "/controls/stakeholders";
 
     constructor(email: string, name: string, jobfunction?: string, groups?: Array<string>) {
         this.email = email;
@@ -59,7 +60,16 @@ export class Stakeholders {
         if (groups) this.groups = groups;
     }
 
-    public static openList(itemsPerPage = 100): void {
+    public static openList(forceReload = false): void {
+        if (forceReload) {
+            cy.visit(Stakeholders.fullUrl, { timeout: 35 * SEC }).then((_) => {
+                cy.wait(10 * SEC);
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", "Controls");
+                selectItemsPerPage(100);
+            });
+            return;
+        }
+
         cy.url().then(($url) => {
             if ($url != Stakeholders.fullUrl) {
                 selectUserPerspective(migration);
@@ -69,7 +79,7 @@ export class Stakeholders {
             }
         });
         cy.get("h1", { timeout: 30 * SEC }).should("contain.text", "Controls");
-        selectItemsPerPage(itemsPerPage);
+        selectItemsPerPage(100);
     }
 
     protected fillName(name: string): void {
@@ -97,7 +107,7 @@ export class Stakeholders {
     }
 
     removeJobfunction(): void {
-        performRowAction(this.email, editAction);
+        performRowActionByIcon(this.email, commonView.pencilIcon);
         click(removeJobFunction);
         submitForm();
     }
@@ -132,7 +142,7 @@ export class Stakeholders {
         Stakeholders.openList();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowAction(this.email, editAction);
+        performRowActionByIcon(this.email, commonView.pencilIcon);
         if (cancel) {
             cancelForm();
         } else {
@@ -158,7 +168,7 @@ export class Stakeholders {
 
     delete(cancel = false): void {
         Stakeholders.openList();
-        performRowAction(this.email, deleteAction);
+        clickItemInKebabMenu(this.email, deleteAction);
         if (cancel) {
             click(commonView.confirmCancelButton);
         } else {

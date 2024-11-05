@@ -33,7 +33,7 @@ import { BusinessServices } from "../../../../models/migration/controls/business
 var stakeholdersList: Array<Stakeholders> = [];
 var businessServicesList: Array<BusinessServices> = [];
 
-describe(["@tier2"], "Business services sort validations", function () {
+describe(["@tier3"], "Business services sort validations", function () {
     before("Login and Create Test Data", function () {
         login();
         stakeholdersList = createMultipleStakeholders(2);
