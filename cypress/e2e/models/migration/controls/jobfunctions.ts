@@ -34,8 +34,6 @@ import {
     cancelForm,
     performRowAction,
     selectUserPerspective,
-    performRowActionByIcon,
-    clickItemInKebabMenu,
 } from "../../../../utils/utils";
 import * as commonView from "../../../views/common.view";
 
@@ -78,7 +76,7 @@ export class Jobfunctions {
         Jobfunctions.openList();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowActionByIcon(this.name, commonView.pencilIcon);
+        performRowAction(this.name, editAction);
 
         if (cancel) {
             cancelForm();
@@ -93,7 +91,7 @@ export class Jobfunctions {
 
     delete(cancel = false): void {
         Jobfunctions.openList();
-        clickItemInKebabMenu(this.name, deleteAction);
+        performRowAction(this.name, deleteAction);
         if (cancel) {
             click(commonView.confirmCancelButton);
         } else {
