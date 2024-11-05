@@ -89,12 +89,6 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         applications = createMultipleApplications(2, ["Language / Java", "Runtime / Quarkus"]);
         Archetype.verifyColumnValue(archetype.name, "Applications", "2 applications");
         selectRow(archetype.name);
-        cy.get("span.pf-v5-c-description-list__text")
-            .contains("Applications")
-            .closest("div")
-            .within(() => {
-                click("a");
-            });
         exists(applications[0].name);
         exists(applications[1].name);
         deleteByList(applications);
