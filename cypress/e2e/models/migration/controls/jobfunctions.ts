@@ -17,8 +17,9 @@ import {
     cancelForm,
     click,
     clickByText,
+    clickItemInKebabMenu,
     inputText,
-    performRowAction,
+    performRowActionByIcon,
     selectItemsPerPage,
     selectUserPerspective,
     submitForm,
@@ -28,7 +29,6 @@ import {
     controls,
     createNewButton,
     deleteAction,
-    editAction,
     jobFunctions,
     migration,
     SEC,
@@ -76,7 +76,7 @@ export class Jobfunctions {
         Jobfunctions.openList();
         selectItemsPerPage(100);
         cy.wait(2000);
-        performRowAction(this.name, editAction);
+        performRowActionByIcon(this.name, commonView.pencilIcon);
 
         if (cancel) {
             cancelForm();
@@ -91,7 +91,7 @@ export class Jobfunctions {
 
     delete(cancel = false): void {
         Jobfunctions.openList();
-        performRowAction(this.name, deleteAction);
+        clickItemInKebabMenu(this.name, deleteAction);
         if (cancel) {
             click(commonView.confirmCancelButton);
         } else {
