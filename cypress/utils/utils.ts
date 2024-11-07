@@ -298,7 +298,7 @@ export function selectRow(name: string): void {
     // Clicks on a particular row on any table
     cy.get(tdTag, { timeout: 10 * SEC })
         .contains(name)
-        .parent(trTag)
+        .closest(trTag)
         .click();
 }
 
