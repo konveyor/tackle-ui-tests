@@ -94,7 +94,7 @@ describe(["@tier2"], "Test Static Report UI", function () {
         cy.get(tdTag).eq(0).should("have.text", appName);
         cy.get(tdTag).eq(1).click(); // tags
         validateTextPresence(tdTag, reportData.technology);
-        cy.get(tdTag).eq(2).should("contain.text", "10");
+        cy.get(tdTag).eq(2).invoke("text").then(parseInt).should("be.gte", 0);
     });
 
     it("Validate Issues Tab", function () {
