@@ -78,7 +78,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
         exists("CUSTOM RULE");
     });
 
-    it("Bug MTA-4126: Verify triggered rule", function () {
+    it("Verify triggered rule", function () {
         const app = new Analysis(
             getRandomApplicationData("jee-example-app custom rule"),
             getRandomAnalysisData({
@@ -117,7 +117,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
     });
 
     // Automates Bug MTA-2000
-    it("Bug MTA-4126: Verify triggered rule for javax.* package import", function () {
+    it("Verify triggered rule for javax.* package import", function () {
         Issues.openSingleApplication(tackleTestapp.name);
         exists("CUSTOM RULE for javax.* package import");
     });
