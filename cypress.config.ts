@@ -54,7 +54,6 @@ export default defineConfig({
             require("./cypress/plugins/index.js")(on, config);
             on("file:preprocessor", tagify(config));
             require("cypress-fail-fast/plugin")(on, config);
-            require("cypress-fs/plugins")(on, config);
             return config;
         },
         experimentalMemoryManagement: true,
