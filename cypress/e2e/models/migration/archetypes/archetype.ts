@@ -229,8 +229,14 @@ export class Archetype {
 
     validateAssessmentField(risk: string): void {
         Archetype.open(true);
-        Assessment.validateAssessmentField(this.name, "Archetype", risk);
+        cy.get(tdTag, { timeout: 10 * SEC })
+            .contains(this.name)
+            .click();
+        cy.get(commonView.sideDrawer.risk).contains("Archetype risk");
+        cy.get(commonView.sideDrawer.labelContent).should("contain", risk);
+        click(commonView.sideDrawer.closeDrawer);
     }
+
     validateReviewDonutChart(): void {
         Archetype.open();
         clickKebabMenuOptionArchetype(this.name, review);
