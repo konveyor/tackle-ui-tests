@@ -25,6 +25,7 @@ import {
     autoPageChangeValidations,
 } from "../../../../../utils/utils";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
+import { appTable } from "../../../../views/common.view";
 
 describe(["@tier3"], "Stakeholder groups pagination validations", function () {
     before("Login and Create Test Data", function () {
@@ -56,7 +57,7 @@ describe(["@tier3"], "Stakeholder groups pagination validations", function () {
         Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
         selectItemsPerPage(10);
-        autoPageChangeValidations();
+        autoPageChangeValidations(appTable, "Name", true);
     });
 
     after("Perform test data clean up", function () {
