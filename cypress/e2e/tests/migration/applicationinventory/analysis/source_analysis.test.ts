@@ -248,7 +248,7 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.get("h2", { timeout: 5 * SEC }).should("contain", "No tags available");
     });
 
-    it("Bug MTA-4135: Analysis for Konveyor example1 application", function () {
+    it("Analysis for Konveyor example1 application", function () {
         // Automates https://github.com/konveyor/example-applications/tree/main/example-1
         const application = new Analysis(
             getRandomApplicationData("Example 1", {
