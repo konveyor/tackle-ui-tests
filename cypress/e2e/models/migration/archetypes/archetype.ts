@@ -233,7 +233,7 @@ export class Archetype {
             .contains(this.name)
             .click();
         cy.get(commonView.sideDrawer.risk).contains("Archetype risk");
-        cy.get(commonView.sideDrawer.labelContent).contains(risk);
+        cy.get(commonView.sideDrawer.labelContent).should("contain", risk);
         click(commonView.sideDrawer.closeDrawer);
     }
 
