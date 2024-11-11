@@ -13,13 +13,17 @@ import {
     sampleQuestionnaireTemplate,
 } from "../../../types/constants";
 import { alertTitle } from "../../../views/common.view";
+import "cypress-fs";
+
 import { closeModal } from "../../../views/assessment.view";
 const filePath = "cypress/downloads/questionnaire-template.yaml";
 const yaml = require("js-yaml");
 const yamlFile = "questionnaire_import/questionnaire-template-sample.yaml";
 const invalidYamlFile = "questionnaire_import/invalid-questionnaire-template.yaml";
 const cloudNativePath = "questionnaire_import/cloud-native.yaml";
-const cloudNativeDownloadPath = "cypress/downloads/questionnaire-2.yaml";
+
+const cloudNativeDownloadPath = "cypress/downloads/";
+
 describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
     before("Login", function () {
         login();
@@ -98,12 +102,26 @@ describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
 
         AssessmentQuestionnaire.import(cloudNativePath);
         AssessmentQuestionnaire.export(cloudNative);
-        cy.readFile(cloudNativeDownloadPath).then((fileContent) => {
-            const updatedContent = AssessmentQuestionnaire.updateYamlContent(
-                fileContent,
-                cloudNative
-            );
-            cy.writeFile(fixturesPath, updatedContent);
+
+        cy.fsReadDir(cloudNativeDownloadPath).then((filesList) => {
+            const matchedFiles = filesList
+                .filter((file) => file.startsWith("questionnaire-") && file.endsWith(".yaml"))
+                .map((file) => ({
+                    file,
+                    number: parseInt(file.match(/-(\d+)\.yaml$/)?.[1], 10),
+                }))
+                .filter((file) => !isNaN(file.number))
+                .sort((a, b) => b.number - a.number);
+
+            const latestFileName = matchedFiles.length > 0 ? matchedFiles[0].file : null;
+            const filePath = `${cloudNativeDownloadPath}/${latestFileName}`;
+            cy.readFile(filePath).then((fileContent) => {
+                const updatedContent = AssessmentQuestionnaire.updateYamlContent(
+                    fileContent,
+                    cloudNative
+                );
+                cy.writeFile(fixturesPath, updatedContent);
+            });
         });
 
         cy.readFile(fixturesPath).then(() => {

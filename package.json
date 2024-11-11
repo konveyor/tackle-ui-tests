@@ -35,6 +35,7 @@
         "cypress": "^13.13.3",
         "cypress-downloadfile": "^1.2.3",
         "cypress-fail-fast": "^7.1.0",
+        "cypress-fs": "^0.2.6",
         "cypress-mochawesome-reporter": "^3.2.2",
         "cypress-tags": "^1.1.2",
         "license-check-and-add": "^4.0.5",
