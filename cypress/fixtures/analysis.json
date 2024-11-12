@@ -11,19 +11,6 @@
         "tags": ["EJB XML", "Java EE Batch", "EJB XML"],
         "issues": [
             {
-                "name": "File system - Java IO",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["cloud-readiness"],
-                "effort": 1,
-                "totalEffort": 6,
-                "incidents": 6,
-                "affectedFiles": 1,
-                "ruleSet": "cloud-readiness",
-                "rule": "local-storage-00001",
-                "labels": ["konveyor.io/source", "storage"]
-            },
-            {
                 "name": "Add Maven profile to run the Quarkus native build",
                 "category": "mandatory",
                 "sources": ["java-ee"],
@@ -34,7 +21,8 @@
                 "affectedFiles": 1,
                 "ruleSet": "quarkus/springboot",
                 "rule": "javaee-pom-to-quarkus-00060",
-                "labels": ["None"]
+                "labels": [],
+                "description": "Add Maven profile to run the Quarkus native build"
             },
             {
                 "name": "Adopt Maven Compiler plugin",
@@ -47,7 +35,8 @@
                 "affectedFiles": 1,
                 "ruleSet": "quarkus/springboot",
                 "rule": "javaee-pom-to-quarkus-00030",
-                "labels": ["None"]
+                "labels": [],
+                "description": "Adopt Maven Compiler plugin"
             },
             {
                 "name": "Adopt Maven Failsafe plugin",
@@ -60,7 +49,8 @@
                 "affectedFiles": 1,
                 "ruleSet": "quarkus/springboot",
                 "rule": "javaee-pom-to-quarkus-00050",
-                "labels": ["None"]
+                "labels": [],
+                "description": "Adopt Maven Failsafe plugin"
             },
             {
                 "name": "Adopt Maven Surefire plugin",
@@ -73,7 +63,8 @@
                 "affectedFiles": 1,
                 "ruleSet": "quarkus/springboot",
                 "rule": "javaee-pom-to-quarkus-00040",
-                "labels": ["None"]
+                "labels": [],
+                "description": "Adopt Maven Surefire plugin"
             },
             {
                 "name": "Adopt Quarkus BOM",
@@ -86,7 +77,8 @@
                 "affectedFiles": 1,
                 "ruleSet": "quarkus/springboot",
                 "rule": "javaee-pom-to-quarkus-00010",
-                "labels": ["None"]
+                "labels": [],
+                "description": "Adopt Quarkus BOM"
             },
             {
                 "name": "Adopt Quarkus Maven plugin",
@@ -99,20 +91,8 @@
                 "affectedFiles": 1,
                 "ruleSet": "quarkus/springboot",
                 "rule": "javaee-pom-to-quarkus-00020",
-                "labels": ["None"]
-            },
-            {
-                "name": "Remove the SpringBoot @SpringBootApplication annotation",
-                "category": "mandatory",
-                "sources": ["springboot"],
-                "targets": ["quarkus"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
-                "ruleSet": "quarkus/springboot",
-                "rule": "springboot-annotations-to-quarkus-00000",
-                "labels": ["None"]
+                "labels": [],
+                "description": "Adopt Quarkus Maven plugin"
             },
             {
                 "name": "Replace the Spring Web artifact with Quarkus 'spring-web' extension",
@@ -125,7 +105,8 @@
                 "affectedFiles": 1,
                 "ruleSet": "quarkus/springboot",
                 "rule": "springboot-web-to-quarkus-00000",
-                "labels": ["None"]
+                "labels": [],
+                "description": "Replace the Spring Web artifact with Quarkus 'spring-web' extension"
             },
             {
                 "name": "Replace the spring-boot-maven-plugin dependency",
@@ -138,7 +119,8 @@
                 "affectedFiles": 1,
                 "ruleSet": "quarkus/springboot",
                 "rule": "springboot-plugins-to-quarkus-0000",
-                "labels": ["None"]
+                "labels": [],
+                "description": "Replace the spring-boot-maven-plugin dependency"
             },
             {
                 "name": "Replace the SpringBoot artifact with Quarkus 'spring-boot-properties' extension",
@@ -151,7 +133,8 @@
                 "affectedFiles": 1,
                 "ruleSet": "quarkus/springboot",
                 "rule": "springboot-properties-to-quarkus-00000",
-                "labels": ["None"]
+                "labels": [],
+                "description": "Replace the SpringBoot artifact with Quarkus 'spring-boot-properties' extension"
             },
             {
                 "name": "Replace the SpringBoot Dependency Injection artifact with Quarkus 'spring-di' extension",
@@ -164,7 +147,8 @@
                 "affectedFiles": 1,
                 "ruleSet": "quarkus/springboot",
                 "rule": "springboot-di-to-quarkus-00000",
-                "labels": ["None"]
+                "labels": [],
+                "description": "Replace the SpringBoot Dependency Injection artifact with Quarkus 'spring-di' extension"
             }
         ],
         "dependencies": [
@@ -424,368 +408,194 @@
         "effort": 402,
         "issues": [
             {
-                "name": "@MessageDriven - EJBs are not supported in Quarkus",
-                "category": "mandatory",
-                "sources": ["java-ee"],
-                "targets": ["quarkus"],
-                "effort": 3,
-                "totalEffort": 3,
-                "incidents": 3,
-                "affectedFiles": 3,
-                "ruleSet": "quarkus/springboot",
-                "rule": "jms-to-reactive-quarkus-00010",
-                "labels": []
-            },
-            {
-                "name": "`beans.xml` descriptor content is ignored",
-                "category": "potential",
-                "sources": ["java-ee"],
-                "targets": ["quarkus"],
-                "effort": 3,
-                "totalEffort": 3,
-                "incidents": 3,
-                "affectedFiles": 3,
+                "title": "beans.xml descriptor content is ignored",
+                "priority": "potential",
+                "sourceTechnologies": ["java-ee"],
+                "targetTechnologies": ["quarkus"],
                 "ruleSet": "quarkus/springboot",
                 "rule": "cdi-to-quarkus-00030",
-                "labels": []
+                "labels": [],
+                "totalAffectedApplications": 3
             },
             {
-                "name": "Add Maven profile to run the Quarkus native build",
-                "category": "mandatory",
-                "sources": ["java-ee"],
-                "targets": ["quarkus"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "Add Maven profile to run the Quarkus native build",
+                "priority": "mandatory",
+                "sourceTechnologies": ["java-ee"],
+                "targetTechnologies": ["quarkus"],
                 "ruleSet": "quarkus/springboot",
                 "rule": "javaee-pom-to-quarkus-00060",
-                "labels": []
+                "labels": [],
+                "totalAffectedApplications": 1
             },
             {
-                "name": "Adopt Maven Compiler plugin",
-                "category": "mandatory",
-                "sources": ["java-ee"],
-                "targets": ["quarkus"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "Adopt Maven Compiler plugin",
+                "priority": "mandatory",
+                "sourceTechnologies": ["java-ee"],
+                "targetTechnologies": ["quarkus"],
                 "ruleSet": "quarkus/springboot",
                 "rule": "javaee-pom-to-quarkus-00030",
-                "labels": []
+                "labels": [],
+                "totalAffectedApplications": 1
             },
             {
-                "name": "Adopt Maven Failsafe plugin",
-                "category": "mandatory",
-                "sources": ["java-ee"],
-                "targets": ["quarkus"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "Adopt Maven Failsafe plugin",
+                "priority": "mandatory",
+                "sourceTechnologies": ["java-ee"],
+                "targetTechnologies": ["quarkus"],
                 "ruleSet": "quarkus/springboot",
                 "rule": "javaee-pom-to-quarkus-00050",
-                "labels": []
+                "labels": [],
+                "totalAffectedApplications": 1
             },
             {
-                "name": "Adopt Maven Surefire plugin",
-                "category": "mandatory",
-                "sources": ["java-ee"],
-                "targets": ["quarkus"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "Adopt Maven Surefire plugin",
+                "priority": "mandatory",
+                "sourceTechnologies": ["java-ee"],
+                "targetTechnologies": ["quarkus"],
                 "ruleSet": "quarkus/springboot",
                 "rule": "javaee-pom-to-quarkus-00040",
-                "labels": []
+                "labels": [],
+                "totalAffectedApplications": 1
             },
             {
-                "name": "Adopt Quarkus BOM",
-                "category": "mandatory",
-                "sources": ["java-ee"],
-                "targets": ["quarkus"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "Adopt Quarkus BOM",
+                "priority": "mandatory",
+                "sourceTechnologies": ["java-ee"],
+                "targetTechnologies": ["quarkus"],
                 "ruleSet": "quarkus/springboot",
                 "rule": "javaee-pom-to-quarkus-00010",
-                "labels": []
+                "labels": [],
+                "totalAffectedApplications": 1
             },
             {
-                "name": "Adopt Quarkus Maven plugin",
-                "category": "mandatory",
-                "sources": ["java-ee"],
-                "targets": ["quarkus"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "Adopt Quarkus Maven plugin",
+                "priority": "mandatory",
+                "sourceTechnologies": ["java-ee"],
+                "targetTechnologies": ["quarkus"],
                 "ruleSet": "quarkus/springboot",
                 "rule": "javaee-pom-to-quarkus-00020",
-                "labels": []
+                "labels": [],
+                "totalAffectedApplications": 1
             },
             {
-                "name": "Configure message listener method with @Incoming",
-                "category": "mandatory",
-                "sources": ["java-ee"],
-                "targets": ["quarkus"],
-                "effort": 3,
-                "totalEffort": 3,
-                "incidents": 3,
-                "affectedFiles": 3,
-                "ruleSet": "quarkus/springboot",
-                "rule": "jms-to-reactive-quarkus-00020",
-                "labels": []
-            },
-            {
-                "name": "Implicit name determination for sequences and tables associated with identifier generation has changed",
-                "category": "potential",
-                "sources": ["None"],
-                "targets": ["eap", "eap8+", "hibernate", "hibernate6+", "quarkus", "quarkus3+"],
-                "effort": 3,
-                "totalEffort": 3,
-                "incidents": 3,
-                "affectedFiles": 3,
-                "ruleSet": "eap8/eap7",
-                "rule": "hibernate-00005",
-                "labels": ["hibernate", "konveyor.io/source"]
-            },
-            {
-                "name": "javax groupId has been replaced by jakarta.platform",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "javax groupId has been replaced by jakarta.platform",
+                "priority": "mandatory",
+                "sourceTechnologies": [],
+                "targetTechnologies": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "ruleSet": "eap8/eap7",
                 "rule": "javax-to-jakarta-dependencies-00006",
-                "labels": ["konveyor.io/source"]
+                "labels": ["konveyor.io/source"],
+                "totalAffectedApplications": 1
             },
             {
-                "name": "javax javaee-api artifactId has been replaced by jakarta.platform jakarta.jakartaee-api",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "javax javaee-api artifactId has been replaced by jakarta.platform jakarta.jakartaee-api",
+                "priority": "mandatory",
+                "sourceTechnologies": [],
+                "targetTechnologies": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "ruleSet": "eap8/eap7",
                 "rule": "javax-to-jakarta-dependencies-00007",
-                "labels": ["konveyor.io/source"]
+                "labels": ["konveyor.io/source"],
+                "totalAffectedApplications": 1
             },
             {
-                "name": "JMS is not supported in Quarkus",
-                "category": "mandatory",
-                "sources": ["java-ee"],
-                "targets": ["quarkus"],
-                "effort": 5,
-                "totalEffort": 5,
-                "incidents": 5,
-                "affectedFiles": 5,
-                "ruleSet": "quarkus/springboot",
-                "rule": "jms-to-reactive-quarkus-00050",
-                "labels": []
-            },
-            {
-                "name": "JMS' Queue must be replaced with an Emitter",
-                "category": "mandatory",
-                "sources": ["java-ee"],
-                "targets": ["quarkus"],
-                "effort": 3,
-                "totalEffort": 3,
-                "incidents": 3,
-                "affectedFiles": 3,
-                "ruleSet": "quarkus/springboot",
-                "rule": "jms-to-reactive-quarkus-00030",
-                "labels": []
-            },
-            {
-                "name": "JMS' Topic must be replaced with an Emitter",
-                "category": "mandatory",
-                "sources": ["java-ee"],
-                "targets": ["quarkus"],
-                "effort": 3,
-                "totalEffort": 3,
-                "incidents": 3,
-                "affectedFiles": 3,
-                "ruleSet": "quarkus/springboot",
-                "rule": "jms-to-reactive-quarkus-00040",
-                "labels": []
-            },
-            {
-                "name": "Local HTTP Calls",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["cloud-readiness"],
-                "effort": 7,
-                "totalEffort": 7,
-                "incidents": 7,
-                "affectedFiles": 7,
+                "title": "Local HTTP Calls",
+                "priority": "mandatory",
+                "sourceTechnologies": [],
+                "targetTechnologies": ["cloud-readiness"],
                 "ruleSet": "cloud-readiness",
                 "rule": "localhost-http-00001",
-                "labels": ["konveyor.io/source", "localhost"]
+                "labels": ["konveyor.io/source", "localhost"],
+                "totalAffectedApplications": 7
             },
             {
-                "name": "Method should be marked as @Transactional",
-                "category": "mandatory",
-                "sources": ["jakarta-ee", "java-ee"],
-                "targets": ["quarkus"],
-                "effort": 3,
-                "totalEffort": 3,
-                "incidents": 1,
-                "affectedFiles": 1,
-                "ruleSet": "quarkus/springboot",
-                "rule": "ee-to-quarkus-00020",
-                "labels": []
-            },
-            {
-                "name": "Move persistence config to a properties file",
-                "category": "optional",
-                "sources": ["jakarta-ee", "java-ee"],
-                "targets": ["quarkus"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "Move persistence config to a properties file",
+                "priority": "optional",
+                "sourceTechnologies": ["jakarta-ee", "java-ee"],
+                "targetTechnologies": ["quarkus"],
                 "ruleSet": "quarkus/springboot",
                 "rule": "persistence-to-quarkus-00000",
-                "labels": []
+                "labels": [],
+                "totalAffectedApplications": 1
             },
             {
-                "name": "Remote EJBs are not supported in Quarkus",
-                "category": "mandatory",
-                "sources": ["jakarta-ee", "java-ee"],
-                "targets": ["quarkus"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
-                "ruleSet": "quarkus/springboot",
-                "rule": "remote-ejb-to-quarkus-00000",
-                "labels": []
-            },
-            {
-                "name": "Replace the Java EE namespace, schemaLocation and version with the Jakarta equivalent",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "Replace the Java EE namespace, schemaLocation and version with the Jakarta equivalent",
+                "priority": "mandatory",
+                "sourceTechnologies": [],
+                "targetTechnologies": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "ruleSet": "eap8/eap7",
                 "rule": "javaee-to-jakarta-namespaces-00001",
-                "labels": ["konveyor.io/source"]
+                "labels": ["konveyor.io/source"],
+                "totalAffectedApplications": 1
             },
             {
-                "name": "Replace the Java EE persistence namespace, schemaLocation and version with the Jakarta equivalent",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "Replace the Java EE persistence namespace, schemaLocation and version with the Jakarta equivalent",
+                "priority": "mandatory",
+                "sourceTechnologies": [],
+                "targetTechnologies": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "ruleSet": "eap8/eap7",
                 "rule": "javaee-to-jakarta-namespaces-00002",
-                "labels": ["konveyor.io/source"]
+                "labels": ["konveyor.io/source"],
+                "totalAffectedApplications": 1
             },
             {
-                "name": "Replace the Java EE version with the Jakarta equivalent",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "Replace the Java EE version with the Jakarta equivalent",
+                "priority": "mandatory",
+                "sourceTechnologies": [],
+                "targetTechnologies": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "ruleSet": "eap8/eap7",
                 "rule": "javaee-to-jakarta-namespaces-00033",
-                "labels": ["konveyor.io/source"]
+                "labels": ["konveyor.io/source"],
+                "totalAffectedApplications": 1
             },
             {
-                "name": "Replace the Java EE XSD with the Jakarta equivalent",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "Replace the Java EE XSD with the Jakarta equivalent",
+                "priority": "mandatory",
+                "sourceTechnologies": [],
+                "targetTechnologies": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "ruleSet": "eap8/eap7",
-                "rule": "javaee-to-jakarta-namespaces-00030",
-                "labels": ["konveyor.io/source"]
+                "rule": "javaee-to-jakarta-namespaces-00006",
+                "labels": ["konveyor.io/source"],
+                "totalAffectedApplications": 1
             },
             {
-                "name": "The 'javax' groupId has been replaced by 'jakarta' group id in dependencies.",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "The 'javax' groupId has been replaced by 'jakarta' group id in dependencies.",
+                "priority": "mandatory",
+                "sourceTechnologies": [],
+                "targetTechnologies": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "ruleSet": "eap8/eap7",
                 "rule": "javax-to-jakarta-dependencies-00001",
-                "labels": ["konveyor.io/source"]
+                "labels": ["konveyor.io/source"],
+                "totalAffectedApplications": 1
             },
             {
-                "name": "The artifactIds starting with javax.*-api must be updated to their corresponding jakarta.*-api versions in dependency files",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "The artifactIds starting with javax.*-api must be updated to their corresponding jakarta.*-api versions in dependency files",
+                "priority": "mandatory",
+                "sourceTechnologies": [],
+                "targetTechnologies": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "ruleSet": "eap8/eap7",
                 "rule": "javax-to-jakarta-dependencies-00002",
-                "labels": ["konveyor.io/source"]
+                "labels": ["konveyor.io/source"],
+                "totalAffectedApplications": 1
             },
             {
-                "name": "The expected project artifact's extension is `jar`",
-                "category": "mandatory",
-                "sources": ["java-ee"],
-                "targets": ["quarkus"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "The expected project artifact's extension is jar",
+                "priority": "mandatory",
+                "sourceTechnologies": ["java-ee"],
+                "targetTechnologies": ["quarkus"],
                 "ruleSet": "quarkus/springboot",
                 "rule": "javaee-pom-to-quarkus-00000",
-                "labels": []
+                "labels": [],
+                "totalAffectedApplications": 1
             },
             {
-                "name": "The package 'javax' has been replaced by 'jakarta'.",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
-                "ruleSet": "eap8/eap7",
-                "rule": "javax-to-jakarta-import-00001",
-                "labels": ["konveyor.io/source"]
-            },
-            {
-                "name": "web.xml element references a javax-prefixed class name",
-                "category": "potential",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
+                "title": "web.xml element references a javax-prefixed class name",
+                "priority": "potential",
+                "sourceTechnologies": [],
+                "targetTechnologies": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
                 "ruleSet": "eap8/eap7",
                 "rule": "javax-to-jakarta-servlet-00130",
-                "labels": ["konveyor.io/source"]
+                "labels": ["konveyor.io/source"],
+                "totalAffectedApplications": 1
             }
         ],
         "dependencies": [
