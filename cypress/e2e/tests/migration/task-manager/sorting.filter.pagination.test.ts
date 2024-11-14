@@ -63,7 +63,6 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
                 applicationsList.forEach((application) => application.create());
             });
         });
-
     });
 
     it("Filtering tasks", function () {
@@ -94,14 +93,14 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
 
         // Filter by ID
         cy.wait("@getTasks")
-        .its('response.body')
-        .should('have.length.gte', 2) // Make sure there are at least two items
-        .then((responseBody) => {
-          TaskManager.applyFilter(TaskFilter.id, responseBody[0].id.toString());
-          validateNumberPresence(TaskManagerColumns.id, responseBody[0].id);
-          notExists(responseBody[1].id.toString(), tasksTable);
-          clearAllFilters();
-        });
+            .its("response.body")
+            .should("have.length.gte", 2) // Make sure there are at least two items
+            .then((responseBody) => {
+                TaskManager.applyFilter(TaskFilter.id, responseBody[0].id.toString());
+                validateNumberPresence(TaskManagerColumns.id, responseBody[0].id);
+                notExists(responseBody[1].id.toString(), tasksTable);
+                clearAllFilters();
+            });
 
         // Filter by Applications
         TaskManager.applyFilter(TaskFilter.applicationName, applicationsList[0].name);
