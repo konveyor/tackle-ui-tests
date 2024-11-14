@@ -56,8 +56,8 @@ describe(["@tier3"], "Operations after application import", () => {
     });
 
     it(
+        ["@dc"],
         "Perform application assessment after a successful application import",
-        { tags: "@dc" },
         function () {
             const application = new Application(appdata);
 
