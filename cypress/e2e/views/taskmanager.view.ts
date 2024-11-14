@@ -24,3 +24,4 @@ export enum TaskManagerColumns {
     preemption = 'td[data-label="Preemption"]',
     createdBy = 'td[data-label="Created By"]',
 }
+export const tasksTable = "table[aria-label='Tasks table']";

@@ -23,6 +23,7 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
+    notExists,
     validateNumberPresence,
     validatePagination,
     validateSortBy,
@@ -31,7 +32,7 @@ import {
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
 import { TaskFilter, TaskKind, TaskStatus, trTag } from "../../../types/constants";
-import { TaskManagerColumns } from "../../../views/taskmanager.view";
+import { TaskManagerColumns, tasksTable } from "../../../views/taskmanager.view";
 
 describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", function () {
     const applicationsList: Analysis[] = [];
@@ -70,6 +71,9 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
 
         Analysis.analyzeAll(dayTraderApp);
         TaskManager.open();
+
+        cy.intercept("GET", "/hub/tasks*").as("getTasks");
+
         // Filter by status
         TaskManager.applyFilter(TaskFilter.status, TaskStatus.pending);
         validateTextPresence(TaskManagerColumns.status, TaskStatus.pending);
@@ -88,12 +92,15 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         clearAllFilters();
 
         // Filter by ID
-        TaskManager.applyFilter(TaskFilter.id, "1");
-        validateNumberPresence(TaskManagerColumns.id, 1);
-        clearAllFilters();
-        TaskManager.applyFilter(TaskFilter.id, "2");
-        validateNumberPresence(TaskManagerColumns.id, 2);
-        clearAllFilters();
+        cy.wait("@getTasks")
+            .its("response.body")
+            .should("have.length.gte", 2) // Make sure there are at least two items
+            .then((responseBody) => {
+                TaskManager.applyFilter(TaskFilter.id, responseBody[0].id.toString());
+                validateNumberPresence(TaskManagerColumns.id, responseBody[0].id);
+                notExists(responseBody[1].id.toString(), tasksTable);
+                clearAllFilters();
+            });
 
         // Filter by Applications
         TaskManager.applyFilter(TaskFilter.applicationName, applicationsList[0].name);
