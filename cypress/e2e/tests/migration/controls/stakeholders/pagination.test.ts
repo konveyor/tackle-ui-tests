@@ -18,48 +18,50 @@ limitations under the License.
 import {
     login,
     selectItemsPerPage,
-    createMultipleStakeholders,
+    createMultipleStakeholderGroups,
     validatePagination,
     itemsPerPageValidation,
     autoPageChangeValidations,
-    deleteAllRows,
+    deleteByList,
 } from "../../../../../utils/utils";
+import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { appTable } from "../../../../views/common.view";
-import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
+let stakeholderGroupsList: Stakeholdergroups[] = [];
 
-describe(["@tier3"], "Stakeholder pagination validations", function () {
+describe(["@tier3"], "Stakeholder groups pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
-        createMultipleStakeholders(11);
+        stakeholderGroupsList = createMultipleStakeholderGroups(11);
     });
 
     beforeEach("Interceptors", function () {
         // Interceptors
-        cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
+        cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");
     });
 
     it("Navigation button validations", function () {
-        Stakeholders.openList();
-        cy.get("@getStakeholders");
+        Stakeholdergroups.openList();
+        cy.get("@getStakeholdergroups");
         selectItemsPerPage(10);
         validatePagination();
     });
 
     it("Items per page validations", function () {
-        Stakeholders.openList();
-        cy.get("@getStakeholders");
-        selectItemsPerPage(10);
-        itemsPerPageValidation(appTable, "Email");
+        Stakeholdergroups.openList();
+        cy.get("@getStakeholdergroups");
+        itemsPerPageValidation();
     });
 
     it("Last page item(s) deletion, impact on page reload validation", function () {
-        Stakeholders.openList();
-        cy.get("@getStakeholders");
+        // Issue - https://issues.redhat.com/browse/TACKLE-155
+        // Navigate to stakeholder groups tab
+        Stakeholdergroups.openList();
+        cy.get("@getStakeholdergroups");
         selectItemsPerPage(10);
-        autoPageChangeValidations(appTable, "Email", true);
+        autoPageChangeValidations(appTable, "Name", true);
     });
 
     after("Perform test data clean up", function () {
-        deleteAllRows();
+        deleteByList(stakeholderGroupsList);
     });
 });
