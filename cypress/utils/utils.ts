@@ -1292,7 +1292,7 @@ export function deleteAllBusinessServices() {
 
 export function deleteAllStakeholderGroups(cancel = false): void {
     Stakeholdergroups.openList();
-    deleteAllItems();
+    deleteAllRows();
 }
 
 export function deleteAllStakeholders(): void {
