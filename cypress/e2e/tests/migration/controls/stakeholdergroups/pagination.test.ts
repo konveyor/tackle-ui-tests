@@ -22,15 +22,16 @@ import {
     validatePagination,
     itemsPerPageValidation,
     autoPageChangeValidations,
-    deleteAllStakeholderGroups,
+    deleteByList,
 } from "../../../../../utils/utils";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { appTable } from "../../../../views/common.view";
+let stakeholderGroupsList: Stakeholdergroups[] = [];
 
 describe(["@tier3"], "Stakeholder groups pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
-        createMultipleStakeholderGroups(11);
+        stakeholderGroupsList = createMultipleStakeholderGroups(11);
     });
 
     beforeEach("Interceptors", function () {
@@ -61,6 +62,6 @@ describe(["@tier3"], "Stakeholder groups pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        deleteAllStakeholderGroups;
+        deleteByList(stakeholderGroupsList);
     });
 });
