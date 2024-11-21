@@ -39,8 +39,7 @@ import { analysisColumn } from "../../../../views/analysis.view";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 
-// TODO (mguetta1): mark it as tier0 once enabling CI again
-describe(["@tier1"], "Source Analysis without credentials", () => {
+describe(["@tier0"], "Source Analysis without credentials", () => {
     before("Login", function () {
         login();
     });
