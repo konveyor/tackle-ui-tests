@@ -69,7 +69,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         cy.wait("@getApplication");
         cy.wait(2000);
         application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyAnalysisStatus("Completed");
         application.verifyEffort(
             this.analysisData["uploadbinary_analysis_with_customrule"]["effort"]
         );

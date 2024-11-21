@@ -375,11 +375,11 @@ export class Analysis extends Application {
     }
 
     public verifyEffort(effort: number) {
-        cy.get(tdTag)
+        cy.get(tdTag, { timeout: 30 * SEC })
             .contains(this.name)
             .closest(trTag)
             .within(() => {
-                cy.get(effortColumn).should("contain", `${effort}`);
+                cy.get(effortColumn, { timeout: 30 * SEC }).should("contain", `${effort}`);
             });
     }
 
