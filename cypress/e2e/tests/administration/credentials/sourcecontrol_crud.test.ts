@@ -89,8 +89,11 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         scCredsKey.delete(toBeCanceled);
     });
 
-    after("Cleaning up", () => {
+    it("Deleting source control credentials with username/password", () => {
         scCredsUsername.delete();
+    });
+
+    it("Deleting source control credentials with source private key", () => {
         scCredsKey.delete();
     });
 });
