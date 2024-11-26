@@ -32,7 +32,7 @@ let applicationsList: Array<Analysis> = [];
 let source_credential: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;
 
-describe(["@tier2"], "Bug MTA-2006: Affected files validation", () => {
+describe(["@tier2"], "Affected files validation", () => {
     before("Login", function () {
         login();
 

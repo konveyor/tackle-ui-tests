@@ -51,7 +51,7 @@ describe.skip(["@tier3"], "Migrator Upload Binary Analysis", () => {
         login();
     });
 
-    it("Bug MTA-1455: Upload Binary Analysis", function () {
+    it("Upload Binary Analysis", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
@@ -69,7 +69,7 @@ describe.skip(["@tier3"], "Migrator Upload Binary Analysis", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it("Bug MTA-1455: Custom rules with custom targets", function () {
+    it("Custom rules with custom targets", function () {
         // Automated https://issues.redhat.com/browse/TACKLE-561
         const application = new Analysis(
             getRandomApplicationData("customRule_customTarget"),

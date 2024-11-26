@@ -86,7 +86,7 @@ describe(["@tier1"], "Source Analysis", () => {
         Application.open(true);
     });
 
-    it("Bug MTA-4135: Source + dependencies analysis on tackletest app", function () {
+    it("Source + dependencies analysis on tackletest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies", {
@@ -107,7 +107,7 @@ describe(["@tier1"], "Source Analysis", () => {
         );
     });
 
-    it("Bug MTA-4135: Source + dependencies analysis on daytrader app", function () {
+    it("Source + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies", {
@@ -349,7 +349,7 @@ describe(["@tier1"], "Source Analysis", () => {
     });
 
     // Automates bug MTA-3422
-    it("Bug MTA-4135: 4 targets source analysis on tackle app public", function () {
+    it("4 targets source analysis on tackle app public", function () {
         const application = new Analysis(
             getRandomApplicationData("tackle-public-4-targets", {
                 sourceData: this.appData["tackle-testapp-public"],
@@ -367,7 +367,7 @@ describe(["@tier1"], "Source Analysis", () => {
     });
 
     // Automates customer bug MTA-2973
-    it("Bug MTA-3163: Source analysis on tackle app public with custom rule", function () {
+    it("Source analysis on tackle app public with custom rule", function () {
         const applicationList = [
             new Analysis(
                 getRandomApplicationData("tackle-public-customRule", {
