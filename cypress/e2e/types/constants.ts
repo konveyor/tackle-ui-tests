@@ -219,6 +219,8 @@ export enum TaskStatus {
     succeeded = "Succeeded",
     pending = "Pending",
     running = "Running",
+    ready = "Ready",
+    postponed = "Postponed",
 }
 
 export enum TaskKind {
