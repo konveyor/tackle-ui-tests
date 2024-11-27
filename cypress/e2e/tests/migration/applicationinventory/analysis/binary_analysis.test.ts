@@ -28,6 +28,7 @@ import { AnalysisStatuses, CredentialType, UserCredentials } from "../../../../t
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { MavenConfiguration } from "../../../../models/administration/repositories/maven";
+import { Application } from "../../../../models/migration/applicationinventory/application";
 let source_credential: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;
 const mavenConfiguration = new MavenConfiguration();
@@ -82,6 +83,7 @@ describe(["@tier1"], "Binary Analysis", () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        Application.open(true);
         application.verifyEffort(this.analysisData["binary_analysis_on_tackletestapp"]["effort"]);
     });
 
