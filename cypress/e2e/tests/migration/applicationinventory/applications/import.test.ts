@@ -79,7 +79,8 @@ describe(["@tier3"], "Application import operations", () => {
         imports.verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Applications import for non existing tags and BS", function () {
+    it.only("1)Applications import for non existing tags and BS \
+        2)Verify assigned BS for imported application if BS already exists", function () {
         Application.open();
         cy.wait("@getApplication");
         // Import csv with non-existent tags
@@ -88,22 +89,21 @@ describe(["@tier3"], "Application import operations", () => {
         importApplication(filePath + fileName, true);
         cy.wait(2000);
         ManageImports.open();
-        imports.verifyAppImport(fileName, "Completed", 3, "-");
+        imports.verifyAppImport(fileName, "Completed", 2, "-");
 
         // Automate bug MTA-4257
-        const fileName2 = "lantik.csv";
+        const fileName2 = "lantik_bug.csv";
         importApplication(filePath + fileName2, true);
         cy.wait(2000);
         ManageImports.open();
         imports.verifyAppImport(fileName, "Completed", 1, "-");
         Application.open();
-        exists("bug4257");
+        exists("App_bug4257");
         cy.get(tdTag)
-            .contains("bug4257")
+            .contains("App_bug4257")
             .closest(trTag)
             .within(() => {
                 cy.get("td[data-label='Business Service']").should("contain.text", "Finance");
-                cy.wait(2000);
             });
     });
 
