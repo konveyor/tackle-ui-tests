@@ -79,8 +79,8 @@ describe(["@tier3"], "Application import operations", () => {
         imports.verifyImportErrorMsg(errorMsgs);
     });
 
-    it.only("1)Applications import for non existing tags and BS \
-        2)Verify assigned BS for imported application if BS already exists", function () {
+    it("1)Applications import for non existing tags and BS \
+        2)Verify assigned BS for imported application if BS was created through previous import", function () {
         Application.open();
         cy.wait("@getApplication");
         // Import csv with non-existent tags
@@ -91,7 +91,7 @@ describe(["@tier3"], "Application import operations", () => {
         ManageImports.open();
         imports.verifyAppImport(fileName, "Completed", 2, "-");
 
-        // Automate bug MTA-4257
+        // Automate bug MTA-4257, Polarion TC MTA-609
         const fileName2 = "lantik_bug.csv";
         importApplication(filePath + fileName2, true);
         cy.wait(2000);
