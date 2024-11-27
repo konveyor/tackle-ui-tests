@@ -94,7 +94,7 @@ describe(["@tier3"], "Credentials filter validations", function () {
         Credentials.filterByType();
     });
 
-    it("Bug MTA-3143: Creator filter validations", () => {
+    it("Creator filter validations", () => {
         Credentials.filterByCreator(adminUserName);
         Credentials.filterByCreator(newAdminUser.username);
     });
