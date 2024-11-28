@@ -24,6 +24,7 @@ import {
     deleteAppImportsTableRows,
     deleteAllMigrationWaves,
 } from "../../../../../utils/utils";
+import { tdTag, trTag } from "../../../../../e2e/types/constants";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { ManageImports } from "../../../../models/migration/applicationinventory/manageImports";
 
@@ -78,7 +79,8 @@ describe(["@tier3"], "Application import operations", () => {
         imports.verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Applications import for non existing tags and BS", function () {
+    it("Bug MTA-4257: 1)Applications import for non existing tags and BS \
+        2)Verify assigned BS for imported application if BS was created through previous import", function () {
         Application.open();
         cy.wait("@getApplication");
         // Import csv with non-existent tags
@@ -87,7 +89,22 @@ describe(["@tier3"], "Application import operations", () => {
         importApplication(filePath + fileName, true);
         cy.wait(2000);
         ManageImports.open();
+        imports.verifyAppImport(fileName, "Completed", 2, "-");
+
+        // Automate bug MTA-4257, Polarion TC MTA-609
+        const fileName2 = "lantik_bug.csv";
+        importApplication(filePath + fileName2, true);
+        cy.wait(2000);
+        ManageImports.open();
         imports.verifyAppImport(fileName, "Completed", 1, "-");
+        Application.open();
+        exists("App_bug4257");
+        cy.get(tdTag)
+            .contains("App_bug4257")
+            .closest(trTag)
+            .within(() => {
+                cy.get("td[data-label='Business Service']").should("contain.text", "Finance");
+            });
     });
 
     it("Applications import with minimum required field(s) and empty row", function () {
