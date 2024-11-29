@@ -86,7 +86,7 @@ describe(["@tier1"], "Source Analysis", () => {
         Application.open(true);
     });
 
-    it("Source + dependencies analysis on tackletest app", function () {
+    it("Bug MTA-4308: Source + dependencies analysis on tackletest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies", {
@@ -107,7 +107,7 @@ describe(["@tier1"], "Source Analysis", () => {
         );
     });
 
-    it("Source + dependencies analysis on daytrader app", function () {
+    it("Bug MTA-4308: Source + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies", {
