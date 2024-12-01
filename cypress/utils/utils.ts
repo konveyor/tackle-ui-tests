@@ -199,7 +199,7 @@ export function login(username?: string, password?: string, firstLogin = false):
     return cy.session(sessionId, () => {
         cy.log("Login in");
         cy.visit(Cypress.env("tackleUrl"), { timeout: 120 * SEC });
-        cy.wait(5000);
+        cy.wait(5 * SEC);
         cy.get("h1", { timeout: 120 * SEC, log: false }).then(($title) => {
             // With auth disabled, login page is not displayed and users are taken straight
             // to the Application Inventory page.
@@ -212,7 +212,7 @@ export function login(username?: string, password?: string, firstLogin = false):
 
             const userName = username ?? Cypress.env("user");
             const userPassword = password ?? Cypress.env("pass");
-
+            cy.wait(3 * SEC);
             inputText(loginView.userNameInput, userName);
             inputText(loginView.userPasswordInput, userPassword);
             click(loginView.loginButton);
