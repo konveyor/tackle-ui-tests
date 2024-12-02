@@ -76,7 +76,7 @@ describe(["@tier2"], "Perform assessment and review as Architect", function () {
 
     it("As Architect, create archetype, perform archetype assessment and review", function () {
         architect.login();
-        // Automates P0larion MTA-522
+        // Automates Polarion MTA-522
         const archetype = new Archetype(
             data.getRandomWord(8),
             [tags[0].name],
@@ -95,6 +95,7 @@ describe(["@tier2"], "Perform assessment and review as Architect", function () {
         archetype.validateReviewFields();
         archetype.delete();
         cy.wait(2 * SEC);
+        architect.logout();
     });
 
     after("Clear test data", () => {
