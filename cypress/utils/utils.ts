@@ -120,9 +120,14 @@ export function inputText(fieldId: string, text: any, log = false): void {
     if (!log) {
         cy.log(`Type ${text} in ${fieldId}`);
     }
-    cy.get(fieldId, { log }).click({ log }).focused({ log }).clear({ log });
+    cy.get(fieldId, { log, timeout: 30 * SEC })
+        .click({ log })
+        .focused({ log })
+        .clear({ log });
     cy.wait(200, { log });
-    cy.get(fieldId, { log }).clear({ log }).type(text, { log });
+    cy.get(fieldId, { log, timeout: 30 * SEC })
+        .clear({ log })
+        .type(text, { log });
 }
 
 export function clearInput(fieldID: string): void {

@@ -165,6 +165,32 @@
                 "ruleSet": "quarkus/springboot",
                 "rule": "springboot-di-to-quarkus-00000",
                 "labels": ["None"]
+            },
+            {
+                "name": "Version of Spring Boot not compatible with Jakarta EE 9+",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 3,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "jakarta-ee9",
+                "rule": "spring-components-00001",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "Version of Spring not compatible with Jakarta EE 9+",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
+                "effort": 3,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "spring-components-00002",
+                "labels": ["konveyor.io/source"]
             }
         ],
         "dependencies": [
@@ -436,6 +462,49 @@
                 "rule": "jms-to-reactive-quarkus-00010",
                 "labels": []
             },
+
+            {
+                "name": "@Produces cannot annotate an EntityManager",
+                "category": "potential",
+                "sources": ["jakarta-ee", "java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "persistence-to-quarkus-00011",
+                "labels": []
+            },
+
+            {
+                "name": "@Stateful annotation must be replaced",
+                "category": "mandatory",
+                "sources": ["jakarta-ee", "java-ee"],
+                "targets": ["quarkus"],
+                "effort": 3,
+                "totalEffort": 3,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "persistence-to-quarkus-00011",
+                "labels": []
+            },
+
+            {
+                "name": "@Stateless annotation must be replaced",
+                "category": "potential",
+                "sources": ["jakarta-ee", "java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "persistence-to-quarkus-00011",
+                "labels": []
+            },
+
             {
                 "name": "`beans.xml` descriptor content is ignored",
                 "category": "potential",
@@ -541,6 +610,34 @@
                 "labels": []
             },
             {
+                "name": "File system - Java IO",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["cloud-readiness"],
+                "effort": 1,
+                "totalEffort": 6,
+                "incidents": 6,
+                "affectedFiles": 1,
+                "ruleSet": "cloud-readiness",
+                "rule": "local-storage-00001",
+                "labels": ["konveyor.io/source", "storage"]
+            },
+
+            {
+                "name": "File system - java.net.URL/URI",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["cloud-readiness"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "cloud-readiness",
+                "rule": "local-storage-00002",
+                "labels": ["konveyor.io/source", "storage"]
+            },
+
+            {
                 "name": "Implicit name determination for sequences and tables associated with identifier generation has changed",
                 "category": "potential",
                 "sources": ["None"],
@@ -553,6 +650,47 @@
                 "rule": "hibernate-00005",
                 "labels": ["hibernate", "konveyor.io/source"]
             },
+
+            {
+                "name": "Java API for XML-based RPC (JAX-RPC)",
+                "category": "optional",
+                "sources": ["java", "rpc"],
+                "targets": ["cloud-readiness"],
+                "effort": 5,
+                "totalEffort": 5,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "cloud-readiness",
+                "rule": "java-rpc-00000",
+                "labels": ["rpc"]
+            },
+            {
+                "name": "Java Mail API",
+                "category": "optional",
+                "sources": ["java", "java-ee"],
+                "targets": ["cloud-readiness"],
+                "effort": 3,
+                "totalEffort": 3,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "cloud-readiness",
+                "rule": "mail-00000",
+                "labels": ["mail"]
+            },
+            {
+                "name": "Java Remote Method Invocation (RMI) service",
+                "category": "mandatory",
+                "sources": ["java", "rmi"],
+                "targets": ["cloud-readiness"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "cloud-readiness",
+                "rule": "java-rmi-00000",
+                "labels": ["cloud-readiness", "rmi"]
+            },
+
             {
                 "name": "javax groupId has been replaced by jakarta.platform",
                 "category": "mandatory",
@@ -657,6 +795,21 @@
                 "rule": "persistence-to-quarkus-00000",
                 "labels": []
             },
+
+            {
+                "name": "Producer annotation no longer required",
+                "category": "potential",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "cdi-to-quarkus-00040",
+                "labels": []
+            },
+
             {
                 "name": "Remote EJBs are not supported in Quarkus",
                 "category": "mandatory",
