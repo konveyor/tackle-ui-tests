@@ -240,7 +240,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     });
 
     allIssuesSortByList.forEach((column) => {
-        it("All issues - Sort issues by ${column}", function () {
+        it(`All issues - Sort issues by ${column}`, function () {
             Issues.openList();
             validateSortBy(column);
         });
@@ -265,7 +265,11 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     });
 
     affectedApplicationSortByList.forEach((column) => {
-        it(`Affected applications - sort by ${column}`, function () {
+        let title =
+            column === "Effort"
+                ? `Bug MTA-4323: Affected applications - sort by ${column}`
+                : `Affected applications - sort by ${column}`;
+        it(title, function () {
             Issues.openAffectedApplications(
                 this.analysisData["source_analysis_on_bookserverapp"]["issues"][0]["name"]
             );
