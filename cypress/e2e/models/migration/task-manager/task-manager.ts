@@ -113,7 +113,7 @@ export class TaskManager {
         }
     }
 
-    public static cancelAnalysiskByStatus(
+    public static cancelAnalysisByStatus(
         appName: string,
         status: TaskStatus,
         enabled = true

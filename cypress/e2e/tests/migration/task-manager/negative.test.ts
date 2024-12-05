@@ -31,7 +31,7 @@ import { Application } from "../../../models/migration/applicationinventory/appl
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
 import { TaskKind, TaskStatus } from "../../../types/constants";
 
-describe(["@tier2"], "Negative: cancel task created by another user", function () {
+describe(["@tier3"], "Negative: cancel task created by another user", function () {
     let userMigrator = new UserMigrator(getRandomUserData());
     let userArchitect = new UserArchitect(getRandomUserData());
     let applicationsList: Array<Analysis> = [];
@@ -66,10 +66,10 @@ describe(["@tier2"], "Negative: cancel task created by another user", function (
         application.analyze();
 
         userMigrator.login();
-        TaskManager.cancelAnalysiskByStatus(application.name, TaskStatus.running, false);
+        TaskManager.cancelAnalysisByStatus(application.name, TaskStatus.running, false);
 
         logout();
         userArchitect.login();
-        TaskManager.cancelAnalysiskByStatus(application.name, TaskStatus.running, false);
+        TaskManager.cancelAnalysisByStatus(application.name, TaskStatus.running, false);
     });
 });
