@@ -56,7 +56,6 @@ import {
     addButton,
     addRules,
     analysisColumn,
-    viewAnalysisDetails,
     analyzeManuallyButton,
     camelToggleButton,
     closeWizard,
@@ -79,7 +78,7 @@ import {
     rightSideMenu,
     sourceCredential,
     sourceDropdown,
-    tabsPanel,
+    tabsPanel, analysisDetails,
 } from "../../../views/analysis.view";
 import {
     bulkApplicationSelectionCheckBox,
@@ -435,7 +434,7 @@ export class Analysis extends Application {
     openAnalysisDetails() {
         cy.wait(2000);
         sidedrawerTab(this.name, "Reports");
-        clickByText(button, viewAnalysisDetails);
+        clickByText(button, analysisDetails);
         cy.wait(2 * SEC);
     }
 
