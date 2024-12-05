@@ -57,6 +57,7 @@ export const helperBusiness = 'span[class*="helper-text__item"]';
 export const stakeHolderGroupHelper = "div.pf-v5-c-helper-text";
 export const actionMenuItem = "span.pf-v5-c-menu__item-text";
 export const kebabMenuItem = "a.pf-c-dropdown__menu-item";
+export const kebabActionButton = "li.pf-v5-c-menu__list-item";
 export const commonTable = "table.pf-v5-c-table.pf-m-grid-md";
 export const tableRowActions = ".pf-v5-c-table__tr.actions-row";
 export const plainButton = "button.pf-v5-c-button.pf-m-plain";

@@ -33,7 +33,12 @@ import {
     trTag,
 } from "../../../types/constants";
 import { sideKebabMenu } from "../../../views/applicationinventory.view";
-import { actionMenuItem, searchButton, searchInput } from "../../../views/common.view";
+import {
+    actionMenuItem,
+    kebabActionButton,
+    searchButton,
+    searchInput,
+} from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
 import { tasksStatusColumn } from "../../../views/taskmanager.view";
 
@@ -105,6 +110,27 @@ export class TaskManager {
             cy.get(actionMenuItem).contains("Cancel").click();
         } else {
             cy.get(actionMenuItem).contains("Cancel").should("not.be.enabled");
+        }
+    }
+
+    public static cancelAnalysisByStatus(
+        appName: string,
+        status: TaskStatus,
+        enabled = true
+    ): void {
+        TaskManager.open();
+        selectItemsPerPage(itemsPerPage);
+        cy.get(trTag)
+            .filter(':contains("' + TaskKind.analyzer + '")')
+            .filter(':contains("' + appName + '")')
+            .filter(':contains("' + status + '")')
+            .within(() => {
+                click(sideKebabMenu);
+            });
+        if (enabled) {
+            cy.get(kebabActionButton).contains("Cancel").click();
+        } else {
+            cy.get(kebabActionButton).contains("Cancel").should("not.be.enabled");
         }
     }
 }
