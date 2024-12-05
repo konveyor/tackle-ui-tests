@@ -56,6 +56,7 @@ import {
     addButton,
     addRules,
     analysisColumn,
+    analysisDetails,
     analyzeManuallyButton,
     camelToggleButton,
     closeWizard,
@@ -78,7 +79,7 @@ import {
     rightSideMenu,
     sourceCredential,
     sourceDropdown,
-    tabsPanel, analysisDetails,
+    tabsPanel,
 } from "../../../views/analysis.view";
 import {
     bulkApplicationSelectionCheckBox,
