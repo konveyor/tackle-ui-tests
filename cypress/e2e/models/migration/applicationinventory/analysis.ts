@@ -56,7 +56,7 @@ import {
     addButton,
     addRules,
     analysisColumn,
-    analysisDetails,
+    viewAnalysisDetails,
     analyzeManuallyButton,
     camelToggleButton,
     closeWizard,
@@ -435,7 +435,7 @@ export class Analysis extends Application {
     openAnalysisDetails() {
         cy.wait(2000);
         sidedrawerTab(this.name, "Reports");
-        clickByText(button, analysisDetails);
+        clickByText(button, viewAnalysisDetails);
         cy.wait(2 * SEC);
     }
 
