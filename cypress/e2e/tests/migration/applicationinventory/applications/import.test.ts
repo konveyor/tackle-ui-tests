@@ -79,7 +79,7 @@ describe(["@tier3"], "Application import operations", () => {
         imports.verifyImportErrorMsg(errorMsgs);
     });
 
-    it("Bug MTA-4257: 1)Applications import for non existing tags and BS \
+    it("1)Applications import for non existing tags and BS \
         2)Verify assigned BS for imported application if BS was created through previous import", function () {
         Application.open();
         cy.wait("@getApplication");
