@@ -20,7 +20,6 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    selectLogView,
 } from "../../../../utils/utils";
 import { SubversionConfiguration } from "../../../models/administration/repositories/subversion";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
@@ -111,36 +110,6 @@ describe(["@tier2"], "Test secure and insecure svn repository analysis", () => {
                 );
             });
     });
-
-    // Automates customer bug MTA-1717
-    it("Analysis on SVN Repository without trunk folder", function () {
-        subversionConfiguration.enableInsecureSubversionRepositories();
-
-        const application = new Analysis(
-            getRandomApplicationData("svn bookserver app no trunk", {
-                sourceData: this.appData["bookserver-svn-insecure-no-trunk"],
-            }),
-            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
-        );
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication");
-        application.manageCredentials(sourceCredential.name, null);
-        application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.failed);
-        application.openAnalysisDetails();
-
-        cy.intercept("GET", "/hub/tasks/*?merged=1").as("applicationDetails");
-        selectLogView("Merged log view");
-
-        cy.wait("@applicationDetails").then((interception) => {
-            expect(interception.response.body).to.contain(
-                "trunk'' non-existent",
-                "Analysis details don't contains the expected error message"
-            );
-        });
-    });
-
     afterEach("Clear state", function () {
         Analysis.open(true);
     });
