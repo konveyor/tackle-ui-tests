@@ -38,6 +38,7 @@ import {
     applyAction,
     confirm,
     click,
+    performRowActionByIcon,
 } from "../../../../utils/utils";
 import {
     dropdownMenuToggle,
@@ -114,7 +115,7 @@ export class Tag {
     edit(updatedValue: { name?: string; tagcategory?: string }, cancel = false): void {
         Tag.openList();
         expandRowDetails(this.tagCategory);
-        this.clickTagAction(editAction);
+        performRowActionByIcon(this.name, commonView.pencilIcon);
         if (cancel) {
             cancelForm();
         } else {
