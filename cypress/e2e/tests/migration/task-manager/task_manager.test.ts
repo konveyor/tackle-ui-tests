@@ -82,7 +82,7 @@ describe(["@tier1"], "Task Manager", () => {
     });
 
     it("Delete an application - related tasks are deleted", function () {
-        // Remove the last element from and return it
+        // Remove the last element from applicationsList
         const app = applicationsList.pop();
         app.delete();
         TaskManager.open();
