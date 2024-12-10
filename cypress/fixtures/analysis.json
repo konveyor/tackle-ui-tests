@@ -11,19 +11,6 @@
         "tags": ["EJB XML", "Java EE Batch", "EJB XML"],
         "issues": [
             {
-                "name": "File system - Java IO",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["cloud-readiness"],
-                "effort": 1,
-                "totalEffort": 6,
-                "incidents": 6,
-                "affectedFiles": 1,
-                "ruleSet": "cloud-readiness",
-                "rule": "local-storage-00001",
-                "labels": ["konveyor.io/source", "storage"]
-            },
-            {
                 "name": "Add Maven profile to run the Quarkus native build",
                 "category": "mandatory",
                 "sources": ["java-ee"],
@@ -102,6 +89,19 @@
                 "labels": ["None"]
             },
             {
+                "name": "File system - Java IO",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["cloud-readiness"],
+                "effort": 1,
+                "totalEffort": 6,
+                "incidents": 6,
+                "affectedFiles": 1,
+                "ruleSet": "cloud-readiness",
+                "rule": "local-storage-00001",
+                "labels": ["konveyor.io/source", "storage"]
+            },
+            {
                 "name": "Remove the SpringBoot @SpringBootApplication annotation",
                 "category": "mandatory",
                 "sources": ["springboot"],
@@ -165,32 +165,6 @@
                 "ruleSet": "quarkus/springboot",
                 "rule": "springboot-di-to-quarkus-00000",
                 "labels": ["None"]
-            },
-            {
-                "name": "Version of Spring Boot not compatible with Jakarta EE 9+",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 3,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
-                "ruleSet": "jakarta-ee9",
-                "rule": "spring-components-00001",
-                "labels": ["konveyor.io/source"]
-            },
-            {
-                "name": "Version of Spring not compatible with Jakarta EE 9+",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 3,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
-                "ruleSet": "quarkus/springboot",
-                "rule": "spring-components-00002",
-                "labels": ["konveyor.io/source"]
             }
         ],
         "dependencies": [
