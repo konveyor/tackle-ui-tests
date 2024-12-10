@@ -81,7 +81,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
                         getRandomApplicationData("IssuesFilteringApp1_" + i, {
                             sourceData: appData["bookserver-app"],
                         }),
-                        getRandomAnalysisData(analysisData["analysis_for_openSourceLibraries"])
+                        getRandomAnalysisData(analysisData["source_analysis_on_bookserverapp"])
                     );
                     bookServerApp.business = businessServiceList[0].name;
                     applicationsList.push(bookServerApp);
