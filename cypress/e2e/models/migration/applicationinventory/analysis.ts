@@ -20,6 +20,7 @@ import {
     button,
     clearAllFilters,
     Languages,
+    MIN,
     ReportTypeSelectors,
     RepositoryType,
     save,
@@ -392,7 +393,7 @@ export class Analysis extends Application {
 
     public static verifyStatus(element: Cypress.Chainable, status: string) {
         element
-            .find("div > div:nth-child(2)", { timeout: 3600000, log: false }) // 1h
+            .find("div > div:nth-child(2)", { timeout: 10 * MIN, log: false })
             .should("not.have.text", AnalysisStatuses.notStarted)
             .and("not.have.text", AnalysisStatuses.scheduled)
             .and("not.have.text", AnalysisStatuses.inProgress)
