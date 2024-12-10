@@ -22,13 +22,14 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
+    notExists,
     validateTextPresence,
 } from "../../../../utils/utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../models/migration/applicationinventory/application";
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
 import { TaskKind, TaskStatus } from "../../../types/constants";
-import { TaskManagerColumns } from "../../../views/taskmanager.view";
+import { TaskManagerColumns, tasksTable } from "../../../views/taskmanager.view";
 
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
@@ -38,6 +39,7 @@ describe(["@tier1"], "Task Manager", () => {
         login();
         deleteApplicationTableRows();
     });
+
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
@@ -77,6 +79,14 @@ describe(["@tier1"], "Task Manager", () => {
         validateTextPresence(TaskManagerColumns.kind, TaskKind.languageDiscovery);
         validateTextPresence(TaskManagerColumns.kind, TaskKind.techDiscovery);
         clearAllFilters();
+    });
+
+    it("Delete an application - related tasks are deleted", function () {
+        // Remove the last element from and return it
+        const app = applicationsList.pop();
+        app.delete();
+        TaskManager.open();
+        notExists(app.name, tasksTable);
     });
 
     after("Perform test data clean up", function () {
