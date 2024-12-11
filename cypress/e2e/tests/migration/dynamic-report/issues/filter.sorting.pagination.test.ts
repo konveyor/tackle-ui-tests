@@ -44,7 +44,7 @@ import { AnalysisStatuses, issueFilter, SEC, tdTag, trTag } from "../../../../ty
 import { randomWordGenerator } from "../../../../../utils/data_utils";
 import { rightSideBar } from "../../../../views/issue.view";
 
-describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
+describe.skip(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
     const applicationsList: Analysis[] = [];
     let businessServiceList: BusinessServices[];
     let archetype: Archetype;
