@@ -364,13 +364,13 @@ export class Analysis extends Application {
         doesExistSelector(analyzeAppButton, rbacRules["Analyze"]);
     }
 
-    verifyAnalysisStatus(status: string) {
+    verifyAnalysisStatus(status: string, timeout?: number) {
         cy.log(`Verifying analysis status, expecting ${status}`);
         cy.get(tdTag, { log: false })
             .contains(this.name, { log: false })
             .closest(trTag, { log: false })
             .within(() => {
-                Analysis.verifyStatus(cy.get(analysisColumn, { log: false }), status);
+                Analysis.verifyStatus(cy.get(analysisColumn, { log: false }), status, timeout);
             });
         this.selectApplication();
     }
@@ -391,9 +391,9 @@ export class Analysis extends Application {
         });
     }
 
-    public static verifyStatus(element: Cypress.Chainable, status: string) {
+    public static verifyStatus(element: Cypress.Chainable, status: string, timeout = 10 * MIN) {
         element
-            .find("div > div:nth-child(2)", { timeout: 10 * MIN, log: false })
+            .find("div > div:nth-child(2)", { timeout: timeout, log: false })
             .should("not.have.text", AnalysisStatuses.notStarted)
             .and("not.have.text", AnalysisStatuses.scheduled)
             .and("not.have.text", AnalysisStatuses.inProgress)

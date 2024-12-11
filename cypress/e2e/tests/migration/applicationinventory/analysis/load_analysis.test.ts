@@ -24,7 +24,7 @@ import {
     deleteApplicationTableRows,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { AnalysisStatuses, SEC } from "../../../../types/constants";
+import { AnalysisStatuses, MIN, SEC } from "../../../../types/constants";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { CustomMigrationTarget } from "../../../../models/administration/custom-migration-targets/custom-migration-target";
 import * as data from "../../../../../utils/data_utils";
@@ -93,7 +93,7 @@ describe(["@tier2"], "Source Analysis of big applications", () => {
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
         application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyAnalysisStatus(AnalysisStatuses.completed, 60 * MIN);
     });
 
     it("Source Analysis on OpenMRS app", function () {
@@ -108,7 +108,7 @@ describe(["@tier2"], "Source Analysis of big applications", () => {
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
         application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyAnalysisStatus(AnalysisStatuses.completed, 30 * MIN);
     });
 
     after("Test data clean up", function () {
