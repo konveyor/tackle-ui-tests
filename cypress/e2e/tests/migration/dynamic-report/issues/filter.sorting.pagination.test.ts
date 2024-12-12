@@ -44,7 +44,7 @@ import { AnalysisStatuses, issueFilter, SEC, tdTag, trTag } from "../../../../ty
 import { randomWordGenerator } from "../../../../../utils/data_utils";
 import { rightSideBar } from "../../../../views/issue.view";
 
-describe.skip(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
+describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
     const applicationsList: Analysis[] = [];
     let businessServiceList: BusinessServices[];
     let archetype: Archetype;
@@ -265,11 +265,11 @@ describe.skip(["@tier3"], "Filtering, sorting and pagination in Issues", functio
     });
 
     affectedApplicationSortByList.forEach((column) => {
-        let title =
+        let testTitle =
             column === "Effort"
                 ? `Bug MTA-4323: Affected applications - sort by ${column}`
                 : `Affected applications - sort by ${column}`;
-        it(title, function () {
+        it(testTitle, function () {
             Issues.openAffectedApplications(
                 this.analysisData["source_analysis_on_bookserverapp"]["issues"][0]["name"]
             );
