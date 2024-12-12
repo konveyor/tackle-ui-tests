@@ -1859,8 +1859,7 @@ export function validateTackleCr(): void {
 export function validateMtaOperatorLog(): void {
     cy.wait(30 * SEC);
     cy.pause();
-    let command = `oc logs $(oc get pods -n openshift-mta| grep mta-operator | cut -d " " -f 1)
-    -n openshift-mta | grep failed | tail -n 1| awk -F 'failed=' '{print $2}'|cut -d " " -f 1`;
+    let command = `oc logs $(oc get pods -n openshift-mta| grep mta-operator | cut -d " " -f 1) -n openshift-mta | grep failed | tail -n 1| awk -F 'failed=' '{print $2}'|cut -d " " -f 1`;
     cy.log("COMMAND:", command);
     getCommandOutput(command).then((result) => {
         cy.log("RESULT:", result);
