@@ -21,7 +21,7 @@ export default defineConfig({
         jira_atlassian_cloud_url: "",
         jira_atlassian_cloud_project: "Test",
         jira_stage_datacenter_project_id: 12335626,
-        tackleUrl: "https://mta-openshift-mta.apps.mig07.rhos-psi.cnv-qe.rhood.us/",
+        tackleUrl: "https://tackle-konveyor-tackle.apps.mtv03.rhos-psi.cnv-qe.rhood.us",
         rwx_enabled: true,
         logLevel: "ASSERT",
         mtaVersion: "",
@@ -55,12 +55,6 @@ export default defineConfig({
             on("file:preprocessor", tagify(config));
             require("cypress-fail-fast/plugin")(on, config);
             require("cypress-fs/plugins")(on, config);
-            on("task", {
-                log(args) {
-                    console.log(...args);
-                    return null;
-                },
-            });
             return config;
         },
         experimentalMemoryManagement: true,

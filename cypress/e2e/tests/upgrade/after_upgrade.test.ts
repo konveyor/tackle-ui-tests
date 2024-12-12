@@ -84,6 +84,8 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
 
     it("Validate Tackle CR", () => validateTackleCr());
 
+    it("Validate MTA Operator Log", () => validateMtaOperatorLog());
+
     it("Controls - testing existence of instances created before upgrade", function () {
         const {
             sourceControlUsernameCredentialsName,
@@ -219,6 +221,4 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
             isEnabled(clearRepository, rwxEnabled);
         });
     });
-
-    it.only("Validate MTA Operator Log", () => validateMtaOperatorLog());
 });

@@ -52,13 +52,3 @@ Cypress.Commands.add(
         dropElement.realMouseMove(0, 0, { position: "topLeft" }).realMouseUp().wait(200);
     }
 );
-Cypress.Commands.overwrite("log", function (log, ...args) {
-    if (Cypress.browser.isHeadless) {
-        return cy.task("log", args, { log: false }).then(() => {
-            return log(...args);
-        });
-    } else {
-        console.log(...args);
-        return log(...args);
-    }
-});
