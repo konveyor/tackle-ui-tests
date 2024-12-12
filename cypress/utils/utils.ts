@@ -1858,9 +1858,14 @@ export function validateTackleCr(): void {
 
 export function validateMtaOperatorLog(): void {
     cy.wait(30 * SEC);
-    let command = `oc logs $(oc get pods | grep mta-operator | cut -d " " -f 1) | grep failed | tail -n 1| awk -F 'failed=' '{print $2}'|cut -d " " -f 1`;
+    cy.pause();
+    let command = `oc logs $(oc get pods -n openshift-mta| grep mta-operator | cut -d " " -f 1)
+    -n openshift-mta | grep failed | tail -n 1| awk -F 'failed=' '{print $2}'|cut -d " " -f 1`;
+    cy.log("COMMAND:", command);
     getCommandOutput(command).then((result) => {
+        cy.log("RESULT:", result);
         const failedCount = parseInt(result.stdout.trim());
+        cy.log("FAILED COUNT IS", failedCount);
         if (Number.isNaN(failedCount)) {
             throw `Debugging output\n
             result.stdout: ${result.stdout}EOV\n

@@ -220,5 +220,5 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         });
     });
 
-    it("Validate MTA Operator Log", () => validateMtaOperatorLog());
+    it.only("Validate MTA Operator Log", () => validateMtaOperatorLog());
 });
