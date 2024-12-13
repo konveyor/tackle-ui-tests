@@ -77,6 +77,7 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         let businessServicesList = createMultipleBusinessServices(2);
         stakeholders = createMultipleStakeholders(1);
 
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(fileName);
 
         let tagList = createMultipleTags(2);
