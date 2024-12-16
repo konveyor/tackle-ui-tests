@@ -1321,8 +1321,8 @@
             {
                 "name": "Hardcoded IP Address",
                 "category": "mandatory",
-                "source": "None",
-                "targets": ["cloud-readiness", "discovery"],
+                "sources": ["None"],
+                "targets": ["cloud-readiness"],
                 "effort": 1,
                 "totalEffort": 1,
                 "incidents": 1,
@@ -1334,8 +1334,8 @@
             {
                 "name": "Legacy configuration with io.konveyor.demo.config.ApplicationConfiguration",
                 "category": "mandatory",
-                "sources": ["java", "java-ee"],
-                "targets": ["cloud-readiness"],
+                "sources": ["traditional-corporate-framework"],
+                "targets": ["cloud-corporate-framework"],
                 "effort": 1,
                 "totalEffort": 1,
                 "incidents": 1,
