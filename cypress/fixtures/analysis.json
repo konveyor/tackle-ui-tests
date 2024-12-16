@@ -1276,7 +1276,7 @@
         "target": ["JBoss Web Server 6"],
         "appName": "tackle-testapp",
         "openSourceLibraries": true,
-        "effort": 2
+        "effort": 34
     },
 
     "openJDK17_source+dep_analysis_on_tackletestapp": {
@@ -1284,7 +1284,7 @@
         "target": ["OpenJDK 17"],
         "appName": "tackle-testapp",
         "openSourceLibraries": true,
-        "effort": 4104
+        "effort": 1335
     },
 
     "openJDK21_source+dep_analysis_on_dayTrader": {
@@ -1292,7 +1292,7 @@
         "target": ["OpenJDK 21"],
         "appName": "deps",
         "openSourceLibraries": true,
-        "effort": 596
+        "effort": 330
     },
 
     "jdk9_source_dep_analysis_on_tackletestapp": {
@@ -1343,8 +1343,8 @@
             {
                 "name": "Hardcoded IP Address",
                 "category": "mandatory",
-                "source": "None",
-                "targets": ["cloud-readiness", "discovery"],
+                "sources": ["None"],
+                "targets": ["cloud-readiness"],
                 "effort": 1,
                 "totalEffort": 1,
                 "incidents": 1,
@@ -1356,8 +1356,8 @@
             {
                 "name": "Legacy configuration with io.konveyor.demo.config.ApplicationConfiguration",
                 "category": "mandatory",
-                "sources": ["java", "java-ee"],
-                "targets": ["cloud-readiness"],
+                "sources": ["traditional-corporate-framework"],
+                "targets": ["cloud-corporate-framework"],
                 "effort": 1,
                 "totalEffort": 1,
                 "incidents": 1,

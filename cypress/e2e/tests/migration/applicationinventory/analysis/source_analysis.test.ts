@@ -268,7 +268,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.verifyEffort(this.analysisData["analysis_on_example-1-app"]["effort"]);
     });
 
-    it("Bug MTA-2916: JWS6 target Source + deps analysis on tackletest app", function () {
+    it("JWS6 target Source + deps analysis on tackletest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies_jws6", {
@@ -289,7 +289,7 @@ describe(["@tier1"], "Source Analysis", () => {
         );
     });
 
-    it("Bug MTA-2916: Openjdk17 Source + dependencies analysis on tackletest app", function () {
+    it("Bug MTA-4408: Openjdk17 Source + dependencies analysis on tackletest app", function () {
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies_openjdk17", {
                 sourceData: this.appData["tackle-testapp-git"],
@@ -311,7 +311,7 @@ describe(["@tier1"], "Source Analysis", () => {
         );
     });
 
-    it("Bug MTA-2916: OpenJDK21 Source + dependencies analysis on daytrader app", function () {
+    it("Bug MTA-4417: OpenJDK21 Source + dependencies analysis on daytrader app", function () {
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies_openjdk21", {
                 sourceData: this.appData["daytrader-app"],
@@ -325,6 +325,7 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        Application.open();
         application.verifyEffort(
             this.analysisData["openJDK21_source+dep_analysis_on_dayTrader"]["effort"]
         );
@@ -368,49 +369,38 @@ describe(["@tier1"], "Source Analysis", () => {
 
     // Automates customer bug MTA-2973
     it("Source analysis on tackle app public with custom rule", function () {
-        const applicationList = [
-            new Analysis(
-                getRandomApplicationData("tackle-public-customRule", {
-                    sourceData: this.appData["tackle-testapp-public"],
-                }),
-                getRandomAnalysisData(this.analysisData["tackle-testapp-public-customRule"])
-            ),
-        ];
+        const { appData, analysisData } = this;
+        const applicationData = getRandomApplicationData("tackle-public-customRule", {
+            sourceData: appData["tackle-testapp-public"],
+        });
 
-        // Analysis application with maven credential
-        cy.wait(2 * SEC);
-        Application.open();
-        applicationList[0].create();
-        applicationList[0].manageCredentials(null, maven_credential.name);
-        applicationsList.push(applicationList[0]);
-        cy.wait(5 * SEC);
-        applicationList[0].analyze();
-        applicationList[0].verifyAnalysisStatus("Completed");
-        applicationList[0].validateIssues(
-            this.analysisData["tackle-testapp-public-customRule"]["issues"]
-        );
-        this.analysisData["tackle-testapp-public-customRule"]["issues"].forEach(
-            (currentIssue: AppIssue) => {
-                applicationList[0].validateAffected(currentIssue);
-            }
-        );
+        const analysisDataCustomRule = analysisData["tackle-testapp-public-customRule"];
 
-        // Analysis application without maven credential
-        cy.wait(2 * SEC);
+        for (let i = 0; i < 2; i++) {
+            applicationsList.push(
+                new Analysis(applicationData, getRandomAnalysisData(analysisDataCustomRule))
+            );
+        }
+
+        // Analyze an application
+        const analyzeApplication = (application, credentials) => {
+            application.create();
+            if (credentials) application.manageCredentials(null, credentials.name);
+            application.analyze();
+            application.verifyAnalysisStatus("Completed");
+            application.validateIssues(analysisDataCustomRule.issues);
+            analysisDataCustomRule.issues.forEach((issue) => {
+                application.validateAffected(issue);
+            });
+        };
+
+        // Analyze application with Maven credentials
         Application.open();
-        applicationList[1].create();
-        applicationsList.push(applicationList[0]);
-        cy.wait(5 * SEC);
-        applicationList[1].analyze();
-        applicationList[1].verifyAnalysisStatus("Completed");
-        applicationList[1].validateIssues(
-            this.analysisData["tackle-testapp-public-customRule"]["issues"]
-        );
-        this.analysisData["tackle-testapp-public-customRule"]["issues"].forEach(
-            (currentIssue: AppIssue) => {
-                applicationList[1].validateAffected(currentIssue);
-            }
-        );
+        analyzeApplication(applicationsList[0], maven_credential);
+
+        // Analyze application without Maven credentials
+        Application.open();
+        analyzeApplication(applicationsList[1], null);
     });
 
     it("Bug MTA-3701: Source analysis on tackle app with hash in Password", function () {
