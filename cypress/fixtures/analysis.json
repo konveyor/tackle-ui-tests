@@ -1321,7 +1321,7 @@
             {
                 "name": "Hardcoded IP Address",
                 "category": "mandatory",
-                "source": "None",
+                "sources": ["None"],
                 "targets": ["cloud-readiness", "discovery"],
                 "effort": 1,
                 "totalEffort": 1,
