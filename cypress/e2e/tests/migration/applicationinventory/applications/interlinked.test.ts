@@ -49,6 +49,7 @@ let businessServicesList: Array<BusinessServices> = [];
 describe(["@tier3"], "Applications interlinked to tags and business service", () => {
     before("Login and Create Test Data", function () {
         login();
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
         stakeholdersList = createMultipleStakeholders(1);
         stakeholderGroupsList = createMultipleStakeholderGroups(1, stakeholdersList);
