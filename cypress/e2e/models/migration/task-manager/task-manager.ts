@@ -19,6 +19,7 @@ import {
     click,
     clickByText,
     inputText,
+    normalizeText,
     selectFilter,
     selectItemsPerPage,
     selectUserPerspective,
@@ -31,6 +32,7 @@ import {
     migration,
     TaskFilter,
     trTag,
+    MIN,
 } from "../../../types/constants";
 import { sideKebabMenu } from "../../../views/applicationinventory.view";
 import {
@@ -40,7 +42,11 @@ import {
     searchInput,
 } from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
-import { tasksStatusColumn } from "../../../views/taskmanager.view";
+import {
+    taskDetailsEditor,
+    TaskManagerColumns,
+    tasksStatusColumn,
+} from "../../../views/taskmanager.view";
 
 export class TaskManager {
     static fullUrl = Cypress.env("tackleUrl") + "/tasks";
@@ -64,14 +70,19 @@ export class TaskManager {
         selectItemsPerPage(itemsPerPage);
     }
 
-    static verifyTaskStatus(application: string, kind: TaskKind, status: TaskStatus): void {
+    static verifyTaskStatus(
+        application: string,
+        kind: TaskKind,
+        status: TaskStatus
+    ): Cypress.Chainable {
         TaskManager.open();
         selectItemsPerPage(itemsPerPage);
-        cy.get(trTag)
+        return cy
+            .get(trTag)
             .filter(':contains("' + application + '")')
             .filter(':contains("' + kind + '")')
             .within(() => {
-                cy.get(tasksStatusColumn).contains(status, { timeout: 30 * SEC });
+                return cy.get(tasksStatusColumn).contains(status, { timeout: 10 * MIN });
             });
     }
 
@@ -120,17 +131,32 @@ export class TaskManager {
     ): void {
         TaskManager.open();
         selectItemsPerPage(itemsPerPage);
-        cy.get(trTag)
-            .filter(':contains("' + TaskKind.analyzer + '")')
-            .filter(':contains("' + appName + '")')
-            .filter(':contains("' + status + '")')
-            .within(() => {
-                click(sideKebabMenu);
-            });
+        this.verifyTaskStatus(appName, TaskKind.analyzer, status).within(() => {
+            click(sideKebabMenu);
+        });
         if (enabled) {
             cy.get(kebabActionButton).contains("Cancel").click();
         } else {
             cy.get(kebabActionButton).contains("Cancel").should("not.be.enabled");
         }
+    }
+
+    public static openTaskDetailsByStatus(
+        appName: string,
+        taskKind: TaskKind,
+        taskStatus: TaskStatus = TaskStatus.succeeded
+    ) {
+        this.open(10, true);
+        this.verifyTaskStatus(appName, taskKind, taskStatus).within(() => {
+            cy.get(TaskManagerColumns.status).click();
+        });
+        cy.wait(2 * SEC);
+        cy.get(taskDetailsEditor)
+            .invoke("text")
+            .then((text) => {
+                const normalizedText = normalizeText(text);
+                expect(normalizedText).to.include(`kind: ${taskKind}`);
+                expect(normalizedText).to.include(`state: ${taskStatus}`);
+            });
     }
 }
