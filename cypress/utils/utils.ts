@@ -1965,3 +1965,12 @@ export function getUniqueNamesMap<T extends { name: string }>(instanceArrays: T[
 
     return instanceMap;
 }
+
+/**
+ * Normalizes text by:
+ * - Collapsing all sequences of whitespace into a single space.
+ * - Trimming leading and trailing whitespace.
+ */
+export function normalizeText(text: string): string {
+    return text.replace(/\s+/g, " ").trim();
+}
