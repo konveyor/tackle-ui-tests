@@ -64,6 +64,8 @@ describe(["@tier2"], "Affected files validation", () => {
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
+
+        Application.open(true);
     });
 
     it("Bug MTA-2006: Affected files validation with Source + dependencies analysis on daytrader app", function () {
@@ -155,6 +157,29 @@ describe(["@tier2"], "Affected files validation", () => {
             this.analysisData["affected_files_on_tackleTestapp_deps"]["issues"]
         );
         this.analysisData["affected_files_on_tackleTestapp_deps"]["issues"].forEach(
+            (currentIssue: AppIssue) => {
+                application.validateAffected(currentIssue);
+            }
+        );
+    });
+
+    // Automates Bug https://issues.redhat.com/browse/MTA-4024
+    it("Affected files validation with source+deps analysis on coolStore app", function () {
+        const application = new Analysis(
+            getRandomApplicationData("affected_files_on_coolStoreApp", {
+                sourceData: this.appData["cool-store-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["affected_files_on_coolStore_deps"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        cy.wait(2 * SEC);
+        application.analyze();
+        application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(this.analysisData["affected_files_on_coolStore_deps"]["effort"]);
+        application.validateIssues(this.analysisData["affected_files_on_coolStore_deps"]["issues"]);
+        this.analysisData["affected_files_on_coolStore_deps"]["issues"].forEach(
             (currentIssue: AppIssue) => {
                 application.validateAffected(currentIssue);
             }
