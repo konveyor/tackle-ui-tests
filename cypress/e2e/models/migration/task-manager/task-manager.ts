@@ -28,11 +28,11 @@ import {
     SEC,
     TaskKind,
     TaskStatus,
-    itemsPerPage,
     migration,
     TaskFilter,
     trTag,
     MIN,
+    taskDetails,
 } from "../../../types/constants";
 import { sideKebabMenu } from "../../../views/applicationinventory.view";
 import {
@@ -52,7 +52,7 @@ export class TaskManager {
     static fullUrl = Cypress.env("tackleUrl") + "/tasks";
     static menuName = "Task Manager";
 
-    static open(itemsPerPage = 100, forceReload = false) {
+    static open(itemsPerPage = 10, forceReload = false) {
         if (forceReload) {
             cy.visit(TaskManager.fullUrl, { timeout: 15 * SEC }).then((_) =>
                 selectItemsPerPage(itemsPerPage)
@@ -70,20 +70,21 @@ export class TaskManager {
         selectItemsPerPage(itemsPerPage);
     }
 
-    static verifyTaskStatus(
+    private static getTaskRow(
         application: string,
-        kind: TaskKind,
-        status: TaskStatus
-    ): Cypress.Chainable {
-        TaskManager.open();
-        selectItemsPerPage(itemsPerPage);
+        kind: TaskKind
+    ): Cypress.Chainable<JQuery<HTMLTableRowElement>> {
         return cy
             .get(trTag)
             .filter(':contains("' + application + '")')
-            .filter(':contains("' + kind + '")')
-            .within(() => {
-                return cy.get(tasksStatusColumn).contains(status, { timeout: 10 * MIN });
-            });
+            .filter(':contains("' + kind + '")');
+    }
+
+    public static verifyTaskStatus(application: string, kind: TaskKind, status: TaskStatus) {
+        TaskManager.open();
+        TaskManager.getTaskRow(application, kind)
+            .find(tasksStatusColumn)
+            .contains(status, { timeout: 10 * MIN });
     }
 
     public static applyFilter(filterType: TaskFilter, filterValue: string) {
@@ -95,8 +96,7 @@ export class TaskManager {
 
     public static setPreemption(preemption: boolean): void {
         const setPreemption = preemption === true ? "Enable preemption" : "Disable preemption";
-
-        TaskManager.open(10);
+        TaskManager.open();
         cy.contains("Pending")
             .closest(trTag)
             .within(() => {
@@ -106,7 +106,7 @@ export class TaskManager {
     }
 
     public static cancelTask(status: string): void {
-        TaskManager.open(10);
+        TaskManager.open();
         cy.contains(status)
             .closest(trTag)
             .within(() => {
@@ -130,10 +130,8 @@ export class TaskManager {
         enabled = true
     ): void {
         TaskManager.open();
-        selectItemsPerPage(itemsPerPage);
-        this.verifyTaskStatus(appName, TaskKind.analyzer, status).within(() => {
-            click(sideKebabMenu);
-        });
+        TaskManager.verifyTaskStatus(appName, TaskKind.analyzer, status);
+        TaskManager.getTaskRow(appName, TaskKind.analyzer).find(sideKebabMenu).click();
         if (enabled) {
             cy.get(kebabActionButton).contains("Cancel").click();
         } else {
@@ -141,22 +139,35 @@ export class TaskManager {
         }
     }
 
-    public static openTaskDetailsByStatus(
-        appName: string,
-        taskKind: TaskKind,
-        taskStatus: TaskStatus = TaskStatus.succeeded
-    ) {
-        this.open(10, true);
-        this.verifyTaskStatus(appName, taskKind, taskStatus).within(() => {
-            cy.get(TaskManagerColumns.status).click();
-        });
+    private static taskDetailsSanity(appName: string, taskKind: TaskKind, taskStatus?: TaskStatus) {
         cy.wait(2 * SEC);
         cy.get(taskDetailsEditor)
             .invoke("text")
             .then((text) => {
                 const normalizedText = normalizeText(text);
+                expect(normalizedText).to.include(`name: ${appName}-${taskKind}`);
                 expect(normalizedText).to.include(`kind: ${taskKind}`);
-                expect(normalizedText).to.include(`state: ${taskStatus}`);
+                if (taskStatus) {
+                    expect(normalizedText).to.include(`state: ${taskStatus}`);
+                }
             });
+    }
+
+    public static openTaskDetailsByStatus(
+        appName: string,
+        taskKind: TaskKind,
+        taskStatus: TaskStatus = TaskStatus.succeeded
+    ) {
+        TaskManager.open(10, true);
+        TaskManager.verifyTaskStatus(appName, taskKind, taskStatus);
+        TaskManager.getTaskRow(appName, taskKind).find(TaskManagerColumns.status).click();
+        TaskManager.taskDetailsSanity(appName, taskKind, taskStatus);
+    }
+
+    public static openTaskDetailsByKebabMenu(appName: string, taskKind: TaskKind) {
+        TaskManager.open(10, true);
+        TaskManager.getTaskRow(appName, taskKind).find(sideKebabMenu).click();
+        cy.get(kebabActionButton).contains(taskDetails).click();
+        TaskManager.taskDetailsSanity(appName, taskKind);
     }
 }

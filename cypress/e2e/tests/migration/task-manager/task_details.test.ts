@@ -56,6 +56,11 @@ describe(["@tier3"], "Task details validation", function () {
         TaskManager.openTaskDetailsByStatus(application.name, TaskKind.techDiscovery);
     });
 
+    it("Open task details from right kebab menu", function () {
+        TaskManager.openTaskDetailsByKebabMenu(application.name, TaskKind.languageDiscovery);
+        TaskManager.openTaskDetailsByStatus(application.name, TaskKind.techDiscovery);
+    });
+
     after("Perform test data clean up", function () {
         deleteApplicationTableRows();
     });

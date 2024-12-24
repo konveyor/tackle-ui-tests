@@ -156,7 +156,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
     });
 
     it("Pagination validation", function () {
-        TaskManager.open(10);
+        TaskManager.open();
         validatePagination();
     });
 
