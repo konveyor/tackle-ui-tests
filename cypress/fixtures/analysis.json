@@ -1249,6 +1249,28 @@
         ]
     },
 
+    "affected_files_on_coolStore_deps": {
+        "source": "Source code + dependencies",
+        "target": ["Containerization", "Jakarta EE 9"],
+        "appName": "cool-store-app",
+        "effort": 114,
+        "issues": [
+            {
+                "name": "Move to Jakarta EE Maven Artifacts - replace groupId javax.activation",
+                "category": "potential",
+                "sources": ["None"],
+                "targets": ["eap"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "eap7/weblogic/tests/data",
+                "rule": "maven-javax-to-jakarta-00002",
+                "labels": ["JakartaEE", "konveyor.io/source"]
+            }
+        ]
+    },
+
     "jws6_source+dep_analysis_on_tackletestapp": {
         "source": "Source code + dependencies",
         "target": ["JBoss Web Server 6"],

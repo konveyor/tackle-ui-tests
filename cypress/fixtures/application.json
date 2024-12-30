@@ -79,5 +79,9 @@
     "python-demo-app": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/Shopify/sample-django-app"
+    },
+    "cool-store-app": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/konveyor-ecosystem/coolstore"
     }
 }
