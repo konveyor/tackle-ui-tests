@@ -39,7 +39,7 @@ import {
     selectFormItems,
     selectUserPerspective,
     performRowActionByIcon,
-    clickItemInKebabMenu,
+    performRowAction,
 } from "../../../../utils/utils";
 
 export class Stakeholdergroups {
@@ -127,7 +127,7 @@ export class Stakeholdergroups {
 
     delete(cancel = false): void {
         Stakeholdergroups.openList();
-        clickItemInKebabMenu(this.name, deleteAction);
+        performRowAction(this.name, deleteAction);
         if (cancel) {
             click(commonView.confirmCancelButton);
         } else {
