@@ -1852,15 +1852,11 @@ export function validateTackleCr(): void {
 }
 
 export function validateMtaOperatorLog(): void {
+    let namespace = getNamespace();
     cy.wait(30 * SEC);
-    let command = `oc logs $(oc get pods | grep mta-operator | cut -d " " -f 1) | grep failed | tail -n 1| awk -F 'failed=' '{print $2}'|cut -d " " -f 1`;
+    let command = `oc logs $(oc get pods -n${namespace} | grep mta-operator | cut -d " " -f 1) -n${namespace} | grep failed | tail -n 1| awk -F 'failed=' '{print $2}'|cut -d " " -f 1`;
     getCommandOutput(command).then((result) => {
         const failedCount = parseInt(result.stdout.trim());
-        if (Number.isNaN(failedCount)) {
-            throw `Debugging output\n
-            result.stdout: ${result.stdout}EOV\n
-            failedCount: ${failedCount}EOV`;
-        }
         expect(failedCount).equal(0);
     });
 }
