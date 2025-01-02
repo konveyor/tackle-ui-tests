@@ -1267,6 +1267,19 @@
                 "ruleSet": "eap7/weblogic/tests/data",
                 "rule": "maven-javax-to-jakarta-00002",
                 "labels": ["JakartaEE", "konveyor.io/source"]
+            },
+            {
+                "name": "Replace the Java EE version with the Jakarta equivalent",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap"],
+                "effort": 1,
+                "totalEffort": 2,
+                "incidents": 2,
+                "affectedFiles": 1,
+                "ruleSet": "eap8/eap7",
+                "rule": "javaee-to-jakarta-namespaces-00033",
+                "labels": ["konveyor.io/source"]
             }
         ]
     },
