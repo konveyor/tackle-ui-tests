@@ -195,11 +195,14 @@ export class Analysis extends Application {
             if (["OpenJDK 11", "OpenJDK 17", "OpenJDK 21"].includes(target[i])) {
                 click(openjdkToggleButton);
                 clickByText(dropDownMenu, target[i]);
+                click(`#target-OpenJDK-select`);
             } else if (["camel:3", "camel:4"].includes(target[i])) {
                 click(camelToggleButton);
                 clickByText(dropDownMenu, target[i]);
+                click(`#target-Camel-select`);
+            } else {
+                click(`#target-${target[i].replace(/ /g, "-")}-select`);
             }
-            click(`#target-${target[i].replace(/ /g, "-")}-select`);
         }
     }
 
