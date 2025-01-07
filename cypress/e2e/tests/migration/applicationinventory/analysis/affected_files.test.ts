@@ -163,7 +163,7 @@ describe(["@tier2"], "Affected files validation", () => {
         );
     });
 
-    // Automates Bug https://issues.redhat.com/browse/MTA-4024
+    // Automates Bug MTA-4024 and MTA-4025
     it("Affected files validation with source+deps analysis on coolStore app", function () {
         const application = new Analysis(
             getRandomApplicationData("affected_files_on_coolStoreApp", {
