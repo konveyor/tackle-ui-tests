@@ -50,7 +50,6 @@ export const modal = "[id^=pf-modal-part-]";
 export const navLink = ".pf-v5-c-nav__link";
 export const closeSuccessNotification = "button[aria-label^='Close Success alert:']";
 export const divHeader = "[id^=pf-random-id-]";
-export const selectFilter = "div.pf-m-toggle-group.pf-m-filter-group.pf-m-show";
 export const itemsSelectInsideDialog =
     "div[role='dialog'] button[class='pf-v5-c-menu-toggle__button']";
 export const helperBusiness = 'span[class*="helper-text__item"]';
@@ -97,5 +96,11 @@ export enum sideDrawer {
     listText = "span.pf-v5-c-description-list__text",
     labelText = "span.pf-v5-c-label__text",
 }
-export const closeAbout = "button[aria-label='Close Dialog'";
+export const closeAbout = "button[aria-label='Close Dialog']";
 export const pencilIcon = "#pencil-action";
+
+// Analysis details page
+export enum downloadFormatButton {
+    yaml = "button[aria-label='YAML']",
+    json = "button[aria-label='JSON']",
+}
