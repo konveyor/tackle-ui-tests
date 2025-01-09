@@ -99,8 +99,16 @@ export enum sideDrawer {
 export const closeAbout = "button[aria-label='Close Dialog']";
 export const pencilIcon = "#pencil-action";
 
-// Analysis details page
-export enum downloadFormatButton {
-    yaml = "button[aria-label='YAML']",
-    json = "button[aria-label='JSON']",
-}
+// Task details page
+export const taskDetailsEditor = "div[class='pf-v5-c-code-editor__code']";
+export const downloadFormatDetails = {
+    yaml: {
+        key: "yaml",
+        button: "button[id='code-language-select-yaml']",
+    },
+    json: {
+        key: "json",
+        button: "button[id='code-language-select-json']",
+    },
+};
+export const downloadTaskButton = "button[aria-label='Download code']";

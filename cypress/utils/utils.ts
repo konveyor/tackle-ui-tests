@@ -65,7 +65,8 @@ import {
     confirmButton,
     deleteButton,
     divHeader,
-    downloadFormatButton,
+    downloadFormatDetails,
+    downloadTaskButton,
     expandableRow,
     expandRow,
     filterDropDownContainer,
@@ -1974,4 +1975,19 @@ export function getUniqueNamesMap<T extends { name: string }>(instanceArrays: T[
  */
 export function normalizeText(text: string): string {
     return text.replace(/\s+/g, " ").trim();
+}
+
+export function downloadTaskDetails(format = downloadFormatDetails.yaml) {
+    cy.url().should("include", "tasks");
+    cy.url().then((url) => {
+        const taskId = url.split("/").pop();
+        const filePath = `cypress/downloads/log-${taskId}.${format.key}`;
+        cy.get(format.button).click();
+        cy.get(downloadTaskButton).click();
+        if (format === downloadFormatDetails.json) {
+            cy.readFile(filePath).its("id").should("eq", Number(taskId));
+        } else {
+            cy.readFile(filePath).should("contain", `id: ${taskId}`);
+        }
+    });
 }

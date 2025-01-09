@@ -16,7 +16,9 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    cleanupDownloads,
     deleteApplicationTableRows,
+    downloadTaskDetails,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
@@ -24,6 +26,7 @@ import {
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
 import { TaskKind } from "../../../types/constants";
+import { downloadFormatDetails } from "../../../views/common.view";
 
 describe(["@tier3"], "Task details validation", function () {
     let application: Analysis;
@@ -61,7 +64,16 @@ describe(["@tier3"], "Task details validation", function () {
         TaskManager.openTaskDetailsByStatus(application.name, TaskKind.techDiscovery);
     });
 
+    it("Download task details in yaml format", function () {
+        downloadTaskDetails();
+    });
+
+    it("Download task details in json format", function () {
+        downloadTaskDetails(downloadFormatDetails.json);
+    });
+
     after("Perform test data clean up", function () {
         deleteApplicationTableRows();
+        cleanupDownloads();
     });
 });
