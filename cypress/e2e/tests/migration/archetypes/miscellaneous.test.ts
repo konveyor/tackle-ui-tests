@@ -68,7 +68,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
 
         archetype = new Archetype(
             data.getRandomWord(8),
-            ["Language / Java", "Runtime / Quarkus"],
+            ["Language / Java", "Runtime / Spring Boot"],
             ["Language / Java"],
             null
         );
@@ -86,7 +86,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
             "Applications",
             "No applications currently match the criteria tags."
         );
-        applications = createMultipleApplications(2, ["Language / Java", "Runtime / Quarkus"]);
+        applications = createMultipleApplications(2, ["Language / Java", "Runtime / Spring Boot"]);
         Archetype.verifyColumnValue(archetype.name, "Applications", "2 applications");
         selectRow(archetype.name);
         exists(applications[0].name);
