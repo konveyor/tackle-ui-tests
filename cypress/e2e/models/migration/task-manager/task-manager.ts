@@ -83,8 +83,9 @@ export class TaskManager {
     public static verifyTaskStatus(application: string, kind: TaskKind, status: TaskStatus) {
         TaskManager.open();
         TaskManager.getTaskRow(application, kind)
-            .find(tasksStatusColumn)
-            .contains(status, { timeout: 10 * MIN });
+            // The assertion will automatically retry as long as the parent command respects the timeout
+            .find(tasksStatusColumn, { timeout: 10 * MIN })
+            .should("contain.text", status);
     }
 
     public static applyFilter(filterType: TaskFilter, filterValue: string) {
