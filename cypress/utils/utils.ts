@@ -21,7 +21,6 @@ import { TagCategory } from "../e2e/models/migration/controls/tagcategory";
 import { Jobfunctions } from "../e2e/models/migration/controls/jobfunctions";
 
 import * as loginView from "../e2e/views/login.view";
-import * as commonView from "../e2e/views/common.view";
 import { navMenu, navTab } from "../e2e/views/menu.view";
 import * as data from "../utils/data_utils";
 import "cypress-file-upload";
@@ -57,21 +56,40 @@ import {
 } from "../e2e/views/applicationinventory.view";
 import {
     aboutButton,
+    actionMenuItem,
+    appTable,
+    cancelButton,
     closeAbout,
     closeSuccessNotification,
+    commonTable,
     confirmButton,
+    deleteButton,
     divHeader,
+    downloadFormatDetails,
+    downloadTaskButton,
+    expandableRow,
+    expandRow,
     filterDropDownContainer,
+    filterInput,
+    filterToggleButton,
     firstPageButton,
+    itemsPerPageMenuOptions,
+    itemsPerPageToggleButton,
     lastPageButton,
     liTag,
+    manageImportsActionsButton,
     modal,
     nextPageButton,
+    optionMenu,
     pageNumInput,
     prevPageButton,
+    removeButton,
     searchButton,
+    sideDrawer,
     span,
     standardFilter,
+    submitButton,
+    successAlertMessage,
 } from "../e2e/views/common.view";
 import { tagLabels, tagMenuButton } from "../e2e/views/tags.view";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
@@ -182,12 +200,12 @@ export function clickJs(fieldId: string, isForced = true, log = false, number = 
 }
 
 export function submitForm(): void {
-    cy.get(commonView.submitButton, { timeout: 10 * SEC }).should("not.be.disabled");
-    clickJs(commonView.submitButton);
+    cy.get(submitButton, { timeout: 10 * SEC }).should("not.be.disabled");
+    clickJs(submitButton);
 }
 
 export function cancelForm(): void {
-    clickJs(commonView.cancelButton);
+    clickJs(cancelButton);
 }
 
 export function login(username?: string, password?: string, firstLogin = false): Chainable<null> {
@@ -267,21 +285,19 @@ export function resetURL(): void {
 
 export function selectItemsPerPage(items: number): void {
     cy.log(`Select ${items} per page`);
-    cy.get(commonView.itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(
-        ($toggleBtn) => {
-            if (!$toggleBtn.eq(0).is(":disabled")) {
-                $toggleBtn.eq(0).trigger("click");
-                cy.get(commonView.itemsPerPageMenuOptions, { log: false });
-                cy.get(`li[data-action="per-page-${items}"]`, { log: false })
-                    .contains(`${items}`)
-                    .click({
-                        force: true,
-                        log: false,
-                    });
-                cy.wait(2 * SEC);
-            }
+    cy.get(itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(($toggleBtn) => {
+        if (!$toggleBtn.eq(0).is(":disabled")) {
+            $toggleBtn.eq(0).trigger("click");
+            cy.get(itemsPerPageMenuOptions, { log: false });
+            cy.get(`li[data-action="per-page-${items}"]`, { log: false })
+                .contains(`${items}`)
+                .click({
+                    force: true,
+                    log: false,
+                });
+            cy.wait(2 * SEC);
         }
-    );
+    });
 }
 
 export function selectFromDropList(dropList, item: string) {
@@ -309,7 +325,7 @@ export function selectRow(name: string): void {
 
 export function sidedrawerTab(name: string, tab: string): void {
     selectRow(name);
-    cy.get(commonView.sideDrawer.pageDrawerContent).within(() => {
+    cy.get(sideDrawer.pageDrawerContent).within(() => {
         clickTab(tab);
     });
 }
@@ -352,10 +368,10 @@ export function closeSuccessAlert(): void {
 }
 
 export function removeMember(memberName: string): void {
-    cy.get("span").contains(memberName).siblings(commonView.removeButton).click();
+    cy.get("span").contains(memberName).siblings(removeButton).click();
 }
 
-export function exists(value: string, tableSelector = commonView.appTable): void {
+export function exists(value: string, tableSelector = appTable): void {
     // Wait for DOM to render table and sibling elements
     cy.get(tableSelector, { timeout: 5 * SEC }).then(($tbody) => {
         if ($tbody.text() !== "No data available") {
@@ -365,7 +381,7 @@ export function exists(value: string, tableSelector = commonView.appTable): void
     });
 }
 
-export function notExists(value: string, tableSelector = commonView.appTable): void {
+export function notExists(value: string, tableSelector = appTable): void {
     cy.get(tableSelector).then(($tbody) => {
         if ($tbody.text() !== "No data available") {
             selectItemsPerPage(100);
@@ -375,7 +391,7 @@ export function notExists(value: string, tableSelector = commonView.appTable): v
 }
 
 export function selectFilter(filterName: string, identifiedRisk?: boolean, value = 0): void {
-    cy.get(commonView.selectFilter)
+    cy.get(filterToggleButton)
         .eq(value)
         .within(() => {
             click("#filtered-by");
@@ -384,10 +400,10 @@ export function selectFilter(filterName: string, identifiedRisk?: boolean, value
 }
 
 export function filterInputText(searchTextValue: string, value: number): void {
-    cy.get(commonView.filterInput).eq(value).click().focused().clear();
+    cy.get(filterInput).eq(value).click().focused().clear();
     cy.wait(200);
-    cy.get(commonView.filterInput).eq(value).clear().type(searchTextValue);
-    cy.get(commonView.searchButton).eq(value).click({ force: true });
+    cy.get(filterInput).eq(value).clear().type(searchTextValue);
+    cy.get(searchButton).eq(value).click({ force: true });
 }
 
 export function clearAllFilters(): void {
@@ -497,7 +513,7 @@ export function applySearchFilter(
 export function clickOnSortButton(
     fieldName: string,
     sortCriteria: string,
-    tableSelector: string = commonView.commonTable
+    tableSelector: string = commonTable
 ): void {
     cy.get(tableSelector)
         .contains("th", fieldName)
@@ -636,7 +652,7 @@ export function expandRowDetails(rowIdentifier: string): void {
         .contains(rowIdentifier)
         .closest(trTag)
         .within(() => {
-            cy.get(commonView.expandRow).then(($btn) => {
+            cy.get(expandRow).then(($btn) => {
                 if ($btn.attr("aria-expanded") === "false") {
                     $btn.trigger("click");
                 }
@@ -653,7 +669,7 @@ export function closeRowDetails(rowIdentifier: string): void {
             if (!button["aria-label=Details"]) {
                 return;
             }
-            cy.get(commonView.expandRow).then(($btn) => {
+            cy.get(expandRow).then(($btn) => {
                 if ($btn.attr("aria-expanded") === "true") {
                     $btn.trigger("click");
                 }
@@ -706,7 +722,7 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
         .find("button")
         .contains("Import")
         .click();
-    checkSuccessAlert(commonView.successAlertMessage, `Success! file saved to be processed.`);
+    checkSuccessAlert(successAlertMessage, `Success! file saved to be processed.`);
 }
 
 export function uploadXml(fileName: string, selector = 'input[type="file"]'): void {
@@ -801,11 +817,7 @@ export function performRowActionByIcon(itemName: string, action: string): void {
 
 export function clickItemInKebabMenu(rowItem, itemName: string): void {
     performRowActionByIcon(rowItem, kebabMenu);
-    cy.get(commonView.actionMenuItem)
-        .contains(itemName)
-        .closest(button)
-        .first()
-        .click({ force: true });
+    cy.get(actionMenuItem).contains(itemName).closest(button).first().click({ force: true });
 }
 
 export function clickKebabMenuOptionArchetype(rowItem: string, itemName: string): void {
@@ -816,7 +828,7 @@ export function clickKebabMenuOptionArchetype(rowItem: string, itemName: string)
         .within(() => {
             click(sideKebabMenu);
         });
-    cy.get(commonView.actionMenuItem).contains(itemName).click({ force: true });
+    cy.get(actionMenuItem).contains(itemName).click({ force: true });
 }
 
 export function createMultipleJiraConnections(
@@ -1161,9 +1173,9 @@ export function deleteAllTagsAndTagCategories(): void {
     const nonDefaultTagTypes = [];
     TagCategory.openList();
 
-    cy.get(commonView.appTable, { timeout: 2 * SEC })
+    cy.get(appTable, { timeout: 2 * SEC })
         .find(trTag)
-        .not(commonView.expandableRow)
+        .not(expandableRow)
         .each(($rowGroup) => {
             let typeName = $rowGroup.find(tagLabels.type).text();
             let isDefault = false;
@@ -1208,9 +1220,7 @@ export function deleteAllTagsAndTagCategories(): void {
         });
 }
 
-export function isTableEmpty(
-    tableSelector: string = commonView.commonTable
-): Cypress.Chainable<boolean> {
+export function isTableEmpty(tableSelector: string = commonTable): Cypress.Chainable<boolean> {
     return cy
         .get(tableSelector)
         .find("div")
@@ -1219,7 +1229,7 @@ export function isTableEmpty(
         });
 }
 
-export function deleteAllRows(tableSelector: string = commonView.commonTable) {
+export function deleteAllRows(tableSelector: string = commonTable) {
     // This method is for pages that have delete button inside Kebab menu
     // like Applications and Imports page
     isTableEmpty().then((empty) => {
@@ -1230,7 +1240,7 @@ export function deleteAllRows(tableSelector: string = commonView.commonTable) {
                     for (let i = 0; i < $rows.length - 1; i++) {
                         cy.get(sideKebabMenu, { timeout: 10000 }).first().click();
                         cy.get("ul[role=menu] > li").contains("Delete").click();
-                        cy.get(commonView.confirmButton).click();
+                        cy.get(confirmButton).click();
                         cy.wait(5000);
                         isTableEmpty().then((empty) => {
                             if (empty) return;
@@ -1241,18 +1251,16 @@ export function deleteAllRows(tableSelector: string = commonView.commonTable) {
     });
 }
 
-export function deleteAllImports(tableSelector: string = commonView.commonTable) {
+export function deleteAllImports(tableSelector: string = commonTable) {
     isTableEmpty().then((empty) => {
         if (!empty) {
             cy.get(tableSelector)
                 .find(trTag)
                 .then(($rows) => {
                     for (let i = 0; i < $rows.length - 1; i++) {
-                        cy.get(commonView.manageImportsActionsButton, { timeout: 10000 })
-                            .eq(1)
-                            .click();
+                        cy.get(manageImportsActionsButton, { timeout: 10000 }).eq(1).click();
                         cy.get("ul[role=menu] > li").contains("Delete").click();
-                        cy.get(commonView.confirmButton).click();
+                        cy.get(confirmButton).click();
                         cy.wait(2 * SEC);
                     }
                 });
@@ -1260,10 +1268,7 @@ export function deleteAllImports(tableSelector: string = commonView.commonTable)
     });
 }
 
-export function deleteAllItems(
-    tableSelector: string = commonView.commonTable,
-    pageNumber?: number
-) {
+export function deleteAllItems(tableSelector: string = commonTable, pageNumber?: number) {
     // This method is for pages like controls that do not have delete button inside kebabmenu
     if (pageNumber) {
         goToPage(pageNumber);
@@ -1274,13 +1279,13 @@ export function deleteAllItems(
                 .find(trTag)
                 .then(($rows) => {
                     for (let i = 0; i < $rows.length - 1; i++) {
-                        cy.get(commonView.deleteButton, { timeout: 10000 })
+                        cy.get(deleteButton, { timeout: 10000 })
                             .first()
                             .then(($delete_btn) => {
                                 if (!$delete_btn.hasClass("pf-m-aria-disabled")) {
                                     $delete_btn.click();
                                     cy.wait(0.5 * SEC);
-                                    click(commonView.confirmButton);
+                                    click(confirmButton);
                                     cy.wait(SEC);
                                 }
                             });
@@ -1317,7 +1322,7 @@ export function deleteApplicationTableRows(): void {
     deleteAllRows();
 }
 export function validatePageTitle(pageTitle: string) {
-    return cy.get(commonView.pageTitle).then((h1) => {
+    return cy.get(pageTitle).then((h1) => {
         return h1.text().includes(pageTitle);
     });
 }
@@ -1333,7 +1338,7 @@ export function deleteAllMigrationWaves() {
                 for (let i = 0; i < $rows.length; i++) {
                     cy.get(MigrationWaveView.actionsButton, { timeout: 10000 }).first().click();
                     cy.contains("Delete").click();
-                    cy.get(commonView.confirmButton).click();
+                    cy.get(confirmButton).click();
                     cy.wait(5000);
                     isTableEmpty().then((empty) => {
                         if (empty) return;
@@ -1379,8 +1384,8 @@ export function goToPage(page: number): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    cy.get(commonView.optionMenu).click();
-    cy.get(commonView.actionMenuItem).contains(userType).click({ force: true });
+    cy.get(optionMenu).click();
+    cy.get(actionMenuItem).contains(userType).click({ force: true });
 }
 
 export function selectWithinModal(selector: string): void {
@@ -1484,10 +1489,7 @@ export function validatePagination(): void {
     cy.get(firstPageButton).eq(0).click();
 }
 
-export function itemsPerPageValidation(
-    tableSelector = commonView.appTable,
-    columnName = "Name"
-): void {
+export function itemsPerPageValidation(tableSelector = appTable, columnName = "Name"): void {
     selectItemsPerPage(10);
     cy.wait(2000);
 
@@ -1510,7 +1512,7 @@ export function itemsPerPageValidation(
 }
 
 export function autoPageChangeValidations(
-    tableSelector = commonView.appTable,
+    tableSelector = appTable,
     columnName = "Name",
     deleteInsideKebab: boolean = false
 ): void {
@@ -1973,4 +1975,19 @@ export function getUniqueNamesMap<T extends { name: string }>(instanceArrays: T[
  */
 export function normalizeText(text: string): string {
     return text.replace(/\s+/g, " ").trim();
+}
+
+export function downloadTaskDetails(format = downloadFormatDetails.yaml) {
+    cy.url().should("include", "tasks");
+    cy.url().then((url) => {
+        const taskId = url.split("/").pop();
+        const filePath = `cypress/downloads/log-${taskId}.${format.key}`;
+        cy.get(format.button).click();
+        cy.get(downloadTaskButton).click();
+        if (format === downloadFormatDetails.json) {
+            cy.readFile(filePath).its("id").should("eq", Number(taskId));
+        } else {
+            cy.readFile(filePath).should("contain", `id: ${taskId}`);
+        }
+    });
 }

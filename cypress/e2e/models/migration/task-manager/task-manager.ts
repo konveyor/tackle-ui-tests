@@ -40,13 +40,10 @@ import {
     kebabActionButton,
     searchButton,
     searchInput,
+    taskDetailsEditor,
 } from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
-import {
-    taskDetailsEditor,
-    TaskManagerColumns,
-    tasksStatusColumn,
-} from "../../../views/taskmanager.view";
+import { TaskManagerColumns, tasksStatusColumn } from "../../../views/taskmanager.view";
 
 export class TaskManager {
     static fullUrl = Cypress.env("tackleUrl") + "/tasks";

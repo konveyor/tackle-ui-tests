@@ -50,7 +50,6 @@ export const modal = "[id^=pf-modal-part-]";
 export const navLink = ".pf-v5-c-nav__link";
 export const closeSuccessNotification = "button[aria-label^='Close Success alert:']";
 export const divHeader = "[id^=pf-random-id-]";
-export const selectFilter = "div.pf-m-toggle-group.pf-m-filter-group.pf-m-show";
 export const itemsSelectInsideDialog =
     "div[role='dialog'] button[class='pf-v5-c-menu-toggle__button']";
 export const helperBusiness = 'span[class*="helper-text__item"]';
@@ -97,5 +96,19 @@ export enum sideDrawer {
     listText = "span.pf-v5-c-description-list__text",
     labelText = "span.pf-v5-c-label__text",
 }
-export const closeAbout = "button[aria-label='Close Dialog'";
+export const closeAbout = "button[aria-label='Close Dialog']";
 export const pencilIcon = "#pencil-action";
+
+// Task details page
+export const taskDetailsEditor = "div[class='pf-v5-c-code-editor__code']";
+export const downloadFormatDetails = {
+    yaml: {
+        key: "yaml",
+        button: "button[id='code-language-select-yaml']",
+    },
+    json: {
+        key: "json",
+        button: "button[id='code-language-select-json']",
+    },
+};
+export const downloadTaskButton = "button[aria-label='Download code']";

@@ -25,4 +25,3 @@ export enum TaskManagerColumns {
     createdBy = 'td[data-label="Created By"]',
 }
 export const tasksTable = "table[aria-label='Tasks table']";
-export const taskDetailsEditor = "div[class='pf-v5-c-code-editor__code']";
