@@ -96,6 +96,20 @@ describe(["@tier1"], "Task Manager", () => {
         TaskManager.verifyTaskStatus(app.name, TaskKind.techDiscovery, TaskStatus.succeeded);
     });
 
+    it("Create a binary app - no discovery task is triggered", function () {
+        Application.open();
+        const app = new Application(
+            getRandomApplicationData("binary", {
+                sourceData: this.appData["tackle-testapp-binary"],
+            })
+        );
+        app.create();
+        cy.wait("@getApplication", { timeout: 5 * SEC });
+        applicationsList.push(app);
+        TaskManager.open();
+        validateTextPresence(TaskManagerColumns.application, app.name, false);
+    });
+
     it("Delete an application - related tasks are deleted", function () {
         // Remove the last element from applicationsList
         const app = applicationsList.pop();
