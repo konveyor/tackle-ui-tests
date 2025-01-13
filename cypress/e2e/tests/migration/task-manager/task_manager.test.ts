@@ -28,10 +28,10 @@ import {
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../models/migration/applicationinventory/application";
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
-import { TaskKind, TaskStatus } from "../../../types/constants";
+import { SEC, TaskKind, TaskStatus } from "../../../types/constants";
 import { TaskManagerColumns, tasksTable } from "../../../views/taskmanager.view";
 
-let applicationsList: Array<Analysis> = [];
+let applicationsList: Array<Application> = [];
 let application: Analysis;
 
 describe(["@tier1"], "Task Manager", () => {
@@ -79,6 +79,21 @@ describe(["@tier1"], "Task Manager", () => {
         validateTextPresence(TaskManagerColumns.kind, TaskKind.languageDiscovery);
         validateTextPresence(TaskManagerColumns.kind, TaskKind.techDiscovery);
         clearAllFilters();
+    });
+
+    it("Create an app with source code and branch name - discovery tasks should succeed", function () {
+        Application.open();
+        const app = new Application(
+            getRandomApplicationData("", {
+                sourceData: this.appData["konveyor-exampleapp"],
+            })
+        );
+        app.create();
+        cy.wait("@getApplication", { timeout: 2 * SEC });
+        applicationsList.push(app);
+        TaskManager.open();
+        TaskManager.verifyTaskStatus(app.name, TaskKind.languageDiscovery, TaskStatus.succeeded);
+        TaskManager.verifyTaskStatus(app.name, TaskKind.techDiscovery, TaskStatus.succeeded);
     });
 
     it("Delete an application - related tasks are deleted", function () {
