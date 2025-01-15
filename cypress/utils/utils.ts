@@ -44,6 +44,8 @@ import {
     issueFilter,
     save,
     SortType,
+    TaskKind,
+    TaskStatus,
 } from "../e2e/types/constants";
 import {
     date,
@@ -90,6 +92,7 @@ import {
     standardFilter,
     submitButton,
     successAlertMessage,
+    taskDetailsEditor,
 } from "../e2e/views/common.view";
 import { tagLabels, tagMenuButton } from "../e2e/views/tags.view";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
@@ -1975,6 +1978,20 @@ export function getUniqueNamesMap<T extends { name: string }>(instanceArrays: T[
  */
 export function normalizeText(text: string): string {
     return text.replace(/\s+/g, " ").trim();
+}
+
+export function taskDetailsSanity(appName: string, taskKind: TaskKind, taskStatus?: TaskStatus) {
+    cy.wait(2 * SEC);
+    cy.get(taskDetailsEditor)
+        .invoke("text")
+        .then((text) => {
+            const normalizedText = normalizeText(text);
+            expect(normalizedText).to.include(`name: ${appName}`);
+            expect(normalizedText).to.include(`kind: ${taskKind}`);
+            if (taskStatus) {
+                expect(normalizedText).to.include(`state: ${taskStatus}`);
+            }
+        });
 }
 
 export function downloadTaskDetails(format = downloadFormatDetails.yaml) {

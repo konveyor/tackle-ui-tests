@@ -28,6 +28,7 @@ import {
     details,
     legacyPathfinder,
     review,
+    TaskKind,
 } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import {
@@ -920,5 +921,12 @@ export class Application {
         Application.open();
         cy.get(tdTag).contains(this.name).trigger("mouseenter").wait(4000);
         cy.contains("View all tasks for the application").click({ force: true });
+    }
+
+    // Opens a task details from application popover
+    openTaskDetailsFromPopover(kind: TaskKind): void {
+        Application.open();
+        cy.get(tdTag).contains(this.name).trigger("mouseenter").wait(4000);
+        cy.contains(kind).click();
     }
 }

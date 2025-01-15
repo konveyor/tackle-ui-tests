@@ -72,7 +72,7 @@ describe(["@tier1"], "Task Manager", () => {
         validateTextPresence(TaskManagerColumns.application, applicationsList[1].name);
     });
 
-    it("Navigation to the task manager page is allowed from the application table", function () {
+    it("Navigation to the task manager page is allowed from the application popover", function () {
         applicationsList[0].openAllTasksLink();
         validateTextPresence(TaskManagerColumns.application, applicationsList[0].name);
         validateTextPresence(TaskManagerColumns.application, applicationsList[1].name, false);
@@ -107,7 +107,7 @@ describe(["@tier1"], "Task Manager", () => {
         cy.wait("@getApplication", { timeout: 5 * SEC });
         applicationsList.push(app);
         TaskManager.open();
-        validateTextPresence(TaskManagerColumns.application, app.name, false);
+        notExists(app.name, tasksTable);
     });
 
     it("Delete an application - related tasks are deleted", function () {
@@ -119,7 +119,6 @@ describe(["@tier1"], "Task Manager", () => {
     });
 
     after("Perform test data clean up", function () {
-        cy.wait(2000);
         Application.open(true);
         deleteByList(applicationsList);
     });
