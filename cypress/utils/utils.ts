@@ -1914,7 +1914,7 @@ export function validateCheckBoxIsDisabled(checkBoxText: string, isChecked?: boo
 }
 
 export function getCheckboxSelector(text: string) {
-    text = text.charAt(0).toLowerCase() + text.slice(1).replace(/\s+/g, "");
+    text = text.toLowerCase().replace(/\s+/g, "");
     return `input[aria-labelledby='check-${text}']`;
 }
 
