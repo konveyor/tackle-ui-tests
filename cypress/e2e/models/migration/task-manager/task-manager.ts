@@ -23,6 +23,7 @@ import {
     selectFilter,
     selectItemsPerPage,
     selectUserPerspective,
+    taskDetailsSanity,
 } from "../../../../utils/utils";
 import {
     SEC,
@@ -137,20 +138,6 @@ export class TaskManager {
         }
     }
 
-    private static taskDetailsSanity(appName: string, taskKind: TaskKind, taskStatus?: TaskStatus) {
-        cy.wait(2 * SEC);
-        cy.get(taskDetailsEditor)
-            .invoke("text")
-            .then((text) => {
-                const normalizedText = normalizeText(text);
-                expect(normalizedText).to.include(`name: ${appName}-${taskKind}`);
-                expect(normalizedText).to.include(`kind: ${taskKind}`);
-                if (taskStatus) {
-                    expect(normalizedText).to.include(`state: ${taskStatus}`);
-                }
-            });
-    }
-
     public static openTaskDetailsByStatus(
         appName: string,
         taskKind: TaskKind,
@@ -159,13 +146,13 @@ export class TaskManager {
         TaskManager.open(10, true);
         TaskManager.verifyTaskStatus(appName, taskKind, taskStatus);
         TaskManager.getTaskRow(appName, taskKind).find(TaskManagerColumns.status).click();
-        TaskManager.taskDetailsSanity(appName, taskKind, taskStatus);
+        taskDetailsSanity(appName, taskKind, taskStatus);
     }
 
     public static openTaskDetailsByKebabMenu(appName: string, taskKind: TaskKind) {
         TaskManager.open(10, true);
         TaskManager.getTaskRow(appName, taskKind).find(sideKebabMenu).click();
         cy.get(kebabActionButton).contains(taskDetails).click();
-        TaskManager.taskDetailsSanity(appName, taskKind);
+        taskDetailsSanity(appName, taskKind);
     }
 }
