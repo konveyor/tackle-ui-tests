@@ -28,7 +28,7 @@ export const tasksTable = "table[aria-label='Tasks table']";
 export enum TaskManagerTableHeaders {
     id = "ID",
     application = "Application",
-    // status = "Status",
+    status = "Status",
     kind = "Kind",
     priority = "Priority",
     preemption = "Preemption",
