@@ -851,7 +851,7 @@ export class Application {
             .eq(0)
             .children("button.pf-m-link")
             .eq(0)
-            .click();
+            .click({ force: true });
         // Need to wait until the application is unlinked from Jira and reflected in the wave
         cy.wait(3 * SEC);
         this.closeApplicationDetails();
