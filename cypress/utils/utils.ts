@@ -73,7 +73,6 @@ import {
     expandRow,
     filterDropDownContainer,
     filterInput,
-    filterToggleButton,
     firstPageButton,
     itemsPerPageMenuOptions,
     itemsPerPageToggleButton,
@@ -394,12 +393,8 @@ export function notExists(value: string, tableSelector = appTable): void {
 }
 
 export function selectFilter(filterName: string, identifiedRisk?: boolean, value = 0): void {
-    cy.get(filterToggleButton)
-        .eq(value)
-        .within(() => {
-            click("#filtered-by");
-            clickWithinByText('div[class="pf-v5-c-menu__content"]', "button", filterName);
-        });
+    cy.get("#filtered-by").click();
+    clickWithinByText('div[class="pf-v5-c-menu__content"]', "button", filterName);
 }
 
 export function filterInputText(searchTextValue: string, value: number): void {
