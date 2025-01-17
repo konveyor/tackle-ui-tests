@@ -29,6 +29,7 @@ import { CredentialsSourceControlUsername } from "../../../../models/administrat
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { MavenConfiguration } from "../../../../models/administration/repositories/maven";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { AppIssue } from "../../../../types/types";
 let source_credential: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;
 const mavenConfiguration = new MavenConfiguration();
@@ -85,6 +86,12 @@ describe(["@tier1"], "Binary Analysis", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
         Application.open(true);
         application.verifyEffort(this.analysisData["binary_analysis_on_tackletestapp"]["effort"]);
+        application.validateIssues(this.analysisData["binary_analysis_on_tackletestapp"]["issues"]);
+        this.analysisData["binary_analysis_on_tackletestapp"]["issues"].forEach(
+            (currentIssue: AppIssue) => {
+                application.validateAffected(currentIssue);
+            }
+        );
     });
 
     afterEach("Persist session", function () {

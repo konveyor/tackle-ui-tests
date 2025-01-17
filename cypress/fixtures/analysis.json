@@ -961,7 +961,35 @@
         "source": "Binary",
         "target": ["Containerization"],
         "appName": "customers-tomcat-0.0.1-SNAPSHOT.war",
-        "effort": 1
+        "effort": 2,
+        "issues": [
+            {
+                "name": "File system - Java IO",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["cloud-readiness"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "cloud-readiness",
+                "rule": "local-storage-00001",
+                "labels": ["konveyor.io/source", "storage"]
+            },
+            {
+                "name": "Hardcoded IP Address",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["cloud-readiness"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "discovery-rules",
+                "rule": "hardcoded-ip-address",
+                "labels": ["discovery"]
+            }
+        ]
     },
 
     "uploadbinary_analysis_on_acmeair": {
