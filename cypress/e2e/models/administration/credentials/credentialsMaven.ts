@@ -1,4 +1,3 @@
-import { Credentials } from "./credentials";
 import {
     cancelForm,
     clickByText,
@@ -7,8 +6,9 @@ import {
     submitForm,
     uploadFile,
 } from "../../../../utils/utils";
-import { CredentialsMavenData } from "../../../types/types";
 import { button } from "../../../types/constants";
+import { CredentialsMavenData } from "../../../types/types";
+import { Credentials } from "./credentials";
 
 export class CredentialsMaven extends Credentials {
     type = "Maven Settings File";

@@ -14,21 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {
-    AnalysisStatuses,
-    analyzeAppButton,
-    analyzeButton,
-    button,
-    clearAllFilters,
-    Languages,
-    MIN,
-    ReportTypeSelectors,
-    RepositoryType,
-    save,
-    SEC,
-    tdTag,
-    trTag,
-} from "../../../types/constants";
-import {
     cancelForm,
     click,
     clickByText,
@@ -47,12 +32,26 @@ import {
     uploadXml,
 } from "../../../../utils/utils";
 import {
+    AnalysisStatuses,
+    analyzeAppButton,
+    analyzeButton,
+    button,
+    clearAllFilters,
+    Languages,
+    MIN,
+    ReportTypeSelectors,
+    RepositoryType,
+    save,
+    SEC,
+    tdTag,
+    trTag,
+} from "../../../types/constants";
+import {
     analysisData,
     applicationData,
     RbacValidationRules,
     RulesRepositoryFields,
 } from "../../../types/types";
-import { Application } from "./application";
 import {
     addButton,
     addRules,
@@ -87,6 +86,7 @@ import {
     kebabMenu,
 } from "../../../views/applicationinventory.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
+import { Application } from "./application";
 
 export class Analysis extends Application {
     name: string;

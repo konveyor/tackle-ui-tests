@@ -15,22 +15,22 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../../utils/data_utils";
 import {
-    login,
-    selectItemsPerPage,
     click,
     clickByText,
-    exists,
-    notExists,
     createMultipleStakeholders,
+    exists,
+    login,
+    notExists,
+    selectItemsPerPage,
     selectUserPerspective,
 } from "../../../../../utils/utils";
-import { navTab } from "../../../../views/menu.view";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
-import { tdTag, trTag, stakeholderGroups, migration } from "../../../../types/constants";
+import { migration, stakeholderGroups, tdTag, trTag } from "../../../../types/constants";
 import { expandRow } from "../../../../views/common.view";
-import * as data from "../../../../../utils/data_utils";
+import { navTab } from "../../../../views/menu.view";
 import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 let stakeholdersList: Array<Stakeholders> = [];

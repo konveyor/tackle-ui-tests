@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import { clickByText, selectItemsPerPage, selectUserPerspective } from "../../../../utils/utils";
-import { SEC, applicationInventory, button, migration } from "../../../types/constants";
+import { applicationInventory, button, migration, SEC } from "../../../types/constants";
 import { applicationsActionButton } from "../../../views/applicationinventory.view";
 import { manageImportsActionsButton } from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";

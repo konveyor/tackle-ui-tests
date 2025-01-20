@@ -16,46 +16,46 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    clickByText,
-    inputText,
-    exists,
-    createMultipleBusinessServices,
-    selectFormItems,
-    getRandomApplicationData,
-    createMultipleStakeholders,
-    expandRowDetails,
-    existsWithinRow,
-    closeRowDetails,
-    deleteByList,
     checkSuccessAlert,
+    clickByText,
+    closeRowDetails,
+    createMultipleBusinessServices,
+    createMultipleStakeholders,
+    deleteByList,
+    exists,
+    existsWithinRow,
+    expandRowDetails,
+    getRandomApplicationData,
+    inputText,
+    login,
+    selectFormItems,
 } from "../../../../../utils/utils";
 import {
     button,
-    minCharsMsg,
+    createNewButton,
+    duplicateApplication,
     max120CharsMsg,
     max250CharsMsg,
-    duplicateApplication,
-    createNewButton,
+    minCharsMsg,
     tdTag,
 } from "../../../../types/constants";
 import {
+    applicationBusinessServiceSelect,
+    applicationContributorsAction,
+    applicationContributorsInput,
+    applicationContributorsText,
     applicationDescriptionInput,
     applicationNameInput,
-    applicationBusinessServiceSelect,
-    applicationContributorsInput,
     applicationOwnerInput,
-    applicationContributorsText,
-    applicationContributorsAction,
 } from "../../../../views/applicationinventory.view";
 
-import * as commonView from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
+import { Application } from "../../../../models/migration/applicationinventory/application";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Tag } from "../../../../models/migration/controls/tags";
-import { Application } from "../../../../models/migration/applicationinventory/application";
 import { MigrationWave } from "../../../../models/migration/migration-waves/migration-wave";
+import * as commonView from "../../../../views/common.view";
 
 let businessservicesList: Array<BusinessServices> = [];
 let stakeHoldersList: Stakeholders[];

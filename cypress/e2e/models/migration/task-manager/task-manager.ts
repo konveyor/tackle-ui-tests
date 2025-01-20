@@ -19,21 +19,20 @@ import {
     click,
     clickByText,
     inputText,
-    normalizeText,
     selectFilter,
     selectItemsPerPage,
     selectUserPerspective,
     taskDetailsSanity,
 } from "../../../../utils/utils";
 import {
+    migration,
+    MIN,
     SEC,
+    taskDetails,
+    TaskFilter,
     TaskKind,
     TaskStatus,
-    migration,
-    TaskFilter,
     trTag,
-    MIN,
-    taskDetails,
 } from "../../../types/constants";
 import { sideKebabMenu } from "../../../views/applicationinventory.view";
 import {
@@ -41,7 +40,6 @@ import {
     kebabActionButton,
     searchButton,
     searchInput,
-    taskDetailsEditor,
 } from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
 import { TaskManagerColumns, tasksStatusColumn } from "../../../views/taskmanager.view";

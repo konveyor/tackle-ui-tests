@@ -13,13 +13,13 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    clickByText,
     applySearchFilter,
-    deleteByList,
+    clickByText,
     createMultipleMigrationWaves,
+    deleteByList,
+    login,
 } from "../../../../utils/utils";
-import { button, name, clearAllFilters } from "../../../types/constants";
+import { button, clearAllFilters, name } from "../../../types/constants";
 
 import * as data from "../../../../utils/data_utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";

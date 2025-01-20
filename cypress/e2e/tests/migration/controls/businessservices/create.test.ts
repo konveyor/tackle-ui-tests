@@ -16,33 +16,33 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
+    checkSuccessAlert,
     clickByText,
-    inputText,
+    clickJs,
     exists,
+    inputText,
+    login,
     notExists,
     selectUserPerspective,
-    checkSuccessAlert,
-    clickJs,
 } from "../../../../../utils/utils";
 import {
     button,
-    minCharsMsg,
-    max120CharsMsg,
-    max250CharsMsg,
     createNewButton,
     duplicateBusinessService,
+    max120CharsMsg,
+    max250CharsMsg,
     migration,
+    minCharsMsg,
     SEC,
 } from "../../../../types/constants";
 import {
-    businessServiceNameInput,
     businessServiceDescriptionInput,
+    businessServiceNameInput,
 } from "../../../../views/businessservices.view";
 import * as commonView from "../../../../views/common.view";
 
-import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import * as data from "../../../../../utils/data_utils";
+import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
 describe(["@tier2"], "Business service validations", () => {

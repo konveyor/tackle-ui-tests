@@ -15,30 +15,30 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../../utils/data_utils";
 import {
-    login,
     clickByText,
-    createMultipleStakeholders,
-    createMultipleStakeholderGroups,
+    clickItemInKebabMenu,
     createMultipleBusinessServices,
+    createMultipleStakeholderGroups,
+    createMultipleStakeholders,
     createMultipleTags,
     deleteByList,
     deleteFromArrayByIndex,
-    clickItemInKebabMenu,
+    login,
     selectItemsPerPage,
 } from "../../../../../utils/utils";
-import { businessColumnSelector } from "../../../../views/applicationinventory.view";
-import { continueButton, stakeholdersAndGroupsSelect } from "../../../../views/assessment.view";
-import { navMenu } from "../../../../views/menu.view";
-import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
-import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
-import { applicationInventory, button, legacyPathfinder, SEC } from "../../../../types/constants";
-import { BusinessServices } from "../../../../models/migration/controls/businessservices";
-import * as data from "../../../../../utils/data_utils";
-import { Tag } from "../../../../models/migration/controls/tags";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
+import { BusinessServices } from "../../../../models/migration/controls/businessservices";
+import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
+import { Tag } from "../../../../models/migration/controls/tags";
+import { applicationInventory, button, legacyPathfinder, SEC } from "../../../../types/constants";
+import { businessColumnSelector } from "../../../../views/applicationinventory.view";
+import { continueButton, stakeholdersAndGroupsSelect } from "../../../../views/assessment.view";
+import { navMenu } from "../../../../views/menu.view";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let stakeholderGroupsList: Array<Stakeholdergroups> = [];

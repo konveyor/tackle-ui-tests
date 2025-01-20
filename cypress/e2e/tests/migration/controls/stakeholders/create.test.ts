@@ -16,31 +16,31 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    clickByText,
-    inputText,
-    exists,
-    notExists,
     checkSuccessAlert,
+    clickByText,
+    exists,
+    inputText,
+    login,
+    notExists,
 } from "../../../../../utils/utils";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import {
     button,
-    minCharsMsg,
-    max120CharsMsg,
-    invalidEmailMsg,
     createNewButton,
     duplicateEmail,
+    invalidEmailMsg,
+    max120CharsMsg,
+    minCharsMsg,
 } from "../../../../types/constants";
 import {
     stakeholderEmailInput,
-    stakeholderNameInput,
     stakeholderHelper,
+    stakeholderNameInput,
     stakeHoldersTable,
 } from "../../../../views/stakeholders.view";
-import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
-import * as commonView from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
+import * as commonView from "../../../../views/common.view";
 
 describe(["@tier2"], "Stakeholder validations", () => {
     const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());

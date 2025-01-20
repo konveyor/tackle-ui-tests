@@ -15,15 +15,15 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { createMultipleApplications, login } from "../../../utils/utils";
-import { CredentialType, JiraType, SEC } from "../../types/constants";
 import * as data from "../../../utils/data_utils";
-import { MigrationWave } from "../../models/migration/migration-waves/migration-wave";
+import { createMultipleApplications, login } from "../../../utils/utils";
+import { JiraCredentials } from "../../models/administration/credentials/JiraCredentials";
 import { Jira } from "../../models/administration/jira-connection/jira";
 import { JiraIssue } from "../../models/administration/jira-connection/jira-api.interface";
-import { JiraCredentials } from "../../models/administration/credentials/JiraCredentials";
-import { Metrics } from "../../models/migration/custom-metrics/custom-metrics";
 import { Application } from "../../models/migration/applicationinventory/application";
+import { Metrics } from "../../models/migration/custom-metrics/custom-metrics";
+import { MigrationWave } from "../../models/migration/migration-waves/migration-wave";
+import { CredentialType, JiraType, SEC } from "../../types/constants";
 
 const now = new Date();
 now.setDate(now.getDate() + 1);

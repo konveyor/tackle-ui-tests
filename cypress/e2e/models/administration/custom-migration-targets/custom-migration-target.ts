@@ -8,24 +8,24 @@ import {
     uploadXml,
 } from "../../../../utils/utils";
 import {
+    button,
     createNewButton,
     customMigrationTargets,
-    button,
+    CustomRuleType,
     deleteAction,
     editAction,
-    RepositoryType,
-    CustomRuleType,
     Languages,
+    RepositoryType,
     SEC,
 } from "../../../types/constants";
-import { navMenu } from "../../../views/menu.view";
+import { RulesManualFields, RulesRepositoryFields } from "../../../types/types";
+import { submitButton } from "../../../views/common.view";
 import {
     CustomMigrationTargetView,
     sourcesList,
     sourcesToggle,
 } from "../../../views/custom-migration-target.view";
-import { RulesManualFields, RulesRepositoryFields } from "../../../types/types";
-import { submitButton } from "../../../views/common.view";
+import { navMenu } from "../../../views/menu.view";
 
 export interface CustomMigrationTarget {
     name: string;

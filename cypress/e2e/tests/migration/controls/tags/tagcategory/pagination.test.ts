@@ -16,17 +16,17 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    selectItemsPerPage,
     createMultipleTags,
     deleteAllTagsAndTagCategories,
-    validatePagination,
     itemsPerPageValidation,
+    login,
+    selectItemsPerPage,
+    validatePagination,
 } from "../../../../../../utils/utils";
 import { SEC } from "../../../../../types/constants";
 
-import { appTable } from "../../../../../views/common.view";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
+import { appTable } from "../../../../../views/common.view";
 import { tagCategory } from "../../../../../views/tags.view";
 
 describe(["@tier3"], "Tag category pagination validations", function () {

@@ -12,20 +12,20 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../../utils/data_utils";
 import {
-    login,
-    getRandomApplicationData,
-    getRandomAnalysisData,
     deleteByList,
+    getRandomAnalysisData,
+    getRandomApplicationData,
+    login,
     manageCredentialsForMultipleApplications,
     writeMavenSettingsFile,
 } from "../../../../../utils/utils";
-import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { CredentialType, SEC, UserCredentials } from "../../../../types/constants";
-import * as data from "../../../../../utils/data_utils";
-import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
+import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
+import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { CredentialType, SEC, UserCredentials } from "../../../../types/constants";
 let source_credential: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;
 const sourceApplicationsList: Array<Analysis> = [];

@@ -16,15 +16,13 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    getRandomApplicationData,
-    getRandomAnalysisData,
-    deleteByList,
     checkSuccessAlert,
+    deleteByList,
+    getRandomAnalysisData,
+    getRandomApplicationData,
+    login,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { infoAlertMessage } from "../../../../views/common.view";
-import { AppIssue } from "../../../../types/types";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { TaskManager } from "../../../../models/migration/task-manager/task-manager";
 import {
@@ -35,7 +33,9 @@ import {
     tdTag,
     trTag,
 } from "../../../../types/constants";
+import { AppIssue } from "../../../../types/types";
 import { analysisColumn } from "../../../../views/analysis.view";
+import { infoAlertMessage } from "../../../../views/common.view";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 

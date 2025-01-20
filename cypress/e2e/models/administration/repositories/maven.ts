@@ -5,8 +5,8 @@ import {
     enableSwitch,
     selectUserPerspective,
 } from "../../../../utils/utils";
-import { clearRepository, confirmClear, mavenSecure } from "../../../views/repository.view";
 import { administration } from "../../../types/constants";
+import { clearRepository, confirmClear, mavenSecure } from "../../../views/repository.view";
 
 export class MavenConfiguration {
     static open() {

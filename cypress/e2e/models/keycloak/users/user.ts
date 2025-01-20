@@ -1,5 +1,3 @@
-import { UserData } from "../../../types/types";
-import { button, SEC, tdTag, trTag } from "../../../types/constants";
 import {
     click,
     clickByText,
@@ -8,6 +6,8 @@ import {
     login,
     logout,
 } from "../../../../utils/utils";
+import { button, SEC, tdTag, trTag } from "../../../types/constants";
+import { UserData } from "../../../types/types";
 import * as loginView from "../../../views/login.view";
 const tackleUiUrl = Cypress.env("tackleUrl");
 const keycloakAdminPassword = Cypress.env("keycloakAdminPassword");

@@ -15,9 +15,9 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../../utils/data_utils";
 import { exists, login, notExists } from "../../../../../utils/utils";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
-import * as data from "../../../../../utils/data_utils";
 
 describe(["@tier2"], "Job Function CRUD operations", () => {
     const jobfunction = new Jobfunctions(data.getJobTitle());

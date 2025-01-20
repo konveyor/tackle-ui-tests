@@ -14,8 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import * as faker from "faker";
+import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
 import { CredentialType, CustomRuleType, JiraType, UserCredentials } from "../e2e/types/constants";
-import { writeGpgKey, writeMavenSettingsFile } from "./utils";
 import {
     CredentialsData,
     CredentialsJiraData,
@@ -25,7 +25,7 @@ import {
     RulesRepositoryFields,
     UserData,
 } from "../e2e/types/types";
-import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
+import { writeGpgKey, writeMavenSettingsFile } from "./utils";
 
 export function getFullName(): string {
     // returns full name made up of first name, last name and title

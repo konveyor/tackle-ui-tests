@@ -15,17 +15,17 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { User } from "../../models/keycloak/users/user";
+import * as data from "../../../utils/data_utils";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
-import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { deleteByList, getRandomApplicationData, login, logout } from "../../../utils/utils";
-import { Analysis } from "../../models/migration/applicationinventory/analysis";
+import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
-import { CredentialType, legacyPathfinder, SEC } from "../../types/constants";
+import { User } from "../../models/keycloak/users/user";
+import { UserMigrator } from "../../models/keycloak/users/userMigrator";
+import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
-import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import * as data from "../../../utils/data_utils";
+import { CredentialType, legacyPathfinder, SEC } from "../../types/constants";
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];

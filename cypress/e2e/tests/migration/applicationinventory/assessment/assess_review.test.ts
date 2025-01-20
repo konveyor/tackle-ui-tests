@@ -16,23 +16,23 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    getRandomApplicationData,
-    deleteByList,
     clickByText,
     createMultipleStakeholders,
+    deleteByList,
+    getRandomApplicationData,
+    login,
 } from "../../../../../utils/utils";
 
-import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { legacyPathfinder, cloudNative, SEC } from "../../../../types/constants";
+import { Application } from "../../../../models/migration/applicationinventory/application";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
+import { cloudNative, legacyPathfinder, SEC } from "../../../../types/constants";
 import {
     modalBoxDialog,
     modalBoxMessage,
     reviewConfirmationText,
 } from "../../../../views/applicationinventory.view";
 import { confirmCancelButton } from "../../../../views/common.view";
-import { Application } from "../../../../models/migration/applicationinventory/application";
 
 let stakeholders: Stakeholders[];
 const yamlFile = "questionnaire_import/cloud-native.yaml";

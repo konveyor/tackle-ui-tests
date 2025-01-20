@@ -12,31 +12,30 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    login,
-    clickByText,
-    applySearchFilter,
-    deleteByList,
-    createMultipleBusinessServices,
-    createMultipleTags,
-    createMultipleApplicationsWithBSandTags,
-    createMultipleStakeholders,
-} from "../../../../utils/utils";
-import {
-    manageApplications,
-    button,
-    name,
-    clearAllFilters,
-    businessService,
-    owner,
-    businessServiceLower,
-} from "../../../types/constants";
 import * as data from "../../../../utils/data_utils";
-import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
-import { BusinessServices } from "../../../models/migration/controls/businessservices";
-import { Tag } from "../../../models/migration/controls/tags";
-import { Stakeholders } from "../../../models/migration/controls/stakeholders";
+import {
+    applySearchFilter,
+    clickByText,
+    createMultipleApplicationsWithBSandTags,
+    createMultipleBusinessServices,
+    createMultipleStakeholders,
+    createMultipleTags,
+    deleteByList,
+    login,
+} from "../../../../utils/utils";
 import { Application } from "../../../models/migration/applicationinventory/application";
+import { BusinessServices } from "../../../models/migration/controls/businessservices";
+import { Stakeholders } from "../../../models/migration/controls/stakeholders";
+import { Tag } from "../../../models/migration/controls/tags";
+import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
+import {
+    businessServiceLower,
+    button,
+    clearAllFilters,
+    manageApplications,
+    name,
+    owner,
+} from "../../../types/constants";
 
 const now = new Date();
 now.setDate(now.getDate() + 1);

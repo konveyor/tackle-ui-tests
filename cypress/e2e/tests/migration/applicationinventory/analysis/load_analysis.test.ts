@@ -15,20 +15,20 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    login,
-    getRandomApplicationData,
-    getRandomAnalysisData,
-    deleteByList,
-    deleteAllMigrationWaves,
-    deleteApplicationTableRows,
-} from "../../../../../utils/utils";
-import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { AnalysisStatuses, MIN, SEC } from "../../../../types/constants";
-import { Application } from "../../../../models/migration/applicationinventory/application";
-import { CustomMigrationTarget } from "../../../../models/administration/custom-migration-targets/custom-migration-target";
 import * as data from "../../../../../utils/data_utils";
 import { getRulesData } from "../../../../../utils/data_utils";
+import {
+    deleteAllMigrationWaves,
+    deleteApplicationTableRows,
+    deleteByList,
+    getRandomAnalysisData,
+    getRandomApplicationData,
+    login,
+} from "../../../../../utils/utils";
+import { CustomMigrationTarget } from "../../../../models/administration/custom-migration-targets/custom-migration-target";
+import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
+import { Application } from "../../../../models/migration/applicationinventory/application";
+import { AnalysisStatuses, MIN, SEC } from "../../../../types/constants";
 
 const applications: Analysis[] = [];
 describe(["@tier2"], "Source Analysis of big applications", () => {

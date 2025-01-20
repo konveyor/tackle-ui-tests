@@ -15,37 +15,19 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../utils/data_utils";
+import { getRulesData } from "../../../../utils/data_utils";
 import {
-    click,
-    clickByText,
-    closeSuccessAlert,
     deleteAllMigrationWaves,
     deleteApplicationTableRows,
-    getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    next,
-    selectItemsPerPage,
 } from "../../../../utils/utils";
-import {
-    AnalysisStatuses,
-    analyzeButton,
-    button,
-    CredentialType,
-    Languages,
-    SEC,
-    UserCredentials,
-} from "../../../types/constants";
-import * as data from "../../../../utils/data_utils";
 import { CustomMigrationTarget } from "../../../models/administration/custom-migration-targets/custom-migration-target";
-import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
-import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
-import { getRulesData } from "../../../../utils/data_utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
-import { cancelButton } from "../../../views/common.view";
-import * as commonView from "../../../views/common.view";
-import { RulesRepositoryFields } from "../../../types/types";
 import { Application } from "../../../models/migration/applicationinventory/application";
+import { AnalysisStatuses, Languages } from "../../../types/constants";
+import { RulesRepositoryFields } from "../../../types/types";
 
 // Automates Bug MTA-3330 | Polarion TC MTA-597
 describe(["@tier3"], "Custom Migration Targets rules trigger validation", () => {

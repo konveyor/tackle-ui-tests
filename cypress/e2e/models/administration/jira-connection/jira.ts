@@ -1,4 +1,3 @@
-import { JiraConnectionData } from "../../../types/types";
 import {
     cancelForm,
     click,
@@ -15,14 +14,6 @@ import {
     validateTextPresence,
 } from "../../../../utils/utils";
 import {
-    createJiraButton,
-    instanceName,
-    instanceUrl,
-    jiraLabels,
-    selectCredentialToggle,
-    selectTypeToggle,
-} from "../../../views/jira.view";
-import {
     administration,
     button,
     CredentialType,
@@ -32,11 +23,20 @@ import {
     tdTag,
     trTag,
 } from "../../../types/constants";
+import { JiraConnectionData } from "../../../types/types";
 import { confirmButton, confirmCancelButton, navLink } from "../../../views/common.view";
-import { JiraIssue, JiraIssueType, JiraProject } from "./jira-api.interface";
-import { JiraCredentials } from "../credentials/JiraCredentials";
 import { filterCategory, filteredBy, searchButton } from "../../../views/credentials.view";
 import { searchInput } from "../../../views/issue.view";
+import {
+    createJiraButton,
+    instanceName,
+    instanceUrl,
+    jiraLabels,
+    selectCredentialToggle,
+    selectTypeToggle,
+} from "../../../views/jira.view";
+import { JiraCredentials } from "../credentials/JiraCredentials";
+import { JiraIssue, JiraIssueType, JiraProject } from "./jira-api.interface";
 
 /**
  * Base class for Jira connection

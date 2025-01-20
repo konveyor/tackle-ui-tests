@@ -16,19 +16,19 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    createMultipleStakeholders,
     createMultipleApplications,
+    createMultipleStakeholders,
+    deleteAllMigrationWaves,
+    deleteApplicationTableRows,
     deleteByList,
     getTableColumnData,
-    deleteApplicationTableRows,
-    deleteAllMigrationWaves,
+    login,
 } from "../../../../utils/utils";
-import { name, legacyPathfinder, SEC } from "../../../types/constants";
-import { Stakeholders } from "../../../models/migration/controls/stakeholders";
-import { Application } from "../../../models/migration/applicationinventory/application";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { Application } from "../../../models/migration/applicationinventory/application";
+import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { Reports } from "../../../models/migration/reports-tab/reports-tab";
+import { legacyPathfinder, name, SEC } from "../../../types/constants";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let applicationsList: Array<Application> = [];

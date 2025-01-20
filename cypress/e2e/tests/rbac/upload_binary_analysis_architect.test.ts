@@ -15,6 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { getRandomUserData } from "../../../utils/data_utils";
 import {
     deleteByList,
     getRandomAnalysisData,
@@ -22,12 +23,11 @@ import {
     login,
     logout,
 } from "../../../utils/utils";
-import { Analysis } from "../../models/migration/applicationinventory/analysis";
-import { AnalysisStatuses, SEC } from "../../types/constants";
-import { UserArchitect } from "../../models/keycloak/users/userArchitect";
-import { getRandomUserData } from "../../../utils/data_utils";
 import { User } from "../../models/keycloak/users/user";
+import { UserArchitect } from "../../models/keycloak/users/userArchitect";
+import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { Application } from "../../models/migration/applicationinventory/application";
+import { AnalysisStatuses, SEC } from "../../types/constants";
 
 describe(["@tier3"], "Architect Upload Binary Analysis", () => {
     const userArchitect = new UserArchitect(getRandomUserData());

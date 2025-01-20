@@ -16,30 +16,30 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    clickByText,
-    exists,
-    click,
     applySearchFilter,
-    selectItemsPerPage,
-    createMultipleStakeholders,
+    click,
+    clickByText,
     createMultipleStakeholderGroups,
+    createMultipleStakeholders,
     deleteByList,
+    exists,
+    login,
+    selectItemsPerPage,
 } from "../../../../../utils/utils";
 import {
     button,
-    tdTag,
-    trTag,
-    description,
     clearAllFilters,
+    description,
     name,
     stakeholders,
+    tdTag,
+    trTag,
 } from "../../../../types/constants";
 
-import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
-import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import * as commonView from "../../../../../e2e/views/common.view";
 import * as data from "../../../../../utils/data_utils";
+import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
 let stakeholdersList: Array<Stakeholders> = [];
 let stakeholderGroupsList: Array<Stakeholdergroups> = [];

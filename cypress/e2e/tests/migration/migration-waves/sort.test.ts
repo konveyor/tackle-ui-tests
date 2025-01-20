@@ -16,28 +16,28 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    verifySortAsc,
-    verifySortDesc,
-    getTableColumnData,
-    deleteByList,
+    cancelForm,
+    clickOnSortButton,
+    createMultipleBusinessServices,
     createMultipleMigrationWaves,
+    createMultipleStakeholders,
+    deleteByList,
+    getTableColumnData,
+    login,
     verifyDateSortAsc,
     verifyDateSortDesc,
-    clickOnSortButton,
-    createMultipleStakeholders,
-    createMultipleBusinessServices,
-    cancelForm,
+    verifySortAsc,
+    verifySortDesc,
 } from "../../../../utils/utils";
-import { startDate, endDate, SortType } from "../../../types/constants";
+import { endDate, SortType, startDate } from "../../../types/constants";
 
+import * as data from "../../../../utils/data_utils";
+import { Application } from "../../../models/migration/applicationinventory/application";
+import { BusinessServices } from "../../../models/migration/controls/businessservices";
+import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 import { name } from "../../../types/constants";
 import { MigrationWaveView } from "../../../views/migration-wave.view";
-import * as data from "../../../../utils/data_utils";
-import { Stakeholders } from "../../../models/migration/controls/stakeholders";
-import { BusinessServices } from "../../../models/migration/controls/businessservices";
-import { Application } from "../../../models/migration/applicationinventory/application";
 
 let migrationWavesList: MigrationWave[] = [];
 let applicationsList: Application[] = [];

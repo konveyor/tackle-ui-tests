@@ -15,20 +15,20 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../../utils/data_utils";
 import {
+    deleteByList,
     exists,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
 } from "../../../../../utils/utils";
-import { AnalysisStatuses, CredentialType, UserCredentials } from "../../../../types/constants";
-import * as data from "../../../../../utils/data_utils";
-import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
-import { Issues } from "../../../../models/migration/dynamic-report/issues/issues";
-import { deleteByList } from "../../../../../utils/utils";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
+import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
+import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { Issues } from "../../../../models/migration/dynamic-report/issues/issues";
+import { AnalysisStatuses, CredentialType, UserCredentials } from "../../../../types/constants";
 
 describe(["@tier2"], "Custom Rules in analyses", function () {
     const applications: Analysis[] = [];

@@ -5,8 +5,8 @@ import {
     selectUserPerspective,
 } from "../../../../utils/utils";
 import { administration } from "../../../types/constants";
-import { gitSecure } from "../../../views/repository.view";
 import { navLink } from "../../../views/proxy.view";
+import { gitSecure } from "../../../views/repository.view";
 
 export class GitConfiguration {
     static open() {

@@ -15,16 +15,16 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { languageDiscoveryData } from "../../../../../fixtures/language_discovery.json";
 import {
-    login,
-    getRandomApplicationData,
-    sidedrawerTab,
     deleteByList,
+    getRandomApplicationData,
+    login,
+    sidedrawerTab,
 } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { SEC } from "../../../../types/constants";
 import { labelTagText } from "../../../../views/applicationinventory.view";
-import { languageDiscoveryData } from "../../../../../fixtures/language_discovery.json";
 
 let applicationList: Application[] = [];
 

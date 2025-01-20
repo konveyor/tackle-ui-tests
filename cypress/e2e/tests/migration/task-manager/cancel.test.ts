@@ -17,7 +17,6 @@ limitations under the License.
 
 import { getRandomUserData } from "../../../../utils/data_utils";
 import {
-    createMultipleApplications,
     deleteApplicationTableRows,
     getRandomAnalysisData,
     getRandomApplicationData,
@@ -30,7 +29,7 @@ import { UserMigrator } from "../../../models/keycloak/users/userMigrator";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../models/migration/applicationinventory/application";
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
-import { TaskKind, TaskStatus } from "../../../types/constants";
+import { TaskStatus } from "../../../types/constants";
 
 describe(["@tier3"], "Cancel task created by another user", function () {
     let userMigrator = new UserMigrator(getRandomUserData());

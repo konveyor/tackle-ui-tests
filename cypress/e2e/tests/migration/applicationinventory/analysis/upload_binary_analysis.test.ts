@@ -23,7 +23,7 @@ import {
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
-import { AnalysisStatuses, SEC } from "../../../../types/constants";
+import { AnalysisStatuses } from "../../../../types/constants";
 
 const applicationsList: Analysis[] = [];
 describe(["@tier1"], "Upload Binary Analysis", () => {

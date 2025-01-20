@@ -15,48 +15,47 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../../utils/data_utils";
 import {
-    login,
-    createMultipleApplications,
-    deleteByList,
     checkSuccessAlert,
-    getRandomApplicationData,
-    clickItemInKebabMenu,
+    click,
     clickByText,
+    clickItemInKebabMenu,
+    clickJs,
+    createMultipleApplications,
+    createMultipleArchetypes,
     createMultipleStakeholders,
     createMultipleTags,
-    createMultipleArchetypes,
-    click,
-    clickJs,
+    deleteByList,
+    getRandomApplicationData,
+    login,
 } from "../../../../../utils/utils";
-import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { Application } from "../../../../models/migration/applicationinventory/application";
+import { Archetype } from "../../../../models/migration/archetypes/archetype";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import {
-    alertTitle,
-    confirmButton,
-    successAlertMessage,
-    nextButton,
-    radioButton,
-    radioButtonLabel,
-    splitItem,
-} from "../../../../views/common.view";
-import {
-    legacyPathfinder,
-    cloudNative,
-    SEC,
     button,
+    cloudNative,
     cloudReadinessFilePath,
     cloudReadinessQuestionnaire,
+    legacyPathfinder,
+    SEC,
 } from "../../../../types/constants";
+import { questionBlock } from "../../../../views/assessment.view";
 import {
     ArchivedQuestionnaires,
     ArchivedQuestionnairesTableDataCell,
 } from "../../../../views/assessmentquestionnaire.view";
-import { Application } from "../../../../models/migration/applicationinventory/application";
-import { Assessment } from "../../../../models/migration/applicationinventory/assessment";
-import { Archetype } from "../../../../models/migration/archetypes/archetype";
-import * as data from "../../../../../utils/data_utils";
-import { questionBlock } from "../../../../views/assessment.view";
+import {
+    alertTitle,
+    confirmButton,
+    nextButton,
+    radioButton,
+    radioButtonLabel,
+    splitItem,
+    successAlertMessage,
+} from "../../../../views/common.view";
 
 let stakeholderList: Array<Stakeholders> = [];
 let applicationList: Array<Application> = [];

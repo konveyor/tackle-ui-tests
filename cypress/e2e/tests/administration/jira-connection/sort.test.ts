@@ -15,18 +15,17 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { getJiraCredentialData } from "../../../../utils/data_utils";
 import {
     clickOnSortButton,
     createMultipleJiraConnections,
-    deleteByList,
     getTableColumnData,
     login,
     verifySortAsc,
     verifySortDesc,
 } from "../../../../utils/utils";
-import { Jira } from "../../../models/administration/jira-connection/jira";
 import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
-import { getJiraCredentialData } from "../../../../utils/data_utils";
+import { Jira } from "../../../models/administration/jira-connection/jira";
 import { CredentialType, instanceName, SEC, SortType } from "../../../types/constants";
 import { jiraTable } from "../../../views/jira.view";
 

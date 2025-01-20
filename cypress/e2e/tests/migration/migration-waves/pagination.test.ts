@@ -16,12 +16,12 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    selectItemsPerPage,
     createMultipleMigrationWaves,
     deleteByList,
-    validatePagination,
     itemsPerPageValidation,
+    login,
+    selectItemsPerPage,
+    validatePagination,
 } from "../../../../utils/utils";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
 

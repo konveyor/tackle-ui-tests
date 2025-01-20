@@ -16,18 +16,18 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    exists,
-    expandRowDetails,
-    existsWithinRow,
     closeRowDetails,
+    exists,
+    existsWithinRow,
+    expandRowDetails,
+    login,
     notExistsWithinRow,
     selectUserPerspective,
 } from "../../../../../../utils/utils";
 import { Tag } from "../../../../../models/migration/controls/tags";
 
-import { migration, tdTag } from "../../../../../types/constants";
 import * as data from "../../../../../../utils/data_utils";
+import { migration, tdTag } from "../../../../../types/constants";
 
 describe(["@tier0"], "Tag CRUD operations", () => {
     beforeEach("Login", function () {

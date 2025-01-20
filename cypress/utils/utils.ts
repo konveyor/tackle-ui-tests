@@ -14,48 +14,66 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import { BusinessServices } from "../e2e/models/migration/controls/businessservices";
-import { Stakeholders } from "../e2e/models/migration/controls/stakeholders";
-import { Stakeholdergroups } from "../e2e/models/migration/controls/stakeholdergroups";
-import { Tag } from "../e2e/models/migration/controls/tags";
-import { TagCategory } from "../e2e/models/migration/controls/tagcategory";
 import { Jobfunctions } from "../e2e/models/migration/controls/jobfunctions";
+import { Stakeholdergroups } from "../e2e/models/migration/controls/stakeholdergroups";
+import { Stakeholders } from "../e2e/models/migration/controls/stakeholders";
+import { TagCategory } from "../e2e/models/migration/controls/tagcategory";
+import { Tag } from "../e2e/models/migration/controls/tags";
 
-import * as loginView from "../e2e/views/login.view";
-import { navMenu, navTab } from "../e2e/views/menu.view";
-import * as data from "../utils/data_utils";
+import * as ansiRegex from "ansi-regex";
 import "cypress-file-upload";
+import { Credentials } from "../e2e/models/administration/credentials/credentials";
+import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
+import { CredentialsProxy } from "../e2e/models/administration/credentials/credentialsProxy";
+import { CredentialsSourceControlKey } from "../e2e/models/administration/credentials/credentialsSourceControlKey";
+import { CredentialsSourceControlUsername } from "../e2e/models/administration/credentials/credentialsSourceControlUsername";
+import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
+import { Jira } from "../e2e/models/administration/jira-connection/jira";
+import { Application } from "../e2e/models/migration/applicationinventory/application";
+import { Archetype } from "../e2e/models/migration/archetypes/archetype";
+import { MigrationWave } from "../e2e/models/migration/migration-waves/migration-wave";
 import {
-    groupCount,
-    memberCount,
-    tagCount,
-    tdTag,
-    trTag,
-    button,
-    rank,
-    criticality,
-    priority,
-    confidence,
     applicationInventory,
-    SEC,
+    button,
+    confidence,
     CredentialType,
-    UserCredentials,
-    JiraType,
-    migration,
+    criticality,
+    groupCount,
     issueFilter,
+    JiraType,
+    memberCount,
+    migration,
+    priority,
+    rank,
     save,
+    SEC,
     SortType,
+    tagCount,
     TaskKind,
     TaskStatus,
+    tdTag,
+    trTag,
+    UserCredentials,
 } from "../e2e/types/constants";
+import { analysisData, AppIssue, applicationData, JiraConnectionData } from "../e2e/types/types";
 import {
-    date,
-    createEntitiesCheckbox,
-    sideKebabMenu,
+    codeEditorControls,
+    manageCredentials,
+    mavenCredential,
+    menuList,
+    menuToggle,
+    sourceCredential,
+} from "../e2e/views/analysis.view";
+import {
     appImportForm,
-    kebabMenu,
     applicationsActionButton,
+    createEntitiesCheckbox,
+    date,
+    kebabMenu,
     manageColumnsModal,
+    sideKebabMenu,
 } from "../e2e/views/applicationinventory.view";
+import { closeModal } from "../e2e/views/assessment.view";
 import {
     aboutButton,
     actionMenuItem,
@@ -93,27 +111,7 @@ import {
     successAlertMessage,
     taskDetailsEditor,
 } from "../e2e/views/common.view";
-import { tagLabels, tagMenuButton } from "../e2e/views/tags.view";
-import { Credentials } from "../e2e/models/administration/credentials/credentials";
-import { analysisData, AppIssue, applicationData, JiraConnectionData } from "../e2e/types/types";
-import { CredentialsProxy } from "../e2e/models/administration/credentials/credentialsProxy";
-import {
-    getJiraConnectionData,
-    getJiraCredentialData,
-    getRandomCredentialsData,
-    randomWordGenerator,
-} from "./data_utils";
-import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
-import { CredentialsSourceControlUsername } from "../e2e/models/administration/credentials/credentialsSourceControlUsername";
-import { CredentialsSourceControlKey } from "../e2e/models/administration/credentials/credentialsSourceControlKey";
-import { switchToggle } from "../e2e/views/reportsTab.view";
-import Chainable = Cypress.Chainable;
-import { MigrationWave } from "../e2e/models/migration/migration-waves/migration-wave";
-import { Jira } from "../e2e/models/administration/jira-connection/jira";
-import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
-import { closeModal } from "../e2e/views/assessment.view";
-import { Application } from "../e2e/models/migration/applicationinventory/application";
-import { stakeHoldersTable } from "../e2e/views/stakeholders.view";
+import { filterSelectType } from "../e2e/views/credentials.view";
 import {
     bsFilterName,
     searchInput,
@@ -121,18 +119,20 @@ import {
     singleApplicationColumns,
     tagFilterName,
 } from "../e2e/views/issue.view";
-import { Archetype } from "../e2e/models/migration/archetypes/archetype";
+import * as loginView from "../e2e/views/login.view";
+import { navMenu, navTab } from "../e2e/views/menu.view";
 import { MigrationWaveView } from "../e2e/views/migration-wave.view";
+import { switchToggle } from "../e2e/views/reportsTab.view";
+import { stakeHoldersTable } from "../e2e/views/stakeholders.view";
+import { tagLabels, tagMenuButton } from "../e2e/views/tags.view";
+import * as data from "../utils/data_utils";
 import {
-    codeEditorControls,
-    manageCredentials,
-    mavenCredential,
-    menuList,
-    menuToggle,
-    sourceCredential,
-} from "../e2e/views/analysis.view";
-import * as ansiRegex from "ansi-regex";
-import { filterSelectType } from "../e2e/views/credentials.view";
+    getJiraConnectionData,
+    getJiraCredentialData,
+    getRandomCredentialsData,
+    randomWordGenerator,
+} from "./data_utils";
+import Chainable = Cypress.Chainable;
 
 const { _ } = Cypress;
 

@@ -24,10 +24,10 @@ import {
     selectUserPerspective,
     submitForm,
 } from "../../../../utils/utils";
-import { navMenu, navTab } from "../../../views/menu.view";
 import { button, controls, migration, SEC, tags, tdTag, trTag } from "../../../types/constants";
-import { createTagCategoryButton, rankInput } from "../../../views/tags.view";
 import * as commonView from "../../../views/common.view";
+import { navMenu, navTab } from "../../../views/menu.view";
+import { createTagCategoryButton, rankInput } from "../../../views/tags.view";
 import { clickTags, fillName } from "./tags";
 
 export class TagCategory {

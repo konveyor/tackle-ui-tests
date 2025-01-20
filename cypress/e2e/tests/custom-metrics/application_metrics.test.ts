@@ -15,8 +15,8 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 import { createMultipleApplications, deleteByList, login } from "../../../utils/utils";
-import { Metrics } from "../../models/migration/custom-metrics/custom-metrics";
 import { Application } from "../../models/migration/applicationinventory/application";
+import { Metrics } from "../../models/migration/custom-metrics/custom-metrics";
 const metrics = new Metrics();
 const metricName = "konveyor_applications_inventoried";
 let applicationList: Array<Application> = [];

@@ -15,9 +15,9 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../utils/data_utils";
 import {
     clickOnSortButton,
-    createMultipleApplications,
     createMultipleStakeholders,
     deleteAllMigrationWaves,
     deleteApplicationTableRows,
@@ -26,6 +26,10 @@ import {
     verifySortAsc,
     verifySortDesc,
 } from "../../../../utils/utils";
+import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { Application } from "../../../models/migration/applicationinventory/application";
+import { Stakeholders } from "../../../models/migration/controls/stakeholders";
+import { Reports } from "../../../models/migration/reports-tab/reports-tab";
 import {
     cloudReadinessFilePath,
     cloudReadinessQuestionnaire,
@@ -33,15 +37,10 @@ import {
     SEC,
     SortType,
 } from "../../../types/constants";
-import { Stakeholders } from "../../../models/migration/controls/stakeholders";
-import { Application } from "../../../models/migration/applicationinventory/application";
-import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { Reports } from "../../../models/migration/reports-tab/reports-tab";
 import {
     IdentifiedRiskTableHeaders,
     questionnaireNameColumnDataLabel,
 } from "../../../views/reportsTab.view";
-import * as data from "../../../../utils/data_utils";
 
 let stakeholder: Stakeholders;
 let application: Application;

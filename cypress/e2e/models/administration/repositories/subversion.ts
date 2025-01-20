@@ -5,8 +5,8 @@ import {
     selectUserPerspective,
 } from "../../../../utils/utils";
 import { administration, SEC } from "../../../types/constants";
-import { subversionSecure } from "../../../views/repository.view";
 import { navLink } from "../../../views/common.view";
+import { subversionSecure } from "../../../views/repository.view";
 
 export class SubversionConfiguration {
     static open() {

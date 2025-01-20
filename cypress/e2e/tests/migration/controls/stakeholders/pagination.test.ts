@@ -16,16 +16,16 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    autoPageChangeValidations,
+    createMultipleStakeholders,
+    deleteAllRows,
+    itemsPerPageValidation,
     login,
     selectItemsPerPage,
-    createMultipleStakeholders,
     validatePagination,
-    itemsPerPageValidation,
-    autoPageChangeValidations,
-    deleteAllRows,
 } from "../../../../../utils/utils";
-import { appTable } from "../../../../views/common.view";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
+import { appTable } from "../../../../views/common.view";
 
 describe(["@tier3"], "Stakeholder pagination validations", function () {
     before("Login and Create Test Data", function () {

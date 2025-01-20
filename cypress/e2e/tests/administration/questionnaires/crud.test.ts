@@ -1,10 +1,10 @@
-import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import {
-    cleanupDownloads,
     checkSuccessAlert,
-    login,
+    cleanupDownloads,
     closeModalWindow,
+    login,
 } from "../../../../utils/utils";
+import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { alertTitle } from "../../../views/common.view";
 
 const yamlFileName = "questionnaire_import/cloud-native.yaml";

@@ -10,11 +10,11 @@ import {
     validateTextPresence,
 } from "../../../../../utils/utils";
 import { dependencyFilter, migration, SEC } from "../../../../types/constants";
-import { navMenu } from "../../../../views/menu.view";
 import { AppDependency } from "../../../../types/types";
-import { archetypeFilterName, searchInput } from "../../../../views/issue.view";
 import { searchButton, span } from "../../../../views/common.view";
 import { dependencyColumns } from "../../../../views/dependency.view";
+import { archetypeFilterName, searchInput } from "../../../../views/issue.view";
+import { navMenu } from "../../../../views/menu.view";
 
 export class Dependencies {
     /** Contains URL of dependencies web page */

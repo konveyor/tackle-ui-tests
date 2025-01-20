@@ -14,23 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /// <reference types="cypress" />
-import {
-    login,
-    clickByText,
-    inputText,
-    selectUserPerspective,
-    checkSuccessAlert,
-} from "../../../../../../utils/utils";
-import { button, max120CharsMsg, duplicateTagName } from "../../../../../types/constants";
-import {
-    createTagButton,
-    nameInput,
-    dropdownMenuToggle,
-    tagsHelper,
-} from "../../../../../views/tags.view";
-import { Tag } from "../../../../../models/migration/controls/tags";
 import * as commonView from "../../../../../../e2e/views/common.view";
 import * as data from "../../../../../../utils/data_utils";
+import {
+    checkSuccessAlert,
+    clickByText,
+    inputText,
+    login,
+    selectUserPerspective,
+} from "../../../../../../utils/utils";
+import { Tag } from "../../../../../models/migration/controls/tags";
+import { button, duplicateTagName, max120CharsMsg } from "../../../../../types/constants";
+import {
+    createTagButton,
+    dropdownMenuToggle,
+    nameInput,
+    tagsHelper,
+} from "../../../../../views/tags.view";
 
 describe(["@tier2"], "Tag validations", () => {
     before("Login", function () {

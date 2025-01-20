@@ -14,83 +14,83 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {
-    applicationInventory,
-    tdTag,
-    trTag,
-    button,
-    createNewButton,
-    assessAppButton,
-    createAppButton,
-    SEC,
-    analyzeButton,
-    reviewAppButton,
-    migration,
-    details,
-    legacyPathfinder,
-    review,
-    TaskKind,
-} from "../../../types/constants";
-import { navMenu } from "../../../views/menu.view";
-import {
-    applicationNameInput,
-    applicationDescriptionInput,
-    applicationBusinessServiceSelect,
-    applicationTagsSelect,
-    applicationCommentInput,
-    applicationOwnerInput,
-    selectBox,
-    sourceRepository,
-    branch,
-    rootPath,
-    group,
-    artifact,
-    version,
-    packaging,
-    kebabMenu,
-    repoTypeSelect,
-    profileEdit,
-    appContributorSelect,
-    northdependenciesDropdownBtn,
-    southdependenciesDropdownBtn,
-    closeForm,
-    tagsColumnSelector,
-} from "../../../views/applicationinventory.view";
-import { appDetailsView } from "../../../views/applicationinventory.view";
-import * as commonView from "../../../views/common.view";
-import {
-    clickByText,
-    inputText,
-    click,
-    submitForm,
     cancelForm,
-    selectFormItems,
-    performRowActionByIcon,
-    selectUserPerspective,
-    selectItemsPerPage,
+    click,
+    clickByText,
+    clickItemInKebabMenu,
+    clickTab,
+    clickWithin,
+    doesExistButton,
     doesExistSelector,
     doesExistText,
-    clickTab,
-    clickItemInKebabMenu,
-    doesExistButton,
-    clickWithin,
+    inputText,
+    performRowActionByIcon,
+    performWithin,
+    selectFormItems,
+    selectItemsPerPage,
+    selectUserPerspective,
+    sidedrawerTab,
+    submitForm,
+    validateNumberPresence,
+    validatePageTitle,
     validateSingleApplicationIssue,
     validateTextPresence,
-    validateNumberPresence,
-    performWithin,
-    sidedrawerTab,
-    validatePageTitle,
 } from "../../../../utils/utils";
+import {
+    analyzeButton,
+    applicationInventory,
+    assessAppButton,
+    button,
+    createAppButton,
+    createNewButton,
+    details,
+    legacyPathfinder,
+    migration,
+    review,
+    reviewAppButton,
+    SEC,
+    TaskKind,
+    tdTag,
+    trTag,
+} from "../../../types/constants";
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
 import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
-import { MigrationWave } from "../migration-waves/migration-wave";
-import { Issues } from "../dynamic-report/issues/issues";
-import { Assessment } from "./assessment";
-import { continueButton, assessmentColumnSelector } from "../../../views/assessment.view";
+import {
+    appContributorSelect,
+    appDetailsView,
+    applicationBusinessServiceSelect,
+    applicationCommentInput,
+    applicationDescriptionInput,
+    applicationNameInput,
+    applicationOwnerInput,
+    applicationTagsSelect,
+    artifact,
+    branch,
+    closeForm,
+    group,
+    kebabMenu,
+    northdependenciesDropdownBtn,
+    packaging,
+    profileEdit,
+    repoTypeSelect,
+    rootPath,
+    selectBox,
+    sourceRepository,
+    southdependenciesDropdownBtn,
+    tagsColumnSelector,
+    version,
+} from "../../../views/applicationinventory.view";
+import { assessmentColumnSelector, continueButton } from "../../../views/assessment.view";
+import * as commonView from "../../../views/common.view";
+import { alertBody, alertTitle } from "../../../views/common.view";
+import { navMenu } from "../../../views/menu.view";
 import { reviewColumnSelector } from "../../../views/review.view";
+import { Archetype } from "../archetypes/archetype";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
-import { Archetype } from "../archetypes/archetype";
-import { alertBody, alertTitle } from "../../../views/common.view";
+import { Issues } from "../dynamic-report/issues/issues";
+import { MigrationWave } from "../migration-waves/migration-wave";
+import { Assessment } from "./assessment";
 
 export class Application {
     name: string;

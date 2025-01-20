@@ -15,6 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { getJiraConnectionData, getRandomCredentialsData } from "../../../../utils/data_utils";
 import {
     cancelForm,
     click,
@@ -24,12 +25,11 @@ import {
     validateTooLongInput,
     validateTooShortInput,
 } from "../../../../utils/utils";
-import { getJiraConnectionData, getRandomCredentialsData } from "../../../../utils/data_utils";
+import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
+import { Jira } from "../../../models/administration/jira-connection/jira";
 import { CredentialType, JiraType } from "../../../types/constants";
 import { JiraConnectionData } from "../../../types/types";
-import { Jira } from "../../../models/administration/jira-connection/jira";
 import { createJiraButton, instanceName, instanceUrl } from "../../../views/jira.view";
-import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
 
 let jiraBasicCredential: JiraCredentials;
 let jiraServerConnectionData: JiraConnectionData;

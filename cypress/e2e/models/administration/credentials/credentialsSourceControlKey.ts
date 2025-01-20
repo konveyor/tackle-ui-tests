@@ -1,4 +1,3 @@
-import { CredentialsSourceControl } from "./credentialsSourceControl";
 import {
     cancelForm,
     click,
@@ -11,6 +10,7 @@ import {
 } from "../../../../utils/utils";
 import { button } from "../../../types/constants";
 import { CredentialsSourceControlPrivateKeyData } from "../../../types/types";
+import { CredentialsSourceControl } from "./credentialsSourceControl";
 
 export class CredentialsSourceControlKey extends CredentialsSourceControl {
     key = "";
