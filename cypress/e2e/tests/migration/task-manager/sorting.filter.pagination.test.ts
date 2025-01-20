@@ -23,7 +23,6 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    notExists,
     validateNumberPresence,
     validatePagination,
     validateSortBy,
@@ -32,7 +31,7 @@ import {
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
 import { TaskFilter, TaskKind, TaskStatus, trTag } from "../../../types/constants";
-import { TaskManagerColumns, tasksTable } from "../../../views/taskmanager.view";
+import { TaskManagerColumns } from "../../../views/taskmanager.view";
 
 describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", function () {
     const applicationsList: Analysis[] = [];
@@ -43,17 +42,9 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         deleteApplicationTableRows();
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 3; i++) {
-                    const bookServerApp = new Analysis(
-                        getRandomApplicationData("TaskFilteringApp1_" + i, {
-                            sourceData: appData["bookserver-app"],
-                        }),
-                        getRandomAnalysisData(analysisData["analysis_for_openSourceLibraries"])
-                    );
-                    applicationsList.push(bookServerApp);
-
+                for (let i = 0; i < 6; i++) {
                     const dayTraderApp = new Analysis(
-                        getRandomApplicationData("TaskFilteringApp2_" + i, {
+                        getRandomApplicationData("TaskFilteringApp_" + i, {
                             sourceData: appData["daytrader-app"],
                         }),
                         getRandomAnalysisData(analysisData["source+dep_analysis_on_daytrader-app"])
@@ -66,9 +57,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
     });
 
     it("Filtering tasks", function () {
-        // Analyzing daytrader app for pagination test to generate issues more than 10.
-        const dayTraderApp = applicationsList[1];
-
+        const dayTraderApp = applicationsList[0];
         Analysis.analyzeAll(dayTraderApp);
         TaskManager.open();
 
@@ -98,7 +87,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
             .then((responseBody) => {
                 TaskManager.applyFilter(TaskFilter.id, responseBody[0].id.toString());
                 validateNumberPresence(TaskManagerColumns.id, responseBody[0].id);
-                notExists(responseBody[1].id.toString(), tasksTable);
+                validateTextPresence(TaskManagerColumns.id, responseBody[1].id.toString(), false);
                 clearAllFilters();
             });
 
