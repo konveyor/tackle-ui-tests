@@ -392,9 +392,13 @@ export function notExists(value: string, tableSelector = appTable): void {
     });
 }
 
-export function selectFilter(filterName: string): void {
-    cy.get("#filtered-by").click();
-    clickWithinByText('div[class="pf-v5-c-menu__content"]', "button", filterName);
+export function selectFilter(filterName: string, eq = 0): void {
+    cy.get("div.pf-m-filter-group")
+        .eq(eq)
+        .within(() => {
+            cy.get("#filtered-by").click();
+            clickWithinByText('div[class="pf-v5-c-menu__content"]', "button", filterName);
+        });
 }
 
 export function filterInputText(searchTextValue: string, value: number): void {
@@ -478,9 +482,9 @@ export function applySearchFilter(
     filterName: string,
     searchText: string | string[],
     identifiedRisk = false,
-    value?: number
+    eq = 0
 ): void {
-    selectFilter(filterName, identifiedRisk, value);
+    selectFilter(filterName, eq);
     let filterValue = [];
     if (!Array.isArray(searchText)) {
         filterValue = [searchText];
