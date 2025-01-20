@@ -393,6 +393,10 @@ export function notExists(value: string, tableSelector = appTable): void {
 }
 
 export function selectFilter(filterName: string, eq = 0): void {
+    if (eq === 0) {
+        cy.get("#filtered-by").click();
+        return;
+    }
     cy.get("div.pf-m-filter-group")
         .eq(eq)
         .within(() => {
