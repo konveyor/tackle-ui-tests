@@ -1320,7 +1320,7 @@ export function deleteApplicationTableRows(): void {
     deleteAllRows();
 }
 export function validatePageTitle(pageTitle: string) {
-    return cy.get(pageTitle).then((h1) => {
+    return cy.get("h1").then((h1) => {
         return h1.text().includes(pageTitle);
     });
 }
