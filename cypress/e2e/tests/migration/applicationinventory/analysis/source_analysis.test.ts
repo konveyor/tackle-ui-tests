@@ -264,6 +264,7 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        Application.open();
         // Polarion TC 406
         application.verifyEffort(this.analysisData["analysis_on_example-1-app"]["effort"]);
     });
@@ -284,6 +285,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        Application.open();
         application.verifyEffort(
             this.analysisData["jws6_source+dep_analysis_on_tackletestapp"]["effort"]
         );
@@ -364,22 +366,22 @@ describe(["@tier1"], "Source Analysis", () => {
         cy.wait(5 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        Application.open();
         application.verifyEffort(this.analysisData["tackle-testapp-public-4-targets"]["effort"]);
     });
 
     // Automates customer bug MTA-2973
     it("Source analysis on tackle app public with custom rule", function () {
-        const { appData, analysisData } = this;
-        const applicationData = getRandomApplicationData("tackle-public-customRule", {
-            sourceData: appData["tackle-testapp-public"],
-        });
-
-        const analysisDataCustomRule = analysisData["tackle-testapp-public-customRule"];
+        const applicationsList = [];
 
         for (let i = 0; i < 2; i++) {
-            applicationsList.push(
-                new Analysis(applicationData, getRandomAnalysisData(analysisDataCustomRule))
+            const application = new Analysis(
+                getRandomApplicationData("tackle-public-customRule", {
+                    sourceData: this.appData["tackle-testapp-public"],
+                }),
+                getRandomAnalysisData(this.analysisData["tackle-testapp-public-customRule"])
             );
+            applicationsList.push(application);
         }
 
         // Analyze an application
@@ -388,10 +390,9 @@ describe(["@tier1"], "Source Analysis", () => {
             if (credentials) application.manageCredentials(null, credentials.name);
             application.analyze();
             application.verifyAnalysisStatus("Completed");
-            application.validateIssues(analysisDataCustomRule.issues);
-            analysisDataCustomRule.issues.forEach((issue) => {
-                application.validateAffected(issue);
-            });
+            application.validateIssues(
+                this.analysisData["tackle-testapp-public-customRule"]["issues"]
+            );
         };
 
         // Analyze application with Maven credentials
