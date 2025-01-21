@@ -27,12 +27,12 @@ import {
     login,
     notExists,
 } from "../../../../../../utils/utils";
-import { cloudNative, legacyPathfinder, review } from "../../../../../types/constants";
-import { Stakeholders } from "../../../../../models/migration/controls/stakeholders";
-import { Application } from "../../../../../models/migration/applicationinventory/application";
 import { AssessmentQuestionnaire } from "../../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { identifiedRisksFilterValidations } from "../../../../../views/reportsTab.view";
+import { Application } from "../../../../../models/migration/applicationinventory/application";
 import { Archetype } from "../../../../../models/migration/archetypes/archetype";
+import { Stakeholders } from "../../../../../models/migration/controls/stakeholders";
+import { cloudNative, legacyPathfinder, review } from "../../../../../types/constants";
+import { identifiedRisksFilterValidations } from "../../../../../views/reportsTab.view";
 
 let application: Application;
 let stakeholder: Stakeholders;

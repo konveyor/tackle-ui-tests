@@ -16,13 +16,13 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    autoPageChangeValidations,
+    createMultipleStakeholderGroups,
+    deleteAllStakeholderGroups,
+    itemsPerPageValidation,
     login,
     selectItemsPerPage,
-    createMultipleStakeholderGroups,
     validatePagination,
-    itemsPerPageValidation,
-    autoPageChangeValidations,
-    deleteAllStakeholderGroups,
 } from "../../../../../utils/utils";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { appTable } from "../../../../views/common.view";

@@ -14,26 +14,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /// <reference types="cypress" />
+import * as data from "../../../../../utils/data_utils";
 import {
-    login,
     clickByText,
-    inputText,
-    exists,
-    notExists,
-    checkSuccessAlert,
     clickJs,
+    exists,
+    inputText,
+    login,
+    notExists,
 } from "../../../../../utils/utils";
+import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import {
     button,
-    minCharsMsg,
-    max120CharsMsg,
     createNewButton,
     duplicateJobFunctionName,
+    max120CharsMsg,
+    minCharsMsg,
 } from "../../../../types/constants";
-import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
-import { jobfunctionNameInput } from "../../../../views/jobfunctions.view";
 import * as commonView from "../../../../views/common.view";
-import * as data from "../../../../../utils/data_utils";
+import { jobfunctionNameInput } from "../../../../views/jobfunctions.view";
 
 describe(["@tier2"], "Job Function Validations", () => {
     const jobfunction = new Jobfunctions(data.getJobTitle());

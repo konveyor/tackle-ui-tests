@@ -13,36 +13,38 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import {
-    tdTag,
-    trTag,
-    button,
-    SEC,
-    legacyPathfinder,
-    text,
-    riskDonutChart,
-} from "../../../types/constants";
-import * as commonView from "../../../views/common.view";
-import {
-    clickByText,
-    selectItemsPerPage,
-    selectFormItems,
-    clickJs,
-    click,
-    sidedrawerTab,
-} from "../../../../utils/utils";
 import * as data from "../../../../utils/data_utils";
 import {
+    click,
+    clickByText,
+    clickJs,
+    selectFormItems,
+    selectItemsPerPage,
+    sidedrawerTab,
+} from "../../../../utils/utils";
+import {
+    button,
+    legacyPathfinder,
+    riskDonutChart,
+    SEC,
+    tdTag,
+    text,
+    trTag,
+} from "../../../types/constants";
+import { notYetReviewed, reviewItems } from "../../../views/archetype.view";
+import {
+    assessmentBlock,
     assessmentColumnSelector,
+    donutChart,
+    donutChartImage,
     questionBlock,
     radioInput,
     stack,
-    assessmentBlock,
-    victoryContainer,
-    donutChart,
-    donutChartImage,
     stakeholdersAndGroupsSelect,
+    victoryContainer,
 } from "../../../views/assessment.view";
+import * as commonView from "../../../views/common.view";
+import { plainButton, splitItem, tableRowActions } from "../../../views/common.view";
 import {
     criticalityInput,
     effortEstimateSelect,
@@ -52,8 +54,6 @@ import {
 } from "../../../views/review.view";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
 import { Stakeholders } from "../controls/stakeholders";
-import { notYetReviewed, reviewItems } from "../../../views/archetype.view";
-import { plainButton, tableRowActions, splitItem } from "../../../views/common.view";
 
 export class Assessment {
     public static selectStakeholdersAndGroups(

@@ -15,16 +15,16 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { tdTag, trTag } from "../../../../../e2e/types/constants";
 import {
+    deleteAllBusinessServices,
+    deleteAllMigrationWaves,
+    deleteAppImportsTableRows,
+    deleteApplicationTableRows,
     exists,
     importApplication,
     login,
-    deleteApplicationTableRows,
-    deleteAllBusinessServices,
-    deleteAppImportsTableRows,
-    deleteAllMigrationWaves,
 } from "../../../../../utils/utils";
-import { tdTag, trTag } from "../../../../../e2e/types/constants";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { ManageImports } from "../../../../models/migration/applicationinventory/manageImports";
 

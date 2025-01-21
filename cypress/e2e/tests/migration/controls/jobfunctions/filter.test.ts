@@ -16,17 +16,17 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    clickByText,
-    exists,
     applySearchFilter,
+    clickByText,
     createMultipleJobFunctions,
     deleteByList,
+    exists,
+    login,
 } from "../../../../../utils/utils";
-import { button, name, clearAllFilters } from "../../../../types/constants";
+import { button, clearAllFilters, name } from "../../../../types/constants";
 
-import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import * as data from "../../../../../utils/data_utils";
+import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 
 let jobFunctionsList: Array<Jobfunctions> = [];
 let invalidSearchInput = String(data.getRandomNumber());

@@ -15,31 +15,31 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as commonView from "../../../../../e2e/views/common.view";
+import * as data from "../../../../../utils/data_utils";
 import {
-    login,
+    checkSuccessAlert,
     clickByText,
-    inputText,
     exists,
+    inputText,
+    login,
     notExists,
     selectUserPerspective,
-    checkSuccessAlert,
 } from "../../../../../utils/utils";
+import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import {
     button,
-    minCharsMsg,
-    max120CharsMsg,
-    max250CharsMsg,
     createNewButton,
     duplicateStakeholderGroupName,
+    max120CharsMsg,
+    max250CharsMsg,
     migration,
+    minCharsMsg,
 } from "../../../../types/constants";
 import {
-    stakeholdergroupNameInput,
     stakeholdergroupDescriptionInput,
+    stakeholdergroupNameInput,
 } from "../../../../views/stakeholdergroups.view";
-import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
-import * as data from "../../../../../utils/data_utils";
-import * as commonView from "../../../../../e2e/views/common.view";
 
 describe(["@tier2"], "Stakeholder groups validations", () => {
     const stakeholdergroup = new Stakeholdergroups(data.getCompanyName(), data.getDescription());

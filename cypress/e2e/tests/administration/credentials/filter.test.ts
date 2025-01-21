@@ -15,6 +15,8 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../utils/data_utils";
+import { getRandomUserData } from "../../../../utils/data_utils";
 import {
     clearAllFilters,
     createMultipleCredentials,
@@ -25,10 +27,8 @@ import {
     notExists,
 } from "../../../../utils/utils";
 import { Credentials } from "../../../models/administration/credentials/credentials";
-import * as data from "../../../../utils/data_utils";
-import { UserAdmin } from "../../../models/keycloak/users/userAdmin";
-import { getRandomUserData } from "../../../../utils/data_utils";
 import { User } from "../../../models/keycloak/users/user";
+import { UserAdmin } from "../../../models/keycloak/users/userAdmin";
 
 describe(["@tier3"], "Credentials filter validations", function () {
     let adminUserName = Cypress.env("user");

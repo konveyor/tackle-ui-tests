@@ -16,20 +16,20 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    createMultipleApplications,
     application_inventory_kebab_menu,
-    navigate_to_application_inventory,
     click,
+    createMultipleApplications,
+    login,
+    navigate_to_application_inventory,
 } from "../../../../../utils/utils";
 
-import * as commonView from "../../../../views/common.view";
+import { Application } from "../../../../models/migration/applicationinventory/application";
 import {
     applicationsActionButton,
     appSelectionButton,
     bulkApplicationSelectionCheckBox,
 } from "../../../../views/applicationinventory.view";
-import { Application } from "../../../../models/migration/applicationinventory/application";
+import * as commonView from "../../../../views/common.view";
 
 describe(["@tier3"], "Bulk deletion of applications", () => {
     before("Login", function () {

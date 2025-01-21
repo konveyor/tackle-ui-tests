@@ -15,22 +15,22 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../../utils/data_utils";
 import {
-    login,
-    clickByText,
-    importApplication,
-    openManageImportsPage,
     applySearchFilter,
-    exists,
-    deleteApplicationTableRows,
-    deleteAppImportsTableRows,
+    clickByText,
     deleteAllMigrationWaves,
+    deleteAppImportsTableRows,
+    deleteApplicationTableRows,
+    exists,
+    importApplication,
+    login,
+    openManageImportsPage,
 } from "../../../../../utils/utils";
 import { button, clearAllFilters } from "../../../../types/constants";
-import * as data from "../../../../../utils/data_utils";
 
-import { FileName } from "../../../../views/applicationinventory.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { FileName } from "../../../../views/applicationinventory.view";
 
 const filePath = "app_import/csv/";
 const filesToImport = [

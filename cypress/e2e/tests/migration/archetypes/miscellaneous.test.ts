@@ -15,20 +15,34 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../utils/data_utils";
 import {
-    click,
+    checkSuccessAlert,
+    clickByText,
     clickJs,
+    createMultipleApplications,
+    createMultipleStakeholders,
+    deleteByList,
     exists,
     login,
-    deleteByList,
-    clickByText,
-    createMultipleStakeholders,
-    checkSuccessAlert,
-    createMultipleApplications,
     selectRow,
 } from "../../../../utils/utils";
-import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { Application } from "../../../models/migration/applicationinventory/application";
+import { Archetype } from "../../../models/migration/archetypes/archetype";
+import { Stakeholders } from "../../../models/migration/controls/stakeholders";
+import {
+    button,
+    cloudReadinessFilePath,
+    cloudReadinessQuestionnaire,
+    legacyPathfinder,
+    SEC,
+} from "../../../types/constants";
+import { questionBlock } from "../../../views/assessment.view";
+import {
+    ArchivedQuestionnaires,
+    ArchivedQuestionnairesTableDataCell,
+} from "../../../views/assessmentquestionnaire.view";
 import {
     nextButton,
     radioButton,
@@ -36,22 +50,6 @@ import {
     splitItem,
     successAlertMessage,
 } from "../../../views/common.view";
-import {
-    legacyPathfinder,
-    SEC,
-    button,
-    cloudReadinessQuestionnaire,
-    cloudReadinessFilePath,
-} from "../../../types/constants";
-import { Application } from "../../../models/migration/applicationinventory/application";
-import { Archetype } from "../../../models/migration/archetypes/archetype";
-import { Assessment } from "../../../models/migration/applicationinventory/assessment";
-import * as data from "../../../../utils/data_utils";
-import {
-    ArchivedQuestionnaires,
-    ArchivedQuestionnairesTableDataCell,
-} from "../../../views/assessmentquestionnaire.view";
-import { questionBlock } from "../../../views/assessment.view";
 
 let stakeholderList: Stakeholders[];
 let archetype: Archetype;

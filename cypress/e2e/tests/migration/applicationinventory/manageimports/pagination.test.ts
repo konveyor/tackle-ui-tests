@@ -16,21 +16,21 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    selectItemsPerPage,
-    importApplication,
-    openManageImportsPage,
-    deleteApplicationTableRows,
-    goToLastPage,
-    deleteAppImportsTableRows,
-    validatePagination,
-    itemsPerPageValidation,
     deleteAllImports,
     deleteAllMigrationWaves,
+    deleteAppImportsTableRows,
+    deleteApplicationTableRows,
+    goToLastPage,
+    importApplication,
+    itemsPerPageValidation,
+    login,
+    openManageImportsPage,
+    selectItemsPerPage,
+    validatePagination,
 } from "../../../../../utils/utils";
 
-import * as commonView from "../../../../views/common.view";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import * as commonView from "../../../../views/common.view";
 
 const filePath = "app_import/csv/";
 const filesToImport = "valid_application_rows.csv";

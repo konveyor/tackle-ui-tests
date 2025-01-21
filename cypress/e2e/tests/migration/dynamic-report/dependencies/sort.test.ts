@@ -1,12 +1,12 @@
-import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
     validateSortBy,
 } from "../../../../../utils/utils";
-import { SEC } from "../../../../types/constants";
+import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
+import { SEC } from "../../../../types/constants";
 
 describe(["@tier3"], "Dependencies sort validations", function () {
     let application: Analysis;

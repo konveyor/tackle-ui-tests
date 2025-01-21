@@ -15,19 +15,19 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    login,
-    getRandomApplicationData,
-    getRandomAnalysisData,
-    deleteByList,
-} from "../../../../../utils/utils";
-import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { CredentialType, SEC, UserCredentials } from "../../../../types/constants";
-import { Application } from "../../../../models/migration/applicationinventory/application";
-import { AppIssue } from "../../../../types/types";
-import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
-import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import * as data from "../../../../../utils/data_utils";
+import {
+    deleteByList,
+    getRandomAnalysisData,
+    getRandomApplicationData,
+    login,
+} from "../../../../../utils/utils";
+import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
+import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
+import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
+import { Application } from "../../../../models/migration/applicationinventory/application";
+import { CredentialType, SEC, UserCredentials } from "../../../../types/constants";
+import { AppIssue } from "../../../../types/types";
 let applicationsList: Array<Analysis> = [];
 let source_credential: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;

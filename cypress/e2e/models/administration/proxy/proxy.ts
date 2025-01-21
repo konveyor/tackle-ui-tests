@@ -1,3 +1,4 @@
+import { getRandomProxyData } from "../../../../utils/data_utils";
 import {
     clearInput,
     click,
@@ -14,7 +15,6 @@ import {
     ProxyType,
     ProxyViewSelectorsByType,
 } from "../../../views/proxy.view";
-import { getRandomProxyData } from "../../../../utils/data_utils";
 
 export class Proxy {
     hostname: string;

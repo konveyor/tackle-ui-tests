@@ -15,18 +15,18 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { getJiraConnectionData, getJiraCredentialData } from "../../../../utils/data_utils";
 import {
     clickByText,
     createMultipleApplications,
     deleteByList,
     login,
 } from "../../../../utils/utils";
-import { getJiraConnectionData, getJiraCredentialData } from "../../../../utils/data_utils";
+import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
+import { Jira } from "../../../models/administration/jira-connection/jira";
+import { Application } from "../../../models/migration/applicationinventory/application";
 import { button, CredentialType, JiraType, SEC } from "../../../types/constants";
 import { JiraConnectionData } from "../../../types/types";
-import { Jira } from "../../../models/administration/jira-connection/jira";
-import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
-import { Application } from "../../../models/migration/applicationinventory/application";
 
 describe(["@tier3"], "Bug MTA-2549: Jira connection negative tests", () => {
     const expectedToFail = true;

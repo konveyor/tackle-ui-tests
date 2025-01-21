@@ -13,23 +13,23 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    getRandomApplicationData,
-    getRandomAnalysisData,
-    patchTackleCR,
     createMultipleStakeholders,
     deleteByList,
+    getRandomAnalysisData,
+    getRandomApplicationData,
     login,
+    patchTackleCR,
 } from "../../../utils/utils";
-import { Stakeholders } from "../../models/migration/controls/stakeholders";
-import {
-    legacyPathfinder,
-    cloudReadinessQuestionnaire,
-    cloudReadinessFilePath,
-    SEC,
-} from "../../types/constants";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { Application } from "../../models/migration/applicationinventory/application";
+import { Stakeholders } from "../../models/migration/controls/stakeholders";
+import {
+    cloudReadinessFilePath,
+    cloudReadinessQuestionnaire,
+    legacyPathfinder,
+    SEC,
+} from "../../types/constants";
 
 let application1: Analysis;
 let application = new Application(getRandomApplicationData());

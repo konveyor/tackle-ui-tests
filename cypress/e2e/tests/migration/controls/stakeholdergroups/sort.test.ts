@@ -16,18 +16,18 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    clickOnSortButton,
+    createMultipleStakeholderGroups,
+    createMultipleStakeholders,
+    deleteByList,
+    getTableColumnData,
     login,
     verifySortAsc,
     verifySortDesc,
-    getTableColumnData,
-    createMultipleStakeholders,
-    createMultipleStakeholderGroups,
-    clickOnSortButton,
-    deleteByList,
 } from "../../../../../utils/utils";
-import { name, memberCount, SortType } from "../../../../types/constants";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
+import { memberCount, name, SortType } from "../../../../types/constants";
 
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var stakeholdersList: Array<Stakeholders> = [];

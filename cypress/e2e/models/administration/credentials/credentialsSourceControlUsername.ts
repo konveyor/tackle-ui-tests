@@ -1,4 +1,3 @@
-import { CredentialsSourceControl } from "./credentialsSourceControl";
 import {
     cancelForm,
     click,
@@ -11,6 +10,7 @@ import {
 import { button } from "../../../types/constants";
 import { CredentialsSourceControlData } from "../../../types/types";
 import { passwordInput, selectType, usernameInput } from "../../../views/credentials.view";
+import { CredentialsSourceControl } from "./credentialsSourceControl";
 
 export class CredentialsSourceControlUsername extends CredentialsSourceControl {
     username = "";

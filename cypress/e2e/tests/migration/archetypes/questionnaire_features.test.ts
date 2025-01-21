@@ -15,27 +15,27 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../utils/data_utils";
 import {
-    login,
-    deleteByList,
     clickByText,
-    createMultipleStakeholders,
     clickJs,
+    createMultipleStakeholders,
+    deleteByList,
+    login,
 } from "../../../../utils/utils";
-import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { nextButton, radioButton, radioButtonLabel, splitItem } from "../../../views/common.view";
+import { Assessment } from "../../../models/migration/applicationinventory/assessment";
+import { Archetype } from "../../../models/migration/archetypes/archetype";
+import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import {
+    button,
+    cloudReadinessFilePath,
+    cloudReadinessQuestionnaire,
     legacyPathfinder,
     SEC,
-    button,
-    cloudReadinessQuestionnaire,
-    cloudReadinessFilePath,
 } from "../../../types/constants";
-import { Archetype } from "../../../models/migration/archetypes/archetype";
-import { Assessment } from "../../../models/migration/applicationinventory/assessment";
-import * as data from "../../../../utils/data_utils";
 import { questionBlock } from "../../../views/assessment.view";
+import { nextButton, radioButton, radioButtonLabel, splitItem } from "../../../views/common.view";
 
 let stakeholderList: Array<Stakeholders> = [];
 let archetype: Archetype;

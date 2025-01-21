@@ -17,26 +17,26 @@ limitations under the License.
 
 import * as data from "../../../../../utils/data_utils";
 import {
-    login,
-    createMultipleTags,
-    createMultipleArchetypes,
-    deleteByList,
-    createMultipleStakeholders,
-    createMultipleApplications,
     clickByText,
+    createMultipleApplications,
+    createMultipleArchetypes,
+    createMultipleStakeholders,
+    createMultipleTags,
+    deleteByList,
+    login,
     selectFromDropListByText,
 } from "../../../../../utils/utils";
+import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Tag } from "../../../../models/migration/controls/tags";
-import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import {
-    cloudReadinessQuestionnaire,
     cloudReadinessFilePath,
+    cloudReadinessQuestionnaire,
     legacyPathfinder,
     SEC,
 } from "../../../../types/constants";
-import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { customActionButton, ViewArchetypes } from "../../../../views/applicationinventory.view";
 import { archetypeDropdown } from "../../../../views/archetype.view";
 

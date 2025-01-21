@@ -14,37 +14,36 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {
-    controls,
-    stakeholders,
+    cancelForm,
+    click,
+    clickByText,
+    clickItemInKebabMenu,
+    inputText,
+    performRowActionByIcon,
+    removeMember,
+    selectFormItems,
+    selectItemsPerPage,
+    selectUserPerspective,
+    submitForm,
+} from "../../../../utils/utils";
+import {
     button,
+    controls,
     createNewButton,
     deleteAction,
     migration,
     SEC,
+    stakeholders,
 } from "../../../types/constants";
+import * as commonView from "../../../views/common.view";
 import { navMenu, navTab } from "../../../views/menu.view";
 import {
-    stakeholderNameInput,
-    stakeholderEmailInput,
-    jobfunctionInput,
     groupInput,
+    jobfunctionInput,
     removeJobFunction,
+    stakeholderEmailInput,
+    stakeholderNameInput,
 } from "../../../views/stakeholders.view";
-import {
-    clickByText,
-    inputText,
-    click,
-    selectItemsPerPage,
-    submitForm,
-    selectFormItems,
-    removeMember,
-    cancelForm,
-    performRowAction,
-    selectUserPerspective,
-    performRowActionByIcon,
-    clickItemInKebabMenu,
-} from "../../../../utils/utils";
-import * as commonView from "../../../views/common.view";
 
 export class Stakeholders {
     name: string;

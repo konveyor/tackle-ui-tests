@@ -1,6 +1,6 @@
-import { CustomRuleType, Languages, RepositoryType } from "./constants";
 import { CredentialsSourceControl } from "../models/administration/credentials/credentialsSourceControl";
 import { JiraCredentials } from "../models/administration/credentials/JiraCredentials";
+import { CustomRuleType, Languages, RepositoryType } from "./constants";
 
 export type CredentialsSourceControlData = {
     type: string;

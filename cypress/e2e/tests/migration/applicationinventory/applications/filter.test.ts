@@ -16,50 +16,50 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    clickByText,
-    exists,
     applySearchFilter,
+    clickByText,
+    createMultipleApplicationsWithBSandTags,
     createMultipleBusinessServices,
+    createMultipleStakeholders,
     createMultipleTags,
     deleteByList,
-    createMultipleApplicationsWithBSandTags,
-    getRandomApplicationData,
+    exists,
     getRandomAnalysisData,
+    getRandomApplicationData,
+    login,
     notExists,
-    createMultipleStakeholders,
     selectFilter,
 } from "../../../../../utils/utils";
 import {
+    archetypes,
+    artifact,
     button,
     clearAllFilters,
     CredentialType,
-    UserCredentials,
     credentialType,
-    repositoryType,
-    subversion,
     git,
-    artifact,
     name,
+    repositoryType,
     risk,
     SEC,
+    subversion,
     tags,
-    archetypes,
+    UserCredentials,
 } from "../../../../types/constants";
 
 import * as data from "../../../../../utils/data_utils";
-import { Application } from "../../../../models/migration/applicationinventory/application";
-import { BusinessServices } from "../../../../models/migration/controls/businessservices";
-import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
-import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
-import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { Tag } from "../../../../models/migration/controls/tags";
-import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
+import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
+import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
+import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
+import { BusinessServices } from "../../../../models/migration/controls/businessservices";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
+import { Tag } from "../../../../models/migration/controls/tags";
+import * as commonView from "../../../../views/common.view";
 import { filterDropDownContainer, standardFilter } from "../../../../views/common.view";
 import { searchMenuToggle } from "../../../../views/issue.view";
-import * as commonView from "../../../../views/common.view";
 
 let source_credential;
 let maven_credential;

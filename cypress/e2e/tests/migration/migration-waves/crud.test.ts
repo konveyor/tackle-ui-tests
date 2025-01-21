@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /// <reference types="cypress" />
+import * as data from "../../../../utils/data_utils";
 import {
     checkSuccessAlert,
     createMultipleApplications,
@@ -23,18 +24,17 @@ import {
     deleteByList,
     login,
 } from "../../../../utils/utils";
-import { SEC } from "../../../types/constants";
-import * as data from "../../../../utils/data_utils";
-import { Stakeholders } from "../../../models/migration/controls/stakeholders";
+import { Application } from "../../../models/migration/applicationinventory/application";
 import { Stakeholdergroups } from "../../../models/migration/controls/stakeholdergroups";
+import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { MigrationWave } from "../../../models/migration/migration-waves/migration-wave";
+import { SEC } from "../../../types/constants";
 import { successAlertMessage } from "../../../views/common.view";
 import {
     getSpecialMigrationWavesTableSelector,
     MigrationWavesSpecialColumns,
     MigrationWaveView,
 } from "../../../views/migration-wave.view";
-import { Application } from "../../../models/migration/applicationinventory/application";
 
 let stakeHolders: Stakeholders[];
 let stakeHolderGroups: Stakeholdergroups[];

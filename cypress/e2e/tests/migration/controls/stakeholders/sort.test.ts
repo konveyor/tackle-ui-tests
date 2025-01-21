@@ -16,21 +16,21 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    verifySortAsc,
-    verifySortDesc,
-    getTableColumnData,
+    clickOnSortButton,
     createMultipleJobFunctions,
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
     deleteByList,
-    clickOnSortButton,
+    getTableColumnData,
+    login,
+    verifySortAsc,
+    verifySortDesc,
 } from "../../../../../utils/utils";
-import { email, displayName, jobFunction, groupCount, SortType } from "../../../../types/constants";
+import { displayName, email, jobFunction, SortType } from "../../../../types/constants";
 
-import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 let stakeholdersList: Array<Stakeholders> = [];

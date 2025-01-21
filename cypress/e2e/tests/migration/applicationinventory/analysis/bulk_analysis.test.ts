@@ -16,14 +16,14 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    getRandomApplicationData,
-    getRandomAnalysisData,
     deleteByList,
+    getRandomAnalysisData,
+    getRandomApplicationData,
+    login,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { AnalysisStatuses } from "../../../../types/constants";
 import { Metrics } from "../../../../models/migration/custom-metrics/custom-metrics";
+import { AnalysisStatuses } from "../../../../types/constants";
 
 const analyses: Analysis[] = [];
 const NUMBER_OF_APPS = 25;

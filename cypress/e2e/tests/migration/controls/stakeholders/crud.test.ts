@@ -15,22 +15,22 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../../utils/data_utils";
 import {
-    login,
+    closeRowDetails,
+    deleteByList,
     exists,
-    notExists,
     existsWithinRow,
     expandRowDetails,
-    closeRowDetails,
+    login,
+    notExists,
     selectUserPerspective,
-    deleteByList,
 } from "../../../../../utils/utils";
-import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
-import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
+import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { migration, tdTag } from "../../../../types/constants";
 import { groupsCount, stakeHoldersTable } from "../../../../views/stakeholders.view";
-import * as data from "../../../../../utils/data_utils";
 let jobFunctionsList: Array<Jobfunctions> = [];
 let stakeholderGroupList: Array<Stakeholdergroups> = [];
 

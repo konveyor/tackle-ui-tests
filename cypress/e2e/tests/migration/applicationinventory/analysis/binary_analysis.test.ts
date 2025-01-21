@@ -15,20 +15,20 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    login,
-    getRandomApplicationData,
-    getRandomAnalysisData,
-    writeMavenSettingsFile,
-    resetURL,
-} from "../../../../../utils/utils";
 import * as data from "../../../../../utils/data_utils";
-import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { AnalysisStatuses, CredentialType, UserCredentials } from "../../../../types/constants";
-import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
+import {
+    getRandomAnalysisData,
+    getRandomApplicationData,
+    login,
+    resetURL,
+    writeMavenSettingsFile,
+} from "../../../../../utils/utils";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
+import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { MavenConfiguration } from "../../../../models/administration/repositories/maven";
+import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { AnalysisStatuses, CredentialType, UserCredentials } from "../../../../types/constants";
 import { AppIssue } from "../../../../types/types";
 let source_credential: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;

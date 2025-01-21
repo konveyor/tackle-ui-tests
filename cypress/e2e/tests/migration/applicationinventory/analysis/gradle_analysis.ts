@@ -16,16 +16,16 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    getRandomApplicationData,
-    deleteByList,
     deleteAllMigrationWaves,
     deleteApplicationTableRows,
+    deleteByList,
+    getRandomApplicationData,
+    login,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { AnalysisStatuses } from "../../../../types/constants";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Issues } from "../../../../models/migration/dynamic-report/issues/issues";
+import { AnalysisStatuses } from "../../../../types/constants";
 
 const applications: Analysis[] = [];
 

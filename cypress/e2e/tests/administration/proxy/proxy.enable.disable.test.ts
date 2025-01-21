@@ -15,17 +15,17 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { login } from "../../../../utils/utils";
-import { Proxy } from "../../../models/administration/proxy/proxy";
-import { CredentialsProxy } from "../../../models/administration/credentials/credentialsProxy";
 import {
     getRandomCredentialsData,
     getRandomProxyData,
     getRandomWord,
 } from "../../../../utils/data_utils";
+import { login } from "../../../../utils/utils";
+import { CredentialsProxy } from "../../../models/administration/credentials/credentialsProxy";
+import { Proxy } from "../../../models/administration/proxy/proxy";
 import { CredentialType } from "../../../types/constants";
-import { helper, port, ProxyType, ProxyViewSelectorsByType } from "../../../views/proxy.view";
 import { submitButton } from "../../../views/common.view";
+import { helper, port, ProxyType, ProxyViewSelectorsByType } from "../../../views/proxy.view";
 
 describe(["@tier3"], "Proxy operations", () => {
     let httpsProxy = new Proxy(getRandomProxyData(), ProxyType.https);

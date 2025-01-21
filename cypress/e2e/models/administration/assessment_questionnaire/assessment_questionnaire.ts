@@ -6,22 +6,21 @@ import {
     selectUserPerspective,
 } from "../../../../utils/utils";
 import {
-    SEC,
     assessmentQuestionnaires,
+    button,
     deleteAction,
     legacyPathfinder,
+    SEC,
     trTag,
 } from "../../../types/constants";
+import { actionButton } from "../../../views/applicationinventory.view";
 import {
-    questionnaireUpload,
     confirmDeletion,
     importQuestionnaire,
     switchToggle,
 } from "../../../views/assessmentquestionnaire.view";
-import { navMenu } from "../../../views/menu.view";
-import { button } from "../../../types/constants";
-import { actionButton } from "../../../views/applicationinventory.view";
 import * as commonView from "../../../views/common.view";
+import { navMenu } from "../../../views/menu.view";
 
 export class AssessmentQuestionnaire {
     public static fullUrl = Cypress.env("tackleUrl") + "/assessment";

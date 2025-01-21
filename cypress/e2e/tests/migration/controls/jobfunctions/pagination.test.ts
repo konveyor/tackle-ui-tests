@@ -16,12 +16,12 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
-    selectItemsPerPage,
     createMultipleJobFunctions,
     deleteByList,
-    validatePagination,
     itemsPerPageValidation,
+    login,
+    selectItemsPerPage,
+    validatePagination,
 } from "../../../../../utils/utils";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 let jobFunctionsList: Array<Jobfunctions> = [];

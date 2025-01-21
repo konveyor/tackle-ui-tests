@@ -28,11 +28,11 @@ import {
     notExists,
     selectFromDropListByText,
 } from "../../../../utils/utils";
-import { cloudNative, legacyPathfinder } from "../../../types/constants";
-import { Stakeholders } from "../../../models/migration/controls/stakeholders";
-import { Application } from "../../../models/migration/applicationinventory/application";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { Application } from "../../../models/migration/applicationinventory/application";
+import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { Reports } from "../../../models/migration/reports-tab/reports-tab";
+import { cloudNative, legacyPathfinder } from "../../../types/constants";
 import {
     identifiedRisksFilterValidations,
     landscapeFilterDropdown,

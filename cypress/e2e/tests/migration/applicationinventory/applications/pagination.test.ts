@@ -16,12 +16,12 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    createMultipleApplications,
+    deleteByList,
+    itemsPerPageValidation,
     login,
     selectItemsPerPage,
-    deleteByList,
-    createMultipleApplications,
     validatePagination,
-    itemsPerPageValidation,
 } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 

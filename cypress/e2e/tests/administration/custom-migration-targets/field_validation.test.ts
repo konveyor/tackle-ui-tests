@@ -15,6 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../utils/data_utils";
 import {
     click,
     doesExistText,
@@ -22,11 +23,10 @@ import {
     validateTooLongInput,
     validateTooShortInput,
 } from "../../../../utils/utils";
-import * as data from "../../../../utils/data_utils";
 import { CustomMigrationTarget } from "../../../models/administration/custom-migration-targets/custom-migration-target";
-import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { RepositoryType, SEC } from "../../../types/constants";
 import { cancelButton, submitButton } from "../../../views/common.view";
+import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 
 describe(["@tier3"], "Custom Migration Target Validations", () => {
     /**

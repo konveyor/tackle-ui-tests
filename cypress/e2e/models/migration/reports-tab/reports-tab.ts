@@ -20,7 +20,7 @@ import {
     selectItemsPerPage,
     selectUserPerspective,
 } from "../../../../utils/utils";
-import { SEC, migration } from "../../../types/constants";
+import { migration, SEC } from "../../../types/constants";
 import { navMenu } from "../../../views/menu.view";
 import {
     highRiskDonut,

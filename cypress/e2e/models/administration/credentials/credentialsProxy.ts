@@ -1,4 +1,3 @@
-import { Credentials } from "./credentials";
 import {
     cancelForm,
     click,
@@ -9,10 +8,11 @@ import {
     submitForm,
     validateValue,
 } from "../../../../utils/utils";
-import { CredentialsProxyData } from "../../../types/types";
 import { button, CredentialType } from "../../../types/constants";
+import { CredentialsProxyData } from "../../../types/types";
 import { selectType, usernameInput } from "../../../views/credentials.view";
 import { userPasswordInput } from "../../../views/login.view";
+import { Credentials } from "./credentials";
 
 export class CredentialsProxy extends Credentials {
     type = CredentialType.proxy;

@@ -39,6 +39,7 @@
         "cypress-mochawesome-reporter": "^3.2.2",
         "cypress-tags": "^1.1.2",
         "license-check-and-add": "^4.0.5",
+        "prettier-plugin-organize-imports": "^4.1.0",
         "typedoc": "^0.23.28"
     }
 }

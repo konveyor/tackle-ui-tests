@@ -1,5 +1,3 @@
-import { Credentials } from "./credentials";
-import { CredentialsJiraData } from "../../../types/types";
 import {
     cancelForm,
     exists,
@@ -9,9 +7,11 @@ import {
     submitForm,
     validateValue,
 } from "../../../../utils/utils";
-import { keyInput, passwordInput, usernameInput } from "../../../views/credentials.view";
-import { submitButton } from "../../../views/common.view";
 import { CredentialType } from "../../../types/constants";
+import { CredentialsJiraData } from "../../../types/types";
+import { submitButton } from "../../../views/common.view";
+import { keyInput, passwordInput, usernameInput } from "../../../views/credentials.view";
+import { Credentials } from "./credentials";
 
 export class JiraCredentials extends Credentials {
     name: string;

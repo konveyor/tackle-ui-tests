@@ -20,10 +20,10 @@ import {
     deleteByList,
     login,
 } from "../../../utils/utils";
-import { Metrics } from "../../models/migration/custom-metrics/custom-metrics";
-import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Application } from "../../models/migration/applicationinventory/application";
+import { Stakeholders } from "../../models/migration/controls/stakeholders";
+import { Metrics } from "../../models/migration/custom-metrics/custom-metrics";
 const metrics = new Metrics();
 const metricName = "konveyor_assessments_initiated_total";
 let applicationList: Array<Application> = [];

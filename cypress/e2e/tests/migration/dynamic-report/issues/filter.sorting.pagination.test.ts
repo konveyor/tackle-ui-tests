@@ -15,6 +15,8 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../../utils/data_utils";
+import { randomWordGenerator } from "../../../../../utils/data_utils";
 import {
     clearAllFilters,
     clickByText,
@@ -31,17 +33,15 @@ import {
     validatePagination,
     validateSortBy,
 } from "../../../../../utils/utils";
-import { BusinessServices } from "../../../../models/migration/controls/businessservices";
-import * as data from "../../../../../utils/data_utils";
-import { Archetype } from "../../../../models/migration/archetypes/archetype";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
+import { Archetype } from "../../../../models/migration/archetypes/archetype";
+import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Tag } from "../../../../models/migration/controls/tags";
 import { Issues } from "../../../../models/migration/dynamic-report/issues/issues";
-import { AppIssue } from "../../../../types/types";
 import { AnalysisStatuses, issueFilter, SEC, tdTag, trTag } from "../../../../types/constants";
-import { randomWordGenerator } from "../../../../../utils/data_utils";
+import { AppIssue } from "../../../../types/types";
 import { rightSideBar } from "../../../../views/issue.view";
 
 describe.skip(["@tier3"], "Filtering, sorting and pagination in Issues", function () {

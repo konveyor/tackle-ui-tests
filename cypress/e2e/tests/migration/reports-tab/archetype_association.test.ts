@@ -16,18 +16,18 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
     createMultipleApplications,
-    deleteByList,
-    createMultipleTags,
     createMultipleStakeholders,
+    createMultipleTags,
+    deleteByList,
+    login,
 } from "../../../../utils/utils";
-import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { legacyPathfinder } from "../../../types/constants";
 
-import { Archetype } from "../../../models/migration/archetypes/archetype";
 import * as data from "../../../../utils/data_utils";
+import { Archetype } from "../../../models/migration/archetypes/archetype";
 import { Reports } from "../../../models/migration/reports-tab/reports-tab";
 import { mediumRiskDonut } from "../../../views/reportsTab.view";
 

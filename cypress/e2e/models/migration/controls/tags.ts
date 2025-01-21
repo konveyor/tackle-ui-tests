@@ -14,38 +14,38 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {
+    button,
     controls,
+    deleteAction,
+    editAction,
+    migration,
+    SEC,
     tags,
     tdTag,
     trTag,
-    button,
-    SEC,
-    editAction,
-    deleteAction,
-    migration,
 } from "../../../types/constants";
 import { navMenu, navTab } from "../../../views/menu.view";
 
 import {
+    applyAction,
+    cancelForm,
+    click,
     clickByText,
+    closeRowDetails,
+    confirm,
+    expandRowDetails,
     inputText,
     selectItemsPerPage,
-    submitForm,
-    cancelForm,
-    expandRowDetails,
-    closeRowDetails,
     selectUserPerspective,
-    applyAction,
-    confirm,
-    click,
+    submitForm,
 } from "../../../../utils/utils";
+import * as commonView from "../../../views/common.view";
 import {
-    dropdownMenuToggle,
     createTagButton,
+    dropdownMenuToggle,
     nameInput,
     tagMenuButton,
 } from "../../../views/tags.view";
-import * as commonView from "../../../views/common.view";
 
 export function clickTags(): void {
     clickByText(navMenu, controls);

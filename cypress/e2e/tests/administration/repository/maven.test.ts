@@ -15,22 +15,22 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { MavenConfiguration } from "../../../models/administration/repositories/maven";
+import * as data from "../../../../utils/data_utils";
 import {
-    patchTackleCR,
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
     isEnabled,
     login,
-    writeMavenSettingsFile,
+    patchTackleCR,
     resetURL,
+    writeMavenSettingsFile,
 } from "../../../../utils/utils";
-import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
-import * as data from "../../../../utils/data_utils";
-import { CredentialType, UserCredentials } from "../../../types/constants";
-import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { CredentialsMaven } from "../../../models/administration/credentials/credentialsMaven";
+import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
+import { MavenConfiguration } from "../../../models/administration/repositories/maven";
+import { Analysis } from "../../../models/migration/applicationinventory/analysis";
+import { CredentialType, UserCredentials } from "../../../types/constants";
 import { clearRepository, repoSize } from "../../../views/repository.view";
 
 let mavenConfiguration = new MavenConfiguration();

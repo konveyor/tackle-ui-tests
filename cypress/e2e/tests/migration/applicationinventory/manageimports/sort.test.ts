@@ -16,20 +16,20 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
     clickByText,
-    verifySortAsc,
-    verifySortDesc,
-    getTableColumnData,
-    importApplication,
-    openManageImportsPage,
-    deleteApplicationTableRows,
-    deleteAppImportsTableRows,
     clickOnSortButton,
     deleteAllMigrationWaves,
+    deleteAppImportsTableRows,
+    deleteApplicationTableRows,
+    getTableColumnData,
+    importApplication,
+    login,
+    openManageImportsPage,
+    verifySortAsc,
+    verifySortDesc,
 } from "../../../../../utils/utils";
+import { applicationInventory, SEC, SortType } from "../../../../types/constants";
 import { navMenu } from "../../../../views/menu.view";
-import { SortType, applicationInventory, SEC } from "../../../../types/constants";
 
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { csvFileName, date, importStatus, user } from "../../../../views/applicationinventory.view";

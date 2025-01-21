@@ -15,7 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { login, clickByText, exists, applySearchFilter } from "../../../../../../utils/utils";
+import { applySearchFilter, clickByText, exists, login } from "../../../../../../utils/utils";
 import { button, clearAllFilters, color, rank } from "../../../../../types/constants";
 
 import * as data from "../../../../../../utils/data_utils";

@@ -15,19 +15,19 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../../utils/data_utils";
 import {
-    login,
-    selectItemsPerPage,
     clickByText,
     exists,
+    login,
     notExists,
+    selectItemsPerPage,
     selectUserPerspective,
 } from "../../../../../utils/utils";
-import { navTab } from "../../../../views/menu.view";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
-import { tdTag, businessServices, migration, SEC } from "../../../../types/constants";
-import * as data from "../../../../../utils/data_utils";
+import { businessServices, migration, SEC, tdTag } from "../../../../types/constants";
+import { navTab } from "../../../../views/menu.view";
 import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 describe(["@tier3"], "Business service linked to stakeholder", () => {

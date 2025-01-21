@@ -15,15 +15,15 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
     validatePagination,
 } from "../../../../../utils/utils";
-import { SEC } from "../../../../types/constants";
+import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
+import { SEC } from "../../../../types/constants";
 
 describe(["@tier3"], "Dependencies pagination validation", function () {
     let application: Analysis;

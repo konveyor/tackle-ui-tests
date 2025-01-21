@@ -15,6 +15,8 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../utils/data_utils";
+import { getRulesData } from "../../../../utils/data_utils";
 import {
     click,
     clickByText,
@@ -25,6 +27,9 @@ import {
     next,
     selectItemsPerPage,
 } from "../../../../utils/utils";
+import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
+import { CustomMigrationTarget } from "../../../models/administration/custom-migration-targets/custom-migration-target";
+import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import {
     analyzeButton,
     button,
@@ -33,14 +38,8 @@ import {
     SEC,
     UserCredentials,
 } from "../../../types/constants";
-import * as data from "../../../../utils/data_utils";
-import { CustomMigrationTarget } from "../../../models/administration/custom-migration-targets/custom-migration-target";
-import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
-import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
-import { getRulesData } from "../../../../utils/data_utils";
-import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { cancelButton } from "../../../views/common.view";
-import * as commonView from "../../../views/common.view";
+import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 
 describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () => {
     let appFixture: string;

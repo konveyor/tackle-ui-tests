@@ -9,22 +9,19 @@ import {
     submitForm,
 } from "../../../../utils/utils";
 import {
-    createNewButton,
     button,
-    SEC,
+    createNewButton,
     deleteAction,
     editAction,
+    exportToIssueManagerAction,
+    manageApplications,
     migrationWaves,
+    SEC,
+    selectNone,
     tdTag,
     trTag,
-    selectNone,
-    manageApplications,
-    exportToIssueManagerAction,
 } from "../../../types/constants";
-import { navMenu } from "../../../views/menu.view";
-import { MigrationWaveView } from "../../../views/migration-wave.view";
-import { Stakeholdergroups } from "../controls/stakeholdergroups";
-import { Stakeholders } from "../controls/stakeholders";
+import { selectBox } from "../../../views/applicationinventory.view";
 import {
     cancelButton,
     confirmButton,
@@ -32,8 +29,11 @@ import {
     modal,
     submitButton,
 } from "../../../views/common.view";
-import { selectBox } from "../../../views/applicationinventory.view";
+import { navMenu } from "../../../views/menu.view";
+import { MigrationWaveView } from "../../../views/migration-wave.view";
 import { Application } from "../applicationinventory/application";
+import { Stakeholdergroups } from "../controls/stakeholdergroups";
+import { Stakeholders } from "../controls/stakeholders";
 
 export interface MigrationWave {
     name: string;

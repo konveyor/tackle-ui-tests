@@ -14,28 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {
-    clickByText,
     cancelForm,
+    click,
+    clickByText,
+    clickKebabMenuOptionArchetype,
+    confirm,
     inputText,
+    performRowActionByIcon,
     selectFormItems,
     selectItemsPerPage,
     selectUserPerspective,
-    submitForm,
-    click,
-    clickKebabMenuOptionArchetype,
-    confirm,
     sidedrawerTab,
+    submitForm,
     validatePageTitle,
-    performRowActionByIcon,
 } from "../../../../utils/utils";
 import { legacyPathfinder, migration, review, SEC, tdTag, trTag } from "../../../types/constants";
-import { navMenu } from "../../../views/menu.view";
-import { Stakeholdergroups } from "../controls/stakeholdergroups";
-import { Stakeholders } from "../controls/stakeholders";
+import { tagsColumnSelector } from "../../../views/applicationinventory.view";
 import * as archetype from "../../../views/archetype.view";
 import * as commonView from "../../../views/common.view";
+import { navMenu } from "../../../views/menu.view";
 import { Assessment } from "../applicationinventory/assessment";
-import { tagsColumnSelector } from "../../../views/applicationinventory.view";
+import { Stakeholdergroups } from "../controls/stakeholdergroups";
+import { Stakeholders } from "../controls/stakeholders";
 
 export interface Archetype {
     name: string;

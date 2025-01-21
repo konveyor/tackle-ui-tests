@@ -15,11 +15,11 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { getRandomProxyData } from "../../../../../utils/data_utils";
 import { getRandomAnalysisData, getRandomApplicationData, login } from "../../../../../utils/utils";
 import { Proxy } from "../../../../models/administration/proxy/proxy";
-import { getRandomProxyData } from "../../../../../utils/data_utils";
-import { ProxyType } from "../../../../views/proxy.view";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
+import { ProxyType } from "../../../../views/proxy.view";
 
 let application: Analysis;
 

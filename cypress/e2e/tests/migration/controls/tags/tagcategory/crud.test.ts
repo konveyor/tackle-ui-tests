@@ -15,9 +15,9 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { login, exists, notExists, selectUserPerspective } from "../../../../../../utils/utils";
-import { Tag } from "../../../../../models/migration/controls/tags";
+import { exists, login, notExists, selectUserPerspective } from "../../../../../../utils/utils";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
+import { Tag } from "../../../../../models/migration/controls/tags";
 
 import * as data from "../../../../../../utils/data_utils";
 import { color, migration, rank, tagCount } from "../../../../../types/constants";

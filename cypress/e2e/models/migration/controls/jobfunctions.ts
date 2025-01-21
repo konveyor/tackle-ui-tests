@@ -14,28 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 import {
-    controls,
-    jobFunctions,
+    cancelForm,
+    click,
+    clickByText,
+    inputText,
+    performRowAction,
+    selectItemsPerPage,
+    selectUserPerspective,
+    submitForm,
+} from "../../../../utils/utils";
+import {
     button,
+    controls,
     createNewButton,
-    editAction,
     deleteAction,
+    editAction,
+    jobFunctions,
     migration,
     SEC,
 } from "../../../types/constants";
-import { navMenu, navTab } from "../../../views/menu.view";
-import { jobfunctionNameInput } from "../../../views/jobfunctions.view";
-import {
-    clickByText,
-    inputText,
-    click,
-    selectItemsPerPage,
-    submitForm,
-    cancelForm,
-    performRowAction,
-    selectUserPerspective,
-} from "../../../../utils/utils";
 import * as commonView from "../../../views/common.view";
+import { jobfunctionNameInput } from "../../../views/jobfunctions.view";
+import { navMenu, navTab } from "../../../views/menu.view";
 
 export class Jobfunctions {
     name: string;

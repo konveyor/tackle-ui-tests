@@ -16,16 +16,16 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    clickOnSortButton,
+    createMultipleJobFunctions,
+    deleteByList,
+    getTableColumnData,
     login,
     verifySortAsc,
     verifySortDesc,
-    getTableColumnData,
-    createMultipleJobFunctions,
-    clickOnSortButton,
-    deleteByList,
 } from "../../../../../utils/utils";
-import { name, SortType } from "../../../../types/constants";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
+import { name, SortType } from "../../../../types/constants";
 
 let jobFunctionsList: Array<Jobfunctions> = [];
 

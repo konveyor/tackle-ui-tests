@@ -1,22 +1,23 @@
 import {
+    clearAllFilters,
     click,
     clickByText,
-    inputText,
-    performRowAction,
-    selectUserPerspective,
-    selectItemsPerPage,
-    notExists,
+    doesExistText,
+    enumKeys,
     exists,
-    validateValue,
+    inputText,
+    notExists,
+    performRowAction,
     selectFromDropList,
     selectFromDropListByText,
-    validateTooShortInput,
+    selectItemsPerPage,
+    selectUserPerspective,
     validateTooLongInput,
-    enumKeys,
-    clearAllFilters,
-    doesExistText,
+    validateTooShortInput,
+    validateValue,
 } from "../../../../utils/utils";
 import {
+    administration,
     button,
     credentials,
     CredentialType,
@@ -24,33 +25,32 @@ import {
     editAction,
     SEC,
     trTag,
-    administration,
 } from "../../../types/constants";
+import { CredentialsData } from "../../../types/types";
+import * as commonView from "../../../views/common.view";
+import {
+    closeSuccessNotification,
+    confirmButton,
+    confirmCancelButton,
+    navLink,
+    searchButton,
+    searchInput,
+} from "../../../views/common.view";
 import {
     createBtn,
     credentialNameInput,
     credLabels,
     descriptionInput,
-    filterCatType,
-    filterCategory,
-    filteredBy,
-    passwordInput,
-    usernameInput,
-    filterSelectType,
     filterCatCreatedBy,
+    filterCategory,
+    filterCatType,
+    filteredBy,
+    filterSelectType,
     modalBoxBody,
+    passwordInput,
+    selectType,
+    usernameInput,
 } from "../../../views/credentials.view";
-import {
-    navLink,
-    confirmButton,
-    closeSuccessNotification,
-    confirmCancelButton,
-    searchButton,
-    searchInput,
-} from "../../../views/common.view";
-import { selectType } from "../../../views/credentials.view";
-import * as commonView from "../../../views/common.view";
-import { CredentialsData } from "../../../types/types";
 
 /**
  * Base class for credentials

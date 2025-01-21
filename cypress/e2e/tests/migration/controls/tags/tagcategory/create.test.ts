@@ -16,32 +16,32 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
-    login,
+    checkSuccessAlert,
+    click,
     clickByText,
     inputText,
+    login,
     selectUserPerspective,
-    click,
-    checkSuccessAlert,
 } from "../../../../../../utils/utils";
+import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 import {
     button,
-    max40CharMsg,
-    minCharsMsg,
     duplicateTagTypeName,
+    max40CharMsg,
     migration,
+    minCharsMsg,
 } from "../../../../../types/constants";
 import {
     createTagCategoryButton,
-    nameInput,
-    tagsHelper,
-    rankInput,
-    positiveRankMsg,
     dropdownMenuTypeToggle,
+    nameInput,
+    positiveRankMsg,
+    rankInput,
+    tagsHelper,
 } from "../../../../../views/tags.view";
-import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 
-import * as commonView from "../../../../../views/common.view";
 import * as data from "../../../../../../utils/data_utils";
+import * as commonView from "../../../../../views/common.view";
 
 describe(["@tier2"], "Tag category validations", () => {
     before("Login", function () {

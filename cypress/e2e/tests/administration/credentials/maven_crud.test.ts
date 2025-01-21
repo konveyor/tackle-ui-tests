@@ -15,9 +15,9 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { getRandomCredentialsData } from "../../../../utils/data_utils";
 import { login } from "../../../../utils/utils";
 import { CredentialsMaven } from "../../../models/administration/credentials/credentialsMaven";
-import { getRandomCredentialsData } from "../../../../utils/data_utils";
 import { CredentialType } from "../../../types/constants";
 
 describe(["@tier3"], "Validation of Maven Credentials", () => {

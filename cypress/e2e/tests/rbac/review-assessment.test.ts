@@ -15,22 +15,22 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../utils/data_utils";
 import {
+    createMultipleApplications,
     createMultipleStakeholders,
     createMultipleTags,
-    createMultipleApplications,
-    login,
     deleteByList,
+    login,
 } from "../../../utils/utils";
-import * as data from "../../../utils/data_utils";
-import { UserArchitect } from "../../models/keycloak/users/userArchitect";
+import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { User } from "../../models/keycloak/users/user";
-import { legacyPathfinder, SEC } from "../../types/constants";
+import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Archetype } from "../../models/migration/archetypes/archetype";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Tag } from "../../models/migration/controls/tags";
-import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import { legacyPathfinder, SEC } from "../../types/constants";
 
 let tags: Tag[];
 let stakeholders: Stakeholders[];

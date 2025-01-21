@@ -15,23 +15,23 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../../utils/data_utils";
 import {
-    login,
-    selectItemsPerPage,
     click,
     clickByText,
     exists,
+    login,
     notExists,
+    selectItemsPerPage,
     selectUserPerspective,
 } from "../../../../../utils/utils";
-import { navTab } from "../../../../views/menu.view";
+import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
-import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
-import { tdTag, trTag, stakeholders, migration } from "../../../../types/constants";
-import * as data from "../../../../../utils/data_utils";
-import { stakeHoldersTable } from "../../../../views/stakeholders.view";
+import { migration, stakeholders, tdTag, trTag } from "../../../../types/constants";
 import { expandRow } from "../../../../views/common.view";
+import { navTab } from "../../../../views/menu.view";
+import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var stakeholdergroupNames: Array<string> = [];

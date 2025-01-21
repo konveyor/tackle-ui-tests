@@ -16,14 +16,14 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    autoPageChangeValidations,
+    createMultipleBusinessServices,
+    deleteAllBusinessServices,
+    deleteApplicationTableRows,
+    itemsPerPageValidation,
     login,
     selectItemsPerPage,
-    createMultipleBusinessServices,
     validatePagination,
-    deleteApplicationTableRows,
-    deleteAllBusinessServices,
-    itemsPerPageValidation,
-    autoPageChangeValidations,
 } from "../../../../../utils/utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 

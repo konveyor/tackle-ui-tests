@@ -15,6 +15,8 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../../../utils/data_utils";
+import { randomWordGenerator } from "../../../../../utils/data_utils";
 import {
     clearAllFilters,
     clickWithinByText,
@@ -29,16 +31,14 @@ import {
     selectItemsPerPage,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { button, dependencyFilter, trTag } from "../../../../types/constants";
-import { BusinessServices } from "../../../../models/migration/controls/businessservices";
-import * as data from "../../../../../utils/data_utils";
-import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
-import { AppDependency } from "../../../../types/types";
-import { randomWordGenerator } from "../../../../../utils/data_utils";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
-import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
+import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
+import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Tag } from "../../../../models/migration/controls/tags";
+import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
+import { button, dependencyFilter, trTag } from "../../../../types/constants";
+import { AppDependency } from "../../../../types/types";
 import { rightSideMenu } from "../../../../views/analysis.view";
 
 let applicationsList: Array<Analysis> = [];

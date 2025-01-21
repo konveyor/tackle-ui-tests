@@ -15,9 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { User } from "../../models/keycloak/users/user";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
-import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import {
     createMultipleStakeholders,
     deleteByList,
@@ -25,13 +23,14 @@ import {
     login,
     logout,
 } from "../../../utils/utils";
-import { Analysis } from "../../models/migration/applicationinventory/analysis";
+import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
-import { CredentialType, legacyPathfinder, SEC } from "../../types/constants";
+import { User } from "../../models/keycloak/users/user";
+import { UserArchitect } from "../../models/keycloak/users/userArchitect";
+import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
-import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import * as data from "../../../utils/data_utils";
+import { CredentialType, legacyPathfinder } from "../../types/constants";
 
 let stakeholders: Array<Stakeholders> = [];
 

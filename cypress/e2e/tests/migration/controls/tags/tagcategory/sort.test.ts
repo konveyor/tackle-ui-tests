@@ -16,14 +16,14 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    clickOnSortButton,
+    getTableColumnData,
     login,
     verifySortAsc,
     verifySortDesc,
-    getTableColumnData,
-    clickOnSortButton,
 } from "../../../../../../utils/utils";
-import { rank, tagCount, SortType, tagCategory } from "../../../../../types/constants";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
+import { rank, SortType, tagCategory, tagCount } from "../../../../../types/constants";
 
 describe(["@tier3"], "Tag category sort validations", function () {
     before("Login", function () {

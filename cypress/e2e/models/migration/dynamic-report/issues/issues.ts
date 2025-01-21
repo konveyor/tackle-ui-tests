@@ -22,7 +22,8 @@ import {
     tdTag,
     trTag,
 } from "../../../../types/constants";
-import { navMenu } from "../../../../views/menu.view";
+import { AppIssue } from "../../../../types/types";
+import { div, liTag, searchButton, searchInput, span } from "../../../../views/common.view";
 import {
     affectedFilesTable,
     issueColumns,
@@ -30,9 +31,7 @@ import {
     singleAppDropList,
     singleApplicationColumns,
 } from "../../../../views/issue.view";
-import { AppIssue } from "../../../../types/types";
-import { div, liTag, searchButton, searchInput, span } from "../../../../views/common.view";
-import { title } from "process";
+import { navMenu } from "../../../../views/menu.view";
 
 export class Issues {
     /** Contains URL of issues web page */

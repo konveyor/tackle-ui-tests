@@ -1,4 +1,4 @@
-import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
+import "cypress-fs";
 import {
     checkSuccessAlert,
     cleanupDownloads,
@@ -6,14 +6,14 @@ import {
     login,
     notExists,
 } from "../../../../utils/utils";
-import { downloadYamlTemplate } from "../../../views/assessmentquestionnaire.view";
+import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import {
     cloudNative,
     legacyPathfinder,
     sampleQuestionnaireTemplate,
 } from "../../../types/constants";
+import { downloadYamlTemplate } from "../../../views/assessmentquestionnaire.view";
 import { alertTitle } from "../../../views/common.view";
-import "cypress-fs";
 
 import { closeModal } from "../../../views/assessment.view";
 const filePath = "cypress/downloads/questionnaire-template.yaml";

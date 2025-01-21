@@ -15,6 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import * as data from "../../../utils/data_utils";
 import {
     clickByText,
     getRandomAnalysisData,
@@ -24,21 +25,19 @@ import {
     resetURL,
     selectItemsPerPage,
 } from "../../../utils/utils";
-import {
-    analyzeButton,
-    application,
-    button,
-    SEC,
-    CustomRuleType,
-    AnalysisStatuses,
-} from "../../types/constants";
-import { RulesRepositoryFields } from "../../types/types";
-import * as data from "../../../utils/data_utils";
 import { CustomMigrationTarget } from "../../models/administration/custom-migration-targets/custom-migration-target";
-import { Analysis } from "../../models/migration/applicationinventory/analysis";
+import { User } from "../../models/keycloak/users/user";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
-import { User } from "../../models/keycloak/users/user";
+import { Analysis } from "../../models/migration/applicationinventory/analysis";
+import {
+    AnalysisStatuses,
+    analyzeButton,
+    button,
+    CustomRuleType,
+    SEC,
+} from "../../types/constants";
+import { RulesRepositoryFields } from "../../types/types";
 
 describe(["tier3"], "Custom Migration Targets RBAC operations", function () {
     // Polarion TC 317 & 319
