@@ -35,15 +35,17 @@ import { TaskManagerColumns } from "../../../views/taskmanager.view";
 
 describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", function () {
     const applicationsList: Analysis[] = [];
-    const sortByList = ["ID", "Application", "Status", "Kind", "Priority", "Created By"];
+    const sortByList = ["ID", "Application", "Kind", "Priority", "Created By", "Status"];
 
     before("Login", function () {
+        let dayTraderApp: Analysis;
+
         login();
         deleteApplicationTableRows();
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
                 for (let i = 0; i < 6; i++) {
-                    const dayTraderApp = new Analysis(
+                    dayTraderApp = new Analysis(
                         getRandomApplicationData("TaskFilteringApp_" + i, {
                             sourceData: appData["daytrader-app"],
                         }),
@@ -52,15 +54,13 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
                     applicationsList.push(dayTraderApp);
                 }
                 applicationsList.forEach((application) => application.create());
+                Analysis.analyzeAll(dayTraderApp);
             });
         });
     });
 
     it("Filtering tasks", function () {
-        const dayTraderApp = applicationsList[0];
-        Analysis.analyzeAll(dayTraderApp);
         TaskManager.open();
-
         cy.intercept("GET", "/hub/tasks*").as("getTasks");
 
         // Filter by status
