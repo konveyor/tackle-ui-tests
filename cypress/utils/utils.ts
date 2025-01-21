@@ -1976,7 +1976,7 @@ export function normalizeText(text: string): string {
 }
 
 export function taskDetailsSanity(appName: string, taskKind: TaskKind, taskStatus?: TaskStatus) {
-    cy.wait(2 * SEC);
+    cy.wait(5 * SEC);
     cy.get(taskDetailsEditor)
         .invoke("text")
         .then((text) => {
