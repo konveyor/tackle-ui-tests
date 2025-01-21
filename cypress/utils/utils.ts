@@ -72,6 +72,7 @@ import {
     expandableRow,
     expandRow,
     filterDropDownContainer,
+    filteredBy,
     filterInput,
     firstPageButton,
     itemsPerPageMenuOptions,
@@ -392,9 +393,18 @@ export function notExists(value: string, tableSelector = appTable): void {
     });
 }
 
-export function selectFilter(filterName: string): void {
-    cy.get("#filtered-by").click();
-    clickWithinByText('div[class="pf-v5-c-menu__content"]', "button", filterName);
+export function selectFilter(filterName: string, eq = 0): void {
+    if (eq === 0) {
+        cy.get(filteredBy).click();
+        clickWithinByText('div[class="pf-v5-c-menu__content"]', "button", filterName);
+        return;
+    }
+    cy.get("div.pf-m-filter-group")
+        .eq(eq)
+        .within(() => {
+            cy.get(filteredBy).click();
+            clickWithinByText('div[class="pf-v5-c-menu__content"]', "button", filterName);
+        });
 }
 
 export function filterInputText(searchTextValue: string, value: number): void {
@@ -462,7 +472,12 @@ export function validateSingleApplicationIssue(issue: AppIssue): void {
         });
 }
 
-export function applySelectFilter(filterId, filterName, filterText, isValid = true): void {
+export function applySelectFilter(
+    filterId: string,
+    filterName,
+    filterText: string,
+    isValid = true
+): void {
     selectFilter(filterName);
     click(".pf-v5-c-menu-toggle__button");
     inputText(".pf-v5-c-text-input-group__text-input", filterText);
@@ -478,9 +493,9 @@ export function applySearchFilter(
     filterName: string,
     searchText: string | string[],
     identifiedRisk = false,
-    value?: number
+    eq = 0
 ): void {
-    selectFilter(filterName, identifiedRisk, value);
+    selectFilter(filterName, eq);
     let filterValue = [];
     if (!Array.isArray(searchText)) {
         filterValue = [searchText];

@@ -25,6 +25,7 @@ export const removeButton = "button[aria-label='Remove']";
 export const clearAllButton = "button[aria-label='Clear all']";
 export const controlsForm = "form.pf-v5-c-form";
 export const itemsPerPageMenu = "div.pf-c-options-menu";
+export const filteredBy = "#filtered-by";
 export const itemsPerPageMenuOptions = "ul.pf-v5-c-menu__list";
 export const expandRow = "button[aria-label=Details]";
 export const successAlertMessage = ".pf-m-success";
@@ -35,7 +36,6 @@ export const alertTitle = "h4[class*='alert__title']";
 export const appTable = ".pf-v5-c-table";
 export const expandableRow = ".pf-c-expandable-row";
 export const helper = "span.pf-v5-c-helper-text__item-text";
-export const filterToggleButton = "div.pf-c-dropdown > button.pf-c-dropdown__toggle";
 export const filterInput = "input[type='search']";
 export const inputText = "input[type='text']";
 

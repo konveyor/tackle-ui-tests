@@ -44,7 +44,7 @@ const end = new Date(now.getTime());
 
 end.setFullYear(end.getFullYear() + 1);
 let applicationsList: Application[] = [];
-let businessservicesList: BusinessServices[] = [];
+let businessServicesList: BusinessServices[] = [];
 let tagList: Tag[] = [];
 let stakeholders: Stakeholders[] = [];
 
@@ -56,12 +56,12 @@ describe(
         before("Login and Create Test Data", function () {
             login();
 
-            businessservicesList = createMultipleBusinessServices(2);
+            businessServicesList = createMultipleBusinessServices(2);
             tagList = createMultipleTags(2);
             stakeholders = createMultipleStakeholders(2);
             applicationsList = createMultipleApplicationsWithBSandTags(
                 2,
-                businessservicesList,
+                businessServicesList,
                 tagList,
                 stakeholders
             );
@@ -153,7 +153,7 @@ describe(
 
         after("Perform test data clean up", function () {
             deleteByList(applicationsList);
-            deleteByList(businessservicesList);
+            deleteByList(businessServicesList);
             deleteByList(tagList);
             deleteByList(stakeholders);
         });
