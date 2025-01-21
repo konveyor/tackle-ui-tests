@@ -489,12 +489,9 @@ export function applySelectFilter(
     click(".pf-v5-c-text-input-group__text-input");
 }
 
-export function applySearchFilter(
-    filterName: string,
-    searchText: string | string[],
-    identifiedRisk = false,
+export function applySearchFilter(filterName: string, searchText: string | string[]): void {
+    selectFilter(filterName);
     eq = 0
-): void {
     selectFilter(filterName, eq);
     let filterValue = [];
     if (!Array.isArray(searchText)) {
