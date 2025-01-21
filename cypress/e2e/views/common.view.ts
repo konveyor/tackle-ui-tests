@@ -25,6 +25,7 @@ export const removeButton = "button[aria-label='Remove']";
 export const clearAllButton = "button[aria-label='Clear all']";
 export const controlsForm = "form.pf-v5-c-form";
 export const itemsPerPageMenu = "div.pf-c-options-menu";
+export const filteredBy = "#filtered-by";
 export const itemsPerPageMenuOptions = "ul.pf-v5-c-menu__list";
 export const expandRow = "button[aria-label=Details]";
 export const successAlertMessage = ".pf-m-success";
