@@ -62,13 +62,19 @@ describe(["@tier2"], "Actions in Task Manager Page", function () {
     });
 
     it("Cancel Task", function () {
-        const bookServerApp = new Analysis(
-            getRandomApplicationData("TaskApp1_", {
-                sourceData: this.appData["bookserver-app"],
-            }),
-            getRandomAnalysisData(this.analysisData["analysis_for_openSourceLibraries"])
-        );
-        bookServerApp.create();
+        const applicationsList: Array<Analysis> = [];
+        let bookServerApp: Analysis;
+        for (let i = 0; i < 3; i++) {
+            bookServerApp = new Analysis(
+                getRandomApplicationData("TaskApp1_", {
+                    sourceData: this.appData["bookserver-app"],
+                }),
+                getRandomAnalysisData(this.analysisData["analysis_for_openSourceLibraries"])
+            );
+            bookServerApp.create();
+            applicationsList.push(bookServerApp);
+        }
+        Analysis.analyzeAll(bookServerApp);
         TaskManager.cancelTask("Pending");
         checkSuccessAlert(commonView.infoAlertMessage, "Cancelation request submitted");
         validateTextPresence(TaskManagerColumns.status, "Canceled");
@@ -77,5 +83,9 @@ describe(["@tier2"], "Actions in Task Manager Page", function () {
         validateTextPresence(TaskManagerColumns.status, "Canceled");
         // Succeeded tasks cannot be cancelled.
         TaskManager.cancelTask("Succeeded");
+    });
+
+    after("Perform test data clean up", function () {
+        deleteApplicationTableRows();
     });
 });
