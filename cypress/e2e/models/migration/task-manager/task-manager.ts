@@ -67,12 +67,12 @@ export class TaskManager {
     }
 
     private static getTaskRow(
-        application: string,
+        applicationName: string,
         kind: TaskKind
     ): Cypress.Chainable<JQuery<HTMLTableRowElement>> {
         return cy
             .get(trTag)
-            .filter(':contains("' + application + '")')
+            .filter(':contains("' + applicationName + '")')
             .filter(':contains("' + kind + '")');
     }
 
@@ -91,15 +91,25 @@ export class TaskManager {
         cy.wait(2 * SEC);
     }
 
-    public static setPreemption(preemption: boolean): void {
+    public static setPreemption(
+        applicationName: string,
+        kind: TaskKind,
+        preemption: boolean
+    ): void {
         const setPreemption = preemption === true ? "Enable preemption" : "Disable preemption";
         TaskManager.open();
-        cy.contains("Pending")
-            .closest(trTag)
-            .within(() => {
-                click(sideKebabMenu);
-            });
+        TaskManager.getTaskRow(applicationName, kind).find(sideKebabMenu).click();
         cy.get(actionMenuItem).contains(setPreemption).click();
+    }
+
+    public static verifyPreemption(
+        applicationName: string,
+        kind: TaskKind,
+        preemption: boolean
+    ): void {
+        TaskManager.getTaskRow(applicationName, kind)
+            .find(TaskManagerColumns.preemption, { timeout: 10 * MIN })
+            .should("contain.text", preemption);
     }
 
     public static cancelTask(status: string): void {

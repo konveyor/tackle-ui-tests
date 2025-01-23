@@ -18,18 +18,24 @@ limitations under the License.
 import {
     checkSuccessAlert,
     deleteApplicationTableRows,
+    deleteCustomResource,
+    getCommandOutput,
+    getNamespace,
     getRandomAnalysisData,
     getRandomApplicationData,
+    limitPodsByQuota,
     login,
     validateTextPresence,
 } from "../../../../utils/utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
+import { TaskKind } from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
 import { TaskManagerColumns } from "../../../views/taskmanager.view";
 
 describe(["@tier2"], "Actions in Task Manager Page", function () {
-    const applicationsList: Analysis[] = [];
+    const applicationsList: Array<Analysis> = [];
+    let bookServerApp: Analysis;
 
     before("Login", function () {
         login();
@@ -45,26 +51,17 @@ describe(["@tier2"], "Actions in Task Manager Page", function () {
         });
     });
 
-    it("Test Enable and Disable Premeption", function () {
-        const bookServerApp = new Analysis(
-            getRandomApplicationData("TaskApp1_", {
-                sourceData: this.appData["bookserver-app"],
-            }),
-            getRandomAnalysisData(this.analysisData["analysis_for_openSourceLibraries"])
-        );
-        bookServerApp.create();
-        TaskManager.setPreemption(true);
-        checkSuccessAlert(commonView.infoAlertMessage, "Update request submitted.");
-        validateTextPresence(TaskManagerColumns.preemption, "true");
-        TaskManager.setPreemption(false);
-        checkSuccessAlert(commonView.infoAlertMessage, "Update request submitted.");
-        validateTextPresence(TaskManagerColumns.preemption, "false");
+    it("Limit pods to the number of tackle pods + 1", function () {
+        let namespace = getNamespace();
+        let command = `oc get pod --no-headers -n ${namespace} | grep -v task | grep -v Completed | wc -l`;
+        getCommandOutput(command).then((output) => {
+            let podsNumber = Number(output.stdout) + 1;
+            limitPodsByQuota(podsNumber);
+        });
     });
 
-    it("Cancel Task", function () {
-        const applicationsList: Array<Analysis> = [];
-        let bookServerApp: Analysis;
-        for (let i = 0; i < 3; i++) {
+    it("Test Enable and Disable Preemption", function () {
+        for (let i = 0; i < 2; i++) {
             bookServerApp = new Analysis(
                 getRandomApplicationData("TaskApp1_", {
                     sourceData: this.appData["bookserver-app"],
@@ -74,8 +71,17 @@ describe(["@tier2"], "Actions in Task Manager Page", function () {
             bookServerApp.create();
             applicationsList.push(bookServerApp);
         }
+        TaskManager.setPreemption(applicationsList[1].name, TaskKind.languageDiscovery, true);
+        checkSuccessAlert(commonView.infoAlertMessage, "Update request submitted.");
+        TaskManager.verifyPreemption(applicationsList[1].name, TaskKind.languageDiscovery, true);
+        TaskManager.setPreemption(applicationsList[1].name, TaskKind.languageDiscovery, false);
+        checkSuccessAlert(commonView.infoAlertMessage, "Update request submitted.", true);
+        TaskManager.verifyPreemption(applicationsList[1].name, TaskKind.languageDiscovery, false);
+    });
+
+    it("Cancel Task", function () {
         Analysis.analyzeAll(bookServerApp);
-        TaskManager.cancelTask("Pending");
+        TaskManager.cancelTask("Postponed");
         checkSuccessAlert(commonView.infoAlertMessage, "Cancelation request submitted");
         validateTextPresence(TaskManagerColumns.status, "Canceled");
         TaskManager.cancelTask("Running");
@@ -86,6 +92,7 @@ describe(["@tier2"], "Actions in Task Manager Page", function () {
     });
 
     after("Perform test data clean up", function () {
+        deleteCustomResource("quota", "task-pods");
         deleteApplicationTableRows();
     });
 });
