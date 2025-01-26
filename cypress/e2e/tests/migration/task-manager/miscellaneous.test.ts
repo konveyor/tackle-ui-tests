@@ -34,7 +34,7 @@ import * as commonView from "../../../views/common.view";
 import { TaskManagerColumns } from "../../../views/taskmanager.view";
 
 describe(["@tier2"], "Actions in Task Manager Page", function () {
-    const applicationsList: Array<Analysis> = [];
+    const applicationsList: Analysis[] = [];
     let bookServerApp: Analysis;
 
     before("Login", function () {
@@ -52,10 +52,11 @@ describe(["@tier2"], "Actions in Task Manager Page", function () {
     });
 
     it("Limit pods to the number of tackle pods + 1", function () {
-        let namespace = getNamespace();
-        let command = `oc get pod --no-headers -n ${namespace} | grep -v task | grep -v Completed | wc -l`;
+        // Polarion TC MTA-553
+        const namespace = getNamespace();
+        const command = `oc get pod --no-headers -n ${namespace} | grep -v task | grep -v Completed | wc -l`;
         getCommandOutput(command).then((output) => {
-            let podsNumber = Number(output.stdout) + 1;
+            const podsNumber = Number(output.stdout) + 1;
             limitPodsByQuota(podsNumber);
         });
     });
@@ -71,17 +72,19 @@ describe(["@tier2"], "Actions in Task Manager Page", function () {
             bookServerApp.create();
             applicationsList.push(bookServerApp);
         }
-        TaskManager.setPreemption(applicationsList[1].name, TaskKind.languageDiscovery, true);
+        const app = applicationsList[1];
+        TaskManager.setPreemption(app.name, TaskKind.languageDiscovery, true);
         checkSuccessAlert(commonView.infoAlertMessage, "Update request submitted.");
-        TaskManager.verifyPreemption(applicationsList[1].name, TaskKind.languageDiscovery, true);
-        TaskManager.setPreemption(applicationsList[1].name, TaskKind.languageDiscovery, false);
+        TaskManager.verifyPreemption(app.name, TaskKind.languageDiscovery, true);
+        TaskManager.setPreemption(app.name, TaskKind.languageDiscovery, false);
         checkSuccessAlert(commonView.infoAlertMessage, "Update request submitted.", true);
-        TaskManager.verifyPreemption(applicationsList[1].name, TaskKind.languageDiscovery, false);
+        TaskManager.verifyPreemption(app.name, TaskKind.languageDiscovery, false);
     });
 
     it("Cancel Task", function () {
         Analysis.analyzeAll(bookServerApp);
-        TaskManager.cancelTask("Postponed");
+        TaskManager.open();
+        TaskManager.cancelTask("Pending");
         checkSuccessAlert(commonView.infoAlertMessage, "Cancelation request submitted");
         validateTextPresence(TaskManagerColumns.status, "Canceled");
         TaskManager.cancelTask("Running");

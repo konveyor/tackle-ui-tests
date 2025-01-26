@@ -2020,11 +2020,10 @@ export function downloadTaskDetails(format = downloadFormatDetails.yaml) {
 }
 
 export function limitPodsByQuota(podsNumber: number) {
-    let namespace = getNamespace();
+    const namespace = getNamespace();
     cy.fixture("custom-resource").then((cr) => {
-        let manifast = cr["resourceQuota"];
-        let command = `PODS_NUMBER=${podsNumber} envsubst < ${manifast} | oc apply -f - -n ${namespace}`;
-        // let command = `export PODS_COUNT=6; oc apply -f ${manifast} -n${namespace}`;
+        const manifast = cr["resourceQuota"];
+        const command = `PODS_NUMBER=${podsNumber} envsubst < ${manifast} | oc apply -f - -n ${namespace}`;
         getCommandOutput(command).then((output) => {
             expect(output.stdout).to.equal("resourcequota/task-pods created");
         });
@@ -2032,8 +2031,8 @@ export function limitPodsByQuota(podsNumber: number) {
 }
 
 export function deleteCustomResource(resourceType: string, resourceName: string) {
-    let namespace = getNamespace();
-    let command = `oc delete ${resourceType} ${resourceName} -n${namespace}`;
+    const namespace = getNamespace();
+    const command = `oc delete ${resourceType} ${resourceName} -n${namespace}`;
     getCommandOutput(command).then((output) => {
         expect(output.code).to.equal(0);
     });

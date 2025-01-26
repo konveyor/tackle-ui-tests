@@ -113,7 +113,6 @@ export class TaskManager {
     }
 
     public static cancelTask(status: string): void {
-        TaskManager.open();
         cy.contains(status)
             .closest(trTag)
             .within(() => {
@@ -136,7 +135,6 @@ export class TaskManager {
         status: TaskStatus,
         enabled = true
     ): void {
-        TaskManager.open();
         TaskManager.verifyTaskStatus(appName, TaskKind.analyzer, status);
         TaskManager.getTaskRow(appName, TaskKind.analyzer).find(sideKebabMenu).click();
         if (enabled) {
