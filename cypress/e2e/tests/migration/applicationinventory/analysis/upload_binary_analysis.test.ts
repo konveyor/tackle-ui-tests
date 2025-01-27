@@ -40,6 +40,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         });
 
         cy.intercept("GET", "/hub/application*").as("getApplication");
+
         Application.open(true);
     });
 
