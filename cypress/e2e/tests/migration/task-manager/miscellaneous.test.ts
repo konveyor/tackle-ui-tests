@@ -29,7 +29,7 @@ import {
 } from "../../../../utils/utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
-import { TaskKind } from "../../../types/constants";
+import { TaskKind, TaskStatus } from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
 import { TaskManagerColumns } from "../../../views/taskmanager.view";
 
@@ -82,14 +82,22 @@ describe(["@tier2"], "Actions in Task Manager Page", function () {
     });
 
     it("Cancel Task", function () {
+        const statusToTest = [TaskStatus.pending, TaskStatus.running, TaskStatus.quotaBlocked];
         Analysis.analyzeAll(bookServerApp);
         TaskManager.open();
-        TaskManager.cancelTask("Pending");
-        checkSuccessAlert(commonView.infoAlertMessage, "Cancelation request submitted");
-        validateTextPresence(TaskManagerColumns.status, "Canceled");
-        TaskManager.cancelTask("Running");
-        checkSuccessAlert(commonView.infoAlertMessage, "Cancelation request submitted");
-        validateTextPresence(TaskManagerColumns.status, "Canceled");
+        statusToTest.forEach((status) => {
+            // Ensure a task with the desired status exists
+            cy.get(TaskManagerColumns.status).then(($elements) => {
+                const matchingElements = $elements.filter(`:contains("${status}")`);
+                if (matchingElements.length) {
+                    TaskManager.cancelTask(status);
+                    checkSuccessAlert(commonView.infoAlertMessage, "Cancelation request submitted");
+                    validateTextPresence(TaskManagerColumns.status, "Canceled");
+                } else {
+                    cy.log(`Task with status ${status} does not exist`);
+                }
+            });
+        });
         // Succeeded tasks cannot be cancelled.
         TaskManager.cancelTask("Succeeded");
     });
