@@ -213,7 +213,9 @@ export class Issues {
         );
         Issues.validateSection(issue.name, sections.targetTechnologies, span, issue.targets);
         Issues.validateSection(issue.name, sections.sourceTechnologies, div, issue.sources);
-        Issues.validateSection(issue.name, sections.ruleSet, div, issue.ruleSet);
+        if (issue.ruleSet) {
+            Issues.validateSection(issue.name, sections.ruleSet, div, issue.ruleSet);
+        }
         Issues.validateSection(issue.name, sections.rule, div, issue.rule);
         Issues.validateSection(issue.name, sections.labels, div, issue.labels);
     }

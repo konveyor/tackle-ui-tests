@@ -1389,9 +1389,8 @@
                 "totalEffort": 1,
                 "incidents": 1,
                 "affectedFiles": 1,
-                "ruleSet": "files",
                 "rule": "corporate-config-01000",
-                "labels": ["None"]
+                "labels": ["configuration", "konveyor.io/include=always"]
             }
         ]
     },
