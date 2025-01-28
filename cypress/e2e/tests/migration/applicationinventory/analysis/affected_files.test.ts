@@ -163,7 +163,7 @@ describe(["@tier2"], "Affected files validation", () => {
         );
     });
 
-    // Automates Bug MTA-4024, MTA-4025 and MTA-4026
+    // Automates Bug MTA-4024, MTA-4025, MTA-4026 and MTA-4027
     it("Bug MTA-4421: Affected files validation with source+deps analysis on coolStore app", function () {
         const application = new Analysis(
             getRandomApplicationData("affected_files_on_coolStoreApp", {
@@ -187,6 +187,7 @@ describe(["@tier2"], "Affected files validation", () => {
     });
 
     after("Perform test data clean up", function () {
+        Application.open(true);
         deleteByList(applicationsList);
     });
 });
