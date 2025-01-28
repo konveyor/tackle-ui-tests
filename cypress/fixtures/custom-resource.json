@@ -1,0 +1,3 @@
+{
+    "resourceQuota": "cypress/fixtures/yaml/resource-quota.yaml"
+}

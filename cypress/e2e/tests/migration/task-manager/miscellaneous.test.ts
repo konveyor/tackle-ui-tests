@@ -18,18 +18,24 @@ limitations under the License.
 import {
     checkSuccessAlert,
     deleteApplicationTableRows,
+    deleteCustomResource,
+    getCommandOutput,
+    getNamespace,
     getRandomAnalysisData,
     getRandomApplicationData,
+    limitPodsByQuota,
     login,
     validateTextPresence,
 } from "../../../../utils/utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
+import { TaskKind, TaskStatus } from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
 import { TaskManagerColumns } from "../../../views/taskmanager.view";
 
 describe(["@tier2"], "Actions in Task Manager Page", function () {
     const applicationsList: Analysis[] = [];
+    let bookServerApp: Analysis;
 
     before("Login", function () {
         login();
@@ -45,37 +51,59 @@ describe(["@tier2"], "Actions in Task Manager Page", function () {
         });
     });
 
-    it("Test Enable and Disable Premeption", function () {
-        const bookServerApp = new Analysis(
-            getRandomApplicationData("TaskApp1_", {
-                sourceData: this.appData["bookserver-app"],
-            }),
-            getRandomAnalysisData(this.analysisData["analysis_for_openSourceLibraries"])
-        );
-        bookServerApp.create();
-        TaskManager.setPreemption(true);
+    it("Limit pods to the number of tackle pods + 1", function () {
+        // Polarion TC MTA-553
+        const namespace = getNamespace();
+        const command = `oc get pod --no-headers -n ${namespace} | grep -v task | grep -v Completed | wc -l`;
+        getCommandOutput(command).then((output) => {
+            const podsNumber = Number(output.stdout) + 1;
+            limitPodsByQuota(podsNumber);
+        });
+    });
+
+    it("Test Enable and Disable Preemption", function () {
+        for (let i = 0; i < 2; i++) {
+            bookServerApp = new Analysis(
+                getRandomApplicationData("TaskApp1_", {
+                    sourceData: this.appData["bookserver-app"],
+                }),
+                getRandomAnalysisData(this.analysisData["analysis_for_openSourceLibraries"])
+            );
+            bookServerApp.create();
+            applicationsList.push(bookServerApp);
+        }
+        const app = applicationsList[1];
+        TaskManager.setPreemption(app.name, TaskKind.languageDiscovery, true);
         checkSuccessAlert(commonView.infoAlertMessage, "Update request submitted.");
-        validateTextPresence(TaskManagerColumns.preemption, "true");
-        TaskManager.setPreemption(false);
-        checkSuccessAlert(commonView.infoAlertMessage, "Update request submitted.");
-        validateTextPresence(TaskManagerColumns.preemption, "false");
+        TaskManager.verifyPreemption(app.name, TaskKind.languageDiscovery, true);
+        TaskManager.setPreemption(app.name, TaskKind.languageDiscovery, false);
+        checkSuccessAlert(commonView.infoAlertMessage, "Update request submitted.", true);
+        TaskManager.verifyPreemption(app.name, TaskKind.languageDiscovery, false);
     });
 
     it("Cancel Task", function () {
-        const bookServerApp = new Analysis(
-            getRandomApplicationData("TaskApp1_", {
-                sourceData: this.appData["bookserver-app"],
-            }),
-            getRandomAnalysisData(this.analysisData["analysis_for_openSourceLibraries"])
-        );
-        bookServerApp.create();
-        TaskManager.cancelTask("Pending");
-        checkSuccessAlert(commonView.infoAlertMessage, "Cancelation request submitted");
-        validateTextPresence(TaskManagerColumns.status, "Canceled");
-        TaskManager.cancelTask("Running");
-        checkSuccessAlert(commonView.infoAlertMessage, "Cancelation request submitted");
-        validateTextPresence(TaskManagerColumns.status, "Canceled");
+        const statusToTest = [TaskStatus.pending, TaskStatus.running, TaskStatus.quotaBlocked];
+        Analysis.analyzeAll(bookServerApp);
+        TaskManager.open();
+        statusToTest.forEach((status) => {
+            // Ensure a task with the desired status exists
+            cy.get(TaskManagerColumns.status).then(($elements) => {
+                const matchingElements = $elements.filter(`:contains("${status}")`);
+                if (matchingElements.length) {
+                    TaskManager.cancelTask(status);
+                    checkSuccessAlert(commonView.infoAlertMessage, "Cancelation request submitted");
+                    validateTextPresence(TaskManagerColumns.status, "Canceled");
+                } else {
+                    cy.log(`Task with status ${status} does not exist`);
+                }
+            });
+        });
         // Succeeded tasks cannot be cancelled.
         TaskManager.cancelTask("Succeeded");
+    });
+
+    after("Perform test data clean up", function () {
+        deleteCustomResource("quota", "task-pods");
+        deleteApplicationTableRows();
     });
 });
