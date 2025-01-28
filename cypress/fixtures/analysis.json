@@ -1294,6 +1294,19 @@
                 "ruleSet": "eap8/eap7",
                 "rule": "javaee-to-jakarta-namespaces-00030",
                 "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "The package 'javax' has been replaced by 'jakarta'.",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap"],
+                "effort": 1,
+                "totalEffort": 6,
+                "incidents": 6,
+                "affectedFiles": 22,
+                "ruleSet": "eap8/eap7",
+                "rule": "javax-to-jakarta-import-00001",
+                "labels": ["konveyor.io/source"]
             }
         ]
     },
