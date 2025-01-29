@@ -1,0 +1,78 @@
+@Library('migrationqe-automation-lib') _
+def getChangedFilesList() {
+    ArrayList<String> changedFiles = new ArrayList<String>()
+    changedFiles = sh(script:"git diff \$(git merge-base origin/main HEAD) HEAD --name-only",
+    returnStdout:true).split('\n')
+    return changedFiles
+}
+
+pipeline{
+    agent {
+        label 'minikube-node' 
+    }
+    options{
+        ansiColor('xterm')
+    }
+    environment{
+        REQUESTS_CA_BUNDLE="/etc/pki/tls/certs/ca-bundle.crt"
+        username="admin"
+        password="Dog8code"
+        TACKLE_GIT_CREDS = credentials('tackle_git_pass')
+        TACKLE_GIT_KEY = credentials('tackle_git_gpg_key')
+        cypress_jira_atlassian_cloud_url="https://mta-qe-testing.atlassian.net/"
+        cypress_jira_atlassian_cloud_email="mta.qe.testing@gmail.com"
+        cypress_jira_stage_datacenter_url="https://issues.stage.redhat.com"
+        cypress_jira_stage_bearer_token= credentials('mta_jira_stage_token')
+        cypress_jira_atlassian_cloud_token= credentials('mta_jira_cloud_token')
+        cypress_jira_stage_basic_login="mta-qe"
+        cypress_jira_stage_basic_password="Mta.qe.testing"
+        cypress_jira_atlassian_cloud_project="mta_integration"
+    }
+    stages{
+        stage("Checkout to the repository"){
+            steps{
+                script{
+                    checkout scm
+                    sh"git checkout $TEST_BRANCH"
+                }
+            }
+        }
+        stage('Install & run minikube'){   
+            steps{
+                script{
+                    tackle.deployKonveyorOnMinikube(params.TEST_BRANCH)
+                    echo "Applying tackle CR"
+                    tackle.applyTackleCR()
+                }
+            }
+        }
+        stage('Run tackle ui tests'){  
+            steps{
+                script{
+                    env.TACKLE_URL = "http://"+sh(
+                        script : 'minikube ip',
+                        returnStdout: true
+                    ).trim()
+
+                    ocp.pollRouteUntilReady(env.TACKLE_URL,15,30)
+                    sh "sleep 40s" //Grace period after the application is serving correctly.
+                    sh(
+                        script: "npm install",
+                        label: "Install dependencies..."
+                    )
+                    //Run the tests.
+                        sh """ 
+                        CYPRESS_INCLUDE_TAGS=@tier1 npx cypress run **/*.test.ts --env user=$username,pass=$password,tackleUrl=$TACKLE_URL,git_user=$TACKLE_GIT_CREDS_USR,git_password=$TACKLE_GIT_CREDS_PSW,git_key='$TACKLE_GIT_KEY'
+                        """ 
+                }
+            }
+        }
+    }
+    post{
+        always{
+            script{
+                cleanWs()
+            }
+        } 
+    }
+}
