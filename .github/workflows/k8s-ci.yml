@@ -264,7 +264,10 @@ jobs:
         shell: bash
 
       - name: Check pod status
-        run: kubectl get pods -n konveyor-tackle
+        run: kubectl get pods -n konveyor-tackle 
+      
+      - name: Check deployments
+        run: kubectl get deployment -n konveyor-tackle
 
       - name: Verify hub
         run: kubectl wait deployment/tackle-hub --for condition=available --timeout=-1s -n konveyor-tackle
