@@ -106,7 +106,7 @@ jobs:
           npx cypress run --spec **/*.test.ts --env grepTags=@tier1,user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
 
   k8s-tier2:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         kubernetes_version: [v1.20.10]
@@ -207,7 +207,7 @@ jobs:
           npx cypress run --spec **/*.test.ts --env grepTags=@tier2,user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
   
   k8s-tier3:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         kubernetes_version: [v1.21.4]
