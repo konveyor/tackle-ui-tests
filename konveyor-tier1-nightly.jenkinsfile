@@ -73,6 +73,21 @@ pipeline{
             script{
                 cleanWs()
             }
-        } 
+        }
+        success{
+            script{
+                if(params.TEST_BRANCH=="main"){
+                    tackle.writeBuildStatus(passed=true,pipeline="ui-tier1-nightly")
+                }
+            }
+        }
+        failure{
+            script{
+                if(params.TEST_BRANCH=="main"){
+                    tackle.writeBuildStatus(passed=false,pipeline="ui-tier1-nightly")       
+                }
+                // tackle.sendTier3NightlyFailureNotification()
+            }
+        }  
     }
 }
