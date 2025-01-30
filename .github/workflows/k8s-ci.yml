@@ -1,9 +1,6 @@
 name: Regression tests CI
 
-on:
-  push:
-    branches:
-      - main
+on: ["push", "pull_request"]
 
 jobs:
   k8s-tier1:
@@ -158,7 +155,7 @@ jobs:
         shell: bash
 
       - name: Create CRD
-        run: kubectl apply -f https://raw.githubusercontent.com/sshveta/tackle-ui-tests/test_prt/.github/install_tackle2_crd.yaml
+        run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle-ui-tests/refs/heads/main/.github/install_tackle2_crd.yml
       
       - name: Wait for pods to be ready. 
         run: sleep 150s
