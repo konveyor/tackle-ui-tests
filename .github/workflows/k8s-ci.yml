@@ -7,7 +7,7 @@ on:
 
 jobs:
   k8s-tier1:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         kubernetes_version: [v1.19.14]
