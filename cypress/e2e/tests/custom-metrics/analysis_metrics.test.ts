@@ -15,7 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 import {
-    deleteByList,
+    deleteApplicationTableRows,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
@@ -111,7 +111,7 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
     });
 
     it("Delete applications - Validate the tasks initiated counter didn't change", function () {
-        deleteByList(applicationList);
+        deleteApplicationTableRows();
         metrics.validateMetric(metricName, counter);
     });
 });
