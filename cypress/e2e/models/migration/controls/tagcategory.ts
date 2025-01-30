@@ -18,9 +18,9 @@ import {
     cancelForm,
     click,
     clickByText,
-    clickItemInKebabMenu,
     confirm,
     inputText,
+    performRowAction,
     performRowActionByIcon,
     selectItemsPerPage,
     selectUserPerspective,
@@ -125,7 +125,7 @@ export class TagCategory {
         // Opening tags list only if another tab is opened
         TagCategory.openList();
 
-        clickItemInKebabMenu(this.name, deleteAction);
+        performRowAction(this.name, deleteAction);
         if (cancel) {
             click(commonView.confirmCancelButton);
         } else {
