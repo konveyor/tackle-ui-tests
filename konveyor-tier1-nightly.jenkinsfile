@@ -86,7 +86,6 @@ pipeline{
                 if(params.TEST_BRANCH=="main"){
                     tackle.writeBuildStatus(passed=false,pipeline="ui-tier1-nightly")       
                 }
-                // tackle.sendTier3NightlyFailureNotification()
             }
         }  
     }
