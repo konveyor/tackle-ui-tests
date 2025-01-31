@@ -60,7 +60,7 @@ jobs:
       - name: Install konveyor
         uses: konveyor/tackle2-operator/.github/actions/install-konveyor@main
         with:
-          tackle_cr: "'{"kind":"Tackle","apiVersion":"tackle.konveyor.io/v1alpha1","metadata":{"name":"tackle"},"spec":{"image_pull_policy":"IfNotPresent","feature_auth_required":true}}'"
+          tackle_cr: '{"kind":"Tackle","apiVersion":"tackle.konveyor.io/v1alpha1","metadata":{"name":"tackle"},"spec":{"image_pull_policy":"IfNotPresent","feature_auth_required":true}}'
       
       # - name: Deploy k8s
       #   run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle2-operator/main/tackle-k8s.yaml 
