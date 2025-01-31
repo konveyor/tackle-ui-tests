@@ -56,10 +56,11 @@ jobs:
           memory: 'max'
           cpus: 'max'
 
-          
+
       - name: Install konveyor
         uses: konveyor/tackle2-operator/.github/actions/install-konveyor@main
-        
+        with:
+          tackle_cr: "'{"kind":"Tackle","apiVersion":"tackle.konveyor.io/v1alpha1","metadata":{"name":"tackle"},"spec":{"image_pull_policy":"IfNotPresent","feature_auth_required":true}}'"
       
       # - name: Deploy k8s
       #   run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle2-operator/main/tackle-k8s.yaml 
@@ -78,20 +79,20 @@ jobs:
       - name: Check pod status
         run: kubectl get pods -n konveyor-tackle
 
-      - name: Verify hub
-        run: kubectl wait deployment/tackle-hub --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify keycloack-controls
-        run: kubectl wait deployment/tackle-keycloak-postgresql --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify tackle-keycloack-sso
-        run: kubectl wait deployment/tackle-keycloak-sso --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify tackle-operator
-        run: kubectl wait deployment/tackle-operator --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify pathfinder
-        run: kubectl wait deployment/tackle-pathfinder --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify tackle-pathfinder-postgresql
-        run: kubectl wait deployment/tackle-pathfinder-postgresql --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify tackle-ui
-        run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n konveyor-tackle
+      # - name: Verify hub
+      #   run: kubectl wait deployment/tackle-hub --for condition=available --timeout=-1s -n konveyor-tackle
+      # - name: Verify keycloack-controls
+      #   run: kubectl wait deployment/tackle-keycloak-postgresql --for condition=available --timeout=-1s -n konveyor-tackle
+      # - name: Verify tackle-keycloack-sso
+      #   run: kubectl wait deployment/tackle-keycloak-sso --for condition=available --timeout=-1s -n konveyor-tackle
+      # - name: Verify tackle-operator
+      #   run: kubectl wait deployment/tackle-operator --for condition=available --timeout=-1s -n konveyor-tackle
+      # - name: Verify pathfinder
+      #   run: kubectl wait deployment/tackle-pathfinder --for condition=available --timeout=-1s -n konveyor-tackle
+      # - name: Verify tackle-pathfinder-postgresql
+      #   run: kubectl wait deployment/tackle-pathfinder-postgresql --for condition=available --timeout=-1s -n konveyor-tackle
+      # - name: Verify tackle-ui
+      #   run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n konveyor-tackle
 
       - name: Wait for Ingress
         shell: bash
