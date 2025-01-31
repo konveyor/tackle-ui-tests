@@ -56,7 +56,7 @@ jobs:
         run: npm install .
       - name: Run cypress login test
         run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
-      - name: Run Tier1 test cases
+      - name: Run Tier0 test cases
         run: |
           npx cypress run --spec **/*.test.ts --env grepTags=@tier0,user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
 
