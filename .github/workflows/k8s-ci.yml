@@ -1,13 +1,10 @@
-name: Regression tests CI
+name: Test TIER0 , TIER1 , TIER3
 
 on: ["push", "pull_request"]
 
 jobs:
   k8s-tier1:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        kubernetes_version: [v1.19.14]
     steps:
       - name: Checkout tackle
         uses: actions/checkout@v2
@@ -15,41 +12,6 @@ jobs:
           repository: konveyor/tackle
           path: tackle
 
-
-
-      # - name: Setup Minikube
-      #   uses: manusa/actions-setup-minikube@v2.3.1
-      #   with:
-      #     minikube version: v1.22.0
-      #     kubernetes version: ${{ matrix.kubernetes_version }}
-      #     start args: "--addons=registry --addons=ingress"
-      # - name: Validate Minikube
-      #   run: minikube status | grep Running
-      # - name: Validate Cluster
-      #   run: kubectl get nodes
-      # - name: Validate enabled addon in arg
-      #   run: minikube addons list -o json | jq '.registry.Status' | grep enabled
-      
-      # - name: Kubectl enable addons ingress
-      #   run: minikube addons enable ingress
-      # - name: Kubectl enable addons registry
-      #   run: minikube addons enable registry
-      # - name: Validate Minikube
-      #   run: minikube status | grep Running
-      # - name: Validate enabled addon in arg
-      #   run: minikube addons list -o json | jq '.registry.Status' | grep enabled
-      # - name: Validate Cluster
-      #   run: kubectl get nodes
-      # - name: Kubectl enable addons
-      #   run: minikube addons enable dashboard
-      # - name: Kubectl enable olm
-      #   run: minikube addons enable olm
-
-      # - name: Deploy CRD
-      #   run: kubectl apply -f https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/crds.yaml
-      # - name: Deploy OLM
-      #   run: kubectl apply -f https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/olm.yaml
-      
       - name: Setup minikube
         uses: konveyor/tackle2-operator/.github/actions/start-minikube@main
         with:
@@ -62,37 +24,12 @@ jobs:
         with:
           tackle_cr: '{"kind":"Tackle","apiVersion":"tackle.konveyor.io/v1alpha1","metadata":{"name":"tackle"},"spec":{"image_pull_policy":"IfNotPresent","feature_auth_required":true}}'
       
-      # - name: Deploy k8s
-      #   run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle2-operator/main/tackle-k8s.yaml 
-
-      # - name: Sleep 
-      #   run: sleep 150s
-      #   shell: bash
-
-      # - name: Create CRD
-      #   run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle-ui-tests/refs/heads/main/.github/install_tackle2_crd.yml
-      
       - name: Wait for pods to be ready. 
         run: sleep 150s
         shell: bash
 
       - name: Check pod status
         run: kubectl get pods -n konveyor-tackle
-
-      # - name: Verify hub
-      #   run: kubectl wait deployment/tackle-hub --for condition=available --timeout=-1s -n konveyor-tackle
-      # - name: Verify keycloack-controls
-      #   run: kubectl wait deployment/tackle-keycloak-postgresql --for condition=available --timeout=-1s -n konveyor-tackle
-      # - name: Verify tackle-keycloack-sso
-      #   run: kubectl wait deployment/tackle-keycloak-sso --for condition=available --timeout=-1s -n konveyor-tackle
-      # - name: Verify tackle-operator
-      #   run: kubectl wait deployment/tackle-operator --for condition=available --timeout=-1s -n konveyor-tackle
-      # - name: Verify pathfinder
-      #   run: kubectl wait deployment/tackle-pathfinder --for condition=available --timeout=-1s -n konveyor-tackle
-      # - name: Verify tackle-pathfinder-postgresql
-      #   run: kubectl wait deployment/tackle-pathfinder-postgresql --for condition=available --timeout=-1s -n konveyor-tackle
-      # - name: Verify tackle-ui
-      #   run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n konveyor-tackle
 
       - name: Wait for Ingress
         shell: bash
@@ -122,56 +59,25 @@ jobs:
           npx cypress run --spec **/*.test.ts --env grepTags=@tier1,user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
 
   k8s-tier2:
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        kubernetes_version: [v1.20.10]
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout tackle
+     - name: Checkout tackle
         uses: actions/checkout@v2
         with:
           repository: konveyor/tackle
           path: tackle
-      - name: Setup Minikube
-        uses: manusa/actions-setup-minikube@v2.3.1
+
+      - name: Setup minikube
+        uses: konveyor/tackle2-operator/.github/actions/start-minikube@main
         with:
-          minikube version: v1.22.0
-          kubernetes version: ${{ matrix.kubernetes_version }}
-          start args: "--addons=registry --addons=ingress"
-      - name: Validate Minikube
-        run: minikube status | grep Running
-      - name: Validate Cluster
-        run: kubectl get nodes
-      - name: Validate enabled addon in arg
-        run: minikube addons list -o json | jq '.registry.Status' | grep enabled
-      - name: Kubectl enable addons ingress
-        run: minikube addons enable ingress
-      - name: Kubectl enable addons registry
-        run: minikube addons enable registry
-      - name: Validate Minikube
-        run: minikube status | grep Running
-      - name: Validate enabled addon in arg
-        run: minikube addons list -o json | jq '.registry.Status' | grep enabled
-      - name: Validate Cluster
-        run: kubectl get nodes
-      - name: Kubectl enable addons
-        run: minikube addons enable dashboard
-      - name: Kubectl enable olm
-        run: minikube addons enable olm
+          memory: 'max'
+          cpus: 'max'
 
-      - name: Deploy CRD
-        run: kubectl apply -f https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/crds.yaml
-      - name: Deploy OLM
-        run: kubectl apply -f https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/olm.yaml
-      - name: Deploy k8s
-        run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle2-operator/main/tackle-k8s.yaml 
 
-      - name: Sleep 
-        run: sleep 150s
-        shell: bash
-
-      - name: Create CRD
-        run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle-ui-tests/refs/heads/main/.github/install_tackle2_crd.yml
+      - name: Install konveyor
+        uses: konveyor/tackle2-operator/.github/actions/install-konveyor@main
+        with:
+          tackle_cr: '{"kind":"Tackle","apiVersion":"tackle.konveyor.io/v1alpha1","metadata":{"name":"tackle"},"spec":{"image_pull_policy":"IfNotPresent","feature_auth_required":true}}'
       
       - name: Wait for pods to be ready. 
         run: sleep 150s
@@ -179,21 +85,6 @@ jobs:
 
       - name: Check pod status
         run: kubectl get pods -n konveyor-tackle
-
-      - name: Verify hub
-        run: kubectl wait deployment/tackle-hub --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify keycloack-controls
-        run: kubectl wait deployment/tackle-keycloak-postgresql --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify tackle-keycloack-sso
-        run: kubectl wait deployment/tackle-keycloak-sso --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify tackle-operator
-        run: kubectl wait deployment/tackle-operator --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify pathfinder
-        run: kubectl wait deployment/tackle-pathfinder --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify tackle-pathfinder-postgresql
-        run: kubectl wait deployment/tackle-pathfinder-postgresql --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify tackle-ui
-        run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n konveyor-tackle
 
       - name: Wait for Ingress
         shell: bash
@@ -223,82 +114,32 @@ jobs:
           npx cypress run --spec **/*.test.ts --env grepTags=@tier2,user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
   
   k8s-tier3:
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        kubernetes_version: [v1.21.4]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout tackle
         uses: actions/checkout@v2
         with:
           repository: konveyor/tackle
           path: tackle
-      - name: Setup Minikube
-        uses: manusa/actions-setup-minikube@v2.3.1
+
+      - name: Setup minikube
+        uses: konveyor/tackle2-operator/.github/actions/start-minikube@main
         with:
-          minikube version: v1.22.0
-          kubernetes version: ${{ matrix.kubernetes_version }}
-          start args: "--addons=registry --addons=ingress"
-      - name: Validate Minikube
-        run: minikube status | grep Running
-      - name: Validate Cluster
-        run: kubectl get nodes
-      - name: Validate enabled addon in arg
-        run: minikube addons list -o json | jq '.registry.Status' | grep enabled
-      
-      - name: Kubectl enable addons ingress
-        run: minikube addons enable ingress
-      - name: Kubectl enable addons registry
-        run: minikube addons enable registry
-      - name: Validate Minikube
-        run: minikube status | grep Running
-      - name: Validate enabled addon in arg
-        run: minikube addons list -o json | jq '.registry.Status' | grep enabled
-      - name: Validate Cluster
-        run: kubectl get nodes
-      - name: Kubectl enable addons
-        run: minikube addons enable dashboard
-      - name: Kubectl enable olm
-        run: minikube addons enable olm
+          memory: 'max'
+          cpus: 'max'
 
-      - name: Deploy CRD
-        run: kubectl apply -f https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/crds.yaml
-      - name: Deploy OLM
-        run: kubectl apply -f https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/olm.yaml
-      - name: Deploy k8s
-        run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle2-operator/main/tackle-k8s.yaml 
 
-      - name: Sleep 
-        run: sleep 150s
-        shell: bash
-
-      - name: Create CRD
-        run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle-ui-tests/refs/heads/main/.github/install_tackle2_crd.yml
+      - name: Install konveyor
+        uses: konveyor/tackle2-operator/.github/actions/install-konveyor@main
+        with:
+          tackle_cr: '{"kind":"Tackle","apiVersion":"tackle.konveyor.io/v1alpha1","metadata":{"name":"tackle"},"spec":{"image_pull_policy":"IfNotPresent","feature_auth_required":true}}'
       
       - name: Wait for pods to be ready. 
         run: sleep 150s
         shell: bash
 
       - name: Check pod status
-        run: kubectl get pods -n konveyor-tackle 
-      
-      - name: Check deployments
-        run: kubectl get deployment -n konveyor-tackle
-
-      - name: Verify hub
-        run: kubectl wait deployment/tackle-hub --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify keycloack-controls
-        run: kubectl wait deployment/tackle-keycloak-postgresql --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify tackle-keycloack-sso
-        run: kubectl wait deployment/tackle-keycloak-sso --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify tackle-operator
-        run: kubectl wait deployment/tackle-operator --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify pathfinder
-        run: kubectl wait deployment/tackle-pathfinder --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify tackle-pathfinder-postgresql
-        run: kubectl wait deployment/tackle-pathfinder-postgresql --for condition=available --timeout=-1s -n konveyor-tackle
-      - name: Verify tackle-ui
-        run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n konveyor-tackle
+        run: kubectl get pods -n konveyor-tackle
 
       - name: Wait for Ingress
         shell: bash
@@ -316,7 +157,7 @@ jobs:
           echo $external_ip;
           export endpoint=$(minikube ip);
           echo "CYPRESS_tackleUrl=https://$endpoint" >>$GITHUB_ENV'
-
+     
       - name: Checkout to branch
         uses: actions/checkout@v2
       - name: Install NPM
