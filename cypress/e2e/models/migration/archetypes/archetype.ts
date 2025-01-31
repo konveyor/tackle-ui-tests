@@ -17,7 +17,7 @@ import {
     cancelForm,
     click,
     clickByText,
-    clickKebabMenuOptionArchetype,
+    clickKebabMenuOptionNoID,
     confirm,
     inputText,
     performRowActionByIcon,
@@ -147,7 +147,7 @@ export class Archetype {
 
     delete(cancel = false): void {
         Archetype.open();
-        clickKebabMenuOptionArchetype(this.name, "Delete");
+        clickKebabMenuOptionNoID(this.name, "Delete");
         if (cancel) {
             cancelForm();
         } else click(commonView.confirmButton);
@@ -216,7 +216,7 @@ export class Archetype {
         saveAndReview = false
     ) {
         Archetype.open();
-        clickKebabMenuOptionArchetype(this.name, "Assess");
+        clickKebabMenuOptionNoID(this.name, "Assess");
         cy.wait(SEC);
         Assessment.perform_assessment(
             risk,
@@ -239,7 +239,7 @@ export class Archetype {
 
     validateReviewDonutChart(): void {
         Archetype.open();
-        clickKebabMenuOptionArchetype(this.name, review);
+        clickKebabMenuOptionNoID(this.name, review);
         Assessment.validateReviewDonutChart();
     }
 
@@ -252,7 +252,7 @@ export class Archetype {
 
     perform_review(risk): void {
         Archetype.open();
-        clickKebabMenuOptionArchetype(this.name, "Review");
+        clickKebabMenuOptionNoID(this.name, "Review");
         cy.wait(8 * SEC);
         Assessment.perform_review(risk);
     }
@@ -277,7 +277,7 @@ export class Archetype {
         comments?: string,
         cancel = false
     ) {
-        clickKebabMenuOptionArchetype(this.name, "Duplicate");
+        clickKebabMenuOptionNoID(this.name, "Duplicate");
 
         if (cancel) {
             cancelForm();
@@ -346,13 +346,13 @@ export class Archetype {
 
     discard(option: string) {
         Archetype.open();
-        clickKebabMenuOptionArchetype(this.name, option);
+        clickKebabMenuOptionNoID(this.name, option);
         confirm();
     }
 
     clickAssessButton() {
         Archetype.open();
-        clickKebabMenuOptionArchetype(this.name, "Assess");
+        clickKebabMenuOptionNoID(this.name, "Assess");
     }
 
     deleteAssessments(): void {
