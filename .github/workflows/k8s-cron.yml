@@ -9,7 +9,6 @@ jobs:
   k8s:
     runs-on: ubuntu-latest
     steps:
-          steps:
       - name: Checkout tackle
         uses: actions/checkout@v2
         with:
