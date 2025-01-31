@@ -1,6 +1,6 @@
-name: Regression tests Cron
+name: Test Nightly tier0
 
-on:
+on: 
   workflow_dispatch:
   schedule:
     - cron: "0 0 * * *"
@@ -9,72 +9,58 @@ jobs:
   k8s:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          path: tackle-ui-tests
-          ref: main
-
       - name: Checkout tackle
         uses: actions/checkout@v2
         with:
           repository: konveyor/tackle
           path: tackle
-      - name: Setup Minikube
-        uses: manusa/actions-setup-minikube@v2.3.1
+
+      - name: Setup minikube
+        uses: konveyor/tackle2-operator/.github/actions/start-minikube@main
         with:
-          minikube version: v1.18.1
-          kubernetes version: v1.21.4
-          start args: "--addons=registry --addons=ingress"
-      - name: Validate Minikube
-        run: minikube status | grep Running
-      - name: Validate Cluster
-        run: kubectl get nodes
-      - name: Validate enabled addon in arg
-        run: minikube addons list -o json | jq '.registry.Status' | grep enabled
-      - name: Kubectl create namespace
-        run: kubectl create ns tackle
+          memory: 'max'
+          cpus: 'max'
 
-      - name: Deploy tackle
-        run: sleep 60s && kubectl create -f tackle/kubernetes/kubernetes-tackle.yaml -n tackle
+      - name: Install konveyor
+        uses: konveyor/tackle2-operator/.github/actions/install-konveyor@main
+        with:
+          tackle_cr: '{"kind":"Tackle","apiVersion":"tackle.konveyor.io/v1alpha1","metadata":{"name":"tackle"},"spec":{"image_pull_policy":"IfNotPresent","feature_auth_required":true}}'
+      
+      - name: Wait for pods to be ready. 
+        run: sleep 150s
+        shell: bash
 
-      - name: Verify keycloak
-        run: kubectl wait deployment/keycloak --for condition=available --timeout=-1s -n tackle
-      - name: Verify tackle-controls
-        run: kubectl wait deployment/tackle-controls --for condition=available --timeout=-1s -n tackle
-      - name: Verify tackle-application-inventory
-        run: kubectl wait deployment/tackle-application-inventory --for condition=available --timeout=-1s -n tackle
-      - name: Verify tackle-pathfinder
-        run: kubectl wait deployment/tackle-pathfinder --for condition=available --timeout=-1s -n tackle
-      - name: Verify tackle-ui
-        run: kubectl wait deployment/tackle-ui --for condition=available --timeout=-1s -n tackle
+      - name: Check pod status
+        run: kubectl get pods -n konveyor-tackle
 
       - name: Wait for Ingress
+        shell: bash
         run: |
           bash -c 'external_ip="";
-          while [ -z $external_ip ];
-            do echo "Waiting for end point...";
-            external_ip=$(kubectl get ingress tackle --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}" -n tackle);[ -z "$external_ip" ] &&
-            sleep 10;
-          done;
+          echo $external_ip;
+          while [[ -z $external_ip ]] 
+            do 
+              echo "Waiting for end point..."
+                external_ip=$(kubectl get ingress tackle --template="{{range.status.loadBalancer.ingress}}{{.ip}}{{end}}" -n konveyor-tackle);[[ -z $external_ip ]] &&
+                echo $external_ip;
+                sleep 10;
+            done
           echo "End point ready:" &&
           echo $external_ip;
-          export endpoint=$external_ip;
-          echo "CYPRESS_tackleUrl=https://$external_ip" >>$GITHUB_ENV'
+          export endpoint=$(minikube ip);
+          echo "CYPRESS_tackleUrl=https://$endpoint" >>$GITHUB_ENV'
+     
+      - name: Checkout to branch
+        uses: actions/checkout@v2
+      - name: Install NPM
+        run: npm install .
+      - name: Run cypress login test
+        run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
+      - name: Run Tier0 test cases
+        run: |
+          CYPRESS_INCLUDE_TAGS=@tier0 npx cypress run --spec **/*.test.ts --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v2
-        with:
-          working-directory: tackle-ui-tests
-          start: npx echo "Starting Minikube Cypress tests"
-          config: pageLoadTimeout=100000,retries=2,video=false
-          browser: chrome
-          record: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CYPRESS_user: tackle
-          CYPRESS_pass: password
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: minikube-tests-screenshots
