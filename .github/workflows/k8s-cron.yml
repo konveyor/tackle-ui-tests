@@ -1,9 +1,9 @@
 name: Test Nightly tier0
 
-on: ['push','pull_request']
-  # workflow_dispatch:
-  # schedule:
-  #   - cron: "0 0 * * *"
+on: 
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
   k8s:
