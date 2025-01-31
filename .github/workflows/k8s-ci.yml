@@ -46,15 +46,20 @@ jobs:
         run: kubectl apply -f https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/crds.yaml
       - name: Deploy OLM
         run: kubectl apply -f https://raw.githubusercontent.com/operator-framework/operator-lifecycle-manager/master/deploy/upstream/quickstart/olm.yaml
-      - name: Deploy k8s
-        run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle2-operator/main/tackle-k8s.yaml 
+      
+      - name: Install konveyor
+        uses: konveyor/tackle2-operator/.github/actions/install-konveyor@main
+        
+      
+      # - name: Deploy k8s
+      #   run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle2-operator/main/tackle-k8s.yaml 
 
-      - name: Sleep 
-        run: sleep 150s
-        shell: bash
+      # - name: Sleep 
+      #   run: sleep 150s
+      #   shell: bash
 
-      - name: Create CRD
-        run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle-ui-tests/refs/heads/main/.github/install_tackle2_crd.yml
+      # - name: Create CRD
+      #   run: kubectl apply -f https://raw.githubusercontent.com/konveyor/tackle-ui-tests/refs/heads/main/.github/install_tackle2_crd.yml
       
       - name: Wait for pods to be ready. 
         run: sleep 150s
