@@ -61,7 +61,7 @@ jobs:
   k8s-tier2:
     runs-on: ubuntu-latest
     steps:
-     - name: Checkout tackle
+      - name: Checkout tackle
         uses: actions/checkout@v2
         with:
           repository: konveyor/tackle
