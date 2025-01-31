@@ -17,6 +17,7 @@ import {
     button,
     controls,
     deleteAction,
+    editAction,
     migration,
     SEC,
     tags,
@@ -30,11 +31,11 @@ import {
     cancelForm,
     click,
     clickByText,
+    clickItemInKebabMenu,
     closeRowDetails,
     confirm,
     expandRowDetails,
     inputText,
-    performRowActionByIcon,
     selectItemsPerPage,
     selectUserPerspective,
     submitForm,
@@ -114,7 +115,7 @@ export class Tag {
     edit(updatedValue: { name?: string; tagcategory?: string }, cancel = false): void {
         Tag.openList();
         expandRowDetails(this.tagCategory);
-        performRowActionByIcon(this.name, commonView.pencilIcon);
+        clickItemInKebabMenu(this.name, editAction);
         if (cancel) {
             cancelForm();
         } else {
