@@ -821,10 +821,7 @@ export function performRowActionByIcon(itemName: string, action: string): void {
     cy.contains(itemName, { timeout: 120 * SEC })
         .closest(trTag)
         .scrollIntoView()
-        .find(action)
-        .first()
-        .find("button", { log: true, timeout: 30 * SEC })
-        .first()
+        .find(action, { log: true, timeout: 30 * SEC })
         .click({ force: true });
 }
 
