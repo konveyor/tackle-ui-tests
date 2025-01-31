@@ -834,8 +834,9 @@ export function clickItemInKebabMenu(rowItem, itemName: string): void {
 }
 
 export function clickKebabMenuOptionNoID(rowItem: string, itemName: string): void {
-    // The clickItemInKebabMenu() fn can't be used on the Archetype page just yet because the
-    // the individual archetypes don't have an id for their kebab menu.
+    // The clickItemInKebabMenu() fn doesn't work in a few places. For eg: clickItemInKebabMenu()
+    // doesn't work on Tag kebab menu.So, try this function if clickItemInKebabMenu() doesn't work.
+    // Also, the kebab menu doesn't have an ID on these pages, hence the name.
     cy.contains(rowItem)
         .closest(trTag)
         .within(() => {

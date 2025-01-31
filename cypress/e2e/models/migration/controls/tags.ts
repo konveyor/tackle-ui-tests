@@ -115,7 +115,7 @@ export class Tag {
     edit(updatedValue: { name?: string; tagcategory?: string }, cancel = false): void {
         Tag.openList();
         expandRowDetails(this.tagCategory);
-        clickKebabMenuOptionNoID(this.name, editAction)
+        clickKebabMenuOptionNoID(this.name, editAction);
         if (cancel) {
             cancelForm();
         } else {
