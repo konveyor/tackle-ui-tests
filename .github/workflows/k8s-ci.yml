@@ -1,9 +1,6 @@
 name: Test UI TIER1 , TIER2 , TIER3
 
-on: 
-  push:
-    branches:
-      - main
+
 jobs:
   k8s-tier1:
     runs-on: ubuntu-latest
