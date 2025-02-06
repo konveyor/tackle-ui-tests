@@ -62,7 +62,7 @@ pipeline{
                     )
                     //Run the tests.
                         sh """ 
-                        CYPRESS_INCLUDE_TAGS=@tier1 npx cypress run **/*.test.ts --env user=$username,pass=$password,tackleUrl=$TACKLE_URL,git_user=$TACKLE_GIT_CREDS_USR,git_password=$TACKLE_GIT_CREDS_PSW,git_key='$TACKLE_GIT_KEY'
+                        CYPRESS_INCLUDE_TAGS=@tier1 npx cypress run --spec **/*.test.ts --env user=$username,pass=$password,tackleUrl=$TACKLE_URL,git_user=$TACKLE_GIT_CREDS_USR,git_password=$TACKLE_GIT_CREDS_PSW,git_key='$TACKLE_GIT_KEY'
                         """ 
                 }
             }
