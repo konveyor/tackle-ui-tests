@@ -30,7 +30,6 @@ import {
     button,
     controls,
     deleteAction,
-    editAction,
     migration,
     SEC,
     tags,
