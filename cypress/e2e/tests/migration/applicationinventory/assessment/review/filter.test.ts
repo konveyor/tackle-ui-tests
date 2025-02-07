@@ -19,7 +19,7 @@ import {
     applySelectFilter,
     clearAllFilters,
     clickItemInKebabMenu,
-    clickKebabMenuOptionNoID,
+    clickKebabMenuOptionArchetype,
     createMultipleApplications,
     createMultipleArchetypes,
     createMultipleStakeholders,
@@ -76,7 +76,7 @@ describe(["@tier3"], "Review Identified Risks filter validations for assessments
             clickItemInKebabMenu(application.name, review);
             commonActions();
             Archetype.open();
-            clickKebabMenuOptionNoID(archetype.name, review);
+            clickKebabMenuOptionArchetype(archetype.name, review);
             commonActions();
         });
     });
