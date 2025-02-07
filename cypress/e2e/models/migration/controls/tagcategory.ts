@@ -21,6 +21,7 @@ import {
     confirm,
     inputText,
     performRowAction,
+    performRowActionByIcon,
     selectItemsPerPage,
     selectUserPerspective,
     submitForm,
@@ -101,7 +102,7 @@ export class TagCategory {
 
     edit(updatedValue: { name?: string; rank?: number; color?: string }, cancel = false): void {
         TagCategory.openList();
-        performRowAction(this.name, editAction);
+        performRowActionByIcon(this.name, commonView.pencilIcon);
         if (cancel) {
             cancelForm();
         } else {
