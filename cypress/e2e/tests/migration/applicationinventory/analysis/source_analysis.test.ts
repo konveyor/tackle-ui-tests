@@ -129,7 +129,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
     });
 
-    it("Analysis on daytrader app with maven credentials", function () {
+    it(["@tier1"], "Analysis on daytrader app with maven credentials", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-751
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_MavenCreds", {
@@ -165,7 +165,7 @@ describe(["@tier2"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it("Analysis on tackle test app with ssh credentials", function () {
+    it(["@tier1"], "Analysis on tackle test app with ssh credentials", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-707
         const scCredsKey = new CredentialsSourceControlKey(
             data.getRandomCredentialsData(

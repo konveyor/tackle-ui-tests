@@ -78,7 +78,7 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         });
     });
 
-    it("Admin, Rules from public repository", function () {
+    it(["@tier1"], "Admin, Rules from public repository", function () {
         analysisWithPublicRules = new Analysis(
             getRandomApplicationData("bookServerApp", {
                 sourceData: this.appData["bookserver-app"],
