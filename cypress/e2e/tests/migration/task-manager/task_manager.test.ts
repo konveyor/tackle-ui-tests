@@ -34,7 +34,7 @@ import { TaskManagerColumns, tasksTable } from "../../../views/taskmanager.view"
 let applicationsList: Array<Application> = [];
 let application: Analysis;
 
-describe(["@tier1"], "Task Manager", () => {
+describe(["@tier2"], "Task Manager", () => {
     before("Login", function () {
         login();
         deleteApplicationTableRows();
