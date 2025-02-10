@@ -31,7 +31,7 @@ import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { AnalysisStatuses, CredentialType, SEC, UserCredentials } from "../../types/constants";
 import { RulesRepositoryFields } from "../../types/types";
 
-describe(["@tier1"], "Custom Rules RBAC operations", function () {
+describe(["@tier2"], "Custom Rules RBAC operations", function () {
     // Polarion TC 318
 
     /**
@@ -78,7 +78,7 @@ describe(["@tier1"], "Custom Rules RBAC operations", function () {
         });
     });
 
-    it("Admin, Rules from public repository", function () {
+    it(["@tier1"], "Admin, Rules from public repository", function () {
         analysisWithPublicRules = new Analysis(
             getRandomApplicationData("bookServerApp", {
                 sourceData: this.appData["bookserver-app"],
