@@ -49,7 +49,7 @@ export default defineConfig({
     defaultCommandTimeout: 8000,
     e2e: {
         testIsolation: false,
-        specPattern: "cypress/e2e/**/*.{js,jsx,ts,tsx}",
+        specPattern: "cypress/e2e/**/*.test.{js,jsx,ts,tsx}",
         setupNodeEvents(on, config) {
             require("./cypress/plugins/index.js")(on, config);
             on("file:preprocessor", tagify(config));
