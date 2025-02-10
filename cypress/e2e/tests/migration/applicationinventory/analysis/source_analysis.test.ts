@@ -39,7 +39,7 @@ let source_credential_withHash: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;
 let applicationsList: Array<Analysis> = [];
 
-describe(["@tier1"], "Source Analysis", () => {
+describe(["@tier2"], "Source Analysis", () => {
     before("Login", function () {
         login();
 
@@ -126,7 +126,7 @@ describe(["@tier1"], "Source Analysis", () => {
         );
     });
 
-    it("Analysis on daytrader app with maven credentials", function () {
+    it(["@tier1"], "Analysis on daytrader app with maven credentials", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-751
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_MavenCreds", {
@@ -144,7 +144,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it("Source Analysis on tackle testapp", function () {
+    it(["@tier1"], "Source Analysis on tackle testapp", function () {
         // For tackle test app source credentials are required.
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source", {
@@ -162,7 +162,7 @@ describe(["@tier1"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it("Analysis on tackle test app with ssh credentials", function () {
+    it(["@tier1"], "Analysis on tackle test app with ssh credentials", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-707
         const scCredsKey = new CredentialsSourceControlKey(
             data.getRandomCredentialsData(

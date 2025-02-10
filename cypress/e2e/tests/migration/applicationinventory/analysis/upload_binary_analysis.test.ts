@@ -26,7 +26,7 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import { AnalysisStatuses } from "../../../../types/constants";
 
 const applicationsList: Analysis[] = [];
-describe(["@tier1"], "Upload Binary Analysis", () => {
+describe(["@tier2"], "Upload Binary Analysis", () => {
     before("Login", function () {
         login();
     });
@@ -44,7 +44,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         Application.open(true);
     });
 
-    it(["@interop"], "Analysis for acmeair app upload binary", function () {
+    it(["@interop", "@tier1"], "Analysis for acmeair app upload binary", function () {
         const application = new Analysis(
             getRandomApplicationData("acmeair_app"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
@@ -60,7 +60,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         application.verifyEffort(this.analysisData["uploadbinary_analysis_on_acmeair"]["effort"]);
     });
 
-    it("Custom rules with custom targets", function () {
+    it(["@tier1"], "Custom rules with custom targets", function () {
         // Automated https://issues.redhat.com/browse/TACKLE-561
         const application = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
@@ -144,7 +144,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         );
     });
 
-    it(["@tier2"], "upload_binary_with_exculde_packages_scope", function () {
+    it("upload_binary_with_exculde_packages_scope", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["upload_binary_with_exculde_packages"])

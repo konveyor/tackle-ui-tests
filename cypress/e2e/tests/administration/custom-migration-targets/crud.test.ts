@@ -41,7 +41,7 @@ import {
 import { cancelButton } from "../../../views/common.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 
-describe(["@tier1", "@interop"], "Custom Migration Targets CRUD operations", () => {
+describe(["@tier2", "@interop"], "Custom Migration Targets CRUD operations", () => {
     let appFixture: string;
     let analysisFixture: string;
     let languageLower: string;
