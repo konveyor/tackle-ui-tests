@@ -421,7 +421,7 @@
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization", "Quarkus"],
         "appName": "deps",
-        "effort": 402,
+        "effort": 2056,
         "issues": [
             {
                 "name": "@MessageDriven - EJBs are not supported in Quarkus",
@@ -953,7 +953,7 @@
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "tackle-testapp",
-        "effort": 30,
+        "effort": 602,
         "openSourceLibraries": true
     },
 
@@ -1324,7 +1324,7 @@
         "target": ["OpenJDK 17"],
         "appName": "tackle-testapp",
         "openSourceLibraries": true,
-        "effort": 1335
+        "effort": 1640
     },
 
     "openJDK21_source+dep_analysis_on_dayTrader": {
@@ -1332,7 +1332,7 @@
         "target": ["OpenJDK 21"],
         "appName": "deps",
         "openSourceLibraries": true,
-        "effort": 330
+        "effort": 315
     },
 
     "jdk9_source_dep_analysis_on_tackletestapp": {
