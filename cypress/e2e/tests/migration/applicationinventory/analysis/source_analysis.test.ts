@@ -121,7 +121,7 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
         application.analyze();
-        application.verifyAnalysisStatus("Completed", 50 * MIN);
+        application.verifyAnalysisStatus("Completed");
         application.verifyEffort(
             this.analysisData["source+dep_analysis_on_daytrader-app"]["effort"]
         );
@@ -145,7 +145,7 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.wait(2 * SEC);
         application.manageCredentials(null, maven_credential.name);
         application.analyze();
-        application.verifyAnalysisStatus("Completed", 20 * MIN);
+        application.verifyAnalysisStatus("Completed");
     });
 
     it(["@tier1"], "Source Analysis on tackle testapp", function () {
