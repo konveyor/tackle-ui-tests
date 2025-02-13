@@ -31,7 +31,6 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import {
     AnalysisStatuses,
     CredentialType,
-    MIN,
     SEC,
     UserCredentials,
 } from "../../../../types/constants";
