@@ -85,7 +85,7 @@ describe(["@tier2"], "Source Analysis", () => {
         Application.open(true);
     });
 
-    it("Bug MTA-4308: Source + dependencies analysis on tackletest app", function () {
+    it(["@tier1"], "Source + dependencies analysis on tackletest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies", {
@@ -106,7 +106,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
     });
 
-    it("Bug MTA-4308: Source + dependencies analysis on daytrader app", function () {
+    it("Source + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies", {
@@ -124,9 +124,12 @@ describe(["@tier2"], "Source Analysis", () => {
         application.verifyEffort(
             this.analysisData["source+dep_analysis_on_daytrader-app"]["effort"]
         );
+        application.validateIssues(
+            this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"]
+        );
     });
 
-    it(["@tier1"], "Analysis on daytrader app with maven credentials", function () {
+    it("Analysis on daytrader app with maven credentials", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-751
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_MavenCreds", {
@@ -162,7 +165,7 @@ describe(["@tier2"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it(["@tier1"], "Analysis on tackle test app with ssh credentials", function () {
+    it("Analysis on tackle test app with ssh credentials", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-707
         const scCredsKey = new CredentialsSourceControlKey(
             data.getRandomCredentialsData(
