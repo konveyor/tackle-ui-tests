@@ -39,7 +39,7 @@ import { infoAlertMessage } from "../../../../views/common.view";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 
-describe(["@tier0"], "Source Analysis without credentials", () => {
+describe(["@tier1"], "Source Analysis without credentials", () => {
     before("Login", function () {
         login();
     });
@@ -56,7 +56,7 @@ describe(["@tier0"], "Source Analysis without credentials", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Source Analysis on bookserver app and its issues validation", function () {
+    it(["@tier0"], "Source Analysis on bookserver app and its issues validation", function () {
         // For source code analysis application must have source code URL git or svn
         application = new Analysis(
             getRandomApplicationData("bookserverApp", {
@@ -94,7 +94,7 @@ describe(["@tier0"], "Source Analysis without credentials", () => {
     });
 
     // Automates Bug https://issues.redhat.com/browse/MTA-3440
-    it("Source analysis on bookserver app with EAP8 target", function () {
+    it(["@tier0"], "Source analysis on bookserver app with EAP8 target", function () {
         const application = new Analysis(
             getRandomApplicationData("eap8-bookserverApp", {
                 sourceData: this.appData["bookserver-app"],
