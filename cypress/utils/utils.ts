@@ -1927,8 +1927,9 @@ export function validateCheckBoxIsDisabled(checkBoxText: string, isChecked?: boo
 }
 
 export function getCheckboxSelector(text: string) {
-    text = text.toLowerCase().replace(/\s+/g, "");
-    return `input[aria-labelledby='check-${text}']`;
+    const [first, ...rest] = text.split(" ");
+    text = rest.length ? first.toLowerCase() + rest.join("") : text.toLowerCase();
+    return `input[aria-labelledby='check-${text.replace(/\s+/g, "")}']`;
 }
 
 export function selectColumns(selectedColumns: string[], buttonText: string = save) {
