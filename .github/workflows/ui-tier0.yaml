@@ -1,10 +1,13 @@
 name: Test UI TIER0
 
+# on:
+#   push:
+#     branches:
+#       - main
 on:
-  push:
+  pull_request:
     branches:
       - main
-
 
 jobs:
   k8s:
