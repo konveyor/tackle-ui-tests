@@ -37,16 +37,17 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         );
     });
 
+    it("Creating source control credentials with username/password and cancelling without saving", () => {
+        scCredsUsername.create(toBeCanceled);
+    });
+
     it(
-        "Creating source control credentials with username/password and cancelling without saving",
+        ["@tier0", "@dc", "@interop"],
+        "Creating source control credentials with username/password",
         () => {
-            scCredsUsername.create(toBeCanceled);
+            scCredsUsername.create();
         }
     );
-
-    it(["@tier0", "@dc", "@interop"], "Creating source control credentials with username/password", () => {
-        scCredsUsername.create();
-    });
 
     it("Editing source control credentials with username/password and cancelling without saving", () => {
         scCredsUsername.edit(getRandomCredentialsData(CredentialType.sourceControl), toBeCanceled);

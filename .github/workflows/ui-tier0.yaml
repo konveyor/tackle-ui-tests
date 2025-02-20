@@ -1,4 +1,4 @@
-name: Test UI TIER0
+name: Test CI tests
 
 on:
   push:
@@ -60,7 +60,7 @@ jobs:
         run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
       - name: Run Tier0 test cases
         run: |
-          CYPRESS_INCLUDE_TAGS=@tier0 npx cypress run --spec **/*.test.ts --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
+          CYPRESS_INCLUDE_TAGS=@ci npx cypress run --spec **/*.test.ts --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
 
       - uses: actions/upload-artifact@v4
         if: failure()
