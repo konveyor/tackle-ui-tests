@@ -45,7 +45,7 @@ const now = new Date();
 const end = new Date(now.getTime());
 end.setFullYear(end.getFullYear() + 1);
 
-describe(["@tier2", "interop"], "Migration Waves CRUD operations", () => {
+describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
     before("Create test data", () => {
         login();
         stakeHolders = createMultipleStakeholders(2);
