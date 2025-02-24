@@ -117,8 +117,8 @@ This repository uses the package [cypress-tags](https://www.npmjs.com/package/cy
 #### Tags and Tiers in Tackle UI tests 
 =======================================
 ### Tags : 
-## interOp : Does not include analysis tests, used by interOp ,rosa, rosa-sts, aro
-   # Tests include:
+### interOp : Used by interOp ,rosa, rosa-sts, aro
+   ## Tests include:
       “Creating source control credentials with username/password”
       “Custom Migration Targets CRUD operations”
       “Analysis for acmeair app upload binary”
@@ -127,12 +127,12 @@ This repository uses the package [cypress-tags](https://www.npmjs.com/package/cy
       “Stakeholder CRUD operations”
       “Migration Waves CRUD operations”
 
-## CI : Runs on minikube for CI testing https://github.com/konveyor/ci 
-  # Tests include:
+### CI : Runs on minikube for CI testing https://github.com/konveyor/ci 
+  ## Tests include:
       “Source Analysis on bookserver app and its issues validation”
 
-## Tier0: basic sanity tests ,runs on stage and production and nightly runs on CI https://github.com/konveyor/ci 
-  # Tests include :
+### Tier0: Basic sanity tests ,runs on stage and production and nightly runs on CI https://github.com/konveyor/ci 
+  ## Tests include :
      “Creating source control credentials with username/password
      ”Custom Migration Targets CRUD operations
      “Source Analysis on bookserver app and its issues validation”
@@ -141,10 +141,10 @@ This repository uses the package [cypress-tags](https://www.npmjs.com/package/cy
      “Business service CRUD operations”
      “Migration Waves CRUD operations”
 
-## Tier1: Includes analysis tests like binary and source+dependencies with credentials , runs on nightly CI https://github.com/konveyor/ci 
-## Tier2: CRUD tests for all functionality
-## Tier3: sorting/filtering for all functionality
-## Tier4 : Load and performance tests.
+### Tier1: Includes analysis tests like binary and source+dependencies with credentials , runs on nightly CI https://github.com/konveyor/ci 
+### Tier2: CRUD tests for all functionality
+### Tier3: sorting/filtering for all functionality
+### Tier4 : Load and performance tests.
 
 
    
