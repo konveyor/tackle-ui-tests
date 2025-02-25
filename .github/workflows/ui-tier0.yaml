@@ -28,7 +28,7 @@ jobs:
       - name: Install konveyor
         uses: konveyor/tackle2-operator/.github/actions/install-konveyor@main
         with:
-          tackle_cr: '{"kind":"Tackle","apiVersion":"tackle.konveyor.io/v1alpha1","metadata":{"name":"tackle"},"spec":{"image_pull_policy":"IfNotPresent","feature_auth_required":false}}'
+          tackle_cr: '{"kind":"Tackle","apiVersion":"tackle.konveyor.io/v1alpha1","metadata":{"name":"tackle"},"spec":{"image_pull_policy":"IfNotPresent","feature_auth_required":true}}'
       
       - name: Wait for pods to be ready. 
         run: sleep 150s
@@ -60,7 +60,7 @@ jobs:
       - name: Install NPM
         run: npm install .
       - name: Run cypress login test
-        run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
+        run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="Passw0rd!",tackleUrl=${{ env.CYPRESS_tackleUrl }}
       - name: Run Tier0 test cases
         run: |
           CYPRESS_INCLUDE_TAGS=@tier0 npx cypress run --spec **/*.test.ts --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
@@ -70,3 +70,4 @@ jobs:
         with:
           name: minikube-tests-screenshots
           path: tackle-ui-tests/cypress/screenshots
+ 
