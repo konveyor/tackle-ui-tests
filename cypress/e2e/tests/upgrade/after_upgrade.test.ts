@@ -43,7 +43,11 @@ import { Jobfunctions } from "../../models/migration/controls/jobfunctions";
 import { Stakeholdergroups } from "../../models/migration/controls/stakeholdergroups";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { TagCategory } from "../../models/migration/controls/tagcategory";
-import { cloudReadinessQuestionnaire, legacyPathfinder } from "../../types/constants";
+import {
+    cloudReadinessQuestionnaire,
+    legacyPathfinder,
+    ReportTypeSelectors,
+} from "../../types/constants";
 import { UpgradeData } from "../../types/types";
 import { clearRepository } from "../../views/repository.view";
 import { stakeHoldersTable } from "../../views/stakeholders.view";
@@ -159,7 +163,12 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
 
         uploadBinaryApplication.analyze();
         uploadBinaryApplication.verifyAnalysisStatus("Completed");
-        uploadBinaryApplication.selectApplication();
+        uploadBinaryApplication.downloadReport(ReportTypeSelectors.HTML);
+        cy.task("unzip", {
+            path: "cypress/downloads/",
+            file: `analysis-report-app-${uploadBinaryApplication.name}.tar`,
+        });
+        cy.verifyDownload(`analysis-report-app-${uploadBinaryApplication.name}/index.html`);
 
         binaryApplication.analyze();
         binaryApplication.verifyAnalysisStatus("Completed");
