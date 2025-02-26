@@ -15,9 +15,9 @@ limitations under the License.
 */
 export const userNameInput = "#username";
 export const userPasswordInput = "#password";
-export const emailInput = "#email   ";
-export const firstNameInput = "#firstName   ";
-export const lastNameInput = "#lastName   ";
+export const emailInput = "#email";
+export const firstNameInput = "#firstName";
+export const lastNameInput = "#lastName";
 export const kcPageTitle = "#kc-page-title   ";
 export const loginButton = "#kc-login";
 export const changePasswordInput = "input[name=password-new]";
