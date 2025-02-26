@@ -493,7 +493,6 @@ export function validateSingleApplicationIssue(issue: AppIssue): void {
         });
 }
 
-
 export function applySelectFilter(
     filterId: string,
     filterName,
