@@ -134,6 +134,7 @@ import {
     randomWordGenerator,
 } from "./data_utils";
 import Chainable = Cypress.Chainable;
+import { submitInput } from "../e2e/views/login.view";
 
 const { _ } = Cypress;
 
@@ -244,19 +245,39 @@ export function login(username?: string, password?: string, firstLogin = false):
             click(loginView.loginButton);
 
             // Change default password on first login.
-            cy.get("span").then(($inputErr) => {
-                if ($inputErr.text().toString().trim() === "Invalid username or password.") {
-                    inputText(loginView.userPasswordInput, "Passw0rd!");
-                    click(loginView.loginButton);
-                    updatePassword();
+            cy.get("body").then(($body) => {
+                let invalidMessageElement = $body.find('span[class*="m-error"]');
+                if (invalidMessageElement.length > 0) {
+                    const errorText = invalidMessageElement.text().trim();
+                    if (errorText === "Invalid username or password.") {
+                        inputText(loginView.userPasswordInput, "Passw0rd!");
+                        click(loginView.loginButton);
+                        updatePassword();
+                    }
                 }
             });
         });
 
         updatePassword();
+        updateAccountInformation();
         cy.get("#main-content-page-layout-horizontal-nav").within(() => {
             cy.get("h1", { timeout: 15 * SEC, log: false }).contains("Application inventory");
         });
+    });
+}
+
+export function updateAccountInformation() {
+    cy.get("body").then(($body) => {
+        let pageTitle = $body.find(loginView.kcPageTitle);
+        if (pageTitle.length > 0) {
+            const pageTitleText = pageTitle.text().trim();
+            if (pageTitleText === "Update Account Information") {
+                inputText(loginView.emailInput, "migrationqe@redhat.com");
+                inputText(loginView.firstNameInput, "migration");
+                inputText(loginView.lastNameInput, "qe");
+                click(loginView.submitInput);
+            }
+        }
     });
 }
 
