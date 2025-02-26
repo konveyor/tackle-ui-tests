@@ -134,9 +134,7 @@ import {
     randomWordGenerator,
 } from "./data_utils";
 import Chainable = Cypress.Chainable;
-import { submitInput } from "../e2e/views/login.view";
 
-const { _ } = Cypress;
 
 export function inputText(fieldId: string, text: any, log = false): void {
     if (!log) {
@@ -1334,7 +1332,7 @@ export function deleteAllBusinessServices() {
     deleteAllRows();
 }
 
-export function deleteAllStakeholderGroups(cancel = false): void {
+export function deleteAllStakeholderGroups(): void {
     Stakeholdergroups.openList();
     deleteAllRows();
 }
@@ -1606,7 +1604,7 @@ export function writeMavenSettingsFile(username: string, password: string, url?:
 }
 
 export function writeGpgKey(git_key): void {
-    cy.readFile("cypress/fixtures/gpgkey").then((data) => {
+    cy.readFile("cypress/fixtures/gpgkey").then( ()=> {
         const key = git_key;
         const beginningKey = "-----BEGIN RSA PRIVATE KEY-----";
         const endingKey = "-----END RSA PRIVATE KEY-----";
