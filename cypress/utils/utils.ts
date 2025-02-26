@@ -135,7 +135,6 @@ import {
 } from "./data_utils";
 import Chainable = Cypress.Chainable;
 
-
 export function inputText(fieldId: string, text: any, log = false): void {
     if (!log) {
         cy.log(`Type ${text} in ${fieldId}`);
@@ -1604,7 +1603,7 @@ export function writeMavenSettingsFile(username: string, password: string, url?:
 }
 
 export function writeGpgKey(git_key): void {
-    cy.readFile("cypress/fixtures/gpgkey").then( ()=> {
+    cy.readFile("cypress/fixtures/gpgkey").then(() => {
         const key = git_key;
         const beginningKey = "-----BEGIN RSA PRIVATE KEY-----";
         const endingKey = "-----END RSA PRIVATE KEY-----";
