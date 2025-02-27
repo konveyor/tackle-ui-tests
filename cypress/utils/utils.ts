@@ -1331,7 +1331,7 @@ export function deleteAllBusinessServices() {
     deleteAllRows();
 }
 
-export function deleteAllStakeholderGroups(): void {
+export function deleteAllStakeholderGroups(cancel = false): void {
     Stakeholdergroups.openList();
     deleteAllRows();
 }
