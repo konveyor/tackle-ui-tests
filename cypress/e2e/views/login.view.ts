@@ -18,7 +18,7 @@ export const userPasswordInput = "#password";
 export const emailInput = "#email";
 export const firstNameInput = "#firstName";
 export const lastNameInput = "#lastName";
-export const kcPageTitle = "#kc-page-title   ";
+export const kcPageTitle = "#kc-page-title";
 export const loginButton = "#kc-login";
 export const changePasswordInput = "input[name=password-new]";
 export const confirmPasswordInput = "input[name=password-confirm]";
