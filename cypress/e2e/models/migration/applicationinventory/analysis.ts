@@ -436,6 +436,14 @@ export class Analysis extends Application {
         this.closeApplicationDetails();
     }
 
+    extractHTMLReport() {
+        cy.task("unzip", {
+            path: "cypress/downloads/",
+            file: `analysis-report-app-${this.name}.tar`,
+        });
+        cy.verifyDownload(`analysis-report-app-${this.name}/index.html`);
+    }
+
     openAnalysisDetails() {
         cy.wait(2000);
         sidedrawerTab(this.name, "Reports");
