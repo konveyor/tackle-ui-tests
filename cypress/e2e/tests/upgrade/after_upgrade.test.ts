@@ -57,6 +57,7 @@ function processApplication(application: Analysis) {
     // Verify static report can be downloaded for an app that was analyzed before upgrade
     exists(application.name);
     application.verifyAnalysisStatus("Completed");
+    application.selectApplication();
     application.downloadReport(ReportTypeSelectors.HTML);
     application.extractHTMLReport();
     // Post upgrade: Re-run analysis on an app that was analyzed before upgrade
