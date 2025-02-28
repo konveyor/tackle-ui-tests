@@ -40,13 +40,32 @@ import { Application } from "../../models/migration/applicationinventory/applica
 import { Archetype } from "../../models/migration/archetypes/archetype";
 import { BusinessServices } from "../../models/migration/controls/businessservices";
 import { Jobfunctions } from "../../models/migration/controls/jobfunctions";
+import { GeneralConfig } from "../../models/administration/general/generalConfig";
 import { Stakeholdergroups } from "../../models/migration/controls/stakeholdergroups";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { TagCategory } from "../../models/migration/controls/tagcategory";
-import { cloudReadinessQuestionnaire, legacyPathfinder } from "../../types/constants";
+import {
+    cloudReadinessQuestionnaire,
+    legacyPathfinder,
+    ReportTypeSelectors,
+} from "../../types/constants";
 import { UpgradeData } from "../../types/types";
 import { clearRepository } from "../../views/repository.view";
 import { stakeHoldersTable } from "../../views/stakeholders.view";
+
+function processApplication(application: Analysis) {
+    // Verify static report can be downloaded for an app that was analyzed before upgrade
+    exists(application.name);
+    application.verifyAnalysisStatus("Completed");
+    application.selectApplication();
+    application.downloadReport(ReportTypeSelectors.HTML);
+    application.extractHTMLReport();
+    // Post upgrade: Re-run analysis on an app that was analyzed before upgrade
+    application.analyze();
+    application.verifyAnalysisStatus("Completed");
+    application.downloadReport(ReportTypeSelectors.HTML);
+    application.extractHTMLReport();
+}
 
 describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     const expectedMtaVersion = Cypress.env("mtaVersion");
@@ -60,6 +79,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         });
 
         AssessmentQuestionnaire.enable(legacyPathfinder);
+        GeneralConfig.enableDownloadReport();
     });
 
     beforeEach("Persist session", function () {
@@ -153,21 +173,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         uploadBinaryApplication.name = uploadBinaryApplicationName;
 
         Analysis.open();
-        exists(sourceApplicationName);
-        exists(binaryApplicationName);
-        exists(uploadBinaryApplicationName);
-
-        uploadBinaryApplication.analyze();
-        uploadBinaryApplication.verifyAnalysisStatus("Completed");
-        uploadBinaryApplication.selectApplication();
-
-        binaryApplication.analyze();
-        binaryApplication.verifyAnalysisStatus("Completed");
-        binaryApplication.selectApplication();
-
-        sourceApplication.analyze();
-        sourceApplication.verifyAnalysisStatus("Completed");
-        sourceApplication.selectApplication();
+        [sourceApplication, binaryApplication, uploadBinaryApplication].forEach(processApplication);
     });
 
     it("Verify that assessed application is migrated", function () {
