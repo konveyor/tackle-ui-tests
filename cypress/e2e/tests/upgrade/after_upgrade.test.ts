@@ -53,7 +53,7 @@ import { UpgradeData } from "../../types/types";
 import { clearRepository } from "../../views/repository.view";
 import { stakeHoldersTable } from "../../views/stakeholders.view";
 
-function processApplication(application: Analysis) {
+function processApplication(application: Analysis): void {
     // Verify static report can be downloaded for an app that was analyzed before upgrade
     exists(application.name);
     application.verifyAnalysisStatus("Completed");
