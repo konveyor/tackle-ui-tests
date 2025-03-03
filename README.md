@@ -114,6 +114,40 @@ This repository uses the package [cypress-tags](https://www.npmjs.com/package/cy
 6. Once the Tackle UI is running on above address, tests can be run against this local instance using below command -
 
     `npx cypress run --config video=false --browser /path/to/your/browser`
+#### Tags and Tiers in Tackle UI tests 
+=======================================
+### Tags : 
+### interOp : Used by interOp ,rosa, rosa-sts, aro
+   ## Tests include:
+      “Creating source control credentials with username/password”
+      “Custom Migration Targets CRUD operations”
+      “Analysis for acmeair app upload binary”
+      “Test inheritance after discarding application assessment and review”
+      “Business service CRUD operations”
+      “Stakeholder CRUD operations”
+      “Migration Waves CRUD operations”
+
+### CI : Runs on minikube for CI testing https://github.com/konveyor/ci 
+  ## Tests include:
+      “Source Analysis on bookserver app and its issues validation”
+
+### Tier0: Basic sanity tests ,runs on stage and production and nightly runs on CI https://github.com/konveyor/ci 
+  ## Tests include :
+     “Creating source control credentials with username/password
+     ”Custom Migration Targets CRUD operations
+     “Source Analysis on bookserver app and its issues validation”
+     “Source analysis on bookserver app with EAP8 target”
+     “Test inheritance after discarding application assessment and review”
+     “Business service CRUD operations”
+     “Migration Waves CRUD operations”
+
+### Tier1: Includes analysis tests like binary and source+dependencies with credentials , runs on nightly CI https://github.com/konveyor/ci 
+### Tier2: CRUD tests for all functionality
+### Tier3: sorting/filtering for all functionality
+### Tier4 : Load and performance tests.
+
+
+   
 
 ### License's header management
 To check if the license's header is available in all eligible files, execute:
