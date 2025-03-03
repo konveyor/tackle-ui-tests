@@ -33,6 +33,7 @@ import {
 } from "../../../utils/utils";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Credentials } from "../../models/administration/credentials/credentials";
+import { GeneralConfig } from "../../models/administration/general/generalConfig";
 import { MavenConfiguration } from "../../models/administration/repositories/maven";
 import { UserAdmin } from "../../models/keycloak/users/userAdmin";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
@@ -40,7 +41,6 @@ import { Application } from "../../models/migration/applicationinventory/applica
 import { Archetype } from "../../models/migration/archetypes/archetype";
 import { BusinessServices } from "../../models/migration/controls/businessservices";
 import { Jobfunctions } from "../../models/migration/controls/jobfunctions";
-import { GeneralConfig } from "../../models/administration/general/generalConfig";
 import { Stakeholdergroups } from "../../models/migration/controls/stakeholdergroups";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { TagCategory } from "../../models/migration/controls/tagcategory";
