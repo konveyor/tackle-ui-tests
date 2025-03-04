@@ -120,7 +120,14 @@ export class MigrationWave {
         cy.contains(button, instance).click();
 
         cy.get(MigrationWaveView.projectSelectToggle).click({ timeout: 20 * SEC });
-        cy.contains(button, project).click({ timeout: 20 * SEC, force: true });
+        Cypress.$(`button:contains("${project}")`);
+        cy.contains(button, project).should(($btn) => {
+            expect(
+                $btn,
+                `Project name ${project} not found in the dropdown. This could be due to the Jira instance being down or other external issues.`
+            ).to.exist;
+            $btn.trigger("click");
+        });
 
         cy.get(MigrationWaveView.issueTypeSelectToggle).click({ timeout: 20 * SEC });
         cy.contains(button, issueType).click({ timeout: 20 * SEC, force: true });
@@ -386,6 +393,7 @@ export class MigrationWave {
 
         click(MigrationWaveView.createTrackerButton);
     }
+
     public openManageApplications() {
         MigrationWave.open();
         this.expandActionsMenu();
