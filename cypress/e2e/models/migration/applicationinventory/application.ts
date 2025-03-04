@@ -18,6 +18,7 @@ import {
     click,
     clickByText,
     clickItemInKebabMenu,
+    clickKebabMenuOptionArchetype,
     clickTab,
     clickWithin,
     doesExistButton,
@@ -327,7 +328,7 @@ export class Application {
     delete(cancel = false): void {
         Application.open();
         cy.wait(2000);
-        clickItemInKebabMenu(this.name, "Delete");
+        clickKebabMenuOptionArchetype(this.name, "Delete");
         if (cancel) {
             cancelForm();
         } else {
