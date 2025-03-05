@@ -47,7 +47,7 @@ import { dependencies, issues, technologies } from "../../../../views/common.vie
 
 const appName = "Downloaded-Report-Test-App";
 
-describe(["@tier2"], "Prepare Downloaded Report", function () {
+describe(["@tier2"], "Prepare downloaded Report", function () {
     it("Download and extract report", function () {
         cy.fixture("application").then(function (appData) {
             cy.fixture("analysis").then(function (analysisData) {
@@ -67,11 +67,7 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
                 app.analyze();
                 app.verifyAnalysisStatus(AnalysisStatuses.completed);
                 app.downloadReport(ReportTypeSelectors.HTML);
-                cy.task("unzip", {
-                    path: "cypress/downloads/",
-                    file: `analysis-report-app-${app.name}.tar`,
-                });
-                cy.verifyDownload(`analysis-report-app-${app.name}/index.html`);
+                app.extractHTMLReport();
             });
         });
     });
