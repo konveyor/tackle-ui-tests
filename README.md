@@ -182,3 +182,9 @@ yarn license-check-and-add add
 
 ## Code of Conduct
 Refer to Konveyor's Code of Conduct [here](https://github.com/konveyor/community/blob/main/CODE_OF_CONDUCT.md).
+
+## Git branch mapping
+ - `mta_7.2.0   : MTA 7.2.0`
+ - `release-0.6 : MTA 7.2.1`
+ - `release-0.7 : MTA 7.3.0`
+ - `main        : Upstream development branch`
