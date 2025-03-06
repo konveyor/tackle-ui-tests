@@ -120,7 +120,6 @@ export class MigrationWave {
         cy.contains(button, instance).click();
 
         cy.get(MigrationWaveView.projectSelectToggle).click({ timeout: 20 * SEC });
-        Cypress.$(`button:contains("${project}")`);
         cy.contains(button, project).should(($btn) => {
             expect(
                 $btn,
