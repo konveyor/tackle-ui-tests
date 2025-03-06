@@ -67,11 +67,7 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
                 app.analyze();
                 app.verifyAnalysisStatus(AnalysisStatuses.completed);
                 app.downloadReport(ReportTypeSelectors.HTML);
-                cy.task("unzip", {
-                    path: "cypress/downloads/",
-                    file: `analysis-report-app-${app.name}.tar`,
-                });
-                cy.verifyDownload(`analysis-report-app-${app.name}/index.html`);
+                app.extractHTMLReport();
             });
         });
     });
