@@ -19,7 +19,6 @@ import {
     clickByText,
     clickTab,
     clickWithin,
-    clickWithinByText,
     doesExistSelector,
     doesExistText,
     inputText,
