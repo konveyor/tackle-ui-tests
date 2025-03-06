@@ -69,7 +69,6 @@ import {
     applicationsActionButton,
     createEntitiesCheckbox,
     date,
-    kebabMenu,
     manageColumnsModal,
     sideKebabMenu,
 } from "../e2e/views/applicationinventory.view";

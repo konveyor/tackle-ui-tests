@@ -18,7 +18,6 @@ import {
     click,
     clickByText,
     clickItemInKebabMenu,
-    clickKebabMenuOptionArchetype,
     clickTab,
     clickWithin,
     doesExistButton,
