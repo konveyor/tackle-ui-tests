@@ -26,7 +26,7 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import { AnalysisStatuses } from "../../../../types/constants";
 
 const applicationsList: Analysis[] = [];
-describe(["@tier2"], "Upload Binary Analysis", () => {
+describe(["@tier1"], "Upload Binary Analysis", () => {
     before("Login", function () {
         login();
     });

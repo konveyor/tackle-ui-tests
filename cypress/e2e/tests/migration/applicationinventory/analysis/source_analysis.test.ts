@@ -85,7 +85,7 @@ describe(["@tier2"], "Source Analysis", () => {
         Application.open(true);
     });
 
-    it("Bug MTA-4308: Source + dependencies analysis on tackletest app", function () {
+    it(["@tier1"], "Source + dependencies analysis on tackletest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies", {

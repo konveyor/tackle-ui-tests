@@ -39,7 +39,7 @@ import { infoAlertMessage } from "../../../../views/common.view";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 
-describe(["@tier0"], "Source Analysis without credentials", () => {
+describe(["@tier1"], "Source Analysis without credentials", () => {
     before("Login", function () {
         login();
     });
@@ -56,28 +56,34 @@ describe(["@tier0"], "Source Analysis without credentials", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Source Analysis on bookserver app and its issues validation", function () {
-        // For source code analysis application must have source code URL git or svn
-        application = new Analysis(
-            getRandomApplicationData("bookserverApp", {
-                sourceData: this.appData["bookserver-app"],
-            }),
-            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
-        );
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication");
-        cy.wait(2000);
-        application.analyze();
-        checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
-        application.verifyAnalysisStatus("Completed");
-        application.validateIssues(this.analysisData["source_analysis_on_bookserverapp"]["issues"]);
-        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
-            (currentIssue: AppIssue) => {
-                application.validateAffected(currentIssue);
-            }
-        );
-    });
+    it(
+        ["@tier0", "@ci"],
+        "Source Analysis on bookserver app and its issues validation",
+        function () {
+            // For source code analysis application must have source code URL git or svn
+            application = new Analysis(
+                getRandomApplicationData("bookserverApp", {
+                    sourceData: this.appData["bookserver-app"],
+                }),
+                getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+            );
+            application.create();
+            applicationsList.push(application);
+            cy.wait("@getApplication");
+            cy.wait(2000);
+            application.analyze();
+            checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
+            application.verifyAnalysisStatus("Completed");
+            application.validateIssues(
+                this.analysisData["source_analysis_on_bookserverapp"]["issues"]
+            );
+            this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+                (currentIssue: AppIssue) => {
+                    application.validateAffected(currentIssue);
+                }
+            );
+        }
+    );
 
     it("Check the bookserver task status on task manager page", function () {
         TaskManager.verifyTaskStatus(application.name, TaskKind.analyzer, TaskStatus.succeeded);
@@ -94,7 +100,7 @@ describe(["@tier0"], "Source Analysis without credentials", () => {
     });
 
     // Automates Bug https://issues.redhat.com/browse/MTA-3440
-    it("Source analysis on bookserver app with EAP8 target", function () {
+    it(["@tier0"], "Source analysis on bookserver app with EAP8 target", function () {
         const application = new Analysis(
             getRandomApplicationData("eap8-bookserverApp", {
                 sourceData: this.appData["bookserver-app"],

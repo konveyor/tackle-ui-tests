@@ -23,7 +23,7 @@ import * as data from "../../../../../utils/data_utils";
 import { migration } from "../../../../types/constants";
 import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
-describe(["@tier2", "@interop"], "Business service CRUD operations", () => {
+describe(["@tier0", "@interop"], "Business service CRUD operations", () => {
     before("Login", function () {
         login();
     });
