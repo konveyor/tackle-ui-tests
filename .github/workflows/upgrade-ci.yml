@@ -75,7 +75,8 @@ jobs:
       - name: Enable ingress addon
         run : minikube addons enable ingress
 
-      
+      - name: Upgrade konveyor
+        run: bash hack/install-preupgrade-konveyor.sh 
 
       # - name: Install konveyor
       #   uses: konveyor/tackle2-operator/.github/actions/install-konveyor@main

@@ -15,4 +15,6 @@ opm index add --bundles "${SOURCE_UPGRADE_BUNDLE_IMAGE}","${TARGET_UPGRADE_BUNDL
 podman images
 
 podman login -u="${QUAY_USERNAME}" -p="${QUAY_PASSWORD}" quay.io
-podman push quay.io/migqe/tackle2-operator-upgrade-index:latest
+podman push quay.io/migqe/tackle2-operator-upgrade-index:latest #To do , maybe change the tag from latest to the source/target versions.
+
+echo 'Image pushed succesfully'
