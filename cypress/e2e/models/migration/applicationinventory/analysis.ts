@@ -24,7 +24,6 @@ import {
     doesExistText,
     inputText,
     next,
-    performRowActionByIcon,
     selectCheckBox,
     selectFormItems,
     sidedrawerTab,
@@ -81,10 +80,7 @@ import {
     sourceDropdown,
     tabsPanel,
 } from "../../../views/analysis.view";
-import {
-    bulkApplicationSelectionCheckBox,
-    kebabMenu,
-} from "../../../views/applicationinventory.view";
+import { bulkApplicationSelectionCheckBox } from "../../../views/applicationinventory.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { Application } from "./application";
 
@@ -572,7 +568,6 @@ export class Analysis extends Application {
     }
 
     cancelAnalysis(): void {
-        performRowActionByIcon(this.name, kebabMenu);
-        clickByText(button, "Cancel analysis");
+        clickItemInKebabMenu(this.name, "Cancel analysis");
     }
 }
