@@ -1,0 +1,124 @@
+name: Upgrade CI test
+
+on:
+  # pull_request:
+  #   branches:
+  #     - main 
+  push:          # Runs on any direct push to any branch 
+
+
+jobs:
+  k8s:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout tackle
+        uses: actions/checkout@v2
+        with:
+          repository: konveyor/tackle
+          path: tackle
+
+      - name: Checkout to branch
+        uses: actions/checkout@v2
+
+      - name: Install operator-sdk
+        shell: bash
+        run: |
+          if command -v operator-sdk >/dev/null 2>&1; then
+            echo "operator-sdk is already installed...yay"
+            exit 0
+          fi
+          curl -LO https://github.com/operator-framework/operator-sdk/releases/download/v1.35.0/operator-sdk_linux_amd64
+          sudo install -o root -g root -m 0755 operator-sdk_linux_amd64 /usr/local/bin/operator-sdk
+
+      - name: Install kubectl
+        shell: bash
+        run: |
+          if command -v kubectl >/dev/null 2>&1; then
+            echo "kubectl is already installed...yay"
+            exit 0
+          fi
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+      - name: Install opm cli
+        shell: bash
+        run: |
+          if command -v opm >/dev/null 2>&1; then
+            echo "opm is already installed"
+            exit 0
+          fi
+          export OPM_VERSION=$(curl -s https://api.github.com/repos/operator-framework/operator-registry/releases/latest | grep tag_name | cut -d '"' -f 4)
+
+          # Download the binary
+          curl -Lo opm-linux-amd64 "https://github.com/operator-framework/operator-registry/releases/download/${OPM_VERSION}/linux-amd64-opm"
+          chmod +x opm-linux-amd64
+          sudo mv opm-linux-amd64 /usr/local/bin/opm
+          opm version
+
+      - name: Set Environment Variables
+        run: |
+          echo "QUAY_USERNAME=${{ secrets.QUAY_USERNAME }}" >> $GITHUB_ENV
+          echo "QUAY_PASSWORD=${{ secrets.QUAY_PASSWORD }}" >> $GITHUB_ENV
+
+      - name: Create and push index image to quay
+        run: bash hack/create-index-image.sh 
+
+      - name: Setup minikube
+        uses: konveyor/tackle2-operator/.github/actions/start-minikube@main
+        with:
+          memory: 'max'
+          cpus: 'max'
+
+      - name: Enable olm 
+        run: minikube addons enable olm
+
+      - name: Enable ingress addon
+        run : minikube addons enable ingress
+
+      
+
+      # - name: Install konveyor
+      #   uses: konveyor/tackle2-operator/.github/actions/install-konveyor@main
+      #   with:
+      #     tackle_cr: '{"kind":"Tackle","apiVersion":"tackle.konveyor.io/v1alpha1","metadata":{"name":"tackle"},"spec":{"image_pull_policy":"IfNotPresent","feature_auth_required":true}}'
+      
+      # - name: Wait for pods to be ready. 
+      #   run: sleep 150s
+      #   shell: bash
+
+      # - name: Check pod status
+      #   run: kubectl get pods -n konveyor-tackle
+
+      # - name: Wait for Ingress
+      #   shell: bash
+      #   run: |
+      #     bash -c 'external_ip="";
+      #     echo $external_ip;
+      #     while [[ -z $external_ip ]] 
+      #       do 
+      #         echo "Waiting for end point..."
+      #           external_ip=$(kubectl get ingress tackle --template="{{range.status.loadBalancer.ingress}}{{.ip}}{{end}}" -n konveyor-tackle);[[ -z $external_ip ]] &&
+      #           echo $external_ip;
+      #           sleep 10;
+      #       done
+      #     echo "End point ready:" &&
+      #     echo $external_ip;
+      #     export endpoint=$(minikube ip);
+      #     echo "CYPRESS_tackleUrl=https://$endpoint" >>$GITHUB_ENV'
+     
+      # - name: Checkout to branch
+      #   uses: actions/checkout@v2
+
+      # - name: Install NPM
+      #   run: npm install .
+      # - name: Run cypress login test
+      #   run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
+      # - name: Run Tier0 test cases
+      #   run: |
+      #     CYPRESS_INCLUDE_TAGS=@ci npx cypress run --spec **/*.test.ts --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
+
+      # - uses: actions/upload-artifact@v4
+      #   if: failure()
+      #   with:
+      #     name: minikube-tests-screenshots
+      #     path: tackle-ui-tests/cypress/screenshots
