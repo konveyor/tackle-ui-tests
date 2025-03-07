@@ -17,6 +17,7 @@ import {
     cancelForm,
     click,
     clickByText,
+    clickItemInKebabMenu,
     clickTab,
     clickWithin,
     doesExistSelector,
@@ -454,8 +455,7 @@ export class Analysis extends Application {
 
     manageCredentials(sourceCred?: string, mavenCred?: string): void {
         cy.wait(2 * SEC);
-        performRowActionByIcon(this.name, kebabMenu);
-        clickByText(button, manageCredentials);
+        clickItemInKebabMenu(this.name, manageCredentials);
         if (sourceCred) {
             selectFormItems(sourceCredential, sourceCred);
         }
