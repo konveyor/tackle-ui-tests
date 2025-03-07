@@ -18,7 +18,10 @@ jobs:
           path: tackle
 
       - name: Checkout to branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+
+      - name: Get Initial Branch Name
+        run: echo "INIT_BRANCH=$(git symbolic-ref --short HEAD)" >> $GITHUB_ENV
 
       - name: Install operator-sdk
         shell: bash
@@ -75,51 +78,66 @@ jobs:
       - name: Enable ingress addon
         run : minikube addons enable ingress
 
-      - name: Upgrade konveyor
+      - name: Install Pre Upgrade konveyor
         run: bash hack/install-preupgrade-konveyor.sh 
 
-      # - name: Install konveyor
-      #   uses: konveyor/tackle2-operator/.github/actions/install-konveyor@main
-      #   with:
-      #     tackle_cr: '{"kind":"Tackle","apiVersion":"tackle.konveyor.io/v1alpha1","metadata":{"name":"tackle"},"spec":{"image_pull_policy":"IfNotPresent","feature_auth_required":true}}'
+
+      - name: Check pod status
+        run: kubectl get pods -n konveyor-tackle
+
+      - name: Wait for Ingress
+        shell: bash
+        run: |
+          bash -c 'external_ip="";
+          echo $external_ip;
+          while [[ -z $external_ip ]] 
+            do 
+              echo "Waiting for end point..."
+                external_ip=$(kubectl get ingress tackle --template="{{range.status.loadBalancer.ingress}}{{.ip}}{{end}}" -n konveyor-tackle);[[ -z $external_ip ]] &&
+                echo $external_ip;
+                sleep 10;
+            done
+          echo "End point ready:" &&
+          echo $external_ip;
+          export endpoint=$(minikube ip);
+          echo "CYPRESS_tackleUrl=https://$endpoint" >>$GITHUB_ENV'
+          git branch
+
+      - name: Checkout to release-0.6 branch
+        uses: actions/checkout@v4
+        with:
+          ref: release-0.6
+
+      - name: Install NPM
+        run: npm install .
+
+      - name: Run cypress login test
+        run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
       
-      # - name: Wait for pods to be ready. 
-      #   run: sleep 150s
-      #   shell: bash
+      - name: Run Preupgrade test cases
+        run: |
+          CYPRESS_INCLUDE_TAGS=@pre-upgrade npx cypress run --spec **/*.test.ts --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
 
-      # - name: Check pod status
-      #   run: kubectl get pods -n konveyor-tackle
+      - name: Checkout to initial branch
+        run: git checkout $INIT_BRANCH
 
-      # - name: Wait for Ingress
-      #   shell: bash
-      #   run: |
-      #     bash -c 'external_ip="";
-      #     echo $external_ip;
-      #     while [[ -z $external_ip ]] 
-      #       do 
-      #         echo "Waiting for end point..."
-      #           external_ip=$(kubectl get ingress tackle --template="{{range.status.loadBalancer.ingress}}{{.ip}}{{end}}" -n konveyor-tackle);[[ -z $external_ip ]] &&
-      #           echo $external_ip;
-      #           sleep 10;
-      #       done
-      #     echo "End point ready:" &&
-      #     echo $external_ip;
-      #     export endpoint=$(minikube ip);
-      #     echo "CYPRESS_tackleUrl=https://$endpoint" >>$GITHUB_ENV'
-     
-      # - name: Checkout to branch
-      #   uses: actions/checkout@v2
+      
+      - name: Install Post Upgrade konveyor
+        run: git branch && bash hack/install-postupgrade-konveyor.sh 
+      
 
-      # - name: Install NPM
-      #   run: npm install .
-      # - name: Run cypress login test
-      #   run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
-      # - name: Run Tier0 test cases
-      #   run: |
-      #     CYPRESS_INCLUDE_TAGS=@ci npx cypress run --spec **/*.test.ts --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
+      - name: Install NPM
+        run: npm install .
 
-      # - uses: actions/upload-artifact@v4
-      #   if: failure()
-      #   with:
-      #     name: minikube-tests-screenshots
-      #     path: tackle-ui-tests/cypress/screenshots
+      - name: Run cypress login test
+        run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="Dog8code",tackleUrl=${{ env.CYPRESS_tackleUrl }}
+
+      - name: Run Post upgrade test cases
+        run: |
+          CYPRESS_INCLUDE_TAGS=@post-upgrade npx cypress run --spec **/*.test.ts --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: minikube-tests-screenshots
+          path: tackle-ui-tests/cypress/screenshots
