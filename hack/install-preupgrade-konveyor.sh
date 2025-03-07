@@ -29,6 +29,8 @@ source "${TEMPLATE_DIR}/05_tacklecr.sh"
 
 kubectl wait --namespace "${NAMESPACE}" --for=condition=Successful --timeout=600s tackles.tackle.konveyor.io/tackle
 kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=tackle-ui -n "${NAMESPACE}" --timeout=300s
+PREUPGRADE_UI_POD=$(kubectl get pod -l app.kubernetes.io/name=tackle-ui -n "${NAMESPACE}" -o name)
+echo "PREUPGRADE_UI_POD=$PREUPGRADE_UI_POD" >> $GITHUB_ENV
 sleep 120s
 
 kubectl get po -n "${NAMESPACE}"
