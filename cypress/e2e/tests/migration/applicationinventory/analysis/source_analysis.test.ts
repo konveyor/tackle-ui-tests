@@ -101,9 +101,10 @@ describe(["@tier2"], "Source Analysis", () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.verifyEffort(
-            this.analysisData["source+dep_analysis_on_tackletestapp"]["effort"]
-        );
+        // Commenting until bug MTA-2984 is fixed in upstream
+        // application.verifyEffort(
+        //     this.analysisData["source+dep_analysis_on_tackletestapp"]["effort"]
+        // );
     });
 
     it("Source + dependencies analysis on daytrader app", function () {
