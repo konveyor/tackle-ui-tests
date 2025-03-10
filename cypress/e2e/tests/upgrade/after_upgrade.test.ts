@@ -191,12 +191,13 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
 
     it("Validating pods after upgrade", function () {
         const allowedPodsList = [
-            "keycloak-0",
+            "mta-rhbk-0",
             "mta-hub",
             "mta-keycloak-postgresql",
             "mta-operator",
             "mta-ui",
             "rhsso-operator",
+            "rhbk-operator",
         ];
         getCommandOutput(`oc get pods -n${getNamespace()}`).then((result) => {
             allowedPodsList.forEach((podName) => {
