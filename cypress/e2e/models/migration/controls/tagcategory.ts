@@ -15,12 +15,12 @@ limitations under the License.
 */
 
 import {
+    applyAction;
     cancelForm,
     click,
     clickByText,
     confirm,
     inputText,
-    performRowAction,
     performRowActionByIcon,
     selectItemsPerPage,
     selectUserPerspective,
@@ -125,7 +125,7 @@ export class TagCategory {
         // Opening tags list only if another tab is opened
         TagCategory.openList();
 
-        performRowAction(this.name, deleteAction);
+        applyAction(this.name, deleteAction);
         if (cancel) {
             click(commonView.confirmCancelButton);
         } else {
