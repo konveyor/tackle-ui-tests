@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 import {
-    applyAction;
+    applyAction,
     cancelForm,
     click,
     clickByText,
