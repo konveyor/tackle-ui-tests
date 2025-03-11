@@ -42,7 +42,7 @@ let applications: Application[];
 let stakeholder: Stakeholders;
 
 // Polarion TC 469
-describe(["@tier3"], "Bug MTA-4630: Reports Tab filter validations", function () {
+describe(["@tier3"], "Reports Tab filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
         deleteAllMigrationWaves();
