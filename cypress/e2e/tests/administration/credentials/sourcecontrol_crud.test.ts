@@ -37,9 +37,9 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         );
     });
 
-    beforeEach("visit site", function() {
+    beforeEach("visit site", function () {
         cy.visit("/");
-    })
+    });
 
     it("Creating source control credentials with username/password and cancelling without saving", () => {
         scCredsUsername.create(toBeCanceled);

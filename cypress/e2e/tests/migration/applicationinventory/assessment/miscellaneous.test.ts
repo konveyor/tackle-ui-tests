@@ -66,7 +66,7 @@ const yamlFile = "questionnaire_import/cloud-native.yaml";
 describe(["@tier3"], "Tests related to application assessment and review", () => {
     before("Perform application assessment and review", function () {
         login();
-        cy.visit("/")
+        cy.visit("/");
         cy.intercept("GET", "/hub/application*").as("getApplication");
 
         AssessmentQuestionnaire.deleteAllQuestionnaires();
@@ -81,9 +81,9 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("review", "Completed");
     });
 
-    beforeEach("start test from main page", function() {
-        cy.visit("/")
-    })
+    beforeEach("start test from main page", function () {
+        cy.visit("/");
+    });
 
     it("Retake Assessment questionnaire", function () {
         clickItemInKebabMenu(applicationList[0].name, "Assess");
