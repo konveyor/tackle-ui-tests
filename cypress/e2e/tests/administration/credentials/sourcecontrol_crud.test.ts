@@ -22,8 +22,8 @@ import { CredentialsSourceControlUsername } from "../../../models/administration
 import { CredentialType, UserCredentials } from "../../../types/constants";
 
 describe(["@tier2"], "Validation of Source Control Credentials", () => {
-    let scCredsUsername;
-    let scCredsKey;
+    let scCredsUsername: CredentialsSourceControlUsername;
+    let scCredsKey: CredentialsSourceControlKey;
     const toBeCanceled = true;
 
     before("Login", function () {
@@ -36,6 +36,10 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
             getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.sourcePrivateKey)
         );
     });
+
+    beforeEach("visit site", function() {
+        cy.visit("/");
+    })
 
     it("Creating source control credentials with username/password and cancelling without saving", () => {
         scCredsUsername.create(toBeCanceled);

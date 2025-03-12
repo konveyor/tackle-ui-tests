@@ -825,9 +825,6 @@ export function performRowAction(itemName: string, action: string): void {
         .closest(trTag)
         .within(() => {
             clickByText(button, action);
-            cy.wait(500);
-            clickByText(button, action);
-            cy.wait(500);
         });
 }
 
