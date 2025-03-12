@@ -7,5 +7,6 @@ describe(["@tag"], "Test login to new rbac", function () {
         let userArchitect = new UserArchitect(getRandomUserData());
         User.loginKeycloakAdmin();
         userArchitect.create();
+        userArchitect.login();
     });
 });

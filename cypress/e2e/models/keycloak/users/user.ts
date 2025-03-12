@@ -60,6 +60,11 @@ export class User {
         }
     }
 
+    static changeRealm(realm: string) {
+        click('button[data-testid="realmSelector"]');
+        clickByText(button, realm);
+    }
+
     static openList(): void {
         clickByText("a", "Users");
         // click("#viewAllUsers");
@@ -129,6 +134,7 @@ export class User {
         this.navigateToSection("credentials");
         click(createPasswordButton);
         this.inputPassword(this.password);
+        cy.pause();
         click("#temporaryPassword");
         click("#modal-confirm");
         click("#modal-confirm");
@@ -141,12 +147,20 @@ export class User {
         clickByText("a", this.username);
         // User.applyAction(this.username, "Edit");
         this.navigateToSection("role-mapping-tab");
-        click('data-testid="assignRole"');
+        click('button[data-testid="assignRole"]');
+        click('button[data-testid="filter-type-dropdown"]');
+        clickByText(button, "Filter by realm roles");
+        cy.contains(tdTag, role)
+            .closest(trTag)
+            .within(() => {
+                click("input");
+            });
+        click('button[data-testid="assign"]');
         // cy.get("#available").select(role);
         // clickByText(button, "Add selected");
-        // cy.wait(SEC);
+        cy.wait(SEC);
         // cy.get("#assigned").select(role);
-        // this.roles.push(role);
+        this.roles.push(role);
     }
 
     removeRole(role: string): void {

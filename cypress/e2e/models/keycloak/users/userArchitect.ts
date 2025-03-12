@@ -3,8 +3,8 @@ import { User } from "./user";
 
 export class UserArchitect extends User {
     create() {
+        User.changeRealm("mta");
         super.create();
-        cy.log("!---<<<<< Creation is completed");
         this.definePassword();
         this.addRole(UserRoles.architect);
     }
