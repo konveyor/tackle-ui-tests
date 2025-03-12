@@ -48,7 +48,7 @@ end.setFullYear(end.getFullYear() + 1);
 describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
     before("Create test data", () => {
         login();
-        cy.visit("/")
+        cy.visit("/");
         stakeHolders = createMultipleStakeholders(2);
         stakeHolderGroups = createMultipleStakeholderGroups(2);
     });
@@ -57,7 +57,7 @@ describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
         cy.intercept("POST", "/hub/migrationwaves*").as("postWave");
         cy.intercept("PUT", "/hub/migrationwaves*/*").as("putWave");
         cy.intercept("DELETE", "/hub/migrationwaves*/*").as("deleteWave");
-        cy.visit("/")
+        cy.visit("/");
     });
 
     // Automates Polarion TC 332
