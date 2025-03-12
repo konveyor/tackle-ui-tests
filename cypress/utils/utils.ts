@@ -138,13 +138,8 @@ export function inputText(fieldId: string, text: any, log = false): void {
     if (!log) {
         cy.log(`Type ${text} in ${fieldId}`);
     }
-    cy.get(fieldId, { log, timeout: 30 * SEC })
-        .click({ log })
-        .focused({ log })
-        .clear({ log });
-    cy.wait(200, { log });
-    cy.get(fieldId, { log, timeout: 30 * SEC })
-        .clear({ log })
+    cy.get(fieldId, { log })
+        .clear({ log, timeout: 30 * SEC})
         .type(text, { log });
 }
 
@@ -166,7 +161,6 @@ export function clickByText(
         force: isForced,
         log,
     });
-    cy.wait(SEC, { log });
 }
 
 export function click(fieldId: string, isForced = true, log = false, number = 0): void {
@@ -221,44 +215,44 @@ export function login(username?: string, password?: string, firstLogin = false):
 
     return cy.session(sessionId, () => {
         cy.log("Login in");
-        cy.visit(Cypress.env("tackleUrl"), { timeout: 120 * SEC });
-        cy.wait(5 * SEC);
-        cy.get("h1", { timeout: 120 * SEC, log: false }).then(($title) => {
-            // With auth disabled, login page is not displayed and users are taken straight
-            // to the Application Inventory page.
-            if (
-                $title.text().toString().trim() !== "Sign in to your account" &&
-                $title.text().includes("Application inventory")
-            ) {
-                return;
-            }
-
-            const userName = username ?? Cypress.env("user");
-            const userPassword = password ?? Cypress.env("pass");
-            cy.wait(3 * SEC);
-            inputText(loginView.userNameInput, userName);
-            inputText(loginView.userPasswordInput, userPassword);
-            click(loginView.loginButton);
-
-            // Change default password on first login.
-            cy.get("body").then(($body) => {
-                let invalidMessageElement = $body.find('span[class*="m-error"]');
-                if (invalidMessageElement.length > 0) {
-                    const errorText = invalidMessageElement.text().trim();
-                    if (errorText === "Invalid username or password.") {
-                        inputText(loginView.userPasswordInput, "Passw0rd!");
-                        click(loginView.loginButton);
-                        updatePassword();
-                    }
+        if (Cypress.env("auth_enabled")) {
+            cy.visit(Cypress.env("tackleUrl"))
+            cy.get("h1", { timeout: 120 * SEC, log: false }).then(($title) => {
+                // With auth disabled, login page is not displayed and users are taken straight
+                // to the Application Inventory page.
+                if (
+                    $title.text().toString().trim() !== "Sign in to your account" &&
+                    $title.text().includes("Application inventory")
+                )   {
+                    return;
                 }
-            });
-        });
 
-        updatePassword();
-        updateAccountInformation();
-        cy.get("#main-content-page-layout-horizontal-nav").within(() => {
-            cy.get("h1", { timeout: 15 * SEC, log: false }).contains("Application inventory");
-        });
+                const userName = username ?? Cypress.env("user");
+                const userPassword = password ?? Cypress.env("pass");
+                inputText(loginView.userNameInput, userName);
+                inputText(loginView.userPasswordInput, userPassword);
+                click(loginView.loginButton);
+
+                // Change default password on first login.
+                cy.get("body").then(($body) => {
+                    let invalidMessageElement = $body.find('span[class*="m-error"]');
+                    if (invalidMessageElement.length > 0) {
+                        const errorText = invalidMessageElement.text().trim();
+                        if (errorText === "Invalid username or password.") {
+                            inputText(loginView.userPasswordInput, "Passw0rd!");
+                            click(loginView.loginButton);
+                            updatePassword();
+                        }
+                    }
+                });
+            });
+
+            updatePassword();
+            updateAccountInformation();
+            cy.get("#main-content-page-layout-horizontal-nav").within(() => {
+                cy.get("h1", { timeout: 15 * SEC, log: false }).contains("Application inventory");
+            });
+        }
     });
 }
 
@@ -315,7 +309,6 @@ export function selectItemsPerPage(items: number): void {
                     force: true,
                     log: false,
                 });
-            cy.wait(2 * SEC);
         }
     });
 }
@@ -1198,7 +1191,6 @@ type Deletable = { delete: () => void };
 
 export function deleteByList<T extends Deletable>(array: T[]): void {
     array.forEach((element) => {
-        cy.wait(0.8 * SEC);
         element.delete();
     });
 }
@@ -1418,7 +1410,7 @@ export function goToPage(page: number): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    cy.get(optionMenu).click();
+    cy.get(optionMenu).find("button").click()
     cy.get(actionMenuItem).contains(userType).click({ force: true });
 }
 
