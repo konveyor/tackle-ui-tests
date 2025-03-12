@@ -20,7 +20,6 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    resetURL,
     writeMavenSettingsFile,
 } from "../../../../../utils/utils";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
@@ -38,6 +37,7 @@ let application: Analysis;
 describe(["@tier1"], "Binary Analysis", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
 
         // Clears artifact repository
         mavenConfiguration.clearRepository();
@@ -52,6 +52,7 @@ describe(["@tier1"], "Binary Analysis", () => {
         );
         source_credential.create();
 
+        // Binary analysis needs to pull from the private repo, so it needs to set the url.
         maven_credential = new CredentialsMaven(
             data.getRandomCredentialsData(CredentialType.maven, "None", true)
         );
@@ -71,6 +72,7 @@ describe(["@tier1"], "Binary Analysis", () => {
 
     it("Binary Analysis", function () {
         // For binary analysis application must have group,artifcat and version.
+        cy.visit("/");
         application = new Analysis(
             getRandomApplicationData("tackletestApp_binary", {
                 binaryData: this.appData["tackle-testapp-binary"],
@@ -79,7 +81,6 @@ describe(["@tier1"], "Binary Analysis", () => {
         );
         application.create();
         cy.wait("@getApplication");
-        cy.wait(2000);
         // Both source and maven credentials required for binary.
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
@@ -95,11 +96,11 @@ describe(["@tier1"], "Binary Analysis", () => {
     });
 
     afterEach("Persist session", function () {
-        resetURL();
+        Application.open(true);
+        application.delete();
     });
 
     after("Perform test data clean up", function () {
-        application.delete();
         source_credential.delete();
         maven_credential.delete();
 

@@ -9,7 +9,7 @@ import {
 import { button, SEC, tdTag, trTag } from "../../../types/constants";
 import { UserData } from "../../../types/types";
 import * as loginView from "../../../views/login.view";
-const tackleUiUrl = Cypress.env("tackleUrl");
+const tackleUiUrl = Cypress.config("baseUrl");
 const keycloakAdminPassword = Cypress.env("keycloakAdminPassword");
 
 export class User {
@@ -46,7 +46,7 @@ export class User {
                 if ($isloggedIn.text().toString().trim() === "Sign in to your account") {
                     cy.get("#kc-header-wrapper", { timeout: 240 * SEC }); // Make sure that login page opened and loaded
                     inputText(loginView.userNameInput, "admin");
-                    inputText(loginView.userPasswordInput, keycloakAdminPassword);
+                    inputText(loginView.userPasswordInput, keycloakAdminPassword, true);
                     click(loginView.loginButton);
                 }
             });
@@ -95,8 +95,8 @@ export class User {
     }
 
     protected inputPassword(password: string) {
-        inputText("#newPas", password);
-        inputText("#confirmPas", password);
+        inputText("#newPas", password, true);
+        inputText("#confirmPas", password, true);
     }
 
     create(): void {

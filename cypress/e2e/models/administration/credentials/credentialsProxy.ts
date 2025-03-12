@@ -41,7 +41,7 @@ export class CredentialsProxy extends Credentials {
     }
 
     protected fillPassword() {
-        inputText(userPasswordInput, this.password);
+        inputText(userPasswordInput, this.password, true);
     }
 
     create(toBeCanceled = false) {

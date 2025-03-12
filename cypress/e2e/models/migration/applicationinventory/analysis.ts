@@ -461,7 +461,6 @@ export class Analysis extends Application {
             selectFormItems(mavenCredential, mavenCred);
         }
         clickByText(button, save);
-        cy.wait(2000);
     }
 
     static validateTopActionMenu(rbacRules: RbacValidationRules) {

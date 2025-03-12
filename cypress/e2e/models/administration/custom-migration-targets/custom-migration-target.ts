@@ -54,7 +54,7 @@ export class CustomMigrationTarget {
         this.sources = sources;
     }
 
-    public static fullUrl = Cypress.env("tackleUrl") + "/migration-targets";
+    public static fullUrl = Cypress.config("baseUrl") + "/migration-targets";
 
     public static open(forceReload = false) {
         if (forceReload) {

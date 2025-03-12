@@ -21,7 +21,7 @@ import { manageImportsActionsButton } from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
 
 export class ManageImports {
-    static fullUrl = Cypress.env("tackleUrl") + "applications/application-imports";
+    static fullUrl = Cypress.config("baseUrl") + "applications/application-imports";
 
     public static open(forceReload = false): void {
         if (forceReload) {

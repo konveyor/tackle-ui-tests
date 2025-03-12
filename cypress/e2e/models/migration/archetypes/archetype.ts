@@ -66,7 +66,7 @@ export class Archetype {
         this.comments = comments;
     }
 
-    static fullUrl = Cypress.env("tackleUrl") + "/archetypes";
+    static fullUrl = Cypress.config("baseUrl") + "/archetypes";
 
     public static open(forceReload = false) {
         const itemsPerPage = 100;

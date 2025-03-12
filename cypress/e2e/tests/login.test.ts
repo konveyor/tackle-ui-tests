@@ -22,6 +22,7 @@ describe("Log In", () => {
     it("Login to Pathfinder", { tags: "@tier1" }, () => {
         // Login
         login();
+        cy.visit("/");
         selectUserPerspective(migration);
 
         // Assert that home page has loaded after login

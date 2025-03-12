@@ -53,7 +53,7 @@ export class TagCategory {
         if (rank) this.rank = rank;
     }
 
-    static fullUrl = Cypress.env("tackleUrl") + "/controls/tags";
+    static fullUrl = Cypress.config("baseUrl") + "/controls/tags";
 
     static openList(itemsPerPage = 100): void {
         cy.url().then(($url) => {
