@@ -58,7 +58,7 @@ export class User {
                 if ($isloggedIn.text().toString().trim() === "Sign in to your account") {
                     cy.get("#kc-header-wrapper", { timeout: 240 * SEC }); // Make sure that login page opened and loaded
                     inputText(loginView.userNameInput, "admin");
-                    inputText(loginView.userPasswordInput, keycloakAdminPassword);
+                    inputText(loginView.userPasswordInput, keycloakAdminPassword, true);
                     click(loginView.loginButton);
                 }
             });
@@ -112,8 +112,8 @@ export class User {
     }
 
     protected inputPassword(password: string) {
-        inputText(passwordInput, password);
-        inputText(passwordConfirm, password);
+        inputText(passwordInput, password, true);
+        inputText(passwordConfirm, password, true);
     }
 
     create(): void {

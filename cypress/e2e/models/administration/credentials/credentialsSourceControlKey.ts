@@ -34,7 +34,7 @@ export class CredentialsSourceControlKey extends CredentialsSourceControl {
     }
 
     protected fillKeyPassphrase() {
-        inputText("#password", this.keyPassphrase);
+        inputText("#password", this.keyPassphrase, true);
     }
 
     protected selectCredType() {

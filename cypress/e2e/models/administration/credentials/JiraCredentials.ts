@@ -35,7 +35,7 @@ export class JiraCredentials extends Credentials {
     }
 
     protected fillToken() {
-        inputText(this.type == CredentialType.jiraBasic ? passwordInput : keyInput, this.token);
+        inputText(this.type == CredentialType.jiraBasic ? passwordInput : keyInput, this.token, true);
     }
 
     protected fillEmail() {
