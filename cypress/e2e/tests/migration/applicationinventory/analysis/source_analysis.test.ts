@@ -426,6 +426,7 @@ describe(["@tier2"], "Source Analysis", () => {
     afterEach("Remove aplication", function () {
         applicationsList.forEach((application) => {
             cy.log("deleting application");
+            cy.visit("/")
             application.delete();
             cy.wait("@deleteApplication");
         });
@@ -433,6 +434,7 @@ describe(["@tier2"], "Source Analysis", () => {
     });
 
     after("Perform test data clean up", function () {
+        cy.visit("/")
         if (source_credential) {
             cy.log("deleting source_credential");
             source_credential.delete();
