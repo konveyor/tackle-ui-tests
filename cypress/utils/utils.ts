@@ -239,7 +239,7 @@ export function login(username?: string, password?: string, firstLogin = false):
                 const userName = username ?? Cypress.env("user");
                 const userPassword = password ?? Cypress.env("pass");
                 inputText(loginView.userNameInput, userName);
-                inputText(loginView.userPasswordInput, userPassword);
+                inputText(loginView.userPasswordInput, userPassword, true);
                 click(loginView.loginButton);
 
                 // Change default password on first login.
@@ -248,7 +248,7 @@ export function login(username?: string, password?: string, firstLogin = false):
                     if (invalidMessageElement.length > 0) {
                         const errorText = invalidMessageElement.text().trim();
                         if (errorText === "Invalid username or password.") {
-                            inputText(loginView.userPasswordInput, "Passw0rd!");
+                            inputText(loginView.userPasswordInput, "Passw0rd!", true);
                             click(loginView.loginButton);
                             updatePassword();
                         }
@@ -285,8 +285,8 @@ export function updatePassword(): void {
     // This is used in PR tester and Jenkins jobs.
     cy.get("h1", { timeout: 120 * SEC }).then(($a) => {
         if ($a.text().toString().trim() == "Update password") {
-            inputText(loginView.changePasswordInput, "Dog8code");
-            inputText(loginView.confirmPasswordInput, "Dog8code");
+            inputText(loginView.changePasswordInput, "Dog8code", true);
+            inputText(loginView.confirmPasswordInput, "Dog8code", true);
             click(loginView.submitButton);
         }
     });
