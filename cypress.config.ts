@@ -48,7 +48,6 @@ export default defineConfig({
     },
     defaultCommandTimeout: 8000,
     e2e: {
-        //testIsolation: false,
         specPattern: "cypress/e2e/**/*.test.{js,jsx,ts,tsx}",
         baseUrl: "https://tackle-konveyor-tackle.apps.mtv03.rhos-psi.cnv-qe.rhood.us",
         setupNodeEvents(on, config) {
@@ -56,9 +55,14 @@ export default defineConfig({
             on("file:preprocessor", tagify(config));
             require("cypress-fail-fast/plugin")(on, config);
             require("cypress-fs/plugins")(on, config);
+            on('task', {
+                print(s) {
+                    console.log(s);
+                    return null;
+                }
+            });
             return config;
         },
         experimentalMemoryManagement: true,
-        //numTestsKeptInMemory: 15,
     },
 });

@@ -326,24 +326,20 @@ export class Application {
 
     delete(cancel = false): void {
         Application.open();
-        cy.wait(2000);
         clickItemInKebabMenu(this.name, "Delete");
         if (cancel) {
             cancelForm();
         } else {
             click(commonView.confirmButton);
-            cy.wait(2000);
         }
     }
 
     selectApplication(): void {
-        cy.wait(4000);
         cy.get(tdTag)
             .contains(this.name)
             .closest(trTag)
             .within(() => {
                 click(selectBox);
-                cy.wait(2000);
             });
     }
 

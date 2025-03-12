@@ -134,12 +134,21 @@ import {
 } from "./data_utils";
 import Chainable = Cypress.Chainable;
 
+Cypress.Commands.overwrite("log", (log, message, ...args) => {
+    // print the to Cypress Command Log
+    // to preserve the existing functionality
+    log(message, ...args);
+    // send the formatted message down to the Node
+    // callback in the cypress.config.js to be printed to the terminal
+    cy.task("print", [message, ...args].join(", "), { log: false });
+});
+
 export function inputText(fieldId: string, text: any, log = false): void {
     if (!log) {
         cy.log(`Type ${text} in ${fieldId}`);
     }
     cy.get(fieldId, { log })
-        .clear({ log, timeout: 30 * SEC})
+        .clear({ log, timeout: 30 * SEC })
         .type(text, { log });
 }
 
@@ -216,14 +225,14 @@ export function login(username?: string, password?: string, firstLogin = false):
     return cy.session(sessionId, () => {
         cy.log("Login in");
         if (Cypress.env("auth_enabled")) {
-            cy.visit("/")
+            cy.visit("/");
             cy.get("h1", { timeout: 120 * SEC, log: false }).then(($title) => {
                 // With auth disabled, login page is not displayed and users are taken straight
                 // to the Application Inventory page.
                 if (
                     $title.text().toString().trim() !== "Sign in to your account" &&
                     $title.text().includes("Application inventory")
-                )   {
+                ) {
                     return;
                 }
 
@@ -1410,7 +1419,7 @@ export function goToPage(page: number): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    cy.get(optionMenu).find("button").click()
+    cy.get(optionMenu).find("button").click();
     cy.get(actionMenuItem).contains(userType).click({ force: true });
 }
 
