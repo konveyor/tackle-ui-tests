@@ -4,7 +4,7 @@ import { navMenu } from "../../../views/menu.view";
 import { switchToggle } from "../../../views/reportsTab.view";
 
 export class GeneralConfig {
-    static fullUrl = Cypress.env("tackleUrl") + "/general";
+    static fullUrl = Cypress.config("baseUrl") + "/general";
 
     static open(): void {
         cy.url().then(($url) => {

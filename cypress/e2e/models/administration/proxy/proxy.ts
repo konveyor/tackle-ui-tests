@@ -22,7 +22,7 @@ export class Proxy {
     credentials: CredentialsProxyData;
     excludeList = [];
     type: ProxyType;
-    static url: string = Cypress.env("tackleUrl") + "/proxies";
+    static url: string = Cypress.config("baseUrl") + "/proxies";
 
     constructor(proxyData: ProxyData, type: ProxyType) {
         const { hostname, port, credentials, excludeList } = proxyData;

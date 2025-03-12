@@ -45,7 +45,7 @@ import { navMenu } from "../../../views/menu.view";
 import { TaskManagerColumns, tasksStatusColumn } from "../../../views/taskmanager.view";
 
 export class TaskManager {
-    static fullUrl = Cypress.env("tackleUrl") + "/tasks";
+    static fullUrl = Cypress.config("baseUrl") + "/tasks";
     static menuName = "Task Manager";
 
     static open(itemsPerPage = 10, forceReload = false) {

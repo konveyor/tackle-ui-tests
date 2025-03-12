@@ -21,7 +21,6 @@ export default defineConfig({
         jira_atlassian_cloud_url: "",
         jira_atlassian_cloud_project: "Test",
         jira_stage_datacenter_project_id: 12335626,
-        tackleUrl: "https://tackle-konveyor-tackle.apps.mtv03.rhos-psi.cnv-qe.rhood.us",
         auth_enabled: false,
         rwx_enabled: true,
         logLevel: "ASSERT",
@@ -51,6 +50,7 @@ export default defineConfig({
     e2e: {
         //testIsolation: false,
         specPattern: "cypress/e2e/**/*.test.{js,jsx,ts,tsx}",
+        baseUrl: "https://tackle-konveyor-tackle.apps.mtv03.rhos-psi.cnv-qe.rhood.us",
         setupNodeEvents(on, config) {
             require("./cypress/plugins/index.js")(on, config);
             on("file:preprocessor", tagify(config));

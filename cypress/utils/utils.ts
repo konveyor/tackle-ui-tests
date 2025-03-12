@@ -216,7 +216,7 @@ export function login(username?: string, password?: string, firstLogin = false):
     return cy.session(sessionId, () => {
         cy.log("Login in");
         if (Cypress.env("auth_enabled")) {
-            cy.visit(Cypress.env("tackleUrl"))
+            cy.visit("/")
             cy.get("h1", { timeout: 120 * SEC, log: false }).then(($title) => {
                 // With auth disabled, login page is not displayed and users are taken straight
                 // to the Application Inventory page.
@@ -1673,7 +1673,7 @@ export function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O):
 }
 
 export function getUrl(): string {
-    return Cypress.env("tackleUrl");
+    return Cypress.config("baseUrl");
 }
 
 export function getNamespace(): string {

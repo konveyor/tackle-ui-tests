@@ -35,7 +35,7 @@ import { navMenu } from "../../../../views/menu.view";
 
 export class Issues {
     /** Contains URL of issues web page */
-    static fullUrl = Cypress.env("tackleUrl") + "/issues";
+    static fullUrl = Cypress.config("baseUrl") + "/issues";
 
     public static openList(itemsPerPage = 100, forceReload = false): void {
         if (forceReload) {
