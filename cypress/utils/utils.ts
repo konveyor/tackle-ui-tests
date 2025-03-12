@@ -223,9 +223,9 @@ export function login(username?: string, password?: string, firstLogin = false):
     const sessionId = (username ?? "login") + (firstLogin ? "FirstLogin" : "");
 
     return cy.session(sessionId, () => {
-        cy.log("Login in");
+        cy.log("Log in");
+        cy.visit("/");
         if (Cypress.env("auth_enabled")) {
-            cy.visit("/");
             cy.get("h1", { timeout: 120 * SEC, log: false }).then(($title) => {
                 // With auth disabled, login page is not displayed and users are taken straight
                 // to the Application Inventory page.
