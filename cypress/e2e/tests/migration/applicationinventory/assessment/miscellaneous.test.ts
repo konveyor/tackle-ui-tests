@@ -66,6 +66,7 @@ const yamlFile = "questionnaire_import/cloud-native.yaml";
 describe(["@tier3"], "Tests related to application assessment and review", () => {
     before("Perform application assessment and review", function () {
         login();
+        cy.visit("/")
         cy.intercept("GET", "/hub/application*").as("getApplication");
 
         AssessmentQuestionnaire.deleteAllQuestionnaires();
@@ -75,16 +76,17 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
         applicationList = createMultipleApplications(1);
         applicationList[0].perform_assessment("low", stakeholderList);
-        cy.wait(2000);
         applicationList[0].verifyStatus("assessment", "Completed");
         applicationList[0].perform_review("low");
-        cy.wait(2000);
         applicationList[0].verifyStatus("review", "Completed");
     });
 
+    beforeEach("start test from main page", function() {
+        cy.visit("/")
+    })
+
     it("Retake Assessment questionnaire", function () {
         clickItemInKebabMenu(applicationList[0].name, "Assess");
-        cy.wait(SEC);
         clickByText(button, "Retake");
         clickJs(nextButton);
         cy.get(splitItem)
@@ -148,7 +150,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             null
         );
         archetype1.create();
-        cy.wait(2 * SEC);
         archetypesList.push(archetype1);
         const appdata = {
             name: data.getAppName(),
@@ -160,7 +161,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         const application1 = new Application(appdata);
         applicationList.push(application1);
         application1.create();
-        cy.wait(2 * SEC);
         archetype1.perform_assessment("low", stakeholderList);
         application1.clickAssessButton();
         application1.validateOverrideAssessmentMessage(archetypesList);
@@ -178,10 +178,8 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         // Polarion TC MTA-392
         const application = new Application(getRandomApplicationData());
         application.create();
-        cy.wait(2 * SEC);
 
         application.perform_assessment("high", stakeholderList);
-        cy.wait(2 * SEC);
 
         application.verifyStatus("assessment", "Completed");
         AssessmentQuestionnaire.disable(legacyPathfinder);
