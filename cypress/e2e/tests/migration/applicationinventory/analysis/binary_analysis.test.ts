@@ -20,7 +20,6 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    resetURL,
     writeMavenSettingsFile,
 } from "../../../../../utils/utils";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
@@ -38,7 +37,7 @@ let application: Analysis;
 describe(["@tier1"], "Binary Analysis", () => {
     before("Login", function () {
         login();
-        cy.visit("/")
+        cy.visit("/");
 
         // Clears artifact repository
         mavenConfiguration.clearRepository();
@@ -73,7 +72,7 @@ describe(["@tier1"], "Binary Analysis", () => {
 
     it("Binary Analysis", function () {
         // For binary analysis application must have group,artifcat and version.
-        cy.visit("/")
+        cy.visit("/");
         application = new Analysis(
             getRandomApplicationData("tackletestApp_binary", {
                 binaryData: this.appData["tackle-testapp-binary"],
@@ -97,7 +96,7 @@ describe(["@tier1"], "Binary Analysis", () => {
     });
 
     afterEach("Persist session", function () {
-        Application.open(true)
+        Application.open(true);
         application.delete();
     });
 
@@ -105,6 +104,6 @@ describe(["@tier1"], "Binary Analysis", () => {
         source_credential.delete();
         maven_credential.delete();
 
-        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5))
+        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 });
