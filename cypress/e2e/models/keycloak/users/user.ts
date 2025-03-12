@@ -9,7 +9,13 @@ import {
 import { button, SEC, tdTag, trTag } from "../../../types/constants";
 import { UserData } from "../../../types/types";
 import * as loginView from "../../../views/login.view";
-import { addUserButton, saveUserButton } from "../../../views/rbac.view";
+import {
+    addUserButton,
+    createPasswordButton,
+    passwordConfirm,
+    passwordInput,
+    saveUserButton,
+} from "../../../views/rbac.view";
 const tackleUiUrl = Cypress.env("tackleUrl");
 const keycloakAdminPassword = Cypress.env("keycloakAdminPassword");
 
@@ -76,7 +82,8 @@ export class User {
     }
 
     protected navigateToSection(section: string) {
-        clickByText("a", section);
+        click(`a[data-testid=${section}]`);
+        // clickByText("a", section);
     }
 
     protected inputUsername(username: string) {
@@ -96,8 +103,8 @@ export class User {
     }
 
     protected inputPassword(password: string) {
-        inputText("#newPas", password);
-        inputText("#confirmPas", password);
+        inputText(passwordInput, password);
+        inputText(passwordConfirm, password);
     }
 
     create(): void {
@@ -118,22 +125,28 @@ export class User {
 
     definePassword(): void {
         User.openList();
-        User.applyAction(this.username, "Edit");
-        this.navigateToSection("Credentials");
+        // User.applyAction(this.username, "Edit");
+        this.navigateToSection("credentials");
+        click(createPasswordButton);
         this.inputPassword(this.password);
-        clickByText(button, "Set Password");
-        clickByText(button, "Set password");
+        click("#temporaryPassword");
+        click("#modal-confirm");
+        click("#modal-confirm");
+        // clickByText(button, "Set Password");
+        // clickByText(button, "Set password");
     }
 
     addRole(role: string): void {
         User.openList();
-        User.applyAction(this.username, "Edit");
-        this.navigateToSection("Role Mappings");
-        cy.get("#available").select(role);
-        clickByText(button, "Add selected");
-        cy.wait(SEC);
-        cy.get("#assigned").select(role);
-        this.roles.push(role);
+        clickByText("a", this.username);
+        // User.applyAction(this.username, "Edit");
+        this.navigateToSection("role-mapping-tab");
+        click('data-testid="assignRole"');
+        // cy.get("#available").select(role);
+        // clickByText(button, "Add selected");
+        // cy.wait(SEC);
+        // cy.get("#assigned").select(role);
+        // this.roles.push(role);
     }
 
     removeRole(role: string): void {
