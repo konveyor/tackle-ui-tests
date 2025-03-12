@@ -223,6 +223,7 @@ export class Credentials {
     }
 
     create(): void {
+        cy.log("creating credential", this.type);
         Credentials.openList();
         click(createBtn);
     }

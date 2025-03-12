@@ -17,7 +17,6 @@ limitations under the License.
 
 import * as data from "../../../../../utils/data_utils";
 import {
-    deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
@@ -42,7 +41,7 @@ let applicationsList: Array<Analysis> = [];
 describe(["@tier2"], "Source Analysis", () => {
     before("Login", function () {
         login();
-        cy.visit("/")
+        cy.visit("/");
 
         // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
@@ -424,23 +423,26 @@ describe(["@tier2"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    afterEach("Remove aplication", function() {
+    afterEach("Remove aplication", function () {
         applicationsList.forEach((application) => {
-            application.delete()
+            cy.log("deleting application");
+            application.delete();
             cy.wait("@deleteApplication");
-        })
-        applicationsList = []
-    })
+        });
+        applicationsList = [];
+    });
 
     after("Perform test data clean up", function () {
         if (source_credential) {
-            source_credential.delete()
+            cy.log("deleting source_credential");
+            source_credential.delete();
         }
         if (maven_credential) {
-            maven_credential.delete()
+            cy.log("deleting maven_credentail");
+            maven_credential.delete();
         }
         if (source_credential_withHash) {
-            source_credential_withHash.delete()
+            source_credential_withHash.delete();
         }
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
