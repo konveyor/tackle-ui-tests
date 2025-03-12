@@ -30,7 +30,7 @@ import {
 } from "../../../views/reportsTab.view";
 
 export class Reports {
-    static fullUrl = Cypress.env("tackleUrl") + "/reports";
+    static fullUrl = Cypress.config("baseUrl") + "/reports";
 
     public static open(itemsPerPage?: number): void {
         if (!getUrl().includes(Reports.fullUrl)) {

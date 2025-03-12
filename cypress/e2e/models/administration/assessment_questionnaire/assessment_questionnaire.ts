@@ -23,7 +23,7 @@ import * as commonView from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
 
 export class AssessmentQuestionnaire {
-    public static fullUrl = Cypress.env("tackleUrl") + "/assessment";
+    public static fullUrl = Cypress.config("baseUrl") + "/assessment";
 
     public static open(forceReload = false) {
         const itemsPerPage = 100;

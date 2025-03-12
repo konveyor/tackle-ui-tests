@@ -42,7 +42,7 @@ let applicationsList: Array<Analysis> = [];
 describe(["@tier2"], "Source Analysis", () => {
     before("Login", function () {
         login();
-        cy.visit(Cypress.env("tackleUrl"))
+        cy.visit("/")
 
         // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
