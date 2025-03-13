@@ -9,6 +9,20 @@ import {
 import { button, SEC, tdTag, trTag } from "../../../types/constants";
 import { UserData } from "../../../types/types";
 import * as loginView from "../../../views/login.view";
+import {
+    addUserButton,
+    assignButton,
+    assignRoleButton,
+    checkBox,
+    createPasswordButton,
+    filterTypeDropdown,
+    kebabToogleButton,
+    modalConfirmButton,
+    passwordConfirm,
+    passwordInput,
+    saveUserButton,
+    tempPasswordToggle,
+} from "../../../views/rbac.view";
 const tackleUiUrl = Cypress.env("tackleUrl");
 const keycloakAdminPassword = Cypress.env("keycloakAdminPassword");
 
@@ -37,11 +51,9 @@ export class User {
 
     static loginKeycloakAdmin(loggedIn = false): void {
         cy.visit(User.keycloakUrl, { timeout: 120 * SEC });
-        cy.contains("h1", "Welcome to", { timeout: 120 * SEC }); // Make sure that welcome page opened and loaded
-        clickByText("a", "Administration Console");
         // This is required to be skipped if admin user is logged in already to keycloak
         if (!loggedIn) {
-            cy.get("h1").then(($isloggedIn) => {
+            cy.get("h1", { timeout: 30 * SEC }).then(($isloggedIn) => {
                 // Due to session sometimes console auto logs in, hence this check is necessary
                 if ($isloggedIn.text().toString().trim() === "Sign in to your account") {
                     cy.get("#kc-header-wrapper", { timeout: 240 * SEC }); // Make sure that login page opened and loaded
@@ -53,9 +65,14 @@ export class User {
         }
     }
 
+    static changeRealm(realm: string) {
+        click('button[data-testid="realmSelector"]');
+        clickByText(button, realm);
+    }
+
     static openList(): void {
+        User.changeRealm("mta");
         clickByText("a", "Users");
-        click("#viewAllUsers");
         cy.wait(SEC);
     }
 
@@ -75,7 +92,7 @@ export class User {
     }
 
     protected navigateToSection(section: string) {
-        clickByText("a", section);
+        click(`a[data-testid=${section}]`);
     }
 
     protected inputUsername(username: string) {
@@ -95,42 +112,57 @@ export class User {
     }
 
     protected inputPassword(password: string) {
-        inputText("#newPas", password);
-        inputText("#confirmPas", password);
+        inputText(passwordInput, password);
+        inputText(passwordConfirm, password);
     }
 
     create(): void {
         User.openList();
-        click("#createUser");
+        click(addUserButton);
         this.inputUsername(this.username);
         this.inputEmail(this.email);
         this.inputFirstname(this.firstName);
         this.inputLastname(this.lastName);
-        clickByText(button, "Save");
+        click(saveUserButton);
     }
 
     delete(): void {
         User.openList();
-        User.applyAction(this.username, "Delete");
+        cy.get(tdTag, { timeout: 120 * SEC })
+            .contains(this.username, { timeout: 120 * SEC })
+            .closest(trTag)
+            .within(() => {
+                click(kebabToogleButton);
+                clickByText(tdTag, "Delete");
+                cy.wait(500);
+            });
     }
 
     definePassword(): void {
         User.openList();
-        User.applyAction(this.username, "Edit");
-        this.navigateToSection("Credentials");
+        clickByText("a", this.username);
+        this.navigateToSection("credentials");
+        click(createPasswordButton);
         this.inputPassword(this.password);
-        clickByText(button, "Set Password");
-        clickByText(button, "Set password");
+        click(tempPasswordToggle);
+        click(modalConfirmButton);
+        click(modalConfirmButton);
     }
 
     addRole(role: string): void {
         User.openList();
-        User.applyAction(this.username, "Edit");
-        this.navigateToSection("Role Mappings");
-        cy.get("#available").select(role);
-        clickByText(button, "Add selected");
+        clickByText("a", this.username);
+        this.navigateToSection("role-mapping-tab");
+        click(assignRoleButton);
+        click(filterTypeDropdown);
+        clickByText(button, "Filter by realm roles");
+        cy.contains(tdTag, role)
+            .closest(trTag)
+            .within(() => {
+                click(checkBox);
+            });
+        click(assignButton);
         cy.wait(SEC);
-        cy.get("#assigned").select(role);
         this.roles.push(role);
     }
 
@@ -147,10 +179,6 @@ export class User {
 
     login(): void {
         login(this.username, this.password, this.firstLogin);
-        if (this.firstLogin) {
-            this.password = Cypress.env("pass");
-            this.firstLogin = false;
-        }
     }
 
     logout() {
