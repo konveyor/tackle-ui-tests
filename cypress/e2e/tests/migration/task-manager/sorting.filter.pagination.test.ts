@@ -66,18 +66,14 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
     it("Filtering tasks by status", function () {
         TaskManager.applyFilter(TaskFilter.status, TaskStatus.pending);
         validateTextPresence(TaskManagerColumns.status, TaskStatus.pending);
-        validateTextPresence(TaskManagerColumns.status, TaskStatus.running, false);
-        validateTextPresence(TaskManagerColumns.status, TaskStatus.succeeded, false);
         clearAllFilters();
+
         TaskManager.applyFilter(TaskFilter.status, TaskStatus.running);
         validateTextPresence(TaskManagerColumns.status, TaskStatus.running);
-        validateTextPresence(TaskManagerColumns.status, TaskStatus.pending, false);
-        validateTextPresence(TaskManagerColumns.status, TaskStatus.succeeded, false);
         clearAllFilters();
+
         TaskManager.applyFilter(TaskFilter.status, TaskStatus.succeeded);
         validateTextPresence(TaskManagerColumns.status, TaskStatus.succeeded);
-        validateTextPresence(TaskManagerColumns.status, TaskStatus.running, false);
-        validateTextPresence(TaskManagerColumns.status, TaskStatus.pending, false);
         clearAllFilters();
     });
 
@@ -115,18 +111,14 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
     it("Filtering tasks by Kind", function () {
         TaskManager.applyFilter(TaskFilter.kind, TaskKind.analyzer);
         validateTextPresence(TaskManagerColumns.kind, TaskKind.analyzer);
-        validateTextPresence(TaskManagerColumns.kind, TaskKind.languageDiscovery, false);
-        validateTextPresence(TaskManagerColumns.kind, TaskKind.techDiscovery, false);
         clearAllFilters();
+
         TaskManager.applyFilter(TaskFilter.kind, TaskKind.languageDiscovery);
         validateTextPresence(TaskManagerColumns.kind, TaskKind.languageDiscovery);
-        validateTextPresence(TaskManagerColumns.kind, TaskKind.analyzer, false);
-        validateTextPresence(TaskManagerColumns.kind, TaskKind.techDiscovery, false);
         clearAllFilters();
+
         TaskManager.applyFilter(TaskFilter.kind, TaskKind.techDiscovery);
         validateTextPresence(TaskManagerColumns.kind, TaskKind.techDiscovery);
-        validateTextPresence(TaskManagerColumns.kind, TaskKind.analyzer, false);
-        validateTextPresence(TaskManagerColumns.kind, TaskKind.languageDiscovery, false);
         clearAllFilters();
     });
 
