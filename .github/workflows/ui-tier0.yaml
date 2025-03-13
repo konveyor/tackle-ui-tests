@@ -1,10 +1,13 @@
 name: Test CI tests
 
+# on:
+#   push:
+#     branches:
+#       - main
 on:
-  push:
+  pull_request:
     branches:
       - main
-
 
 jobs:
   k8s:
@@ -57,7 +60,7 @@ jobs:
       - name: Install NPM
         run: npm install .
       - name: Run cypress login test
-        run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
+        run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="Passw0rd!",tackleUrl=${{ env.CYPRESS_tackleUrl }}
       - name: Run Tier0 test cases
         run: |
           CYPRESS_INCLUDE_TAGS=@ci npx cypress run --spec **/*.test.ts --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
@@ -67,3 +70,4 @@ jobs:
         with:
           name: minikube-tests-screenshots
           path: tackle-ui-tests/cypress/screenshots
+ 
