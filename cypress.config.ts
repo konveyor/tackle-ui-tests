@@ -21,7 +21,6 @@ export default defineConfig({
         jira_atlassian_cloud_url: "",
         jira_atlassian_cloud_project: "Test",
         jira_stage_datacenter_project_id: 12335626,
-        auth_enabled: false,
         rwx_enabled: true,
         logLevel: "ASSERT",
         mtaVersion: "",
