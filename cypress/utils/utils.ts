@@ -1269,8 +1269,8 @@ export function deleteAllRows(tableSelector: string = commonTable) {
                 .find(trTag)
                 .then(($rows) => {
                     for (let i = 0; i < $rows.length - 1; i++) {
-                        cy.get(sideKebabMenu, { timeout: 10000 }).first().click();
-                        cy.get("ul[role=menu] > li").contains("Delete").click();
+                        cy.get(sideKebabMenu, { timeout: 10000 }).eq(0).click({ force: true });
+                        cy.get("ul[role=menu] > li").contains("Delete").click({ force: true });
                         cy.get(confirmButton).click();
                         cy.wait(5000);
                         isTableEmpty().then((empty) => {
