@@ -83,7 +83,7 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
         cy.intercept("DELETE", "/hub/application*").as("deleteApplication");
-        Application.open(true);
+        cy.visit("/");
     });
 
     it(["@tier1"], "Source + dependencies analysis on tackletest app", function () {
@@ -434,6 +434,7 @@ describe(["@tier2"], "Source Analysis", () => {
     });
 
     after("Perform test data clean up", function () {
+        login();
         cy.visit("/");
         if (source_credential) {
             cy.log("deleting source_credential");
