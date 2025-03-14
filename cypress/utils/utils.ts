@@ -225,43 +225,41 @@ export function login(username?: string, password?: string, firstLogin = false):
     return cy.session(sessionId, () => {
         cy.log("Log in");
         cy.visit("/");
-        if (Cypress.env("auth_enabled")) {
-            cy.get("h1", { timeout: 120 * SEC, log: false }).then(($title) => {
-                // With auth disabled, login page is not displayed and users are taken straight
-                // to the Application Inventory page.
-                if (
-                    $title.text().toString().trim() !== "Sign in to your account" &&
-                    $title.text().includes("Application inventory")
-                ) {
-                    return;
-                }
+        cy.get("h1", { timeout: 120 * SEC, log: false }).then(($title) => {
+            // With auth disabled, login page is not displayed and users are taken straight
+            // to the Application Inventory page.
+            if (
+                $title.text().toString().trim() !== "Sign in to your account" &&
+                $title.text().includes("Application inventory")
+            ) {
+                return;
+            }
 
-                const userName = username ?? Cypress.env("user");
-                const userPassword = password ?? Cypress.env("pass");
-                inputText(loginView.userNameInput, userName);
-                inputText(loginView.userPasswordInput, userPassword, true);
-                click(loginView.loginButton);
+            const userName = username ?? Cypress.env("user");
+            const userPassword = password ?? Cypress.env("pass");
+            inputText(loginView.userNameInput, userName);
+            inputText(loginView.userPasswordInput, userPassword, true);
+            click(loginView.loginButton);
 
-                // Change default password on first login.
-                cy.get("body").then(($body) => {
-                    let invalidMessageElement = $body.find('span[class*="m-error"]');
-                    if (invalidMessageElement.length > 0) {
-                        const errorText = invalidMessageElement.text().trim();
-                        if (errorText === "Invalid username or password.") {
-                            inputText(loginView.userPasswordInput, "Passw0rd!", true);
-                            click(loginView.loginButton);
-                            updatePassword();
-                        }
+            // Change default password on first login.
+            cy.get("body").then(($body) => {
+                let invalidMessageElement = $body.find('span[class*="m-error"]');
+                if (invalidMessageElement.length > 0) {
+                    const errorText = invalidMessageElement.text().trim();
+                    if (errorText === "Invalid username or password.") {
+                        inputText(loginView.userPasswordInput, "Passw0rd!", true);
+                        click(loginView.loginButton);
+                        updatePassword();
                     }
-                });
+                }
             });
+        });
 
-            updatePassword();
-            updateAccountInformation();
-            cy.get("#main-content-page-layout-horizontal-nav").within(() => {
-                cy.get("h1", { timeout: 15 * SEC, log: false }).contains("Application inventory");
-            });
-        }
+        updatePassword();
+        updateAccountInformation();
+        cy.get("#main-content-page-layout-horizontal-nav").within(() => {
+            cy.get("h1", { timeout: 15 * SEC, log: false }).contains("Application inventory");
+        });
     });
 }
 
