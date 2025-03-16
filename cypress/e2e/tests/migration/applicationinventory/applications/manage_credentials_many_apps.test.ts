@@ -75,10 +75,10 @@ describe(["@tier2"], "Manage credentials source analysis", () => {
         sourceApplicationsList.push(application);
 
         application = new Analysis(
-            getRandomApplicationData("dayTraderApp_Source+dependencies", {
-                sourceData: this.appData["daytrader-app"],
+            getRandomApplicationData("tackleTestApp_Source+dependencies", {
+                sourceData: this.appData["tackle-testapp-git"],
             }),
-            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
+            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
         );
         sourceApplicationsList.push(application);
 
