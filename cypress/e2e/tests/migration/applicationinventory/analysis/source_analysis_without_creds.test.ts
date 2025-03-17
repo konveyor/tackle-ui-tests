@@ -140,8 +140,8 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
     });
 
     after("Perform test data clean up", function () {
-        login()
-        cy.visit("/")
+        login();
+        cy.visit("/");
         deleteByList(applicationsList);
     });
 });
