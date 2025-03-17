@@ -17,6 +17,7 @@ limitations under the License.
 
 import {
     checkSuccessAlert,
+    deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
@@ -139,7 +140,8 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
     });
 
     after("Perform test data clean up", function () {
-        //Application.open(true);
-        //deleteByList(applicationsList);
+        login()
+        cy.visit("/")
+        deleteByList(applicationsList);
     });
 });
