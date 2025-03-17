@@ -69,7 +69,6 @@ import {
     applicationsActionButton,
     createEntitiesCheckbox,
     date,
-    kebabMenu,
     manageColumnsModal,
     sideKebabMenu,
 } from "../e2e/views/applicationinventory.view";
@@ -847,8 +846,12 @@ export function performRowActionByIcon(itemName: string, action: string): void {
 }
 
 export function clickItemInKebabMenu(rowItem, itemName: string): void {
-    performRowActionByIcon(rowItem, kebabMenu);
-    cy.get(actionMenuItem).contains(itemName).closest(button).first().click({ force: true });
+    cy.contains(rowItem)
+        .closest(trTag)
+        .within(() => {
+            click(sideKebabMenu);
+        });
+    cy.get(actionMenuItem).contains(itemName).click({ force: true });
 }
 
 export function clickKebabMenuOptionArchetype(rowItem: string, itemName: string): void {
