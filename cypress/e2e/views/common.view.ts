@@ -98,7 +98,7 @@ export enum sideDrawer {
     labelText = "span.pf-v5-c-label__text",
 }
 export const closeAbout = "button[aria-label='Close Dialog']";
-export const pencilIcon = "#pencil-action";
+export const pencilIcon = "#action";
 
 // Task details page
 export const taskDetailsEditor = "div[class='pf-v5-c-code-editor__code']";
