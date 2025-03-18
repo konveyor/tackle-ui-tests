@@ -17,6 +17,7 @@ import {
     cancelForm,
     click,
     clickByText,
+    clickItemInKebabMenu,
     clickTab,
     clickWithin,
     clickWithinByText,
@@ -24,7 +25,6 @@ import {
     doesExistText,
     inputText,
     next,
-    performRowActionByIcon,
     selectCheckBox,
     selectFormItems,
     sidedrawerTab,
@@ -81,10 +81,7 @@ import {
     sourceDropdown,
     tabsPanel,
 } from "../../../views/analysis.view";
-import {
-    bulkApplicationSelectionCheckBox,
-    kebabMenu,
-} from "../../../views/applicationinventory.view";
+import { bulkApplicationSelectionCheckBox } from "../../../views/applicationinventory.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { Application } from "./application";
 
@@ -445,8 +442,7 @@ export class Analysis extends Application {
 
     manageCredentials(sourceCred?: string, mavenCred?: string): void {
         cy.wait(2 * SEC);
-        performRowActionByIcon(this.name, kebabMenu);
-        clickByText(button, manageCredentials);
+        clickItemInKebabMenu(this.name, manageCredentials);
         if (sourceCred) {
             selectFormItems(sourceCredential, sourceCred);
         }
@@ -563,7 +559,6 @@ export class Analysis extends Application {
     }
 
     cancelAnalysis(): void {
-        performRowActionByIcon(this.name, kebabMenu);
-        clickByText(button, "Cancel analysis");
+        clickItemInKebabMenu(this.name, "Cancel analysis");
     }
 }
