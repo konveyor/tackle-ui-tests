@@ -81,9 +81,7 @@ import {
     sourceDropdown,
     tabsPanel,
 } from "../../../views/analysis.view";
-import {
-    bulkApplicationSelectionCheckBox,
-} from "../../../views/applicationinventory.view";
+import { bulkApplicationSelectionCheckBox } from "../../../views/applicationinventory.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { Application } from "./application";
 
