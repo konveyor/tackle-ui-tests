@@ -234,6 +234,8 @@ export function login(username?: string, password?: string, firstLogin = false):
                 });
             }
         });
+        updatePassword();
+        updateAccountInformation();
         cy.url().should("eq", Application.fullUrl);
     });
 }
