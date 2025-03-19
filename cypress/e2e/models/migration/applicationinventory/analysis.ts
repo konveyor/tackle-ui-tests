@@ -18,7 +18,6 @@ import {
     click,
     clickByText,
     clickItemInKebabMenu,
-    clickTab,
     clickWithin,
     clickWithinByText,
     doesExistSelector,
@@ -76,7 +75,6 @@ import {
     numberOfRulesColumn,
     openjdkToggleButton,
     panelBody,
-    rightSideMenu,
     sourceCredential,
     sourceDropdown,
     tabsPanel,
@@ -421,16 +419,20 @@ export class Analysis extends Application {
 
     downloadReport(type: ReportTypeSelectors) {
         Application.open();
-        this.selectApplicationRow();
-        cy.get(rightSideMenu, { timeout: 30 * SEC }).within(() => {
-            clickTab("Reports");
-            click(type);
-            // waits until the file is downloaded
-            cy.get(type, { timeout: 30 * SEC });
-            const extension = type === ReportTypeSelectors.YAML ? "yaml" : "tar";
-            cy.verifyDownload(`analysis-report-app-${this.name}.${extension}`);
-        });
+        sidedrawerTab(this.name, "Reports");
+        click(type);
+        // waits until the file is downloaded
+        const extension = type === ReportTypeSelectors.YAML ? "yaml" : "tar";
+        cy.verifyDownload(`analysis-report-app-${this.name}.${extension}`, { timeout: 30 * SEC });
         this.closeApplicationDetails();
+    }
+
+    extractHTMLReport() {
+        cy.task("unzip", {
+            path: "cypress/downloads/",
+            file: `analysis-report-app-${this.name}.tar`,
+        });
+        cy.verifyDownload(`analysis-report-app-${this.name}/index.html`);
     }
 
     openAnalysisDetails() {
