@@ -755,8 +755,7 @@ export class Application {
     // Opens the manage dependencies dialog from application inventory page
     openManageDependencies(): void {
         Application.open();
-        performRowActionByIcon(this.name, kebabMenu);
-        clickByText(button, "Manage dependencies");
+        clickItemInKebabMenu(this.name, "Manage dependencies");
     }
 
     // Selects the application as dependency from dropdown. Arg dropdownNum value 0 selects northbound, whereas value 1 selects southbound
