@@ -197,7 +197,15 @@ export function getRandomCredentialsData(
             // Source Control - username and password
             if (useTestingAccount) {
                 user = Cypress.env("git_user");
+                if (!user) {
+                    user = getRandomWord(6);
+                    cy.log("No user specified, using generated user", user);
+                }
                 password = Cypress.env("git_password");
+                if (!password) {
+                    password = getRandomWord(8);
+                    cy.log("No password specified, using generated password");
+                }
             }
             return {
                 type: type,

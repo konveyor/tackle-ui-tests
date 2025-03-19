@@ -21,7 +21,6 @@ export default defineConfig({
         jira_atlassian_cloud_url: "",
         jira_atlassian_cloud_project: "Test",
         jira_stage_datacenter_project_id: 12335626,
-        tackleUrl: "https://tackle-konveyor-tackle.apps.mtv03.rhos-psi.cnv-qe.rhood.us",
         rwx_enabled: true,
         logLevel: "ASSERT",
         mtaVersion: "",
@@ -48,16 +47,21 @@ export default defineConfig({
     },
     defaultCommandTimeout: 8000,
     e2e: {
-        testIsolation: false,
         specPattern: "cypress/e2e/**/*.test.{js,jsx,ts,tsx}",
+        baseUrl: "https://tackle-konveyor-tackle.apps.mtv03.rhos-psi.cnv-qe.rhood.us",
         setupNodeEvents(on, config) {
             require("./cypress/plugins/index.js")(on, config);
             on("file:preprocessor", tagify(config));
             require("cypress-fail-fast/plugin")(on, config);
             require("cypress-fs/plugins")(on, config);
+            on('task', {
+                print(s) {
+                    console.log(s);
+                    return null;
+                }
+            });
             return config;
         },
         experimentalMemoryManagement: true,
-        numTestsKeptInMemory: 15,
     },
 });

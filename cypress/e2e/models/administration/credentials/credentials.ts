@@ -70,7 +70,7 @@ export class Credentials {
     inUse = false;
 
     /** Contains URL of credentials web page */
-    static fullUrl = Cypress.env("tackleUrl") + "/identities";
+    static fullUrl = Cypress.config("baseUrl") + "/identities";
 
     constructor(name?: string) {
         if (name) this.name = name;
@@ -223,6 +223,7 @@ export class Credentials {
     }
 
     create(): void {
+        cy.log("creating credential", this.type);
         Credentials.openList();
         click(createBtn);
     }

@@ -39,7 +39,7 @@ import { navMenu, navTab } from "../../../views/menu.view";
 
 export class Jobfunctions {
     name: string;
-    static fullUrl = Cypress.env("tackleUrl") + "controls/job-functions";
+    static fullUrl = Cypress.config("baseUrl") + "controls/job-functions";
 
     constructor(name: string) {
         this.name = name;

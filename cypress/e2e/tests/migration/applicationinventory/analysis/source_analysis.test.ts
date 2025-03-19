@@ -17,7 +17,6 @@ limitations under the License.
 
 import * as data from "../../../../../utils/data_utils";
 import {
-    deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
@@ -42,6 +41,7 @@ let applicationsList: Array<Analysis> = [];
 describe(["@tier2"], "Source Analysis", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
 
         // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
@@ -82,7 +82,8 @@ describe(["@tier2"], "Source Analysis", () => {
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
-        Application.open(true);
+        cy.intercept("DELETE", "/hub/application*").as("deleteApplication");
+        cy.visit("/");
     });
 
     it(["@tier1"], "Source + dependencies analysis on tackletest app", function () {
@@ -97,7 +98,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -160,7 +160,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -424,8 +423,30 @@ describe(["@tier2"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
+    afterEach("Remove aplication", function () {
+        applicationsList.forEach((application) => {
+            cy.log("deleting application");
+            cy.visit("/");
+            application.delete();
+            cy.wait("@deleteApplication");
+        });
+        applicationsList = [];
+    });
+
     after("Perform test data clean up", function () {
-        deleteByList(applicationsList);
+        login();
+        cy.visit("/");
+        if (source_credential) {
+            cy.log("deleting source_credential");
+            source_credential.delete();
+        }
+        if (maven_credential) {
+            cy.log("deleting maven_credentail");
+            maven_credential.delete();
+        }
+        if (source_credential_withHash) {
+            source_credential_withHash.delete();
+        }
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 });

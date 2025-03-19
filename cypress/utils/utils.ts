@@ -138,13 +138,8 @@ export function inputText(fieldId: string, text: any, log = false): void {
     if (!log) {
         cy.log(`Type ${text} in ${fieldId}`);
     }
-    cy.get(fieldId, { log, timeout: 30 * SEC })
-        .click({ log })
-        .focused({ log })
-        .clear({ log });
-    cy.wait(200, { log });
-    cy.get(fieldId, { log, timeout: 30 * SEC })
-        .clear({ log })
+    cy.get(fieldId, { log })
+        .clear({ log, timeout: 30 * SEC })
         .type(text, { log });
 }
 
@@ -166,7 +161,6 @@ export function clickByText(
         force: isForced,
         log,
     });
-    cy.wait(SEC, { log });
 }
 
 export function click(fieldId: string, isForced = true, log = false, number = 0): void {
@@ -210,55 +204,39 @@ export function cancelForm(): void {
 
 export function login(username?: string, password?: string, firstLogin = false): Chainable<null> {
     /**
-     *  If the login method is explicitly called, it means that previous sessions are no longer required
-     */
-    Cypress.session.clearAllSavedSessions();
-
-    /**
      * The sessionId is used to create a new session or to try to recover a previous one
      */
     const sessionId = (username ?? "login") + (firstLogin ? "FirstLogin" : "");
 
     return cy.session(sessionId, () => {
-        cy.log("Login in");
-        cy.visit(Cypress.env("tackleUrl"), { timeout: 120 * SEC });
-        cy.wait(5 * SEC);
-        cy.get("h1", { timeout: 120 * SEC, log: false }).then(($title) => {
-            // With auth disabled, login page is not displayed and users are taken straight
-            // to the Application Inventory page.
-            if (
-                $title.text().toString().trim() !== "Sign in to your account" &&
-                $title.text().includes("Application inventory")
-            ) {
-                return;
-            }
+        cy.log("Log in");
+        cy.visit("/", { timeout: 120 * SEC });
+        cy.url().then(($url) => {
+            cy.log($url);
+            if ($url != Application.fullUrl) {
+                const userName = username ?? Cypress.env("user");
+                const userPassword = password ?? Cypress.env("pass");
+                inputText(loginView.userNameInput, userName);
+                inputText(loginView.userPasswordInput, userPassword, true);
+                click(loginView.loginButton);
 
-            const userName = username ?? Cypress.env("user");
-            const userPassword = password ?? Cypress.env("pass");
-            cy.wait(3 * SEC);
-            inputText(loginView.userNameInput, userName);
-            inputText(loginView.userPasswordInput, userPassword);
-            click(loginView.loginButton);
-
-            // Change default password on first login.
-            cy.get("body").then(($body) => {
-                let invalidMessageElement = $body.find('span[class*="m-error"]');
-                if (invalidMessageElement.length > 0) {
-                    const errorText = invalidMessageElement.text().trim();
-                    if (errorText === "Invalid username or password.") {
-                        inputText(loginView.userPasswordInput, "Passw0rd!");
-                        click(loginView.loginButton);
-                        updatePassword();
+                // Change default password on first login.
+                cy.get("body").then(($body) => {
+                    let invalidMessageElement = $body.find('span[class*="m-error"]');
+                    if (invalidMessageElement.length > 0) {
+                        const errorText = invalidMessageElement.text().trim();
+                        if (errorText === "Invalid username or password.") {
+                            inputText(loginView.userPasswordInput, "Passw0rd!", true);
+                            click(loginView.loginButton);
+                            updatePassword();
+                        }
                     }
-                }
-            });
+                });
+                updatePassword();
+                updateAccountInformation();
+            }
         });
-
-        updatePassword();
-        updateAccountInformation();
-        cy.get("#main-content-page-layout-horizontal-nav").within(() => {
-            cy.get("h1", { timeout: 15 * SEC, log: false }).contains("Application inventory");
-        });
+        cy.url().should("eq", Application.fullUrl);
     });
 }
 
@@ -282,8 +260,8 @@ export function updatePassword(): void {
     // This is used in PR tester and Jenkins jobs.
     cy.get("h1", { timeout: 120 * SEC }).then(($a) => {
         if ($a.text().toString().trim() == "Update password") {
-            inputText(loginView.changePasswordInput, "Dog8code");
-            inputText(loginView.confirmPasswordInput, "Dog8code");
+            inputText(loginView.changePasswordInput, "Dog8code", true);
+            inputText(loginView.confirmPasswordInput, "Dog8code", true);
             click(loginView.submitButton);
         }
     });
@@ -315,7 +293,6 @@ export function selectItemsPerPage(items: number): void {
                     force: true,
                     log: false,
                 });
-            cy.wait(2 * SEC);
         }
     });
 }
@@ -823,9 +800,6 @@ export function performRowAction(itemName: string, action: string): void {
         .closest(trTag)
         .within(() => {
             clickByText(button, action);
-            cy.wait(500);
-            clickByText(button, action);
-            cy.wait(500);
         });
 }
 
@@ -1198,7 +1172,6 @@ type Deletable = { delete: () => void };
 
 export function deleteByList<T extends Deletable>(array: T[]): void {
     array.forEach((element) => {
-        cy.wait(0.8 * SEC);
         element.delete();
     });
 }
@@ -1418,7 +1391,7 @@ export function goToPage(page: number): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    cy.get(optionMenu).click();
+    cy.get(optionMenu).find("button").click();
     cy.get(actionMenuItem).contains(userType).click({ force: true });
 }
 
@@ -1681,7 +1654,7 @@ export function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O):
 }
 
 export function getUrl(): string {
-    return Cypress.env("tackleUrl");
+    return Cypress.config("baseUrl");
 }
 
 export function getNamespace(): string {

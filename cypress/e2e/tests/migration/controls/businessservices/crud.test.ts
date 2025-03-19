@@ -36,6 +36,8 @@ describe(["@tier0", "@interop"], "Business service CRUD operations", () => {
         // Interceptors for stakeholders
         cy.intercept("POST", "/hub/stakeholders*").as("postStakeholder");
         cy.intercept("GET", "/hub/stakeholders*").as("getStakeholders");
+
+        cy.visit("/");
     });
 
     it("Business service CRUD", function () {
