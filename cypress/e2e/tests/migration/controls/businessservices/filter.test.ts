@@ -35,6 +35,7 @@ let invalidSearchInput = String(data.getRandomNumber());
 describe(["@tier3"], "Business services filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         stakeholdersList = createMultipleStakeholders(3);
         businessServicesList = createMultipleBusinessServices(2, stakeholdersList);
     });

@@ -53,74 +53,54 @@ let invalidSearchInput = "SomeInvalidInput";
 describe(["@tier3"], "Stakeholder filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
-
-        // Create multiple job functions, stakeholder groups and stakeholders
+        cy.visit("/");
         jobFunctionsList = createMultipleJobFunctions(2);
         stakeholderGroupsList = createMultipleStakeholderGroups(2);
         stakeholdersList = createMultipleStakeholders(2, jobFunctionsList, stakeholderGroupsList);
     });
 
     it("Email filter validations", function () {
-        // Navigate to stakeholder tab
         Stakeholders.openList();
 
         // Enter an existing email substring and apply it as search filter
         let validSearchInput = stakeholdersList[0].email.substring(0, 5);
         applySearchFilter(email, validSearchInput);
-
-        // Assert that stakeholder row(s) containing the search text is/are displayed
         exists(stakeholdersList[0].email, stakeHoldersTable);
         if (stakeholdersList[1].email.indexOf(validSearchInput) >= 0) {
             exists(stakeholdersList[1].email, stakeHoldersTable);
         }
-
-        // Clear all filters
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing email substring and apply it as search filter
         applySearchFilter(email, invalidSearchInput);
-
-        // Assert that no search results are found
         cy.get("h2").contains("No stakeholder available");
-
         clickByText(button, clearAllFilters);
     });
 
     it("Display name filter validations", function () {
-        // Navigate to stakeholder tab
         Stakeholders.openList();
 
         // Enter an existing display name substring and apply it as search filter
         let validSearchInput = stakeholdersList[0].name.substring(0, 3);
         applySearchFilter(name, validSearchInput);
-
-        // Assert that stakeholder row(s) containing the search text is/are displayed
         exists(stakeholdersList[0].name, stakeHoldersTable);
         if (stakeholdersList[1].name.indexOf(validSearchInput) >= 0) {
             exists(stakeholdersList[1].name, stakeHoldersTable);
         }
-
-        // Clear all filters
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing display name substring and apply it as search filter
         applySearchFilter(name, invalidSearchInput);
-
-        // Assert that no search results are found
         cy.get("h2").contains("No stakeholder available");
-
         clickByText(button, clearAllFilters);
     });
 
     it("Job function filter validations", function () {
-        // Navigate to stakeholder tab
         Stakeholders.openList();
 
         // Enter an existing job function substring and apply it as search filter
         let validSearchInput = stakeholdersList[0].jobfunction.substring(0, 3);
         applySearchFilter(jobFunction, validSearchInput);
-
-        // Assert that stakeholder row(s) containing the search text is/are displayed
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(stakeholdersList[0].email)
@@ -131,28 +111,20 @@ describe(["@tier3"], "Stakeholder filter validations", function () {
         if (stakeholdersList[1].jobfunction.indexOf(validSearchInput) >= 0) {
             exists(stakeholdersList[1].email, stakeHoldersTable);
         }
-
-        // Clear all filters
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing job function substring and apply it as search filter
         applySearchFilter(jobFunction, invalidSearchInput);
-
-        // Assert that no search results are found
         cy.get("h2").contains("No stakeholder available");
-
         clickByText(button, clearAllFilters);
     });
 
     it("Group filter validations", function () {
-        // Navigate to stakeholder tab
         Stakeholders.openList();
 
         // Enter an existing group substring and apply it as search filter
         let validSearchInput = stakeholdersList[0].groups[0].substring(0, 3);
         applySearchFilter(group, validSearchInput);
-
-        // Assert that stakeholder row(s) containing the search text is/are displayed
         selectItemsPerPage(100);
         cy.get(tdTag)
             .contains(stakeholdersList[0].email)
@@ -166,16 +138,11 @@ describe(["@tier3"], "Stakeholder filter validations", function () {
         if (stakeholdersList[1].groups[0].indexOf(validSearchInput) >= 0) {
             exists(stakeholdersList[1].email, stakeHoldersTable);
         }
-
-        // Clear all filters
         clickByText(button, clearAllFilters);
 
         // Enter a non-existing group substring and apply it as search filter
         applySearchFilter(group, invalidSearchInput);
-
-        // Assert that no search results are found
         cy.get("h2").contains("No stakeholder available");
-
         clickByText(button, clearAllFilters);
     });
 

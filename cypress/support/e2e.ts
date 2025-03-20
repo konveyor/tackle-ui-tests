@@ -71,4 +71,5 @@ declare global {
 beforeEach(() => {
     cy.log("logging in, or getting session");
     login();
+    cy.visit("/");
 });

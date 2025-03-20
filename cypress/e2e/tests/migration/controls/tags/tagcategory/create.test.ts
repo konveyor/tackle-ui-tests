@@ -20,15 +20,12 @@ import {
     click,
     clickByText,
     inputText,
-    login,
-    selectUserPerspective,
 } from "../../../../../../utils/utils";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 import {
     button,
     duplicateTagTypeName,
     max40CharMsg,
-    migration,
     minCharsMsg,
 } from "../../../../../types/constants";
 import {
@@ -44,12 +41,8 @@ import * as data from "../../../../../../utils/data_utils";
 import * as commonView from "../../../../../views/common.view";
 
 describe(["@tier2"], "Tag category validations", () => {
-    before("Login", function () {
-        login();
-    });
 
     it("Tag type field validations", function () {
-        // Navigate to Tags tab and click "Create tag type" button
         TagCategory.openList();
         clickByText(button, createTagCategoryButton);
 
@@ -71,61 +64,39 @@ describe(["@tier2"], "Tag category validations", () => {
         click(dropdownMenuTypeToggle);
         clickByText(button, data.getColor());
         cy.get(commonView.submitButton).should("not.be.disabled");
-
-        // Close the form
         cy.get(commonView.cancelButton).click();
     });
 
     it("Tag category button validations", function () {
-        // Navigate to Tags tab and click "Create tag category" button
         TagCategory.openList();
         clickByText(button, createTagCategoryButton);
-
-        // Check "Create" and "Cancel" button status
         cy.get(commonView.submitButton).should("be.disabled");
         cy.get(commonView.cancelButton).should("not.be.disabled");
-
-        // Cancel creating new tag category
         cy.get(commonView.cancelButton).click();
-        cy.wait(100);
 
         clickByText(button, createTagCategoryButton);
-
-        // Close the "Create tag type" form
         cy.get(commonView.closeButton).click();
-        cy.wait(100);
-
-        // Assert that Tags tab is opened
         cy.contains(button, createTagCategoryButton).should("exist");
     });
 
     it("Tag category success alert and unique constraint validation", function () {
-        selectUserPerspective(migration);
         const tagCategory = new TagCategory(
             data.getRandomWord(5),
             data.getColor(),
             data.getRandomNumber(5, 15)
         );
 
-        // Create a new tag type
         tagCategory.create();
         checkSuccessAlert(
             commonView.successAlertMessage,
             "Success alert:Tag category was successfully created."
         );
-        cy.wait(2000);
-
-        // Click "Create tag category" button
         clickByText(button, createTagCategoryButton);
-
-        // Check tag category name duplication
         inputText(nameInput, tagCategory.name);
         click(dropdownMenuTypeToggle);
         clickByText(button, data.getColor());
         cy.get(tagsHelper).should("contain.text", duplicateTagTypeName);
         cy.get(commonView.closeButton).click();
-
-        // Delete created tag
         tagCategory.delete();
     });
 });
