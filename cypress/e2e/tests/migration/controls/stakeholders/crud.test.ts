@@ -33,7 +33,6 @@ let jobFunctionsList: Array<Jobfunctions> = [];
 let stakeholderGroupList: Array<Stakeholdergroups> = [];
 
 describe(["@tier2", "@interop"], "Stakeholder CRUD operations", () => {
-
     beforeEach("Interceptors", function () {
         cy.intercept("POST", "/hub/stakeholder*").as("postStakeholder");
         cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
@@ -69,7 +68,7 @@ describe(["@tier2", "@interop"], "Stakeholder CRUD operations", () => {
 
         stakeholder.edit({}, true);
         exists(initialStakeholderName, stakeHoldersTable);
-        
+
         stakeholder.delete(true);
         exists(stakeholder.email, stakeHoldersTable);
 

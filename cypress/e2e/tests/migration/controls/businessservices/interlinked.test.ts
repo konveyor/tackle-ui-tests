@@ -16,13 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import * as data from "../../../../../utils/data_utils";
-import {
-    clickByText,
-    exists,
-    login,
-    notExists,
-    selectItemsPerPage,
-} from "../../../../../utils/utils";
+import { clickByText, exists, notExists, selectItemsPerPage } from "../../../../../utils/utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { businessServices, SEC, tdTag } from "../../../../types/constants";
@@ -31,7 +25,6 @@ import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 describe(["@tier3"], "Business service linked to stakeholder", () => {
     beforeEach("Login", function () {
-
         // Interceptors for business services
         cy.intercept("POST", "/hub/business-service*").as("postBusinessService");
         cy.intercept("GET", "/hub/business-service*").as("getBusinessService");

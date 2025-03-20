@@ -23,7 +23,6 @@ import * as data from "../../../../../utils/data_utils";
 import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 describe(["@tier0", "@interop"], "Business service CRUD operations", () => {
-
     beforeEach("Interceptors", function () {
         // Interceptors for business services
         cy.intercept("POST", "/hub/businessservices*").as("postBusinessService");
@@ -32,7 +31,6 @@ describe(["@tier0", "@interop"], "Business service CRUD operations", () => {
         // Interceptors for stakeholders
         cy.intercept("POST", "/hub/stakeholders*").as("postStakeholder");
         cy.intercept("GET", "/hub/stakeholders*").as("getStakeholders");
-
     });
 
     it("Business service CRUD", function () {

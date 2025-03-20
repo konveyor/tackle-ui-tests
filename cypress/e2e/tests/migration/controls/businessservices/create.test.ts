@@ -45,7 +45,6 @@ import { BusinessServices } from "../../../../models/migration/controls/business
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
 describe(["@tier2"], "Business service validations", () => {
-    
     it("Business service field validations", function () {
         BusinessServices.openList();
         clickByText(button, createNewButton);
@@ -95,7 +94,6 @@ describe(["@tier2"], "Business service validations", () => {
             commonView.successAlertMessage,
             `Success alert:Business service ${businessService1.name} was successfully created.`
         );
-
 
         clickByText(button, createNewButton);
 

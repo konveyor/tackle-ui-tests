@@ -15,13 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 import * as data from "../../../../../utils/data_utils";
-import {
-    clickByText,
-    clickJs,
-    exists,
-    inputText,
-    notExists,
-} from "../../../../../utils/utils";
+import { clickByText, clickJs, exists, inputText, notExists } from "../../../../../utils/utils";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import {
     button,

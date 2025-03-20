@@ -20,7 +20,6 @@ import {
     click,
     clickByText,
     exists,
-    login,
     notExists,
     selectItemsPerPage,
 } from "../../../../../utils/utils";
@@ -36,7 +35,6 @@ var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var stakeholdergroupNames: Array<string> = [];
 
 describe(["@tier3"], "Stakeholder linked to stakeholder groups and job function", () => {
-
     beforeEach("Interceptors", function () {
         // Interceptors for stakeholder groups
         cy.intercept("POST", "/hub/stakeholdergroups*").as("postStakeholdergroups");

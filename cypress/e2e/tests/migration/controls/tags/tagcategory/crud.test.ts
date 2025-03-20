@@ -23,7 +23,6 @@ import * as data from "../../../../../../utils/data_utils";
 import { color, rank, tagCount } from "../../../../../types/constants";
 
 describe(["@tier2"], "Tag tagCategory CRUD operations", () => {
-    
     it("Tag Category CRUD", function () {
         const tagCategory = new TagCategory(
             data.getRandomWord(8),

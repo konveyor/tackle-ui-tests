@@ -15,12 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import {
-    checkSuccessAlert,
-    click,
-    clickByText,
-    inputText,
-} from "../../../../../../utils/utils";
+import { checkSuccessAlert, click, clickByText, inputText } from "../../../../../../utils/utils";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 import {
     button,
@@ -41,7 +36,6 @@ import * as data from "../../../../../../utils/data_utils";
 import * as commonView from "../../../../../views/common.view";
 
 describe(["@tier2"], "Tag category validations", () => {
-
     it("Tag type field validations", function () {
         TagCategory.openList();
         clickByText(button, createTagCategoryButton);
