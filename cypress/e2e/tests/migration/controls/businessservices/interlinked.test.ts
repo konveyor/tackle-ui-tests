@@ -19,7 +19,7 @@ import * as data from "../../../../../utils/data_utils";
 import { clickByText, exists, notExists, selectItemsPerPage } from "../../../../../utils/utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
-import { businessServices, SEC, tdTag } from "../../../../types/constants";
+import { businessServices, tdTag } from "../../../../types/constants";
 import { navTab } from "../../../../views/menu.view";
 import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
@@ -49,7 +49,6 @@ describe(["@tier3"], "Business service linked to stakeholder", () => {
         exists(businessservice.name);
 
         selectItemsPerPage(100);
-        cy.wait(2000);
         cy.get(tdTag)
             .contains(businessservice.name)
             .get("td[data-label='Owner']")
@@ -58,10 +57,8 @@ describe(["@tier3"], "Business service linked to stakeholder", () => {
         var updatedStakeholderName = data.getFullName();
         stakeholder.edit({ name: updatedStakeholderName });
         cy.wait("@getStakeholders");
-        cy.wait(2 * SEC);
         clickByText(navTab, businessServices);
         selectItemsPerPage(100);
-        cy.wait(2000);
         cy.get(tdTag)
             .contains(businessservice.name)
             .get("td[data-label='Owner']")
@@ -72,7 +69,6 @@ describe(["@tier3"], "Business service linked to stakeholder", () => {
 
         clickByText(navTab, businessServices);
         selectItemsPerPage(100);
-        cy.wait(2000);
         cy.get(tdTag)
             .contains(businessservice.name)
             .get("td[data-label='Owner']")
