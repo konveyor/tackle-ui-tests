@@ -54,6 +54,7 @@ let dayTraderApp: Analysis;
 describe(["@tier3"], "Dependency filtering", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
         businessServiceList = createMultipleBusinessServices(2);
         stakeholders = createMultipleStakeholders(2);
         stakeholderGroups = createMultipleStakeholderGroups(2);

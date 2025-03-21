@@ -24,11 +24,10 @@ import {
     login,
     notExists,
     selectItemsPerPage,
-    selectUserPerspective,
 } from "../../../../../utils/utils";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
-import { migration, stakeholderGroups, tdTag, trTag } from "../../../../types/constants";
+import { stakeholderGroups, tdTag, trTag } from "../../../../types/constants";
 import { expandRow } from "../../../../views/common.view";
 import { navTab } from "../../../../views/menu.view";
 import { stakeHoldersTable } from "../../../../views/stakeholders.view";
@@ -39,7 +38,7 @@ const membersList: Array<string> = [];
 describe(["@tier3"], "Stakeholder group linked to stakeholder members", () => {
     before("Login and Create Test Data", function () {
         login();
-
+        cy.visit("/");
         stakeholdersList = createMultipleStakeholders(2);
         for (let i = 0; i < stakeholdersList.length; i++) {
             membersList.push(stakeholdersList[i].name);
@@ -57,8 +56,6 @@ describe(["@tier3"], "Stakeholder group linked to stakeholder members", () => {
     });
 
     it("stakeholders attach, update and delete dependency on stakeholder group", function () {
-        selectUserPerspective(migration);
-
         const stakeholderGroup = new Stakeholdergroups(
             data.getCompanyName(),
             data.getDescription(),
@@ -90,10 +87,7 @@ describe(["@tier3"], "Stakeholder group linked to stakeholder members", () => {
         stakeholderGroup.edit({ name: updatedStakeholderGroupName });
         cy.wait("@getStakeholderGroups");
 
-        // Go to stakeholder group page
         clickByText(navTab, stakeholderGroups);
-
-        // Check if second stakeholder's name attached to stakeholder group updated
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.contains(tdTag, stakeholderGroup.name)
@@ -107,10 +101,7 @@ describe(["@tier3"], "Stakeholder group linked to stakeholder members", () => {
         stakeholdersList[1].delete();
         cy.wait("@getStakeholders");
         notExists(stakeholdersList[1].name, stakeHoldersTable);
-
         clickByText(navTab, stakeholderGroups);
-
-        // Check if second stakeholder's name detached from stakeholder group
         selectItemsPerPage(100);
         cy.wait(2000);
         cy.contains(tdTag, stakeholderGroup.name)

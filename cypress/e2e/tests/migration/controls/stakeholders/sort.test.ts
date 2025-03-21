@@ -40,6 +40,7 @@ let stakeholderGroupList: Array<Stakeholdergroups> = [];
 describe(["@tier3"], "Stakeholder sort validations", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         jobFunctionsList = createMultipleJobFunctions(2);
         stakeholderGroupList = createMultipleStakeholderGroups(2);
         stakeholdersList = createMultipleStakeholders(2, jobFunctionsList, stakeholderGroupList);
@@ -47,69 +48,45 @@ describe(["@tier3"], "Stakeholder sort validations", function () {
 
     it("Email sort validations", function () {
         Stakeholders.openList();
-
-        // get unsorted list when page loads
         const unsortedList = getTableColumnData(email);
 
         // Sort the stakeholders by email in ascending order
         clickOnSortButton(email, SortType.ascending, stakeHoldersTable);
-        cy.wait(2000);
-
-        // Verify that the stakeholder rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(email);
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by email in descending order
         clickOnSortButton(email, SortType.descending, stakeHoldersTable);
-        cy.wait(2000);
-
-        // Verify that the stakeholder rows are displayed in descending order
         const afterDescSortList = getTableColumnData(email);
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
     it("Display name sort validations", function () {
         Stakeholders.openList();
-
-        // get unsorted list when page loads
         const unsortedList = getTableColumnData(displayName);
 
         // Sort the stakeholders by display name in ascending order
         clickOnSortButton(displayName, SortType.ascending, stakeHoldersTable);
-        cy.wait(2000);
-
-        // Verify that the stakeholder rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(displayName);
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by display name in descending order
         clickOnSortButton(displayName, SortType.descending, stakeHoldersTable);
-        cy.wait(2000);
-
-        // Verify that the stakeholder rows are displayed in descending order
         const afterDescSortList = getTableColumnData(displayName);
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
     it("Job function sort validations", function () {
         Stakeholders.openList();
-
-        // get unsorted list when page loads
         const unsortedList = getTableColumnData(jobFunction);
 
         // Sort the stakeholders by Job function in ascending order
         clickOnSortButton(jobFunction, SortType.ascending, stakeHoldersTable);
-        cy.wait(2000);
-
-        // Verify that the stakeholder rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(jobFunction);
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholders by Job function in descending order
         clickOnSortButton(jobFunction, SortType.descending, stakeHoldersTable);
-        cy.wait(2000);
-
-        // Verify that the stakeholder rows are displayed in descending order
         const afterDescSortList = getTableColumnData(jobFunction);
         verifySortDesc(afterDescSortList, unsortedList);
     });
