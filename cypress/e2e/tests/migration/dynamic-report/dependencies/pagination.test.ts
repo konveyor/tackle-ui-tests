@@ -25,7 +25,7 @@ import { Analysis } from "../../../../models/migration/applicationinventory/anal
 import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
 import { SEC } from "../../../../types/constants";
 
-describe(["@tier3"], "Dependencies pagination validation", function () {
+describe(["@tier3"], "Bug MTA-4598 - Dependencies pagination validation", function () {
     let application: Analysis;
     before("Load data", function () {
         login();
