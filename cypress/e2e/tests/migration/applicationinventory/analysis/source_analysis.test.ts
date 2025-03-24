@@ -85,7 +85,7 @@ describe(["@tier2"], "Source Analysis", () => {
         Application.open(true);
     });
 
-    it(["@tier1"], "Source + dependencies analysis on tackletest app", function () {
+    it(["@tier1"], "Bug MTA-2984: Source + dependencies analysis on tackletest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies", {
@@ -106,7 +106,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
     });
 
-    it("Bug MTA-4308: Source + dependencies analysis on daytrader app", function () {
+    it("Bug MTA-2984: Source + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies", {
@@ -126,7 +126,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
     });
 
-    it(["@tier1"], "Analysis on daytrader app with maven credentials", function () {
+    it(["@tier1"], "Bug MTA-2984: Analysis on daytrader app with maven credentials", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-751
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_MavenCreds", {
@@ -290,7 +290,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
     });
 
-    it("Bug MTA-4408: Openjdk17 Source + dependencies analysis on tackletest app", function () {
+    it("Bug MTA-4412: Openjdk17 Source + dependencies analysis on tackletest app", function () {
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies_openjdk17", {
                 sourceData: this.appData["tackle-testapp-git"],
