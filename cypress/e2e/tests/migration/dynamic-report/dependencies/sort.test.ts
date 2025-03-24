@@ -8,7 +8,7 @@ import { Analysis } from "../../../../models/migration/applicationinventory/anal
 import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
 import { SEC } from "../../../../types/constants";
 
-describe(["@tier3"], "Dependencies sort validations", function () {
+describe(["@tier3"], "Bug MTA-4598 - Dependencies sort validations", function () {
     let application: Analysis;
     const sortByList = ["Dependency name", "Labels", "Found in"];
 
