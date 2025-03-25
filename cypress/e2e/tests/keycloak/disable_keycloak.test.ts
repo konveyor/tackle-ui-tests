@@ -28,7 +28,6 @@ import {
     cloudReadinessFilePath,
     cloudReadinessQuestionnaire,
     legacyPathfinder,
-    SEC,
 } from "../../types/constants";
 
 let application1: Analysis;
@@ -40,7 +39,7 @@ describe(["@tier5"], "Perform certain operations after disabling Keycloak", func
     before("Disable Keycloak", function () {
         patchTackleCR("keycloak", false);
         login();
-
+        cy.visit("/");
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -79,11 +78,9 @@ describe(["@tier5"], "Perform certain operations after disabling Keycloak", func
 
     it("With Auth disabled, Perform application assessment and review", function () {
         application.perform_assessment("high", stakeholders, null, cloudReadinessQuestionnaire);
-        cy.wait(SEC);
         application.verifyStatus("assessment", "Completed");
 
         application.perform_review("low");
-        cy.wait(SEC);
         application.verifyStatus("assessment", "Completed");
     });
 

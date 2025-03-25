@@ -47,7 +47,7 @@ export class User {
         this.firstLogin = true;
     }
 
-    static keycloakUrl = tackleUiUrl + "/auth/";
+    static keycloakUrl = Cypress.config("baseUrl") + "/auth/";
 
     static loginKeycloakAdmin(loggedIn = false): void {
         cy.visit(User.keycloakUrl, { timeout: 120 * SEC });

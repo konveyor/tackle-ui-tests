@@ -40,6 +40,7 @@ const isInsecure = true;
 describe(["@tier3"], "Field validations for Jira Server connection instance", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
         jiraBasicCredential = new JiraCredentials(
             getRandomCredentialsData(CredentialType.jiraBasic)
         );

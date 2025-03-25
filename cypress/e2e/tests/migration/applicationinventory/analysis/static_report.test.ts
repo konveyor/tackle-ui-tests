@@ -52,6 +52,7 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
         cy.fixture("application").then(function (appData) {
             cy.fixture("analysis").then(function (analysisData) {
                 login();
+                cy.visit("/");
                 cleanupDownloads();
                 deleteAllMigrationWaves();
                 deleteApplicationTableRows();

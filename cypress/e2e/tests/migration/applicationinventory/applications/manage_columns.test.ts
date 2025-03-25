@@ -42,6 +42,7 @@ describe(["@tier3"], "Application inventory managing columns validations", funct
     //automates polarion MTA537
     before("Login and validate data", function () {
         login();
+        cy.visit("/");
         Application.open();
         applicationInventoryTableColumns.forEach((column) =>
             validateTextPresence(trTag, column, true)
