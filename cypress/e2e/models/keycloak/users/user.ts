@@ -23,7 +23,7 @@ import {
     saveUserButton,
     tempPasswordToggle,
 } from "../../../views/rbac.view";
-
+const tackleUiUrl = Cypress.config("baseUrl");
 const keycloakAdminPassword = Cypress.env("keycloakAdminPassword");
 
 export class User {
@@ -47,7 +47,7 @@ export class User {
         this.firstLogin = true;
     }
 
-    static keycloakUrl = Cypress.config("baseUrl") + "/auth/";
+    static keycloakUrl = tackleUiUrl + "/auth/";
 
     static loginKeycloakAdmin(loggedIn = false): void {
         cy.visit(User.keycloakUrl, { timeout: 120 * SEC });
@@ -72,6 +72,7 @@ export class User {
 
     static openList(): void {
         User.changeRealm("mta");
+        cy.get("a");
         clickByText("a", "Users");
         cy.wait(SEC);
     }
