@@ -72,7 +72,6 @@ export class User {
 
     static openList(): void {
         User.changeRealm("mta");
-        cy.get("a");
         clickByText("a", "Users");
         cy.wait(SEC);
     }
