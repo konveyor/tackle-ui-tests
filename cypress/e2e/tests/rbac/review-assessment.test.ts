@@ -30,7 +30,7 @@ import { Application } from "../../models/migration/applicationinventory/applica
 import { Archetype } from "../../models/migration/archetypes/archetype";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Tag } from "../../models/migration/controls/tags";
-import { legacyPathfinder, SEC } from "../../types/constants";
+import { legacyPathfinder } from "../../types/constants";
 
 let tags: Tag[];
 let stakeholders: Stakeholders[];
@@ -43,11 +43,11 @@ describe(["@tier2"], "Perform assessment and review as Architect", function () {
         User.loginKeycloakAdmin();
         architect.create();
         login();
+        cy.visit("/");
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
 
         architect.login();
-        cy.wait(2 * SEC);
         tags = createMultipleTags(2);
         stakeholders = createMultipleStakeholders(1);
         application = createMultipleApplications(1, [tags[0].name]);
@@ -64,12 +64,10 @@ describe(["@tier2"], "Perform assessment and review as Architect", function () {
         // Polarion TC 312
         architect.login();
         application[0].perform_assessment("medium", stakeholders);
-        cy.wait(2 * SEC);
         application[0].verifyStatus("assessment", "Completed");
         application[0].validateAssessmentField("Medium");
 
         application[0].perform_review("medium");
-        cy.wait(2 * SEC);
         application[0].verifyStatus("review", "Completed");
         application[0].validateReviewFields();
     });
@@ -85,21 +83,17 @@ describe(["@tier2"], "Perform assessment and review as Architect", function () {
             stakeholders
         );
         archetype.create();
-        cy.wait(2 * SEC);
-
         archetype.perform_assessment("low", stakeholders);
-        cy.wait(2 * SEC);
         archetype.validateAssessmentField("Low");
         archetype.perform_review("low");
-        cy.wait(2 * SEC);
         archetype.validateReviewFields();
         archetype.delete();
-        cy.wait(2 * SEC);
         architect.logout();
     });
 
     after("Clear test data", () => {
         login();
+        cy.visit("/");
         application[0].delete();
         deleteByList(tags);
         User.loginKeycloakAdmin();

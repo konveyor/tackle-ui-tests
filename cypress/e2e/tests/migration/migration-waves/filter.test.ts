@@ -29,10 +29,8 @@ let migrationWavesList: Array<MigrationWave> = [];
 //Automates Polarion TC 343
 describe(["@tier3"], "Migration waves filter validations", function () {
     before("Login and Create Test Data", function () {
-        // Peform login
         login();
-
-        // Create multiple migration waves
+        cy.visit("/");
         migrationWavesList = createMultipleMigrationWaves(2);
     });
 
@@ -65,7 +63,6 @@ describe(["@tier3"], "Migration waves filter validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        // Delete the business services
         deleteByList(migrationWavesList);
     });
 });

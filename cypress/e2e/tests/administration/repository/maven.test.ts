@@ -127,6 +127,7 @@ describe(["@tier2"], "Test secure and insecure maven repository analysis", () =>
             patchTackleCR("configureRWX", !rwxEnabled);
         });
         login();
+        cy.visit("/");
         MavenConfiguration.open();
 
         cy.get(repoSize).then(($btn) => {

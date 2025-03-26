@@ -52,6 +52,7 @@ describe(["tier3"], "Custom Migration Targets RBAC operations", function () {
         migrator.create();
 
         login();
+        cy.visit("/");
         cy.fixture("custom-rules").then((customMigrationTargets) => {
             const targetData = customMigrationTargets.rules_from_bookServerApp;
             const repositoryData: RulesRepositoryFields = {
@@ -116,6 +117,7 @@ describe(["tier3"], "Custom Migration Targets RBAC operations", function () {
 
     after("Clear test data", () => {
         login();
+        cy.visit("/");
         analysis.delete();
         target.delete();
         User.loginKeycloakAdmin();
@@ -147,7 +149,6 @@ describe(["tier3"], "Custom Migration Targets RBAC operations", function () {
 
     const analyzeAndVerify = (analysis: Analysis) => {
         analysis.analyze();
-        cy.wait(10 * SEC);
         analysis.verifyAnalysisStatus(AnalysisStatuses.completed);
         analysis.openReport();
         resetURL();

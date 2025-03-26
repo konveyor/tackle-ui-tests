@@ -23,7 +23,7 @@ import {
     saveUserButton,
     tempPasswordToggle,
 } from "../../../views/rbac.view";
-const tackleUiUrl = Cypress.config("baseUrl");
+
 const keycloakAdminPassword = Cypress.env("keycloakAdminPassword");
 
 export class User {

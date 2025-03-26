@@ -178,7 +178,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         // Polarion TC MTA-392
         const application = new Application(getRandomApplicationData());
         application.create();
-
         application.perform_assessment("high", stakeholderList);
 
         application.verifyStatus("assessment", "Completed");
@@ -218,15 +217,10 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             };
             const application2 = new Application(appdata);
             application2.create();
-            cy.wait(2 * SEC);
-
             application2.perform_assessment("medium", stakeholderList);
-            cy.wait(2 * SEC);
             application2.verifyStatus("assessment", "Completed");
             application2.validateAssessmentField("Medium");
-
             application2.perform_review("medium");
-            cy.wait(2 * SEC);
             application2.verifyStatus("review", "Completed");
             application2.validateReviewFields();
 
@@ -250,7 +244,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             application2.verifyInheritanceStatus("assessment");
 
             application2.delete();
-            cy.wait(2 * SEC);
             archetypes[0].delete();
             deleteByList(tags);
         }
@@ -271,7 +264,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         );
         archetype1.create();
         archetypes.push(archetype1);
-        cy.wait(2 * SEC);
 
         const archetype2 = new Archetype(
             data.getRandomWord(8),
@@ -281,7 +273,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         );
         archetype2.create();
         archetypes.push(archetype2);
-        cy.wait(2 * SEC);
 
         const archetype3 = new Archetype(
             data.getRandomWord(8),
@@ -291,7 +282,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         );
         archetype3.create();
         archetypes.push(archetype3);
-        cy.wait(2 * SEC);
 
         application[0].verifyArchetypeList(
             [archetype1.name, archetype2.name, archetype3.name],

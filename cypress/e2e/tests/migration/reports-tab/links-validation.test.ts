@@ -39,6 +39,7 @@ let riskType = ["high", "medium", "low", "unknown"];
 describe(["@tier3"], "Reports tab links validation tests", () => {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
         AssessmentQuestionnaire.deleteAllQuestionnaires();

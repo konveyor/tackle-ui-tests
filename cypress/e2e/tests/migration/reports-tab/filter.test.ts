@@ -45,6 +45,7 @@ let stakeholder: Stakeholders;
 describe(["@tier3"], "Reports Tab filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
         AssessmentQuestionnaire.deleteAllQuestionnaires();

@@ -44,6 +44,7 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
 
     before("Creating RBAC users, adding roles for them", function () {
         login();
+        cy.visit("/");
         AssessmentQuestionnaire.enable(legacyPathfinder);
         // Navigate to stakeholders control tab and create new stakeholder
         stakeholders = createMultipleStakeholders(1);
@@ -93,6 +94,7 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
     after("Clean up", function () {
         userArchitect.logout();
         login();
+        cy.visit("/");
         appCredentials.delete();
         deleteByList(stakeholders);
         application.delete();

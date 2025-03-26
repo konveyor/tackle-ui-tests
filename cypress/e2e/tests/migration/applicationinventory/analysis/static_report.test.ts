@@ -134,6 +134,7 @@ describe(["@tier2"], "Test Static Report UI", function () {
 describe(["@tier2"], "Delete Downloaded Report Data", function () {
     it("Delete Downloaded Report Data", function () {
         login();
+        cy.visit("/");
         cleanupDownloads();
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
