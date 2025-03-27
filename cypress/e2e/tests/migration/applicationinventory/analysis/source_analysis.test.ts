@@ -126,7 +126,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
     });
 
-    it(["@tier1"], "Bug MTA-4135: Analysis on daytrader app with maven credentials", function () {
+    it(["@tier1"], "Analysis on daytrader app with maven credentials", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-751
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_MavenCreds", {
