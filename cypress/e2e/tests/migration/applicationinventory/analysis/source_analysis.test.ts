@@ -107,7 +107,7 @@ describe(["@tier2"], "Source Analysis", () => {
         // );
     });
 
-    it("Source + dependencies analysis on daytrader app", function () {
+    it("Bug MTA-2984: Source + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies", {
@@ -130,7 +130,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
     });
 
-    it("Analysis on daytrader app with maven credentials", function () {
+    it("Bug MTA-2984: Analysis on daytrader app with maven credentials", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-751
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_MavenCreds", {
@@ -251,7 +251,7 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.get("h2", { timeout: 5 * SEC }).should("contain", "No tags available");
     });
 
-    it("Analysis for Konveyor example1 application", function () {
+    it("Bug MTA-4824: Analysis for Konveyor example1 application", function () {
         // Automates https://github.com/konveyor/example-applications/tree/main/example-1
         const application = new Analysis(
             getRandomApplicationData("Example 1", {
@@ -294,7 +294,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
     });
 
-    it("Bug MTA-4408: Openjdk17 Source + dependencies analysis on tackletest app", function () {
+    it("Bug MTA-4412: Openjdk17 Source + dependencies analysis on tackletest app", function () {
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies_openjdk17", {
                 sourceData: this.appData["tackle-testapp-git"],

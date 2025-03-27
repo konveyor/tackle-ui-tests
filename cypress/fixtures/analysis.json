@@ -1378,7 +1378,7 @@
         "source": "Source code",
         "target": ["Containerization", "Linux", "OracleJDK to OpenJDK"],
         "customRule": ["corporate-framework-config.windup.xml"],
-        "effort": 2,
+        "effort": 3,
         "issues": [
             {
                 "name": "Hardcoded IP Address",
