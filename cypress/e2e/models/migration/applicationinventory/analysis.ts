@@ -191,7 +191,10 @@ export class Analysis extends Application {
             .find("input[type=checkbox]")
             .check();
 
-        cy.get(languageSelectionDropdown).click();
+        if(languageSelectionDropdown)
+            cy.get(languageSelectionDropdown).click();
+        else 
+            return;
     }
 
     public selectTarget(target: string[]): void {
@@ -322,7 +325,7 @@ export class Analysis extends Application {
         if (this.binary) this.uploadBinary();
         this.isNextEnabled();
         next();
-        Analysis.selectLanguage(this.language);
+        // Analysis.selectLanguage(this.language);
         cy.wait(2 * SEC);
         this.selectTarget(this.target);
         next();
