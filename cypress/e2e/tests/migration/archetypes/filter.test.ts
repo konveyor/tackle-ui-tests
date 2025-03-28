@@ -32,6 +32,7 @@ let archetypeList: Archetype[];
 describe(["@tier3"], "Archetype filter validation", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
         archetypeList = createMultipleArchetypes(2);
     });
 

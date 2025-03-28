@@ -216,7 +216,7 @@ export function login(username?: string, password?: string, firstLogin = false):
             if ($url != Application.fullUrl) {
                 const userName = username ?? Cypress.env("user");
                 const userPassword = password ?? Cypress.env("pass");
-                inputText(loginView.userNameInput, userName);
+                inputText(loginView.userNameInput, userName, true);
                 inputText(loginView.userPasswordInput, userPassword, true);
                 click(loginView.loginButton);
 

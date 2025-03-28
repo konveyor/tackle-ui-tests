@@ -28,12 +28,13 @@ import {
 import { CustomMigrationTarget } from "../../../../models/administration/custom-migration-targets/custom-migration-target";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
-import { AnalysisStatuses, MIN, SEC } from "../../../../types/constants";
+import { AnalysisStatuses, MIN } from "../../../../types/constants";
 
 const applications: Analysis[] = [];
 describe(["@tier2"], "Source Analysis of big applications", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
     });
@@ -74,7 +75,6 @@ describe(["@tier2"], "Source Analysis of big applications", () => {
 
         applications.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
 
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
@@ -91,7 +91,6 @@ describe(["@tier2"], "Source Analysis of big applications", () => {
         application.create();
         applications.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed, 60 * MIN);
     });
@@ -106,7 +105,6 @@ describe(["@tier2"], "Source Analysis of big applications", () => {
         application.create();
         applications.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed, 30 * MIN);
     });

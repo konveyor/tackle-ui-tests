@@ -39,6 +39,7 @@ let appdata = { name: "Customers" };
 describe(["@tier3"], "Operations after application import", () => {
     before("Login and create test data", function () {
         login();
+        cy.visit("/");
         // This test will fail if there are preexisting questionnaire.
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
@@ -47,7 +48,6 @@ describe(["@tier3"], "Operations after application import", () => {
         // Import applications through valid .CSV file
         const fileName = "template_application_import.csv";
         importApplication(filePath + fileName);
-        cy.wait(2000);
 
         // Verify imported apps are visible in table
         exists("Customers");
@@ -72,14 +72,10 @@ describe(["@tier3"], "Operations after application import", () => {
         // Automates Polarion TC MTA-295
         const application = new Application(appdata);
 
-        // Perform application review
         application.perform_review("low");
-        cy.wait(2000);
         application.verifyStatus("review", "Completed");
 
-        // Delete application
         application.delete();
-        cy.wait(2000);
         notExists(application.name);
     });
 

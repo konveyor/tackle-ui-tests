@@ -41,6 +41,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         let dayTraderApp: Analysis;
 
         login();
+        cy.visit("/");
         deleteApplicationTableRows();
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {

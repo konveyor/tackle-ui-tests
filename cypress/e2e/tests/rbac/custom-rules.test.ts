@@ -53,7 +53,7 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         migrator.create();
 
         login();
-
+        cy.visit("/");
         sourceCredential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -159,6 +159,7 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
 
     after("Clear test data", () => {
         login();
+        cy.visit("/");
         sourceCredential.delete();
         analysisWithPublicRules.delete();
         analysisWithPrivateRules.delete();

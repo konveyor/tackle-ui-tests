@@ -42,6 +42,7 @@ let riskType = ["low", "medium", "high", "low", "high", "high"];
 describe(["@tier3"], "Reports tests", () => {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
         deleteAllMigrationWaves();

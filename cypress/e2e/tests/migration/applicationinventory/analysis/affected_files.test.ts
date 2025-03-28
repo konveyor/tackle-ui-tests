@@ -26,7 +26,7 @@ import { CredentialsMaven } from "../../../../models/administration/credentials/
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
-import { CredentialType, SEC, UserCredentials } from "../../../../types/constants";
+import { CredentialType, UserCredentials } from "../../../../types/constants";
 import { AppIssue } from "../../../../types/types";
 let applicationsList: Array<Analysis> = [];
 let source_credential: CredentialsSourceControlUsername;
@@ -35,7 +35,7 @@ let maven_credential: CredentialsMaven;
 describe(["@tier2"], "Affected files validation", () => {
     before("Login", function () {
         login();
-
+        cy.visit("/");
         // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
@@ -79,7 +79,6 @@ describe(["@tier2"], "Affected files validation", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.validateIssues(this.analysisData["affected_files_on_day_trader_app"]["issues"]);
@@ -102,7 +101,6 @@ describe(["@tier2"], "Affected files validation", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.validateIssues(this.analysisData["affected_files_on_bookserverapp"]["issues"]);
@@ -125,7 +123,6 @@ describe(["@tier2"], "Affected files validation", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -149,7 +146,6 @@ describe(["@tier2"], "Affected files validation", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -174,7 +170,6 @@ describe(["@tier2"], "Affected files validation", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.verifyEffort(this.analysisData["affected_files_on_coolStore_deps"]["effort"]);

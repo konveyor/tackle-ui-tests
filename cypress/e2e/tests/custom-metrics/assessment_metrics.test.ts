@@ -33,13 +33,9 @@ const fileName = "Legacy Pathfinder";
 
 describe(["@tier2"], "Custom Metrics - The total number of initiated assessments", function () {
     before("Login and create test data", function () {
-        // Perform login
         login();
-
-        // Navigate to stakeholders control tab and create new stakeholder
+        cy.visit("/");
         stakeholdersList = createMultipleStakeholders(1);
-
-        // Create 2 applications
         applicationList = createMultipleApplications(2);
         AssessmentQuestionnaire.enable(fileName);
     });
@@ -66,7 +62,6 @@ describe(["@tier2"], "Custom Metrics - The total number of initiated assessments
     it("Perform Review-No impact on assessment count", function () {
         // Perform application review
         applicationList[1].perform_review("medium");
-        cy.wait(2000);
         applicationList[1].verifyStatus("review", "Completed");
 
         // Validate the assessment initiated count doesn't change

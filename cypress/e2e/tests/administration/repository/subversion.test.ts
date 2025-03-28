@@ -35,6 +35,7 @@ describe(["@tier2"], "Test secure and insecure svn repository analysis", () => {
 
     before("Login", function () {
         login();
+        cy.visit("/");
         sourceCredential = new CredentialsSourceControlUsername({
             type: CredentialType.sourceControl,
             name: getRandomWord(6),

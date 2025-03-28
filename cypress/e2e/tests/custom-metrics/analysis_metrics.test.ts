@@ -18,7 +18,6 @@ import {
     deleteApplicationTableRows,
     getRandomAnalysisData,
     getRandomApplicationData,
-    login,
 } from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { Application } from "../../models/migration/applicationinventory/application";
@@ -29,10 +28,6 @@ let applicationList: Array<Application> = [];
 let counter: number;
 
 describe(["@tier2"], "Custom Metrics - Count the total number of initiated analyses", function () {
-    before("Login", function () {
-        login();
-    });
-
     beforeEach("Load data and define interceptors", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
@@ -62,7 +57,6 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
         // Counter increases by discovery tasks
         counter += 2;
         cy.wait("@getApplication");
-        cy.wait(2000);
         bookServerApp.analyze();
         bookServerApp.verifyAnalysisStatus("Completed");
 
@@ -79,7 +73,6 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
         // Application with empty source code should not initiate the discovery tasks
         application.create();
         cy.wait("@getApplication");
-        cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         counter++;
@@ -99,7 +92,6 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
         );
         tackleTestApp.create();
         cy.wait("@getApplication");
-        cy.wait(2000);
         tackleTestApp.analyze();
         tackleTestApp.verifyAnalysisStatus("Failed");
 

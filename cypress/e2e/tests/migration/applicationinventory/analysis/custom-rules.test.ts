@@ -38,7 +38,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
 
     before("Create test data", function () {
         login();
-
+        cy.visit("/");
         sourceCredential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,

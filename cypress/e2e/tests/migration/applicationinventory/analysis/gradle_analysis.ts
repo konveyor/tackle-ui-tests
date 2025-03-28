@@ -32,6 +32,7 @@ const applications: Analysis[] = [];
 describe(["@tier2"], "Gradle Analysis", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
     });

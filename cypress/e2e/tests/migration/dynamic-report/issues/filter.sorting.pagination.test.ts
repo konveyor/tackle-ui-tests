@@ -40,7 +40,7 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Tag } from "../../../../models/migration/controls/tags";
 import { Issues } from "../../../../models/migration/dynamic-report/issues/issues";
-import { AnalysisStatuses, issueFilter, SEC, tdTag, trTag } from "../../../../types/constants";
+import { AnalysisStatuses, issueFilter, tdTag, trTag } from "../../../../types/constants";
 import { AppIssue } from "../../../../types/types";
 import { rightSideBar } from "../../../../views/issue.view";
 
@@ -59,7 +59,7 @@ describe.skip(["@tier3"], "Filtering, sorting and pagination in Issues", functio
 
     before("Login", function () {
         login();
-
+        cy.visit("/");
         stakeholders = createMultipleStakeholders(2);
         stakeholderGroups = createMultipleStakeholderGroups(2);
         businessServiceList = createMultipleBusinessServices(2);
@@ -250,7 +250,6 @@ describe.skip(["@tier3"], "Filtering, sorting and pagination in Issues", functio
         Issues.openAffectedApplications(
             this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"][0]["name"]
         );
-        cy.wait(2 * SEC);
         clickByText(tdTag, applicationsList[6].name);
         cy.get(rightSideBar).within(() => {
             affectedFilesSortByList.forEach((column) => {

@@ -14,6 +14,7 @@ const legacyQuestionnaire = "Legacy Pathfinder";
 describe(["@tier2"], "Questionnaire CRUD operations", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
         // This test will fail if there are preexisting questionnaire.
         AssessmentQuestionnaire.deleteAllQuestionnaires();
     });

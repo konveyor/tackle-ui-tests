@@ -19,12 +19,11 @@ import * as data from "../../../../utils/data_utils";
 import {
     click,
     doesExistText,
-    login,
     validateTooLongInput,
     validateTooShortInput,
 } from "../../../../utils/utils";
 import { CustomMigrationTarget } from "../../../models/administration/custom-migration-targets/custom-migration-target";
-import { RepositoryType, SEC } from "../../../types/constants";
+import { RepositoryType } from "../../../types/constants";
 import { cancelButton, submitButton } from "../../../views/common.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 
@@ -33,9 +32,6 @@ describe(["@tier3"], "Custom Migration Target Validations", () => {
      * Validations for Polarion TCs 299, 301, 303, 304 & 305
      * This suite is only for fields validations, see crud.test.ts for CRUD operations
      */
-    before("Login", function () {
-        login();
-    });
 
     beforeEach("Clear state", function () {
         CustomMigrationTarget.open(true);
@@ -92,7 +88,6 @@ describe(["@tier3"], "Custom Migration Target Validations", () => {
         });
         CustomMigrationTarget.uploadImage("img/big-image.jpg");
         cy.get(CustomMigrationTargetView.imageInput).blur();
-        cy.wait(2 * SEC);
         click(cancelButton);
     });
 

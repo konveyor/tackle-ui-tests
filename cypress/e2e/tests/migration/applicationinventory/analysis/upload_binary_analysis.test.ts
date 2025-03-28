@@ -19,7 +19,6 @@ import {
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
-    login,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
@@ -27,10 +26,6 @@ import { AnalysisStatuses } from "../../../../types/constants";
 
 const applicationsList: Analysis[] = [];
 describe(["@tier2"], "Upload Binary Analysis", () => {
-    before("Login", function () {
-        login();
-    });
-
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;

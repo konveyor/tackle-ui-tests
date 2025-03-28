@@ -39,6 +39,7 @@ describe(["@tier3"], "Proxy operations", () => {
 
     before("Login", function () {
         login();
+        cy.visit("/");
         httpProxyCredentials.create();
         httpsProxyCredentials.create();
     });

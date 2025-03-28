@@ -54,7 +54,7 @@ describe(
     function () {
         before("Login and Create Test Data", function () {
             login();
-
+            cy.visit("/");
             businessServicesList = createMultipleBusinessServices(2);
             tagList = createMultipleTags(2);
             stakeholders = createMultipleStakeholders(2);

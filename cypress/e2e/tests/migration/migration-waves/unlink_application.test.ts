@@ -66,7 +66,7 @@ describe(["@tier3"], "Unlink application from exported migration waves", functio
             ).to.eq(false);
         }
         login();
-
+        cy.visit("/");
         jiraCloudCredentials = new JiraCredentials(
             data.getJiraCredentialData(CredentialType.jiraBasic, true)
         );

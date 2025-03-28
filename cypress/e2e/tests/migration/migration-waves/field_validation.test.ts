@@ -38,7 +38,7 @@ let migrationWave: MigrationWave;
 describe(["@tier2"], "Migration Waves Validations", () => {
     before("Login and create test data", function () {
         login();
-
+        cy.visit("/");
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
 

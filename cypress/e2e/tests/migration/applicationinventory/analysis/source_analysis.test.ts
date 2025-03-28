@@ -119,7 +119,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.verifyEffort(
@@ -142,7 +141,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(null, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -184,7 +182,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(scCredsKey.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -202,7 +199,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -220,7 +216,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -258,12 +253,10 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_on_example-1-app"])
         );
-        cy.wait(2 * SEC);
         Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         Application.open();
@@ -283,7 +276,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -306,7 +298,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -326,7 +317,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         Application.open();
@@ -348,7 +338,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.manageCredentials(null, maven_credential.name);
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
@@ -361,11 +350,9 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["tackle-testapp-public-4-targets"])
         );
-        cy.wait(2 * SEC);
         Application.open();
         application.create();
         applicationsList.push(application);
-        cy.wait(5 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         Application.open();

@@ -21,7 +21,6 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    resetURL,
     writeMavenSettingsFile,
 } from "../../../../utils/utils";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
@@ -36,6 +35,7 @@ let applicationsList: Analysis[] = [];
 describe(["@tier2"], "Test secure and insecure git repository analysis", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -59,11 +59,6 @@ describe(["@tier2"], "Test secure and insecure git repository analysis", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    afterEach("Persist session", function () {
-        // Reset URL from report page to web UI
-        resetURL();
-    });
-
     it("Analysis on insecure git Repository(http) for tackle test app when insecure repository is allowed", function () {
         // test that when the insecure repository is enabled the analysis on a http repo should be completed successfully
 
@@ -80,7 +75,6 @@ describe(["@tier2"], "Test secure and insecure git repository analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
         application.manageCredentials(source_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -103,7 +97,6 @@ describe(["@tier2"], "Test secure and insecure git repository analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
         application.manageCredentials(source_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Failed");
@@ -111,7 +104,6 @@ describe(["@tier2"], "Test secure and insecure git repository analysis", () => {
     });
 
     after("Perform test data clean up", () => {
-        login();
         deleteByList(applicationsList);
         source_credential.delete();
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));

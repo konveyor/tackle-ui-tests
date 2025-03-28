@@ -44,6 +44,7 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
 
     before("Creating RBAC users, adding roles for them", function () {
         login();
+        cy.visit("/");
         AssessmentQuestionnaire.enable(legacyPathfinder);
         // Navigate to stakeholders control tab and create new stakeholder
         stakeholders = createMultipleStakeholders(1);
@@ -52,8 +53,8 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
         application.create();
         application.perform_review("low");
         application.perform_assessment("low", stakeholders);
-
         logout();
+
         User.loginKeycloakAdmin();
         userArchitect.create();
     });
@@ -61,13 +62,13 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
     beforeEach("Persist session", function () {
         // login as architect
         userArchitect.login();
-
+        cy.visit("/");
         cy.fixture("rbac").then(function (rbacRules) {
             this.rbacRules = rbacRules["architect"];
         });
     });
 
-    it("Architect, validate create application button", function () {
+    it.only("Architect, validate create application button", function () {
         //Architect is allowed to create applications
         Application.validateCreateAppButton(this.rbacRules);
     });
@@ -93,6 +94,7 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
     after("Clean up", function () {
         userArchitect.logout();
         login();
+        cy.visit("/");
         appCredentials.delete();
         deleteByList(stakeholders);
         application.delete();

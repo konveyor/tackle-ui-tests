@@ -23,7 +23,6 @@ import {
     closeSuccessAlert,
     getRandomAnalysisData,
     getRandomApplicationData,
-    login,
     next,
     selectItemsPerPage,
 } from "../../../../utils/utils";
@@ -45,10 +44,6 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
     let appFixture: string;
     let analysisFixture: string;
     let languageLower: string;
-
-    before("Login", function () {
-        login();
-    });
 
     Object.values(Languages).forEach((language) => {
         describe(`${language} language`, function () {
@@ -94,7 +89,6 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                     language
                 );
                 target.create();
-                cy.wait(2 * SEC);
                 cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
                 closeSuccessAlert();
                 cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
@@ -121,7 +115,6 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
 
                 target.delete();
                 cy.wait("@deleteRule");
-                cy.wait(3 * SEC);
                 cy.get(CustomMigrationTargetView.cardContainer).then((container) => {
                     if (container.children().length > 1) {
                         cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(

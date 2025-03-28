@@ -46,6 +46,7 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         }
 
         login();
+        cy.visit("/");
         openManageImportsPage();
         importMultipleFiles(11);
     });
@@ -81,7 +82,6 @@ describe(["@tier3"], "Manage imports pagination validations", function () {
         goToLastPage();
         cy.wait("@getImports");
 
-        // Delete all items of last page
         deleteAllImports();
 
         // Verify that page is re-directed to previous page

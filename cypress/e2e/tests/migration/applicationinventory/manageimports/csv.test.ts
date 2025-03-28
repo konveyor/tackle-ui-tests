@@ -23,6 +23,7 @@ import { manageImportsActionsButton } from "../../../../views/common.view";
 describe(["@tier3"], "Manage imports tests", function () {
     before("Login", function () {
         login();
+        cy.visit("/");
         Application.open();
         openManageImportsPage();
     });
@@ -30,7 +31,6 @@ describe(["@tier3"], "Manage imports tests", function () {
     it("Download CSV template", function () {
         cy.get(manageImportsActionsButton).eq(0).click({ force: true });
         cy.get(kebabMenuItem).contains("Download CSV template").click();
-        cy.wait(2000);
         cy.readFile("cypress/downloads/template_application_import.csv").should(
             "contain",
             "Customers"

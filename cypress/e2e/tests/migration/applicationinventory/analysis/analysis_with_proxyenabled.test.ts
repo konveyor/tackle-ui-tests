@@ -16,7 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { getRandomProxyData } from "../../../../../utils/data_utils";
-import { getRandomAnalysisData, getRandomApplicationData, login } from "../../../../../utils/utils";
+import { getRandomAnalysisData, getRandomApplicationData } from "../../../../../utils/utils";
 import { Proxy } from "../../../../models/administration/proxy/proxy";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { ProxyType } from "../../../../views/proxy.view";
@@ -26,10 +26,6 @@ let application: Analysis;
 describe(["@tier3"], "Running analysis with incorrect proxy configuration", () => {
     let httpsProxy = new Proxy(getRandomProxyData(), ProxyType.https);
     let httpProxy = new Proxy(getRandomProxyData(), ProxyType.http);
-
-    before("Login", function () {
-        login();
-    });
 
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {

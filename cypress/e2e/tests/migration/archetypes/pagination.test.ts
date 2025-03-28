@@ -31,6 +31,7 @@ let archetypeList: Archetype[] = [];
 describe(["@tier3"], "Archetypes pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         archetypeList = createMultipleArchetypes(11);
     });
 

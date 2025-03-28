@@ -36,6 +36,7 @@ let stakeholderList: Array<Stakeholders> = [];
 describe(["@tier2"], "Archetype association reports tests", () => {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
         stakeholderList = createMultipleStakeholders(1);

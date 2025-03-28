@@ -25,7 +25,7 @@ import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
-import { CredentialType, legacyPathfinder, SEC } from "../../types/constants";
+import { CredentialType, legacyPathfinder } from "../../types/constants";
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
@@ -41,11 +41,11 @@ describe(["@tier3", "@rhsso"], "Migrator RBAC operations", () => {
     before("Creating RBAC users, adding roles for them", () => {
         //Need to log in as admin and create simple app with known name to use it for tests
         login();
+        cy.visit("/");
         AssessmentQuestionnaire.enable(legacyPathfinder);
         // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
-        cy.wait(2 * SEC);
 
         stakeholdersList.push(stakeholder);
         stakeholdersNameList.push(stakeholder.name);
@@ -94,6 +94,7 @@ describe(["@tier3", "@rhsso"], "Migrator RBAC operations", () => {
     after("", () => {
         userMigrator.logout();
         login();
+        cy.visit("/");
         appCredentials.delete();
         deleteByList(stakeholdersList);
         application.delete();

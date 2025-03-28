@@ -20,7 +20,6 @@ import {
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
-    login,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { TaskManager } from "../../../../models/migration/task-manager/task-manager";
@@ -39,9 +38,6 @@ let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 
 describe(["@tier1"], "Source Analysis without credentials", () => {
-    before("Login", function () {
-        login();
-    });
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
@@ -109,7 +105,6 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
         application.analyze();
         cy.get(tdTag, { log: false })
             .contains(application.name)
@@ -140,8 +135,6 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
     });
 
     after("Perform test data clean up", function () {
-        login();
-        cy.visit("/");
         deleteByList(applicationsList);
     });
 });

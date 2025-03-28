@@ -138,7 +138,6 @@ describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
         cy.get(applicationTableSelector + " td > button").each((btn) => {
             cy.wrap(btn).click();
             cy.contains("Delete").click();
-            cy.wait(3 * SEC);
         });
         migrationWave.applications = [];
 

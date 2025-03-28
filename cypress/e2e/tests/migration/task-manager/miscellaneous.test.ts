@@ -39,6 +39,7 @@ describe(["@tier2"], "Actions in Task Manager Page", function () {
 
     before("Login", function () {
         login();
+        cy.visit("/");
         deleteApplicationTableRows();
     });
 

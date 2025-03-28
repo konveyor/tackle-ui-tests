@@ -27,7 +27,7 @@ import {
 } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
-import { businessService, name, SEC, SortType, tags } from "../../../../types/constants";
+import { businessService, name, SortType, tags } from "../../../../types/constants";
 
 var applicationsList: Array<Application> = [];
 let businessServicesList: Array<BusinessServices> = [];
@@ -35,7 +35,7 @@ let businessServicesList: Array<BusinessServices> = [];
 describe(["@tier3"], "Application inventory sort validations", function () {
     before("Login and Create Test Data", function () {
         login();
-
+        cy.visit("/");
         var tagsList = ["C++", "COBOL", "Java"];
         businessServicesList = createMultipleBusinessServices(3);
         for (let i = 0; i < 3; i++) {
@@ -59,7 +59,6 @@ describe(["@tier3"], "Application inventory sort validations", function () {
 
         // Sort the application inventory by name in ascending order
         clickOnSortButton(name, SortType.ascending);
-        cy.wait(2 * SEC);
 
         // Verify that the application inventory table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(name);
@@ -67,7 +66,6 @@ describe(["@tier3"], "Application inventory sort validations", function () {
 
         // Sort the application inventory by name in descending order
         clickOnSortButton(name, SortType.descending);
-        cy.wait(2 * SEC);
 
         // Verify that the application inventory table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(name);
@@ -82,7 +80,6 @@ describe(["@tier3"], "Application inventory sort validations", function () {
 
         // Sort the application inventory by Tag count in ascending order
         clickOnSortButton(businessService, SortType.ascending);
-        cy.wait(2 * SEC);
 
         // Verify that the application inventory table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(businessService);
@@ -90,7 +87,6 @@ describe(["@tier3"], "Application inventory sort validations", function () {
 
         // Sort the application inventory by tags in descending order
         clickOnSortButton(businessService, SortType.descending);
-        cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(businessService);
@@ -105,7 +101,6 @@ describe(["@tier3"], "Application inventory sort validations", function () {
 
         // Sort the application inventory by Tag count in ascending order
         clickOnSortButton(tags, SortType.ascending);
-        cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(tags);
@@ -113,7 +108,6 @@ describe(["@tier3"], "Application inventory sort validations", function () {
 
         // Sort the application inventory by tags in descending order
         clickOnSortButton(tags, SortType.descending);
-        cy.wait(2000);
 
         // Verify that the application inventory table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(tags);

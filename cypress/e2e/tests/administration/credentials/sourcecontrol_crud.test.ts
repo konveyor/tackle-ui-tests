@@ -27,18 +27,14 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
     const toBeCanceled = true;
 
     before("Login", function () {
-        // Perform login
         login();
+        cy.visit("/");
         scCredsUsername = new CredentialsSourceControlUsername(
             getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.usernamePassword)
         );
         scCredsKey = new CredentialsSourceControlKey(
             getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.sourcePrivateKey)
         );
-    });
-
-    beforeEach("visit site", function () {
-        cy.visit("/");
     });
 
     it("Creating source control credentials with username/password and cancelling without saving", () => {

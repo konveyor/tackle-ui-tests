@@ -36,7 +36,6 @@ import {
     cloudReadinessFilePath,
     cloudReadinessQuestionnaire,
     legacyPathfinder,
-    SEC,
 } from "../../../types/constants";
 import { questionBlock } from "../../../views/assessment.view";
 import {
@@ -58,6 +57,7 @@ let applications: Application[];
 describe(["@tier3"], "Miscellaneous Archetype tests", () => {
     before("Import and enable Cloud readiness questionnaire template", function () {
         login();
+        cy.visit("/");
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.disable(legacyPathfinder);
         AssessmentQuestionnaire.import(cloudReadinessFilePath);
@@ -71,7 +71,6 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
             null
         );
         archetype.create();
-        cy.wait(2 * SEC);
         archetype.perform_assessment("high", stakeholderList, null, cloudReadinessQuestionnaire);
         archetype.validateAssessmentField("High");
         archetype.perform_review("high");
@@ -96,7 +95,6 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         //Automates Polarion MTA-394
         Archetype.open(true);
         archetype.clickAssessButton();
-        cy.wait(SEC);
         clickByText(button, "Retake");
         clickJs(nextButton);
         cy.get(splitItem)
@@ -173,7 +171,6 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
             `Success! Review discarded for ${archetype.name}.`,
             true
         );
-        cy.wait(2 * SEC);
         archetype.verifyStatus("review", "Not started");
     });
 

@@ -16,12 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { languageDiscoveryData } from "../../../../../fixtures/language_discovery.json";
-import {
-    deleteByList,
-    getRandomApplicationData,
-    login,
-    sidedrawerTab,
-} from "../../../../../utils/utils";
+import { deleteByList, getRandomApplicationData, sidedrawerTab } from "../../../../../utils/utils";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { SEC } from "../../../../types/constants";
 import { labelTagText } from "../../../../views/applicationinventory.view";
@@ -29,10 +24,6 @@ import { labelTagText } from "../../../../views/applicationinventory.view";
 let applicationList: Application[] = [];
 
 describe(["@tier2"], "Test if application language is discovered and tagged correctly", () => {
-    before("Login", function () {
-        login();
-    });
-
     languageDiscoveryData.forEach((data) => {
         it(`test ${data.name.split("-").join(" ")}`, function () {
             // Automates TCs 582, 583, 584, 585, 585, 586, 587
@@ -48,7 +39,6 @@ describe(["@tier2"], "Test if application language is discovered and tagged corr
             );
             application.create();
             applicationList.push(application);
-            cy.wait(2 * SEC);
             sidedrawerTab(data.name, "Tags");
             cy.contains("No tags available", { timeout: 60 * SEC }).should("not.exist");
             assertTagsInSection(sectionsTags);

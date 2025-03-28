@@ -32,6 +32,7 @@ describe(["@tier3"], "Task details validation", function () {
     let application: Analysis;
     before("Login", function () {
         login();
+        cy.visit("/");
         deleteApplicationTableRows();
     });
 

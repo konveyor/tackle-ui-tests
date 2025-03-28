@@ -27,7 +27,7 @@ let application: Analysis;
 describe(["@tier3"], "Select the list of packages to be analyzed manually", () => {
     before("Login", function () {
         login();
-        // Create source Credentials
+        cy.visit("/");
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,

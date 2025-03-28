@@ -49,8 +49,8 @@ let businessServicesList: BusinessServices[] = [];
 describe(["@tier3"], "Migration Waves sort validations", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
 
-        // Create multiple Migration Waves
         migrationWavesList = createMultipleMigrationWaves(2);
         stakeholdersList = createMultipleStakeholders(3);
         businessServicesList = createMultipleBusinessServices(3);

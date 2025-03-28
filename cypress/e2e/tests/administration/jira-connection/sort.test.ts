@@ -26,7 +26,7 @@ import {
 } from "../../../../utils/utils";
 import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
 import { Jira } from "../../../models/administration/jira-connection/jira";
-import { CredentialType, instanceName, SEC, SortType } from "../../../types/constants";
+import { CredentialType, instanceName, SortType } from "../../../types/constants";
 import { jiraTable } from "../../../views/jira.view";
 
 describe(["@tier3"], "Jira connections sort validations", function () {
@@ -37,6 +37,7 @@ describe(["@tier3"], "Jira connections sort validations", function () {
 
     before("", () => {
         login();
+        cy.visit("/");
         // Defining and creating credentials to be used in test
         jiraBasicCredential = new JiraCredentials(
             getJiraCredentialData(CredentialType.jiraBasic, !useTestingAccount)
@@ -62,7 +63,6 @@ describe(["@tier3"], "Jira connections sort validations", function () {
 
         // Sort the Jira instances by Name in ascending order
         clickOnSortButton(instanceName, SortType.ascending, jiraTable);
-        cy.wait(2 * SEC);
 
         // Verify that the Jira instances table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(instanceName);
@@ -70,7 +70,6 @@ describe(["@tier3"], "Jira connections sort validations", function () {
 
         // Sort the Jira instances by Name in descending order
         clickOnSortButton(instanceName, SortType.descending, jiraTable);
-        cy.wait(2 * SEC);
 
         // Verify that the Jira instances table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(instanceName);
@@ -84,7 +83,6 @@ describe(["@tier3"], "Jira connections sort validations", function () {
 
         // Sort the Jira instances by URL in ascending order
         clickOnSortButton("URL", SortType.ascending, jiraTable);
-        cy.wait(2 * SEC);
 
         // Verify that the Jira instances table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData("URL");
@@ -92,7 +90,6 @@ describe(["@tier3"], "Jira connections sort validations", function () {
 
         // Sort the Jira instances by URL in descending order
         clickOnSortButton("URL", SortType.descending, jiraTable);
-        cy.wait(2 * SEC);
 
         // Verify that the Jira instances table rows are displayed in descending order
         const afterDescSortList = getTableColumnData("URL");
