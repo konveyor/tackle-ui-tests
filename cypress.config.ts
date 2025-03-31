@@ -48,7 +48,7 @@ export default defineConfig({
     defaultCommandTimeout: 8000,
     e2e: {
         specPattern: "cypress/e2e/**/*.test.{js,jsx,ts,tsx}",
-        baseUrl: "https://mta-openshift-mta.apps.mig01.rhos-psi.cnv-qe.rhood.us",
+        baseUrl: "https://tackle-konveyor-tackle.apps.mig01.rhos-psi.cnv-qe.rhood.us/",
         setupNodeEvents(on, config) {
             require("./cypress/plugins/index.js")(on, config);
             on("file:preprocessor", tagify(config));
