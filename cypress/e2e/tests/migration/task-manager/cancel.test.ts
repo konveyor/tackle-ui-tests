@@ -43,6 +43,7 @@ describe(["@tier3"], "Cancel task created by another user", function () {
         userArchitect.create();
 
         login();
+        cy.visit("/");
         deleteApplicationTableRows();
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
@@ -103,6 +104,7 @@ describe(["@tier3"], "Cancel task created by another user", function () {
 
         userArchitect.logout();
         login();
+        cy.visit("/");
         TaskManager.cancelAnalysisByStatus(app2.name, TaskStatus.running);
     });
 

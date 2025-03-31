@@ -31,6 +31,7 @@ describe(["@tier3"], "Migration Waves pagination validations", function () {
     //Automates Polarion TC 357
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         migrationWavesList = createMultipleMigrationWaves(11);
     });
 

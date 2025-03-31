@@ -34,6 +34,7 @@ const filePath = "app_import/csv/";
 describe(["@tier3"], "Application import operations", () => {
     before("Login and create test data", function () {
         login();
+        cy.visit("/");
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
     });
@@ -49,7 +50,6 @@ describe(["@tier3"], "Application import operations", () => {
         // Import valid csv
         const fileName = "template_application_import.csv";
         importApplication(filePath + fileName);
-        cy.wait(2000);
 
         // Verify imported apps are visible in table
         exists("Customers");
@@ -66,7 +66,6 @@ describe(["@tier3"], "Application import operations", () => {
         // Import already imported valid csv file
         const fileName = "template_application_import.csv";
         importApplication(filePath + fileName);
-        cy.wait(2000);
 
         ManageImports.open();
         imports.verifyAppImport(fileName, "Completed", 2, 3);
@@ -87,14 +86,12 @@ describe(["@tier3"], "Application import operations", () => {
         // tag and BS should get created.
         const fileName = "missing_tags_and_bs.csv";
         importApplication(filePath + fileName, true);
-        cy.wait(2000);
         ManageImports.open();
         imports.verifyAppImport(fileName, "Completed", 2, "-");
 
         // Automate bug MTA-4257, Polarion TC MTA-609
         const fileName2 = "lantik_bug.csv";
         importApplication(filePath + fileName2, true);
-        cy.wait(2000);
         ManageImports.open();
         imports.verifyAppImport(fileName, "Completed", 1, "-");
         Application.open();
@@ -114,7 +111,6 @@ describe(["@tier3"], "Application import operations", () => {
         // Import csv with an empty row between two valid rows having minimum required field(s)
         const fileName = "mandatory_and_empty_row_21.csv";
         importApplication(filePath + fileName);
-        cy.wait(2000);
         ManageImports.open();
         imports.verifyAppImport(fileName, "Completed", 2, 1);
         imports.openErrorReport();
@@ -128,7 +124,6 @@ describe(["@tier3"], "Application import operations", () => {
         // Import csv having applications with same name, differentiated by whitespaces
         const fileName = "app_name_with_spaces_21.csv";
         importApplication(filePath + fileName);
-        cy.wait(2000);
         ManageImports.open();
         imports.verifyAppImport(fileName, "Completed", 1, 1);
         imports.openErrorReport();
@@ -143,7 +138,6 @@ describe(["@tier3"], "Application import operations", () => {
         // Import csv invalid schema
         const fileName = "invalid_schema_21.csv";
         importApplication(filePath + fileName);
-        cy.wait(2000);
         ManageImports.open();
         imports.verifyAppImport(fileName, "Completed", 0, 2);
         const errorMsgs = ["Invalid or unknown Record Type", "Invalid or unknown Record Type"];
@@ -160,7 +154,6 @@ describe(["@tier3"], "Application import operations", () => {
 
         const fileName = "invalid_record_type_21.csv";
         importApplication(filePath + fileName);
-        cy.wait(2000);
         ManageImports.open();
         imports.verifyAppImport(fileName, "Completed", 0, 2);
         const errorMsgs = [
@@ -178,7 +171,6 @@ describe(["@tier3"], "Application import operations", () => {
 
         const fileName = "missing_application_name.csv";
         importApplication(filePath + fileName);
-        cy.wait(2000);
         ManageImports.open();
         imports.verifyAppImport(fileName, "Completed", 0, 1);
         const errorMsg = ["Application Name is mandatory."];

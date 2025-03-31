@@ -27,8 +27,8 @@ let application: Analysis;
 describe(["@tier2"], "Exclude package Analysis", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
 
-        // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,

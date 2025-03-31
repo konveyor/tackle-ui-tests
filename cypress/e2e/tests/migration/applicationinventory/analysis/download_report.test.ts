@@ -23,13 +23,14 @@ import {
 } from "../../../../../utils/utils";
 import { GeneralConfig } from "../../../../models/administration/general/generalConfig";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { AnalysisStatuses, ReportTypeSelectors, SEC } from "../../../../types/constants";
+import { AnalysisStatuses, ReportTypeSelectors } from "../../../../types/constants";
 
 describe(["@tier2"], "Enable and Download HTML and YAML Reports", function () {
     let sourceApplication: Analysis;
 
     before("Login", function () {
         login();
+        cy.visit("/");
         GeneralConfig.enableDownloadReport();
     });
 
@@ -50,7 +51,6 @@ describe(["@tier2"], "Enable and Download HTML and YAML Reports", function () {
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
         sourceApplication.create();
-        cy.wait(2 * SEC);
         sourceApplication.analyze();
         sourceApplication.verifyAnalysisStatus(AnalysisStatuses.completed);
         sourceApplication.downloadReport(ReportTypeSelectors.YAML);

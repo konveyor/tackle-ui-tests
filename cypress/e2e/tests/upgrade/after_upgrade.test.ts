@@ -57,6 +57,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
             userAdmin.username = this.upgradeData.adminUser;
             userAdmin.password = Cypress.env("pass");
             userAdmin.login();
+            cy.visit("/");
         });
 
         AssessmentQuestionnaire.enable(legacyPathfinder);
