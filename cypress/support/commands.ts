@@ -52,4 +52,3 @@ Cypress.Commands.add(
         dropElement.realMouseMove(0, 0, { position: "topLeft" }).realMouseUp().wait(200);
     }
 );
-
