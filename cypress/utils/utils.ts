@@ -209,7 +209,6 @@ export function login(username?: string, password?: string, firstLogin = false):
     const sessionId = (username ?? "login") + (firstLogin ? "FirstLogin" : "");
 
     return cy.session(sessionId, () => {
-        cy.log("Log in");
         cy.visit("/", { timeout: 120 * SEC });
         cy.url().then(($url) => {
             cy.log($url);
@@ -282,7 +281,6 @@ export function resetURL(): void {
 }
 
 export function selectItemsPerPage(items: number): void {
-    cy.log(`Select ${items} per page`);
     cy.get(itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(($toggleBtn) => {
         if (!$toggleBtn.eq(0).is(":disabled")) {
             $toggleBtn.eq(0).trigger("click");
