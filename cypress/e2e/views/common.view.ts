@@ -99,6 +99,7 @@ export enum sideDrawer {
 }
 export const closeAbout = "button[aria-label='Close Dialog']";
 export const pencilIcon = "#action";
+export const pencilAction = "#pencil-action";
 
 // Task details page
 export const taskDetailsEditor = "div[class='pf-v5-c-code-editor__code']";

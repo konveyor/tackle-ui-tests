@@ -69,7 +69,6 @@ declare global {
 }
 
 beforeEach(() => {
-    cy.log("logging in, or getting session");
     login();
     // Every test starts by visiting / which should redirect to baseURL/applications
     cy.visit("/");

@@ -34,7 +34,7 @@ export class CredentialsSourceControlUsername extends CredentialsSourceControl {
     }
 
     protected fillPassword() {
-        inputText(passwordInput, this.password, true);
+        inputText(passwordInput, this.password);
     }
 
     protected selectCredType() {
