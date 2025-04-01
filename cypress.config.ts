@@ -54,12 +54,6 @@ export default defineConfig({
             on("file:preprocessor", tagify(config));
             require("cypress-fail-fast/plugin")(on, config);
             require("cypress-fs/plugins")(on, config);
-            on('task', {
-                print(s) {
-                    console.log(s);
-                    return null;
-                }
-            });
             return config;
         },
         experimentalMemoryManagement: true,
