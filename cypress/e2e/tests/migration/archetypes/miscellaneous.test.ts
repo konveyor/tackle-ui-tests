@@ -76,7 +76,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         archetype.perform_review("high");
     });
 
-    it.only("Verify associated application count and link", function () {
+    it("Verify associated application count and link", function () {
         // Automates Polarion MTA-529
         Archetype.verifyColumnValue(
             archetype.name,
