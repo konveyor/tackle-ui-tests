@@ -19,7 +19,7 @@ import { login, selectUserPerspective } from "../../utils/utils";
 import { migration } from "../types/constants";
 
 describe("Log In", () => {
-    it("Login to Pathfinder", { tags: "@tier1" }, () => {
+    it(["@tier1"], "Login to Pathfinder", function () {
         login();
         cy.visit("/");
         selectUserPerspective(migration);
