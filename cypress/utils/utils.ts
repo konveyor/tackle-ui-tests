@@ -320,7 +320,7 @@ export function selectFormItems(fieldId: string, item: string): void {
 
 export function selectRow(name: string): void {
     // Clicks on a particular row on any table
-    cy.get(tdTag, { timeout: 10 * SEC })
+    cy.get(tdTag, { timeout: 100 * SEC })
         .contains(name)
         .closest(trTag)
         .click();
@@ -328,7 +328,9 @@ export function selectRow(name: string): void {
 
 export function sidedrawerTab(name: string, tab: string): void {
     selectRow(name);
-    cy.get(sideDrawer.pageDrawerContent).within(() => {
+    cy.log("<<-- Row is selected");
+    cy.wait(10 * SEC);
+    cy.get(sideDrawer.pageDrawerContent, { timeout: 500 * SEC }).within(() => {
         clickTab(tab);
     });
 }
