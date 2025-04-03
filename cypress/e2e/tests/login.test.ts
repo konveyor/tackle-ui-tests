@@ -15,15 +15,12 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { login, selectUserPerspective } from "../../utils/utils";
+import { selectUserPerspective } from "../../utils/utils";
 import { migration } from "../types/constants";
 
 describe("Log In", () => {
     it(["@tier1"], "Login to Pathfinder", function () {
-        login();
-        cy.visit("/");
         selectUserPerspective(migration);
-
         cy.get("h1").should("contain", "Application inventory");
     });
 });
