@@ -46,7 +46,7 @@ export class Stakeholdergroups {
     name: string;
     description: string;
     members: Array<string>;
-    static fullUrl = Cypress.env("tackleUrl") + "controls/stakeholder-groups";
+    static fullUrl = Cypress.config("baseUrl") + "controls/stakeholder-groups";
 
     constructor(name: string, description?: string, members?: Array<string>) {
         this.name = name;

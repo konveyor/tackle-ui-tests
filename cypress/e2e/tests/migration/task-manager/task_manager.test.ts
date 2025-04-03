@@ -37,6 +37,7 @@ let application: Analysis;
 describe(["@tier2"], "Task Manager", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
         deleteApplicationTableRows();
     });
 
@@ -63,7 +64,6 @@ describe(["@tier2"], "Task Manager", () => {
             );
             application.create();
             cy.wait("@getApplication");
-            cy.wait(2000);
             applicationsList.push(application);
         }
 

@@ -27,6 +27,7 @@ let application: Analysis;
 describe(["@tier3"], "Validation of credentials being used by app", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
         source_credential = new CredentialsSourceControlUsername(
             getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.usernamePassword)
         );

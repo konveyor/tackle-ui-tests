@@ -57,6 +57,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
 
     before("Login", function () {
         login();
+        cy.visit("/");
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
@@ -186,7 +187,6 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         );
         binaryApplication.name = this.upgradeData.binaryApplicationName;
         binaryApplication.create();
-        cy.wait(2 * SEC);
         binaryApplication.manageCredentials(
             sourceControlUsernameCredentials.name,
             mavenCredentialsUsername.name

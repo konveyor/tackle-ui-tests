@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 /// <reference types="cypress" />
-import { createMultipleApplications, deleteByList, login } from "../../../utils/utils";
+import { createMultipleApplications, deleteByList } from "../../../utils/utils";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Metrics } from "../../models/migration/custom-metrics/custom-metrics";
 const metrics = new Metrics();
@@ -26,11 +26,6 @@ describe(
     ["@tier2"],
     "Custom Metrics - Count the current number of applications in inventory",
     function () {
-        before("Login", function () {
-            // Perform login
-            login();
-        });
-
         beforeEach("Get the current gauge value", function () {
             metrics.getValue(metricName).then((counterValue) => {
                 count = counterValue;
@@ -38,7 +33,6 @@ describe(
         });
 
         it("Create applications - Validate the applications count increased", function () {
-            // Create applications
             applicationList = createMultipleApplications(3);
             count += applicationList.length;
 

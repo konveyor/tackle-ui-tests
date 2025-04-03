@@ -51,6 +51,7 @@ let application: Application;
 describe(["@tier3"], "Tests for application questionnaire features", () => {
     before("Import and enable Cloud readiness questionnaire template", function () {
         login();
+        cy.visit("/");
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.disable(legacyPathfinder);
         AssessmentQuestionnaire.import(cloudReadinessFilePath);
@@ -63,13 +64,11 @@ describe(["@tier3"], "Tests for application questionnaire features", () => {
         };
         application = new Application(appdata);
         application.create();
-        cy.wait(2 * SEC);
     });
 
     it("1) Test conditional questions during application assessment; 2) Cancel assessment", function () {
         //Automates Polarion MTA-385: Test conditional questions
         Application.open();
-        cy.wait(2 * SEC);
         clickItemInKebabMenu(application.name, "Assess");
         Assessment.take_questionnaire(cloudReadinessQuestionnaire);
         Assessment.selectStakeholdersAndGroups(stakeholderList);
@@ -88,7 +87,6 @@ describe(["@tier3"], "Tests for application questionnaire features", () => {
                         );
                     });
                 Assessment.clickRadioOption($question, 1);
-                cy.wait(2000);
             });
 
         // Automates Polarion MTA-505: Cancel assessment
@@ -100,12 +98,10 @@ describe(["@tier3"], "Tests for application questionnaire features", () => {
     it("Bug MTA-3417: 1) Test auto answer feature of questionnaires; 2) Save assessment", function () {
         //Automates Polarion MTA-388: Auto answer
         Application.open();
-        cy.wait(2 * SEC);
         clickItemInKebabMenu(application.name, "Assess");
         Assessment.take_questionnaire(cloudReadinessQuestionnaire);
         Assessment.selectStakeholdersAndGroups(stakeholderList);
         clickJs(nextButton);
-        cy.wait(SEC);
 
         cy.get(splitItem)
             .contains("What is the main technology in your application?")

@@ -52,6 +52,7 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
         cy.fixture("application").then(function (appData) {
             cy.fixture("analysis").then(function (analysisData) {
                 login();
+                cy.visit("/");
                 cleanupDownloads();
                 deleteAllMigrationWaves();
                 deleteApplicationTableRows();
@@ -137,6 +138,7 @@ describe(["@tier2"], "Test Static Report UI", function () {
 describe(["@tier2"], "Delete Downloaded Report Data", function () {
     it("Delete Downloaded Report Data", function () {
         login();
+        cy.visit("/");
         cleanupDownloads();
         deleteAllMigrationWaves();
         deleteApplicationTableRows();

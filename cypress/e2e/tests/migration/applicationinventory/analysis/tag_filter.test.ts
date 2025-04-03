@@ -43,6 +43,7 @@ const applications: Application[] = [];
 describe(["@tier3"], "Filter tags on application details page", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,

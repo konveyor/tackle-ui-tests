@@ -55,6 +55,7 @@ const sortableColumns = [
 describe(["@tier3"], "Reports tab sort tests", () => {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
         AssessmentQuestionnaire.deleteAllQuestionnaires();

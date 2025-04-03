@@ -48,7 +48,7 @@ const invalidSearchInput = `${data.getRandomNumber()}`;
 describe(["@tier3"], "Stakeholder groups filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
-
+        cy.visit("/");
         stakeholdersList = createMultipleStakeholders(2);
         stakeholderGroupsList = createMultipleStakeholderGroups(2, stakeholdersList);
     });
@@ -63,7 +63,6 @@ describe(["@tier3"], "Stakeholder groups filter validations", function () {
 
         const validSearchInput = stakeholderGroupsList[0].name.substring(0, 5);
         applySearchFilter(name, validSearchInput);
-
         exists(stakeholderGroupsList[0].name);
         if (stakeholderGroupsList[1].name.indexOf(validSearchInput) >= 0) {
             exists(stakeholdersList[1].name);
@@ -71,11 +70,8 @@ describe(["@tier3"], "Stakeholder groups filter validations", function () {
 
         clickByText(button, clearAllFilters);
         cy.get("@getStakeholderGroups");
-
         applySearchFilter(name, invalidSearchInput);
-
         cy.get("h2").contains("No stakeholder group available");
-
         clickByText(button, clearAllFilters);
         cy.get("@getStakeholderGroups");
     });
@@ -95,11 +91,8 @@ describe(["@tier3"], "Stakeholder groups filter validations", function () {
 
         clickByText(button, clearAllFilters);
         cy.get("@getStakeholderGroups");
-
         applySearchFilter(description, invalidSearchInput);
-
         cy.get("h2").contains("No stakeholder group available");
-
         clickByText(button, clearAllFilters);
         cy.get("@getStakeholderGroups");
     });
@@ -127,11 +120,8 @@ describe(["@tier3"], "Stakeholder groups filter validations", function () {
 
         clickByText(button, clearAllFilters);
         cy.get("@getStakeholderGroups");
-
         applySearchFilter(stakeholders, invalidSearchInput);
-
         cy.get("h2").contains("No stakeholder group available");
-
         clickByText(button, clearAllFilters);
         cy.get("@getStakeholderGroups");
     });
