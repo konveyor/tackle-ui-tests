@@ -59,7 +59,7 @@ describe(["@tier3"], "Bulk deletion of applications", () => {
         click(commonView.confirmButton);
     });
 
-    it("Bulk deletion of applications - Select all ", function () {
+    it("Bug MTA-4886: Bulk deletion of applications - Select all ", function () {
         navigate_to_application_inventory();
         cy.get(appSelectionButton).eq(0).click();
         cy.get("ul[role=menu] > li").contains("Select all").click();
