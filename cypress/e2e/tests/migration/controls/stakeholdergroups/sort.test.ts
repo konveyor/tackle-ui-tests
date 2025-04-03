@@ -35,44 +35,32 @@ var stakeholdersList: Array<Stakeholders> = [];
 describe(["@tier3"], "Stakeholder groups sort validations", function () {
     before("Login and Create Test Data", function () {
         login();
-
-        // Create multiple stakeholder groups and stakeholders
+        cy.visit("/");
         stakeholdersList = createMultipleStakeholders(3);
         stakeholdergroupsList = createMultipleStakeholderGroups(3, stakeholdersList);
     });
 
     beforeEach("Interceptors", function () {
-        // Interceptors
         cy.intercept("GET", "/hub/stakeholder-group*").as("getStakeholdergroups");
     });
 
     it("Name sort validations", function () {
-        // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
-
-        // get unsorted list when page loads
         const unsortedList = getTableColumnData(name);
 
         // Sort the stakeholder groups by name in ascending order
         clickOnSortButton(name, SortType.ascending);
-        cy.wait(2000);
-
-        // Verify that the stakeholder groups table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(name);
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholder groups by name in descending order
         clickOnSortButton(name, SortType.descending);
-        cy.wait(2000);
-
-        // Verify that the stakeholder groups table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(name);
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
     it("Member(s) sort validations", function () {
-        // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
 
@@ -81,17 +69,11 @@ describe(["@tier3"], "Stakeholder groups sort validations", function () {
 
         // Sort the stakeholder groups by members in ascending order
         clickOnSortButton(memberCount, SortType.ascending);
-        cy.wait(2000);
-
-        // Verify that the stakeholder groups table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(memberCount);
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the stakeholder groups by members in descending order
         clickOnSortButton(memberCount, SortType.descending);
-        cy.wait(2000);
-
-        // Verify that the stakeholder groups table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(memberCount);
         verifySortDesc(afterDescSortList, unsortedList);
     });

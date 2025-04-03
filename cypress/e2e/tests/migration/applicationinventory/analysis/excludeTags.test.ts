@@ -31,10 +31,9 @@ let application: Analysis;
 
 describe.skip(["@tier2"], "Exclude Tags", () => {
     before("Login", function () {
-        // Perform login
         login();
+        cy.visit("/");
 
-        // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -75,7 +74,7 @@ describe.skip(["@tier2"], "Exclude Tags", () => {
         application.create();
         application.manageCredentials(source_credential.name);
         cy.wait("@getApplication");
-        cy.wait(2000);
+
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.openReport();

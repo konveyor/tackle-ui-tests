@@ -15,22 +15,15 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { exists, login, notExists, selectUserPerspective } from "../../../../../../utils/utils";
+import { exists, notExists } from "../../../../../../utils/utils";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 import { Tag } from "../../../../../models/migration/controls/tags";
 
 import * as data from "../../../../../../utils/data_utils";
-import { color, migration, rank, tagCount } from "../../../../../types/constants";
+import { color, rank, tagCount } from "../../../../../types/constants";
 
 describe(["@tier2"], "Tag tagCategory CRUD operations", () => {
-    before("Login", function () {
-        login();
-    });
-
     it("Tag Category CRUD", function () {
-        selectUserPerspective("Migration");
-
-        // Create new tag category
         const tagCategory = new TagCategory(
             data.getRandomWord(8),
             data.getColor(),
@@ -39,32 +32,19 @@ describe(["@tier2"], "Tag tagCategory CRUD operations", () => {
         tagCategory.create();
         exists(tagCategory.name);
 
-        // Edit the tag category name, rank and color
         let updatedTagType = data.getRandomWord(8);
         let updatedRank = data.getRandomNumber(10, 30);
         let updatedColor = data.getColor();
         tagCategory.edit({ name: updatedTagType, rank: updatedRank, color: updatedColor });
-        cy.wait(2000);
-
-        // Assert that tag category name got updated
         exists(updatedTagType);
 
-        // Assert that rank got updated
         tagCategory.assertColumnValue(rank, updatedRank.toString());
-
-        // Assert that color got updated
         tagCategory.assertColumnValue(color, updatedColor);
-
-        // Delete tag category
         tagCategory.delete();
-        cy.wait(2000);
         notExists(tagCategory.name);
     });
 
     it("Tag category CRUD with member (tags)", function () {
-        selectUserPerspective(migration);
-
-        // Create new tag category
         const tagCategory = new TagCategory(
             data.getRandomWord(8),
             data.getColor(),
@@ -74,8 +54,6 @@ describe(["@tier2"], "Tag tagCategory CRUD operations", () => {
         exists(tagCategory.name);
 
         let tagList: Array<Tag> = [];
-
-        // Create multiple tags within the tag category created above
         for (let i = 0; i < 2; i++) {
             const tag = new Tag(data.getRandomWord(6), tagCategory.name);
             tag.create();
@@ -91,7 +69,6 @@ describe(["@tier2"], "Tag tagCategory CRUD operations", () => {
         }
 
         tagCategory.delete();
-        cy.wait(2000);
         notExists(tagCategory.name);
     });
 });

@@ -20,10 +20,8 @@ import {
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
-    login,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { Application } from "../../../../models/migration/applicationinventory/application";
 import { TaskManager } from "../../../../models/migration/task-manager/task-manager";
 import {
     AnalysisStatuses,
@@ -40,9 +38,6 @@ let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 
 describe(["@tier1"], "Source Analysis without credentials", () => {
-    before("Login", function () {
-        login();
-    });
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
@@ -54,6 +49,7 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
+        cy.visit("/");
     });
 
     it(
@@ -70,7 +66,6 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
             application.create();
             applicationsList.push(application);
             cy.wait("@getApplication");
-            cy.wait(2000);
             application.analyze();
             checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
             application.verifyAnalysisStatus("Completed");
@@ -110,7 +105,6 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
         application.analyze();
         cy.get(tdTag, { log: false })
             .contains(application.name)
@@ -141,8 +135,6 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
     });
 
     after("Perform test data clean up", function () {
-        cy.wait(2000);
-        Application.open(true);
         deleteByList(applicationsList);
     });
 });

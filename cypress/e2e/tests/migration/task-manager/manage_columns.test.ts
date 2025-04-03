@@ -17,7 +17,6 @@ limitations under the License.
 
 import {
     clickByText,
-    login,
     openManageColumns,
     restoreColumnsToDefault,
     selectColumns,
@@ -36,10 +35,6 @@ describe(["@tier3"], "Task manager - table column management validation", functi
         TaskManagerTableHeaders.started,
         TaskManagerTableHeaders.terminated,
     ];
-
-    before("Login", function () {
-        login();
-    });
 
     it("Open task manager page - table default columns should be visible", function () {
         TaskManager.open();

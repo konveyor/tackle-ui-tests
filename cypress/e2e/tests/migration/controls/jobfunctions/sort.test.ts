@@ -32,33 +32,22 @@ let jobFunctionsList: Array<Jobfunctions> = [];
 describe(["@tier3"], "Job function sorting", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         jobFunctionsList = createMultipleJobFunctions(2);
     });
 
     beforeEach("Interceptors", function () {
-        // Interceptors
         cy.intercept("GET", "/hub/jobfunctions*").as("getJobfunctions");
     });
 
     it("Name sort validations", function () {
         Jobfunctions.openList();
-
-        // get unsorted list when page loads
         const unsortedList = getTableColumnData(name);
-
-        // Sort the Job functions by name in ascending order
         clickOnSortButton(name, SortType.ascending);
-        cy.wait(2000);
-
-        // Verify that the job function rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(name);
         verifySortAsc(afterAscSortList, unsortedList);
 
-        // Sort the job function by name in descending order
         clickOnSortButton(name, SortType.descending);
-        cy.wait(2000);
-
-        // Verify that the job function rows are displayed in descending order
         const afterDescSortList = getTableColumnData(name);
         verifySortDesc(afterDescSortList, unsortedList);
     });

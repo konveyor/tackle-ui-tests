@@ -30,6 +30,7 @@ let applicationsList: Array<Application> = [];
 describe(["@tier3"], "Manage application dependencies", () => {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         applicationsList = createMultipleApplications(3);
     });
 
@@ -62,7 +63,7 @@ describe(["@tier3"], "Manage application dependencies", () => {
         applicationsList[0].selectDependency(northdependenciesDropdownBtn, [
             applicationsList[2].name,
         ]);
-        cy.wait(500);
+
         cy.get(helper).should("contain.text", cyclicDependenciesErrorMsg);
         click(closeForm);
 
@@ -71,7 +72,7 @@ describe(["@tier3"], "Manage application dependencies", () => {
         applicationsList[2].selectDependency(southdependenciesDropdownBtn, [
             applicationsList[0].name,
         ]);
-        cy.wait(500);
+
         cy.get(helper).should("contain.text", cyclicDependenciesErrorMsg);
         click(closeForm);
     });

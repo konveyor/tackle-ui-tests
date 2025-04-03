@@ -48,17 +48,17 @@ jobs:
           echo "End point ready:" &&
           echo $external_ip;
           export endpoint=$(minikube ip);
-          echo "CYPRESS_tackleUrl=https://$endpoint" >>$GITHUB_ENV'
+          echo "CYPRESS_baseUrl=https://$endpoint" >>$GITHUB_ENV'
      
       - name: Checkout to branch
         uses: actions/checkout@v2
       - name: Install NPM
         run: npm install .
       - name: Run cypress login test
-        run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
+        run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="password" --config baseUrl=${{ env.CYPRESS_baseUrl }}
       - name: Run Tier0 test cases
         run: |
-          CYPRESS_INCLUDE_TAGS=@tier0 npx cypress run --spec **/*.test.ts --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
+          CYPRESS_INCLUDE_TAGS=@tier0 npx cypress run --spec **/*.test.ts --env user=admin,pass=Dog8code --config baseUrl=${{ env.CYPRESS_baseUrl }}
 
       - uses: actions/upload-artifact@v4
         if: failure()

@@ -17,7 +17,6 @@ limitations under the License.
 
 import * as data from "../../../../../utils/data_utils";
 import {
-    deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
@@ -42,6 +41,7 @@ let applicationsList: Array<Analysis> = [];
 describe(["@tier2"], "Source Analysis", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
 
         // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
@@ -82,7 +82,8 @@ describe(["@tier2"], "Source Analysis", () => {
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
-        Application.open(true);
+        cy.intercept("DELETE", "/hub/application*").as("deleteApplication");
+        cy.visit("/");
     });
 
     it(["@tier1"], "Source + dependencies analysis on tackletest app", function () {
@@ -97,7 +98,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -119,7 +119,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.verifyEffort(
@@ -142,7 +141,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(null, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -160,7 +158,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -185,7 +182,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(scCredsKey.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -203,7 +199,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -221,7 +216,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -259,12 +253,10 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_on_example-1-app"])
         );
-        cy.wait(2 * SEC);
         Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         Application.open();
@@ -284,7 +276,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -307,7 +298,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -327,7 +317,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         Application.open();
@@ -349,7 +338,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.manageCredentials(null, maven_credential.name);
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
@@ -362,11 +350,9 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["tackle-testapp-public-4-targets"])
         );
-        cy.wait(2 * SEC);
         Application.open();
         application.create();
         applicationsList.push(application);
-        cy.wait(5 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         Application.open();
@@ -424,8 +410,27 @@ describe(["@tier2"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
+    afterEach("Remove aplication", function () {
+        applicationsList.forEach((application) => {
+            cy.visit("/");
+            application.delete();
+            cy.wait("@deleteApplication");
+        });
+        applicationsList = [];
+    });
+
     after("Perform test data clean up", function () {
-        deleteByList(applicationsList);
+        login();
+        cy.visit("/");
+        if (source_credential) {
+            source_credential.delete();
+        }
+        if (maven_credential) {
+            maven_credential.delete();
+        }
+        if (source_credential_withHash) {
+            source_credential_withHash.delete();
+        }
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 });

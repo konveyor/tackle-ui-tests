@@ -15,19 +15,14 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { exists, login, notExists, selectUserPerspective } from "../../../../../utils/utils";
+import { exists, notExists } from "../../../../../utils/utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
 import * as data from "../../../../../utils/data_utils";
-import { migration } from "../../../../types/constants";
 import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 describe(["@tier0", "@interop"], "Business service CRUD operations", () => {
-    before("Login", function () {
-        login();
-    });
-
     beforeEach("Interceptors", function () {
         // Interceptors for business services
         cy.intercept("POST", "/hub/businessservices*").as("postBusinessService");
@@ -40,37 +35,24 @@ describe(["@tier0", "@interop"], "Business service CRUD operations", () => {
 
     it("Business service CRUD", function () {
         const businessService = new BusinessServices(data.getCompanyName(), data.getDescription());
-
-        selectUserPerspective(migration);
-
-        // Create new Business service
         businessService.create();
         cy.wait("@postBusinessService");
         exists(businessService.name);
 
-        // Edit Business service's name
         let updatedBusinessServiceName = data.getCompanyName();
         businessService.edit({ name: updatedBusinessServiceName });
         cy.wait("@getBusinessService");
         exists(updatedBusinessServiceName);
 
-        // Delete Business service
         businessService.delete();
         cy.wait("@getBusinessService");
-
-        // Assert that Business service is deleted
         notExists(businessService.name);
     });
 
     it("Business service CRUD with owner", function () {
-        selectUserPerspective(migration);
-
-        // Create owner - stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
         cy.wait("@postStakeholder");
-
-        // Create new Business service with owner attached
         const businessService = new BusinessServices(
             data.getCompanyName(),
             data.getDescription(),
@@ -80,24 +62,17 @@ describe(["@tier0", "@interop"], "Business service CRUD operations", () => {
         cy.wait("@postBusinessService");
         exists(businessService.name);
 
-        // Edit Business service's name
         let updatedBusinessServiceName = data.getCompanyName();
         businessService.edit({ name: updatedBusinessServiceName });
         cy.wait("@getBusinessService");
         exists(updatedBusinessServiceName);
 
-        // Delete Business service
         businessService.delete();
         cy.wait("@getBusinessService");
-
-        // Assert that Business service is deleted
         notExists(businessService.name);
 
-        // Delete stakeholder owner
         stakeholder.delete();
         cy.wait("@getStakeholders");
-
-        // Assert that stakeholder owner is deleted
         notExists(stakeholder.email, stakeHoldersTable);
     });
 });

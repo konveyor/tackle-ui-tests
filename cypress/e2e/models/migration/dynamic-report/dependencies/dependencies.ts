@@ -18,7 +18,7 @@ import { navMenu } from "../../../../views/menu.view";
 
 export class Dependencies {
     /** Contains URL of dependencies web page */
-    static fullUrl = Cypress.env("tackleUrl") + "/dependencies";
+    static fullUrl = Cypress.config("baseUrl") + "/dependencies";
 
     public static openList(itemsPerPage = 100, forceReload = false): void {
         if (forceReload) {

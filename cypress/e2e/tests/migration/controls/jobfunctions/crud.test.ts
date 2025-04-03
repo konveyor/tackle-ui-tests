@@ -16,39 +16,29 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import * as data from "../../../../../utils/data_utils";
-import { exists, login, notExists } from "../../../../../utils/utils";
+import { exists, notExists } from "../../../../../utils/utils";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 
 describe(["@tier2"], "Job Function CRUD operations", () => {
     const jobfunction = new Jobfunctions(data.getJobTitle());
 
-    before("Login", () => {
-        login();
-
-        // Interceptors
+    beforeEach("Interceptors", function () {
         cy.intercept("POST", "/hub/jobfunctions*").as("postJobfunction");
         cy.intercept("GET", "/hub/jobfunctions*").as("getJobfunctions");
     });
 
     it("Jobfunction CRUD", function () {
-        // Create new job function
         jobfunction.create();
         cy.wait("@postJobfunction");
         exists(jobfunction.name);
 
-        // Edit the current job function's name
         var updatedJobfuncName = data.getJobTitle();
         jobfunction.edit(updatedJobfuncName);
         cy.wait("@getJobfunctions");
-
-        // Assert that jobfunction name got edited
         exists(updatedJobfuncName);
 
-        // Delete job function
         jobfunction.delete();
         cy.wait("@getJobfunctions");
-
-        // Assert that job function is deleted
         notExists(jobfunction.name);
     });
 });

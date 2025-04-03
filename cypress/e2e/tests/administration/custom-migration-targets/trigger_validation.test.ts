@@ -37,6 +37,7 @@ describe(["@tier3"], "Custom Migration Targets rules trigger validation", () => 
 
     before("Login", function () {
         login();
+        cy.visit("/");
         deleteAllMigrationWaves();
         deleteApplicationTableRows();
     });
