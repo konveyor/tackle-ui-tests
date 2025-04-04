@@ -196,18 +196,13 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     });
 
     it("Validating pods after upgrade", function () {
-        // MTA 7.2 has a dependency on RHSSO. The dependency installation is handled by OLM.
-        // As of March, 2025, there's no mechanism to handle a dependency removal.
-        // In MTA 7.3, RHSSO has been replaced by RHBK. Although MTA 7.3 has no dependency
-        // on RHSSO, the rhsso-operator continues to run after a 7.2.x -> 7.3 upgrade
-        // because of the above reason.
+        // In MTA 7.3, RHSSO has been replaced by RHBK.
         const allowedPodsList = [
-            "mta-rhbk-0",
             "mta-hub",
             "mta-keycloak-postgresql",
             "mta-operator",
+            "mta-rhbk-0",
             "mta-ui",
-            "rhsso-operator",
             "rhbk-operator",
         ];
         getCommandOutput(`oc get pods -n${getNamespace()}`).then((result) => {
