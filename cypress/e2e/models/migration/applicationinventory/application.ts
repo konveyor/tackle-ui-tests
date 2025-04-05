@@ -67,6 +67,7 @@ import {
     artifact,
     branch,
     closeForm,
+    editButton,
     group,
     kebabMenu,
     northdependenciesDropdownBtn,
@@ -264,7 +265,7 @@ export class Application {
         if (updateAppInfo) {
             this.editApplicationFromApplicationProfile();
         } else {
-            performRowActionByIcon(this.name, "#actions");
+            performRowActionByIcon(this.name, editButton);
         }
 
         if (cancel) {
@@ -314,7 +315,7 @@ export class Application {
 
     removeBusinessService(): void {
         cy.wait(2000);
-        performRowActionByIcon(this.name, commonView.pencilIcon);
+        performRowActionByIcon(this.name, editButton);
         cy.get(applicationBusinessServiceSelect)
             .closest("div")
             .next("button")
