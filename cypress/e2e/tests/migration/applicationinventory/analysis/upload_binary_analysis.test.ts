@@ -44,7 +44,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         Application.open(true);
     });
 
-    it(["@interop", "@tier1"], "Analysis for acmeair app upload binary", function () {
+    it(["@interop", "@tier1"], "Bug MTA-4903: Analysis for acmeair app upload binary", function () {
         const application = new Analysis(
             getRandomApplicationData("acmeair_app"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
@@ -78,7 +78,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         );
     });
 
-    it("Analysis for spring-petclinic application", function () {
+    it("Bug MTA-4903: Analysis for spring-petclinic application", function () {
         const application = new Analysis(
             getRandomApplicationData("spring"),
             getRandomAnalysisData(this.analysisData["analysis_for_spring_petclinic_app"])
@@ -91,7 +91,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it("Analysis for jee-example-app upload binary ", function () {
+    it("Bug MTA-4903: Analysis for jee-example-app upload binary ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(
@@ -110,7 +110,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         );
     });
 
-    it("Analysis for camunda-bpm-spring-boot-starter", function () {
+    it("Bug MTA-4903: Analysis for camunda-bpm-spring-boot-starter", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_camunda_app"])
@@ -127,7 +127,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         );
     });
 
-    it("Analysis for kafka-clients-sb app ", function () {
+    it("Bug MTA-4903: Analysis for kafka-clients-sb app ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_kafka-app"])
@@ -144,7 +144,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         );
     });
 
-    it("upload_binary_with_exculde_packages_scope", function () {
+    it("Bug MTA-4903: upload_binary_with_exculde_packages_scope", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["upload_binary_with_exculde_packages"])
