@@ -1417,5 +1417,11 @@
         "target": [],
         "appName": "python-app-custom-rules",
         "customRule": ["python-rules.yaml"]
+    },
+    "source_analysis_on_pythonApp": {
+        "appName": "python-app",
+        "source": "Source code",
+        "target": [],
+        "customRule": ["python_app_rules.yaml"]
     }
 }
