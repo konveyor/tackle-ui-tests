@@ -73,15 +73,29 @@ describe(["@tier2"], "Test secure and insecure svn repository analysis", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it("Analysis on insecure SVN Repository(http) when not allowed", function () {
-        subversionConfiguration.disableInsecureSubversionRepositories();
+    it("Analysis on SVN Repository(http) when filenames have special characters", function () {
+        const application = new Analysis(
+            getRandomApplicationData("Insecure svn when filenames have special characters", {
+                sourceData: this.appData["bookserver-svn-branch"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        application.manageCredentials(sourceCredential.name, null);
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+    });
 
+    it("Analysis on insecure SVN Repository(http) when not allowed", function () {
         const application = new Analysis(
             getRandomApplicationData("Insecure svn disabled bookserver app", {
                 sourceData: this.appData["bookserver-svn-insecure"],
             }),
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
         );
+        subversionConfiguration.disableInsecureSubversionRepositories();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
