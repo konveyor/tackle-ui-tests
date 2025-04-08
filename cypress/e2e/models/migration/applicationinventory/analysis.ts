@@ -571,4 +571,17 @@ export class Analysis extends Application {
     cancelAnalysis(): void {
         clickItemInKebabMenu(this.name, "Cancel analysis");
     }
+
+    verifyMergedLogContain(): void {
+        this.openAnalysisDetails();
+        cy.get("span.pf-v5-c-menu-toggle__toggle-icon").eq(2).click();
+        cy.get(".pf-v5-c-menu__list").within(() => {
+            clickByText(button, "Merged log view");
+        });
+        cy.get(".pf-v5-c-code-editor__code")
+            .wait(2000)
+            .then(($editor) => {
+                expect($editor.text()).to.contain("lspServerName: generic'");
+            });
+    }
 }
