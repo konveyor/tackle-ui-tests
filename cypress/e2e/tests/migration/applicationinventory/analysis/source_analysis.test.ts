@@ -85,7 +85,7 @@ describe(["@tier2"], "Source Analysis", () => {
         Application.open(true);
     });
 
-    it(["@tier1"], "Bug MTA-2984: Source + dependencies analysis on tackletest app", function () {
+    it(["@tier1"], "Bug MTA-4943: Source + dependencies analysis on tackletest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies", {
@@ -106,7 +106,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
     });
 
-    it("Bug MTA-2984: Source + dependencies analysis on daytrader app", function () {
+    it("Bug MTA-4943: Source + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies", {
@@ -221,6 +221,7 @@ describe(["@tier2"], "Source Analysis", () => {
         application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        application.verifyEffort(this.analysisData["analysis_for_enableTagging"]["effort"]);
         application.applicationDetailsTab("Tags");
         application.tagAndCategoryExists(
             this.analysisData["analysis_for_enableTagging"]["techTags"]
