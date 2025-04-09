@@ -3,7 +3,7 @@ name: Global CI
 on: ["push", "pull_request"]
 
 jobs:
-  e2e:
+  e2e: 
     uses: konveyor/ci/.github/workflows/global-ci.yml@main
     with:
       run_api_tests: false
