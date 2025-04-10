@@ -34,6 +34,7 @@ let invalidSearchInput = String(data.getRandomNumber());
 describe(["@tier2"], "Job function filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         jobFunctionsList = createMultipleJobFunctions(2);
     });
 
@@ -52,10 +53,7 @@ describe(["@tier2"], "Job function filter validations", function () {
 
         // Enter a non-existing display name substring and apply it as search filter
         applySearchFilter(name, invalidSearchInput);
-
-        // Assert that no search results are found
         cy.get("h2").contains("No job function available");
-
         clickByText(button, clearAllFilters);
     });
 

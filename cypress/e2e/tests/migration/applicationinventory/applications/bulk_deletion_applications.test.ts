@@ -34,6 +34,7 @@ import * as commonView from "../../../../views/common.view";
 describe(["@tier3"], "Bulk deletion of applications", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
         Application.open(true);
         createMultipleApplications(1);
         cy.get("tr.pf-m-clickable").then(($rows) => {

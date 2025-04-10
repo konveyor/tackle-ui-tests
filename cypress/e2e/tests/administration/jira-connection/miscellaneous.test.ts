@@ -25,7 +25,7 @@ import {
 import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 import { Application } from "../../../models/migration/applicationinventory/application";
-import { button, CredentialType, JiraType, SEC } from "../../../types/constants";
+import { button, CredentialType, JiraType } from "../../../types/constants";
 import { JiraConnectionData } from "../../../types/types";
 
 describe(["@tier3"], "Bug MTA-2549: Jira connection negative tests", () => {
@@ -49,6 +49,7 @@ describe(["@tier3"], "Bug MTA-2549: Jira connection negative tests", () => {
 
     before("Login and create required credentials", function () {
         login();
+        cy.visit("/");
         jiraBasicCredential = new JiraCredentials(
             getJiraCredentialData(CredentialType.jiraBasic, useTestingAccount)
         );
@@ -106,7 +107,6 @@ describe(["@tier3"], "Bug MTA-2549: Jira connection negative tests", () => {
          */
         jiraCloudConnectionIncorrect.create();
         jiraCloudConnectionIncorrect.validateState(expectedToFail);
-        cy.wait(10 * SEC);
         clickByText(button, "Not connected");
         cy.get("#code-content").then(($code) => {
             expect($code.text()).to.contain(
@@ -124,7 +124,6 @@ describe(["@tier3"], "Bug MTA-2549: Jira connection negative tests", () => {
          */
         jiraStageConnectionIncorrect.create();
         jiraStageConnectionIncorrect.validateState(expectedToFail);
-        cy.wait(10 * SEC);
         clickByText(button, "Not connected");
         cy.get("#code-content").then(($code) => {
             expect($code.text()).to.contain(

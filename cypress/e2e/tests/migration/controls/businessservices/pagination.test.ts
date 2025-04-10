@@ -30,6 +30,7 @@ import { BusinessServices } from "../../../../models/migration/controls/business
 describe(["@tier3"], "Business services pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         createMultipleBusinessServices(11);
     });
 

@@ -53,6 +53,7 @@ describe(["@tier3"], "Architect Upload Binary Analysis", () => {
 
         // Perform login as admin user to be able to create all required instances
         login();
+        cy.visit("/");
     });
 
     it("Upload Binary Analysis", function () {
@@ -62,7 +63,6 @@ describe(["@tier3"], "Architect Upload Binary Analysis", () => {
         );
         application.create();
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         // Need to log out as admin and login as Architect to perform analysis
         logout();
         userArchitect.login();

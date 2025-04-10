@@ -26,7 +26,7 @@ import {
 } from "../../../../../../utils/utils";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
 import { Tag } from "../../../../../models/migration/controls/tags";
-import { name, SEC, tdTag } from "../../../../../types/constants";
+import { name, tdTag } from "../../../../../types/constants";
 
 describe(["@tier3"], "Tags filter validations", function () {
     const tagCategory = new TagCategory(data.getRandomWord(5), data.getColor());
@@ -34,20 +34,18 @@ describe(["@tier3"], "Tags filter validations", function () {
 
     before("Login", function () {
         login();
+        cy.visit("/");
         tagCategory.create();
         tag.create();
     });
 
     it("Name filter validations", function () {
-        // Navigate to Tags tab
         let validSearchInputTag = tag.name.substring(0, 3);
         let validSearchInputTagCategory = tagCategory.name.substring(0, 3);
         let filterType = name;
 
-        //Applying valid filter for tags and tag category
         Tag.openList();
         applySelectFilter("tags", filterType, validSearchInputTag);
-        // Assert that created tag exists
         expandRowDetails(tag.tagCategory);
         existsWithinRow(tag.tagCategory, tdTag, tag.name);
         closeRowDetails(tag.tagCategory);
@@ -64,7 +62,6 @@ describe(["@tier3"], "Tags filter validations", function () {
 
     after("Cleanup", function () {
         tag.delete();
-        cy.wait(2 * SEC);
         tagCategory.delete();
     });
 });

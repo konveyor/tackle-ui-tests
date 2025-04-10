@@ -39,6 +39,7 @@ require("cypress-log-filter");
 // The use of this library is limited to Chromium-based browsers
 // https://github.com/dmtrKovalenko/cypress-real-events
 import "cypress-real-events";
+import { login } from "../utils/utils";
 
 /** Hide XHR logs line */
 // TODO: Improve by implementing a configuration parameter
@@ -66,3 +67,9 @@ declare global {
         }
     }
 }
+
+beforeEach(() => {
+    login();
+    // Every test starts by visiting / which should redirect to baseURL/applications
+    cy.visit("/");
+});

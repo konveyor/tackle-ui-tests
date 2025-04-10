@@ -61,7 +61,7 @@ export class MigrationWave {
         this.applications = applications;
     }
 
-    public static fullUrl = Cypress.env("tackleUrl") + "/migration-waves";
+    public static fullUrl = Cypress.config("baseUrl") + "/migration-waves";
 
     public static open(forceReload = false) {
         if (forceReload) {

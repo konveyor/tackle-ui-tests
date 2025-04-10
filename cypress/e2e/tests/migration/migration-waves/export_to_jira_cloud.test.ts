@@ -60,7 +60,7 @@ describe(["@tier2"], "Export Migration Wave to Jira Cloud", function () {
             ).to.eq(false);
         }
         login();
-
+        cy.visit("/");
         jiraCloudCredentials = new JiraCredentials(
             data.getJiraCredentialData(CredentialType.jiraBasic, true)
         );
