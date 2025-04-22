@@ -21,7 +21,6 @@ import {
     deleteByList,
     getRandomApplicationData,
     login,
-    logout,
 } from "../../../utils/utils";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
@@ -53,7 +52,6 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
         application.create();
         application.perform_review("low");
         application.perform_assessment("low", stakeholders);
-        logout();
 
         User.loginKeycloakAdmin();
         userArchitect.create();
@@ -68,7 +66,7 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
         });
     });
 
-    it.only("Architect, validate create application button", function () {
+    it("Architect, validate create application button", function () {
         //Architect is allowed to create applications
         Application.validateCreateAppButton(this.rbacRules);
     });
@@ -79,7 +77,7 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
     });
 
     it("Architect, validate presence of analyse button", function () {
-        //Architect is allowed to analyse applications
+        //Architect is allowed to analyze applications
         Analysis.validateAnalyzeButton(this.rbacRules);
     });
 
@@ -92,13 +90,11 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
     });
 
     after("Clean up", function () {
-        userArchitect.logout();
         login();
         cy.visit("/");
         appCredentials.delete();
         deleteByList(stakeholders);
         application.delete();
-        logout();
         User.loginKeycloakAdmin();
         userArchitect.delete();
     });
