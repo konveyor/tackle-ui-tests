@@ -180,7 +180,6 @@ export class User {
     login(): void {
         login(this.username, this.password, this.firstLogin);
         cy.visit(Cypress.config("baseUrl"));
-        // cy.visit("/");
     }
 
     logout() {
