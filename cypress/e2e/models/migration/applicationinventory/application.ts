@@ -19,7 +19,6 @@ import {
     clickByText,
     clickItemInKebabMenu,
     clickTab,
-    clickWithin,
     doesExistButton,
     doesExistSelector,
     doesExistText,
@@ -85,6 +84,7 @@ import { assessmentColumnSelector, continueButton } from "../../../views/assessm
 import * as commonView from "../../../views/common.view";
 import { alertBody, alertTitle } from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
+import { kebabToogleButton } from "../../../views/rbac.view";
 import { reviewColumnSelector } from "../../../views/review.view";
 import { Archetype } from "../archetypes/archetype";
 import { Stakeholdergroups } from "../controls/stakeholdergroups";
@@ -456,7 +456,7 @@ export class Application {
             .contains(this.name)
             .closest(trTag)
             .within(() => {
-                clickWithin("#row-actions", button);
+                click(kebabToogleButton);
                 doesExistButton(assessAppButton, rbacRules["Application actions"]["Assess"]);
                 doesExistButton(reviewAppButton, rbacRules["Application actions"]["Review"]);
                 doesExistText(
