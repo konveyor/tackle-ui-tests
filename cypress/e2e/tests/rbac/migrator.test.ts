@@ -17,7 +17,7 @@ limitations under the License.
 
 import * as data from "../../../utils/data_utils";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
-import { deleteByList, getRandomApplicationData, login, logout } from "../../../utils/utils";
+import { deleteByList, getRandomApplicationData, login } from "../../../utils/utils";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { User } from "../../models/keycloak/users/user";
@@ -53,7 +53,6 @@ describe(["@tier3", "@rhsso"], "Migrator RBAC operations", () => {
         appCredentials.create();
         application.create();
         application.perform_review("low");
-        logout();
         //Logging in as keycloak admin to create migrator user and test it
         User.loginKeycloakAdmin();
         userMigrator.create();
@@ -92,13 +91,11 @@ describe(["@tier3", "@rhsso"], "Migrator RBAC operations", () => {
     });
 
     after("", () => {
-        userMigrator.logout();
         login();
         cy.visit("/");
         appCredentials.delete();
         deleteByList(stakeholdersList);
         application.delete();
-        logout();
         User.loginKeycloakAdmin();
         userMigrator.delete();
     });
