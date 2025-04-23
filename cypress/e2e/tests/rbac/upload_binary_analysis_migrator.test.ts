@@ -21,7 +21,6 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    logout,
 } from "../../../utils/utils";
 import { User } from "../../models/keycloak/users/user";
 import { UserMigrator } from "../../models/keycloak/users/userMigrator";
@@ -62,8 +61,6 @@ describe.skip(["@tier3"], "Migrator Upload Binary Analysis", () => {
 
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
-        // Need to log out as admin and login as Architect to perform analysis
-        logout();
         userMigrator.login();
 
         application.analyze();
@@ -79,8 +76,6 @@ describe.skip(["@tier3"], "Migrator Upload Binary Analysis", () => {
         application.create();
         applications.push(application);
         cy.wait("@getApplication");
-        // Need to log out as admin and login as Architect to perform analysis
-        logout();
         userMigrator.login();
 
         application.analyze();

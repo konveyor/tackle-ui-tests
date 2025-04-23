@@ -276,6 +276,7 @@ export class Assessment {
             `${entityName} - ${name}-10`,
         ];
 
+        cy.wait(2 * SEC);
         for (let i in list) {
             cy.get("dt")
                 .contains(list[i])
