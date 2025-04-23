@@ -36,8 +36,10 @@ describe(["@tier3"], "Task manager - table column management validation", functi
         TaskManagerTableHeaders.terminated,
     ];
 
-    it("Open task manager page - table default columns should be visible", function () {
+    beforeEach("Open Task Manager", function () {
         TaskManager.open();
+    });
+    it("Open task manager page - table default columns should be visible", function () {
         taskManagerDefaultColumns.forEach((column) => validateTextPresence(tableHead, column));
         columnsToSelect.forEach((column) => validateTextPresence(tableHead, column, false));
     });

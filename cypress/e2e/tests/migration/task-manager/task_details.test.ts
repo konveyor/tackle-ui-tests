@@ -56,20 +56,10 @@ describe(["@tier3"], "Task details validation", function () {
         TaskManager.openTaskDetailsByStatus(application.name, TaskKind.languageDiscovery);
     });
 
-    it("Open tech-discovery details by clicking on the status link", function () {
-        TaskManager.openTaskDetailsByStatus(application.name, TaskKind.techDiscovery);
-    });
-
-    it("Open task details from right kebab menu", function () {
+    it("Open task details and download task details", function () {
         TaskManager.openTaskDetailsByKebabMenu(application.name, TaskKind.languageDiscovery);
         TaskManager.openTaskDetailsByStatus(application.name, TaskKind.techDiscovery);
-    });
-
-    it("Download task details in yaml format", function () {
         downloadTaskDetails();
-    });
-
-    it("Download task details in json format", function () {
         downloadTaskDetails(downloadFormatDetails.json);
     });
 
