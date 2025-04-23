@@ -1229,7 +1229,9 @@ export function isTableEmpty(tableSelector: string = commonTable): Cypress.Chain
     return cy
         .get(tableSelector)
         .find("div")
+        .should("not.have.descendants", "svg.pf-v5-c-spinner")
         .then(($element) => {
+            console.log($element);
             return $element.hasClass("pf-v5-c-empty-state");
         });
 }

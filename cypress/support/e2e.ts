@@ -69,6 +69,11 @@ declare global {
 }
 
 beforeEach(() => {
+    // Disable for static report test as it need to open local files
+    if (Cypress.spec.name === "static_report.test.ts") {
+        return;
+    }
+
     login();
     // Every test starts by visiting / which should redirect to baseURL/applications
     cy.visit("/");
