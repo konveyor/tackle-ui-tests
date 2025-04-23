@@ -58,7 +58,7 @@ describe(["@tier3"], "Tests for archetype questionnaire features", () => {
         archetype.create();
     });
 
-    it("Test conditional questions during archetype assessment", function () {
+    it("Bug MTA-5010: Test conditional questions during archetype assessment", function () {
         //Automates Polarion MTA-386: Test conditional questions
         archetype.clickAssessButton();
         Assessment.take_questionnaire(cloudReadinessQuestionnaire);
