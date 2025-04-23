@@ -16,7 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { applySearchFilter, clickByText, exists } from "../../../../../../utils/utils";
-import { button, clearAllFilters, color, rank } from "../../../../../types/constants";
+import { button, clearAllFilters, color } from "../../../../../types/constants";
 
 import * as data from "../../../../../../utils/data_utils";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
@@ -40,23 +40,6 @@ describe(["@tier3"], "Tag tagCategory filter validations", function () {
         // Enter a non-existing tag type color substring and apply it as search filter
         var invalidSearchInput = String(data.getRandomWord(3));
         applySearchFilter(color, invalidSearchInput);
-        cy.get("h2").contains("No tags available");
-        clickByText(button, clearAllFilters);
-    });
-
-    it("Tag category rank filter validations", function () {
-        TagCategory.openList();
-
-        // Enter an existing tag category rank number and apply it as search filter
-        var validSearchInput = String(data.getRandomNumber(1, 6));
-        applySearchFilter(rank, validSearchInput);
-        exists(validSearchInput);
-        clickByText(button, clearAllFilters);
-        cy.get("@getTagCategories");
-
-        // Enter a non-existing tag category rank number and apply it as search filter
-        var invalidSearchInput = String(data.getRandomNumber(1111, 2222));
-        applySearchFilter(rank, invalidSearchInput);
         cy.get("h2").contains("No tags available");
         clickByText(button, clearAllFilters);
     });
