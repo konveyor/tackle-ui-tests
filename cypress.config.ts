@@ -22,10 +22,11 @@ export default defineConfig({
         jira_atlassian_cloud_project: "Test",
         jira_stage_datacenter_project_id: 12335626,
         rwx_enabled: true,
-        logLevel: "ASSERT",
+        logLevel: "VERBOSE",
         mtaVersion: "",
         FAIL_FAST_PLUGIN: true,
         FAIL_FAST_ENABLED: false,
+        keycloakAdminPassword: "CmG5T53udrK5SLXN",
     },
     retries: {
         runMode: 0,
@@ -50,7 +51,7 @@ export default defineConfig({
         specPattern: "cypress/e2e/**/*.test.{js,jsx,ts,tsx}",
         baseUrl:
             process.env.CYPRESS_baseUrl ||
-            "https://mta-openshift-mta.apps.mig09.rhos-psi.cnv-qe.rhood.us",
+            "https://tackle-konveyor-tackle.apps.mig09.rhos-psi.cnv-qe.rhood.us",
         setupNodeEvents(on, config) {
             require("./cypress/plugins/index.js")(on, config);
             on("file:preprocessor", tagify(config));
