@@ -71,11 +71,11 @@ describe(["@tier3"], "Reports tab sort tests", () => {
         application.create();
         application.perform_assessment("medium", [stakeholder], null, cloudReadinessQuestionnaire);
         application.verifyStatus("assessment", "Completed");
-        Reports.open(100);
     });
 
     sortableColumns.forEach((column: string) => {
         it(`${column} sort validations`, function () {
+            Reports.open(100);
             let columnDataLabel = column;
             if (column === (IdentifiedRiskTableHeaders.questionnaireName as string)) {
                 columnDataLabel = questionnaireNameColumnDataLabel;
@@ -86,6 +86,7 @@ describe(["@tier3"], "Reports tab sort tests", () => {
     });
 
     it("Risk sort validation", function () {
+        Reports.open(100);
         const unsorted = getRiskIconColumnSortableData();
         clickOnSortButton(IdentifiedRiskTableHeaders.risk, SortType.ascending);
         verifySortAsc(getRiskIconColumnSortableData(), unsorted);
