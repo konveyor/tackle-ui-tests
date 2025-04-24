@@ -117,7 +117,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
             stakeHolderGroupName,
         ]);
         const businessService = new BusinessServices(businessServiceName);
-        const tagType = new TagCategory(tagTypeName, data.getColor(), data.getRandomNumber(5, 15));
+        const tagType = new TagCategory(tagTypeName, data.getColor());
         const tag = new Tag(tagName, tagTypeName);
 
         jobFunction.create();
