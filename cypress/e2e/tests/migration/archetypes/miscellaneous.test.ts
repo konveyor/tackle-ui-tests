@@ -72,7 +72,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         );
         archetype.create();
         archetype.perform_assessment("high", stakeholderList, null, cloudReadinessQuestionnaire);
-        archetype.validateAssessmentField("High");
+        archetype.verifyStatus("assessment", "Completed");
         archetype.perform_review("high");
     });
 
@@ -91,7 +91,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         deleteByList(applications);
     });
 
-    it("Retake questionnaire for Archetype", function () {
+    it("Bug MTA-5010: Retake questionnaire for Archetype", function () {
         //Automates Polarion MTA-394
         Archetype.open(true);
         archetype.clickAssessButton();
