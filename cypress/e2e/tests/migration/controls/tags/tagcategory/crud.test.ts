@@ -20,36 +20,26 @@ import { TagCategory } from "../../../../../models/migration/controls/tagcategor
 import { Tag } from "../../../../../models/migration/controls/tags";
 
 import * as data from "../../../../../../utils/data_utils";
-import { color, rank, tagCount } from "../../../../../types/constants";
+import { color, tagCount } from "../../../../../types/constants";
 
 describe(["@tier2"], "Tag tagCategory CRUD operations", () => {
     it("Tag Category CRUD", function () {
-        const tagCategory = new TagCategory(
-            data.getRandomWord(8),
-            data.getColor(),
-            data.getRandomNumber(1, 30)
-        );
+        const tagCategory = new TagCategory(data.getRandomWord(8), data.getColor());
         tagCategory.create();
         exists(tagCategory.name);
 
         let updatedTagType = data.getRandomWord(8);
-        let updatedRank = data.getRandomNumber(10, 30);
         let updatedColor = data.getColor();
-        tagCategory.edit({ name: updatedTagType, rank: updatedRank, color: updatedColor });
+        tagCategory.edit({ name: updatedTagType, color: updatedColor });
         exists(updatedTagType);
 
-        tagCategory.assertColumnValue(rank, updatedRank.toString());
         tagCategory.assertColumnValue(color, updatedColor);
         tagCategory.delete();
         notExists(tagCategory.name);
     });
 
     it("Tag category CRUD with member (tags)", function () {
-        const tagCategory = new TagCategory(
-            data.getRandomWord(8),
-            data.getColor(),
-            data.getRandomNumber(1, 30)
-        );
+        const tagCategory = new TagCategory(data.getRandomWord(8), data.getColor());
         tagCategory.create();
         exists(tagCategory.name);
 

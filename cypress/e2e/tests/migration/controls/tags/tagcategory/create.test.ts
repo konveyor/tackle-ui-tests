@@ -27,8 +27,6 @@ import {
     createTagCategoryButton,
     dropdownMenuTypeToggle,
     nameInput,
-    positiveRankMsg,
-    rankInput,
     tagsHelper,
 } from "../../../../../views/tags.view";
 
@@ -46,15 +44,8 @@ describe(["@tier2"], "Tag category validations", () => {
         inputText(nameInput, data.getRandomWords(40));
         cy.get(tagsHelper).should("contain", max40CharMsg);
 
-        // Rank constraint
-        inputText(rankInput, data.getRandomNumber(-10, -20));
-        cy.get(tagsHelper).should("contain", positiveRankMsg);
-
-        cy.get(commonView.submitButton).should("be.disabled");
-
         // Validate the create button is enabled with valid inputs
         inputText(nameInput, data.getRandomWord(6));
-        inputText(rankInput, data.getRandomNumber(5, 15));
         click(dropdownMenuTypeToggle);
         clickByText(button, data.getColor());
         cy.get(commonView.submitButton).should("not.be.disabled");
@@ -74,11 +65,7 @@ describe(["@tier2"], "Tag category validations", () => {
     });
 
     it("Tag category success alert and unique constraint validation", function () {
-        const tagCategory = new TagCategory(
-            data.getRandomWord(5),
-            data.getColor(),
-            data.getRandomNumber(5, 15)
-        );
+        const tagCategory = new TagCategory(data.getRandomWord(5), data.getColor());
 
         tagCategory.create();
         checkSuccessAlert(

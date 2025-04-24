@@ -22,7 +22,7 @@ import {
     verifySortDesc,
 } from "../../../../../../utils/utils";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
-import { rank, SortType, tagCategory, tagCount } from "../../../../../types/constants";
+import { SortType, tagCategory, tagCount } from "../../../../../types/constants";
 
 describe(["@tier3"], "Tag category sort validations", function () {
     beforeEach("Interceptors", function () {
@@ -43,23 +43,6 @@ describe(["@tier3"], "Tag category sort validations", function () {
         // Sort the tag type by name in descending order
         clickOnSortButton(tagCategory, SortType.descending);
         const afterDescSortList = getTableColumnData(tagCategory);
-        verifySortDesc(afterDescSortList, unsortedList);
-    });
-
-    it("Rank sort validations", function () {
-        TagCategory.openList();
-        cy.get("@getTagCategories");
-
-        const unsortedList = getTableColumnData(rank);
-
-        // Sort the tag category by rank in ascending order
-        clickOnSortButton(rank, SortType.ascending);
-        const afterAscSortList = getTableColumnData(rank);
-        verifySortAsc(afterAscSortList, unsortedList);
-
-        // Sort the tag category by rank in descending order
-        clickOnSortButton(rank, SortType.descending);
-        const afterDescSortList = getTableColumnData(rank);
         verifySortDesc(afterDescSortList, unsortedList);
     });
 

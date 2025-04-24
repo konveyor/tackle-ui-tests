@@ -20,7 +20,6 @@ import {
     clickByText,
     clickItemInKebabMenu,
     confirm,
-    inputText,
     performRowActionByIcon,
     selectItemsPerPage,
     selectUserPerspective,
@@ -38,19 +37,17 @@ import {
 } from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
 import { navMenu, navTab } from "../../../views/menu.view";
-import { createTagCategoryButton, rankInput } from "../../../views/tags.view";
+import { createTagCategoryButton } from "../../../views/tags.view";
 import { clickTags, fillName } from "./tags";
 
 export class TagCategory {
     name: string;
-    rank: number;
     fieldId: "color";
     color: string;
 
-    constructor(name: string, color: string, rank?: number) {
+    constructor(name: string, color: string) {
         this.name = name;
         this.color = color;
-        if (rank) this.rank = rank;
     }
 
     static fullUrl = Cypress.config("baseUrl") + "/controls/tags";
@@ -73,10 +70,6 @@ export class TagCategory {
         clickByText(button, color);
     }
 
-    protected fillRank(rank: number): void {
-        inputText(rankInput, rank);
-    }
-
     assertColumnValue(columnName: string, columnVal: string) {
         cy.get(tdTag)
             .contains(this.name)
@@ -94,12 +87,11 @@ export class TagCategory {
         } else {
             fillName(this.name);
             this.selectColor(this.color);
-            if (this.rank) this.fillRank(this.rank);
             submitForm();
         }
     }
 
-    edit(updatedValue: { name?: string; rank?: number; color?: string }, cancel = false): void {
+    edit(updatedValue: { name?: string; color?: string }, cancel = false): void {
         TagCategory.openList();
         performRowActionByIcon(this.name, commonView.pencilIcon);
         if (cancel) {
@@ -108,10 +100,6 @@ export class TagCategory {
             if (updatedValue.name && updatedValue.name != this.name) {
                 fillName(updatedValue.name);
                 this.name = updatedValue.name;
-            }
-            if (updatedValue.rank && updatedValue.rank != this.rank) {
-                this.fillRank(updatedValue.rank);
-                this.rank = updatedValue.rank;
             }
             if (updatedValue.color && updatedValue.color != this.color) {
                 this.selectColor(updatedValue.color);

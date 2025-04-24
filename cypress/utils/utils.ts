@@ -1015,11 +1015,7 @@ export function createMultipleTags(numberoftags: number): Array<Tag> {
     let tagList: Array<Tag> = [];
     for (let i = 0; i < numberoftags; i++) {
         //Create Tag category
-        const tagCategory = new TagCategory(
-            data.getRandomWord(8),
-            data.getColor(),
-            data.getRandomNumber()
-        );
+        const tagCategory = new TagCategory(data.getRandomWord(8), data.getColor());
         tagCategory.create();
 
         // Create new tag
