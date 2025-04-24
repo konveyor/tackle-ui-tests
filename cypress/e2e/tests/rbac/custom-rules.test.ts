@@ -51,7 +51,6 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         User.loginKeycloakAdmin();
         architect.create();
         migrator.create();
-
         login();
         cy.visit("/");
         sourceCredential = new CredentialsSourceControlUsername(
@@ -135,10 +134,12 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
     });
 
     it("Architect, Rules from private repository with credentials", function () {
+        architect.login();
         analyzeAndVerify(analysisWithPrivateRules, AnalysisStatuses.completed);
     });
 
     it("Architect, Rules from private repository without credentials", function () {
+        architect.login();
         analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
         architect.logout();
     });
@@ -149,10 +150,12 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
     });
 
     it("Migrator, Rules from private repository with credentials", function () {
+        migrator.login();
         analyzeAndVerify(analysisWithPrivateRules, AnalysisStatuses.completed);
     });
 
     it("Migrator, Rules from private repository without credentials", function () {
+        migrator.login();
         analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
         migrator.logout();
     });
