@@ -44,7 +44,7 @@ import { AnalysisStatuses, issueFilter, tdTag, trTag } from "../../../../types/c
 import { AppIssue } from "../../../../types/types";
 import { rightSideBar } from "../../../../views/issue.view";
 
-describe.skip(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
+describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
     const applicationsList: Analysis[] = [];
     let businessServiceList: BusinessServices[];
     let archetype: Archetype;
