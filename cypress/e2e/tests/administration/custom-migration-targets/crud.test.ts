@@ -21,8 +21,11 @@ import {
     click,
     clickByText,
     closeSuccessAlert,
+    deleteAllMigrationWaves,
+    deleteApplicationTableRows,
     getRandomAnalysisData,
     getRandomApplicationData,
+    login,
     next,
     selectItemsPerPage,
 } from "../../../../utils/utils";
@@ -45,8 +48,15 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
     let analysisFixture: string;
     let languageLower: string;
 
+    before(() => {
+        login();
+        cy.visit("/");
+        deleteAllMigrationWaves();
+        deleteApplicationTableRows();
+    });
+
     Object.values(Languages).forEach((language) => {
-        describe(`${language} language`, function () {
+        describe(`Custom Migration Targets CRUD | ${language} language`, function () {
             // Automates Polarion TC 300 & 305
 
             beforeEach("Fixtures and Interceptors", function () {
@@ -117,10 +127,9 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                 cy.wait("@deleteRule");
                 cy.get(CustomMigrationTargetView.cardContainer).then((container) => {
                     if (container.children().length > 1) {
-                        cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
-                            "not.contain",
-                            target.name
-                        );
+                        cy.contains(CustomMigrationTargetView.card, target.name, {
+                            timeout: 5 * SEC,
+                        }).should("not.exist");
                     }
                 });
             });
