@@ -17,12 +17,7 @@ limitations under the License.
 
 import * as data from "../../../utils/data_utils";
 import { getRulesData } from "../../../utils/data_utils";
-import {
-    getRandomAnalysisData,
-    getRandomApplicationData,
-    login,
-    logout,
-} from "../../../utils/utils";
+import { getRandomAnalysisData, getRandomApplicationData, login } from "../../../utils/utils";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { User } from "../../models/keycloak/users/user";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
@@ -51,6 +46,7 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         User.loginKeycloakAdmin();
         architect.create();
         migrator.create();
+
         login();
         cy.visit("/");
         sourceCredential = new CredentialsSourceControlUsername(
@@ -125,7 +121,6 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
 
         analysisWithPrivateRulesNoCred.create();
         analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
-        logout();
     });
 
     it("Architect, Rules from public repository", function () {
