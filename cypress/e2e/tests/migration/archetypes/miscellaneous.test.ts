@@ -151,7 +151,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         // Automates Polarion MTA-439 Delete assessment through Assessment Actions page
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
         archetype.perform_assessment("high", stakeholderList, null, cloudReadinessQuestionnaire);
-        archetype.verifyStatus("assessment", "completed");
+        archetype.verifyStatus("assessment", "Completed");
         Archetype.open(true);
         archetype.deleteAssessments();
         archetype.verifyButtonEnabled("Take");
