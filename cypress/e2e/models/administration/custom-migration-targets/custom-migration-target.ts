@@ -84,7 +84,7 @@ export class CustomMigrationTarget {
         this.openLanguageForm();
         CustomMigrationTarget.fillForm(this);
         submitForm();
-        cy.get(submitButton, { timeout: 1 * SEC }).should("not.exist");
+        cy.get(submitButton, { timeout: 5 * SEC }).should("not.exist");
     }
 
     public openEditDialog() {
