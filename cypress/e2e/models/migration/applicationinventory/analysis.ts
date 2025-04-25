@@ -429,8 +429,11 @@ export class Analysis extends Application {
     downloadReport(type: ReportTypeSelectors) {
         Application.open();
         sidedrawerTab(this.name, "Reports");
+        // The button has an aria-disabled atrr but not the disabled attr itself so verifying if its enabled won't work
+        cy.get(type)
+            .should("not.have.attr", "aria-disabled", true)
+            .and("not.have.class", "pf-m-aria-disabled");
         click(type);
-        // waits until the file is downloaded
         const extension = type === ReportTypeSelectors.YAML ? "yaml" : "tar";
         cy.verifyDownload(`analysis-report-app-${this.name}.${extension}`, { timeout: 30 * SEC });
         this.closeApplicationDetails();
