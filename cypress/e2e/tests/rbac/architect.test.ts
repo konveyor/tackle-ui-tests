@@ -58,9 +58,6 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
     });
 
     beforeEach("Persist session", function () {
-        // login as architect
-        userArchitect.login();
-        cy.visit("/");
         cy.fixture("rbac").then(function (rbacRules) {
             this.rbacRules = rbacRules["architect"];
         });
@@ -68,24 +65,29 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
 
     it("Architect, validate create application button", function () {
         //Architect is allowed to create applications
+        userArchitect.login();
         Application.validateCreateAppButton(this.rbacRules);
     });
 
     it("Architect, validate content of top kebab menu", function () {
         //Architect is allowed to import applications
+        userArchitect.login();
         Analysis.validateTopActionMenu(this.rbacRules);
     });
 
     it("Architect, validate presence of analyse button", function () {
         //Architect is allowed to analyze applications
+        userArchitect.login();
         Analysis.validateAnalyzeButton(this.rbacRules);
     });
 
     it("Architect, validate content of application kebab menu", function () {
+        userArchitect.login();
         application.validateAppContextMenu(this.rbacRules);
     });
 
     it("Architect, validate availability of binary upload functionality", function () {
+        userArchitect.login();
         application.validateUploadBinary(this.rbacRules);
     });
 

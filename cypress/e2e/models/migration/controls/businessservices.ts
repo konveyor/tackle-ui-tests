@@ -146,6 +146,7 @@ export class BusinessServices {
                 this.selectOwner(this.owner);
             }
             submitForm();
+            cy.wait(2 * SEC);
         }
     }
 
