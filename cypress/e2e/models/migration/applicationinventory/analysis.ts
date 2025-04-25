@@ -19,6 +19,7 @@ import {
     clickByText,
     clickItemInKebabMenu,
     clickWithin,
+    clickWithinByText,
     doesExistSelector,
     doesExistText,
     inputText,
@@ -167,20 +168,23 @@ export class Analysis extends Application {
      * Make sure our language is selected. It may already be selected if language-discovery
      * added it, or if it was added manually.
      * @param language
-     * @param removePreSelected boolean if true, it will **try** to remove the preselected filters if any
+     * @param removePreSelected boolean if true, it will remove the preselected filters
      */
     public static selectLanguage(language: Languages, removePreSelected = false) {
         cy.wait(2 * SEC);
         if (removePreSelected) {
-            cy.get(".pf-v5-c-wizard__main-body")
-                .eq(0)
-                .within(() => {
-                    cy.contains(button, clearAllFilters).should(($btn) => {
-                        if ($btn && $btn.length) {
-                            $btn.trigger("click");
-                        }
-                    });
-                });
+            cy.get(languageSelectionDropdown).click();
+            /**
+             * There may not be any pre-selected filters so
+             * the only deterministic way to eliminate pre-selected filters is to make sure there is one
+             */
+            cy.get(`#filter-control-provider-select-typeahead-listbox > li`)
+                .contains("Java")
+                .closest(".pf-v5-c-menu__list-item")
+                .find("input[type=checkbox]")
+                .check();
+            cy.get(languageSelectionDropdown).click();
+            clickWithinByText(".pf-v5-c-wizard__main-body", "button", clearAllFilters);
         }
 
         cy.get(languageSelectionDropdown).click();
