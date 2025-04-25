@@ -25,13 +25,11 @@ import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 describe(["@tier3"], "Business service linked to stakeholder", () => {
     beforeEach("Login", function () {
-        // Interceptors for business services
-        cy.intercept("POST", "/hub/business-service*").as("postBusinessService");
-        cy.intercept("GET", "/hub/business-service*").as("getBusinessService");
+        cy.intercept("POST", "/hub/businessservices*").as("postBusinessService");
+        cy.intercept("GET", "/hub/businessservices*").as("getBusinessServices");
 
-        // Interceptors for stakeholders
-        cy.intercept("POST", "/hub/stakeholder*").as("postStakeholder");
-        cy.intercept("GET", "/hub/stakeholder*").as("getStakeholders");
+        cy.intercept("POST", "/hub/stakeholders*").as("postStakeholder");
+        cy.intercept("GET", "/hub/stakeholders*").as("getStakeholders");
     });
 
     it("Stakeholder attach, update and delete dependency on business service", function () {
@@ -39,28 +37,30 @@ describe(["@tier3"], "Business service linked to stakeholder", () => {
         stakeholder.create();
         cy.wait("@postStakeholder");
 
-        const businessservice = new BusinessServices(
+        const businessService = new BusinessServices(
             data.getCompanyName(),
             data.getDescription(),
             stakeholder.name
         );
-        businessservice.create();
-        cy.get("@postBusinessService");
-        exists(businessservice.name);
+        businessService.create();
+        cy.wait("@postBusinessService");
+        exists(businessService.name);
 
         selectItemsPerPage(100);
         cy.get(tdTag)
-            .contains(businessservice.name)
+            .contains(businessService.name)
             .get("td[data-label='Owner']")
             .should("contain", stakeholder.name);
 
-        var updatedStakeholderName = data.getFullName();
+        const updatedStakeholderName = data.getFullName();
         stakeholder.edit({ name: updatedStakeholderName });
         cy.wait("@getStakeholders");
+
         clickByText(navTab, businessServices);
         selectItemsPerPage(100);
+        cy.wait("@getBusinessServices");
         cy.get(tdTag)
-            .contains(businessservice.name)
+            .contains(businessService.name)
             .get("td[data-label='Owner']")
             .should("contain", updatedStakeholderName);
         stakeholder.delete();
@@ -70,11 +70,11 @@ describe(["@tier3"], "Business service linked to stakeholder", () => {
         clickByText(navTab, businessServices);
         selectItemsPerPage(100);
         cy.get(tdTag)
-            .contains(businessservice.name)
+            .contains(businessService.name)
             .get("td[data-label='Owner']")
             .should("not.contain", updatedStakeholderName);
-        businessservice.delete();
-        cy.get("@getBusinessService");
-        notExists(businessservice.name);
+        businessService.delete();
+        cy.wait("@getBusinessServices");
+        notExists(businessService.name);
     });
 });
