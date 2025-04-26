@@ -42,19 +42,18 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
     );
 
     before("Creating RBAC users, adding roles for them", function () {
+        User.loginKeycloakAdmin();
+        userArchitect.create();
+
         login();
         cy.visit("/");
         AssessmentQuestionnaire.enable(legacyPathfinder);
-        // Navigate to stakeholders control tab and create new stakeholder
         stakeholders = createMultipleStakeholders(1);
 
         appCredentials.create();
         application.create();
         application.perform_review("low");
         application.perform_assessment("low", stakeholders);
-
-        User.loginKeycloakAdmin();
-        userArchitect.create();
     });
 
     beforeEach("Persist session", function () {
@@ -63,31 +62,12 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
         });
     });
 
-    it("Architect, validate create application button", function () {
-        //Architect is allowed to create applications
+    it("Architect, validate buttons", function () {
         userArchitect.login();
         Application.validateCreateAppButton(this.rbacRules);
-    });
-
-    it("Architect, validate content of top kebab menu", function () {
-        //Architect is allowed to import applications
-        userArchitect.login();
         Analysis.validateTopActionMenu(this.rbacRules);
-    });
-
-    it("Architect, validate presence of analyse button", function () {
-        //Architect is allowed to analyze applications
-        userArchitect.login();
         Analysis.validateAnalyzeButton(this.rbacRules);
-    });
-
-    it("Architect, validate content of application kebab menu", function () {
-        userArchitect.login();
         application.validateAppContextMenu(this.rbacRules);
-    });
-
-    it("Architect, validate availability of binary upload functionality", function () {
-        userArchitect.login();
         application.validateUploadBinary(this.rbacRules);
     });
 
