@@ -42,8 +42,6 @@ describe(["@tier2"], "Application crud operations", () => {
         // Delete application
         application.delete();
         cy.wait("@getApplication");
-
-        // Assert that newly created application is deleted
         notExists(application.name);
     });
 });
