@@ -32,7 +32,7 @@ describe(["@tier3"], "Business service linked to stakeholder", () => {
         cy.intercept("GET", "/hub/stakeholders*").as("getStakeholders");
     });
 
-    it("Stakeholder attach, update and delete dependency on business service", function () {
+    it("Bug MTA-5091: Stakeholder attach, update and delete dependency on business service", function () {
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
         cy.wait("@postStakeholder");
