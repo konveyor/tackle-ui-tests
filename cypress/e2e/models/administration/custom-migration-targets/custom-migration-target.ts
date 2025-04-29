@@ -76,14 +76,8 @@ export class CustomMigrationTarget {
         clickByText(button, createNewButton);
     }
 
-    public openLanguageForm() {
-        CustomMigrationTarget.open();
-        CustomMigrationTarget.selectLanguage(this.language);
-        clickByText(button, createNewButton);
-    }
-
     public create() {
-        this.openLanguageForm();
+        CustomMigrationTarget.openNewForm();
         CustomMigrationTarget.fillForm(this);
         submitForm();
         cy.get(submitButton, { timeout: 1 * SEC }).should("not.exist");
