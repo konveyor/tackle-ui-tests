@@ -26,13 +26,12 @@ import { SortType, tagCategory, tagCount } from "../../../../../types/constants"
 
 describe(["@tier3"], "Tag category sort validations", function () {
     beforeEach("Interceptors", function () {
-        cy.intercept("GET", "/hub/tag-category*").as("getTagCategories");
+        cy.intercept("GET", "/hub/tagcategories*").as("getTagCategories");
     });
 
     it("Tag category name sort validations", function () {
         TagCategory.openList();
-        cy.get("@getTagCategories");
-
+        cy.wait("@getTagCategories");
         const unsortedList = getTableColumnData(tagCategory);
 
         // Sort the tag type by name in ascending order
@@ -48,7 +47,7 @@ describe(["@tier3"], "Tag category sort validations", function () {
 
     it("Tag count sort validations", function () {
         TagCategory.openList();
-        cy.get("@getTagCategories");
+        cy.wait("@getTagCategories");
 
         const unsortedList = getTableColumnData(tagCount);
 

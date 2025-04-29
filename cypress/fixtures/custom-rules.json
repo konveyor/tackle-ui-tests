@@ -41,7 +41,7 @@
         "sources": ["traditional-corporate-framework"],
         "targets": ["cloud-corporate-framework"]
     },
-    "go_manual_rules": {
+    "golang_manual_rules": {
         "image": "img/cloud.png",
         "rulesFiles": ["yaml/golang-dep-rules.yaml"]
     }
