@@ -77,6 +77,7 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                 cy.intercept("DELETE", "/hub/targets*/*").as("deleteRule");
 
                 CustomMigrationTarget.open(true);
+                cy.wait("@getRule", { timeout: 30 * SEC });
             });
 
             it("Custom Migration Targets CRUD with rules uploaded manually", function () {
@@ -115,6 +116,7 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
 
                 target.delete();
                 cy.wait("@deleteRule");
+                cy.wait("@getRule");
                 cy.get(CustomMigrationTargetView.cardContainer).then((container) => {
                     if (container.children().length > 1) {
                         cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
@@ -166,6 +168,8 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                 click(cancelButton);
 
                 target.delete();
+                cy.wait("@deleteRule");
+                cy.wait("@getRule");
                 sourceCredential.delete();
             });
 
@@ -179,6 +183,7 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                     language
                 );
                 target.create();
+                cy.wait("@getRule");
 
                 const target1 = new CustomMigrationTarget(
                     data.getRandomWord(8),
@@ -231,6 +236,8 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                 if (language == Languages.Go) {
                     target1.delete();
                 }
+                cy.wait("@deleteRule");
+                cy.wait("@getRule");
                 application.delete();
             });
 
@@ -279,6 +286,8 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                 clickByText(button, "Cancel");
 
                 target.delete();
+                cy.wait("@deleteRule");
+                cy.wait("@getRule");
                 application.delete();
             });
         });
