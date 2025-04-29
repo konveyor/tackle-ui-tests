@@ -2,6 +2,7 @@ import {
     click,
     clickByText,
     clickJs,
+    clickWithinByText,
     inputText,
     selectUserPerspective,
     submitForm,
@@ -9,6 +10,7 @@ import {
 } from "../../../../utils/utils";
 import {
     button,
+    clearAllFilters,
     createNewButton,
     customMigrationTargets,
     CustomRuleType,
@@ -74,14 +76,8 @@ export class CustomMigrationTarget {
         clickByText(button, createNewButton);
     }
 
-    public openLanguageForm() {
-        CustomMigrationTarget.open();
-        CustomMigrationTarget.selectLanguage(this.language);
-        clickByText(button, createNewButton);
-    }
-
     public create() {
-        this.openLanguageForm();
+        CustomMigrationTarget.openNewForm();
         CustomMigrationTarget.fillForm(this);
         submitForm();
         cy.get(submitButton, { timeout: 5 * SEC }).should("not.exist");
@@ -100,7 +96,6 @@ export class CustomMigrationTarget {
     }
 
     public delete() {
-        CustomMigrationTarget.selectLanguage(this.language);
         this.expandActionsMenu();
         cy.contains(button, deleteAction).click();
     }
@@ -121,6 +116,15 @@ export class CustomMigrationTarget {
     private static fillForm(values: Partial<CustomMigrationTarget>) {
         if (values.name) {
             CustomMigrationTarget.fillName(values.name);
+        }
+
+        if (values.language) {
+            click(CustomMigrationTargetView.formLanguageDropdown);
+            clickWithinByText(
+                CustomMigrationTargetView.formLanguageDropdownOptions,
+                "li",
+                values.language
+            );
         }
 
         if (values.description) {
@@ -145,8 +149,28 @@ export class CustomMigrationTarget {
 
     public static selectLanguage(language: Languages) {
         CustomMigrationTarget.open();
-        cy.get(CustomMigrationTargetView.languageDropdown, { timeout: 30 * SEC }).click();
-        clickByText("span", language);
+        cy.get(CustomMigrationTargetView.filterLanguageDropdown).click();
+        /**
+         * There may be a pre-selected filter so
+         * the only deterministic way to eliminate pre-selected filters is to make sure there is one
+         */
+        cy.get(`#filter-control-provider-select-typeahead-listbox > li`)
+            .contains(Languages.Java)
+            .closest(".pf-v5-c-menu__list-item")
+            .find("input[type=checkbox]")
+            .check();
+        cy.get(CustomMigrationTargetView.filterLanguageDropdown).click();
+        clickByText("button", clearAllFilters);
+
+        cy.get(CustomMigrationTargetView.filterLanguageDropdown).click();
+
+        cy.get(`#filter-control-provider-select-typeahead-listbox > li`)
+            .contains(language)
+            .closest(".pf-v5-c-menu__list-item")
+            .find("input[type=checkbox]")
+            .check();
+
+        cy.get(CustomMigrationTargetView.filterLanguageDropdown).click();
     }
 
     public static uploadRules(rulePaths: string[]) {

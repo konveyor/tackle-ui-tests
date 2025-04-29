@@ -23,6 +23,8 @@ export enum CustomMigrationTargetView {
     dragButton = "#drag-button",
     card = ".pf-v5-c-card",
     cardContainer = "div.dnd-grid",
-    languageDropdown = "button[aria-label='Menu toggle']",
+    filterLanguageDropdown = "#filter-control-provider-Languages",
+    formLanguageDropdown = "#provider-type-select-toggle",
+    formLanguageDropdownOptions = "#provider-type-select",
     dragAndDropSection = ".dnd-grid",
 }
