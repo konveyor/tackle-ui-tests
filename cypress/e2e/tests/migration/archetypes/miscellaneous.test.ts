@@ -72,8 +72,9 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         );
         archetype.create();
         archetype.perform_assessment("high", stakeholderList, null, cloudReadinessQuestionnaire);
-        archetype.validateAssessmentField("High");
+        archetype.verifyStatus("assessment", "Completed");
         archetype.perform_review("high");
+        archetype.verifyStatus("review", "Completed");
     });
 
     it("Verify associated application count and link", function () {
@@ -91,7 +92,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         deleteByList(applications);
     });
 
-    it("Retake questionnaire for Archetype", function () {
+    it("Bug MTA-5010: Retake questionnaire for Archetype", function () {
         //Automates Polarion MTA-394
         Archetype.open(true);
         archetype.clickAssessButton();
@@ -150,6 +151,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         // Automates Polarion MTA-439 Delete assessment through Assessment Actions page
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
         archetype.perform_assessment("high", stakeholderList, null, cloudReadinessQuestionnaire);
+        archetype.verifyStatus("assessment", "Completed");
         Archetype.open(true);
         archetype.deleteAssessments();
         archetype.verifyButtonEnabled("Take");

@@ -78,7 +78,7 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
     });
 });
 
-describe(["@tier2"], "Test Static Report UI", function () {
+describe(["@tier2"], "Test Static Report UI", { baseUrl: null }, function () {
     const reportData = {
         name: "Adopt Maven Surefire plugin",
         category: "mandatory",

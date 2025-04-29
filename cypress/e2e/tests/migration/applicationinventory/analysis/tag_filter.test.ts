@@ -53,11 +53,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
         );
         source_credential.create();
 
-        tagCategory = new TagCategory(
-            data.getRandomWord(8),
-            data.getColor(),
-            data.getRandomNumber(1, 30)
-        );
+        tagCategory = new TagCategory(data.getRandomWord(8), data.getColor());
         tagCategory.create();
 
         tag = new Tag(data.getRandomWord(6), tagCategory.name);

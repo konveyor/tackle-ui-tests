@@ -17,12 +17,7 @@ limitations under the License.
 
 import * as data from "../../../utils/data_utils";
 import { getRulesData } from "../../../utils/data_utils";
-import {
-    getRandomAnalysisData,
-    getRandomApplicationData,
-    login,
-    logout,
-} from "../../../utils/utils";
+import { getRandomAnalysisData, getRandomApplicationData, login } from "../../../utils/utils";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { User } from "../../models/keycloak/users/user";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
@@ -126,7 +121,6 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
 
         analysisWithPrivateRulesNoCred.create();
         analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
-        logout();
     });
 
     it("Architect, Rules from public repository", function () {
@@ -135,10 +129,12 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
     });
 
     it("Architect, Rules from private repository with credentials", function () {
+        architect.login();
         analyzeAndVerify(analysisWithPrivateRules, AnalysisStatuses.completed);
     });
 
     it("Architect, Rules from private repository without credentials", function () {
+        architect.login();
         analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
         architect.logout();
     });
@@ -149,10 +145,12 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
     });
 
     it("Migrator, Rules from private repository with credentials", function () {
+        migrator.login();
         analyzeAndVerify(analysisWithPrivateRules, AnalysisStatuses.completed);
     });
 
     it("Migrator, Rules from private repository without credentials", function () {
+        migrator.login();
         analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
         migrator.logout();
     });
