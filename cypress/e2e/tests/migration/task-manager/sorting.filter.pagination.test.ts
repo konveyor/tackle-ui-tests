@@ -139,14 +139,14 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
     });
 
     it("Sorting tasks", function () {
-        TaskManager.open();
+        TaskManager.open(100);
         sortByList.forEach((column) => {
             validateSortBy(column);
         });
     });
 
     it("Pagination validation", function () {
-        TaskManager.open();
+        TaskManager.open(10, true);
         validatePagination();
     });
 
