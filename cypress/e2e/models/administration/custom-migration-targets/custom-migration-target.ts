@@ -146,7 +146,7 @@ export class CustomMigrationTarget {
     public static selectLanguage(language: Languages) {
         CustomMigrationTarget.open();
         cy.get(CustomMigrationTargetView.languageDropdown, { timeout: 30 * SEC }).click();
-        clickByText("button", language);
+        clickByText("span", language);
     }
 
     public static uploadRules(rulePaths: string[]) {
