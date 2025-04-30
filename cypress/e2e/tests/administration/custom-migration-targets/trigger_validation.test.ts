@@ -43,6 +43,7 @@ describe(["@tier3"], "Custom Migration Targets rules trigger validation", () => 
     });
 
     beforeEach("Fixtures and Interceptors", function () {
+        cy.intercept("GET", "/hub/targets*").as("getTargets");
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -68,6 +69,7 @@ describe(["@tier3"], "Custom Migration Targets rules trigger validation", () => 
             Languages.Java
         );
         target.create();
+        cy.wait("@getTargets");
 
         for (let i = 0; i < 2; i++) {
             const application = new Analysis(
@@ -98,7 +100,7 @@ describe(["@tier3"], "Custom Migration Targets rules trigger validation", () => 
     });
 
     after("Clear state", function () {
-        Application.open(true);
+        cy.visit("/");
         target.delete();
         applications.forEach((app) => app.delete());
     });
