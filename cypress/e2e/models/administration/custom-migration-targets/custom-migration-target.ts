@@ -58,15 +58,29 @@ export class CustomMigrationTarget {
 
     public static fullUrl = Cypress.config("baseUrl") + "/migration-targets";
 
+    /**
+     * Opens the custom migration target page if not already there
+     * This method checks that the target cards are present before continuing,
+     * this assumes the page is always filtered by Java targets, looking for one of the defaults
+     * @param forceReload
+     */
     public static open(forceReload = false) {
         if (forceReload) {
             cy.visit(CustomMigrationTarget.fullUrl);
+            cy.get(CustomMigrationTargetView.card, { timeout: 30 * SEC }).should(
+                "contain",
+                "Containerization"
+            );
         }
 
         cy.url().then(($url) => {
             if ($url != CustomMigrationTarget.fullUrl) {
                 selectUserPerspective("Administration");
                 clickByText(navMenu, customMigrationTargets);
+                cy.get(CustomMigrationTargetView.card, { timeout: 30 * SEC }).should(
+                    "contain",
+                    "Containerization"
+                );
             }
         });
     }
