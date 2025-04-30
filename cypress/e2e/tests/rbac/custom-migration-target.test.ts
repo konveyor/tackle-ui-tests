@@ -145,6 +145,7 @@ describe(["tier3"], "Custom Migration Targets RBAC operations", function () {
 
     const analyzeAndVerify = (analysis: Analysis) => {
         analysis.analyze();
+        // .wait(20 * SEC);
         analysis.verifyAnalysisStatus(AnalysisStatuses.completed);
         analysis.openReport();
         resetURL();

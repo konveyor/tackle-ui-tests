@@ -410,17 +410,7 @@ export class Analysis extends Application {
             .and("not.have.text", AnalysisStatuses.inProgress)
             .then(($a) => {
                 const currentStatus = $a.text().toString() as AnalysisStatuses;
-                if (currentStatus != status) {
-                    // If analysis failed and is not expected then test fails.
-                    if (
-                        currentStatus == AnalysisStatuses.failed &&
-                        status != AnalysisStatuses.failed
-                    ) {
-                        expect(currentStatus).to.include(AnalysisStatuses.completed);
-                    }
-                } else {
-                    expect(currentStatus).to.include(status);
-                }
+                expect(currentStatus).to.equal(status);
             });
     }
 
