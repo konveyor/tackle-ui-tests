@@ -318,7 +318,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         deleteByList(archetypes);
     });
 
-    it("Validates auto tagging of applications and archetypes based on assessment answers", function () {
+    it("Bug MTA-5011: Validates auto tagging of applications and archetypes based on assessment answers", function () {
         //automates polarion MTA-387 and MTA-502
         const archetypeTag = ["3rd party", "Apache Aries"];
         const assessmentTag = ["Runtime", "Spring Boot"];

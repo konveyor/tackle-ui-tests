@@ -28,7 +28,7 @@ import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { AnalysisStatuses, SEC } from "../../types/constants";
 
-describe.skip(["@tier3"], "Migrator Upload Binary Analysis", () => {
+describe(["@tier3"], "Migrator Upload Binary Analysis", () => {
     const userMigrator = new UserMigrator(getRandomUserData());
     const applications: Analysis[] = [];
 

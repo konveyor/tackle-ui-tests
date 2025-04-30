@@ -23,16 +23,8 @@ import {
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { TaskManager } from "../../../../models/migration/task-manager/task-manager";
-import {
-    AnalysisStatuses,
-    SEC,
-    TaskKind,
-    TaskStatus,
-    tdTag,
-    trTag,
-} from "../../../../types/constants";
+import { AnalysisStatuses, SEC, TaskKind, TaskStatus } from "../../../../types/constants";
 import { AppIssue } from "../../../../types/types";
-import { analysisColumn } from "../../../../views/analysis.view";
 import { infoAlertMessage } from "../../../../views/common.view";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
@@ -106,17 +98,7 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
         applicationsList.push(application);
         cy.wait("@getApplication");
         application.analyze();
-        cy.get(tdTag, { log: false })
-            .contains(application.name)
-            .closest(trTag, { log: false })
-            .within(() => {
-                Analysis.verifyStatus(
-                    cy
-                        .get(analysisColumn, { log: false })
-                        .should("not.have.text", "Completed with Errors"),
-                    AnalysisStatuses.completed
-                );
-            });
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
     it("Cancel the analysis and check the status", function () {
