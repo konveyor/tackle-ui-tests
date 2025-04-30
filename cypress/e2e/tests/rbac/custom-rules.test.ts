@@ -123,34 +123,18 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
         analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
     });
 
-    it("Architect, Rules from public repository", function () {
+    it("Architect, Rules from public and private(with and without credentials) repository", function () {
         architect.login();
         analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
-    });
-
-    it("Architect, Rules from private repository with credentials", function () {
-        architect.login();
         analyzeAndVerify(analysisWithPrivateRules, AnalysisStatuses.completed);
-    });
-
-    it("Architect, Rules from private repository without credentials", function () {
-        architect.login();
         analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
         architect.logout();
     });
 
-    it("Migrator, Rules from public repository", function () {
+    it("Migrator, Rules from public and private(with and without credentials)repository", function () {
         migrator.login();
         analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
-    });
-
-    it("Migrator, Rules from private repository with credentials", function () {
-        migrator.login();
         analyzeAndVerify(analysisWithPrivateRules, AnalysisStatuses.completed);
-    });
-
-    it("Migrator, Rules from private repository without credentials", function () {
-        migrator.login();
         analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
         migrator.logout();
     });

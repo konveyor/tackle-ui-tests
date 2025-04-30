@@ -59,8 +59,8 @@ describe(["@tier2"], "Perform assessment and review as Architect", function () {
         });
     });
 
-    it("As Architect, perform application assessment and review", function () {
-        // Polarion TC 312
+    it("As Architect, perform application and archetype assessment and review", function () {
+        // Polarion TC 312 and Polarion MTA-522
         architect.login();
         cy.wait(10 * SEC);
         application[0].perform_assessment("medium", stakeholders);
@@ -70,11 +70,7 @@ describe(["@tier2"], "Perform assessment and review as Architect", function () {
         application[0].perform_review("medium");
         application[0].verifyStatus("review", "Completed");
         application[0].validateReviewFields();
-    });
 
-    it("As Architect, create archetype, perform archetype assessment and review", function () {
-        architect.login();
-        // Automates Polarion MTA-522
         const archetype = new Archetype(
             data.getRandomWord(8),
             [tags[0].name],
