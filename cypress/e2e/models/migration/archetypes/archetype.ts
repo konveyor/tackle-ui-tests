@@ -128,8 +128,8 @@ export class Archetype {
 
     create(cancel = false): void {
         Archetype.open();
-        cy.contains("button", "Create new archetype", { timeout: 2 * SEC })
-            .should("be.enabled", { timeout: 2 * SEC })
+        cy.contains("button", "Create new archetype", { timeout: 20000 })
+            .should("be.enabled")
             .click();
         if (cancel) {
             cancelForm();

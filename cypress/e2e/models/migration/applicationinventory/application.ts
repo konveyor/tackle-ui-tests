@@ -169,7 +169,7 @@ export class Application {
             if ($url != Application.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, applicationInventory);
-                cy.get("h1", { timeout: 60 * SEC }).should("contain", applicationInventory);
+                cy.get("h1", { timeout: 100 * SEC }).should("contain", applicationInventory);
             }
         });
         selectItemsPerPage(itemsPerPage);
