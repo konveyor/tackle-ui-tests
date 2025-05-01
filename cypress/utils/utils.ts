@@ -1385,7 +1385,9 @@ export function goToPage(page: number): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    cy.get(optionMenu).find("button").click();
+    cy.get(optionMenu)
+        .find("button", { timeout: 10 * SEC })
+        .click();
     cy.get(actionMenuItem).contains(userType).click({ force: true });
 }
 

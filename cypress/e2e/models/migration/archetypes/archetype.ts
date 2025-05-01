@@ -128,7 +128,9 @@ export class Archetype {
 
     create(cancel = false): void {
         Archetype.open();
-        cy.contains("button", "Create new archetype").should("be.enabled").click();
+        cy.contains("button", "Create new archetype", { timeout: 2 * SEC })
+            .should("be.enabled", { timeout: 2 * SEC })
+            .click();
         if (cancel) {
             cancelForm();
         } else {
