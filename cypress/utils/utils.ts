@@ -1603,7 +1603,7 @@ export function enableSwitch(selector: string): void {
                 .invoke("css", "display")
                 .then((display) => {
                     if (display.toString() == "none") {
-                        click(switchToggle);
+                        cy.get(switchToggle).click();
                     }
                 });
         });
@@ -1617,7 +1617,7 @@ export function disableSwitch(selector: string): void {
                 .invoke("css", "display")
                 .then((display) => {
                     if (display.toString() == "none") {
-                        click(switchToggle);
+                        cy.get(switchToggle).click();
                     }
                 });
         });

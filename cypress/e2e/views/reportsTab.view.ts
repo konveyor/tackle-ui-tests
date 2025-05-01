@@ -26,7 +26,7 @@ export const itemsPerPageMenu = "div.pf-m-bottom > div.pf-c-options-menu";
 export const itemsPerPageToggleButton = "div > button[aria-label='Items per page']";
 export const closeRowIdentifiedRisk =
     ":nth-child(4) > .pf-c-card > .pf-c-card__header > .pf-c-card__header-toggle > .pf-c-button > .pf-c-card__header-toggle-icon > svg";
-export const switchToggle = ".pf-v5-c-switch__toggle";
+export const switchToggle = "span.pf-v5-c-switch__toggle";
 
 export const highRiskDonut = "#landscape-donut-red";
 export const mediumRiskDonut = "#landscape-donut-yellow";
