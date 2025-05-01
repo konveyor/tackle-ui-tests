@@ -169,6 +169,7 @@ export class Application {
             if ($url != Application.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, applicationInventory);
+                cy.wait(2* SEC);
                 cy.get("h1", { timeout: 100 * SEC }).should("contain", applicationInventory);
             }
         });
