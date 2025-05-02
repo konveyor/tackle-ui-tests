@@ -1,7 +1,6 @@
 import {
     click,
     clickByText,
-    clickJs,
     selectItemsPerPage,
     selectUserPerspective,
 } from "../../../../utils/utils";
@@ -98,7 +97,7 @@ export class AssessmentQuestionnaire {
                     .invoke("css", "display")
                     .then((display) => {
                         if (display.toString() == "none") {
-                            clickJs(switchToggle);
+                            cy.get(switchToggle, { timeout: 2 * SEC }).click();
                         }
                     });
             });

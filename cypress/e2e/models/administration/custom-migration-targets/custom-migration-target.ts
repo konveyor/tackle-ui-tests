@@ -185,7 +185,6 @@ export class CustomMigrationTarget {
             .check();
 
         cy.get(CustomMigrationTargetView.filterLanguageDropdown).click();
-
     }
 
     public static uploadRules(rulePaths: string[]) {

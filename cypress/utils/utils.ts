@@ -20,7 +20,6 @@ import { Stakeholders } from "../e2e/models/migration/controls/stakeholders";
 import { TagCategory } from "../e2e/models/migration/controls/tagcategory";
 import { Tag } from "../e2e/models/migration/controls/tags";
 
-import * as ansiRegex from "ansi-regex";
 import "cypress-file-upload";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
 import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
@@ -149,7 +148,7 @@ export function clearInput(fieldID: string): void {
 
 export function clickByText(
     fieldId: string,
-    buttonText: string | ansiRegex,
+    buttonText: string | RegExp,
     isForced = true,
     log = false
 ): void {
@@ -1386,7 +1385,9 @@ export function goToPage(page: number): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    cy.get(optionMenu).find("button").click();
+    cy.get(optionMenu)
+        .find("button", { timeout: 10 * SEC })
+        .click();
     cy.get(actionMenuItem).contains(userType).click({ force: true });
 }
 
@@ -1604,7 +1605,7 @@ export function enableSwitch(selector: string): void {
                 .invoke("css", "display")
                 .then((display) => {
                     if (display.toString() == "none") {
-                        click(switchToggle);
+                        cy.get(switchToggle).click();
                     }
                 });
         });
@@ -1618,7 +1619,7 @@ export function disableSwitch(selector: string): void {
                 .invoke("css", "display")
                 .then((display) => {
                     if (display.toString() == "none") {
-                        click(switchToggle);
+                        cy.get(switchToggle).click();
                     }
                 });
         });

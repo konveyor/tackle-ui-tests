@@ -81,10 +81,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("review", "Completed");
     });
 
-    beforeEach("start test from main page", function () {
-        cy.visit("/");
-    });
-
     it("Retake Assessment questionnaire", function () {
         clickItemInKebabMenu(applicationList[0].name, "Assess");
         clickByText(button, "Retake");
