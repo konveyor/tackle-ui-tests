@@ -59,7 +59,7 @@ describe(["@tier2"], "Test secure and insecure git repository analysis", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Analysis on insecure git Repository(http) for tackle test app when insecure repository is allowed", function () {
+    it("Bug MTA-4903: Analysis on insecure git Repository(http) for tackle test app when insecure repository is allowed", function () {
         // test that when the insecure repository is enabled the analysis on a http repo should be completed successfully
 
         gitConfiguration.enableInsecureGitRepositories();
