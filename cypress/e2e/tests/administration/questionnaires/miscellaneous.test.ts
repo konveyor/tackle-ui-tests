@@ -42,11 +42,8 @@ describe(["@tier3"], "Miscellaneous Questionnaire tests", () => {
         // Automates bugs: https://issues.redhat.com/browse/MTA-1725 and https://issues.redhat.com/browse/MTA-1781
 
         AssessmentQuestionnaire.open();
-
         AssessmentQuestionnaire.import(yamlFile);
-
         AssessmentQuestionnaire.delete(sampleQuestionnaireTemplate);
-
         notExists(sampleQuestionnaireTemplate);
     });
 
@@ -54,9 +51,7 @@ describe(["@tier3"], "Miscellaneous Questionnaire tests", () => {
         // Automates bug https://issues.redhat.com/browse/MTA-1349
 
         AssessmentQuestionnaire.open();
-
         AssessmentQuestionnaire.import(invalidYamlFile);
-
         cy.get(alertTitle).then(($element) => {
             const text = $element.text();
             expect(text).to.contain(

@@ -76,6 +76,8 @@ export class AssessmentQuestionnaire {
 
     public static export(fileName: string) {
         AssessmentQuestionnaire.operation(fileName, "Export");
+        // Adding wait for file to finish downloading
+        cy.wait(5 * SEC);
     }
 
     public static view(fileName: string) {
