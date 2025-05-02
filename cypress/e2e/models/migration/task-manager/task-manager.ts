@@ -151,7 +151,9 @@ export class TaskManager {
     ) {
         TaskManager.open(10, true);
         TaskManager.verifyTaskStatus(appName, taskKind, taskStatus);
-        TaskManager.getTaskRow(appName, taskKind).find(TaskManagerColumns.status).click();
+        TaskManager.getTaskRow(appName, taskKind)
+            .find(TaskManagerColumns.status, { timeout: 2 * SEC })
+            .click();
         taskDetailsSanity(appName, taskKind, taskStatus);
     }
 

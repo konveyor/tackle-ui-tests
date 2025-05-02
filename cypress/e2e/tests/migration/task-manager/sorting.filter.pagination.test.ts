@@ -55,7 +55,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
                     applicationsList.push(dayTraderApp);
                 }
                 applicationsList.forEach((application) => application.create());
-                Analysis.analyzeAll(dayTraderApp);
+                Analysis.analyzeByList(applicationsList);
             });
         });
     });

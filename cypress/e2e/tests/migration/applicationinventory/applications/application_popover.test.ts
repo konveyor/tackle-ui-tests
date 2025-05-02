@@ -48,7 +48,7 @@ describe(["@tier3"], "Validate task links from application popover", function ()
         });
     });
 
-    it("Click the tech-discovery link in application popover - task details page should open", function () {
+    it("Bug MTA-4903: Click the tech-discovery link in application popover - task details page should open", function () {
         const taskKind = TaskKind.techDiscovery;
         bookServerApp.openTaskDetailsFromPopover(taskKind);
         taskDetailsSanity(bookServerApp.name, taskKind);
