@@ -57,7 +57,7 @@ describe(["@tier2"], "Test secure and insecure svn repository analysis", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Analysis on insecure SVN Repository(http) when allowed", function () {
+    it("Bug MTA-4903: Analysis on insecure SVN Repository(http) when allowed", function () {
         subversionConfiguration.enableInsecureSubversionRepositories();
 
         const application = new Analysis(
@@ -74,7 +74,7 @@ describe(["@tier2"], "Test secure and insecure svn repository analysis", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it("Analysis on SVN Repository(http) when filenames have special characters", function () {
+    it("Bug MTA-4903: Analysis on SVN Repository(http) when filenames have special characters", function () {
         const application = new Analysis(
             getRandomApplicationData("Insecure svn when filenames have special characters", {
                 sourceData: this.appData["bookserver-svn-branch"],
