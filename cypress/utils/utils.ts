@@ -1385,7 +1385,9 @@ export function goToPage(page: number): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    cy.get(optionMenu).find("button").click();
+    cy.get(optionMenu)
+        .find("button", { timeout: 10 * SEC })
+        .click();
     cy.get(actionMenuItem).contains(userType).click({ force: true });
 }
 
@@ -1603,7 +1605,7 @@ export function enableSwitch(selector: string): void {
                 .invoke("css", "display")
                 .then((display) => {
                     if (display.toString() == "none") {
-                        click(switchToggle);
+                        cy.get(switchToggle).click();
                     }
                 });
         });
@@ -1617,7 +1619,7 @@ export function disableSwitch(selector: string): void {
                 .invoke("css", "display")
                 .then((display) => {
                     if (display.toString() == "none") {
-                        click(switchToggle);
+                        cy.get(switchToggle).click();
                     }
                 });
         });
