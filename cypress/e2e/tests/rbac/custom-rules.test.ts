@@ -17,12 +17,7 @@ limitations under the License.
 
 import * as data from "../../../utils/data_utils";
 import { getRulesData } from "../../../utils/data_utils";
-import {
-    getRandomAnalysisData,
-    getRandomApplicationData,
-    login,
-    logout,
-} from "../../../utils/utils";
+import { getRandomAnalysisData, getRandomApplicationData, login } from "../../../utils/utils";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { User } from "../../models/keycloak/users/user";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
@@ -126,33 +121,20 @@ describe(["@tier2"], "Custom Rules RBAC operations", function () {
 
         analysisWithPrivateRulesNoCred.create();
         analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
-        logout();
     });
 
-    it("Architect, Rules from public repository", function () {
+    it("Architect, Rules from public and private(with and without credentials) repository", function () {
         architect.login();
         analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
-    });
-
-    it("Architect, Rules from private repository with credentials", function () {
         analyzeAndVerify(analysisWithPrivateRules, AnalysisStatuses.completed);
-    });
-
-    it("Architect, Rules from private repository without credentials", function () {
         analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
         architect.logout();
     });
 
-    it("Migrator, Rules from public repository", function () {
+    it("Migrator, Rules from public and private(with and without credentials)repository", function () {
         migrator.login();
         analyzeAndVerify(analysisWithPublicRules, AnalysisStatuses.completed);
-    });
-
-    it("Migrator, Rules from private repository with credentials", function () {
         analyzeAndVerify(analysisWithPrivateRules, AnalysisStatuses.completed);
-    });
-
-    it("Migrator, Rules from private repository without credentials", function () {
         analyzeAndVerify(analysisWithPrivateRulesNoCred, AnalysisStatuses.failed);
         migrator.logout();
     });

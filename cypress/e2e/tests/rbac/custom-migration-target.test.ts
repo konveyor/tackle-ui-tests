@@ -21,7 +21,6 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    logout,
     resetURL,
     selectItemsPerPage,
 } from "../../../utils/utils";
@@ -97,8 +96,6 @@ describe(["tier3"], "Custom Migration Targets RBAC operations", function () {
                 assertTargetIsVisible(analysis, target);
                 analyzeAndVerify(analysis);
             });
-
-        logout();
     });
 
     it("Look for created target on an analysis as architect user", function () {
@@ -112,7 +109,6 @@ describe(["tier3"], "Custom Migration Targets RBAC operations", function () {
         migrator.login();
         assertTargetIsVisible(analysis, target);
         analyzeAndVerify(analysis);
-        migrator.logout();
     });
 
     after("Clear test data", () => {

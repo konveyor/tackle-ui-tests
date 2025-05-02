@@ -30,7 +30,7 @@ import { Application } from "../../models/migration/applicationinventory/applica
 import { Archetype } from "../../models/migration/archetypes/archetype";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { Tag } from "../../models/migration/controls/tags";
-import { legacyPathfinder } from "../../types/constants";
+import { legacyPathfinder, SEC } from "../../types/constants";
 
 let tags: Tag[];
 let stakeholders: Stakeholders[];
@@ -51,7 +51,6 @@ describe(["@tier2"], "Perform assessment and review as Architect", function () {
         tags = createMultipleTags(2);
         stakeholders = createMultipleStakeholders(1);
         application = createMultipleApplications(1, [tags[0].name]);
-        architect.logout();
     });
 
     beforeEach("Load fixtures", function () {
@@ -60,9 +59,10 @@ describe(["@tier2"], "Perform assessment and review as Architect", function () {
         });
     });
 
-    it("As Architect, perform application assessment and review", function () {
-        // Polarion TC 312
+    it("As Architect, perform application and archetype assessment and review", function () {
+        // Polarion TC 312 and Polarion MTA-522
         architect.login();
+        cy.wait(10 * SEC);
         application[0].perform_assessment("medium", stakeholders);
         application[0].verifyStatus("assessment", "Completed");
         application[0].validateAssessmentField("Medium");
@@ -70,11 +70,7 @@ describe(["@tier2"], "Perform assessment and review as Architect", function () {
         application[0].perform_review("medium");
         application[0].verifyStatus("review", "Completed");
         application[0].validateReviewFields();
-    });
 
-    it("As Architect, create archetype, perform archetype assessment and review", function () {
-        architect.login();
-        // Automates Polarion MTA-522
         const archetype = new Archetype(
             data.getRandomWord(8),
             [tags[0].name],
@@ -88,7 +84,6 @@ describe(["@tier2"], "Perform assessment and review as Architect", function () {
         archetype.perform_review("low");
         archetype.validateReviewFields();
         archetype.delete();
-        architect.logout();
     });
 
     after("Clear test data", () => {

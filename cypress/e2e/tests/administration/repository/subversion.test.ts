@@ -125,9 +125,6 @@ describe(["@tier2"], "Test secure and insecure svn repository analysis", () => {
                 );
             });
     });
-    afterEach("Clear state", function () {
-        Analysis.open(true);
-    });
 
     after("Perform test data clean up", () => {
         deleteByList(applicationsList);
