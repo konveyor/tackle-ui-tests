@@ -346,7 +346,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         application.applicationDetailsTab("Tags");
         application.tagAndCategoryDontExist([assessmentTag]);
         application.closeApplicationDetails();
-        application.closeApplicationDetails();
 
         // Automates Polarion MTA-502
         const archetype = new Archetype(
