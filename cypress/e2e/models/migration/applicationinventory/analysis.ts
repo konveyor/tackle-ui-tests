@@ -70,6 +70,8 @@ import {
     fileName,
     kebabTopMenuButton,
     languageSelectionDropdown,
+    logDropDown,
+    logFilter,
     manageCredentials,
     mavenCredential,
     numberOfRulesColumn,
@@ -567,5 +569,16 @@ export class Analysis extends Application {
 
     cancelAnalysis(): void {
         clickItemInKebabMenu(this.name, "Cancel analysis");
+    }
+
+    verifyMergedLogContain(): void {
+        this.openAnalysisDetails();
+        cy.get(logFilter).eq(2).click();
+        clickByText(logDropDown, "Merged log view");
+
+        // Wait for the editor content to load and assert expected text
+        cy.get(".pf-v5-c-code-editor__code", { timeout: 5000 }).then(($editor) => {
+            expect($editor.text()).to.contain("lspServerName: generic");
+        });
     }
 }
