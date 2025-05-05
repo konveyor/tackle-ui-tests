@@ -92,7 +92,7 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         deleteByList(applications);
     });
 
-    it("Bug MTA-5010: Retake questionnaire for Archetype", function () {
+    it("Retake questionnaire for Archetype", function () {
         //Automates Polarion MTA-394
         Archetype.open(true);
         archetype.clickAssessButton();
