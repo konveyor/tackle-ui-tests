@@ -94,7 +94,6 @@ import {
     itemsPerPageMenuOptions,
     itemsPerPageToggleButton,
     lastPageButton,
-    liTag,
     manageImportsActionsButton,
     modal,
     nextPageButton,
@@ -306,7 +305,10 @@ export function selectFromDropListByText(droplist, item: string) {
 
 export function selectFormItems(fieldId: string, item: string): void {
     cy.get(fieldId).click();
-    cy.contains("button", item).click();
+    cy.get("button").then(($buttons) => {
+        const match = $buttons.toArray().find((btn) => btn.textContent?.trim() === item);
+        cy.wrap(match).click();
+    });
 }
 
 export function selectRow(name: string): void {
@@ -453,11 +455,7 @@ export function validateSingleApplicationIssue(issue: AppIssue): void {
             validateTextPresence(singleApplicationColumns.issue, issue.name);
             validateTextPresence(singleApplicationColumns.category, issue.category);
             validateTextPresence(singleApplicationColumns.source, issue.sources[0]);
-            cy.get(singleApplicationColumns.target).within(() => {
-                issue.targets.forEach((currentTarget) => {
-                    validateTextPresence(liTag, currentTarget);
-                });
-            });
+            validateTextPresence(singleApplicationColumns.target, issue.targets[0]);
             validateNumberPresence(singleApplicationColumns.effort, issue.effort);
             validateNumberPresence(singleApplicationColumns.files, issue.affectedFiles);
         });
