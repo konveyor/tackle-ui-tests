@@ -1417,5 +1417,38 @@
         "target": [],
         "appName": "python-app-custom-rules",
         "customRule": ["python-rules.yaml"]
+    },
+    "source_analysis_on_pythonApp": {
+        "source": "Source code",
+        "appName": "python-app",
+        "target": [],
+        "customRule": ["python_app_rules.yaml"],
+        "effort": 6,
+        "issues": [
+            {
+                "name": "sample-rule-1 - this should appear as an issue",
+                "category": "potential",
+                "sources": ["None"],
+                "targets": ["None"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "rule": "python-sample-rule-001",
+                "labels": "None"
+            },
+            {
+                "name": "sample-rule-2 - this should appear as an issue",
+                "category": "potential",
+                "sources": ["None"],
+                "targets": ["None"],
+                "effort": 5,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "rule": "python-sample-rule-002",
+                "labels": "None"
+            }
+        ]
     }
 }
