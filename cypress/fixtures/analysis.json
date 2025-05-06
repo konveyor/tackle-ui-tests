@@ -1423,5 +1423,39 @@
         "source": "Source code",
         "target": [],
         "customRule": ["python_app_rules.yaml"]
+    },
+    "source_analysis_on_nodejsApp": {
+        "source": "Source code",
+        "target": [],
+        "appName": "nodejs-app-custom-rules",
+        "customRule": ["nodejs_rules.yaml"],
+        "issues": [
+            {
+                "name": "Testing that the node provider works - function",
+                "category": "potential",
+                "sources": ["None"],
+                "targets": ["None"],
+                "effort": 1,
+                "totalEffort": 2,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "files",
+                "rule": "node-sample-rule-002",
+                "labels": "None"
+            },
+            {
+                "name": "Testing that the node provider works - type",
+                "category": "potential",
+                "sources": ["None"],
+                "targets": ["None"],
+                "effort": 1,
+                "totalEffort": 2,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "files",
+                "rule": "node-sample-rule-001",
+                "labels": ["None"]
+            }
+        ]
     }
 }
