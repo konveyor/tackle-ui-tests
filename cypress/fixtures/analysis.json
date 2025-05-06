@@ -1736,7 +1736,7 @@
         "source": "Source code",
         "target": ["Containerization", "Linux", "OracleJDK to OpenJDK"],
         "customRule": ["corporate-framework-config.windup.xml"],
-        "effort": 3,
+        "effort": 2,
         "issues": [
             {
                 "name": "Hardcoded IP Address",
@@ -1777,42 +1777,35 @@
         "customRule": ["python-rules.yaml"]
     },
     "source_analysis_on_pythonApp": {
+        "source": "Source code",
         "appName": "python-app",
-        "source": "Source code",
         "target": [],
-        "customRule": ["python_app_rules.yaml"]
-    },
-    "source_analysis_on_nodejsApp": {
-        "source": "Source code",
-        "target": [],
-        "appName": "nodejs-app-custom-rules",
-        "customRule": ["nodejs_rules.yaml"],
+        "customRule": ["python_app_rules.yaml"],
+        "effort": 6,
         "issues": [
             {
-                "name": "Testing that the node provider works - function",
+                "name": "sample-rule-1 - this should appear as an issue",
                 "category": "potential",
                 "sources": ["None"],
                 "targets": ["None"],
                 "effort": 1,
-                "totalEffort": 2,
+                "totalEffort": 1,
                 "incidents": 1,
                 "affectedFiles": 1,
-                "ruleSet": "files",
-                "rule": "node-sample-rule-002",
+                "rule": "python-sample-rule-001",
                 "labels": "None"
             },
             {
-                "name": "Testing that the node provider works - type",
+                "name": "sample-rule-2 - this should appear as an issue",
                 "category": "potential",
                 "sources": ["None"],
                 "targets": ["None"],
-                "effort": 1,
-                "totalEffort": 2,
+                "effort": 5,
+                "totalEffort": 1,
                 "incidents": 1,
                 "affectedFiles": 1,
-                "ruleSet": "files",
-                "rule": "node-sample-rule-001",
-                "labels": ["None"]
+                "rule": "python-sample-rule-002",
+                "labels": "None"
             }
         ]
     },
