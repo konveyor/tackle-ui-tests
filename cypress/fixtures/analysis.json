@@ -421,7 +421,7 @@
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization", "Quarkus"],
         "appName": "deps",
-        "effort": 2056,
+        "effort": 91,
         "issues": [
             {
                 "name": "@MessageDriven - EJBs are not supported in Quarkus",
@@ -953,7 +953,7 @@
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "tackle-testapp",
-        "effort": 602,
+        "effort": 598,
         "openSourceLibraries": true
     },
 
