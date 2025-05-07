@@ -322,13 +322,10 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         applicationsList.push(application1);
 
         const application2 = new Analysis(
-            getRandomApplicationData("Tackle Public", {
-                sourceData: this.appData["tackle-testapp-public"],
+            getRandomApplicationData("python-app-custom-rules", {
+                sourceData: this.appData["python-demo-app"],
             }),
-            {
-                source: "Source code",
-                target: [],
-            }
+            getRandomAnalysisData(this.analysisData["python_demo_application"])
         );
         application2.create();
         applicationsList.push(application2);
