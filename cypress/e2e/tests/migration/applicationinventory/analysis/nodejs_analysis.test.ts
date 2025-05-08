@@ -36,7 +36,7 @@ describe(["@tier1"], "Nodejs Analysis", () => {
         cy.intercept("DELETE", "/hub/application*").as("deleteApplication");
     });
 
-    it("Source analysis on nodejs app", function () {
+    it("Bug MTA-5170: Source analysis on nodejs app", function () {
         const application = new Analysis(
             getRandomApplicationData("nodejsApp_Source", {
                 sourceData: this.appData["nodejs-app"],
