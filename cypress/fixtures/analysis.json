@@ -115,6 +115,379 @@
                 "labels": ["None"]
             },
             {
+                "name": "Replace the spring-boot-maven-plugin dependency",
+                "category": "mandatory",
+                "sources": ["springboot"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "springboot-plugins-to-quarkus-0000",
+                "labels": ["None"]
+            }
+        ],
+        "dependencies": [
+            {
+                "name": "ch.qos.logback.logback-classic",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "ch.qos.logback.logback-core",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "com.fasterxml.classmate",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "com.fasterxml.jackson.core.jackson-annotations",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "com.fasterxml.jackson.core.jackson-core",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "com.fasterxml.jackson.core.jackson-databind",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "com.fasterxml.jackson.dataformat.jackson-dataformat-xml",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "com.fasterxml.jackson.datatype.jackson-datatype-jdk8",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "com.fasterxml.jackson.datatype.jackson-datatype-jsr310",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "com.fasterxml.jackson.module.jackson-module-jaxb-annotations",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "com.fasterxml.jackson.module.jackson-module-parameter-names",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "com.fasterxml.woodstox.woodstox-core",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "javax.annotation.javax.annotation-api",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "javax.validation.validation-api",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.apache.logging.log4j.log4j-api",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.apache.logging.log4j.log4j-to-slf4j",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.apache.tomcat.embed.tomcat-embed-core",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.apache.tomcat.embed.tomcat-embed-el",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.apache.tomcat.embed.tomcat-embed-websocket",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.codehaus.woodstox.stax2-api",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.hibernate.validator.hibernate-validator",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.jboss.logging.jboss-logging",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.projectlombok.lombok",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.slf4j.jul-to-slf4j",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.slf4j.slf4j-api",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.springframework.boot.spring-boot",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.springframework.boot.spring-boot-autoconfigure",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.springframework.boot.spring-boot-starter",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.springframework.boot.spring-boot-starter-json",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.springframework.boot.spring-boot-starter-logging",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.springframework.boot.spring-boot-starter-tomcat",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.springframework.boot.spring-boot-starter-web",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.springframework.spring-aop",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.springframework.spring-beans",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.springframework.spring-context",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.springframework.spring-core",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.springframework.spring-expression",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.springframework.spring-jcl",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.springframework.spring-web",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.springframework.spring-webmvc",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            },
+            {
+                "name": "org.yaml.snakeyaml",
+                "language": "java",
+                "labels": ["open-source"],
+                "applications": 1
+            }
+        ]
+    },
+    "source_plus_dep_analysis_on_bookserverapp": {
+        "source": "Source code + dependencies",
+        "target": ["Containerization", "Linux", "Quarkus"],
+        "appName": "bookserver-app",
+        "tags": ["EJB XML", "Java EE Batch", "EJB XML"],
+        "issues": [
+            {
+                "name": "Add Maven profile to run the Quarkus native build",
+                "category": "mandatory",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00060",
+                "labels": ["None"]
+            },
+            {
+                "name": "Adopt Maven Compiler plugin",
+                "category": "mandatory",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00030",
+                "labels": ["None"]
+            },
+            {
+                "name": "Adopt Maven Failsafe plugin",
+                "category": "mandatory",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00050",
+                "labels": ["None"]
+            },
+            {
+                "name": "Adopt Maven Surefire plugin",
+                "category": "mandatory",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00040",
+                "labels": ["None"]
+            },
+            {
+                "name": "Adopt Quarkus BOM",
+                "category": "mandatory",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00010",
+                "labels": ["None"]
+            },
+            {
+                "name": "Adopt Quarkus Maven plugin",
+                "category": "mandatory",
+                "sources": ["java-ee"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "javaee-pom-to-quarkus-00020",
+                "labels": ["None"]
+            },
+            {
+                "name": "File system - Java IO",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["cloud-readiness"],
+                "effort": 1,
+                "totalEffort": 6,
+                "incidents": 6,
+                "affectedFiles": 1,
+                "ruleSet": "cloud-readiness",
+                "rule": "local-storage-00001",
+                "labels": ["konveyor.io/source", "storage"]
+            },
+            {
+                "name": "Remove the SpringBoot @SpringBootApplication annotation",
+                "category": "mandatory",
+                "sources": ["springboot"],
+                "targets": ["quarkus"],
+                "effort": 1,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "quarkus/springboot",
+                "rule": "springboot-annotations-to-quarkus-00000",
+                "labels": ["None"]
+            },
+            {
                 "name": "Replace the Spring Web artifact with Quarkus 'spring-web' extension",
                 "category": "mandatory",
                 "sources": ["springboot"],
@@ -421,7 +794,7 @@
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization", "Quarkus"],
         "appName": "deps",
-        "effort": 2056,
+        "effort": 91,
         "issues": [
             {
                 "name": "@MessageDriven - EJBs are not supported in Quarkus",
@@ -464,21 +837,6 @@
                 "rule": "persistence-to-quarkus-00011",
                 "labels": []
             },
-
-            {
-                "name": "@Stateless annotation must be replaced",
-                "category": "potential",
-                "sources": ["jakarta-ee", "java-ee"],
-                "targets": ["quarkus"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
-                "ruleSet": "quarkus/springboot",
-                "rule": "persistence-to-quarkus-00011",
-                "labels": []
-            },
-
             {
                 "name": "`beans.xml` descriptor content is ignored",
                 "category": "potential",
@@ -953,7 +1311,7 @@
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "tackle-testapp",
-        "effort": 602,
+        "effort": 598,
         "openSourceLibraries": true
     },
 
@@ -1127,7 +1485,7 @@
 
     "analysis_for_openSourceLibraries": {
         "source": "Source code + dependencies",
-        "target": ["Containerization"],
+        "target": ["Quarkus"],
         "appName": "deps",
         "openSourceLibraries": true,
         "storyPoints": "2,602"
@@ -1137,7 +1495,7 @@
         "source": "Source code",
         "target": ["Containerization"],
         "appName": "example-1",
-        "effort": 2
+        "effort": 1
     },
     "source_analysis_on_nexus_app": {
         "source": "Source code",

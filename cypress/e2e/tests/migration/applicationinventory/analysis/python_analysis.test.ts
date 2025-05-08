@@ -33,12 +33,11 @@ describe(["@tier1"], "Python app analysis", () => {
             this.analysisData = analysisData;
         });
 
-        // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
         cy.intercept("DELETE", "/hub/application*").as("deleteApplication");
     });
-    it("Bug MTA-4903: Source analysis on python app", function () {
+    it("Source analysis on python application", function () {
         const application = new Analysis(
             getRandomApplicationData("pythonApp_Source", {
                 sourceData: this.appData["python-app"],
@@ -52,11 +51,7 @@ describe(["@tier1"], "Python app analysis", () => {
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.verifyEffort(this.analysisData["source_analysis_on_pythonApp"]["effort"]);
-        // ToDo Commenting until bug MTA-4885 is fixed
-        // application.validateIssues(
-        //     this.analysisData["source_analysis_on_pythonApp"]["issues"]
-        // );
-        application.verifyMergedLogContain();
+        application.validateIssues(this.analysisData["source_analysis_on_pythonApp"]["issues"]);
     });
 
     after("Perform test data clean up", () => {

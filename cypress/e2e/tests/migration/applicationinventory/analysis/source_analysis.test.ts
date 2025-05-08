@@ -30,6 +30,7 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import {
     AnalysisStatuses,
     CredentialType,
+    MIN,
     SEC,
     UserCredentials,
 } from "../../../../types/constants";
@@ -101,13 +102,12 @@ describe(["@tier2"], "Source Analysis", () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        // Commenting until bug MTA-2984 is fixed in upstream
-        // application.verifyEffort(
-        //     this.analysisData["source+dep_analysis_on_tackletestapp"]["effort"]
-        // );
+        application.verifyEffort(
+            this.analysisData["source+dep_analysis_on_tackletestapp"]["effort"]
+        );
     });
 
-    it("Bug MTA-2984: Source + dependencies analysis on daytrader app", function () {
+    it("Source + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies", {
@@ -120,7 +120,8 @@ describe(["@tier2"], "Source Analysis", () => {
         applicationsList.push(application);
         cy.wait("@getApplication");
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        // Daytrader app take more than 20 min to analyze
+        application.verifyAnalysisStatus("Completed", 30 * MIN);
         application.verifyEffort(
             this.analysisData["source+dep_analysis_on_daytrader-app"]["effort"]
         );
@@ -129,7 +130,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
     });
 
-    it("Bug MTA-2984: Analysis on daytrader app with maven credentials", function () {
+    it("Analysis on daytrader app with maven credentials", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-751
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_MavenCreds", {
@@ -160,7 +161,7 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.wait("@getApplication");
         application.manageCredentials(source_credential.name, null);
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus("Completed", 30 * MIN);
     });
 
     it("Analysis on tackle test app with ssh credentials", function () {
@@ -245,7 +246,7 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.get("h2", { timeout: 5 * SEC }).should("contain", "No tags available");
     });
 
-    it("Bug MTA-4824: Analysis for Konveyor example1 application", function () {
+    it("Analysis for Konveyor example1 application", function () {
         // Automates https://github.com/konveyor/example-applications/tree/main/example-1
         const application = new Analysis(
             getRandomApplicationData("Example 1", {
@@ -285,7 +286,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
     });
 
-    it("Bug MTA-4412: Openjdk17 Source + dependencies analysis on tackletest app", function () {
+    it("Bug MTA-4408: Openjdk17 Source + dependencies analysis on tackletest app", function () {
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies_openjdk17", {
                 sourceData: this.appData["tackle-testapp-git"],
