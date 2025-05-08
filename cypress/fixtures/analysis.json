@@ -1813,7 +1813,8 @@
         "source": "Source code",
         "target": [],
         "appName": "nodejs-app-custom-rules",
-        "customRule": ["nodejs_rules.yaml"],
+        "customRule": ["nodejs-rules.yaml"],
+        "effort": 4,
         "issues": [
             {
                 "name": "Testing that the node provider works - function",
