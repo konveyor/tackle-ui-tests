@@ -57,6 +57,9 @@ describe(["@tier2"], "Archetype association reports tests", () => {
             archetype.perform_assessment("medium", stakeholderList);
             const applications = createMultipleApplications(1, [tags[0].name]);
             Reports.open();
+            // App count within risk donut doesn't get updated as soon as Reports page is opened,
+            // so added a small wait.
+            cy.wait(1000);
             Reports.verifyRiskValue(mediumRiskDonut, numericRiskValue + 1);
             archetype.delete();
             deleteByList(tags);
