@@ -55,7 +55,7 @@ describe(["@tier3"], "Architect Upload Binary Analysis", () => {
         cy.visit("/");
     });
 
-    it("Bug MTA-4903: Upload Binary Analysis", function () {
+    it("Upload Binary Analysis", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
@@ -68,7 +68,7 @@ describe(["@tier3"], "Architect Upload Binary Analysis", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it("Bug MTA-4903: Custom rules with custom targets", function () {
+    it("Custom rules with custom targets", function () {
         // Automated https://issues.redhat.com/browse/TACKLE-561
         const application = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
