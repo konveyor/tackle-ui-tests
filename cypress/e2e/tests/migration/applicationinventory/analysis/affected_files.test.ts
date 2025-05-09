@@ -134,7 +134,7 @@ describe(["@tier2"], "Affected files validation", () => {
         );
     });
 
-    it("Affected files validation with source+deps analysis on tackle-testapp app", function () {
+    it("Bug MTA-5154: Affected files validation with source+deps analysis on tackle-testapp app", function () {
         // Automate bug https://issues.redhat.com/browse/MTA-1622
         const application = new Analysis(
             getRandomApplicationData("affected_files_on_tackleTestapp_deps", {
@@ -160,7 +160,7 @@ describe(["@tier2"], "Affected files validation", () => {
     });
 
     // Automates Bug MTA-4024, MTA-4025, MTA-4026 and MTA-4027
-    it("Bug MTA-4421: Affected files validation with source+deps analysis on coolStore app", function () {
+    it("Affected files validation with source+deps analysis on coolStore app", function () {
         const application = new Analysis(
             getRandomApplicationData("affected_files_on_coolStoreApp", {
                 sourceData: this.appData["cool-store-app"],
