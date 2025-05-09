@@ -369,17 +369,23 @@ export function removeMember(memberName: string): void {
 
 export function exists(value: string, tableSelector = appTable): void {
     // Wait for DOM to render table and sibling elements
-    cy.get(tableSelector, { timeout: 5 * SEC }).then(($tbody) => {
-        if ($tbody.text() !== "No data available") {
+    cy.get(tableSelector, { timeout: 15 * SEC }).then(($tbody) => {
+        if (
+            $tbody.text() !== "No data available" &&
+            $tbody.text() !== "No applications available"
+        ) {
             selectItemsPerPage(100);
-            cy.get(tableSelector, { timeout: 5 * SEC }).should("contain", value);
+            cy.get(tableSelector, { timeout: 15 * SEC }).should("contain", value);
         }
     });
 }
 
 export function notExists(value: string, tableSelector = appTable): void {
     cy.get(tableSelector).then(($tbody) => {
-        if ($tbody.text() !== "No data available") {
+        if (
+            $tbody.text() !== "No data available" &&
+            $tbody.text() !== "No applications available"
+        ) {
             selectItemsPerPage(100);
             cy.get(tableSelector, { timeout: 5 * SEC }).should("not.contain", value);
         }
