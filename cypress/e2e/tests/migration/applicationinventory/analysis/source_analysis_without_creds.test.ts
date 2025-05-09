@@ -72,6 +72,36 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
         }
     );
 
+    it(
+        ["@tier0", "@ci"],
+        "Source + dependency Analysis on bookserver app and its issues validation",
+        function () {
+            // For source code analysis application must have source code URL git or svn
+            application = new Analysis(
+                getRandomApplicationData("Dep_bookserverApp", {
+                    sourceData: this.appData["bookserver-app"],
+                }),
+                getRandomAnalysisData(
+                    this.analysisData["source_plus_dep_analysis_on_bookserverapp"]
+                )
+            );
+            application.create();
+            applicationsList.push(application);
+            cy.wait("@getApplication");
+            application.analyze();
+            checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
+            application.verifyAnalysisStatus("Completed");
+            application.validateIssues(
+                this.analysisData["source_plus_dep_analysis_on_bookserverapp"]["issues"]
+            );
+            this.analysisData["source_plus_dep_analysis_on_bookserverapp"]["issues"].forEach(
+                (currentIssue: AppIssue) => {
+                    application.validateAffected(currentIssue);
+                }
+            );
+        }
+    );
+
     it("Check the bookserver task status on task manager page", function () {
         TaskManager.verifyTaskStatus(application.name, TaskKind.analyzer, TaskStatus.succeeded);
         TaskManager.verifyTaskStatus(
