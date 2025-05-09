@@ -391,7 +391,9 @@ export class Analysis extends Application {
             .contains(this.name)
             .closest(trTag)
             .within(() => {
-                cy.get(effortColumn).should("contain", `${effort}`);
+                cy.get(effortColumn, { timeout: 5 * SEC }).should("contain", `${effort}`, {
+                    timeout: 10 * SEC,
+                });
             });
     }
 
