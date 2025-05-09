@@ -18,7 +18,6 @@ limitations under the License.
 import {
     createMultipleApplications,
     createMultipleStakeholders,
-    createMultipleTags,
     deleteByList,
     login,
 } from "../../../../utils/utils";
@@ -46,23 +45,21 @@ describe(["@tier2"], "Archetype association reports tests", () => {
         //automates polarion MTA-500
         Reports.getRiskValue(mediumRiskDonut).then((currentRiskValue) => {
             const numericRiskValue = parseInt(currentRiskValue, 10);
-            const tags = createMultipleTags(2);
             const archetype = new Archetype(
                 data.getRandomWord(8),
-                [tags[0].name],
-                [tags[1].name],
+                ["Web Service / XFire"],
+                ["Web Service / CXF"],
                 null
             );
             archetype.create();
             archetype.perform_assessment("medium", stakeholderList);
-            const applications = createMultipleApplications(1, [tags[0].name]);
+            const applications = createMultipleApplications(1, ["Web Service / XFire"]);
             Reports.open();
-            // App count within risk donut doesn't get updated as soon as Reports page is opened,
+            // App count within risk donuts doesn't get updated as soon as Reports page is opened,
             // so added a small wait.
             cy.wait(1000);
             Reports.verifyRiskValue(mediumRiskDonut, numericRiskValue + 1);
             archetype.delete();
-            deleteByList(tags);
             deleteByList(applications);
         });
     });
