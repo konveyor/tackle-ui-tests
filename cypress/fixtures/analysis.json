@@ -1283,29 +1283,29 @@
                 "labels": ["konveyor.io/source"]
             },
             {
-                "name": "Replace the Java EE XSD with the Jakarta equivalent",
+                "name": "HTTP session replication",
                 "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap"],
-                "effort": 1,
-                "totalEffort": 1,
+                "sources": ["java", "java-ee"],
+                "targets": ["cloud-readiness"],
+                "effort": 3,
+                "totalEffort": 3,
                 "incidents": 1,
                 "affectedFiles": 1,
-                "ruleSet": "eap8/eap7",
-                "rule": "javaee-to-jakarta-namespaces-00030",
-                "labels": ["konveyor.io/source"]
+                "ruleSet": "cloud-readiness",
+                "rule": "session-00000",
+                "labels": ["clustering"]
             },
             {
-                "name": "The package 'javax' has been replaced by 'jakarta'.",
+                "name": "javax groupId has been replaced by jakarta.platform",
                 "category": "mandatory",
-                "sources": ["None"],
+                "sources": ["spring5"],
                 "targets": ["eap"],
                 "effort": 1,
-                "totalEffort": 6,
-                "incidents": 6,
-                "affectedFiles": 22,
+                "totalEffort": 2,
+                "incidents": 2,
+                "affectedFiles": 1,
                 "ruleSet": "eap8/eap7",
-                "rule": "javax-to-jakarta-import-00001",
+                "rule": "javax-to-jakarta-dependencies-00006",
                 "labels": ["konveyor.io/source"]
             }
         ]
