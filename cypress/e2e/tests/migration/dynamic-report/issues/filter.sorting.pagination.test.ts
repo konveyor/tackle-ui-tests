@@ -40,7 +40,7 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Tag } from "../../../../models/migration/controls/tags";
 import { Issues } from "../../../../models/migration/dynamic-report/issues/issues";
-import { AnalysisStatuses, issueFilter, tdTag, trTag } from "../../../../types/constants";
+import { AnalysisStatuses, issueFilter, MIN, tdTag, trTag } from "../../../../types/constants";
 import { AppIssue } from "../../../../types/types";
 import { rightSideBar } from "../../../../views/issue.view";
 
@@ -56,8 +56,10 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     const affectedApplicationSortByList = ["Name", "Business service", "Effort", "Incidents"];
     const singleApplicationSortByList = ["Issue", "Category", "Effort", "Affected files"];
     const affectedFilesSortByList = ["File", "Incidents", "Effort"];
+    const appAmount = 6;
 
     before("Login", function () {
+        Cypress.session.clearAllSavedSessions();
         login();
         cy.visit("/");
         stakeholders = createMultipleStakeholders(2);
@@ -76,7 +78,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         archetype.create();
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 6; i++) {
+                for (let i = 0; i < appAmount; i++) {
                     const bookServerApp = new Analysis(
                         getRandomApplicationData("IssuesFilteringApp1_" + i, {
                             sourceData: appData["bookserver-app"],
@@ -91,7 +93,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 6; i++) {
+                for (let i = 0; i < appAmount; i++) {
                     const dayTraderApp = new Analysis(
                         getRandomApplicationData("IssuesFilteringApp2_" + i, {
                             sourceData: appData["daytrader-app"],
@@ -120,12 +122,12 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     it("All issues - Filtering issues by name", function () {
         // Analyzing daytrader app for pagination test to generate issues more than 10.
         const bookServerApp = applicationsList[0];
-        const dayTraderApp = applicationsList[6];
+        const dayTraderApp = applicationsList[appAmount];
         const bookServerIssues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
         const dayTraderIssues = this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"];
 
         Analysis.analyzeAll(dayTraderApp);
-        Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
+        Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed, 25 * MIN);
 
         Issues.openList(100, true);
         Issues.applyAndValidateFilter(
@@ -147,7 +149,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
     it("All issues - filtering by multiple names", function () {
         const bookServerApp = applicationsList[0];
-        const dayTraderApp = applicationsList[6];
+        const dayTraderApp = applicationsList[appAmount];
         const bookServerIssues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
         const dayTraderIssues = this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"];
 
