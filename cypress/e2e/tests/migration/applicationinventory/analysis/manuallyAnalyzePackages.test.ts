@@ -49,7 +49,7 @@ describe(["@tier3"], "Select the list of packages to be analyzed manually", () =
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Bug MTA-4903: Analyze the packages manually with excluded packages", function () {
+    it("Analyze the packages manually with excluded packages", function () {
         const analysisData = this.analysisData["analysis_for_manuallyAnalyzePackages"];
         application = new Analysis(
             getRandomApplicationData("testapp-excludePackages", {

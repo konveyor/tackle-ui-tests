@@ -88,5 +88,15 @@
     "cool-store-app": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/konveyor-ecosystem/coolstore"
+    },
+    "python-app": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/konveyor/analyzer-lsp",
+        "rootPath": "examples/python"
+    },
+    "nodejs-app": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/konveyor/analyzer-lsp",
+        "rootPath": "examples/nodejs"
     }
 }
