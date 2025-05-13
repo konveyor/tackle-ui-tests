@@ -1731,6 +1731,12 @@
         "target": ["Application server migration to", "OpenJDK", "Containerization", "Linux"],
         "effort": 20
     },
+    "tackle-testapp-public": {
+        "appName": "tackle-testapp-public",
+        "source": "Source code",
+        "target": ["Application server migration to"],
+        "effort": 20
+    },
     "tackle-testapp-public-customRule": {
         "appName": "tackle-testapp-public",
         "source": "Source code",
