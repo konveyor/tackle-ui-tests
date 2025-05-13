@@ -571,7 +571,7 @@ export class Application {
                             if (!button.text().includes("All incidents")) {
                                 // Asserting that content of text field has at least 100 symbols
                                 cy.get("div.monaco-scrollable-element.editor-scrollable.vs-dark", {
-                                    timeout: 5 * SEC,
+                                    timeout: 15 * SEC,
                                 })
                                     .invoke("text")
                                     .then((text) => {

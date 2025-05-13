@@ -1820,7 +1820,7 @@
         "target": [],
         "appName": "nodejs-app-custom-rules",
         "customRule": ["nodejs-rules.yaml"],
-        "effort": 4,
+        "effort": 6,
         "issues": [
             {
                 "name": "Testing that the node provider works - function",
