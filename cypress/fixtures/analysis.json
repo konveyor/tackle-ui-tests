@@ -1371,7 +1371,7 @@
         "source": "Source code",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "tackle-testapp",
-        "effort": 26,
+        "effort": 11,
         "techTags": [
             ["Other", "Properties"],
             ["Bean", "EJB XML"],
@@ -1382,17 +1382,6 @@
         ],
         "issues": [
             {
-                "name": "File system - Java IO",
-                "category": "mandatory",
-                "source": "None",
-                "targets": ["cloud-readiness"],
-                "effort": 1,
-                "affectedFiles": 1,
-                "ruleSet": "cloud-readiness",
-                "rule": "local-storage-00001",
-                "labels": ["konveyor.io/source", "storage"]
-            },
-            {
                 "name": "Hardcoded IP Address",
                 "category": "mandatory",
                 "source": "None",
@@ -1402,6 +1391,17 @@
                 "ruleSet": "discovery-rules",
                 "rule": "hardcoded-ip-address",
                 "labels": ["discovery"]
+            },
+            {
+                "name": "The package 'javax' has been replaced by 'jakarta'",
+                "category": "mandatory",
+                "source": "spring5",
+                "targets": ["eap8"],
+                "effort": 1,
+                "affectedFiles": 2,
+                "ruleSet": "eap8/eap7",
+                "rule": "javax-to-jakarta-import-00001",
+                "labels": ["konveyor.io/source"]
             }
         ]
     },
