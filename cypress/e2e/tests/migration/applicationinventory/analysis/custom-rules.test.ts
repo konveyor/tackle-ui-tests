@@ -64,7 +64,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
         });
     });
 
-    it("Bug MTA-4885: Custom rule with administracionEfectivo application", function () {
+    it("Bug MTA-5199: Custom rule with administracionEfectivo application", function () {
         const app = new Analysis(
             getRandomApplicationData("customRule_administracionEfectivo"),
             getRandomAnalysisData(this.analysisData["administracionEfectivo_custom_rules"])
