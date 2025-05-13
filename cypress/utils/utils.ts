@@ -320,13 +320,13 @@ export function selectRow(name: string): void {
     // Clicks on a particular row on any table
     cy.get(tdTag, { timeout: 10 * SEC })
         .contains(name)
-        .closest(trTag)
+        .closest(trTag, { timeout: 10 * SEC })
         .click();
 }
 
 export function sidedrawerTab(name: string, tab: string): void {
     selectRow(name);
-    cy.get(sideDrawer.pageDrawerContent).within(() => {
+    cy.get(sideDrawer.pageDrawerContent, { timeout: 10 * SEC }).within(() => {
         clickTab(tab);
     });
 }
