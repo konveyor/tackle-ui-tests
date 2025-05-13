@@ -1364,7 +1364,7 @@
         "binary": ["customers-tomcat-0.0.1-SNAPSHOT.war"],
         "customRule": ["javax-package-custom-target.windup.xml"],
         "appName": "customers-tomcat-0.0.1-SNAPSHOT.war",
-        "effort": 16
+        "effort": 22
     },
 
     "analysis_for_enableTagging": {
