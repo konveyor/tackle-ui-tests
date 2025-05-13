@@ -305,6 +305,11 @@ export function selectFromDropListByText(droplist, item: string) {
 
 export function selectFormItems(fieldId: string, item: string): void {
     cy.get(fieldId).click();
+    cy.contains("button", item).click();
+}
+
+export function selectAnalysisMode(fieldId: string, item: string): void {
+    cy.get(fieldId).click();
     cy.get("button").then(($buttons) => {
         const match = $buttons.toArray().find((btn) => btn.textContent?.trim() === item);
         cy.wrap(match).click();

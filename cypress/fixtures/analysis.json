@@ -1371,7 +1371,7 @@
         "source": "Source code",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "tackle-testapp",
-        "effort": 26,
+        "effort": 11,
         "techTags": [
             ["Other", "Properties"],
             ["Bean", "EJB XML"],
