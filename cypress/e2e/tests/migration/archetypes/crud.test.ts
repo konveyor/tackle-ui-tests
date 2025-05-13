@@ -52,8 +52,8 @@ describe(["@tier2"], "Archetype CRUD operations", () => {
 
         const archetype = new Archetype(
             data.getRandomWord(8),
-            [tags[0].name],
-            [tags[1].name],
+            [tags[0].tagCategory + " / " + tags[0].name],
+            [tags[1].tagCategory + " / " + tags[1].name],
             null,
             stakeholders,
             stakeholderGroups
