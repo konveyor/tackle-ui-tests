@@ -1498,7 +1498,7 @@
         "effort": 1
     },
     "source_analysis_on_nexus_app": {
-        "source": "Source code + dependencies",
+        "source": "Source code",
         "target": ["OpenJDK", "Containerization"],
         "appName": "nexus"
     },

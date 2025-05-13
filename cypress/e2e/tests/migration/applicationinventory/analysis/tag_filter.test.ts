@@ -72,7 +72,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
         Application.open(true);
     });
 
-    it.only("Filter by automated tags generated after analysis", function () {
+    it("Filter by automated tags generated after analysis", function () {
         // Automates Polarion MTA-310
         const application = new Analysis(
             getRandomApplicationData(
@@ -145,7 +145,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
     });
 
     after("Perform test data clean up", function () {
-        // Application.open(true);
+        Application.open(true);
         deleteByList(applications);
         tag.delete();
         tagCategory.delete();
