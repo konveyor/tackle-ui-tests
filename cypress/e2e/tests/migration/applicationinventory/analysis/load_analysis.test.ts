@@ -72,10 +72,8 @@ describe(["@tier2"], "Source Analysis of big applications", () => {
 
         application.target = [target.name];
         application.create();
-
         applications.push(application);
         cy.wait("@getApplication");
-
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
         target.delete();
