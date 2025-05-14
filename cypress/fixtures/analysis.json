@@ -1364,14 +1364,14 @@
         "binary": ["customers-tomcat-0.0.1-SNAPSHOT.war"],
         "customRule": ["javax-package-custom-target.windup.xml"],
         "appName": "customers-tomcat-0.0.1-SNAPSHOT.war",
-        "effort": 16
+        "effort": 22
     },
 
     "analysis_for_enableTagging": {
         "source": "Source code",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "tackle-testapp",
-        "effort": 26,
+        "effort": 11,
         "techTags": [
             ["Other", "Properties"],
             ["Bean", "EJB XML"],
@@ -1384,24 +1384,24 @@
             {
                 "name": "File system - Java IO",
                 "category": "mandatory",
-                "source": "None",
-                "targets": ["cloud-readiness"],
-                "effort": 1,
-                "affectedFiles": 1,
-                "ruleSet": "cloud-readiness",
-                "rule": "local-storage-00001",
-                "labels": ["konveyor.io/source", "storage"]
-            },
-            {
-                "name": "Hardcoded IP Address",
-                "category": "mandatory",
-                "source": "None",
+                "sources": ["None"],
                 "effort": 1,
                 "affectedFiles": 1,
                 "targets": ["cloud-readiness"],
                 "ruleSet": "discovery-rules",
                 "rule": "hardcoded-ip-address",
                 "labels": ["discovery"]
+            },
+            {
+                "name": "The package 'javax' has been replaced by 'jakarta'",
+                "category": "mandatory",
+                "sources": ["spring5"],
+                "targets": ["eap", "eap8"],
+                "effort": 1,
+                "affectedFiles": 2,
+                "ruleSet": "eap8/eap7",
+                "rule": "javax-to-jakarta-import-00001",
+                "labels": ["konveyor.io/source"]
             }
         ]
     },
@@ -1731,6 +1731,12 @@
         "target": ["Application server migration to", "OpenJDK", "Containerization", "Linux"],
         "effort": 20
     },
+    "tackle-testapp-public": {
+        "appName": "tackle-testapp-public",
+        "source": "Source code",
+        "target": ["Application server migration to"],
+        "effort": 20
+    },
     "tackle-testapp-public-customRule": {
         "appName": "tackle-testapp-public",
         "source": "Source code",
@@ -1814,7 +1820,7 @@
         "target": [],
         "appName": "nodejs-app-custom-rules",
         "customRule": ["nodejs-rules.yaml"],
-        "effort": 4,
+        "effort": 6,
         "issues": [
             {
                 "name": "Testing that the node provider works - function",
@@ -1824,7 +1830,7 @@
                 "effort": 1,
                 "totalEffort": 2,
                 "incidents": 1,
-                "affectedFiles": 1,
+                "affectedFiles": 2,
                 "ruleSet": "files",
                 "rule": "node-sample-rule-002",
                 "labels": "None"
@@ -1837,7 +1843,7 @@
                 "effort": 1,
                 "totalEffort": 2,
                 "incidents": 1,
-                "affectedFiles": 1,
+                "affectedFiles": 2,
                 "ruleSet": "files",
                 "rule": "node-sample-rule-001",
                 "labels": ["None"]

@@ -72,7 +72,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
         Application.open(true);
     });
 
-    it("Bug MTA-2984: Filter by automated tags generated after analysis", function () {
+    it("Filter by automated tags generated after analysis", function () {
         // Automates Polarion MTA-310
         const application = new Analysis(
             getRandomApplicationData(
@@ -89,6 +89,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
         application.filterTags("Analysis");
         application.tagAndCategoryExists(this.techTags);
         cy.get(appDetailsView.applicationTag).should("not.contain", tag.name);
+        application.closeApplicationDetails();
 
         // Validate rules doesn't have effort=0 and should only appear as tags.
         application.verifyEffort(this.analysisData["analysis_for_enableTagging"]["effort"]);
