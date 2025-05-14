@@ -71,7 +71,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
             name: data.getAppName(),
             business: businessServicesList[0].name,
             description: data.getDescription(),
-            tags: [tagList[0].name],
+            tags: [tagList[0].tagCategory + " / " + tagList[0].name],
             comment: data.getDescription(),
         };
         const application = new Application(appdata);
@@ -102,7 +102,7 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
 
         application.edit({
             business: businessServicesList[1].name,
-            tags: [tagList[1].name],
+            tags: [tagList[1].tagCategory + " / " + tagList[1].name],
         });
         cy.get("@getApplication");
 
@@ -153,8 +153,11 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         tagList = createMultipleTags(3);
         const archetype = new Archetype(
             data.getRandomWord(8),
-            [tagList[0].name, tagList[2].name],
-            [tagList[1].name],
+            [
+                tagList[0].tagCategory + " / " + tagList[0].name,
+                tagList[2].tagCategory + " / " + tagList[2].name,
+            ],
+            [tagList[1].tagCategory + " / " + tagList[1].name],
             null
         );
         archetype.create();
