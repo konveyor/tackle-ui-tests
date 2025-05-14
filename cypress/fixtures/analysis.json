@@ -1830,7 +1830,7 @@
                 "effort": 1,
                 "totalEffort": 2,
                 "incidents": 1,
-                "affectedFiles": 1,
+                "affectedFiles": 2,
                 "ruleSet": "files",
                 "rule": "node-sample-rule-002",
                 "labels": "None"
@@ -1843,7 +1843,7 @@
                 "effort": 1,
                 "totalEffort": 2,
                 "incidents": 1,
-                "affectedFiles": 1,
+                "affectedFiles": 2,
                 "ruleSet": "files",
                 "rule": "node-sample-rule-001",
                 "labels": ["None"]
