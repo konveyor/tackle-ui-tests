@@ -21,7 +21,6 @@ import {
     checkSuccessAlert,
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
-    createMultipleTags,
     deleteByList,
     exists,
     login,
@@ -30,13 +29,11 @@ import {
 import { Archetype } from "../../../models/migration/archetypes/archetype";
 import { Stakeholdergroups } from "../../../models/migration/controls/stakeholdergroups";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
-import { Tag } from "../../../models/migration/controls/tags";
 import { archetypeTags, criteriaTags } from "../../../views/archetype.view";
 import { successAlertMessage } from "../../../views/common.view";
 
 let stakeholders: Stakeholders[];
 let stakeholderGroups: Stakeholdergroups[];
-let tags: Tag[];
 
 describe(["@tier2"], "Archetype CRUD operations", () => {
     before("Login", function () {
@@ -44,7 +41,6 @@ describe(["@tier2"], "Archetype CRUD operations", () => {
         cy.visit("/");
         stakeholders = createMultipleStakeholders(2);
         stakeholderGroups = createMultipleStakeholderGroups(2);
-        tags = createMultipleTags(2);
     });
 
     it("Archetype CRUD operations", function () {
@@ -52,8 +48,8 @@ describe(["@tier2"], "Archetype CRUD operations", () => {
 
         const archetype = new Archetype(
             data.getRandomWord(8),
-            [tags[0].name],
-            [tags[1].name],
+            ["RHEL 8"],
+            ["XFire"],
             null,
             stakeholders,
             stakeholderGroups
@@ -89,8 +85,8 @@ describe(["@tier2"], "Archetype CRUD operations", () => {
 
         const archetype = new Archetype(
             data.getRandomWord(8),
-            [tags[0].name],
-            [tags[1].name],
+            ["RHEL 8"],
+            ["XFire"],
             null,
             stakeholders,
             stakeholderGroups
@@ -125,6 +121,5 @@ describe(["@tier2"], "Archetype CRUD operations", () => {
     after("Clear test data", function () {
         deleteByList(stakeholders);
         deleteByList(stakeholderGroups);
-        deleteByList(tags);
     });
 });
