@@ -1384,24 +1384,24 @@
             {
                 "name": "File system - Java IO",
                 "category": "mandatory",
-                "source": "None",
-                "targets": ["cloud-readiness"],
-                "effort": 1,
-                "affectedFiles": 1,
-                "ruleSet": "cloud-readiness",
-                "rule": "local-storage-00001",
-                "labels": ["konveyor.io/source", "storage"]
-            },
-            {
-                "name": "Hardcoded IP Address",
-                "category": "mandatory",
-                "source": "None",
+                "sources": ["None"],
                 "effort": 1,
                 "affectedFiles": 1,
                 "targets": ["cloud-readiness"],
                 "ruleSet": "discovery-rules",
                 "rule": "hardcoded-ip-address",
                 "labels": ["discovery"]
+            },
+            {
+                "name": "The package 'javax' has been replaced by 'jakarta'",
+                "category": "mandatory",
+                "sources": ["spring5"],
+                "targets": ["eap", "eap8"],
+                "effort": 1,
+                "affectedFiles": 2,
+                "ruleSet": "eap8/eap7",
+                "rule": "javax-to-jakarta-import-00001",
+                "labels": ["konveyor.io/source"]
             }
         ]
     },
