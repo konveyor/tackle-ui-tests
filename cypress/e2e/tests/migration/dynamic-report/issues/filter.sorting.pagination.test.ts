@@ -161,11 +161,9 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
     it("All issues - Filtering issues by Archetype", function () {
         Issues.applyFilter(issueFilter.archetype, archetype.name);
-        this.analysisData["source+dep_on_coolStore_app"]["issues"].forEach(
-            (issue: AppIssue) => {
-                Issues.validateFilter(issue);
-            }
-        );
+        this.analysisData["source+dep_on_coolStore_app"]["issues"].forEach((issue: AppIssue) => {
+            Issues.validateFilter(issue);
+        });
         clearAllFilters();
     });
 
