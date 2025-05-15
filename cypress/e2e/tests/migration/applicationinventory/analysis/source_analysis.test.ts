@@ -34,6 +34,7 @@ import {
     SEC,
     UserCredentials,
 } from "../../../../types/constants";
+import { AppIssue } from "../../../../types/types";
 let source_credential: CredentialsSourceControlUsername;
 let source_credential_withHash: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;
@@ -127,6 +128,12 @@ describe(["@tier2"], "Source Analysis", () => {
         );
         application.validateIssues(
             this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"]
+        );
+        // Automate bug https://issues.redhat.com/browse/MTA-2006
+        this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"].forEach(
+            (currentIssue: AppIssue) => {
+                application.validateAffected(currentIssue);
+            }
         );
     });
 
