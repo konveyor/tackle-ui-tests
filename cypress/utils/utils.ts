@@ -358,23 +358,19 @@ export function removeMember(memberName: string): void {
 
 export function exists(value: string, tableSelector = appTable): void {
     // Wait for DOM to render table and sibling elements
-    cy.get(tableSelector, { timeout: 15 * SEC }).then(($tbody) => {
-        if (
+    cy.get(tableSelector, { timeout: 5 * SEC }).then(($tbody) => {
+        if ($tbody.text() !== "No data available") {
             $tbody.text() !== "No data available" &&
-            $tbody.text() !== "No applications available"
-        ) {
             selectItemsPerPage(100);
-            cy.get(tableSelector, { timeout: 15 * SEC }).should("contain", value);
+            cy.get(tableSelector, { timeout: 5 * SEC }).should("contain", value);
         }
     });
 }
 
 export function notExists(value: string, tableSelector = appTable): void {
     cy.get(tableSelector).then(($tbody) => {
-        if (
+        if ($tbody.text() !== "No data available") {
             $tbody.text() !== "No data available" &&
-            $tbody.text() !== "No applications available"
-        ) {
             selectItemsPerPage(100);
             cy.get(tableSelector, { timeout: 5 * SEC }).should("not.contain", value);
         }
@@ -1592,13 +1588,13 @@ export function doesExistButton(str: string, toBePresent: boolean): void {
 
 export function enableSwitch(selector: string): void {
     cy.get(selector)
-        .closest("label")
+        .parent("label")
         .within(() => {
             cy.get(".pf-m-on")
                 .invoke("css", "display")
                 .then((display) => {
                     if (display.toString() == "none") {
-                        cy.get(switchToggle).click({ force: true });
+                        cy.get(switchToggle).click();
                     }
                 });
         });
@@ -1606,13 +1602,13 @@ export function enableSwitch(selector: string): void {
 
 export function disableSwitch(selector: string): void {
     cy.get(selector)
-        .closest("label")
+        .parent("label")
         .within(() => {
             cy.get(".pf-m-off")
                 .invoke("css", "display")
                 .then((display) => {
                     if (display.toString() == "none") {
-                        cy.get(switchToggle).click({ force: true });
+                        cy.get(switchToggle).click();
                     }
                 });
         });
