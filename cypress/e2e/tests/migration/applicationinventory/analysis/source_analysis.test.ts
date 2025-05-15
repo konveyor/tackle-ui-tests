@@ -17,6 +17,7 @@ limitations under the License.
 
 import * as data from "../../../../../utils/data_utils";
 import {
+    deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
@@ -96,7 +97,6 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -116,7 +116,6 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -145,7 +144,6 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -162,7 +160,6 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -186,7 +183,6 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -203,7 +199,6 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_for_openSourceLibraries"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -220,7 +215,6 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_for_enableTagging"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -242,7 +236,6 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_for_disableTagging"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -261,13 +254,11 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["analysis_on_example-1-app"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        Application.open();
         // Polarion TC 406
         application.verifyEffort(this.analysisData["analysis_on_example-1-app"]["effort"]);
     });
@@ -280,20 +271,18 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["jws6_source+dep_analysis_on_tackletestapp"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        Application.open();
         application.verifyEffort(
             this.analysisData["jws6_source+dep_analysis_on_tackletestapp"]["effort"]
         );
     });
 
-    it("Bug MTA-4408: Openjdk17 Source + dependencies analysis on tackletest app", function () {
+    it("Bug MTA-4412: Bug MTA-5212  Openjdk17 Source + dependencies analysis on tackletest app", function () {
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies_openjdk17", {
                 sourceData: this.appData["tackle-testapp-git"],
@@ -302,7 +291,6 @@ describe(["@tier2"], "Source Analysis", () => {
                 this.analysisData["openJDK17_source+dep_analysis_on_tackletestapp"]
             )
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -321,13 +309,11 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["openJDK21_source+dep_analysis_on_dayTrader"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        Application.open();
+        application.verifyAnalysisStatus("Completed", 30 * MIN);
         application.verifyEffort(
             this.analysisData["openJDK21_source+dep_analysis_on_dayTrader"]["effort"]
         );
@@ -341,7 +327,6 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["jdk9_source_dep_analysis_on_tackletestapp"])
         );
-        Application.open();
         application.create();
         application.manageCredentials(null, maven_credential.name);
         applicationsList.push(application);
@@ -358,12 +343,10 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["tackle-testapp-public-4-targets"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        Application.open();
         application.verifyEffort(this.analysisData["tackle-testapp-public-4-targets"]["effort"]);
     });
 
@@ -410,7 +393,6 @@ describe(["@tier2"], "Source Analysis", () => {
         );
 
         // Analysis application with source credential created with hash
-        Application.open();
         application.create();
         application.manageCredentials(source_credential_withHash.name);
         applicationsList.push(application);
@@ -418,18 +400,9 @@ describe(["@tier2"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    afterEach("Remove aplication", function () {
-        applicationsList.forEach((application) => {
-            cy.visit("/");
-            application.delete();
-            cy.wait("@deleteApplication");
-        });
-        applicationsList = [];
-    });
-
     after("Perform test data clean up", function () {
-        login();
-        cy.visit("/");
+        Application.open(true);
+        deleteByList(applicationsList);
         if (source_credential) {
             source_credential.delete();
         }

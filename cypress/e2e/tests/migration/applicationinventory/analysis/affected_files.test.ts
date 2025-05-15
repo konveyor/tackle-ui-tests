@@ -64,8 +64,6 @@ describe(["@tier2"], "Affected files validation", () => {
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
-
-        Application.open(true);
     });
 
     it("Affected files validation with source analysis on bookserver app", function () {
@@ -76,7 +74,6 @@ describe(["@tier2"], "Affected files validation", () => {
             }),
             getRandomAnalysisData(this.analysisData["affected_files_on_bookserverapp"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -98,7 +95,6 @@ describe(["@tier2"], "Affected files validation", () => {
             }),
             getRandomAnalysisData(this.analysisData["affected_files_on_tackleTestapp"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
@@ -121,7 +117,6 @@ describe(["@tier2"], "Affected files validation", () => {
             }),
             getRandomAnalysisData(this.analysisData["affected_files_on_tackleTestapp_deps"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
