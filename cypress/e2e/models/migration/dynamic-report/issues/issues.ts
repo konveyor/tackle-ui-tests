@@ -143,6 +143,7 @@ export class Issues {
     }
 
     public static applyMultiFilter(filterType: issueFilter, filterValues: string[]): void {
+        Issues.openList();
         selectFilter(filterType);
         click(searchMenuToggle);
         filterValues.forEach((filterValue) => clickByText(span, filterValue));
