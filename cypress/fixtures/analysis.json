@@ -1592,26 +1592,6 @@
         },
         "openSourceLibraries": true
     },
-    "affected_files_on_day_trader_app": {
-        "source": "Source code + dependencies",
-        "target": ["Application server migration to"],
-        "appName": "deps",
-        "issues": [
-            {
-                "name": "Hibernate Search 5 - Changes in indexing numeric and date values",
-                "category": "optional",
-                "sources": ["eap"],
-                "targets": ["eap"],
-                "effort": 1,
-                "incidents": 2,
-                "affectedFiles": 64,
-                "ruleSet": "eap7/weblogic/tests/data",
-                "rule": "hsearch-00116",
-                "labels": ["hibernate", "hibernate-search"]
-            }
-        ]
-    },
-
     "affected_files_on_bookserverapp": {
         "source": "Source code",
         "target": ["Quarkus"],
