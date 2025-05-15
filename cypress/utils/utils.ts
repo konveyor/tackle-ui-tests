@@ -230,25 +230,9 @@ export function login(username?: string, password?: string, firstLogin = false):
                     }
                 });
                 updatePassword();
-                updateAccountInformation();
             }
         });
         cy.url().should("eq", Application.fullUrl);
-    });
-}
-
-export function updateAccountInformation() {
-    cy.get("body").then(($body) => {
-        let pageTitle = $body.find(loginView.kcPageTitle);
-        if (pageTitle.length > 0) {
-            const pageTitleText = pageTitle.text().trim();
-            if (pageTitleText === "Update Account Information") {
-                inputText(loginView.emailInput, "migrationqe@redhat.com");
-                inputText(loginView.firstNameInput, "migration");
-                inputText(loginView.lastNameInput, "qe");
-                click(loginView.submitInput);
-            }
-        }
     });
 }
 
