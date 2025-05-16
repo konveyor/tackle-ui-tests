@@ -26,10 +26,11 @@ import {
     limitPodsByQuota,
     login,
     validateTextPresence,
+    clickWithin,
 } from "../../../../utils/utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
-import { TaskKind, TaskStatus } from "../../../types/constants";
+import { SEC, TaskKind, TaskStatus } from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
 import { TaskManagerColumns } from "../../../views/taskmanager.view";
 
@@ -101,6 +102,24 @@ describe(["@tier2"], "Actions in Task Manager Page", function () {
         });
         // Succeeded tasks cannot be cancelled.
         TaskManager.cancelTask("Succeeded");
+    });
+
+    it("Validate 'View All Tasks' link from within the task drawer", function () {
+        bookServerApp = new Analysis(
+            getRandomApplicationData("TaskApp1_", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["analysis_for_openSourceLibraries"])
+        );
+        bookServerApp.create();
+        bookServerApp.analyze();
+        cy.get("#task-notification-badge").click();
+        cy.wait(10000); // Wait for alert messages to auto close
+        clickWithin(
+            "div.pf-v5-c-notification-drawer",
+            "div.pf-v5-c-notification-drawer__header-action"
+        );
+        cy.get("h1", { timeout: 35 * SEC }).should("contain", "Task Manager");
     });
 
     after("Perform test data clean up", function () {
