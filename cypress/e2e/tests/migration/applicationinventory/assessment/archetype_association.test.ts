@@ -193,6 +193,7 @@ describe(["@tier3"], "Tests related to application-archetype association ", () =
     });
 
     after("Perform test data clean up", function () {
+        Application.open(true);
         deleteByList(applicationList);
         deleteByList(inheritanceTags);
         deleteByList(associationTags);

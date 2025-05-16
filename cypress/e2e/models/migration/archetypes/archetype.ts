@@ -128,6 +128,7 @@ export class Archetype {
 
     create(cancel = false): void {
         Archetype.open();
+        cy.wait(2 * SEC);
         cy.contains("button", "Create new archetype", { timeout: 20000 })
             .should("be.enabled")
             .click();

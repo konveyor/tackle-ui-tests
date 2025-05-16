@@ -201,6 +201,7 @@ export class Analysis extends Application {
 
     public selectTarget(target: string[]): void {
         for (let i = 0; i < target.length; i++) {
+            cy.log(target[i]);
             if (["OpenJDK 11", "OpenJDK 17", "OpenJDK 21"].includes(target[i])) {
                 click(openjdkToggleButton);
                 clickByText(dropDownMenu, target[i]);
