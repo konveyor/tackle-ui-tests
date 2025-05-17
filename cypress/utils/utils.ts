@@ -136,13 +136,13 @@ export function inputText(fieldId: string, text: any, log = false): void {
     if (!log) {
         cy.log(`Type ${text} in ${fieldId}`);
     }
-    cy.get(fieldId, { log })
+    cy.get(fieldId, { log, timeout: 2 * SEC })
         .clear({ log, timeout: 30 * SEC })
         .type(text, { log });
 }
 
 export function clearInput(fieldID: string): void {
-    cy.get(fieldID).clear();
+    cy.get(fieldID, { timeout: 2 * SEC }).clear();
 }
 
 export function clickByText(

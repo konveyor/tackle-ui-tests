@@ -36,7 +36,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it(["@interop", "@tier1"], "Analysis for acmeair app upload binary", function () {
+    it(["@interop", "@tier1"], "Bug MTA-5181: Analysis for acmeair app upload binary", function () {
         const application = new Analysis(
             getRandomApplicationData("acmeair_app"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
