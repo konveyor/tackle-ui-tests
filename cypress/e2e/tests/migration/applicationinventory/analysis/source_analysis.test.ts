@@ -17,6 +17,7 @@ limitations under the License.
 
 import * as data from "../../../../../utils/data_utils";
 import {
+    deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
@@ -202,7 +203,7 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.wait("@getApplication");
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus("Completed", 30 * MIN);
     });
 
     it("Automated tagging using Source Analysis on tackle testapp", function () {
@@ -386,11 +387,9 @@ describe(["@tier2"], "Source Analysis", () => {
         };
 
         // Analyze application with Maven credentials
-        Application.open();
         analyzeApplication(applicationsList[0], maven_credential);
 
         // Analyze application without Maven credentials
-        Application.open();
         analyzeApplication(applicationsList[1], null);
     });
 
@@ -423,6 +422,8 @@ describe(["@tier2"], "Source Analysis", () => {
     after("Perform test data clean up", function () {
         login();
         cy.visit("/");
+        Application.open(true);
+        deleteByList(applicationsList);
         if (source_credential) {
             source_credential.delete();
         }

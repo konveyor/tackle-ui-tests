@@ -163,7 +163,7 @@ describe(["@tier2"], "Affected files validation", () => {
     it("Affected files validation with source+deps analysis on coolStore app", function () {
         const application = new Analysis(
             getRandomApplicationData("affected_files_on_coolStoreApp", {
-                sourceData: this.appData["cool-store-app"],
+                sourceData: this.appData["coolstore-app"],
             }),
             getRandomAnalysisData(this.analysisData["affected_files_on_coolStore_deps"])
         );
