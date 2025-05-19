@@ -1669,12 +1669,7 @@ export function getNamespace(): string {
 }
 
 export function patchTackleCR(option: string, isEnabled = true): void {
-    let value: string;
-    if (isEnabled) {
-        value = "true";
-    } else {
-        value = "false";
-    }
+    const value = isEnabled ? "true" : "false";
     let command = "";
     let namespace = getNamespace();
     let tackleCr = `tackle=$(oc get tackle -n${namespace}|grep -iv name|awk '{print $1}'); `;
@@ -1683,11 +1678,13 @@ export function patchTackleCR(option: string, isEnabled = true): void {
     command += "$tackle ";
     command += `-n${namespace} `;
     command += "--type merge ";
-    if (option == "configureRWX") command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
-    else if (option == "keycloak")
+    if (option == "configureRWX") {
+        command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
+    } else if (option == "keycloak") {
         command += `--patch '{"spec":{"feature_auth_required": ${value}}}'`;
-    else if (option == "metrics") command += `--patch '{"spec":{"hub_metrics_enabled": ${value}}}'`;
-    cy.log(command);
+    } else if (option == "metrics") {
+        command += `--patch '{"spec":{"hub_metrics_enabled": ${value}}}'`;
+    }
     cy.exec(command).then((result) => {
         cy.log(result.stderr);
     });

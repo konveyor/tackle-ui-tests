@@ -22,6 +22,7 @@ import {
     getRandomApplicationData,
     isEnabled,
     login,
+    logout,
     patchTackleCR,
     writeMavenSettingsFile,
 } from "../../../../utils/utils";
@@ -116,7 +117,7 @@ describe(["@tier2"], "Test secure and insecure maven repository analysis", () =>
 
     it("Perform RWX=true and clear repository", function () {
         MavenConfiguration.open();
-        let rwxEnabled;
+        let rwxEnabled: boolean;
 
         cy.get(repoSize).then(($btn) => {
             // In UI if $btn.is(':disabled'), RWX = false
@@ -126,6 +127,8 @@ describe(["@tier2"], "Test secure and insecure maven repository analysis", () =>
             if (rwxEnabled) mavenConfiguration.clearRepository();
             patchTackleCR("configureRWX", !rwxEnabled);
         });
+        logout();
+        Cypress.session.clearAllSavedSessions();
         login();
         cy.visit("/");
         MavenConfiguration.open();
@@ -139,6 +142,8 @@ describe(["@tier2"], "Test secure and insecure maven repository analysis", () =>
 
     after("Perform test data clean up", () => {
         patchTackleCR("configureRWX", false);
+        logout();
+        Cypress.session.clearAllSavedSessions();
         login();
         cy.visit("/");
         deleteByList(applicationsList);
