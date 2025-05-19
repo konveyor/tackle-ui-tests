@@ -30,10 +30,10 @@ import { Analysis } from "../../../models/migration/applicationinventory/analysi
 import { Application } from "../../../models/migration/applicationinventory/application";
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
 import { SEC, TaskKind, TaskStatus } from "../../../types/constants";
+import { taskNotificationBadge } from "../../../views/common.view";
 import { TaskManagerColumns, tasksTable } from "../../../views/taskmanager.view";
 
 let applicationsList: Array<Application> = [];
-let application: Analysis;
 
 describe(["@tier2"], "Task Manager", () => {
     before("Login", function () {
@@ -50,7 +50,7 @@ describe(["@tier2"], "Task Manager", () => {
                         }),
                         getRandomAnalysisData(analysisData["source_analysis_on_bookserverapp"])
                     );
-                    application.create();
+                    bookServerApp.create();
                     applicationsList.push(bookServerApp);
                 }
             });
@@ -83,7 +83,7 @@ describe(["@tier2"], "Task Manager", () => {
 
     it("Validate 'View All Tasks' link from within the task drawer", function () {
         // Automates Polarion TC MTA-557
-        cy.get("#task-notification-badge").click();
+        cy.get(taskNotificationBadge).click();
         clickWithin(
             "div.pf-v5-c-notification-drawer",
             "div.pf-v5-c-notification-drawer__header-action"
