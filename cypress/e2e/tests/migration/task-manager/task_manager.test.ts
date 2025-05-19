@@ -17,6 +17,7 @@ limitations under the License.
 
 import {
     clearAllFilters,
+    clickWithin,
     deleteApplicationTableRows,
     deleteByList,
     getRandomAnalysisData,
@@ -39,34 +40,33 @@ describe(["@tier2"], "Task Manager", () => {
         login();
         cy.visit("/");
         deleteApplicationTableRows();
+
+        cy.fixture("application").then((appData) => {
+            cy.fixture("analysis").then((analysisData) => {
+                for (let i = 0; i < 2; i++) {
+                    const bookServerApp = new Analysis(
+                        getRandomApplicationData("bookserverApp", {
+                            sourceData: appData["bookserver-app"],
+                        }),
+                        getRandomAnalysisData(analysisData["source_analysis_on_bookserverapp"])
+                    );
+                    application.create();
+                    applicationsList.push(bookServerApp);
+                }
+            });
+        });
     });
 
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
-        cy.fixture("analysis").then(function (analysisData) {
-            this.analysisData = analysisData;
-        });
-
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
     it("Navigation to the task manager page is allowed from the left navigation menu", function () {
-        for (let i = 0; i < 2; i++) {
-            application = new Analysis(
-                getRandomApplicationData("", {
-                    sourceData: this.appData["bookserver-app"],
-                }),
-                getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
-            );
-            application.create();
-            cy.wait("@getApplication");
-            applicationsList.push(application);
-        }
-
         TaskManager.open();
         validateTextPresence(TaskManagerColumns.application, applicationsList[0].name);
         validateTextPresence(TaskManagerColumns.application, applicationsList[1].name);
@@ -79,6 +79,18 @@ describe(["@tier2"], "Task Manager", () => {
         validateTextPresence(TaskManagerColumns.kind, TaskKind.languageDiscovery);
         validateTextPresence(TaskManagerColumns.kind, TaskKind.techDiscovery);
         clearAllFilters();
+    });
+
+    it("Validate 'View All Tasks' link from within the task drawer", function () {
+        // Automates Polarion TC MTA-557
+        cy.get("#task-notification-badge").click();
+        clickWithin(
+            "div.pf-v5-c-notification-drawer",
+            "div.pf-v5-c-notification-drawer__header-action"
+        );
+        cy.get("h1", { timeout: 35 * SEC }).should("contain", "Task Manager");
+        validateTextPresence(TaskManagerColumns.application, applicationsList[0].name);
+        validateTextPresence(TaskManagerColumns.application, applicationsList[1].name);
     });
 
     it("Create an app with source code and branch name - discovery tasks should succeed", function () {
