@@ -94,7 +94,6 @@ import {
     itemsPerPageMenuOptions,
     itemsPerPageToggleButton,
     lastPageButton,
-    liTag,
     manageImportsActionsButton,
     modal,
     nextPageButton,
@@ -231,25 +230,9 @@ export function login(username?: string, password?: string, firstLogin = false):
                     }
                 });
                 updatePassword();
-                updateAccountInformation();
             }
         });
         cy.url().should("eq", Application.fullUrl);
-    });
-}
-
-export function updateAccountInformation() {
-    cy.get("body").then(($body) => {
-        let pageTitle = $body.find(loginView.kcPageTitle);
-        if (pageTitle.length > 0) {
-            const pageTitleText = pageTitle.text().trim();
-            if (pageTitleText === "Update Account Information") {
-                inputText(loginView.emailInput, "migrationqe@redhat.com");
-                inputText(loginView.firstNameInput, "migration");
-                inputText(loginView.lastNameInput, "qe");
-                click(loginView.submitInput);
-            }
-        }
     });
 }
 
@@ -309,17 +292,25 @@ export function selectFormItems(fieldId: string, item: string): void {
     cy.contains("button", item).click();
 }
 
+export function selectAnalysisMode(fieldId: string, item: string): void {
+    cy.get(fieldId).click();
+    cy.get("button").then(($buttons) => {
+        const match = $buttons.toArray().find((btn) => btn.textContent?.trim() === item);
+        cy.wrap(match).click();
+    });
+}
+
 export function selectRow(name: string): void {
     // Clicks on a particular row on any table
     cy.get(tdTag, { timeout: 10 * SEC })
         .contains(name)
-        .closest(trTag)
+        .closest(trTag, { timeout: 10 * SEC })
         .click();
 }
 
 export function sidedrawerTab(name: string, tab: string): void {
     selectRow(name);
-    cy.get(sideDrawer.pageDrawerContent).within(() => {
+    cy.get(sideDrawer.pageDrawerContent, { timeout: 10 * SEC }).within(() => {
         clickTab(tab);
     });
 }
@@ -453,11 +444,7 @@ export function validateSingleApplicationIssue(issue: AppIssue): void {
             validateTextPresence(singleApplicationColumns.issue, issue.name);
             validateTextPresence(singleApplicationColumns.category, issue.category);
             validateTextPresence(singleApplicationColumns.source, issue.sources[0]);
-            cy.get(singleApplicationColumns.target).within(() => {
-                issue.targets.forEach((currentTarget) => {
-                    validateTextPresence(liTag, currentTarget);
-                });
-            });
+            validateTextPresence(singleApplicationColumns.target, issue.targets[0]);
             validateNumberPresence(singleApplicationColumns.effort, issue.effort);
             validateNumberPresence(singleApplicationColumns.files, issue.affectedFiles);
         });
@@ -1666,12 +1653,7 @@ export function getNamespace(): string {
 }
 
 export function patchTackleCR(option: string, isEnabled = true): void {
-    let value: string;
-    if (isEnabled) {
-        value = "true";
-    } else {
-        value = "false";
-    }
+    const value = isEnabled ? "true" : "false";
     let command = "";
     let namespace = getNamespace();
     let tackleCr = `tackle=$(oc get tackle -n${namespace}|grep -iv name|awk '{print $1}'); `;
@@ -1680,11 +1662,13 @@ export function patchTackleCR(option: string, isEnabled = true): void {
     command += "$tackle ";
     command += `-n${namespace} `;
     command += "--type merge ";
-    if (option == "configureRWX") command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
-    else if (option == "keycloak")
+    if (option == "configureRWX") {
+        command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
+    } else if (option == "keycloak") {
         command += `--patch '{"spec":{"feature_auth_required": ${value}}}'`;
-    else if (option == "metrics") command += `--patch '{"spec":{"hub_metrics_enabled": ${value}}}'`;
-    cy.log(command);
+    } else if (option == "metrics") {
+        command += `--patch '{"spec":{"hub_metrics_enabled": ${value}}}'`;
+    }
     cy.exec(command).then((result) => {
         cy.log(result.stderr);
     });

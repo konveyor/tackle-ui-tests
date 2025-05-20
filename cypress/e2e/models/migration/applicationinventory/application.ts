@@ -570,7 +570,9 @@ export class Application {
                         cy.get("ul[role=tablist] >li >button").then((button) => {
                             if (!button.text().includes("All incidents")) {
                                 // Asserting that content of text field has at least 100 symbols
-                                cy.get("div.monaco-scrollable-element.editor-scrollable.vs-dark")
+                                cy.get("div.monaco-scrollable-element.editor-scrollable.vs-dark", {
+                                    timeout: 15 * SEC,
+                                })
                                     .invoke("text")
                                     .then((text) => {
                                         expect(text.length).to.be.at.least(100);

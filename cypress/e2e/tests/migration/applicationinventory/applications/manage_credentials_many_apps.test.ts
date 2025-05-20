@@ -24,7 +24,6 @@ import {
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { Application } from "../../../../models/migration/applicationinventory/application";
 import { CredentialType, UserCredentials } from "../../../../types/constants";
 let source_credential: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;
@@ -60,10 +59,6 @@ describe(["@tier2"], "Manage credentials source analysis", () => {
         });
     });
 
-    afterEach("Reset url", function () {
-        Application.open(true);
-    });
-
     it("Adding source credentials to multiple apps", function () {
         let application = new Analysis(
             getRandomApplicationData("bookserverApp", {
@@ -74,10 +69,10 @@ describe(["@tier2"], "Manage credentials source analysis", () => {
         sourceApplicationsList.push(application);
 
         application = new Analysis(
-            getRandomApplicationData("dayTraderApp_Source+dependencies", {
-                sourceData: this.appData["daytrader-app"],
+            getRandomApplicationData("tackle-testapp-public", {
+                sourceData: this.appData["tackle-testapp-public"],
             }),
-            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
+            getRandomAnalysisData(this.analysisData["tackle-testapp-public"])
         );
         sourceApplicationsList.push(application);
 
@@ -93,10 +88,10 @@ describe(["@tier2"], "Manage credentials source analysis", () => {
 
     it("Adding maven credentials to multiple apps", function () {
         let application = new Analysis(
-            getRandomApplicationData("dayTraderApp_MavenCreds", {
-                sourceData: this.appData["daytrader-app"],
+            getRandomApplicationData("tackletestApp_MavenCreds", {
+                sourceData: this.appData["tackle-testapp-public"],
             }),
-            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
+            getRandomAnalysisData(this.analysisData["tackle-testapp-public"])
         );
         mavenApplicationsList.push(application);
 

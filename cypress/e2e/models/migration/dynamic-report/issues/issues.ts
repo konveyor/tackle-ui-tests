@@ -211,7 +211,7 @@ export class Issues {
             button,
             /\d - View affected /
         );
-        Issues.validateSection(issue.name, sections.targetTechnologies, span, issue.targets);
+        Issues.validateSection(issue.name, sections.targetTechnologies, div, issue.targets);
         Issues.validateSection(issue.name, sections.sourceTechnologies, div, issue.sources);
         if (issue.ruleSet) {
             Issues.validateSection(issue.name, sections.ruleSet, div, issue.ruleSet);

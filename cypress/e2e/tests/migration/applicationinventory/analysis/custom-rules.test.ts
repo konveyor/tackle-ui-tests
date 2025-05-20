@@ -64,7 +64,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
         });
     });
 
-    it("Bug MTA-4885: Custom rule with administracionEfectivo application", function () {
+    it("Bug MTA-5199: Custom rule with administracionEfectivo application", function () {
         const app = new Analysis(
             getRandomApplicationData("customRule_administracionEfectivo"),
             getRandomAnalysisData(this.analysisData["administracionEfectivo_custom_rules"])
@@ -78,7 +78,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
         exists("CUSTOM RULE");
     });
 
-    it("Bug MTA-4885: Verify triggered rule", function () {
+    it("Verify triggered rule", function () {
         const app = new Analysis(
             getRandomApplicationData("jee-example-app custom rule"),
             getRandomAnalysisData({
@@ -98,7 +98,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
     });
 
     // Automates Bug MTA-2001
-    it("Bug MTA-3863: Verify triggered rule for dependency", function () {
+    it("Bug MTA-4885: Verify triggered rule for dependency", function () {
         const app = new Analysis(
             getRandomApplicationData("tackle-testapp-custom-rules", {
                 sourceData: this.appData["tackle-testapp-git"],
@@ -117,7 +117,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
     });
 
     // Automates Bug MTA-2000
-    it("Bug MTA-4885: Verify triggered rule for javax.* package import", function () {
+    it("Verify triggered rule for javax.* package import", function () {
         Issues.openSingleApplication(tackleTestapp.name);
         exists("CUSTOM RULE for javax.* package import");
     });
