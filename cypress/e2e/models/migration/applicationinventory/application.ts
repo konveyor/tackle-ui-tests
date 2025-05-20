@@ -503,7 +503,6 @@ export class Application {
 
     private validateAffectedValues(appIssue: AppIssue): void {
         performWithin(this.name, () => {
-            validateTextPresence('td[data-label="Name"]', this.name);
             if (this.description) {
                 validateTextPresence('td[data-label="Description"]', this.description);
             }

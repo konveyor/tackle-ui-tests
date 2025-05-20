@@ -107,7 +107,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
     });
 
-    it("Bug MTA-5179: Source + dependencies analysis on daytrader app", function () {
+    it("Source + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies", {

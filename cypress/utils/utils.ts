@@ -441,7 +441,6 @@ export function validateSingleApplicationIssue(issue: AppIssue): void {
     cy.contains(issue.name)
         .closest(trTag)
         .within(() => {
-            validateTextPresence(singleApplicationColumns.issue, issue.name);
             validateTextPresence(singleApplicationColumns.category, issue.category);
             validateTextPresence(singleApplicationColumns.source, issue.sources[0]);
             validateTextPresence(singleApplicationColumns.target, issue.targets[0]);

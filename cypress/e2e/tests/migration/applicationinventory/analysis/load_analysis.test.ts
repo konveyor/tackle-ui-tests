@@ -109,6 +109,23 @@ describe(["@tier2"], "Source Analysis of big applications", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed, 30 * MIN);
     });
 
+    it("Source + dependency Analysis on Nexus app", function () {
+        const application = new Analysis(
+            getRandomApplicationData("Nexus Source+dep", {
+                sourceData: this.appData["nexus"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_plus_dependency_analysis_on_nexus_app"])
+        );
+        application.create();
+        applications.push(application);
+        cy.wait("@getApplication");
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed, 60 * MIN);
+        application.verifyEffort(
+            this.analysisData["source_plus_dependency_analysis_on_nexus_app"]["effort"]
+        );
+    });
+
     after("Test data clean up", function () {
         Analysis.open(true);
         deleteByList(applications);
