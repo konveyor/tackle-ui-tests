@@ -15,9 +15,11 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 import {
+    deleteAllMigrationWaves,
     deleteApplicationTableRows,
     getRandomAnalysisData,
     getRandomApplicationData,
+    login,
 } from "../../../utils/utils";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { Application } from "../../models/migration/applicationinventory/application";
@@ -28,6 +30,13 @@ let applicationList: Array<Application> = [];
 let counter: number;
 
 describe(["@tier2"], "Custom Metrics - Count the total number of initiated analyses", function () {
+    before("Log in and clear state", function () {
+        login();
+        cy.visit("/");
+        deleteAllMigrationWaves();
+        deleteApplicationTableRows();
+    });
+
     beforeEach("Load data and define interceptors", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
