@@ -311,8 +311,6 @@ describe(["@tier3"], "Application inventory filter validations", function () {
     });
 
     it("Analysis status filter validation", function () {
-        Application.open();
-
         const application1 = new Analysis(
             getRandomApplicationData("Insecure_enabled_tackle_test_app", {
                 sourceData: this.appData["tackle-testapp"],
