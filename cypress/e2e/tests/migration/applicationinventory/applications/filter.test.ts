@@ -31,6 +31,7 @@ import {
     selectFilter,
 } from "../../../../../utils/utils";
 import {
+    analysis,
     archetypes,
     artifact,
     button,
@@ -119,195 +120,195 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         clearAllFiltersIfExists();
     });
 
-    // it("Name filter validations", function () {
-    //     Application.open();
-    //     filterApplicationsBySubstring();
-    //
-    //     // Enter an exact existing name and assert
-    //     applySearchFilter(name, applicationsList[1].name);
-    //     exists(applicationsList[1].name);
-    //     notExists(applicationsList[0].name);
-    //     clickByText(button, clearAllFilters);
-    // });
-    //
-    // it("Business service filter validations", function () {
-    //     const validSearchInput = applicationsList[0].business;
-    //     applySearchFilter("Business service", validSearchInput);
-    //
-    //     exists(applicationsList[0].business);
-    //     clickByText(button, clearAllFilters);
-    // });
-    //
-    // it("Tag filter validations", function () {
-    //     Application.open();
-    //
-    //     const validSearchInput = applicationsList[0].tags[0];
-    //     applySearchFilter(tags, validSearchInput);
-    //
-    //     exists(applicationsList[0].name);
-    //     notExists(applicationsList[1].name);
-    //     clickByText(button, clearAllFilters);
-    //
-    //     applySearchFilter(tags, applicationsList[1].tags[0]);
-    //     exists(applicationsList[1].name);
-    //     notExists(applicationsList[0].name);
-    //     clickByText(button, clearAllFilters);
-    // });
-    //
-    // it("Credential type filter validations", function () {
-    //     const application = new Analysis(
-    //         getRandomApplicationData("tackleTestApp_Source_Binary", {
-    //             sourceData: this.appData["tackle-testapp"],
-    //             binaryData: this.appData["tackle-testapp-binary"],
-    //         }),
-    //         getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
-    //     );
-    //     application.create();
-    //     applicationsList.push(application);
-    //     cy.wait("@getApplication");
-    //
-    //     application.manageCredentials(null, maven_credential.name);
-    //     exists(application.name);
-    //
-    //     applySearchFilter(credentialType, "Maven");
-    //     exists(application.name);
-    //     clickByText(button, clearAllFilters);
-    //
-    //     application.manageCredentials(source_credential.name, null);
-    //     exists(application.name);
-    //
-    //     applySearchFilter(credentialType, "Source");
-    //     exists(application.name);
-    //     clickByText(button, clearAllFilters);
-    // });
-    //
-    // it("Repository type filter validations", function () {
-    //     // For application must have source code URL
-    //     const application = new Application(
-    //         getRandomApplicationData("tackleTestApp_Source", {
-    //             sourceData: this.appData["tackle-testapp-git"],
-    //         })
-    //     );
-    //     const application1 = new Application(
-    //         getRandomApplicationData("tackleTestApp_svnRepo", {
-    //             sourceData: this.appData["tackle-testapp-svn"],
-    //         })
-    //     );
-    //
-    //     //Create two applications one with Git and another with svn as repository type
-    //     application.create();
-    //     application1.create();
-    //     cy.get("@getApplication");
-    //
-    //     // Apply repository type filter check with Git
-    //     // Check Application exists and application1 doesn't exist
-    //     applySearchFilter(repositoryType, git);
-    //     exists(application.name);
-    //     notExists(application1.name);
-    //     clickByText(button, clearAllFilters);
-    //
-    //     // Apply repository type filter check with Subversion
-    //     // Check Application1 exists and application doesn't exist
-    //     applySearchFilter(repositoryType, subversion);
-    //     exists(application1.name);
-    //     notExists(application.name);
-    //     clickByText(button, clearAllFilters);
-    // });
-    //
-    // it("Artifact type filter validations", function () {
-    //     // For application must have Binary group,artifact and version
-    //     const application = new Application(
-    //         getRandomApplicationData("tackleTestApp_Binary", {
-    //             binaryData: this.appData["tackle-testapp-binary"],
-    //         })
-    //     );
-    //     application.create();
-    //     cy.get("@getApplication");
-    //
-    //     // Check application exists on the page
-    //     exists(application.name);
-    //
-    //     // Apply artifact filter check with associated artifact field
-    //     // Check application exists and applicationList[0] doesn't exist
-    //     applySearchFilter(artifact, "Associated artifact");
-    //     exists(application.name);
-    //     notExists(applicationsList[0].name);
-    //     clickByText(button, clearAllFilters);
-    //
-    //     // Apply artifact filter check with 'No associated artifact' field
-    //     // Check applicationList[0] exists and application doesn't exist
-    //     applySearchFilter(artifact, "No associated artifact");
-    //     exists(applicationsList[0].name);
-    //     notExists(application.name);
-    //     clickByText(button, clearAllFilters);
-    // });
-    //
-    // it("Risk filter validations", function () {
-    //     const application = applicationsList[0];
-    //     const application1 = applicationsList[1];
-    //
-    //     // Check application exists on the page
-    //     exists(application.name);
-    //     exists(application1.name);
-    //
-    //     application.perform_assessment("low", stakeholders);
-    //     application.verifyStatus("assessment", "Completed");
-    //
-    //     // Apply search filter Risk - Low
-    //     applySearchFilter(risk, "Low");
-    //     exists(application.name);
-    //     notExists(application1.name);
-    //     clickByText(button, clearAllFilters);
-    //
-    //     // apply search filter Risk - Unassessed
-    //     applySearchFilter(risk, "Unassessed");
-    //     exists(application1.name);
-    //     notExists(application.name);
-    //     clickByText(button, clearAllFilters);
-    // });
-    //
-    // it("Archetype filter validations", function () {
-    //     const tags = createMultipleTags(2);
-    //
-    //     //validate archetype1 is shown in applications archetype filter and application1 is present
-    //     const archetype1 = new Archetype(
-    //         data.getRandomWord(8),
-    //         [tags[0].name],
-    //         [tags[1].name],
-    //         null
-    //     );
-    //     archetype1.create();
-    //     const appdata = {
-    //         name: data.getAppName(),
-    //         description: data.getDescription(),
-    //         tags: [tags[0].name],
-    //         comment: data.getDescription(),
-    //     };
-    //     const application1 = new Application(appdata);
-    //     applicationsList.push(application1);
-    //     application1.create();
-    //     cy.get("@getApplication");
-    //     const validSearchInput = archetype1.name;
-    //     applySearchFilter("Archetypes", validSearchInput);
-    //     exists(application1.name);
-    //     clickByText(button, clearAllFilters);
-    //
-    //     //validate archetype2 is not present in applications archetype filter
-    //     const archetype2 = new Archetype(
-    //         data.getRandomWord(8),
-    //         [tags[1].name],
-    //         [tags[0].name],
-    //         null
-    //     );
-    //     archetype2.create();
-    //     Application.open();
-    //     selectFilter(archetypes);
-    //     cy.get(filterDropDownContainer).find(searchMenuToggle).click();
-    //     notExists(archetype2.name);
-    //
-    //     deleteByList([archetype1, archetype2]);
-    //     deleteByList(tags);
-    // });
+    it("Name filter validations", function () {
+        Application.open();
+        filterApplicationsBySubstring();
+
+        // Enter an exact existing name and assert
+        applySearchFilter(name, applicationsList[1].name);
+        exists(applicationsList[1].name);
+        notExists(applicationsList[0].name);
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Business service filter validations", function () {
+        const validSearchInput = applicationsList[0].business;
+        applySearchFilter("Business service", validSearchInput);
+
+        exists(applicationsList[0].business);
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Tag filter validations", function () {
+        Application.open();
+
+        const validSearchInput = applicationsList[0].tags[0];
+        applySearchFilter(tags, validSearchInput);
+
+        exists(applicationsList[0].name);
+        notExists(applicationsList[1].name);
+        clickByText(button, clearAllFilters);
+
+        applySearchFilter(tags, applicationsList[1].tags[0]);
+        exists(applicationsList[1].name);
+        notExists(applicationsList[0].name);
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Credential type filter validations", function () {
+        const application = new Analysis(
+            getRandomApplicationData("tackleTestApp_Source_Binary", {
+                sourceData: this.appData["tackle-testapp"],
+                binaryData: this.appData["tackle-testapp-binary"],
+            }),
+            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+
+        application.manageCredentials(null, maven_credential.name);
+        exists(application.name);
+
+        applySearchFilter(credentialType, "Maven");
+        exists(application.name);
+        clickByText(button, clearAllFilters);
+
+        application.manageCredentials(source_credential.name, null);
+        exists(application.name);
+
+        applySearchFilter(credentialType, "Source");
+        exists(application.name);
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Repository type filter validations", function () {
+        // For application must have source code URL
+        const application = new Application(
+            getRandomApplicationData("tackleTestApp_Source", {
+                sourceData: this.appData["tackle-testapp-git"],
+            })
+        );
+        const application1 = new Application(
+            getRandomApplicationData("tackleTestApp_svnRepo", {
+                sourceData: this.appData["tackle-testapp-svn"],
+            })
+        );
+
+        //Create two applications one with Git and another with svn as repository type
+        application.create();
+        application1.create();
+        cy.get("@getApplication");
+
+        // Apply repository type filter check with Git
+        // Check Application exists and application1 doesn't exist
+        applySearchFilter(repositoryType, git);
+        exists(application.name);
+        notExists(application1.name);
+        clickByText(button, clearAllFilters);
+
+        // Apply repository type filter check with Subversion
+        // Check Application1 exists and application doesn't exist
+        applySearchFilter(repositoryType, subversion);
+        exists(application1.name);
+        notExists(application.name);
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Artifact type filter validations", function () {
+        // For application must have Binary group,artifact and version
+        const application = new Application(
+            getRandomApplicationData("tackleTestApp_Binary", {
+                binaryData: this.appData["tackle-testapp-binary"],
+            })
+        );
+        application.create();
+        cy.get("@getApplication");
+
+        // Check application exists on the page
+        exists(application.name);
+
+        // Apply artifact filter check with associated artifact field
+        // Check application exists and applicationList[0] doesn't exist
+        applySearchFilter(artifact, "Associated artifact");
+        exists(application.name);
+        notExists(applicationsList[0].name);
+        clickByText(button, clearAllFilters);
+
+        // Apply artifact filter check with 'No associated artifact' field
+        // Check applicationList[0] exists and application doesn't exist
+        applySearchFilter(artifact, "No associated artifact");
+        exists(applicationsList[0].name);
+        notExists(application.name);
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Risk filter validations", function () {
+        const application = applicationsList[0];
+        const application1 = applicationsList[1];
+
+        // Check application exists on the page
+        exists(application.name);
+        exists(application1.name);
+
+        application.perform_assessment("low", stakeholders);
+        application.verifyStatus("assessment", "Completed");
+
+        // Apply search filter Risk - Low
+        applySearchFilter(risk, "Low");
+        exists(application.name);
+        notExists(application1.name);
+        clickByText(button, clearAllFilters);
+
+        // apply search filter Risk - Unassessed
+        applySearchFilter(risk, "Unassessed");
+        exists(application1.name);
+        notExists(application.name);
+        clickByText(button, clearAllFilters);
+    });
+
+    it("Archetype filter validations", function () {
+        const tags = createMultipleTags(2);
+
+        //validate archetype1 is shown in applications archetype filter and application1 is present
+        const archetype1 = new Archetype(
+            data.getRandomWord(8),
+            [tags[0].name],
+            [tags[1].name],
+            null
+        );
+        archetype1.create();
+        const appdata = {
+            name: data.getAppName(),
+            description: data.getDescription(),
+            tags: [tags[0].name],
+            comment: data.getDescription(),
+        };
+        const application1 = new Application(appdata);
+        applicationsList.push(application1);
+        application1.create();
+        cy.get("@getApplication");
+        const validSearchInput = archetype1.name;
+        applySearchFilter("Archetypes", validSearchInput);
+        exists(application1.name);
+        clickByText(button, clearAllFilters);
+
+        //validate archetype2 is not present in applications archetype filter
+        const archetype2 = new Archetype(
+            data.getRandomWord(8),
+            [tags[1].name],
+            [tags[0].name],
+            null
+        );
+        archetype2.create();
+        Application.open();
+        selectFilter(archetypes);
+        cy.get(filterDropDownContainer).find(searchMenuToggle).click();
+        notExists(archetype2.name);
+
+        deleteByList([archetype1, archetype2]);
+        deleteByList(tags);
+    });
 
     it("Analysis filter validation", function () {
         Application.open();
@@ -331,13 +332,22 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         applicationsList.push(application2);
 
         application1.analyze();
-        application2.analyze();
+
+        applySearchFilter(analysis, "Not started");
+        exists(application2.name);
+        notExists(application1.name);
+
+        clickByText(button, clearAllFilters);
+
+        applySearchFilter(analysis, "Failed");
+        exists(application1.name);
+        notExists(application2.name);
     });
 
     after("Perform test data clean up", function () {
         deleteByList(tagList);
         deleteByList(businessServicesList);
-        // deleteByList(applicationsList);
+        deleteByList(applicationsList);
         deleteByList(stakeholders);
     });
 });
