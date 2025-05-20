@@ -53,7 +53,7 @@ import {
     trTag,
 } from "../../../types/constants";
 import { AppIssue, applicationData, RbacValidationRules } from "../../../types/types";
-import { effortColumn, rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
+import { rightSideMenu, sourceDropdown } from "../../../views/analysis.view";
 import {
     appContributorSelect,
     appDetailsView,
@@ -178,17 +178,6 @@ export class Application {
 
     protected fillName(name: string): void {
         inputText(applicationNameInput, name);
-    }
-
-    public verifyEffort(effort: number) {
-        cy.get(tdTag)
-            .contains(this.name)
-            .closest(trTag)
-            .within(() => {
-                cy.get(effortColumn, { timeout: 5 * SEC }).should("contain", `${effort}`, {
-                    timeout: 10 * SEC,
-                });
-            });
     }
 
     protected fillDescription(description: string): void {
@@ -515,7 +504,6 @@ export class Application {
 
     private validateAffectedValues(appIssue: AppIssue): void {
         performWithin(this.name, () => {
-            // validateTextPresence('td[data-label="Name"]', this.name);
             if (this.description) {
                 validateTextPresence('td[data-label="Description"]', this.description);
             }
