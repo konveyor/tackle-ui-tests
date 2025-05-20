@@ -66,12 +66,17 @@ export class User {
     }
 
     static changeRealm(realm: string) {
-        click('button[data-testid="realmSelector"]');
-        clickByText(button, realm);
+        cy.url().then(($url) => {
+            if (!$url.includes(`#/${realm}`)) {
+                click('a[data-testid="nav-item-realms"]');
+                clickByText("a", realm);
+            }
+        });
     }
 
     static openList(): void {
-        User.changeRealm("mta");
+        const realm = "mta";
+        User.changeRealm(realm);
         clickByText("a", "Users");
         cy.wait(SEC);
     }
@@ -139,8 +144,6 @@ export class User {
     }
 
     definePassword(): void {
-        User.openList();
-        clickByText("a", this.username);
         this.navigateToSection("credentials");
         click(createPasswordButton);
         this.inputPassword(this.password);
