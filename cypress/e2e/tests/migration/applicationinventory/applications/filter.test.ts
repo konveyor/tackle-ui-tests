@@ -310,7 +310,7 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         deleteByList(tags);
     });
 
-    it("Analysis filter validation", function () {
+    it("Analysis status filter validation", function () {
         Application.open();
 
         const application1 = new Analysis(
