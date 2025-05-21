@@ -44,7 +44,7 @@ import { AnalysisStatuses, issueFilter, tdTag, trTag } from "../../../../types/c
 import { AppIssue } from "../../../../types/types";
 import { rightSideBar } from "../../../../views/issue.view";
 
-describe.skip(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
+describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () {
     const applicationsList: Analysis[] = [];
     let businessServiceList: BusinessServices[];
     let archetype: Archetype;
@@ -92,15 +92,15 @@ describe.skip(["@tier3"], "Filtering, sorting and pagination in Issues", functio
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
                 for (let i = 0; i < 6; i++) {
-                    const dayTraderApp = new Analysis(
+                    const coolstoreApp = new Analysis(
                         getRandomApplicationData("IssuesFilteringApp2_" + i, {
-                            sourceData: appData["daytrader-app"],
+                            sourceData: appData["coolstore-app"],
                         }),
-                        getRandomAnalysisData(analysisData["source+dep_analysis_on_daytrader-app"])
+                        getRandomAnalysisData(analysisData["source+dep_on_coolStore_app"])
                     );
-                    dayTraderApp.tags = tagNames;
-                    dayTraderApp.business = businessServiceList[1].name;
-                    applicationsList.push(dayTraderApp);
+                    coolstoreApp.tags = tagNames;
+                    coolstoreApp.business = businessServiceList[1].name;
+                    applicationsList.push(coolstoreApp);
                 }
 
                 applicationsList.forEach((application) => application.create());
@@ -118,13 +118,13 @@ describe.skip(["@tier3"], "Filtering, sorting and pagination in Issues", functio
     });
 
     it("All issues - Filtering issues by name", function () {
-        // Analyzing daytrader app for pagination test to generate issues more than 10.
+        // Analyzing coolstore app for pagination test to generate issues more than 10.
         const bookServerApp = applicationsList[0];
-        const dayTraderApp = applicationsList[6];
+        const coolstoreApp = applicationsList[6];
         const bookServerIssues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
-        const dayTraderIssues = this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"];
+        const coolstoreIssues = this.analysisData["source+dep_on_coolStore_app"]["issues"];
 
-        Analysis.analyzeAll(dayTraderApp);
+        Analysis.analyzeByList(applicationsList);
         Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
 
         Issues.openList(100, true);
@@ -132,14 +132,14 @@ describe.skip(["@tier3"], "Filtering, sorting and pagination in Issues", functio
             issueFilter.applicationName,
             [bookServerApp.name],
             bookServerIssues,
-            dayTraderIssues
+            coolstoreIssues
         );
         clearAllFilters();
 
         Issues.applyAndValidateFilter(
             issueFilter.applicationName,
-            [dayTraderApp.name],
-            dayTraderIssues,
+            [coolstoreApp.name],
+            coolstoreIssues,
             bookServerIssues
         );
         clearAllFilters();
@@ -147,21 +147,21 @@ describe.skip(["@tier3"], "Filtering, sorting and pagination in Issues", functio
 
     it("All issues - filtering by multiple names", function () {
         const bookServerApp = applicationsList[0];
-        const dayTraderApp = applicationsList[6];
+        const coolstoreApp = applicationsList[6];
         const bookServerIssues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
-        const dayTraderIssues = this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"];
+        const coolstoreIssues = this.analysisData["source+dep_on_coolStore_app"]["issues"];
 
         Issues.applyMultiFilter(issueFilter.applicationName, [
             bookServerApp.name,
-            dayTraderApp.name,
+            coolstoreApp.name,
         ]);
-        Issues.validateMultiFilter(getUniqueNamesMap([bookServerIssues, dayTraderIssues]));
+        Issues.validateMultiFilter(getUniqueNamesMap([bookServerIssues, coolstoreIssues]));
         clearAllFilters();
     });
 
     it("All issues - Filtering issues by Archetype", function () {
         Issues.applyFilter(issueFilter.archetype, archetype.name);
-        this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"].forEach(
+        this.analysisData["source+dep_on_coolStore_app"]["issues"].forEach(
             (issue: AppIssue) => {
                 Issues.validateFilter(issue);
             }
@@ -182,7 +182,7 @@ describe.skip(["@tier3"], "Filtering, sorting and pagination in Issues", functio
     it("All issues - Filtering issues by tags", function () {
         tagNames.forEach((currentTag: string) => {
             Issues.applyFilter(issueFilter.tags, currentTag);
-            this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"].forEach(
+            this.analysisData["source+dep_on_coolStore_app"]["issues"].forEach(
                 (issue: AppIssue) => {
                     Issues.validateFilter(issue);
                 }
@@ -248,7 +248,7 @@ describe.skip(["@tier3"], "Filtering, sorting and pagination in Issues", functio
 
     it("All issues - Sorting affected files", function () {
         Issues.openAffectedApplications(
-            this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"][0]["name"]
+            this.analysisData["source+dep_on_coolStore_app"]["issues"][0]["name"]
         );
         clickByText(tdTag, applicationsList[6].name);
         cy.get(rightSideBar).within(() => {
