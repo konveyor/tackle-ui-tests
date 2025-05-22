@@ -26,7 +26,6 @@ import {
 import { User } from "../../models/keycloak/users/user";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
-import { Application } from "../../models/migration/applicationinventory/application";
 import { AnalysisStatuses, SEC } from "../../types/constants";
 
 describe(["@tier3"], "Architect Upload Binary Analysis", () => {
@@ -87,10 +86,6 @@ describe(["@tier3"], "Architect Upload Binary Analysis", () => {
 
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
-    });
-
-    afterEach("Persist session", function () {
-        Application.open(true);
     });
 
     after("Perform test data clean up", function () {

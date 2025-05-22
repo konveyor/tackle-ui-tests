@@ -38,7 +38,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
     const sortByList = ["ID", "Application", "Kind", "Priority", "Created By", "Status"];
 
     before("Login", function () {
-        let dayTraderApp: Analysis;
+        let bookServerApp: Analysis;
 
         login();
         cy.visit("/");
@@ -46,16 +46,16 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
                 for (let i = 0; i < 6; i++) {
-                    dayTraderApp = new Analysis(
+                    bookServerApp = new Analysis(
                         getRandomApplicationData("TaskFilteringApp_" + i, {
-                            sourceData: appData["daytrader-app"],
+                            sourceData: appData["bookserver-app"],
                         }),
-                        getRandomAnalysisData(analysisData["source+dep_analysis_on_daytrader-app"])
+                        getRandomAnalysisData(analysisData["source_analysis_on_bookserverapp"])
                     );
-                    applicationsList.push(dayTraderApp);
+                    applicationsList.push(bookServerApp);
                 }
                 applicationsList.forEach((application) => application.create());
-                Analysis.analyzeAll(dayTraderApp);
+                Analysis.analyzeAll(bookServerApp);
             });
         });
     });

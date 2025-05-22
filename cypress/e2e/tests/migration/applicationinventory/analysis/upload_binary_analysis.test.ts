@@ -19,6 +19,7 @@ import {
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
+    login,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { AnalysisStatuses } from "../../../../types/constants";
@@ -36,7 +37,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it(["@interop", "@tier1"], "Analysis for acmeair app upload binary", function () {
+    it(["@interop", "@tier1"], "Bug MTA-5181: Analysis for acmeair app upload binary", function () {
         const application = new Analysis(
             getRandomApplicationData("acmeair_app"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
@@ -49,7 +50,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         application.verifyEffort(this.analysisData["uploadbinary_analysis_on_acmeair"]["effort"]);
     });
 
-    it(["@tier1"], "Custom rules with custom targets", function () {
+    it(["@tier1"], "Bug MTA-5181: Custom rules with custom targets", function () {
         // Automated https://issues.redhat.com/browse/TACKLE-561
         const application = new Analysis(
             getRandomApplicationData("customRule_customTarget"),
@@ -65,7 +66,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         );
     });
 
-    it("Analysis for spring-petclinic application", function () {
+    it("Bug MTA-5181: Analysis for spring-petclinic application", function () {
         const application = new Analysis(
             getRandomApplicationData("spring"),
             getRandomAnalysisData(this.analysisData["analysis_for_spring_petclinic_app"])
@@ -77,7 +78,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it("Analysis for jee-example-app upload binary ", function () {
+    it("Bug MTA-5181: Analysis for jee-example-app upload binary ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(
@@ -109,7 +110,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         );
     });
 
-    it("Analysis for kafka-clients-sb app ", function () {
+    it("Bug MTA-5181: Analysis for kafka-clients-sb app ", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_kafka-app"])
@@ -137,6 +138,8 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
     });
 
     after("Perform test data clean up", function () {
+        login();
+        cy.visit("/");
         deleteByList(applicationsList);
     });
 });
