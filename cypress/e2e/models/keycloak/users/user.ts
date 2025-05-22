@@ -55,6 +55,10 @@ export class User {
         if (!loggedIn) {
             cy.get("h1", { timeout: 30 * SEC }).then(($isloggedIn) => {
                 // Due to session sometimes console auto logs in, hence this check is necessary
+                if ($isloggedIn.text().toString().trim() === "Welcome to Keycloak") {
+                    // This check is for upstream only
+                    cy.get("div.welcome-primary-link").click();
+                }
                 if ($isloggedIn.text().toString().trim() === "Sign in to your account") {
                     cy.get("#kc-header-wrapper", { timeout: 240 * SEC }); // Make sure that login page opened and loaded
                     inputText(loginView.userNameInput, "admin");
