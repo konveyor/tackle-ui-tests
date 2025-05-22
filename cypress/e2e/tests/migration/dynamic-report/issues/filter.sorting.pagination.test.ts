@@ -266,7 +266,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             column === "Effort"
                 ? `Bug MTA-4323: Affected applications - sort by ${column}`
                 : `Affected applications - sort by ${column}`;
-        it(title, function () {
+        it(`${title}`, function () {
             Issues.openAffectedApplications(
                 this.analysisData["source_analysis_on_bookserverapp"]["issues"][0]["name"]
             );
