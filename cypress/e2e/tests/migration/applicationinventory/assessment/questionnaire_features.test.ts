@@ -66,7 +66,7 @@ describe(["@tier3"], "Tests for application questionnaire features", () => {
         application.create();
     });
 
-    it("Bug MTA-5010: 1) Test conditional questions during application assessment; 2) Cancel assessment", function () {
+    it("1) Test conditional questions during application assessment; 2) Cancel assessment", function () {
         //Automates Polarion MTA-385: Test conditional questions
         Application.open();
         clickItemInKebabMenu(application.name, "Assess");
