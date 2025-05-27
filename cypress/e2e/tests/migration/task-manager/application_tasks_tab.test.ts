@@ -12,10 +12,10 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 import {
-    login,
-    getRandomApplicationData,
-    sidedrawerTab,
     getRandomAnalysisData,
+    getRandomApplicationData,
+    login,
+    sidedrawerTab,
 } from "../../../../utils/utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 
