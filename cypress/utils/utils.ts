@@ -578,7 +578,7 @@ export function getTableColumnData(columnName: string): Array<string> {
 
 export function verifySortAsc(listToVerify: any[], unsortedList: any[]): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        const sortedList = unsortedList.sort((a, b) =>
+        const sortedList = unsortedList.slice().sort((a, b) =>
             a.toString().localeCompare(b, "en-us", {
                 numeric: !unsortedList.some(isNaN),
             })
