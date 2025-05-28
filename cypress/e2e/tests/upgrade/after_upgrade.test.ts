@@ -62,6 +62,7 @@ function processApplication(application: Analysis): void {
     application.extractHTMLReport();
     // Post upgrade: Re-run analysis on an app that was analyzed before upgrade
     application.analyze();
+    application.waitStatusChange("In-progress");
     application.verifyAnalysisStatus("Completed");
     application.downloadReport(ReportTypeSelectors.HTML);
     application.extractHTMLReport();
