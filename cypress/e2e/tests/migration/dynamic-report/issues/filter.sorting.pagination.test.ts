@@ -56,8 +56,10 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     const affectedApplicationSortByList = ["Name", "Business service", "Effort", "Incidents"];
     const singleApplicationSortByList = ["Issue", "Category", "Effort", "Affected files"];
     const affectedFilesSortByList = ["File", "Incidents", "Effort"];
+    const appAmount = 6;
 
     before("Login", function () {
+        Cypress.session.clearAllSavedSessions();
         login();
         cy.visit("/");
         stakeholders = createMultipleStakeholders(2);
@@ -76,7 +78,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         archetype.create();
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 6; i++) {
+                for (let i = 0; i < appAmount; i++) {
                     const bookServerApp = new Analysis(
                         getRandomApplicationData("IssuesFilteringApp1_" + i, {
                             sourceData: appData["bookserver-app"],
@@ -91,7 +93,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 6; i++) {
+                for (let i = 0; i < appAmount; i++) {
                     const coolstoreApp = new Analysis(
                         getRandomApplicationData("IssuesFilteringApp2_" + i, {
                             sourceData: appData["coolstore-app"],
@@ -115,12 +117,14 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         cy.fixture("analysis").then(function (analysisData) {
             this.analysisData = analysisData;
         });
+        cy.intercept("GET", "/hub/analyses/report/rules*").as("getIssues");
+        cy.intercept("GET", "hub/analyses/report/issues/applications*").as("getApplications");
     });
 
     it("All issues - Filtering issues by name", function () {
-        // Analyzing coolstore app for pagination test to generate issues more than 10.
+        // Analyzing Coolstore app for pagination test to generate issues more than 10.
         const bookServerApp = applicationsList[0];
-        const coolstoreApp = applicationsList[6];
+        const coolstoreApp = applicationsList[appAmount];
         const bookServerIssues = this.analysisData["source_analysis_on_bookserverapp"]["issues"];
         const coolstoreIssues = this.analysisData["source+dep_on_coolStore_app"]["issues"];
 
@@ -240,6 +244,9 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     allIssuesSortByList.forEach((column) => {
         it(`All issues - Sort issues by ${column}`, function () {
             Issues.openList();
+            cy.wait("@getIssues");
+            selectItemsPerPage(100);
+            cy.wait("@getIssues");
             validateSortBy(column);
         });
     });
@@ -262,14 +269,13 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     });
 
     affectedApplicationSortByList.forEach((column) => {
-        let title =
-            column === "Effort"
-                ? `Bug MTA-4323: Affected applications - sort by ${column}`
-                : `Affected applications - sort by ${column}`;
-        it(`${title}`, function () {
+        it(`Affected applications - sort by ${column}`, function () {
             Issues.openAffectedApplications(
                 this.analysisData["source_analysis_on_bookserverapp"]["issues"][0]["name"]
             );
+            cy.wait("@getApplications");
+            selectItemsPerPage(100);
+            cy.wait("@getApplications");
             validateSortBy(column);
         });
     });
