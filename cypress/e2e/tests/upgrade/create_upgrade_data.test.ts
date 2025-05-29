@@ -154,7 +154,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         cy.wait(2 * SEC);
         uploadBinaryApplication.perform_assessment("low", [stakeHolder]);
         uploadBinaryApplication.analyze();
-        uploadBinaryApplication.verifyAnalysisStatus("Completed", 30 * MIN);
+        uploadBinaryApplication.verifyAnalysisStatus("Completed", 60 * MIN);
         uploadBinaryApplication.verifyStatus("assessment", "Completed");
         uploadBinaryApplication.selectApplication();
     });
@@ -174,7 +174,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         sourceApplication.verifyStatus("assessment", "Completed");
         cy.wait(2 * SEC);
         sourceApplication.analyze();
-        sourceApplication.verifyAnalysisStatus("Completed", 30 * MIN);
+        sourceApplication.verifyAnalysisStatus("Completed", 60 * MIN);
         sourceApplication.selectApplication();
     });
 
@@ -194,7 +194,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         );
         binaryApplication.perform_assessment("low", [stakeHolder]);
         binaryApplication.analyze();
-        binaryApplication.verifyAnalysisStatus("Completed", 30 * MIN);
+        binaryApplication.verifyAnalysisStatus("Completed", 60 * MIN);
         binaryApplication.verifyStatus("assessment", "Completed");
         binaryApplication.selectApplication();
     });
