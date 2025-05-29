@@ -34,6 +34,7 @@ describe(["@tier2"], "Verify 'Tasks' Tab Displays Expected Task Kinds", () => {
     });
 
     it("opens the Tasks tab and verifies all expected task kinds are present", function () {
+        // Polarion TC MTA-624
         application = new Analysis(
             getRandomApplicationData("bookserverApp", {
                 sourceData: this.appData["bookserver-app"],
