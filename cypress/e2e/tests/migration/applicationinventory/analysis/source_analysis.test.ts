@@ -302,7 +302,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
     });
 
-    it("Bug MTA-4417: OpenJDK21 Source + dependencies analysis on daytrader app", function () {
+    it("OpenJDK21 Source + dependencies analysis on daytrader app", function () {
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies_openjdk21", {
                 sourceData: this.appData["daytrader-app"],
@@ -316,6 +316,9 @@ describe(["@tier2"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed", 30 * MIN);
         application.verifyEffort(
             this.analysisData["openJDK21_source+dep_analysis_on_dayTrader"]["effort"]
+        );
+        application.validateIssues(
+            this.analysisData["openJDK21_source+dep_analysis_on_dayTrader"]["issues"]
         );
     });
 
