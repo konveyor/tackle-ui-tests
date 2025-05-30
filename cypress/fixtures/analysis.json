@@ -2018,7 +2018,74 @@
         "target": ["OpenJDK 21"],
         "appName": "deps",
         "openSourceLibraries": true,
-        "effort": 315
+        "effort": 330,
+        "issues": [
+            {
+                "name": "Dynamic loading of agents will be removed",
+                "category": "potential",
+                "sources": ["openjdk", "openjdk21-"],
+                "targets": ["openjdk", "openjdk21+"],
+                "effort": 3,
+                "totalEffort": 1,
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "openjdk17",
+                "rule": "dynamic-agents-00000",
+                "labels": ["None"]
+            },
+            {
+                "name": "References to the Java Security Manager API have been deprecated",
+                "category": "mandatory",
+                "sources": ["openjdk", "openjdk11-"],
+                "targets": ["openjdk", "openjdk17+"],
+                "effort": 5,
+                "totalEffort": 3,
+                "incidents": 1,
+                "affectedFiles": 11,
+                "ruleSet": "openjdk17/openjdk11",
+                "rule": "security-manager-deprecation-00010",
+                "labels": ["None"]
+            },
+            {
+                "name": "The 'java.io' constructor defaults to UTF-8",
+                "category": "potential",
+                "sources": ["None"],
+                "targets": ["openjdk", "openjdk18+"],
+                "effort": 1,
+                "totalEffort": 3,
+                "incidents": 1,
+                "affectedFiles": 27,
+                "ruleSet": "openjdk17",
+                "rule": "utf-8-by-default-00000",
+                "labels": ["konveyor.io/source"]
+            },
+            {
+                "name": "The Java Security Manager class has been deprecated.",
+                "category": "mandatory",
+                "sources": ["openjdk", "openjdk11-", "spring5"],
+                "targets": ["openjdk", "openjdk17+", "spring6+"],
+                "effort": 5,
+                "totalEffort": 2,
+                "incidents": 2,
+                "affectedFiles": 16,
+                "ruleSet": "openjdk17/openjdk11",
+                "rule": "security-manager-deprecation-00000",
+                "labels": ["None"]
+            },
+            {
+                "name": "The java.annotation (Common Annotations) module has been removed from OpenJDK 11",
+                "category": "mandatory",
+                "sources": ["openjdk", "openjdk8-"],
+                "targets": ["openjdk", "openjdk11+"],
+                "effort": 1,
+                "totalEffort": 2,
+                "incidents": 2,
+                "affectedFiles": 15,
+                "ruleSet": "openjdk11/openjdk8",
+                "rule": "removed-javaee-modules-00020",
+                "labels": ["None"]
+            }
+        ]
     },
 
     "jdk9_source_dep_analysis_on_tackletestapp": {
