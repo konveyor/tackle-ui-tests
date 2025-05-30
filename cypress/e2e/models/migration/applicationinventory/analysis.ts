@@ -419,6 +419,15 @@ export class Analysis extends Application {
             });
     }
 
+    waitStatusChange(newStatus: string) {
+        cy.get(tdTag, { log: false })
+            .contains(this.name, { log: false })
+            .closest(trTag, { log: false })
+            .within(() => {
+                cy.get(analysisColumn, { timeout: 30 * SEC }).should("contain", newStatus);
+            });
+    }
+
     openReport() {
         sidedrawerTab(this.name, "Reports");
         clickByText(button, "View analysis details");
