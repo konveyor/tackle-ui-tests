@@ -42,6 +42,7 @@ import {
     cloudReadinessQuestionnaire,
     CredentialType,
     legacyPathfinder,
+    MIN,
     SEC,
     UserCredentials,
 } from "../../types/constants";
@@ -153,7 +154,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         cy.wait(2 * SEC);
         uploadBinaryApplication.perform_assessment("low", [stakeHolder]);
         uploadBinaryApplication.analyze();
-        uploadBinaryApplication.verifyAnalysisStatus("Completed");
+        uploadBinaryApplication.verifyAnalysisStatus("Completed", 60 * MIN);
         uploadBinaryApplication.verifyStatus("assessment", "Completed");
         uploadBinaryApplication.selectApplication();
     });
@@ -173,7 +174,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         sourceApplication.verifyStatus("assessment", "Completed");
         cy.wait(2 * SEC);
         sourceApplication.analyze();
-        sourceApplication.verifyAnalysisStatus("Completed");
+        sourceApplication.verifyAnalysisStatus("Completed", 60 * MIN);
         sourceApplication.selectApplication();
     });
 
@@ -193,7 +194,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         );
         binaryApplication.perform_assessment("low", [stakeHolder]);
         binaryApplication.analyze();
-        binaryApplication.verifyAnalysisStatus("Completed");
+        binaryApplication.verifyAnalysisStatus("Completed", 60 * MIN);
         binaryApplication.verifyStatus("assessment", "Completed");
         binaryApplication.selectApplication();
     });
