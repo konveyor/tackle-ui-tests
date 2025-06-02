@@ -1283,16 +1283,16 @@
                 "labels": ["konveyor.io/source"]
             },
             {
-                "name": "Replace the Java EE XSD with the Jakarta equivalent",
+                "name": "Replace the Java EE persistence namespace",
                 "category": "mandatory",
                 "sources": ["None"],
                 "targets": ["eap"],
                 "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
+                "totalEffort": 3,
+                "incidents": 3,
                 "affectedFiles": 1,
                 "ruleSet": "eap8/eap7",
-                "rule": "javaee-to-jakarta-namespaces-00030",
+                "rule": "javaee-to-jakarta-namespaces-00002",
                 "labels": ["konveyor.io/source"]
             },
             {
@@ -1301,8 +1301,8 @@
                 "sources": ["None"],
                 "targets": ["eap"],
                 "effort": 1,
-                "totalEffort": 6,
-                "incidents": 6,
+                "totalEffort": 95,
+                "incidents": 95,
                 "affectedFiles": 22,
                 "ruleSet": "eap8/eap7",
                 "rule": "javax-to-jakarta-import-00001",
