@@ -31,6 +31,7 @@ import {
     selectFilter,
 } from "../../../../../utils/utils";
 import {
+    analysis,
     archetypes,
     artifact,
     button,
@@ -307,6 +308,38 @@ describe(["@tier3"], "Application inventory filter validations", function () {
 
         deleteByList([archetype1, archetype2]);
         deleteByList(tags);
+    });
+
+    it("Analysis status filter validation", function () {
+        const application1 = new Analysis(
+            getRandomApplicationData("Insecure_enabled_tackle_test_app", {
+                sourceData: this.appData["tackle-testapp"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+        );
+        application1.create();
+        applicationsList.push(application1);
+
+        const application2 = new Analysis(
+            getRandomApplicationData("python-app-custom-rules", {
+                sourceData: this.appData["python-demo-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["python_demo_application"])
+        );
+        application2.create();
+        applicationsList.push(application2);
+
+        application1.analyze();
+
+        applySearchFilter(analysis, "Not started");
+        exists(application2.name);
+        notExists(application1.name);
+
+        clickByText(button, clearAllFilters);
+
+        applySearchFilter(analysis, "Completed");
+        exists(application1.name);
+        notExists(application2.name);
     });
 
     after("Perform test data clean up", function () {
