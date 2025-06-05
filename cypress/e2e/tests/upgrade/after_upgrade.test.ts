@@ -47,6 +47,7 @@ import { TagCategory } from "../../models/migration/controls/tagcategory";
 import {
     cloudReadinessQuestionnaire,
     legacyPathfinder,
+    MIN,
     ReportTypeSelectors,
 } from "../../types/constants";
 import { UpgradeData } from "../../types/types";
@@ -62,8 +63,8 @@ function processApplication(application: Analysis): void {
     application.extractHTMLReport();
     // Post upgrade: Re-run analysis on an app that was analyzed before upgrade
     application.analyze();
-    application.waitStatusChange("In-progress");
-    application.verifyAnalysisStatus("Completed");
+    application.waitStatusChange("Scheduled");
+    application.verifyAnalysisStatus("Completed", 60 * MIN);
     application.downloadReport(ReportTypeSelectors.HTML);
     application.extractHTMLReport();
 }
