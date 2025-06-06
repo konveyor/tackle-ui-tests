@@ -20,9 +20,7 @@ export const dropdownMenuToggle = "button[id='tag-type-select-toggle']";
 export const dropdownMenuTypeToggle = "#type-select-toggle";
 export const tagsHelper = "div.pf-v5-c-helper-text";
 export const nameInput = "input[name=name]";
-export const rankInput = "input[aria-label='rank']";
 export const tagMenuButton = 'button[aria-label="Kebab toggle"]';
-export const positiveRankMsg = "This field must be greater than 1.";
 export const tagCategory = "td[data-label='Tag category']";
 export enum tagLabels {
     name = 'td[data-label="Tag name"]',
