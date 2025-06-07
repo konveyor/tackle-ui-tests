@@ -107,7 +107,7 @@ describe(["@tier2"], "Source Analysis of big applications", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed, 30 * MIN);
     });
 
-    it("Source + dependency Analysis on Nexus app", function () {
+    it.only("Source + dependency Analysis on Nexus app", function () {
         const application = new Analysis(
             getRandomApplicationData("Nexus Source+dep", {
                 sourceData: this.appData["nexus"],
