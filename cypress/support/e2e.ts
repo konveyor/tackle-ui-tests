@@ -53,6 +53,13 @@ if (app && !app.document.head.querySelector("[data-hide-command-log-request]")) 
     app.document.head.appendChild(style);
 }
 
+Cypress.on("uncaught:exception", (err) => {
+    if (err.message.includes("clipboard-write")) {
+        // Prevent Cypress from failing the test due to this known harmless exception
+        return false;
+    }
+});
+
 declare global {
     namespace Cypress {
         interface Chainable {

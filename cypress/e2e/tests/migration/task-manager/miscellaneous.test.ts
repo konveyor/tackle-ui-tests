@@ -84,7 +84,7 @@ describe(["@tier2"], "Actions in Task Manager Page", function () {
 
     it("Cancel Task", function () {
         const statusToTest = [TaskStatus.pending, TaskStatus.running, TaskStatus.quotaBlocked];
-        Analysis.analyzeAll(bookServerApp);
+        Analysis.analyzeByList(applicationsList);
         TaskManager.open();
         statusToTest.forEach((status) => {
             // Ensure a task with the desired status exists

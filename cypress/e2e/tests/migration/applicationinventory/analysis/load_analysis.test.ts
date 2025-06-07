@@ -31,7 +31,7 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import { AnalysisStatuses, MIN } from "../../../../types/constants";
 
 const applications: Analysis[] = [];
-describe(["@tier2"], "Source Analysis of big applications", () => {
+describe(["@tier4"], "Source Analysis of big applications", () => {
     before("Login", function () {
         login();
         cy.visit("/");
