@@ -31,7 +31,7 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import { AnalysisStatuses, MIN } from "../../../../types/constants";
 
 const applications: Analysis[] = [];
-describe(["@tier2"], "Source Analysis of big applications", () => {
+describe(["@tier4"], "Source Analysis of big applications", () => {
     before("Login", function () {
         login();
         cy.visit("/");
@@ -107,7 +107,7 @@ describe(["@tier2"], "Source Analysis of big applications", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed, 30 * MIN);
     });
 
-    it.only("Source + dependency Analysis on Nexus app", function () {
+    it("Source + dependency Analysis on Nexus app", function () {
         const application = new Analysis(
             getRandomApplicationData("Nexus Source+dep", {
                 sourceData: this.appData["nexus"],
