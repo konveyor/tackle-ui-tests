@@ -166,7 +166,9 @@ describe(["@tier3"], "Tests related to application-archetype association ", () =
 
     it("View Archetypes from application assessment popup", function () {
         // Automates Polarion MTA-436
-
+        AssessmentQuestionnaire.import(cloudReadinessFilePath);
+        AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
+        AssessmentQuestionnaire.disable(legacyPathfinder);
         const archetypeList = createMultipleArchetypes(2, associationTags);
 
         for (let i = 0; i < archetypeList.length; i++) {
