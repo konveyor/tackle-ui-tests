@@ -25,7 +25,6 @@ import {
     deleteByList,
     exists,
     login,
-    selectRow,
 } from "../../../../utils/utils";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Application } from "../../../models/migration/applicationinventory/application";
@@ -36,6 +35,8 @@ import {
     cloudReadinessFilePath,
     cloudReadinessQuestionnaire,
     legacyPathfinder,
+    tdTag,
+    trTag,
 } from "../../../types/constants";
 import { questionBlock } from "../../../views/assessment.view";
 import {
@@ -86,7 +87,11 @@ describe(["@tier3"], "Miscellaneous Archetype tests", () => {
         );
         applications = createMultipleApplications(2, ["Language / Java", "Runtime / Spring Boot"]);
         Archetype.verifyColumnValue(archetype.name, "Applications", "2 applications");
-        selectRow(archetype.name);
+        cy.get(tdTag)
+            .contains(archetype.name)
+            .parent(trTag)
+            .find("td[data-label='Applications']")
+            .click();
         exists(applications[0].name);
         exists(applications[1].name);
         deleteByList(applications);
