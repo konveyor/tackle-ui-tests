@@ -23,7 +23,6 @@ import {
 } from "../../../../utils/utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { taskNotificationBadge } from "../../../views/common.view";
-import { AnalysisStatuses } from "../../../types/constants";
 
 const analyses: Analysis[] = [];
 const NUMBER_OF_APPS = 2;
@@ -32,6 +31,7 @@ describe(["@tier3"], "Task drawer validation", () => {
     before("Login", function () {
         login();
         cy.visit("/");
+
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
                 for (let i = 0; i < NUMBER_OF_APPS; i++) {
@@ -44,24 +44,64 @@ describe(["@tier3"], "Task drawer validation", () => {
                         )
                     );
                 }
-
                 analyses.forEach((analysis) => analysis.create());
             });
         });
     });
 
     it("Perform bulk analysis and validate information on task drawer", function () {
+        // Automates Polarion TC MTA-556
         Analysis.analyzeAll(analyses[0]);
         cy.get(taskNotificationBadge).click();
+
+        // Assert that Tech discovery tasks are listed
+        cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title")
+            .eq(0)
+            .contains("tech-discovery", { timeout: 6000 })
+            .then((item) => {
+                let techDiscoverytasks = [
+                    `(tech-discovery) - ${analyses[0].name} - 0`,
+                    `(tech-discovery) - ${analyses[1].name} - 0`,
+                ];
+
+                // Extract Task ID from the drawer item title; Task ID is present at the start of the string
+                const match = item.text().match(/^\d+/);
+                if (match) {
+                    const taskID = parseInt(match[0], 10);
+                    expect(Number.isInteger(taskID), "Task ID should be an integer").to.eq(true);
+                }
+
+                // Assert that drawer item title contains task type, app name and task priority
+                expect(
+                    Cypress.$(item)
+                        .text()
+                        .replace(/^\d+\s/, "")
+                ).to.be.oneOf(techDiscoverytasks);
+            });
+
+        // Assert that analysis tasks are listed
         cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title")
             .eq(0)
             .contains("analyzer", { timeout: 10000 })
             .then((item) => {
-                let appNames = [
+                let analyzerTasks = [
                     `(analyzer) - ${analyses[0].name} - 10`,
                     `(analyzer) - ${analyses[1].name} - 10`,
                 ];
-                expect(Cypress.$(item).text().substring(3)).to.be.oneOf(appNames);
+
+                // Extract Task ID from the drawer item title; Task ID is present at the start of the string
+                const match = item.text().match(/^\d+/);
+                if (match) {
+                    const taskID = parseInt(match[0], 10);
+                    expect(Number.isInteger(taskID), "Task ID should be an integer").to.eq(true);
+                }
+
+                // Assert that drawer item title contains task type, app name and task priority
+                expect(
+                    Cypress.$(item)
+                        .text()
+                        .replace(/^\d+\s/, "")
+                ).to.be.oneOf(analyzerTasks);
             });
     });
 
