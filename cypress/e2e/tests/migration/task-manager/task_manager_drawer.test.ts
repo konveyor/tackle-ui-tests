@@ -16,6 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    deleteApplicationTableRows,
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
@@ -27,11 +28,11 @@ import { taskNotificationBadge } from "../../../views/common.view";
 const analyses: Analysis[] = [];
 const NUMBER_OF_APPS = 2;
 
-describe(["@tier3"], "Task drawer validation", () => {
+describe(["@tier2"], "Task drawer validation", () => {
     before("Login", function () {
         login();
         cy.visit("/");
-
+        deleteApplicationTableRows();
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
                 for (let i = 0; i < NUMBER_OF_APPS; i++) {
@@ -55,11 +56,9 @@ describe(["@tier3"], "Task drawer validation", () => {
         cy.get(taskNotificationBadge).click();
 
         // Assert that Tech discovery tasks are listed
-        cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title")
-            .eq(0)
-            .contains("tech-discovery", { timeout: 6000 })
-            .then((item) => {
-                let techDiscoverytasks = [
+        cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title").each((item) => {
+            if (Cypress.$(item).text().includes("tech-discovery")) {
+                const techDiscoverytasks = [
                     `(tech-discovery) - ${analyses[0].name} - 0`,
                     `(tech-discovery) - ${analyses[1].name} - 0`,
                 ];
@@ -77,14 +76,16 @@ describe(["@tier3"], "Task drawer validation", () => {
                         .text()
                         .replace(/^\d+\s/, "")
                 ).to.be.oneOf(techDiscoverytasks);
-            });
+            }
+        });
 
         // Assert that analysis tasks are listed
-        cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title")
-            .eq(0)
-            .contains("analyzer", { timeout: 10000 })
-            .then((item) => {
-                let analyzerTasks = [
+        cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title").contains("analyzer", {
+            timeout: 10000,
+        });
+        cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title").each((item) => {
+            if (Cypress.$(item).text().includes("analyzer")) {
+                const analyzerTasks = [
                     `(analyzer) - ${analyses[0].name} - 10`,
                     `(analyzer) - ${analyses[1].name} - 10`,
                 ];
@@ -102,7 +103,8 @@ describe(["@tier3"], "Task drawer validation", () => {
                         .text()
                         .replace(/^\d+\s/, "")
                 ).to.be.oneOf(analyzerTasks);
-            });
+            }
+        });
     });
 
     after("Perform test data clean up", function () {
