@@ -53,8 +53,16 @@ describe(["@tier3"], "Task drawer validation", () => {
     it("Perform bulk analysis and validate information on task drawer", function () {
         Analysis.analyzeAll(analyses[0]);
         cy.get(taskNotificationBadge).click();
-        // cy.get("h2.list-item-header-title").index(0).contains("(analyzer) - app1 -10");
-        cy.get('*[class^="list-item-header-title"]').eq(0).contains("(analyzer) - app1 -10");
+        cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title")
+            .eq(0)
+            .contains("analyzer", { timeout: 10000 })
+            .then((item) => {
+                let appNames = [
+                    `(analyzer) - ${analyses[0].name} - 10`,
+                    `(analyzer) - ${analyses[1].name} - 10`,
+                ];
+                expect(Cypress.$(item).text().substring(3)).to.be.oneOf(appNames);
+            });
     });
 
     after("Perform test data clean up", function () {
