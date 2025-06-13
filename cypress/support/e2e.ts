@@ -43,12 +43,16 @@ if (app && !app.document.head.querySelector("[data-hide-command-log-request]")) 
     app.document.head.appendChild(style);
 }
 
-before(() => {
-    cy.log("Looking for AUTH_REQUIRED");
+beforeEach(() => {
+    // Disable for static report test as it need to open local files
+    if (Cypress.spec.name === "static_report.test.ts") {
+        return;
+    }
 
     // Look for the window._env data on the application's page, decode it, and push the object
     // into a alias so other tests can check the UI's _env configuration.
     cy.request("/").then((resp) => {
+        cy.log("Looking for _env in UI's index.html");
         expect(resp.status).to.eq(200);
 
         const htmlBody = resp.body;
@@ -60,13 +64,6 @@ before(() => {
 
         cy.wrap(env).as("environmentConfig");
     });
-});
-
-beforeEach(() => {
-    // Disable for static report test as it need to open local files
-    if (Cypress.spec.name === "static_report.test.ts") {
-        return;
-    }
 
     login();
 
