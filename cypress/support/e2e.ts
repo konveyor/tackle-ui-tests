@@ -53,42 +53,6 @@ if (app && !app.document.head.querySelector("[data-hide-command-log-request]")) 
     app.document.head.appendChild(style);
 }
 
-declare global {
-    namespace Cypress {
-        interface Chainable {
-            /**
-             * Drags an element to a drop location.
-             * This custom command works only on Chromium-based browsers
-             * @example cy.dragAndDrop(cy.get('#source'), cy.get('#target'))
-             * @param dragElement
-             * @param dropElement
-             */
-            dragAndDrop(dragElement: Cypress.Chainable, dropElement: Cypress.Chainable): void;
-
-            /**
-             * Look for the UI's `window._env` data on the application's page, decode it, and
-             * provide the data as a Chainable response.
-             */
-            uiEnvironmentConfig(): Cypress.Chainable<object>;
-        }
-    }
-}
-
-Cypress.Commands.add("uiEnvironmentConfig", () => {
-    return cy.request("/").then<object>((resp) => {
-        expect(resp.status).to.eq(200);
-
-        cy.log("Looking for _env in UI's index.html");
-        const htmlBody = resp.body;
-        const windowEnv = htmlBody.match(/window\._env\s*=\s*"(.*?)"/);
-        expect(windowEnv, "Find _env in index.html").to.not.be.null;
-
-        const env = JSON.parse(atob(windowEnv[1]));
-        cy.log("window._env: ", JSON.stringify(env));
-        return cy.wrap(env);
-    });
-});
-
 beforeEach(() => {
     // Disable for static report test as it need to open local files
     if (Cypress.spec.name === "static_report.test.ts") {
