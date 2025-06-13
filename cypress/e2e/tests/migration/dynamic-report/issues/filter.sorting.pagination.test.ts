@@ -24,6 +24,8 @@ import {
     createMultipleStakeholderGroups,
     createMultipleStakeholders,
     createMultipleTags,
+    deleteAllMigrationWaves,
+    deleteApplicationTableRows,
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
@@ -62,6 +64,8 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         Cypress.session.clearAllSavedSessions();
         login();
         cy.visit("/");
+        deleteAllMigrationWaves();
+        deleteApplicationTableRows();
         stakeholders = createMultipleStakeholders(2);
         stakeholderGroups = createMultipleStakeholderGroups(2);
         businessServiceList = createMultipleBusinessServices(2);
@@ -335,7 +339,6 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
 
     after("Perform test data clean up", function () {
         cy.reload();
-        cy.log("Deleting app list");
         deleteByList(applicationsList);
         archetype.delete();
         deleteByList(stakeholders);
