@@ -25,6 +25,7 @@ import {
     createMultipleStakeholders,
     createMultipleTags,
     deleteAllMigrationWaves,
+    deleteApplicationTableRows,
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
@@ -64,7 +65,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
         login();
         cy.visit("/");
         deleteAllMigrationWaves();
-        deleteAllMigrationWaves();
+        deleteApplicationTableRows();
         stakeholders = createMultipleStakeholders(2);
         stakeholderGroups = createMultipleStakeholderGroups(2);
         businessServiceList = createMultipleBusinessServices(2);
