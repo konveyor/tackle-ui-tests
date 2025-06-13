@@ -53,21 +53,6 @@ if (app && !app.document.head.querySelector("[data-hide-command-log-request]")) 
     app.document.head.appendChild(style);
 }
 
-declare global {
-    namespace Cypress {
-        interface Chainable {
-            /**
-             * Drags an element to a drop location.
-             * This custom command works only on Chromium-based browsers
-             * @example cy.dragAndDrop(cy.get('#source'), cy.get('#target'))
-             * @param dragElement
-             * @param dropElement
-             */
-            dragAndDrop(dragElement: Cypress.Chainable, dropElement: Cypress.Chainable): void;
-        }
-    }
-}
-
 beforeEach(() => {
     // Disable for static report test as it need to open local files
     if (Cypress.spec.name === "static_report.test.ts") {
@@ -75,6 +60,7 @@ beforeEach(() => {
     }
 
     login();
+
     // Every test starts by visiting / which should redirect to baseURL/applications
     cy.visit("/");
 });
