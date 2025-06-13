@@ -9,6 +9,7 @@ export default defineConfig({
         user: "admin",
         initialPassword: "Passw0rd!",
         pass: "Dog8code",
+        keycloakAdminPassword: "",
         git_user: "",
         git_password: "",
         svn_user: "qe-admin",
