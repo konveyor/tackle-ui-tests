@@ -214,7 +214,7 @@ export function login(
     return cy.session(sessionId, () => {
         cy.visit("/", { timeout: 120 * SEC });
 
-        cy.get("@environmentConfig").then((env) => {
+        cy.uiEnvironmentConfig().then((env) => {
             if (env["AUTH_REQUIRED"] === "true") {
                 cy.log("AUTH is enabled, logging in");
 
@@ -222,7 +222,7 @@ export function login(
                 cy.get(loginView.userNameInput, { timeout: 30 * SEC }).should("be.visible");
 
                 // Attempt login
-                inputText(loginView.userNameInput, username, true);
+                inputText(loginView.userNameInput, username);
                 inputText(loginView.userPasswordInput, password);
                 click(loginView.loginButton);
 
