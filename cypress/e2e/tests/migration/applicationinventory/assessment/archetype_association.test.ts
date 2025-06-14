@@ -169,6 +169,10 @@ describe(["@tier3"], "Tests related to application-archetype association ", () =
 
         const archetypeList = createMultipleArchetypes(2, associationTags);
 
+        AssessmentQuestionnaire.import(cloudReadinessFilePath);
+        AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
+        AssessmentQuestionnaire.disable(legacyPathfinder);
+
         for (let i = 0; i < archetypeList.length; i++) {
             archetypeList[i].perform_assessment("low", stakeholders);
             Archetype.open(true);
