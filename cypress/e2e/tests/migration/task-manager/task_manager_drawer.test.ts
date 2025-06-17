@@ -28,6 +28,31 @@ import { taskNotificationBadge } from "../../../views/common.view";
 const analyses: Analysis[] = [];
 const NUMBER_OF_APPS = 2;
 
+function validateTasks(taskType: string, expectedTasks: string[]) {
+    cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title").each((item) => {
+        cy.wrap(item)
+            .invoke("text")
+            .then((text) => {
+                if (item.text().includes(taskType)) {
+                    // Extract Task ID from the drawer item title; Task ID is present at the start of the string
+                    const match = text.match(/^\d+/);
+                    if (match) {
+                        const taskID = parseInt(match[0], 10);
+                        expect(Number.isInteger(taskID), "Task ID should be an integer").to.eq(
+                            true
+                        );
+                    }
+
+                    // Assert that drawer item title contains task type, app name and task priority
+                    expect(
+                        text.replace(/^\d+\s/, ""),
+                        "Task should be in expected list"
+                    ).to.be.oneOf(expectedTasks);
+                }
+            });
+    });
+}
+
 describe(["@tier2"], "Task drawer validation", () => {
     before("Login", function () {
         login();
@@ -53,58 +78,20 @@ describe(["@tier2"], "Task drawer validation", () => {
     it("Perform bulk analysis and validate information on task drawer", function () {
         // Automates Polarion TC MTA-556
         Analysis.analyzeAll(analyses[0]);
+
         cy.get(taskNotificationBadge).click();
+        validateTasks("tech-discovery", [
+            `(tech-discovery) - ${analyses[0].name} - 0`,
+            `(tech-discovery) - ${analyses[1].name} - 0`,
+        ]);
 
-        // Assert that Tech discovery tasks are listed
-        cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title").each((item) => {
-            if (Cypress.$(item).text().includes("tech-discovery")) {
-                const techDiscoverytasks = [
-                    `(tech-discovery) - ${analyses[0].name} - 0`,
-                    `(tech-discovery) - ${analyses[1].name} - 0`,
-                ];
-
-                // Extract Task ID from the drawer item title; Task ID is present at the start of the string
-                const match = item.text().match(/^\d+/);
-                if (match) {
-                    const taskID = parseInt(match[0], 10);
-                    expect(Number.isInteger(taskID), "Task ID should be an integer").to.eq(true);
-                }
-
-                // Assert that drawer item title contains task type, app name and task priority
-                expect(
-                    Cypress.$(item)
-                        .text()
-                        .replace(/^\d+\s/, "")
-                ).to.be.oneOf(techDiscoverytasks);
-            }
-        });
-
-        // Assert that analysis tasks are listed
         cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title").contains("analyzer", {
             timeout: 10000,
         });
-        cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title").each((item) => {
-            if (Cypress.$(item).text().includes("analyzer")) {
-                const analyzerTasks = [
-                    `(analyzer) - ${analyses[0].name} - 10`,
-                    `(analyzer) - ${analyses[1].name} - 10`,
-                ];
-
-                // Extract Task ID from the drawer item title; Task ID is present at the start of the string
-                const match = item.text().match(/^\d+/);
-                if (match) {
-                    const taskID = parseInt(match[0], 10);
-                    expect(Number.isInteger(taskID), "Task ID should be an integer").to.eq(true);
-                }
-
-                // Assert that drawer item title contains task type, app name and task priority
-                expect(
-                    Cypress.$(item)
-                        .text()
-                        .replace(/^\d+\s/, "")
-                ).to.be.oneOf(analyzerTasks);
-            }
-        });
+        validateTasks("analyzer", [
+            `(analyzer) - ${analyses[0].name} - 10`,
+            `(analyzer) - ${analyses[1].name} - 10`,
+        ]);
     });
 
     after("Perform test data clean up", function () {
