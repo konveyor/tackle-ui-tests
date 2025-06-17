@@ -106,7 +106,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
     });
 
-    it.only("Source + dependencies analysis on daytrader app", function () {
+    it("Source + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies", {
@@ -118,7 +118,6 @@ describe(["@tier2"], "Source Analysis", () => {
         applicationsList.push(application);
         cy.wait("@getApplication");
         application.analyze();
-
         // Daytrader app take more than 20 min to analyze
         application.verifyAnalysisStatus("Completed", 30 * MIN);
         application.verifyEffort(
