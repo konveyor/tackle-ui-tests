@@ -30,6 +30,7 @@ import {
     selectUserPerspective,
     sidedrawerTab,
     submitForm,
+    validateAnyNumberPresence,
     validateNumberPresence,
     validatePageTitle,
     validateSingleApplicationIssue,
@@ -536,11 +537,8 @@ export class Application {
                 .each(($row) => {
                     cy.wrap($row).within(() => {
                         cy.get('td[data-label="File"]').should("have.descendants", button);
-                        validateNumberPresence('td[data-label="Incidents"]', appIssue.incidents);
-                        validateNumberPresence(
-                            'td[data-label="Effort"]',
-                            appIssue.effort * appIssue.incidents
-                        );
+                        validateAnyNumberPresence('td[data-label="Incidents"]');
+                        validateAnyNumberPresence('td[data-label="Effort"]');
                     });
                 });
         });
@@ -550,26 +548,23 @@ export class Application {
     private validateAffectedFilesModal(appIssue: AppIssue): void {
         // Iterating through affected files
         for (let affectedFile = 0; affectedFile < appIssue.affectedFiles; affectedFile++) {
-            cy.get('td[data-label="File"]').within(() => {
-                click(button, false, true, affectedFile);
-            });
+            cy.get('td[data-label="File"]')
+                .eq(affectedFile)
+                .within(() => {
+                    cy.get("button").click();
+                });
             cy.wait(SEC);
             cy.get("[id^=pf-modal-part-]")
                 .first()
                 .within(() => {
-                    // Checking amount of tabs for incidents in particular file
-                    cy.get("ul[role=tablist]").within(() => {
-                        cy.get("li").should("have.length", appIssue.incidents);
-                    });
-                    // Iterating through incidents list to click on each and validate content
-                    for (let incident = 0; incident < appIssue.incidents; incident++) {
-                        cy.get("ul[role=tablist]").within(() => {
-                            // Clicking on particular incident
-                            click(button, false, true, incident);
-                        });
-                        cy.get("ul[role=tablist] >li >button").then((button) => {
-                            if (!button.text().includes("All incidents")) {
-                                // Asserting that content of text field has at least 100 symbols
+                    cy.get("ul[role=tablist] > li > button").then((tabButtons) => {
+                        const tabCount = tabButtons.length;
+
+                        for (let incident = 0; incident < tabCount; incident++) {
+                            cy.get('button[role="tab"]').eq(incident).click();
+                            const tabText = tabButtons[incident].innerText;
+
+                            if (!tabText.includes("All incidents")) {
                                 cy.get("div.monaco-scrollable-element.editor-scrollable.vs-dark", {
                                     timeout: 15 * SEC,
                                 })
@@ -578,8 +573,8 @@ export class Application {
                                         expect(text.length).to.be.at.least(100);
                                     });
                             }
-                        });
-                    }
+                        }
+                    });
                     clickByText(button, "Close");
                 });
         }

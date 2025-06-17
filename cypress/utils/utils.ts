@@ -444,13 +444,16 @@ export function filterIssueBy(filterType: issueFilter, filterValue: string | str
 }
 
 export function validateSingleApplicationIssue(issue: AppIssue): void {
+    cy.log(issue.name);
     cy.contains(issue.name)
         .closest(trTag)
         .within(() => {
             validateTextPresence(singleApplicationColumns.category, issue.category);
             validateTextPresence(singleApplicationColumns.source, issue.sources[0]);
+            cy.log(issue.sources[0]);
             validateTextPresence(singleApplicationColumns.target, issue.targets[0]);
             validateNumberPresence(singleApplicationColumns.effort, issue.effort);
+            cy.log(issue.affectedFiles + "");
             validateNumberPresence(singleApplicationColumns.files, issue.affectedFiles);
         });
 }

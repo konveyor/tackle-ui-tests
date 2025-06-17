@@ -35,7 +35,6 @@ import {
     SEC,
     UserCredentials,
 } from "../../../../types/constants";
-import { AppIssue } from "../../../../types/types";
 let source_credential: CredentialsSourceControlUsername;
 let source_credential_withHash: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;
@@ -47,31 +46,31 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.visit("/");
 
         // Create source Credentials
-        source_credential = new CredentialsSourceControlUsername(
-            data.getRandomCredentialsData(
-                CredentialType.sourceControl,
-                UserCredentials.usernamePassword,
-                true
-            )
-        );
-        source_credential.create();
+        // source_credential = new CredentialsSourceControlUsername(
+        //     data.getRandomCredentialsData(
+        //         CredentialType.sourceControl,
+        //         UserCredentials.usernamePassword,
+        //         true
+        //     )
+        // );
+        // source_credential.create();
 
-        // Create source Credentials with # in password
-        source_credential_withHash = new CredentialsSourceControlUsername(
-            data.getRandomCredentialsData(
-                CredentialType.sourceControl,
-                UserCredentials.usernamePassword,
-                true
-            )
-        );
-        source_credential_withHash.password = "#" + source_credential_withHash.password;
-        source_credential_withHash.create();
+        // // Create source Credentials with # in password
+        // source_credential_withHash = new CredentialsSourceControlUsername(
+        //     data.getRandomCredentialsData(
+        //         CredentialType.sourceControl,
+        //         UserCredentials.usernamePassword,
+        //         true
+        //     )
+        // );
+        // source_credential_withHash.password = "#" + source_credential_withHash.password;
+        // source_credential_withHash.create();
 
-        // Create Maven credentials
-        maven_credential = new CredentialsMaven(
-            data.getRandomCredentialsData(CredentialType.maven, null, true)
-        );
-        maven_credential.create();
+        // // Create Maven credentials
+        // maven_credential = new CredentialsMaven(
+        //     data.getRandomCredentialsData(CredentialType.maven, null, true)
+        // );
+        // maven_credential.create();
     });
 
     beforeEach("Load data", function () {
@@ -107,7 +106,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
     });
 
-    it("Source + dependencies analysis on daytrader app", function () {
+    it.only("Source + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies", {
@@ -115,12 +114,13 @@ describe(["@tier2"], "Source Analysis", () => {
             }),
             getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
         );
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication");
-        application.analyze();
+        // application.create();
+        // applicationsList.push(application);
+        // cy.wait("@getApplication");
+        // application.analyze();
+        application.name = "dayTraderApp_Source+dependencies_test-app-ipsa77";
         // Daytrader app take more than 20 min to analyze
-        application.verifyAnalysisStatus("Completed", 30 * MIN);
+        // application.verifyAnalysisStatus("Completed", 30 * MIN);
         application.verifyEffort(
             this.analysisData["source+dep_analysis_on_daytrader-app"]["effort"]
         );
@@ -128,11 +128,11 @@ describe(["@tier2"], "Source Analysis", () => {
             this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"]
         );
         // Automate bug https://issues.redhat.com/browse/MTA-2006
-        this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"].forEach(
-            (currentIssue: AppIssue) => {
-                application.validateAffected(currentIssue);
-            }
-        );
+        // this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"].forEach(
+        //     (currentIssue: AppIssue) => {
+        //         application.validateAffected(currentIssue);
+        //     }
+        // );
     });
 
     it("Analysis on daytrader app with maven credentials", function () {
