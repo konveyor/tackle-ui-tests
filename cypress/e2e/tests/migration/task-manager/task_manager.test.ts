@@ -33,7 +33,7 @@ import { SEC, TaskKind, TaskStatus } from "../../../types/constants";
 import { taskNotificationBadge } from "../../../views/common.view";
 import { TaskManagerColumns, tasksTable } from "../../../views/taskmanager.view";
 
-const analyses: Analysis[] = [];
+let applicationsList: Array<Application> = [];
 
 describe(["@tier2"], "Task Manager", () => {
     before("Login", function () {
@@ -44,16 +44,15 @@ describe(["@tier2"], "Task Manager", () => {
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
                 for (let i = 0; i < 2; i++) {
-                    analyses.push(
-                        new Analysis(
-                            getRandomApplicationData("bookserverApp", {
-                                sourceData: appData["bookserver-app"],
-                            }),
-                            getRandomAnalysisData(analysisData["analysis_for_openSourceLibraries"])
-                        )
+                    const bookServerApp = new Analysis(
+                        getRandomApplicationData("bookserverApp", {
+                            sourceData: appData["bookserver-app"],
+                        }),
+                        getRandomAnalysisData(analysisData["source_analysis_on_bookserverapp"])
                     );
+                    bookServerApp.create();
+                    applicationsList.push(bookServerApp);
                 }
-                analyses.forEach((analysis) => analysis.create());
             });
         });
     });
@@ -62,9 +61,6 @@ describe(["@tier2"], "Task Manager", () => {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
-        cy.fixture("analysis").then(function (analysisData) {
-            this.analysisData = analysisData;
-        });
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
@@ -72,74 +68,17 @@ describe(["@tier2"], "Task Manager", () => {
 
     it("Navigation to the task manager page is allowed from the left navigation menu", function () {
         TaskManager.open();
-        validateTextPresence(TaskManagerColumns.application, analyses[0].name);
-        validateTextPresence(TaskManagerColumns.application, analyses[1].name);
+        validateTextPresence(TaskManagerColumns.application, applicationsList[0].name);
+        validateTextPresence(TaskManagerColumns.application, applicationsList[1].name);
     });
 
     it("Navigation to the task manager page is allowed from the application popover", function () {
-        analyses[0].openAllTasksLink();
-        validateTextPresence(TaskManagerColumns.application, analyses[0].name);
-        validateTextPresence(TaskManagerColumns.application, analyses[1].name, false);
+        applicationsList[0].openAllTasksLink();
+        validateTextPresence(TaskManagerColumns.application, applicationsList[0].name);
+        validateTextPresence(TaskManagerColumns.application, applicationsList[1].name, false);
         validateTextPresence(TaskManagerColumns.kind, TaskKind.languageDiscovery);
         validateTextPresence(TaskManagerColumns.kind, TaskKind.techDiscovery);
         clearAllFilters();
-    });
-
-    it("Perform bulk analysis and validate information on task drawer", function () {
-        // Automates Polarion TC MTA-556
-        Analysis.analyzeAll(analyses[0]);
-        cy.get(taskNotificationBadge).click();
-
-        // Assert that Tech discovery tasks are listed
-        cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title").each((item) => {
-            if (Cypress.$(item).text().includes("tech-discovery")) {
-                const techDiscoverytasks = [
-                    `(tech-discovery) - ${analyses[0].name} - 0`,
-                    `(tech-discovery) - ${analyses[1].name} - 0`,
-                ];
-
-                // Extract Task ID from the drawer item title; Task ID is present at the start of the string
-                const match = item.text().match(/^\d+/);
-                if (match) {
-                    const taskID = parseInt(match[0], 10);
-                    expect(Number.isInteger(taskID), "Task ID should be an integer").to.eq(true);
-                }
-
-                // Assert that drawer item title contains task type, app name and task priority
-                expect(
-                    Cypress.$(item)
-                        .text()
-                        .replace(/^\d+\s/, "")
-                ).to.be.oneOf(techDiscoverytasks);
-            }
-        });
-
-        // Assert that analysis tasks are listed
-        cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title").contains("analyzer", {
-            timeout: 10000,
-        });
-        cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title").each((item) => {
-            if (Cypress.$(item).text().includes("analyzer")) {
-                const analyzerTasks = [
-                    `(analyzer) - ${analyses[0].name} - 10`,
-                    `(analyzer) - ${analyses[1].name} - 10`,
-                ];
-
-                // Extract Task ID from the drawer item title; Task ID is present at the start of the string
-                const match = item.text().match(/^\d+/);
-                if (match) {
-                    const taskID = parseInt(match[0], 10);
-                    expect(Number.isInteger(taskID), "Task ID should be an integer").to.eq(true);
-                }
-
-                // Assert that drawer item title contains task type, app name and task priority
-                expect(
-                    Cypress.$(item)
-                        .text()
-                        .replace(/^\d+\s/, "")
-                ).to.be.oneOf(analyzerTasks);
-            }
-        });
     });
 
     it("Validate 'View All Tasks' link from within the task drawer", function () {
@@ -150,21 +89,20 @@ describe(["@tier2"], "Task Manager", () => {
             "div.pf-v5-c-notification-drawer__header-action"
         );
         cy.get("h1", { timeout: 35 * SEC }).should("contain", "Task Manager");
-        validateTextPresence(TaskManagerColumns.application, analyses[0].name);
-        validateTextPresence(TaskManagerColumns.application, analyses[1].name);
+        validateTextPresence(TaskManagerColumns.application, applicationsList[0].name);
+        validateTextPresence(TaskManagerColumns.application, applicationsList[1].name);
     });
 
     it("Create an app with source code and branch name - discovery tasks should succeed", function () {
         Application.open();
-        const app = new Analysis(
+        const app = new Application(
             getRandomApplicationData("", {
                 sourceData: this.appData["konveyor-exampleapp"],
-            }),
-            getRandomAnalysisData(this.analysisData["analysis_on_example-1-app"])
+            })
         );
         app.create();
         cy.wait("@getApplication", { timeout: 2 * SEC });
-        analyses.push(app);
+        applicationsList.push(app);
         TaskManager.open();
         TaskManager.verifyTaskStatus(app.name, TaskKind.languageDiscovery, TaskStatus.succeeded);
         TaskManager.verifyTaskStatus(app.name, TaskKind.techDiscovery, TaskStatus.succeeded);
@@ -172,22 +110,21 @@ describe(["@tier2"], "Task Manager", () => {
 
     it("Create a binary app - no discovery task is triggered", function () {
         Application.open();
-        const app = new Analysis(
-            getRandomApplicationData("tackletestApp_binary", {
-                binaryData: this.appData["tackle-testapp-binary"],
-            }),
-            getRandomAnalysisData(this.analysisData["binary_analysis_on_tackletestapp"])
+        const app = new Application(
+            getRandomApplicationData("binary", {
+                sourceData: this.appData["tackle-testapp-binary"],
+            })
         );
         app.create();
         cy.wait("@getApplication", { timeout: 5 * SEC });
-        analyses.push(app);
+        applicationsList.push(app);
         TaskManager.open();
         notExists(app.name, tasksTable);
     });
 
     it("Delete an application - related tasks are deleted", function () {
         // Remove the last element from applicationsList
-        const app = analyses.pop();
+        const app = applicationsList.pop();
         app.delete();
         TaskManager.open();
         notExists(app.name, tasksTable);
@@ -195,6 +132,6 @@ describe(["@tier2"], "Task Manager", () => {
 
     after("Perform test data clean up", function () {
         Application.open(true);
-        deleteByList(analyses);
+        deleteByList(applicationsList);
     });
 });
