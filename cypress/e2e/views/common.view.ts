@@ -115,3 +115,6 @@ export const downloadFormatDetails = {
     },
 };
 export const downloadTaskButton = "button[aria-label='Download code']";
+
+// Task Manager drawer
+export const taskDrawerItemTitle = "h2.pf-v5-c-notification-drawer__list-item-header-title";

@@ -23,17 +23,17 @@ import {
     login,
 } from "../../../../utils/utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
-import { taskNotificationBadge } from "../../../views/common.view";
+import { taskDrawerItemTitle, taskNotificationBadge } from "../../../views/common.view";
 
 const analyses: Analysis[] = [];
 const NUMBER_OF_APPS = 2;
 
 function validateTasks(taskType: string, expectedTasks: string[]) {
-    cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title").each((item) => {
+    cy.get(taskDrawerItemTitle).each((item) => {
         cy.wrap(item)
             .invoke("text")
             .then((text) => {
-                if (item.text().includes(taskType)) {
+                if (text.includes(taskType)) {
                     // Extract Task ID from the drawer item title; Task ID is present at the start of the string
                     const match = text.match(/^\d+/);
                     if (match) {
@@ -53,7 +53,7 @@ function validateTasks(taskType: string, expectedTasks: string[]) {
     });
 }
 
-describe(["@tier2"], "Task drawer validation", () => {
+describe(["@tier2"], "Task Manager Drawer validation", () => {
     before("Login", function () {
         login();
         cy.visit("/");
@@ -75,7 +75,7 @@ describe(["@tier2"], "Task drawer validation", () => {
         });
     });
 
-    it("Perform bulk analysis and validate information on task drawer", function () {
+    it("Perform bulk analysis and validate tasks on Task Manager Drawer", function () {
         // Automates Polarion TC MTA-556
         Analysis.analyzeAll(analyses[0]);
 
@@ -85,7 +85,7 @@ describe(["@tier2"], "Task drawer validation", () => {
             `(tech-discovery) - ${analyses[1].name} - 0`,
         ]);
 
-        cy.get("h2.pf-v5-c-notification-drawer__list-item-header-title").contains("analyzer", {
+        cy.get(taskDrawerItemTitle).contains("analyzer", {
             timeout: 10000,
         });
         validateTasks("analyzer", [
