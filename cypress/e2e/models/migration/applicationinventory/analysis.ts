@@ -24,6 +24,7 @@ import {
     inputText,
     next,
     performRowActionByIcon,
+    selectAnalysisMode,
     selectCheckBox,
     selectFormItems,
     sidedrawerTab,
@@ -164,7 +165,7 @@ export class Analysis extends Application {
     }
 
     public selectSourceofAnalysis(source: string): void {
-        selectFormItems(sourceDropdown, source);
+        selectAnalysisMode(sourceDropdown, source);
     }
 
     /**

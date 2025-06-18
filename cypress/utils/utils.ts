@@ -20,7 +20,6 @@ import { Stakeholders } from "../e2e/models/migration/controls/stakeholders";
 import { TagCategory } from "../e2e/models/migration/controls/tagcategory";
 import { Tag } from "../e2e/models/migration/controls/tags";
 
-import * as ansiRegex from "ansi-regex";
 import "cypress-file-upload";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
 import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
@@ -157,7 +156,7 @@ export function clearInput(fieldID: string): void {
 
 export function clickByText(
     fieldId: string,
-    buttonText: string | ansiRegex,
+    buttonText: string | RegExp,
     isForced = true,
     log = false
 ): void {
@@ -316,6 +315,14 @@ export function selectFromDropListByText(droplist, item: string) {
 export function selectFormItems(fieldId: string, item: string): void {
     cy.get(fieldId).click();
     cy.contains("button", item).click();
+}
+
+export function selectAnalysisMode(fieldId: string, item: string): void {
+    cy.get(fieldId).click();
+    cy.get("button").then(($buttons) => {
+        const match = $buttons.toArray().find((btn) => btn.textContent?.trim() === item);
+        cy.wrap(match).click();
+    });
 }
 
 export function selectRow(name: string): void {
