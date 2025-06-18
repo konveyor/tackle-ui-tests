@@ -115,19 +115,6 @@
                 "labels": ["None"]
             },
             {
-                "name": "Replace the Spring Web artifact with Quarkus 'spring-web' extension",
-                "category": "mandatory",
-                "sources": ["springboot"],
-                "targets": ["quarkus"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
-                "ruleSet": "quarkus/springboot",
-                "rule": "springboot-web-to-quarkus-00000",
-                "labels": ["None"]
-            },
-            {
                 "name": "Replace the spring-boot-maven-plugin dependency",
                 "category": "mandatory",
                 "sources": ["springboot"],
@@ -138,32 +125,6 @@
                 "affectedFiles": 1,
                 "ruleSet": "quarkus/springboot",
                 "rule": "springboot-plugins-to-quarkus-0000",
-                "labels": ["None"]
-            },
-            {
-                "name": "Replace the SpringBoot artifact with Quarkus 'spring-boot-properties' extension",
-                "category": "mandatory",
-                "sources": ["springboot"],
-                "targets": ["quarkus"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
-                "ruleSet": "quarkus/springboot",
-                "rule": "springboot-properties-to-quarkus-00000",
-                "labels": ["None"]
-            },
-            {
-                "name": "Replace the SpringBoot Dependency Injection artifact with Quarkus 'spring-di' extension",
-                "category": "potential",
-                "sources": ["springboot"],
-                "targets": ["quarkus"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
-                "ruleSet": "quarkus/springboot",
-                "rule": "springboot-di-to-quarkus-00000",
                 "labels": ["None"]
             }
         ],
