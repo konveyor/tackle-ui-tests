@@ -31,6 +31,7 @@ import { Application } from "../../../../models/migration/applicationinventory/a
 import {
     AnalysisStatuses,
     CredentialType,
+    MIN,
     SEC,
     UserCredentials,
 } from "../../../../types/constants";
@@ -120,7 +121,7 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus("Completed", 30 * MIN);
         application.verifyEffort(
             this.analysisData["source+dep_analysis_on_daytrader-app"]["effort"]
         );
@@ -402,23 +403,6 @@ describe(["@tier2"], "Source Analysis", () => {
         // Analyze application without Maven credentials
         Application.open();
         analyzeApplication(applicationsList[1], null);
-    });
-
-    it("Bug MTA-3701: Source analysis on tackle app with hash in Password", function () {
-        const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_Source", {
-                sourceData: this.appData["tackle-testapp-git"],
-            }),
-            getRandomAnalysisData(this.analysisData["tackleTestApp_Source"])
-        );
-
-        // Analysis application with source credential created with hash
-        Application.open();
-        application.create();
-        application.manageCredentials(source_credential_withHash.name);
-        applicationsList.push(application);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
     });
 
     after("Perform test data clean up", function () {

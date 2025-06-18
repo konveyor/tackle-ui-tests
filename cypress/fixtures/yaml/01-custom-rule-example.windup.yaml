@@ -1,7 +1,7 @@
 - category: potential
   customVariables: []
   description: CUSTOM RULE FOR DEPENDENCIES | jackson-databind identified in the pom.xml
-  effort: 0
+  effort: 5
   labels:
   - konveyor.io/include=always
   - tag
