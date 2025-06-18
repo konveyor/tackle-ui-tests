@@ -41,7 +41,7 @@ describe(["@tier3"], "Bug MTA-4598: Dependencies sort validations", function () 
     });
 
     sortByList.forEach((column) => {
-        it(`Bug MTA-4169: Sort dependencies by ${column}`, function () {
+        it(`Bug MTA-4598: Sort dependencies by ${column}`, function () {
             Dependencies.openList();
             validateSortBy(column);
         });
