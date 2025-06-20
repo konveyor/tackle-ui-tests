@@ -1,0 +1,4 @@
+#
+# Auto-fix any lint errors in staged files
+#
+lint-staged
