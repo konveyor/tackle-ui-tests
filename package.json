@@ -49,5 +49,8 @@
     "lint-staged": {
         "!(package-lock.json)*": "prettier --ignore-unknown --write",
         "cypress/**/*.{ts,js,json}": "prettier --ignore-unknown --write "
+    },
+    "engines": {
+        "node": ">=20.17"
     }
 }
