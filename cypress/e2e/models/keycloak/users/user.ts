@@ -2,6 +2,7 @@ import {
     click,
     clickByText,
     deleteFromArray,
+    getNamespace,
     inputText,
     login,
     logout,
@@ -68,14 +69,18 @@ export class User {
     static changeRealm(realm: string) {
         cy.url().then(($url) => {
             if (!$url.includes(`#/${realm}`)) {
-                click('a[data-testid="nav-item-realms"]');
-                clickByText("a", realm);
+                click('button[data-testid="realmSelector"]');
+                clickByText(button, realm);
             }
         });
     }
 
     static openList(): void {
-        const realm = "mta";
+        const namespace = getNamespace();
+        let realm = "tackle";
+        if (namespace.includes("mta")) {
+            realm = "mta";
+        }
         User.changeRealm(realm);
         clickByText("a", "Users");
         cy.wait(SEC);
@@ -182,6 +187,7 @@ export class User {
 
     login(): void {
         login(this.username, this.password, this.firstLogin);
+        cy.visit(Cypress.config("baseUrl"));
     }
 
     logout() {
