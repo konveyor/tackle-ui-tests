@@ -1,15 +1,19 @@
 {
     "compilerOptions": {
+        "baseUrl": ".",
+
         "target": "es5",
         "lib": ["es5", "dom", "es2015"],
         "types": [
+            "node",
+            "cy-verify-downloads",
             "cypress",
-            "cypress-xpath",
-            "@testing-library/cypress",
+            "cypress-file-upload",
             "cypress-react-selector",
             "cypress-real-events",
-            "node"
+            "@testing-library/cypress",
         ],
+        "esModuleInterop": true,
         "skipLibCheck": true,
         "allowJs": true,
         "resolveJsonModule": true,
@@ -21,8 +25,8 @@
     },
     "include": [
         "**/*.ts",
-        "**/*.js",
+        // "**/*.js",
         "../node_modules/dom-accessibility-api/dist/polyfills/SetLike.d.ts"
     ],
-    "exclude": ["../node_modules"]
+    // "exclude": ["../node_modules"]
 }

@@ -13,14 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { BusinessServices } from "../e2e/models/migration/controls/businessservices";
-import { Jobfunctions } from "../e2e/models/migration/controls/jobfunctions";
-import { Stakeholdergroups } from "../e2e/models/migration/controls/stakeholdergroups";
-import { Stakeholders } from "../e2e/models/migration/controls/stakeholders";
-import { TagCategory } from "../e2e/models/migration/controls/tagcategory";
-import { Tag } from "../e2e/models/migration/controls/tags";
 
-import "cypress-file-upload";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
 import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
 import { CredentialsProxy } from "../e2e/models/administration/credentials/credentialsProxy";
@@ -30,6 +23,12 @@ import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCr
 import { Jira } from "../e2e/models/administration/jira-connection/jira";
 import { Application } from "../e2e/models/migration/applicationinventory/application";
 import { Archetype } from "../e2e/models/migration/archetypes/archetype";
+import { BusinessServices } from "../e2e/models/migration/controls/businessservices";
+import { Jobfunctions } from "../e2e/models/migration/controls/jobfunctions";
+import { Stakeholdergroups } from "../e2e/models/migration/controls/stakeholdergroups";
+import { Stakeholders } from "../e2e/models/migration/controls/stakeholders";
+import { TagCategory } from "../e2e/models/migration/controls/tagcategory";
+import { Tag } from "../e2e/models/migration/controls/tags";
 import { MigrationWave } from "../e2e/models/migration/migration-waves/migration-wave";
 import {
     applicationInventory,
@@ -206,6 +205,7 @@ export function login(username?: string, password?: string, firstLogin = false):
      */
     const sessionId = (username ?? "login") + (firstLogin ? "FirstLogin" : "");
 
+    cy.log(`login a new session or grab the currently logged in session [${sessionId}]`);
     return cy.session(sessionId, () => {
         cy.visit("/", { timeout: 120 * SEC });
         cy.url().then(($url) => {

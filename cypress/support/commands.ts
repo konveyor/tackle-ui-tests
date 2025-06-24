@@ -13,34 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-require("cy-verify-downloads").addCustomCommand();
-require("cypress-downloadfile/lib/downloadFileCommand");
+// custom commands
+export {};
+declare global {
+    namespace Cypress {
+        interface Chainable {
+            /**
+             * Drags an element to a drop location.
+             * This custom command works only on Chromium-based browsers
+             * @example cy.dragAndDrop(cy.get('#source'), cy.get('#target'))
+             * @param dragElement
+             * @param dropElement
+             */
+            dragAndDrop(dragElement: Cypress.Chainable, dropElement: Cypress.Chainable): void;
+        }
+    }
+}
 
 Cypress.Commands.add(
     "dragAndDrop",
