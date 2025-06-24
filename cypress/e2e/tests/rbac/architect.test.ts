@@ -34,6 +34,8 @@ import { CredentialType, legacyPathfinder } from "../../types/constants";
 let stakeholders: Array<Stakeholders> = [];
 
 describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
+    // https://github.com/konveyor/tackle2-ui/issues/2397
+    // https://github.com/konveyor/tackle2-ui/issues/2399
     let userArchitect = new UserArchitect(getRandomUserData());
     const application = new Application(getRandomApplicationData());
 
@@ -62,7 +64,7 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
         });
     });
 
-    it("Architect, validate buttons", function () {
+    it("Issue 2397, 2399: Architect, validate buttons", function () {
         userArchitect.login();
         Application.validateCreateAppButton(this.rbacRules);
         Analysis.validateTopActionMenu(this.rbacRules);

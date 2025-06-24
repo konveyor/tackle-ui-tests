@@ -19,7 +19,6 @@ import {
     clickByText,
     clickItemInKebabMenu,
     clickTab,
-    clickWithin,
     doesExistButton,
     doesExistSelector,
     doesExistText,
@@ -75,6 +74,7 @@ import {
     repoTypeSelect,
     rootPath,
     selectBox,
+    sideKebabMenu,
     sourceRepository,
     southdependenciesDropdownBtn,
     tagsColumnSelector,
@@ -455,7 +455,7 @@ export class Application {
             .contains(this.name)
             .closest(trTag)
             .within(() => {
-                clickWithin("#row-actions", button);
+                click(sideKebabMenu);
                 doesExistButton(assessAppButton, rbacRules["Application actions"]["Assess"]);
                 doesExistButton(reviewAppButton, rbacRules["Application actions"]["Review"]);
                 doesExistText(
