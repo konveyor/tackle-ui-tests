@@ -55,7 +55,7 @@ describe(["@tier3"], "Tests related to application-archetype association ", () =
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
-    it("Verify multiple applications inherit assessment and review inheritance from an archetype", function () {
+    it("tackle2-ui Issue 2400: Verify multiple applications inherit assessment and review inheritance from an archetype", function () {
         // Automates Polarion MTA-400 Archetype association - Application creation before archetype creation.
         AssessmentQuestionnaire.import(cloudReadinessFilePath);
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
@@ -107,7 +107,7 @@ describe(["@tier3"], "Tests related to application-archetype association ", () =
         AssessmentQuestionnaire.delete(cloudReadinessQuestionnaire);
     });
 
-    it("Verify application assessment and review inheritance from multiple archetypes ", function () {
+    it("tackle2-ui Issue 2400: Verify application assessment and review inheritance from multiple archetypes ", function () {
         /* Automates MTA-420
         This also verifies: Archetype association - Application creation after archetype creation.
         */
@@ -164,7 +164,7 @@ describe(["@tier3"], "Tests related to application-archetype association ", () =
         deleteByList(archetypeList);
     });
 
-    it("View Archetypes from application assessment popup", function () {
+    it("tackle2-ui Issue 2400: View Archetypes from application assessment popup", function () {
         // Automates Polarion MTA-436
 
         const archetypeList = createMultipleArchetypes(2, associationTags);
