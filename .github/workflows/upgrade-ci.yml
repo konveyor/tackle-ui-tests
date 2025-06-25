@@ -81,6 +81,15 @@ jobs:
       - name: Install Pre Upgrade konveyor
         run: bash hack/install-preupgrade-konveyor.sh 
 
+      - name: Set preupgrade konveyor value
+        run: | 
+          kubectl get csv -n konveyor-tackle -o=custom-columns=:spec.version
+          konveyor_version=$(kubectl get csv -n konveyor-tackle -o=custom-columns=:spec.version)
+          echo $konveyor_version
+          echo "mtaVersion=$konveyor_version" >> $GITHUB_ENV
+
+      - name: Use mtaVersion
+        run: echo "Konveyor version is $mtaVersion"
 
       - name: Check pod status
         run: kubectl get pods -n konveyor-tackle
@@ -129,6 +138,16 @@ jobs:
       - name: Install NPM
         run: npm install .
 
+
+      - name: Set postupgrade konveyor value
+        run: | 
+          konveyor_version=$(kubectl get csv -n konveyor-tackle -o=custom-columns=:spec.version)
+          echo "mtaVersion=$konveyor_version" >> $GITHUB_ENV
+
+      - name: Use mtaVersion
+        run: echo "Konveyor version is $mtaVersion"
+
+        
       - name: Run cypress login test
         run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="Dog8code",tackleUrl=${{ env.CYPRESS_tackleUrl }}
 
