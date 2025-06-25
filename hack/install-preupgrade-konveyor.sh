@@ -19,9 +19,9 @@ kubectl get sub -n konveyor-tackle -o yaml #Remove later
 sleep 60s
 echo "Patching installplan for konveyor..."
 
-kubectl get ip -n "${NAMESPACE}"
+kubectl get installplan -n "${NAMESPACE}"
 
-kubectl patch ip $(kubectl get ip -n "${NAMESPACE}" | egrep "$PREUPGRADE_VERSION"|awk '{print $1}') -n "${NAMESPACE}" --type merge --patch '{"spec":{"approved":true}}'
+kubectl patch installplan $(kubectl get installplan -n "${NAMESPACE}" | egrep "$PREUPGRADE_VERSION"|awk '{print $1}') -n "${NAMESPACE}" --type merge --patch '{"spec":{"approved":true}}'
 
 sleep 20s
 
