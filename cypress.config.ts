@@ -12,7 +12,9 @@ export default defineConfig({
     video: false,
     env: {
         user: "admin",
+        initialPassword: "Passw0rd!",
         pass: "Dog8code",
+        keycloakAdminPassword: "",
         git_user: "",
         git_password: "",
         svn_user: "qe-admin",
@@ -27,7 +29,7 @@ export default defineConfig({
         jira_atlassian_cloud_project: "Test",
         jira_stage_datacenter_project_id: 12335626,
         rwx_enabled: true,
-        logLevel: "ASSERT",
+        logLevel: "INFO", // VERBOSE, INFO, ASSERT, ERROR
         mtaVersion: "",
         FAIL_FAST_PLUGIN: true,
         FAIL_FAST_ENABLED: false,
