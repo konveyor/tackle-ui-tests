@@ -974,37 +974,40 @@
         "source": "Source code",
         "target": ["Jakarta EE 9", "Containerization"],
         "appName": "tackle-testapp",
-        "effort": 68,
+        "effort": 11,
         "techTags": [
-            ["Other", "Properties"],
-            ["Bean", "EJB XML"],
-            ["Java EE", "EJB XML"],
-            ["Embedded", "Properties"],
-            ["Connect", "EJB XML"],
-            ["Sustain", "Properties"]
+            ["Other", ["Properties"]],
+            ["Bean", ["EJB XML"]],
+            ["HTTP", ["Servlet"]],
+            ["Persistence", ["JPA named queries"]],
+            ["Store", ["JPA named queries"]],
+            ["Sustain", ["Properties"]],
+            ["Connect", ["Servlet", "EJB XML"]],
+            ["Embedded", ["Properties"]],
+            ["Java EE", ["EJB XML", "Servlet", "JPA named queries"]]
         ],
         "issues": [
             {
-                "name": "File system - Java IO",
-                "category": "mandatory",
-                "source": "None",
-                "targets": ["cloud-readiness"],
-                "effort": 1,
-                "affectedFiles": 1,
-                "ruleSet": "cloud-readiness",
-                "rule": "local-storage-00001",
-                "labels": ["konveyor.io/source", "storage"]
-            },
-            {
                 "name": "Hardcoded IP Address",
                 "category": "mandatory",
-                "source": "None",
+                "sources": ["None"],
                 "effort": 1,
                 "affectedFiles": 1,
                 "targets": ["cloud-readiness"],
                 "ruleSet": "discovery-rules",
                 "rule": "hardcoded-ip-address",
                 "labels": ["discovery"]
+            },
+            {
+                "name": "The package 'javax' has been replaced by 'jakarta'",
+                "category": "mandatory",
+                "sources": ["None"],
+                "targets": ["eap"],
+                "effort": 1,
+                "affectedFiles": 2,
+                "ruleSet": "eap8/eap7",
+                "rule": "javax-to-jakarta-import-00001",
+                "labels": ["konveyor.io/source"]
             }
         ]
     },
