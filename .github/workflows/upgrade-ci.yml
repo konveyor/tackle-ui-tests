@@ -83,9 +83,7 @@ jobs:
 
       - name: Set preupgrade konveyor value
         run: | 
-          kubectl get csv -n konveyor-tackle -o=custom-columns=:spec.version
-          konveyor_version=$(kubectl get csv -n konveyor-tackle -o=custom-columns=:spec.version)
-          echo $konveyor_version
+          konveyor_version=$(kubectl get csv -n konveyor-tackle -o=custom-columns=:spec.version | head -n 1 | tr -d '[:space:]')
           echo "mtaVersion=$konveyor_version" >> $GITHUB_ENV
 
       - name: Use mtaVersion
@@ -125,7 +123,7 @@ jobs:
       
       - name: Run Preupgrade test cases
         run: |
-          CYPRESS_INCLUDE_TAGS=@pre-upgrade npx cypress run --spec **/*.test.ts --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
+          CYPRESS_INCLUDE_TAGS=@pre-upgrade npx cypress run --spec cypress/e2e/tests/upgrade/create_upgrade_data.test.ts --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
 
       - name: Checkout to initial branch
         run: git checkout $INIT_BRANCH
@@ -141,7 +139,7 @@ jobs:
 
       - name: Set postupgrade konveyor value
         run: | 
-          konveyor_version=$(kubectl get csv -n konveyor-tackle -o=custom-columns=:spec.version)
+          konveyor_version=$(kubectl get csv -n konveyor-tackle -o=custom-columns=:spec.version | head -n 1 | tr -d '[:space:]')
           echo "mtaVersion=$konveyor_version" >> $GITHUB_ENV
 
       - name: Use mtaVersion
@@ -159,4 +157,4 @@ jobs:
         if: failure()
         with:
           name: minikube-tests-screenshots
-          path: tackle-ui-tests/cypress/screenshots
+          path: tackle-ui-tests/cypress/screenshots 
