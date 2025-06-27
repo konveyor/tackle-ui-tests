@@ -110,6 +110,7 @@ describe(["@tier3"], "Unlink application from exported migration waves", functio
     // Automates Polarion TC 415
     it("Export to Jira Cloud and unlink applications from App Inventory", function () {
         exportWave().then(() => {
+            Application.open(true);
             applications.forEach((app) => app.unlinkJiraTicket());
             Jira.openList();
             cy.get(tdTag)
