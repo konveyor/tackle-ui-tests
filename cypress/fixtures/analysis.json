@@ -1926,7 +1926,7 @@
         "source": "Source code + dependencies",
         "target": ["Containerization", "Jakarta EE 9"],
         "appName": "coolstore-app",
-        "effort": 114,
+        "effort": 113,
         "issues": [
             {
                 "name": "Move to Jakarta EE Maven Artifacts - replace groupId javax.activation",
@@ -1947,8 +1947,8 @@
                 "sources": ["None"],
                 "targets": ["eap"],
                 "effort": 1,
-                "totalEffort": 2,
-                "incidents": 2,
+                "totalEffort": 1,
+                "incidents": 1,
                 "affectedFiles": 1,
                 "ruleSet": "eap8/eap7",
                 "rule": "javaee-to-jakarta-namespaces-00033",
