@@ -23,7 +23,7 @@ import {
     validateTooShortInput,
 } from "../../../../utils/utils";
 import { CustomMigrationTarget } from "../../../models/administration/custom-migration-targets/custom-migration-target";
-import { RepositoryType } from "../../../types/constants";
+import { MustbeAValidRepositoryURL, RepositoryType } from "../../../types/constants";
 import { cancelButton, submitButton } from "../../../views/common.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 
@@ -97,12 +97,12 @@ describe(["@tier3"], "Custom Migration Target Validations", () => {
         CustomMigrationTarget.selectRepositoryType(RepositoryType.git);
 
         CustomMigrationTarget.fillRepositoryUrl("   ");
-        doesExistText("Must be a valid URL.", true);
+        doesExistText(MustbeAValidRepositoryURL, true);
 
         CustomMigrationTarget.fillRepositoryUrl("Invalid url");
-        doesExistText("Must be a valid URL.", true);
+        doesExistText(MustbeAValidRepositoryURL, true);
 
         CustomMigrationTarget.fillRepositoryUrl("https://github.com/konveyor/tackle-testapp");
-        doesExistText("Must be a valid URL.", false);
+        doesExistText(MustbeAValidRepositoryURL, false);
     });
 });
