@@ -54,7 +54,7 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
         Application.open(true);
     });
 
-    it("Perform analyses - Validate the tasks initiated counter increased", function () {
+    it("Perform source analysis - Validate the tasks initiated counter increased", function () {
         // For source code analysis application must have source code URL git or svn
         const bookServerApp = new Analysis(
             getRandomApplicationData("bookserverApp", {
@@ -73,7 +73,11 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
         counter++;
         applicationList.push(bookServerApp);
 
-        Application.open(true);
+        // Validate the tasks initiated counter increased
+        metrics.validateMetric(metricName, counter);
+    });
+
+    it("Perform binary analysis - Validate discovery tasks are not initiated", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
@@ -86,8 +90,6 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
         application.verifyAnalysisStatus("Completed");
         counter++;
         applicationList.push(application);
-
-        // Validate the tasks initiated counter increased
         metrics.validateMetric(metricName, counter);
     });
 
