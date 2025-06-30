@@ -370,7 +370,7 @@ export function notExists(value: string, tableSelector = appTable): void {
     cy.get(tableSelector).then(($tbody) => {
         if ($tbody.text() !== "No data available") {
             selectItemsPerPage(100);
-            cy.get(tableSelector, { timeout: 5 * SEC }).should("not.contain", value);
+            cy.get(tableSelector).should("not.contain", value);
         }
     });
 }
