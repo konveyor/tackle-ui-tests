@@ -78,7 +78,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it("Analysis for jee-example-app upload binary ", function () {
+    it("Analysis for jee-example-app upload binary", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(
@@ -110,7 +110,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         );
     });
 
-    it("Analysis for kafka-clients-sb app ", function () {
+    it("Analysis for kafka-clients-sb app", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_kafka-app"])

@@ -358,10 +358,10 @@ export function removeMember(memberName: string): void {
 
 export function exists(value: string, tableSelector = appTable): void {
     // Wait for DOM to render table and sibling elements
-    cy.get(tableSelector, { timeout: 5 * SEC }).then(($tbody) => {
+    cy.get(tableSelector).then(($tbody) => {
         if ($tbody.text() !== "No data available") {
             selectItemsPerPage(100);
-            cy.get(tableSelector, { timeout: 5 * SEC }).should("contain", value);
+            cy.get(tableSelector).should("contain", value);
         }
     });
 }
