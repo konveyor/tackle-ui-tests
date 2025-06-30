@@ -798,7 +798,7 @@ export function performRowActionByIcon(itemName: string, action: string): void {
         .find(action)
         .first()
         .find("button", { log: true, timeout: 30 * SEC })
-        .nthNode(1)
+        .eq(1)
         .click({ force: true });
 }
 
