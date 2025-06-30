@@ -158,5 +158,6 @@ describe(["@tier2"], "Affected files validation", () => {
     after("Perform test data clean up", function () {
         Application.open(true);
         deleteByList(applicationsList);
+        source_credential.delete();
     });
 });
