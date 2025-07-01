@@ -3,9 +3,30 @@ name: Global CI
 on: ["push", "pull_request"]
 
 jobs:
-  e2e:
+  e2e-main:
     uses: konveyor/ci/.github/workflows/global-ci.yml@main
+    if: "${{github.event.pull_request.base.ref == 'main' }}"
     with:
       run_api_tests: false
       run_ui_tests: true
       ui_tests_ref: ${{ github.event.number && format('refs/pull/{0}/merge', github.event.number) || '' }}
+      
+  e2e-release-06:
+    uses: konveyor/ci/.github/workflows/global-ci.yml@main
+    if: "${{github.event.pull_request.base.ref == 'release-0.6' }}"
+    with:
+      run_api_tests: false
+      run_ui_tests: true
+      ui_tests_ref: ${{ github.event.number && format('refs/pull/{0}/merge', github.event.number) || '' }}
+      tag: release-0.6 
+      operator_tag: v0.6.0
+
+  e2e-release-07:
+    uses: konveyor/ci/.github/workflows/global-ci.yml@main
+    if: "${{github.event.pull_request.base.ref == 'release-0.7' }}"
+    with:
+      run_api_tests: false
+      run_ui_tests: true
+      ui_tests_ref: ${{ github.event.number && format('refs/pull/{0}/merge', github.event.number) || '' }}
+      tag: release-0.7 # Move this to release-0.7 once a separate branch is cut in operator repo , currently tracks to main.
+      operator_tag: v0.7.0 #Move this to proper tag once a separate branch is cut in the operator repo, currently tracks to main
