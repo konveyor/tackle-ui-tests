@@ -12,10 +12,10 @@ jobs:
       ui_tests_ref: ${{ github.event.number && format('refs/pull/{0}/merge', github.event.number) || '' }}
       
   e2e-release-06:
-    uses: msajidmansoori12/ci/.github/workflows/global-ci.yml@use-tackleUrl
+    uses: konveyor/ci/.github/workflows/global-ci.yml@main
     if: "${{github.event.pull_request.base.ref == 'release-0.6' }}"
     with:
-      run_api_tests: false
+      run_api_tests: false 
       run_ui_tests: true
       ui_tests_ref: ${{ github.event.number && format('refs/pull/{0}/merge', github.event.number) || '' }}
       tag: release-0.6 
