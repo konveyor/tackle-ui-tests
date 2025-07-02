@@ -326,20 +326,21 @@ describe(["@tier3"], "Application inventory filter validations", function () {
             }),
             getRandomAnalysisData(this.analysisData["python_demo_application"])
         );
+
         application2.create();
         applicationsList.push(application2);
 
-        application1.analyze();
+        application2.analyze();
 
         applySearchFilter(analysis, "Not started");
-        exists(application2.name);
-        notExists(application1.name);
+        exists(application1.name);
+        notExists(application2.name);
 
         clickByText(button, clearAllFilters);
 
         applySearchFilter(analysis, "Completed");
-        exists(application1.name);
-        notExists(application2.name);
+        exists(application2.name);
+        notExists(application1.name);
     });
 
     after("Perform test data clean up", function () {
