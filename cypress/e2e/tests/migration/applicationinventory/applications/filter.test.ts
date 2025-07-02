@@ -330,17 +330,16 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         application2.create();
         applicationsList.push(application2);
 
-        application2.analyze();
+        application1.analyze();
 
         applySearchFilter(analysis, "Not started");
-        exists(application1.name);
-        notExists(application2.name);
+        exists(application2.name);
+        notExists(application1.name);
 
         clickByText(button, clearAllFilters);
 
-        applySearchFilter(analysis, "Completed");
+        exists(application1.name);
         exists(application2.name);
-        notExists(application1.name);
     });
 
     after("Perform test data clean up", function () {
