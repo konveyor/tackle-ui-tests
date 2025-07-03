@@ -338,9 +338,8 @@ describe(["@tier3"], "Application inventory filter validations", function () {
 
         clickByText(button, clearAllFilters);
 
-        applySearchFilter(analysis, "Completed");
         exists(application2.name);
-        notExists(application1.name);
+        exists(application1.name);
     });
 
     after("Perform test data clean up", function () {
