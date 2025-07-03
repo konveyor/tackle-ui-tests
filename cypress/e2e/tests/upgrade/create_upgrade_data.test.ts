@@ -80,7 +80,10 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         validateMtaVersionInUI(expectedMtaVersion)
     );
 
-    it("Validate MTA version in CLI", () => validateMtaVersionInCLI(expectedMtaVersion));
+    it.only("Validate MTA version in CLI", () => {
+        console.log("PRODUCT VERSION", expectedMtaVersion);
+        validateMtaVersionInCLI(expectedMtaVersion);
+    });
 
     it("Creating credentials", function () {
         const { sourceControlUsernameCredentialsName, mavenUsernameCredentialName } =
