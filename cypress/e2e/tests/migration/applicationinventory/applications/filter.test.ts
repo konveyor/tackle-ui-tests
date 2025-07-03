@@ -316,7 +316,7 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         gitConfiguration.enableInsecureGitRepositories();
 
         const application1 = new Analysis(
-            getRandomApplicationData("Insecure_disabled_tackle_test_app", {
+            getRandomApplicationData("Insecure_enabled_tackle_test_app", {
                 sourceData: this.appData["tackle-testapp"],
             }),
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
