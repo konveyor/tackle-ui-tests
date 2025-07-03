@@ -312,7 +312,7 @@ describe(["@tier3"], "Application inventory filter validations", function () {
 
     it("Analysis status filter validation", function () {
         const application1 = new Analysis(
-            getRandomApplicationData("Insecure_enabled_tackle_test_app", {
+            getRandomApplicationData("Insecure_disabled_tackle_test_app", {
                 sourceData: this.appData["tackle-testapp"],
             }),
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
@@ -331,6 +331,7 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         applicationsList.push(application2);
 
         application1.analyze();
+        application1.verifyAnalysisStatus("Completed");
 
         applySearchFilter(analysis, "Not started");
         exists(application2.name);
@@ -338,8 +339,9 @@ describe(["@tier3"], "Application inventory filter validations", function () {
 
         clickByText(button, clearAllFilters);
 
+        applySearchFilter(analysis, "Completed");
         exists(application1.name);
-        exists(application2.name);
+        notExists(application2.name);
     });
 
     after("Perform test data clean up", function () {
