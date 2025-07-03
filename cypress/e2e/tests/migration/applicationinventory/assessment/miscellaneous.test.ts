@@ -135,7 +135,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("review", "Not started");
     });
 
-    it("Assess application and overide assessment for that archetype", function () {
+    it("tackle2-ui Issue 2425: Assess application and override assessment for that archetype", function () {
         // Polarion TC MTA-390
         const archetypesList = [];
         const tags = createMultipleTags(2);
@@ -198,7 +198,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
     it(
         ["@interop", "@tier0"],
-        "Test inheritance after discarding application assessment and review",
+        "tackle2-ui Issue 2418: Test inheritance after discarding application assessment and review",
         function () {
             // Polarion TC MTA-456 Assess and review application associated with unassessed/unreviewed archetypes
             const tags = createMultipleTags(2);
