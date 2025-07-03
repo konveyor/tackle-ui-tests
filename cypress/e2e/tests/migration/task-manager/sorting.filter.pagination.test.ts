@@ -20,8 +20,11 @@ import {
     clearAllFilters,
     deleteApplicationTableRows,
     deleteByList,
+    deleteCustomResource,
+    getNumberOfNonTaskPods,
     getRandomAnalysisData,
     getRandomApplicationData,
+    limitPodsByQuota,
     login,
     validateNumberPresence,
     validatePagination,
@@ -30,37 +33,41 @@ import {
 } from "../../../../utils/utils";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
-import { TaskFilter, TaskKind, TaskStatus, trTag } from "../../../types/constants";
-import { TaskManagerColumns } from "../../../views/taskmanager.view";
+import { SEC, TaskFilter, TaskKind, TaskStatus, trTag } from "../../../types/constants";
+import { TaskManagerColumns, TaskManagerTableHeaders } from "../../../views/taskmanager.view";
 
 describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", function () {
     const applicationsList: Analysis[] = [];
-    const sortByList = ["ID", "Application", "Kind", "Priority", "Created By", "Status"];
 
     before("Login", function () {
-        let bookServerApp: Analysis;
-
         login();
         cy.visit("/");
         deleteApplicationTableRows();
-        cy.fixture("application").then((appData) => {
-            cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 6; i++) {
-                    bookServerApp = new Analysis(
-                        getRandomApplicationData("TaskFilteringApp_" + i, {
-                            sourceData: appData["bookserver-app"],
-                        }),
-                        getRandomAnalysisData(analysisData["source_analysis_on_bookserverapp"])
-                    );
-                    applicationsList.push(bookServerApp);
-                }
-                applicationsList.forEach((application) => application.create());
-                Analysis.analyzeByList(applicationsList);
-            });
+    });
+
+    beforeEach("Load data", function () {
+        cy.fixture("application").then(function (appData) {
+            this.appData = appData;
+        });
+        cy.fixture("analysis").then(function (analysisData) {
+            this.analysisData = analysisData;
         });
     });
 
     it("Filtering tasks", function () {
+        let bookServerApp: Analysis;
+        for (let i = 0; i < 6; i++) {
+            bookServerApp = new Analysis(
+                getRandomApplicationData("TaskFilteringApp_" + i, {
+                    sourceData: this.appData["bookserver-app"],
+                }),
+                getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+            );
+            applicationsList.push(bookServerApp);
+        }
+        applicationsList.forEach((application) => application.create());
+        Analysis.analyzeAll(bookServerApp);
+
         TaskManager.open();
         cy.intercept("GET", "/hub/tasks*").as("getTasks");
 
@@ -139,10 +146,38 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
     });
 
     it("Sorting tasks", function () {
+        // Ensure total pod count does not exceed the number of tackle pods.
+        // Existing pods are not automatically deleted.
+        deleteApplicationTableRows();
+        getNumberOfNonTaskPods().then((podsNum) => {
+            limitPodsByQuota(podsNum);
+        });
+        let bookServerApp: Analysis;
+        for (let i = 0; i < 2; i++) {
+            bookServerApp = new Analysis(
+                getRandomApplicationData("TaskFilteringApp_" + i, {
+                    sourceData: this.appData["bookserver-app"],
+                }),
+                getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+            );
+            applicationsList.push(bookServerApp);
+        }
+        applicationsList.forEach((application) => application.create());
+        Analysis.analyzeAll(bookServerApp);
         TaskManager.open(100);
-        sortByList.forEach((column) => {
+        cy.wait(5 * SEC);
+        const columsToTest = [
+            TaskManagerTableHeaders.id,
+            TaskManagerTableHeaders.application,
+            TaskManagerTableHeaders.kind,
+            TaskManagerTableHeaders.priority,
+            TaskManagerTableHeaders.createdBy,
+            TaskManagerTableHeaders.status,
+        ];
+        columsToTest.forEach((column) => {
             validateSortBy(column);
         });
+        deleteCustomResource("quota", "task-pods");
     });
 
     it("Pagination validation", function () {
