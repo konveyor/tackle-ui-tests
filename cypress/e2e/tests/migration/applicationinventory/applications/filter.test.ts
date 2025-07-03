@@ -339,8 +339,8 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         application3.create();
         applicationsList.push(application3);
 
-        application2.analyze();
-        application2.verifyAnalysisStatus("Completed");
+        application1.analyze();
+        application1.verifyAnalysisStatus("Completed");
 
         application3.analyze();
         application3.verifyAnalysisStatus("Failed");
