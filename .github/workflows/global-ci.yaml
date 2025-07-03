@@ -18,8 +18,8 @@ jobs:
       run_api_tests: false
       run_ui_tests: true
       ui_tests_ref: ${{ github.event.number && format('refs/pull/{0}/merge', github.event.number) || '' }}
-      tag: latest # Move this to release-0.7 once a separate branch is cut in operator repo , currently tracks to main.
-      operator_tag: latest #Move this to proper tag once a separate branch is cut in the operator repo, currently tracks to main
+      tag: release-0.7
+      operator_tag: v0.7.0
 
 
 
