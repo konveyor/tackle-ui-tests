@@ -153,22 +153,17 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
             limitPodsByQuota(podsNum);
         });
         let bookServerApp: Analysis;
-        cy.fixture("application").then((appData) => {
-            cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 2; i++) {
-                    bookServerApp = new Analysis(
-                        getRandomApplicationData("TaskFilteringApp_" + i, {
-                            sourceData: appData["bookserver-app"],
-                        }),
-                        getRandomAnalysisData(analysisData["source_analysis_on_bookserverapp"])
-                    );
-                    applicationsList.push(bookServerApp);
-                }
-                applicationsList.forEach((application) => application.create());
-                Analysis.analyzeAll(bookServerApp);
-            });
-        });
-
+        for (let i = 0; i < 2; i++) {
+            bookServerApp = new Analysis(
+                getRandomApplicationData("TaskFilteringApp_" + i, {
+                    sourceData: this.appData["bookserver-app"],
+                }),
+                getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+            );
+            applicationsList.push(bookServerApp);
+        }
+        applicationsList.forEach((application) => application.create());
+        Analysis.analyzeAll(bookServerApp);
         TaskManager.open(100);
         cy.wait(5 * SEC);
         const columsToTest = [
