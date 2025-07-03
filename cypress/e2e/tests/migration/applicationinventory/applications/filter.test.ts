@@ -51,6 +51,7 @@ import * as data from "../../../../../utils/data_utils";
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
+import { GitConfiguration } from "../../../../models/administration/repositories/git";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
 import { Archetype } from "../../../../models/migration/archetypes/archetype";
@@ -61,6 +62,7 @@ import * as commonView from "../../../../views/common.view";
 import { filterDropDownContainer, standardFilter } from "../../../../views/common.view";
 import { searchMenuToggle } from "../../../../views/issue.view";
 
+let gitConfiguration = new GitConfiguration();
 let source_credential;
 let maven_credential;
 let applicationsList: Array<Application> = [];
@@ -311,6 +313,8 @@ describe(["@tier3"], "Application inventory filter validations", function () {
     });
 
     it("Analysis status filter validation", function () {
+        gitConfiguration.enableInsecureGitRepositories();
+
         const application1 = new Analysis(
             getRandomApplicationData("Insecure_disabled_tackle_test_app", {
                 sourceData: this.appData["tackle-testapp"],
