@@ -312,7 +312,7 @@ describe(["@tier3"], "Application inventory filter validations", function () {
 
     it("Analysis status filter validation", function () {
         const application1 = new Analysis(
-            getRandomApplicationData("tackle_test_app", {
+            getRandomApplicationData("tackle_test_app_1", {
                 sourceData: this.appData["tackle-testapp-public"],
             }),
             getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
@@ -330,18 +330,39 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         application2.create();
         applicationsList.push(application2);
 
-        application1.analyze();
-        application1.verifyAnalysisStatus("Completed");
+        const application3 = new Analysis(
+            getRandomApplicationData("tackle_test_app_2", {
+                sourceData: this.appData["tackle-testapp"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+        );
+        application3.create();
+        applicationsList.push(application3);
+
+        application2.analyze();
+        application2.verifyAnalysisStatus("Completed");
+
+        application3.analyze();
+        application3.verifyAnalysisStatus("Failed");
 
         applySearchFilter(analysis, "Not started");
+        notExists(application3.name);
         exists(application2.name);
         notExists(application1.name);
 
         clickByText(button, clearAllFilters);
 
         applySearchFilter(analysis, "Completed");
-        exists(application1.name);
+        notExists(application3.name);
         notExists(application2.name);
+        exists(application1.name);
+
+        clickByText(button, clearAllFilters);
+
+        applySearchFilter(analysis, "Failed");
+        exists(application3.name);
+        notExists(application2.name);
+        notExists(application1.name);
     });
 
     after("Perform test data clean up", function () {
