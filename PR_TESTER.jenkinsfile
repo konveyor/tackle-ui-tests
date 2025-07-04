@@ -77,13 +77,16 @@ pipeline{
             }   
             steps{
                 script{
-                    env.TACKLE_URL = "http://"+sh(
+                    env.MINIKUBE_IP = sh(
                         script : 'minikube ip',
                         returnStdout: true
                     ).trim()
 
+                    env.TACKLE_URL = "http://"+"$MINIKUBE_IP"
+
                     ocp.pollRouteUntilReady(env.TACKLE_URL,15,30)
                     sh "sleep 40s" //Grace period after the application is serving correctly.
+                    tackle.exposeMetricsRouteMinikube()
                     sh(
                         script: "npm install",
                         label: "Install dependencies..."
