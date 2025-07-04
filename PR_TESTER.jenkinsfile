@@ -1,4 +1,4 @@
-@Library('migrationqe-automation-lib') _
+@Library('migrationqe-automation-lib@expose-metrics') _
 def getChangedFilesList() {
     ArrayList<String> changedFiles = new ArrayList<String>()
     changedFiles = sh(script:"git diff \$(git merge-base origin/main HEAD) HEAD --name-only",
