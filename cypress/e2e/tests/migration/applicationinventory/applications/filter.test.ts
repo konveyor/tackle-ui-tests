@@ -347,16 +347,16 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         application3.verifyAnalysisStatus(AnalysisStatuses.failed);
 
         applySearchFilter(analysis, AnalysisStatuses.notStarted);
-        notExists(application3.name);
         exists(application2.name);
+        notExists(application3.name);
         notExists(application1.name);
 
         clickByText(button, clearAllFilters);
 
         applySearchFilter(analysis, AnalysisStatuses.completed);
+        exists(application1.name);
         notExists(application3.name);
         notExists(application2.name);
-        exists(application1.name);
 
         clickByText(button, clearAllFilters);
 
