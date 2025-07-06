@@ -32,6 +32,7 @@ import {
 } from "../../../../../utils/utils";
 import {
     analysis,
+    AnalysisStatuses,
     archetypes,
     artifact,
     button,
@@ -340,26 +341,26 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         applicationsList.push(application3);
 
         application1.analyze();
-        application1.verifyAnalysisStatus("Completed");
+        application1.verifyAnalysisStatus(AnalysisStatuses.completed);
 
         application3.analyze();
-        application3.verifyAnalysisStatus("Failed");
+        application3.verifyAnalysisStatus(AnalysisStatuses.failed);
 
-        applySearchFilter(analysis, "Not started");
+        applySearchFilter(analysis, AnalysisStatuses.notStarted);
         notExists(application3.name);
         exists(application2.name);
         notExists(application1.name);
 
         clickByText(button, clearAllFilters);
 
-        applySearchFilter(analysis, "Completed");
+        applySearchFilter(analysis, AnalysisStatuses.completed);
         notExists(application3.name);
         notExists(application2.name);
         exists(application1.name);
 
         clickByText(button, clearAllFilters);
 
-        applySearchFilter(analysis, "Failed");
+        applySearchFilter(analysis, AnalysisStatuses.failed);
         exists(application3.name);
         notExists(application2.name);
         notExists(application1.name);
