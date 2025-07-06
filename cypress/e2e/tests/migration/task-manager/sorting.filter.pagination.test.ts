@@ -61,7 +61,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         });
     });
 
-     beforeEach("Load data", function () {
+    beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
         });
@@ -69,7 +69,6 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
             this.analysisData = analysisData;
         });
     });
-
 
     it("Filtering tasks", function () {
         TaskManager.open();
@@ -172,6 +171,10 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         columsToTest.forEach((column) => {
             validateSortBy(column);
         });
+    });
+
+    // Making sure Resource Quota CR is deleted
+    it("Delete resource quota created in previous test", function () {
         deleteCustomResource("quota", "task-pods");
     });
 
