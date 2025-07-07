@@ -14,7 +14,7 @@ kubectl patch sub konveyor-operator -n konveyor-tackle --type=merge -p "{\"spec\
 
 echo "Patching installplan for konveyor..."
 
-kubectl patch ip $(kubectl get ip -n "${NAMESPACE}" | egrep "$POSTUPGRADE_VERSION"|awk '{print $1}') -n "${NAMESPACE}" --type merge --patch '{"spec":{"approved":true}}'
+kubectl patch installplan $(kubectl get installplan -n "${NAMESPACE}" | egrep "$POSTUPGRADE_VERSION"|awk '{print $1}') -n "${NAMESPACE}" --type merge --patch '{"spec":{"approved":true}}'
 
 kubectl wait --namespace "${NAMESPACE}" --for=condition=Successful --timeout=600s tackles.tackle.konveyor.io/tackle
 

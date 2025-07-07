@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout tackle
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2 
         with:
           repository: konveyor/tackle
           path: tackle
@@ -42,6 +42,18 @@ jobs:
           fi
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+      - name: Installing oc binary
+        shell: bash
+        run: |
+          if command -v oc >/dev/null 2>&1; then
+            echo "oc is already installed...yay"
+            exit 0
+          fi
+          OC_VERSION=$(curl -s https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/release.txt | grep 'Name:' | awk '{print $2}')
+          curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OC_VERSION}/openshift-client-linux.tar.gz"
+          tar -xzf openshift-client-linux.tar.gz oc
+          sudo mv oc /usr/local/bin/oc
+          oc version --client
 
       - name: Install opm cli
         shell: bash
@@ -83,11 +95,19 @@ jobs:
 
       - name: Set preupgrade konveyor value
         run: | 
-          konveyor_version=$(kubectl get csv -n konveyor-tackle -o=custom-columns=:spec.version | head -n 1 | tr -d '[:space:]')
-          echo "mtaVersion=$konveyor_version" >> $GITHUB_ENV
+          konveyor_version=$(kubectl get csv -n konveyor-tackle -o=custom-columns=:spec.version | head -n 2 | tr -d '[:space:]')
+          echo "cypress_mtaVersion=$konveyor_version" >> $GITHUB_ENV
+          echo "Konveyor version: $konveyor_version"
+
+      - name: Display konveyor version for confirmation
+        run: |
+          echo "Confirming konveyor version from environment variable: $cypress_mtaVersion"
+          echo "Environment variable cypress_mtaVersion value: ${{ env.cypress_mtaVersion }}"
 
       - name: Use mtaVersion
-        run: echo "Konveyor version is $mtaVersion"
+        run: echo "Konveyor version is $cypress_mtaVersion"
+
+      
 
       - name: Check pod status
         run: kubectl get pods -n konveyor-tackle
@@ -118,12 +138,23 @@ jobs:
       - name: Install NPM
         run: npm install .
 
+      - name: Set Keycloak admin password and git credentials
+        run: |
+          keycloak_password=$(kubectl get secret tackle-keycloak-sso -n konveyor-tackle -o=jsonpath='{.data.admin-password}' | base64 -d)
+          echo "cypress_keycloakAdminPassword=$keycloak_password" >> $GITHUB_ENV
+          
       - name: Run cypress login test
         run: npx cypress run --spec "cypress/e2e/tests/login.test.ts" --env user="admin",pass="password",tackleUrl=${{ env.CYPRESS_tackleUrl }}
       
       - name: Run Preupgrade test cases
         run: |
-          CYPRESS_INCLUDE_TAGS=@pre-upgrade npx cypress run --spec cypress/e2e/tests/upgrade/create_upgrade_data.test.ts --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
+          CYPRESS_INCLUDE_TAGS=@pre-upgrade npx cypress run --spec cypress/e2e/tests/upgrade/create_upgrade_data.test.ts --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }},git_user=${{ secrets.KONVEYOR_GIT_USER }},git_password=${{ secrets.KONVEYOR_GIT_PASSWORD }}
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: minikube-tests-screenshots
+          path: /home/runner/work/tackle-ui-tests/tackle-ui-tests/cypress/screenshots/
 
       - name: Checkout to initial branch
         run: git checkout $INIT_BRANCH
@@ -139,11 +170,16 @@ jobs:
 
       - name: Set postupgrade konveyor value
         run: | 
-          konveyor_version=$(kubectl get csv -n konveyor-tackle -o=custom-columns=:spec.version | head -n 1 | tr -d '[:space:]')
-          echo "mtaVersion=$konveyor_version" >> $GITHUB_ENV
+          konveyor_version=$(kubectl get csv -n konveyor-tackle -o=custom-columns=:spec.version | head -n 2 | tr -d '[:space:]')
+          echo "cypress_mtaVersion=$konveyor_version" >> $GITHUB_ENV
+
+      - name: Set Keycloak admin password and git credentials (post-upgrade)
+        run: |
+          keycloak_password=$(kubectl get secret tackle-keycloak-sso -n konveyor-tackle -o=jsonpath='{.data.admin-password}' | base64 -d)
+          echo "cypress_keycloakAdminPassword=$keycloak_password" >> $GITHUB_ENV
 
       - name: Use mtaVersion
-        run: echo "Konveyor version is $mtaVersion"
+        run: echo "Konveyor version is $cypress_mtaVersion"
 
         
       - name: Run cypress login test
@@ -151,10 +187,10 @@ jobs:
 
       - name: Run Post upgrade test cases
         run: |
-          CYPRESS_INCLUDE_TAGS=@post-upgrade npx cypress run --spec **/*.test.ts --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }}
+          CYPRESS_INCLUDE_TAGS=@post-upgrade npx cypress run --spec cypress/e2e/tests/upgrade/after_upgrade.test.ts   --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }},git_user=${{ secrets.KONVEYOR_GIT_USER }},git_password=${{ secrets.KONVEYOR_GIT_PASSWORD }}
 
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: minikube-tests-screenshots
-          path: tackle-ui-tests/cypress/screenshots 
+          path: /home/runner/work/tackle-ui-tests/tackle-ui-tests/cypress/screenshots/
