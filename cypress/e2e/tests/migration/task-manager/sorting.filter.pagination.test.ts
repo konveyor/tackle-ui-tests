@@ -38,27 +38,11 @@ import { TaskManagerColumns, TaskManagerTableHeaders } from "../../../views/task
 
 describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", function () {
     const applicationsList: Analysis[] = [];
-    let bookServerApp: Analysis;
 
     before("Login", function () {
         login();
         cy.visit("/");
         deleteApplicationTableRows();
-        cy.fixture("application").then((appData) => {
-            cy.fixture("analysis").then((analysisData) => {
-                for (let i = 0; i < 6; i++) {
-                    bookServerApp = new Analysis(
-                        getRandomApplicationData("TaskFilteringApp_" + i, {
-                            sourceData: appData["bookserver-app"],
-                        }),
-                        getRandomAnalysisData(analysisData["source_analysis_on_bookserverapp"])
-                    );
-                    applicationsList.push(bookServerApp);
-                }
-                applicationsList.forEach((application) => application.create());
-                Analysis.analyzeByList(applicationsList);
-            });
-        });
     });
 
     beforeEach("Load data", function () {
@@ -68,6 +52,45 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         cy.fixture("analysis").then(function (analysisData) {
             this.analysisData = analysisData;
         });
+    });
+
+    it("Sorting tasks", function () {
+        // Ensure total pod count does not exceed the number of tackle pods.
+        getNumberOfNonTaskPods().then((podsNum) => {
+            limitPodsByQuota(podsNum);
+        });
+
+        let bookServerApp: Analysis;
+        for (let i = 0; i < 6; i++) {
+            bookServerApp = new Analysis(
+                getRandomApplicationData("TaskFilteringApp_" + i, {
+                    sourceData: this.appData["bookserver-app"],
+                }),
+                getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+            );
+            applicationsList.push(bookServerApp);
+        }
+        applicationsList.forEach((application) => application.create());
+        Analysis.analyzeAll(bookServerApp);
+
+        TaskManager.open(100);
+        cy.wait(5 * SEC);
+        const columsToTest = [
+            TaskManagerTableHeaders.id,
+            TaskManagerTableHeaders.application,
+            TaskManagerTableHeaders.kind,
+            TaskManagerTableHeaders.priority,
+            TaskManagerTableHeaders.createdBy,
+            TaskManagerTableHeaders.status,
+        ];
+        columsToTest.forEach((column) => {
+            validateSortBy(column);
+        });
+    });
+
+    // Making sure Resource Quota CR is deleted
+    it("Delete resource quota created in previous test", function () {
+        deleteCustomResource("quota", "task-pods");
     });
 
     it("Filtering tasks", function () {
@@ -146,36 +169,6 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         TaskManager.applyFilter(TaskFilter.applicationName, randomWordGenerator(6));
         cy.get(trTag).should("contain", "No results found");
         clearAllFilters();
-    });
-
-    it("Sorting tasks", function () {
-        // Ensure total pod count does not exceed the number of tackle pods.
-        // Existing pods are not automatically deleted.
-        deleteApplicationTableRows();
-        getNumberOfNonTaskPods().then((podsNum) => {
-            limitPodsByQuota(podsNum);
-        });
-        applicationsList.forEach((application) => application.create());
-        Analysis.analyzeAll(bookServerApp);
-
-        TaskManager.open(100);
-        cy.wait(5 * SEC);
-        const columsToTest = [
-            TaskManagerTableHeaders.id,
-            TaskManagerTableHeaders.application,
-            TaskManagerTableHeaders.kind,
-            TaskManagerTableHeaders.priority,
-            TaskManagerTableHeaders.createdBy,
-            TaskManagerTableHeaders.status,
-        ];
-        columsToTest.forEach((column) => {
-            validateSortBy(column);
-        });
-    });
-
-    // Making sure Resource Quota CR is deleted
-    it("Delete resource quota created in previous test", function () {
-        deleteCustomResource("quota", "task-pods");
     });
 
     it("Pagination validation", function () {
