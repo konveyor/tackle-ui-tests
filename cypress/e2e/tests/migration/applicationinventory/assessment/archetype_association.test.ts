@@ -174,7 +174,12 @@ describe(["@tier3"], "Tests related to application-archetype association ", () =
         AssessmentQuestionnaire.disable(legacyPathfinder);
 
         for (let i = 0; i < archetypeList.length; i++) {
-            archetypeList[i].perform_assessment("low", stakeholders);
+            archetypeList[i].perform_assessment(
+                "low",
+                stakeholders,
+                null,
+                cloudReadinessQuestionnaire
+            );
             Archetype.open(true);
             archetypeList[i].verifyStatus("assessment", "Completed");
         }
