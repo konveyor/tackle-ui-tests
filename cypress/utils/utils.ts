@@ -2014,9 +2014,16 @@ export function limitPodsByQuota(podsNumber: number) {
     });
 }
 
-export function deleteCustomResource(resourceType: string, resourceName: string) {
+export function deleteCustomResource(
+    resourceType: string,
+    resourceName: string,
+    ignoreNotFound = false
+) {
     const namespace = getNamespace();
-    const command = `oc delete ${resourceType} ${resourceName} -n${namespace}`;
+    let command = `oc delete ${resourceType} ${resourceName} -n${namespace}`;
+    if (ignoreNotFound) {
+        command = `${command} --ignore-not-found=true`;
+    }
     getCommandOutput(command).then((output) => {
         expect(output.code).to.equal(0);
     });

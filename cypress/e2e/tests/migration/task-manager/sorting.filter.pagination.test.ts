@@ -90,7 +90,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
 
     // Making sure Resource Quota CR is deleted
     it("Delete resource quota created in previous test", function () {
-        deleteCustomResource("quota", "task-pods");
+        deleteCustomResource("quota", "task-pods", true);
     });
 
     it("Filtering tasks", function () {
