@@ -41,6 +41,7 @@ import {
     JiraType,
     memberCount,
     migration,
+    MIN,
     priority,
     rank,
     save,
@@ -199,52 +200,59 @@ export function cancelForm(): void {
     clickJs(cancelButton);
 }
 
-export function login(username?: string, password?: string, firstLogin = false): Chainable<null> {
+export function login(
+    username: string = Cypress.env("user"),
+    password: string = Cypress.env("pass"),
+    firstLogin = false
+): Chainable<null> {
     /**
      * The sessionId is used to create a new session or to try to recover a previous one
      */
-    const sessionId = (username ?? "login") + (firstLogin ? "FirstLogin" : "");
+    const sessionId = username + (firstLogin ? "FirstLogin" : "");
 
     cy.log(`login a new session or grab the currently logged in session [${sessionId}]`);
     return cy.session(sessionId, () => {
         cy.visit("/", { timeout: 120 * SEC });
-        cy.url().then(($url) => {
-            cy.log($url);
-            if ($url != Application.fullUrl) {
-                const userName = username ?? Cypress.env("user");
-                const userPassword = password ?? Cypress.env("pass");
-                inputText(loginView.userNameInput, userName, true);
-                inputText(loginView.userPasswordInput, userPassword);
+
+        cy.uiEnvironmentConfig().then((env) => {
+            if (env["AUTH_REQUIRED"] === "true") {
+                cy.log("AUTH is enabled, logging in");
+
+                // Wait up to 30 seconds for the userNameInput field to be visible on the page
+                cy.get(loginView.userNameInput, { timeout: 30 * SEC }).should("be.visible");
+
+                // Attempt login
+                inputText(loginView.userNameInput, username);
+                inputText(loginView.userPasswordInput, password);
                 click(loginView.loginButton);
 
-                // Change default password on first login.
+                // If login fails, try the initialPassword
                 cy.get("body").then(($body) => {
-                    let invalidMessageElement = $body.find('span[class*="m-error"]');
-                    if (invalidMessageElement.length > 0) {
-                        const errorText = invalidMessageElement.text().trim();
-                        if (errorText === "Invalid username or password.") {
-                            inputText(loginView.userPasswordInput, "Passw0rd!");
-                            click(loginView.loginButton);
-                            updatePassword();
-                        }
+                    const txt = $body.find("*:contains('Invalid username or password')");
+                    if (txt.length > 0) {
+                        cy.log("Try logging in with the initial password");
+                        inputText(loginView.userPasswordInput, Cypress.env("initialPassword"));
+                        click(loginView.loginButton);
                     }
                 });
-                updatePassword();
-            }
-        });
-        cy.url().should("eq", Application.fullUrl);
-    });
-}
 
-export function updatePassword(): void {
-    // Change password screen which appears only for first login
-    // This is used in PR tester and Jenkins jobs.
-    cy.get("h1", { timeout: 120 * SEC }).then(($a) => {
-        if ($a.text().toString().trim() == "Update password") {
-            inputText(loginView.changePasswordInput, "Dog8code");
-            inputText(loginView.confirmPasswordInput, "Dog8code");
-            click(loginView.submitButton);
-        }
+                // Update the password if it needs to be updated
+                cy.get("body").then(($body) => {
+                    const txt = $body.find("*:contains('You need to change your password')");
+                    if (txt.length > 0) {
+                        cy.log("Attempting to change the password");
+                        inputText(loginView.changePasswordInput, password);
+                        inputText(loginView.confirmPasswordInput, password);
+                        click(loginView.submitButton);
+                    }
+                });
+            } else {
+                cy.log("AUTH is disabled, just look for applications page");
+            }
+
+            // Should be past any auth steps needed, so wait for the url to become "/applications
+            cy.url({ timeout: 1 * MIN }).should("eq", Application.fullUrl);
+        });
     });
 }
 

@@ -27,6 +27,12 @@ declare global {
              * @param dropElement
              */
             dragAndDrop(dragElement: Cypress.Chainable, dropElement: Cypress.Chainable): void;
+
+            /**
+             * Look for the UI's `window._env` data on the application's page, decode it, and
+             * provide the data as a Chainable response.
+             */
+            uiEnvironmentConfig(): Cypress.Chainable<object>;
         }
     }
 }
@@ -40,4 +46,19 @@ Cypress.Commands.add(
             .wait(200);
         dropElement.realMouseMove(0, 0, { position: "topLeft" }).realMouseUp().wait(200);
     }
+);
+
+Cypress.Commands.add("uiEnvironmentConfig", () =>
+    cy.request("/").then<object>((resp) => {
+        expect(resp.status).to.eq(200);
+
+        cy.log("Looking for _env in UI's index.html");
+        const htmlBody = resp.body;
+        const windowEnv = htmlBody.match(/window\._env\s*=\s*"(.*?)"/);
+        expect(windowEnv, "Find _env in index.html").to.not.be.null;
+
+        const env = JSON.parse(atob(windowEnv[1]));
+        cy.log("window._env: ", JSON.stringify(env));
+        return cy.wrap(env);
+    })
 );

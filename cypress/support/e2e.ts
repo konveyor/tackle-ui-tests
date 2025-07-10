@@ -50,6 +50,7 @@ beforeEach(() => {
     }
 
     login();
+
     // Every test starts by visiting / which should redirect to baseURL/applications
     cy.visit("/");
 });
