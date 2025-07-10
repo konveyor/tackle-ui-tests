@@ -117,11 +117,13 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         // Filter by ID
         cy.wait("@getTasks")
             .its("response.body")
-            .should("have.length.gte", 2) // Make sure there are at least two items
             .then((responseBody) => {
-                TaskManager.applyFilter(TaskFilter.id, responseBody[0].id.toString());
-                validateNumberPresence(TaskManagerColumns.id, responseBody[0].id);
-                validateTextPresence(TaskManagerColumns.id, responseBody[1].id.toString(), false);
+                // Parse the JSON string into a JavaScript array
+                const parsed =
+                    typeof responseBody === "string" ? JSON.parse(responseBody) : responseBody;
+                TaskManager.applyFilter(TaskFilter.id, parsed[0].id.toString());
+                validateNumberPresence(TaskManagerColumns.id, parsed[0].id);
+                validateTextPresence(TaskManagerColumns.id, parsed[1].id.toString(), false);
                 clearAllFilters();
             });
 
