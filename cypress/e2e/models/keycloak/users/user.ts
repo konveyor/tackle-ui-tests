@@ -69,8 +69,8 @@ export class User {
     static changeRealm(realm: string) {
         cy.url().then(($url) => {
             if (!$url.includes(`#/${realm}`)) {
-                click('button[data-testid="realmSelector"]');
-                clickByText(button, realm);
+                click('a[data-testid="nav-item-realms"]');
+                clickByText("a", realm);
             }
         });
     }
