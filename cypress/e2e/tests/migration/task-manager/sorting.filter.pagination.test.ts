@@ -93,11 +93,8 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         deleteCustomResource("quota", "task-pods", true);
     });
 
-    it("Filtering tasks", function () {
+    it("Filtering tasks by Status", function () {
         TaskManager.open();
-        cy.intercept("GET", "/hub/tasks*").as("getTasks");
-
-        // Filter by status
         TaskManager.applyFilter(TaskFilter.status, TaskStatus.pending);
         validateTextPresence(TaskManagerColumns.status, TaskStatus.pending);
         validateTextPresence(TaskManagerColumns.status, TaskStatus.running, false);
@@ -113,8 +110,11 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         validateTextPresence(TaskManagerColumns.status, TaskStatus.running, false);
         validateTextPresence(TaskManagerColumns.status, TaskStatus.pending, false);
         clearAllFilters();
+    });
 
-        // Filter by ID
+    it("Filter by ID", function () {
+        cy.intercept("GET", "/hub/tasks*").as("getTasks");
+        TaskManager.open();
         cy.wait("@getTasks")
             .its("response.body")
             .then((responseBody) => {
@@ -126,8 +126,10 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
                 validateTextPresence(TaskManagerColumns.id, parsed[1].id.toString(), false);
                 clearAllFilters();
             });
+    });
 
-        // Filter by Applications
+    it("Filter by Application", () => {
+        TaskManager.open();
         TaskManager.applyFilter(TaskFilter.applicationName, applicationsList[0].name);
         validateTextPresence(TaskManagerColumns.application, applicationsList[0].name);
         validateTextPresence(TaskManagerColumns.application, applicationsList[1].name, false);
@@ -144,8 +146,10 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         validateTextPresence(TaskManagerColumns.kind, TaskKind.languageDiscovery);
         validateTextPresence(TaskManagerColumns.kind, TaskKind.techDiscovery);
         clearAllFilters();
+    });
 
-        // Filter by Kind
+    it("Bug MTA-5739: Filter by Kind", () => {
+        TaskManager.open();
         TaskManager.applyFilter(TaskFilter.kind, TaskKind.analyzer);
         validateTextPresence(TaskManagerColumns.kind, TaskKind.analyzer);
         validateTextPresence(TaskManagerColumns.kind, TaskKind.languageDiscovery, false);
@@ -161,13 +165,17 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         validateTextPresence(TaskManagerColumns.kind, TaskKind.analyzer, false);
         validateTextPresence(TaskManagerColumns.kind, TaskKind.languageDiscovery, false);
         clearAllFilters();
+    });
 
-        // Filter by Created By
+    it("Filter by 'Created By'", () => {
+        TaskManager.open();
         TaskManager.applyFilter(TaskFilter.createdBy, "admin");
         validateTextPresence(TaskManagerColumns.createdBy, "admin");
         clearAllFilters();
+    });
 
-        // Negative test, filtering by not existing data
+    it("Negative test: filtering by not existing data", () => {
+        TaskManager.open();
         TaskManager.applyFilter(TaskFilter.applicationName, randomWordGenerator(6));
         cy.get(trTag).should("contain", "No results found");
         clearAllFilters();
