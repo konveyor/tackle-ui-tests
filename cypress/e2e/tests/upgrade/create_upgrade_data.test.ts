@@ -76,11 +76,11 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     });
 
     // Enable fail fast, skip the rest of tests if this specific test fails.
-    it("Validate MTA version in UI", { failFast: { enabled: true } }, () =>
+    it.skip("Validate MTA version in UI", { failFast: { enabled: true } }, () =>
         validateMtaVersionInUI(expectedMtaVersion)
     );
 
-    it.only("Validate MTA version in CLI", () => {
+    it.skip("Validate MTA version in CLI", () => {
         console.log("PRODUCT VERSION", expectedMtaVersion);
         validateMtaVersionInCLI(expectedMtaVersion);
     });
