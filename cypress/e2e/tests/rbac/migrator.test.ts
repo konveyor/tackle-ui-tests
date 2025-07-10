@@ -58,17 +58,28 @@ describe(["@tier3", "@rhsso"], "Migrator RBAC operations", () => {
 
     beforeEach("Persist session", function () {
         userMigrator.login();
-
         cy.fixture("rbac").then(function (rbacRules) {
             this.rbacRules = rbacRules["migrator"];
         });
     });
 
-    it("Migrator, validate buttons", function () {
+    it("Migrator, validate create application button", function () {
         Application.validateCreateAppButton(this.rbacRules);
+    });
+
+    it("Migrator, validate top action menu", function () {
         Analysis.validateTopActionMenu(this.rbacRules);
+    });
+
+    it("Migrator, validate analyze button", function () {
         Analysis.validateAnalyzeButton(this.rbacRules);
+    });
+
+    it("Migrator, validate application context menu", function () {
         application.validateAppContextMenu(this.rbacRules);
+    });
+
+    it("Migrator, validate ability to upload binary", function () {
         application.validateUploadBinary(this.rbacRules);
     });
 
