@@ -1,0 +1,8 @@
+---
+# MTA cluster and credentials
+url: https://mta-openshift-mta.apps.mtv02.rhos-psi.cnv-qe.rhood.us
+username: admin
+password: Dog8code
+
+# Export of Identitiy (credentials) password and key fields should be encrypted, set the passphase
+encryption_passphase: export-import-key-2025

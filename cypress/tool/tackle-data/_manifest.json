@@ -1,0 +1,18 @@
+{
+    "timestamp_utc": "2025-07-12T01:15:06.215601",
+    "command_options": {
+        "action": ["export"],
+        "config": "./tackle-config.yml",
+        "data_dir": "./tackle-data",
+        "verbose": false,
+        "skipDestCheck": false,
+        "disableSslWarnings": false,
+        "ignoreImportErrors": false,
+        "noAuth": false,
+        "skipBuckets": false,
+        "token": "",
+        "pathfinder_url": ""
+    },
+    "known_string": "tackle-cli-known-string-plaintext",
+    "crypted_known_string": "zaUaUQOhkSiZzWyheEFOO8FfFv9sJULZBLPdaQoLq8PxcwiNVLc/MIyP0JvyZJB/Cw=="
+}
