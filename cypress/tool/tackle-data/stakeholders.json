@@ -1,0 +1,16 @@
+[
+    {
+        "id": 3,
+        "createUser": "admin",
+        "updateUser": "",
+        "createTime": "2025-07-12T01:12:31.924631664Z",
+        "name": "test-stakeholder",
+        "email": "abcd@gmail.com",
+        "stakeholderGroups": [],
+        "businessServices": [],
+        "jobFunction": null,
+        "owns": [],
+        "contributes": [],
+        "migrationWaves": []
+    }
+]

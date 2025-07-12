@@ -1,0 +1,12 @@
+[
+    {
+        "id": 3,
+        "createUser": "admin",
+        "updateUser": "admin",
+        "createTime": "2025-07-12T01:12:12.853531019Z",
+        "name": "test-stakeholderGroup",
+        "description": "",
+        "stakeholders": [],
+        "migrationWaves": []
+    }
+]
