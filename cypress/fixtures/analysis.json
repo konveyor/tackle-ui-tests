@@ -1434,12 +1434,15 @@
         "appName": "tackle-testapp",
         "effort": 11,
         "techTags": [
-            ["Other", "Properties"],
-            ["Bean", "EJB XML"],
-            ["Java EE", "EJB XML"],
-            ["Embedded", "Properties"],
-            ["Connect", "EJB XML"],
-            ["Sustain", "Properties"]
+            ["Bean", ["EJB XML"]],
+            ["HTTP", ["Servlet"]],
+            ["Other", ["Properties"]],
+            ["Persistence", ["JPA named queries"]],
+            ["Sustain", ["Properties"]],
+            ["Connect", ["EJB XML", "Servlet"]],
+            ["Java EE", ["JPA named queries", "Servlet", "EJB XML"]],
+            ["Embedded", ["Properties"]],
+            ["Store", ["JPA named queries"]]
         ],
         "issues": [
             {
