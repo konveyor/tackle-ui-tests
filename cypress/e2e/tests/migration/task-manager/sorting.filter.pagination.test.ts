@@ -167,7 +167,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         clearAllFilters();
     });
 
-    it("Filter by 'Created By'", () => {
+    it("Bug MTA-5753: Filter by 'Created By'", () => {
         TaskManager.open();
         TaskManager.applyFilter(TaskFilter.createdBy, "admin");
         validateTextPresence(TaskManagerColumns.createdBy, "admin");
