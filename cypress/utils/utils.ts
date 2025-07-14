@@ -2001,6 +2001,16 @@ export function downloadTaskDetails(format = downloadFormatDetails.yaml) {
     });
 }
 
+export function getNumberOfNonTaskPods(): Cypress.Chainable<number> {
+    let podsNumber: number;
+    const namespace = getNamespace();
+    const command = `oc get pod --no-headers -n ${namespace} | grep -v task | grep -v Completed | wc -l`;
+    return getCommandOutput(command).then((output) => {
+        podsNumber = Number(output.stdout);
+        return podsNumber;
+    });
+}
+
 export function limitPodsByQuota(podsNumber: number) {
     const namespace = getNamespace();
     cy.fixture("custom-resource").then((cr) => {
@@ -2012,9 +2022,16 @@ export function limitPodsByQuota(podsNumber: number) {
     });
 }
 
-export function deleteCustomResource(resourceType: string, resourceName: string) {
+export function deleteCustomResource(
+    resourceType: string,
+    resourceName: string,
+    ignoreNotFound = false
+) {
     const namespace = getNamespace();
-    const command = `oc delete ${resourceType} ${resourceName} -n${namespace}`;
+    let command = `oc delete ${resourceType} ${resourceName} -n${namespace}`;
+    if (ignoreNotFound) {
+        command = `${command} --ignore-not-found=true`;
+    }
     getCommandOutput(command).then((output) => {
         expect(output.code).to.equal(0);
     });
