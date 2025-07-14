@@ -55,10 +55,10 @@ describe(["@tier3", "@rhsso"], "Bug MTA-5631: Architect RBAC operations", functi
         application.create();
         application.perform_review("low");
         application.perform_assessment("low", stakeholders);
+        userArchitect.login();
     });
 
     beforeEach("Persist session", function () {
-        userArchitect.login();
         cy.fixture("rbac").then(function (rbacRules) {
             this.rbacRules = rbacRules["architect"];
         });
