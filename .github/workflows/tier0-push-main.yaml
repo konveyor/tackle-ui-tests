@@ -1,0 +1,16 @@
+name: Test push to main tier0
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    k8s:
+        uses: ./.github/workflows/run-ui-tests.yaml
+        with:
+            test_tags: "@ci,@tier0"
+            feature_auth_required: true
+            bundle_image: quay.io/konveyor/tackle2-operator-bundle:latest
+            install_konveyor_version: main
+            test_ref: main

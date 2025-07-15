@@ -1,0 +1,133 @@
+name: run UI tests on minikube
+
+on:
+    workflow_call: # call from another workflow
+        inputs:
+            test_tags:
+                type: string
+                default: "@ci,@tier0"
+
+            feature_auth_required:
+                type: boolean
+                default: false
+
+            bundle_image:
+                type: string
+                default: quay.io/konveyor/tackle2-operator-bundle:latest
+
+            install_konveyor_version:
+                type: string
+                default: main
+
+            test_ref:
+                type: string
+                default: main
+
+    workflow_dispatch: # start from GitHub UI or API
+        inputs:
+            test_tags:
+                description: Comma separated list of test tags to run
+                type: string
+                default: "@ci,@tier0"
+
+            feature_auth_required:
+                description: Enable authentication?
+                type: boolean
+                default: false
+
+            bundle_image:
+                description: Operator bundle image to use
+                type: string
+                default: quay.io/konveyor/tackle2-operator-bundle:latest
+
+            install_konveyor_version:
+                description: Ref in operator repo to use for the install-konveyor action
+                type: string
+                default: main
+
+            test_ref:
+                description: Ref in this repo to use for the tests
+                type: string
+                default: main
+
+jobs:
+    run-test:
+        name: "Run tests - auth: ${{ inputs.feature_auth_required }}, test: ${{ inputs.test_ref }}, tags: ${{ inputs.test_tags }}"
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Setup minikube
+              uses: konveyor/operator/.github/actions/start-minikube@main
+              with:
+                  memory: "max"
+                  cpus: "max"
+
+            - name: Checkout the operator so we can pick the install-konveyor version to use dynamically
+              uses: actions/checkout@v4
+              with:
+                  repository: konveyor/operator
+                  ref: ${{ inputs.install_konveyor_version }}
+                  path: konveyor-operator
+
+            - name: Install konveyor using ${{ inputs.install_konveyor_version }}
+              uses: ./konveyor-operator/.github/actions/install-konveyor
+              with:
+                  bundle_image: ${{ inputs.bundle_image }}
+                  tackle_cr: |
+                      kind: Tackle
+                      apiVersion: tackle.konveyor.io/v1alpha1
+                      metadata:
+                        name: tackle
+                      spec:
+                        image_pull_policy: IfNotPresent
+                        feature_auth_required: ${{ inputs.feature_auth_required }}
+
+            - name: Wait for Ingress
+              run: |
+                  external_ip=""
+                  echo $external_ip
+                  while [[ -z $external_ip ]]; do
+                    echo "Waiting for end point..."
+                    external_ip=$(kubectl get -n konveyor-tackle ingress tackle -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+                    [[ -z $external_ip ]] && echo $external_ip
+                    sleep 10
+                  done
+                  echo "End point ready: $external_ip"
+                  echo "UI_URL=https://$(minikube ip)" >>$GITHUB_ENV
+
+            - name: "Checkout the tests (ref: ${{ inputs.test_ref }})"
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ inputs.test_ref }}
+                  path: tackle-ui-tests
+
+            - name: Run login tests using default credentials from `cypress.config.ts`
+              uses: cypress-io/github-action@v6
+              env:
+                  CYPRESS_baseUrl: "${{ env.UI_URL }}"
+              with:
+                  working-directory: tackle-ui-tests
+                  spec: "cypress/e2e/tests/login.test.ts"
+
+            - name: Run UI tests (${{ inputs.test_tags }}) using default credentials from `cypress.config.ts`
+              uses: cypress-io/github-action@v6
+              env:
+                  CYPRESS_INCLUDE_TAGS: "${{ inputs.test_tags }}"
+                  CYPRESS_baseUrl: "${{ env.UI_URL }}"
+                  CYPRESS_git_user: "fakeuser"
+                  CYPRESS_git_password: "${{ secrets.GITHUB_TOKEN }}"
+                  CYPRESS_git_key: "${{ secrets.GITHUB_TOKEN }}"
+              with:
+                  working-directory: tackle-ui-tests
+
+            - uses: actions/upload-artifact@v4
+              if: failure()
+              env:
+                  AUTH_KIND: ${{ fromJSON('{true:"auth", false:"noauth"}')[inputs.feature_auth_required] }}
+                  TEST_KIND: ${{ inputs.test_ref }}
+              with:
+                  name: test-reports-${{ env.AUTH_KIND }}-${{ env.TEST_KIND }}
+                  path: |
+                      tackle-ui-tests/cypress/reports
+                      tackle-ui-tests/cypress/screenshots
+                      tackle-ui-tests/cypress/videos

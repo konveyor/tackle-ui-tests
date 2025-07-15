@@ -1,0 +1,30 @@
+name: Test nightly tier0
+
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: "0 0 * * *"
+
+jobs:
+    nightly:
+        strategy:
+            fail-fast: false
+            matrix:
+                test_tags:
+                    - "@ci,@tier0"
+                feature_auth_required:
+                    - true
+                    - false
+                refs:
+                    - bundle_image: quay.io/konveyor/tackle2-operator-bundle:latest
+                      install_konveyor_version: main
+                      test: main
+
+        name: "Nightly auth: ${{ matrix.feature_auth_required }}, test: ${{ matrix.refs.test }}, tags: ${{ matrix.test_tags }}"
+        uses: ./.github/workflows/run-ui-tests.yaml
+        with:
+            test_tags: ${{ matrix.test_tags }}
+            feature_auth_required: ${{ matrix.feature_auth_required }}
+            bundle_image: ${{ matrix.refs.bundle_image }}
+            install_konveyor_version: ${{ matrix.refs.install_konveyor_version }}
+            test_ref: ${{ matrix.refs.test }}
