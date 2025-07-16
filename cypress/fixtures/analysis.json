@@ -1446,7 +1446,7 @@
         ],
         "issues": [
             {
-                "name": "File system - Java IO",
+                "name": "Hardcoded IP Address",
                 "category": "mandatory",
                 "sources": ["None"],
                 "effort": 1,
@@ -1459,7 +1459,7 @@
             {
                 "name": "The package 'javax' has been replaced by 'jakarta'",
                 "category": "mandatory",
-                "sources": ["spring5"],
+                "sources": ["None"],
                 "targets": ["eap", "eap8"],
                 "effort": 1,
                 "affectedFiles": 2,
