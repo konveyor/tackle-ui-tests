@@ -43,6 +43,7 @@ import * as commonView from "../../../../views/common.view";
 import * as data from "../../../../../utils/data_utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
+import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
 describe(["@tier2"], "Business service validations", () => {
     it("Business service field validations", function () {
@@ -112,5 +113,27 @@ describe(["@tier2"], "Business service validations", () => {
         checkSuccessAlert(commonView.successAlertMessage, `Success alert:Business service deleted`);
         stakeholder.delete();
         notExists(businessService.name);
+    });
+
+    it("Business service CRUD with owner", function () {
+        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
+        stakeholder.create();
+        const businessService = new BusinessServices(
+            data.getCompanyName(),
+            data.getDescription(),
+            stakeholder.name
+        );
+        businessService.create();
+        exists(businessService.name);
+
+        let updatedBusinessServiceName = data.getCompanyName();
+        businessService.edit({ name: updatedBusinessServiceName });
+        exists(updatedBusinessServiceName);
+
+        businessService.delete();
+        notExists(businessService.name);
+
+        stakeholder.delete();
+        notExists(stakeholder.email, stakeHoldersTable);
     });
 });

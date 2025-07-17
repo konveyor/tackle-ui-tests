@@ -19,20 +19,19 @@ import * as data from "../../../../../utils/data_utils";
 import { exists, notExists } from "../../../../../utils/utils";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 
-describe(["@tier2"], "Job Function CRUD operations", () => {
-    const jobfunction = new Jobfunctions(data.getJobTitle());
-
+export function jobFunctionCRUD() {
     beforeEach("Interceptors", function () {
         cy.intercept("POST", "/hub/jobfunctions*").as("postJobfunction");
         cy.intercept("GET", "/hub/jobfunctions*").as("getJobfunctions");
     });
 
     it("Jobfunction CRUD", function () {
+        const jobfunction = new Jobfunctions(data.getJobTitle());
         jobfunction.create();
         cy.wait("@postJobfunction");
         exists(jobfunction.name);
 
-        var updatedJobfuncName = data.getJobTitle();
+        const updatedJobfuncName = data.getJobTitle();
         jobfunction.edit(updatedJobfuncName);
         cy.wait("@getJobfunctions");
         exists(updatedJobfuncName);
@@ -41,4 +40,4 @@ describe(["@tier2"], "Job Function CRUD operations", () => {
         cy.wait("@getJobfunctions");
         notExists(jobfunction.name);
     });
-});
+}

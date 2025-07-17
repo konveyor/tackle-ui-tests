@@ -1,10 +1,10 @@
 import { defineConfig } from "cypress";
-import { tagify } from "cypress-tags";
-import esbuildPreprocessor from "./cypress/support/esbuild-preprocessor";
 import cypressFastFail from "cypress-fail-fast/plugin";
-const { downloadFile } = require("cypress-downloadfile/lib/addPlugin");
-const { verifyDownloadTasks } = require('cy-verify-downloads')
+import { tagify } from "cypress-tags";
 import decompress from "decompress";
+import esbuildPreprocessor from "./cypress/support/esbuild-preprocessor";
+const { downloadFile } = require("cypress-downloadfile/lib/addPlugin");
+const { verifyDownloadTasks } = require("cy-verify-downloads");
 
 export default defineConfig({
     viewportWidth: 1920,
@@ -54,8 +54,10 @@ export default defineConfig({
     },
     defaultCommandTimeout: 8000,
     e2e: {
-        specPattern: "cypress/e2e/**/*.test.{js,jsx,ts,tsx}",
-        baseUrl: process.env.CYPRESS_baseUrl || "https://tackle-konveyor-tackle.apps.mig09.rhos-psi.cnv-qe.rhood.us",
+        specPattern: "cypress/e2e/tests/**/*.test.{js,jsx,ts,tsx}",
+        baseUrl:
+            process.env.CYPRESS_baseUrl ||
+            "https://tackle-konveyor-tackle.apps.mig09.rhos-psi.cnv-qe.rhood.us",
         setupNodeEvents(on, config) {
             // preprocessors (for typescript and tags)
             esbuildPreprocessor(on);
@@ -66,13 +68,13 @@ export default defineConfig({
             require("cypress-fs/plugins")(on, config);
 
             // add tasks that execute in node, called by cy.task("functionName", ...)
-            on('task', { downloadFile });
-            on("task", verifyDownloadTasks)
+            on("task", { downloadFile });
+            on("task", verifyDownloadTasks);
             on("task", {
                 unzip: ({ path, file }) => {
                     decompress(path + file, path + "/" + file.split(".")[0]);
                     return null;
-                }
+                },
             });
         },
         experimentalMemoryManagement: true,
