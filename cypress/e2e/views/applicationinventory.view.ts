@@ -46,7 +46,7 @@ export const importStatus = "Status";
 export const selectBox = "input[type=checkbox]";
 export const tags = "span";
 export const user = "User";
-export const kebabMenu = "#row-actions";
+export const kebabMenu = "#action";
 export const topKebabMenu = "#toolbar-kebab";
 export const kebabMenuItem = "span.pf-v5-c-menu__item-text";
 export const bulkApplicationSelectionCheckBox = "input[name='bulk-selected-items-checkbox']";
