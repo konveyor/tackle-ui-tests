@@ -20,7 +20,7 @@ import { archetypeCRUD } from "./migration/archetypes/crud.test";
 import { businessServiceCRUD } from "./migration/controls/businessservices/crud.test";
 import { jobFunctionCRUD } from "./migration/controls/jobfunctions/crud.test";
 
-describe("Sanity UI tests", () => {
+describe(["@ci"], "Sanity UI tests", () => {
     businessServiceCRUD();
     jobFunctionCRUD();
     archetypeCRUD();
