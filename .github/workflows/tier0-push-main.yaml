@@ -10,7 +10,7 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    k8s:
+    main-tier0:
         uses: ./.github/workflows/run-ui-tests.yaml
         with:
             test_tags: "@ci,@tier0"

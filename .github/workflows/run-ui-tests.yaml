@@ -52,7 +52,7 @@ on:
 
 jobs:
     run-test:
-        name: "Run tests - auth: ${{ inputs.feature_auth_required }}, test: ${{ inputs.test_ref }}, tags: ${{ inputs.test_tags }}"
+        name: "Run tests - ${{ inputs.feature_auth_required && 'auth' || 'noauth' }}, test: ${{ inputs.test_ref }}, tags: ${{ inputs.test_tags }}"
         runs-on: ubuntu-latest
 
         steps:

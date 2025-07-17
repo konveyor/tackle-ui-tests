@@ -24,7 +24,7 @@ jobs:
                       install_konveyor_version: main
                       test: main
 
-        name: "Nightly auth: ${{ matrix.feature_auth_required }}, test: ${{ matrix.refs.test }}, tags: ${{ matrix.test_tags }}"
+        name: "Nightly ${{ matrix.feature_auth_required && 'auth' || 'noauth' }}, @${{ matrix.refs.test }}, ${{ matrix.test_tags }}"
         uses: ./.github/workflows/run-ui-tests.yaml
         with:
             test_tags: ${{ matrix.test_tags }}
