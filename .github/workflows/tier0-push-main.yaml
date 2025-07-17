@@ -5,6 +5,10 @@ on:
         branches:
             - main
 
+concurrency:
+    group: tier0-push-main-${{ github.ref }}
+    cancel-in-progress: true
+
 jobs:
     k8s:
         uses: ./.github/workflows/run-ui-tests.yaml

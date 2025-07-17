@@ -119,12 +119,12 @@ This repository uses the package [cypress-tags](https://www.npmjs.com/package/cy
    EOF
    ```
 
-1. Wait for some time to let deployment finish and get Konveyor UI's ip address
+1. Wait for the tackle ingress to become available
    ```sh
-   kubectl get -n konveyor-tackle ingress tackle -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+   kubectl wait -n konveyor-tackle ingress/tackle --for=jsonpath='{.status.loadBalancer.ingress[0]}' --timeout=600s
    ```
 
-1. Once the Konveyor UI is running on above address, tests can be run against this local instance, with video captures of the tests turned on, using the command
+1. Once the Konveyor UI ingress is running, tests can be run against this local instance, with video captures of the tests turned on, using the command
    ```sh
    CYPRESS_baseUrl=https://$(minikube ip) npx cypress run --config video=true
    ```

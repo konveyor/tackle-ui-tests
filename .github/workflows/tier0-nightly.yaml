@@ -5,6 +5,10 @@ on:
     schedule:
         - cron: "0 0 * * *"
 
+concurrency:
+    group: tier0-nightly-${{ github.ref }}
+    cancel-in-progress: true
+
 jobs:
     nightly:
         strategy:

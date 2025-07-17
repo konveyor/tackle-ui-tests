@@ -84,16 +84,15 @@ jobs:
 
             - name: Wait for Ingress
               run: |
-                  external_ip=""
-                  echo $external_ip
-                  while [[ -z $external_ip ]]; do
-                    echo "Waiting for end point..."
-                    external_ip=$(kubectl get -n konveyor-tackle ingress tackle -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-                    [[ -z $external_ip ]] && echo $external_ip
-                    sleep 10
-                  done
-                  echo "End point ready: $external_ip"
-                  echo "UI_URL=https://$(minikube ip)" >>$GITHUB_ENV
+                  kubectl wait \
+                    -n konveyor-tackle \
+                    ingress/tackle \
+                    --timeout=600s \
+                    --for=jsonpath='{.status.loadBalancer.ingress[0]}'
+
+                  minikube_ip=$(minikube ip)
+                  echo "ingress is ready at: ${minikube_ip}"
+                  echo "UI_URL=https://${minikube_ip}" >>$GITHUB_ENV
 
             - name: "Checkout the tests (ref: ${{ inputs.test_ref }})"
               uses: actions/checkout@v4
@@ -123,7 +122,7 @@ jobs:
             - uses: actions/upload-artifact@v4
               if: failure()
               env:
-                  AUTH_KIND: ${{ fromJSON('{true:"auth", false:"noauth"}')[inputs.feature_auth_required] }}
+                  AUTH_KIND: ${{ inputs.feature_auth_required && 'auth' || 'noauth' }}
                   TEST_KIND: ${{ inputs.test_ref }}
               with:
                   name: test-reports-${{ env.AUTH_KIND }}-${{ env.TEST_KIND }}
