@@ -1010,7 +1010,7 @@ export function createMultipleTags(numberoftags: number): Array<Tag> {
         //Create Tag category
         const tagCategory = new TagCategory(data.getRandomWord(8), data.getColor());
         tagCategory.create();
-
+        cy.wait(2 * SEC);
         // Create new tag
         const tag = new Tag(data.getRandomWord(6), tagCategory.name);
         tag.create();

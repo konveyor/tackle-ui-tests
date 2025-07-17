@@ -20,24 +20,16 @@ import { exists, notExists } from "../../../../../utils/utils";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 
 export function jobFunctionCRUD() {
-    beforeEach("Interceptors", function () {
-        cy.intercept("POST", "/hub/jobfunctions*").as("postJobfunction");
-        cy.intercept("GET", "/hub/jobfunctions*").as("getJobfunctions");
-    });
-
     it("Jobfunction CRUD", function () {
         const jobfunction = new Jobfunctions(data.getJobTitle());
         jobfunction.create();
-        cy.wait("@postJobfunction");
         exists(jobfunction.name);
 
         const updatedJobfuncName = data.getJobTitle();
         jobfunction.edit(updatedJobfuncName);
-        cy.wait("@getJobfunctions");
         exists(updatedJobfuncName);
 
         jobfunction.delete();
-        cy.wait("@getJobfunctions");
         notExists(jobfunction.name);
     });
 }
