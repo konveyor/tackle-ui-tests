@@ -17,18 +17,14 @@ limitations under the License.
 
 import { exists, notExists } from "../../../../../utils/utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
-import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
 import * as data from "../../../../../utils/data_utils";
-import { stakeHoldersTable } from "../../../../views/stakeholders.view";
 
-describe(["@tier0", "@interop"], "Business service CRUD operations", () => {
+export function businessServiceCRUD() {
     beforeEach("Interceptors", function () {
-        // Interceptors for business services
         cy.intercept("POST", "/hub/businessservices*").as("postBusinessService");
         cy.intercept("GET", "/hub/businessservices*").as("getBusinessService");
 
-        // Interceptors for stakeholders
         cy.intercept("POST", "/hub/stakeholders*").as("postStakeholder");
         cy.intercept("GET", "/hub/stakeholders*").as("getStakeholders");
     });
@@ -36,43 +32,13 @@ describe(["@tier0", "@interop"], "Business service CRUD operations", () => {
     it("Business service CRUD", function () {
         const businessService = new BusinessServices(data.getCompanyName(), data.getDescription());
         businessService.create();
-        cy.wait("@postBusinessService");
         exists(businessService.name);
 
         let updatedBusinessServiceName = data.getCompanyName();
         businessService.edit({ name: updatedBusinessServiceName });
-        cy.wait("@getBusinessService");
         exists(updatedBusinessServiceName);
 
         businessService.delete();
-        cy.wait("@getBusinessService");
         notExists(businessService.name);
     });
-
-    it("Business service CRUD with owner", function () {
-        const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
-        stakeholder.create();
-        cy.wait("@postStakeholder");
-        const businessService = new BusinessServices(
-            data.getCompanyName(),
-            data.getDescription(),
-            stakeholder.name
-        );
-        businessService.create();
-        cy.wait("@postBusinessService");
-        exists(businessService.name);
-
-        let updatedBusinessServiceName = data.getCompanyName();
-        businessService.edit({ name: updatedBusinessServiceName });
-        cy.wait("@getBusinessService");
-        exists(updatedBusinessServiceName);
-
-        businessService.delete();
-        cy.wait("@getBusinessService");
-        notExists(businessService.name);
-
-        stakeholder.delete();
-        cy.wait("@getStakeholders");
-        notExists(stakeholder.email, stakeHoldersTable);
-    });
-});
+}

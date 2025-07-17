@@ -16,6 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import * as data from "../../../../utils/data_utils";
+import { getRandomWord } from "../../../../utils/data_utils";
 import {
     checkSuccessAlert,
     createMultipleStakeholderGroups,
@@ -23,24 +24,32 @@ import {
     createMultipleTags,
     deleteByList,
     exists,
+    login,
     notExists,
 } from "../../../../utils/utils";
 import { Archetype } from "../../../models/migration/archetypes/archetype";
 import { Stakeholdergroups } from "../../../models/migration/controls/stakeholdergroups";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { Tag } from "../../../models/migration/controls/tags";
+import { archetypeTags, criteriaTags } from "../../../views/archetype.view";
 import { successAlertMessage } from "../../../views/common.view";
 
 let stakeholders: Stakeholders[];
 let stakeholderGroups: Stakeholdergroups[];
 let tags: Tag[];
 
-export function archetypeCRUD() {
-    it("Archetype CRUD operations", function () {
-        // Automates Polarion MTA-395
+describe(["@tier2"], "Archetype CRUD operations", () => {
+    before("Login", function () {
+        login();
+        cy.visit("/");
         stakeholders = createMultipleStakeholders(2);
         stakeholderGroups = createMultipleStakeholderGroups(2);
         tags = createMultipleTags(2);
+    });
+
+    it("Duplicate archetype", function () {
+        // Automates Polarion MTA-399
+
         const archetype = new Archetype(
             data.getRandomWord(8),
             [tags[0].name],
@@ -49,6 +58,7 @@ export function archetypeCRUD() {
             stakeholders,
             stakeholderGroups
         );
+
         archetype.create();
         checkSuccessAlert(
             successAlertMessage,
@@ -57,25 +67,27 @@ export function archetypeCRUD() {
         );
         exists(archetype.name);
 
-        const updatedArchetypeName = data.getRandomWord(8);
-        archetype.edit({ name: updatedArchetypeName });
+        const archetypeDuplicate = archetype.duplicate(getRandomWord(6));
         checkSuccessAlert(
             successAlertMessage,
-            `Success alert:Archetype was successfully saved.`,
+            `Success alert:Archetype ${archetypeDuplicate.name} was successfully created.`,
             true
         );
-        exists(updatedArchetypeName);
+        exists(archetypeDuplicate.name);
+
+        archetypeDuplicate.assertsTagsMatch(archetypeTags, archetype.archetypeTags, true, false);
+        archetypeDuplicate.assertsTagsMatch(criteriaTags, archetype.criteriaTags, false, true);
 
         archetype.delete();
-        checkSuccessAlert(
-            successAlertMessage,
-            `Success alert:Archetype ${archetype.name} was successfully deleted.`,
-            true
-        );
-        notExists(archetype.name);
+        archetypeDuplicate.delete();
 
+        notExists(archetype.name);
+        notExists(archetypeDuplicate.name);
+    });
+
+    after("Clear test data", function () {
         deleteByList(stakeholders);
         deleteByList(stakeholderGroups);
         deleteByList(tags);
     });
-}
+});
