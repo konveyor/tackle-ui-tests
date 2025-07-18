@@ -1,7 +1,7 @@
 {
     "java_manual_rules": {
         "image": "img/cloud.png",
-        "rulesFiles": ["xml/javax-package-custom-target.windup.xml"]
+        "rulesFiles": ["yaml/javax-package-custom-target.windup.yaml"]
     },
     "rules_from_tackle_testApp": {
         "image": "img/cloud.png",
@@ -32,12 +32,12 @@
     },
     "hazelcast_target": {
         "image": "img/cloud.png",
-        "rulesFiles": ["xml/hazelcast.windup.xml"]
+        "rulesFiles": ["yaml/hazelcast.yaml"]
     },
 
     "rules_with_source_target_element": {
         "image": "img/cloud.png",
-        "rulesFiles": ["xml/corporate-framework-config.windup.xml"],
+        "rulesFiles": ["yaml/corporate-framework-config.yaml"],
         "sources": ["traditional-corporate-framework"],
         "targets": ["cloud-corporate-framework"]
     },

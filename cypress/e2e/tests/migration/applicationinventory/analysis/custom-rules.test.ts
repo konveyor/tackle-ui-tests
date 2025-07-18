@@ -85,7 +85,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
                 source: "Upload a local binary",
                 target: ["Application server migration to"],
                 binary: ["jee-example-app-1.0.0.ear"],
-                customRule: ["basic-custom-rule.xml"],
+                customRule: ["basic-custom-rule.yaml"],
             })
         );
         Application.open();
