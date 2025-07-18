@@ -9,7 +9,7 @@ export enum CustomMigrationTargetView {
     descriptionInput = "#description",
     imageInput = "#custom-migration-target-upload-image-filename",
     imageHelper = "#custom-migration-target-upload-image-helper",
-    ruleInput = "input[accept*='.xml']",
+    ruleInput = "input[accept*='text/yaml,.yml,.yaml']",
     ruleHelper = "h4[class*='alert__title']",
     ruleFilesToggle = "button[aria-expanded='true']",
     takeMeThereNotification = "Take me there",

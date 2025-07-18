@@ -110,7 +110,7 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                 const newName = data.getRandomWord(8);
                 const newRules = {
                     ...target.ruleTypeData,
-                    rulesetPaths: ["xml/javax-package-custom.windup.xml"],
+                    rulesetPaths: ["yaml/javax-package-custom.yaml"],
                 };
 
                 target.edit({

@@ -1,0 +1,23 @@
+- category: optional
+  customVariables: []
+  description: ServletAuthentication CUSTOM RULE - ServletAuthentication
+  effort: 1
+  labels:
+      - konveyor.io/source=springboot
+      - konveyor.io/source=weblogic
+      - konveyor.io/target=eap7
+      - konveyor.io/target=eap8
+      - hibernate
+      - configuration
+  links:
+      - title: This link should take you to the Konveyor main page
+        url: https://www.konveyor.io/
+      - title: This link should take you to the Konveyor organization GitHub page
+        url: https://github.com/konveyor
+  message: This is a custom rule for testing that should trigger issues in imports
+      of ServletAuthentication
+  ruleID: basic-custom-rule
+  when:
+      java.referenced:
+          location: IMPORT
+          pattern: weblogic.servlet.security.ServletAuthentication
