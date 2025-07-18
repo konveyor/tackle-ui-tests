@@ -1423,7 +1423,7 @@
         "source": "Upload a local binary",
         "target": ["Jakarta EE 9"],
         "binary": ["customers-tomcat-0.0.1-SNAPSHOT.war"],
-        "customRule": ["javax-package-custom-target.windup.yaml"],
+        "customRule": ["01-javax-package-custom-target.windup.yaml"],
         "appName": "customers-tomcat-0.0.1-SNAPSHOT.war",
         "effort": 22
     },
