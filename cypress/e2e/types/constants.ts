@@ -211,7 +211,7 @@ export enum dependencyFilter {
 }
 
 export enum Languages {
-    //Go = "Golang",
+    Go = "Golang",
     Java = "Java",
 }
 
