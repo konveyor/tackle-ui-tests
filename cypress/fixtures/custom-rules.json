@@ -1,7 +1,7 @@
 {
     "java_manual_rules": {
         "image": "img/cloud.png",
-        "rulesFiles": ["yaml/javax-package-custom-target.windup.yaml"]
+        "rulesFiles": ["yaml/01-javax-package-custom-target.windup.yaml"]
     },
     "rules_from_tackle_testApp": {
         "image": "img/cloud.png",
