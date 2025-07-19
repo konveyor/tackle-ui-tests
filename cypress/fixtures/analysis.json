@@ -2177,5 +2177,26 @@
                 "labels": ["None"]
             }
         ]
+    },
+    "imported_data_for_ci_test": {
+        "source": "Source code",
+        "target": ["Containerization", "Linux", "Quarkus"],
+        "appName": "bookserver-app",
+        "effort": 25000,
+        "issues": [
+            {
+                "name": "This is a test 1/1 violation.",
+                "category": "warning",
+                "sources": ["oraclejdk"],
+                "targets": ["openjdk11+"],
+                "effort": 10,
+                "totalEffort": 8,
+                "incidents": 8,
+                "affectedFiles": 3,
+                "ruleSet": "ruleSet-1",
+                "rule": "rule-1",
+                "labels": ["RULE-1", "RULESET-1"]
+            }
+        ]
     }
 }

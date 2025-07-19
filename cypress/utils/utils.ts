@@ -1819,6 +1819,31 @@ export function isRwxEnabled(): Cypress.Chainable<boolean> {
     });
 }
 
+export function seedAnalysisData(applicationId: number): void {
+    const baseUrl = Cypress.config("baseUrl");
+    const hostname = new URL(baseUrl).hostname;
+    cy.log(hostname);
+    const command = `cd cypress/fixtures && chmod +x analysis.sh && HOST=${hostname} ./analysis.sh ${applicationId}`;
+    cy.exec("pwd").then((result) => {
+        cy.log("Cypress is running from:", result.stdout);
+    });
+
+    cy.exec(command, {
+        timeout: 30 * SEC,
+        failOnNonZeroExit: false,
+    }).then((result) => {
+        expect(result.code).to.eq(0);
+        expect(result.stderr, "No error output").to.eq("");
+        expect(result.stdout, "Expected script output").to.include("Analysis: created.");
+    });
+}
+
+export function getApplicationID(url: string): number | null {
+    const urlObj = new URL(url);
+    const activeItem = urlObj.searchParams.get("activeItem");
+    return activeItem !== null ? Number(activeItem) : null;
+}
+
 export function validateMtaVersionInCLI(expectedMtaVersion: string): void {
     const namespace = getNamespace();
     const podName = `$(oc get pods -n${namespace}| grep ui|cut -d " " -f 1)`;

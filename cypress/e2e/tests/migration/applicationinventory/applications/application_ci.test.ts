@@ -19,8 +19,10 @@ import {
     checkSuccessAlert,
     createMultipleStakeholders,
     deleteByList,
+    getApplicationID,
     getRandomAnalysisData,
     getRandomApplicationData,
+    seedAnalysisData,
 } from "../../../../../utils/utils";
 
 import { AssessmentQuestionnaire } from "../../../../models/administration/assessment_questionnaire/assessment_questionnaire";
@@ -48,21 +50,20 @@ export function assessReviewAndAnalyzeApplication() {
     });
 
     it("Validate application assessment and review with low risk and analyze", function () {
-        //Polarion MTA-517 - Verify donut chart on applications review page
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
 
         stakeholders = createMultipleStakeholders(1);
         const application = new Analysis(
-            getRandomApplicationData("bookserverApp", {
+            getRandomApplicationData("ci_testApp", {
                 sourceData: this.appData["bookserver-app"],
             }),
-            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+            getRandomAnalysisData(this.analysisData["imported_data_for_ci_test"])
         );
         application.create();
         cy.wait("@getApplication");
 
-        // Perform assessment of application
+        //Perform assessment of application
         application.perform_assessment("low", stakeholders);
         application.verifyStatus("assessment", "Completed");
 
@@ -74,6 +75,16 @@ export function assessReviewAndAnalyzeApplication() {
         application.analyze();
         checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
 
+        application.selectApplicationRow();
+
+        cy.url().then((currentUrl) => {
+            const id = getApplicationID(currentUrl);
+            cy.log(`Current URL: ${currentUrl}`);
+            cy.log(`Extracted ID: ${id}`);
+            seedAnalysisData(id);
+        });
+        application.verifyEffort(this.analysisData["imported_data_for_ci_test"]["effort"]);
+        application.validateIssues(this.analysisData["imported_data_for_ci_test"]["issues"]);
         application.delete();
         deleteByList(stakeholders);
     });
