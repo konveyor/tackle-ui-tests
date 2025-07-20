@@ -15,21 +15,16 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import * as data from "../../../../../utils/data_utils";
-import { exists, notExists } from "../../../../../utils/utils";
-import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
+import {
+    archetypeCRUD,
+    assessReviewAndAnalyzeApplication,
+    businessServiceCRUD,
+    jobFunctionCRUD,
+} from "./ci-utils";
 
-export function jobFunctionCRUD() {
-    it("Jobfunction CRUD", function () {
-        const jobfunction = new Jobfunctions(data.getJobTitle());
-        jobfunction.create();
-        exists(jobfunction.name);
-
-        const updatedJobfuncName = data.getJobTitle();
-        jobfunction.edit(updatedJobfuncName);
-        exists(updatedJobfuncName);
-
-        jobfunction.delete();
-        notExists(jobfunction.name);
-    });
-}
+describe(["@ci"], "Sanity UI tests", () => {
+    businessServiceCRUD();
+    jobFunctionCRUD();
+    archetypeCRUD();
+    assessReviewAndAnalyzeApplication();
+});
