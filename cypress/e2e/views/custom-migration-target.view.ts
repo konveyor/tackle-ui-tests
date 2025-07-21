@@ -20,11 +20,10 @@ export enum CustomMigrationTargetView {
     credentialsDropdown = "#associated-credentials-select-toggle",
     credentialsInput = "#associated-credentials-select-toggle-select-typeahead",
     retrieveFromARepositoryRadio = "#repository",
-    dragButton = "#drag-button",
+    dragButton = 'button[id*="drag-button"]',
     card = ".pf-v5-c-card",
-    cardContainer = "div.dnd-grid",
+    cardContainer = 'div[class*="gallery"][class*="gutter"]',
     filterLanguageDropdown = "#filter-control-provider-Languages",
     formLanguageDropdown = "#provider-type-select-toggle",
     formLanguageDropdownOptions = "#provider-type-select",
-    dragAndDropSection = ".dnd-grid",
 }

@@ -1,20 +1,20 @@
-- category: optional
-  customVariables: []
-  description: INVALID RULE
-  effort: 1
-  labels:
+- asd: optional
+  dasdasdsa: []
+  descrdsdsadiption: INVALID RULE
+  efsssafort: 1
+  lasaabels:
       - konveyor.io/source=springboot
       - konveyor.io/source=weblogic
       - konveyor.io/target=eap7
       - konveyor.io/target=eap8
       - hibernate
       - configuration
-  links:
+  linssks:
       - title: This link should take you to the Konveyor main page
         url: https://www.konveyor.io/
       - title: This link should take you to the Konveyor organization GitHub page
         url: https://github.com/konveyor
-  message: This is a custom rule for testing that should trigger issues in imports
+  messaaage: This is a custom rule for testing that should trigger issues in imports
       of ServletAuthentication
   invalid1: basic-custom-rule
   invalid:

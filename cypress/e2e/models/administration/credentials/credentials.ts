@@ -2,6 +2,7 @@ import {
     clearAllFilters,
     click,
     clickByText,
+    clickItemInKebabMenu,
     doesExistText,
     enumKeys,
     exists,
@@ -229,7 +230,9 @@ export class Credentials {
 
     delete(toBeCanceled = false): void {
         Credentials.openList();
-        performRowAction(this.name, deleteAction);
+        exists(this.name);
+        //performRowAction(this.name, deleteAction);
+        clickItemInKebabMenu(this.name, deleteAction);
         if (toBeCanceled) {
             click(confirmCancelButton);
             exists(this.name);

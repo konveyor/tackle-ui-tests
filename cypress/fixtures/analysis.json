@@ -2047,11 +2047,11 @@
             " io.konveyor.demo.ordermanagement.model "
         ]
     },
-    "tackle_testapp_fileNotValidXML": {
+    "tackle_testapp_fileNotValidYaml": {
         "source": "Source code",
         "target": [],
-        "appName": "fileNotValidXML custom rules",
-        "customRule": ["settings.xml"]
+        "appName": "fileNotValidYaml custom rules",
+        "customRule": ["invalid-rule.yaml"]
     },
     "tackle-testapp-public-4-targets": {
         "appName": "tackle-testapp-public",

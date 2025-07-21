@@ -213,7 +213,7 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                     .find(CustomMigrationTargetView.dragButton);
 
                 // Moves the custom migration target to the first place
-                cy.dragAndDrop(dragButton, cy.get(CustomMigrationTargetView.dragAndDropSection));
+                cy.dragAndDrop(dragButton, cy.get(CustomMigrationTargetView.cardContainer));
                 cy.wait("@getTargets");
 
                 Analysis.open(true);
