@@ -72,21 +72,34 @@ export function businessServiceCRUD() {
 }
 
 export function jobFunctionCRUD() {
+    beforeEach("Interceptors", function () {
+        cy.intercept("POST", "/hub/jobfunctions*").as("postJobFunction");
+        cy.intercept("GET", "/hub/jobfunctions*").as("getJobFunctions");
+    });
+
     it("Jobfunction CRUD", function () {
         const jobfunction = new Jobfunctions(data.getJobTitle());
         jobfunction.create();
+        cy.wait("@postJobFunction");
         exists(jobfunction.name);
 
         const updatedJobfuncName = data.getJobTitle();
         jobfunction.edit(updatedJobfuncName);
+        cy.wait("@getJobFunctions");
         exists(updatedJobfuncName);
 
         jobfunction.delete();
+        cy.wait("@getJobFunctions");
         notExists(jobfunction.name);
     });
 }
 
 export function archetypeCRUD() {
+    beforeEach("Interceptors", function () {
+        cy.intercept("POST", "/hub/archetypes*").as("postArchetype");
+        cy.intercept("GET", "/hub/archetypes*").as("getArchetypes");
+    });
+
     it("Archetype CRUD operations", function () {
         // Automates Polarion MTA-395
         stakeholders = createMultipleStakeholders(2);
@@ -101,6 +114,7 @@ export function archetypeCRUD() {
             stakeholderGroups
         );
         archetype.create();
+        cy.wait("@postArchetype");
         checkSuccessAlert(
             successAlertMessage,
             `Success alert:Archetype ${archetype.name} was successfully created.`,
@@ -110,6 +124,7 @@ export function archetypeCRUD() {
 
         const updatedArchetypeName = data.getRandomWord(8);
         archetype.edit({ name: updatedArchetypeName });
+        cy.wait("@getArchetypes");
         checkSuccessAlert(
             successAlertMessage,
             `Success alert:Archetype was successfully saved.`,
@@ -118,6 +133,7 @@ export function archetypeCRUD() {
         exists(updatedArchetypeName);
 
         archetype.delete();
+        cy.wait("@getArchetypes");
         checkSuccessAlert(
             successAlertMessage,
             `Success alert:Archetype ${archetype.name} was successfully deleted.`,
@@ -143,6 +159,8 @@ export function assessReviewAndAnalyzeApplication() {
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
+        cy.intercept("POST", "/hub/assessments*").as("postAssessment");
+        cy.intercept("GET", "/hub/assessments*").as("getAssessment");
         cy.visit("/");
     });
 
@@ -162,11 +180,13 @@ export function assessReviewAndAnalyzeApplication() {
 
         //Perform assessment of application
         application.perform_assessment("low", stakeholders);
+        cy.wait("@postAssessment");
         application.verifyStatus("assessment", "Completed");
 
         // Perform application review
         application.perform_review("low");
         application.verifyStatus("review", "Completed");
+        cy.wait("@getAssessment");
         application.validateReviewFields();
 
         application.analyze();
