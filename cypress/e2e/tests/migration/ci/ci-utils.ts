@@ -44,7 +44,6 @@ import { legacyPathfinder } from "../../../types/constants";
 let stakeholders: Stakeholders[];
 let stakeholderGroups: Stakeholdergroups[];
 let tags: Tag[];
-const yamlFile = "questionnaire_import/cloud-native.yaml";
 
 export function businessServiceCRUD() {
     beforeEach("Interceptors", function () {
