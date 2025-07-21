@@ -240,7 +240,6 @@ export class Assessment {
         entityName: string,
         archetypeName?: string
     ): void {
-        cy.wait(SEC * 5);
         sidedrawerTab(name, "Review");
         if (archetypeName) name = archetypeName;
         let list = [
@@ -278,7 +277,8 @@ export class Assessment {
         ];
 
         for (let i in list) {
-            cy.get("dt")
+            cy.wait(SEC * 5);
+            cy.get("dt", { timeout: 3 * SEC })
                 .contains(list[i])
                 .closest("div")
                 .within(() => {
