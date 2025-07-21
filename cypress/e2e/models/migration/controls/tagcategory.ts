@@ -37,7 +37,7 @@ import {
 } from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
 import { navMenu, navTab } from "../../../views/menu.view";
-import { createTagCategoryButton } from "../../../views/tags.view";
+import { colorMenuToggle, createTagCategoryButton } from "../../../views/tags.view";
 import { clickTags, fillName } from "./tags";
 
 export class TagCategory {
@@ -65,8 +65,7 @@ export class TagCategory {
     }
 
     protected selectColor(color: string): void {
-        cy.waitForReact();
-        cy.react("FormGroup", { props: { fieldId: "color" } }).click();
+        click(colorMenuToggle);
         clickByText(button, color);
     }
 

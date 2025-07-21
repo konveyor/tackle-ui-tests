@@ -179,7 +179,7 @@ export class Assessment {
                     if (saveAndReview && i == lastStep) {
                         clickJs(commonView.saveAndReviewButton);
                     } else {
-                        clickJs(commonView.nextButton);
+                        cy.get(commonView.nextButton).click();
                     }
                 }
             });

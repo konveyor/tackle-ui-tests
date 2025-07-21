@@ -45,14 +45,7 @@ export class Jobfunctions {
         this.name = name;
     }
 
-    public static openList(itemsPerPage = 100, forceReload = false): void {
-        if (forceReload) {
-            cy.visit(Jobfunctions.fullUrl, { timeout: 15 * SEC }).then((_) => {
-                cy.get("h1", { timeout: 35 * SEC }).should("contain", "Controls");
-                clickByText(navTab, jobFunctions);
-            });
-            return;
-        }
+    public static openList(itemsPerPage = 100): void {
         cy.url().then(($url) => {
             if ($url != Jobfunctions.fullUrl) {
                 selectUserPerspective(migration);
