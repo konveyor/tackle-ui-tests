@@ -23,19 +23,8 @@ import {
 } from "./ci-utils";
 
 describe(["@ci"], "Sanity UI tests", () => {
-    it("Business Service CRUD", () => {
-        businessServiceCRUD();
-    });
-
-    it("Job Function CRUD", () => {
-        jobFunctionCRUD();
-    });
-
-    it("Archetype CRUD", () => {
-        archetypeCRUD();
-    });
-
-    it("Assess, Review and Analyze Application", () => {
-        assessReviewAndAnalyzeApplication();
-    });
+    businessServiceCRUD();
+    jobFunctionCRUD();
+    archetypeCRUD();
+    assessReviewAndAnalyzeApplication();
 });

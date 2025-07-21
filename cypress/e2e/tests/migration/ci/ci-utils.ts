@@ -49,9 +49,6 @@ export function businessServiceCRUD() {
     beforeEach("Interceptors", function () {
         cy.intercept("POST", "/hub/businessservices*").as("postBusinessService");
         cy.intercept("GET", "/hub/businessservices*").as("getBusinessService");
-
-        cy.intercept("POST", "/hub/stakeholders*").as("postStakeholder");
-        cy.intercept("GET", "/hub/stakeholders*").as("getStakeholders");
     });
 
     it("Business service CRUD", function () {
@@ -159,8 +156,6 @@ export function assessReviewAndAnalyzeApplication() {
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
-        cy.intercept("POST", "/hub/assessments*").as("postAssessment");
-        cy.intercept("GET", "/hub/assessments*").as("getAssessment");
         cy.visit("/");
     });
 
@@ -180,13 +175,11 @@ export function assessReviewAndAnalyzeApplication() {
 
         //Perform assessment of application
         application.perform_assessment("low", stakeholders);
-        cy.wait("@postAssessment");
         application.verifyStatus("assessment", "Completed");
 
         // Perform application review
         application.perform_review("low");
         application.verifyStatus("review", "Completed");
-        cy.wait("@getAssessment");
         application.validateReviewFields();
 
         application.analyze();
