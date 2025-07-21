@@ -240,6 +240,7 @@ export class Assessment {
         entityName: string,
         archetypeName?: string
     ): void {
+        cy.wait(SEC * 5);
         sidedrawerTab(name, "Review");
         if (archetypeName) name = archetypeName;
         let list = [
