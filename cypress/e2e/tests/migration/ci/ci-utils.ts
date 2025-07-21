@@ -55,15 +55,20 @@ export function businessServiceCRUD() {
         const businessService = new BusinessServices(data.getCompanyName(), data.getDescription());
         businessService.create();
         cy.wait("@postBusinessService");
+        // Adding forced navigation for page refresh which will be removed once the UI refresh bugs are fixed
+        // https://github.com/konveyor/tackle2-ui/issues/2471 and https://github.com/konveyor/tackle2-ui/issues/2470
+        BusinessServices.openList(100, true);
         exists(businessService.name);
 
         let updatedBusinessServiceName = data.getCompanyName();
         businessService.edit({ name: updatedBusinessServiceName });
         cy.wait("@getBusinessService");
+        BusinessServices.openList(100, true);
         exists(updatedBusinessServiceName);
 
         businessService.delete();
         cy.wait("@getBusinessService");
+        BusinessServices.openList(100, true);
         notExists(businessService.name);
     });
 }
@@ -78,15 +83,18 @@ export function jobFunctionCRUD() {
         const jobfunction = new Jobfunctions(data.getJobTitle());
         jobfunction.create();
         cy.wait("@postJobFunction");
+        Jobfunctions.openList(100, true);
         exists(jobfunction.name);
 
         const updatedJobfuncName = data.getJobTitle();
         jobfunction.edit(updatedJobfuncName);
         cy.wait("@getJobFunctions");
+        Jobfunctions.openList(100, true);
         exists(updatedJobfuncName);
 
         jobfunction.delete();
         cy.wait("@getJobFunctions");
+        Jobfunctions.openList(100, true);
         notExists(jobfunction.name);
     });
 }
@@ -117,6 +125,7 @@ export function archetypeCRUD() {
             `Success alert:Archetype ${archetype.name} was successfully created.`,
             true
         );
+        Archetype.open(true);
         exists(archetype.name);
 
         const updatedArchetypeName = data.getRandomWord(8);
@@ -127,6 +136,7 @@ export function archetypeCRUD() {
             `Success alert:Archetype was successfully saved.`,
             true
         );
+        Archetype.open(true);
         exists(updatedArchetypeName);
 
         archetype.delete();
@@ -136,11 +146,13 @@ export function archetypeCRUD() {
             `Success alert:Archetype ${archetype.name} was successfully deleted.`,
             true
         );
+        Archetype.open(true);
         notExists(archetype.name);
 
         deleteByList(stakeholders);
         deleteByList(stakeholderGroups);
-        deleteByList(tags);
+        tags[0].delete();
+        tags[1].delete();
     });
 }
 

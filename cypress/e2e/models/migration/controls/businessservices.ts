@@ -61,7 +61,15 @@ export class BusinessServices {
         if (owner) this.owner = owner;
     }
 
-    public static openList(itemsPerPage = 100): void {
+    public static openList(itemsPerPage = 100, forceReload = false): void {
+        if (forceReload) {
+            cy.visit(BusinessServices.fullUrl, { timeout: 15 * SEC }).then((_) => {
+                cy.get("h1", { timeout: 35 * SEC }).should("contain", "Controls");
+                clickByText(navTab, businessServices);
+            });
+            return;
+        }
+
         cy.url().then(($url) => {
             if ($url != BusinessServices.fullUrl) {
                 selectUserPerspective(migration);

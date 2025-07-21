@@ -39,13 +39,20 @@ import { navMenu, navTab } from "../../../views/menu.view";
 
 export class Jobfunctions {
     name: string;
-    static fullUrl = Cypress.config("baseUrl") + "controls/job-functions";
+    static fullUrl = Cypress.config("baseUrl") + "/controls/job-functions";
 
     constructor(name: string) {
         this.name = name;
     }
 
-    public static openList(itemsPerPage = 100): void {
+    public static openList(itemsPerPage = 100, forceReload = false): void {
+        if (forceReload) {
+            cy.visit(Jobfunctions.fullUrl, { timeout: 15 * SEC }).then((_) => {
+                cy.get("h1", { timeout: 35 * SEC }).should("contain", "Controls");
+                clickByText(navTab, jobFunctions);
+            });
+            return;
+        }
         cy.url().then(($url) => {
             if ($url != Jobfunctions.fullUrl) {
                 selectUserPerspective(migration);
