@@ -91,7 +91,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
         cy.get(appDetailsView.applicationTag).should("not.contain", tag.name);
         application.closeApplicationDetails();
 
-        // Validate rules doesn't have effort=0 and should only appear as tags.
+        // Automate bug MTA-2089 : Rules from technology usage should only appear as tags and not issues
         application.verifyEffort(this.analysisData["analysis_for_enableTagging"]["effort"]);
         application.validateIssues(this.analysisData["analysis_for_enableTagging"]["issues"]);
     });
