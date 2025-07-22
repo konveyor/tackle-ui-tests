@@ -6,7 +6,7 @@ import {
     inputText,
     selectUserPerspective,
     submitForm,
-    uploadXml,
+    uploadFile,
 } from "../../../../utils/utils";
 import {
     button,
@@ -188,7 +188,7 @@ export class CustomMigrationTarget {
     }
 
     public static uploadRules(rulePaths: string[]) {
-        rulePaths.forEach((path) => uploadXml(path, CustomMigrationTargetView.ruleInput));
+        rulePaths.forEach((path) => uploadFile(path, CustomMigrationTargetView.ruleInput));
     }
 
     private static fillManualForm(values: Partial<RulesManualFields>) {

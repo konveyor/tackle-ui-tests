@@ -127,7 +127,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
         tackleTestapp.verifyRulesNumber();
     });
 
-    it.skip("Bug MTA-5779: Verify a file is not a valid XML", function () {
+    it.skip("Bug MTA-5779: Verify a file is not a valid YAML", function () {
         const app = new Analysis(
             getRandomApplicationData("tackle-testapp-fileNotValidXML", {
                 sourceData: this.appData["tackle-testapp-git"],

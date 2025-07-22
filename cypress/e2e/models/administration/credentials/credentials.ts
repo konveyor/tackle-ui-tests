@@ -231,7 +231,6 @@ export class Credentials {
     delete(toBeCanceled = false): void {
         Credentials.openList();
         exists(this.name);
-        //performRowAction(this.name, deleteAction);
         clickItemInKebabMenu(this.name, deleteAction);
         if (toBeCanceled) {
             click(confirmCancelButton);

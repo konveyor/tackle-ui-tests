@@ -723,14 +723,6 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
     checkSuccessAlert(successAlertMessage, `Success! file saved to be processed.`);
 }
 
-export function uploadXml(fileName: string, selector = 'input[type="file"]'): void {
-    cy.get(selector, { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
-        timeout: 120 * SEC,
-        force: true,
-    });
-    cy.wait(2000);
-}
-
 export function uploadApplications(fileName: string): void {
     cy.get('input[type="file"]', { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
         timeout: 120 * SEC,
@@ -738,8 +730,8 @@ export function uploadApplications(fileName: string): void {
     });
 }
 
-export function uploadFile(fileName: string): void {
-    cy.get('input[type="file"]', { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
+export function uploadFile(fileName: string, selector = 'input[type="file"]'): void {
+    cy.get(selector, { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
         timeout: 120 * SEC,
         force: true,
     });
