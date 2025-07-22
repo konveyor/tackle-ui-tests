@@ -27,3 +27,4 @@ export enum tagLabels {
     type = 'td[data-label="Tag type"]',
     count = 'td[data-label="Tag count"]',
 }
+export const colorMenuToggle = "button[id='type-select-toggle']";

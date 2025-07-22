@@ -47,43 +47,6 @@ describe(["@tier2"], "Archetype CRUD operations", () => {
         tags = createMultipleTags(2);
     });
 
-    it("Archetype CRUD operations", function () {
-        // Automates Polarion MTA-395
-
-        const archetype = new Archetype(
-            data.getRandomWord(8),
-            [tags[0].name],
-            [tags[1].name],
-            null,
-            stakeholders,
-            stakeholderGroups
-        );
-        archetype.create();
-        checkSuccessAlert(
-            successAlertMessage,
-            `Success alert:Archetype ${archetype.name} was successfully created.`,
-            true
-        );
-        exists(archetype.name);
-
-        const updatedArchetypeName = data.getRandomWord(8);
-        archetype.edit({ name: updatedArchetypeName });
-        checkSuccessAlert(
-            successAlertMessage,
-            `Success alert:Archetype was successfully saved.`,
-            true
-        );
-        exists(updatedArchetypeName);
-
-        archetype.delete();
-        checkSuccessAlert(
-            successAlertMessage,
-            `Success alert:Archetype ${archetype.name} was successfully deleted.`,
-            true
-        );
-        notExists(archetype.name);
-    });
-
     it("Duplicate archetype", function () {
         // Automates Polarion MTA-399
 

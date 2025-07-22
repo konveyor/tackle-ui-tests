@@ -1002,7 +1002,7 @@ export function createMultipleTags(numberoftags: number): Array<Tag> {
         //Create Tag category
         const tagCategory = new TagCategory(data.getRandomWord(8), data.getColor());
         tagCategory.create();
-
+        cy.wait(2 * SEC);
         // Create new tag
         const tag = new Tag(data.getRandomWord(6), tagCategory.name);
         tag.create();
@@ -1152,6 +1152,7 @@ type Deletable = { delete: () => void };
 export function deleteByList<T extends Deletable>(array: T[]): void {
     array.forEach((element) => {
         element.delete();
+        cy.wait(2 * SEC);
     });
 }
 
@@ -1808,6 +1809,32 @@ export function isRwxEnabled(): Cypress.Chainable<boolean> {
         if (result.stderr !== "") throw new Error(result.stderr.toString());
         return result.stdout.trim().toLowerCase() === "true";
     });
+}
+
+export function seedAnalysisData(applicationId: number): void {
+    const baseUrl = Cypress.config("baseUrl");
+    const hostname = new URL(baseUrl).hostname;
+    cy.log(hostname);
+    const command = `cd cypress/fixtures && chmod +x analysis.sh && HOST=${hostname} ./analysis.sh ${applicationId}`;
+    cy.log(command);
+    cy.exec(command, {
+        timeout: 120 * SEC,
+        failOnNonZeroExit: false,
+    }).then((result) => {
+        console.log("Command result:", result);
+        cy.log(`Exit code: ${result.code}`);
+        cy.log(`stdout: ${result.stdout}`);
+        cy.log(`stderr: ${result.stderr}`);
+        expect(result.code).to.eq(0);
+        expect(result.stderr, "No error output").to.eq("");
+        expect(result.stdout, "Expected script output").to.include("Analysis: created.");
+    });
+}
+
+export function getApplicationID(url: string): number | null {
+    const urlObj = new URL(url);
+    const activeItem = urlObj.searchParams.get("activeItem");
+    return activeItem !== null ? Number(activeItem) : null;
 }
 
 export function validateMtaVersionInCLI(expectedMtaVersion: string): void {

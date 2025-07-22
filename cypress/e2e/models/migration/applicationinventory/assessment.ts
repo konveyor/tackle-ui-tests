@@ -179,7 +179,7 @@ export class Assessment {
                     if (saveAndReview && i == lastStep) {
                         clickJs(commonView.saveAndReviewButton);
                     } else {
-                        clickJs(commonView.nextButton);
+                        cy.get(commonView.nextButton).click();
                     }
                 }
             });
@@ -277,7 +277,8 @@ export class Assessment {
         ];
 
         for (let i in list) {
-            cy.get("dt")
+            cy.wait(SEC * 2);
+            cy.get("dt", { timeout: 3 * SEC })
                 .contains(list[i])
                 .closest("div")
                 .within(() => {
