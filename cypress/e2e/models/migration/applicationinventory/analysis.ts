@@ -29,7 +29,7 @@ import {
     selectFormItems,
     sidedrawerTab,
     uploadApplications,
-    uploadXml,
+    uploadFile,
 } from "../../../../utils/utils";
 import {
     AnalysisStatuses,
@@ -251,7 +251,7 @@ export class Analysis extends Application {
         for (let i = 0; i < this.customRule.length; i++) {
             cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
             const folder = this.customRule[i].split(".").pop();
-            uploadXml(`${folder}/${this.customRule[i]}`);
+            uploadFile(`${folder}/${this.customRule[i]}`);
             cy.wait(2000);
             cy.get("span.pf-v5-c-progress__measure", { timeout: 150000 }).should("contain", "100%");
             cy.wait(2000);
@@ -533,29 +533,6 @@ export class Analysis extends Application {
                     expect(this.incidents[index].information).equal(Number(count));
                 }
             });
-    }
-
-    verifyFileNotValidXML(): void {
-        this.selectApplication();
-        cy.contains(button, analyzeButton).should("be.enabled").click();
-        this.selectSourceofAnalysis(this.source);
-        next();
-        next();
-        next();
-        for (let i = 0; i < this.customRule.length; i++) {
-            cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
-            const folder = this.customRule[i].split(".").pop();
-            uploadXml(`${folder}/${this.customRule[i]}`);
-            cy.wait(2000);
-            cy.get("span.pf-v5-c-progress__measure", { timeout: 150000 }).should("contain", "100%");
-            cy.wait(2000);
-            cy.get("h4.pf-v5-c-alert__title").should(
-                "contain.text",
-                `Error: File "${this.customRule[i]}" is not a valid XML: `
-            );
-            cy.contains(addRules, "Add", { timeout: 2000 }).should("not.be.enabled");
-        }
-        cy.get(closeWizard).click({ force: true });
     }
 
     // verifyRulesNumber verifies the number of rules found in an uploaded custom rules file

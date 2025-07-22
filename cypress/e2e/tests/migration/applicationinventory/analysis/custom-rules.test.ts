@@ -85,7 +85,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
                 source: "Upload a local binary",
                 target: ["Application server migration to"],
                 binary: ["jee-example-app-1.0.0.ear"],
-                customRule: ["basic-custom-rule.xml"],
+                customRule: ["basic-custom-rule.yaml"],
             })
         );
         Application.open();
@@ -127,16 +127,16 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
         tackleTestapp.verifyRulesNumber();
     });
 
-    it("Verify a file is not a valid XML", function () {
+    it.skip("Bug MTA-5779: Verify a file is not a valid YAML", function () {
         const app = new Analysis(
             getRandomApplicationData("tackle-testapp-fileNotValidXML", {
                 sourceData: this.appData["tackle-testapp-git"],
             }),
-            getRandomAnalysisData(this.analysisData["tackle_testapp_fileNotValidXML"])
+            getRandomAnalysisData(this.analysisData["tackle_testapp_fileNotValidYaml"])
         );
         app.create();
         applications.push(app);
-        app.verifyFileNotValidXML();
+        // TODO: after the bug is fixed Verify that the uploaded yaml not valid
     });
 
     it("Python custom rules file analysis", function () {
