@@ -787,8 +787,14 @@ export function performRowAction(itemName: string, action: string): void {
 }
 
 // Perform edit/delete action on the specified row selector by clicking an icon button
-/* As of Tackle 2.1, this function can be used to click the update button and kebab menu for
-   applications on the Application Inventory page */
+/**
+ * Clicks the icon button for a specified action within a table row identified by item name.
+ *
+ * Used to trigger actions such as edit or open kebab menu for applications on the Application Inventory page.
+ *
+ * @param itemName - The text identifying the row (e.g., application name)
+ * @param action - The selector or identifier for the action to perform (e.g., edit, kebab menu)
+ */
 export function performRowActionByIcon(itemName: string, action: string): void {
     // itemName is the text to be searched on the screen (For eg: application name, etc)
     // Action is the name of the action to be applied (For eg: edit or click kebab menu)
@@ -798,7 +804,7 @@ export function performRowActionByIcon(itemName: string, action: string): void {
         .find(action)
         .first()
         .find("button", { log: true, timeout: 30 * SEC })
-        .first()
+        .nthNode(1)
         .click({ force: true });
 }
 
