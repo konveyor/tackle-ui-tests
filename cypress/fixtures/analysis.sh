@@ -12,14 +12,6 @@ fi
 export TOKEN=$(curl -kSs -d '{"user":"admin","password":"Dog8code"}' \
   https://${host}/auth/login | jq -r ".token")
 
-
-# Exit if token is empty
-if [[ -z "$TOKEN" || "$TOKEN" == "null" ]]; then
-  echo "Failed to fetch TOKEN from ${host}. Exiting."
-  exit 1
-fi
-
-
 appId="${1:-0}"
 nRuleSet="${2:-10}"
 nInsight="${3:-10}"
