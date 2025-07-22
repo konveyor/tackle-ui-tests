@@ -1,22 +1,61 @@
 name: Global CI
 
-on: ["push", "pull_request"]
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+            - release-*
+
+env:
+    DEFAULT_UI_TEST_TAGS: "@ci"
 
 jobs:
+    pick-ui-test-tags:
+        runs-on: ubuntu-latest
+        outputs:
+            tags: ${{ steps.extract-tags.outputs.tags }}
+        steps:
+            - name: Extract UI test tags from PR body
+              id: extract-tags
+              env:
+                  PR_BODY: ${{ github.event.pull_request.body }}
+              run: |
+                  if [ "${{ github.event_name }}" = "pull_request" ]; then
+                      if echo "$PR_BODY" | grep -q "ui_test_tags:"; then
+                          TAGS=$(echo "$PR_BODY" | grep "ui_test_tags:" | head -1 | sed 's/^ui_test_tags:[[:space:]]*\(.*\)[[:space:]]*$/\1/')
+                          echo "Found ui_test_tags in PR body: $TAGS"
+                      else
+                          TAGS="${{ env.DEFAULT_UI_TEST_TAGS }}"
+                          echo "No ui_test_tags found in PR body, using default: $TAGS"
+                      fi
+                  else
+                      TAGS="${{ env.DEFAULT_UI_TEST_TAGS }}"
+                      echo "Not a pull request, using default: $TAGS"
+                  fi
+                  echo "tags=$TAGS" >> $GITHUB_OUTPUT
+                  echo "Using ui_test_tags: \`$TAGS\`" >> $GITHUB_STEP_SUMMARY
+
     e2e-main:
+        needs: pick-ui-test-tags
         uses: konveyor/ci/.github/workflows/global-ci.yml@main
         if: "${{github.event.pull_request.base.ref == 'main' }}"
         with:
             run_api_tests: false
             run_ui_tests: true
             ui_tests_ref: ${{ github.event.number && format('refs/pull/{0}/merge', github.event.number) || '' }}
+            ui_test_tags: ${{ needs.pick-ui-test-tags.outputs.tags }}
 
     e2e-release-07:
+        needs: pick-ui-test-tags
         uses: konveyor/ci/.github/workflows/global-ci.yml@main
         if: "${{github.event.pull_request.base.ref == 'release-0.7' }}"
         with:
             run_api_tests: false
             run_ui_tests: true
             ui_tests_ref: ${{ github.event.number && format('refs/pull/{0}/merge', github.event.number) || '' }}
+            ui_test_tags: ${{ needs.pick-ui-test-tags.outputs.tags }}
             tag: release-0.7
             operator_tag: v0.7.0
