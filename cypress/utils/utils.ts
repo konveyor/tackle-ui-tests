@@ -1824,12 +1824,8 @@ export function seedAnalysisData(applicationId: number): void {
     const hostname = new URL(baseUrl).hostname;
     cy.log(hostname);
     const command = `cd cypress/fixtures && chmod +x analysis.sh && HOST=${hostname} ./analysis.sh ${applicationId}`;
-    cy.exec("pwd").then((result) => {
-        cy.log("Cypress is running from:", result.stdout);
-    });
-
     cy.exec(command, {
-        timeout: 30 * SEC,
+        timeout: 120 * SEC,
         failOnNonZeroExit: false,
     }).then((result) => {
         expect(result.code).to.eq(0);

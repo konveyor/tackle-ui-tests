@@ -277,7 +277,7 @@ export class Assessment {
         ];
 
         for (let i in list) {
-            cy.wait(SEC * 5);
+            cy.wait(SEC * 2);
             cy.get("dt", { timeout: 3 * SEC })
                 .contains(list[i])
                 .closest("div")
