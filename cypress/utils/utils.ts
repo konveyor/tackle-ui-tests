@@ -1824,10 +1824,15 @@ export function seedAnalysisData(applicationId: number): void {
     const hostname = new URL(baseUrl).hostname;
     cy.log(hostname);
     const command = `cd cypress/fixtures && chmod +x analysis.sh && HOST=${hostname} ./analysis.sh ${applicationId}`;
+    cy.log(command);
     cy.exec(command, {
         timeout: 120 * SEC,
         failOnNonZeroExit: false,
     }).then((result) => {
+        console.log("Command result:", result);
+        cy.log(`Exit code: ${result.code}`);
+        cy.log(`stdout: ${result.stdout}`);
+        cy.log(`stderr: ${result.stderr}`);
         expect(result.code).to.eq(0);
         expect(result.stderr, "No error output").to.eq("");
         expect(result.stdout, "Expected script output").to.include("Analysis: created.");
