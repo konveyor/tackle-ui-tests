@@ -143,7 +143,7 @@ describe("UI Sanity Tests", () => {
 
     it(
         ["@ci"],
-        "Validate application assessment and review with low risk and analyze",
+        "Application assessment, review, analyze and validate efforts and issues",
         function () {
             AssessmentQuestionnaire.deleteAllQuestionnaires();
             AssessmentQuestionnaire.enable(legacyPathfinder);
