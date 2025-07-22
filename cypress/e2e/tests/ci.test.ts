@@ -39,7 +39,7 @@ import { infoAlertMessage, successAlertMessage } from "../views/common.view";
 
 import { AssessmentQuestionnaire } from "../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Analysis } from "../models/migration/applicationinventory/analysis";
-import { legacyPathfinder, SEC } from "../types/constants";
+import { legacyPathfinder } from "../types/constants";
 
 let stakeholders: Stakeholders[];
 let stakeholderGroups: Stakeholdergroups[];
@@ -165,14 +165,12 @@ describe("UI Sanity Tests", () => {
             // Perform application review
             application.perform_review("low");
             application.verifyStatus("review", "Completed");
-            cy.wait(2 * SEC);
             application.validateReviewFields();
 
             application.analyze();
             checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
 
             application.selectApplicationRow();
-
             cy.url().then((currentUrl) => {
                 const id = getApplicationID(currentUrl);
                 cy.log(`Current URL: ${currentUrl}`);
