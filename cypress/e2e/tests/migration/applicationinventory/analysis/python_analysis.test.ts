@@ -15,7 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { CredentialsSourceControlUsername } from "cypress/e2e/models/administration/credentials/credentialsSourceControlUsername";
+import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import {
     deleteByList,
     getRandomAnalysisData,
