@@ -753,7 +753,7 @@ export class Application {
     // Opens the manage dependencies dialog from application inventory page
     openManageDependencies(): void {
         Application.open();
-        performRowActionByIcon(this.name, kebabMenuAction);
+        performRowActionByIcon(this.name, kebabMenuAction, 1);
         clickByText(button, "Manage dependencies");
     }
 
