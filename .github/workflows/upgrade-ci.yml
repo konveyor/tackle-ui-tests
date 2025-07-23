@@ -187,10 +187,12 @@ jobs:
 
       - name: Run Post upgrade test cases
         run: |
-          CYPRESS_INCLUDE_TAGS=@post-upgrade npx cypress run --spec cypress/e2e/tests/upgrade/after_upgrade.test.ts   --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }},git_user=${{ secrets.KONVEYOR_GIT_USER }},git_password=${{ secrets.KONVEYOR_GIT_PASSWORD }}
+          CYPRESS_INCLUDE_TAGS=@post-upgrade npx cypress run --spec cypress/e2e/tests/upgrade/after_upgrade.test.ts  --config baseUrl=${{ env.CYPRESS_tackleUrl }} --env user=admin,pass=Dog8code,tackleUrl=${{ env.CYPRESS_tackleUrl }},git_user=${{ secrets.KONVEYOR_GIT_USER }},git_password=${{ secrets.KONVEYOR_GIT_PASSWORD }}
 
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: minikube-tests-screenshots
           path: /home/runner/work/tackle-ui-tests/tackle-ui-tests/cypress/screenshots/
+
+          
