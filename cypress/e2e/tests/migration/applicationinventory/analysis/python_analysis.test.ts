@@ -15,6 +15,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { CredentialsSourceControlUsername } from "cypress/e2e/models/administration/credentials/credentialsSourceControlUsername";
 import {
     deleteByList,
     getRandomAnalysisData,
@@ -22,6 +23,8 @@ import {
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import * as data from "../../../../../utils/data_utils";
+import { CredentialType, UserCredentials } from "../../../../types/constants";
 
 let applicationsList: Array<Analysis> = [];
 describe(["@tier1"], "Python app analysis", () => {
@@ -38,6 +41,17 @@ describe(["@tier1"], "Python app analysis", () => {
         cy.intercept("DELETE", "/hub/application*").as("deleteApplication");
     });
     it("Source analysis on python application", function () {
+
+        const sourceCredential = new CredentialsSourceControlUsername(
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                Cypress.env("git_password") && Cypress.env("git_user")
+            )
+        );
+
+        sourceCredential.create();
+
         const application = new Analysis(
             getRandomApplicationData("pythonApp_Source", {
                 sourceData: this.appData["python-app"],
@@ -46,6 +60,7 @@ describe(["@tier1"], "Python app analysis", () => {
         );
         Application.open();
         application.create();
+        application.manageCredentials(sourceCredential.name);
         applicationsList.push(application);
         cy.wait("@getApplication");
         application.analyze();
