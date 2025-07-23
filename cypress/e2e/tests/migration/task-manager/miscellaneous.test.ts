@@ -19,8 +19,7 @@ import {
     checkSuccessAlert,
     deleteApplicationTableRows,
     deleteCustomResource,
-    getCommandOutput,
-    getNamespace,
+    getNumberOfNonTaskPods,
     getRandomAnalysisData,
     getRandomApplicationData,
     limitPodsByQuota,
@@ -52,17 +51,12 @@ describe(["@tier2"], "Actions in Task Manager Page", function () {
         });
     });
 
-    it("Limit pods to the number of tackle pods + 1", function () {
-        // Polarion TC MTA-553
-        const namespace = getNamespace();
-        const command = `oc get pod --no-headers -n ${namespace} | grep -v task | grep -v Completed | wc -l`;
-        getCommandOutput(command).then((output) => {
-            const podsNumber = Number(output.stdout) + 1;
-            limitPodsByQuota(podsNumber);
-        });
-    });
-
     it("Test Enable and Disable Preemption", function () {
+        // Polarion TC MTA-553
+        // Limit pods to the number of tackle pods + 1
+        getNumberOfNonTaskPods().then((podsNum) => {
+            limitPodsByQuota(podsNum + 1);
+        });
         for (let i = 0; i < 2; i++) {
             bookServerApp = new Analysis(
                 getRandomApplicationData("TaskApp1_", {

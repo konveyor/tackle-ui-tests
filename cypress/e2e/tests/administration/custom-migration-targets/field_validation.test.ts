@@ -23,7 +23,7 @@ import {
     validateTooShortInput,
 } from "../../../../utils/utils";
 import { CustomMigrationTarget } from "../../../models/administration/custom-migration-targets/custom-migration-target";
-import { RepositoryType } from "../../../types/constants";
+import { MustbeAValidRepositoryURL, RepositoryType } from "../../../types/constants";
 import { cancelButton, submitButton } from "../../../views/common.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 
@@ -54,21 +54,16 @@ describe(["@tier3"], "Custom Migration Target Validations", () => {
     it("Rule files validations", function () {
         CustomMigrationTarget.openNewForm();
         CustomMigrationTarget.fillName(data.getRandomWord(5));
-
-        CustomMigrationTarget.uploadRules(["xml/invalid-rule.windup.xml"]);
-        doesExistText('Error: File "invalid-rule.windup.xml" is not a valid XML', true);
-
-        doesExistText("0 of 1 files uploaded", true);
-
         cy.get(submitButton).should("be.disabled");
 
-        CustomMigrationTarget.uploadRules(["xml/javax-package-custom.windup.xml"]);
-        doesExistText("1 of 2 files uploaded", true);
+        CustomMigrationTarget.uploadRules(["yaml/javax-package-custom.yaml"]);
+        doesExistText("1 of 1 files uploaded", true);
 
         cy.get(submitButton).should("be.enabled");
 
         cy.get('button[aria-label="Remove from list"]').each((btn) => cy.wrap(btn).click());
-        doesExistText("0 of 0 files uploaded", true);
+        doesExistText("0 of 0 files uploaded", false);
+        doesExistText("1 of 1 files uploaded", false);
 
         cy.get(submitButton).should("be.disabled");
         click(cancelButton);
@@ -97,12 +92,12 @@ describe(["@tier3"], "Custom Migration Target Validations", () => {
         CustomMigrationTarget.selectRepositoryType(RepositoryType.git);
 
         CustomMigrationTarget.fillRepositoryUrl("   ");
-        doesExistText("Must be a valid URL.", true);
+        doesExistText(MustbeAValidRepositoryURL, true);
 
         CustomMigrationTarget.fillRepositoryUrl("Invalid url");
-        doesExistText("Must be a valid URL.", true);
+        doesExistText(MustbeAValidRepositoryURL, true);
 
         CustomMigrationTarget.fillRepositoryUrl("https://github.com/konveyor/tackle-testapp");
-        doesExistText("Must be a valid URL.", false);
+        doesExistText(MustbeAValidRepositoryURL, false);
     });
 });

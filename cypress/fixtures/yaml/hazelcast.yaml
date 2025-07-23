@@ -1,0 +1,41 @@
+- category: mandatory
+  customVariables: []
+  description: Embedded Hazelcast
+  effort: 3
+  labels:
+      - konveyor.io/target=cloud-readiness
+      - konveyor.io/source
+      - Hazelcast
+  links: []
+  message: "Consider using Kubernetes specific configuration.\n \n\t\t\t\t\t\t\t//
+      Example using Kubernetes specific configuration\n\n\t\t\t\t\t\t\tJoinConfig joinConfig
+      = config.getNetworkConfig().getJoin();\n\t\t\t\t\t\t\tconfig.getKubernetesConfig().setEnabled(true)\n\t\t\t\t\t\t\t
+      .setProperty(\"namespace\", \"namespace\")\n\t\t\t\t\t\t\t .setProperty(\"service-name\",
+      \"hazelcast-service\");"
+  ruleID: hazelcast-cloud-readiness-hz001
+  when:
+      or:
+          - java.referenced:
+                location: METHOD_CALL
+                pattern: com.hazelcast.config.JoinConfig.getMulticastConfig*
+          - java.referenced:
+                location: METHOD_CALL
+                pattern: com.hazelcast.config.JoinConfig.getTcpIpConfig*
+- category: mandatory
+  customVariables: []
+  description: Embedded Hazelcast dependencies
+  effort: 1
+  labels:
+      - konveyor.io/target=cloud-readiness
+      - konveyor.io/source
+      - Hazelcast
+  links: []
+  message: |-
+      The project uses hazelcast with the version between 2.0.0 and less than 5.0.0. Please use
+       hazelcast 5.0 or above.
+  ruleID: hazelcast-cloud-readiness-hz002
+  when:
+      java.dependency:
+          lowerbound: 2.0.0
+          name: com.hazelcast.hazelcast
+          upperbound: 4.2.7

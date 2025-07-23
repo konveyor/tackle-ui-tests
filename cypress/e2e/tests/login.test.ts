@@ -19,7 +19,7 @@ import { selectUserPerspective } from "../../utils/utils";
 import { migration } from "../types/constants";
 
 describe("Log In", () => {
-    it(["@tier1"], "Login to Pathfinder", function () {
+    it(["@ci"], "Open the UI and navigate to Migration/Application Inventory page", function () {
         selectUserPerspective(migration);
         cy.get("h1").should("contain", "Application inventory");
     });

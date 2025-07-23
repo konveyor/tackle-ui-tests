@@ -33,9 +33,8 @@ import { CredentialType, legacyPathfinder } from "../../types/constants";
 
 let stakeholders: Array<Stakeholders> = [];
 
-describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
-    // https://github.com/konveyor/tackle2-ui/issues/2397
-    // https://github.com/konveyor/tackle2-ui/issues/2399
+describe(["@tier3", "@rhsso"], "Bug MTA-5631: Architect RBAC operations", function () {
+    // https://issues.redhat.com/browse/MTA-5631
     let userArchitect = new UserArchitect(getRandomUserData());
     const application = new Application(getRandomApplicationData());
 
@@ -56,6 +55,7 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
         application.create();
         application.perform_review("low");
         application.perform_assessment("low", stakeholders);
+        userArchitect.login();
     });
 
     beforeEach("Persist session", function () {
@@ -64,12 +64,23 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
         });
     });
 
-    it("Issue 2397, 2399: Architect, validate buttons", function () {
-        userArchitect.login();
+    it("Architect, validate create application button", function () {
         Application.validateCreateAppButton(this.rbacRules);
+    });
+
+    it("Architect, validate top action menu", function () {
         Analysis.validateTopActionMenu(this.rbacRules);
+    });
+
+    it("Architect, validate analyze button", function () {
         Analysis.validateAnalyzeButton(this.rbacRules);
+    });
+
+    it("Bug MTA-5631: Architect, validate application context menu", function () {
         application.validateAppContextMenu(this.rbacRules);
+    });
+
+    it("Architect, validate ability to upload binary", function () {
         application.validateUploadBinary(this.rbacRules);
     });
 
