@@ -21,7 +21,6 @@ import {
     deleteByList,
     getRandomApplicationData,
     login,
-    logout,
 } from "../../../utils/utils";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
@@ -34,7 +33,8 @@ import { CredentialType, legacyPathfinder } from "../../types/constants";
 
 let stakeholders: Array<Stakeholders> = [];
 
-describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
+describe(["@tier3", "@rhsso"], "Bug MTA-5631: Architect RBAC operations", function () {
+    // https://issues.redhat.com/browse/MTA-5631
     let userArchitect = new UserArchitect(getRandomUserData());
     const application = new Application(getRandomApplicationData());
 
@@ -43,60 +43,53 @@ describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
     );
 
     before("Creating RBAC users, adding roles for them", function () {
+        User.loginKeycloakAdmin();
+        userArchitect.create();
+
         login();
+        cy.visit("/");
         AssessmentQuestionnaire.enable(legacyPathfinder);
-        // Navigate to stakeholders control tab and create new stakeholder
         stakeholders = createMultipleStakeholders(1);
 
         appCredentials.create();
         application.create();
         application.perform_review("low");
         application.perform_assessment("low", stakeholders);
-
-        logout();
-        User.loginKeycloakAdmin();
-        userArchitect.create();
+        userArchitect.login();
     });
 
     beforeEach("Persist session", function () {
-        // login as architect
-        userArchitect.login();
-
         cy.fixture("rbac").then(function (rbacRules) {
             this.rbacRules = rbacRules["architect"];
         });
     });
 
     it("Architect, validate create application button", function () {
-        //Architect is allowed to create applications
         Application.validateCreateAppButton(this.rbacRules);
     });
 
-    it("Architect, validate content of top kebab menu", function () {
-        //Architect is allowed to import applications
+    it("Architect, validate top action menu", function () {
         Analysis.validateTopActionMenu(this.rbacRules);
     });
 
-    it("Architect, validate presence of analyse button", function () {
-        //Architect is allowed to analyse applications
+    it("Architect, validate analyze button", function () {
         Analysis.validateAnalyzeButton(this.rbacRules);
     });
 
-    it("Architect, validate content of application kebab menu", function () {
+    it("Bug MTA-5631: Architect, validate application context menu", function () {
         application.validateAppContextMenu(this.rbacRules);
     });
 
-    it("Architect, validate availability of binary upload functionality", function () {
+    it("Architect, validate ability to upload binary", function () {
         application.validateUploadBinary(this.rbacRules);
     });
 
     after("Clean up", function () {
-        userArchitect.logout();
         login();
+        cy.visit("/");
         appCredentials.delete();
         deleteByList(stakeholders);
         application.delete();
-        logout();
         User.loginKeycloakAdmin();
         userArchitect.delete();
     });

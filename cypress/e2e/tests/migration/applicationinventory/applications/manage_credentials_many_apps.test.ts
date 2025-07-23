@@ -24,8 +24,7 @@ import {
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { Application } from "../../../../models/migration/applicationinventory/application";
-import { CredentialType, SEC, UserCredentials } from "../../../../types/constants";
+import { CredentialType, UserCredentials } from "../../../../types/constants";
 let source_credential: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;
 const sourceApplicationsList: Array<Analysis> = [];
@@ -34,8 +33,7 @@ const mavenApplicationsList: Array<Analysis> = [];
 describe(["@tier2"], "Manage credentials source analysis", () => {
     before("Login", function () {
         login();
-
-        // Create source Credentials
+        cy.visit("/");
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -61,10 +59,6 @@ describe(["@tier2"], "Manage credentials source analysis", () => {
         });
     });
 
-    afterEach("Reset url", function () {
-        Application.open(true);
-    });
-
     it("Adding source credentials to multiple apps", function () {
         let application = new Analysis(
             getRandomApplicationData("bookserverApp", {
@@ -75,10 +69,10 @@ describe(["@tier2"], "Manage credentials source analysis", () => {
         sourceApplicationsList.push(application);
 
         application = new Analysis(
-            getRandomApplicationData("dayTraderApp_Source+dependencies", {
-                sourceData: this.appData["daytrader-app"],
+            getRandomApplicationData("tackle-testapp-public", {
+                sourceData: this.appData["tackle-testapp-public"],
             }),
-            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
+            getRandomAnalysisData(this.analysisData["tackle-testapp-public"])
         );
         sourceApplicationsList.push(application);
 
@@ -86,7 +80,6 @@ describe(["@tier2"], "Manage credentials source analysis", () => {
             currentApplication.create();
         });
         manageCredentialsForMultipleApplications(sourceApplicationsList, source_credential);
-        cy.wait(2 * SEC);
         sourceApplicationsList.forEach((currentApplication) => {
             currentApplication.analyze();
             currentApplication.verifyAnalysisStatus("Completed");
@@ -95,10 +88,10 @@ describe(["@tier2"], "Manage credentials source analysis", () => {
 
     it("Adding maven credentials to multiple apps", function () {
         let application = new Analysis(
-            getRandomApplicationData("dayTraderApp_MavenCreds", {
-                sourceData: this.appData["daytrader-app"],
+            getRandomApplicationData("tackletestApp_MavenCreds", {
+                sourceData: this.appData["tackle-testapp-public"],
             }),
-            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_daytrader-app"])
+            getRandomAnalysisData(this.analysisData["tackle-testapp-public"])
         );
         mavenApplicationsList.push(application);
 
@@ -114,7 +107,6 @@ describe(["@tier2"], "Manage credentials source analysis", () => {
             currentApplication.create();
         });
         manageCredentialsForMultipleApplications(mavenApplicationsList, maven_credential);
-        cy.wait(2 * SEC);
         mavenApplicationsList.forEach((currentApplication) => {
             currentApplication.analyze();
             currentApplication.verifyAnalysisStatus("Completed");

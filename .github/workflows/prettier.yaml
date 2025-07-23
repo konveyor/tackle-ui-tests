@@ -1,11 +1,33 @@
 name: Code formatting
+
 on: pull_request
 
 jobs:
-  build:
-    name: Prettier
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: npm install .
-      - run: npm run check
+    prettier-check:
+        name: Prettier
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Use Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version-file: package.json
+
+            - name: Install dependencies
+              run: npm ci
+
+            - name: Check Prettier version
+              run: npx prettier --version
+
+            - name: Run Prettier and show issues
+              run: |
+                  echo "Checking formatting..."
+                  npx prettier --check './cypress/**/*.{ts,js,json}' || {
+                    echo -e "\n Prettier found formatting issues. Showing diff:\n"
+                    npx prettier --write './cypress/**/*.{ts,js,json}'
+                    git --no-pager diff
+                    exit 1
+                  }

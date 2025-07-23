@@ -17,7 +17,6 @@ limitations under the License.
 
 import {
     clickByText,
-    login,
     openManageColumns,
     restoreColumnsToDefault,
     selectColumns,
@@ -37,10 +36,6 @@ describe(["@tier3"], "Task manager - table column management validation", functi
         TaskManagerTableHeaders.terminated,
     ];
 
-    before("Login", function () {
-        login();
-    });
-
     it("Open task manager page - table default columns should be visible", function () {
         TaskManager.open();
         taskManagerDefaultColumns.forEach((column) => validateTextPresence(tableHead, column));
@@ -49,6 +44,7 @@ describe(["@tier3"], "Task manager - table column management validation", functi
 
     it("Select columns to display in the table view - they should be visible", function () {
         // Check the unchecked columns and verify that all columns are visible
+        TaskManager.open();
         selectColumns(columnsToSelect);
         Object.values(TaskManagerTableHeaders).forEach((column) =>
             validateTextPresence(tableHead, column)
@@ -56,17 +52,20 @@ describe(["@tier3"], "Task manager - table column management validation", functi
     });
 
     it("Validate ID checbox in the manage columns window is checked and disabled", function () {
+        TaskManager.open();
         openManageColumns();
         validateCheckBoxIsDisabled(TaskManagerTableHeaders.id, true);
         clickByText(button, save);
     });
 
     it("Validate restoring columns to default", function () {
+        TaskManager.open();
         restoreColumnsToDefault();
         taskManagerDefaultColumns.forEach((column) => validateTextPresence(tableHead, column));
     });
 
     it("Validate cancel button in the manage columns window", function () {
+        TaskManager.open();
         openManageColumns();
         clickByText(button, cancel);
         taskManagerDefaultColumns.forEach((column) => validateTextPresence(tableHead, column));

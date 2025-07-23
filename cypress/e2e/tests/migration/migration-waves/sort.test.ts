@@ -21,6 +21,8 @@ import {
     createMultipleBusinessServices,
     createMultipleMigrationWaves,
     createMultipleStakeholders,
+    deleteAllMigrationWaves,
+    deleteApplicationTableRows,
     deleteByList,
     getTableColumnData,
     login,
@@ -49,8 +51,10 @@ let businessServicesList: BusinessServices[] = [];
 describe(["@tier3"], "Migration Waves sort validations", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
 
-        // Create multiple Migration Waves
+        deleteAllMigrationWaves();
+        deleteApplicationTableRows();
         migrationWavesList = createMultipleMigrationWaves(2);
         stakeholdersList = createMultipleStakeholders(3);
         businessServicesList = createMultipleBusinessServices(3);
@@ -106,6 +110,7 @@ describe(["@tier3"], "Migration Waves sort validations", function () {
         const afterDescSortList = getTableColumnData(endDate);
         verifyDateSortDesc(afterDescSortList, unsortedList);
     });
+
     it("Sort Manage applications table", function () {
         for (let i = 0; i < 3; i++) {
             const appdata = {
@@ -130,6 +135,15 @@ describe(["@tier3"], "Migration Waves sort validations", function () {
         );
         const afterAscSortBusinessList = getTableColumnData("Business service");
         verifySortAsc(afterAscSortBusinessList, unsortedBusinessList);
+
+        clickOnSortButton(
+            "Business service",
+            SortType.descending,
+            MigrationWaveView.migrationWavesTable
+        );
+        const afterDescSortBusinessList = getTableColumnData("Business service");
+        verifySortDesc(afterDescSortBusinessList, unsortedBusinessList);
+
         clickOnSortButton(
             "Application Name",
             SortType.ascending,
@@ -138,31 +152,27 @@ describe(["@tier3"], "Migration Waves sort validations", function () {
         const afterAscSortappList = getTableColumnData("Application Name");
         verifySortAsc(afterAscSortappList, unsortedAppList);
 
-        clickOnSortButton("Owner", SortType.ascending, MigrationWaveView.migrationWavesTable);
-        const afterAscSortOwnerList = getTableColumnData("Owner");
-        verifySortAsc(afterAscSortOwnerList, unsortedOwnerList);
-        clickOnSortButton(
-            "Business service",
-            SortType.ascending,
-            MigrationWaveView.migrationWavesTable
-        );
-        const afterDescSortBusinessList = getTableColumnData("Business service");
-        verifyDateSortDesc(afterDescSortBusinessList, unsortedBusinessList);
         clickOnSortButton(
             "Application Name",
-            SortType.ascending,
+            SortType.descending,
             MigrationWaveView.migrationWavesTable
         );
         const afterDescSortappList = getTableColumnData("Application Name");
-        verifyDateSortDesc(afterDescSortappList, unsortedAppList);
+        verifySortDesc(afterDescSortappList, unsortedAppList);
 
         clickOnSortButton("Owner", SortType.ascending, MigrationWaveView.migrationWavesTable);
+        const afterAscSortOwnerList = getTableColumnData("Owner");
+        verifySortAsc(afterAscSortOwnerList, unsortedOwnerList);
+
+        clickOnSortButton("Owner", SortType.descending, MigrationWaveView.migrationWavesTable);
         const afterDescSortOwnerList = getTableColumnData("Owner");
-        verifyDateSortDesc(afterDescSortOwnerList, unsortedOwnerList);
+        verifySortDesc(afterDescSortOwnerList, unsortedOwnerList);
+
         cancelForm();
     });
 
     after("Perform test data clean up", function () {
+        cy.visit("/");
         // Delete the Migration Waves created before the tests
         deleteByList(migrationWavesList);
         deleteByList(applicationsList);

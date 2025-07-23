@@ -29,11 +29,11 @@ let jobFunctionsList: Array<Jobfunctions> = [];
 describe(["@tier3"], "Job functions pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         jobFunctionsList = createMultipleJobFunctions(11);
     });
 
     beforeEach("Interceptors", function () {
-        // Interceptors for Job functions
         cy.intercept("GET", "/hub/jobfunctions*").as("getJobfunctions");
     });
 

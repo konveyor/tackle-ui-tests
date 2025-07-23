@@ -20,29 +20,16 @@ import {
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
-    login,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { Application } from "../../../../models/migration/applicationinventory/application";
 import { TaskManager } from "../../../../models/migration/task-manager/task-manager";
-import {
-    AnalysisStatuses,
-    SEC,
-    TaskKind,
-    TaskStatus,
-    tdTag,
-    trTag,
-} from "../../../../types/constants";
+import { AnalysisStatuses, SEC, TaskKind, TaskStatus } from "../../../../types/constants";
 import { AppIssue } from "../../../../types/types";
-import { analysisColumn } from "../../../../views/analysis.view";
 import { infoAlertMessage } from "../../../../views/common.view";
 let applicationsList: Array<Analysis> = [];
 let application: Analysis;
 
 describe(["@tier1"], "Source Analysis without credentials", () => {
-    before("Login", function () {
-        login();
-    });
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
@@ -54,11 +41,12 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
+        cy.visit("/");
     });
 
     it(
         ["@tier0", "@ci"],
-        "Source Analysis on bookserver app and its issues validation",
+        "Bug MTA-5634: Source Analysis on bookserver app and its issues validation",
         function () {
             // For source code analysis application must have source code URL git or svn
             application = new Analysis(
@@ -70,7 +58,6 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
             application.create();
             applicationsList.push(application);
             cy.wait("@getApplication");
-            cy.wait(2000);
             application.analyze();
             checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
             application.verifyAnalysisStatus("Completed");
@@ -78,6 +65,36 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
                 this.analysisData["source_analysis_on_bookserverapp"]["issues"]
             );
             this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+                (currentIssue: AppIssue) => {
+                    application.validateAffected(currentIssue);
+                }
+            );
+        }
+    );
+
+    it(
+        ["@tier0", "@ci"],
+        "Bug MTA-5634: Source + dependency Analysis on bookserver app and its issues validation",
+        function () {
+            // For source code analysis application must have source code URL git or svn
+            application = new Analysis(
+                getRandomApplicationData("Dep_bookserverApp", {
+                    sourceData: this.appData["bookserver-app"],
+                }),
+                getRandomAnalysisData(
+                    this.analysisData["source_plus_dep_analysis_on_bookserverapp"]
+                )
+            );
+            application.create();
+            applicationsList.push(application);
+            cy.wait("@getApplication");
+            application.analyze();
+            checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
+            application.verifyAnalysisStatus("Completed");
+            application.validateIssues(
+                this.analysisData["source_plus_dep_analysis_on_bookserverapp"]["issues"]
+            );
+            this.analysisData["source_plus_dep_analysis_on_bookserverapp"]["issues"].forEach(
                 (currentIssue: AppIssue) => {
                     application.validateAffected(currentIssue);
                 }
@@ -110,19 +127,8 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
         application.analyze();
-        cy.get(tdTag, { log: false })
-            .contains(application.name)
-            .closest(trTag, { log: false })
-            .within(() => {
-                Analysis.verifyStatus(
-                    cy
-                        .get(analysisColumn, { log: false })
-                        .should("not.have.text", "Completed with Errors"),
-                    AnalysisStatuses.completed
-                );
-            });
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
     it("Cancel the analysis and check the status", function () {
@@ -141,8 +147,6 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
     });
 
     after("Perform test data clean up", function () {
-        cy.wait(2000);
-        Application.open(true);
         deleteByList(applicationsList);
     });
 });

@@ -31,6 +31,8 @@ import {
     selectFilter,
 } from "../../../../../utils/utils";
 import {
+    analysis,
+    AnalysisStatuses,
     archetypes,
     artifact,
     button,
@@ -41,7 +43,6 @@ import {
     name,
     repositoryType,
     risk,
-    SEC,
     subversion,
     tags,
     UserCredentials,
@@ -72,8 +73,8 @@ const fileName = "Legacy Pathfinder";
 describe(["@tier3"], "Application inventory filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
 
-        //Create Multiple Application with Business service and Tags
         let businessServicesList = createMultipleBusinessServices(2);
         stakeholders = createMultipleStakeholders(1);
 
@@ -126,7 +127,6 @@ describe(["@tier3"], "Application inventory filter validations", function () {
 
         // Enter an exact existing name and assert
         applySearchFilter(name, applicationsList[1].name);
-        cy.wait(2000);
         exists(applicationsList[1].name);
         notExists(applicationsList[0].name);
         clickByText(button, clearAllFilters);
@@ -135,7 +135,6 @@ describe(["@tier3"], "Application inventory filter validations", function () {
     it("Business service filter validations", function () {
         const validSearchInput = applicationsList[0].business;
         applySearchFilter("Business service", validSearchInput);
-        cy.wait(2000);
 
         exists(applicationsList[0].business);
         clickByText(button, clearAllFilters);
@@ -146,7 +145,6 @@ describe(["@tier3"], "Application inventory filter validations", function () {
 
         const validSearchInput = applicationsList[0].tags[0];
         applySearchFilter(tags, validSearchInput);
-        cy.wait(2000);
 
         exists(applicationsList[0].name);
         notExists(applicationsList[1].name);
@@ -169,13 +167,11 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
 
         application.manageCredentials(null, maven_credential.name);
         exists(application.name);
 
         applySearchFilter(credentialType, "Maven");
-        cy.wait(2000);
         exists(application.name);
         clickByText(button, clearAllFilters);
 
@@ -183,7 +179,6 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         exists(application.name);
 
         applySearchFilter(credentialType, "Source");
-        cy.wait(2000);
         exists(application.name);
         clickByText(button, clearAllFilters);
     });
@@ -205,12 +200,10 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         application.create();
         application1.create();
         cy.get("@getApplication");
-        cy.wait(2000);
 
         // Apply repository type filter check with Git
         // Check Application exists and application1 doesn't exist
         applySearchFilter(repositoryType, git);
-        cy.wait(2000);
         exists(application.name);
         notExists(application1.name);
         clickByText(button, clearAllFilters);
@@ -218,7 +211,6 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         // Apply repository type filter check with Subversion
         // Check Application1 exists and application doesn't exist
         applySearchFilter(repositoryType, subversion);
-        cy.wait(2000);
         exists(application1.name);
         notExists(application.name);
         clickByText(button, clearAllFilters);
@@ -233,7 +225,6 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         );
         application.create();
         cy.get("@getApplication");
-        cy.wait(2000);
 
         // Check application exists on the page
         exists(application.name);
@@ -241,7 +232,6 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         // Apply artifact filter check with associated artifact field
         // Check application exists and applicationList[0] doesn't exist
         applySearchFilter(artifact, "Associated artifact");
-        cy.wait(2000);
         exists(application.name);
         notExists(applicationsList[0].name);
         clickByText(button, clearAllFilters);
@@ -249,7 +239,6 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         // Apply artifact filter check with 'No associated artifact' field
         // Check applicationList[0] exists and application doesn't exist
         applySearchFilter(artifact, "No associated artifact");
-        cy.wait(2000);
         exists(applicationsList[0].name);
         notExists(application.name);
         clickByText(button, clearAllFilters);
@@ -264,19 +253,16 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         exists(application1.name);
 
         application.perform_assessment("low", stakeholders);
-        cy.wait(2 * SEC);
         application.verifyStatus("assessment", "Completed");
 
         // Apply search filter Risk - Low
         applySearchFilter(risk, "Low");
-        cy.wait(2 * SEC);
         exists(application.name);
         notExists(application1.name);
         clickByText(button, clearAllFilters);
 
         // apply search filter Risk - Unassessed
         applySearchFilter(risk, "Unassessed");
-        cy.wait(2 * SEC);
         exists(application1.name);
         notExists(application.name);
         clickByText(button, clearAllFilters);
@@ -293,7 +279,6 @@ describe(["@tier3"], "Application inventory filter validations", function () {
             null
         );
         archetype1.create();
-        cy.wait(2 * SEC);
         const appdata = {
             name: data.getAppName(),
             description: data.getDescription(),
@@ -304,7 +289,6 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         applicationsList.push(application1);
         application1.create();
         cy.get("@getApplication");
-        cy.wait(2 * SEC);
         const validSearchInput = archetype1.name;
         applySearchFilter("Archetypes", validSearchInput);
         exists(application1.name);
@@ -318,7 +302,6 @@ describe(["@tier3"], "Application inventory filter validations", function () {
             null
         );
         archetype2.create();
-        cy.wait(2 * SEC);
         Application.open();
         selectFilter(archetypes);
         cy.get(filterDropDownContainer).find(searchMenuToggle).click();
@@ -326,6 +309,61 @@ describe(["@tier3"], "Application inventory filter validations", function () {
 
         deleteByList([archetype1, archetype2]);
         deleteByList(tags);
+    });
+
+    it("Analysis status filter validation", function () {
+        const application1 = new Analysis(
+            getRandomApplicationData("tackle_test_app_1", {
+                sourceData: this.appData["tackle-testapp-public"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+        );
+        application1.create();
+        applicationsList.push(application1);
+
+        const application2 = new Analysis(
+            getRandomApplicationData("python-app-custom-rules", {
+                sourceData: this.appData["python-demo-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["python_demo_application"])
+        );
+
+        application2.create();
+        applicationsList.push(application2);
+
+        const application3 = new Analysis(
+            getRandomApplicationData("tackle_test_app_2", {
+                sourceData: this.appData["tackle-testapp"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+        );
+        application3.create();
+        applicationsList.push(application3);
+
+        application1.analyze();
+        application1.verifyAnalysisStatus(AnalysisStatuses.completed);
+
+        application3.analyze();
+        application3.verifyAnalysisStatus(AnalysisStatuses.failed);
+
+        applySearchFilter(analysis, AnalysisStatuses.notStarted);
+        exists(application2.name);
+        notExists(application3.name);
+        notExists(application1.name);
+
+        clickByText(button, clearAllFilters);
+
+        applySearchFilter(analysis, AnalysisStatuses.completed);
+        exists(application1.name);
+        notExists(application3.name);
+        notExists(application2.name);
+
+        clickByText(button, clearAllFilters);
+
+        applySearchFilter(analysis, AnalysisStatuses.failed);
+        exists(application3.name);
+        notExists(application2.name);
+        notExists(application1.name);
     });
 
     after("Perform test data clean up", function () {

@@ -37,6 +37,11 @@
         "repoType": "Subversion",
         "sourceRepo": "http://10.0.188.129/svn/mtaqe-svn/bookserver-no-trunk"
     },
+    "bookserver-svn-branch": {
+        "repoType": "Subversion",
+        "sourceRepo": "http://10.0.188.129/svn/mtaqe-svn/book-server",
+        "branch": "branches/bookserver-app"
+    },
     "konveyor-exampleapp": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/konveyor/example-applications",
@@ -80,8 +85,18 @@
         "repoType": "Git",
         "sourceRepo": "https://github.com/Shopify/sample-django-app"
     },
-    "cool-store-app": {
+    "coolstore-app": {
         "repoType": "Git",
         "sourceRepo": "https://github.com/konveyor-ecosystem/coolstore"
+    },
+    "python-app": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/konveyor/analyzer-lsp",
+        "rootPath": "examples/python"
+    },
+    "nodejs-app": {
+        "repoType": "Git",
+        "sourceRepo": "https://github.com/konveyor/analyzer-lsp",
+        "rootPath": "examples/nodejs"
     }
 }

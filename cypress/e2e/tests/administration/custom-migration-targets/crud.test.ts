@@ -21,6 +21,8 @@ import {
     click,
     clickByText,
     closeSuccessAlert,
+    deleteAllMigrationWaves,
+    deleteApplicationTableRows,
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
@@ -46,12 +48,15 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
     let analysisFixture: string;
     let languageLower: string;
 
-    before("Login", function () {
+    before(() => {
         login();
+        cy.visit("/");
+        deleteAllMigrationWaves();
+        deleteApplicationTableRows();
     });
 
     Object.values(Languages).forEach((language) => {
-        describe(`${language} language`, function () {
+        describe(`Custom Migration Targets CRUD | ${language} language`, function () {
             // Automates Polarion TC 300 & 305
 
             beforeEach("Fixtures and Interceptors", function () {
@@ -76,12 +81,13 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                     this.customMigrationTargets = customMigrationTargets;
                 });
 
-                cy.intercept("POST", "/hub/targets/*").as("postRule");
-                cy.intercept("GET", "/hub/targets*").as("getRule");
-                cy.intercept("PUT", "/hub/targets*/*").as("putRule");
-                cy.intercept("DELETE", "/hub/targets*/*").as("deleteRule");
+                cy.intercept("POST", "/hub/targets/*").as("postTarget");
+                cy.intercept("GET", "/hub/targets*").as("getTargets");
+                cy.intercept("PUT", "/hub/targets*/*").as("putTarget");
+                cy.intercept("DELETE", "/hub/targets*/*").as("deleteTarget");
 
                 CustomMigrationTarget.open(true);
+                cy.wait("@getTargets", { timeout: 30 * SEC });
             });
 
             it("Custom Migration Targets CRUD with rules uploaded manually", function () {
@@ -94,7 +100,6 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                     language
                 );
                 target.create();
-                cy.wait(2 * SEC);
                 cy.contains(CustomMigrationTargetView.takeMeThereNotification).click();
                 closeSuccessAlert();
                 cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
@@ -105,7 +110,7 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                 const newName = data.getRandomWord(8);
                 const newRules = {
                     ...target.ruleTypeData,
-                    rulesetPaths: ["xml/javax-package-custom.windup.xml"],
+                    rulesetPaths: ["yaml/javax-package-custom.yaml"],
                 };
 
                 target.edit({
@@ -120,14 +125,13 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                 target.ruleTypeData = newRules;
 
                 target.delete();
-                cy.wait("@deleteRule");
-                cy.wait(3 * SEC);
+                cy.wait("@deleteTarget");
+                cy.wait("@getTargets");
                 cy.get(CustomMigrationTargetView.cardContainer).then((container) => {
                     if (container.children().length > 1) {
-                        cy.get(CustomMigrationTargetView.card, { timeout: 12 * SEC }).should(
-                            "not.contain",
-                            target.name
-                        );
+                        cy.contains(CustomMigrationTargetView.card, target.name, {
+                            timeout: 5 * SEC,
+                        }).should("not.exist");
                     }
                 });
             });
@@ -173,6 +177,8 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                 click(cancelButton);
 
                 target.delete();
+                cy.wait("@deleteTarget");
+                cy.wait("@getTargets");
                 sourceCredential.delete();
             });
 
@@ -186,6 +192,7 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                     language
                 );
                 target.create();
+                cy.wait("@getTargets");
 
                 const target1 = new CustomMigrationTarget(
                     data.getRandomWord(8),
@@ -199,14 +206,15 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                     target1.create();
                 }
                 closeSuccessAlert();
-                cy.wait("@getRule");
+                cy.wait("@getTargets");
 
                 const dragButton = cy
                     .contains(CustomMigrationTargetView.card, target.name, { timeout: 12 * SEC })
                     .find(CustomMigrationTargetView.dragButton);
 
                 // Moves the custom migration target to the first place
-                cy.dragAndDrop(dragButton, cy.get(CustomMigrationTargetView.dragAndDropSection));
+                cy.dragAndDrop(dragButton, cy.get(CustomMigrationTargetView.cardContainer));
+                cy.wait("@getTargets");
 
                 Analysis.open(true);
                 const application = new Analysis(
@@ -238,6 +246,8 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                 if (language == Languages.Go) {
                     target1.delete();
                 }
+                cy.wait("@deleteTarget");
+                cy.wait("@getTargets");
                 application.delete();
             });
 
@@ -252,6 +262,7 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                     targetData.sources
                 );
                 target.create();
+                cy.wait("@getTargets");
                 closeSuccessAlert();
 
                 const application = new Analysis(
@@ -286,6 +297,8 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                 clickByText(button, "Cancel");
 
                 target.delete();
+                cy.wait("@deleteTarget");
+                cy.wait("@getTargets");
                 application.delete();
             });
         });

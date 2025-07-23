@@ -63,6 +63,7 @@ let stakeHoldersList: Stakeholders[];
 describe(["@tier2"], "Application validations", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
         businessservicesList = createMultipleBusinessServices(1);
         stakeHoldersList = createMultipleStakeholders(2);
     });
@@ -155,13 +156,10 @@ describe(["@tier2"], "Application validations", () => {
 
         // Cancel creating new application
         cy.get(commonView.cancelButton).click();
-        cy.wait(100);
-
         clickByText(button, createNewButton);
 
         // Close the "Create New" application inventory form
         cy.get(commonView.closeButton).click();
-        cy.wait(100);
 
         // Assert that application inventory page is opened
         cy.contains(button, createNewButton).should("exist");

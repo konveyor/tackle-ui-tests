@@ -1,11 +1,5 @@
 import "cypress-fs";
-import {
-    checkSuccessAlert,
-    cleanupDownloads,
-    click,
-    login,
-    notExists,
-} from "../../../../utils/utils";
+import { checkSuccessAlert, cleanupDownloads, click, notExists } from "../../../../utils/utils";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import {
     cloudNative,
@@ -24,16 +18,11 @@ const cloudNativePath = "questionnaire_import/cloud-native.yaml";
 
 const cloudNativeDownloadPath = "cypress/downloads/";
 
-describe(["@tier3"], "Miscellaneous Questinnaire tests", () => {
-    before("Login", function () {
-        login();
-    });
-
+describe(["@tier3"], "Miscellaneous Questionnaire tests", () => {
     it("Download YAML template", function () {
         // Polarion TC MTA-397
         AssessmentQuestionnaire.open();
         click(downloadYamlTemplate);
-        cy.wait(6000);
         cy.readFile(filePath).then((fileContent) => {
             try {
                 yaml.load(fileContent);

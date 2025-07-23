@@ -20,15 +20,13 @@ import {
     click,
     clickByText,
     exists,
-    login,
     notExists,
     selectItemsPerPage,
-    selectUserPerspective,
 } from "../../../../../utils/utils";
 import { Jobfunctions } from "../../../../models/migration/controls/jobfunctions";
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
-import { migration, stakeholders, tdTag, trTag } from "../../../../types/constants";
+import { stakeholders, tdTag, trTag } from "../../../../types/constants";
 import { expandRow } from "../../../../views/common.view";
 import { navTab } from "../../../../views/menu.view";
 import { stakeHoldersTable } from "../../../../views/stakeholders.view";
@@ -37,10 +35,6 @@ var stakeholdergroupsList: Array<Stakeholdergroups> = [];
 var stakeholdergroupNames: Array<string> = [];
 
 describe(["@tier3"], "Stakeholder linked to stakeholder groups and job function", () => {
-    before("Login", function () {
-        login();
-    });
-
     beforeEach("Interceptors", function () {
         // Interceptors for stakeholder groups
         cy.intercept("POST", "/hub/stakeholdergroups*").as("postStakeholdergroups");
@@ -56,9 +50,6 @@ describe(["@tier3"], "Stakeholder linked to stakeholder groups and job function"
     });
 
     it("Stakeholder group attach, update and delete dependency on stakeholder", function () {
-        selectUserPerspective(migration);
-
-        // Create two stakeholder groups
         for (let i = 0; i < 2; i++) {
             const stakeholdergroup = new Stakeholdergroups(
                 data.getCompanyName(),
@@ -69,7 +60,6 @@ describe(["@tier3"], "Stakeholder linked to stakeholder groups and job function"
             stakeholdergroupNames.push(stakeholdergroup.name);
         }
 
-        // Create new stakeholder and attach two stakeholder groups
         const stakeholder = new Stakeholders(
             data.getEmail(),
             data.getFullName(),
@@ -82,7 +72,6 @@ describe(["@tier3"], "Stakeholder linked to stakeholder groups and job function"
 
         // Check if both the stakeholder groups got attached to stakeholder
         selectItemsPerPage(100);
-        cy.wait(2000);
         cy.get(tdTag)
             .contains(stakeholder.email)
             .parent(trTag)
@@ -97,12 +86,10 @@ describe(["@tier3"], "Stakeholder linked to stakeholder groups and job function"
         var updatedStakeholderGroupName = data.getCompanyName();
         stakeholdergroupsList[1].edit({ name: updatedStakeholderGroupName });
         cy.wait("@getStakeholdergroups");
-        cy.wait(2000);
 
         clickByText(navTab, stakeholders);
         // Verify if the second stakeholder group's name attached to the stakeholder got updated
         selectItemsPerPage(100);
-        cy.wait(2000);
         cy.get(tdTag)
             .contains(stakeholder.email)
             .parent(trTag)
@@ -112,15 +99,12 @@ describe(["@tier3"], "Stakeholder linked to stakeholder groups and job function"
             .get("div > dd")
             .should("contain", updatedStakeholderGroupName);
 
-        // Delete second stakeholder group
         stakeholdergroupsList[1].delete();
         cy.wait("@getStakeholdergroups");
         notExists(stakeholdergroupsList[1].name);
 
         clickByText(navTab, stakeholders);
-        // Verify if the second stakeholder group's name got detached from stakeholder
         selectItemsPerPage(100);
-        cy.wait(2000);
         cy.get(tdTag)
             .contains(stakeholder.email)
             .parent(trTag)
@@ -134,15 +118,12 @@ describe(["@tier3"], "Stakeholder linked to stakeholder groups and job function"
         cy.wait("@getStakeholders");
         notExists(stakeholder.email, stakeHoldersTable);
 
-        // Delete first stakeholder group
         stakeholdergroupsList[0].delete();
         cy.wait("@getStakeholdergroups");
         notExists(stakeholdergroupsList[0].name);
     });
 
     it("Job function attach, update and delete dependency on stakeholder", function () {
-        selectUserPerspective(migration);
-
         const jobfunction = new Jobfunctions(data.getJobTitle());
         jobfunction.create();
         cy.wait("@postJobfunction");
@@ -156,7 +137,6 @@ describe(["@tier3"], "Stakeholder linked to stakeholder groups and job function"
 
         // Check if the job function got attached to stakeholder
         selectItemsPerPage(100);
-        cy.wait(2000);
         cy.get(tdTag)
             .contains(stakeholder.email)
             .parent(trTag)
@@ -172,17 +152,14 @@ describe(["@tier3"], "Stakeholder linked to stakeholder groups and job function"
         clickByText(navTab, stakeholders);
         // Verify if the job function's name attached to the stakeholder got updated
         selectItemsPerPage(100);
-        cy.wait(2000);
         cy.get(tdTag)
             .contains(stakeholder.email)
             .parent(trTag)
             .find("td[data-label='Job function']")
             .should("contain", updatedJobfunctionName);
 
-        // Remove the job function from the stakeholder
         stakeholder.removeJobfunction();
         cy.wait("@getJobfunctions");
-        cy.wait(2000);
 
         jobfunction.delete();
         cy.wait("@getJobfunctions");
@@ -191,7 +168,6 @@ describe(["@tier3"], "Stakeholder linked to stakeholder groups and job function"
         clickByText(navTab, stakeholders);
         // Verify if the job function's name got detached from stakeholder
         selectItemsPerPage(100);
-        cy.wait(2000);
         cy.get(tdTag)
             .contains(stakeholder.email)
             .parent(trTag)

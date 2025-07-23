@@ -27,7 +27,7 @@ import { AssessmentQuestionnaire } from "../../../models/administration/assessme
 import { Archetype } from "../../../models/migration/archetypes/archetype";
 import { Stakeholders } from "../../../models/migration/controls/stakeholders";
 import { Tag } from "../../../models/migration/controls/tags";
-import { legacyPathfinder, SEC } from "../../../types/constants";
+import { legacyPathfinder } from "../../../types/constants";
 
 let stakeholders: Stakeholders[];
 let tags: Tag[];
@@ -35,6 +35,7 @@ let tags: Tag[];
 describe(["@tier2"], "Archetype assessment and review tests", () => {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
 
@@ -53,12 +54,10 @@ describe(["@tier2"], "Archetype assessment and review tests", () => {
         );
         Archetype.open(true);
         archetype.create();
-        cy.wait(2 * SEC);
 
         archetype.verifyStatus("assessment", "Not started");
         archetype.perform_assessment("low", stakeholders);
         Archetype.open(true);
-        cy.wait(2 * SEC);
         archetype.validateAssessmentField("Low");
         archetype.verifyStatus("assessment", "Completed");
 
@@ -67,12 +66,10 @@ describe(["@tier2"], "Archetype assessment and review tests", () => {
         Archetype.open(true);
         archetype.verifyStatus("review", "Not started");
         archetype.perform_review("low");
-        cy.wait(2 * SEC);
         archetype.verifyStatus("review", "Completed");
         archetype.validateReviewFields();
 
         archetype.delete();
-        cy.wait(2 * SEC);
     });
 
     it("Archetype assessment and review with medium risk", function () {
@@ -84,17 +81,11 @@ describe(["@tier2"], "Archetype assessment and review tests", () => {
             stakeholders
         );
         archetype.create();
-        cy.wait(2 * SEC);
-
         archetype.perform_assessment("medium", stakeholders);
-        cy.wait(2 * SEC);
         archetype.validateAssessmentField("Medium");
         archetype.perform_review("medium");
-        cy.wait(2 * SEC);
         archetype.validateReviewFields();
-
         archetype.delete();
-        cy.wait(2 * SEC);
     });
 
     it("Archetype assessment and review with high risk", function () {
@@ -106,18 +97,12 @@ describe(["@tier2"], "Archetype assessment and review tests", () => {
             stakeholders
         );
         archetype.create();
-        cy.wait(2 * SEC);
-
         archetype.perform_assessment("high", stakeholders);
-        cy.wait(2 * SEC);
         archetype.validateAssessmentField("High");
 
         archetype.perform_review("high");
-        cy.wait(2 * SEC);
         archetype.validateReviewFields();
-
         archetype.delete();
-        cy.wait(2 * SEC);
     });
 
     after("Clear test data", function () {

@@ -17,7 +17,7 @@ limitations under the License.
 
 import * as data from "../../../utils/data_utils";
 import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
-import { deleteByList, getRandomApplicationData, login, logout } from "../../../utils/utils";
+import { deleteByList, getRandomApplicationData, login } from "../../../utils/utils";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
 import { User } from "../../models/keycloak/users/user";
@@ -25,7 +25,7 @@ import { UserMigrator } from "../../models/keycloak/users/userMigrator";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
-import { CredentialType, legacyPathfinder, SEC } from "../../types/constants";
+import { CredentialType, legacyPathfinder } from "../../types/constants";
 
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
@@ -39,13 +39,11 @@ describe(["@tier3", "@rhsso"], "Migrator RBAC operations", () => {
     );
 
     before("Creating RBAC users, adding roles for them", () => {
-        //Need to log in as admin and create simple app with known name to use it for tests
         login();
+        cy.visit("/");
         AssessmentQuestionnaire.enable(legacyPathfinder);
-        // Navigate to stakeholders control tab and create new stakeholder
         const stakeholder = new Stakeholders(data.getEmail(), data.getFullName());
         stakeholder.create();
-        cy.wait(2 * SEC);
 
         stakeholdersList.push(stakeholder);
         stakeholdersNameList.push(stakeholder.name);
@@ -53,51 +51,44 @@ describe(["@tier3", "@rhsso"], "Migrator RBAC operations", () => {
         appCredentials.create();
         application.create();
         application.perform_review("low");
-        logout();
-        //Logging in as keycloak admin to create migrator user and test it
+
         User.loginKeycloakAdmin();
         userMigrator.create();
     });
 
     beforeEach("Persist session", function () {
-        // Login as Migrator
         userMigrator.login();
-
         cy.fixture("rbac").then(function (rbacRules) {
             this.rbacRules = rbacRules["migrator"];
         });
     });
 
     it("Migrator, validate create application button", function () {
-        //Migrator is not allowed to create applications
         Application.validateCreateAppButton(this.rbacRules);
     });
 
-    it("Migrator, validate content of top kebab menu", function () {
-        //migrator is allowed to import applications
+    it("Migrator, validate top action menu", function () {
         Analysis.validateTopActionMenu(this.rbacRules);
     });
 
-    it("Migrator, validate presence of analyse button", function () {
-        //Migrator is allowed to analyse applications
+    it("Migrator, validate analyze button", function () {
         Analysis.validateAnalyzeButton(this.rbacRules);
     });
 
-    it("Migrator, validate content of application kebab menu", function () {
+    it("Migrator, validate application context menu", function () {
         application.validateAppContextMenu(this.rbacRules);
     });
 
-    it("Migrator, validate availability of binary upload functionality", function () {
+    it("Migrator, validate ability to upload binary", function () {
         application.validateUploadBinary(this.rbacRules);
     });
 
     after("", () => {
-        userMigrator.logout();
         login();
+        cy.visit("/");
         appCredentials.delete();
         deleteByList(stakeholdersList);
         application.delete();
-        logout();
         User.loginKeycloakAdmin();
         userMigrator.delete();
     });

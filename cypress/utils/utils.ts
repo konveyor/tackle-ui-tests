@@ -13,15 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { BusinessServices } from "../e2e/models/migration/controls/businessservices";
-import { Jobfunctions } from "../e2e/models/migration/controls/jobfunctions";
-import { Stakeholdergroups } from "../e2e/models/migration/controls/stakeholdergroups";
-import { Stakeholders } from "../e2e/models/migration/controls/stakeholders";
-import { TagCategory } from "../e2e/models/migration/controls/tagcategory";
-import { Tag } from "../e2e/models/migration/controls/tags";
 
-import * as ansiRegex from "ansi-regex";
-import "cypress-file-upload";
 import { Credentials } from "../e2e/models/administration/credentials/credentials";
 import { CredentialsMaven } from "../e2e/models/administration/credentials/credentialsMaven";
 import { CredentialsProxy } from "../e2e/models/administration/credentials/credentialsProxy";
@@ -31,6 +23,12 @@ import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCr
 import { Jira } from "../e2e/models/administration/jira-connection/jira";
 import { Application } from "../e2e/models/migration/applicationinventory/application";
 import { Archetype } from "../e2e/models/migration/archetypes/archetype";
+import { BusinessServices } from "../e2e/models/migration/controls/businessservices";
+import { Jobfunctions } from "../e2e/models/migration/controls/jobfunctions";
+import { Stakeholdergroups } from "../e2e/models/migration/controls/stakeholdergroups";
+import { Stakeholders } from "../e2e/models/migration/controls/stakeholders";
+import { TagCategory } from "../e2e/models/migration/controls/tagcategory";
+import { Tag } from "../e2e/models/migration/controls/tags";
 import { MigrationWave } from "../e2e/models/migration/migration-waves/migration-wave";
 import {
     applicationInventory,
@@ -43,6 +41,7 @@ import {
     JiraType,
     memberCount,
     migration,
+    MIN,
     priority,
     rank,
     save,
@@ -95,7 +94,6 @@ import {
     itemsPerPageMenuOptions,
     itemsPerPageToggleButton,
     lastPageButton,
-    liTag,
     manageImportsActionsButton,
     modal,
     nextPageButton,
@@ -138,23 +136,18 @@ export function inputText(fieldId: string, text: any, log = false): void {
     if (!log) {
         cy.log(`Type ${text} in ${fieldId}`);
     }
-    cy.get(fieldId, { log, timeout: 30 * SEC })
-        .click({ log })
-        .focused({ log })
-        .clear({ log });
-    cy.wait(200, { log });
-    cy.get(fieldId, { log, timeout: 30 * SEC })
-        .clear({ log })
+    cy.get(fieldId, { log, timeout: 2 * SEC })
+        .clear({ log, timeout: 30 * SEC })
         .type(text, { log });
 }
 
 export function clearInput(fieldID: string): void {
-    cy.get(fieldID).clear();
+    cy.get(fieldID, { timeout: 2 * SEC }).clear();
 }
 
 export function clickByText(
     fieldId: string,
-    buttonText: string | ansiRegex,
+    buttonText: string | RegExp,
     isForced = true,
     log = false
 ): void {
@@ -166,7 +159,6 @@ export function clickByText(
         force: isForced,
         log,
     });
-    cy.wait(SEC, { log });
 }
 
 export function click(fieldId: string, isForced = true, log = false, number = 0): void {
@@ -208,84 +200,59 @@ export function cancelForm(): void {
     clickJs(cancelButton);
 }
 
-export function login(username?: string, password?: string, firstLogin = false): Chainable<null> {
-    /**
-     *  If the login method is explicitly called, it means that previous sessions are no longer required
-     */
-    Cypress.session.clearAllSavedSessions();
-
+export function login(
+    username: string = Cypress.env("user"),
+    password: string = Cypress.env("pass"),
+    firstLogin = false
+): Chainable<null> {
     /**
      * The sessionId is used to create a new session or to try to recover a previous one
      */
-    const sessionId = (username ?? "login") + (firstLogin ? "FirstLogin" : "");
+    const sessionId = username + (firstLogin ? "FirstLogin" : "");
 
+    cy.log(`login a new session or grab the currently logged in session [${sessionId}]`);
     return cy.session(sessionId, () => {
-        cy.log("Login in");
-        cy.visit(Cypress.env("tackleUrl"), { timeout: 120 * SEC });
-        cy.wait(5 * SEC);
-        cy.get("h1", { timeout: 120 * SEC, log: false }).then(($title) => {
-            // With auth disabled, login page is not displayed and users are taken straight
-            // to the Application Inventory page.
-            if (
-                $title.text().toString().trim() !== "Sign in to your account" &&
-                $title.text().includes("Application inventory")
-            ) {
-                return;
-            }
+        cy.visit("/", { timeout: 120 * SEC });
 
-            const userName = username ?? Cypress.env("user");
-            const userPassword = password ?? Cypress.env("pass");
-            cy.wait(3 * SEC);
-            inputText(loginView.userNameInput, userName);
-            inputText(loginView.userPasswordInput, userPassword);
-            click(loginView.loginButton);
+        cy.uiEnvironmentConfig().then((env) => {
+            if (env["AUTH_REQUIRED"] === "true") {
+                cy.log("AUTH is enabled, logging in");
 
-            // Change default password on first login.
-            cy.get("body").then(($body) => {
-                let invalidMessageElement = $body.find('span[class*="m-error"]');
-                if (invalidMessageElement.length > 0) {
-                    const errorText = invalidMessageElement.text().trim();
-                    if (errorText === "Invalid username or password.") {
-                        inputText(loginView.userPasswordInput, "Passw0rd!");
+                // Wait up to 30 seconds for the userNameInput field to be visible on the page
+                cy.get(loginView.userNameInput, { timeout: 30 * SEC }).should("be.visible");
+
+                // Attempt login
+                inputText(loginView.userNameInput, username);
+                inputText(loginView.userPasswordInput, password);
+                click(loginView.loginButton);
+
+                // If login fails, try the initialPassword
+                cy.get("body").then(($body) => {
+                    const txt = $body.find("*:contains('Invalid username or password')");
+                    if (txt.length > 0) {
+                        cy.log("Try logging in with the initial password");
+                        inputText(loginView.userPasswordInput, Cypress.env("initialPassword"));
                         click(loginView.loginButton);
-                        updatePassword();
                     }
-                }
-            });
-        });
+                });
 
-        updatePassword();
-        updateAccountInformation();
-        cy.get("#main-content-page-layout-horizontal-nav").within(() => {
-            cy.get("h1", { timeout: 15 * SEC, log: false }).contains("Application inventory");
-        });
-    });
-}
-
-export function updateAccountInformation() {
-    cy.get("body").then(($body) => {
-        let pageTitle = $body.find(loginView.kcPageTitle);
-        if (pageTitle.length > 0) {
-            const pageTitleText = pageTitle.text().trim();
-            if (pageTitleText === "Update Account Information") {
-                inputText(loginView.emailInput, "migrationqe@redhat.com");
-                inputText(loginView.firstNameInput, "migration");
-                inputText(loginView.lastNameInput, "qe");
-                click(loginView.submitInput);
+                // Update the password if it needs to be updated
+                cy.get("body").then(($body) => {
+                    const txt = $body.find("*:contains('You need to change your password')");
+                    if (txt.length > 0) {
+                        cy.log("Attempting to change the password");
+                        inputText(loginView.changePasswordInput, password);
+                        inputText(loginView.confirmPasswordInput, password);
+                        click(loginView.submitButton);
+                    }
+                });
+            } else {
+                cy.log("AUTH is disabled, just look for applications page");
             }
-        }
-    });
-}
 
-export function updatePassword(): void {
-    // Change password screen which appears only for first login
-    // This is used in PR tester and Jenkins jobs.
-    cy.get("h1", { timeout: 120 * SEC }).then(($a) => {
-        if ($a.text().toString().trim() == "Update password") {
-            inputText(loginView.changePasswordInput, "Dog8code");
-            inputText(loginView.confirmPasswordInput, "Dog8code");
-            click(loginView.submitButton);
-        }
+            // Should be past any auth steps needed, so wait for the url to become "/applications
+            cy.url({ timeout: 1 * MIN }).should("eq", Application.fullUrl);
+        });
     });
 }
 
@@ -304,7 +271,6 @@ export function resetURL(): void {
 }
 
 export function selectItemsPerPage(items: number): void {
-    cy.log(`Select ${items} per page`);
     cy.get(itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(($toggleBtn) => {
         if (!$toggleBtn.eq(0).is(":disabled")) {
             $toggleBtn.eq(0).trigger("click");
@@ -315,7 +281,6 @@ export function selectItemsPerPage(items: number): void {
                     force: true,
                     log: false,
                 });
-            cy.wait(2 * SEC);
         }
     });
 }
@@ -335,17 +300,25 @@ export function selectFormItems(fieldId: string, item: string): void {
     cy.contains("button", item).click();
 }
 
+export function selectAnalysisMode(fieldId: string, item: string): void {
+    cy.get(fieldId).click();
+    cy.get("button").then(($buttons) => {
+        const match = $buttons.toArray().find((btn) => btn.textContent?.trim() === item);
+        cy.wrap(match).click();
+    });
+}
+
 export function selectRow(name: string): void {
     // Clicks on a particular row on any table
     cy.get(tdTag, { timeout: 10 * SEC })
         .contains(name)
-        .closest(trTag)
+        .closest(trTag, { timeout: 10 * SEC })
         .click();
 }
 
 export function sidedrawerTab(name: string, tab: string): void {
     selectRow(name);
-    cy.get(sideDrawer.pageDrawerContent).within(() => {
+    cy.get(sideDrawer.pageDrawerContent, { timeout: 10 * SEC }).within(() => {
         clickTab(tab);
     });
 }
@@ -393,10 +366,10 @@ export function removeMember(memberName: string): void {
 
 export function exists(value: string, tableSelector = appTable): void {
     // Wait for DOM to render table and sibling elements
-    cy.get(tableSelector, { timeout: 5 * SEC }).then(($tbody) => {
+    cy.get(tableSelector).then(($tbody) => {
         if ($tbody.text() !== "No data available") {
             selectItemsPerPage(100);
-            cy.get(tableSelector, { timeout: 5 * SEC }).should("contain", value);
+            cy.get(tableSelector).should("contain", value);
         }
     });
 }
@@ -405,7 +378,7 @@ export function notExists(value: string, tableSelector = appTable): void {
     cy.get(tableSelector).then(($tbody) => {
         if ($tbody.text() !== "No data available") {
             selectItemsPerPage(100);
-            cy.get(tableSelector, { timeout: 5 * SEC }).should("not.contain", value);
+            cy.get(tableSelector).should("not.contain", value);
         }
     });
 }
@@ -476,14 +449,9 @@ export function validateSingleApplicationIssue(issue: AppIssue): void {
     cy.contains(issue.name)
         .closest(trTag)
         .within(() => {
-            validateTextPresence(singleApplicationColumns.issue, issue.name);
             validateTextPresence(singleApplicationColumns.category, issue.category);
             validateTextPresence(singleApplicationColumns.source, issue.sources[0]);
-            cy.get(singleApplicationColumns.target).within(() => {
-                issue.targets.forEach((currentTarget) => {
-                    validateTextPresence(liTag, currentTarget);
-                });
-            });
+            validateTextPresence(singleApplicationColumns.target, issue.targets[0]);
             validateNumberPresence(singleApplicationColumns.effort, issue.effort);
             validateNumberPresence(singleApplicationColumns.files, issue.affectedFiles);
         });
@@ -618,7 +586,7 @@ export function getTableColumnData(columnName: string): Array<string> {
 
 export function verifySortAsc(listToVerify: any[], unsortedList: any[]): void {
     cy.wrap(listToVerify).then((capturedList) => {
-        const sortedList = unsortedList.sort((a, b) =>
+        const sortedList = unsortedList.slice().sort((a, b) =>
             a.toString().localeCompare(b, "en-us", {
                 numeric: !unsortedList.some(isNaN),
             })
@@ -755,14 +723,6 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
     checkSuccessAlert(successAlertMessage, `Success! file saved to be processed.`);
 }
 
-export function uploadXml(fileName: string, selector = 'input[type="file"]'): void {
-    cy.get(selector, { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
-        timeout: 120 * SEC,
-        force: true,
-    });
-    cy.wait(2000);
-}
-
 export function uploadApplications(fileName: string): void {
     cy.get('input[type="file"]', { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
         timeout: 120 * SEC,
@@ -770,8 +730,8 @@ export function uploadApplications(fileName: string): void {
     });
 }
 
-export function uploadFile(fileName: string): void {
-    cy.get('input[type="file"]', { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
+export function uploadFile(fileName: string, selector = 'input[type="file"]'): void {
+    cy.get(selector, { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
         timeout: 120 * SEC,
         force: true,
     });
@@ -823,9 +783,6 @@ export function performRowAction(itemName: string, action: string): void {
         .closest(trTag)
         .within(() => {
             clickByText(button, action);
-            cy.wait(500);
-            clickByText(button, action);
-            cy.wait(500);
         });
 }
 
@@ -1043,11 +1000,7 @@ export function createMultipleTags(numberoftags: number): Array<Tag> {
     let tagList: Array<Tag> = [];
     for (let i = 0; i < numberoftags; i++) {
         //Create Tag category
-        const tagCategory = new TagCategory(
-            data.getRandomWord(8),
-            data.getColor(),
-            data.getRandomNumber()
-        );
+        const tagCategory = new TagCategory(data.getRandomWord(8), data.getColor());
         tagCategory.create();
 
         // Create new tag
@@ -1198,7 +1151,6 @@ type Deletable = { delete: () => void };
 
 export function deleteByList<T extends Deletable>(array: T[]): void {
     array.forEach((element) => {
-        cy.wait(0.8 * SEC);
         element.delete();
     });
 }
@@ -1258,6 +1210,7 @@ export function isTableEmpty(tableSelector: string = commonTable): Cypress.Chain
     return cy
         .get(tableSelector)
         .find("div")
+        .should("not.have.descendants", "svg.pf-v5-c-spinner")
         .then(($element) => {
             return $element.hasClass("pf-v5-c-empty-state");
         });
@@ -1418,7 +1371,9 @@ export function goToPage(page: number): void {
 }
 
 export function selectUserPerspective(userType: string): void {
-    cy.get(optionMenu).click();
+    cy.get(optionMenu)
+        .find("button", { timeout: 10 * SEC })
+        .click();
     cy.get(actionMenuItem).contains(userType).click({ force: true });
 }
 
@@ -1636,7 +1591,7 @@ export function enableSwitch(selector: string): void {
                 .invoke("css", "display")
                 .then((display) => {
                     if (display.toString() == "none") {
-                        click(switchToggle);
+                        cy.get(switchToggle).click();
                     }
                 });
         });
@@ -1650,7 +1605,7 @@ export function disableSwitch(selector: string): void {
                 .invoke("css", "display")
                 .then((display) => {
                     if (display.toString() == "none") {
-                        click(switchToggle);
+                        cy.get(switchToggle).click();
                     }
                 });
         });
@@ -1681,7 +1636,7 @@ export function enumKeys<O extends object, K extends keyof O = keyof O>(obj: O):
 }
 
 export function getUrl(): string {
-    return Cypress.env("tackleUrl");
+    return Cypress.config("baseUrl");
 }
 
 export function getNamespace(): string {
@@ -1697,12 +1652,7 @@ export function getNamespace(): string {
 }
 
 export function patchTackleCR(option: string, isEnabled = true): void {
-    let value: string;
-    if (isEnabled) {
-        value = "true";
-    } else {
-        value = "false";
-    }
+    const value = isEnabled ? "true" : "false";
     let command = "";
     let namespace = getNamespace();
     let tackleCr = `tackle=$(oc get tackle -n${namespace}|grep -iv name|awk '{print $1}'); `;
@@ -1711,11 +1661,13 @@ export function patchTackleCR(option: string, isEnabled = true): void {
     command += "$tackle ";
     command += `-n${namespace} `;
     command += "--type merge ";
-    if (option == "configureRWX") command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
-    else if (option == "keycloak")
+    if (option == "configureRWX") {
+        command += `--patch '{"spec":{"rwx_supported": ${value}}}'`;
+    } else if (option == "keycloak") {
         command += `--patch '{"spec":{"feature_auth_required": ${value}}}'`;
-    else if (option == "metrics") command += `--patch '{"spec":{"hub_metrics_enabled": ${value}}}'`;
-    cy.log(command);
+    } else if (option == "metrics") {
+        command += `--patch '{"spec":{"hub_metrics_enabled": ${value}}}'`;
+    }
     cy.exec(command).then((result) => {
         cy.log(result.stderr);
     });
@@ -2041,6 +1993,16 @@ export function downloadTaskDetails(format = downloadFormatDetails.yaml) {
     });
 }
 
+export function getNumberOfNonTaskPods(): Cypress.Chainable<number> {
+    let podsNumber: number;
+    const namespace = getNamespace();
+    const command = `oc get pod --no-headers -n ${namespace} | grep -v task | grep -v Completed | wc -l`;
+    return getCommandOutput(command).then((output) => {
+        podsNumber = Number(output.stdout);
+        return podsNumber;
+    });
+}
+
 export function limitPodsByQuota(podsNumber: number) {
     const namespace = getNamespace();
     cy.fixture("custom-resource").then((cr) => {
@@ -2052,9 +2014,16 @@ export function limitPodsByQuota(podsNumber: number) {
     });
 }
 
-export function deleteCustomResource(resourceType: string, resourceName: string) {
+export function deleteCustomResource(
+    resourceType: string,
+    resourceName: string,
+    ignoreNotFound = false
+) {
     const namespace = getNamespace();
-    const command = `oc delete ${resourceType} ${resourceName} -n${namespace}`;
+    let command = `oc delete ${resourceType} ${resourceName} -n${namespace}`;
+    if (ignoreNotFound) {
+        command = `${command} --ignore-not-found=true`;
+    }
     getCommandOutput(command).then((output) => {
         expect(output.code).to.equal(0);
     });

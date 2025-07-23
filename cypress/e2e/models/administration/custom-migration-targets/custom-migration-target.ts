@@ -2,13 +2,15 @@ import {
     click,
     clickByText,
     clickJs,
+    clickWithinByText,
     inputText,
     selectUserPerspective,
     submitForm,
-    uploadXml,
+    uploadFile,
 } from "../../../../utils/utils";
 import {
     button,
+    clearAllFilters,
     createNewButton,
     customMigrationTargets,
     CustomRuleType,
@@ -54,17 +56,31 @@ export class CustomMigrationTarget {
         this.sources = sources;
     }
 
-    public static fullUrl = Cypress.env("tackleUrl") + "/migration-targets";
+    public static fullUrl = Cypress.config("baseUrl") + "/migration-targets";
 
+    /**
+     * Opens the custom migration target page if not already there
+     * This method checks that the target cards are present before continuing,
+     * this assumes the page is always filtered by Java targets, looking for one of the defaults
+     * @param forceReload
+     */
     public static open(forceReload = false) {
         if (forceReload) {
             cy.visit(CustomMigrationTarget.fullUrl);
+            cy.get(CustomMigrationTargetView.card, { timeout: 30 * SEC }).should(
+                "contain",
+                "Containerization"
+            );
         }
 
         cy.url().then(($url) => {
             if ($url != CustomMigrationTarget.fullUrl) {
                 selectUserPerspective("Administration");
                 clickByText(navMenu, customMigrationTargets);
+                cy.get(CustomMigrationTargetView.card, { timeout: 30 * SEC }).should(
+                    "contain",
+                    "Containerization"
+                );
             }
         });
     }
@@ -74,17 +90,11 @@ export class CustomMigrationTarget {
         clickByText(button, createNewButton);
     }
 
-    public openLanguageForm() {
-        CustomMigrationTarget.open();
-        CustomMigrationTarget.selectLanguage(this.language);
-        clickByText(button, createNewButton);
-    }
-
     public create() {
-        this.openLanguageForm();
+        CustomMigrationTarget.openNewForm();
         CustomMigrationTarget.fillForm(this);
         submitForm();
-        cy.get(submitButton, { timeout: 1 * SEC }).should("not.exist");
+        cy.get(submitButton, { timeout: 5 * SEC }).should("not.exist");
     }
 
     public openEditDialog() {
@@ -100,7 +110,6 @@ export class CustomMigrationTarget {
     }
 
     public delete() {
-        CustomMigrationTarget.selectLanguage(this.language);
         this.expandActionsMenu();
         cy.contains(button, deleteAction).click();
     }
@@ -121,6 +130,15 @@ export class CustomMigrationTarget {
     private static fillForm(values: Partial<CustomMigrationTarget>) {
         if (values.name) {
             CustomMigrationTarget.fillName(values.name);
+        }
+
+        if (values.language) {
+            click(CustomMigrationTargetView.formLanguageDropdown);
+            clickWithinByText(
+                CustomMigrationTargetView.formLanguageDropdownOptions,
+                "li",
+                values.language
+            );
         }
 
         if (values.description) {
@@ -145,12 +163,32 @@ export class CustomMigrationTarget {
 
     public static selectLanguage(language: Languages) {
         CustomMigrationTarget.open();
-        cy.get(CustomMigrationTargetView.languageDropdown, { timeout: 30 * SEC }).click();
-        clickByText("button", language);
+        cy.get(CustomMigrationTargetView.filterLanguageDropdown).click();
+        /**
+         * There may be a pre-selected filter so
+         * the only deterministic way to eliminate pre-selected filters is to make sure there is one
+         */
+        cy.get(`#filter-control-provider-select-typeahead-listbox > li`)
+            .contains(Languages.Java)
+            .closest(".pf-v5-c-menu__list-item")
+            .find("input[type=checkbox]")
+            .check();
+        cy.get(CustomMigrationTargetView.filterLanguageDropdown).click();
+        clickByText("button", clearAllFilters);
+
+        cy.get(CustomMigrationTargetView.filterLanguageDropdown).click();
+
+        cy.get(`#filter-control-provider-select-typeahead-listbox > li`)
+            .contains(language)
+            .closest(".pf-v5-c-menu__list-item")
+            .find("input[type=checkbox]")
+            .check();
+
+        cy.get(CustomMigrationTargetView.filterLanguageDropdown).click();
     }
 
     public static uploadRules(rulePaths: string[]) {
-        rulePaths.forEach((path) => uploadXml(path, CustomMigrationTargetView.ruleInput));
+        rulePaths.forEach((path) => uploadFile(path, CustomMigrationTargetView.ruleInput));
     }
 
     private static fillManualForm(values: Partial<RulesManualFields>) {

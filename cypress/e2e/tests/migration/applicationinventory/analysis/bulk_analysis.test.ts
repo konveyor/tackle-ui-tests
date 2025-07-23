@@ -34,6 +34,7 @@ let counter: number;
 describe(["@tier4"], "Bulk analysis and custom metrics afterwards", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
                 for (let i = 0; i < NUMBER_OF_APPS; i++) {

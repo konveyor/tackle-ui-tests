@@ -35,6 +35,7 @@ let invalidSearchInput = String(data.getRandomNumber());
 describe(["@tier3"], "Business services filter validations", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         stakeholdersList = createMultipleStakeholders(3);
         businessServicesList = createMultipleBusinessServices(2, stakeholdersList);
     });
@@ -61,10 +62,7 @@ describe(["@tier3"], "Business services filter validations", function () {
 
         // Enter a non-existing name substring and apply it as search filter
         applySearchFilter(name, invalidSearchInput);
-
-        // Assert that no search results are found
         cy.get("h2").contains("No business service available");
-
         clickByText(button, clearAllFilters);
     });
 
@@ -90,10 +88,7 @@ describe(["@tier3"], "Business services filter validations", function () {
 
         // Enter a non-existing description substring and apply it as search filter
         applySearchFilter(description, invalidSearchInput);
-
-        // Assert that no search results are found
         cy.get("h2").contains("No business service available");
-
         clickByText(button, clearAllFilters);
     });
 
@@ -119,10 +114,7 @@ describe(["@tier3"], "Business services filter validations", function () {
 
         // Enter a non-attached owner substring and apply it as search filter
         applySearchFilter(createdBy, stakeholdersList[2].name);
-
-        // Assert that no search results are found
         cy.get("h2").contains("No business service available");
-
         clickByText(button, clearAllFilters);
     });
 

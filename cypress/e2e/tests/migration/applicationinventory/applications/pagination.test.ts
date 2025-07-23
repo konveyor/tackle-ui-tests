@@ -30,6 +30,7 @@ let applicationsList: Array<Application> = [];
 describe(["@tier3"], "Application inventory pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         applicationsList = createMultipleApplications(11);
     });
 

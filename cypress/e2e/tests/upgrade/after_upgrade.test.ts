@@ -33,6 +33,7 @@ import {
 } from "../../../utils/utils";
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { Credentials } from "../../models/administration/credentials/credentials";
+import { GeneralConfig } from "../../models/administration/general/generalConfig";
 import { MavenConfiguration } from "../../models/administration/repositories/maven";
 import { UserAdmin } from "../../models/keycloak/users/userAdmin";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
@@ -43,10 +44,29 @@ import { Jobfunctions } from "../../models/migration/controls/jobfunctions";
 import { Stakeholdergroups } from "../../models/migration/controls/stakeholdergroups";
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { TagCategory } from "../../models/migration/controls/tagcategory";
-import { cloudReadinessQuestionnaire, legacyPathfinder } from "../../types/constants";
+import {
+    cloudReadinessQuestionnaire,
+    legacyPathfinder,
+    ReportTypeSelectors,
+} from "../../types/constants";
 import { UpgradeData } from "../../types/types";
 import { clearRepository } from "../../views/repository.view";
 import { stakeHoldersTable } from "../../views/stakeholders.view";
+
+function processApplication(application: Analysis): void {
+    // Verify static report can be downloaded for an app that was analyzed before upgrade
+    exists(application.name);
+    application.verifyAnalysisStatus("Completed");
+    application.selectApplication();
+    application.downloadReport(ReportTypeSelectors.HTML);
+    application.extractHTMLReport();
+    // Post upgrade: Re-run analysis on an app that was analyzed before upgrade
+    application.analyze();
+    application.waitStatusChange("In-progress");
+    application.verifyAnalysisStatus("Completed");
+    application.downloadReport(ReportTypeSelectors.HTML);
+    application.extractHTMLReport();
+}
 
 describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     const expectedMtaVersion = Cypress.env("mtaVersion");
@@ -57,9 +77,11 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
             userAdmin.username = this.upgradeData.adminUser;
             userAdmin.password = Cypress.env("pass");
             userAdmin.login();
+            cy.visit("/");
         });
 
         AssessmentQuestionnaire.enable(legacyPathfinder);
+        GeneralConfig.enableDownloadReport();
     });
 
     beforeEach("Persist session", function () {
@@ -153,21 +175,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         uploadBinaryApplication.name = uploadBinaryApplicationName;
 
         Analysis.open();
-        exists(sourceApplicationName);
-        exists(binaryApplicationName);
-        exists(uploadBinaryApplicationName);
-
-        uploadBinaryApplication.analyze();
-        uploadBinaryApplication.verifyAnalysisStatus("Completed");
-        uploadBinaryApplication.selectApplication();
-
-        binaryApplication.analyze();
-        binaryApplication.verifyAnalysisStatus("Completed");
-        binaryApplication.selectApplication();
-
-        sourceApplication.analyze();
-        sourceApplication.verifyAnalysisStatus("Completed");
-        sourceApplication.selectApplication();
+        [sourceApplication, binaryApplication, uploadBinaryApplication].forEach(processApplication);
     });
 
     it("Verify that assessed application is migrated", function () {

@@ -43,12 +43,12 @@ const invalidSearchInput = String(data.getRandomNumber());
 describe(["@tier3"], "Manage applications import filter validations", function () {
     before("Login and create test data", function () {
         login();
+        cy.visit("/");
         Application.open();
 
         // Import multiple csv files
         filesToImport.forEach(function (csvFile) {
             importApplication(filePath + csvFile);
-            cy.wait(2000);
         });
     });
 
@@ -72,14 +72,10 @@ describe(["@tier3"], "Manage applications import filter validations", function (
             exists(filesToImport[1]);
         }
 
-        // Clear all filters
         clickByText(button, clearAllFilters);
-        cy.wait(2000);
 
         // Enter a non-existing file name substring and apply it as search filter
         applySearchFilter(FileName, invalidSearchInput);
-
-        // Assert that no search results are found
         cy.get("h2").contains("No import summary available");
     });
 

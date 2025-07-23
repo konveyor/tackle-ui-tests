@@ -14,31 +14,22 @@
  * limitations under the License.
  */
 
-// Import commands.js using ES2015 syntax:
+// commands from libraries
+import "cypress-downloadfile/lib/downloadFileCommand";
+import "cypress-fail-fast";
+import "cypress-file-upload";
+import "cypress-fs";
+import "cypress-react-selector";
+import "cypress-real-events";
+require("cy-verify-downloads").addCustomCommand();
+
+// plugins
+import "cypress-log-filter";
+
+// custom commands
 import "./commands";
 
-//Cypress-react-selector
-import "cypress-react-selector";
-
-// For more information, see: https://github.com/javierbrea/cypress-fail-fast/blob/main/README.md
-import "cypress-fail-fast";
-
-// Alternatively you can use CommonJS syntax:
-// require('./commands')
-require("cypress-xpath"); // Refer - https://www.npmjs.com/package/cypress-xpath
-
-// load and register the grep feature
-// https://github.com/bahmutov/cypress-grep
-require("cypress-grep")();
-
-// Load cypress-log-filter-plugin
-// https://github.com/Brugui7/cypress-log-filter
-require("cypress-log-filter");
-
-// Allows to handle special actions like drag-n-drop
-// The use of this library is limited to Chromium-based browsers
-// https://github.com/dmtrKovalenko/cypress-real-events
-import "cypress-real-events";
+import { login } from "../utils/utils";
 
 /** Hide XHR logs line */
 // TODO: Improve by implementing a configuration parameter
@@ -52,17 +43,14 @@ if (app && !app.document.head.querySelector("[data-hide-command-log-request]")) 
     app.document.head.appendChild(style);
 }
 
-declare global {
-    namespace Cypress {
-        interface Chainable {
-            /**
-             * Drags an element to a drop location.
-             * This custom command works only on Chromium-based browsers
-             * @example cy.dragAndDrop(cy.get('#source'), cy.get('#target'))
-             * @param dragElement
-             * @param dropElement
-             */
-            dragAndDrop(dragElement: Cypress.Chainable, dropElement: Cypress.Chainable): void;
-        }
+beforeEach(() => {
+    // Disable for static report test as it need to open local files
+    if (Cypress.spec.name === "static_report.test.ts") {
+        return;
     }
-}
+
+    login();
+
+    // Every test starts by visiting / which should redirect to baseURL/applications
+    cy.visit("/");
+});

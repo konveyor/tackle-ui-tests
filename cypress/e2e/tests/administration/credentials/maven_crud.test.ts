@@ -16,7 +16,6 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
-import { login } from "../../../../utils/utils";
 import { CredentialsMaven } from "../../../models/administration/credentials/credentialsMaven";
 import { CredentialType } from "../../../types/constants";
 
@@ -24,17 +23,12 @@ describe(["@tier3"], "Validation of Maven Credentials", () => {
     const mavenCredentialsUsername = new CredentialsMaven(
         getRandomCredentialsData(CredentialType.maven)
     );
-    before("Login", function () {
-        // Perform login
-        login();
-    });
 
     it("Creating Maven credentials", () => {
         mavenCredentialsUsername.create();
     });
 
     after("Cleaning up", () => {
-        login();
         mavenCredentialsUsername.delete();
     });
 });

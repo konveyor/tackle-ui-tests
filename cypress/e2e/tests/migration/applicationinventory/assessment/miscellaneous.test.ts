@@ -66,6 +66,7 @@ const yamlFile = "questionnaire_import/cloud-native.yaml";
 describe(["@tier3"], "Tests related to application assessment and review", () => {
     before("Perform application assessment and review", function () {
         login();
+        cy.visit("/");
         cy.intercept("GET", "/hub/application*").as("getApplication");
 
         AssessmentQuestionnaire.deleteAllQuestionnaires();
@@ -75,16 +76,13 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
         applicationList = createMultipleApplications(1);
         applicationList[0].perform_assessment("low", stakeholderList);
-        cy.wait(2000);
         applicationList[0].verifyStatus("assessment", "Completed");
         applicationList[0].perform_review("low");
-        cy.wait(2000);
         applicationList[0].verifyStatus("review", "Completed");
     });
 
     it("Retake Assessment questionnaire", function () {
         clickItemInKebabMenu(applicationList[0].name, "Assess");
-        cy.wait(SEC);
         clickByText(button, "Retake");
         clickJs(nextButton);
         cy.get(splitItem)
@@ -137,7 +135,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("review", "Not started");
     });
 
-    it("Assess application and overide assessment for that archetype", function () {
+    it("tackle2-ui Issue 2425: Assess application and override assessment for that archetype", function () {
         // Polarion TC MTA-390
         const archetypesList = [];
         const tags = createMultipleTags(2);
@@ -148,7 +146,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             null
         );
         archetype1.create();
-        cy.wait(2 * SEC);
         archetypesList.push(archetype1);
         const appdata = {
             name: data.getAppName(),
@@ -160,7 +157,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         const application1 = new Application(appdata);
         applicationList.push(application1);
         application1.create();
-        cy.wait(2 * SEC);
         archetype1.perform_assessment("low", stakeholderList);
         application1.clickAssessButton();
         application1.validateOverrideAssessmentMessage(archetypesList);
@@ -178,10 +174,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         // Polarion TC MTA-392
         const application = new Application(getRandomApplicationData());
         application.create();
-        cy.wait(2 * SEC);
-
         application.perform_assessment("high", stakeholderList);
-        cy.wait(2 * SEC);
 
         application.verifyStatus("assessment", "Completed");
         AssessmentQuestionnaire.disable(legacyPathfinder);
@@ -205,7 +198,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
     it(
         ["@interop", "@tier0"],
-        "Test inheritance after discarding application assessment and review",
+        "tackle2-ui Issue 2418: Test inheritance after discarding application assessment and review",
         function () {
             // Polarion TC MTA-456 Assess and review application associated with unassessed/unreviewed archetypes
             const tags = createMultipleTags(2);
@@ -220,15 +213,10 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             };
             const application2 = new Application(appdata);
             application2.create();
-            cy.wait(2 * SEC);
-
             application2.perform_assessment("medium", stakeholderList);
-            cy.wait(2 * SEC);
             application2.verifyStatus("assessment", "Completed");
             application2.validateAssessmentField("Medium");
-
             application2.perform_review("medium");
-            cy.wait(2 * SEC);
             application2.verifyStatus("review", "Completed");
             application2.validateReviewFields();
 
@@ -252,7 +240,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             application2.verifyInheritanceStatus("assessment");
 
             application2.delete();
-            cy.wait(2 * SEC);
             archetypes[0].delete();
             deleteByList(tags);
         }
@@ -273,7 +260,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         );
         archetype1.create();
         archetypes.push(archetype1);
-        cy.wait(2 * SEC);
 
         const archetype2 = new Archetype(
             data.getRandomWord(8),
@@ -283,7 +269,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         );
         archetype2.create();
         archetypes.push(archetype2);
-        cy.wait(2 * SEC);
 
         const archetype3 = new Archetype(
             data.getRandomWord(8),
@@ -293,7 +278,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         );
         archetype3.create();
         archetypes.push(archetype3);
-        cy.wait(2 * SEC);
 
         application[0].verifyArchetypeList(
             [archetype1.name, archetype2.name, archetype3.name],

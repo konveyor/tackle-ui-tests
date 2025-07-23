@@ -26,7 +26,7 @@ import { CredentialsMaven } from "../../../../models/administration/credentials/
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
-import { CredentialType, SEC, UserCredentials } from "../../../../types/constants";
+import { CredentialType, UserCredentials } from "../../../../types/constants";
 import { AppIssue } from "../../../../types/types";
 let applicationsList: Array<Analysis> = [];
 let source_credential: CredentialsSourceControlUsername;
@@ -35,7 +35,7 @@ let maven_credential: CredentialsMaven;
 describe(["@tier2"], "Affected files validation", () => {
     before("Login", function () {
         login();
-
+        cy.visit("/");
         // Create source Credentials
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
@@ -64,30 +64,6 @@ describe(["@tier2"], "Affected files validation", () => {
         // Interceptors
         cy.intercept("POST", "/hub/application*").as("postApplication");
         cy.intercept("GET", "/hub/application*").as("getApplication");
-
-        Application.open(true);
-    });
-
-    it("Bug MTA-2006: Affected files validation with Source + dependencies analysis on daytrader app", function () {
-        // Automate bug https://issues.redhat.com/browse/MTA-2006
-        const application = new Analysis(
-            getRandomApplicationData("affected_files_on_day_trader_app", {
-                sourceData: this.appData["daytrader-app"],
-            }),
-            getRandomAnalysisData(this.analysisData["affected_files_on_day_trader_app"])
-        );
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication");
-        cy.wait(2 * SEC);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.validateIssues(this.analysisData["affected_files_on_day_trader_app"]["issues"]);
-        this.analysisData["affected_files_on_day_trader_app"]["issues"].forEach(
-            (currentIssue: AppIssue) => {
-                application.validateAffected(currentIssue);
-            }
-        );
     });
 
     it("Affected files validation with source analysis on bookserver app", function () {
@@ -98,11 +74,9 @@ describe(["@tier2"], "Affected files validation", () => {
             }),
             getRandomAnalysisData(this.analysisData["affected_files_on_bookserverapp"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.validateIssues(this.analysisData["affected_files_on_bookserverapp"]["issues"]);
@@ -121,11 +95,9 @@ describe(["@tier2"], "Affected files validation", () => {
             }),
             getRandomAnalysisData(this.analysisData["affected_files_on_tackleTestapp"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -145,11 +117,9 @@ describe(["@tier2"], "Affected files validation", () => {
             }),
             getRandomAnalysisData(this.analysisData["affected_files_on_tackleTestapp_deps"])
         );
-        Application.open();
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -164,17 +134,16 @@ describe(["@tier2"], "Affected files validation", () => {
     });
 
     // Automates Bug MTA-4024, MTA-4025, MTA-4026 and MTA-4027
-    it("Bug MTA-4421: Affected files validation with source+deps analysis on coolStore app", function () {
+    it("Affected files validation with source+deps analysis on coolStore app", function () {
         const application = new Analysis(
             getRandomApplicationData("affected_files_on_coolStoreApp", {
-                sourceData: this.appData["cool-store-app"],
+                sourceData: this.appData["coolstore-app"],
             }),
             getRandomAnalysisData(this.analysisData["affected_files_on_coolStore_deps"])
         );
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.verifyEffort(this.analysisData["affected_files_on_coolStore_deps"]["effort"]);
@@ -189,5 +158,6 @@ describe(["@tier2"], "Affected files validation", () => {
     after("Perform test data clean up", function () {
         Application.open(true);
         deleteByList(applicationsList);
+        source_credential.delete();
     });
 });

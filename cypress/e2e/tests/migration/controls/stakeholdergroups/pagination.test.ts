@@ -30,11 +30,11 @@ import { appTable } from "../../../../views/common.view";
 describe(["@tier3"], "Stakeholder groups pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         createMultipleStakeholderGroups(11);
     });
 
     beforeEach("Interceptors", function () {
-        // Interceptors
         cy.intercept("GET", "/hub/stakeholdergroups*").as("getStakeholdergroups");
     });
 
@@ -52,8 +52,6 @@ describe(["@tier3"], "Stakeholder groups pagination validations", function () {
     });
 
     it("Last page item(s) deletion, impact on page reload validation", function () {
-        // Issue - https://issues.redhat.com/browse/TACKLE-155
-        // Navigate to stakeholder groups tab
         Stakeholdergroups.openList();
         cy.get("@getStakeholdergroups");
         selectItemsPerPage(10);

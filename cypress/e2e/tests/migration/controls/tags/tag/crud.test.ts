@@ -20,20 +20,15 @@ import {
     exists,
     existsWithinRow,
     expandRowDetails,
-    login,
     notExistsWithinRow,
-    selectUserPerspective,
 } from "../../../../../../utils/utils";
 import { Tag } from "../../../../../models/migration/controls/tags";
 
 import * as data from "../../../../../../utils/data_utils";
-import { migration, tdTag } from "../../../../../types/constants";
+import { tdTag } from "../../../../../types/constants";
 
 describe(["@tier2"], "Tag CRUD operations", () => {
     beforeEach("Login", function () {
-        login();
-
-        // Interceptors
         cy.intercept("POST", "/hub/tag*").as("postTag");
         cy.intercept("GET", "/hub/tag*").as("getTag");
         cy.intercept("PUT", "/hub/tag/*").as("putTag");
@@ -41,37 +36,24 @@ describe(["@tier2"], "Tag CRUD operations", () => {
     });
 
     it("Tag CRUD", function () {
-        selectUserPerspective(migration);
         const tag = new Tag(data.getRandomWord(8), data.getRandomDefaultTagCategory());
         tag.create();
         cy.wait("@postTag");
-
-        // Assert that created tag exists
         expandRowDetails(tag.tagCategory);
         existsWithinRow(tag.tagCategory, tdTag, tag.name);
         closeRowDetails(tag.tagCategory);
 
-        // Edit the tag and tag category name
         let updatedTagName = data.getRandomWord(8);
         let updatedTagCategoryName = data.getRandomDefaultTagCategory();
         tag.edit({ name: updatedTagName, tagcategory: updatedTagCategoryName });
         cy.get("@putTag");
-        cy.wait(2000);
-
-        // Assert that tag type name got updated
         exists(updatedTagCategoryName);
-
-        // Assert that tag name got updated
         expandRowDetails(updatedTagCategoryName);
         existsWithinRow(updatedTagCategoryName, tdTag, updatedTagName);
         closeRowDetails(updatedTagCategoryName);
 
-        // Delete tag
         tag.delete();
         cy.get("@deleteTag");
-        cy.wait(2000);
-
-        // Assert that tag got deleted
         expandRowDetails(tag.tagCategory);
         notExistsWithinRow(tag.tagCategory, tdTag, tag.name);
         closeRowDetails(tag.tagCategory);

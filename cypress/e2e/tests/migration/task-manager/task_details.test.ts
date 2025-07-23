@@ -32,6 +32,7 @@ describe(["@tier3"], "Task details validation", function () {
     let application: Analysis;
     before("Login", function () {
         login();
+        cy.visit("/");
         deleteApplicationTableRows();
     });
 
@@ -61,14 +62,15 @@ describe(["@tier3"], "Task details validation", function () {
 
     it("Open task details from right kebab menu", function () {
         TaskManager.openTaskDetailsByKebabMenu(application.name, TaskKind.languageDiscovery);
-        TaskManager.openTaskDetailsByStatus(application.name, TaskKind.techDiscovery);
     });
 
     it("Download task details in yaml format", function () {
+        TaskManager.openTaskDetailsByKebabMenu(application.name, TaskKind.techDiscovery, false);
         downloadTaskDetails();
     });
 
     it("Download task details in json format", function () {
+        TaskManager.openTaskDetailsByKebabMenu(application.name, TaskKind.techDiscovery, false);
         downloadTaskDetails(downloadFormatDetails.json);
     });
 

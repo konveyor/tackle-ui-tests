@@ -17,18 +17,19 @@ import {
     cancelForm,
     click,
     clickByText,
-    clickTab,
+    clickItemInKebabMenu,
     clickWithin,
+    clickWithinByText,
     doesExistSelector,
     doesExistText,
     inputText,
     next,
-    performRowActionByIcon,
+    selectAnalysisMode,
     selectCheckBox,
     selectFormItems,
     sidedrawerTab,
     uploadApplications,
-    uploadXml,
+    uploadFile,
 } from "../../../../utils/utils";
 import {
     AnalysisStatuses,
@@ -70,20 +71,18 @@ import {
     fileName,
     kebabTopMenuButton,
     languageSelectionDropdown,
+    logDropDown,
+    logFilter,
     manageCredentials,
     mavenCredential,
     numberOfRulesColumn,
     openjdkToggleButton,
     panelBody,
-    rightSideMenu,
     sourceCredential,
     sourceDropdown,
     tabsPanel,
 } from "../../../views/analysis.view";
-import {
-    bulkApplicationSelectionCheckBox,
-    kebabMenu,
-} from "../../../views/applicationinventory.view";
+import { bulkApplicationSelectionCheckBox } from "../../../views/applicationinventory.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { Application } from "./application";
 
@@ -165,27 +164,30 @@ export class Analysis extends Application {
     }
 
     public selectSourceofAnalysis(source: string): void {
-        selectFormItems(sourceDropdown, source);
+        selectAnalysisMode(sourceDropdown, source);
     }
 
     /**
      * Make sure our language is selected. It may already be selected if language-discovery
      * added it, or if it was added manually.
      * @param language
-     * @param removePreSelected boolean if true, it will **try** to remove the preselected filters if any
+     * @param removePreSelected boolean if true, it will remove the preselected filters
      */
     public static selectLanguage(language: Languages, removePreSelected = false) {
         cy.wait(2 * SEC);
         if (removePreSelected) {
-            cy.get(".pf-v5-c-wizard__main-body")
-                .eq(0)
-                .within(() => {
-                    cy.contains(button, clearAllFilters).should(($btn) => {
-                        if ($btn && $btn.length) {
-                            $btn.trigger("click");
-                        }
-                    });
-                });
+            cy.get(languageSelectionDropdown).click();
+            /**
+             * There may not be any pre-selected filters so
+             * the only deterministic way to eliminate pre-selected filters is to make sure there is one
+             */
+            cy.get(`#filter-control-provider-select-typeahead-listbox > li`)
+                .contains("Java")
+                .closest(".pf-v5-c-menu__list-item")
+                .find("input[type=checkbox]")
+                .check();
+            cy.get(languageSelectionDropdown).click();
+            clickWithinByText(".pf-v5-c-wizard__main-body", "button", clearAllFilters);
         }
 
         cy.get(languageSelectionDropdown).click();
@@ -249,7 +251,7 @@ export class Analysis extends Application {
         for (let i = 0; i < this.customRule.length; i++) {
             cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
             const folder = this.customRule[i].split(".").pop();
-            uploadXml(`${folder}/${this.customRule[i]}`);
+            uploadFile(`${folder}/${this.customRule[i]}`);
             cy.wait(2000);
             cy.get("span.pf-v5-c-progress__measure", { timeout: 150000 }).should("contain", "100%");
             cy.wait(2000);
@@ -392,7 +394,9 @@ export class Analysis extends Application {
             .contains(this.name)
             .closest(trTag)
             .within(() => {
-                cy.get(effortColumn).should("contain", `${effort}`);
+                cy.get(effortColumn, { timeout: 5 * SEC }).should("contain", `${effort}`, {
+                    timeout: 10 * SEC,
+                });
             });
     }
 
@@ -411,17 +415,16 @@ export class Analysis extends Application {
             .and("not.have.text", AnalysisStatuses.inProgress)
             .then(($a) => {
                 const currentStatus = $a.text().toString() as AnalysisStatuses;
-                if (currentStatus != status) {
-                    // If analysis failed and is not expected then test fails.
-                    if (
-                        currentStatus == AnalysisStatuses.failed &&
-                        status != AnalysisStatuses.failed
-                    ) {
-                        expect(currentStatus).to.include(AnalysisStatuses.completed);
-                    }
-                } else {
-                    expect(currentStatus).to.include(status);
-                }
+                expect(currentStatus).to.equal(status);
+            });
+    }
+
+    waitStatusChange(newStatus: string) {
+        cy.get(tdTag, { log: false })
+            .contains(this.name, { log: false })
+            .closest(trTag, { log: false })
+            .within(() => {
+                cy.get(analysisColumn, { timeout: 30 * SEC }).should("contain", newStatus);
             });
     }
 
@@ -433,16 +436,23 @@ export class Analysis extends Application {
 
     downloadReport(type: ReportTypeSelectors) {
         Application.open();
-        this.selectApplicationRow();
-        cy.get(rightSideMenu, { timeout: 30 * SEC }).within(() => {
-            clickTab("Reports");
-            click(type);
-            // waits until the file is downloaded
-            cy.get(type, { timeout: 30 * SEC });
-            const extension = type === ReportTypeSelectors.YAML ? "yaml" : "tar";
-            cy.verifyDownload(`analysis-report-app-${this.name}.${extension}`);
-        });
+        sidedrawerTab(this.name, "Reports");
+        // The button has an aria-disabled atrr but not the disabled attr itself so verifying if its enabled won't work
+        cy.get(type)
+            .should("not.have.attr", "aria-disabled", true)
+            .and("not.have.class", "pf-m-aria-disabled");
+        click(type);
+        const extension = type === ReportTypeSelectors.YAML ? "yaml" : "tar";
+        cy.verifyDownload(`analysis-report-app-${this.name}.${extension}`, { timeout: 30 * SEC });
         this.closeApplicationDetails();
+    }
+
+    extractHTMLReport() {
+        cy.task("unzip", {
+            path: "cypress/downloads/",
+            file: `analysis-report-app-${this.name}.tar`,
+        });
+        cy.verifyDownload(`analysis-report-app-${this.name}/index.html`);
     }
 
     openAnalysisDetails() {
@@ -454,8 +464,7 @@ export class Analysis extends Application {
 
     manageCredentials(sourceCred?: string, mavenCred?: string): void {
         cy.wait(2 * SEC);
-        performRowActionByIcon(this.name, kebabMenu);
-        clickByText(button, manageCredentials);
+        clickItemInKebabMenu(this.name, manageCredentials);
         if (sourceCred) {
             selectFormItems(sourceCredential, sourceCred);
         }
@@ -463,7 +472,6 @@ export class Analysis extends Application {
             selectFormItems(mavenCredential, mavenCred);
         }
         clickByText(button, save);
-        cy.wait(2000);
     }
 
     static validateTopActionMenu(rbacRules: RbacValidationRules) {
@@ -527,29 +535,6 @@ export class Analysis extends Application {
             });
     }
 
-    verifyFileNotValidXML(): void {
-        this.selectApplication();
-        cy.contains(button, analyzeButton).should("be.enabled").click();
-        this.selectSourceofAnalysis(this.source);
-        next();
-        next();
-        next();
-        for (let i = 0; i < this.customRule.length; i++) {
-            cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
-            const folder = this.customRule[i].split(".").pop();
-            uploadXml(`${folder}/${this.customRule[i]}`);
-            cy.wait(2000);
-            cy.get("span.pf-v5-c-progress__measure", { timeout: 150000 }).should("contain", "100%");
-            cy.wait(2000);
-            cy.get("h4.pf-v5-c-alert__title").should(
-                "contain.text",
-                `Error: File "${this.customRule[i]}" is not a valid XML: `
-            );
-            cy.contains(addRules, "Add", { timeout: 2000 }).should("not.be.enabled");
-        }
-        cy.get(closeWizard).click({ force: true });
-    }
-
     // verifyRulesNumber verifies the number of rules found in an uploaded custom rules file
     public verifyRulesNumber(): void {
         Application.open();
@@ -572,7 +557,17 @@ export class Analysis extends Application {
     }
 
     cancelAnalysis(): void {
-        performRowActionByIcon(this.name, kebabMenu);
-        clickByText(button, "Cancel analysis");
+        clickItemInKebabMenu(this.name, "Cancel analysis");
+    }
+
+    verifyMergedLogContain(): void {
+        this.openAnalysisDetails();
+        cy.get(logFilter).eq(2).click();
+        clickByText(logDropDown, "Merged log view");
+
+        // Wait for the editor content to load and assert expected text
+        cy.get(".pf-v5-c-code-editor__code", { timeout: 5000 }).then(($editor) => {
+            expect($editor.text()).to.contain("lspServerName: generic");
+        });
     }
 }

@@ -21,7 +21,6 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    logout,
     resetURL,
     selectItemsPerPage,
 } from "../../../utils/utils";
@@ -52,6 +51,7 @@ describe(["tier3"], "Custom Migration Targets RBAC operations", function () {
         migrator.create();
 
         login();
+        cy.visit("/");
         cy.fixture("custom-rules").then((customMigrationTargets) => {
             const targetData = customMigrationTargets.rules_from_bookServerApp;
             const repositoryData: RulesRepositoryFields = {
@@ -96,8 +96,6 @@ describe(["tier3"], "Custom Migration Targets RBAC operations", function () {
                 assertTargetIsVisible(analysis, target);
                 analyzeAndVerify(analysis);
             });
-
-        logout();
     });
 
     it("Look for created target on an analysis as architect user", function () {
@@ -111,11 +109,11 @@ describe(["tier3"], "Custom Migration Targets RBAC operations", function () {
         migrator.login();
         assertTargetIsVisible(analysis, target);
         analyzeAndVerify(analysis);
-        migrator.logout();
     });
 
     after("Clear test data", () => {
         login();
+        cy.visit("/");
         analysis.delete();
         target.delete();
         User.loginKeycloakAdmin();
@@ -147,7 +145,6 @@ describe(["tier3"], "Custom Migration Targets RBAC operations", function () {
 
     const analyzeAndVerify = (analysis: Analysis) => {
         analysis.analyze();
-        cy.wait(10 * SEC);
         analysis.verifyAnalysisStatus(AnalysisStatuses.completed);
         analysis.openReport();
         resetURL();

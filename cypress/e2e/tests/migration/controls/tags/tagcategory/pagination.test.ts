@@ -32,6 +32,7 @@ import { tagCategory } from "../../../../../views/tags.view";
 describe(["@tier3"], "Tag category pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         TagCategory.openList();
         let rowsToCreate = 0;
 

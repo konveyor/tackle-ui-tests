@@ -50,7 +50,7 @@ export class Stakeholders {
     email: string;
     jobfunction: string;
     groups: Array<string>;
-    static fullUrl = Cypress.env("tackleUrl") + "/controls/stakeholders";
+    static fullUrl = Cypress.config("baseUrl") + "/controls/stakeholders";
 
     constructor(email: string, name: string, jobfunction?: string, groups?: Array<string>) {
         this.email = email;

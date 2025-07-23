@@ -18,93 +18,46 @@ limitations under the License.
 import {
     clickOnSortButton,
     getTableColumnData,
-    login,
     verifySortAsc,
     verifySortDesc,
 } from "../../../../../../utils/utils";
 import { TagCategory } from "../../../../../models/migration/controls/tagcategory";
-import { rank, SortType, tagCategory, tagCount } from "../../../../../types/constants";
+import { SortType, tagCategory, tagCount } from "../../../../../types/constants";
 
 describe(["@tier3"], "Tag category sort validations", function () {
-    before("Login", function () {
-        login();
-    });
-
     beforeEach("Interceptors", function () {
-        // Interceptors
-        cy.intercept("GET", "/hub/tag-category*").as("getTagCategories");
+        cy.intercept("GET", "/hub/tagcategories*").as("getTagCategories");
     });
 
     it("Tag category name sort validations", function () {
-        // Navigate to Tags tab
         TagCategory.openList();
-        cy.get("@getTagCategories");
-
-        // Get unsorted list when page loads
+        cy.wait("@getTagCategories");
         const unsortedList = getTableColumnData(tagCategory);
 
         // Sort the tag type by name in ascending order
         clickOnSortButton(tagCategory, SortType.ascending);
-        cy.wait(2000);
-
-        // Verify that the tag type rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(tagCategory);
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the tag type by name in descending order
         clickOnSortButton(tagCategory, SortType.descending);
-        cy.wait(2000);
-
-        // Verify that the tag type rows are displayed in descending order
         const afterDescSortList = getTableColumnData(tagCategory);
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
-    it("Rank sort validations", function () {
-        TagCategory.openList();
-        cy.get("@getTagCategories");
-
-        // Get unsorted list when page loads
-        const unsortedList = getTableColumnData(rank);
-
-        // Sort the tag category by rank in ascending order
-        clickOnSortButton(rank, SortType.ascending);
-        cy.wait(2000);
-
-        // Verify that the tag category rows are displayed in ascending order
-        const afterAscSortList = getTableColumnData(rank);
-        verifySortAsc(afterAscSortList, unsortedList);
-
-        // Sort the tag category by rank in descending order
-        clickOnSortButton(rank, SortType.descending);
-        cy.wait(2000);
-
-        // Verify that the tag category rows are displayed in descending order
-        const afterDescSortList = getTableColumnData(rank);
-        verifySortDesc(afterDescSortList, unsortedList);
-    });
-
     it("Tag count sort validations", function () {
-        // Navigate to Tags tab
         TagCategory.openList();
-        cy.get("@getTagCategories");
+        cy.wait("@getTagCategories");
 
-        // Get unsorted list when page loads
         const unsortedList = getTableColumnData(tagCount);
 
         // Sort the tag category by tag count in ascending order
         clickOnSortButton(tagCount, SortType.ascending);
-        cy.wait(2000);
-
-        // Verify that the tag category rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(tagCount);
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the tag category by tag count in descending order
         clickOnSortButton(tagCount, SortType.descending);
-        cy.wait(2000);
-
-        // Verify that the tag category rows are displayed in descending order
         const afterDescSortList = getTableColumnData(tagCount);
         verifySortDesc(afterDescSortList, unsortedList);
     });

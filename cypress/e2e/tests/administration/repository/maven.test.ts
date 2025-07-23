@@ -22,8 +22,8 @@ import {
     getRandomApplicationData,
     isEnabled,
     login,
+    logout,
     patchTackleCR,
-    resetURL,
     writeMavenSettingsFile,
 } from "../../../../utils/utils";
 import { CredentialsMaven } from "../../../models/administration/credentials/credentialsMaven";
@@ -41,7 +41,7 @@ let applicationsList: Analysis[] = [];
 describe(["@tier2"], "Test secure and insecure maven repository analysis", () => {
     before("Login", function () {
         login();
-
+        cy.visit("/");
         //Create source and maven credentials required for analysis
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
@@ -87,7 +87,6 @@ describe(["@tier2"], "Test secure and insecure maven repository analysis", () =>
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -109,7 +108,6 @@ describe(["@tier2"], "Test secure and insecure maven repository analysis", () =>
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
@@ -119,7 +117,7 @@ describe(["@tier2"], "Test secure and insecure maven repository analysis", () =>
 
     it("Perform RWX=true and clear repository", function () {
         MavenConfiguration.open();
-        let rwxEnabled;
+        let rwxEnabled: boolean;
 
         cy.get(repoSize).then(($btn) => {
             // In UI if $btn.is(':disabled'), RWX = false
@@ -129,7 +127,10 @@ describe(["@tier2"], "Test secure and insecure maven repository analysis", () =>
             if (rwxEnabled) mavenConfiguration.clearRepository();
             patchTackleCR("configureRWX", !rwxEnabled);
         });
+        logout();
+        Cypress.session.clearAllSavedSessions();
         login();
+        cy.visit("/");
         MavenConfiguration.open();
 
         cy.get(repoSize).then(($btn) => {
@@ -139,13 +140,12 @@ describe(["@tier2"], "Test secure and insecure maven repository analysis", () =>
         });
     });
 
-    afterEach("Reset Url", function () {
-        resetURL();
-    });
-
     after("Perform test data clean up", () => {
         patchTackleCR("configureRWX", false);
+        logout();
+        Cypress.session.clearAllSavedSessions();
         login();
+        cy.visit("/");
         deleteByList(applicationsList);
         source_credential.delete();
         maven_credential.delete();

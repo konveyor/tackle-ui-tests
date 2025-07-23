@@ -99,6 +99,7 @@ export const reviewAppButton = "Review";
 export const analyzeAppButton = "#analyze-application";
 export const duplicateMigrationWaveError =
     "Danger alert:The migration wave could not be created due to a conflict with an existing wave. Make sure the name and start/end dates are unique and try again.";
+export const MustbeAValidRepositoryURL = "Must be a valid repository URL.";
 
 // Error helper messages general to all views
 export const duplicateErrMsg = "ERROR: duplicate key value violates unique constraint";
@@ -210,7 +211,7 @@ export enum dependencyFilter {
 }
 
 export enum Languages {
-    Go = "Go",
+    Go = "Golang",
     Java = "Java",
 }
 

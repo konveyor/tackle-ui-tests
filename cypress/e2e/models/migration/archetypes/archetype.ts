@@ -66,14 +66,12 @@ export class Archetype {
         this.comments = comments;
     }
 
-    static fullUrl = Cypress.env("tackleUrl") + "/archetypes";
+    static fullUrl = Cypress.config("baseUrl") + "/archetypes";
 
     public static open(forceReload = false) {
         const itemsPerPage = 100;
         if (forceReload) {
             cy.visit(Archetype.fullUrl, { timeout: 15 * SEC }).then((_) => {
-                // This explicit wait is required in some cases.
-                cy.wait(10 * SEC);
                 cy.get("h1", { timeout: 35 * SEC }).should("contain", "Archetypes");
                 selectItemsPerPage(itemsPerPage);
             });
@@ -130,7 +128,10 @@ export class Archetype {
 
     create(cancel = false): void {
         Archetype.open();
-        cy.contains("button", "Create new archetype").should("be.enabled").click();
+        cy.wait(2 * SEC);
+        cy.contains("button", "Create new archetype", { timeout: 20000 })
+            .should("be.enabled")
+            .click();
         if (cancel) {
             cancelForm();
         } else {
@@ -166,7 +167,7 @@ export class Archetype {
         cancel = false
     ): void {
         Archetype.open();
-        performRowActionByIcon(this.name, commonView.pencilIcon);
+        performRowActionByIcon(this.name, commonView.pencilAction);
 
         if (cancel) {
             cancelForm();
@@ -217,7 +218,6 @@ export class Archetype {
     ) {
         Archetype.open();
         clickKebabMenuOptionArchetype(this.name, "Assess");
-        cy.wait(SEC);
         Assessment.perform_assessment(
             risk,
             stakeholders,
@@ -253,7 +253,6 @@ export class Archetype {
     perform_review(risk): void {
         Archetype.open();
         clickKebabMenuOptionArchetype(this.name, "Review");
-        cy.wait(8 * SEC);
         Assessment.perform_review(risk);
     }
 

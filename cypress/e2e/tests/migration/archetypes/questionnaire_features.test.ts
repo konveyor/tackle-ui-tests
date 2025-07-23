@@ -32,7 +32,6 @@ import {
     cloudReadinessFilePath,
     cloudReadinessQuestionnaire,
     legacyPathfinder,
-    SEC,
 } from "../../../types/constants";
 import { questionBlock } from "../../../views/assessment.view";
 import { nextButton, radioButton, radioButtonLabel, splitItem } from "../../../views/common.view";
@@ -43,6 +42,7 @@ let archetype: Archetype;
 describe(["@tier3"], "Tests for archetype questionnaire features", () => {
     before("Import and enable Cloud readiness questionnaire template", function () {
         login();
+        cy.visit("/");
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.disable(legacyPathfinder);
         AssessmentQuestionnaire.import(cloudReadinessFilePath);
@@ -56,7 +56,6 @@ describe(["@tier3"], "Tests for archetype questionnaire features", () => {
             null
         );
         archetype.create();
-        cy.wait(2 * SEC);
     });
 
     it("Test conditional questions during archetype assessment", function () {
@@ -65,7 +64,6 @@ describe(["@tier3"], "Tests for archetype questionnaire features", () => {
         Assessment.take_questionnaire(cloudReadinessQuestionnaire);
         Assessment.selectStakeholdersAndGroups(stakeholderList);
         clickJs(nextButton);
-        cy.wait(SEC);
         cy.get(questionBlock)
             .eq(0)
             .then(($question) => {
@@ -79,7 +77,6 @@ describe(["@tier3"], "Tests for archetype questionnaire features", () => {
                         );
                     });
                 Assessment.clickRadioOption($question, 1);
-                cy.wait(2000);
             });
         clickByText(button, "Cancel");
         Archetype.open(true);
@@ -92,7 +89,6 @@ describe(["@tier3"], "Tests for archetype questionnaire features", () => {
         Assessment.take_questionnaire(cloudReadinessQuestionnaire);
         Assessment.selectStakeholdersAndGroups(stakeholderList);
         clickJs(nextButton);
-        cy.wait(SEC);
 
         cy.get(splitItem)
             .contains("What is the main technology in your application?")

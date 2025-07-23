@@ -21,7 +21,6 @@ import {
     clickJs,
     exists,
     inputText,
-    login,
     notExists,
     selectUserPerspective,
 } from "../../../../../utils/utils";
@@ -46,15 +45,10 @@ import { BusinessServices } from "../../../../models/migration/controls/business
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 
 describe(["@tier2"], "Business service validations", () => {
-    before("Login", function () {
-        login();
-    });
-
     it("Business service field validations", function () {
         BusinessServices.openList();
         clickByText(button, createNewButton);
 
-        // Name constraints
         inputText(businessServiceNameInput, data.getRandomWord(2));
         cy.get(commonView.helperBusiness).should("contain", minCharsMsg);
         inputText(businessServiceNameInput, data.getRandomWords(45));
@@ -62,33 +56,19 @@ describe(["@tier2"], "Business service validations", () => {
         inputText(businessServiceNameInput, data.getRandomWord(4));
         cy.get(commonView.submitButton).should("not.be.disabled");
 
-        // Description constraints
         inputText(businessServiceDescriptionInput, data.getRandomWords(75));
         cy.get(commonView.helperBusiness).should("contain", max250CharsMsg);
-
-        // Close the form
         clickJs(commonView.cancelButton);
     });
 
     it("Business service button validations", function () {
         BusinessServices.openList();
         clickByText(button, createNewButton);
-
-        // Check "Create" and "Cancel" button status
         cy.get(commonView.submitButton).should("be.disabled");
         cy.get(commonView.cancelButton).should("not.be.disabled");
-
-        // Cancel creating business service
         cy.get(commonView.cancelButton).click();
-        cy.wait(100);
-
         clickByText(button, createNewButton);
-
-        // Close the "Create New" business service form
         cy.get(commonView.closeButton).click();
-        cy.wait(100);
-
-        // Assert that business service tab is opened
         cy.contains(button, createNewButton).should("exist");
     });
 
@@ -102,8 +82,6 @@ describe(["@tier2"], "Business service validations", () => {
         );
 
         selectUserPerspective(migration);
-
-        // Create new business service
         businessService.create();
         checkSuccessAlert(
             commonView.successAlertMessage,
@@ -117,7 +95,6 @@ describe(["@tier2"], "Business service validations", () => {
             `Success alert:Business service ${businessService1.name} was successfully created.`
         );
 
-        // Navigate to business service tab and click "Create New" button
         clickByText(button, createNewButton);
 
         // Check name duplication

@@ -31,6 +31,7 @@ let assessmentQuestionnaireList: Array<string> = [];
 describe(["@tier3"], "Assessment Questionnaire filter validation", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
         AssessmentQuestionnaire.import(yamlFileName);
         AssessmentQuestionnaire.enable(cloudNative, false);
         assessmentQuestionnaireList.push(cloudNative);

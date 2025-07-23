@@ -22,13 +22,13 @@ import { CredentialsSourceControlUsername } from "../../../models/administration
 import { CredentialType, UserCredentials } from "../../../types/constants";
 
 describe(["@tier2"], "Validation of Source Control Credentials", () => {
-    let scCredsUsername;
-    let scCredsKey;
+    let scCredsUsername: CredentialsSourceControlUsername;
+    let scCredsKey: CredentialsSourceControlKey;
     const toBeCanceled = true;
 
     before("Login", function () {
-        // Perform login
         login();
+        cy.visit("/");
         scCredsUsername = new CredentialsSourceControlUsername(
             getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.usernamePassword)
         );

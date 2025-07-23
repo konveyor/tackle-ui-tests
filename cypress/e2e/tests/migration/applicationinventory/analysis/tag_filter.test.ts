@@ -43,6 +43,7 @@ const applications: Application[] = [];
 describe(["@tier3"], "Filter tags on application details page", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
         source_credential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -52,11 +53,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
         );
         source_credential.create();
 
-        tagCategory = new TagCategory(
-            data.getRandomWord(8),
-            data.getColor(),
-            data.getRandomNumber(1, 30)
-        );
+        tagCategory = new TagCategory(data.getRandomWord(8), data.getColor());
         tagCategory.create();
 
         tag = new Tag(data.getRandomWord(6), tagCategory.name);
@@ -75,7 +72,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
         Application.open(true);
     });
 
-    it("BUG MTA-2984: Filter by automated tags generated after analysis", function () {
+    it("Filter by automated tags generated after analysis", function () {
         // Automates Polarion MTA-310
         const application = new Analysis(
             getRandomApplicationData(
@@ -92,6 +89,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
         application.filterTags("Analysis");
         application.tagAndCategoryExists(this.techTags);
         cy.get(appDetailsView.applicationTag).should("not.contain", tag.name);
+        application.closeApplicationDetails();
 
         // Validate rules doesn't have effort=0 and should only appear as tags.
         application.verifyEffort(this.analysisData["analysis_for_enableTagging"]["effort"]);

@@ -24,19 +24,15 @@ import {
 import { Credentials } from "../../../models/administration/credentials/credentials";
 
 describe(["@tier3"], "Tag type pagination validations", function () {
-    // let newCredentialsList: Array<Credentials> = [];
     let createdCredentialsList: Array<Credentials> = [];
     before("Login and Create Test Data", () => {
-        // Perform login
         login();
+        cy.visit("/");
         createdCredentialsList = createMultipleCredentials(12);
     });
 
     it("Navigation button validations", function () {
-        // select 10 items per page
         Credentials.openList(10);
-
-        // Run validation
         validatePagination();
     });
 

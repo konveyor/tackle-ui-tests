@@ -30,8 +30,8 @@ describe(["@tier2"], "Validation of jira credentials", () => {
     const useTestingAccount = true;
 
     before("Login", function () {
-        // Perform login
         login();
+        cy.visit("/");
 
         randomJiraBasicCredentials = getJiraCredentialData(
             CredentialType.jiraBasic,

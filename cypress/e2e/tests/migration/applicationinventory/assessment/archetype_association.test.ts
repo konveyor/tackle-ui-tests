@@ -35,7 +35,6 @@ import {
     cloudReadinessFilePath,
     cloudReadinessQuestionnaire,
     legacyPathfinder,
-    SEC,
 } from "../../../../types/constants";
 import { customActionButton, ViewArchetypes } from "../../../../views/applicationinventory.view";
 import { archetypeDropdown } from "../../../../views/archetype.view";
@@ -47,6 +46,7 @@ let stakeholders: Stakeholders[];
 describe(["@tier3"], "Tests related to application-archetype association ", () => {
     before("Login", function () {
         login();
+        cy.visit("/");
         inheritanceTags = createMultipleTags(2);
         associationTags = createMultipleTags(2);
         stakeholders = createMultipleStakeholders(1);
@@ -55,7 +55,7 @@ describe(["@tier3"], "Tests related to application-archetype association ", () =
         AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
-    it("Verify multiple applications inherit assessment and review inheritance from an archetype", function () {
+    it("tackle2-ui Issue 2400: Verify multiple applications inherit assessment and review inheritance from an archetype", function () {
         // Automates Polarion MTA-400 Archetype association - Application creation before archetype creation.
         AssessmentQuestionnaire.import(cloudReadinessFilePath);
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
@@ -68,7 +68,6 @@ describe(["@tier3"], "Tests related to application-archetype association ", () =
             null
         );
         archetype.create();
-        cy.wait(2 * SEC);
 
         /*Automates Polarion MTA-499 Verify multiple applications inherit assessment and review inheritance from an archetype
           and Polarion MTA-2464 Assess archetype with multiple questionnaires */
@@ -108,7 +107,7 @@ describe(["@tier3"], "Tests related to application-archetype association ", () =
         AssessmentQuestionnaire.delete(cloudReadinessQuestionnaire);
     });
 
-    it("Verify application assessment and review inheritance from multiple archetypes ", function () {
+    it("tackle2-ui Issue 2400: Verify application assessment and review inheritance from multiple archetypes ", function () {
         /* Automates MTA-420
         This also verifies: Archetype association - Application creation after archetype creation.
         */
@@ -124,7 +123,6 @@ describe(["@tier3"], "Tests related to application-archetype association ", () =
         const application2 = new Application(appdata);
         applicationList.push(application2);
         application2.create();
-        cy.wait(2 * SEC);
 
         // Note that the application is associated with 2 archetypes. Its 'Assessment' and 'Review'
         // status show 'In-progress' until all associated archetypes have been assessed.
@@ -166,13 +164,22 @@ describe(["@tier3"], "Tests related to application-archetype association ", () =
         deleteByList(archetypeList);
     });
 
-    it("View Archetypes from application assessment popup", function () {
+    it("tackle2-ui Issue 2400: View Archetypes from application assessment popup", function () {
         // Automates Polarion MTA-436
 
         const archetypeList = createMultipleArchetypes(2, associationTags);
 
+        AssessmentQuestionnaire.import(cloudReadinessFilePath);
+        AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
+        AssessmentQuestionnaire.disable(legacyPathfinder);
+
         for (let i = 0; i < archetypeList.length; i++) {
-            archetypeList[i].perform_assessment("low", stakeholders);
+            archetypeList[i].perform_assessment(
+                "low",
+                stakeholders,
+                null,
+                cloudReadinessQuestionnaire
+            );
             Archetype.open(true);
             archetypeList[i].verifyStatus("assessment", "Completed");
         }
@@ -185,7 +192,6 @@ describe(["@tier3"], "Tests related to application-archetype association ", () =
         const application = new Application(appdata);
         applicationList.push(application);
         application.create();
-        cy.wait(2 * SEC);
         application.clickAssessButton();
 
         clickByText(customActionButton, ViewArchetypes);
@@ -196,6 +202,7 @@ describe(["@tier3"], "Tests related to application-archetype association ", () =
     });
 
     after("Perform test data clean up", function () {
+        Application.open(true);
         deleteByList(applicationList);
         deleteByList(inheritanceTags);
         deleteByList(associationTags);

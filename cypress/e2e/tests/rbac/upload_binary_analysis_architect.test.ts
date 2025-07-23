@@ -21,12 +21,10 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    logout,
 } from "../../../utils/utils";
 import { User } from "../../models/keycloak/users/user";
 import { UserArchitect } from "../../models/keycloak/users/userArchitect";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
-import { Application } from "../../models/migration/applicationinventory/application";
 import { AnalysisStatuses, SEC } from "../../types/constants";
 
 describe(["@tier3"], "Architect Upload Binary Analysis", () => {
@@ -53,6 +51,7 @@ describe(["@tier3"], "Architect Upload Binary Analysis", () => {
 
         // Perform login as admin user to be able to create all required instances
         login();
+        cy.visit("/");
     });
 
     it("Upload Binary Analysis", function () {
@@ -62,9 +61,6 @@ describe(["@tier3"], "Architect Upload Binary Analysis", () => {
         );
         application.create();
         cy.wait("@getApplication");
-        cy.wait(2 * SEC);
-        // Need to log out as admin and login as Architect to perform analysis
-        logout();
         userArchitect.login();
 
         application.analyze();
@@ -81,16 +77,10 @@ describe(["@tier3"], "Architect Upload Binary Analysis", () => {
         applications.push(application);
         cy.wait("@getApplication");
         cy.wait(2 * SEC);
-        // Need to log out as admin and login as Architect to perform analysis
-        logout();
         userArchitect.login();
 
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
-    });
-
-    afterEach("Persist session", function () {
-        Application.open(true);
     });
 
     after("Perform test data clean up", function () {

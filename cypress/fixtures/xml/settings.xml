@@ -9,8 +9,8 @@
   <servers>
     <server>
        <id>tackle-testapp</id>
-       <username>pfmOP</username>
-       <password>DjGyX</password>
+       <username>asdasd</username>
+       <password>asdasdasd</password>
      </server>
   </servers>
   <mirrors>
@@ -29,6 +29,13 @@
         <repository>
           <id>central</id>
           <url>https://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+          <id>tackle-testapp-public</id>
+          <url>https://maven.pkg.github.com/konveyor/tackle-testapp-public</url>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
         </repository>
         <repository>
           <id>tackle-testapp</id>

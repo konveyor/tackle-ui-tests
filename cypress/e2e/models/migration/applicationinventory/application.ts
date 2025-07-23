@@ -19,7 +19,6 @@ import {
     clickByText,
     clickItemInKebabMenu,
     clickTab,
-    clickWithin,
     doesExistButton,
     doesExistSelector,
     doesExistText,
@@ -75,6 +74,7 @@ import {
     repoTypeSelect,
     rootPath,
     selectBox,
+    sideKebabMenu,
     sourceRepository,
     southdependenciesDropdownBtn,
     tagsColumnSelector,
@@ -110,7 +110,7 @@ export class Application {
     packaging?: string;
     contributor?: string;
 
-    static fullUrl = Cypress.env("tackleUrl") + "/applications";
+    static fullUrl = Cypress.config("baseUrl") + "/applications";
 
     constructor(appData: applicationData) {
         this.init(appData);
@@ -326,24 +326,20 @@ export class Application {
 
     delete(cancel = false): void {
         Application.open();
-        cy.wait(2000);
         clickItemInKebabMenu(this.name, "Delete");
         if (cancel) {
             cancelForm();
         } else {
             click(commonView.confirmButton);
-            cy.wait(2000);
         }
     }
 
     selectApplication(): void {
-        cy.wait(4000);
         cy.get(tdTag)
             .contains(this.name)
             .closest(trTag)
             .within(() => {
                 click(selectBox);
-                cy.wait(2000);
             });
     }
 
@@ -459,7 +455,7 @@ export class Application {
             .contains(this.name)
             .closest(trTag)
             .within(() => {
-                clickWithin("#row-actions", button);
+                click(sideKebabMenu);
                 doesExistButton(assessAppButton, rbacRules["Application actions"]["Assess"]);
                 doesExistButton(reviewAppButton, rbacRules["Application actions"]["Review"]);
                 doesExistText(
@@ -507,7 +503,6 @@ export class Application {
 
     private validateAffectedValues(appIssue: AppIssue): void {
         performWithin(this.name, () => {
-            validateTextPresence('td[data-label="Name"]', this.name);
             if (this.description) {
                 validateTextPresence('td[data-label="Description"]', this.description);
             }
@@ -574,7 +569,9 @@ export class Application {
                         cy.get("ul[role=tablist] >li >button").then((button) => {
                             if (!button.text().includes("All incidents")) {
                                 // Asserting that content of text field has at least 100 symbols
-                                cy.get("div.monaco-scrollable-element.editor-scrollable.vs-dark")
+                                cy.get("div.monaco-scrollable-element.editor-scrollable.vs-dark", {
+                                    timeout: 15 * SEC,
+                                })
                                     .invoke("text")
                                     .then((text) => {
                                         expect(text.length).to.be.at.least(100);

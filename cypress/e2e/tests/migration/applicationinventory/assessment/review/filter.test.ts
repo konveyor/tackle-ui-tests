@@ -42,6 +42,7 @@ let archetype: Archetype;
 describe(["@tier3"], "Review Identified Risks filter validations for assessments", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.import("questionnaire_import/cloud-native.yaml");
         AssessmentQuestionnaire.enable(cloudNative);

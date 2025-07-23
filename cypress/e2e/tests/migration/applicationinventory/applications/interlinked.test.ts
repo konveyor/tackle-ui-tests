@@ -35,7 +35,7 @@ import { BusinessServices } from "../../../../models/migration/controls/business
 import { Stakeholdergroups } from "../../../../models/migration/controls/stakeholdergroups";
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Tag } from "../../../../models/migration/controls/tags";
-import { applicationInventory, button, legacyPathfinder, SEC } from "../../../../types/constants";
+import { applicationInventory, button, legacyPathfinder } from "../../../../types/constants";
 import { businessColumnSelector } from "../../../../views/applicationinventory.view";
 import { continueButton, stakeholdersAndGroupsSelect } from "../../../../views/assessment.view";
 import { navMenu } from "../../../../views/menu.view";
@@ -49,6 +49,7 @@ let businessServicesList: Array<BusinessServices> = [];
 describe(["@tier3"], "Applications interlinked to tags and business service", () => {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         AssessmentQuestionnaire.deleteAllQuestionnaires();
         AssessmentQuestionnaire.enable(legacyPathfinder);
         stakeholdersList = createMultipleStakeholders(1);
@@ -77,7 +78,6 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         applicationList.push(application);
         application.create();
         cy.get("@getApplication");
-        cy.wait(2 * SEC);
 
         application.applicationDetailsTab("Tags");
         application.tagAndCategoryExists(tagList[0].name);
@@ -90,12 +90,10 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
 
         // Navigate to application inventory
         clickByText(navMenu, applicationInventory);
-        cy.wait(100);
         cy.get("@getApplication");
 
         // Assert that deleted business service is removed from application
         application.getColumnText(businessColumnSelector, "");
-        cy.wait(100);
 
         // Assert that deleted tag is removed
         application.applicationDetailsTab("Tags");
@@ -110,7 +108,6 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
 
         // Assert that business service is updated
         application.getColumnText(businessColumnSelector, businessServicesList[1].name);
-        cy.wait(SEC);
 
         // Assert that created tag exists
         application.applicationDetailsTab("Tags");
@@ -129,7 +126,6 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
         applicationList.push(application);
         application.create();
         cy.get("@getApplication");
-        cy.wait(2 * SEC);
         // Perform assessment of application
         application.perform_assessment("low", stakeholdersList, stakeholderGroupsList);
         application.verifyStatus("assessment", "Completed");
@@ -162,7 +158,6 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
             null
         );
         archetype.create();
-        cy.wait(2 * SEC);
 
         const tagCombinations = [
             [tagList[0].name, tagList[2].name],
@@ -182,7 +177,6 @@ describe(["@tier3"], "Applications interlinked to tags and business service", ()
             applicationList.push(application);
             application.create();
             cy.get("@getApplication");
-            cy.wait(2 * SEC);
             application.applicationDetailsTab("Tags");
             appData.tags.forEach((tag) => {
                 application.tagAndCategoryExists(tag);

@@ -52,6 +52,7 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
         cy.fixture("application").then(function (appData) {
             cy.fixture("analysis").then(function (analysisData) {
                 login();
+                cy.visit("/");
                 cleanupDownloads();
                 deleteAllMigrationWaves();
                 deleteApplicationTableRows();
@@ -67,17 +68,13 @@ describe(["@tier2"], "Prepare Downloaded Report", function () {
                 app.analyze();
                 app.verifyAnalysisStatus(AnalysisStatuses.completed);
                 app.downloadReport(ReportTypeSelectors.HTML);
-                cy.task("unzip", {
-                    path: "cypress/downloads/",
-                    file: `analysis-report-app-${app.name}.tar`,
-                });
-                cy.verifyDownload(`analysis-report-app-${app.name}/index.html`);
+                app.extractHTMLReport();
             });
         });
     });
 });
 
-describe(["@tier2"], "Test Static Report UI", function () {
+describe(["@tier2"], "Test Static Report UI", { baseUrl: null }, function () {
     const reportData = {
         name: "Adopt Maven Surefire plugin",
         category: "mandatory",
@@ -137,6 +134,7 @@ describe(["@tier2"], "Test Static Report UI", function () {
 describe(["@tier2"], "Delete Downloaded Report Data", function () {
     it("Delete Downloaded Report Data", function () {
         login();
+        cy.visit("/");
         cleanupDownloads();
         deleteAllMigrationWaves();
         deleteApplicationTableRows();

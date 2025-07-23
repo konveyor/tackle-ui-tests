@@ -6,15 +6,14 @@ import {
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
-import { SEC } from "../../../../types/constants";
 
-describe(["@tier3"], "Dependencies sort validations", function () {
+describe(["@tier3"], "Bug MTA-4598: Dependencies sort validations", function () {
     let application: Analysis;
     const sortByList = ["Dependency name", "Labels", "Found in"];
 
     before("Load data", function () {
         login();
-
+        cy.visit("/");
         cy.intercept("GET", "/hub/application*").as("getApplication");
         cy.fixture("application")
             .then(function (appData) {
@@ -35,13 +34,12 @@ describe(["@tier3"], "Dependencies sort validations", function () {
                 application.create();
                 cy.wait("@getApplication");
                 application.analyze();
-                cy.wait(2 * SEC);
                 application.verifyAnalysisStatus("Completed");
             });
     });
 
     sortByList.forEach((column) => {
-        it(`Bug MTA-4169: Sort dependencies by ${column}`, function () {
+        it(`Bug MTA-4598: Sort dependencies by ${column}`, function () {
             Dependencies.openList();
             validateSortBy(column);
         });

@@ -38,8 +38,8 @@ describe(["@tier2"], "CRUD operations for Jira Cloud instance", () => {
     let jiraStageConnection: Jira;
 
     before("Login", function () {
-        // Perform login
         login();
+        cy.visit("/");
         // Defining and creating credentials to be used in test
         jiraBasicCredential = new JiraCredentials(
             getJiraCredentialData(CredentialType.jiraBasic, useTestingAccount)

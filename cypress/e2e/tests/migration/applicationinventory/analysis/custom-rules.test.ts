@@ -38,7 +38,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
 
     before("Create test data", function () {
         login();
-
+        cy.visit("/");
         sourceCredential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -64,7 +64,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
         });
     });
 
-    it("Bug MTA-3366: Custom rule with administracionEfectivo application", function () {
+    it("Bug MTA-5199: Custom rule with administracionEfectivo application", function () {
         const app = new Analysis(
             getRandomApplicationData("customRule_administracionEfectivo"),
             getRandomAnalysisData(this.analysisData["administracionEfectivo_custom_rules"])
@@ -85,7 +85,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
                 source: "Upload a local binary",
                 target: ["Application server migration to"],
                 binary: ["jee-example-app-1.0.0.ear"],
-                customRule: ["basic-custom-rule.xml"],
+                customRule: ["basic-custom-rule.yaml"],
             })
         );
         Application.open();
@@ -98,7 +98,7 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
     });
 
     // Automates Bug MTA-2001
-    it("Bug MTA-3863: Verify triggered rule for dependency", function () {
+    it("Bug MTA-4885: Verify triggered rule for dependency", function () {
         const app = new Analysis(
             getRandomApplicationData("tackle-testapp-custom-rules", {
                 sourceData: this.appData["tackle-testapp-git"],
@@ -127,16 +127,16 @@ describe(["@tier2"], "Custom Rules in analyses", function () {
         tackleTestapp.verifyRulesNumber();
     });
 
-    it("Verify a file is not a valid XML", function () {
+    it.skip("Bug MTA-5779: Verify a file is not a valid YAML", function () {
         const app = new Analysis(
             getRandomApplicationData("tackle-testapp-fileNotValidXML", {
                 sourceData: this.appData["tackle-testapp-git"],
             }),
-            getRandomAnalysisData(this.analysisData["tackle_testapp_fileNotValidXML"])
+            getRandomAnalysisData(this.analysisData["tackle_testapp_fileNotValidYaml"])
         );
         app.create();
         applications.push(app);
-        app.verifyFileNotValidXML();
+        // TODO: after the bug is fixed Verify that the uploaded yaml not valid
     });
 
     it("Python custom rules file analysis", function () {

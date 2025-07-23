@@ -45,7 +45,7 @@ import { navMenu } from "../../../views/menu.view";
 import { TaskManagerColumns, tasksStatusColumn } from "../../../views/taskmanager.view";
 
 export class TaskManager {
-    static fullUrl = Cypress.env("tackleUrl") + "/tasks";
+    static fullUrl = Cypress.config("baseUrl") + "/tasks";
     static menuName = "Task Manager";
 
     static open(itemsPerPage = 10, forceReload = false) {
@@ -155,10 +155,16 @@ export class TaskManager {
         taskDetailsSanity(appName, taskKind, taskStatus);
     }
 
-    public static openTaskDetailsByKebabMenu(appName: string, taskKind: TaskKind) {
+    public static openTaskDetailsByKebabMenu(
+        appName: string,
+        taskKind: TaskKind,
+        sanityCheck: boolean = true
+    ) {
         TaskManager.open(10, true);
         TaskManager.getTaskRow(appName, taskKind).find(sideKebabMenu).click();
         cy.get(kebabActionButton).contains(taskDetails).click();
-        taskDetailsSanity(appName, taskKind);
+        if (sanityCheck) {
+            taskDetailsSanity(appName, taskKind);
+        }
     }
 }

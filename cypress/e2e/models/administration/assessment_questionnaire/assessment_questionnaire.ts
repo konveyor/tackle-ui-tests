@@ -1,7 +1,6 @@
 import {
     click,
     clickByText,
-    clickJs,
     selectItemsPerPage,
     selectUserPerspective,
 } from "../../../../utils/utils";
@@ -23,7 +22,7 @@ import * as commonView from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
 
 export class AssessmentQuestionnaire {
-    public static fullUrl = Cypress.env("tackleUrl") + "/assessment";
+    public static fullUrl = Cypress.config("baseUrl") + "/assessment";
 
     public static open(forceReload = false) {
         const itemsPerPage = 100;
@@ -98,7 +97,7 @@ export class AssessmentQuestionnaire {
                     .invoke("css", "display")
                     .then((display) => {
                         if (display.toString() == "none") {
-                            clickJs(switchToggle);
+                            cy.get(switchToggle, { timeout: 2 * SEC }).click();
                         }
                     });
             });

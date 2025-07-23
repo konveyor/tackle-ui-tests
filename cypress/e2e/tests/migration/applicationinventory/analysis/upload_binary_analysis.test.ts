@@ -22,15 +22,10 @@ import {
     login,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { Application } from "../../../../models/migration/applicationinventory/application";
 import { AnalysisStatuses } from "../../../../types/constants";
 
 const applicationsList: Analysis[] = [];
 describe(["@tier2"], "Upload Binary Analysis", () => {
-    before("Login", function () {
-        login();
-    });
-
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
@@ -40,8 +35,6 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         });
 
         cy.intercept("GET", "/hub/application*").as("getApplication");
-
-        Application.open(true);
     });
 
     it(["@interop", "@tier1"], "Analysis for acmeair app upload binary", function () {
@@ -52,11 +45,8 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
-
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
-        Application.open(true);
         application.verifyEffort(this.analysisData["uploadbinary_analysis_on_acmeair"]["effort"]);
     });
 
@@ -69,10 +59,8 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
-        Application.open(true);
         application.verifyEffort(
             this.analysisData["uploadbinary_analysis_with_customrule"]["effort"]
         );
@@ -86,12 +74,11 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it("Analysis for jee-example-app upload binary ", function () {
+    it("Analysis for jee-example-app upload binary", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(
@@ -101,10 +88,8 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        Application.open(true);
         application.verifyEffort(
             this.analysisData["analysis_and_incident_validation_jeeExample_app"]["effort"]
         );
@@ -118,16 +103,14 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        Application.open(true);
         application.verifyEffort(
             this.analysisData["analysis_and_incident_validation_camunda_app"]["effort"]
         );
     });
 
-    it("Analysis for kafka-clients-sb app ", function () {
+    it("Analysis for kafka-clients-sb app", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["analysis_and_incident_validation_kafka-app"])
@@ -135,10 +118,8 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
-        Application.open(true);
         application.verifyEffort(
             this.analysisData["analysis_and_incident_validation_kafka-app"]["effort"]
         );
@@ -152,16 +133,13 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        cy.wait(2000);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    afterEach("Persist session", function () {
-        Application.open(true);
-    });
-
     after("Perform test data clean up", function () {
+        login();
+        cy.visit("/");
         deleteByList(applicationsList);
     });
 });

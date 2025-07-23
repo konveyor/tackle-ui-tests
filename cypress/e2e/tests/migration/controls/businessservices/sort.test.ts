@@ -36,6 +36,7 @@ var businessServicesList: Array<BusinessServices> = [];
 describe(["@tier3"], "Business services sort validations", function () {
     before("Login and Create Test Data", function () {
         login();
+        cy.visit("/");
         stakeholdersList = createMultipleStakeholders(2);
         businessServicesList = createMultipleBusinessServices(2, stakeholdersList);
     });
@@ -47,7 +48,6 @@ describe(["@tier3"], "Business services sort validations", function () {
     });
 
     it("Name sort validations", function () {
-        // Navigate to business services tab
         BusinessServices.openList();
         cy.get("@getBusinessService");
 
@@ -56,42 +56,27 @@ describe(["@tier3"], "Business services sort validations", function () {
 
         // Sort the business services by name in ascending order
         clickOnSortButton(name, SortType.ascending);
-        cy.wait(2000);
-
-        // Verify that the business services table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(name);
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the business services by name in descending order
         clickOnSortButton(name, SortType.descending);
-        cy.wait(2000);
-
-        // Verify that the business services table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(name);
         verifySortDesc(afterDescSortList, unsortedList);
     });
 
     it("Owner sort validations", function () {
-        // Navigate to business services tab
         BusinessServices.openList();
         cy.get("@getBusinessService");
-
-        // get unsorted list when page loads
         const unsortedList = getTableColumnData(owner);
 
         // Sort the business services by owner in ascending order
         clickOnSortButton(owner, SortType.ascending);
-        cy.wait(2000);
-
-        // Verify that the business services table rows are displayed in ascending order
         const afterAscSortList = getTableColumnData(owner);
         verifySortAsc(afterAscSortList, unsortedList);
 
         // Sort the business services by owner in descending order
         clickOnSortButton(owner, SortType.descending);
-        cy.wait(2000);
-
-        // Verify that the business services table rows are displayed in descending order
         const afterDescSortList = getTableColumnData(owner);
         verifySortDesc(afterDescSortList, unsortedList);
     });

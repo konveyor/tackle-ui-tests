@@ -77,20 +77,23 @@ pipeline{
             }   
             steps{
                 script{
-                    env.TACKLE_URL = "http://"+sh(
+                    env.MINIKUBE_IP = sh(
                         script : 'minikube ip',
                         returnStdout: true
                     ).trim()
 
+                    env.TACKLE_URL = "http://"+"$MINIKUBE_IP"
+
                     ocp.pollRouteUntilReady(env.TACKLE_URL,15,30)
                     sh "sleep 40s" //Grace period after the application is serving correctly.
+                    tackle.exposeMetricsRouteMinikube()
                     sh(
                         script: "npm install",
                         label: "Install dependencies..."
                     )
                     //Run the tests.
                         sh """ 
-                        npx cypress run --spec $CHANGED_TEST_FILES --env user=$username,pass=$password,tackleUrl=$TACKLE_URL,git_user=$TACKLE_GIT_CREDS_USR,git_password=$TACKLE_GIT_CREDS_PSW,git_key='$TACKLE_GIT_KEY'
+                        npx cypress run --spec $CHANGED_TEST_FILES --config baseUrl=$TACKLE_URL --env user=$username,pass=$password,git_user=$TACKLE_GIT_CREDS_USR,git_password=$TACKLE_GIT_CREDS_PSW,git_key='$TACKLE_GIT_KEY'
                         """ 
                 }
             }

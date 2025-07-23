@@ -4,7 +4,7 @@ export class Metrics {
     metricsUrl: string;
 
     constructor() {
-        let splitted = Cypress.env("tackleUrl").split("//");
+        let splitted = Cypress.config("baseUrl").split("//");
         this.metricsUrl = "http://metrics-" + splitted[1] + "/metrics";
     }
 

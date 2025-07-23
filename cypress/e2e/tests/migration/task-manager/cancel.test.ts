@@ -21,13 +21,11 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    logout,
 } from "../../../../utils/utils";
 import { User } from "../../../models/keycloak/users/user";
 import { UserArchitect } from "../../../models/keycloak/users/userArchitect";
 import { UserMigrator } from "../../../models/keycloak/users/userMigrator";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
-import { Application } from "../../../models/migration/applicationinventory/application";
 import { TaskManager } from "../../../models/migration/task-manager/task-manager";
 import { TaskStatus } from "../../../types/constants";
 
@@ -37,12 +35,8 @@ describe(["@tier3"], "Cancel task created by another user", function () {
     let applicationsList: Array<Analysis> = [];
 
     before("Login", function () {
-        // Creating RBAC users
-        User.loginKeycloakAdmin();
-        userMigrator.create();
-        userArchitect.create();
-
         login();
+        cy.visit("/");
         deleteApplicationTableRows();
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
@@ -58,6 +52,11 @@ describe(["@tier3"], "Cancel task created by another user", function () {
                 applicationsList.forEach((application) => application.create());
             });
         });
+
+        // Creating RBAC users
+        User.loginKeycloakAdmin();
+        userMigrator.create();
+        userArchitect.create();
     });
 
     beforeEach("Load data", function () {
@@ -70,13 +69,9 @@ describe(["@tier3"], "Cancel task created by another user", function () {
     });
 
     it("Bug MTA-3819: Run analysis by admin and cancel by another user - should not be allowed", function () {
-        const app = applicationsList[0];
-        app.analyze();
-
-        logout();
+        applicationsList[0].analyze();
         userMigrator.login();
-        TaskManager.cancelAnalysisByStatus(app.name, TaskStatus.running, false);
-        userMigrator.logout();
+        TaskManager.cancelAnalysisByStatus(applicationsList[0].name, TaskStatus.running, false);
 
         // TODO: (mguetta) uncomment the below once bug MTA-3819 is fixed.
         // userArchitect.login();
@@ -85,25 +80,22 @@ describe(["@tier3"], "Cancel task created by another user", function () {
     });
 
     it("Bug MTA-3819: Run analysis by migrator and cancel by architect user - should not be allowed", function () {
-        userMigrator.logout(); // TODO: (mguetta) Remove once bug MTA-3819 is fixed.
-        const app1 = applicationsList[1];
         userMigrator.login();
-        Application.open();
-        app1.analyze();
+        applicationsList[1].analyze();
         userMigrator.logout();
 
         userArchitect.login();
-        TaskManager.cancelAnalysisByStatus(app1.name, TaskStatus.running, false);
+        TaskManager.cancelAnalysisByStatus(applicationsList[1].name, TaskStatus.running, false);
     });
 
     it("Run analysis by architect and cancel by admin user - should be allowed", function () {
-        const app2 = applicationsList[2];
-        Application.open();
-        app2.analyze();
-
+        userArchitect.login();
+        applicationsList[2].analyze();
         userArchitect.logout();
+
         login();
-        TaskManager.cancelAnalysisByStatus(app2.name, TaskStatus.running);
+        cy.visit("/");
+        TaskManager.cancelAnalysisByStatus(applicationsList[2].name, TaskStatus.running);
     });
 
     after("Perform test data clean up", function () {

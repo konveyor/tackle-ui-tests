@@ -35,7 +35,7 @@ import { navMenu } from "../../../../views/menu.view";
 
 export class Issues {
     /** Contains URL of issues web page */
-    static fullUrl = Cypress.env("tackleUrl") + "/issues";
+    static fullUrl = Cypress.config("baseUrl") + "/issues";
 
     public static openList(itemsPerPage = 100, forceReload = false): void {
         if (forceReload) {
@@ -143,6 +143,7 @@ export class Issues {
     }
 
     public static applyMultiFilter(filterType: issueFilter, filterValues: string[]): void {
+        Issues.openList();
         selectFilter(filterType);
         click(searchMenuToggle);
         filterValues.forEach((filterValue) => clickByText(span, filterValue));
@@ -211,7 +212,7 @@ export class Issues {
             button,
             /\d - View affected /
         );
-        Issues.validateSection(issue.name, sections.targetTechnologies, span, issue.targets);
+        Issues.validateSection(issue.name, sections.targetTechnologies, div, issue.targets);
         Issues.validateSection(issue.name, sections.sourceTechnologies, div, issue.sources);
         if (issue.ruleSet) {
             Issues.validateSection(issue.name, sections.ruleSet, div, issue.ruleSet);

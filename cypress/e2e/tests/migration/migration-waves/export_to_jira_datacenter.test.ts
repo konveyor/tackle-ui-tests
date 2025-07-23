@@ -33,7 +33,7 @@ end.setFullYear(end.getFullYear() + 1);
 let jiraCredentials: JiraCredentials;
 let jiraInstance: Jira;
 const applications: Application[] = [];
-const wavesMap = {};
+let wave: MigrationWave;
 let projectName = "";
 
 // Automates Polarion TC 340, 359, 360 and 361 for Jira Datacenter
@@ -59,7 +59,7 @@ describe(["@tier2"], "Export Migration Wave to Jira Datacenter", function () {
             ).to.eq(false);
         }
         login();
-
+        cy.visit("/");
         jiraCredentials = new JiraCredentials(
             data.getJiraCredentialData(CredentialType.jiraToken, true)
         );
@@ -76,20 +76,10 @@ describe(["@tier2"], "Export Migration Wave to Jira Datacenter", function () {
             const apps = createMultipleApplications(2);
             applications.push(...apps);
 
-            const migrationWave = new MigrationWave(
-                data.getRandomWord(8),
-                now,
-                end,
-                null,
-                null,
-                apps
-            );
-            migrationWave.create();
-            wavesMap[issueType] = migrationWave;
+            wave = new MigrationWave(data.getRandomWord(8), now, end, null, null, apps);
+            wave.create();
         });
-    });
 
-    Object.values(JiraIssueTypes).forEach((issueType) => {
         it(`Export wave as ${issueType} to Jira`, function () {
             jiraInstance
                 .getProjectById(Cypress.env("jira_stage_datacenter_project_id"))
@@ -104,7 +94,7 @@ describe(["@tier2"], "Export Migration Wave to Jira Datacenter", function () {
                     expect(!!issue).to.eq(true);
 
                     MigrationWave.open(true);
-                    wavesMap[issueType].exportToIssueManager(
+                    wave.exportToIssueManager(
                         JiraType.server,
                         jiraInstance.name,
                         projectName,
@@ -112,33 +102,27 @@ describe(["@tier2"], "Export Migration Wave to Jira Datacenter", function () {
                     );
                 });
         });
-    });
 
-    Object.values(JiraIssueTypes).forEach((issueType) => {
         it(`Assert exports for ${issueType}`, function () {
             cy.wait(40 * SEC); // Enough time to create both tasks and for them to be available in the Jira API
             jiraInstance.getIssues(projectName).then((issues: JiraIssue[]) => {
                 const waveIssues = issues.filter((issue) => {
                     return (
-                        (issue.fields.summary.includes(
-                            wavesMap[issueType].applications[0].name.trim()
-                        ) ||
-                            issue.fields.summary.includes(
-                                wavesMap[issueType].applications[1].name.trim()
-                            )) &&
+                        (issue.fields.summary.includes(wave.applications[0].name.trim()) ||
+                            issue.fields.summary.includes(wave.applications[1].name.trim())) &&
                         issue.fields.issuetype.name.toUpperCase() ===
                             (issueType as string).toUpperCase()
                     );
                 });
 
                 expect(waveIssues).to.have.length(2);
+                wave.delete();
             });
         });
     });
 
     after("Clear test data", function () {
         MigrationWave.open(true);
-        deleteByList(Object.values(wavesMap) as MigrationWave[]);
         deleteByList(applications);
         jiraInstance.delete();
         jiraCredentials.delete();

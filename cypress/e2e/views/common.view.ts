@@ -87,6 +87,7 @@ export const actionSelectToggle = "span.pf-v5-c-menu-toggle__controls";
 export const radioButtonLabel = "div.pf-v5-c-radio";
 export const radioButton = '*[class^="pf-v5-c-radio__input"]';
 export const splitItem = "div.pf-v5-l-split__item";
+export const taskNotificationBadge = "#task-notification-badge";
 
 // Application/Archetype side drawer
 export enum sideDrawer {
@@ -99,6 +100,7 @@ export enum sideDrawer {
 }
 export const closeAbout = "button[aria-label='Close Dialog']";
 export const pencilIcon = "#action";
+export const pencilAction = "#pencil-action";
 
 // Task details page
 export const taskDetailsEditor = "div[class='pf-v5-c-code-editor__code']";
@@ -113,3 +115,6 @@ export const downloadFormatDetails = {
     },
 };
 export const downloadTaskButton = "button[aria-label='Download code']";
+
+// Task Manager drawer
+export const taskDrawerItemTitle = "h2.pf-v5-c-notification-drawer__list-item-header-title";

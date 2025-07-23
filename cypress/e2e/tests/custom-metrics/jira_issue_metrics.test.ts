@@ -43,6 +43,7 @@ let counter: number;
 describe(["@tier2"], "Custom Metrics - Count the total number of issues exported", function () {
     before("Create test data", function () {
         login();
+        cy.visit("/");
         applications = createMultipleApplications(2);
 
         migrationWave = new MigrationWave(

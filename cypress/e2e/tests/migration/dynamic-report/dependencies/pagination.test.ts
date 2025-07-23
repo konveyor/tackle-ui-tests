@@ -23,12 +23,12 @@ import {
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
-import { SEC } from "../../../../types/constants";
 
-describe(["@tier3"], "Dependencies pagination validation", function () {
+describe(["@tier3"], "Bug MTA-4598 - Dependencies pagination validation", function () {
     let application: Analysis;
     before("Load data", function () {
         login();
+        cy.visit("/");
         cy.fixture("application")
             .then(function (appData) {
                 this.appData = appData;
@@ -47,7 +47,6 @@ describe(["@tier3"], "Dependencies pagination validation", function () {
                 );
                 application.create();
                 application.analyze();
-                cy.wait(2 * SEC);
                 application.verifyAnalysisStatus("Completed");
             });
     });
