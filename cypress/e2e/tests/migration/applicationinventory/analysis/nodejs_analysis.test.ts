@@ -51,7 +51,8 @@ describe(["@tier1"], "Nodejs Analysis", () => {
         application.verifyAnalysisStatus("Completed");
         application.verifyEffort(this.analysisData["source_analysis_on_nodejsApp"]["effort"]);
         application.validateIssues(this.analysisData["source_analysis_on_nodejsApp"]["issues"]);
-        application.verifyMergedLogContain();
+        Application.open();
+        application.verifyMergedLogContain("nodejs");
     });
 
     after("Perform test data clean up", () => {
