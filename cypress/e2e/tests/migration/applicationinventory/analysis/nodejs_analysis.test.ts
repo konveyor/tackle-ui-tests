@@ -53,7 +53,7 @@ describe(["@tier1"], "Nodejs Analysis", () => {
         application.verifyEffort(this.analysisData["source_analysis_on_nodejsApp"]["effort"]);
         application.validateIssues(this.analysisData["source_analysis_on_nodejsApp"]["issues"]);
         Application.open();
-        application.verifyLogContains(AnalysisLogView.mergedLogView, "lspServerName: nodejs");;
+        application.verifyLogContains(AnalysisLogView.mergedLogView, "lspServerName: nodejs");
     });
 
     after("Perform test data clean up", () => {
