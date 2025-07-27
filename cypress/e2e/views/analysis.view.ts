@@ -51,5 +51,5 @@ export const logDropDown = "span.pf-v5-c-menu__item-text";
 
 export enum LogView {
     mergedLogView = "Merged log view",
-    logView = "Log view"
+    logView = "Log view",
 }

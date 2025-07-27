@@ -568,17 +568,14 @@ export class Analysis extends Application {
         cy.wait(3 * SEC);
 
         cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 })
-        .should("be.visible")
-        .click()
-        .type('{ctrl+f}')
-        .type(`${searchText}`)
-        .type('{enter}')
-        .wait(2 * SEC)
-        .type('{Esc}');
-    
-
-        cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 })
             .should("be.visible")
             .click()
+            .type("{ctrl+f}")
+            .type(`${searchText}`)
+            .type("{enter}")
+            .wait(2 * SEC)
+            .type("{Esc}");
+
+        cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 }).should("be.visible").click();
     }
 }
