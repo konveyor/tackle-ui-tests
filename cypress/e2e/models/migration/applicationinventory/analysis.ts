@@ -458,8 +458,7 @@ export class Analysis extends Application {
 
     openAnalysisDetails() {
         cy.wait(2000);
-        // sidedrawerTab(this.name, "Reports"); todo:for debuggin purpose only, revert
-        sidedrawerTab("nodejsApp_Source_test-app-voluptatem8", "Reports");
+        sidedrawerTab(this.name, "Reports");
         clickByText(button, analysisDetails);
         cy.wait(2 * SEC);
     }
