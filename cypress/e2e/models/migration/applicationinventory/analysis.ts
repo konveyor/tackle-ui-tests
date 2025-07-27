@@ -564,14 +564,12 @@ export class Analysis extends Application {
         this.openAnalysisDetails();
         cy.get(logFilter).eq(2).click();
         clickByText(logDropDown, "Merged log view");
-
+        cy.wait(3 * SEC);
         // Wait for the editor content to load and assert expected text
         cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 })
             .should("be.visible")
-            .find(".monaco-scrollable-element.editor-scrollable.vs-dark")
-            .invoke("text")
-            .then((text) => {
-                expect(text).to.contain(`lspServerName: ${serverName}`);
+            .then(($editor) => {
+                expect($editor.text()).to.contain(`lspServerName: ${serverName}`);
             });
     }
 }
