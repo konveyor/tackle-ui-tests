@@ -12,7 +12,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { AnalysisLogView } from "cypress/e2e/views/analysis.view";
+import { AnalysisLogView } from "../../../../views/analysis.view";
 import {
     deleteByList,
     getRandomAnalysisData,
