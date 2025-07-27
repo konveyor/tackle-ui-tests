@@ -568,8 +568,10 @@ export class Analysis extends Application {
         // Wait for the editor content to load and assert expected text
         cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 })
             .should("be.visible")
-            .then(($editor) => {
-                expect($editor.text()).to.contain(`lspServerName: ${serverName}`);
+            .find(".monaco-scrollable-element.editor-scrollable.vs-dark")
+            .invoke("text")
+            .then((text) => {
+                expect(text).to.contain(`lspServerName: ${serverName}`);
             });
     }
 }
