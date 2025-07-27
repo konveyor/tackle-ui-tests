@@ -12,6 +12,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { LogView } from "../../../../views/analysis.view";
 import {
     deleteByList,
     getRandomAnalysisData,
@@ -52,7 +53,7 @@ describe(["@tier1"], "Nodejs Analysis", () => {
         application.verifyEffort(this.analysisData["source_analysis_on_nodejsApp"]["effort"]);
         application.validateIssues(this.analysisData["source_analysis_on_nodejsApp"]["issues"]);
         Application.open();
-        application.verifyMergedLogContain("nodejs");
+        application.verifyLogContains(LogView.mergedLogView, "lspServerName: nodejs");
     });
 
     after("Perform test data clean up", () => {

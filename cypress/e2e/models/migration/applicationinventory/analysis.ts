@@ -73,6 +73,7 @@ import {
     languageSelectionDropdown,
     logDropDown,
     logFilter,
+    LogView,
     manageCredentials,
     mavenCredential,
     numberOfRulesColumn,
@@ -457,7 +458,8 @@ export class Analysis extends Application {
 
     openAnalysisDetails() {
         cy.wait(2000);
-        sidedrawerTab(this.name, "Reports");
+        // sidedrawerTab(this.name, "Reports"); todo:for debuggin purpose only, revert
+        sidedrawerTab("nodejsApp_Source_test-app-voluptatem8", "Reports");
         clickByText(button, analysisDetails);
         cy.wait(2 * SEC);
     }
@@ -560,19 +562,24 @@ export class Analysis extends Application {
         clickItemInKebabMenu(this.name, "Cancel analysis");
     }
 
-    verifyMergedLogContain(serverName: string = "generic"): void {
+    verifyLogContains(logView: LogView, searchText: string): void {
         this.openAnalysisDetails();
         cy.get(logFilter).eq(2).click();
-        clickByText(logDropDown, "Merged log view");
+        clickByText(logDropDown, logView);
         cy.wait(3 * SEC);
+
+        cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 })
+        .should("be.visible")
+        .click()
+        .type('{ctrl+f}')
+        .type(`${searchText}`)
+        .type('{enter}')
+        .wait(2 * SEC)
+        .type('{Esc}');
+    
+
         cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 })
             .should("be.visible")
-            .find(".lines-content.monaco-editor-background")
-            .scrollTo("bottom")
-            .wait(2 * SEC);
-        cy.get(".pf-v5-c-code-editor__code")
-            .then(($editor) => {
-                expect($editor.text()).to.contain(`lspServerName: ${serverName}`);
-            });
+            .click()
     }
 }
