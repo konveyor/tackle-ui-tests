@@ -566,8 +566,10 @@ export class Analysis extends Application {
         clickByText(logDropDown, "Merged log view");
 
         // Wait for the editor content to load and assert expected text
-        cy.get(".pf-v5-c-code-editor__code", { timeout: 5000 }).then(($editor) => {
-            expect($editor.text()).to.contain(`lspServerName: ${serverName}`);
+        cy.get(".pf-v5-c-code-editor__code", { timeout: 5000 }).within(() => {
+            cy.get(".lines-content").then(($editor) => {
+                expect($editor.text()).to.contain(`lspServerName: ${serverName}`);
+            });
         });
     }
 }
