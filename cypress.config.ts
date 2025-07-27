@@ -12,10 +12,8 @@ export default defineConfig({
     video: false,
     env: {
         user: "admin",
-        initialPassword: "Passw0rd!",
         pass: "Dog8code",
-        keycloakAdminPassword: "",
-        git_user: "",
+        git_user: "midays",
         git_password: "",
         svn_user: "qe-admin",
         svn_password: "Dog8code",
@@ -29,7 +27,7 @@ export default defineConfig({
         jira_atlassian_cloud_project: "Test",
         jira_stage_datacenter_project_id: 12335626,
         rwx_enabled: true,
-        logLevel: "INFO", // VERBOSE, INFO, ASSERT, ERROR
+        logLevel: "VERBOSE",
         mtaVersion: "",
         FAIL_FAST_PLUGIN: true,
         FAIL_FAST_ENABLED: false,
@@ -55,7 +53,7 @@ export default defineConfig({
     defaultCommandTimeout: 8000,
     e2e: {
         specPattern: "cypress/e2e/**/*.test.{js,jsx,ts,tsx}",
-        baseUrl: process.env.CYPRESS_baseUrl || "https://tackle-konveyor-tackle.apps.mig09.rhos-psi.cnv-qe.rhood.us",
+        baseUrl: process.env.CYPRESS_baseUrl || "https://mta-openshift-mta.apps.mtv-mida-c2af0.rhos-psi.cnv-qe.rhood.us",
         setupNodeEvents(on, config) {
             // preprocessors (for typescript and tags)
             esbuildPreprocessor(on);

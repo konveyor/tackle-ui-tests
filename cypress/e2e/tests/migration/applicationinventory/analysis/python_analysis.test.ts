@@ -53,7 +53,6 @@ describe(["@tier1"], "Python app analysis", () => {
         application.verifyEffort(this.analysisData["source_analysis_on_pythonApp"]["effort"]);
         application.validateIssues(this.analysisData["source_analysis_on_pythonApp"]["issues"]);
     });
-    
 
     after("Perform test data clean up", () => {
         deleteByList(applicationsList);
