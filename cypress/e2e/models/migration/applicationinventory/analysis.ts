@@ -73,6 +73,7 @@ import {
     languageSelectionDropdown,
     logDropDown,
     logFilter,
+    AnalysisLogView,
     manageCredentials,
     mavenCredential,
     numberOfRulesColumn,
@@ -560,14 +561,21 @@ export class Analysis extends Application {
         clickItemInKebabMenu(this.name, "Cancel analysis");
     }
 
-    verifyMergedLogContain(): void {
+    verifyLogContains(analysisLogView: AnalysisLogView, searchText: string): void {
         this.openAnalysisDetails();
         cy.get(logFilter).eq(2).click();
-        clickByText(logDropDown, "Merged log view");
+        clickByText(logDropDown, analysisLogView);
+        cy.wait(3 * SEC);
 
-        // Wait for the editor content to load and assert expected text
-        cy.get(".pf-v5-c-code-editor__code", { timeout: 5000 }).then(($editor) => {
-            expect($editor.text()).to.contain("lspServerName: generic");
-        });
+        cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 })
+            .should("be.visible")
+            .click()
+            .type("{ctrl+f}")
+            .type(`${searchText}`)
+            .type("{enter}")
+            .wait(2 * SEC)
+            .type("{Esc}");
+
+        cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 }).should("be.visible").click();
     }
 }

@@ -12,6 +12,7 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { AnalysisLogView } from "cypress/e2e/views/analysis.view";
 import {
     deleteByList,
     getRandomAnalysisData,
@@ -51,7 +52,8 @@ describe(["@tier1"], "Nodejs Analysis", () => {
         application.verifyAnalysisStatus("Completed");
         application.verifyEffort(this.analysisData["source_analysis_on_nodejsApp"]["effort"]);
         application.validateIssues(this.analysisData["source_analysis_on_nodejsApp"]["issues"]);
-        application.verifyMergedLogContain();
+        Application.open();
+        application.verifyLogContains(AnalysisLogView.mergedLogView, "lspServerName: nodejs");;
     });
 
     after("Perform test data clean up", () => {
