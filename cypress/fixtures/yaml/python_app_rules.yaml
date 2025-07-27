@@ -1,6 +1,6 @@
 - ruleID: python-sample-rule-001
   message: python sample rule 001
-  description: CUSTOM RULE FOR PYTHON
+  description: sample-rule-1 - this should appear as an issue
   category: potential
   effort: 1
   when:
@@ -8,6 +8,7 @@
       pattern: "hello_world"
 - ruleID: python-sample-rule-002
   message: python sample rule 002
+  description: sample-rule-2 - this should appear as an issue
   category: potential
   effort: 5
   when:
