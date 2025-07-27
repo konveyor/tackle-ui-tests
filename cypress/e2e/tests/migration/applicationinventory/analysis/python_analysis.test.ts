@@ -38,7 +38,6 @@ describe(["@tier1"], "Python app analysis", () => {
         cy.intercept("DELETE", "/hub/application*").as("deleteApplication");
     });
     it("Source analysis on python application", function () {
-
         const application = new Analysis(
             getRandomApplicationData("pythonApp_Source", {
                 sourceData: this.appData["python-app"],
