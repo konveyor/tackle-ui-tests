@@ -12,7 +12,6 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { AnalysisLogView } from "../../../../views/analysis.view";
 import {
     deleteByList,
     getRandomAnalysisData,
@@ -20,6 +19,7 @@ import {
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { AnalysisLogView } from "../../../../views/analysis.view";
 
 let applicationsList: Array<Analysis> = [];
 describe(["@tier1"], "Nodejs Analysis", () => {
