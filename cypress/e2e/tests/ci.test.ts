@@ -95,7 +95,7 @@ describe("UI Sanity Tests", () => {
         notExists(jobfunction.name);
     });
 
-    it(["@ci"], "Archetype CRUD operations", function () {
+    it(["@ci"], "Stakeholder , Stakeholder Group , Tag and Archetype CRUD operations", function () {
         // Automates Polarion MTA-395
         stakeholders = createMultipleStakeholders(2);
         stakeholderGroups = createMultipleStakeholderGroups(2);
