@@ -570,10 +570,13 @@ export class Analysis extends Application {
         cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 })
             .should("be.visible")
             .click()
-            .type("{ctrl+f}")
+            .wait(1 * SEC)
+            .type("{ctrl}f")
+            .wait(1 * SEC)
             .type(`${searchText}`)
+            .wait(1 * SEC)
             .type("{enter}")
-            .wait(2 * SEC)
+            .wait(1 * SEC)
             .type("{Esc}");
 
         cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 }).then(($editor) => {
