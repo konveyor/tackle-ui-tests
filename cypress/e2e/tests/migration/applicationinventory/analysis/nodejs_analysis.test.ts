@@ -51,9 +51,9 @@ describe(["@tier1"], "Nodejs Analysis", () => {
         cy.wait("@getApplication");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        cy.wait(1 * SEC);
+        cy.wait(2 * SEC);
         application.verifyEffort(this.analysisData["source_analysis_on_nodejsApp"]["effort"]);
-        cy.wait(1 * SEC);
+        cy.wait(2 * SEC);
         application.validateIssues(this.analysisData["source_analysis_on_nodejsApp"]["issues"]);
         Application.open();
         application.verifyLogContains(AnalysisLogView.mergedLogView, "lspServerName: nodejs");
