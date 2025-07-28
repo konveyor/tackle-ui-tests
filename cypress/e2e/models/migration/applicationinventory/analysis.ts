@@ -573,11 +573,11 @@ export class Analysis extends Application {
             .wait(1 * SEC)
             .type("{ctrl}f")
             .wait(1 * SEC)
-            .type(`${searchText}`)
-            .wait(1 * SEC)
-            .type("{enter}")
-            .wait(1 * SEC)
-            .type("{Esc}");
+
+            cy.get('.find-part textarea.input', { timeout: 5000 })
+                .should('be.visible')
+                .clear()
+                .type(`${searchText}`);
 
         cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 }).then(($editor) => {
             expect($editor.text()).to.contain(searchText);
