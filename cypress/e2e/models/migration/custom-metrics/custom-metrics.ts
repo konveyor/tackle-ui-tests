@@ -4,8 +4,7 @@ export class Metrics {
     metricsUrl: string;
 
     constructor() {
-        let splitted = Cypress.config("baseUrl").split("//");
-        this.metricsUrl = "http://metrics-" + splitted[1] + "/metrics";
+        this.metricsUrl = Cypress.env("metricsUrl");
     }
 
     validateMetric(metricName: string, value: number): void {
