@@ -576,6 +576,8 @@ export class Analysis extends Application {
             .wait(2 * SEC)
             .type("{Esc}");
 
-        cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 }).should("be.visible").click();
+        cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 }).then(($editor) => {
+            expect($editor.text()).to.contain(searchText);
+        });
     }
 }
