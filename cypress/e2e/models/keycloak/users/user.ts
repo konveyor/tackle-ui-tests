@@ -17,7 +17,6 @@ import {
     checkBox,
     createPasswordButton,
     filterTypeDropdown,
-    kebabToogleButton,
     modalConfirmButton,
     passwordConfirm,
     passwordInput,
@@ -69,8 +68,8 @@ export class User {
     static changeRealm(realm: string) {
         cy.url().then(($url) => {
             if (!$url.includes(`#/${realm}`)) {
-                click('a[data-testid="nav-item-realms"]');
-                clickByText("a", realm);
+                click('button[data-testid="realmSelector"]');
+                clickByText(button, realm);
             }
         });
     }
@@ -142,8 +141,10 @@ export class User {
             .contains(this.username, { timeout: 120 * SEC })
             .closest(trTag)
             .within(() => {
-                click(kebabToogleButton);
-                clickByText(tdTag, "Delete");
+                // click(kebabToogleButton);
+                // clickByText(tdTag, "Delete");
+                click("input");
+                click("button[data-testid='delete-user-btn']");
                 cy.wait(500);
             });
     }
