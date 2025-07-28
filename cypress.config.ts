@@ -26,6 +26,7 @@ export default defineConfig({
         mtaVersion: "",
         FAIL_FAST_PLUGIN: true,
         FAIL_FAST_ENABLED: false,
+        metricsUrl: "",
     },
     retries: {
         runMode: 0,
