@@ -1459,7 +1459,7 @@
             {
                 "name": "The package 'javax' has been replaced by 'jakarta'",
                 "category": "mandatory",
-                "sources": ["None"],
+                "sources": ["spring5"],
                 "targets": ["eap", "eap8"],
                 "effort": 1,
                 "affectedFiles": 2,
