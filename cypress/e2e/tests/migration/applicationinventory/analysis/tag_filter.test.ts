@@ -16,7 +16,12 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import * as data from "../../../../../utils/data_utils";
-import { getRandomAnalysisData, getRandomApplicationData, login } from "../../../../../utils/utils";
+import {
+    deleteByList,
+    getRandomAnalysisData,
+    getRandomApplicationData,
+    login,
+} from "../../../../../utils/utils";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
@@ -46,7 +51,7 @@ describe(["@tier3"], "Filter tags on application details page", () => {
                 true
             )
         );
-        // source_credential.create();
+        source_credential.create();
 
         tagCategory = new TagCategory(data.getRandomWord(8), data.getColor());
         tagCategory.create();
@@ -141,18 +146,17 @@ describe(["@tier3"], "Filter tags on application details page", () => {
 
     after("Perform test data clean up", function () {
         Application.open(true);
-        // deleteByList(applications);
+        deleteByList(applications);
         tag.delete();
         tagCategory.delete();
-        // source_credential.delete();
+        source_credential.delete();
     });
 
     const analyzeAndVerifyEnableTaggingApplication = (application: Analysis) => {
         applications.push(application);
         application.create();
         cy.wait("@getApplication");
-        // application.manageCredentials(source_credential.name, null);
-        application.manageCredentials("upgrade-srcUsername", null);
+        application.manageCredentials(source_credential.name, null);
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     };
