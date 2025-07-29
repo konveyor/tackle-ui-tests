@@ -25,3 +25,5 @@ export const confirmPasswordInput = "input[name=password-confirm]";
 export const submitButton = "button[type=submit]";
 export const submitInput = "input[type=submit]";
 export const inputError = "span[id=input-error]";
+export const deleteUserButton = 'button[data-testid="delete-user-btn"]';
+export const realmSelector = 'button[data-testid="realmSelector"]';
