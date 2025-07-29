@@ -57,6 +57,7 @@ import {
     addRules,
     analysisColumn,
     analysisDetails,
+    AnalysisLogView,
     analyzeManuallyButton,
     camelToggleButton,
     closeWizard,
@@ -560,14 +561,26 @@ export class Analysis extends Application {
         clickItemInKebabMenu(this.name, "Cancel analysis");
     }
 
-    verifyMergedLogContain(): void {
+    verifyLogContains(analysisLogView: AnalysisLogView, searchText: string): void {
         this.openAnalysisDetails();
         cy.get(logFilter).eq(2).click();
-        clickByText(logDropDown, "Merged log view");
+        clickByText(logDropDown, analysisLogView);
+        cy.wait(3 * SEC);
 
-        // Wait for the editor content to load and assert expected text
-        cy.get(".pf-v5-c-code-editor__code", { timeout: 5000 }).then(($editor) => {
-            expect($editor.text()).to.contain("lspServerName: generic");
+        cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 })
+            .should("be.visible")
+            .click()
+            .wait(1 * SEC)
+            .type("{ctrl}f")
+            .wait(1 * SEC);
+
+        cy.get(".find-part textarea.input", { timeout: 5000 })
+            .should("be.visible")
+            .clear()
+            .type(`${searchText}`);
+
+        cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 }).then(($editor) => {
+            expect($editor.text()).to.contain(searchText);
         });
     }
 }
