@@ -179,7 +179,7 @@ export class Assessment {
                     if (saveAndReview && i == lastStep) {
                         clickJs(commonView.saveAndReviewButton);
                     } else {
-                        cy.get(commonView.nextButton).click();
+                        clickJs(commonView.nextButton);
                     }
                 }
             });
@@ -222,7 +222,6 @@ export class Assessment {
         if (stakeholders || stakeholderGroups)
             this.selectStakeholdersAndGroups(stakeholders, stakeholderGroups);
         clickJs(commonView.nextButton);
-        cy.wait(SEC);
         this.selectAnswers(risk, saveAndReview);
     }
 
@@ -232,7 +231,6 @@ export class Assessment {
         this.fillCriticality(risk);
         this.fillPriority(risk);
         clickByText(button, "Submit review");
-        cy.wait(2 * SEC);
     }
 
     public static validateReviewFields(
@@ -277,9 +275,8 @@ export class Assessment {
         ];
 
         for (let i in list) {
-            cy.wait(SEC * 2);
             cy.get("dt", { timeout: 3 * SEC })
-                .contains(list[i])
+                .contains(list[i], { timeout: 2 * SEC })
                 .closest("div")
                 .within(() => {
                     if (archetypeName) {
@@ -296,14 +293,24 @@ export class Assessment {
                             }
                         });
                     } else {
-                        cy.get("dd").then(($value) => {
+                        cy.get("dd", { timeout: 3 * SEC }).then(($value) => {
                             let text = $value.text();
-                            if (list[i] == "Proposed action") expect(text).to.be.oneOf(actionList);
-                            if (list[i] == "Effort estimate")
+                            if (list[i] == "Proposed action") {
+                                cy.wait(5 * SEC);
+                                expect(text).to.be.oneOf(actionList);
+                            }
+                            cy.log("proposed action");
+                            if (list[i] == "Effort estimate") {
                                 expect(text).to.be.oneOf(effortEstimateList);
-                            if (list[i] == "Business criticality" || list[i] == "Work priority")
+                                cy.log("effort estimate");
+                            }
+                            if (list[i] == "Business criticality" || list[i] == "Work priority") {
+                                cy.log("criticality");
                                 expect(text).to.be.oneOf(criticalityList);
-                            if (list[i] == "Comments") expect(text).not.equal("Not yet reviewed");
+                            }
+                            if (list[i] == "Comments") {
+                                expect(text).not.equal("Not yet reviewed");
+                            }
                         });
                     }
                 });

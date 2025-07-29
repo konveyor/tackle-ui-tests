@@ -9,7 +9,7 @@ else
   host="${rawHost}/hub"
 fi
   
-export TOKEN=$(curl -kSs -d '{"user":"admin","password":"Dog8code"}' \
+export TOKEN=$(curl -kSs -d "{\"user\":\"${USERNAME}\",\"password\":\"${PASSWORD}\"}" \
   https://${host}/auth/login | jq -r ".token")
 
 appId="${1:-0}"

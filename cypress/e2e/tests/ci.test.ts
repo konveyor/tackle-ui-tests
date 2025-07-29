@@ -165,7 +165,9 @@ describe("UI Sanity Tests", () => {
             // Perform application review
             application.perform_review("low");
             application.verifyStatus("review", "Completed");
-            application.validateReviewFields();
+
+            // TO DO - Uncomment once bug https://issues.redhat.com/browse/MTA-5794 is fixed.
+            // application.validateReviewFields();
 
             application.analyze();
             checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);

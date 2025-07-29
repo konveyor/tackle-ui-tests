@@ -1010,7 +1010,6 @@ export function createMultipleTags(numberoftags: number): Array<Tag> {
         //Create Tag category
         const tagCategory = new TagCategory(data.getRandomWord(8), data.getColor());
         tagCategory.create();
-        cy.wait(2 * SEC);
         // Create new tag
         const tag = new Tag(data.getRandomWord(6), tagCategory.name);
         tag.create();
@@ -1822,9 +1821,10 @@ export function isRwxEnabled(): Cypress.Chainable<boolean> {
 export function seedAnalysisData(applicationId: number): void {
     const baseUrl = Cypress.config("baseUrl");
     const hostname = new URL(baseUrl).hostname;
-    cy.log(hostname);
-    const command = `cd cypress/fixtures && chmod +x analysis.sh && HOST=${hostname} ./analysis.sh ${applicationId}`;
-    cy.log(command);
+    const username = Cypress.env("user");
+    const password = Cypress.env("pass");
+
+    const command = `cd cypress/fixtures && chmod +x analysis.sh && HOST=${hostname} USERNAME=${username} PASSWORD=${password} ./analysis.sh ${applicationId}`;
     cy.exec(command, {
         timeout: 120 * SEC,
         failOnNonZeroExit: false,
