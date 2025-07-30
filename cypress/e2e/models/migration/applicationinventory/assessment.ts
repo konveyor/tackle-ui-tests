@@ -179,7 +179,17 @@ export class Assessment {
                     if (saveAndReview && i == lastStep) {
                         clickJs(commonView.saveAndReviewButton);
                     } else {
-                        clickJs(commonView.nextButton);
+                        // title on questionnaire changes on each page
+                        // This avoids the use of arbitrary `cy.wait()` calls
+                        cy.get("h1")
+                            .invoke("text")
+                            .then((titleBefore) => {
+                                clickJs(commonView.nextButton);
+                                cy.get("h1", { timeout: 10000 }).should(($h1) => {
+                                    const titleAfter = $h1.text().trim();
+                                    expect(titleAfter).not.to.eq(titleBefore);
+                                });
+                            });
                     }
                 }
             });
