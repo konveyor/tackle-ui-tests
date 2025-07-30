@@ -1158,8 +1158,7 @@ type Deletable = { delete: () => void };
 
 export function deleteByList<T extends Deletable>(array: T[]): void {
     array.forEach((element) => {
-        element.delete();
-        cy.wait(2 * SEC);
+        cy.wrap(null).then(() => element.delete());
     });
 }
 

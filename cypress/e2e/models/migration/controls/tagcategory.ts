@@ -19,7 +19,9 @@ import {
     click,
     clickByText,
     clickItemInKebabMenu,
+    closeSuccessAlert,
     confirm,
+    exists,
     performRowActionByIcon,
     selectItemsPerPage,
     selectUserPerspective,
@@ -87,6 +89,9 @@ export class TagCategory {
             fillName(this.name);
             this.selectColor(this.color);
             submitForm();
+            closeSuccessAlert();
+            selectItemsPerPage(100);
+            exists(this.name);
         }
     }
 
