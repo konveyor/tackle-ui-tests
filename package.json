@@ -40,8 +40,8 @@
     },
     "scripts": {
         "prepare": "node .husky/install.mjs",
-        "e2e:run:local": "cypress run --env tackleUrl=http://localhost:9000",
-        "e2e:open:local": "cypress open --e2e --env tackleUrl=http://localhost:9000",
+        "e2e:run:local": "cypress run --env baseUrl=http://localhost:9000",
+        "e2e:open:local": "cypress open --e2e --env baseUrl=http://localhost:9000",
         "check": "prettier --check './cypress/**/*.{ts,js,json}'",
         "format": "prettier --write './cypress/**/*.{ts,js,json}'",
         "mergereports": "npx jrm ./cypress/reports/junitreport.xml ./cypress/reports/junit/*.xml"

@@ -116,7 +116,6 @@ export class TagCategory {
     delete(cancel = false): void {
         // Opening tags list only if another tab is opened
         TagCategory.openList();
-
         clickItemInKebabMenu(this.name, deleteAction);
         if (cancel) {
             click(commonView.confirmCancelButton);

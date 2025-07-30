@@ -68,6 +68,7 @@ import {
     closeForm,
     group,
     kebabMenu,
+    kebabMenuAction,
     northdependenciesDropdownBtn,
     packaging,
     profileEdit,
@@ -398,19 +399,22 @@ export class Application {
      * Verify that tags and categories are present on Application details -> Tags page
      * @param tags tag or list of tags
      */
-    tagAndCategoryExists(tags: string | string[][]): void {
+    tagAndCategoryExists(tags: string | [string, string[]][]): void {
         if (Array.isArray(tags)) {
-            // For Tags and Categories
-            tags.forEach(function (tag) {
-                cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
-                    "contain",
-                    tag[1]
-                );
-                cy.get(appDetailsView.tagCategory).should("contain", tag[0]);
+            // For Tags and Categories: [category, [tag1, tag2, ...]]
+            tags.forEach(function ([category, tagList]) {
+                cy.get(appDetailsView.tagCategory).should("contain", category);
+                tagList.forEach(function (tag) {
+                    cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
+                        "contain",
+                        tag
+                    );
+                });
             });
+        } else {
+            // For tags
+            cy.get(appDetailsView.applicationTag).should("contain", tags);
         }
-        // For Tags
-        else cy.get(appDetailsView.applicationTag).should("contain", tags);
     }
 
     /**
@@ -751,7 +755,7 @@ export class Application {
     // Opens the manage dependencies dialog from application inventory page
     openManageDependencies(): void {
         Application.open();
-        performRowActionByIcon(this.name, kebabMenu);
+        performRowActionByIcon(this.name, kebabMenuAction, 1);
         clickByText(button, "Manage dependencies");
     }
 

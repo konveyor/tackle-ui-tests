@@ -29,7 +29,7 @@ import {
     selectFormItems,
     sidedrawerTab,
     uploadApplications,
-    uploadXml,
+    uploadFile,
 } from "../../../../utils/utils";
 import {
     AnalysisStatuses,
@@ -57,6 +57,7 @@ import {
     addRules,
     analysisColumn,
     analysisDetails,
+    AnalysisLogView,
     analyzeManuallyButton,
     camelToggleButton,
     closeWizard,
@@ -251,7 +252,7 @@ export class Analysis extends Application {
         for (let i = 0; i < this.customRule.length; i++) {
             cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
             const folder = this.customRule[i].split(".").pop();
-            uploadXml(`${folder}/${this.customRule[i]}`);
+            uploadFile(`${folder}/${this.customRule[i]}`);
             cy.wait(2000);
             cy.get("span.pf-v5-c-progress__measure", { timeout: 150000 }).should("contain", "100%");
             cy.wait(2000);
@@ -535,29 +536,6 @@ export class Analysis extends Application {
             });
     }
 
-    verifyFileNotValidXML(): void {
-        this.selectApplication();
-        cy.contains(button, analyzeButton).should("be.enabled").click();
-        this.selectSourceofAnalysis(this.source);
-        next();
-        next();
-        next();
-        for (let i = 0; i < this.customRule.length; i++) {
-            cy.contains("button", "Add rules", { timeout: 20000 }).should("be.enabled").click();
-            const folder = this.customRule[i].split(".").pop();
-            uploadXml(`${folder}/${this.customRule[i]}`);
-            cy.wait(2000);
-            cy.get("span.pf-v5-c-progress__measure", { timeout: 150000 }).should("contain", "100%");
-            cy.wait(2000);
-            cy.get("h4.pf-v5-c-alert__title").should(
-                "contain.text",
-                `Error: File "${this.customRule[i]}" is not a valid XML: `
-            );
-            cy.contains(addRules, "Add", { timeout: 2000 }).should("not.be.enabled");
-        }
-        cy.get(closeWizard).click({ force: true });
-    }
-
     // verifyRulesNumber verifies the number of rules found in an uploaded custom rules file
     public verifyRulesNumber(): void {
         Application.open();
@@ -583,14 +561,26 @@ export class Analysis extends Application {
         clickItemInKebabMenu(this.name, "Cancel analysis");
     }
 
-    verifyMergedLogContain(): void {
+    verifyLogContains(analysisLogView: AnalysisLogView, searchText: string): void {
         this.openAnalysisDetails();
         cy.get(logFilter).eq(2).click();
-        clickByText(logDropDown, "Merged log view");
+        clickByText(logDropDown, analysisLogView);
+        cy.wait(3 * SEC);
 
-        // Wait for the editor content to load and assert expected text
-        cy.get(".pf-v5-c-code-editor__code", { timeout: 5000 }).then(($editor) => {
-            expect($editor.text()).to.contain("lspServerName: generic");
+        cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 })
+            .should("be.visible")
+            .click()
+            .wait(1 * SEC)
+            .type("{ctrl}f")
+            .wait(1 * SEC);
+
+        cy.get(".find-part textarea.input", { timeout: 5000 })
+            .should("be.visible")
+            .clear()
+            .type(`${searchText}`);
+
+        cy.get(".pf-v5-c-code-editor__code", { timeout: 10000 }).then(($editor) => {
+            expect($editor.text()).to.contain(searchText);
         });
     }
 }

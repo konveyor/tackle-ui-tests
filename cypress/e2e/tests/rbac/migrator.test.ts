@@ -39,6 +39,7 @@ describe(["@tier3", "@rhsso"], "Migrator RBAC operations", () => {
     );
 
     before("Creating RBAC users, adding roles for them", () => {
+        cy.clearLocalStorage();
         login();
         cy.visit("/");
         AssessmentQuestionnaire.enable(legacyPathfinder);
@@ -51,16 +52,15 @@ describe(["@tier3", "@rhsso"], "Migrator RBAC operations", () => {
         appCredentials.create();
         application.create();
         application.perform_review("low");
-
         User.loginKeycloakAdmin();
         userMigrator.create();
     });
 
     beforeEach("Persist session", function () {
-        userMigrator.login();
         cy.fixture("rbac").then(function (rbacRules) {
             this.rbacRules = rbacRules["migrator"];
         });
+        userMigrator.login();
     });
 
     it("Migrator, validate create application button", function () {

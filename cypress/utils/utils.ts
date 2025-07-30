@@ -723,14 +723,6 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
     checkSuccessAlert(successAlertMessage, `Success! file saved to be processed.`);
 }
 
-export function uploadXml(fileName: string, selector = 'input[type="file"]'): void {
-    cy.get(selector, { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
-        timeout: 120 * SEC,
-        force: true,
-    });
-    cy.wait(2000);
-}
-
 export function uploadApplications(fileName: string): void {
     cy.get('input[type="file"]', { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
         timeout: 120 * SEC,
@@ -738,8 +730,8 @@ export function uploadApplications(fileName: string): void {
     });
 }
 
-export function uploadFile(fileName: string): void {
-    cy.get('input[type="file"]', { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
+export function uploadFile(fileName: string, selector = 'input[type="file"]'): void {
+    cy.get(selector, { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
         timeout: 120 * SEC,
         force: true,
     });
@@ -797,7 +789,7 @@ export function performRowAction(itemName: string, action: string): void {
 // Perform edit/delete action on the specified row selector by clicking an icon button
 /* As of Tackle 2.1, this function can be used to click the update button and kebab menu for
    applications on the Application Inventory page */
-export function performRowActionByIcon(itemName: string, action: string): void {
+export function performRowActionByIcon(itemName: string, action: string, nthPosition = 0): void {
     // itemName is the text to be searched on the screen (For eg: application name, etc)
     // Action is the name of the action to be applied (For eg: edit or click kebab menu)
     cy.contains(itemName, { timeout: 120 * SEC })
@@ -806,7 +798,7 @@ export function performRowActionByIcon(itemName: string, action: string): void {
         .find(action)
         .first()
         .find("button", { log: true, timeout: 30 * SEC })
-        .first()
+        .eq(nthPosition)
         .click({ force: true });
 }
 
@@ -2027,6 +2019,16 @@ export function downloadTaskDetails(format = downloadFormatDetails.yaml) {
     });
 }
 
+export function getNumberOfNonTaskPods(): Cypress.Chainable<number> {
+    let podsNumber: number;
+    const namespace = getNamespace();
+    const command = `oc get pod --no-headers -n ${namespace} | grep -v task | grep -v Completed | wc -l`;
+    return getCommandOutput(command).then((output) => {
+        podsNumber = Number(output.stdout);
+        return podsNumber;
+    });
+}
+
 export function limitPodsByQuota(podsNumber: number) {
     const namespace = getNamespace();
     cy.fixture("custom-resource").then((cr) => {
@@ -2038,9 +2040,16 @@ export function limitPodsByQuota(podsNumber: number) {
     });
 }
 
-export function deleteCustomResource(resourceType: string, resourceName: string) {
+export function deleteCustomResource(
+    resourceType: string,
+    resourceName: string,
+    ignoreNotFound = false
+) {
     const namespace = getNamespace();
-    const command = `oc delete ${resourceType} ${resourceName} -n${namespace}`;
+    let command = `oc delete ${resourceType} ${resourceName} -n${namespace}`;
+    if (ignoreNotFound) {
+        command = `${command} --ignore-not-found=true`;
+    }
     getCommandOutput(command).then((output) => {
         expect(output.code).to.equal(0);
     });

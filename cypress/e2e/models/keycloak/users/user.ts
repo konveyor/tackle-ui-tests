@@ -9,6 +9,7 @@ import {
 } from "../../../../utils/utils";
 import { button, SEC, tdTag, trTag } from "../../../types/constants";
 import { UserData } from "../../../types/types";
+import { modalConfirm } from "../../../views/common.view";
 import * as loginView from "../../../views/login.view";
 import {
     addUserButton,
@@ -17,7 +18,6 @@ import {
     checkBox,
     createPasswordButton,
     filterTypeDropdown,
-    kebabToogleButton,
     modalConfirmButton,
     passwordConfirm,
     passwordInput,
@@ -69,8 +69,8 @@ export class User {
     static changeRealm(realm: string) {
         cy.url().then(($url) => {
             if (!$url.includes(`#/${realm}`)) {
-                click('a[data-testid="nav-item-realms"]');
-                clickByText("a", realm);
+                click(loginView.realmSelector);
+                clickByText(button, realm);
             }
         });
     }
@@ -142,10 +142,11 @@ export class User {
             .contains(this.username, { timeout: 120 * SEC })
             .closest(trTag)
             .within(() => {
-                click(kebabToogleButton);
-                clickByText(tdTag, "Delete");
+                click("input");
                 cy.wait(500);
             });
+        click(loginView.deleteUserButton);
+        click(modalConfirm);
     }
 
     definePassword(): void {

@@ -19,6 +19,8 @@ import {
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Application } from "../../../../models/migration/applicationinventory/application";
+import { SEC } from "../../../../types/constants";
+import { AnalysisLogView } from "../../../../views/analysis.view";
 
 let applicationsList: Array<Analysis> = [];
 describe(["@tier1"], "Nodejs Analysis", () => {
@@ -49,9 +51,12 @@ describe(["@tier1"], "Nodejs Analysis", () => {
         cy.wait("@getApplication");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
+        cy.wait(2 * SEC);
         application.verifyEffort(this.analysisData["source_analysis_on_nodejsApp"]["effort"]);
+        cy.wait(2 * SEC);
         application.validateIssues(this.analysisData["source_analysis_on_nodejsApp"]["issues"]);
-        application.verifyMergedLogContain();
+        Application.open();
+        application.verifyLogContains(AnalysisLogView.mergedLogView, "lspServerName: nodejs");
     });
 
     after("Perform test data clean up", () => {

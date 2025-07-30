@@ -1,0 +1,16 @@
+- category: potential
+  customVariables: []
+  description: Test-002 Remote Exception
+  effort: 0
+  labels:
+      - konveyor.io/target=cloud-readiness
+      - konveyor.io/source
+      - Hazelcast
+  links:
+      - title: Test-002 Test link
+        url: http://nufc.com
+  message: Test-002 Message markdown
+  ruleID: Test-002-00001
+  when:
+      builtin.file:
+          pattern: AdministracionEfectivo-jpa.*\.jar

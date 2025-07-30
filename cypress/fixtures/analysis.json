@@ -1423,7 +1423,7 @@
         "source": "Upload a local binary",
         "target": ["Jakarta EE 9"],
         "binary": ["customers-tomcat-0.0.1-SNAPSHOT.war"],
-        "customRule": ["javax-package-custom-target.windup.xml"],
+        "customRule": ["01-javax-package-custom-target.windup.yaml"],
         "appName": "customers-tomcat-0.0.1-SNAPSHOT.war",
         "effort": 22
     },
@@ -1434,16 +1434,19 @@
         "appName": "tackle-testapp",
         "effort": 11,
         "techTags": [
-            ["Other", "Properties"],
-            ["Bean", "EJB XML"],
-            ["Java EE", "EJB XML"],
-            ["Embedded", "Properties"],
-            ["Connect", "EJB XML"],
-            ["Sustain", "Properties"]
+            ["Bean", ["EJB XML"]],
+            ["HTTP", ["Servlet"]],
+            ["Other", ["Properties"]],
+            ["Persistence", ["JPA named queries"]],
+            ["Sustain", ["Properties"]],
+            ["Connect", ["EJB XML", "Servlet"]],
+            ["Java EE", ["JPA named queries", "Servlet", "EJB XML"]],
+            ["Embedded", ["Properties"]],
+            ["Store", ["JPA named queries"]]
         ],
         "issues": [
             {
-                "name": "File system - Java IO",
+                "name": "Hardcoded IP Address",
                 "category": "mandatory",
                 "sources": ["None"],
                 "effort": 1,
@@ -1499,7 +1502,7 @@
         "source": "Source code",
         "target": ["Linux"],
         "appName": "tackle-testapp",
-        "customRule": ["javax-package-custom.windup.xml"],
+        "customRule": ["javax-package-custom.yaml"],
         "excludeRuleTags": "tag",
         "storyPoints": 1
     },
@@ -2033,7 +2036,7 @@
         "source": "Upload a local binary",
         "target": ["Containerization"],
         "binary": ["administracionEfectivo.ear"],
-        "customRule": ["test.windup.xml"]
+        "customRule": ["admin-efectivo.yaml"]
     },
 
     "upload_binary_with_exculde_packages": {
@@ -2047,11 +2050,11 @@
             " io.konveyor.demo.ordermanagement.model "
         ]
     },
-    "tackle_testapp_fileNotValidXML": {
+    "tackle_testapp_fileNotValidYaml": {
         "source": "Source code",
         "target": [],
-        "appName": "fileNotValidXML custom rules",
-        "customRule": ["settings.xml"]
+        "appName": "fileNotValidYaml custom rules",
+        "customRule": ["invalid-rule.yaml"]
     },
     "tackle-testapp-public-4-targets": {
         "appName": "tackle-testapp-public",
@@ -2069,7 +2072,7 @@
         "appName": "tackle-testapp-public",
         "source": "Source code",
         "target": ["Containerization", "Linux", "OracleJDK to OpenJDK"],
-        "customRule": ["corporate-framework-config.windup.xml"],
+        "customRule": ["corporate-framework-config.yaml"],
         "effort": 2,
         "issues": [
             {

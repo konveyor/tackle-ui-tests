@@ -43,6 +43,7 @@ describe(["@tier3", "@rhsso"], "Bug MTA-5631: Architect RBAC operations", functi
     );
 
     before("Creating RBAC users, adding roles for them", function () {
+        cy.clearLocalStorage();
         User.loginKeycloakAdmin();
         userArchitect.create();
 
@@ -55,13 +56,14 @@ describe(["@tier3", "@rhsso"], "Bug MTA-5631: Architect RBAC operations", functi
         application.create();
         application.perform_review("low");
         application.perform_assessment("low", stakeholders);
+        userArchitect.login();
     });
 
     beforeEach("Persist session", function () {
-        userArchitect.login();
         cy.fixture("rbac").then(function (rbacRules) {
             this.rbacRules = rbacRules["architect"];
         });
+        userArchitect.login();
     });
 
     it("Architect, validate create application button", function () {
