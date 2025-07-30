@@ -31,6 +31,7 @@ import {
     click,
     clickByText,
     closeRowDetails,
+    closeSuccessAlert,
     confirm,
     expandRowDetails,
     inputText,
@@ -108,6 +109,7 @@ export class Tag {
             fillName(this.name);
             this.selectTagCategory(this.tagCategory);
             submitForm();
+            closeSuccessAlert();
         }
     }
 

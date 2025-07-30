@@ -660,7 +660,6 @@ export class Application {
     perform_review(risk): void {
         Application.open();
         clickItemInKebabMenu(this.name, "Review");
-        cy.wait(8 * SEC);
         Assessment.perform_review(risk);
     }
 
