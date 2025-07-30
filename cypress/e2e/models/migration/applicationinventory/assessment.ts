@@ -276,7 +276,7 @@ export class Assessment {
 
         for (let i in list) {
             cy.get("dt", { timeout: 3 * SEC })
-                .contains(list[i], { timeout: 2 * SEC })
+                .contains(list[i])
                 .closest("div")
                 .within(() => {
                     if (archetypeName) {
@@ -293,24 +293,14 @@ export class Assessment {
                             }
                         });
                     } else {
-                        cy.get("dd", { timeout: 3 * SEC }).then(($value) => {
+                        cy.get("dd").then(($value) => {
                             let text = $value.text();
-                            if (list[i] == "Proposed action") {
-                                cy.wait(5 * SEC);
-                                expect(text).to.be.oneOf(actionList);
-                            }
-                            cy.log("proposed action");
-                            if (list[i] == "Effort estimate") {
+                            if (list[i] == "Proposed action") expect(text).to.be.oneOf(actionList);
+                            if (list[i] == "Effort estimate")
                                 expect(text).to.be.oneOf(effortEstimateList);
-                                cy.log("effort estimate");
-                            }
-                            if (list[i] == "Business criticality" || list[i] == "Work priority") {
-                                cy.log("criticality");
+                            if (list[i] == "Business criticality" || list[i] == "Work priority")
                                 expect(text).to.be.oneOf(criticalityList);
-                            }
-                            if (list[i] == "Comments") {
-                                expect(text).not.equal("Not yet reviewed");
-                            }
+                            if (list[i] == "Comments") expect(text).not.equal("Not yet reviewed");
                         });
                     }
                 });
