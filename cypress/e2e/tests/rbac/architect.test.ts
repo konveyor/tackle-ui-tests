@@ -33,7 +33,7 @@ import { CredentialType, legacyPathfinder } from "../../types/constants";
 
 let stakeholders: Array<Stakeholders> = [];
 
-describe(["@tier3", "@rhsso"], "Architect RBAC operations", function () {
+describe(["@tier3", "@rhsso", "@rhbk"], "Architect RBAC operations", function () {
     let userArchitect = new UserArchitect(getRandomUserData());
     const application = new Application(getRandomApplicationData());
 
