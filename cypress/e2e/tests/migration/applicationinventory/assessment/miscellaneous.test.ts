@@ -135,7 +135,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].verifyStatus("review", "Not started");
     });
 
-    it("tackle2-ui Issue 2425: Assess application and override assessment for that archetype", function () {
+    it("Assess application and override assessment for that archetype", function () {
         // Polarion TC MTA-390
         const archetypesList = [];
         const tags = createMultipleTags(2);
