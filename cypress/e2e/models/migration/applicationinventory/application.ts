@@ -860,7 +860,7 @@ export class Application {
         cy.wait(2 * SEC);
         const archetypeNames = archetypes.map((archetype) => archetype.name);
         const joinedArchetypes = archetypeNames.join(", ");
-        const alertTitleMessage = `The application already is associated with archetypes: ${joinedArchetypes}`;
+        const alertTitleMessage = `The application ${this.name} already is associated with archetypes: ${joinedArchetypes}`;
         cy.get(alertTitle)
             .invoke("text")
             .then((text) => {
