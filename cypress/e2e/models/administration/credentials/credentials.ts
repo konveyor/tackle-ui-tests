@@ -8,7 +8,6 @@ import {
     exists,
     inputText,
     notExists,
-    performRowAction,
     selectFromDropList,
     selectFromDropListByText,
     selectItemsPerPage,
@@ -23,8 +22,8 @@ import {
     credentials,
     CredentialType,
     deleteAction,
-    editAction,
     SEC,
+    tdTag,
     trTag,
 } from "../../../types/constants";
 import { CredentialsData } from "../../../types/types";
@@ -249,7 +248,12 @@ export class Credentials {
 
     edit(cred: CredentialsData): void {
         Credentials.openList();
-        performRowAction(this.name, editAction);
+        cy.get(tdTag, { timeout: 120 * SEC })
+            .contains(this.name, { timeout: 120 * SEC })
+            .closest(trTag)
+            .within(() => {
+                click("#edit-action");
+            });
     }
 
     protected closeSuccessNotification(): void {
