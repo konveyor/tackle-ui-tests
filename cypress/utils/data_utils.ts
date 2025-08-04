@@ -133,7 +133,8 @@ export function getRandomCredentialsData(
     type: string,
     userCred?: string,
     useTestingAccount = false,
-    url?: string
+    url?: string,
+    setDefaultCreds?: boolean
 ): CredentialsData {
     let password = getRandomWord(6);
     let user = getRandomWord(6);
@@ -213,6 +214,7 @@ export function getRandomCredentialsData(
                 description: getDescription(),
                 username: user,
                 password: password,
+                setDefault: setDefaultCreds,
             };
         }
     } else {
@@ -225,6 +227,7 @@ export function getRandomCredentialsData(
             name: getRandomWord(6),
             description: getRandomWord(6),
             settingFile: "xml/settings.xml",
+            setDefault: setDefaultCreds,
         };
     }
 }

@@ -1,5 +1,7 @@
+import { setDefaultCheckbox } from "../../../views/credentials.view";
 import {
     cancelForm,
+    click,
     clickByText,
     exists,
     notExists,
@@ -20,10 +22,11 @@ export class CredentialsMaven extends Credentials {
     }
 
     protected init(credentialsMavenData: CredentialsMavenData) {
-        const { name, description, settingFile } = credentialsMavenData;
+        const { name, description, settingFile, setDefault } = credentialsMavenData;
         this.name = name;
         this.description = description;
         this.settingsFile = settingFile;
+        this.setDefault = setDefault;
     }
 
     protected fillSettingsFile() {
@@ -36,6 +39,7 @@ export class CredentialsMaven extends Credentials {
         this.fillDescription();
         this.selectType(this.type);
         this.fillSettingsFile();
+        this.checkSetDefault();
         if (!toBeCanceled) {
             submitForm();
             exists(this.name);
@@ -43,6 +47,10 @@ export class CredentialsMaven extends Credentials {
             cancelForm();
             notExists(this.name);
         }
+    }
+
+    verifyDefaultCredentialIcon() {
+        super.verifyDefaultCredentialIcon();
     }
 
     edit(credentialsMavenData: CredentialsMavenData, toBeCanceled = false) {

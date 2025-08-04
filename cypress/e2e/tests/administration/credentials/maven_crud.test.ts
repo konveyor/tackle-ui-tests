@@ -15,20 +15,32 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { deleteByList } from "../../../../utils/utils";
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
 import { CredentialsMaven } from "../../../models/administration/credentials/credentialsMaven";
 import { CredentialType } from "../../../types/constants";
 
-describe(["@tier3"], "Validation of Maven Credentials", () => {
-    const mavenCredentialsUsername = new CredentialsMaven(
-        getRandomCredentialsData(CredentialType.maven)
-    );
+let mavenCredentials: CredentialsMaven[] = [];
 
+describe(["@tier3"], "Validation of Maven Credentials", () => {
     it("Creating Maven credentials", () => {
+        let mavenCredentialsUsername = new CredentialsMaven(
+            getRandomCredentialsData(CredentialType.maven)
+        );
         mavenCredentialsUsername.create();
+        mavenCredentials.push(mavenCredentialsUsername);
+    });
+    
+    it("Creating Default Maven credentials", () => {
+        let defaultMavenCredentials = new CredentialsMaven(
+            getRandomCredentialsData(CredentialType.maven, null, false, null, true)
+        );
+        defaultMavenCredentials.create();
+        mavenCredentials.push(defaultMavenCredentials);
+        defaultMavenCredentials.verifyDefaultCredentialIcon();
     });
 
     after("Cleaning up", () => {
-        mavenCredentialsUsername.delete();
+        deleteByList(mavenCredentials);
     });
 });

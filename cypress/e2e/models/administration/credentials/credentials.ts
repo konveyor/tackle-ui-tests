@@ -25,6 +25,7 @@ import {
     deleteAction,
     editAction,
     SEC,
+    tdTag,
     trTag,
 } from "../../../types/constants";
 import { CredentialsData } from "../../../types/types";
@@ -50,6 +51,7 @@ import {
     modalBoxBody,
     passwordInput,
     selectType,
+    setDefaultCheckbox,
     usernameInput,
 } from "../../../views/credentials.view";
 
@@ -69,6 +71,9 @@ export class Credentials {
 
     /** Keeps state if credential is in use or not */
     inUse = false;
+
+    /** Indicates whether this credential is set as the default option */
+    setDefault = false;
 
     /** Contains URL of credentials web page */
     static fullUrl = Cypress.config("baseUrl") + "/identities";
@@ -126,6 +131,23 @@ export class Credentials {
     protected fillDescription(): void {
         if (this.description != "") {
             inputText(descriptionInput, this.description);
+        }
+    }
+
+    protected checkSetDefault(): void {
+        if (this.setDefault) {
+            click(setDefaultCheckbox);
+        }
+    }
+
+    protected verifyDefaultCredentialIcon(): void {
+        if (this.setDefault) {
+            cy.get(tdTag, { timeout: 120 * SEC })
+            .contains(this.name, { timeout: 120 * SEC })
+            .closest(trTag)
+            .within(() => {
+                cy.get('svg.pf-v5-svg').should("exist");
+            });
         }
     }
 
