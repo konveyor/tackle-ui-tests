@@ -20,11 +20,9 @@ import { deleteByList } from "../../../../utils/utils";
 import { CredentialsMaven } from "../../../models/administration/credentials/credentialsMaven";
 import { CredentialType } from "../../../types/constants";
 
-
 describe(["@tier3"], "Validation of Maven Credentials", () => {
-
     let mavenCredentials: CredentialsMaven[] = [];
-    
+
     it("Creating Maven credentials", () => {
         const mavenCredentialsUsername = new CredentialsMaven(
             getRandomCredentialsData(CredentialType.maven)

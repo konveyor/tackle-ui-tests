@@ -46,10 +46,10 @@ import {
     filterCatType,
     filteredBy,
     filterSelectType,
+    isDefaultCheckbox,
     modalBoxBody,
     passwordInput,
     selectType,
-    isDefaultCheckbox,
     usernameInput,
 } from "../../../views/credentials.view";
 
