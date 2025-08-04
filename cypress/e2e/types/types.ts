@@ -32,7 +32,7 @@ export type CredentialsMavenData = {
     name?: string;
     description?: string;
     settingFile?: any;
-    setDefault?: boolean;
+    isDefault?: boolean;
 };
 
 export type CredentialsJiraBasicData = {

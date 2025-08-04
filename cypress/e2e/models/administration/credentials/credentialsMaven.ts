@@ -20,11 +20,11 @@ export class CredentialsMaven extends Credentials {
     }
 
     protected init(credentialsMavenData: CredentialsMavenData) {
-        const { name, description, settingFile, setDefault } = credentialsMavenData;
+        const { name, description, settingFile, isDefault } = credentialsMavenData;
         this.name = name;
         this.description = description;
         this.settingsFile = settingFile;
-        this.setDefault = setDefault;
+        this.isDefault = isDefault;
     }
 
     protected fillSettingsFile() {
@@ -37,7 +37,7 @@ export class CredentialsMaven extends Credentials {
         this.fillDescription();
         this.selectType(this.type);
         this.fillSettingsFile();
-        this.checkSetDefault();
+        this.setAsDefault();
         if (!toBeCanceled) {
             submitForm();
             exists(this.name);

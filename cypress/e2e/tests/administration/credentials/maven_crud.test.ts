@@ -20,11 +20,13 @@ import { deleteByList } from "../../../../utils/utils";
 import { CredentialsMaven } from "../../../models/administration/credentials/credentialsMaven";
 import { CredentialType } from "../../../types/constants";
 
-let mavenCredentials: CredentialsMaven[] = [];
 
 describe(["@tier3"], "Validation of Maven Credentials", () => {
+
+    let mavenCredentials: CredentialsMaven[] = [];
+    
     it("Creating Maven credentials", () => {
-        let mavenCredentialsUsername = new CredentialsMaven(
+        const mavenCredentialsUsername = new CredentialsMaven(
             getRandomCredentialsData(CredentialType.maven)
         );
         mavenCredentialsUsername.create();
@@ -32,7 +34,7 @@ describe(["@tier3"], "Validation of Maven Credentials", () => {
     });
 
     it("Creating Default Maven credentials", () => {
-        let defaultMavenCredentials = new CredentialsMaven(
+        const defaultMavenCredentials = new CredentialsMaven(
             getRandomCredentialsData(CredentialType.maven, null, false, null, true)
         );
         defaultMavenCredentials.create();

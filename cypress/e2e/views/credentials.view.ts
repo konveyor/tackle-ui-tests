@@ -15,7 +15,7 @@ limitations under the License.
 */
 export const credentialNameInput = "input[name=name]";
 export const descriptionInput = "input[name='description']";
-export const setDefaultCheckbox = "input[name='default']";
+export const isDefaultCheckbox = "input[name='default']";
 export const usernameInput = "#user";
 export const passwordInput = "#password";
 export const keyInput = "#key";

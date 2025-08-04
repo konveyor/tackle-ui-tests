@@ -49,7 +49,7 @@ import {
     modalBoxBody,
     passwordInput,
     selectType,
-    setDefaultCheckbox,
+    isDefaultCheckbox,
     usernameInput,
 } from "../../../views/credentials.view";
 
@@ -71,7 +71,7 @@ export class Credentials {
     inUse = false;
 
     /** Indicates whether this credential is set as the default option */
-    setDefault = false;
+    isDefault = false;
 
     /** Contains URL of credentials web page */
     static fullUrl = Cypress.config("baseUrl") + "/identities";
@@ -132,14 +132,14 @@ export class Credentials {
         }
     }
 
-    protected checkSetDefault(): void {
-        if (this.setDefault) {
-            click(setDefaultCheckbox);
+    protected setAsDefault(): void {
+        if (this.isDefault) {
+            click(isDefaultCheckbox);
         }
     }
 
     protected verifyDefaultCredentialIcon(): void {
-        if (this.setDefault) {
+        if (this.isDefault) {
             cy.get(tdTag, { timeout: 120 * SEC })
                 .contains(this.name, { timeout: 120 * SEC })
                 .closest(trTag)
