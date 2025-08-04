@@ -1,7 +1,5 @@
-import { setDefaultCheckbox } from "../../../views/credentials.view";
 import {
     cancelForm,
-    click,
     clickByText,
     exists,
     notExists,

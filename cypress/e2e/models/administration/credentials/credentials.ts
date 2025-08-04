@@ -143,11 +143,11 @@ export class Credentials {
     protected verifyDefaultCredentialIcon(): void {
         if (this.setDefault) {
             cy.get(tdTag, { timeout: 120 * SEC })
-            .contains(this.name, { timeout: 120 * SEC })
-            .closest(trTag)
-            .within(() => {
-                cy.get('svg.pf-v5-svg').should("exist");
-            });
+                .contains(this.name, { timeout: 120 * SEC })
+                .closest(trTag)
+                .within(() => {
+                    cy.get("svg.pf-v5-svg").should("exist");
+                });
         }
     }
 
