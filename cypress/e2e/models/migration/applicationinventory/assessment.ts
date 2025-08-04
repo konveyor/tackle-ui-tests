@@ -179,7 +179,17 @@ export class Assessment {
                     if (saveAndReview && i == lastStep) {
                         clickJs(commonView.saveAndReviewButton);
                     } else {
-                        clickJs(commonView.nextButton);
+                        // title on questionnaire changes on each page
+                        // This avoids the use of arbitrary `cy.wait()` calls
+                        cy.get("h1")
+                            .invoke("text")
+                            .then((titleBefore) => {
+                                clickJs(commonView.nextButton);
+                                cy.get("h1", { timeout: 10000 }).should(($h1) => {
+                                    const titleAfter = $h1.text().trim();
+                                    expect(titleAfter).not.to.eq(titleBefore);
+                                });
+                            });
                     }
                 }
             });
@@ -222,7 +232,6 @@ export class Assessment {
         if (stakeholders || stakeholderGroups)
             this.selectStakeholdersAndGroups(stakeholders, stakeholderGroups);
         clickJs(commonView.nextButton);
-        cy.wait(SEC);
         this.selectAnswers(risk, saveAndReview);
     }
 
@@ -232,7 +241,6 @@ export class Assessment {
         this.fillCriticality(risk);
         this.fillPriority(risk);
         clickByText(button, "Submit review");
-        cy.wait(2 * SEC);
     }
 
     public static validateReviewFields(
@@ -277,7 +285,7 @@ export class Assessment {
         ];
 
         for (let i in list) {
-            cy.get("dt")
+            cy.get("dt", { timeout: 3 * SEC })
                 .contains(list[i])
                 .closest("div")
                 .within(() => {

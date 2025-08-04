@@ -19,7 +19,9 @@ import {
     click,
     clickByText,
     clickItemInKebabMenu,
+    closeSuccessAlert,
     confirm,
+    exists,
     performRowActionByIcon,
     selectItemsPerPage,
     selectUserPerspective,
@@ -37,7 +39,7 @@ import {
 } from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
 import { navMenu, navTab } from "../../../views/menu.view";
-import { createTagCategoryButton } from "../../../views/tags.view";
+import { colorMenuToggle, createTagCategoryButton } from "../../../views/tags.view";
 import { clickTags, fillName } from "./tags";
 
 export class TagCategory {
@@ -65,8 +67,7 @@ export class TagCategory {
     }
 
     protected selectColor(color: string): void {
-        cy.waitForReact();
-        cy.react("FormGroup", { props: { fieldId: "color" } }).click();
+        click(colorMenuToggle);
         clickByText(button, color);
     }
 
@@ -88,6 +89,9 @@ export class TagCategory {
             fillName(this.name);
             this.selectColor(this.color);
             submitForm();
+            closeSuccessAlert();
+            selectItemsPerPage(100);
+            exists(this.name);
         }
     }
 
@@ -112,7 +116,6 @@ export class TagCategory {
     delete(cancel = false): void {
         // Opening tags list only if another tab is opened
         TagCategory.openList();
-
         clickItemInKebabMenu(this.name, deleteAction);
         if (cancel) {
             click(commonView.confirmCancelButton);
