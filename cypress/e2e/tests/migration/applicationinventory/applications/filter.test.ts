@@ -245,8 +245,12 @@ describe(["@tier3"], "Application inventory filter validations", function () {
     });
 
     it("Risk filter validations", function () {
-        const application = applicationsList[0];
-        const application1 = applicationsList[1];
+        // Create two applications with random names
+        const application = new Application(getRandomApplicationData("RiskFilterApp1"));
+        const application1 = new Application(getRandomApplicationData("RiskFilterApp2"));
+        application.create();
+        application1.create();
+        applicationsList.push(application, application1);
 
         // Check application exists on the page
         exists(application.name);
