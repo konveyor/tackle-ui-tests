@@ -4,7 +4,7 @@ import {
     enableSwitch,
     selectUserPerspective,
 } from "../../../../utils/utils";
-import { administration } from "../../../types/constants";
+import { administration, SEC } from "../../../types/constants";
 import { navLink } from "../../../views/proxy.view";
 import { gitSecure } from "../../../views/repository.view";
 
@@ -14,6 +14,7 @@ export class GitConfiguration {
         selectUserPerspective(administration);
         clickByText(navLink, "Git");
         cy.contains("h1", "Git configuration", { timeout: 5000 });
+        cy.wait( 5 * SEC);
     }
 
     enableInsecureGitRepositories() {
