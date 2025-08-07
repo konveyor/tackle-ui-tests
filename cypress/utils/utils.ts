@@ -993,6 +993,7 @@ export function createMultipleBusinessServices(
         businessService.create();
         businessServices.push(businessService);
         cy.contains("New business service").should("not.exist");
+        exists(businessService.name);
     }
     return businessServices;
 }
