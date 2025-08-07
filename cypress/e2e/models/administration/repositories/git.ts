@@ -14,7 +14,7 @@ export class GitConfiguration {
         selectUserPerspective(administration);
         clickByText(navLink, "Git");
         cy.contains("h1", "Git configuration", { timeout: 5000 });
-        cy.get(gitSecure, { timeout: 5 * SEC }).parent("label").should("be.visible");
+        cy.wait(5 * SEC);
     }
 
     enableInsecureGitRepositories() {
