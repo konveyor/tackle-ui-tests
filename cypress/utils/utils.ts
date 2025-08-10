@@ -977,23 +977,25 @@ export function createMultipleStakeholderGroups(
 }
 
 export function createMultipleBusinessServices(
-    numberofbusinessservice: number,
+    amount: number,
     stakeholdersList?: Array<Stakeholders>
 ): Array<BusinessServices> {
-    let businessservicesList: Array<BusinessServices> = [];
-    for (let i = 0; i < numberofbusinessservice; i++) {
+    const businessServices: BusinessServices[] = [];
+    for (let i = 0; i < amount; i++) {
         let stakeholders: string;
         if (stakeholdersList) stakeholders = stakeholdersList[i].name;
         // Create new business service
-        const businessservice = new BusinessServices(
+        const businessService = new BusinessServices(
             data.getCompanyName(),
             data.getDescription(),
             stakeholders
         );
-        businessservice.create();
-        businessservicesList.push(businessservice);
+        businessService.create();
+        businessServices.push(businessService);
+        cy.contains("New business service").should("not.exist");
+        exists(businessService.name);
     }
-    return businessservicesList;
+    return businessServices;
 }
 
 export function createMultipleTags(numberoftags: number): Array<Tag> {
