@@ -41,6 +41,7 @@ import {
     goToLastPage,
     goToPage,
     inputText,
+    notExists,
     performRowActionByIcon,
     selectFormItems,
     selectItemsPerPage,
@@ -189,7 +190,7 @@ export class BusinessServices {
             click(commonView.confirmCancelButton);
         } else {
             click(commonView.confirmButton);
+            notExists(this.name);
         }
-        cy.wait(2000);
     }
 }

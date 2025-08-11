@@ -56,7 +56,7 @@ describe(["@tier3"], "Reports tab links validation tests", () => {
         }
     });
 
-    it("Risk links validation", function () {
+    it("Bug MTA-5846: Risk links validation", function () {
         riskType.forEach((risk, i) => {
             Reports.open();
             if (risk === "unknown") {
@@ -80,7 +80,7 @@ describe(["@tier3"], "Reports tab links validation tests", () => {
         );
     });
 
-    it("Identified Risks links validation", function () {
+    it("Bug MTA-5846: Identified Risks links validation", function () {
         Reports.open(100);
         cy.contains("a", "1 application").click();
         cy.wrap(getTableColumnData(name)).then((appNames) =>

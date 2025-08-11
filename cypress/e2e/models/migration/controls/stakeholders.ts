@@ -19,6 +19,7 @@ import {
     clickByText,
     clickItemInKebabMenu,
     inputText,
+    notExists,
     performRowActionByIcon,
     removeMember,
     selectFormItems,
@@ -172,6 +173,7 @@ export class Stakeholders {
             click(commonView.confirmCancelButton);
         } else {
             click(commonView.confirmButton);
+            notExists(this.email);
         }
     }
 }
