@@ -41,6 +41,20 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         scCredsUsername.create(toBeCanceled);
     });
 
+    it("Creating default source control credentials with username/password", () => {
+        const defaultScCredsUsername = new CredentialsSourceControlUsername(
+            getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                false,
+                undefined,
+                true
+            )
+        );
+        defaultScCredsUsername.create();
+        defaultScCredsUsername.verifyDefaultCredentialIcon();
+    });
+
     it(
         ["@tier0", "@dc", "@interop"],
         "Creating source control credentials with username/password",

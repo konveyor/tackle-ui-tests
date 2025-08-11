@@ -42,6 +42,10 @@ export class CredentialsSourceControlUsername extends CredentialsSourceControl {
         clickByText(button, "Username/Password");
     }
 
+    verifyDefaultCredentialIcon() {
+        super.verifyDefaultCredentialIcon();
+    }
+
     create(toBeCanceled = false) {
         super.create();
         this.selectCredType();
