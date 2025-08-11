@@ -8,6 +8,7 @@ export type CredentialsSourceControlData = {
     description?: string;
     username?: string;
     password?: string;
+    setDefault?: boolean;
 };
 
 export type CredentialsSourceControlPrivateKeyData = {
@@ -31,6 +32,7 @@ export type CredentialsMavenData = {
     name?: string;
     description?: string;
     settingFile?: any;
+    isDefault?: boolean;
 };
 
 export type CredentialsJiraBasicData = {

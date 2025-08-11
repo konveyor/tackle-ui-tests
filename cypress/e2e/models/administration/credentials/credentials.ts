@@ -46,6 +46,7 @@ import {
     filterCatType,
     filteredBy,
     filterSelectType,
+    isDefaultCheckbox,
     modalBoxBody,
     passwordInput,
     selectType,
@@ -68,6 +69,9 @@ export class Credentials {
 
     /** Keeps state if credential is in use or not */
     inUse = false;
+
+    /** Indicates whether this credential is set as the default option */
+    isDefault = false;
 
     /** Contains URL of credentials web page */
     static fullUrl = Cypress.config("baseUrl") + "/identities";
@@ -125,6 +129,23 @@ export class Credentials {
     protected fillDescription(): void {
         if (this.description != "") {
             inputText(descriptionInput, this.description);
+        }
+    }
+
+    protected setAsDefault(): void {
+        if (this.isDefault) {
+            click(isDefaultCheckbox);
+        }
+    }
+
+    protected verifyDefaultCredentialIcon(): void {
+        if (this.isDefault) {
+            cy.get(tdTag, { timeout: 120 * SEC })
+                .contains(this.name, { timeout: 120 * SEC })
+                .closest(trTag)
+                .within(() => {
+                    cy.get("svg.pf-v5-svg").should("exist");
+                });
         }
     }
 
