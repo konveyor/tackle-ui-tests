@@ -24,6 +24,7 @@ import { CredentialType, UserCredentials } from "../../../types/constants";
 describe(["@tier2"], "Validation of Source Control Credentials", () => {
     let scCredsUsername: CredentialsSourceControlUsername;
     let scCredsKey: CredentialsSourceControlKey;
+    let defaultScCredsUsername: CredentialsSourceControlUsername;
     const toBeCanceled = true;
 
     before("Login", function () {
@@ -42,7 +43,7 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
     });
 
     it("Creating default source control credentials with username/password", () => {
-        const defaultScCredsUsername = new CredentialsSourceControlUsername(
+        defaultScCredsUsername = new CredentialsSourceControlUsername(
             getRandomCredentialsData(
                 CredentialType.sourceControl,
                 UserCredentials.usernamePassword,
@@ -109,5 +110,9 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
 
     it("Deleting source control credentials with source private key", () => {
         scCredsKey.delete();
+    });
+
+    after("Cleaning up", () => {
+        defaultScCredsUsername.delete();
     });
 });
