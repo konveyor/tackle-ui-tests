@@ -1242,7 +1242,7 @@ export function assertSuccessPopupAndClose() {
         .should("be.visible")
         .within(() => {
             cy.get('button[aria-label^="Close"]').click();
-        });   
+        });
 }
 export function checkRowCount(expectedCount: number) {
     cy.get("td[data-label=Name]").then(($rows) => {
