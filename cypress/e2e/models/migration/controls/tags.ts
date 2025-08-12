@@ -100,7 +100,7 @@ export class Tag {
             .click();
     }
 
-    create(cancel = false): void {
+    create(cancel = false, readSuccessAlert = false): void {
         Tag.openList();
         clickByText(button, createTagButton);
         if (cancel) {
@@ -109,7 +109,7 @@ export class Tag {
             fillName(this.name);
             this.selectTagCategory(this.tagCategory);
             submitForm();
-            closeSuccessAlert();
+            if (!readSuccessAlert) closeSuccessAlert();
         }
     }
 

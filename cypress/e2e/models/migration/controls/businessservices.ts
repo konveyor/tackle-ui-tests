@@ -38,6 +38,7 @@ import {
     click,
     clickByText,
     clickItemInKebabMenu,
+    closeSuccessAlert,
     goToLastPage,
     goToPage,
     inputText,
@@ -190,6 +191,7 @@ export class BusinessServices {
             click(commonView.confirmCancelButton);
         } else {
             click(commonView.confirmButton);
+            closeSuccessAlert();
             notExists(this.name);
         }
     }
