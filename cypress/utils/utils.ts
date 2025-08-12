@@ -1222,7 +1222,9 @@ export function deleteAllRows(tableSelector: string = commonTable) {
                 .find(trTag)
                 .then(($rows) => {
                     for (let i = 0; i < $rows.length - 1; i++) {
-                        cy.get(sideKebabMenu, { timeout: 10000 }).first().click();
+                        cy.get(sideKebabMenu, { timeout: 10 * SEC })
+                            .first()
+                            .click();
                         cy.get("ul[role=menu] > li").contains("Delete").click();
                         cy.get(confirmButton).click();
                         // asserts the deletion popup is visible and then closes it.
@@ -1523,6 +1525,12 @@ export function goToLastPage(): void {
                 $button.click();
             }
         });
+}
+
+export function checkCurrentPageIs(pageNumber: number) {
+    cy.get(".pf-v5-c-pagination__nav-page-select", { timeout: 10 * SEC })
+        .find('input[aria-label="Current page"]')
+        .should("have.value", pageNumber.toString());
 }
 
 export function validateValue(selector, value: string): void {
