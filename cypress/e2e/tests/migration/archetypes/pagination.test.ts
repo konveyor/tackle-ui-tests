@@ -26,6 +26,7 @@ import {
     validatePagination,
 } from "../../../../utils/utils";
 import { Archetype } from "../../../models/migration/archetypes/archetype";
+import { SEC } from "../../../types/constants";
 let archetypeList: Archetype[] = [];
 
 describe(["@tier3"], "Archetypes pagination validations", function () {
@@ -51,7 +52,10 @@ describe(["@tier3"], "Archetypes pagination validations", function () {
         selectItemsPerPage(10);
         goToLastPage();
         deleteAllRows();
-        // Verify that page is re-directed to previous page
+        // assert that the page is redirected to the previous page, in this case the first page
+        cy.get(".pf-v5-c-pagination__nav-page-select", { timeout: 3 * SEC })
+            .find('input[aria-label="Current page"]')
+            .should("have.value", "1");
         cy.get("td[data-label=Name]").then(($rows) => {
             cy.wrap($rows.length).should("eq", 10);
         });

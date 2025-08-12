@@ -1216,19 +1216,27 @@ export function isTableEmpty(tableSelector: string = commonTable): Cypress.Chain
 }
 
 export function deleteAllRows(tableSelector: string = commonTable) {
-    // This method is for pages that have delete button inside Kebab menu
-    // like Applications and Imports page
-
-    cy.get(tableSelector)
-        .find(trTag)
-        .then(($rows) => {
-            for (let i = 0; i < $rows.length - 1; i++) {
-                cy.get(sideKebabMenu, { timeout: 10000 }).first().click();
-                cy.get("ul[role=menu] > li").contains("Delete").click();
-                cy.get(confirmButton).click();
-                cy.wait(5000);
-            }
-        });
+    isTableEmpty().then((empty) => {
+        if (!empty) {
+            cy.get(tableSelector)
+                .find(trTag)
+                .then(($rows) => {
+                    for (let i = 0; i < $rows.length - 1; i++) {
+                        cy.get(sideKebabMenu, { timeout: 10000 }).first().click();
+                        cy.get("ul[role=menu] > li").contains("Delete").click();
+                        cy.get(confirmButton).click();
+                        // asserts the deletion popup is visible and then closes it.
+                        cy.get("ul.pf-v5-c-alert-group.pf-m-toast li .pf-v5-c-alert.pf-m-success", {
+                            timeout: 3 * SEC,
+                        })
+                            .should("be.visible")
+                            .within(() => {
+                                cy.get('button[aria-label^="Close"]').click();
+                            });
+                    }
+                });
+        }
+    });
 }
 
 export function deleteAllImports(tableSelector: string = commonTable) {
