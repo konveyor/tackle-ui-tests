@@ -273,10 +273,10 @@ export function resetURL(): void {
 export function selectItemsPerPage(items: number): void {
     cy.get(itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(($toggleBtn) => {
         if (!$toggleBtn.eq(0).is(":disabled")) {
-            cy.get(itemsPerPageToggleButton).first().click();
-            cy.get(itemsPerPageMenuOptions, { timeout: 60 * SEC, log: false });
+            $toggleBtn.eq(0).trigger("click");
+            cy.get(itemsPerPageMenuOptions, { log: false });
             cy.get(`li[data-action="per-page-${items}"]`, { log: false })
-                .contains(`${items}`, { timeout: 30 * SEC, log: false })
+                .contains(`${items}`)
                 .click({
                     force: true,
                     log: false,
