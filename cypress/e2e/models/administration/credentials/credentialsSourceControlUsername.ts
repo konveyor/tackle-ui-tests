@@ -22,11 +22,12 @@ export class CredentialsSourceControlUsername extends CredentialsSourceControl {
     }
 
     protected init(credentialsSourceControl: CredentialsSourceControlData) {
-        const { name, description, username, password } = credentialsSourceControl;
+        const { name, description, username, password, isDefault } = credentialsSourceControl;
         this.name = name;
         this.description = description;
         this.username = username;
         this.password = password;
+        this.isDefault = isDefault;
     }
 
     protected fillUsername() {
@@ -42,9 +43,14 @@ export class CredentialsSourceControlUsername extends CredentialsSourceControl {
         clickByText(button, "Username/Password");
     }
 
+    verifyDefaultCredentialIcon() {
+        super.verifyDefaultCredentialIcon();
+    }
+
     create(toBeCanceled = false) {
         super.create();
         this.selectCredType();
+        this.setAsDefault();
         this.fillUsername();
         this.fillPassword();
         if (!toBeCanceled) {

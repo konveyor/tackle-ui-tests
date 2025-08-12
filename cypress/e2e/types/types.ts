@@ -8,7 +8,7 @@ export type CredentialsSourceControlData = {
     description?: string;
     username?: string;
     password?: string;
-    setDefault?: boolean;
+    isDefault?: boolean;
 };
 
 export type CredentialsSourceControlPrivateKeyData = {
