@@ -948,9 +948,9 @@ export function createMultipleArchetypes(number, tags?: Tag[]): Archetype[] {
         let archetype: Archetype;
         if (tags) archetype = new Archetype(data.getRandomWord(6), [tags[i].name], [tags[i].name]);
         else archetype = new Archetype(data.getRandomWord(6), [randomTagName], [randomTagName]);
-        cy.wait(2 * SEC);
         archetype.create();
-        cy.wait(2 * SEC);
+        // asserts the creation success popup is visible and then closes it.
+        assertSuccessPopupAndClose();
         archetypesList.push(archetype);
     }
     return archetypesList;
@@ -1227,17 +1227,26 @@ export function deleteAllRows(tableSelector: string = commonTable) {
                             .click();
                         cy.get("ul[role=menu] > li").contains("Delete").click();
                         cy.get(confirmButton).click();
-                        // asserts the deletion popup is visible and then closes it.
-                        cy.get("ul.pf-v5-c-alert-group.pf-m-toast li .pf-v5-c-alert.pf-m-success", {
-                            timeout: 3 * SEC,
-                        })
-                            .should("be.visible")
-                            .within(() => {
-                                cy.get('button[aria-label^="Close"]').click();
-                            });
+                        // asserts the deletion success popup is visible and then closes it.
+                        assertSuccessPopupAndClose();
                     }
                 });
         }
+    });
+}
+
+export function assertSuccessPopupAndClose() {
+    cy.get("ul.pf-v5-c-alert-group.pf-m-toast li .pf-v5-c-alert.pf-m-success", {
+        timeout: 3 * SEC,
+    })
+        .should("be.visible")
+        .within(() => {
+            cy.get('button[aria-label^="Close"]').click();
+        });   
+}
+export function checkRowCount(expectedCount: number) {
+    cy.get("td[data-label=Name]").then(($rows) => {
+        cy.wrap($rows.length).should("eq", expectedCount);
     });
 }
 
@@ -1519,6 +1528,7 @@ export function autoPageChangeValidations(
 
 export function goToLastPage(): void {
     cy.get(lastPageButton, { timeout: 10 * SEC })
+        .should("not.be.disabled", { timeout: 10 * SEC })
         .eq(1)
         .then(($button) => {
             if (!$button.hasClass(".pf-m-disabled")) {
