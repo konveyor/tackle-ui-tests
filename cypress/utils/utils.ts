@@ -706,7 +706,7 @@ export function notExistsWithinRow(
 export function importApplication(fileName: string, disableAutoCreation?: boolean): void {
     // Performs application import via csv file upload
     application_inventory_kebab_menu("Import");
-    cy.get('input[type="file"]', { timeout: 2 * SEC }).selectFile(`fixtures/${fileName}`, {
+    cy.get('input[type="file"]', { timeout: 2 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
         timeout: 120 * SEC,
         force: true,
     });
@@ -724,14 +724,14 @@ export function importApplication(fileName: string, disableAutoCreation?: boolea
 }
 
 export function uploadApplications(fileName: string): void {
-    cy.get('input[type="file"]', { timeout: 5 * SEC }).selectFile(`fixtures/${fileName}`, {
+    cy.get('input[type="file"]', { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
         timeout: 120 * SEC,
         force: true,
     });
 }
 
 export function uploadFile(fileName: string, selector = 'input[type="file"]'): void {
-    cy.get(selector, { timeout: 5 * SEC }).selectFile(`fixtures/${fileName}`, {
+    cy.get(selector, { timeout: 5 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
         timeout: 120 * SEC,
         force: true,
     });
@@ -974,8 +974,8 @@ export function createMultipleStakeholderGroups(
             stakeholders
         );
         stakeholdergroup.create();
-        stakeholdergroupsList.push(stakeholdergroup);
         exists(stakeholdergroup.name);
+        stakeholdergroupsList.push(stakeholdergroup);
     }
     return stakeholdergroupsList;
 }
@@ -1542,42 +1542,37 @@ export function validateValue(selector, value: string): void {
 }
 
 export function writeMavenSettingsFile(username: string, password: string, url?: string): void {
-    cy.readFile("fixtures/xml/settings.xml.example", { log: false }).then((exampleData) => {
-        cy.writeFile("fixtures/xml/settings.xml", exampleData, {
-            log: false,
-        }).then(() => {
-            cy.readFile("fixtures/xml/settings.xml").then((data) => {
-                // Sometimes the data will be undefined due to access problems in pipelines
-                // When no access, data will be strictly undefined, not an empty string
-                if (data === undefined) {
-                    cy.writeFile("fixtures/xml/settings.xml", "");
-                    return;
-                }
-                const parser = new DOMParser();
-                const xmlDOM = parser.parseFromString(data.toString(), "text/xml");
-                const serializer = new XMLSerializer();
+    cy.readFile("cypress/fixtures/xml/settings.xml").then((data) => {
+        // Sometimes the data will be undefined due to access problems in pipelines
+        // When no access, data will be strictly undefined, not an empty string
+        if (data === undefined) {
+            cy.writeFile("cypress/fixtures/xml/settings.xml", "");
+            return;
+        }
+        const parser = new DOMParser();
+        const xmlDOM = parser.parseFromString(data.toString(), "text/xml");
+        const serializer = new XMLSerializer();
 
-                xmlDOM.getElementsByTagName("username")[0].childNodes[0].nodeValue = username;
-                xmlDOM.getElementsByTagName("password")[0].childNodes[0].nodeValue = password;
-                if (url) {
-                    xmlDOM
-                        .getElementsByTagName("repository")[1]
-                        .getElementsByTagName("url")[0].childNodes[0].nodeValue = url;
-                }
-                cy.writeFile("fixtures/xml/settings.xml", serializer.serializeToString(xmlDOM));
-            });
-        });
+        xmlDOM.getElementsByTagName("username")[0].childNodes[0].nodeValue = username;
+        xmlDOM.getElementsByTagName("password")[0].childNodes[0].nodeValue = password;
+        if (url) {
+            xmlDOM
+                .getElementsByTagName("repository")[1]
+                .getElementsByTagName("url")[0].childNodes[0].nodeValue = url;
+        }
+
+        cy.writeFile("cypress/fixtures/xml/settings.xml", serializer.serializeToString(xmlDOM));
     });
 }
 
 export function writeGpgKey(git_key): void {
-    cy.readFile("fixtures/gpgkey").then(() => {
+    cy.readFile("cypress/fixtures/gpgkey").then(() => {
         const key = git_key;
         const beginningKey = "-----BEGIN RSA PRIVATE KEY-----";
         const endingKey = "-----END RSA PRIVATE KEY-----";
         const keystring = key.toString().split(" ").join("\n");
         const gpgkey = beginningKey + "\n" + keystring + "\n" + endingKey;
-        cy.writeFile("fixtures/gpgkey", gpgkey);
+        cy.writeFile("cypress/fixtures/gpgkey", gpgkey);
     });
 }
 
@@ -1826,7 +1821,7 @@ export function seedAnalysisData(applicationId: number): void {
     const username = Cypress.env("user");
     const password = Cypress.env("pass");
 
-    const command = `cd fixtures && chmod +x analysis.sh && HOST=${hostname} USERNAME=${username} PASSWORD=${password} ./analysis.sh ${applicationId}`;
+    const command = `cd cypress/fixtures && chmod +x analysis.sh && HOST=${hostname} USERNAME=${username} PASSWORD=${password} ./analysis.sh ${applicationId}`;
     cy.exec(command, {
         timeout: 120 * SEC,
         failOnNonZeroExit: false,
