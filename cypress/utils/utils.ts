@@ -948,9 +948,8 @@ export function createMultipleArchetypes(number, tags?: Tag[]): Archetype[] {
         let archetype: Archetype;
         if (tags) archetype = new Archetype(data.getRandomWord(6), [tags[i].name], [tags[i].name]);
         else archetype = new Archetype(data.getRandomWord(6), [randomTagName], [randomTagName]);
-        cy.wait(2 * SEC);
         archetype.create();
-        cy.wait(2 * SEC);
+        assertSuccessPopupAndClose();
         archetypesList.push(archetype);
     }
     return archetypesList;
@@ -1218,24 +1217,36 @@ export function isTableEmpty(tableSelector: string = commonTable): Cypress.Chain
 }
 
 export function deleteAllRows(tableSelector: string = commonTable) {
-    // This method is for pages that have delete button inside Kebab menu
-    // like Applications and Imports page
     isTableEmpty().then((empty) => {
         if (!empty) {
             cy.get(tableSelector)
                 .find(trTag)
                 .then(($rows) => {
                     for (let i = 0; i < $rows.length - 1; i++) {
-                        cy.get(sideKebabMenu, { timeout: 10000 }).first().click();
+                        cy.get(sideKebabMenu, { timeout: 10 * SEC })
+                            .first()
+                            .click();
                         cy.get("ul[role=menu] > li").contains("Delete").click();
                         cy.get(confirmButton).click();
-                        cy.wait(5000);
-                        isTableEmpty().then((empty) => {
-                            if (empty) return;
-                        });
+                        assertSuccessPopupAndClose();
                     }
                 });
         }
+    });
+}
+
+export function assertSuccessPopupAndClose() {
+    cy.get(successAlertMessage, {
+        timeout: 3 * SEC,
+    })
+        .should("be.visible")
+        .within(() => {
+            cy.get('button[aria-label^="Close"]').click();
+        });
+}
+export function checkRowCount(expectedCount: number) {
+    cy.get("td[data-label=Name]").then(($rows) => {
+        cy.wrap($rows.length).should("eq", expectedCount);
     });
 }
 
@@ -1517,12 +1528,19 @@ export function autoPageChangeValidations(
 
 export function goToLastPage(): void {
     cy.get(lastPageButton, { timeout: 10 * SEC })
+        .should("not.be.disabled", { timeout: 10 * SEC })
         .eq(1)
         .then(($button) => {
             if (!$button.hasClass(".pf-m-disabled")) {
                 $button.click();
             }
         });
+}
+
+export function checkCurrentPageIs(pageNumber: number) {
+    cy.get(".pf-v5-c-pagination__nav-page-select", { timeout: 10 * SEC })
+        .find('input[aria-label="Current page"]')
+        .should("have.value", pageNumber.toString());
 }
 
 export function validateValue(selector, value: string): void {
