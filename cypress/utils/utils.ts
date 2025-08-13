@@ -949,7 +949,6 @@ export function createMultipleArchetypes(number, tags?: Tag[]): Archetype[] {
         if (tags) archetype = new Archetype(data.getRandomWord(6), [tags[i].name], [tags[i].name]);
         else archetype = new Archetype(data.getRandomWord(6), [randomTagName], [randomTagName]);
         archetype.create();
-        // asserts the creation success popup is visible and then closes it.
         assertSuccessPopupAndClose();
         archetypesList.push(archetype);
     }
@@ -1227,7 +1226,6 @@ export function deleteAllRows(tableSelector: string = commonTable) {
                             .click();
                         cy.get("ul[role=menu] > li").contains("Delete").click();
                         cy.get(confirmButton).click();
-                        // asserts the deletion success popup is visible and then closes it.
                         assertSuccessPopupAndClose();
                     }
                 });
@@ -1236,7 +1234,7 @@ export function deleteAllRows(tableSelector: string = commonTable) {
 }
 
 export function assertSuccessPopupAndClose() {
-    cy.get("ul.pf-v5-c-alert-group.pf-m-toast li .pf-v5-c-alert.pf-m-success", {
+    cy.get(successAlertMessage, {
         timeout: 3 * SEC,
     })
         .should("be.visible")
