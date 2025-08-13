@@ -26,4 +26,5 @@ export const submitButton = "button[type=submit]";
 export const submitInput = "input[type=submit]";
 export const inputError = "span[id=input-error]";
 export const deleteUserButton = 'button[data-testid="delete-user-btn"]';
-export const realmSelector = 'button[data-testid="realmSelector"]';
+export const realmSelectorMta = "#nav-item-realms";
+export const realmSelectorTackle = 'button[data-testid="realmSelector"]';
