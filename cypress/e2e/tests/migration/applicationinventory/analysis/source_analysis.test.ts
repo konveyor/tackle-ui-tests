@@ -21,13 +21,11 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
-    writeMavenSettingsFile,
 } from "../../../../../utils/utils";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlKey } from "../../../../models/administration/credentials/credentialsSourceControlKey";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { Application } from "../../../../models/migration/applicationinventory/application";
 import {
     AnalysisStatuses,
     CredentialType,
@@ -422,19 +420,11 @@ describe(["@tier2"], "Source Analysis", () => {
     });
 
     after("Perform test data clean up", function () {
-        login();
-        cy.visit("/");
-        Application.open(true);
         deleteByList(applicationsList);
-        if (sourceCredential) {
-            sourceCredential.delete();
-        }
-        if (mavenCredential) {
-            mavenCredential.delete();
-        }
-        if (sourceCredentialWithHash) {
-            sourceCredentialWithHash.delete();
-        }
-        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
+        sourceCredential.delete();
+        defaultSourceCredential.delete();
+        sourceCredentialWithHash.delete();
+        mavenCredential.delete();
+        defaultMavenCredential.delete();
     });
 });
