@@ -36,9 +36,9 @@ import {
     UserCredentials,
 } from "../../../../types/constants";
 import { AppIssue } from "../../../../types/types";
-let source_credential: CredentialsSourceControlUsername;
+let defaultSourceCredential: CredentialsSourceControlUsername;
 let source_credential_withHash: CredentialsSourceControlUsername;
-let maven_credential: CredentialsMaven;
+let defaultMavenCredential: CredentialsMaven;
 let applicationsList: Array<Analysis> = [];
 
 describe(["@tier2"], "Source Analysis", () => {
@@ -47,14 +47,16 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.visit("/");
 
         // Create source Credentials
-        source_credential = new CredentialsSourceControlUsername(
+        defaultSourceCredential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
                 UserCredentials.usernamePassword,
+                true,
+                null,
                 true
             )
         );
-        source_credential.create();
+        defaultSourceCredential.create();
 
         // Create source Credentials with # in password
         source_credential_withHash = new CredentialsSourceControlUsername(
@@ -68,10 +70,10 @@ describe(["@tier2"], "Source Analysis", () => {
         source_credential_withHash.create();
 
         // Create Maven credentials
-        maven_credential = new CredentialsMaven(
-            data.getRandomCredentialsData(CredentialType.maven, null, true)
+        defaultMavenCredential = new CredentialsMaven(
+            data.getRandomCredentialsData(CredentialType.maven, null, true, null, true)
         );
-        maven_credential.create();
+        defaultMavenCredential.create();
     });
 
     beforeEach("Load data", function () {
@@ -89,24 +91,27 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.visit("/");
     });
 
-    it(["@tier1"], "Source + dependencies analysis on tackletest app", function () {
-        // Source code analysis require both source and maven credentials
-        const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_Source+dependencies", {
-                sourceData: this.appData["tackle-testapp-git"],
-            }),
-            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
-        );
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication");
-        application.manageCredentials(source_credential.name, maven_credential.name);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
-        application.verifyEffort(
-            this.analysisData["source+dep_analysis_on_tackletestapp"]["effort"]
-        );
-    });
+    it(
+        ["@tier1"],
+        "Source + dependencies analysis on tackletest app with default credentials",
+        function () {
+            // Source code analysis require both source and maven credentials
+            const application = new Analysis(
+                getRandomApplicationData("tackleTestApp_Source+dependencies", {
+                    sourceData: this.appData["tackle-testapp-git"],
+                }),
+                getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
+            );
+            application.create();
+            applicationsList.push(application);
+            cy.wait("@getApplication");
+            application.analyze();
+            application.verifyAnalysisStatus("Completed");
+            application.verifyEffort(
+                this.analysisData["source+dep_analysis_on_tackletestapp"]["effort"]
+            );
+        }
+    );
 
     it("Source + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
@@ -147,7 +152,7 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        application.manageCredentials(null, maven_credential.name);
+        application.manageCredentials(null, defaultMavenCredential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
     });
@@ -163,7 +168,7 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        application.manageCredentials(source_credential.name, null);
+        application.manageCredentials(defaultSourceCredential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed", 30 * MIN);
     });
@@ -202,7 +207,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed", 30 * MIN);
     });
@@ -218,7 +222,7 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        application.manageCredentials(source_credential.name, null);
+        application.manageCredentials(defaultSourceCredential.name, null);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.applicationDetailsTab("Tags");
@@ -274,7 +278,7 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        application.manageCredentials(source_credential.name, maven_credential.name);
+        application.manageCredentials(defaultSourceCredential.name, defaultMavenCredential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.verifyEffort(
@@ -294,7 +298,7 @@ describe(["@tier2"], "Source Analysis", () => {
         application.create();
         applicationsList.push(application);
         cy.wait("@getApplication");
-        application.manageCredentials(source_credential.name, maven_credential.name);
+        application.manageCredentials(defaultSourceCredential.name, defaultMavenCredential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
         application.verifyEffort(
@@ -328,7 +332,7 @@ describe(["@tier2"], "Source Analysis", () => {
             getRandomAnalysisData(this.analysisData["jdk9_source_dep_analysis_on_tackletestapp"])
         );
         application.create();
-        application.manageCredentials(null, maven_credential.name);
+        application.manageCredentials(null, defaultMavenCredential.name);
         applicationsList.push(application);
         cy.wait("@getApplication");
         application.analyze();
@@ -376,7 +380,7 @@ describe(["@tier2"], "Source Analysis", () => {
         };
 
         // Analyze application with Maven credentials
-        analyzeApplication(applicationsList[0], maven_credential);
+        analyzeApplication(applicationsList[0], defaultMavenCredential);
 
         // Analyze application without Maven credentials
         analyzeApplication(applicationsList[1], null);
@@ -403,11 +407,11 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.visit("/");
         Application.open(true);
         deleteByList(applicationsList);
-        if (source_credential) {
-            source_credential.delete();
+        if (defaultSourceCredential) {
+            defaultSourceCredential.delete();
         }
-        if (maven_credential) {
-            maven_credential.delete();
+        if (defaultMavenCredential) {
+            defaultMavenCredential.delete();
         }
         if (source_credential_withHash) {
             source_credential_withHash.delete();
