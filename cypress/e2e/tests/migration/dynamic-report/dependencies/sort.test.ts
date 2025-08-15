@@ -7,7 +7,7 @@ import {
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
 
-describe(["@tier3"], "Bug MTA-4598: Dependencies sort validations", function () {
+describe(["@tier3"], "Dependencies sort validations", function () {
     let application: Analysis;
     const sortByList = ["Dependency name", "Labels", "Found in"];
 
@@ -39,7 +39,7 @@ describe(["@tier3"], "Bug MTA-4598: Dependencies sort validations", function () 
     });
 
     sortByList.forEach((column) => {
-        it(`Bug MTA-4598: Sort dependencies by ${column}`, function () {
+        it(`Sort dependencies by ${column}`, function () {
             Dependencies.openList();
             validateSortBy(column);
         });

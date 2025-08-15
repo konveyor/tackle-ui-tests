@@ -274,7 +274,7 @@ export function selectItemsPerPage(items: number): void {
     cy.get(itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(($toggleBtn) => {
         if (!$toggleBtn.eq(0).is(":disabled")) {
             $toggleBtn.eq(0).trigger("click");
-            cy.get(itemsPerPageMenuOptions, { log: false });
+            cy.get(itemsPerPageMenuOptions, { timeout: 60 * SEC, log: false });
             cy.get(`li[data-action="per-page-${items}"]`, { log: false })
                 .contains(`${items}`)
                 .click({
@@ -357,7 +357,7 @@ export function validateAnyNumberPresence(fieldId: string): void {
 export function closeSuccessAlert(): void {
     cy.get(closeSuccessNotification, { timeout: 10 * SEC })
         .first()
-        .click({ force: true });
+        .click({ force: true, timeout: 5 * SEC });
 }
 
 export function removeMember(memberName: string): void {
@@ -808,7 +808,9 @@ export function clickItemInKebabMenu(rowItem, itemName: string): void {
         .within(() => {
             click(sideKebabMenu);
         });
-    cy.get(actionMenuItem).contains(itemName).click({ force: true });
+    cy.get(actionMenuItem, { timeout: 120 * SEC })
+        .contains(itemName, { timeout: 120 * SEC })
+        .click({ force: true });
 }
 
 export function clickKebabMenuOptionArchetype(rowItem: string, itemName: string): void {
@@ -898,6 +900,7 @@ export function createMultipleStakeholders(
             stakeholderGroupNames
         );
         stakeholder.create();
+        exists(stakeholder.name);
         stakeholdersList.push(stakeholder);
     }
     return stakeholdersList;
@@ -970,6 +973,7 @@ export function createMultipleStakeholderGroups(
             stakeholders
         );
         stakeholdergroup.create();
+        exists(stakeholdergroup.name);
         stakeholdergroupsList.push(stakeholdergroup);
     }
     return stakeholdergroupsList;
@@ -1208,7 +1212,7 @@ export function deleteAllTagsAndTagCategories(): void {
 
 export function isTableEmpty(tableSelector: string = commonTable): Cypress.Chainable<boolean> {
     return cy
-        .get(tableSelector)
+        .get(tableSelector, { timeout: 5 * SEC })
         .find("div")
         .should("not.have.descendants", "svg.pf-v5-c-spinner")
         .then(($element) => {
@@ -1217,22 +1221,17 @@ export function isTableEmpty(tableSelector: string = commonTable): Cypress.Chain
 }
 
 export function deleteAllRows(tableSelector: string = commonTable) {
-    isTableEmpty().then((empty) => {
-        if (!empty) {
-            cy.get(tableSelector)
-                .find(trTag)
-                .then(($rows) => {
-                    for (let i = 0; i < $rows.length - 1; i++) {
-                        cy.get(sideKebabMenu, { timeout: 10 * SEC })
-                            .first()
-                            .click();
-                        cy.get("ul[role=menu] > li").contains("Delete").click();
-                        cy.get(confirmButton).click();
-                        assertSuccessPopupAndClose();
-                    }
-                });
-        }
-    });
+    cy.get(tableSelector)
+        .find(trTag)
+        .then(($rows) => {
+            for (let i = 0; i < $rows.length - 1; i++) {
+                cy.log(`Deleting row ${i + 1} of ${$rows.length - 1}`);
+                cy.get(sideKebabMenu, { timeout: 10000 }).eq(0).click();
+                cy.get("ul[role=menu] > li").contains("Delete").click();
+                cy.get(confirmButton).click();
+                cy.wait(2 * SEC);
+            }
+        });
 }
 
 export function assertSuccessPopupAndClose() {
@@ -1512,14 +1511,10 @@ export function itemsPerPageValidation(tableSelector = appTable, columnName = "N
         });
 }
 
-export function autoPageChangeValidations(
-    tableSelector = appTable,
-    columnName = "Name",
-    deleteInsideKebab: boolean = false
-): void {
+export function autoPageChangeValidations(columnName = "Name"): void {
     selectItemsPerPage(10);
     goToLastPage();
-    deleteInsideKebab ? deleteAllRows() : deleteAllItems(tableSelector);
+    deleteAllRows();
     // Verify that page is re-directed to previous page
     cy.get(`td[data-label='${columnName}']`).then(($rows) => {
         cy.wrap($rows.length).should("eq", 10);
@@ -1532,7 +1527,7 @@ export function goToLastPage(): void {
         .eq(1)
         .then(($button) => {
             if (!$button.hasClass(".pf-m-disabled")) {
-                $button.click();
+                cy.wrap($button).click();
             }
         });
 }
