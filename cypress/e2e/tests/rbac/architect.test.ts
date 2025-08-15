@@ -33,7 +33,7 @@ import { CredentialType, legacyPathfinder } from "../../types/constants";
 
 let stakeholders: Array<Stakeholders> = [];
 
-describe(["@tier3", "@rhsso", "@rhbk"], "Bug MTA-5631: Architect RBAC operations", function () {
+describe(["@tier3", "@rhsso", "@rhbk"], "Architect RBAC operations", function () {
     // https://issues.redhat.com/browse/MTA-5631
     let userArchitect = new UserArchitect(getRandomUserData());
     const application = new Application(getRandomApplicationData());
@@ -78,7 +78,7 @@ describe(["@tier3", "@rhsso", "@rhbk"], "Bug MTA-5631: Architect RBAC operations
         Analysis.validateAnalyzeButton(this.rbacRules);
     });
 
-    it("Bug MTA-5631: Architect, validate application context menu", function () {
+    it("Architect, validate application context menu", function () {
         application.validateAppContextMenu(this.rbacRules);
     });
 

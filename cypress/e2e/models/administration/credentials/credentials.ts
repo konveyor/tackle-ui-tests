@@ -144,7 +144,7 @@ export class Credentials {
                 .contains(this.name, { timeout: 120 * SEC })
                 .closest(trTag)
                 .within(() => {
-                    cy.get("svg.pf-v5-svg").should("exist");
+                    cy.get("td").eq(1).find("svg.pf-v5-svg").should("exist");
                 });
         }
     }

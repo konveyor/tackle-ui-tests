@@ -951,9 +951,8 @@ export function createMultipleArchetypes(number, tags?: Tag[]): Archetype[] {
         let archetype: Archetype;
         if (tags) archetype = new Archetype(data.getRandomWord(6), [tags[i].name], [tags[i].name]);
         else archetype = new Archetype(data.getRandomWord(6), [randomTagName], [randomTagName]);
-        cy.wait(2 * SEC);
         archetype.create();
-        cy.wait(2 * SEC);
+        assertSuccessPopupAndClose();
         archetypesList.push(archetype);
     }
     return archetypesList;
@@ -1235,6 +1234,21 @@ export function deleteAllRows(tableSelector: string = commonTable) {
         });
 }
 
+export function assertSuccessPopupAndClose() {
+    cy.get(successAlertMessage, {
+        timeout: 3 * SEC,
+    })
+        .should("be.visible")
+        .within(() => {
+            cy.get('button[aria-label^="Close"]').click();
+        });
+}
+export function checkRowCount(expectedCount: number) {
+    cy.get("td[data-label=Name]").then(($rows) => {
+        cy.wrap($rows.length).should("eq", expectedCount);
+    });
+}
+
 export function deleteAllImports(tableSelector: string = commonTable) {
     isTableEmpty().then((empty) => {
         if (!empty) {
@@ -1369,9 +1383,9 @@ export function goToPage(page: number): void {
 
 export function selectUserPerspective(userType: string): void {
     cy.get(optionMenu)
-        .find("button", { timeout: 10 * SEC })
+        .find(button, { timeout: 10 * SEC })
         .click();
-    cy.get(actionMenuItem).contains(userType).click({ force: true });
+    clickByText(button, userType);
 }
 
 export function selectWithinModal(selector: string): void {
@@ -1509,12 +1523,19 @@ export function autoPageChangeValidations(columnName = "Name"): void {
 
 export function goToLastPage(): void {
     cy.get(lastPageButton, { timeout: 10 * SEC })
+        .should("not.be.disabled", { timeout: 10 * SEC })
         .eq(1)
         .then(($button) => {
             if (!$button.hasClass(".pf-m-disabled")) {
                 cy.wrap($button).click();
             }
         });
+}
+
+export function checkCurrentPageIs(pageNumber: number) {
+    cy.get(".pf-v5-c-pagination__nav-page-select", { timeout: 10 * SEC })
+        .find('input[aria-label="Current page"]')
+        .should("have.value", pageNumber.toString());
 }
 
 export function validateValue(selector, value: string): void {
