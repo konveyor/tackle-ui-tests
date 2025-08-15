@@ -1516,9 +1516,7 @@ export function autoPageChangeValidations(
     deleteInsideKebab: boolean = false
 ): void {
     selectItemsPerPage(10);
-    cy.wait(7000);
     goToLastPage();
-    cy.wait(7000);
     deleteInsideKebab ? deleteAllRows() : deleteAllItems(tableSelector);
     // Verify that page is re-directed to previous page
     cy.get(`td[data-label='${columnName}']`).then(($rows) => {
