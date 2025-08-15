@@ -19,19 +19,19 @@ import {
     autoPageChangeValidations,
     createMultipleBusinessServices,
     deleteAllBusinessServices,
-    deleteApplicationTableRows,
     itemsPerPageValidation,
     login,
     selectItemsPerPage,
     validatePagination,
 } from "../../../../../utils/utils";
 import { BusinessServices } from "../../../../models/migration/controls/businessservices";
+let businessService: BusinessServices[];
 
 describe(["@tier3"], "Business services pagination validations", function () {
     before("Login and Create Test Data", function () {
         login();
         cy.visit("/");
-        createMultipleBusinessServices(11);
+        businessService = createMultipleBusinessServices(11);
     });
 
     it("Navigation button validations", function () {
@@ -53,7 +53,6 @@ describe(["@tier3"], "Business services pagination validations", function () {
     });
 
     after("Perform test data clean up", function () {
-        deleteApplicationTableRows();
         deleteAllBusinessServices();
     });
 });

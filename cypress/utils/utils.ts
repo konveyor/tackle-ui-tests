@@ -357,7 +357,7 @@ export function validateAnyNumberPresence(fieldId: string): void {
 export function closeSuccessAlert(): void {
     cy.get(closeSuccessNotification, { timeout: 10 * SEC })
         .first()
-        .click({ force: true });
+        .click({ force: true, timeout: 5 * SEC });
 }
 
 export function removeMember(memberName: string): void {
@@ -1213,7 +1213,7 @@ export function deleteAllTagsAndTagCategories(): void {
 
 export function isTableEmpty(tableSelector: string = commonTable): Cypress.Chainable<boolean> {
     return cy
-        .get(tableSelector)
+        .get(tableSelector, { timeout: 5 * SEC })
         .find("div")
         .should("not.have.descendants", "svg.pf-v5-c-spinner")
         .then(($element) => {
@@ -1222,25 +1222,30 @@ export function isTableEmpty(tableSelector: string = commonTable): Cypress.Chain
 }
 
 export function deleteAllRows(tableSelector: string = commonTable) {
-    // This method is for pages that have delete button inside Kebab menu
-    // like Applications and Imports page
-    isTableEmpty().then((empty) => {
-        if (!empty) {
+    cy.get(tableSelector)
+        .find(trTag)
+        .then(($rows) => {
+            const rowsToDelete = $rows.length - 1;
+            if (rowsToDelete <= 0) {
+                cy.log("No rows to delete or only one row present.");
+                return;
+            }
+
             cy.get(tableSelector)
                 .find(trTag)
-                .then(($rows) => {
-                    for (let i = 0; i < $rows.length - 1; i++) {
-                        cy.get(sideKebabMenu, { timeout: 10000 }).first().click();
-                        cy.get("ul[role=menu] > li").contains("Delete").click();
-                        cy.get(confirmButton).click();
-                        cy.wait(5000);
-                        isTableEmpty().then((empty) => {
-                            if (empty) return;
+                .each(($row, index) => {
+                    if (index > 0 && index <= rowsToDelete) {
+                        cy.wrap($row).within(() => {
+                            cy.wait(1000);
+                            cy.get(sideKebabMenu, { timeout: 10000 }).click({ force: true });
                         });
+                        cy.contains("Delete").click();
+                        cy.get(confirmButton, { timeout: 5 * SEC }).click();
+                        closeSuccessAlert();
+                        cy.wrap($row).should("not.exist");
                     }
                 });
-        }
-    });
+        });
 }
 
 export function deleteAllImports(tableSelector: string = commonTable) {
@@ -1511,7 +1516,9 @@ export function autoPageChangeValidations(
     deleteInsideKebab: boolean = false
 ): void {
     selectItemsPerPage(10);
+    cy.wait(7000);
     goToLastPage();
+    cy.wait(7000);
     deleteInsideKebab ? deleteAllRows() : deleteAllItems(tableSelector);
     // Verify that page is re-directed to previous page
     cy.get(`td[data-label='${columnName}']`).then(($rows) => {
