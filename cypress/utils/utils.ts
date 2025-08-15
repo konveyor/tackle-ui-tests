@@ -1225,26 +1225,13 @@ export function deleteAllRows(tableSelector: string = commonTable) {
     cy.get(tableSelector)
         .find(trTag)
         .then(($rows) => {
-            const rowsToDelete = $rows.length - 1;
-            if (rowsToDelete <= 0) {
-                cy.log("No rows to delete or only one row present.");
-                return;
+            for (let i = 0; i < $rows.length - 1; i++) {
+                cy.log(`Deleting row ${i + 1} of ${$rows.length - 1}`);
+                cy.get(sideKebabMenu, { timeout: 10000 }).eq(0).click();
+                cy.get("ul[role=menu] > li").contains("Delete").click();
+                cy.get(confirmButton).click();
+                cy.wait(2 * SEC);
             }
-
-            cy.get(tableSelector)
-                .find(trTag)
-                .each(($row, index) => {
-                    if (index > 0 && index <= rowsToDelete) {
-                        cy.wrap($row).within(() => {
-                            cy.wait(1000);
-                            cy.get(sideKebabMenu, { timeout: 10000 }).click({ force: true });
-                        });
-                        cy.contains("Delete").click();
-                        cy.get(confirmButton, { timeout: 5 * SEC }).click();
-                        closeSuccessAlert();
-                        cy.wrap($row).should("not.exist");
-                    }
-                });
         });
 }
 
@@ -1510,14 +1497,10 @@ export function itemsPerPageValidation(tableSelector = appTable, columnName = "N
         });
 }
 
-export function autoPageChangeValidations(
-    tableSelector = appTable,
-    columnName = "Name",
-    deleteInsideKebab: boolean = false
-): void {
+export function autoPageChangeValidations(columnName = "Name"): void {
     selectItemsPerPage(10);
     goToLastPage();
-    deleteInsideKebab ? deleteAllRows() : deleteAllItems(tableSelector);
+    deleteAllRows();
     // Verify that page is re-directed to previous page
     cy.get(`td[data-label='${columnName}']`).then(($rows) => {
         cy.wrap($rows.length).should("eq", 10);
