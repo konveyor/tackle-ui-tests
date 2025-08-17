@@ -67,10 +67,16 @@ export class User {
     }
 
     static changeRealm(realm: string) {
+        const namespace = getNamespace();
         cy.url().then(($url) => {
             if (!$url.includes(`#/${realm}`)) {
-                click(loginView.realmSelector);
-                clickByText(button, realm);
+                if (namespace.includes("mta")) {
+                    click(loginView.realmSelectorMta);
+                    clickByText("a", realm);
+                } else {
+                    click(loginView.realmSelectorTackle);
+                    clickByText(button, realm);
+                }
             }
         });
     }

@@ -19,7 +19,6 @@ import {
     autoPageChangeValidations,
     createMultipleBusinessServices,
     deleteAllBusinessServices,
-    deleteApplicationTableRows,
     itemsPerPageValidation,
     login,
     selectItemsPerPage,
@@ -49,11 +48,10 @@ describe(["@tier3"], "Business services pagination validations", function () {
     it("Last page item(s) deletion, impact on page reload validation", function () {
         BusinessServices.openList();
         selectItemsPerPage(10);
-        autoPageChangeValidations(undefined, undefined, true);
+        autoPageChangeValidations(undefined);
     });
 
     after("Perform test data clean up", function () {
-        deleteApplicationTableRows();
         deleteAllBusinessServices();
     });
 });

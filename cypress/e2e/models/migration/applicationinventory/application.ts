@@ -171,6 +171,9 @@ export class Application {
                 selectUserPerspective(migration);
                 clickByText(navMenu, applicationInventory);
                 cy.get("h1", { timeout: 60 * SEC }).should("contain", applicationInventory);
+                cy.get(commonView.itemsPerPageToggleButton, { timeout: 30 * SEC })
+                    .should("exist")
+                    .should("not.be.disabled");
             }
         });
         selectItemsPerPage(itemsPerPage);
@@ -265,7 +268,7 @@ export class Application {
         if (updateAppInfo) {
             this.editApplicationFromApplicationProfile();
         } else {
-            performRowActionByIcon(this.name, commonView.pencilIcon);
+            performRowActionByIcon(this.name, commonView.pencilAction);
         }
 
         if (cancel) {

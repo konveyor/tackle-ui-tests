@@ -274,7 +274,7 @@ export function selectItemsPerPage(items: number): void {
     cy.get(itemsPerPageToggleButton, { timeout: 60 * SEC, log: false }).then(($toggleBtn) => {
         if (!$toggleBtn.eq(0).is(":disabled")) {
             $toggleBtn.eq(0).trigger("click");
-            cy.get(itemsPerPageMenuOptions, { log: false });
+            cy.get(itemsPerPageMenuOptions, { timeout: 60 * SEC, log: false });
             cy.get(`li[data-action="per-page-${items}"]`, { log: false })
                 .contains(`${items}`)
                 .click({
@@ -357,7 +357,7 @@ export function validateAnyNumberPresence(fieldId: string): void {
 export function closeSuccessAlert(): void {
     cy.get(closeSuccessNotification, { timeout: 10 * SEC })
         .first()
-        .click({ force: true });
+        .click({ force: true, timeout: 5 * SEC });
 }
 
 export function removeMember(memberName: string): void {
@@ -808,7 +808,9 @@ export function clickItemInKebabMenu(rowItem, itemName: string): void {
         .within(() => {
             click(sideKebabMenu);
         });
-    cy.get(actionMenuItem).contains(itemName).click({ force: true });
+    cy.get(actionMenuItem, { timeout: 120 * SEC })
+        .contains(itemName, { timeout: 120 * SEC })
+        .click({ force: true });
 }
 
 export function clickKebabMenuOptionArchetype(rowItem: string, itemName: string): void {
@@ -898,6 +900,7 @@ export function createMultipleStakeholders(
             stakeholderGroupNames
         );
         stakeholder.create();
+        exists(stakeholder.name);
         stakeholdersList.push(stakeholder);
     }
     return stakeholdersList;
@@ -948,9 +951,8 @@ export function createMultipleArchetypes(number, tags?: Tag[]): Archetype[] {
         let archetype: Archetype;
         if (tags) archetype = new Archetype(data.getRandomWord(6), [tags[i].name], [tags[i].name]);
         else archetype = new Archetype(data.getRandomWord(6), [randomTagName], [randomTagName]);
-        cy.wait(2 * SEC);
         archetype.create();
-        cy.wait(2 * SEC);
+        assertSuccessPopupAndClose();
         archetypesList.push(archetype);
     }
     return archetypesList;
@@ -971,6 +973,7 @@ export function createMultipleStakeholderGroups(
             stakeholders
         );
         stakeholdergroup.create();
+        exists(stakeholdergroup.name);
         stakeholdergroupsList.push(stakeholdergroup);
     }
     return stakeholdergroupsList;
@@ -1209,7 +1212,7 @@ export function deleteAllTagsAndTagCategories(): void {
 
 export function isTableEmpty(tableSelector: string = commonTable): Cypress.Chainable<boolean> {
     return cy
-        .get(tableSelector)
+        .get(tableSelector, { timeout: 5 * SEC })
         .find("div")
         .should("not.have.descendants", "svg.pf-v5-c-spinner")
         .then(($element) => {
@@ -1218,24 +1221,31 @@ export function isTableEmpty(tableSelector: string = commonTable): Cypress.Chain
 }
 
 export function deleteAllRows(tableSelector: string = commonTable) {
-    // This method is for pages that have delete button inside Kebab menu
-    // like Applications and Imports page
-    isTableEmpty().then((empty) => {
-        if (!empty) {
-            cy.get(tableSelector)
-                .find(trTag)
-                .then(($rows) => {
-                    for (let i = 0; i < $rows.length - 1; i++) {
-                        cy.get(sideKebabMenu, { timeout: 10000 }).first().click();
-                        cy.get("ul[role=menu] > li").contains("Delete").click();
-                        cy.get(confirmButton).click();
-                        cy.wait(5000);
-                        isTableEmpty().then((empty) => {
-                            if (empty) return;
-                        });
-                    }
-                });
-        }
+    cy.get(tableSelector)
+        .find(trTag)
+        .then(($rows) => {
+            for (let i = 0; i < $rows.length - 1; i++) {
+                cy.log(`Deleting row ${i + 1} of ${$rows.length - 1}`);
+                cy.get(sideKebabMenu, { timeout: 10000 }).eq(0).click();
+                cy.get("ul[role=menu] > li").contains("Delete").click();
+                cy.get(confirmButton).click();
+                cy.wait(2 * SEC);
+            }
+        });
+}
+
+export function assertSuccessPopupAndClose() {
+    cy.get(successAlertMessage, {
+        timeout: 3 * SEC,
+    })
+        .should("be.visible")
+        .within(() => {
+            cy.get('button[aria-label^="Close"]').click();
+        });
+}
+export function checkRowCount(expectedCount: number) {
+    cy.get("td[data-label=Name]").then(($rows) => {
+        cy.wrap($rows.length).should("eq", expectedCount);
     });
 }
 
@@ -1373,9 +1383,9 @@ export function goToPage(page: number): void {
 
 export function selectUserPerspective(userType: string): void {
     cy.get(optionMenu)
-        .find("button", { timeout: 10 * SEC })
+        .find(button, { timeout: 10 * SEC })
         .click();
-    cy.get(actionMenuItem).contains(userType).click({ force: true });
+    clickByText(button, userType);
 }
 
 export function selectWithinModal(selector: string): void {
@@ -1501,14 +1511,10 @@ export function itemsPerPageValidation(tableSelector = appTable, columnName = "N
         });
 }
 
-export function autoPageChangeValidations(
-    tableSelector = appTable,
-    columnName = "Name",
-    deleteInsideKebab: boolean = false
-): void {
+export function autoPageChangeValidations(columnName = "Name"): void {
     selectItemsPerPage(10);
     goToLastPage();
-    deleteInsideKebab ? deleteAllRows() : deleteAllItems(tableSelector);
+    deleteAllRows();
     // Verify that page is re-directed to previous page
     cy.get(`td[data-label='${columnName}']`).then(($rows) => {
         cy.wrap($rows.length).should("eq", 10);
@@ -1517,12 +1523,19 @@ export function autoPageChangeValidations(
 
 export function goToLastPage(): void {
     cy.get(lastPageButton, { timeout: 10 * SEC })
+        .should("not.be.disabled", { timeout: 10 * SEC })
         .eq(1)
         .then(($button) => {
             if (!$button.hasClass(".pf-m-disabled")) {
-                $button.click();
+                cy.wrap($button).click();
             }
         });
+}
+
+export function checkCurrentPageIs(pageNumber: number) {
+    cy.get(".pf-v5-c-pagination__nav-page-select", { timeout: 10 * SEC })
+        .find('input[aria-label="Current page"]')
+        .should("have.value", pageNumber.toString());
 }
 
 export function validateValue(selector, value: string): void {

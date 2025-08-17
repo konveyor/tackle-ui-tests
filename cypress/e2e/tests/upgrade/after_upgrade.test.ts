@@ -185,7 +185,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         assessmentApplication.verifyStatus("assessment", "Completed");
     });
 
-    it("Verify that imported questionnaire assessement is migrated", function () {
+    it("Bug MTA-5883: Verify that imported questionnaire assessement is migrated", function () {
         AssessmentQuestionnaire.disable(legacyPathfinder);
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
         const assessmentApplication = new Application({
@@ -198,13 +198,14 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     });
 
     it("Validating pods after upgrade", function () {
+        // In MTA 7.3, RHSSO has been replaced by RHBK.
         const allowedPodsList = [
-            "keycloak-0",
             "mta-hub",
             "mta-keycloak-postgresql",
             "mta-operator",
+            "mta-rhbk-0",
             "mta-ui",
-            "rhsso-operator",
+            "rhbk-operator",
         ];
         getCommandOutput(`oc get pods -n${getNamespace()}`).then((result) => {
             allowedPodsList.forEach((podName) => {

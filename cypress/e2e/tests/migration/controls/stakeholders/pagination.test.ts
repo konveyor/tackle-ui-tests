@@ -56,7 +56,7 @@ describe(["@tier3"], "Stakeholder pagination validations", function () {
         Stakeholders.openList();
         cy.get("@getStakeholders");
         selectItemsPerPage(10);
-        autoPageChangeValidations(appTable, "Email", true);
+        autoPageChangeValidations("Email");
     });
 
     after("Perform test data clean up", function () {

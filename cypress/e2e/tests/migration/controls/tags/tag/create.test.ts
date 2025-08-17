@@ -63,7 +63,7 @@ describe(["@tier2"], "Tag validations", () => {
 
     it("Tag success alert and unique constraint validation", function () {
         const tag = new Tag(data.getRandomWord(5), data.getRandomDefaultTagCategory());
-        tag.create();
+        tag.create(false, true);
         checkSuccessAlert(
             commonView.successAlertMessage,
             "Success alert:Tag was successfully created."

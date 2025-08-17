@@ -51,7 +51,7 @@ let tagNames: string[];
 let bookServerApp: Analysis;
 let dayTraderApp: Analysis;
 
-describe(["@tier3"], "Bug MTA-4598: Dependency filtering", () => {
+describe(["@tier3"], "Dependency filtering", () => {
     before("Login", function () {
         login();
         cy.visit("/");
@@ -112,7 +112,7 @@ describe(["@tier3"], "Bug MTA-4598: Dependency filtering", () => {
         });
     });
 
-    it("Bug MTA-4598: Running analysis and filtering dependencies by app name", function () {
+    it("Running analysis and filtering dependencies by app name", function () {
         Dependencies.openList(100);
         // Applying filter by book server app and validating no dependencies of day trader app showed up
         Dependencies.applyAndValidateFilter(
@@ -133,7 +133,7 @@ describe(["@tier3"], "Bug MTA-4598: Dependency filtering", () => {
         clearAllFilters();
     });
 
-    it("Bug MTA-4598: Filtering dependencies by Archetype", function () {
+    it("Filtering dependencies by Archetype", function () {
         Dependencies.applyFilter(dependencyFilter.archetype, archetype.name);
         this.analysisData["source_analysis_on_bookserverapp"]["dependencies"].forEach(
             (dependency: AppDependency) => {
@@ -143,7 +143,7 @@ describe(["@tier3"], "Bug MTA-4598: Dependency filtering", () => {
         clearAllFilters();
     });
 
-    it("Bug MTA-4598: Filtering dependencies by BS", function () {
+    it("Filtering dependencies by BS", function () {
         Dependencies.applyFilter(dependencyFilter.bs, businessServiceList[0].name);
         this.analysisData["source_analysis_on_bookserverapp"]["dependencies"].forEach(
             (dependency: AppDependency) => {
@@ -153,7 +153,7 @@ describe(["@tier3"], "Bug MTA-4598: Dependency filtering", () => {
         clearAllFilters();
     });
 
-    it("Bug MTA-4598: Filtering dependencies by tags", function () {
+    it("Filtering dependencies by tags", function () {
         tagNames.forEach((currentTag: string) => {
             Dependencies.applyFilter(dependencyFilter.tags, currentTag);
             this.analysisData["source_analysis_on_bookserverapp"]["dependencies"].forEach(
@@ -165,7 +165,7 @@ describe(["@tier3"], "Bug MTA-4598: Dependency filtering", () => {
         });
     });
 
-    it("Bug MTA-4598: Filtering dependencies by dependency name", function () {
+    it("Filtering dependencies by dependency name", function () {
         this.analysisData["source_analysis_on_bookserverapp"]["dependencies"].forEach(
             (dependency: AppDependency) => {
                 Dependencies.applyFilter(dependencyFilter.deppName, dependency.name);
@@ -180,7 +180,7 @@ describe(["@tier3"], "Bug MTA-4598: Dependency filtering", () => {
         clearAllFilters();
     });
 
-    it("Bug MTA-4598: Filtering dependencies by dependency language", function () {
+    it("Filtering dependencies by dependency language", function () {
         this.analysisData["source_analysis_on_bookserverapp"]["dependencies"].forEach(
             (dependency: AppDependency) => {
                 Dependencies.applyFilter(dependencyFilter.language, dependency.language);
@@ -195,7 +195,7 @@ describe(["@tier3"], "Bug MTA-4598: Dependency filtering", () => {
         clearAllFilters();
     });
 
-    it("Bug MTA-4598: Validate dependencies filter is applied when drilling down from application page", function () {
+    it("Validate dependencies filter is applied when drilling down from application page", function () {
         // Validation of bug https://issues.redhat.com/browse/MTA-2008
         Analysis.open();
         bookServerApp.applicationDetailsTab("Details");

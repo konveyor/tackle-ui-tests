@@ -16,6 +16,8 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    checkCurrentPageIs,
+    checkRowCount,
     createMultipleArchetypes,
     deleteAllArchetypes,
     deleteAllRows,
@@ -50,11 +52,11 @@ describe(["@tier3"], "Archetypes pagination validations", function () {
         Archetype.open();
         selectItemsPerPage(10);
         goToLastPage();
+        checkCurrentPageIs(2);
         deleteAllRows();
-        // Verify that page is re-directed to previous page
-        cy.get("td[data-label=Name]").then(($rows) => {
-            cy.wrap($rows.length).should("eq", 10);
-        });
+        // assert that the page is redirected to the previous page, in this case the first page
+        checkCurrentPageIs(1);
+        checkRowCount(10);
     });
 
     after("Perform test data clean up", function () {
