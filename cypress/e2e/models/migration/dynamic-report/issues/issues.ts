@@ -191,6 +191,7 @@ export class Issues {
             Issues.openAffectedFiles(issueName);
         }
         cy.get(affectedFilesTable).within(() => {
+            cy.contains("Loading").should("not.exist");
             cy.contains(fileName).click();
         });
     }
