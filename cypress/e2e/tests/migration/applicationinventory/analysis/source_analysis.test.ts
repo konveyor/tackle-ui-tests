@@ -61,7 +61,7 @@ describe(["@tier2"], "Source Analysis", () => {
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
                 UserCredentials.usernamePassword,
-                false,
+                true,
                 null,
                 true
             )
@@ -87,7 +87,7 @@ describe(["@tier2"], "Source Analysis", () => {
 
         // Create default Maven credentials
         defaultMavenCredential = new CredentialsMaven(
-            data.getRandomCredentialsData(CredentialType.maven, null, false, null, true)
+            data.getRandomCredentialsData(CredentialType.maven, null, true, null, true)
         );
         defaultMavenCredential.create();
     });
