@@ -1220,16 +1220,20 @@ export function isTableEmpty(tableSelector: string = commonTable): Cypress.Chain
 }
 
 export function deleteAllRows(tableSelector: string = commonTable) {
-    cy.get(tableSelector)
-        .find(trTag)
-        .then(($rows) => {
-            for (let i = 0; i < $rows.length - 1; i++) {
-                cy.get(sideKebabMenu, { timeout: 10000 }).eq(0).click();
-                cy.get("ul[role=menu] > li").contains("Delete").click();
-                cy.get(confirmButton).click();
-                cy.wait(2 * SEC);
-            }
-        });
+    isTableEmpty().then((empty) => {
+        if (!empty) {
+            cy.get(tableSelector)
+                .find(trTag)
+                .then(($rows) => {
+                    for (let i = 0; i < $rows.length - 1; i++) {
+                        cy.get(sideKebabMenu, { timeout: 10000 }).eq(0).click();
+                        cy.get("ul[role=menu] > li").contains("Delete").click();
+                        cy.get(confirmButton).click();
+                        cy.wait(1 * SEC);
+                    }
+                });
+        }
+    });
 }
 
 export function assertSuccessPopupAndClose() {
@@ -1264,18 +1268,22 @@ export function deleteAllImports(tableSelector: string = commonTable) {
     });
 }
 
-export function deleteAllItems(tableSelector: string = commonTable, pageNumber?: number) {
+export function deleteAllItems(tableSelector: string = commonTable) {
     // This method is for pages like applications that have rows inside tbody
-    cy.get(`${tableSelector} tbody`)
-        .find(trTag)
-        .then(($rows) => {
-            for (let i = 0; i < $rows.length - 1; i++) {
-                cy.get(sideKebabMenu, { timeout: 10000 }).eq(0).click();
-                cy.get("ul[role=menu] > li").contains("Delete").click();
-                cy.get(confirmButton).click();
-                cy.wait(2 * SEC);
-            }
-        });
+    isTableEmpty().then((empty) => {
+        if (!empty) {
+            cy.get(`${tableSelector} tbody`)
+                .find(trTag)
+                .then(($rows) => {
+                    for (let i = 0; i < $rows.length; i++) {
+                        cy.get(sideKebabMenu, { timeout: 10000 }).eq(0).click();
+                        cy.get("ul[role=menu] > li").contains("Delete").click();
+                        cy.get(confirmButton).click();
+                        cy.wait(1 * SEC);
+                    }
+                });
+        }
+    });
 }
 
 export function deleteAllBusinessServices() {
@@ -1301,6 +1309,7 @@ export function deleteAllArchetypes() {
 
 export function deleteApplicationTableRows(): void {
     navigate_to_application_inventory();
+    cy.wait(1 * SEC);
     selectItemsPerPage(100);
     deleteAllItems();
 }
