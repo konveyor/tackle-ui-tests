@@ -1224,8 +1224,6 @@ export function deleteAllRows(tableSelector: string = commonTable) {
         .find(trTag)
         .then(($rows) => {
             for (let i = 0; i < $rows.length - 1; i++) {
-                cy.log($rows.length + "rowsssssss");
-                cy.log(`Deleting row ${i + 1} of ${$rows.length - 1}`);
                 cy.get(sideKebabMenu, { timeout: 10000 }).eq(0).click();
                 cy.get("ul[role=menu] > li").contains("Delete").click();
                 cy.get(confirmButton).click();
@@ -1272,8 +1270,6 @@ export function deleteAllItems(tableSelector: string = commonTable, pageNumber?:
         .find(trTag)
         .then(($rows) => {
             for (let i = 0; i < $rows.length - 1; i++) {
-                cy.log($rows.length + "rowsssssss");
-                cy.log(`Deleting row ${i + 1} of ${$rows.length - 1}`);
                 cy.get(sideKebabMenu, { timeout: 10000 }).eq(0).click();
                 cy.get("ul[role=menu] > li").contains("Delete").click();
                 cy.get(confirmButton).click();
