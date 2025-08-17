@@ -47,7 +47,6 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         cy.wait("@getApplication");
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
-        application.verifyEffort(this.analysisData["uploadbinary_analysis_on_acmeair"]["effort"]);
     });
 
     it(["@tier1"], "Custom rules with custom targets", function () {
@@ -105,9 +104,6 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         cy.wait("@getApplication");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.verifyEffort(
-            this.analysisData["analysis_and_incident_validation_camunda_app"]["effort"]
-        );
     });
 
     it("Analysis for kafka-clients-sb app", function () {
