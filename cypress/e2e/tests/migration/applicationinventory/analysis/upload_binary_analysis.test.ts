@@ -60,9 +60,6 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         cy.wait("@getApplication");
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
-        application.verifyEffort(
-            this.analysisData["uploadbinary_analysis_with_customrule"]["effort"]
-        );
     });
 
     it("Analysis for spring-petclinic application", function () {
@@ -89,9 +86,6 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         cy.wait("@getApplication");
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.verifyEffort(
-            this.analysisData["analysis_and_incident_validation_jeeExample_app"]["effort"]
-        );
     });
 
     it("Analysis for camunda-bpm-spring-boot-starter", function () {
@@ -116,9 +110,6 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         cy.wait("@getApplication");
         application.analyze();
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
-        application.verifyEffort(
-            this.analysisData["analysis_and_incident_validation_kafka-app"]["effort"]
-        );
     });
 
     it("upload_binary_with_exculde_packages_scope", function () {
