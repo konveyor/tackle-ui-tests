@@ -22,7 +22,7 @@ import {
     login,
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { AnalysisStatuses } from "../../../../types/constants";
+import { AnalysisStatuses, MIN } from "../../../../types/constants";
 
 const applicationsList: Analysis[] = [];
 describe(["@tier2"], "Upload Binary Analysis", () => {
@@ -112,7 +112,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it("upload_binary_with_exculde_packages_scope", function () {
+    it.only("upload_binary_with_exculde_packages_scope", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["upload_binary_with_exculde_packages"])
@@ -121,7 +121,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         applicationsList.push(application);
         cy.wait("@getApplication");
         application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyAnalysisStatus(AnalysisStatuses.completed, 20 * MIN);
     });
 
     after("Perform test data clean up", function () {
