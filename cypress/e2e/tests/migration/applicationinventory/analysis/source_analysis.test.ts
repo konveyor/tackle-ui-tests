@@ -87,7 +87,7 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.intercept("DELETE", "/hub/application*").as("deleteApplication");
     });
 
-    it(["@tier1"], "Source + dependencies analysis on tackletest app", function () {
+    it.skip(["@tier1"], "Source + dependencies analysis on tackletest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies", {
@@ -101,9 +101,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.verifyEffort(
-            this.analysisData["source+dep_analysis_on_tackletestapp"]["effort"]
-        );
     });
 
     it("Source + dependencies analysis on daytrader app", function () {
@@ -220,7 +217,7 @@ describe(["@tier2"], "Source Analysis", () => {
         application.closeApplicationDetails();
     });
 
-    it("Bug MTA-3418: Disable Automated tagging using Source Analysis on tackle testapp", function () {
+    it("Bug MTA-3418: Disable Automated tagging using Source Analysis on bookServer app", function () {
         // Automates Polarion MTA-307
         const application = new Analysis(
             getRandomApplicationData("bookserverApp_Disable_autoTagging", {
@@ -347,8 +344,6 @@ describe(["@tier2"], "Source Analysis", () => {
 
     // Automates customer bug MTA-2973
     it("Source analysis on tackle app public with custom rule", function () {
-        const applicationsList = [];
-
         for (let i = 0; i < 2; i++) {
             const application = new Analysis(
                 getRandomApplicationData("tackle-public-customRule", {

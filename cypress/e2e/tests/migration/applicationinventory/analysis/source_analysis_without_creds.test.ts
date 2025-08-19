@@ -46,7 +46,7 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
 
     it(
         ["@tier0", "@ci"],
-        "Bug MTA-5634: Source Analysis on bookserver app and its issues validation",
+        "Source Analysis on bookserver app and its issues validation",
         function () {
             // For source code analysis application must have source code URL git or svn
             application = new Analysis(
@@ -74,7 +74,7 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
 
     it(
         ["@tier0", "@ci"],
-        "Bug MTA-5634: Source + dependency Analysis on bookserver app and its issues validation",
+        "Source + dependency Analysis on bookserver app and its issues validation",
         function () {
             // For source code analysis application must have source code URL git or svn
             application = new Analysis(
