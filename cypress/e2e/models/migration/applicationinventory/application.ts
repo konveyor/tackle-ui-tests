@@ -268,7 +268,7 @@ export class Application {
         if (updateAppInfo) {
             this.editApplicationFromApplicationProfile();
         } else {
-            performRowActionByIcon(this.name, commonView.pencilAction);
+            performRowActionByIcon(this.name, commonView.pencilIcon);
         }
 
         if (cancel) {
