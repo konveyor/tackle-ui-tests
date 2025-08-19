@@ -794,7 +794,7 @@
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization", "Quarkus"],
         "appName": "deps",
-        "effort": 959,
+        "effort": 957,
         "issues": [
             {
                 "name": "@MessageDriven - EJBs are not supported in Quarkus",
@@ -1475,7 +1475,7 @@
         "target": ["Containerization"],
         "appName": "book-server",
         "disableTagging": true,
-        "effort": 2
+        "effort": 4
     },
 
     "analysis_for_spring_petclinic_app": {
@@ -2021,7 +2021,7 @@
         "target": ["OpenJDK 21"],
         "appName": "deps",
         "openSourceLibraries": true,
-        "effort": 315
+        "effort": 557
     },
 
     "jdk9_source_dep_analysis_on_tackletestapp": {

@@ -44,37 +44,31 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
         cy.visit("/");
     });
 
-    it(
-        ["@tier0"],
-        "Bug MTA-5634: Source Analysis on bookserver app and its issues validation",
-        function () {
-            // For source code analysis application must have source code URL git or svn
-            application = new Analysis(
-                getRandomApplicationData("bookserverApp", {
-                    sourceData: this.appData["bookserver-app"],
-                }),
-                getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
-            );
-            application.create();
-            applicationsList.push(application);
-            cy.wait("@getApplication");
-            application.analyze();
-            checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
-            application.verifyAnalysisStatus("Completed");
-            application.validateIssues(
-                this.analysisData["source_analysis_on_bookserverapp"]["issues"]
-            );
-            this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
-                (currentIssue: AppIssue) => {
-                    application.validateAffected(currentIssue);
-                }
-            );
-        }
-    );
+    it(["@tier0"], "Source Analysis on bookserver app and its issues validation", function () {
+        // For source code analysis application must have source code URL git or svn
+        application = new Analysis(
+            getRandomApplicationData("bookserverApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_analysis_on_bookserverapp"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        application.analyze();
+        checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
+        application.verifyAnalysisStatus("Completed");
+        application.validateIssues(this.analysisData["source_analysis_on_bookserverapp"]["issues"]);
+        this.analysisData["source_analysis_on_bookserverapp"]["issues"].forEach(
+            (currentIssue: AppIssue) => {
+                application.validateAffected(currentIssue);
+            }
+        );
+    });
 
     it(
         ["@tier0"],
-        "Bug MTA-5634: Source + dependency Analysis on bookserver app and its issues validation",
+        "Source + dependency Analysis on bookserver app and its issues validation",
         function () {
             // For source code analysis application must have source code URL git or svn
             application = new Analysis(
