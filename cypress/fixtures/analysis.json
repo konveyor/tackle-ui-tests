@@ -794,7 +794,7 @@
         "source": "Source code + dependencies",
         "target": ["Jakarta EE 9", "Containerization", "Quarkus"],
         "appName": "deps",
-        "effort": 959,
+        "effort": 957,
         "issues": [
             {
                 "name": "@MessageDriven - EJBs are not supported in Quarkus",
@@ -947,7 +947,7 @@
                 "effort": 1,
                 "totalEffort": 1,
                 "incidents": 1,
-                "affectedFiles": 1,
+                "affectedFiles": 2,
                 "ruleSet": "cloud-readiness",
                 "rule": "local-storage-00001",
                 "labels": ["konveyor.io/source", "storage"]
@@ -1125,7 +1125,7 @@
                 "labels": ["konveyor.io/source"]
             },
             {
-                "name": "Replace the Java EE version with the Jakarta equivalent In the root tag",
+                "name": "Replace the Java EE version with the Jakarta equivalent",
                 "category": "mandatory",
                 "sources": ["None"],
                 "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
@@ -1138,59 +1138,7 @@
                 "labels": ["konveyor.io/source"]
             },
             {
-                "name": "Replace the Java EE version with the Jakarta equivalent `beans_1_1.xsd`",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
-                "ruleSet": "eap8/eap7",
-                "rule": "javaee-to-jakarta-namespaces-00035",
-                "labels": ["konveyor.io/source"]
-            },
-            {
-                "name": "Replace the Java EE version with the Jakarta equivalent `ejb-jar_3_2.xsd`",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 2,
-                "incidents": 2,
-                "affectedFiles": 1,
-                "ruleSet": "eap8/eap7",
-                "rule": "javaee-to-jakarta-namespaces-00042",
-                "labels": ["konveyor.io/source"]
-            },
-            {
-                "name": "Replace the Java EE version with the Jakarta equivalent `web-app_3_1`",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 2,
-                "incidents": 2,
-                "affectedFiles": 1,
-                "ruleSet": "eap8/eap7",
-                "rule": "javaee-to-jakarta-namespaces-00044",
-                "labels": ["konveyor.io/source"]
-            },
-            {
-                "name": "Replace the Java EE version with the Jakarta equivalent `web-facesconfig_2_2`",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 2,
-                "incidents": 2,
-                "affectedFiles": 1,
-                "ruleSet": "eap8/eap7",
-                "rule": "javaee-to-jakarta-namespaces-00048",
-                "labels": ["konveyor.io/source"]
-            },
-            {
-                "name": "Replace the Java EE XSD with the Jakarta equivalent Replace `beans_1_1.xsd`",
+                "name": "Replace the Java EE XSD with the Jakarta equivalent",
                 "category": "mandatory",
                 "sources": ["None"],
                 "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
@@ -1200,58 +1148,6 @@
                 "affectedFiles": 1,
                 "ruleSet": "eap8/eap7",
                 "rule": "avaee-to-jakarta-namespaces-00006",
-                "labels": ["konveyor.io/source"]
-            },
-            {
-                "name": "Replace the Java EE XSD with the Jakarta equivalent Replace `ejb-jar_3_2.xsd`",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
-                "ruleSet": "eap8/eap7",
-                "rule": "javaee-to-jakarta-namespaces-00014",
-                "labels": ["konveyor.io/source"]
-            },
-            {
-                "name": "Replace the Java EE XSD with the Jakarta equivalent Replace `web-app_3_1.xsd`",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
-                "ruleSet": "eap8/eap7",
-                "rule": "javaee-to-jakarta-namespaces-00017",
-                "labels": ["konveyor.io/source"]
-            },
-            {
-                "name": "Replace the Java EE XSD with the Jakarta equivalent Replace `web-facesconfig_2_2.xsd`",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 1,
-                "incidents": 1,
-                "affectedFiles": 1,
-                "ruleSet": "eap8/eap7",
-                "rule": "javaee-to-jakarta-namespaces-00021",
-                "labels": ["konveyor.io/source"]
-            },
-            {
-                "name": "Replace the Java EE XSD with the Jakarta equivalent Replace `persistence_2_1.xsd`",
-                "category": "mandatory",
-                "sources": ["None"],
-                "targets": ["eap", "eap8", "jakarta-ee", "jakarta-ee9+", "jws", "jws6+"],
-                "effort": 1,
-                "totalEffort": 3,
-                "incidents": 3,
-                "affectedFiles": 3,
-                "ruleSet": "eap8/eap7",
-                "rule": "javaee-to-jakarta-namespaces-00030",
                 "labels": ["konveyor.io/source"]
             },
             {
@@ -1461,7 +1357,7 @@
         "target": ["Containerization"],
         "appName": "book-server",
         "disableTagging": true,
-        "effort": 2
+        "effort": 4
     },
 
     "analysis_for_spring_petclinic_app": {
@@ -2018,7 +1914,7 @@
                 "totalEffort": 1,
                 "incidents": 1,
                 "affectedFiles": 1,
-                "ruleSet": "openjdk17",
+                "ruleSet": "openjdk21",
                 "rule": "dynamic-agents-00000",
                 "labels": ["None"]
             },
@@ -2044,7 +1940,7 @@
                 "totalEffort": 3,
                 "incidents": 1,
                 "affectedFiles": 27,
-                "ruleSet": "openjdk17",
+                "ruleSet": "openjdk21",
                 "rule": "utf-8-by-default-00000",
                 "labels": ["konveyor.io/source"]
             },
