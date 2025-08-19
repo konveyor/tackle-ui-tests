@@ -87,7 +87,7 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.intercept("DELETE", "/hub/application*").as("deleteApplication");
     });
 
-    it.skip(["@tier1"], "Source + dependencies analysis on tackletest app", function () {
+    it(["@tier1"], "Source + dependencies analysis on tackletest app", function () {
         // Source code analysis require both source and maven credentials
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies", {
