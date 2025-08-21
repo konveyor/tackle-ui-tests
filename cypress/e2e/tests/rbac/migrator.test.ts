@@ -30,7 +30,7 @@ import { CredentialType, legacyPathfinder } from "../../types/constants";
 const stakeholdersList: Array<Stakeholders> = [];
 const stakeholdersNameList: Array<string> = [];
 
-describe(["@tier3", "@rhsso", "@rhbk"], "Migrator RBAC operations", () => {
+describe(["@tier3", "@rhsso", "@rhbk"], "Bug MTA-6004: Migrator RBAC operations", () => {
     let userMigrator = new UserMigrator(getRandomUserData());
     const application = new Application(getRandomApplicationData());
 
@@ -67,7 +67,7 @@ describe(["@tier3", "@rhsso", "@rhbk"], "Migrator RBAC operations", () => {
         Application.validateCreateAppButton(this.rbacRules);
     });
 
-    it("Migrator, validate top action menu", function () {
+    it("Bug MTA-6004: Migrator, validate top action menu", function () {
         Analysis.validateTopActionMenu(this.rbacRules);
     });
 
