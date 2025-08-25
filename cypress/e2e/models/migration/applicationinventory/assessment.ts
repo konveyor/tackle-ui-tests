@@ -289,6 +289,7 @@ export class Assessment {
                 .contains(list[i])
                 .closest("div")
                 .within(() => {
+                    cy.wait(SEC);
                     if (archetypeName) {
                         cy.get("span.pf-v5-c-label__text").each((item) => {
                             if (Cypress.$(item).text().includes(name)) {
