@@ -16,15 +16,17 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
-import { login } from "../../../../utils/utils";
+import { click, login } from "../../../../utils/utils";
 import { CredentialsSourceControlKey } from "../../../models/administration/credentials/credentialsSourceControlKey";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType, UserCredentials } from "../../../types/constants";
+import { confirmButton } from "../../../views/common.view";
 
 describe(["@tier2"], "Validation of Source Control Credentials", () => {
     let scCredsUsername: CredentialsSourceControlUsername;
     let scCredsKey: CredentialsSourceControlKey;
     let defaultScCredsUsername: CredentialsSourceControlUsername;
+    let scCredsUsernameSetAsDefault: CredentialsSourceControlUsername;
     const toBeCanceled = true;
 
     before("Login", function () {
@@ -54,6 +56,20 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         );
         defaultScCredsUsername.create();
         defaultScCredsUsername.verifyDefaultCredentialIcon();
+    });
+
+    it("Creating source control credentials with username/password then setting as default", () => {
+        scCredsUsernameSetAsDefault = new CredentialsSourceControlUsername(
+            getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                false
+            )
+        );
+        scCredsUsernameSetAsDefault.create();
+        scCredsUsernameSetAsDefault.setAsDefaultViaActionsMenu();
+        click(confirmButton);
+        scCredsUsernameSetAsDefault.verifyDefaultCredentialIcon();
     });
 
     it(
