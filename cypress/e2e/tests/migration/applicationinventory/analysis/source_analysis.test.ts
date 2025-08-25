@@ -21,6 +21,7 @@ import {
     getRandomAnalysisData,
     getRandomApplicationData,
     login,
+    writeMavenSettingsFile,
 } from "../../../../../utils/utils";
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlKey } from "../../../../models/administration/credentials/credentialsSourceControlKey";
@@ -421,5 +422,6 @@ describe(["@tier2"], "Source Analysis", () => {
         sourceCredentialWithHash.delete();
         mavenCredential.delete();
         defaultMavenCredential.delete();
+        writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 });
