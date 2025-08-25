@@ -15,12 +15,12 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { confirmButton } from "../../../views/common.view";
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
 import { click, login } from "../../../../utils/utils";
 import { CredentialsSourceControlKey } from "../../../models/administration/credentials/credentialsSourceControlKey";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType, UserCredentials } from "../../../types/constants";
+import { confirmButton } from "../../../views/common.view";
 
 describe(["@tier2"], "Validation of Source Control Credentials", () => {
     let scCredsUsername: CredentialsSourceControlUsername;
