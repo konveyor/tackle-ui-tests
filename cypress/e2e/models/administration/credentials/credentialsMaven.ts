@@ -51,6 +51,11 @@ export class CredentialsMaven extends Credentials {
         super.verifyDefaultCredentialIcon();
     }
 
+    setAsDefaultViaActionsMenu() {
+        this.isDefault = true;
+        super.setAsDefaultViaActionsMenu();
+    }
+
     edit(credentialsMavenData: CredentialsMavenData, toBeCanceled = false) {
         const oldValues = this.storeOldValues();
         super.edit(oldValues);
