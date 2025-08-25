@@ -38,6 +38,7 @@ export const criticality = "Criticality";
 export const credentials = "Credentials";
 export const credentialType = "Credential type";
 export const setAsDefaultAction = "Set as default";
+export const unsetAsDefaultAction = "Remove default";
 export const deleteAction = "Delete";
 export const details = "Details";
 export const editAction = "Edit";

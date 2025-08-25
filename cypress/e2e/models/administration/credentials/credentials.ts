@@ -26,6 +26,7 @@ import {
     setAsDefaultAction,
     tdTag,
     trTag,
+    unsetAsDefaultAction,
 } from "../../../types/constants";
 import { CredentialsData } from "../../../types/types";
 import * as commonView from "../../../views/common.view";
@@ -140,18 +141,28 @@ export class Credentials {
     }
 
     protected verifyDefaultCredentialIcon(): void {
-        if (this.isDefault) {
-            cy.get(tdTag, { timeout: 120 * SEC })
-                .contains(this.name, { timeout: 120 * SEC })
-                .closest(trTag)
-                .within(() => {
+        const isDefault = this.isDefault; // Capture the value before the Cypress command chain
+        cy.log("this.isDefault", isDefault);
+        cy.get(tdTag, { timeout: 120 * SEC })
+            .contains(this.name, { timeout: 120 * SEC })
+            .closest(trTag)
+            .within(() => {
+                if (isDefault) {
+                    cy.log("this.isDefault exist", isDefault);
                     cy.get("td").eq(1).find("svg.pf-v5-svg").should("exist");
-                });
-        }
+                } else {
+                    cy.log("this.isDefault not exist", isDefault);
+                    cy.get("td").eq(1).find("svg.pf-v5-svg").should("not.exist");
+                }
+            });
     }
 
     protected setAsDefaultViaActionsMenu(): void {
         clickItemInKebabMenu(this.name, setAsDefaultAction);
+    }
+
+    protected unsetAsDefaultViaActionsMenu(): void {
+        clickItemInKebabMenu(this.name, unsetAsDefaultAction);
     }
 
     /** Validates if description field contains same value as sent parameter
