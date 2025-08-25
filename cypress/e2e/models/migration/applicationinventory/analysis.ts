@@ -13,8 +13,10 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 import {
     cancelForm,
+    checkSuccessAlert,
     click,
     clickByText,
     clickItemInKebabMenu,
@@ -84,6 +86,7 @@ import {
     tabsPanel,
 } from "../../../views/analysis.view";
 import { bulkApplicationSelectionCheckBox } from "../../../views/applicationinventory.view";
+import { successAlertMessage } from "../../../views/common.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { Application } from "./application";
 
@@ -225,6 +228,7 @@ export class Analysis extends Application {
                 "contain",
                 "100%"
             );
+            checkSuccessAlert(successAlertMessage, `Uploaded binary file.`, true);
         });
     }
 

@@ -249,7 +249,7 @@ describe(["@tier2"], "Source Analysis", () => {
         application.closeApplicationDetails();
     });
 
-    it("Bug MTA-3418: Disable Automated tagging using Source Analysis on tackle testapp", function () {
+    it("Bug MTA-3418: Disable Automated tagging using Source Analysis on bookServer app", function () {
         // Automates Polarion MTA-307
         const application = new Analysis(
             getRandomApplicationData("bookserverApp_Disable_autoTagging", {
@@ -298,9 +298,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.manageCredentials(sourceCredential.name, mavenCredential.name);
         application.analyze();
         application.verifyAnalysisStatus("Completed");
-        application.verifyEffort(
-            this.analysisData["jws6_source+dep_analysis_on_tackletestapp"]["effort"]
-        );
     });
 
     it("Bug MTA-4412: Bug MTA-5212  Openjdk17 Source + dependencies analysis on tackletest app", function () {
@@ -323,7 +320,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
     });
 
-    it("Bug MTA-4417: OpenJDK21 Source + dependencies analysis on daytrader app", function () {
+    it("OpenJDK21 Source + dependencies analysis on daytrader app", function () {
         const application = new Analysis(
             getRandomApplicationData("dayTraderApp_Source+dependencies_openjdk21", {
                 sourceData: this.appData["daytrader-app"],
@@ -373,8 +370,6 @@ describe(["@tier2"], "Source Analysis", () => {
 
     // Automates customer bug MTA-2973
     it("Source analysis on tackle app public with custom rule", function () {
-        const applicationsList = [];
-
         for (let i = 0; i < 2; i++) {
             const application = new Analysis(
                 getRandomApplicationData("tackle-public-customRule", {

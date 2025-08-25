@@ -81,7 +81,6 @@ import {
     closeSuccessNotification,
     commonTable,
     confirmButton,
-    deleteButton,
     divHeader,
     downloadFormatDetails,
     downloadTaskButton,
@@ -1221,17 +1220,20 @@ export function isTableEmpty(tableSelector: string = commonTable): Cypress.Chain
 }
 
 export function deleteAllRows(tableSelector: string = commonTable) {
-    cy.get(tableSelector)
-        .find(trTag)
-        .then(($rows) => {
-            for (let i = 0; i < $rows.length - 1; i++) {
-                cy.log(`Deleting row ${i + 1} of ${$rows.length - 1}`);
-                cy.get(sideKebabMenu, { timeout: 10000 }).eq(0).click();
-                cy.get("ul[role=menu] > li").contains("Delete").click();
-                cy.get(confirmButton).click();
-                cy.wait(2 * SEC);
-            }
-        });
+    isTableEmpty().then((empty) => {
+        if (!empty) {
+            cy.get(tableSelector)
+                .find(trTag)
+                .then(($rows) => {
+                    for (let i = 0; i < $rows.length - 1; i++) {
+                        cy.get(sideKebabMenu, { timeout: 10000 }).eq(0).click();
+                        cy.get("ul[role=menu] > li").contains("Delete").click();
+                        cy.get(confirmButton).click();
+                        cy.wait(1 * SEC);
+                    }
+                });
+        }
+    });
 }
 
 export function assertSuccessPopupAndClose() {
@@ -1266,27 +1268,18 @@ export function deleteAllImports(tableSelector: string = commonTable) {
     });
 }
 
-export function deleteAllItems(tableSelector: string = commonTable, pageNumber?: number) {
-    // This method is for pages like controls that do not have delete button inside kebabmenu
-    if (pageNumber) {
-        goToPage(pageNumber);
-    }
+export function deleteAllItems(tableSelector: string = commonTable) {
+    // This method is for pages like applications that have rows inside tbody
     isTableEmpty().then((empty) => {
         if (!empty) {
-            cy.get(tableSelector)
+            cy.get(`${tableSelector} tbody`)
                 .find(trTag)
                 .then(($rows) => {
-                    for (let i = 0; i < $rows.length - 1; i++) {
-                        cy.get(deleteButton, { timeout: 10000 })
-                            .first()
-                            .then(($delete_btn) => {
-                                if (!$delete_btn.hasClass("pf-m-aria-disabled")) {
-                                    $delete_btn.click();
-                                    cy.wait(0.5 * SEC);
-                                    click(confirmButton);
-                                    cy.wait(SEC);
-                                }
-                            });
+                    for (let i = 0; i < $rows.length; i++) {
+                        cy.get(sideKebabMenu, { timeout: 10000 }).eq(0).click();
+                        cy.get("ul[role=menu] > li").contains("Delete").click();
+                        cy.get(confirmButton).click();
+                        cy.wait(1 * SEC);
                     }
                 });
         }
@@ -1316,8 +1309,9 @@ export function deleteAllArchetypes() {
 
 export function deleteApplicationTableRows(): void {
     navigate_to_application_inventory();
+    cy.wait(1 * SEC);
     selectItemsPerPage(100);
-    deleteAllRows();
+    deleteAllItems();
 }
 export function validatePageTitle(pageTitle: string) {
     return cy.get("h1").then((h1) => {
