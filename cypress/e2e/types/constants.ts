@@ -37,6 +37,7 @@ export const createNewButton = "Create new";
 export const criticality = "Criticality";
 export const credentials = "Credentials";
 export const credentialType = "Credential type";
+export const setAsDefaultAction = "Set as default";
 export const deleteAction = "Delete";
 export const details = "Details";
 export const editAction = "Edit";

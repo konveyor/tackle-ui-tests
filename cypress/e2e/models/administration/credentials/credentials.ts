@@ -23,6 +23,7 @@ import {
     CredentialType,
     deleteAction,
     SEC,
+    setAsDefaultAction,
     tdTag,
     trTag,
 } from "../../../types/constants";
@@ -147,6 +148,10 @@ export class Credentials {
                     cy.get("td").eq(1).find("svg.pf-v5-svg").should("exist");
                 });
         }
+    }
+
+    protected setAsDefaultViaActionsMenu(): void {
+        clickItemInKebabMenu(this.name, setAsDefaultAction);
     }
 
     /** Validates if description field contains same value as sent parameter

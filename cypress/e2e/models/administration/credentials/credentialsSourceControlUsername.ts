@@ -47,6 +47,10 @@ export class CredentialsSourceControlUsername extends CredentialsSourceControl {
         super.verifyDefaultCredentialIcon();
     }
 
+    setAsDefaultViaActionsMenu() {
+        super.setAsDefaultViaActionsMenu();
+    }
+
     create(toBeCanceled = false) {
         super.create();
         this.selectCredType();
