@@ -15,8 +15,9 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { confirmButton } from "../../../views/common.view";
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
-import { login } from "../../../../utils/utils";
+import { click, login } from "../../../../utils/utils";
 import { CredentialsSourceControlKey } from "../../../models/administration/credentials/credentialsSourceControlKey";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType, UserCredentials } from "../../../types/constants";
@@ -67,6 +68,7 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         );
         scCredsUsernameSetAsDefault.create();
         scCredsUsernameSetAsDefault.setAsDefaultViaActionsMenu();
+        click(confirmButton);
         scCredsUsernameSetAsDefault.verifyDefaultCredentialIcon();
     });
 
