@@ -26,6 +26,7 @@ import {
     setAsDefaultAction,
     tdTag,
     trTag,
+    unsetAsDefaultAction,
 } from "../../../types/constants";
 import { CredentialsData } from "../../../types/types";
 import * as commonView from "../../../views/common.view";
@@ -41,6 +42,7 @@ import {
     createBtn,
     credentialNameInput,
     credLabels,
+    defaultIcon,
     descriptionInput,
     filterCatCreatedBy,
     filterCategory,
@@ -140,18 +142,27 @@ export class Credentials {
     }
 
     protected verifyDefaultCredentialIcon(): void {
-        if (this.isDefault) {
-            cy.get(tdTag, { timeout: 120 * SEC })
-                .contains(this.name, { timeout: 120 * SEC })
-                .closest(trTag)
-                .within(() => {
-                    cy.get("td").eq(1).find("svg.pf-v5-svg").should("exist");
-                });
-        }
+        const isDefault = this.isDefault;
+        cy.get(tdTag, { timeout: 120 * SEC })
+            .contains(this.name, { timeout: 120 * SEC })
+            .closest(trTag)
+            .within(() => {
+                if (isDefault) {
+                    cy.get("td").eq(1).find(defaultIcon).should("exist");
+                } else {
+                    cy.get("td").eq(1).find(defaultIcon).should("not.exist");
+                }
+            });
     }
 
     protected setAsDefaultViaActionsMenu(): void {
+        this.isDefault = true;
         clickItemInKebabMenu(this.name, setAsDefaultAction);
+    }
+
+    protected unsetAsDefaultViaActionsMenu(): void {
+        this.isDefault = false;
+        clickItemInKebabMenu(this.name, unsetAsDefaultAction);
     }
 
     /** Validates if description field contains same value as sent parameter

@@ -27,6 +27,7 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
     let scCredsKey: CredentialsSourceControlKey;
     let defaultScCredsUsername: CredentialsSourceControlUsername;
     let scCredsUsernameSetAsDefault: CredentialsSourceControlUsername;
+    let tempDefaultCred: CredentialsSourceControlUsername;
     const toBeCanceled = true;
 
     before("Login", function () {
@@ -70,6 +71,24 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         scCredsUsernameSetAsDefault.setAsDefaultViaActionsMenu();
         click(confirmButton);
         scCredsUsernameSetAsDefault.verifyDefaultCredentialIcon();
+    });
+
+    it("Unsetting default source control credentials after creating it", () => {
+        // Polarion TC: MTA-718
+        tempDefaultCred = new CredentialsSourceControlUsername(
+            getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                false,
+                undefined,
+                true
+            )
+        );
+        tempDefaultCred.create();
+        tempDefaultCred.verifyDefaultCredentialIcon();
+        tempDefaultCred.unsetAsDefaultViaActionsMenu();
+        click(confirmButton);
+        tempDefaultCred.verifyDefaultCredentialIcon();
     });
 
     it(
@@ -130,5 +149,6 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
 
     after("Cleaning up", () => {
         defaultScCredsUsername.delete();
+        tempDefaultCred.delete();
     });
 });
