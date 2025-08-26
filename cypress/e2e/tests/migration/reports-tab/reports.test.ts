@@ -60,7 +60,7 @@ describe(["@tier3"], "Reports tests", () => {
         }
     });
 
-    it("Number of Application risk validation", function () {
+    it("Bug MTA-5883: Number of Application risk validation", function () {
         Reports.open();
         Reports.verifyRisk(
             highRiskApps,

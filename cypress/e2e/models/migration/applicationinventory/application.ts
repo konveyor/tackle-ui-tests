@@ -318,7 +318,7 @@ export class Application {
 
     removeBusinessService(): void {
         cy.wait(2000);
-        performRowActionByIcon(this.name, commonView.pencilIcon);
+        performRowActionByIcon(this.name, commonView.pencilAction);
         cy.get(applicationBusinessServiceSelect)
             .closest("div")
             .next("button")
