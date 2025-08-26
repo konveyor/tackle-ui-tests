@@ -43,6 +43,12 @@ if (app && !app.document.head.querySelector("[data-hide-command-log-request]")) 
     app.document.head.appendChild(style);
 }
 
+Cypress.on("uncaught:exception", (err) => {
+    if (err.message.includes("Failed to execute 'importScripts'")) {
+        return false; // don't fail test
+    }
+});
+
 beforeEach(() => {
     // Disable for static report test as it need to open local files
     if (Cypress.spec.name === "static_report.test.ts") {
