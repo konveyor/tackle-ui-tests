@@ -142,8 +142,7 @@ export class Credentials {
     }
 
     protected verifyDefaultCredentialIcon(): void {
-        const isDefault = this.isDefault; // Capture the value before the Cypress command chain
-        cy.log("this.isDefault", isDefault);
+        const isDefault = this.isDefault;
         cy.get(tdTag, { timeout: 120 * SEC })
             .contains(this.name, { timeout: 120 * SEC })
             .closest(trTag)
