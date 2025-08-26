@@ -52,8 +52,11 @@ export class CredentialsMaven extends Credentials {
     }
 
     setAsDefaultViaActionsMenu() {
-        this.isDefault = true;
         super.setAsDefaultViaActionsMenu();
+    }
+
+    unsetAsDefaultViaActionsMenu() {
+        super.unsetAsDefaultViaActionsMenu();
     }
 
     edit(credentialsMavenData: CredentialsMavenData, toBeCanceled = false) {

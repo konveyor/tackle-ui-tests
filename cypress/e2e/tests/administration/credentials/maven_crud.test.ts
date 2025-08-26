@@ -52,6 +52,20 @@ describe(["@tier3"], "Validation of Maven Credentials", () => {
         mavenCredentialsSetAsDefault.verifyDefaultCredentialIcon();
     });
 
+    it("Unsetting default Maven credentials after creating it", () => {
+        // Polarion TC: MTA-719
+        const tempDefaultCred = new CredentialsMaven(
+            getRandomCredentialsData(CredentialType.maven, null, false, null, true)
+        );
+
+        tempDefaultCred.create();
+        mavenCredentials.push(tempDefaultCred);
+        tempDefaultCred.verifyDefaultCredentialIcon();
+        tempDefaultCred.unsetAsDefaultViaActionsMenu();
+        click(confirmButton);
+        tempDefaultCred.verifyDefaultCredentialIcon();
+    });
+
     after("Cleaning up", () => {
         deleteByList(mavenCredentials);
     });
