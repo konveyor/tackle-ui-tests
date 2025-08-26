@@ -156,10 +156,12 @@ export class Credentials {
     }
 
     protected setAsDefaultViaActionsMenu(): void {
+        this.isDefault = true;
         clickItemInKebabMenu(this.name, setAsDefaultAction);
     }
 
     protected unsetAsDefaultViaActionsMenu(): void {
+        this.isDefault = false;
         clickItemInKebabMenu(this.name, unsetAsDefaultAction);
     }
 

@@ -48,12 +48,10 @@ export class CredentialsSourceControlUsername extends CredentialsSourceControl {
     }
 
     setAsDefaultViaActionsMenu() {
-        this.isDefault = true;
         super.setAsDefaultViaActionsMenu();
     }
 
     unsetAsDefaultViaActionsMenu() {
-        this.isDefault = false;
         super.unsetAsDefaultViaActionsMenu();
     }
 

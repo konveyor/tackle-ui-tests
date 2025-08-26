@@ -74,6 +74,7 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
     });
 
     it("Unsetting default source control credentials after creating it", () => {
+        // Polarion TC: MTA-718
         tempDefaultCred = new CredentialsSourceControlUsername(
             getRandomCredentialsData(
                 CredentialType.sourceControl,
