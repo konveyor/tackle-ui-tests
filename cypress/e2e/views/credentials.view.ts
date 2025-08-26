@@ -29,6 +29,7 @@ export const filterCatCreatedBy = "#filter-category-createdBy";
 export const filterSelectType = "#select-filter-value-select";
 export const searchButton = "#search-button";
 export const modalBoxBody = "#confirm-dialog";
+export const defaultIcon = "svg.pf-v5-svg";
 export enum credLabels {
     name = 'td[data-label="Name"]',
     description = 'td[data-label="Description"]',

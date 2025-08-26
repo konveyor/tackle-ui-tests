@@ -42,6 +42,7 @@ import {
     createBtn,
     credentialNameInput,
     credLabels,
+    defaultIcon,
     descriptionInput,
     filterCatCreatedBy,
     filterCategory,
@@ -148,11 +149,9 @@ export class Credentials {
             .closest(trTag)
             .within(() => {
                 if (isDefault) {
-                    cy.log("this.isDefault exist", isDefault);
-                    cy.get("td").eq(1).find("svg.pf-v5-svg").should("exist");
+                    cy.get("td").eq(1).find(defaultIcon).should("exist");
                 } else {
-                    cy.log("this.isDefault not exist", isDefault);
-                    cy.get("td").eq(1).find("svg.pf-v5-svg").should("not.exist");
+                    cy.get("td").eq(1).find(defaultIcon).should("not.exist");
                 }
             });
     }
