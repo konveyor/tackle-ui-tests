@@ -140,7 +140,7 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.canceled);
     });
 
-    it("Analysis should fail when no default credentials are available", function () {
+    it("Analysis that requires credentials should fail when none are set", function () {
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies", {
                 sourceData: this.appData["tackle-testapp-git"],
