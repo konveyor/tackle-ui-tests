@@ -54,6 +54,7 @@ describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
     });
 
     beforeEach("Login", function () {
+        cy.intercept("GET", "/hub/migrationwaves*").as("getWave");
         cy.intercept("POST", "/hub/migrationwaves*").as("postWave");
         cy.intercept("PUT", "/hub/migrationwaves*/*").as("putWave");
         cy.intercept("DELETE", "/hub/migrationwaves*/*").as("deleteWave");
@@ -138,6 +139,8 @@ describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
         cy.get(applicationTableSelector + " td > button").each((btn) => {
             cy.wrap(btn).click();
             cy.contains("Delete").click();
+            cy.wait("@putWave");
+            cy.wait("@getWave");
         });
         migrationWave.applications = [];
 
