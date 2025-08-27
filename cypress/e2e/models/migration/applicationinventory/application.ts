@@ -68,7 +68,6 @@ import {
     closeForm,
     group,
     kebabMenu,
-    kebabMenuAction,
     northdependenciesDropdownBtn,
     packaging,
     profileEdit,
@@ -758,7 +757,7 @@ export class Application {
     // Opens the manage dependencies dialog from application inventory page
     openManageDependencies(): void {
         Application.open();
-        performRowActionByIcon(this.name, kebabMenuAction, 1);
+        performRowActionByIcon(this.name, kebabMenu);
         clickByText(button, "Manage dependencies");
     }
 
