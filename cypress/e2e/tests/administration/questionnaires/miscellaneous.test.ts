@@ -89,8 +89,14 @@ describe(["@tier3"], "Miscellaneous Questionnaire tests", () => {
         const updatedFileName = "cloud-native-updated.yaml";
         const fixturesPath = "cypress/fixtures/" + updatedFileName;
 
+        cy.intercept({
+            method: "GET",
+            url: /\/hub\/questionnaires\/\d+$/,
+        }).as("fileDownload");
+
         AssessmentQuestionnaire.import(cloudNativePath);
         AssessmentQuestionnaire.export(cloudNative);
+        cy.wait("@fileDownload");
 
         cy.fsReadDir(cloudNativeDownloadPath).then((filesList) => {
             const matchedFiles = filesList
@@ -101,7 +107,6 @@ describe(["@tier3"], "Miscellaneous Questionnaire tests", () => {
                 }))
                 .filter((file) => !isNaN(file.number))
                 .sort((a, b) => b.number - a.number);
-
             const latestFileName = matchedFiles.length > 0 ? matchedFiles[0].file : null;
             const filePath = `${cloudNativeDownloadPath}/${latestFileName}`;
             cy.readFile(filePath).then((fileContent) => {
@@ -112,7 +117,6 @@ describe(["@tier3"], "Miscellaneous Questionnaire tests", () => {
                 cy.writeFile(fixturesPath, updatedContent);
             });
         });
-
         cy.readFile(fixturesPath).then(() => {
             AssessmentQuestionnaire.import(updatedFileName);
         });
