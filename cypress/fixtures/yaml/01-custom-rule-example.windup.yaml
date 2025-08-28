@@ -1,16 +1,16 @@
 - category: potential
   customVariables: []
   description: CUSTOM RULE FOR DEPENDENCIES | jackson-databind identified in the pom.xml
-  effort: 0
+  effort: 1
   labels:
-  - konveyor.io/include=always
-  - tag
+      - konveyor.io/include=always
+      - tag
   links:
-  - title: Test-002 Test link
-    url: http://nufc.com
+      - title: Test-002 Test link
+        url: http://nufc.com
   message: Test-002 Custom rule
   ruleID: Test-002-00001
   when:
-    java.dependency:
-      lowerbound: 0.0.0
-      name: com.fasterxml.jackson.core.jackson-databind
+      java.dependency:
+          lowerbound: 0.0.0
+          name: com.fasterxml.jackson.core.jackson-databind
