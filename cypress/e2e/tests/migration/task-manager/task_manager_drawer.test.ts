@@ -75,7 +75,7 @@ describe(["@tier2"], "Task Manager Drawer validation", () => {
         });
     });
 
-    it("Perform bulk analysis and validate tasks on Task Manager Drawer", function () {
+    it("Bug MTA-6046: Perform bulk analysis and validate tasks on Task Manager Drawer", function () {
         // Automates Polarion TC MTA-556
         Analysis.analyzeAll(analyses[0]);
 
