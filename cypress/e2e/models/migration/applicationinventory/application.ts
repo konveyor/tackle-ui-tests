@@ -23,6 +23,7 @@ import {
     doesExistSelector,
     doesExistText,
     inputText,
+    isElementExpanded,
     performRowActionByIcon,
     performWithin,
     selectFormItems,
@@ -48,6 +49,7 @@ import {
     review,
     reviewAppButton,
     SEC,
+    sourceCode,
     TaskKind,
     tdTag,
     trTag,
@@ -214,7 +216,9 @@ export class Application {
 
     protected fillSourceModeFields(): void {
         //Fields relevant to source code analysis
-        clickByText(button, "Source code");
+        if (!isElementExpanded(commonView.expandableSection, sourceCode)) {
+            clickByText(button, sourceCode);
+        }
         if (this.repoType) this.selectRepoType(this.repoType);
         inputText(sourceRepository, this.sourceRepo);
         if (this.branch) inputText(branch, this.branch);
