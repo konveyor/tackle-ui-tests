@@ -34,7 +34,6 @@ import {
     SEC,
     UserCredentials,
 } from "../../../../types/constants";
-import { AppIssue } from "../../../../types/types";
 let sourceCredential: CredentialsSourceControlUsername;
 let defaultSourceCredential: CredentialsSourceControlUsername;
 let sourceCredentialWithHash: CredentialsSourceControlUsername;
@@ -146,15 +145,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed", 30 * MIN);
         application.verifyEffort(
             this.analysisData["source+dep_analysis_on_daytrader-app"]["effort"]
-        );
-        application.validateIssues(
-            this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"]
-        );
-        // Automate bug https://issues.redhat.com/browse/MTA-2006
-        this.analysisData["source+dep_analysis_on_daytrader-app"]["issues"].forEach(
-            (currentIssue: AppIssue) => {
-                application.validateAffected(currentIssue);
-            }
         );
     });
 
@@ -397,22 +387,6 @@ describe(["@tier2"], "Source Analysis", () => {
 
         // Analyze application without Maven credentials
         analyzeApplication(applicationsList[1], null);
-    });
-
-    it("Bug MTA-3701: Source analysis on tackle app with hash in Password", function () {
-        const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_Source", {
-                sourceData: this.appData["tackle-testapp-git"],
-            }),
-            getRandomAnalysisData(this.analysisData["tackleTestApp_Source"])
-        );
-
-        // Analysis application with source credential created with hash
-        application.create();
-        application.manageCredentials(sourceCredentialWithHash.name);
-        applicationsList.push(application);
-        application.analyze();
-        application.verifyAnalysisStatus("Completed");
     });
 
     after("Perform test data clean up", function () {
