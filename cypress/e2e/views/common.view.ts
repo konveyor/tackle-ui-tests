@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-export const expandableSection = "button[class='pf-v5-c-expandable-section__toggle']";
 export const itemsPerPageToggleButton = "#pagination-id-top-toggle";
 export const submitButton = "#submit";
 export const cancelButton = "#cancel";
