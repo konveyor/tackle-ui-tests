@@ -329,6 +329,13 @@ export function checkSuccessAlert(fieldId: string, message: string, close = fals
     }
 }
 
+export function checkErrorMessage(fieldId: string, message: string, close = true): void {
+    validateTextPresence(fieldId, message);
+    if (close) {
+        closeModalWindow();
+    }
+}
+
 export function validateTextPresence(fieldId: string, message: string, shouldBeFound = true): void {
     if (shouldBeFound) {
         cy.get(fieldId, { timeout: 150 * SEC }).should("contain.text", message);
@@ -2068,10 +2075,7 @@ export function isElementExpanded(
     element: string,
     elementText: string
 ): Cypress.Chainable<boolean> {
-    return cy
-        .get(element)
-        .contains(elementText)
-        .then(($element) => {
-            return $element.attr("aria-expanded") === "true";
-        });
+    return cy.contains(element, elementText).then(($element) => {
+        return $element.attr("aria-expanded") === "true";
+    });
 }

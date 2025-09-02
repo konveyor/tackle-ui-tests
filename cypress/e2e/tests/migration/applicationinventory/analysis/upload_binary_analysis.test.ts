@@ -112,7 +112,7 @@ describe(["@tier2"], "Upload Binary Analysis", () => {
         application.verifyAnalysisStatus(AnalysisStatuses.completed);
     });
 
-    it.only("upload_binary_with_exculde_packages_scope", function () {
+    it("upload_binary_with_exclude_packages_scope", function () {
         const application = new Analysis(
             getRandomApplicationData("uploadBinary"),
             getRandomAnalysisData(this.analysisData["upload_binary_with_exculde_packages"])

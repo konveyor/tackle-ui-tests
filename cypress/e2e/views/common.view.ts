@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-export const expandableSection = "button[class='pf-v5-c-expandable-section__toggle']";
 export const itemsPerPageToggleButton = "#pagination-id-top-toggle";
 export const submitButton = "#submit";
 export const cancelButton = "#cancel";
@@ -30,6 +29,7 @@ export const filteredBy = "#filtered-by";
 export const itemsPerPageMenuOptions = "ul.pf-v5-c-menu__list";
 export const expandRow = "button[aria-label=Details]";
 export const successAlertMessage = ".pf-m-success";
+export const errorAlertMessage = ".pf-m-error";
 export const pageTitle = "section.pf-v5-c-page__main-section.pf-m-light h1";
 export const infoAlertMessage = ".pf-m-info";
 export const alertBody = 'div[id*="pf-modal-part"]';
