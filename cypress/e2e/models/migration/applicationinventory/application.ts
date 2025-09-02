@@ -216,9 +216,11 @@ export class Application {
 
     protected fillSourceModeFields(): void {
         //Fields relevant to source code analysis
-        if (!isElementExpanded(commonView.expandableSection, sourceCode)) {
-            clickByText(button, sourceCode);
-        }
+        isElementExpanded(commonView.expandableSection, sourceCode).then((expanded) => {
+            if (!expanded) {
+                cy.contains(commonView.expandableSection, sourceCode).click({ force: true });
+            }
+        });
         if (this.repoType) this.selectRepoType(this.repoType);
         inputText(sourceRepository, this.sourceRepo);
         if (this.branch) inputText(branch, this.branch);
