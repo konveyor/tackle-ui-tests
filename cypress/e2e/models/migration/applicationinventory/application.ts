@@ -23,6 +23,7 @@ import {
     doesExistSelector,
     doesExistText,
     inputText,
+    isElementExpanded,
     performRowActionByIcon,
     performWithin,
     selectFormItems,
@@ -48,6 +49,7 @@ import {
     review,
     reviewAppButton,
     SEC,
+    sourceCode,
     TaskKind,
     tdTag,
     trTag,
@@ -158,8 +160,9 @@ export class Application {
         if (forceReload) {
             cy.visit(Application.fullUrl, { timeout: 35 * SEC }).then((_) => {
                 // Bug MTA-3812 Application Inventory page takes long to load
-                // Timeout time of 100s to be reduced after above bug is fixed
-                cy.get("h1", { timeout: 100 * SEC }).should("contain", applicationInventory);
+                // TODO: Wait of 10s to be reduced after above bug is fixed
+                cy.wait(10 * SEC);
+                cy.get("h1").should("contain", applicationInventory);
                 selectItemsPerPage(itemsPerPage);
             });
             return;
@@ -214,7 +217,11 @@ export class Application {
 
     protected fillSourceModeFields(): void {
         //Fields relevant to source code analysis
-        clickByText(button, "Source code");
+        isElementExpanded(commonView.expandableSection, sourceCode).then((expanded) => {
+            if (!expanded) {
+                cy.contains(commonView.expandableSection, sourceCode).click({ force: true });
+            }
+        });
         if (this.repoType) this.selectRepoType(this.repoType);
         inputText(sourceRepository, this.sourceRepo);
         if (this.branch) inputText(branch, this.branch);

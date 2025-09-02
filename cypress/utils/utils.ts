@@ -2063,3 +2063,15 @@ export function deleteCustomResource(
         expect(output.code).to.equal(0);
     });
 }
+
+export function isElementExpanded(
+    element: string,
+    elementText: string
+): Cypress.Chainable<boolean> {
+    return cy
+        .get(element)
+        .contains(elementText)
+        .then(($element) => {
+            return $element.attr("aria-expanded") === "true";
+        });
+}
