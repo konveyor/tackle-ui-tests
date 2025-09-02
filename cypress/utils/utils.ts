@@ -329,6 +329,13 @@ export function checkSuccessAlert(fieldId: string, message: string, close = fals
     }
 }
 
+export function checkErrorMessage(fieldId: string, message: string, close = true): void {
+    validateTextPresence(fieldId, message);
+    if (close) {
+        closeModalWindow();
+    }
+}
+
 export function validateTextPresence(fieldId: string, message: string, shouldBeFound = true): void {
     if (shouldBeFound) {
         cy.get(fieldId, { timeout: 150 * SEC }).should("contain.text", message);

@@ -52,7 +52,7 @@ export class AssessmentQuestionnaire {
         clickByText(button, operation);
     }
 
-    public static import(fileName: string) {
+    public static import(fileName: string, submit: boolean = true) {
         AssessmentQuestionnaire.open();
         click(importQuestionnaire);
         cy.get('input[type="file"]', { timeout: 2 * SEC }).selectFile(
@@ -62,10 +62,13 @@ export class AssessmentQuestionnaire {
                 force: true,
             }
         );
-        cy.get(commonView.controlsForm, { timeout: 5 * SEC })
-            .find("button")
-            .contains("Import")
-            .click();
+
+        if (submit) {
+            cy.get(commonView.controlsForm, { timeout: 5 * SEC })
+                .find("button")
+                .contains("Import")
+                .click();
+        }
     }
 
     public static delete(fileName: string) {

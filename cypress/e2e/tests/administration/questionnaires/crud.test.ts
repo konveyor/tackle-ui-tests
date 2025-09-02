@@ -1,11 +1,11 @@
 import {
+    checkErrorMessage,
     checkSuccessAlert,
     cleanupDownloads,
-    closeModalWindow,
     login,
 } from "../../../../utils/utils";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
-import { alertTitle } from "../../../views/common.view";
+import { alertTitle, errorAlertMessage, successAlertMessage } from "../../../views/common.view";
 
 const yamlFileName = "questionnaire_import/cloud-native.yaml";
 const importedQuestionnaire = "Cloud Native";
@@ -29,13 +29,21 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
         AssessmentQuestionnaire.enable(importedQuestionnaire, false);
     });
 
-    it("Bug MTA-2783: Duplicate questionnaire Test", function () {
+    it("Duplicate questionnaire Test", function () {
         AssessmentQuestionnaire.import(yamlFileName);
-        checkSuccessAlert(alertTitle, "UNIQUE constraint failed: Questionnaire.Name");
-        closeModalWindow();
+        checkSuccessAlert(
+            successAlertMessage,
+            `Questionnaire ${importedQuestionnaire} was successfully created.`,
+            true
+        );
+        AssessmentQuestionnaire.import(yamlFileName, false);
+        checkErrorMessage(
+            errorAlertMessage,
+            "A questionnaire with this name already exists. Use a different name."
+        );
     });
 
-    it("Bug MTA-2783: Export questionnaire and Import it back", function () {
+    it("Export questionnaire and Import it back", function () {
         AssessmentQuestionnaire.export(legacyQuestionnaire);
         cy.readFile("cypress/downloads/questionnaire-1.yaml").should(
             "contain",
@@ -47,8 +55,11 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
             cy.log(result.stdout);
         });
         // Polarion TC MTA-423
-        AssessmentQuestionnaire.import("questionnaire_import/questionnaire-1.yaml");
-        checkSuccessAlert(alertTitle, "UNIQUE constraint failed: Questionnaire.Name");
+        AssessmentQuestionnaire.import("questionnaire_import/questionnaire-1.yaml", false);
+        checkErrorMessage(
+            errorAlertMessage,
+            "A questionnaire with this name already exists. Use a different name."
+        );
     });
 
     it("Delete questionnaire", function () {
