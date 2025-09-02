@@ -2075,10 +2075,7 @@ export function isElementExpanded(
     element: string,
     elementText: string
 ): Cypress.Chainable<boolean> {
-    return cy
-        .get(element)
-        .contains(elementText)
-        .then(($element) => {
-            return $element.attr("aria-expanded") === "true";
-        });
+    return cy.contains(element, elementText).then(($element) => {
+        return $element.attr("aria-expanded") === "true";
+    });
 }
