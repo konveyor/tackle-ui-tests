@@ -226,6 +226,8 @@ export enum TaskStatus {
     ready = "Ready",
     postponed = "Postponed",
     quotaBlocked = "Quota Blocked",
+    failed = "Failed",
+    canceled = "Canceled",
 }
 
 export enum TaskKind {

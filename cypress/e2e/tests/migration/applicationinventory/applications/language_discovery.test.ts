@@ -16,12 +16,30 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { languageDiscoveryData } from "../../../../../fixtures/language_discovery.json";
-import { deleteByList, getRandomApplicationData, sidedrawerTab } from "../../../../../utils/utils";
+import { getRandomCredentialsData } from "../../../../../utils/data_utils";
+import {
+    deleteAppImportsTableRows,
+    deleteApplicationTableRows,
+    deleteByList,
+    getRandomApplicationData,
+    sidedrawerTab,
+} from "../../../../../utils/utils";
+import { Credentials } from "../../../../models/administration/credentials/credentials";
+import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
+import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { Application } from "../../../../models/migration/applicationinventory/application";
-import { SEC } from "../../../../types/constants";
+import { TaskManager } from "../../../../models/migration/task-manager/task-manager";
+import {
+    CredentialType,
+    SEC,
+    TaskKind,
+    TaskStatus,
+    UserCredentials,
+} from "../../../../types/constants";
 import { labelTagText } from "../../../../views/applicationinventory.view";
 
 let applicationList: Application[] = [];
+let credentialsList: Credentials[] = [];
 
 describe(["@tier2"], "Test if application language is discovered and tagged correctly", () => {
     languageDiscoveryData.forEach((data) => {
@@ -45,12 +63,68 @@ describe(["@tier2"], "Test if application language is discovered and tagged corr
         });
     });
 
+    it("Verify application discovery logic for missing, and valid credentials", () => {
+        // Automates TCs MTA-712
+
+        const application = new Application(
+            getRandomApplicationData("application discovery logic", {
+                sourceData: {
+                    repoType: "Git",
+                    sourceRepo: "https://github.com/konveyor/tackle-testapp",
+                },
+            })
+        );
+
+        application.create();
+
+        TaskManager.verifyTaskStatus(
+            application.name,
+            TaskKind.languageDiscovery,
+            TaskStatus.failed
+        );
+        TaskManager.verifyTaskStatus(application.name, TaskKind.techDiscovery, TaskStatus.canceled);
+
+        const defaultScCreds = new CredentialsSourceControlUsername(
+            getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                true,
+                null,
+                true
+            )
+        );
+        credentialsList.push(defaultScCreds);
+        defaultScCreds.create();
+        defaultScCreds.verifyDefaultCredentialIcon();
+
+        const mavenDefaultCred = new CredentialsMaven(
+            getRandomCredentialsData(CredentialType.maven, null, false, null, true)
+        );
+
+        mavenDefaultCred.create();
+        mavenDefaultCred.verifyDefaultCredentialIcon();
+        credentialsList.push(mavenDefaultCred);
+
+        TaskManager.verifyTaskStatus(
+            application.name,
+            TaskKind.languageDiscovery,
+            TaskStatus.succeeded
+        );
+        TaskManager.verifyTaskStatus(
+            application.name,
+            TaskKind.techDiscovery,
+            TaskStatus.succeeded
+        );
+    });
+
     afterEach("Persist session", function () {
         Application.open(true);
     });
 
     after("Perform test data clean up", function () {
-        deleteByList(applicationList);
+        deleteApplicationTableRows();
+        deleteAppImportsTableRows();
+        deleteByList(credentialsList);
     });
 
     function assertTagsInSection(sectionsTags: {
