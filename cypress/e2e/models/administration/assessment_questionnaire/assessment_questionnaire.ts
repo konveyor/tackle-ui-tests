@@ -37,6 +37,7 @@ export class AssessmentQuestionnaire {
             if ($url != AssessmentQuestionnaire.fullUrl) {
                 selectUserPerspective("Administration");
                 clickByText(navMenu, assessmentQuestionnaires);
+                cy.wait(5 * SEC);
             }
         });
         selectItemsPerPage(itemsPerPage);
