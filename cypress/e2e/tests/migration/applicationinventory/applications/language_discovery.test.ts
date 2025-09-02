@@ -122,7 +122,6 @@ describe(["@tier2"], "Test if application language is discovered and tagged corr
     });
 
     after("Perform test data clean up", function () {
-        deleteByList(applicationList);
         deleteApplicationTableRows();
         deleteAppImportsTableRows();
         deleteByList(credentialsList);
