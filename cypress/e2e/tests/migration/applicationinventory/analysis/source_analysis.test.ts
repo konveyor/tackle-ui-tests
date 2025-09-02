@@ -361,17 +361,14 @@ describe(["@tier2"], "Source Analysis", () => {
 
     // Automates customer bug MTA-2973
     it("Source analysis on tackle app public with custom rule", function () {
-        for (let i = 0; i < 2; i++) {
-            const application = new Analysis(
+        const createApplication = () =>
+            new Analysis(
                 getRandomApplicationData("tackle-public-customRule", {
                     sourceData: this.appData["tackle-testapp-public"],
                 }),
                 getRandomAnalysisData(this.analysisData["tackle-testapp-public-customRule"])
             );
-            applicationsList.push(application);
-        }
 
-        // Analyze an application
         const analyzeApplication = (application, credentials) => {
             application.create();
             if (credentials) application.manageCredentials(null, credentials.name);
@@ -382,11 +379,12 @@ describe(["@tier2"], "Source Analysis", () => {
             );
         };
 
-        // Analyze application with Maven credentials
-        analyzeApplication(applicationsList[0], mavenCredential);
+        const appWithCredentials = createApplication();
+        const appWithoutCredentials = createApplication();
+        applicationsList.push(appWithCredentials, appWithoutCredentials);
 
-        // Analyze application without Maven credentials
-        analyzeApplication(applicationsList[1], null);
+        analyzeApplication(appWithCredentials, mavenCredential);
+        analyzeApplication(appWithoutCredentials, null);
     });
 
     after("Perform test data clean up", function () {
