@@ -412,9 +412,9 @@ describe(["@tier2"], "Source Analysis", () => {
         deleteByList(applicationsList);
         sourceCredential.delete();
         validDefaultSourceCredential.delete();
+        invalidDefaultSourceCredential.delete();
         sourceCredentialWithHash.delete();
         mavenCredential.delete();
-        validDefaultMavenCredential.delete();
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 });
