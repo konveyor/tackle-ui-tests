@@ -16,10 +16,9 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
-import { click, deleteByList } from "../../../../utils/utils";
+import { deleteByList } from "../../../../utils/utils";
 import { CredentialsMaven } from "../../../models/administration/credentials/credentialsMaven";
 import { CredentialType } from "../../../types/constants";
-import { confirmButton } from "../../../views/common.view";
 
 describe(["@tier3"], "Validation of Maven Credentials", () => {
     let mavenCredentials: CredentialsMaven[] = [];
@@ -48,7 +47,6 @@ describe(["@tier3"], "Validation of Maven Credentials", () => {
         mavenCredentialsSetAsDefault.create();
         mavenCredentials.push(mavenCredentialsSetAsDefault);
         mavenCredentialsSetAsDefault.setAsDefaultViaActionsMenu();
-        click(confirmButton);
         mavenCredentialsSetAsDefault.verifyDefaultCredentialIcon();
     });
 
@@ -62,7 +60,6 @@ describe(["@tier3"], "Validation of Maven Credentials", () => {
         mavenCredentials.push(tempDefaultCred);
         tempDefaultCred.verifyDefaultCredentialIcon();
         tempDefaultCred.unsetAsDefaultViaActionsMenu();
-        click(confirmButton);
         tempDefaultCred.verifyDefaultCredentialIcon();
     });
 

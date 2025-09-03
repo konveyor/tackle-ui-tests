@@ -16,11 +16,10 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
-import { click, login } from "../../../../utils/utils";
+import { login } from "../../../../utils/utils";
 import { CredentialsSourceControlKey } from "../../../models/administration/credentials/credentialsSourceControlKey";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType, UserCredentials } from "../../../types/constants";
-import { confirmButton } from "../../../views/common.view";
 
 describe(["@tier2"], "Validation of Source Control Credentials", () => {
     let scCredsUsername: CredentialsSourceControlUsername;
@@ -88,7 +87,6 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         tempDefaultCred.create();
         tempDefaultCred.verifyDefaultCredentialIcon();
         tempDefaultCred.unsetAsDefaultViaActionsMenu();
-        click(confirmButton);
         tempDefaultCred.verifyDefaultCredentialIcon();
         tempDefaultCred.delete();
     });
