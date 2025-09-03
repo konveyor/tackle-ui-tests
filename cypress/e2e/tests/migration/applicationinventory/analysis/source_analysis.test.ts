@@ -35,10 +35,11 @@ import {
     UserCredentials,
 } from "../../../../types/constants";
 let sourceCredential: CredentialsSourceControlUsername;
-let defaultSourceCredential: CredentialsSourceControlUsername;
+let validDefaultSourceCredential: CredentialsSourceControlUsername;
+let invalidDefaultSourceCredential: CredentialsSourceControlUsername;
 let sourceCredentialWithHash: CredentialsSourceControlUsername;
 let mavenCredential: CredentialsMaven;
-let defaultMavenCredential: CredentialsMaven;
+let validDefaultMavenCredential: CredentialsMaven;
 let applicationsList: Array<Analysis> = [];
 
 describe(["@tier2"], "Source Analysis", () => {
@@ -57,16 +58,25 @@ describe(["@tier2"], "Source Analysis", () => {
         sourceCredential.create();
 
         // Create default source Credentials
-        defaultSourceCredential = new CredentialsSourceControlUsername(
+        validDefaultSourceCredential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
                 UserCredentials.usernamePassword,
                 true,
-                null,
-                true
+                null
             )
         );
-        defaultSourceCredential.create();
+        validDefaultSourceCredential.create();
+
+        // Create invalid default source Credentials
+        invalidDefaultSourceCredential = new CredentialsSourceControlUsername({
+            type: CredentialType.sourceControl,
+            name: "invalidDefaultSourceCredential",
+            description: "invalidDefaultSourceCredential",
+            username: "invalidDefaultSourceCredential",
+            password: "invalidDefaultSourceCredential",
+        });
+        invalidDefaultSourceCredential.create();
 
         // Create source Credentials with # in password
         sourceCredentialWithHash = new CredentialsSourceControlUsername(
@@ -86,10 +96,10 @@ describe(["@tier2"], "Source Analysis", () => {
         mavenCredential.create();
 
         // Create default Maven credentials
-        defaultMavenCredential = new CredentialsMaven(
-            data.getRandomCredentialsData(CredentialType.maven, null, true, null, true)
+        validDefaultMavenCredential = new CredentialsMaven(
+            data.getRandomCredentialsData(CredentialType.maven, null, true)
         );
-        defaultMavenCredential.create();
+        validDefaultMavenCredential.create();
     });
 
     beforeEach("Load data", function () {
@@ -121,11 +131,30 @@ describe(["@tier2"], "Source Analysis", () => {
             application.create();
             applicationsList.push(application);
             cy.wait("@getApplication");
+            // analyze with no default creds
             application.analyze();
-            application.verifyAnalysisStatus("Completed");
+            application.verifyAnalysisStatus(AnalysisStatuses.failed);
+
+            // analyze with inValid default source creds
+            invalidDefaultSourceCredential.setAsDefaultViaActionsMenu();
+            application.analyze();
+            application.verifyAnalysisStatus(AnalysisStatuses.failed);
+
+            // analyze with valid default source and maven creds
+            validDefaultMavenCredential.setAsDefaultViaActionsMenu();
+            validDefaultSourceCredential.setAsDefaultViaActionsMenu();
+            application.analyze();
+            application.verifyAnalysisStatus(AnalysisStatuses.completed);
+
             application.verifyEffort(
                 this.analysisData["source+dep_analysis_on_tackletestapp"]["effort"]
             );
+
+            // analyze after removing valid default source and maven creds
+            validDefaultSourceCredential.unsetAsDefaultViaActionsMenu();
+            validDefaultMavenCredential.unsetAsDefaultViaActionsMenu();
+            application.analyze();
+            application.verifyAnalysisStatus(AnalysisStatuses.failed);
         }
     );
 
@@ -390,10 +419,10 @@ describe(["@tier2"], "Source Analysis", () => {
     after("Perform test data clean up", function () {
         deleteByList(applicationsList);
         sourceCredential.delete();
-        defaultSourceCredential.delete();
+        validDefaultSourceCredential.delete();
         sourceCredentialWithHash.delete();
         mavenCredential.delete();
-        defaultMavenCredential.delete();
+        validDefaultMavenCredential.delete();
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
 });

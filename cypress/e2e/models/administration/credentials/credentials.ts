@@ -156,13 +156,21 @@ export class Credentials {
     }
 
     protected setAsDefaultViaActionsMenu(): void {
+        Credentials.openList();
         this.isDefault = true;
         clickItemInKebabMenu(this.name, setAsDefaultAction);
+        cy.get("body").then(($body) => {
+            if ($body.find(modalBoxBody).length > 0) {
+                click(confirmButton);
+            }
+        });
     }
 
     protected unsetAsDefaultViaActionsMenu(): void {
+        Credentials.openList();
         this.isDefault = false;
         clickItemInKebabMenu(this.name, unsetAsDefaultAction);
+        click(confirmButton);
     }
 
     /** Validates if description field contains same value as sent parameter
