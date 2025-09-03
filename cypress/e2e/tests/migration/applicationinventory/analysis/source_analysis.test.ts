@@ -36,7 +36,6 @@ import {
 } from "../../../../types/constants";
 let sourceCredential: CredentialsSourceControlUsername;
 let invalidSourceCredential: CredentialsSourceControlUsername;
-let sourceCredentialWithHash: CredentialsSourceControlUsername;
 let mavenCredential: CredentialsMaven;
 let applicationsList: Array<Analysis> = [];
 
@@ -64,17 +63,6 @@ describe(["@tier2"], "Source Analysis", () => {
             password: "invalidDefaultSourceCredential",
         });
         invalidSourceCredential.create();
-
-        // Create source Credentials with # in password
-        sourceCredentialWithHash = new CredentialsSourceControlUsername(
-            data.getRandomCredentialsData(
-                CredentialType.sourceControl,
-                UserCredentials.usernamePassword,
-                true
-            )
-        );
-        sourceCredentialWithHash.password = "#" + sourceCredentialWithHash.password;
-        sourceCredentialWithHash.create();
 
         // Create Maven credentials
         mavenCredential = new CredentialsMaven(
@@ -400,7 +388,6 @@ describe(["@tier2"], "Source Analysis", () => {
         deleteByList(applicationsList);
         sourceCredential.delete();
         invalidSourceCredential.delete();
-        sourceCredentialWithHash.delete();
         mavenCredential.delete();
         writeMavenSettingsFile(data.getRandomWord(5), data.getRandomWord(5));
     });
