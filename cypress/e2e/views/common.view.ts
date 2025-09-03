@@ -93,7 +93,7 @@ export const modalConfirm = "#modal-confirm";
 
 // Application/Archetype side drawer
 export enum sideDrawer {
-    risk = "h3.pf-v5-c-title.pf-m-md",
+    risk = "h4.pf-v5-c-title.pf-m-md",
     labelContent = "span.pf-v5-c-label__content",
     closeDrawer = "button[aria-label='Close drawer panel']",
     pageDrawerContent = "#page-drawer-content",

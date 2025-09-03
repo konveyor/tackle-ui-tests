@@ -235,7 +235,7 @@ export class Archetype {
         cy.get(tdTag, { timeout: 10 * SEC })
             .contains(this.name)
             .click();
-        cy.get(commonView.sideDrawer.risk).contains("Archetype risk");
+        cy.get(commonView.sideDrawer.listText).contains("Archetype risk");
         cy.get(commonView.sideDrawer.labelContent).should("contain", risk);
         click(commonView.sideDrawer.closeDrawer);
     }
