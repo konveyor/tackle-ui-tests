@@ -39,7 +39,6 @@ let validDefaultSourceCredential: CredentialsSourceControlUsername;
 let invalidDefaultSourceCredential: CredentialsSourceControlUsername;
 let sourceCredentialWithHash: CredentialsSourceControlUsername;
 let mavenCredential: CredentialsMaven;
-let validDefaultMavenCredential: CredentialsMaven;
 let applicationsList: Array<Analysis> = [];
 
 describe(["@tier2"], "Source Analysis", () => {
@@ -57,7 +56,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
         sourceCredential.create();
 
-        // Create default source Credentials
+        // Create valid source Credentials
         validDefaultSourceCredential = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
@@ -68,7 +67,7 @@ describe(["@tier2"], "Source Analysis", () => {
         );
         validDefaultSourceCredential.create();
 
-        // Create invalid default source Credentials
+        // Create invalid source Credentials
         invalidDefaultSourceCredential = new CredentialsSourceControlUsername({
             type: CredentialType.sourceControl,
             name: "invalidDefaultSourceCredential",
@@ -94,12 +93,6 @@ describe(["@tier2"], "Source Analysis", () => {
             data.getRandomCredentialsData(CredentialType.maven, null, true)
         );
         mavenCredential.create();
-
-        // Create default Maven credentials
-        validDefaultMavenCredential = new CredentialsMaven(
-            data.getRandomCredentialsData(CredentialType.maven, null, true)
-        );
-        validDefaultMavenCredential.create();
     });
 
     beforeEach("Load data", function () {
@@ -135,24 +128,23 @@ describe(["@tier2"], "Source Analysis", () => {
             application.analyze();
             application.verifyAnalysisStatus(AnalysisStatuses.failed);
 
-            // analyze with inValid default source creds
+            // analyze with inValid default source creds and valid maven creds
             invalidDefaultSourceCredential.setAsDefaultViaActionsMenu();
+            mavenCredential.setAsDefaultViaActionsMenu();
             application.analyze();
             application.verifyAnalysisStatus(AnalysisStatuses.failed);
 
             // analyze with valid default source and maven creds
-            validDefaultMavenCredential.setAsDefaultViaActionsMenu();
             validDefaultSourceCredential.setAsDefaultViaActionsMenu();
             application.analyze();
             application.verifyAnalysisStatus(AnalysisStatuses.completed);
-
             application.verifyEffort(
                 this.analysisData["source+dep_analysis_on_tackletestapp"]["effort"]
             );
 
             // analyze after removing valid default source and maven creds
             validDefaultSourceCredential.unsetAsDefaultViaActionsMenu();
-            validDefaultMavenCredential.unsetAsDefaultViaActionsMenu();
+            mavenCredential.unsetAsDefaultViaActionsMenu();
             application.analyze();
             application.verifyAnalysisStatus(AnalysisStatuses.failed);
         }
