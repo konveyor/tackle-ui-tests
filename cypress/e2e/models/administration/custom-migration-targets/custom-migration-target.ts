@@ -65,22 +65,27 @@ export class CustomMigrationTarget {
      * @param forceReload
      */
     public static open(forceReload = false) {
-        if (forceReload) {
-            cy.visit(CustomMigrationTarget.fullUrl);
+        cy.intercept("GET", "/hub/targets*").as("getTargets");
+
+        const waitForTargets = () => {
+            cy.wait("@getTargets", { timeout: 30 * SEC });
             cy.get(CustomMigrationTargetView.card, { timeout: 30 * SEC }).should(
                 "contain",
                 "Containerization"
             );
+        };
+
+        if (forceReload) {
+            cy.visit(CustomMigrationTarget.fullUrl);
+            waitForTargets();
+            return;
         }
 
         cy.url().then(($url) => {
-            if ($url != CustomMigrationTarget.fullUrl) {
+            if ($url !== CustomMigrationTarget.fullUrl) {
                 selectUserPerspective("Administration");
                 clickByText(navMenu, customMigrationTargets);
-                cy.get(CustomMigrationTargetView.card, { timeout: 30 * SEC }).should(
-                    "contain",
-                    "Containerization"
-                );
+                waitForTargets();
             }
         });
     }
