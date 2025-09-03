@@ -16,11 +16,10 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
-import { click, login } from "../../../../utils/utils";
+import { login } from "../../../../utils/utils";
 import { CredentialsSourceControlKey } from "../../../models/administration/credentials/credentialsSourceControlKey";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType, UserCredentials } from "../../../types/constants";
-import { confirmButton } from "../../../views/common.view";
 
 describe(["@tier2"], "Validation of Source Control Credentials", () => {
     let scCredsUsername: CredentialsSourceControlUsername;
@@ -57,6 +56,7 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         );
         defaultScCredsUsername.create();
         defaultScCredsUsername.verifyDefaultCredentialIcon();
+        defaultScCredsUsername.delete();
     });
 
     it("Creating source control credentials with username/password then setting as default", () => {
@@ -69,8 +69,8 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         );
         scCredsUsernameSetAsDefault.create();
         scCredsUsernameSetAsDefault.setAsDefaultViaActionsMenu();
-        click(confirmButton);
         scCredsUsernameSetAsDefault.verifyDefaultCredentialIcon();
+        scCredsUsernameSetAsDefault.delete();
     });
 
     it("Unsetting default source control credentials after creating it", () => {
@@ -87,8 +87,8 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         tempDefaultCred.create();
         tempDefaultCred.verifyDefaultCredentialIcon();
         tempDefaultCred.unsetAsDefaultViaActionsMenu();
-        click(confirmButton);
         tempDefaultCred.verifyDefaultCredentialIcon();
+        tempDefaultCred.delete();
     });
 
     it(
@@ -145,10 +145,5 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
 
     it("Deleting source control credentials with source private key", () => {
         scCredsKey.delete();
-    });
-
-    after("Cleaning up", () => {
-        defaultScCredsUsername.delete();
-        tempDefaultCred.delete();
     });
 });

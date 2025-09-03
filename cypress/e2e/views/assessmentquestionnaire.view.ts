@@ -6,3 +6,4 @@ export const switchToggle = ".pf-v5-c-switch__toggle";
 export const downloadYamlTemplate = "#download-yaml-template";
 export const ArchivedQuestionnaires = "Archived questionnaires";
 export const ArchivedQuestionnairesTableDataCell = 'td[data-label="Archived questionnaires"]';
+export const QuestionnaireBreadcrumb = ".pf-v5-c-breadcrumb__item";

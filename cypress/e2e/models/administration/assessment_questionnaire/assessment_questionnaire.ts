@@ -16,6 +16,7 @@ import { actionButton } from "../../../views/applicationinventory.view";
 import {
     confirmDeletion,
     importQuestionnaire,
+    QuestionnaireBreadcrumb,
     switchToggle,
 } from "../../../views/assessmentquestionnaire.view";
 import * as commonView from "../../../views/common.view";
@@ -188,7 +189,7 @@ export class AssessmentQuestionnaire {
     }
 
     static backToQuestionnaire(): void {
-        cy.get("button.pf-v5-c-button.pf-m-link").contains("Back to questionnaire").click();
+        cy.get(QuestionnaireBreadcrumb).contains("Assessment").click();
         cy.get(".pf-v5-c-content > h1").invoke("text").should("equal", "Assessment questionnaires");
     }
 
