@@ -57,6 +57,7 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         );
         defaultScCredsUsername.create();
         defaultScCredsUsername.verifyDefaultCredentialIcon();
+        defaultScCredsUsername.delete();
     });
 
     it("Creating source control credentials with username/password then setting as default", () => {
@@ -69,8 +70,8 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         );
         scCredsUsernameSetAsDefault.create();
         scCredsUsernameSetAsDefault.setAsDefaultViaActionsMenu();
-        click(confirmButton);
         scCredsUsernameSetAsDefault.verifyDefaultCredentialIcon();
+        scCredsUsernameSetAsDefault.delete();
     });
 
     it("Unsetting default source control credentials after creating it", () => {
@@ -89,6 +90,7 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         tempDefaultCred.unsetAsDefaultViaActionsMenu();
         click(confirmButton);
         tempDefaultCred.verifyDefaultCredentialIcon();
+        tempDefaultCred.delete();
     });
 
     it(
@@ -145,10 +147,5 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
 
     it("Deleting source control credentials with source private key", () => {
         scCredsKey.delete();
-    });
-
-    after("Cleaning up", () => {
-        defaultScCredsUsername.delete();
-        tempDefaultCred.delete();
     });
 });

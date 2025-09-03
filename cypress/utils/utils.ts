@@ -958,7 +958,7 @@ export function createMultipleArchetypes(number, tags?: Tag[]): Archetype[] {
         if (tags) archetype = new Archetype(data.getRandomWord(6), [tags[i].name], [tags[i].name]);
         else archetype = new Archetype(data.getRandomWord(6), [randomTagName], [randomTagName]);
         archetype.create();
-        assertSuccessPopupAndClose();
+        closeSuccessAlert();
         archetypesList.push(archetype);
     }
     return archetypesList;
@@ -1252,6 +1252,7 @@ export function assertSuccessPopupAndClose() {
             cy.get('button[aria-label^="Close"]').click();
         });
 }
+
 export function checkRowCount(expectedCount: number) {
     cy.get("td[data-label=Name]").then(($rows) => {
         cy.wrap($rows.length).should("eq", expectedCount);
