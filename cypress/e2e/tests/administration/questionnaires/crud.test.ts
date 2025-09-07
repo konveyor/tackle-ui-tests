@@ -1,9 +1,7 @@
-import { closeForm } from "cypress/e2e/views/applicationinventory.view";
 import {
     checkErrorMessage,
     checkSuccessAlert,
     cleanupDownloads,
-    click,
     login,
 } from "../../../../utils/utils";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
@@ -42,9 +40,9 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
         AssessmentQuestionnaire.import(yamlFileName, false);
         checkErrorMessage(
             errorAlertMessage,
-            "A questionnaire with this name already exists. Use a different name."
+            "A questionnaire with this name already exists. Use a different name.",
+            true
         );
-        click(closeForm);
         deleteQuestionnaire(importedQuestionnaire);
     });
 
@@ -63,7 +61,8 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
         AssessmentQuestionnaire.import("questionnaire_import/questionnaire-1.yaml", false);
         checkErrorMessage(
             errorAlertMessage,
-            "A questionnaire with this name already exists. Use a different name."
+            "A questionnaire with this name already exists. Use a different name.",
+            true
         );
     });
 
