@@ -1,7 +1,9 @@
+import { closeForm } from "cypress/e2e/views/applicationinventory.view";
 import {
     checkErrorMessage,
     checkSuccessAlert,
     cleanupDownloads,
+    click,
     login,
 } from "../../../../utils/utils";
 import { AssessmentQuestionnaire } from "../../../models/administration/assessment_questionnaire/assessment_questionnaire";
@@ -19,7 +21,7 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
         AssessmentQuestionnaire.deleteAllQuestionnaires();
     });
 
-    it("Import questionnaire", function () {
+    it("Import questionnaire & delete it", function () {
         AssessmentQuestionnaire.import(yamlFileName);
         checkSuccessAlert(
             alertTitle,
@@ -27,6 +29,7 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
             true
         );
         AssessmentQuestionnaire.enable(importedQuestionnaire, false);
+        deleteQuestionnaire(importedQuestionnaire);
     });
 
     it("Duplicate questionnaire Test", function () {
@@ -41,6 +44,8 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
             errorAlertMessage,
             "A questionnaire with this name already exists. Use a different name."
         );
+        click(closeForm);
+        deleteQuestionnaire(importedQuestionnaire);
     });
 
     it("Export questionnaire and Import it back", function () {
@@ -62,14 +67,14 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
         );
     });
 
-    it("Delete questionnaire", function () {
-        AssessmentQuestionnaire.delete(importedQuestionnaire);
+    function deleteQuestionnaire(questionnaireName: string) {
+        AssessmentQuestionnaire.delete(questionnaireName);
         checkSuccessAlert(
             alertTitle,
-            `Success alert:Questionnaire ${importedQuestionnaire} was successfully deleted.`,
+            `Success alert:Questionnaire ${questionnaireName} was successfully deleted.`,
             true
         );
-    });
+    }
 
     after("Cleaning up", function () {
         cleanupDownloads();
