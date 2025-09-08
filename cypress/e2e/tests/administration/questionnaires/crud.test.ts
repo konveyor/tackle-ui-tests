@@ -19,7 +19,7 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
         AssessmentQuestionnaire.deleteAllQuestionnaires();
     });
 
-    it("Import questionnaire", function () {
+    it("Import questionnaire & delete it", function () {
         AssessmentQuestionnaire.import(yamlFileName);
         checkSuccessAlert(
             alertTitle,
@@ -27,6 +27,7 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
             true
         );
         AssessmentQuestionnaire.enable(importedQuestionnaire, false);
+        deleteQuestionnaire(importedQuestionnaire);
     });
 
     it("Duplicate questionnaire Test", function () {
@@ -39,8 +40,10 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
         AssessmentQuestionnaire.import(yamlFileName, false);
         checkErrorMessage(
             errorAlertMessage,
-            "A questionnaire with this name already exists. Use a different name."
+            "A questionnaire with this name already exists. Use a different name.",
+            true
         );
+        deleteQuestionnaire(importedQuestionnaire);
     });
 
     it("Export questionnaire and Import it back", function () {
@@ -58,18 +61,19 @@ describe(["@tier2"], "Questionnaire CRUD operations", () => {
         AssessmentQuestionnaire.import("questionnaire_import/questionnaire-1.yaml", false);
         checkErrorMessage(
             errorAlertMessage,
-            "A questionnaire with this name already exists. Use a different name."
-        );
-    });
-
-    it("Delete questionnaire", function () {
-        AssessmentQuestionnaire.delete(importedQuestionnaire);
-        checkSuccessAlert(
-            alertTitle,
-            `Success alert:Questionnaire ${importedQuestionnaire} was successfully deleted.`,
+            "A questionnaire with this name already exists. Use a different name.",
             true
         );
     });
+
+    function deleteQuestionnaire(questionnaireName: string) {
+        AssessmentQuestionnaire.delete(questionnaireName);
+        checkSuccessAlert(
+            alertTitle,
+            `Success alert:Questionnaire ${questionnaireName} was successfully deleted.`,
+            true
+        );
+    }
 
     after("Cleaning up", function () {
         cleanupDownloads();
