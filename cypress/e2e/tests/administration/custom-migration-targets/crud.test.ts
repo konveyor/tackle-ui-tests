@@ -87,7 +87,6 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                 cy.intercept("DELETE", "/hub/targets*/*").as("deleteTarget");
 
                 CustomMigrationTarget.open(true);
-                cy.wait("@getTargets", { timeout: 30 * SEC });
             });
 
             it("Custom Migration Targets CRUD with rules uploaded manually", function () {
