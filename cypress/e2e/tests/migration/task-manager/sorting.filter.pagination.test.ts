@@ -54,7 +54,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         });
     });
 
-    it("Bug MTA-5739: Sorting tasks", function () {
+    it("Sorting tasks", function () {
         // Ensure total pod count does not exceed the number of tackle pods.
         getNumberOfNonTaskPods().then((podsNum) => {
             limitPodsByQuota(podsNum);
@@ -148,7 +148,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         clearAllFilters();
     });
 
-    it("Bug MTA-5739: Filter by Kind", () => {
+    it("Filter by Kind", () => {
         TaskManager.open();
         TaskManager.applyFilter(TaskFilter.kind, TaskKind.analyzer);
         validateTextPresence(TaskManagerColumns.kind, TaskKind.analyzer);
