@@ -185,7 +185,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         assessmentApplication.verifyStatus("assessment", "Completed");
     });
 
-    it("Bug MTA-5883: Verify that imported questionnaire assessement is migrated", function () {
+    it("Bug MTA-6099: Verify that imported questionnaire assessment is migrated", function () {
         AssessmentQuestionnaire.disable(legacyPathfinder);
         AssessmentQuestionnaire.enable(cloudReadinessQuestionnaire);
         const assessmentApplication = new Application({
