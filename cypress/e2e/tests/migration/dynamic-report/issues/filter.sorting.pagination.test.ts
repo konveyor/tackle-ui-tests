@@ -42,7 +42,7 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Tag } from "../../../../models/migration/controls/tags";
 import { Issues } from "../../../../models/migration/dynamic-report/issues/issues";
-import { AnalysisStatuses, issueFilter, tdTag, trTag } from "../../../../types/constants";
+import { AnalysisStatuses, issueFilter, SEC, tdTag, trTag } from "../../../../types/constants";
 import { AppIssue } from "../../../../types/types";
 import { rightSideBar } from "../../../../views/issue.view";
 
@@ -54,9 +54,9 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
     let stakeholderGroups: Stakeholdergroups[];
     let tags: Tag[];
     let tagNames: string[];
-    const allIssuesSortByList = ["Issue", "Category", "Effort", "Affected applications"];
+    const allIssuesSortByList = ["Issue", "Category", "Affected applications"];
     const affectedApplicationSortByList = ["Name", "Business service", "Effort", "Incidents"];
-    const singleApplicationSortByList = ["Issue", "Category", "Effort", "Affected files"];
+    const singleApplicationSortByList = ["Issue", "Category", "Affected files"];
     const affectedFilesSortByList = ["File", "Incidents", "Effort"];
     const appAmount = 6;
 
@@ -277,9 +277,9 @@ describe(["@tier3"], "Filtering, sorting and pagination in Issues", function () 
             Issues.openAffectedApplications(
                 this.analysisData["source_analysis_on_bookserverapp"]["issues"][0]["name"]
             );
-            cy.wait("@getApplications");
+            // Wait up to 3 sec until spinner will be away
+            cy.get("div.pf-v5-l-bullseye", { timeout: 3 * SEC }).should("not.exist");
             selectItemsPerPage(100);
-            cy.wait("@getApplications");
             validateSortBy(column);
         });
     });
