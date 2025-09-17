@@ -77,6 +77,7 @@ describe(["@tier3"], "Reports tab sort tests", () => {
     sortableColumns.forEach((column: string) => {
         it(`${column} sort validations`, function () {
             let columnDataLabel = column;
+            Reports.open(100);
             if (column === (IdentifiedRiskTableHeaders.questionnaireName as string)) {
                 columnDataLabel = questionnaireNameColumnDataLabel;
             }
@@ -86,6 +87,7 @@ describe(["@tier3"], "Reports tab sort tests", () => {
     });
 
     it("Risk sort validation", function () {
+        Reports.open(100);
         const unsorted = getRiskIconColumnSortableData();
         clickOnSortButton(IdentifiedRiskTableHeaders.risk, SortType.ascending);
         verifySortAsc(getRiskIconColumnSortableData(), unsorted);
