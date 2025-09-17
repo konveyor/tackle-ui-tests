@@ -16,7 +16,12 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import * as data from "../../../../utils/data_utils";
-import { createMultipleApplications, login } from "../../../../utils/utils";
+import {
+    createMultipleApplications,
+    deleteAllMigrationWaves,
+    deleteApplicationTableRows,
+    login,
+} from "../../../../utils/utils";
 import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 import { JiraIssue } from "../../../models/administration/jira-connection/jira-api.interface";
@@ -61,6 +66,8 @@ describe(["@tier2"], "Export Migration Wave to Jira Cloud", function () {
         }
         login();
         cy.visit("/");
+        deleteAllMigrationWaves();
+        deleteApplicationTableRows();
         jiraCloudCredentials = new JiraCredentials(
             data.getJiraCredentialData(CredentialType.jiraBasic, true)
         );
@@ -134,7 +141,6 @@ describe(["@tier2"], "Export Migration Wave to Jira Cloud", function () {
                             (issueType as string).toUpperCase()
                     );
                 });
-
                 Application.open();
 
                 jiraCloudInstance.deleteIssues(waveIssues.map((issue) => issue.id));
@@ -145,8 +151,9 @@ describe(["@tier2"], "Export Migration Wave to Jira Cloud", function () {
     });
 
     after("Clear test data", function () {
-        Object.values(wavesMap).forEach((wave: MigrationWave) => wave.delete());
-        applications.forEach((app) => app.delete());
+        deleteAllMigrationWaves();
+        deleteApplicationTableRows();
+
         jiraCloudInstance.delete();
         jiraCloudCredentials.delete();
     });
