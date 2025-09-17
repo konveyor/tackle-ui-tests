@@ -65,9 +65,10 @@ export class Reports {
             .eq(0)
             .find("tspan")
             .eq(0)
-            .invoke("text")
-            .then(($text) => {
-                cy.wrap(parseFloat($text)).should("eq", value);
+            .should(($element) => {
+                const text = $element.text();
+                const parsedValue = parseFloat(text);
+                expect(parsedValue).to.eq(value);
             });
     }
 
