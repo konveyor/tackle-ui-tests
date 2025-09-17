@@ -74,10 +74,12 @@ export class Stakeholders {
             if ($url != Stakeholders.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, controls);
+                cy.wait(2 * SEC);
                 cy.get("h1", { timeout: 60 * SEC }).should("contain", "Controls");
                 clickByText(navTab, stakeholders);
             }
         });
+        cy.wait(2 * SEC);
         cy.get("h1", { timeout: 30 * SEC }).should("contain.text", "Controls");
         selectItemsPerPage(100);
     }
@@ -141,7 +143,7 @@ export class Stakeholders {
     ): void {
         Stakeholders.openList();
         selectItemsPerPage(100);
-        cy.wait(2000);
+        cy.wait(2 * SEC);
         performRowActionByIcon(this.email, commonView.pencilIcon);
         if (cancel) {
             cancelForm();
@@ -173,6 +175,7 @@ export class Stakeholders {
             click(commonView.confirmCancelButton);
         } else {
             click(commonView.confirmButton);
+            cy.wait(SEC);
             notExists(this.email);
         }
     }
