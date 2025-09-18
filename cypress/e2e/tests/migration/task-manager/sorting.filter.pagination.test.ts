@@ -54,7 +54,7 @@ describe(["@tier3"], "Filtering, sorting and pagination in Task Manager Page", f
         });
     });
 
-    it("Sorting tasks", function () {
+    it("Bug MTA-6164: Sorting tasks", function () {
         // Ensure total pod count does not exceed the number of tackle pods.
         getNumberOfNonTaskPods().then((podsNum) => {
             limitPodsByQuota(podsNum);
