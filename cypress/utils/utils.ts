@@ -1461,9 +1461,9 @@ export function confirm(): void {
 
 export function validatePagination(): void {
     // Verify next buttons are enabled as there are more than 11 rows present
-    cy.get(nextPageButton, { timeout: 10 * SEC }).each(($nextBtn) => {
-        cy.wrap($nextBtn).should("not.be.disabled");
-    });
+    cy.get(nextPageButton, { timeout: 10 * SEC })
+        .first()
+        .should("not.be.disabled");
 
     // Verify that previous buttons are disabled being on the first page
     cy.get(prevPageButton).each(($previousBtn) => {

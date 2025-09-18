@@ -16,7 +16,12 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import * as data from "../../../../utils/data_utils";
-import { createMultipleApplications, deleteByList, login } from "../../../../utils/utils";
+import {
+    createMultipleApplications,
+    deleteAllMigrationWaves,
+    deleteApplicationTableRows,
+    login,
+} from "../../../../utils/utils";
 import { JiraCredentials } from "../../../models/administration/credentials/JiraCredentials";
 import { Jira } from "../../../models/administration/jira-connection/jira";
 import { JiraIssue } from "../../../models/administration/jira-connection/jira-api.interface";
@@ -122,8 +127,8 @@ describe(["@tier2"], "Export Migration Wave to Jira Datacenter", function () {
     });
 
     after("Clear test data", function () {
-        MigrationWave.open(true);
-        deleteByList(applications);
+        deleteAllMigrationWaves();
+        deleteApplicationTableRows();
         jiraInstance.delete();
         jiraCredentials.delete();
     });
