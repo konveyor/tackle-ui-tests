@@ -191,6 +191,7 @@ export class BusinessServices {
         } else {
             click(commonView.confirmButton);
             notExists(this.name);
+            cy.wait(SEC);
         }
     }
 }

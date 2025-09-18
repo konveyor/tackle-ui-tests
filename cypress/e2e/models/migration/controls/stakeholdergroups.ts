@@ -59,6 +59,7 @@ export class Stakeholdergroups {
             if ($url != Stakeholdergroups.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, controls);
+                cy.wait(5 * SEC);
                 cy.get("h1", { timeout: 60 * SEC }).should("contain", "Controls");
                 clickByText(navTab, stakeholderGroups);
             }
