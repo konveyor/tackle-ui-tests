@@ -59,7 +59,7 @@ describe(["@tier3"], "Custom Migration Targets rules trigger validation", () => 
         CustomMigrationTarget.open(true);
     });
 
-    it("Bug MTA-5786: Test same rules are triggered for custom rules and custom migration target", function () {
+    it("Bug MTA-6163: Test same rules are triggered for custom rules and custom migration target", function () {
         const targetData = this.customMigrationTargets["rules_from_bug_3330"];
         target = new CustomMigrationTarget(
             data.getRandomWord(8),
@@ -99,7 +99,7 @@ describe(["@tier3"], "Custom Migration Targets rules trigger validation", () => 
         });
     });
 
-    after("Clear state", function () {
+    after("Bug MTA-6163: Clear state", function () {
         cy.visit("/");
         target.delete();
         applications.forEach((app) => app.delete());
