@@ -293,7 +293,7 @@ export class Jira {
 
     public getIssues(projectName: string): Cypress.Chainable<JiraIssue[]> {
         const url =
-            this.type === Jira.cloud
+            this.type == Jira.cloud
                 ? `${this.url}/rest/api/3/search/jql?jql=project=${projectName}&fields=*navigable`
                 : `${this.url}/rest/api/2/search?jql=project="${projectName}"`;
         return this.doJiraRequest<JiraIssue[]>(url).its("issues");
