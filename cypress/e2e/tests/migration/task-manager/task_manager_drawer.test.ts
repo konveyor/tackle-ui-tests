@@ -81,8 +81,8 @@ describe(["@tier2"], "Task Manager Drawer validation", () => {
 
         cy.get(taskNotificationBadge).click();
         validateTasks("tech-discovery", [
-            `(tech-discovery) - ${analyses[0].name} - 0`,
-            `(tech-discovery) - ${analyses[1].name} - 0`,
+            `(tech-discovery) - ${analyses[0].name} - 11`,
+            `(tech-discovery) - ${analyses[1].name} - 11`,
         ]);
 
         cy.get(taskDrawerItemTitle).contains("analyzer", {
