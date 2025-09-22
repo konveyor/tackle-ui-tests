@@ -87,6 +87,7 @@ describe(
             migrationWave.create();
             cy.wait("@postWave");
             cy.wait("@getWave");
+            MigrationWave.open(true);
             migrationWave.expandActionsMenu();
             cy.contains(manageApplications).click();
 
@@ -117,6 +118,7 @@ describe(
             migrationWave.create();
             cy.wait("@postWave");
             cy.wait("@getWave");
+            MigrationWave.open(true);
             migrationWave.expandActionsMenu();
             cy.contains(manageApplications).click();
 
@@ -147,6 +149,7 @@ describe(
             migrationWave.create();
             cy.wait("@postWave");
             cy.wait("@getWave");
+            MigrationWave.open(true);
             migrationWave.expandActionsMenu();
             cy.contains(manageApplications).click();
 
