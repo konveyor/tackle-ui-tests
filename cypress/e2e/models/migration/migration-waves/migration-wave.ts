@@ -282,9 +282,7 @@ export class MigrationWave {
                 .parents("tr")
                 .within(() => {
                     cy.get(MigrationWaveView.actionsButton).then(($btn) => {
-                        if ($btn.attr("aria-expanded") === "false") {
-                            $btn.trigger("click");
-                        }
+                        $btn.trigger("click");
                     });
                 });
         } else {
