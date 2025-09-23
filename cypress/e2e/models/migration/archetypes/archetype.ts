@@ -79,7 +79,7 @@ export class Archetype {
         }
 
         cy.url().then(($url) => {
-            if (!$url.includes(Archetype.fullUrl)) {
+            if ($url != Archetype.fullUrl) {
                 selectUserPerspective(migration);
                 clickByText(navMenu, "Archetypes");
                 cy.get("h1", { timeout: 60 * SEC }).should("contain", "Archetypes");
