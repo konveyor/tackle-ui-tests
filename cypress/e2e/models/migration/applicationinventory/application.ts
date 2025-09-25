@@ -403,23 +403,28 @@ export class Application {
 
     /**
      * Verify that tags and categories are present on Application details -> Tags page
-     * @param tags tag or list of tags
+     * @param tags tag or list of tags or list of category, tags
      */
-    tagAndCategoryExists(tags: string | [string, string[]][]): void {
-        if (Array.isArray(tags)) {
-            // For Tags and Categories: [category, [tag1, tag2, ...]]
-            tags.forEach(function ([category, tagList]) {
+    tagAndCategoryExists(tags: string | string[] | [string, string[]][]): void {
+        if (typeof tags === "string") {
+            // Case: single tag
+            cy.get(appDetailsView.applicationTag).should("contain", tags);
+        } else if (Array.isArray(tags) && typeof tags[0] === "string") {
+            // Case: array of strings
+            (tags as string[]).forEach((tag) => {
+                cy.get(appDetailsView.applicationTag).should("contain", tag);
+            });
+        } else {
+            // Case: [category, [tags]] pairs
+            (tags as [string, string[]][]).forEach(([category, tagList]) => {
                 cy.get(appDetailsView.tagCategory).should("contain", category);
-                tagList.forEach(function (tag) {
+                tagList.forEach((tag) => {
                     cy.get(appDetailsView.applicationTag, { timeout: 10 * SEC }).should(
                         "contain",
                         tag
                     );
                 });
             });
-        } else {
-            // For tags
-            cy.get(appDetailsView.applicationTag).should("contain", tags);
         }
     }
 
