@@ -20,6 +20,8 @@ import {
     createMultipleBusinessServices,
     createMultipleStakeholders,
     createMultipleTags,
+    deleteAllMigrationWaves,
+    deleteApplicationTableRows,
     deleteByList,
     login,
 } from "../../../../utils/utils";
@@ -55,6 +57,8 @@ describe(
         before("Login and Create Test Data", function () {
             login();
             cy.visit("/");
+            deleteAllMigrationWaves();
+            deleteApplicationTableRows();
             businessServicesList = createMultipleBusinessServices(2);
             tagList = createMultipleTags(2);
             stakeholders = createMultipleStakeholders(2);
@@ -64,6 +68,11 @@ describe(
                 tagList,
                 stakeholders
             );
+        });
+
+        beforeEach("Login", function () {
+            cy.intercept("GET", "/hub/migrationwaves*").as("getWave");
+            cy.intercept("POST", "/hub/migrationwaves*").as("postWave");
         });
 
         it("Filter applications by name", function () {
@@ -76,6 +85,9 @@ describe(
                 applicationsList
             );
             migrationWave.create();
+            cy.wait("@postWave");
+            cy.wait("@getWave");
+            MigrationWave.open(true);
             migrationWave.expandActionsMenu();
             cy.contains(manageApplications).click();
 
@@ -104,6 +116,9 @@ describe(
                 applicationsList
             );
             migrationWave.create();
+            cy.wait("@postWave");
+            cy.wait("@getWave");
+            MigrationWave.open(true);
             migrationWave.expandActionsMenu();
             cy.contains(manageApplications).click();
 
@@ -132,6 +147,9 @@ describe(
                 applicationsList
             );
             migrationWave.create();
+            cy.wait("@postWave");
+            cy.wait("@getWave");
+            MigrationWave.open(true);
             migrationWave.expandActionsMenu();
             cy.contains(manageApplications).click();
 
@@ -151,7 +169,8 @@ describe(
         });
 
         after("Perform test data clean up", function () {
-            deleteByList(applicationsList);
+            deleteAllMigrationWaves();
+            deleteApplicationTableRows();
             deleteByList(businessServicesList);
             deleteByList(tagList);
             deleteByList(stakeholders);

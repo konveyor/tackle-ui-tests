@@ -65,6 +65,8 @@ describe(["@tier2"], "Export Migration Wave to Jira Datacenter", function () {
         }
         login();
         cy.visit("/");
+        deleteAllMigrationWaves();
+        deleteApplicationTableRows();
         jiraCredentials = new JiraCredentials(
             data.getJiraCredentialData(CredentialType.jiraToken, true)
         );
