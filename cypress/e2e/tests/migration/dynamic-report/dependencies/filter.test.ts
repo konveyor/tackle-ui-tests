@@ -37,7 +37,7 @@ import { Stakeholdergroups } from "../../../../models/migration/controls/stakeho
 import { Stakeholders } from "../../../../models/migration/controls/stakeholders";
 import { Tag } from "../../../../models/migration/controls/tags";
 import { Dependencies } from "../../../../models/migration/dynamic-report/dependencies/dependencies";
-import { button, dependencyFilter, trTag } from "../../../../types/constants";
+import { button, dependencyFilter, SEC, trTag } from "../../../../types/constants";
 import { AppDependency } from "../../../../types/types";
 import { rightSideMenu } from "../../../../views/analysis.view";
 
@@ -200,6 +200,7 @@ describe(["@tier3"], "Dependency filtering", () => {
         Analysis.open();
         bookServerApp.applicationDetailsTab("Details");
         clickWithinByText(rightSideMenu, "a", "Dependencies");
+        cy.wait(SEC);
         selectItemsPerPage(100);
         cy.contains('[id^="pf-random-id-"]', bookServerApp.name);
         cy.contains(button, "Clear all filters");
