@@ -55,13 +55,13 @@ describe(["@tier2"], "Source Analysis", () => {
         sourceCredential.create();
 
         // Create invalid source Credentials
-        invalidSourceCredential = new CredentialsSourceControlUsername({
-            type: CredentialType.sourceControl,
-            name: "invalidDefaultSourceCredential",
-            description: "invalidDefaultSourceCredential",
-            username: "invalidDefaultSourceCredential",
-            password: "invalidDefaultSourceCredential",
-        });
+        invalidSourceCredential = new CredentialsSourceControlUsername(
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                false
+            )
+        );
         invalidSourceCredential.create();
 
         // Create Maven credentials
@@ -112,7 +112,6 @@ describe(["@tier2"], "Source Analysis", () => {
 
             // analyze with valid default source and maven creds
             sourceCredential.setAsDefaultViaActionsMenu();
-            application.analyze();
             application.verifyAnalysisStatus(AnalysisStatuses.completed);
             application.verifyEffort(
                 this.analysisData["source+dep_analysis_on_tackletestapp"]["effort"]
@@ -122,6 +121,8 @@ describe(["@tier2"], "Source Analysis", () => {
             sourceCredential.unsetAsDefaultViaActionsMenu();
             mavenCredential.unsetAsDefaultViaActionsMenu();
             application.analyze();
+            // Few seconds required for status to change to In Progress
+            cy.wait(3 * SEC);
             application.verifyAnalysisStatus(AnalysisStatuses.failed);
         }
     );
