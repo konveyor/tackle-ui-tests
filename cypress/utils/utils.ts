@@ -1315,6 +1315,11 @@ export function deleteAllArchetypes() {
     deleteAllRows();
 }
 
+export function deleteAllCredentials() {
+    Credentials.openList(100);
+    deleteAllRows();
+}
+
 export function deleteApplicationTableRows(): void {
     navigate_to_application_inventory();
     cy.wait(1 * SEC);
