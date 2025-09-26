@@ -1160,8 +1160,8 @@ export function createMultipleApplicationsWithBSandTags(
 type Deletable = { delete: () => void };
 
 export function deleteByList<T extends Deletable>(array: T[]): void {
-    array.forEach((element) => {
-        cy.wrap(null).then(() => element.delete());
+    cy.wrap(array).each((element: T) => {
+        element.delete();
     });
 }
 
