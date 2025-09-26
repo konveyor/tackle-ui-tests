@@ -244,7 +244,7 @@ describe(["@tier3"], "Application inventory filter validations", function () {
         clickByText(button, clearAllFilters);
     });
 
-    it("Bug MTA-6099: Risk filter validations", function () {
+    it("Risk filter validations", function () {
         const application = applicationsList[0];
         const application1 = applicationsList[1];
 

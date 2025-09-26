@@ -198,7 +198,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
     it(
         ["@interop", "@tier0"],
-        "Bug MTA-6099: Test inheritance after discarding application assessment and review",
+        "Test inheritance after discarding application assessment and review",
         function () {
             // Polarion TC MTA-456 Assess and review application associated with unassessed/unreviewed archetypes
             const tags = createMultipleTags(2);
