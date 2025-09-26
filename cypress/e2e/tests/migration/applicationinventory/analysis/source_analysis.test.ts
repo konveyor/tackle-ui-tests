@@ -17,7 +17,6 @@ limitations under the License.
 
 import * as data from "../../../../../utils/data_utils";
 import {
-    deleteAllCredentials,
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
@@ -44,7 +43,6 @@ describe(["@tier2"], "Source Analysis", () => {
     before("Login", function () {
         login();
         cy.visit("/");
-        deleteAllCredentials();
 
         // Create source Credentials
         sourceCredential = new CredentialsSourceControlUsername(
