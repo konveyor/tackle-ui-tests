@@ -86,7 +86,7 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.visit("/");
     });
 
-    it.only(
+    it(
         ["@tier1"],
         "Source + dependencies analysis on tackletest app with default credentials",
         function () {
@@ -121,9 +121,7 @@ describe(["@tier2"], "Source Analysis", () => {
             sourceCredential.unsetAsDefaultViaActionsMenu();
             mavenCredential.unsetAsDefaultViaActionsMenu();
             application.analyze();
-            // Few seconds required for status to change to In Progress
-            application.waitStatusChange(AnalysisStatuses.inProgress);
-            application.verifyAnalysisStatus(AnalysisStatuses.failed);
+            application.waitStatusChange(AnalysisStatuses.failed);
         }
     );
 
