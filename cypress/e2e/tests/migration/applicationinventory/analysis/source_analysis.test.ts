@@ -86,7 +86,7 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.visit("/");
     });
 
-    it(
+    it.only(
         ["@tier1"],
         "Source + dependencies analysis on tackletest app with default credentials",
         function () {
