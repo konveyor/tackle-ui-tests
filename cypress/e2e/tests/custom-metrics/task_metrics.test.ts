@@ -29,7 +29,7 @@ const metrics = new Metrics();
 const metricName = "konveyor_tasks_initiated_total";
 let applicationList: Array<Application> = [];
 
-describe(["@tier2"], "Custom Metrics - Count the total number of initiated analyses", function () {
+describe(["@tier2"], "Custom Metrics - Count the total number of initiated tasks", function () {
     before("Log in and clear state", function () {
         login();
         cy.visit("/");
