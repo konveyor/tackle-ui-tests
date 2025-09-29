@@ -122,7 +122,7 @@ describe(["@tier2"], "Source Analysis", () => {
             mavenCredential.unsetAsDefaultViaActionsMenu();
             application.analyze();
             // Few seconds required for status to change to In Progress
-            cy.wait(3 * SEC);
+            application.waitStatusChange(AnalysisStatuses.inProgress);
             application.verifyAnalysisStatus(AnalysisStatuses.failed);
         }
     );
