@@ -1317,7 +1317,8 @@ export function deleteAllArchetypes() {
 
 export function deleteApplicationTableRows(): void {
     navigate_to_application_inventory();
-    cy.wait(1 * SEC);
+    cy.intercept("GET", "/hub/application*").as("getApplication");
+    cy.wait("@getApplication", { timeout: 10 * SEC });
     selectItemsPerPage(100);
     deleteAllItems();
 }

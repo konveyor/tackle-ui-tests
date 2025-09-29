@@ -24,11 +24,12 @@ import {
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { Application } from "../../models/migration/applicationinventory/application";
 import { Metrics } from "../../models/migration/custom-metrics/custom-metrics";
+import { taskIcon } from "../../views/applicationinventory.view";
 const metrics = new Metrics();
 const metricName = "konveyor_tasks_initiated_total";
 let applicationList: Array<Application> = [];
 
-describe(["@tier2"], "Custom Metrics - Count the total number of initiated analyses", function () {
+describe(["@tier2"], "Custom Metrics - Count the total number of initiated tasks", function () {
     before("Log in and clear state", function () {
         login();
         cy.visit("/");
@@ -59,7 +60,7 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
             bookServerApp.create();
             cy.wait("@getApplication");
             bookServerApp.analyze();
-            bookServerApp.verifyAnalysisStatus("Completed");
+            bookServerApp.verifyTaskIcon(taskIcon.success);
             applicationList.push(bookServerApp);
 
             // Validate the tasks initiated counter increased
@@ -79,7 +80,7 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
             application.create();
             cy.wait("@getApplication");
             application.analyze();
-            application.verifyAnalysisStatus("Completed");
+            application.verifyTaskIcon(taskIcon.success);
             applicationList.push(application);
             const expectedCounter = initialCounter + 1;
             metrics.validateMetric(metricName, expectedCounter);
@@ -98,7 +99,7 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated analy
             tackleTestApp.create();
             cy.wait("@getApplication");
             tackleTestApp.analyze();
-            tackleTestApp.verifyAnalysisStatus("Failed");
+            tackleTestApp.verifyTaskIcon(taskIcon.failed);
             applicationList.push(tackleTestApp);
 
             // Validate the tasks initiated counter increased

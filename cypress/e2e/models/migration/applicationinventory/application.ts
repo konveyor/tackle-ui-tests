@@ -46,6 +46,7 @@ import {
     details,
     legacyPathfinder,
     migration,
+    MIN,
     review,
     reviewAppButton,
     SEC,
@@ -80,6 +81,7 @@ import {
     sourceRepository,
     southdependenciesDropdownBtn,
     tagsColumnSelector,
+    taskIcon,
     version,
 } from "../../../views/applicationinventory.view";
 import { assessmentColumnSelector, continueButton } from "../../../views/assessment.view";
@@ -939,5 +941,13 @@ export class Application {
         Application.open();
         cy.get(tdTag).contains(this.name).trigger("mouseenter").wait(4000);
         cy.contains(kind).click();
+    }
+
+    verifyTaskIcon(icon: taskIcon, timeout = 5 * MIN): void {
+        cy.get(tdTag)
+            .filter(':contains("' + this.name + '")')
+            .within(() => {
+                cy.get(icon, { timeout }).should("be.visible");
+            });
     }
 }
