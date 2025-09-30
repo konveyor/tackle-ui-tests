@@ -337,7 +337,7 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         // Automates Polarion MTA-519 Validate application tag filtration
         application.validateTagsCount("2");
         application.filterTags("Assessment"); // Verify assessment tag is applied to application
-        application.tagAndCategoryExists([assessmentTag]);
+        application.tagAndCategoryExists(assessmentTag);
         application.tagAndCategoryDontExist([archetypeTag, ["Language", "C"]]);
         application.closeApplicationDetails();
 
@@ -366,12 +366,12 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
         // Verify archetype tag and assessment tag are present on application details page
         application2.filterTags("Archetype");
-        application2.tagAndCategoryExists([archetypeTag]);
+        application2.tagAndCategoryExists(archetypeTag);
         application2.tagAndCategoryDontExist([assessmentTag, ["Language", "Java"]]);
         application2.closeApplicationDetails();
 
         application2.filterTags("Assessment");
-        application2.tagAndCategoryExists([assessmentTag]);
+        application2.tagAndCategoryExists(assessmentTag);
         application2.tagAndCategoryDontExist([archetypeTag, ["Language", "Java"]]);
         application2.closeApplicationDetails();
 

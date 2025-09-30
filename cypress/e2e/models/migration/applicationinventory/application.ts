@@ -407,15 +407,14 @@ export class Application {
      * Verify that tags and categories are present on Application details -> Tags page
      * @param tags tag or list of tags or list of category, tags
      */
-    tagAndCategoryExists(tags: string | string[] | [string, string[]][]): void {
+    tagAndCategoryExists(tags: string | [string, string] | [string, string[]][]): void {
         if (typeof tags === "string") {
             // Case: single tag
             cy.get(appDetailsView.applicationTag).should("contain", tags);
         } else if (Array.isArray(tags) && typeof tags[0] === "string") {
             // Case: array of strings
-            (tags as string[]).forEach((tag) => {
-                cy.get(appDetailsView.applicationTag).should("contain", tag);
-            });
+            cy.get(appDetailsView.tagCategory).should("contain", tags[0]);
+            cy.get(appDetailsView.applicationTag).should("contain", tags[1]);
         } else {
             // Case: [category, [tags]] pairs
             (tags as [string, string[]][]).forEach(([category, tagList]) => {
