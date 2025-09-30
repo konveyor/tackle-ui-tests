@@ -112,12 +112,12 @@ describe(["@tier2"], "Source Analysis", () => {
             // application.verifyAnalysisStatus(AnalysisStatuses.failed);
 
             // analyze with valid default source and maven creds
-            // sourceCredential.setAsDefaultViaActionsMenu();
-            // application.waitStatusChange(AnalysisStatuses.inProgress);
-            // application.verifyAnalysisStatus(AnalysisStatuses.completed);
-            // application.verifyEffort(
-            //     this.analysisData["source+dep_analysis_on_tackletestapp"]["effort"]
-            // );
+            sourceCredential.setAsDefaultViaActionsMenu();
+            application.waitStatusChange(AnalysisStatuses.inProgress);
+            application.verifyAnalysisStatus(AnalysisStatuses.completed);
+            application.verifyEffort(
+                this.analysisData["source+dep_analysis_on_tackletestapp"]["effort"]
+            );
 
             // // analyze after removing valid default source and maven creds
             // sourceCredential.unsetAsDefaultViaActionsMenu();
