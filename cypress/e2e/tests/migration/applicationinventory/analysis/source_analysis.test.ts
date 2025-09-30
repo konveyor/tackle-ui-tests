@@ -108,10 +108,12 @@ describe(["@tier2"], "Source Analysis", () => {
             invalidSourceCredential.setAsDefaultViaActionsMenu();
             mavenCredential.setAsDefaultViaActionsMenu();
             application.analyze();
-            application.verifyAnalysisStatus(AnalysisStatuses.failed);
+            application.waitStatusChange(AnalysisStatuses.failed);
+            // application.verifyAnalysisStatus(AnalysisStatuses.failed);
 
             // analyze with valid default source and maven creds
             sourceCredential.setAsDefaultViaActionsMenu();
+            application.waitStatusChange(AnalysisStatuses.inProgress);
             application.verifyAnalysisStatus(AnalysisStatuses.completed);
             application.verifyEffort(
                 this.analysisData["source+dep_analysis_on_tackletestapp"]["effort"]
