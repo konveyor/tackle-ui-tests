@@ -384,7 +384,6 @@ export class Analysis extends Application {
     }
 
     verifyAnalysisStatus(status: string, timeout?: number) {
-        Application.open();
         cy.log(`Verifying analysis status, expecting ${status}`);
         cy.get(tdTag, { log: false })
             .contains(this.name, { log: false })
@@ -426,7 +425,6 @@ export class Analysis extends Application {
     }
 
     waitStatusChange(newStatus: string) {
-        Application.open();
         cy.get(tdTag, { log: false })
             .contains(this.name, { log: false })
             .closest(trTag, { log: false })
