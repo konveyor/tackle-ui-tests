@@ -426,6 +426,7 @@ export class Analysis extends Application {
     }
 
     waitStatusChange(newStatus: string) {
+        Application.open();
         cy.get(tdTag, { log: false })
             .contains(this.name, { log: false })
             .closest(trTag, { log: false })
