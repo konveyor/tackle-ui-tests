@@ -9,7 +9,7 @@ import { Dependencies } from "../../../../models/migration/dynamic-report/depend
 
 describe(["@tier3"], "Dependencies sort validations", function () {
     let application: Analysis;
-    const sortByList = ["Dependency name", "Labels", "Found in"];
+    const sortByList = ["Dependency name", "Language", "Found in"];
 
     before("Load data", function () {
         login();
