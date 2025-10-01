@@ -16,11 +16,18 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { getRandomCredentialsData } from "../../../../utils/data_utils";
-import { getRandomAnalysisData, getRandomApplicationData, login } from "../../../../utils/utils";
+import {
+    click,
+    getRandomAnalysisData,
+    getRandomApplicationData,
+    login,
+} from "../../../../utils/utils";
 import { Credentials } from "../../../models/administration/credentials/credentials";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
-import { CredentialType, SEC, tdTag, trTag, UserCredentials } from "../../../types/constants";
+import { CredentialType, trTag, UserCredentials } from "../../../types/constants";
+import { sideKebabMenu } from "../../../views/applicationinventory.view";
+
 let source_credential: CredentialsSourceControlUsername;
 let application: Analysis;
 
@@ -49,12 +56,16 @@ describe(["@tier3"], "Validation of credentials being used by app", () => {
         application.create();
         application.manageCredentials(source_credential.name);
         Credentials.openList();
-        cy.get(tdTag, { timeout: 120 * SEC })
-            .contains(source_credential.name, { timeout: 120 * SEC })
+
+        cy.contains(source_credential.name)
             .closest(trTag)
             .within(() => {
-                cy.get("#delete-button").should("have.class", "pf-m-aria-disabled");
+                click(sideKebabMenu);
             });
+        cy.get("ul")
+            .contains("span", "Delete")
+            .closest("li")
+            .should("have.class", "pf-m-aria-disabled");
     });
 
     after("Cleanup", () => {
