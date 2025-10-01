@@ -45,6 +45,7 @@ import { Stakeholdergroups } from "../../models/migration/controls/stakeholdergr
 import { Stakeholders } from "../../models/migration/controls/stakeholders";
 import { TagCategory } from "../../models/migration/controls/tagcategory";
 import {
+    AnalysisStatuses,
     cloudReadinessQuestionnaire,
     legacyPathfinder,
     ReportTypeSelectors,
@@ -62,7 +63,7 @@ function processApplication(application: Analysis): void {
     application.extractHTMLReport();
     // Post upgrade: Re-run analysis on an app that was analyzed before upgrade
     application.analyze();
-    application.waitStatusChange("In-progress");
+    application.waitStatusChange(AnalysisStatuses.inProgress);
     application.verifyAnalysisStatus("Completed");
     application.downloadReport(ReportTypeSelectors.HTML);
     application.extractHTMLReport();
