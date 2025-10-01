@@ -47,7 +47,7 @@ describe(["@tier2"], "Gradle Analysis", () => {
     });
 
     // Automates TC 532
-    it("Analysis for Gradle JMH application", function () {
+    it("Bug MTA-6211: Analysis for Gradle JMH application", function () {
         const application = new Analysis(
             getRandomApplicationData("JMH Gradle", {
                 sourceData: this.appData["jmh-gradle-example"],
@@ -68,7 +68,7 @@ describe(["@tier2"], "Gradle Analysis", () => {
     });
 
     // Automates TC 546
-    it("Analysis for Gradle JMH application with Open Source libraries", function () {
+    it("Bug MTA-6211: Analysis for Gradle JMH application with Open Source libraries", function () {
         const application = new Analysis(
             getRandomApplicationData("JMH Gradle OS libs", {
                 sourceData: this.appData["jmh-gradle-example"],
