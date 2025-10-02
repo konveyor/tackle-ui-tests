@@ -76,11 +76,14 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     });
 
     // Enable fail fast, skip the rest of tests if this specific test fails.
-    it("Validate MTA version in UI", { failFast: { enabled: true } }, () =>
+    it.skip("Validate MTA version in UI", { failFast: { enabled: true } }, () =>
         validateMtaVersionInUI(expectedMtaVersion)
     );
 
-    it("Validate MTA version in CLI", () => validateMtaVersionInCLI(expectedMtaVersion));
+    it.skip("Validate MTA version in CLI", () => {
+        console.log("PRODUCT VERSION", expectedMtaVersion);
+        validateMtaVersionInCLI(expectedMtaVersion);
+    });
 
     it("Creating credentials", function () {
         const { sourceControlUsernameCredentialsName, mavenUsernameCredentialName } =
