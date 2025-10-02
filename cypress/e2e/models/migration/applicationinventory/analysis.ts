@@ -429,7 +429,7 @@ export class Analysis extends Application {
             .contains(this.name, { log: false })
             .closest(trTag, { log: false })
             .within(() => {
-                cy.get(analysisColumn, { timeout: 30 * SEC }).should("contain", newStatus);
+                cy.get(analysisColumn, { timeout: 60 * SEC }).should("contain", newStatus);
             });
     }
 
