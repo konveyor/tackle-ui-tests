@@ -17,6 +17,7 @@ import {
     cancelForm,
     click,
     clickByText,
+    clickItemInKebabMenu,
     inputText,
     selectFormItems,
     selectItemsPerPage,
@@ -26,9 +27,17 @@ import {
 import { administration, SEC } from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
+import * as sourcePlatform from "../../../views/source-platform.view";
+
+export interface SourcePlatform {
+    name: string;
+    type: string;
+    url: string;
+    credentials?: string;
+}
 
 export class SourcePlatform {
-    constructor(name: string, type: string, url: string, credentials: string) {
+    constructor(name: string, type: string, url: string, credentials?: string) {
         this.name = name;
         this.type = type;
         this.url = url;
@@ -58,19 +67,19 @@ export class SourcePlatform {
     }
 
     protected fillName(name: string): void {
-        inputText(sourceplatform.name, name);
+        inputText(sourcePlatform.name, name);
     }
 
-    protected selectType(type: string[]): void {
-        selectFormItems(sourceplatform.name, type);
+    protected selectType(type: string): void {
+        selectFormItems(sourcePlatform.type, type);
     }
 
     protected fillUrl(url: string): void {
-        inputText(sourceplatform.url, url);
+        inputText(sourcePlatform.url, url);
     }
 
-    protected selectCredentials(credentials: string[]): void {
-        selectFormItems(sourceplatform.credentials, credentials);
+    protected selectCredentials(credentials: string): void {
+        selectFormItems(sourcePlatform.credentials, credentials);
     }
 
     create(cancel = false): void {
@@ -95,7 +104,7 @@ export class SourcePlatform {
 
     delete(cancel = false): void {
         SourcePlatform.open();
-        clickKebabMenuOption(this.name, "Delete");
+        clickItemInKebabMenu(this.name, "Delete");
         if (cancel) {
             cancelForm();
         } else click(commonView.confirmButton);

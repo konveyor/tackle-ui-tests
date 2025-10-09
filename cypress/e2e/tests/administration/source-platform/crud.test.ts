@@ -22,34 +22,37 @@ import { SourcePlatform } from "../../../models/administration/source-platform/s
 import { CredentialType, UserCredentials } from "../../../types/constants";
 import { successAlertMessage } from "../../../views/common.view";
 
-let sourceCredential: CredentialsSourceControlUsername;
+let cloudFoundryCreds: CredentialsSourceControlUsername;
 
 describe(["@tier2"], "Source platform CRUD operations", () => {
     before("Login", function () {
         login();
         cy.visit("/");
-        sourceCredential = new CredentialsSourceControlUsername(
+        cloudFoundryCreds = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
                 UserCredentials.usernamePassword,
+                false,
+                null,
+                null,
                 true
             )
         );
-        sourceCredential.create();
+        cloudFoundryCreds.create();
     });
 
     it("Cloud Foundry Source platform crud tests", function () {
         const platform = new SourcePlatform(
             data.getRandomWord(8),
             "Cloud Foundry",
-            url,
-            sourceCredential.name
+            "https://api.bosh-lite.com",
+            cloudFoundryCreds.name
         );
 
         platform.create();
         checkSuccessAlert(
             successAlertMessage,
-            `Success alert:Source Platform ${platform.name} was successfully created.`,
+            `Success alert:Source platform ${platform.name} was successfully created.`,
             true
         );
         exists(platform.name);
@@ -59,6 +62,6 @@ describe(["@tier2"], "Source platform CRUD operations", () => {
     });
 
     after("Clear test data", function () {
-        sourceCredential.delete();
+        cloudFoundryCreds.delete();
     });
 });
