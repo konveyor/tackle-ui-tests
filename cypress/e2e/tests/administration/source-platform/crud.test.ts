@@ -26,6 +26,19 @@ let cloudFoundryCreds: CredentialsSourceControlUsername;
 
 describe(["@tier2"], "Source platform CRUD operations", () => {
     before("Login", function () {
+        if (
+            !Cypress.env("cloudfoundry_user") ||
+            !Cypress.env("cloudfoundry_password") ||
+            !Cypress.env("cloudfoundry_url")
+        ) {
+            expect(
+                true,
+                `
+                One or more required Cloud Foundry env variables are missing in cypress.config.ts :
+                \ncloudfoundry_user\ncloudfoundry_password\ncloudfoundry_url
+                `
+            ).to.eq(false);
+        }
         login();
         cy.visit("/");
         cloudFoundryCreds = new CredentialsSourceControlUsername(

@@ -36,7 +36,7 @@ export interface SourcePlatform {
     credentials?: string;
 }
 
-export class SourcePlatform {
+export class SourcePlatform implements SourcePlatform {
     constructor(name: string, type: string, url: string, credentials?: string) {
         this.name = name;
         this.type = type;
@@ -57,7 +57,7 @@ export class SourcePlatform {
         }
 
         cy.url().then(($url) => {
-            if ($url != SourcePlatform.fullUrl) {
+            if ($url !== SourcePlatform.fullUrl) {
                 selectUserPerspective(administration);
                 clickByText(navMenu, "Source platforms");
                 cy.get("h1", { timeout: 60 * SEC }).should("contain", "Source platforms");
@@ -98,8 +98,8 @@ export class SourcePlatform {
             this.selectType(this.type);
             this.fillUrl(this.url);
             if (this.credentials) this.selectCredentials(this.credentials);
+            submitForm();
         }
-        submitForm();
     }
 
     delete(cancel = false): void {
