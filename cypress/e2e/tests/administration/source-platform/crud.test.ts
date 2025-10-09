@@ -43,9 +43,9 @@ describe(["@tier2"], "Source platform CRUD operations", () => {
 
     it("Cloud Foundry Source platform crud tests", function () {
         const platform = new SourcePlatform(
-            data.getRandomWord(8),
+            "CF-" + data.getRandomNumber(1, 200),
             "Cloud Foundry",
-            "https://api.bosh-lite.com",
+            Cypress.env("cloudfoundry_url"),
             cloudFoundryCreds.name
         );
 
