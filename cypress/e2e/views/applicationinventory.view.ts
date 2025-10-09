@@ -58,9 +58,9 @@ export const appSelectionButton = "button.pf-v5-c-menu-toggle__button";
 export const sideKebabMenu = "button[aria-label='Kebab toggle']";
 
 //Fields related to analysis - source mode
-export const sourceRepository = "input[name=sourceRepository]";
-export const branch = "input[name=branch]";
-export const rootPath = "input[name=rootPath]";
+export const sourceRepository = "input[id=sourceRepository]";
+export const branch = "input[id=branch]";
+export const rootPath = "input[id=rootPath]";
 
 //Fields related to analysis - binary mode
 export const group = "input[name=group]";
