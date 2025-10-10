@@ -24,20 +24,15 @@ import { successAlertMessage } from "../../../views/common.view";
 
 let cloudFoundryCreds: CredentialsSourceControlUsername;
 
-describe(["@tier2"], "Source platform CRUD operations", () => {
+describe(["@tier2"], "CRUD operations on Cloud Foundry Source platform", () => {
     before("Login", function () {
         if (
             !Cypress.env("cloudfoundry_user") ||
             !Cypress.env("cloudfoundry_password") ||
             !Cypress.env("cloudfoundry_url")
         ) {
-            expect(
-                true,
-                `
-                One or more required Cloud Foundry env variables are missing in cypress.config.ts :
-                \ncloudfoundry_user\ncloudfoundry_password\ncloudfoundry_url
-                `
-            ).to.eq(false);
+            throw new Error(`One or more required Cloud Foundry env variables are missing in cypress.config.ts :
+            \ncloudfoundry_user\ncloudfoundry_password\ncloudfoundry_url`);
         }
         login();
         cy.visit("/");
@@ -54,7 +49,7 @@ describe(["@tier2"], "Source platform CRUD operations", () => {
         cloudFoundryCreds.create();
     });
 
-    it("Cloud Foundry Source platform crud tests", function () {
+    it("Perform CRUD Tests on Cloud Foundry Source platform", function () {
         const platform = new SourcePlatform(
             "CF-" + data.getRandomNumber(1, 200),
             "Cloud Foundry",

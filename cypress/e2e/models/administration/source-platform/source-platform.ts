@@ -29,14 +29,12 @@ import * as commonView from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
 import * as sourcePlatform from "../../../views/source-platform.view";
 
-export interface SourcePlatform {
+export class SourcePlatform {
     name: string;
     type: string;
     url: string;
     credentials?: string;
-}
 
-export class SourcePlatform implements SourcePlatform {
     constructor(name: string, type: string, url: string, credentials?: string) {
         this.name = name;
         this.type = type;
@@ -85,12 +83,9 @@ export class SourcePlatform implements SourcePlatform {
     create(cancel = false): void {
         SourcePlatform.open();
         cy.contains("button", "Create new platform", { timeout: 20000 })
-            .should(($btn) => {
-                // Wait until the button is enabled and visible
-                expect($btn).to.be.visible;
-                expect($btn).not.to.be.disabled;
-            })
-            .click({ force: true });
+            .should("be.visible")
+            .and("not.be.disabled")
+            .click();
         if (cancel) {
             cancelForm();
         } else {
@@ -102,6 +97,7 @@ export class SourcePlatform implements SourcePlatform {
         }
     }
 
+    // TODO: Add update method and corresponding test
     delete(cancel = false): void {
         SourcePlatform.open();
         clickItemInKebabMenu(this.name, "Delete");
