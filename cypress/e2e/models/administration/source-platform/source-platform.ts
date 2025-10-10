@@ -29,14 +29,12 @@ import * as commonView from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
 import * as sourcePlatform from "../../../views/source-platform.view";
 
-export interface SourcePlatform {
+export class SourcePlatform {
     name: string;
     type: string;
     url: string;
     credentials?: string;
-}
 
-export class SourcePlatform implements SourcePlatform {
     constructor(name: string, type: string, url: string, credentials?: string) {
         this.name = name;
         this.type = type;

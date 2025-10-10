@@ -24,7 +24,7 @@ import { successAlertMessage } from "../../../views/common.view";
 
 let cloudFoundryCreds: CredentialsSourceControlUsername;
 
-describe(["@tier2"], "Source platform CRUD operations", () => {
+describe(["@tier2"], "CRUD operations on Cloud Foundry Source platform", () => {
     before("Login", function () {
         if (
             !Cypress.env("cloudfoundry_user") ||
@@ -54,7 +54,7 @@ describe(["@tier2"], "Source platform CRUD operations", () => {
         cloudFoundryCreds.create();
     });
 
-    it("Cloud Foundry Source platform crud tests", function () {
+    it("Perform CRUD Tests on Cloud Foundry Source platform", function () {
         const platform = new SourcePlatform(
             "CF-" + data.getRandomNumber(1, 200),
             "Cloud Foundry",
