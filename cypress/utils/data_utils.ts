@@ -134,7 +134,8 @@ export function getRandomCredentialsData(
     userCred?: string,
     useTestingAccount = false,
     url?: string,
-    isDefault?: boolean
+    isDefault?: boolean,
+    isCloudFoundry?: boolean
 ): CredentialsData {
     let password = getRandomWord(6);
     let user = getRandomWord(6);
@@ -194,6 +195,9 @@ export function getRandomCredentialsData(
                 key: "gpgkey",
                 passphrase: getRandomWord(6),
             };
+        } else if (isCloudFoundry) {
+            user = Cypress.env("cloudfoundry_user");
+            password = Cypress.env("cloudfoundry_password");
         } else {
             // Source Control - username and password
             if (useTestingAccount) {
@@ -208,15 +212,16 @@ export function getRandomCredentialsData(
                     cy.log("No password specified, using generated password");
                 }
             }
-            return {
-                type: type,
-                name: getRandomWord(6),
-                description: getDescription(),
-                username: user,
-                password: password,
-                isDefault: isDefault,
-            };
         }
+
+        return {
+            type: type,
+            name: getRandomWord(6),
+            description: getDescription(),
+            username: user,
+            password: password,
+            isDefault: isDefault,
+        };
     } else {
         // Maven credentials
         if (useTestingAccount) {

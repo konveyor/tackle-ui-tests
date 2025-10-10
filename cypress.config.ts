@@ -28,6 +28,9 @@ export default defineConfig({
         jira_atlassian_cloud_url: "",
         jira_atlassian_cloud_project: "Test",
         jira_stage_datacenter_project_id: 12335626,
+        cloudfoundry_user: "",
+        cloudfoundry_password: "",
+        cloudfoundry_url: "https://api.bosh-lite.com",
         rwx_enabled: true,
         logLevel: "INFO", // VERBOSE, INFO, ASSERT, ERROR
         mtaVersion: "",
