@@ -61,7 +61,7 @@ describe(["@tier3"], "Reports Tab filter validations", function () {
         AssessmentQuestionnaire.disable(cloudNative);
     });
 
-    it("Bug MTA-5846: Filter landscape by questionnaire", function () {
+    it("MTA-6262: Filter landscape by questionnaire", function () {
         Reports.open(100);
         Reports.verifyRisk(1, 1, 0, 0, "2");
         selectFromDropListByText(landscapeFilterDropdown, legacyPathfinder);
@@ -71,7 +71,7 @@ describe(["@tier3"], "Reports Tab filter validations", function () {
     });
 
     identifiedRisksFilterValidations.forEach((validation) => {
-        it(`Bug MTA-5846: Filtering identified risks by ${validation.name}`, function () {
+        it(`Filtering identified risks by ${validation.name}`, function () {
             Reports.open(100);
             applySelectFilter(validation.id, new RegExp(`^${validation.name}$`), validation.text);
             exists(validation.should);
