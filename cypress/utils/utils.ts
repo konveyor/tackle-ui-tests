@@ -31,6 +31,7 @@ import { TagCategory } from "../e2e/models/migration/controls/tagcategory";
 import { Tag } from "../e2e/models/migration/controls/tags";
 import { MigrationWave } from "../e2e/models/migration/migration-waves/migration-wave";
 import {
+    appInventoryKebab,
     applicationInventory,
     button,
     confidence,
@@ -750,7 +751,7 @@ export function navigate_to_application_inventory(): void {
 }
 
 export function application_inventory_kebab_menu(menu: string): void {
-    // The value for menu could be one of {Import, Manage imports, Delete, Manage credentials}
+    // The value for menu could be one of {Import, Manage application imports, Delete, Manage credentials}
     navigate_to_application_inventory();
 
     cy.get(applicationsActionButton, { timeout: 60 * SEC })
@@ -773,8 +774,8 @@ export function application_inventory_kebab_menu(menu: string): void {
 }
 
 export function openManageImportsPage(): void {
-    // Opens the manage import applications page
-    application_inventory_kebab_menu("Manage imports");
+    // Opens the Manage application imports page
+    application_inventory_kebab_menu(appInventoryKebab.manageImports);
     cy.wait(5 * SEC)
         .get("h1", { timeout: 5 * SEC })
         .contains("Application imports");

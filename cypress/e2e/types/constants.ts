@@ -244,3 +244,7 @@ export enum TaskFilter {
     kind = "Kind",
     createdBy = "Created By",
 }
+
+export enum appInventoryKebab {
+    manageImports = "Manage application imports",
+}
