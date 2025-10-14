@@ -1520,9 +1520,7 @@ export function autoPageChangeValidations(columnName = "Name"): void {
     goToLastPage();
     deleteAllRows();
     // Verify that page is re-directed to previous page
-    cy.get(`td[data-label='${columnName}']`).then(($rows) => {
-        cy.wrap($rows.length).should("eq", 10);
-    });
+    cy.get(`td[data-label='${columnName}']`, { timeout: 10000 }).should("have.length", 10);
 }
 
 export function goToLastPage(): void {
