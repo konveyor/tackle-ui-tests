@@ -15,7 +15,13 @@ limitations under the License.
 */
 
 import { clickByText, selectItemsPerPage, selectUserPerspective } from "../../../../utils/utils";
-import { applicationInventory, button, migration, SEC } from "../../../types/constants";
+import {
+    appInventoryKebab,
+    applicationInventory,
+    button,
+    migration,
+    SEC,
+} from "../../../types/constants";
 import { applicationsActionButton } from "../../../views/applicationinventory.view";
 import { manageImportsActionsButton } from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
@@ -36,7 +42,7 @@ export class ManageImports {
                 selectUserPerspective(migration);
                 clickByText(navMenu, applicationInventory);
                 cy.get(applicationsActionButton).click({ force: true });
-                clickByText(button, "Manage imports");
+                clickByText(button, appInventoryKebab.manageImports);
                 cy.wait(5 * SEC)
                     .get("h1", { timeout: 5 * SEC })
                     .contains("Application imports");

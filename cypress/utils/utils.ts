@@ -712,7 +712,7 @@ export function notExistsWithinRow(
 
 export function importApplication(fileName: string, disableAutoCreation?: boolean): void {
     // Performs application import via csv file upload
-    application_inventory_kebab_menu("Import");
+    application_inventory_kebab_menu(appInventoryKebab.import);
     cy.get('input[type="file"]', { timeout: 2 * SEC }).selectFile(`cypress/fixtures/${fileName}`, {
         timeout: 120 * SEC,
         force: true,
