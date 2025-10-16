@@ -213,7 +213,7 @@ describe(["@tier2"], "Application validations", () => {
         tag.delete();
     });
 
-    it("Bug MTA-6105 Update and validate application profile details", function () {
+    it("Bug MTA-6263 Update and validate application profile details", function () {
         let appdata = {
             name: data.getAppName(),
             description: data.getDescription(),
