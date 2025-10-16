@@ -86,7 +86,7 @@ describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
         migrationWave.edit({ name: newName });
         checkSuccessAlert(
             successAlertMessage,
-            "Success alert:Migration wave was successfully saved.",
+            `Success alert:Migration wave ${newName} was successfully saved.`,
             true
         );
         cy.wait("@putWave");
