@@ -249,3 +249,8 @@ export enum appInventoryKebab {
     manageImports = "Manage application imports",
     import = "Import applications from CSV",
 }
+
+export enum DefaultCredentialFilter {
+    default = "Default",
+    notDefault = "Not Default",
+}

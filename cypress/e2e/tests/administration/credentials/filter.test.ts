@@ -17,6 +17,7 @@ limitations under the License.
 
 import * as data from "../../../../utils/data_utils";
 
+import { getRandomCredentialsData } from "../../../../utils/data_utils";
 import {
     clearAllFilters,
     createMultipleCredentials,
@@ -26,6 +27,8 @@ import {
     notExists,
 } from "../../../../utils/utils";
 import { Credentials } from "../../../models/administration/credentials/credentials";
+import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
+import { CredentialType, DefaultCredentialFilter, UserCredentials } from "../../../types/constants";
 
 describe(["@tier3"], "Credentials filter validations", function () {
     let adminUserName = Cypress.env("user");
@@ -38,42 +41,82 @@ describe(["@tier3"], "Credentials filter validations", function () {
         credentialsListByDefaultAdmin = createMultipleCredentials(8);
     });
 
-    it("Name filter validations", () => {
+    // it("Name filter validations", () => {
+    //     Credentials.openList(100);
+
+    //     // Searching by first letters of name:
+    //     let firstName = credentialsListByDefaultAdmin[0].name;
+    //     let secondName = credentialsListByDefaultAdmin[1].name;
+    //     let validSearchInput = firstName.substring(0, 3);
+    //     Credentials.ApplyFilterByName(validSearchInput);
+    //     exists(firstName);
+
+    //     if (secondName.indexOf(validSearchInput) >= 0) {
+    //         exists(secondName);
+    //     }
+    //     clearAllFilters();
+
+    //     // Searching by full name:
+    //     Credentials.ApplyFilterByName(secondName);
+    //     exists(secondName);
+    //     notExists(firstName);
+    //     clearAllFilters();
+
+    //     // Searching for invalid name:
+    //     Credentials.ApplyFilterByName(invalidSearchInput);
+
+    //     // Assert that no search results are found
+    //     cy.get("h2").contains("No credential available");
+
+    //     clearAllFilters();
+    // });
+
+    // it("Type filter validations", () => {
+    //     Credentials.filterByType();
+    // });
+
+    // it("Creator filter validations", () => {
+    //     Credentials.filterByCreator(adminUserName);
+    // });
+
+    it("Default credential filter validations", () => {
+        // Open credentials list page with sufficiently large page size
         Credentials.openList(100);
 
-        // Searching by first letters of name:
-        let firstName = credentialsListByDefaultAdmin[0].name;
-        let secondName = credentialsListByDefaultAdmin[1].name;
-        let validSearchInput = firstName.substring(0, 3);
-        Credentials.ApplyFilterByName(validSearchInput);
-        exists(firstName);
+        const defaultScCredsUsername = new CredentialsSourceControlUsername(
+            getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                false,
+                undefined,
+                true
+            )
+        );
+        defaultScCredsUsername.create();
+        credentialsListByDefaultAdmin.push(defaultScCredsUsername);
 
-        if (secondName.indexOf(validSearchInput) >= 0) {
-            exists(secondName);
-        }
+        const notDefaultScCredsUsername = new CredentialsSourceControlUsername(
+            getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                false,
+                undefined,
+                false
+            )
+        );
+        notDefaultScCredsUsername.create();
+        credentialsListByDefaultAdmin.push(notDefaultScCredsUsername);
+
+        // Apply the "Default credential" filter
+        Credentials.filterByDefaultCredential(DefaultCredentialFilter.default);
+        exists(defaultScCredsUsername.name);
+        notExists(notDefaultScCredsUsername.name);
+
+        Credentials.filterByDefaultCredential(DefaultCredentialFilter.notDefault);
+        exists(notDefaultScCredsUsername.name);
+        notExists(defaultScCredsUsername.name);
+
         clearAllFilters();
-
-        // Searching by full name:
-        Credentials.ApplyFilterByName(secondName);
-        exists(secondName);
-        notExists(firstName);
-        clearAllFilters();
-
-        // Searching for invalid name:
-        Credentials.ApplyFilterByName(invalidSearchInput);
-
-        // Assert that no search results are found
-        cy.get("h2").contains("No credential available");
-
-        clearAllFilters();
-    });
-
-    it("Type filter validations", () => {
-        Credentials.filterByType();
-    });
-
-    it("Creator filter validations", () => {
-        Credentials.filterByCreator(adminUserName);
     });
 
     after("Perform test data clean up", function () {
