@@ -6,7 +6,7 @@
         "Top action menu": {
             "Not available": false,
             "Import": true,
-            "Manage imports": true,
+            "Manage application imports": true,
             "Manage credentials": true,
             "Delete": true
         },
@@ -28,7 +28,7 @@
         "Top action menu": {
             "Not available": true,
             "Import": false,
-            "Manage imports": false,
+            "Manage application imports": false,
             "Manage credentials": false,
             "Delete": false
         },

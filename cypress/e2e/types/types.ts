@@ -148,7 +148,7 @@ export type RbacValidationRules = {
     "Top action menu"?: {
         "Not available": boolean;
         Import?: boolean;
-        "Manage imports"?: boolean;
+        "Manage application imports"?: boolean;
         "Manage credentials"?: boolean;
         Delete?: boolean;
     };
