@@ -23,8 +23,8 @@ import {
     clickWithin,
     clickWithinByText,
     doesExistSelector,
-    doesExistText,
     inputText,
+    matchText,
     next,
     selectAnalysisMode,
     selectCheckBox,
@@ -37,6 +37,7 @@ import {
     AnalysisStatuses,
     analyzeAppButton,
     analyzeButton,
+    appInventoryKebab,
     button,
     clearAllFilters,
     Languages,
@@ -495,13 +496,13 @@ export class Analysis extends Application {
                 .within(() => {
                     clickWithin(kebabTopMenuButton, button);
                 });
-            doesExistText("Import", rbacRules["Top action menu"]["Import"]);
-            doesExistText(
-                "Manage application imports",
+            matchText(appInventoryKebab.import, rbacRules["Top action menu"]["Import"]);
+            matchText(
+                appInventoryKebab.manageImports,
                 rbacRules["Top action menu"]["Manage application imports"]
             );
-            doesExistText("Manage credentials", rbacRules["Top action menu"]["Manage credentials"]);
-            doesExistText("Delete", rbacRules["Top action menu"]["Delete"]);
+            matchText("Manage credentials", rbacRules["Top action menu"]["Manage credentials"]);
+            matchText("Delete", rbacRules["Top action menu"]["Delete"]);
         }
     }
 

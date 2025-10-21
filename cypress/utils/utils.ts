@@ -1599,6 +1599,11 @@ export function doesExistButton(str: string, toBePresent: boolean): void {
     cy.contains(button, str).should(toBePresent ? "exist" : "not.exist");
 }
 
+export function matchText(str: string, toBePresent: boolean): void {
+    const escapedStr = str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    cy.contains(new RegExp(`^${escapedStr}$`)).should(toBePresent ? "exist" : "not.exist");
+}
+
 export function enableSwitch(selector: string): void {
     cy.get(selector)
         .parent("label")
