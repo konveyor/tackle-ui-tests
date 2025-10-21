@@ -290,9 +290,9 @@ export function selectFromDropList(dropList, item: string) {
     click(item);
 }
 
-export function selectFromDropListByText(droplist, item: string) {
-    click(droplist);
-    clickByText(button, item);
+export function selectFromDropListByText(droplistId, itemText: string, itemLocator = button) {
+    click(droplistId);
+    clickByText(itemLocator, itemText);
 }
 
 export function selectFormItems(fieldId: string, item: string): void {

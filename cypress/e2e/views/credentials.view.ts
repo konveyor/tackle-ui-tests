@@ -31,6 +31,7 @@ export const filterCatDefaultCredential = "#filter-category-";
 export const searchButton = "#search-button";
 export const modalBoxBody = "#confirm-dialog";
 export const defaultIcon = "svg.pf-v5-svg";
+export const filterItemTextSelector = "span.pf-v5-c-menu__item-text";
 export enum credLabels {
     name = 'td[data-label="Name"]',
     description = 'td[data-label="Description"]',

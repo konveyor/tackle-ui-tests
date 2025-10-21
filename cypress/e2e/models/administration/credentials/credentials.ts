@@ -50,6 +50,7 @@ import {
     filterCategory,
     filterCatType,
     filteredBy,
+    filterItemTextSelector,
     filterSelectType,
     isDefaultCheckbox,
     modalBoxBody,
@@ -237,9 +238,9 @@ export class Credentials {
         click(searchButton);
     }
 
-    static applyFilterDefaultCredential(value: string) {
+    static applyFilterDefaultCredential(value: DefaultCredentialFilter) {
         selectFromDropList(filteredBy, filterCatDefaultCredential);
-        selectFromDropListByText(filterSelectType, value);
+        selectFromDropListByText(filterSelectType, value, filterItemTextSelector);
     }
 
     static filterByType(): void {
