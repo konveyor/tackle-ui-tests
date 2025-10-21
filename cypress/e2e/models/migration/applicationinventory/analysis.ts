@@ -496,7 +496,10 @@ export class Analysis extends Application {
                     clickWithin(kebabTopMenuButton, button);
                 });
             doesExistText("Import", rbacRules["Top action menu"]["Import"]);
-            doesExistText("Manage imports", rbacRules["Top action menu"]["Manage imports"]);
+            doesExistText(
+                "Manage application imports",
+                rbacRules["Top action menu"]["Manage application imports"]
+            );
             doesExistText("Manage credentials", rbacRules["Top action menu"]["Manage credentials"]);
             doesExistText("Delete", rbacRules["Top action menu"]["Delete"]);
         }
