@@ -48,7 +48,7 @@ describe(["@tier2"], "Custom Metrics - Count the total number of initiated tasks
         cy.intercept("GET", "/hub/application*").as("getApplication");
     });
 
-    it("Perform source analysis - Validate the tasks initiated counter increased", function () {
+    it("Bug MTA-6161: Perform source analysis - Validate the tasks initiated counter increased", function () {
         // For source code analysis application must have source code URL git or svn
         metrics.getValue(metricName).then((initialCounter) => {
             const bookServerApp = new Analysis(
