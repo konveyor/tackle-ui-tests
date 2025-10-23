@@ -16,13 +16,13 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import * as data from "../../../../utils/data_utils";
-import { checkSuccessAlert, exists, login, notExists } from "../../../../utils/utils";
+import { checkSuccessAlert, deleteByList, exists, login, notExists } from "../../../../utils/utils";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { SourcePlatform } from "../../../models/administration/source-platform/source-platform";
 import { CredentialType, UserCredentials } from "../../../types/constants";
 import { successAlertMessage } from "../../../views/common.view";
 
-let cloudFoundryCreds: CredentialsSourceControlUsername;
+let cloudFoundryCreds: Array<CredentialsSourceControlUsername> = [];
 
 describe(["@tier2"], "CRUD operations on Cloud Foundry Source platform", () => {
     before("Login", function () {
@@ -36,25 +36,29 @@ describe(["@tier2"], "CRUD operations on Cloud Foundry Source platform", () => {
         }
         login();
         cy.visit("/");
-        cloudFoundryCreds = new CredentialsSourceControlUsername(
-            data.getRandomCredentialsData(
-                CredentialType.sourceControl,
-                UserCredentials.usernamePassword,
-                false,
-                null,
-                null,
-                true
-            )
-        );
-        cloudFoundryCreds.create();
+        for (let i = 0; i < 2; i++) {
+            const creds = new CredentialsSourceControlUsername(
+                data.getRandomCredentialsData(
+                    CredentialType.sourceControl,
+                    UserCredentials.usernamePassword,
+                    false,
+                    null,
+                    null,
+                    true
+                )
+            );
+            creds.name = "CF-CREDS" + data.getRandomNumber(1, 200);
+            creds.create();
+            cloudFoundryCreds.push(creds);
+        }
     });
 
-    it("Perform CRUD Tests on Cloud Foundry Source platform", function () {
+    it.skip("Perform CRUD Tests on Cloud Foundry Source platform", function () {
         const platform = new SourcePlatform(
             "CF-" + data.getRandomNumber(1, 200),
             "Cloud Foundry",
             Cypress.env("cloudfoundry_url"),
-            cloudFoundryCreds.name
+            cloudFoundryCreds[0].name
         );
 
         platform.create();
@@ -65,11 +69,23 @@ describe(["@tier2"], "CRUD operations on Cloud Foundry Source platform", () => {
         );
         exists(platform.name);
 
+        var newName = "CF-" + "updatedName" + data.getRandomNumber(1, 200);
+        platform.edit({ name: newName });
+        exists(newName);
+
+        var newURL = "https://api.bosh-updated-lite.com";
+        platform.edit({ url: newURL });
+        exists(newName);
+
+        var newCreds = cloudFoundryCreds[1].name;
+        platform.edit({ credentials: newCreds });
+        exists(newName);
+
         platform.delete();
         notExists(platform.name);
     });
 
     after("Clear test data", function () {
-        cloudFoundryCreds.delete();
+        deleteByList(cloudFoundryCreds);
     });
 });

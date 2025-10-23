@@ -19,6 +19,7 @@ import {
     clickByText,
     clickItemInKebabMenu,
     inputText,
+    performRowActionByIcon,
     selectFormItems,
     selectItemsPerPage,
     selectUserPerspective,
@@ -85,7 +86,7 @@ export class SourcePlatform {
         cy.contains("button", "Create new platform", { timeout: 20000 })
             .should("be.visible")
             .and("not.be.disabled")
-            .click();
+            .click({ force: true });
         if (cancel) {
             cancelForm();
         } else {
@@ -115,21 +116,22 @@ export class SourcePlatform {
         cancel = false
     ): void {
         SourcePlatform.open();
-        clickItemInKebabMenu(this.name, commonView.pencilAction);
+        performRowActionByIcon(this.name, commonView.pencilAction);
 
         if (cancel) {
             cancelForm();
         } else {
-            if (updatedValues.name && updatedValues.name != this.name) {
+            if (updatedValues.name && updatedValues.name !== this.name) {
                 this.fillName(updatedValues.name);
                 this.name = updatedValues.name;
             }
-            if (updatedValues.url && updatedValues.url != this.url) {
+            if (updatedValues.url && updatedValues.url !== this.url) {
                 this.fillUrl(updatedValues.url);
                 this.url = updatedValues.url;
             }
-            if (updatedValues.credentials && updatedValues.credentials != this.credentials) {
+            if (updatedValues.credentials && updatedValues.credentials !== this.credentials) {
                 this.selectCredentials(updatedValues.credentials);
+                this.credentials = updatedValues.credentials;
             }
             if (updatedValues) {
                 submitForm();
