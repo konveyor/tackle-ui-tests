@@ -105,4 +105,35 @@ export class SourcePlatform {
             cancelForm();
         } else click(commonView.confirmButton);
     }
+
+    edit(
+        updatedValues: {
+            name?: string;
+            url?: string;
+            credentials?: string;
+        },
+        cancel = false
+    ): void {
+        SourcePlatform.open();
+        clickItemInKebabMenu(this.name, commonView.pencilAction);
+
+        if (cancel) {
+            cancelForm();
+        } else {
+            if (updatedValues.name && updatedValues.name != this.name) {
+                this.fillName(updatedValues.name);
+                this.name = updatedValues.name;
+            }
+            if (updatedValues.url && updatedValues.url != this.url) {
+                this.fillUrl(updatedValues.url);
+                this.url = updatedValues.url;
+            }
+            if (updatedValues.credentials && updatedValues.credentials != this.credentials) {
+                this.selectCredentials(updatedValues.credentials);
+            }
+            if (updatedValues) {
+                submitForm();
+            }
+        }
+    }
 }
