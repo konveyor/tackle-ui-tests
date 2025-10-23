@@ -405,10 +405,10 @@ export class Analysis extends Application {
             });
     }
 
-    public static verifyAllAnalysisStatuses(status: string) {
+    public static verifyAllAnalysisStatuses(status: string, timeout = 10 * MIN) {
         cy.log(`Verifying all analysis statuses, expecting ${status}`);
         cy.get(analysisColumn, { log: false }).each(($el) => {
-            Analysis.verifyStatus(cy.wrap($el), status);
+            Analysis.verifyStatus(cy.wrap($el), status, timeout);
         });
     }
 
