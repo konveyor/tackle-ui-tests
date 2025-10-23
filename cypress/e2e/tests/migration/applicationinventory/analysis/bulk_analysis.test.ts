@@ -16,6 +16,8 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    deleteAllMigrationWaves,
+    deleteApplicationTableRows,
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
@@ -35,6 +37,8 @@ describe(["@tier4"], "Bulk analysis and custom metrics afterwards", () => {
     before("Login", function () {
         login();
         cy.visit("/");
+        deleteAllMigrationWaves();
+        deleteApplicationTableRows();
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
                 for (let i = 0; i < NUMBER_OF_APPS; i++) {
