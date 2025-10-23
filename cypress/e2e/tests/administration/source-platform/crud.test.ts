@@ -69,15 +69,15 @@ describe(["@tier2"], "CRUD operations on Cloud Foundry Source platform", () => {
         );
         exists(platform.name);
 
-        var newName = "CF-" + "updatedName" + data.getRandomNumber(1, 200);
+        const newName = "CF-" + "updatedName" + data.getRandomNumber(1, 200);
         platform.edit({ name: newName });
         exists(newName);
 
-        var newURL = "https://api.bosh-updated-lite.com";
+        const newURL = "https://api.bosh-updated-lite.com";
         platform.edit({ url: newURL });
         exists(newName);
 
-        var newCreds = cloudFoundryCreds[1].name;
+        const newCreds = cloudFoundryCreds[1].name;
         platform.edit({ credentials: newCreds });
         exists(newName);
 
