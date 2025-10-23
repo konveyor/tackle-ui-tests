@@ -21,6 +21,7 @@ import {
     button,
     credentials,
     CredentialType,
+    DefaultCredentialFilter,
     deleteAction,
     SEC,
     setAsDefaultAction,
@@ -45,9 +46,11 @@ import {
     defaultIcon,
     descriptionInput,
     filterCatCreatedBy,
+    filterCatDefaultCredential,
     filterCategory,
     filterCatType,
     filteredBy,
+    filterItemTextSelector,
     filterSelectType,
     isDefaultCheckbox,
     modalBoxBody,
@@ -235,6 +238,11 @@ export class Credentials {
         click(searchButton);
     }
 
+    static applyFilterDefaultCredential(value: DefaultCredentialFilter) {
+        selectFromDropList(filteredBy, filterCatDefaultCredential);
+        selectFromDropListByText(filterSelectType, value, filterItemTextSelector);
+    }
+
     static filterByType(): void {
         Credentials.openList();
         /*
@@ -265,6 +273,11 @@ export class Credentials {
                 assert($row.find(credLabels.createdBy), name);
             });
         clearAllFilters();
+    }
+
+    static filterByDefaultCredential(defaultFilter: DefaultCredentialFilter): void {
+        Credentials.openList();
+        Credentials.applyFilterDefaultCredential(defaultFilter);
     }
 
     create(): void {

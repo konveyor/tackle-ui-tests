@@ -17,6 +17,7 @@ limitations under the License.
 
 import * as data from "../../../../utils/data_utils";
 
+import { getRandomCredentialsData } from "../../../../utils/data_utils";
 import {
     clearAllFilters,
     createMultipleCredentials,
@@ -26,6 +27,8 @@ import {
     notExists,
 } from "../../../../utils/utils";
 import { Credentials } from "../../../models/administration/credentials/credentials";
+import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
+import { CredentialType, DefaultCredentialFilter, UserCredentials } from "../../../types/constants";
 
 describe(["@tier3"], "Credentials filter validations", function () {
     let adminUserName = Cypress.env("user");
@@ -74,6 +77,46 @@ describe(["@tier3"], "Credentials filter validations", function () {
 
     it("Creator filter validations", () => {
         Credentials.filterByCreator(adminUserName);
+    });
+
+    it("Default credential filter validations", () => {
+        // Open credentials list page with sufficiently large page size
+        Credentials.openList(100);
+
+        const defaultScCredsUsername = new CredentialsSourceControlUsername(
+            getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                false,
+                undefined,
+                true
+            )
+        );
+        defaultScCredsUsername.create();
+        credentialsListByDefaultAdmin.push(defaultScCredsUsername);
+
+        const notDefaultScCredsUsername = new CredentialsSourceControlUsername(
+            getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                false,
+                undefined,
+                false
+            )
+        );
+        notDefaultScCredsUsername.create();
+        credentialsListByDefaultAdmin.push(notDefaultScCredsUsername);
+
+        // Apply the "Default credential" filter
+        Credentials.filterByDefaultCredential(DefaultCredentialFilter.default);
+        exists(defaultScCredsUsername.name);
+        notExists(notDefaultScCredsUsername.name);
+
+        Credentials.filterByDefaultCredential(DefaultCredentialFilter.notDefault);
+        exists(notDefaultScCredsUsername.name);
+        notExists(defaultScCredsUsername.name);
+
+        clearAllFilters();
     });
 
     after("Perform test data clean up", function () {
