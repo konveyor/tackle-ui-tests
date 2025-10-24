@@ -16,6 +16,8 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import {
+    deleteAllMigrationWaves,
+    deleteApplicationTableRows,
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
@@ -23,7 +25,7 @@ import {
 } from "../../../../../utils/utils";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { Metrics } from "../../../../models/migration/custom-metrics/custom-metrics";
-import { AnalysisStatuses } from "../../../../types/constants";
+import { AnalysisStatuses, MIN } from "../../../../types/constants";
 
 const analyses: Analysis[] = [];
 const NUMBER_OF_APPS = 25;
@@ -35,6 +37,8 @@ describe(["@tier4"], "Bulk analysis and custom metrics afterwards", () => {
     before("Login", function () {
         login();
         cy.visit("/");
+        deleteAllMigrationWaves();
+        deleteApplicationTableRows();
         cy.fixture("application").then((appData) => {
             cy.fixture("analysis").then((analysisData) => {
                 for (let i = 0; i < NUMBER_OF_APPS; i++) {
@@ -60,7 +64,7 @@ describe(["@tier4"], "Bulk analysis and custom metrics afterwards", () => {
 
     it("Bulk analysis and collect metrics afterwards", function () {
         Analysis.analyzeAll(analyses[0]);
-        Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed);
+        Analysis.verifyAllAnalysisStatuses(AnalysisStatuses.completed, NUMBER_OF_APPS * 2 * MIN);
         counter = counter + NUMBER_OF_APPS;
         metrics.validateMetric(metricName, counter);
     });
