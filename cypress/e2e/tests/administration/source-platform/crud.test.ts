@@ -56,7 +56,7 @@ describe(["@tier2"], "CRUD operations on Cloud Foundry Source platform", () => {
     it.skip("Perform CRUD Tests on Cloud Foundry Source platform", function () {
         // TODO : Unskip tests once Infra ticket MTA-6241 is resolved
         const platform = new SourcePlatform(
-            "CF-" + data.getRandomNumber(1, 500),
+            `CF-${data.getRandomNumber(1, 500)}`,
             "Cloud Foundry",
             Cypress.env("cloudfoundry_url"),
             cloudFoundryCreds[0].name
