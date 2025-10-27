@@ -351,7 +351,6 @@ describe(["@tier2"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    // Automates customer bug MTA-2973
     it("Source analysis on tackle app public with custom rule", function () {
         const createApplication = () =>
             new Analysis(
