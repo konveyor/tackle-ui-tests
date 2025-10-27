@@ -83,10 +83,10 @@ export class SourcePlatform {
 
     create(cancel = false): void {
         SourcePlatform.open();
-        cy.contains("button", "Create new platform", { timeout: 20000 })
+        cy.contains("button", "Create new platform", { timeout: 8000 })
             .should("be.visible")
             .and("not.be.disabled")
-            .click({ force: true });
+            .click();
         if (cancel) {
             cancelForm();
         } else {
@@ -98,7 +98,6 @@ export class SourcePlatform {
         }
     }
 
-    // TODO: Add update method and corresponding test
     delete(cancel = false): void {
         SourcePlatform.open();
         clickItemInKebabMenu(this.name, "Delete");
@@ -108,11 +107,11 @@ export class SourcePlatform {
     }
 
     edit(
-        updatedValues: {
-            name?: string;
-            url?: string;
-            credentials?: string;
-        },
+        updatedValues: Partial<{
+            name: string;
+            url: string;
+            credentials: string;
+        }>,
         cancel = false
     ): void {
         SourcePlatform.open();
@@ -120,22 +119,28 @@ export class SourcePlatform {
 
         if (cancel) {
             cancelForm();
-        } else {
-            if (updatedValues.name && updatedValues.name !== this.name) {
-                this.fillName(updatedValues.name);
-                this.name = updatedValues.name;
-            }
-            if (updatedValues.url && updatedValues.url !== this.url) {
-                this.fillUrl(updatedValues.url);
-                this.url = updatedValues.url;
-            }
-            if (updatedValues.credentials && updatedValues.credentials !== this.credentials) {
-                this.selectCredentials(updatedValues.credentials);
-                this.credentials = updatedValues.credentials;
-            }
-            if (updatedValues) {
-                submitForm();
-            }
+            return;
+        }
+
+        const { name, url, credentials } = updatedValues;
+
+        if (name && name !== this.name) {
+            this.fillName(name);
+            this.name = name;
+        }
+
+        if (url && url !== this.url) {
+            this.fillUrl(url);
+            this.url = url;
+        }
+
+        if (credentials && credentials !== this.credentials) {
+            this.selectCredentials(credentials);
+            this.credentials = credentials;
+        }
+
+        if (Object.keys(updatedValues).length > 0) {
+            submitForm();
         }
     }
 }

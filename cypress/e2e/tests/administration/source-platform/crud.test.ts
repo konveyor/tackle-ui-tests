@@ -47,15 +47,16 @@ describe(["@tier2"], "CRUD operations on Cloud Foundry Source platform", () => {
                     true
                 )
             );
-            creds.name = "CF-CREDS" + data.getRandomNumber(1, 200);
+            creds.name = `CF-CREDS-${data.getRandomNumber(1, 500)}`;
             creds.create();
             cloudFoundryCreds.push(creds);
         }
     });
 
     it.skip("Perform CRUD Tests on Cloud Foundry Source platform", function () {
+        // TODO : Unskip tests once Infra ticket MTA-6241 is resolved
         const platform = new SourcePlatform(
-            "CF-" + data.getRandomNumber(1, 200),
+            "CF-" + data.getRandomNumber(1, 500),
             "Cloud Foundry",
             Cypress.env("cloudfoundry_url"),
             cloudFoundryCreds[0].name
@@ -69,7 +70,7 @@ describe(["@tier2"], "CRUD operations on Cloud Foundry Source platform", () => {
         );
         exists(platform.name);
 
-        const newName = "CF-" + "updatedName" + data.getRandomNumber(1, 200);
+        const newName = `CF-updatedName-${data.getRandomNumber(1, 500)}`;
         platform.edit({ name: newName });
         exists(newName);
 
@@ -82,6 +83,11 @@ describe(["@tier2"], "CRUD operations on Cloud Foundry Source platform", () => {
         exists(newName);
 
         platform.delete();
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success alert:Platform ${platform.name} was successfully deleted.`,
+            true
+        );
         notExists(platform.name);
     });
 
