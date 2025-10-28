@@ -57,6 +57,7 @@ export default defineConfig({
         },
     },
     defaultCommandTimeout: 8000,
+    numTestsKeptInMemory: 1,
     e2e: {
         specPattern: "cypress/e2e/tests/**/*.test.{js,jsx,ts,tsx}",
         baseUrl:
