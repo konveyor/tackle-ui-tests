@@ -24,7 +24,6 @@ import {
     clickWithinByText,
     doesExistSelector,
     inputText,
-    matchText,
     next,
     selectAnalysisMode,
     selectCheckBox,
@@ -32,12 +31,13 @@ import {
     sidedrawerTab,
     uploadApplications,
     uploadFile,
+    verifySelectorText,
 } from "../../../../utils/utils";
 import {
     AnalysisStatuses,
     analyzeAppButton,
     analyzeButton,
-    appInventoryKebab,
+    appInventoryKebab as kebab,
     button,
     clearAllFilters,
     Languages,
@@ -87,7 +87,7 @@ import {
     tabsPanel,
 } from "../../../views/analysis.view";
 import { bulkApplicationSelectionCheckBox } from "../../../views/applicationinventory.view";
-import { successAlertMessage } from "../../../views/common.view";
+import { actionMenuItem, successAlertMessage } from "../../../views/common.view";
 import { CustomMigrationTargetView } from "../../../views/custom-migration-target.view";
 import { Application } from "./application";
 
@@ -496,13 +496,26 @@ export class Analysis extends Application {
                 .within(() => {
                     clickWithin(kebabTopMenuButton, button);
                 });
-            matchText(appInventoryKebab.import, rbacRules["Top action menu"]["Import"]);
-            matchText(
-                appInventoryKebab.manageImports,
+            verifySelectorText(
+                kebab.import,
+                actionMenuItem,
+                rbacRules["Top action menu"]["Import"]
+            );
+            verifySelectorText(
+                kebab.manageImports,
+                actionMenuItem,
                 rbacRules["Top action menu"]["Manage application imports"]
             );
-            matchText("Manage credentials", rbacRules["Top action menu"]["Manage credentials"]);
-            matchText("Delete", rbacRules["Top action menu"]["Delete"]);
+            verifySelectorText(
+                kebab.manageCredentials,
+                actionMenuItem,
+                rbacRules["Top action menu"]["Manage credentials"]
+            );
+            verifySelectorText(
+                kebab.delete,
+                actionMenuItem,
+                rbacRules["Top action menu"]["Delete"]
+            );
         }
     }
 

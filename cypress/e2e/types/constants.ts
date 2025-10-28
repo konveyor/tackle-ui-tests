@@ -248,4 +248,6 @@ export enum TaskFilter {
 export enum appInventoryKebab {
     manageImports = "Manage application imports",
     import = "Import applications from CSV",
+    manageCredentials = "Manage credentials",
+    delete = "Delete",
 }
