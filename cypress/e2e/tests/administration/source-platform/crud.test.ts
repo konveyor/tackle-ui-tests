@@ -21,6 +21,7 @@ import { CredentialsSourceControlUsername } from "../../../models/administration
 import { SourcePlatform } from "../../../models/administration/source-platform/source-platform";
 import { CredentialType, UserCredentials } from "../../../types/constants";
 import { successAlertMessage } from "../../../views/common.view";
+import * as selectors from "../../../views/source-platform.view";
 
 let cloudFoundryCreds: Array<CredentialsSourceControlUsername> = [];
 
@@ -76,11 +77,11 @@ describe(["@tier2"], "CRUD operations on Cloud Foundry Source platform", () => {
 
         const newURL = "https://api.bosh-updated-lite.com";
         platform.edit({ url: newURL });
-        exists(newName);
+        cy.get(selectors.url).should("have.value", newURL);
 
         const newCreds = cloudFoundryCreds[1].name;
         platform.edit({ credentials: newCreds });
-        exists(newName);
+        cy.get(selectors.credentials).should("have.value", newCreds);
 
         platform.delete();
         checkSuccessAlert(
