@@ -5,6 +5,9 @@ FROM docker.io/cypress/included:13.13.3
 ENV CYPRESS_CACHE_FOLDER=/tmp/.cache/Cypress
 ENV npm_config_cache=/tmp/.cache/npm
 
+# Install curl
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
 RUN mkdir /tmp/tackle-ui-tests
 WORKDIR /tmp/tackle-ui-tests
 COPY . .
