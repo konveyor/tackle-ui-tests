@@ -202,4 +202,5 @@ Refer to Konveyor's Code of Conduct [here](https://github.com/konveyor/community
 |mta_7.2.0|MTA 7.2.0|
 |release-0.6|MTA 7.2.1|
 |release-0.7|MTA 7.3.0|
+|mta_8.0.0|MTA 8.0.0|
 |main|Upstream development branch|
