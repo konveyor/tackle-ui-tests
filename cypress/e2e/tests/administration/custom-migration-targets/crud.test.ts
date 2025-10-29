@@ -181,7 +181,8 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                 sourceCredential.delete();
             });
 
-            it("Change layout and check in analysis wizard", function () {
+            // Even if this test is marked with a bug it may pass as it depends on internet speed and host performance
+            it("Bug MTA-6287: Change layout and check in analysis wizard", function () {
                 const targetData = this.customMigrationTargets[`${languageLower}_manual_rules`];
                 const target = new CustomMigrationTarget(
                     data.getRandomWord(8),
