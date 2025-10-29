@@ -1599,6 +1599,33 @@ export function doesExistButton(str: string, toBePresent: boolean): void {
     cy.contains(button, str).should(toBePresent ? "exist" : "not.exist");
 }
 
+/**
+ * Verifies that at least one element matching the selector has the exact expected text.
+ * Unlike doesExistText which uses cy.contains() for partial/regex matching,
+ * this function performs exact text comparison on elements selected by a CSS selector.
+ *
+ * @param expectedText - The exact text to match (after trimming whitespace)
+ * @param selector - CSS selector to find elements
+ * @param shouldExist - true to assert text exists, false to assert it doesn't exist
+ */
+export function verifySelectorText(
+    expectedText: string,
+    selector: string,
+    shouldExist: boolean
+): void {
+    cy.get(selector).should(($elements) => {
+        const texts = Array.from($elements).map((el) => el.textContent?.trim() ?? "");
+        const matched = texts.includes(expectedText);
+
+        if (shouldExist) {
+            expect(matched, `Expected one of the elements to have exact text "${expectedText}"`).to
+                .be.true;
+        } else {
+            expect(matched, `Expected no element to have exact text "${expectedText}"`).to.be.false;
+        }
+    });
+}
+
 export function enableSwitch(selector: string): void {
     cy.get(selector)
         .parent("label")
