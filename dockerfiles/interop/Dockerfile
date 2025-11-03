@@ -5,6 +5,16 @@ FROM docker.io/cypress/included:13.13.3
 ENV CYPRESS_CACHE_FOLDER=/tmp/.cache/Cypress
 ENV npm_config_cache=/tmp/.cache/npm
 
+# Install curl and yq
+RUN apt-get update && \
+    apt-get install -y curl && \
+    # Get the architecture (amd64 or arm64) and install yq
+    ARCH=$(dpkg --print-architecture) && \
+    curl -L "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${ARCH}" -o /usr/bin/yq && \
+    chmod +x /usr/bin/yq && \
+    # Clean up
+    rm -rf /var/lib/apt/lists/*
+
 RUN mkdir /tmp/tackle-ui-tests
 WORKDIR /tmp/tackle-ui-tests
 COPY . .
