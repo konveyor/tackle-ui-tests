@@ -5,6 +5,7 @@ import decompress from "decompress";
 import esbuildPreprocessor from "./cypress/support/esbuild-preprocessor";
 const { downloadFile } = require("cypress-downloadfile/lib/addPlugin");
 const { verifyDownloadTasks } = require("cy-verify-downloads");
+const path = require("path");
 
 export default defineConfig({
     viewportWidth: 1920,
@@ -44,7 +45,10 @@ export default defineConfig({
     },
     reporter: "cypress-multi-reporters",
     reporterOptions: {
-        reporterEnabled: "cypress-mochawesome-reporter, mocha-junit-reporter",
+        reporterEnabled: `${path.resolve(
+            process.cwd(),
+            "cypress/reporters/custom-spec-reporter.js"
+        )}, cypress-mochawesome-reporter, mocha-junit-reporter`,
         cypressMochawesomeReporterReporterOptions: {
             reportDir: "cypress/reports",
             charts: true,
