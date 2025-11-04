@@ -276,14 +276,6 @@ function CustomSpecReporter(runner, options) {
 
         Base.consoleLog("  " + "└" + "─".repeat(totalWidth - 2) + "┘");
         Base.consoleLog();
-
-        // Print all known bugs
-        if (totalBugs.size > 0) {
-            Base.consoleLog(
-                "  " + color("pending", `Known Bugs: ${Array.from(totalBugs).join(", ")}`)
-            );
-            Base.consoleLog();
-        }
     }
 
     function truncateSpec(spec, maxLength) {
@@ -312,6 +304,8 @@ function CustomSpecReporter(runner, options) {
         const lines = [];
         const parts = text.split(", ");
         let currentLine = "";
+        let itemsInCurrentLine = 0;
+        const maxItemsPerLine = 2; // Maximum 2 bug IDs per line
 
         for (let i = 0; i < parts.length; i++) {
             const part = parts[i];
@@ -319,11 +313,17 @@ function CustomSpecReporter(runner, options) {
 
             if (currentLine.length === 0) {
                 currentLine = part;
-            } else if ((currentLine + separator + part).length <= maxWidth) {
+                itemsInCurrentLine = 1;
+            } else if (
+                itemsInCurrentLine < maxItemsPerLine &&
+                (currentLine + separator + part).length <= maxWidth
+            ) {
                 currentLine += separator + part;
+                itemsInCurrentLine++;
             } else {
                 lines.push(currentLine);
                 currentLine = part;
+                itemsInCurrentLine = 1;
             }
         }
 
