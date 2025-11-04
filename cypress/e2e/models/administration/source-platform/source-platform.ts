@@ -19,6 +19,7 @@ import {
     clickByText,
     clickItemInKebabMenu,
     inputText,
+    next,
     performRowActionByIcon,
     selectFormItems,
     selectItemsPerPage,
@@ -141,6 +142,20 @@ export class SourcePlatform {
 
         if (Object.keys(updatedValues).length > 0) {
             submitForm();
+        }
+    }
+
+    discover(cancel = false): void {
+        SourcePlatform.open();
+        clickItemInKebabMenu(this.name, "Discover applications");
+        if (cancel) {
+            cancelForm();
+        } else {
+            // Enter app name
+            click("span.pf-v5-c-button__icon pf-m-start");
+            // Enter space name
+            click("span.pf-v5-c-button.pf-m-link");
+            next();
         }
     }
 }
