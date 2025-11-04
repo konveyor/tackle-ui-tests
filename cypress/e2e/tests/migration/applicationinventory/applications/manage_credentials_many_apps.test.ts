@@ -24,7 +24,12 @@ import {
 import { CredentialsMaven } from "../../../../models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
-import { CredentialType, UserCredentials } from "../../../../types/constants";
+import {
+    AnalysisStatuses,
+    CredentialType,
+    MIN,
+    UserCredentials,
+} from "../../../../types/constants";
 let source_credential: CredentialsSourceControlUsername;
 let maven_credential: CredentialsMaven;
 const sourceApplicationsList: Array<Analysis> = [];
@@ -109,7 +114,7 @@ describe(["@tier2"], "Manage credentials source analysis", () => {
         manageCredentialsForMultipleApplications(mavenApplicationsList, maven_credential);
         mavenApplicationsList.forEach((currentApplication) => {
             currentApplication.analyze();
-            currentApplication.verifyAnalysisStatus("Completed");
+            currentApplication.verifyAnalysisStatus(AnalysisStatuses.completed, 30 * MIN);
         });
     });
 
