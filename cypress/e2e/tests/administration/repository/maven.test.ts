@@ -30,7 +30,7 @@ import { CredentialsMaven } from "../../../models/administration/credentials/cre
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { MavenConfiguration } from "../../../models/administration/repositories/maven";
 import { Analysis } from "../../../models/migration/applicationinventory/analysis";
-import { CredentialType, UserCredentials } from "../../../types/constants";
+import { AnalysisStatuses, CredentialType, MIN, UserCredentials } from "../../../types/constants";
 import { clearRepository, repoSize } from "../../../views/repository.view";
 
 let mavenConfiguration = new MavenConfiguration();
@@ -89,7 +89,7 @@ describe(["@tier2"], "Test secure and insecure maven repository analysis", () =>
         cy.wait("@getApplication");
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus(AnalysisStatuses.completed, 30 * MIN);
         cy.wait("@getApplication");
         application.openReport();
     });
@@ -110,7 +110,7 @@ describe(["@tier2"], "Test secure and insecure maven repository analysis", () =>
         cy.wait("@getApplication");
         application.manageCredentials(source_credential.name, maven_credential.name);
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus(AnalysisStatuses.completed, 30 * MIN);
         cy.wait("@getApplication");
         application.openReport();
     });
