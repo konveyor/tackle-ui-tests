@@ -141,12 +141,12 @@ function CustomSpecReporter(runner, options) {
         const maxSpecLength = 45;
         const colWidths = {
             spec: maxSpecLength,
-            tests: 7,
-            passing: 8,
-            failing: 8,
-            pending: 8,
-            skipped: 8,
-            bugCount: 10,
+            tests: 9,
+            passing: 10,
+            failing: 10,
+            pending: 10,
+            skipped: 10,
+            bugCount: 12,
             bugIds: 25,
         };
 
@@ -297,41 +297,13 @@ function CustomSpecReporter(runner, options) {
     }
 
     function wrapText(text, maxWidth) {
-        if (text.length <= maxWidth) {
+        if (text === "-") {
             return [text];
         }
 
-        const lines = [];
+        // Split bug IDs and put one per line
         const parts = text.split(", ");
-        let currentLine = "";
-        let itemsInCurrentLine = 0;
-        const maxItemsPerLine = 2; // Maximum 2 bug IDs per line
-
-        for (let i = 0; i < parts.length; i++) {
-            const part = parts[i];
-            const separator = i < parts.length - 1 ? ", " : "";
-
-            if (currentLine.length === 0) {
-                currentLine = part;
-                itemsInCurrentLine = 1;
-            } else if (
-                itemsInCurrentLine < maxItemsPerLine &&
-                (currentLine + separator + part).length <= maxWidth
-            ) {
-                currentLine += separator + part;
-                itemsInCurrentLine++;
-            } else {
-                lines.push(currentLine);
-                currentLine = part;
-                itemsInCurrentLine = 1;
-            }
-        }
-
-        if (currentLine.length > 0) {
-            lines.push(currentLine);
-        }
-
-        return lines.length > 0 ? lines : [text];
+        return parts.length > 0 ? parts : [text];
     }
 
     function padRight(str, width) {
