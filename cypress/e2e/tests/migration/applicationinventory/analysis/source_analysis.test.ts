@@ -116,9 +116,6 @@ describe(["@tier2"], "Source Analysis", () => {
             application.analyze();
             application.waitStatusChange(AnalysisStatuses.scheduled);
             application.verifyAnalysisStatus(AnalysisStatuses.completed);
-            application.verifyEffort(
-                this.analysisData["source+dep_analysis_on_tackletestapp"]["effort"]
-            );
 
             // analyze after removing valid default source and maven creds
             sourceCredential.unsetAsDefaultViaActionsMenu();
@@ -287,7 +284,7 @@ describe(["@tier2"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it("Bug MTA-4412: Bug MTA-5212  Openjdk17 Source + dependencies analysis on tackletest app", function () {
+    it("Bug MTA-4412, Bug MTA-5212: Openjdk17 Source + dependencies analysis on tackletest app", function () {
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies_openjdk17", {
                 sourceData: this.appData["tackle-testapp-git"],

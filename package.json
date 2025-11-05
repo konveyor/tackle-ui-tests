@@ -52,5 +52,9 @@
     },
     "engines": {
         "node": ">=20.17"
+    },
+    "devDependencies": {
+        "mochawesome-merge": "^5.0.0",
+        "table": "^6.9.0"
     }
 }
