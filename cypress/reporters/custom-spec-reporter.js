@@ -20,6 +20,7 @@ const {
     EVENT_RUN_END,
     EVENT_TEST_FAIL,
     EVENT_TEST_PASS,
+    EVENT_TEST_PENDING,
     EVENT_SUITE_BEGIN,
     EVENT_SUITE_END,
 } = Mocha.Runner.constants;
@@ -89,10 +90,10 @@ function CustomSpecReporter(runner, options) {
 
     runner.on(EVENT_SUITE_END, function () {
         --indents;
-        // Suppress suite end output
-        // if (indents === 1) {
-        //     Base.consoleLog();
-        // }
+        // Reset currentSpec when we've finished processing a spec file
+        if (indents === 0) {
+            currentSpec = null;
+        }
     });
 
     runner.on(EVENT_TEST_PASS, function (test) {
@@ -105,11 +106,6 @@ function CustomSpecReporter(runner, options) {
             const bugs = extractBugIds(test.title);
             bugs.forEach((bug) => stats.knownBugs.add(bug));
         }
-
-        // Suppress individual test output to avoid duplicate
-        // const fmt = indent() + color("checkmark", "  " + Base.symbols.ok) + color("pass", " %s");
-        // cursor.CR();
-        // Base.consoleLog(fmt, test.title);
     });
 
     runner.on(EVENT_TEST_FAIL, function (test) {
@@ -122,10 +118,18 @@ function CustomSpecReporter(runner, options) {
             const bugs = extractBugIds(test.title);
             bugs.forEach((bug) => stats.knownBugs.add(bug));
         }
+    });
 
-        // Suppress individual test output to avoid duplicate
-        // cursor.CR();
-        // Base.consoleLog(indent() + color("fail", "  %d) %s"), ++n, test.title);
+    runner.on(EVENT_TEST_PENDING, function (test) {
+        const stats = specStats.get(currentSpec);
+        if (stats) {
+            stats.tests++;
+            stats.pending++;
+
+            // Extract bug IDs from test title
+            const bugs = extractBugIds(test.title);
+            bugs.forEach((bug) => stats.knownBugs.add(bug));
+        }
     });
 
     runner.on(EVENT_RUN_END, function () {
@@ -289,13 +293,6 @@ function CustomSpecReporter(runner, options) {
         return result;
     }
 
-    function truncate(str, maxLength) {
-        if (str.length > maxLength) {
-            return str.substring(0, maxLength - 3) + "...";
-        }
-        return str;
-    }
-
     function wrapText(text, maxWidth) {
         if (text === "-") {
             return [text];
@@ -309,7 +306,7 @@ function CustomSpecReporter(runner, options) {
     function padRight(str, width) {
         const strValue = String(str);
         // Remove ANSI color codes to calculate the actual visible length
-        const visibleLength = strValue.replace(/\u001b\[\d+m/g, "").length;
+        const visibleLength = strValue.replace(/\x1b\[\d+m/g, "").length;
         const padding = width - visibleLength;
         return strValue + " ".repeat(Math.max(0, padding));
     }
