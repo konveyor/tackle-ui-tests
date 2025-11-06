@@ -5,6 +5,7 @@
         "Upload binary": true,
         "Top action menu": {
             "Not available": false,
+            "Discover applications": true,
             "Import": true,
             "Manage application imports": true,
             "Manage credentials": true,
@@ -27,6 +28,7 @@
         "Upload binary": true,
         "Top action menu": {
             "Not available": true,
+            "Discover applications": false,
             "Import": false,
             "Manage application imports": false,
             "Manage credentials": false,
