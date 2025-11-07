@@ -26,10 +26,12 @@ json.results.forEach((result) => {
         suite.tests.forEach((t) => {
             const s = specs[specName];
             s.total++;
-            if (bugPattern.test(t.title)) {
-                const bugId = t.title.match(bugPattern)[1];
+            const bugMatch = t.title.match(bugPattern);
+            if (bugMatch) {
+                const bugId = bugMatch[1];
                 s.bugs.push(bugId);
             }
+
             switch (t.state) {
                 case "passed":
                     s.passing++;
@@ -61,10 +63,10 @@ sortedSpecs.forEach((spec) => {
                 i === 0 ? spec : "",
                 i === 0 ? s.total : "",
                 i === 0 ? s.passing : "",
-                i === 0 ? red(s.failing) : "",
+                i === 0 ? (s.failing > 0 ? red(s.failing) : s.failing) : "",
                 i === 0 ? s.pending : "",
                 i === 0 ? s.skipped : "",
-                i === 0 ? red(s.bugs.length) : "",
+                i === 0 ? (s.bugs.length > 0 ? red(s.bugs.length) : s.bugs.length) : "",
                 b,
             ]);
         });
@@ -73,10 +75,10 @@ sortedSpecs.forEach((spec) => {
             spec,
             s.total,
             s.passing,
-            red(s.failing),
+            s.failing > 0 ? red(s.failing) : s.failing,
             s.pending,
             s.skipped,
-            red(s.bugs.length),
+            s.bugs.length > 0 ? red(s.bugs.length) : s.bugs.length,
             "-",
         ]);
     }
@@ -95,10 +97,10 @@ rows.push([
     red(`✖ ${totalFailed} of ${totalTests} failed (${percentFailed}%)`),
     "",
     totalPassed,
-    red(totalFailed),
+    totalFailed > 0 ? red(totalFailed) : totalFailed,
     totalPending,
     totalSkipped,
-    red(totalBugs),
+    totalBugs > 0 ? red(totalBugs) : totalBugs,
     "-",
 ]);
 
