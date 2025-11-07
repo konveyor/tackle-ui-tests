@@ -1,98 +1,116 @@
+import chalk from "chalk";
 import { merge } from "mochawesome-merge";
 import { table } from "table";
 
 const bugPattern = /Bug\s+([A-Z]+-\d+)/i;
-const filePattern = process.argv[2] || "cypress/reports/.jsons/*.json";
+const fileArg = process.argv[2] || "cypress/reports/*.json";
 
-// ANSI colors
-const red = (text) => `\x1b[31m${text}\x1b[0m`;
-const green = (text) => `\x1b[32m${text}\x1b[0m`;
+// Merge mochawesome JSON reports
+const json = await merge({ files: [fileArg] });
 
-async function run() {
-    const json = await merge({ files: [filePattern] });
+// Collect and aggregate per-spec data
+const specs = {};
+let totalDuration = 0;
 
-    const specs = {};
-    let totalTests = 0,
-        totalPassing = 0,
-        totalFailing = 0,
-        totalPending = 0,
-        totalSkipped = 0,
-        totalBugs = 0;
+json.results.forEach((result) => {
+    const specName = result.file?.split("/").pop() ?? "unknown";
+    specs[specName] ||= {
+        total: 0,
+        passing: 0,
+        failing: 0,
+        pending: 0,
+        skipped: 0,
+        bugs: [],
+        duration: 0,
+    };
 
-    json.results.forEach((result) => {
-        const specName = result.file?.split("/").pop() ?? "unknown";
-        specs[specName] ||= { total: 0, passing: 0, failing: 0, pending: 0, skipped: 0, bugs: [] };
+    totalDuration += result.stats?.duration ?? 0;
 
-        result.suites.forEach((suite) => {
-            suite.tests.forEach((t) => {
-                const s = specs[specName];
-                s.total++;
-                totalTests++;
+    result.suites.forEach((suite) => {
+        suite.tests.forEach((t) => {
+            const s = specs[specName];
+            s.total++;
+            s.duration += t.duration || 0;
 
-                if (bugPattern.test(t.title)) {
-                    const bugId = t.title.match(bugPattern)[1];
-                    s.bugs.push(bugId);
-                    totalBugs++;
-                }
+            if (bugPattern.test(t.title)) {
+                const bugId = t.title.match(bugPattern)[1];
+                s.bugs.push(bugId);
+            }
 
-                switch (t.state) {
-                    case "passed":
-                        s.passing++;
-                        totalPassing++;
-                        break;
-                    case "failed":
-                        s.failing++;
-                        totalFailing++;
-                        break;
-                    case "pending":
-                        s.pending++;
-                        totalPending++;
-                        break;
-                    case "skipped":
-                        s.skipped++;
-                        totalSkipped++;
-                        break;
-                }
-            });
+            switch (t.state) {
+                case "passed":
+                    s.passing++;
+                    break;
+                case "failed":
+                    s.failing++;
+                    break;
+                case "pending":
+                    s.pending++;
+                    break;
+                case "skipped":
+                    s.skipped++;
+                    break;
+            }
         });
     });
+});
 
-    const rows = [
-        ["Spec", "Tests", "Passing", "Failing", "Pending", "Skipped", "Bug Count", "Bug IDs"],
-    ];
+// Sort specs alphabetically
+const sortedSpecs = Object.entries(specs).sort(([a], [b]) => a.localeCompare(b));
 
-    for (const [spec, s] of Object.entries(specs)) {
-        const bugCell = s.bugs.length ? s.bugs.join("\n") : "-";
-        rows.push([
-            spec,
-            s.total,
-            s.passing,
-            s.failing ? red(s.failing) : s.failing,
-            s.pending,
-            s.skipped,
-            s.bugs.length ? red(s.bugs.length) : 0,
-            bugCell,
-        ]);
-    }
+let total = { total: 0, passing: 0, failing: 0, pending: 0, skipped: 0, bugs: 0 };
+const rows = [
+    ["Spec", "Tests", "Passing", "Failing", "Pending", "Skipped", "Bug Count", "Bug IDs"],
+];
 
-    // Summary row
-    const failedPct = totalTests ? Math.round((totalFailing / totalTests) * 100) : 0;
-    const summaryText = `✖ ${totalFailing} of ${totalTests} failed (${failedPct}%)`;
-    rows.push([summaryText, "", "", "", "", "", totalBugs ? red(totalBugs) : 0, "-"]);
+// Fill rows
+for (const [spec, s] of sortedSpecs) {
+    total.total += s.total;
+    total.passing += s.passing;
+    total.failing += s.failing;
+    total.pending += s.pending;
+    total.skipped += s.skipped;
+    total.bugs += s.bugs.length;
 
-    const output = table(rows, {
-        columns: { 7: { width: 20, wrapWord: true } },
-        drawHorizontalLine: (index, size) => {
-            if (index === 0) return true; // top
-            if (index === 1) return true; // header
-            if (index > 1 && index < size - 1) return true; // after each spec
-            if (index === size - 1) return true; // before summary
-            if (index === size) return true; // bottom
-            return false;
-        },
-    });
-
-    console.log(output);
+    rows.push([
+        spec,
+        s.total,
+        s.passing,
+        s.failing ? chalk.red(s.failing) : s.failing,
+        s.pending,
+        s.skipped,
+        s.bugs.length ? chalk.red(s.bugs.length) : s.bugs.length,
+        s.bugs.length ? s.bugs.join("\n") : "-",
+    ]);
 }
 
-await run();
+// Calculate fail percentage
+const failRate = total.total ? Math.round((total.failing / total.total) * 100) : 0;
+
+// Convert total duration (ms) → hh:mm:ss
+function formatDuration(ms) {
+    const sec = Math.floor(ms / 1000);
+    const h = String(Math.floor(sec / 3600)).padStart(1, "0");
+    const m = String(Math.floor((sec % 3600) / 60)).padStart(2, "0");
+    const s = String(sec % 60).padStart(2, "0");
+    return `${h}:${m}:${s}`;
+}
+
+const durationStr = formatDuration(totalDuration);
+
+// Summary label
+const summaryLabel = chalk.red(`✖ ${total.failing} of ${total.total} failed (${failRate}%)`);
+
+// Add final aggregate line
+rows.push([
+    `${summaryLabel}   ${chalk.gray(durationStr)}`,
+    total.total,
+    total.passing,
+    chalk.red(total.failing),
+    total.pending,
+    total.skipped,
+    total.bugs ? chalk.red(total.bugs) : total.bugs,
+    "-",
+]);
+
+console.log(table(rows));
