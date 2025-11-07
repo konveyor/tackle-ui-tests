@@ -5,7 +5,7 @@ import { table } from "table";
 const bugPattern = /Bug\s+([A-Z]+-\d+)/i;
 const fileArg = process.argv[2] || "cypress/reports/.jsons/*.json";
 
-// ANSI colors
+// ANSI red
 const red = (text) => `\x1b[31m${text}\x1b[0m`;
 
 let json;
@@ -26,10 +26,10 @@ json.results.forEach((result) => {
         suite.tests.forEach((t) => {
             const s = specs[specName];
             s.total++;
+
             const bugMatch = t.title.match(bugPattern);
             if (bugMatch) {
-                const bugId = bugMatch[1];
-                s.bugs.push(bugId);
+                s.bugs.push(bugMatch[1]);
             }
 
             switch (t.state) {
@@ -57,34 +57,20 @@ const rows = [
 const sortedSpecs = Object.keys(specs).sort();
 sortedSpecs.forEach((spec) => {
     const s = specs[spec];
-    if (s.bugs.length) {
-        s.bugs.forEach((b, i) => {
-            rows.push([
-                i === 0 ? spec : "",
-                i === 0 ? s.total : "",
-                i === 0 ? s.passing : "",
-                i === 0 ? (s.failing > 0 ? red(s.failing) : s.failing) : "",
-                i === 0 ? s.pending : "",
-                i === 0 ? s.skipped : "",
-                i === 0 ? (s.bugs.length > 0 ? red(s.bugs.length) : s.bugs.length) : "",
-                b,
-            ]);
-        });
-    } else {
-        rows.push([
-            spec,
-            s.total,
-            s.passing,
-            s.failing > 0 ? red(s.failing) : s.failing,
-            s.pending,
-            s.skipped,
-            s.bugs.length > 0 ? red(s.bugs.length) : s.bugs.length,
-            "-",
-        ]);
-    }
+    const bugList = s.bugs.length ? s.bugs.join("\n") : "-";
+    rows.push([
+        spec,
+        s.total,
+        s.passing,
+        s.failing > 0 ? red(s.failing) : s.failing,
+        s.pending,
+        s.skipped,
+        s.bugs.length > 0 ? red(s.bugs.length) : s.bugs.length,
+        bugList,
+    ]);
 });
 
-// Aggregate row
+// Aggregate totals
 const totalTests = Object.values(specs).reduce((a, s) => a + s.total, 0);
 const totalPassed = Object.values(specs).reduce((a, s) => a + s.passing, 0);
 const totalFailed = Object.values(specs).reduce((a, s) => a + s.failing, 0);
@@ -95,7 +81,7 @@ const percentFailed = totalTests ? Math.round((totalFailed / totalTests) * 100) 
 
 rows.push([
     red(`✖ ${totalFailed} of ${totalTests} failed (${percentFailed}%)`),
-    "",
+    totalTests,
     totalPassed,
     totalFailed > 0 ? red(totalFailed) : totalFailed,
     totalPending,
@@ -104,4 +90,11 @@ rows.push([
     "-",
 ]);
 
-console.log(table(rows));
+const output = table(rows, {
+    columns: { 7: { wrapWord: true, width: 25 } },
+    drawHorizontalLine: (index, size) => {
+        return index === 0 || index === 1 || index === size || index > 1;
+    },
+});
+
+console.log(output);
