@@ -87,7 +87,7 @@ export class SourcePlatform {
         cy.contains("button", "Create new platform", { timeout: 8000 })
             .should("be.visible")
             .and("not.be.disabled")
-            .click();
+            .click({ force: true });
         if (cancel) {
             cancelForm();
         } else {
@@ -152,10 +152,15 @@ export class SourcePlatform {
             cancelForm();
         } else {
             // Enter app name
-            click("span.pf-v5-c-button__icon pf-m-start");
-            // Enter space name
-            click("span.pf-v5-c-button.pf-m-link");
+            cy.contains("Add a name").click();
+            inputText('input[name="names.0.value"]', "hello-spring-cloud");
+
+            cy.contains("Add a space").click();
+            inputText('input[name="spaces.0.value"]', "space");
             next();
+            cy.contains("button", "Discover applications").click();
+            cy.contains("Close").click();
+            cy.get("span.pf-v5-c-icon__content pf-m-success", { timeout: 20000 });
         }
     }
 }

@@ -16,6 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import * as data from "../../../../utils/data_utils";
+import { deleteByList, exists, login } from "../../../../utils/utils";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { SourcePlatform } from "../../../models/administration/source-platform/source-platform";
 import { CredentialType, UserCredentials } from "../../../types/constants";
@@ -32,6 +33,7 @@ describe(["@tier2"], "CRUD operations on Cloud Foundry Source platform", () => {
             throw new Error(`One or more required Cloud Foundry env variables are missing in cypress.config.ts :
             \ncloudfoundry_user\ncloudfoundry_password\ncloudfoundry_url`);
         }
+        login();
         cy.visit("/");
         for (let i = 0; i < 2; i++) {
             const creds = new CredentialsSourceControlUsername(
@@ -60,6 +62,7 @@ describe(["@tier2"], "CRUD operations on Cloud Foundry Source platform", () => {
 
         platform.create();
         platform.discover();
+
         cy.wait("@getApplication");
         exists("hello-spring-cloud");
     });
