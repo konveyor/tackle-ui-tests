@@ -26,7 +26,7 @@ import {
     selectUserPerspective,
     submitForm,
 } from "../../../../utils/utils";
-import { administration, SEC } from "../../../types/constants";
+import { administration, SEC, trTag } from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
 import * as sourcePlatform from "../../../views/source-platform.view";
@@ -145,7 +145,7 @@ export class SourcePlatform {
         }
     }
 
-    discover(cancel = false): void {
+    discover(name: string, space: string, cancel = false): void {
         SourcePlatform.open();
         clickItemInKebabMenu(this.name, "Discover applications");
         if (cancel) {
@@ -153,14 +153,21 @@ export class SourcePlatform {
         } else {
             // Enter app name
             cy.contains("Add a name").click();
-            inputText('input[name="names.0.value"]', "hello-spring-cloud");
+            inputText(`input[name="names.0.value"]`, name);
 
             cy.contains("Add a space").click();
-            inputText('input[name="spaces.0.value"]', "space");
+            inputText(`input[name="spaces.0.value"]`, space);
+
             next();
             cy.contains("button", "Discover applications").click();
             cy.contains("Close").click();
-            cy.get("span.pf-v5-c-icon__content pf-m-success", { timeout: 20000 });
+
+            SourcePlatform.open();
+            cy.contains(this.name)
+                .closest(trTag)
+                .within(() => {
+                    cy.get(commonView.successIcon, { timeout: 60000 });
+                });
         }
     }
 }

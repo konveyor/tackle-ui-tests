@@ -16,15 +16,15 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import * as data from "../../../../utils/data_utils";
-import { deleteByList, exists, login } from "../../../../utils/utils";
+import { deleteApplicationTableRows, exists, login, sidedrawerTab } from "../../../../utils/utils";
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { SourcePlatform } from "../../../models/administration/source-platform/source-platform";
 import { CredentialType, UserCredentials } from "../../../types/constants";
 
-let cloudFoundryCreds: Array<CredentialsSourceControlUsername> = [];
+var creds;
 
-describe(["@tier2"], "CRUD operations on Cloud Foundry Source platform", () => {
-    before("Login", function () {
+describe(["@tier2"], "Cloud Foundry discovery", () => {
+    before("Verify Cloud Foundry env variables are present", function () {
         if (
             !Cypress.env("cloudfoundry_user") ||
             !Cypress.env("cloudfoundry_password") ||
@@ -35,39 +35,53 @@ describe(["@tier2"], "CRUD operations on Cloud Foundry Source platform", () => {
         }
         login();
         cy.visit("/");
-        for (let i = 0; i < 2; i++) {
-            const creds = new CredentialsSourceControlUsername(
-                data.getRandomCredentialsData(
-                    CredentialType.sourceControl,
-                    UserCredentials.usernamePassword,
-                    false,
-                    null,
-                    null,
-                    true
-                )
-            );
-            creds.name = `CF-CREDS-${data.getRandomNumber(1, 500)}`;
-            creds.create();
-            cloudFoundryCreds.push(creds);
-        }
+        deleteApplicationTableRows();
+        creds = new CredentialsSourceControlUsername(
+            data.getRandomCredentialsData(
+                CredentialType.sourceControl,
+                UserCredentials.usernamePassword,
+                false,
+                null,
+                null,
+                true
+            )
+        );
+        creds.name = `CF-CREDS-${data.getRandomNumber(1, 500)}`;
+        creds.create();
     });
 
-    it("Discover CF applications from a single space", function () {
+    it("Discover a single CF application", function () {
         const platform = new SourcePlatform(
             `CF-${data.getRandomNumber(1, 500)}`,
             "Cloud Foundry",
             Cypress.env("cloudfoundry_url"),
-            cloudFoundryCreds[0].name
+            creds.name
         );
-
         platform.create();
-        platform.discover();
 
-        cy.wait("@getApplication");
-        exists("hello-spring-cloud");
+        const app = "hello-spring-cloud";
+        platform.discover(app, "space");
+
+        // Click 'Applications' link for the CF instance
+        cy.contains(platform.name)
+            .closest("tr")
+            .find('a[href*="applications"]')
+            .click({ force: true });
+        exists(app);
+
+        // Verify discovery manifest is generated for the CF app
+        sidedrawerTab(app, "More (2)");
+        cy.contains("Platform").click();
+        cy.contains("Application discovery manifest")
+            .parents(".drawer-tab-content__section")
+            .find('[class*="code-editor__code"]')
+            .should("exist");
+
+        platform.delete();
     });
 
     after("Clear test data", function () {
-        deleteByList(cloudFoundryCreds);
+        deleteApplicationTableRows();
+        creds.delete();
     });
 });
