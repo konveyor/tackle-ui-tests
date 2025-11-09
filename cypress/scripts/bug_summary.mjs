@@ -80,7 +80,9 @@ const totalBugs = Object.values(specs).reduce((a, s) => a + s.bugs.length, 0);
 const percentFailed = totalTests ? Math.round((totalFailed / totalTests) * 100) : 0;
 
 rows.push([
-    red(`✖ ${totalFailed}/${totalTests} failed (${percentFailed}%)`),
+    totalFailed > 0
+        ? red(`✖ ${totalFailed} of ${totalTests} failed (${percentFailed}%)`)
+        : `✓ ${totalTests} tests passed`,
     totalTests,
     totalPassed,
     totalFailed > 0 ? red(totalFailed) : totalFailed,
