@@ -86,7 +86,7 @@ describe(["@tier0", "@interop"], "Custom Migration Targets CRUD operations", () 
                 cy.intercept("PUT", "/hub/targets*/*").as("putTarget");
                 cy.intercept("DELETE", "/hub/targets*/*").as("deleteTarget");
 
-                CustomMigrationTarget.open(true);
+                CustomMigrationTarget.open();
             });
 
             it("Custom Migration Targets CRUD with rules uploaded manually", function () {
