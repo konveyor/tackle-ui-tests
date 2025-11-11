@@ -159,9 +159,7 @@ export class User {
         click(createPasswordButton);
         this.inputPassword(this.password);
         click(tempPasswordToggle);
-        cy.wait(300);
         click(modalConfirmButton);
-        cy.wait(300);
         click(modalConfirmButton);
     }
 
