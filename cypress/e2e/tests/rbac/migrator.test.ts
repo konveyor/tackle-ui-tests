@@ -67,7 +67,7 @@ describe(["@tier3", "@rhsso", "@rhbk"], "Migrator RBAC operations", () => {
         Application.validateCreateAppButton(this.rbacRules);
     });
 
-    it("Bug MTA-6273: Migrator, validate top action menu", function () {
+    it("Migrator, validate top action menu", function () {
         Analysis.validateTopActionMenu(this.rbacRules);
     });
 
