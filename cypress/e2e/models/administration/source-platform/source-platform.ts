@@ -87,7 +87,7 @@ export class SourcePlatform {
         cy.contains("button", "Create new platform", { timeout: 8000 })
             .should("be.visible")
             .and("not.be.disabled")
-            .click({ force: true });
+            .click();
         if (cancel) {
             cancelForm();
         } else {
@@ -151,17 +151,19 @@ export class SourcePlatform {
         if (cancel) {
             cancelForm();
         } else {
-            // Enter app name
-            cy.contains("Add a name").click();
+            // Click to add app name field and enter value
+            cy.contains("button", sourcePlatform.addName).click();
             inputText(`input[name="names.0.value"]`, name);
 
-            cy.contains("Add a space").click();
+            // Click to add space field and enter value
+            cy.contains("button", sourcePlatform.addSpace).click();
             inputText(`input[name="spaces.0.value"]`, space);
 
             next();
-            cy.contains("button", "Discover applications").click();
-            cy.contains("Close").click();
+            cy.contains("button", sourcePlatform.discoverApplications).click();
+            cy.contains("button", "Close").click();
 
+            // Page reload is required here
             SourcePlatform.open();
             cy.contains(this.name)
                 .closest(trTag)

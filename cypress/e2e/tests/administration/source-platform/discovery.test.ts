@@ -21,7 +21,8 @@ import { CredentialsSourceControlUsername } from "../../../models/administration
 import { SourcePlatform } from "../../../models/administration/source-platform/source-platform";
 import { CredentialType, UserCredentials } from "../../../types/constants";
 
-var creds;
+let CFCreds: CredentialsSourceControlUsername;
+let CFInstance: SourcePlatform;
 
 describe(["@tier2"], "Cloud Foundry discovery", () => {
     before("Verify Cloud Foundry env variables are present", function () {
@@ -36,7 +37,7 @@ describe(["@tier2"], "Cloud Foundry discovery", () => {
         login();
         cy.visit("/");
         deleteApplicationTableRows();
-        creds = new CredentialsSourceControlUsername(
+        CFCreds = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
                 UserCredentials.usernamePassword,
@@ -46,42 +47,40 @@ describe(["@tier2"], "Cloud Foundry discovery", () => {
                 true
             )
         );
-        creds.name = `CF-CREDS-${data.getRandomNumber(1, 500)}`;
-        creds.create();
-    });
+        CFCreds.name = `CF-CREDS-${data.getRandomNumber(1, 500)}`;
+        CFCreds.create();
 
-    it("Discover a single CF application", function () {
-        const platform = new SourcePlatform(
+        CFInstance = new SourcePlatform(
             `CF-${data.getRandomNumber(1, 500)}`,
             "Cloud Foundry",
             Cypress.env("cloudfoundry_url"),
-            creds.name
+            CFCreds.name
         );
-        platform.create();
+        CFInstance.create();
+    });
 
-        const app = "hello-spring-cloud";
-        platform.discover(app, "space");
+    it("Discover a single CF application", function () {
+        const CFApp = "hello-spring-cloud";
+        CFInstance.discover(CFApp, "space");
 
         // Click 'Applications' link for the CF instance
-        cy.contains(platform.name)
+        cy.contains(CFInstance.name)
             .closest("tr")
             .find('a[href*="applications"]')
             .click({ force: true });
-        exists(app);
+        exists(CFApp);
 
         // Verify discovery manifest is generated for the CF app
-        sidedrawerTab(app, "More (2)");
-        cy.contains("Platform").click();
+        sidedrawerTab(CFApp, "Platform");
         cy.contains("Application discovery manifest")
             .parents(".drawer-tab-content__section")
             .find('[class*="code-editor__code"]')
             .should("exist");
-
-        platform.delete();
     });
 
     after("Clear test data", function () {
         deleteApplicationTableRows();
-        creds.delete();
+        CFInstance.delete();
+        CFCreds.delete();
     });
 });
