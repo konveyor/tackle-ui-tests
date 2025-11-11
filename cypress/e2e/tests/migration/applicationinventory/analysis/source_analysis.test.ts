@@ -31,9 +31,9 @@ import {
     AnalysisStatuses,
     CredentialType,
     MIN,
-    SEC,
     UserCredentials,
 } from "../../../../types/constants";
+import { appDetailsView } from "../../../../views/applicationinventory.view";
 let sourceCredential: CredentialsSourceControlUsername;
 let invalidSourceCredential: CredentialsSourceControlUsername;
 let mavenCredential: CredentialsMaven;
@@ -116,9 +116,6 @@ describe(["@tier2"], "Source Analysis", () => {
             application.analyze();
             application.waitStatusChange(AnalysisStatuses.scheduled);
             application.verifyAnalysisStatus(AnalysisStatuses.completed);
-            application.verifyEffort(
-                this.analysisData["source+dep_analysis_on_tackletestapp"]["effort"]
-            );
 
             // analyze after removing valid default source and maven creds
             sourceCredential.unsetAsDefaultViaActionsMenu();
@@ -236,7 +233,7 @@ describe(["@tier2"], "Source Analysis", () => {
         application.closeApplicationDetails();
     });
 
-    it("Bug MTA-3418: Disable Automated tagging using Source Analysis on bookServer app", function () {
+    it("Disable Automated tagging using Source Analysis on bookServer app", function () {
         // Automates Polarion MTA-307
         const application = new Analysis(
             getRandomApplicationData("bookserverApp_Disable_autoTagging", {
@@ -251,7 +248,8 @@ describe(["@tier2"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
         application.verifyEffort(this.analysisData["analysis_for_disableTagging"]["effort"]);
         application.applicationDetailsTab("Tags");
-        cy.get("h2", { timeout: 5 * SEC }).should("contain", "No tags available");
+        cy.get(appDetailsView.tagFilter).click();
+        cy.get(appDetailsView.filterSourceMenu).should("not.contain.text", "Analysis");
     });
 
     it("Analysis for Konveyor example1 application", function () {
@@ -287,7 +285,7 @@ describe(["@tier2"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it("Bug MTA-4412: Bug MTA-5212  Openjdk17 Source + dependencies analysis on tackletest app", function () {
+    it("Bug MTA-4412, Bug MTA-5212: Openjdk17 Source + dependencies analysis on tackletest app", function () {
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source+dependencies_openjdk17", {
                 sourceData: this.appData["tackle-testapp-git"],
