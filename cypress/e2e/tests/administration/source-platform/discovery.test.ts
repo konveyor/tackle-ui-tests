@@ -21,8 +21,8 @@ import { CredentialsSourceControlUsername } from "../../../models/administration
 import { SourcePlatform } from "../../../models/administration/source-platform/source-platform";
 import { CredentialType, UserCredentials } from "../../../types/constants";
 
-let CFCreds: CredentialsSourceControlUsername;
-let CFInstance: SourcePlatform;
+let cfCreds: CredentialsSourceControlUsername;
+let cfInstance: SourcePlatform;
 
 describe(["@tier2"], "Cloud Foundry discovery", () => {
     before("Verify Cloud Foundry env variables are present", function () {
@@ -37,7 +37,7 @@ describe(["@tier2"], "Cloud Foundry discovery", () => {
         login();
         cy.visit("/");
         deleteApplicationTableRows();
-        CFCreds = new CredentialsSourceControlUsername(
+        cfCreds = new CredentialsSourceControlUsername(
             data.getRandomCredentialsData(
                 CredentialType.sourceControl,
                 UserCredentials.usernamePassword,
@@ -47,24 +47,24 @@ describe(["@tier2"], "Cloud Foundry discovery", () => {
                 true
             )
         );
-        CFCreds.name = `CF-CREDS-${data.getRandomNumber(1, 500)}`;
-        CFCreds.create();
+        cfCreds.name = `CF-CREDS-${data.getRandomNumber(1, 500)}`;
+        cfCreds.create();
 
-        CFInstance = new SourcePlatform(
+        cfInstance = new SourcePlatform(
             `CF-${data.getRandomNumber(1, 500)}`,
             "Cloud Foundry",
             Cypress.env("cloudfoundry_url"),
-            CFCreds.name
+            cfCreds.name
         );
-        CFInstance.create();
+        cfInstance.create();
     });
 
     it("Discover a single CF application", function () {
         const CFApp = "hello-spring-cloud";
-        CFInstance.discover(CFApp, "space");
+        cfInstance.discover(CFApp, "space");
 
         // Click 'Applications' link for the CF instance
-        cy.contains(CFInstance.name)
+        cy.contains(cfInstance.name)
             .closest("tr")
             .find('a[href*="applications"]')
             .click({ force: true });
@@ -80,7 +80,7 @@ describe(["@tier2"], "Cloud Foundry discovery", () => {
 
     after("Clear test data", function () {
         deleteApplicationTableRows();
-        CFInstance.delete();
-        CFCreds.delete();
+        cfInstance.delete();
+        cfCreds.delete();
     });
 });

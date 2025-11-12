@@ -145,31 +145,30 @@ export class SourcePlatform {
         }
     }
 
-    discover(name: string, space: string, cancel = false): void {
+    discover(appName: string, space: string, cancel = false): void {
         SourcePlatform.open();
         clickItemInKebabMenu(this.name, "Discover applications");
         if (cancel) {
             cancelForm();
-        } else {
-            // Click to add app name field and enter value
-            cy.contains("button", sourcePlatform.addName).click();
-            inputText(`input[name="names.0.value"]`, name);
-
-            // Click to add space field and enter value
-            cy.contains("button", sourcePlatform.addSpace).click();
-            inputText(`input[name="spaces.0.value"]`, space);
-
-            next();
-            cy.contains("button", sourcePlatform.discoverApplications).click();
-            cy.contains("button", "Close").click();
-
-            // Page reload is required here
-            SourcePlatform.open();
-            cy.contains(this.name)
-                .closest(trTag)
-                .within(() => {
-                    cy.get(commonView.successIcon, { timeout: 60000 });
-                });
+            return;
         }
+
+        cy.contains("button", "Add a name").click();
+        inputText(`input[name="names.0.value"]`, appName);
+
+        cy.contains("button", "Add a space").click();
+        inputText(`input[name="spaces.0.value"]`, space);
+        next();
+
+        cy.contains("button", "Discover applications").click();
+        cy.contains("button", "Close").click();
+
+        // Page reload is required here
+        SourcePlatform.open();
+        cy.contains(this.name)
+            .closest(trTag)
+            .within(() => {
+                cy.get(commonView.successIcon, { timeout: 60000 });
+            });
     }
 }

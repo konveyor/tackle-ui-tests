@@ -17,8 +17,3 @@ export const name = "#name";
 export const type = "#platform-kind-toggle-select-typeahead";
 export const url = "#url";
 export const credentials = "#credentials-toggle-select-typeahead";
-
-// Discover application wizard
-export const addName = "Add a name";
-export const addSpace = "Add a space";
-export const discoverApplications = "Discover applications";
