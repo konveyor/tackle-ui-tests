@@ -31,6 +31,7 @@ import {
     AnalysisStatuses,
     CredentialType,
     MIN,
+    SEC,
     UserCredentials,
 } from "../../../../types/constants";
 import { appDetailsView } from "../../../../views/applicationinventory.view";
@@ -39,7 +40,7 @@ let invalidSourceCredential: CredentialsSourceControlUsername;
 let mavenCredential: CredentialsMaven;
 let applicationsList: Array<Analysis> = [];
 
-describe(["@tier2"], "Source Analysis", () => {
+describe(["@tier1"], "Source Analysis", () => {
     before("Login", function () {
         login();
         cy.visit("/");
@@ -86,44 +87,40 @@ describe(["@tier2"], "Source Analysis", () => {
         cy.visit("/");
     });
 
-    it(
-        ["@tier1"],
-        "Source + dependencies analysis on tackletest app with default credentials",
-        function () {
-            // Source code analysis require both source and maven credentials
-            const application = new Analysis(
-                getRandomApplicationData("tackleTestApp_Source+dependencies", {
-                    sourceData: this.appData["tackle-testapp-git"],
-                }),
-                getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
-            );
-            application.create();
-            applicationsList.push(application);
-            cy.wait("@getApplication");
-            // analyze with no default creds
-            application.analyze();
-            application.verifyAnalysisStatus(AnalysisStatuses.failed);
+    it("Source + dependencies analysis on tackletest app with default credentials", function () {
+        // Source code analysis require both source and maven credentials
+        const application = new Analysis(
+            getRandomApplicationData("tackleTestApp_Source+dependencies", {
+                sourceData: this.appData["tackle-testapp-git"],
+            }),
+            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        // analyze with no default creds
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.failed);
 
-            // analyze with inValid default source creds and valid maven creds
-            invalidSourceCredential.setAsDefaultViaActionsMenu();
-            mavenCredential.setAsDefaultViaActionsMenu();
-            application.analyze();
-            application.waitStatusChange(AnalysisStatuses.scheduled);
-            application.verifyAnalysisStatus(AnalysisStatuses.failed);
+        // analyze with inValid default source creds and valid maven creds
+        invalidSourceCredential.setAsDefaultViaActionsMenu();
+        mavenCredential.setAsDefaultViaActionsMenu();
+        application.analyze();
+        application.waitStatusChange(AnalysisStatuses.scheduled);
+        application.verifyAnalysisStatus(AnalysisStatuses.failed);
 
-            // analyze with valid default source and maven creds
-            sourceCredential.setAsDefaultViaActionsMenu();
-            application.analyze();
-            application.waitStatusChange(AnalysisStatuses.scheduled);
-            application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        // analyze with valid default source and maven creds
+        sourceCredential.setAsDefaultViaActionsMenu();
+        application.analyze();
+        application.waitStatusChange(AnalysisStatuses.scheduled);
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
 
-            // analyze after removing valid default source and maven creds
-            sourceCredential.unsetAsDefaultViaActionsMenu();
-            mavenCredential.unsetAsDefaultViaActionsMenu();
-            application.analyze();
-            application.waitStatusChange(AnalysisStatuses.failed);
-        }
-    );
+        // analyze after removing valid default source and maven creds
+        sourceCredential.unsetAsDefaultViaActionsMenu();
+        mavenCredential.unsetAsDefaultViaActionsMenu();
+        application.analyze();
+        application.waitStatusChange(AnalysisStatuses.failed);
+    });
 
     it("Source + dependencies analysis on daytrader app", function () {
         // Automate bug https://issues.redhat.com/browse/TACKLE-721
@@ -157,7 +154,7 @@ describe(["@tier2"], "Source Analysis", () => {
         application.verifyAnalysisStatus("Completed");
     });
 
-    it(["@tier1"], "Source Analysis on tackle testapp", function () {
+    it("Source Analysis on tackle testapp", function () {
         // For tackle test app source credentials are required.
         const application = new Analysis(
             getRandomApplicationData("tackleTestApp_Source", {
@@ -374,6 +371,50 @@ describe(["@tier2"], "Source Analysis", () => {
 
         analyzeApplication(appWithCredentials, mavenCredential);
         analyzeApplication(appWithoutCredentials, null);
+    });
+
+    // Automates Bug https://issues.redhat.com/browse/MTA-3440
+    it("Source analysis on bookserver app with EAP8 target", function () {
+        const application = new Analysis(
+            getRandomApplicationData("eap8-bookserverApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["eap8_bookserverApp"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+    });
+
+    it("Cancel the analysis and check the status", function () {
+        const application = new Analysis(
+            getRandomApplicationData("eap8-bookserverApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["eap8_bookserverApp"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication", { timeout: 2 * SEC });
+        application.analyze();
+        application.cancelAnalysis();
+        application.verifyAnalysisStatus(AnalysisStatuses.canceled);
+    });
+
+    it("Analysis that requires credentials should fail when none are set", function () {
+        const application = new Analysis(
+            getRandomApplicationData("tackleTestApp_Source+dependencies", {
+                sourceData: this.appData["tackle-testapp-git"],
+            }),
+            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        application.analyze();
+        application.verifyAnalysisStatus(AnalysisStatuses.failed);
     });
 
     after("Perform test data clean up", function () {
