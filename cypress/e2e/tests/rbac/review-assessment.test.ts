@@ -36,7 +36,7 @@ let tags: Tag[];
 let stakeholders: Stakeholders[];
 let application: Application[];
 
-describe(["@tier2"], "Bug MTA-5883: Perform assessment and review as Architect", function () {
+describe(["@tier2"], "Perform assessment and review as Architect", function () {
     const architect = new UserArchitect(data.getRandomUserData());
 
     before("Create test data", function () {
@@ -59,7 +59,7 @@ describe(["@tier2"], "Bug MTA-5883: Perform assessment and review as Architect",
         });
     });
 
-    it("Bug MTA-5883: As Architect, perform application and archetype assessment and review", function () {
+    it("As Architect, perform application and archetype assessment and review", function () {
         // Polarion TC 312 and Polarion MTA-522
         architect.login();
         cy.wait(10 * SEC);
