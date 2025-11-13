@@ -132,13 +132,30 @@ import {
 } from "./data_utils";
 import Chainable = Cypress.Chainable;
 
-export function inputText(fieldId: string, text: any, log = false): void {
+/**
+ * Types text into a field identified by fieldId
+ * @param fieldId - CSS selector for the field
+ * @param text - Text to enter
+ * @param log - Whether to log Cypress commands (default: false)
+ * @param useInvoke - Set to true for faster text entry via .invoke("val") when
+ *                    keyboard events are not needed (default: false uses .type())
+ */
+export function inputText(fieldId: string, text: any, log = false, useInvoke = false): void {
     if (!log) {
         cy.log(`Type ${text} in ${fieldId}`);
     }
-    cy.get(fieldId, { log, timeout: 2 * SEC })
-        .clear({ log, timeout: 30 * SEC })
-        .type(text, { log });
+
+    if (useInvoke) {
+        cy.get(fieldId, { log, timeout: 2 * SEC })
+            .clear({ log, timeout: 30 * SEC })
+            .invoke("val", text)
+            .trigger("input")
+            .trigger("change");
+    } else {
+        cy.get(fieldId, { log, timeout: 2 * SEC })
+            .clear({ log, timeout: 30 * SEC })
+            .type(text, { log });
+    }
 }
 
 export function clearInput(fieldID: string): void {
