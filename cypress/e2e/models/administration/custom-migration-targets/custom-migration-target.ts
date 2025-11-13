@@ -68,6 +68,7 @@ export class CustomMigrationTarget {
         cy.intercept("GET", "/hub/targets*").as("getTargets");
 
         const waitForTargets = () => {
+            cy.get("h1").should("contain", customMigrationTargets);
             cy.wait("@getTargets", { timeout: 30 * SEC });
             cy.get(CustomMigrationTargetView.card, { timeout: 30 * SEC }).should(
                 "contain",
