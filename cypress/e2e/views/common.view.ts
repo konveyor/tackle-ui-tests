@@ -29,6 +29,7 @@ export const filteredBy = "#filtered-by";
 export const itemsPerPageMenuOptions = "ul.pf-v5-c-menu__list";
 export const expandRow = "button[aria-label=Details]";
 export const successAlertMessage = ".pf-m-success";
+export const successIcon = "span.pf-v5-c-icon__content.pf-m-success";
 export const errorAlertMessage = ".pf-m-error";
 export const pageTitle = "section.pf-v5-c-page__main-section.pf-m-light h1";
 export const infoAlertMessage = ".pf-m-info";
