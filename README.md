@@ -6,7 +6,7 @@
 
 ### Requirements
 1. Operating system (typically Fedora or MacOS)
-2. Install Node.js 22 or above (OS native packages, or [nodejs](https://nodejs.org/en/download), or [nvm](https://github.com/nvm-sh/nvm) managed installs are all ok)
+2. Install Node.js 20 or above (OS native packages, or [nodejs](https://nodejs.org/en/download), or [nvm](https://github.com/nvm-sh/nvm) managed installs are all ok)
 
 ### Install and run automation
 
