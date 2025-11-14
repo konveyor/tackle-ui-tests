@@ -21,7 +21,7 @@ import { CredentialsSourceControlKey } from "../../../models/administration/cred
 import { CredentialsSourceControlUsername } from "../../../models/administration/credentials/credentialsSourceControlUsername";
 import { CredentialType, UserCredentials } from "../../../types/constants";
 
-describe(["@tier2"], "Validation of Source Control Credentials", () => {
+describe(["@tier2", "@dc", "@interop"], "Validation of Source Control Credentials", () => {
     let scCredsUsername: CredentialsSourceControlUsername;
     let scCredsKey: CredentialsSourceControlKey;
     let defaultScCredsUsername: CredentialsSourceControlUsername;
@@ -91,13 +91,9 @@ describe(["@tier2"], "Validation of Source Control Credentials", () => {
         tempDefaultCred.delete();
     });
 
-    it(
-        ["@tier0", "@dc", "@interop"],
-        "Creating source control credentials with username/password",
-        () => {
-            scCredsUsername.create();
-        }
-    );
+    it("Creating source control credentials with username/password", () => {
+        scCredsUsername.create();
+    });
 
     it("Editing source control credentials with username/password and cancelling without saving", () => {
         scCredsUsername.edit(getRandomCredentialsData(CredentialType.sourceControl), toBeCanceled);

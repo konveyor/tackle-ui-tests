@@ -36,7 +36,7 @@ const filePath = "app_import/csv/";
 let stakeholders: Stakeholders[];
 let appdata = { name: "Customers" };
 
-describe(["@tier3"], "Operations after application import", () => {
+describe(["@tier3", "@dc"], "Operations after application import", () => {
     before("Login and create test data", function () {
         login();
         cy.visit("/");
@@ -55,18 +55,14 @@ describe(["@tier3"], "Operations after application import", () => {
         exists("Gateway");
     });
 
-    it(
-        ["@dc"],
-        "Perform application assessment after a successful application import",
-        function () {
-            const application = new Application(appdata);
+    it("Perform application assessment after a successful application import", function () {
+        const application = new Application(appdata);
 
-            // Perform assessment of application
-            application.perform_assessment("low", stakeholders);
-            cy.wait(2000);
-            application.verifyStatus("assessment", "Completed");
-        }
-    );
+        // Perform assessment of application
+        application.perform_assessment("low", stakeholders);
+        cy.wait(2000);
+        application.verifyStatus("assessment", "Completed");
+    });
 
     it("Perform application review after a successful application import", function () {
         // Automates Polarion TC MTA-295

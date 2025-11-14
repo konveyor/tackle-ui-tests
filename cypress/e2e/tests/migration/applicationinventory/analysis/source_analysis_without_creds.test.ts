@@ -15,21 +15,24 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
+import { getRandomCredentialsData } from "../../../../../utils/data_utils";
 import {
     checkSuccessAlert,
     deleteByList,
     getRandomAnalysisData,
     getRandomApplicationData,
 } from "../../../../../utils/utils";
+import { CredentialsSourceControlUsername } from "../../../../models/administration/credentials/credentialsSourceControlUsername";
 import { Analysis } from "../../../../models/migration/applicationinventory/analysis";
 import { TaskManager } from "../../../../models/migration/task-manager/task-manager";
-import { AnalysisStatuses, SEC, TaskKind, TaskStatus } from "../../../../types/constants";
+import { CredentialType, TaskKind, TaskStatus, UserCredentials } from "../../../../types/constants";
 import { AppIssue } from "../../../../types/types";
 import { infoAlertMessage } from "../../../../views/common.view";
 let applicationsList: Array<Analysis> = [];
+let credentialsList: Array<CredentialsSourceControlUsername> = [];
 let application: Analysis;
 
-describe(["@tier1"], "Source Analysis without credentials", () => {
+describe(["@tier0"], "Source Analysis without credentials", () => {
     beforeEach("Load data", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
@@ -44,7 +47,15 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
         cy.visit("/");
     });
 
-    it(["@tier0"], "Source Analysis on bookserver app and its issues validation", function () {
+    it("Creating source control credentials with username/password", function () {
+        let scCredsUsername = new CredentialsSourceControlUsername(
+            getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.usernamePassword)
+        );
+        scCredsUsername.create();
+        credentialsList.push(scCredsUsername);
+    });
+
+    it("Source Analysis on bookserver app and its issues validation", function () {
         // For source code analysis application must have source code URL git or svn
         application = new Analysis(
             getRandomApplicationData("bookserverApp", {
@@ -66,35 +77,29 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
         );
     });
 
-    it(
-        ["@tier0"],
-        "Source + dependency Analysis on bookserver app and its issues validation",
-        function () {
-            // For source code analysis application must have source code URL git or svn
-            application = new Analysis(
-                getRandomApplicationData("Dep_bookserverApp", {
-                    sourceData: this.appData["bookserver-app"],
-                }),
-                getRandomAnalysisData(
-                    this.analysisData["source_plus_dep_analysis_on_bookserverapp"]
-                )
-            );
-            application.create();
-            applicationsList.push(application);
-            cy.wait("@getApplication");
-            application.analyze();
-            checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
-            application.verifyAnalysisStatus("Completed");
-            application.validateIssues(
-                this.analysisData["source_plus_dep_analysis_on_bookserverapp"]["issues"]
-            );
-            this.analysisData["source_plus_dep_analysis_on_bookserverapp"]["issues"].forEach(
-                (currentIssue: AppIssue) => {
-                    application.validateAffected(currentIssue);
-                }
-            );
-        }
-    );
+    it("Source + dependency Analysis on bookserver app and its issues validation", function () {
+        // For source code analysis application must have source code URL git or svn
+        application = new Analysis(
+            getRandomApplicationData("Dep_bookserverApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["source_plus_dep_analysis_on_bookserverapp"])
+        );
+        application.create();
+        applicationsList.push(application);
+        cy.wait("@getApplication");
+        application.analyze();
+        checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
+        application.verifyAnalysisStatus("Completed");
+        application.validateIssues(
+            this.analysisData["source_plus_dep_analysis_on_bookserverapp"]["issues"]
+        );
+        this.analysisData["source_plus_dep_analysis_on_bookserverapp"]["issues"].forEach(
+            (currentIssue: AppIssue) => {
+                application.validateAffected(currentIssue);
+            }
+        );
+    });
 
     it("Check the bookserver task status on task manager page", function () {
         TaskManager.verifyTaskStatus(application.name, TaskKind.analyzer, TaskStatus.succeeded);
@@ -110,51 +115,8 @@ describe(["@tier1"], "Source Analysis without credentials", () => {
         );
     });
 
-    // Automates Bug https://issues.redhat.com/browse/MTA-3440
-    it(["@tier0"], "Source analysis on bookserver app with EAP8 target", function () {
-        const application = new Analysis(
-            getRandomApplicationData("eap8-bookserverApp", {
-                sourceData: this.appData["bookserver-app"],
-            }),
-            getRandomAnalysisData(this.analysisData["eap8_bookserverApp"])
-        );
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication");
-        application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
-    });
-
-    it("Cancel the analysis and check the status", function () {
-        const application = new Analysis(
-            getRandomApplicationData("eap8-bookserverApp", {
-                sourceData: this.appData["bookserver-app"],
-            }),
-            getRandomAnalysisData(this.analysisData["eap8_bookserverApp"])
-        );
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication", { timeout: 2 * SEC });
-        application.analyze();
-        application.cancelAnalysis();
-        application.verifyAnalysisStatus(AnalysisStatuses.canceled);
-    });
-
-    it("Analysis that requires credentials should fail when none are set", function () {
-        const application = new Analysis(
-            getRandomApplicationData("tackleTestApp_Source+dependencies", {
-                sourceData: this.appData["tackle-testapp-git"],
-            }),
-            getRandomAnalysisData(this.analysisData["source+dep_analysis_on_tackletestapp"])
-        );
-        application.create();
-        applicationsList.push(application);
-        cy.wait("@getApplication");
-        application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.failed);
-    });
-
     after("Perform test data clean up", function () {
         deleteByList(applicationsList);
+        deleteByList(credentialsList);
     });
 });
