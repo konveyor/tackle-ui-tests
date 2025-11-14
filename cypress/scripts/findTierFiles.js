@@ -2,7 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const glob = require("glob");
+const { globSync } = require("glob");
 
 // Read tier tags from CLI argument
 const tierArg = process.argv[2];
@@ -16,8 +16,9 @@ const tierTags = tierArg.split(",").map((t) => t.trim());
 
 const rootDir = path.resolve("cypress/e2e/tests");
 
+// Get all test files using glob package (compatible with Node 20+)
 function getAllTestFiles(dir) {
-    return glob.sync("**/*.{ts,js}", { cwd: dir, absolute: true });
+    return globSync("**/*.{ts,js}", { cwd: dir, absolute: true });
 }
 
 function fileContainsAnyTier(file, tags) {
