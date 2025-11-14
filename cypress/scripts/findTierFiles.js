@@ -16,7 +16,6 @@ const tierTags = tierArg.split(",").map((t) => t.trim());
 
 const rootDir = path.resolve("cypress/e2e/tests");
 
-// Get all test files using glob package (compatible with Node 20+)
 function getAllTestFiles(dir) {
     return glob.sync("**/*.{ts,js}", { cwd: dir, absolute: true });
 }
