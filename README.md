@@ -206,7 +206,7 @@ npx cypress run --spec "$(node cypress/scripts/findTierFiles.js tier1)"
 
 #### `@tier2` - Comprehensive CRUD Tests
 - **Purpose**: Full CRUD coverage for all features
-- **Test Files**: 45 files
+- **Test Files**: 49 files
 - **Test Areas**: Administration (credentials, repositories, questionnaires), application inventory, controls, custom metrics, migration waves, task manager, RBAC, and analysis features
 
 **Usage**:

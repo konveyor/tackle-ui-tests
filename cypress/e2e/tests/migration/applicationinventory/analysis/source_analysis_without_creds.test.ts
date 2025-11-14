@@ -29,6 +29,7 @@ import { CredentialType, TaskKind, TaskStatus, UserCredentials } from "../../../
 import { AppIssue } from "../../../../types/types";
 import { infoAlertMessage } from "../../../../views/common.view";
 let applicationsList: Array<Analysis> = [];
+let credentialsList: Array<CredentialsSourceControlUsername> = [];
 let application: Analysis;
 
 describe(["@tier0"], "Source Analysis without credentials", () => {
@@ -51,6 +52,7 @@ describe(["@tier0"], "Source Analysis without credentials", () => {
             getRandomCredentialsData(CredentialType.sourceControl, UserCredentials.usernamePassword)
         );
         scCredsUsername.create();
+        credentialsList.push(scCredsUsername);
     });
 
     it("Source Analysis on bookserver app and its issues validation", function () {
@@ -115,5 +117,6 @@ describe(["@tier0"], "Source Analysis without credentials", () => {
 
     after("Perform test data clean up", function () {
         deleteByList(applicationsList);
+        deleteByList(credentialsList);
     });
 });
