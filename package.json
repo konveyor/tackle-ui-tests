@@ -51,7 +51,7 @@
         "cypress/**/*.{ts,js,json}": "prettier --ignore-unknown --write "
     },
     "engines": {
-        "node": ">=20.17"
+        "node": ">=22.0.0"
     },
     "devDependencies": {
         "mochawesome-merge": "^5.0.0",

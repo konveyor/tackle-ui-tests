@@ -6,7 +6,7 @@
 
 ### Requirements
 1. Operating system (typically Fedora or MacOS)
-2. Install Node.js 20 or above (OS native packages, or [nodejs](https://nodejs.org/en/download), or [nvm](https://github.com/nvm-sh/nvm) managed installs are all ok)
+2. Install Node.js 22 or above (OS native packages, or [nodejs](https://nodejs.org/en/download), or [nvm](https://github.com/nvm-sh/nvm) managed installs are all ok)
 
 ### Install and run automation
 
@@ -158,7 +158,6 @@ npx cypress run --spec "$(node cypress/scripts/findTierFiles.js tier0,interop)"
   - Limited resources (minikube environment)
   - Cannot use tests requiring external credentials
   - Time-constrained (must complete reasonably quickly)
-- **Test Files**: 2 files (5 tests total)
 - **Tests Include**:
   - Login and navigation validation
   - Business service CRUD
@@ -174,7 +173,6 @@ npx cypress run --spec "$(node cypress/scripts/findTierFiles.js ci)"
 #### `@tier0` - Basic Sanity Tests
 - **Purpose**: Core smoke tests for critical functionality
 - **Runs on**: Stage, production, and nightly on [Konveyor CI](https://github.com/konveyor/ci)
-- **Test Files**: 4 files
 - **Tests Include**:
   - Custom migration targets CRUD and validation
   - Source analysis on bookserver app (without credentials)
@@ -189,7 +187,6 @@ npx cypress run --spec "$(node cypress/scripts/findTierFiles.js tier0)"
 #### `@tier1` - Analysis Tests with Credentials
 - **Purpose**: Comprehensive analysis tests requiring external credentials
 - **Runs on**: Nightly on [Konveyor CI](https://github.com/konveyor/ci)
-- **Test Files**: 5 files
 - **Tests Include**:
   - Binary analysis with Git credentials
   - Source code analysis with credentials
@@ -206,7 +203,6 @@ npx cypress run --spec "$(node cypress/scripts/findTierFiles.js tier1)"
 
 #### `@tier2` - Comprehensive CRUD Tests
 - **Purpose**: Full CRUD coverage for all features
-- **Test Files**: 49 files
 - **Test Areas**: Administration (credentials, repositories, questionnaires), application inventory, controls, custom metrics, migration waves, task manager, RBAC, and analysis features
 
 **Usage**:
@@ -241,7 +237,6 @@ npx cypress run --spec "$(node cypress/scripts/findTierFiles.js tier4)"
 
 #### `@interop` - Interoperability Tests
 - **Purpose**: Used by interOp team for testing on ROSA, ROSA-STS, and ARO clusters
-- **Test Files**: 3 files
 - **Tests Include**:
   - Source control credentials CRUD
   - Custom migration targets CRUD
