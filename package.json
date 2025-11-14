@@ -55,7 +55,7 @@
         "node": ">=20.17"
     },
     "devDependencies": {
-        "mochawesome-merge": "^5.0.0",
+        "mochawesome-merge": "^4.4.1",
         "table": "^6.9.0"
     }
 }
