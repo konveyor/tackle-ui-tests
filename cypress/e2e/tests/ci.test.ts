@@ -45,7 +45,7 @@ let stakeholders: Stakeholders[];
 let stakeholderGroups: Stakeholdergroups[];
 let tags: Tag[];
 
-describe("UI Sanity Tests", () => {
+describe(["@ci"], "UI Sanity Tests", () => {
     beforeEach("Interceptors", function () {
         cy.intercept("POST", "/hub/businessservices*").as("postBusinessService");
         cy.intercept("GET", "/hub/businessservices*").as("getBusinessService");
@@ -63,7 +63,7 @@ describe("UI Sanity Tests", () => {
         });
     });
 
-    it(["@ci"], "Business service CRUD", function () {
+    it("Business service CRUD", function () {
         const businessService = new BusinessServices(data.getCompanyName(), data.getDescription());
         businessService.create();
         cy.wait("@postBusinessService");
@@ -79,7 +79,7 @@ describe("UI Sanity Tests", () => {
         notExists(businessService.name);
     });
 
-    it(["@ci"], "Jobfunction CRUD", function () {
+    it("Jobfunction CRUD", function () {
         const jobfunction = new Jobfunctions(data.getJobTitle());
         jobfunction.create();
         cy.wait("@postJobFunction");
@@ -95,7 +95,7 @@ describe("UI Sanity Tests", () => {
         notExists(jobfunction.name);
     });
 
-    it(["@ci"], "Stakeholder , Stakeholder Group , Tag and Archetype CRUD operations", function () {
+    it("Stakeholder , Stakeholder Group , Tag and Archetype CRUD operations", function () {
         // Automates Polarion MTA-395
         stakeholders = createMultipleStakeholders(2);
         stakeholderGroups = createMultipleStakeholderGroups(2);
@@ -141,48 +141,44 @@ describe("UI Sanity Tests", () => {
         deleteByList(tags);
     });
 
-    it(
-        ["@ci"],
-        "Application assessment, review, analyze and validate efforts and issues",
-        function () {
-            AssessmentQuestionnaire.deleteAllQuestionnaires();
-            AssessmentQuestionnaire.enable(legacyPathfinder);
+    it("Application assessment, review, analyze and validate efforts and issues", function () {
+        AssessmentQuestionnaire.deleteAllQuestionnaires();
+        AssessmentQuestionnaire.enable(legacyPathfinder);
 
-            stakeholders = createMultipleStakeholders(1);
-            const application = new Analysis(
-                getRandomApplicationData("ci_testApp", {
-                    sourceData: this.appData["bookserver-app"],
-                }),
-                getRandomAnalysisData(this.analysisData["imported_data_for_ci_test"])
-            );
-            application.create();
-            cy.wait("@getApplication");
+        stakeholders = createMultipleStakeholders(1);
+        const application = new Analysis(
+            getRandomApplicationData("ci_testApp", {
+                sourceData: this.appData["bookserver-app"],
+            }),
+            getRandomAnalysisData(this.analysisData["imported_data_for_ci_test"])
+        );
+        application.create();
+        cy.wait("@getApplication");
 
-            //Perform assessment of application
-            application.perform_assessment("low", stakeholders);
-            application.verifyStatus("assessment", "Completed");
+        //Perform assessment of application
+        application.perform_assessment("low", stakeholders);
+        application.verifyStatus("assessment", "Completed");
 
-            // Perform application review
-            application.perform_review("low");
-            application.verifyStatus("review", "Completed");
+        // Perform application review
+        application.perform_review("low");
+        application.verifyStatus("review", "Completed");
 
-            // TO DO - Uncomment once bug https://issues.redhat.com/browse/MTA-5794 is fixed.
-            // application.validateReviewFields();
+        // TO DO - Uncomment once bug https://issues.redhat.com/browse/MTA-5794 is fixed.
+        // application.validateReviewFields();
 
-            application.analyze();
-            checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
+        application.analyze();
+        checkSuccessAlert(infoAlertMessage, `Submitted for analysis`);
 
-            application.selectApplicationRow();
-            cy.url().then((currentUrl) => {
-                const id = getApplicationID(currentUrl);
-                cy.log(`Current URL: ${currentUrl}`);
-                cy.log(`Extracted ID: ${id}`);
-                seedAnalysisData(id);
-            });
-            application.verifyEffort(this.analysisData["imported_data_for_ci_test"]["effort"]);
-            application.validateIssues(this.analysisData["imported_data_for_ci_test"]["issues"]);
-            application.delete();
-            deleteByList(stakeholders);
-        }
-    );
+        application.selectApplicationRow();
+        cy.url().then((currentUrl) => {
+            const id = getApplicationID(currentUrl);
+            cy.log(`Current URL: ${currentUrl}`);
+            cy.log(`Extracted ID: ${id}`);
+            seedAnalysisData(id);
+        });
+        application.verifyEffort(this.analysisData["imported_data_for_ci_test"]["effort"]);
+        application.validateIssues(this.analysisData["imported_data_for_ci_test"]["issues"]);
+        application.delete();
+        deleteByList(stakeholders);
+    });
 });

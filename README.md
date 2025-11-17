@@ -131,54 +131,133 @@ This repository uses the package [cypress-tags](https://www.npmjs.com/package/cy
 
 ## Tags and Tiers in Konveyor UI tests
 
-### Tags
+### Tag Overview
 
-### `@interOp` tag: (Used by interOp team, rosa, rosa-sts, aro clusters)
+Tests are tagged for selective execution based on purpose, stability, and resource requirements.
 
-Tests include:
-  - “Creating source control credentials with username/password”
-  - “Custom Migration Targets CRUD operations”
-  - “Analysis for acmeair app upload binary”
-  - “Test inheritance after discarding application assessment and review”
-  - “Business service CRUD operations”
-  - “Stakeholder CRUD operations”
-  - “Migration Waves CRUD operations”
+### Finding and Running Tests by Tag
 
-### `@ci` tag:
-- Runs on minikube for CI testing https://github.com/konveyor/ci
-- Running tests on github actions on minikube has some constraints like
-  1) Limited resources
-  2) Cannot run tests with credentials
-  3) Time taken to run CI tests
+Use the `findTierFiles.js` utility to locate and run tests with specific tags:
 
-Considering the above factors, we are including tests that are most necessary to test functionality of MTA while merging a PR. More tests will be added here once they're stabilized.
+```bash
+# Find all tier0 tests
+node cypress/scripts/findTierFiles.js tier0
 
-Tests include:
-  - “Source Analysis on bookserver app and its issues validation” (Current Time taken - 20-30 mins)
+# Run tests for a specific tier
+npx cypress run --spec "$(node cypress/scripts/findTierFiles.js tier0)"
 
-### `@tier0` tag:
-Basic sanity tests.  Runs on stage and production and nightly runs on [Konveyor CI](https://github.com/konveyor/ci).
+# Run tests for multiple tiers
+npx cypress run --spec "$(node cypress/scripts/findTierFiles.js tier0,interop)"
+```
 
-Tests include:
-  - “Creating source control credentials with username/password
-  - ”Custom Migration Targets CRUD operations
-  - “Source Analysis on bookserver app and its issues validation”
-  - “Source analysis on bookserver app with EAP8 target”
-  - “Test inheritance after discarding application assessment and review”
-  - “Business service CRUD operations”
-  - “Migration Waves CRUD operations”
+### Tag Definitions
 
-### `@tier1` tag:
-Includes analysis tests like binary and source+dependencies with credentials, runs on nightly [Konveyor CI](https://github.com/konveyor/ci).
+#### `@ci` - Continuous Integration Tests
+- **Purpose**: Runs on minikube for PR validation via [Konveyor CI](https://github.com/konveyor/ci)
+- **Constraints**:
+  - Limited resources (minikube environment)
+  - Cannot use tests requiring external credentials
+  - Time-constrained (must complete reasonably quickly)
+- **Tests Include**:
+  - Login and navigation validation
+  - Business service CRUD
+  - Job function CRUD
+  - Stakeholder, stakeholder group, tag, and archetype CRUD operations
+  - Application assessment, review, and analysis with effort and issues validation
 
-### `@tier2` tag:
-CRUD tests for all functionality
+**Usage**:
+```bash
+npx cypress run --spec "$(node cypress/scripts/findTierFiles.js ci)"
+```
 
-### `@tier3` tag:
-Sorting/filtering for all functionality
+#### `@tier0` - Basic Sanity Tests
+- **Purpose**: Core smoke tests for critical functionality
+- **Runs on**: Stage, production, and nightly on [Konveyor CI](https://github.com/konveyor/ci)
+- **Tests Include**:
+  - Custom migration targets CRUD and validation
+  - Source analysis on bookserver app (without credentials)
+  - Source + dependency analysis validation
+  - Migration waves CRUD and application association
 
-### `@tier4` tag:
-Load and performance tests.
+**Usage**:
+```bash
+npx cypress run --spec "$(node cypress/scripts/findTierFiles.js tier0)"
+```
+
+#### `@tier1` - Analysis Tests with Credentials
+- **Purpose**: Comprehensive analysis tests requiring external credentials
+- **Runs on**: Nightly on [Konveyor CI](https://github.com/konveyor/ci)
+- **Tests Include**:
+  - Binary analysis with Git credentials
+  - Source code analysis with credentials
+  - Node.js application analysis
+  - Python application analysis
+  - Upload binary analysis
+
+**Required Config**: Tests need `git_user` and `git_password` configured in `cypress.config.ts`
+
+**Usage**:
+```bash
+npx cypress run --spec "$(node cypress/scripts/findTierFiles.js tier1)"
+```
+
+#### `@tier2` - Comprehensive CRUD Tests
+- **Purpose**: Full CRUD coverage for all features
+- **Test Areas**: Administration (credentials, repositories, questionnaires), application inventory, controls, custom metrics, migration waves, task manager, RBAC, and analysis features
+
+**Usage**:
+```bash
+npx cypress run --spec "$(node cypress/scripts/findTierFiles.js tier2)"
+```
+
+#### `@tier3` - Sorting and Filtering Tests
+- **Purpose**: Validate sorting, filtering, and UI interactions
+- **Tests Include**:
+  - Job function filters
+  - Tag filters on application details
+  - Manual package selection for analysis
+  - Analysis with proxy configuration
+
+**Usage**:
+```bash
+npx cypress run --spec "$(node cypress/scripts/findTierFiles.js tier3)"
+```
+
+#### `@tier4` - Load and Performance Tests
+- **Purpose**: Load testing and performance validation
+- **Tests Include**:
+  - Bulk analysis operations
+  - Large dataset handling
+  - Performance benchmarks
+
+**Usage**:
+```bash
+npx cypress run --spec "$(node cypress/scripts/findTierFiles.js tier4)"
+```
+
+#### `@interop` - Interoperability Tests
+- **Purpose**: Used by interOp team for testing on ROSA, ROSA-STS, and ARO clusters
+- **Tests Include**:
+  - Source control credentials CRUD
+  - Custom migration targets CRUD
+  - Stakeholder CRUD operations
+
+**Usage**:
+```bash
+npx cypress run --spec "$(node cypress/scripts/findTierFiles.js interop)"
+```
+
+### Running Multiple Tags
+
+To run tests from multiple tiers in a single execution:
+
+```bash
+# Run tier0 and tier1 together
+npx cypress run --spec "$(node cypress/scripts/findTierFiles.js tier0,tier1)"
+
+# Run interop and tier0 tests
+npx cypress run --spec "$(node cypress/scripts/findTierFiles.js tier0,interop)"
+```
 
 ## License's header management
 To check if the license's header is available in all eligible files, execute:
