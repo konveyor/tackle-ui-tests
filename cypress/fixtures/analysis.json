@@ -1359,7 +1359,7 @@
                 "labels": ["None"]
             },
             {
-                "name": "Producer annotation no longer required",
+                "name": "@Produces annotation no longer required",
                 "category": "potential",
                 "sources": ["java-ee"],
                 "targets": ["quarkus"],
