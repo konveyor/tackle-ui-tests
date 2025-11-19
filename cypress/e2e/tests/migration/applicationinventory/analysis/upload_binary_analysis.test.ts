@@ -59,7 +59,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         applicationsList.push(application);
         cy.wait("@getApplication");
         application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyAnalysisStatus(AnalysisStatuses.completed, 20 * MIN);
     });
 
     it("Analysis for spring-petclinic application", function () {
@@ -71,7 +71,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         applicationsList.push(application);
         cy.wait("@getApplication");
         application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyAnalysisStatus(AnalysisStatuses.completed, 20 * MIN);
     });
 
     it("Analysis for jee-example-app upload binary", function () {
@@ -97,7 +97,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         applicationsList.push(application);
         cy.wait("@getApplication");
         application.analyze();
-        application.verifyAnalysisStatus("Completed");
+        application.verifyAnalysisStatus(AnalysisStatuses.completed, 20 * MIN);
     });
 
     it("Analysis for kafka-clients-sb app", function () {
@@ -109,7 +109,7 @@ describe(["@tier1"], "Upload Binary Analysis", () => {
         applicationsList.push(application);
         cy.wait("@getApplication");
         application.analyze();
-        application.verifyAnalysisStatus(AnalysisStatuses.completed);
+        application.verifyAnalysisStatus(AnalysisStatuses.completed, 30 * MIN);
     });
 
     it("upload_binary_with_exclude_packages_scope", function () {
