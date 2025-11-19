@@ -145,13 +145,16 @@ export class SourcePlatform {
         }
     }
 
-    discover(appName: string, space: string, cancel = false): void {
+    discover(org: string, appName: string, space: string, cancel = false): void {
         SourcePlatform.open();
         clickItemInKebabMenu(this.name, "Discover applications");
         if (cancel) {
             cancelForm();
             return;
         }
+
+        cy.contains("button", "Add an organization").click();
+        inputText(`input[name="organizations.0.value"]`, appName);
 
         cy.contains("button", "Add a name").click();
         inputText(`input[name="names.0.value"]`, appName);
