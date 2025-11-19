@@ -26,7 +26,7 @@ import {
     selectUserPerspective,
     submitForm,
 } from "../../../../utils/utils";
-import { administration, SEC, trTag } from "../../../types/constants";
+import { administration, button, SEC, trTag } from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
 import * as sourcePlatform from "../../../views/source-platform.view";
@@ -153,18 +153,18 @@ export class SourcePlatform {
             return;
         }
 
-        cy.contains("button", "Add an organization").click();
-        inputText(`input[name="organizations.0.value"]`, appName);
+        clickByText(button, "Add an organization");
+        inputText(`input[name="organizations.0.value"]`, org);
 
-        cy.contains("button", "Add a name").click();
+        clickByText(button, "Add a name");
         inputText(`input[name="names.0.value"]`, appName);
 
-        cy.contains("button", "Add a space").click();
+        clickByText(button, "Add a space");
         inputText(`input[name="spaces.0.value"]`, space);
         next();
 
-        cy.contains("button", "Discover applications").click();
-        cy.contains("button", "Close").click();
+        clickByText(button, "Discover applications");
+        clickByText(button, "Close");
 
         // Page reload is required here
         SourcePlatform.open();
