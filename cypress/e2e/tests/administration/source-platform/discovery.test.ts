@@ -61,7 +61,7 @@ describe(["@tier1"], "Cloud Foundry discovery", () => {
 
     it("Discover a single CF application", function () {
         const CFApp = "hello-spring-cloud";
-        cfInstance.discover(CFApp, "space");
+        cfInstance.discover("org", CFApp, "space");
 
         // Click 'Applications' link for the CF instance
         cy.contains(cfInstance.name)
