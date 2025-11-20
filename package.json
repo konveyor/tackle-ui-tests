@@ -26,6 +26,7 @@
         "decompress": "^4.2.1",
         "esbuild": "^0.25.5",
         "faker": "^5.5.3",
+        "glob": "^10.3.0",
         "husky": "^9.1.7",
         "js-yaml": "^4.1.0",
         "junit-report-merger": "^3.0.2",
@@ -54,7 +55,7 @@
         "node": ">=20.17"
     },
     "devDependencies": {
-        "mochawesome-merge": "^5.0.0",
+        "mochawesome-merge": "^4.4.1",
         "table": "^6.9.0"
     }
 }
