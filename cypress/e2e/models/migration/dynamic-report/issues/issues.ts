@@ -2,60 +2,53 @@ import {
     click,
     clickByText,
     getUniqueElementsFromSecondArray,
-    getUrl,
+    // getUrl,
     inputText,
     performWithin,
     selectFilter,
-    selectItemsPerPage,
-    selectUserPerspective,
+    // selectItemsPerPage,
+    // selectUserPerspective,
     validateAnyNumberPresence,
     validateNumberPresence,
     validateTextPresence,
-    waitUntilSpinnerIsGone,
 } from "../../../../../utils/utils";
-import {
-    button,
-    issueFilter,
-    migration,
-    SEC,
-    singleApplication,
-    tdTag,
-    trTag,
-} from "../../../../types/constants";
+import { DynamicReports } from "../../../../tests/migration/dynamic-report/dynamic-report";
+import { button, issueFilter, tdTag, trTag } from "../../../../types/constants";
 import { AppIssue } from "../../../../types/types";
 import { div, liTag, searchButton, searchInput, span } from "../../../../views/common.view";
 import {
     affectedFilesTable,
     issueColumns,
     searchMenuToggle,
-    singleAppDropList,
     singleApplicationColumns,
 } from "../../../../views/issue.view";
-import { navMenu } from "../../../../views/menu.view";
+// import { navMenu } from "../../../../views/menu.view";
 
-export class Issues {
+export class Issues extends DynamicReports {
     /** Contains URL of issues web page */
-    static fullUrl = Cypress.config("baseUrl") + "/issues";
+    // static fullUrl = Cypress.config("baseUrl") + "/issues";
+    static urlSuffix = "/issues";
+    static menuName = "Issues";
 
-    public static openList(itemsPerPage = 100, forceReload = false): void {
-        if (forceReload) {
-            cy.visit(Issues.fullUrl);
-        }
-        if (!getUrl().includes(Issues.fullUrl)) {
-            selectUserPerspective(migration);
-        }
-        clickByText(navMenu, "Issues");
-        cy.wait(2 * SEC);
-        waitUntilSpinnerIsGone();
-        selectItemsPerPage(itemsPerPage);
-    }
+    // public static openList(itemsPerPage = 100, forceReload = false): void {
+    //     if (forceReload) {
+    //         cy.visit(Issues.fullUrl);
+    //     }
+    //     if (!getUrl().includes(Issues.fullUrl)) {
+    //         selectUserPerspective(migration);
+    //     }
+    //     clickByText(navMenu, "Issues");
+    //     cy.wait(2 * SEC);
+    //     waitUntilSpinnerIsGone();
+    //     selectItemsPerPage(itemsPerPage);
+    // }
 
-    public static openSingleApplication(applicationName: string): void {
-        Issues.openList();
-        clickByText(button, singleApplication);
-        click(singleAppDropList);
-        clickByText(button, applicationName);
-    }
+    // public static openSingleApplication(applicationName: string): void {
+    //     Issues.openList();
+    //     clickByText(button, singleApplication);
+    //     click(singleAppDropList);
+    //     clickByText(button, applicationName);
+    // }
 
     public static applyAndValidateFilter(
         filterType: issueFilter,
