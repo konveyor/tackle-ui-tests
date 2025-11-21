@@ -16,7 +16,7 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import * as data from "../../../utils/data_utils";
-import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data_utils";
+import { getRandomCredentialsData } from "../../../utils/data_utils";
 import {
     getRandomAnalysisData,
     getRandomApplicationData,
@@ -27,8 +27,6 @@ import {
 import { AssessmentQuestionnaire } from "../../models/administration/assessment_questionnaire/assessment_questionnaire";
 import { CredentialsMaven } from "../../models/administration/credentials/credentialsMaven";
 import { CredentialsSourceControlUsername } from "../../models/administration/credentials/credentialsSourceControlUsername";
-import { User } from "../../models/keycloak/users/user";
-import { UserAdmin } from "../../models/keycloak/users/userAdmin";
 import { Analysis } from "../../models/migration/applicationinventory/analysis";
 import { Archetype } from "../../models/migration/archetypes/archetype";
 import { BusinessServices } from "../../models/migration/controls/businessservices";
@@ -234,15 +232,15 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         AssessmentQuestionnaire.disable(cloudReadinessQuestionnaire);
     });
 
-    it("Create new admin user to use after upgrade", function () {
-        const user = this.upgradeData.adminUser;
-        const password = Cypress.env("pass");
-        const userAdmin = new UserAdmin(getRandomUserData());
-        userAdmin.username = this.upgradeData.adminUser;
-        userAdmin.password = Cypress.env("pass");
+    // it("Create new admin user to use after upgrade", function () {
+    //     const user = this.upgradeData.adminUser;
+    //     const password = Cypress.env("pass");
+    //     const userAdmin = new UserAdmin(getRandomUserData());
+    //     userAdmin.username = this.upgradeData.adminUser;
+    //     userAdmin.password = Cypress.env("pass");
 
-        //Logging in as keycloak admin to create new user
-        User.loginKeycloakAdmin();
-        userAdmin.create();
-    });
+    //     //Logging in as keycloak admin to create new user
+    //     User.loginKeycloakAdmin();
+    //     userAdmin.create();
+    // });
 });

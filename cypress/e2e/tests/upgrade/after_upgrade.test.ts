@@ -75,7 +75,7 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         cy.fixture("upgrade-data").then((upgradeData: UpgradeData) => {
             this.upgradeData = upgradeData;
             const userAdmin = new UserAdmin(getRandomUserData());
-            userAdmin.username = this.upgradeData.adminUser;
+            userAdmin.username = Cypress.env("user");
             userAdmin.password = Cypress.env("pass");
             userAdmin.login();
             cy.visit("/");
