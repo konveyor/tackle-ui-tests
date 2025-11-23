@@ -312,8 +312,8 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
 
     it("Validates auto tagging of applications and archetypes based on assessment answers", function () {
         //automates polarion MTA-387 and MTA-502
-        const archetypeTag = ["3rd party", "Apache Aries"];
-        const assessmentTag = ["Runtime", "Spring Boot"];
+        const archetypeTag = ["3rd party", "Apache Aries"] as [string, string];
+        const assessmentTag = ["Runtime", "Spring Boot"] as [string, string];
         const appdata = { name: data.getAppName(), tags: ["Language / Java"] };
         const application = new Application(appdata);
         application.create();
