@@ -148,9 +148,7 @@ export function inputText(fieldId: string, text: any, log = false, useInvoke = f
     if (useInvoke) {
         cy.get(fieldId, { log, timeout: 2 * SEC })
             .clear({ log, timeout: 30 * SEC })
-            .invoke("val", text)
-            .trigger("input")
-            .trigger("change");
+            .invoke("val", text);
     } else {
         cy.get(fieldId, { log, timeout: 2 * SEC })
             .clear({ log, timeout: 30 * SEC })
