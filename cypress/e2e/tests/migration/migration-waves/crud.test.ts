@@ -55,8 +55,6 @@ describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
 
     beforeEach("Login", function () {
         cy.intercept("GET", "/hub/migrationwaves*").as("getWave");
-        cy.intercept("GET", "/hub/tickets*").as("getTickets");
-        cy.intercept("GET", "/hub/trackers*").as("getTrackers");
         cy.intercept("POST", "/hub/migrationwaves*").as("postWave");
         cy.intercept("PUT", "/hub/migrationwaves*/*").as("putWave");
         cy.intercept("DELETE", "/hub/migrationwaves*/*").as("deleteWave");
