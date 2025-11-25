@@ -55,6 +55,8 @@ describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
 
     beforeEach("Login", function () {
         cy.intercept("GET", "/hub/migrationwaves*").as("getWave");
+        cy.intercept("GET", "/hub/tickets*").as("getTickets");
+        cy.intercept("GET", "/hub/trackers*").as("getTrackers");
         cy.intercept("POST", "/hub/migrationwaves*").as("postWave");
         cy.intercept("PUT", "/hub/migrationwaves*/*").as("putWave");
         cy.intercept("DELETE", "/hub/migrationwaves*/*").as("deleteWave");
@@ -116,7 +118,8 @@ describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
             applications
         );
         migrationWave.create();
-
+        // Setting the applications triggers a put request that needs to be intercepted to avoid errors later
+        cy.wait("@putWave");
         verifySpecialColumnCount(migrationWave, MigrationWavesSpecialColumns.Stakeholders, 2);
         verifySpecialColumnCount(migrationWave, MigrationWavesSpecialColumns.Applications, 2);
 
@@ -137,10 +140,16 @@ describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
 
         // Delete all applications by clicking the delete buttons
         cy.get(applicationTableSelector + " td > button").each((btn) => {
-            cy.wrap(btn).click();
-            cy.contains("Delete").click();
+            cy.wait("@getWave");
+            cy.wait("@getTickets");
+            cy.wait("@getTrackers");
+            cy.wrap(btn)
+                .click()
+                .then(() => cy.contains("Delete").click({ force: true }));
             cy.wait("@putWave");
             cy.wait("@getWave");
+            cy.wait("@getTickets");
+            cy.wait("@getTrackers");
         });
         migrationWave.applications = [];
 
