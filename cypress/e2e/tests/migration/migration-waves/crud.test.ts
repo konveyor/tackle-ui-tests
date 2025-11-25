@@ -118,8 +118,6 @@ describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
             applications
         );
         migrationWave.create();
-        // Setting the applications triggers a put request that needs to be intercepted to avoid errors later
-        cy.wait("@putWave");
         verifySpecialColumnCount(migrationWave, MigrationWavesSpecialColumns.Stakeholders, 2);
         verifySpecialColumnCount(migrationWave, MigrationWavesSpecialColumns.Applications, 2);
 
@@ -139,17 +137,15 @@ describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
             .and("contain", applications[1].name);
 
         // Delete all applications by clicking the delete buttons
-        cy.get(applicationTableSelector + " td > button").each((btn) => {
-            cy.wait("@getWave");
-            cy.wait("@getTickets");
-            cy.wait("@getTrackers");
-            cy.wrap(btn)
-                .click()
-                .then(() => cy.contains("Delete").click({ force: true }));
-            cy.wait("@putWave");
-            cy.wait("@getWave");
-            cy.wait("@getTickets");
-            cy.wait("@getTrackers");
+        cy.get(applicationTableSelector + " td > button").each((btn, i, list) => {
+            const elements = list.length;
+            cy.wrap(btn).click();
+            cy.contains("Delete").click();
+            verifySpecialColumnCount(
+                migrationWave,
+                MigrationWavesSpecialColumns.Applications,
+                elements - i - 1
+            );
         });
         migrationWave.applications = [];
 
@@ -167,10 +163,11 @@ describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
     const verifySpecialColumnCount = (
         wave: MigrationWave,
         column: MigrationWavesSpecialColumns,
-        expectedCount: number
+        expectedCount: number,
+        timeout = 10 * SEC
     ) => {
         cy.contains("td", wave.name)
             .siblings(`td[data-label='${column}']`)
-            .should("contain", expectedCount);
+            .should("contain", expectedCount, { timeout });
     };
 });
