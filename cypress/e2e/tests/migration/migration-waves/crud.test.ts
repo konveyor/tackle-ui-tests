@@ -116,7 +116,6 @@ describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
             applications
         );
         migrationWave.create();
-
         verifySpecialColumnCount(migrationWave, MigrationWavesSpecialColumns.Stakeholders, 2);
         verifySpecialColumnCount(migrationWave, MigrationWavesSpecialColumns.Applications, 2);
 
@@ -136,11 +135,15 @@ describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
             .and("contain", applications[1].name);
 
         // Delete all applications by clicking the delete buttons
-        cy.get(applicationTableSelector + " td > button").each((btn) => {
+        cy.get(applicationTableSelector + " td > button").each((btn, i, list) => {
+            const elements = list.length;
             cy.wrap(btn).click();
             cy.contains("Delete").click();
-            cy.wait("@putWave");
-            cy.wait("@getWave");
+            verifySpecialColumnCount(
+                migrationWave,
+                MigrationWavesSpecialColumns.Applications,
+                elements - i - 1
+            );
         });
         migrationWave.applications = [];
 
@@ -158,10 +161,11 @@ describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
     const verifySpecialColumnCount = (
         wave: MigrationWave,
         column: MigrationWavesSpecialColumns,
-        expectedCount: number
+        expectedCount: number,
+        timeout = 10 * SEC
     ) => {
         cy.contains("td", wave.name)
-            .siblings(`td[data-label='${column}']`)
+            .siblings(`td[data-label='${column}']`, { timeout })
             .should("contain", expectedCount);
     };
 });
