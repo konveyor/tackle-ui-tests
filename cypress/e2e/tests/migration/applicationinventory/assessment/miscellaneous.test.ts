@@ -116,12 +116,12 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
         applicationList[0].perform_assessment("low", stakeholderList);
         Application.open(true);
         applicationList[0].deleteAssessments();
-        applicationList[0].verifyButtonEnabled("Take");
         checkSuccessAlert(
             successAlertMessage,
             `Success! Assessment discarded for ${applicationList[0].name}.`,
             true
         );
+        applicationList[0].verifyButtonEnabled("Take");
         applicationList[0].validateAssessmentField("Unassessed");
         archetypeList[0].perform_assessment("low", stakeholderList);
     });
