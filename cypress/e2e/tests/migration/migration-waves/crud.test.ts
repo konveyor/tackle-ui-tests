@@ -165,7 +165,7 @@ describe(["@tier0", "interop"], "Migration Waves CRUD operations", () => {
         timeout = 10 * SEC
     ) => {
         cy.contains("td", wave.name)
-            .siblings(`td[data-label='${column}']`)
-            .should("contain", expectedCount, { timeout });
+            .siblings(`td[data-label='${column}']`, { timeout })
+            .should("contain", expectedCount);
     };
 });
