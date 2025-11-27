@@ -2,10 +2,7 @@ import {
     click,
     clickByText,
     getUniqueElementsFromSecondArray,
-    // getUrl,
-    inputText,
     performWithin,
-    selectFilter,
     // selectItemsPerPage,
     // selectUserPerspective,
     validateAnyNumberPresence,
@@ -15,11 +12,10 @@ import {
 import { DynamicReports } from "../../../../tests/migration/dynamic-report/dynamic-report";
 import { button, issueFilter, tdTag, trTag } from "../../../../types/constants";
 import { AppIssue } from "../../../../types/types";
-import { div, liTag, searchButton, searchInput, span } from "../../../../views/common.view";
+import { div, liTag, span } from "../../../../views/common.view";
 import {
     affectedFilesTable,
     issueColumns,
-    searchMenuToggle,
     singleApplicationColumns,
 } from "../../../../views/issue.view";
 // import { navMenu } from "../../../../views/menu.view";
@@ -110,48 +106,23 @@ export class Issues extends DynamicReports {
         });
     }
 
-    public static applyFilter(
-        filterType: issueFilter,
-        filterValue: string,
-        isSingle = false
-    ): void {
-        if (!isSingle) {
-            Issues.openList();
-        }
-
-        selectFilter(filterType);
-        const isApplicableFilter =
-            filterType === issueFilter.category ||
-            filterType === issueFilter.source ||
-            filterType === issueFilter.target;
-
-        if (isApplicableFilter) {
-            inputText(searchInput, filterValue);
-            click(searchButton);
-        } else {
-            click(searchMenuToggle);
-            clickByText(span, filterValue);
-            click(searchMenuToggle);
-        }
-    }
-
-    public static applyMultiFilter(filterType: issueFilter, filterValues: string[]): void {
-        Issues.openList();
-        selectFilter(filterType);
-        click(searchMenuToggle);
-        filterValues.forEach((filterValue) => clickByText(span, filterValue));
-        click(searchMenuToggle);
-    }
-
-    public static unfold(name: string): void {
-        performWithin(name, () => {
-            cy.get("[id^=expandable]").then(($button) => {
-                if (!$button.hasClass("pf-m-expanded")) {
-                    $button.trigger("click");
-                }
-            });
-        });
-    }
+    // public static applyMultiFilter(filterType: issueFilter, filterValues: string[]): void {
+    //     Issues.openList();
+    //     selectFilter(filterType);
+    //     click(searchMenuToggle);
+    //     filterValues.forEach((filterValue) => clickByText(span, filterValue));
+    //     click(searchMenuToggle);
+    // }
+    //
+    // public static unfold(name: string): void {
+    //     performWithin(name, () => {
+    //         cy.get("[id^=expandable]").then(($button) => {
+    //             if (!$button.hasClass("pf-m-expanded")) {
+    //                 $button.trigger("click");
+    //             }
+    //         });
+    //     });
+    // }
 
     public static openAffectedApplications(name: string): void {
         Issues.openList();

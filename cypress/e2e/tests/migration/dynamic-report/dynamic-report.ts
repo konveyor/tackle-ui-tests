@@ -2,13 +2,16 @@ import {
     click,
     clickByText,
     getUrl,
+    inputText,
     performWithin,
+    selectFilter,
     selectItemsPerPage,
     selectUserPerspective,
     waitUntilSpinnerIsGone,
 } from "../../../../utils/utils";
-import { button, migration, SEC, singleApplication } from "../../../types/constants";
-import { singleAppDropList } from "../../../views/issue.view";
+import { button, issueFilter, migration, SEC, singleApplication } from "../../../types/constants";
+import { searchButton, searchInput, span } from "../../../views/common.view";
+import { searchMenuToggle, singleAppDropList } from "../../../views/issue.view";
 import { navMenu } from "../../../views/menu.view";
 
 export abstract class DynamicReports {
@@ -48,5 +51,38 @@ export abstract class DynamicReports {
                 }
             });
         });
+    }
+
+    public static applyFilter(
+        filterType: issueFilter,
+        filterValue: string,
+        isSingle = false
+    ): void {
+        if (!isSingle) {
+            this.openList();
+        }
+
+        selectFilter(filterType);
+        const isApplicableFilter =
+            filterType === issueFilter.category ||
+            filterType === issueFilter.source ||
+            filterType === issueFilter.target;
+
+        if (isApplicableFilter) {
+            inputText(searchInput, filterValue);
+            click(searchButton);
+        } else {
+            click(searchMenuToggle);
+            clickByText(span, filterValue);
+            click(searchMenuToggle);
+        }
+    }
+
+    public static applyMultiFilter(filterType: issueFilter, filterValues: string[]): void {
+        this.openList();
+        selectFilter(filterType);
+        click(searchMenuToggle);
+        filterValues.forEach((filterValue) => clickByText(span, filterValue));
+        click(searchMenuToggle);
     }
 }
