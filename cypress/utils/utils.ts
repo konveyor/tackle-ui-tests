@@ -1865,10 +1865,10 @@ export function seedAnalysisData(applicationId: number): void {
         failOnNonZeroExit: false,
     }).then((result) => {
         console.log("Command result:", result);
-        cy.log(`Exit code: ${result.code}`);
+        cy.log(`Exit code: ${result.exitCode}`);
         cy.log(`stdout: ${result.stdout}`);
         cy.log(`stderr: ${result.stderr}`);
-        expect(result.code).to.eq(0);
+        expect(result.exitCode).to.eq(0);
         expect(result.stderr, "No error output").to.eq("");
         expect(result.stdout, "Expected script output").to.include("Analysis: created.");
     });
@@ -2095,7 +2095,7 @@ export function deleteCustomResource(
         command = `${command} --ignore-not-found=true`;
     }
     getCommandOutput(command).then((output) => {
-        expect(output.code).to.equal(0);
+        expect(output.exitCode).to.equal(0);
     });
 }
 
