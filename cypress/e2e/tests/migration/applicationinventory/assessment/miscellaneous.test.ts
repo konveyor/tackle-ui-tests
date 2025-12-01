@@ -192,8 +192,6 @@ describe(["@tier3"], "Tests related to application assessment and review", () =>
             .find(ArchivedQuestionnairesTableDataCell)
             .last()
             .should("not.have.text", cloudNative);
-        // todo: uncomment when the bug is fixed
-        // AssessmentQuestionnaire.delete(cloudNative);
     });
 
     it("Test inheritance after discarding application assessment and review", function () {
