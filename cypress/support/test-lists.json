@@ -1,0 +1,30 @@
+{
+  "tier0": [
+    "cypress/e2e/tests/administration/custom-migration-targets/trigger_validation.test.ts",
+    "cypress/e2e/tests/administration/custom-migration-targets/crud.test.ts",
+    "cypress/e2e/tests/migration/migration-waves/crud.test.ts",
+    "cypress/e2e/tests/migration/applicationinventory/analysis/source_analysis_without_creds.test.ts"
+  ],
+  "tier1": [
+    "cypress/e2e/tests/administration/source-platform/discovery.test.ts",
+    "cypress/e2e/tests/migration/applicationinventory/analysis/python_analysis.test.ts",
+    "cypress/e2e/tests/migration/applicationinventory/analysis/source_analysis.test.ts",
+    "cypress/e2e/tests/migration/applicationinventory/analysis/upload_binary_analysis.test.ts",
+    "cypress/e2e/tests/migration/applicationinventory/analysis/nodejs_analysis.test.ts",
+    "cypress/e2e/tests/migration/applicationinventory/analysis/binary_analysis.test.ts"
+  ],
+  "ci": [
+    "cypress/e2e/tests/login.test.ts",
+    "cypress/e2e/tests/ci.test.ts"
+  ],
+  "fast": [
+    "cypress/e2e/tests/migration/controls/**/*.test.ts",
+    "cypress/e2e/tests/administration/credentials/**/*.test.ts",
+    "cypress/e2e/tests/administration/jira-connection/**/*.test.ts"
+  ],
+  "slow": [
+    "cypress/e2e/tests/migration/applicationinventory/analysis/**/*.test.ts",
+    "cypress/e2e/tests/migration/migration-waves/**/*.test.ts",
+    "cypress/e2e/tests/custom-metrics/**/*.test.ts"
+  ]
+}

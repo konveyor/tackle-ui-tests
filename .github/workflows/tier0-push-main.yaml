@@ -13,7 +13,7 @@ jobs:
     main-tier0:
         uses: ./.github/workflows/run-ui-tests.yaml
         with:
-            test_tags: "@ci,@tier0"
+            test_spec: "cypress/e2e/tests/{ci,tier0}/**/*.test.ts"
             feature_auth_required: true
             bundle_image: quay.io/konveyor/tackle2-operator-bundle:latest
             install_konveyor_version: main

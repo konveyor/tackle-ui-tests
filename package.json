@@ -22,7 +22,6 @@
         "cypress-multi-reporters": "^1.5.0",
         "cypress-react-selector": "^3.0.0",
         "cypress-real-events": "^1.15.0",
-        "cypress-tags": "^1.2.2",
         "decompress": "^4.2.1",
         "esbuild": "^0.25.5",
         "faker": "^5.5.3",
@@ -55,6 +54,7 @@
         "node": ">=20.17"
     },
     "devDependencies": {
+        "cypress-split": "^1.24.25",
         "mochawesome-merge": "^4.4.1",
         "table": "^6.9.0"
     }

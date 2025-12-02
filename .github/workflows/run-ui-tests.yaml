@@ -3,9 +3,10 @@ name: run UI tests on minikube
 on:
     workflow_call: # call from another workflow
         inputs:
-            test_tags:
+            test_spec:
                 type: string
-                default: "@ci,@tier0"
+                default: "cypress/e2e/tests/{ci,tier0}/**/*.test.ts"
+                description: "Spec pattern for tests to run"
 
             feature_auth_required:
                 type: boolean
@@ -25,10 +26,10 @@ on:
 
     workflow_dispatch: # start from GitHub UI or API
         inputs:
-            test_tags:
-                description: Comma separated list of test tags to run
+            test_spec:
+                description: "Spec pattern for tests (e.g., cypress/e2e/tests/tier0/**/*.test.ts)"
                 type: string
-                default: "@ci,@tier0"
+                default: "cypress/e2e/tests/{ci,tier0}/**/*.test.ts"
 
             feature_auth_required:
                 description: Enable authentication?
@@ -52,8 +53,12 @@ on:
 
 jobs:
     run-test:
-        name: "Run tests - ${{ inputs.feature_auth_required && 'auth' || 'noauth' }}, test: ${{ inputs.test_ref }}, tags: ${{ inputs.test_tags }}"
+        name: "Run tests - ${{ inputs.feature_auth_required && 'auth' || 'noauth' }}, test: ${{ inputs.test_ref }}, spec: ${{ inputs.test_spec }}, container: ${{ matrix.containers }}"
         runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                containers: [1, 2, 3, 4]
 
         steps:
             - name: Setup minikube
@@ -100,24 +105,19 @@ jobs:
                   ref: ${{ inputs.test_ref }}
                   path: tackle-ui-tests
 
-            - name: Run login tests using default credentials from `cypress.config.ts`
+            - name: Run UI tests (${{ inputs.test_spec }}) using default credentials from `cypress.config.ts`
               uses: cypress-io/github-action@v6
               env:
-                  CYPRESS_baseUrl: "${{ env.UI_URL }}"
-              with:
-                  working-directory: tackle-ui-tests
-                  spec: "cypress/e2e/tests/login.test.ts"
-
-            - name: Run UI tests (${{ inputs.test_tags }}) using default credentials from `cypress.config.ts`
-              uses: cypress-io/github-action@v6
-              env:
-                  CYPRESS_INCLUDE_TAGS: "${{ inputs.test_tags }}"
                   CYPRESS_baseUrl: "${{ env.UI_URL }}"
                   CYPRESS_git_user: "fakeuser"
                   CYPRESS_git_password: "${{ secrets.GITHUB_TOKEN }}"
                   CYPRESS_git_key: "${{ secrets.GITHUB_TOKEN }}"
+                  SPLIT: ${{ strategy.job-total }}
+                  SPLIT_INDEX: ${{ strategy.job-index }}
               with:
                   working-directory: tackle-ui-tests
+                  spec: "${{ inputs.test_spec }}"
+                  command: npx cypress run --spec "${{ inputs.test_spec }}" --env SPLIT=${{ strategy.job-total }},SPLIT_INDEX=${{ strategy.job-index }}
 
             - uses: actions/upload-artifact@v4
               if: failure()
@@ -125,7 +125,7 @@ jobs:
                   AUTH_KIND: ${{ inputs.feature_auth_required && 'auth' || 'noauth' }}
                   TEST_KIND: ${{ inputs.test_ref }}
               with:
-                  name: test-reports-${{ env.AUTH_KIND }}-${{ env.TEST_KIND }}
+                  name: test-reports-${{ env.AUTH_KIND }}-${{ env.TEST_KIND }}-container-${{ matrix.containers }}
                   path: |
                       tackle-ui-tests/cypress/reports
                       tackle-ui-tests/cypress/screenshots

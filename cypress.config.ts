@@ -1,6 +1,6 @@
 import { defineConfig } from "cypress";
 import cypressFastFail from "cypress-fail-fast/plugin";
-import { tagify } from "cypress-tags";
+import cypressSplit from "cypress-split";
 import decompress from "decompress";
 import esbuildPreprocessor from "./cypress/support/esbuild-preprocessor";
 const { downloadFile } = require("cypress-downloadfile/lib/addPlugin");
@@ -63,12 +63,12 @@ export default defineConfig({
             process.env.CYPRESS_baseUrl ||
             "https://tackle-konveyor-tackle.apps.mig09.rhos-psi.cnv-qe.rhood.us",
         setupNodeEvents(on, config) {
-            // preprocessors (for typescript and tags)
+            // preprocessors (for typescript)
             esbuildPreprocessor(on);
-            on("file:preprocessor", tagify(config));
 
             // enable plugins as needed
             cypressFastFail(on, config);
+            cypressSplit(on, config);
             require("cypress-fs/plugins")(on, config);
 
             // add tasks that execute in node, called by cy.task("functionName", ...)
@@ -80,6 +80,8 @@ export default defineConfig({
                     return null;
                 },
             });
+
+            return config;
         },
         experimentalMemoryManagement: true,
     },
