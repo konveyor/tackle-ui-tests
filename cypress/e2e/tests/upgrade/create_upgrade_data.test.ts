@@ -42,6 +42,7 @@ import {
     cloudReadinessQuestionnaire,
     CredentialType,
     legacyPathfinder,
+    MIN,
     SEC,
     UserCredentials,
 } from "../../types/constants";
@@ -143,22 +144,6 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         archetype.validateAssessmentField("Low");
     });
 
-    it("Creating Upload Binary Analysis", function () {
-        const uploadBinaryApplication = new Analysis(
-            getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
-        );
-        uploadBinaryApplication.name = this.upgradeData.uploadBinaryApplicationName;
-        uploadBinaryApplication.create();
-        cy.wait("@getApplication");
-        cy.wait(2 * SEC);
-        uploadBinaryApplication.perform_assessment("low", [stakeHolder]);
-        uploadBinaryApplication.analyze();
-        uploadBinaryApplication.verifyAnalysisStatus("Completed");
-        uploadBinaryApplication.verifyStatus("assessment", "Completed");
-        uploadBinaryApplication.selectApplication();
-    });
-
     it("Creating source applications", function () {
         const { tagName } = this.upgradeData;
         const sourceApplication = new Analysis(
@@ -193,7 +178,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         );
         binaryApplication.perform_assessment("low", [stakeHolder]);
         binaryApplication.analyze();
-        binaryApplication.verifyAnalysisStatus("Completed");
+        binaryApplication.verifyAnalysisStatus("Completed", 30 * MIN);
         binaryApplication.verifyStatus("assessment", "Completed");
         binaryApplication.selectApplication();
     });

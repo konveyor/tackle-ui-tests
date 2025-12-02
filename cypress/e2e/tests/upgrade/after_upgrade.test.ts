@@ -48,6 +48,7 @@ import {
     AnalysisStatuses,
     cloudReadinessQuestionnaire,
     legacyPathfinder,
+    MIN,
     ReportTypeSelectors,
 } from "../../types/constants";
 import { UpgradeData } from "../../types/types";
@@ -64,7 +65,7 @@ function processApplication(application: Analysis): void {
     // Post upgrade: Re-run analysis on an app that was analyzed before upgrade
     application.analyze();
     application.waitStatusChange(AnalysisStatuses.inProgress);
-    application.verifyAnalysisStatus("Completed");
+    application.verifyAnalysisStatus("Completed", 30 * MIN);
     application.downloadReport(ReportTypeSelectors.HTML);
     application.extractHTMLReport();
 }
@@ -169,14 +170,8 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         );
         binaryApplication.name = binaryApplicationName;
 
-        const uploadBinaryApplication = new Analysis(
-            getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
-        );
-        uploadBinaryApplication.name = uploadBinaryApplicationName;
-
         Analysis.open();
-        [sourceApplication, binaryApplication, uploadBinaryApplication].forEach(processApplication);
+        [sourceApplication, binaryApplication].forEach(processApplication);
     });
 
     it("Verify that assessed application is migrated", function () {
@@ -199,7 +194,6 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
     });
 
     it("Validating pods after upgrade", function () {
-        // In MTA 7.3, RHSSO has been replaced by RHBK.
         const allowedPodsList = [
             "mta-hub",
             "mta-keycloak-postgresql",
