@@ -17,7 +17,6 @@ import {
     assignRoleButton,
     checkBox,
     createPasswordButton,
-    filterTypeDropdown,
     modalConfirmButton,
     passwordConfirm,
     passwordInput,
@@ -128,8 +127,9 @@ export class User {
     }
 
     protected inputPassword(password: string) {
-        inputText(passwordInput, password);
-        inputText(passwordConfirm, password);
+        // TODO: Remove false, true after fix: https://github.com/keycloak/keycloak/issues/44278
+        inputText(passwordInput, password, false, true);
+        inputText(passwordConfirm, password, false, true);
     }
 
     create(): void {
@@ -169,8 +169,7 @@ export class User {
         clickByText("a", this.username);
         this.navigateToSection("role-mapping-tab");
         click(assignRoleButton);
-        click(filterTypeDropdown);
-        clickByText(button, "Filter by realm roles");
+        clickByText(button, "Realm roles");
         cy.contains(tdTag, role)
             .closest(trTag)
             .within(() => {
