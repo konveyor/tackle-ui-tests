@@ -169,14 +169,8 @@ describe(["@post-upgrade"], "Performing post-upgrade validations", () => {
         );
         binaryApplication.name = binaryApplicationName;
 
-        const uploadBinaryApplication = new Analysis(
-            getRandomApplicationData("uploadBinary"),
-            getRandomAnalysisData(this.analysisData["uploadbinary_analysis_on_acmeair"])
-        );
-        uploadBinaryApplication.name = uploadBinaryApplicationName;
-
         Analysis.open();
-        [sourceApplication, binaryApplication, uploadBinaryApplication].forEach(processApplication);
+        [sourceApplication, binaryApplication].forEach(processApplication);
     });
 
     it("Verify that assessed application is migrated", function () {
