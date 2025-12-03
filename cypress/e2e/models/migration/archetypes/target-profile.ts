@@ -45,7 +45,7 @@ export class TargetProfile {
 
     protected selectGenerators(generatorList: string[]): void {
         generatorList.forEach((generator) => {
-            cy.get(view.generatorListItem).contains(generator).click({ force: true });
+            cy.contains(view.generatorListItem, generator).should("exist").click({ force: true });
         });
         cy.get(view.addSelectedItems).click();
     }

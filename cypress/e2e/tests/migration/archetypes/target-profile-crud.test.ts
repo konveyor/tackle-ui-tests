@@ -31,7 +31,7 @@ import { successAlertMessage } from "../../../views/common.view";
 let tags: Tag[];
 let archetype: Archetype;
 
-describe(["@tier3"], "CRUD operations on Archetype target profile ", () => {
+describe(["@tier3"], "CRUD operations on Archetype target profile", () => {
     before("Login", function () {
         login();
         cy.visit("/");
@@ -42,7 +42,7 @@ describe(["@tier3"], "CRUD operations on Archetype target profile ", () => {
         archetype.create();
     });
 
-    it("Perform CRUD tests on Archetype target profile", function () {
+    it("Bug MTA-6469: Perform CRUD tests on Archetype target profile", function () {
         // Automates Polarion MTA-786
         const targetProfile = new TargetProfile(`test-profile-${getRandomWord(8)}`, [
             defaultGenerator,
@@ -50,14 +50,14 @@ describe(["@tier3"], "CRUD operations on Archetype target profile ", () => {
         targetProfile.create(archetype.name);
         checkSuccessAlert(
             successAlertMessage,
-            `Success alert:Archetype was successfully saved.`,
+            `Success alert:Target profile was successfully created.`,
             true
         );
 
         targetProfile.delete();
         checkSuccessAlert(
             successAlertMessage,
-            `Success alert:Archetype was successfully saved.`,
+            `Success alert:Target profile was successfully deleted.`,
             true
         );
     });
