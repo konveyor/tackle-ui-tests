@@ -9,7 +9,6 @@
     "mavenUsernameCredentialName": "upgrade-mavenUsername",
     "sourceApplicationName": "upgrade-sourceApp",
     "binaryApplicationName": "upgrade-binaryApp",
-    "uploadBinaryApplicationName": "upgrade-uploadBinaryApp",
     "assessmentApplicationName": "upgrade-assessmentApplication",
     "archetypeName": "upgrade-archetype",
     "importedQuestionnaireAppName": "upgrade-questionnaireApplication",
