@@ -1,7 +1,6 @@
 import {
     click,
     clickByText,
-    getUrl,
     inputText,
     performWithin,
     selectFilter,
@@ -26,7 +25,11 @@ export abstract class DynamicReports {
         const clazz = this as typeof DynamicReports;
 
         if (forceReload) cy.visit(clazz.fullUrl);
-        if (!getUrl().includes(clazz.fullUrl)) selectUserPerspective(migration);
+        cy.url().then((url) => {
+            if (!url.includes(clazz.fullUrl)) {
+                selectUserPerspective(migration);
+            }
+        });
 
         clickByText(navMenu, clazz.menuName);
         cy.wait(2 * SEC);
@@ -35,7 +38,6 @@ export abstract class DynamicReports {
     }
 
     public static openSingleApplication(applicationName: string): void {
-        // this === Inheritor (Issues, Insights и т.д.)
         this.openList();
 
         clickByText(button, singleApplication);
@@ -47,7 +49,7 @@ export abstract class DynamicReports {
         performWithin(name, () => {
             cy.get("[id^=expandable]").then(($button) => {
                 if (!$button.hasClass("pf-m-expanded")) {
-                    $button.trigger("click");
+                    cy.wrap($button).click();
                 }
             });
         });

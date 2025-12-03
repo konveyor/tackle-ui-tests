@@ -3,8 +3,6 @@ import {
     clickByText,
     getUniqueElementsFromSecondArray,
     performWithin,
-    // selectItemsPerPage,
-    // selectUserPerspective,
     validateAnyNumberPresence,
     validateNumberPresence,
     validateTextPresence,
@@ -18,33 +16,11 @@ import {
     issueColumns,
     singleApplicationColumns,
 } from "../../../../views/issue.view";
-// import { navMenu } from "../../../../views/menu.view";
 
 export class Issues extends DynamicReports {
     /** Contains URL of issues web page */
-    // static fullUrl = Cypress.config("baseUrl") + "/issues";
     static urlSuffix = "/issues";
     static menuName = "Issues";
-
-    // public static openList(itemsPerPage = 100, forceReload = false): void {
-    //     if (forceReload) {
-    //         cy.visit(Issues.fullUrl);
-    //     }
-    //     if (!getUrl().includes(Issues.fullUrl)) {
-    //         selectUserPerspective(migration);
-    //     }
-    //     clickByText(navMenu, "Issues");
-    //     cy.wait(2 * SEC);
-    //     waitUntilSpinnerIsGone();
-    //     selectItemsPerPage(itemsPerPage);
-    // }
-
-    // public static openSingleApplication(applicationName: string): void {
-    //     Issues.openList();
-    //     clickByText(button, singleApplication);
-    //     click(singleAppDropList);
-    //     clickByText(button, applicationName);
-    // }
 
     public static applyAndValidateFilter(
         filterType: issueFilter,
@@ -105,24 +81,6 @@ export class Issues extends DynamicReports {
                 });
         });
     }
-
-    // public static applyMultiFilter(filterType: issueFilter, filterValues: string[]): void {
-    //     Issues.openList();
-    //     selectFilter(filterType);
-    //     click(searchMenuToggle);
-    //     filterValues.forEach((filterValue) => clickByText(span, filterValue));
-    //     click(searchMenuToggle);
-    // }
-    //
-    // public static unfold(name: string): void {
-    //     performWithin(name, () => {
-    //         cy.get("[id^=expandable]").then(($button) => {
-    //             if (!$button.hasClass("pf-m-expanded")) {
-    //                 $button.trigger("click");
-    //             }
-    //         });
-    //     });
-    // }
 
     public static openAffectedApplications(name: string): void {
         Issues.openList();
