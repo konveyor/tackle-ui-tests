@@ -17,14 +17,15 @@ import {
     cancelForm,
     click,
     clickItemInKebabMenu,
+    clickKebabMenuOptionArchetype,
+    clickWithinByText,
     inputText,
-    selectItemsPerPage,
-    submitForm,
 } from "../../../../utils/utils";
-import { SEC } from "../../../types/constants";
 import * as commonView from "../../../views/common.view";
+import * as view from "../../../views/target-profile.view";
+import { Archetype } from "./archetype";
 
-export class targetProfile {
+export class TargetProfile {
     name: string;
     generatorList: string[];
 
@@ -33,44 +34,45 @@ export class targetProfile {
         this.generatorList = generatorList;
     }
 
-    static fullUrl = Cypress.config("baseUrl") + "target-profiles";
-
-    public static open(forceReload = false) {
-        const itemsPerPage = 100;
-        cy.visit(targetProfile.fullUrl, { timeout: 15 * SEC }).then((_) => {
-            selectItemsPerPage(itemsPerPage);
-        });
+    open(archetypeName: string) {
+        Archetype.open();
+        clickKebabMenuOptionArchetype(archetypeName, "Manage target profiles");
     }
 
     protected fillName(name: string): void {
-        inputText(targetProfile.name, name);
+        inputText("#target-profile-name", name);
     }
 
     protected selectGenerators(generatorList: string[]): void {
         generatorList.forEach((generator) => {
-            cy.get("span.pf-v5-c-dual-list-selector__item-text").contains(generator).click();
+            cy.get(view.generatorListItem).contains(generator).click({ force: true });
         });
-        cy.get("div.pf-v5-c-dual-list-selector__controls-item").click();
+        cy.get(view.addSelectedItems).click();
     }
 
-    create(cancel = false): void {
-        cy.contains("button", "Create new target profile", { timeout: 8000 })
+    create(archetypeName: string, cancel = false): void {
+        this.open(archetypeName);
+        cy.contains("button", "Create new target profile")
             .should("be.visible")
             .and("not.be.disabled")
             .click();
+
         if (cancel) {
             cancelForm();
-        } else {
-            this.fillName(this.name);
-            this.selectGenerators(this.generatorList);
-            submitForm();
+            return;
         }
+
+        this.fillName(this.name);
+        this.selectGenerators(this.generatorList);
+        clickWithinByText(commonView.modal, "button", "Create");
     }
 
     delete(cancel = false): void {
         clickItemInKebabMenu(this.name, "Delete");
         if (cancel) {
             cancelForm();
-        } else click(commonView.confirmButton);
+            return;
+        }
+        click(commonView.confirmButton);
     }
 }
