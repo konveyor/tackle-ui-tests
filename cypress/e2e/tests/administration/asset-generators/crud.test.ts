@@ -15,39 +15,33 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { GeneratorTemplateRepository } from "cypress/e2e/types/types";
-import * as data from "../../../../utils/data_utils";
+import { getRandomAssetGeneratorData, getRandomNumber } from "../../../../utils/data_utils";
 import { checkSuccessAlert, exists, login, notExists } from "../../../../utils/utils";
 import { AssetGenerator } from "../../../models/administration/asset-generators/asset-generator";
-import { generatorType } from "../../../views/asset-generators.view";
 import { successAlertMessage } from "../../../views/common.view";
 
 describe(["@tier2"], "CRUD operations on Asset Generators", () => {
     before("Login", function () {
         login();
         cy.visit("/");
-    });
 
-    beforeEach("Load data", function () {
-        cy.fixture("generator").then(function (generatorData) {
-            this.generatorData = generatorData;
+        // Load fixture data
+        cy.fixture("generator").then((generatorFixture) => {
+            this.generatorFixture = generatorFixture;
         });
     });
 
     it("Perform CRUD tests on asset generator", function () {
         AssetGenerator.open();
         const generator = new AssetGenerator(
-            `Generator-${data.getRandomNumber()}`,
-            generatorType.helm,
-            this.generatorData["cf-k8s-helm-chart"] as GeneratorTemplateRepository,
-            data.getDescription()
+            getRandomAssetGeneratorData(this.generatorFixture["cf-k8s-helm-chart"])
         );
 
         generator.create();
         checkSuccessAlert(successAlertMessage, "New generator was successfully created.", true);
         exists(generator.name);
 
-        const newName = `Generator-updatedName-${data.getRandomNumber()}`;
+        const newName = `Generator-updatedName-${getRandomNumber()}`;
         generator.edit({ name: newName });
         checkSuccessAlert(successAlertMessage, "generator was successfully saved.", true);
         exists(newName);

@@ -17,14 +17,17 @@ import * as faker from "faker";
 import { JiraCredentials } from "../e2e/models/administration/credentials/JiraCredentials";
 import { CredentialType, CustomRuleType, JiraType, UserCredentials } from "../e2e/types/constants";
 import {
+    AssetGeneratorData,
     CredentialsData,
     CredentialsJiraData,
+    GeneratorTemplateRepository,
     JiraConnectionData,
     ProxyData,
     RulesManualFields,
     RulesRepositoryFields,
     UserData,
 } from "../e2e/types/types";
+import { GeneratorType } from "../e2e/views/asset-generators.view";
 import { writeGpgKey, writeMavenSettingsFile } from "./utils";
 
 export function getFullName(): string {
@@ -349,5 +352,20 @@ export function getRulesData(targetData): RulesRepositoryFields | RulesManualFie
     return {
         type: CustomRuleType.Manual,
         rulesetPaths: targetData.rulesFiles,
+    };
+}
+
+export function getRandomAssetGeneratorData(
+    templateRepository: GeneratorTemplateRepository,
+    generatorType?: GeneratorType
+): AssetGeneratorData {
+    if (!generatorType) {
+        generatorType = GeneratorType.Helm;
+    }
+    return {
+        name: `Generator-${getRandomNumber()}`,
+        generatorType: generatorType,
+        templateRepository: templateRepository,
+        description: getDescription(),
     };
 }

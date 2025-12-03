@@ -13,20 +13,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-export const generatorsMenu = "Generators";
-export enum generatorFields {
-    name = "input[id='name']",
-    description = "input[id='description']",
-    generatorType = "input[id='generator-type-toggle-select-typeahead']",
-    templateRepositoryToggle = "div[id='template-repository-header']",
-    repositoryType = "button[id='repo-type-toggle']",
-    repositoryUrl = "input[id='repository.url']",
-    repositoryBranch = "input[id='branch']",
-    repositoryRootPath = "input[id='path']",
+export const GENERATORS_MENU = "Generators";
+
+export enum GeneratorFieldSelector {
+    Name = "input[id='name']",
+    Description = "input[id='description']",
+    GeneratorType = "input[id='generator-type-toggle-select-typeahead']",
+    TemplateRepositoryToggle = "div[id='template-repository-header']",
+    RepositoryType = "button[id='repo-type-toggle']",
+    RepositoryUrl = "input[id='repository.url']",
+    RepositoryBranch = "input[id='branch']",
+    RepositoryRootPath = "input[id='path']",
 }
 
-export enum generatorType {
-    helm = "Helm",
+export enum GeneratorType {
+    Helm = "Helm",
 }
 
-export const deleteIcon = "td[id='delete-action']";
+export const DELETE_ICON_SELECTOR = "td[id='delete-action']";

@@ -224,3 +224,10 @@ export type GeneratorTemplateRepository = {
     rootPath?: string;
     credentials?: CredentialsSourceControl;
 };
+
+export type AssetGeneratorData = {
+    name: string;
+    generatorType: string;
+    templateRepository: GeneratorTemplateRepository;
+    description?: string;
+};

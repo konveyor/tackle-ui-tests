@@ -13,7 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { GeneratorTemplateRepository } from "cypress/e2e/types/types";
+import { AssetGeneratorData, GeneratorTemplateRepository } from "cypress/e2e/types/types";
 import {
     cancelForm,
     click,
@@ -27,10 +27,9 @@ import {
 } from "../../../../utils/utils";
 import { administration, itemsPerPage, SEC } from "../../../types/constants";
 import {
-    deleteIcon,
-    generatorFields,
-    generatorsMenu,
-    generatorType,
+    DELETE_ICON_SELECTOR,
+    GeneratorFieldSelector,
+    GENERATORS_MENU,
 } from "../../../views/asset-generators.view";
 import { confirmButton, pencilAction } from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
@@ -41,16 +40,11 @@ export class AssetGenerator {
     templateRepository: GeneratorTemplateRepository;
     description?: string;
 
-    constructor(
-        name: string,
-        generatorType: generatorType,
-        templateRepository: GeneratorTemplateRepository,
-        description?: string
-    ) {
-        this.name = name;
-        this.generatorType = generatorType;
-        this.templateRepository = templateRepository;
-        this.description = description;
+    constructor(assetGeneratorData: AssetGeneratorData) {
+        this.name = assetGeneratorData.name;
+        this.generatorType = assetGeneratorData.generatorType;
+        this.templateRepository = assetGeneratorData.templateRepository;
+        this.description = assetGeneratorData.description;
     }
 
     static fullUrl = Cypress.config("baseUrl") + "/asset-generators";
@@ -58,7 +52,7 @@ export class AssetGenerator {
     public static open(forceReload = false) {
         if (forceReload) {
             cy.visit(AssetGenerator.fullUrl, { timeout: 15 * SEC }).then((_) => {
-                cy.get("h1", { timeout: 35 * SEC }).should("contain", generatorsMenu);
+                cy.get("h1", { timeout: 35 * SEC }).should("contain", GENERATORS_MENU);
                 selectItemsPerPage(itemsPerPage);
             });
             return;
@@ -67,35 +61,35 @@ export class AssetGenerator {
         cy.url().then(($url) => {
             if ($url !== AssetGenerator.fullUrl) {
                 selectUserPerspective(administration);
-                clickByText(navMenu, generatorsMenu);
-                cy.get("h1", { timeout: 60 * SEC }).should("contain", generatorsMenu);
+                clickByText(navMenu, GENERATORS_MENU);
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", GENERATORS_MENU);
             }
         });
         selectItemsPerPage(itemsPerPage);
     }
 
     protected fillName(name: string): void {
-        inputText(generatorFields.name, name);
+        inputText(GeneratorFieldSelector.Name, name);
     }
 
     protected fillDescription(description: string): void {
-        inputText(generatorFields.description, description);
+        inputText(GeneratorFieldSelector.Description, description);
     }
 
     protected selectGeneratorType(generatorType: string): void {
-        selectFormItems(generatorFields.generatorType, generatorType);
+        selectFormItems(GeneratorFieldSelector.GeneratorType, generatorType);
     }
 
     protected fillTemplateRepository(templateRepository: GeneratorTemplateRepository): void {
-        selectFormItems(generatorFields.repositoryType, templateRepository.repositoryType);
-        inputText(generatorFields.repositoryUrl, templateRepository.url);
+        selectFormItems(GeneratorFieldSelector.RepositoryType, templateRepository.repositoryType);
+        inputText(GeneratorFieldSelector.RepositoryUrl, templateRepository.url);
 
         if (templateRepository.branch) {
-            inputText(generatorFields.repositoryBranch, templateRepository.branch);
+            inputText(GeneratorFieldSelector.RepositoryBranch, templateRepository.branch);
         }
 
         if (templateRepository.rootPath) {
-            inputText(generatorFields.repositoryRootPath, templateRepository.rootPath);
+            inputText(GeneratorFieldSelector.RepositoryRootPath, templateRepository.rootPath);
         }
     }
 
@@ -118,7 +112,7 @@ export class AssetGenerator {
 
     delete(cancel = false): void {
         AssetGenerator.open();
-        performRowActionByIcon(this.name, deleteIcon);
+        performRowActionByIcon(this.name, DELETE_ICON_SELECTOR);
         if (cancel) {
             cancelForm();
         } else click(confirmButton);
