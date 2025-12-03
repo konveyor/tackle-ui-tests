@@ -20,7 +20,6 @@ import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data
 import {
     getRandomAnalysisData,
     getRandomApplicationData,
-    login,
     validateMtaVersionInCLI,
     validateMtaVersionInUI,
 } from "../../../utils/utils";
@@ -55,12 +54,6 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     let archetype: Archetype;
     let stakeHolderGroup: Stakeholdergroups;
     const expectedMtaVersion = Cypress.env("mtaVersion");
-
-    before("Login", function () {
-        login();
-        cy.visit("/");
-        AssessmentQuestionnaire.enable(legacyPathfinder);
-    });
 
     beforeEach("Persist session", function () {
         cy.fixture("application").then(function (appData) {
@@ -130,6 +123,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     });
 
     it("Creating and assess archetype", function () {
+        AssessmentQuestionnaire.enable(legacyPathfinder);
         const { tagName, archetypeName } = this.upgradeData;
         archetype = new Archetype(
             archetypeName,
