@@ -15,18 +15,17 @@ limitations under the License.
 */
 /// <reference types="cypress" />
 
-import { TargetProfile } from "../../../../e2e/models/migration/archetypes/targetProfile";
 import { getRandomWord } from "../../../../utils/data_utils";
 import {
+    checkSuccessAlert,
     createMultipleTags,
     deleteByList,
-    exists,
     login,
-    notExists,
 } from "../../../../utils/utils";
 import { Archetype } from "../../../models/migration/archetypes/archetype";
+import { TargetProfile } from "../../../models/migration/archetypes/target-profile";
 import { Tag } from "../../../models/migration/controls/tags";
-import { defaultGenerator, SEC } from "../../../types/constants";
+import { defaultGenerator } from "../../../types/constants";
 import { successAlertMessage } from "../../../views/common.view";
 
 let tags: Tag[];
@@ -45,20 +44,22 @@ describe(["@tier3"], "CRUD operations on Archetype target profile ", () => {
 
     it("Perform CRUD tests on Archetype target profile", function () {
         // Automates Polarion MTA-786
-        const targetProf = new TargetProfile(`test-profile-${getRandomWord(8)}`, [
+        const targetProfile = new TargetProfile(`test-profile-${getRandomWord(8)}`, [
             defaultGenerator,
         ]);
-        targetProf.create(archetype.name);
-        cy.get(successAlertMessage, { timeout: 150 * SEC })
-            .eq(1)
-            .should("contain.text", `Success alert:Archetype was successfully saved.`);
-        exists(targetProf.name);
+        targetProfile.create(archetype.name);
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success alert:Archetype was successfully saved.`,
+            true
+        );
 
-        targetProf.delete();
-        cy.get(successAlertMessage, { timeout: 150 * SEC })
-            .eq(1)
-            .should("contain.text", `Success alert:Archetype was successfully saved.`);
-        notExists(targetProf.name);
+        targetProfile.delete();
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success alert:Archetype was successfully saved.`,
+            true
+        );
     });
 
     after("Clear test data", function () {
