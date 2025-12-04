@@ -4,11 +4,11 @@ import {
     validateAnyNumberPresence,
     validateTextPresence,
 } from "../../../../../utils/utils";
-import { DynamicReports } from "../../../../tests/migration/dynamic-report/dynamic-report";
 import { issueFilter, trTag } from "../../../../types/constants";
 import { AppInsight } from "../../../../types/types";
 import { liTag, span } from "../../../../views/common.view";
 import { insightColumns, singleApplicationColumns } from "../../../../views/issue.view";
+import { DynamicReports } from "../dynamic-report";
 
 export class Insights extends DynamicReports {
     static urlSuffix = "/insights";
@@ -18,7 +18,7 @@ export class Insights extends DynamicReports {
         filterType: issueFilter,
         filterValues: string[],
         insightsExpected: AppInsight[],
-        insightsNotExpected?: AppInsight[],
+        insightsNotExpected: AppInsight[] = [],
         isSingle = false
     ) {
         filterValues.forEach((value) => {
@@ -38,22 +38,29 @@ export class Insights extends DynamicReports {
     }
 
     public static validateFilter(insight: AppInsight, isSingle = false): void {
+        const firstSource = insight.sources?.[0] ?? "None";
+        const firstTarget = insight.targets?.[0] ?? "None";
+        const hasMultipleTargets = (insight.targets?.length ?? 0) > 1;
+
         cy.contains(insight.name)
             .closest(trTag)
             .within(() => {
                 validateTextPresence(insightColumns.insight, insight.name);
                 validateTextPresence(insightColumns.category, insight.category);
-                validateTextPresence(insightColumns.source, insight.sources[0]);
-                if (insight.targets[0] != "None") {
+                validateTextPresence(insightColumns.source, firstSource);
+
+                if (firstTarget !== "None") {
                     cy.get(insightColumns.target).within(() => {
-                        validateTextPresence(liTag, insight.targets[0]);
-                        if (insight.targets.length > 1) {
+                        validateTextPresence(liTag, firstTarget);
+
+                        if (hasMultipleTargets) {
                             clickByText(span, /more/i);
                         }
                     });
                 } else {
-                    validateTextPresence(insightColumns.target, insight.targets[0]);
+                    validateTextPresence(insightColumns.target, "None");
                 }
+
                 if (!isSingle) {
                     validateAnyNumberPresence(insightColumns.applications);
                 } else {

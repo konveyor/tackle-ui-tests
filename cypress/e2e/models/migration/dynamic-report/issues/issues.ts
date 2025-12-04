@@ -7,7 +7,6 @@ import {
     validateNumberPresence,
     validateTextPresence,
 } from "../../../../../utils/utils";
-import { DynamicReports } from "../../../../tests/migration/dynamic-report/dynamic-report";
 import { button, issueFilter, tdTag, trTag } from "../../../../types/constants";
 import { AppIssue } from "../../../../types/types";
 import { div, liTag, span } from "../../../../views/common.view";
@@ -16,6 +15,7 @@ import {
     issueColumns,
     singleApplicationColumns,
 } from "../../../../views/issue.view";
+import { DynamicReports } from "../dynamic-report";
 
 export class Issues extends DynamicReports {
     /** Contains URL of issues web page */
