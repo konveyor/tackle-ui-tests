@@ -55,6 +55,11 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     let stakeHolderGroup: Stakeholdergroups;
     const expectedMtaVersion = Cypress.env("mtaVersion");
 
+    before(() => {
+        cy.clearCookies();
+        cy.clearLocalStorage();
+    });
+
     beforeEach("Persist session", function () {
         cy.fixture("application").then(function (appData) {
             this.appData = appData;
