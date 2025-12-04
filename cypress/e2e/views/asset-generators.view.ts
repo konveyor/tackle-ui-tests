@@ -13,21 +13,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-export const GENERATORS_MENU = "Generators";
+export const generatorsMenu = "Generators";
 
-export enum GeneratorFieldSelector {
-    Name = "input[id='name']",
-    Description = "input[id='description']",
-    GeneratorType = "input[id='generator-type-toggle-select-typeahead']",
-    TemplateRepositoryToggle = "div[id='template-repository-header']",
-    RepositoryType = "button[id='repo-type-toggle']",
-    RepositoryUrl = "input[id='repository.url']",
-    RepositoryBranch = "input[id='branch']",
-    RepositoryRootPath = "input[id='path']",
+export enum GeneratorView {
+    nameInput = "input[id='name']",
+    descriptionInput = "input[id='description']",
+    generatorTypeSelect = "input[id='generator-type-toggle-select-typeahead']",
+    templateRepositoryToggle = "div[id='template-repository-header']",
+    repositoryTypeButton = "button[id='repo-type-toggle']",
+    repositoryUrlInput = "input[id='repository.url']",
+    repositoryBranchInput = "input[id='branch']",
+    repositoryRootPathInput = "input[id='path']",
+    createNewButton = "button[id='create-new-generator']",
+    deleteAction = "td[id='delete-action']",
 }
 
 export enum GeneratorType {
     Helm = "Helm",
 }
-
-export const DELETE_ICON_SELECTOR = "td[id='delete-action']";

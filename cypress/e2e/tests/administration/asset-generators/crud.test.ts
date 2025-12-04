@@ -16,15 +16,12 @@ limitations under the License.
 /// <reference types="cypress" />
 
 import { getRandomAssetGeneratorData, getRandomNumber } from "../../../../utils/data_utils";
-import { checkSuccessAlert, exists, login, notExists } from "../../../../utils/utils";
+import { checkSuccessAlert, exists, notExists } from "../../../../utils/utils";
 import { AssetGenerator } from "../../../models/administration/asset-generators/asset-generator";
 import { successAlertMessage } from "../../../views/common.view";
 
 describe(["@tier2"], "CRUD operations on Asset Generators", () => {
-    before("Login", function () {
-        login();
-        cy.visit("/");
-
+    before("Load fixture data", function () {
         // Load fixture data
         cy.fixture("generator").then((generatorFixture) => {
             this.generatorFixture = generatorFixture;
@@ -32,7 +29,6 @@ describe(["@tier2"], "CRUD operations on Asset Generators", () => {
     });
 
     it("Perform CRUD tests on asset generator", function () {
-        AssetGenerator.open();
         const generator = new AssetGenerator(
             getRandomAssetGeneratorData(this.generatorFixture["cf-k8s-helm-chart"])
         );

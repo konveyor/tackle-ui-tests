@@ -26,11 +26,7 @@ import {
     submitForm,
 } from "../../../../utils/utils";
 import { administration, itemsPerPage, SEC } from "../../../types/constants";
-import {
-    DELETE_ICON_SELECTOR,
-    GeneratorFieldSelector,
-    GENERATORS_MENU,
-} from "../../../views/asset-generators.view";
+import { generatorsMenu, GeneratorView } from "../../../views/asset-generators.view";
 import { confirmButton, pencilAction } from "../../../views/common.view";
 import { navMenu } from "../../../views/menu.view";
 
@@ -52,7 +48,7 @@ export class AssetGenerator {
     public static open(forceReload = false) {
         if (forceReload) {
             cy.visit(AssetGenerator.fullUrl, { timeout: 15 * SEC }).then((_) => {
-                cy.get("h1", { timeout: 35 * SEC }).should("contain", GENERATORS_MENU);
+                cy.get("h1", { timeout: 35 * SEC }).should("contain", generatorsMenu);
                 selectItemsPerPage(itemsPerPage);
             });
             return;
@@ -61,72 +57,65 @@ export class AssetGenerator {
         cy.url().then(($url) => {
             if ($url !== AssetGenerator.fullUrl) {
                 selectUserPerspective(administration);
-                clickByText(navMenu, GENERATORS_MENU);
-                cy.get("h1", { timeout: 60 * SEC }).should("contain", GENERATORS_MENU);
+                clickByText(navMenu, generatorsMenu);
+                cy.get("h1", { timeout: 60 * SEC }).should("contain", generatorsMenu);
             }
         });
         selectItemsPerPage(itemsPerPage);
     }
 
     protected fillName(name: string): void {
-        inputText(GeneratorFieldSelector.Name, name);
+        inputText(GeneratorView.nameInput, name);
     }
 
     protected fillDescription(description: string): void {
-        inputText(GeneratorFieldSelector.Description, description);
+        inputText(GeneratorView.descriptionInput, description);
     }
 
     protected selectGeneratorType(generatorType: string): void {
-        selectFormItems(GeneratorFieldSelector.GeneratorType, generatorType);
+        selectFormItems(GeneratorView.generatorTypeSelect, generatorType);
     }
 
     protected fillTemplateRepository(templateRepository: GeneratorTemplateRepository): void {
-        selectFormItems(GeneratorFieldSelector.RepositoryType, templateRepository.repositoryType);
-        inputText(GeneratorFieldSelector.RepositoryUrl, templateRepository.url);
+        selectFormItems(GeneratorView.repositoryTypeButton, templateRepository.repositoryType);
+        inputText(GeneratorView.repositoryUrlInput, templateRepository.url);
 
         if (templateRepository.branch) {
-            inputText(GeneratorFieldSelector.RepositoryBranch, templateRepository.branch);
+            inputText(GeneratorView.repositoryBranchInput, templateRepository.branch);
         }
 
         if (templateRepository.rootPath) {
-            inputText(GeneratorFieldSelector.RepositoryRootPath, templateRepository.rootPath);
+            inputText(GeneratorView.repositoryRootPathInput, templateRepository.rootPath);
         }
+    }
+
+    private applyFormValues(values: Partial<AssetGeneratorData>): void {
+        if (values.name) this.fillName(values.name);
+        if (values.description) this.fillDescription(values.description);
+        if (values.generatorType) this.selectGeneratorType(values.generatorType);
+        if (values.templateRepository) this.fillTemplateRepository(values.templateRepository);
     }
 
     create(cancel = false): void {
         AssetGenerator.open();
-        cy.contains("button", "Create new generator", { timeout: 8000 })
-            .should("be.visible")
-            .and("not.be.disabled")
-            .click();
+        cy.get(GeneratorView.createNewButton).should("be.visible").click();
         if (cancel) {
             cancelForm();
-        } else {
-            this.fillName(this.name);
-            if (this.description) this.fillDescription(this.description);
-            if (this.generatorType) this.selectGeneratorType(this.generatorType);
-            if (this.templateRepository) this.fillTemplateRepository(this.templateRepository);
-            submitForm();
+            return;
         }
+        this.applyFormValues(this);
+        submitForm();
     }
 
     delete(cancel = false): void {
         AssetGenerator.open();
-        performRowActionByIcon(this.name, DELETE_ICON_SELECTOR);
+        performRowActionByIcon(this.name, GeneratorView.deleteAction);
         if (cancel) {
             cancelForm();
         } else click(confirmButton);
     }
 
-    edit(
-        updatedValues: Partial<{
-            name: string;
-            description: string;
-            generatorType: string;
-            templateRepository: GeneratorTemplateRepository;
-        }>,
-        cancel = false
-    ): void {
+    edit(updatedValues: Partial<AssetGeneratorData>, cancel = false): void {
         AssetGenerator.open();
         performRowActionByIcon(this.name, pencilAction);
 
@@ -135,27 +124,8 @@ export class AssetGenerator {
             return;
         }
 
-        const { name, description, generatorType, templateRepository } = updatedValues;
-
-        if (name && name !== this.name) {
-            this.fillName(name);
-            this.name = name;
-        }
-
-        if (description && description !== this.description) {
-            this.fillDescription(description);
-            this.description = description;
-        }
-
-        if (generatorType && generatorType !== this.generatorType) {
-            this.selectGeneratorType(generatorType);
-            this.generatorType = generatorType;
-        }
-
-        if (templateRepository) {
-            this.fillTemplateRepository(templateRepository);
-            this.templateRepository = templateRepository;
-        }
+        this.applyFormValues(updatedValues);
+        Object.assign(this, updatedValues);
 
         if (Object.keys(updatedValues).length > 0) {
             submitForm();
