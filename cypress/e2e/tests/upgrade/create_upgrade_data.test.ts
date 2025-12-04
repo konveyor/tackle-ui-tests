@@ -20,6 +20,7 @@ import { getRandomCredentialsData, getRandomUserData } from "../../../utils/data
 import {
     getRandomAnalysisData,
     getRandomApplicationData,
+    login,
     validateMtaVersionInCLI,
     validateMtaVersionInUI,
 } from "../../../utils/utils";
@@ -56,8 +57,10 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     const expectedMtaVersion = Cypress.env("mtaVersion");
 
     before(() => {
-        cy.clearCookies();
-        cy.clearLocalStorage();
+        waitForBackendToBeReady(); // <── ADD THIS
+        login();
+        cy.visit("/");
+        AssessmentQuestionnaire.enable(legacyPathfinder);
     });
 
     beforeEach("Persist session", function () {
@@ -128,7 +131,6 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     });
 
     it("Creating and assess archetype", function () {
-        AssessmentQuestionnaire.enable(legacyPathfinder);
         const { tagName, archetypeName } = this.upgradeData;
         archetype = new Archetype(
             archetypeName,
@@ -229,4 +231,28 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         User.loginKeycloakAdmin();
         userAdmin.create();
     });
+
+    function waitForBackendToBeReady(retries = 30) {
+        const url = Cypress.config("baseUrl") || "/";
+
+        cy.log(`Checking if backend is ready… Remaining retries: ${retries}`);
+
+        cy.request({
+            url,
+            failOnStatusCode: false,
+            timeout: 5000,
+        }).then((resp) => {
+            if ((resp.status === 200 || resp.status === 302) && resp.body) {
+                cy.log("Backend is ready ✔");
+                return;
+            }
+
+            if (retries <= 0) {
+                throw new Error("Backend did not become ready in time");
+            }
+
+            cy.wait(3000);
+            waitForBackendToBeReady(retries - 1);
+        });
+    }
 });
