@@ -4,11 +4,11 @@ import {
     validateAnyNumberPresence,
     validateTextPresence,
 } from "../../../../../utils/utils";
-import { DynamicReports } from "../../../../tests/migration/dynamic-report/dynamic-report";
 import { issueFilter, trTag } from "../../../../types/constants";
 import { AppInsight } from "../../../../types/types";
 import { liTag, span } from "../../../../views/common.view";
 import { insightColumns, singleApplicationColumns } from "../../../../views/issue.view";
+import { DynamicReports } from "../dynamic-report";
 
 export class Insights extends DynamicReports {
     static urlSuffix = "/insights";
@@ -18,7 +18,7 @@ export class Insights extends DynamicReports {
         filterType: issueFilter,
         filterValues: string[],
         insightsExpected: AppInsight[],
-        insightsNotExpected?: AppInsight[],
+        insightsNotExpected: AppInsight[] = [],
         isSingle = false
     ) {
         filterValues.forEach((value) => {
