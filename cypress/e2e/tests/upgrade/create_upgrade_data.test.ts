@@ -56,7 +56,8 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
     let stakeHolderGroup: Stakeholdergroups;
     const expectedMtaVersion = Cypress.env("mtaVersion");
 
-    before("Login", function () {
+    before(() => {
+        waitForBackendToBeReady(); // <── ADD THIS
         login();
         cy.visit("/");
         AssessmentQuestionnaire.enable(legacyPathfinder);
@@ -230,4 +231,28 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         User.loginKeycloakAdmin();
         userAdmin.create();
     });
+
+    function waitForBackendToBeReady(retries = 30) {
+        const url = Cypress.config("baseUrl") || "/";
+
+        cy.log(`Checking if backend is ready… Remaining retries: ${retries}`);
+
+        cy.request({
+            url,
+            failOnStatusCode: false,
+            timeout: 5000,
+        }).then((resp) => {
+            if ((resp.status === 200 || resp.status === 302) && resp.body) {
+                cy.log("Backend is ready ✔");
+                return;
+            }
+
+            if (retries <= 0) {
+                throw new Error("Backend did not become ready in time");
+            }
+
+            cy.wait(3000);
+            waitForBackendToBeReady(retries - 1);
+        });
+    }
 });
