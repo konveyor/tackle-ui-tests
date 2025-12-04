@@ -22,7 +22,6 @@ import { successAlertMessage } from "../../../views/common.view";
 
 describe(["@tier2"], "CRUD operations on Asset Generators", () => {
     before("Load fixture data", function () {
-        // Load fixture data
         cy.fixture("generator").then((generatorFixture) => {
             this.generatorFixture = generatorFixture;
         });

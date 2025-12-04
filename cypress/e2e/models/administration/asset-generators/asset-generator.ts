@@ -55,13 +55,13 @@ export class AssetGenerator {
         }
 
         cy.url().then(($url) => {
-            if ($url !== AssetGenerator.fullUrl) {
+            if (!$url.includes(AssetGenerator.fullUrl)) {
                 selectUserPerspective(administration);
                 clickByText(navMenu, generatorsMenu);
                 cy.get("h1", { timeout: 60 * SEC }).should("contain", generatorsMenu);
             }
+            selectItemsPerPage(itemsPerPage);
         });
-        selectItemsPerPage(itemsPerPage);
     }
 
     protected fillName(name: string): void {
