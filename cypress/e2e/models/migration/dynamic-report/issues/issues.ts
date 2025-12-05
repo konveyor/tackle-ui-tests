@@ -2,60 +2,25 @@ import {
     click,
     clickByText,
     getUniqueElementsFromSecondArray,
-    getUrl,
-    inputText,
     performWithin,
-    selectFilter,
-    selectItemsPerPage,
-    selectUserPerspective,
     validateAnyNumberPresence,
     validateNumberPresence,
     validateTextPresence,
-    waitUntilSpinnerIsGone,
 } from "../../../../../utils/utils";
-import {
-    button,
-    issueFilter,
-    migration,
-    SEC,
-    singleApplication,
-    tdTag,
-    trTag,
-} from "../../../../types/constants";
+import { button, issueFilter, tdTag, trTag } from "../../../../types/constants";
 import { AppIssue } from "../../../../types/types";
-import { div, liTag, searchButton, searchInput, span } from "../../../../views/common.view";
+import { div, liTag, span } from "../../../../views/common.view";
 import {
     affectedFilesTable,
     issueColumns,
-    searchMenuToggle,
-    singleAppDropList,
     singleApplicationColumns,
 } from "../../../../views/issue.view";
-import { navMenu } from "../../../../views/menu.view";
+import { DynamicReports } from "../dynamic-report";
 
-export class Issues {
+export class Issues extends DynamicReports {
     /** Contains URL of issues web page */
-    static fullUrl = Cypress.config("baseUrl") + "/issues";
-
-    public static openList(itemsPerPage = 100, forceReload = false): void {
-        if (forceReload) {
-            cy.visit(Issues.fullUrl);
-        }
-        if (!getUrl().includes(Issues.fullUrl)) {
-            selectUserPerspective(migration);
-        }
-        clickByText(navMenu, "Issues");
-        cy.wait(2 * SEC);
-        waitUntilSpinnerIsGone();
-        selectItemsPerPage(itemsPerPage);
-    }
-
-    public static openSingleApplication(applicationName: string): void {
-        Issues.openList();
-        clickByText(button, singleApplication);
-        click(singleAppDropList);
-        clickByText(button, applicationName);
-    }
+    static urlSuffix = "/issues";
+    static menuName = "Issues";
 
     public static applyAndValidateFilter(
         filterType: issueFilter,
@@ -114,49 +79,6 @@ export class Issues {
                     validateTextPresence(issueColumns.issue, name);
                     validateNumberPresence(issueColumns.applications, allIssues[name]);
                 });
-        });
-    }
-
-    public static applyFilter(
-        filterType: issueFilter,
-        filterValue: string,
-        isSingle = false
-    ): void {
-        if (!isSingle) {
-            Issues.openList();
-        }
-
-        selectFilter(filterType);
-        const isApplicableFilter =
-            filterType === issueFilter.category ||
-            filterType === issueFilter.source ||
-            filterType === issueFilter.target;
-
-        if (isApplicableFilter) {
-            inputText(searchInput, filterValue);
-            click(searchButton);
-        } else {
-            click(searchMenuToggle);
-            clickByText(span, filterValue);
-            click(searchMenuToggle);
-        }
-    }
-
-    public static applyMultiFilter(filterType: issueFilter, filterValues: string[]): void {
-        Issues.openList();
-        selectFilter(filterType);
-        click(searchMenuToggle);
-        filterValues.forEach((filterValue) => clickByText(span, filterValue));
-        click(searchMenuToggle);
-    }
-
-    public static unfold(name: string): void {
-        performWithin(name, () => {
-            cy.get("[id^=expandable]").then(($button) => {
-                if (!$button.hasClass("pf-m-expanded")) {
-                    $button.trigger("click");
-                }
-            });
         });
     }
 

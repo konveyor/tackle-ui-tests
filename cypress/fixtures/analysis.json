@@ -375,6 +375,112 @@
                 "labels": ["open-source"],
                 "applications": 1
             }
+        ],
+        "insights": [
+            {
+                "name": "EJB XML Configuration",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["discovery"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "discovery-rules",
+                "rule": "windup-discover-ejb-configuration",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=EJB XML"]
+            },
+            {
+                "name": "Embedded framework - Spring Boot",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "3rd-party-spring-03001",
+                "labels": [
+                    "discovery",
+                    "konveyor.io/include=always",
+                    "tag=Spring Boot Auto-configuration"
+                ]
+            },
+            {
+                "name": "Java source files",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["discovery"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "discovery-rules",
+                "rule": "discover-java-files",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Java Source"]
+            },
+            {
+                "name": "Maven XML file",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["discovery"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "discovery-rules",
+                "rule": "discover-maven-xml",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Maven XML"]
+            },
+            {
+                "name": "Non-XML EJB",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "non-xml-technology-usage-02000",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Bean=EJB XML"]
+            },
+            {
+                "name": "Spring Boot Auto-configuration",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "technology-usage-3rd-party-spring-03001-1",
+                "labels": [
+                    "discovery",
+                    "konveyor.io/include=always",
+                    "tag=Configuration Management=Spring Boot Auto-configuration"
+                ]
+            },
+            {
+                "name": "Spring Boot Component Scan",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "technology-usage-3rd-party-spring-03001-2",
+                "labels": [
+                    "discovery",
+                    "konveyor.io/include=always",
+                    "tag=Configuration Management=Spring Boot Component Scan"
+                ]
+            },
+            {
+                "name": "Spring Boot Configuration",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "technology-usage-3rd-party-spring-03001-0",
+                "labels": [
+                    "discovery",
+                    "konveyor.io/include=always",
+                    "tag=Configuration Management=Spring Boot Configuration"
+                ]
+            }
         ]
     },
     "source_plus_dep_analysis_on_bookserverapp": {
@@ -1396,6 +1502,307 @@
                 "ruleSet": "quarkus/springboot",
                 "rule": "javaee-pom-to-quarkus-00000",
                 "labels": ["None"]
+            }
+        ],
+        "insights": [
+            {
+                "name": "Clustering Web Session",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "clustering-00000",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Clustering Web Session"]
+            },
+            {
+                "name": "Clustering Web Session",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "technology-usage-clustering-01000",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Clustering=Web Session"]
+            },
+            {
+                "name": "Common Annotations",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "javaee-technology-usage-00080",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Common Annotations"]
+            },
+            {
+                "name": "Common Annotations",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "javaee-technology-usage-00180",
+                "labels": [
+                    "discovery",
+                    "konveyor.io/include=always",
+                    "tag=Connect=Common Annotations"
+                ]
+            },
+            {
+                "name": "Discover project license",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["discovery"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "discovery-rules",
+                "rule": "discover-license",
+                "labels": [
+                    "discovery",
+                    "konveyor.io/include=always",
+                    "tag=License=Apache License 2.0"
+                ]
+            },
+            {
+                "name": "EJB XML Configuration",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["discovery"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "discovery-rules",
+                "rule": "windup-discover-ejb-configuration",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=EJB XML"]
+            },
+            {
+                "name": "Embedded framework - GIN",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "embedded-framework-05900",
+                "labels": [
+                    "discovery",
+                    "konveyor.io/include=always",
+                    "tag=Embedded framework - GIN"
+                ]
+            },
+            {
+                "name": "Embedded library - Logging Utils",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "logging-usage-00160",
+                "labels": [
+                    "discovery",
+                    "konveyor.io/include=always",
+                    "tag=Embedded library - Logging Utils"
+                ]
+            },
+            {
+                "name": "GIN",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "technology-usage-embedded-framework-05900",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Embedded=GIN"]
+            },
+            {
+                "name": "Java Connect",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "technology-usage-connect-01000",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Connect=RMI"]
+            },
+            {
+                "name": "Java EE JSON-P",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "javaee-technology-usage-00030",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Java EE JSON-P"]
+            },
+            {
+                "name": "Java EE JSON-P",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "javaee-technology-usage-00031",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Execute=Java EE JSON-P"]
+            },
+            {
+                "name": "Java source files",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["discovery"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "discovery-rules",
+                "rule": "discover-java-files",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Java Source"]
+            },
+            {
+                "name": "JavaEE",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "javaee-technology-usage-00021",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Execute=CDI"]
+            },
+            {
+                "name": "JavaEE javax",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "javaee-technology-usage-00020-javax",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=CDI"]
+            },
+            {
+                "name": "JPA Entities",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "technology-usage-database-01100",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Java EE=JPA entities"]
+            },
+            {
+                "name": "JPA Queries",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "technology-usage-database-01200",
+                "labels": [
+                    "discovery",
+                    "konveyor.io/include=always",
+                    "tag=Java EE=JPA named queries"
+                ]
+            },
+            {
+                "name": "JPA XML Configuration",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["discovery"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "discovery-rules",
+                "rule": "windup-discover-jpa-configuration",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=JPA XML"]
+            },
+            {
+                "name": "Logging Utils",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "technology-usage-logging-000160",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Embedded=Logging Utils"]
+            },
+            {
+                "name": "Maven XML file",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["discovery"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "discovery-rules",
+                "rule": "discover-maven-xml",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Maven XML"]
+            },
+            {
+                "name": "Non-XML EJB",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "non-xml-technology-usage-02000",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Bean=EJB XML"]
+            },
+            {
+                "name": "Non-XML JPA",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "non-xml-technology-usage-17000",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Java EE=JPA XML"]
+            },
+            {
+                "name": "Persistence Units",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["None"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "technology-usage",
+                "rule": "technology-usage-database-01300",
+                "labels": [
+                    "discovery",
+                    "konveyor.io/include=always",
+                    "tag=Java EE=Persistence units"
+                ]
+            },
+            {
+                "name": "Spring XML Configuration",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["discovery"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "discovery-rules",
+                "rule": "windup-discover-spring-configuration",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Spring XML"]
+            },
+            {
+                "name": "Web XML Configuration",
+                "category": "",
+                "sources": ["None"],
+                "targets": ["discovery"],
+                "incidents": 1,
+                "affectedFiles": 1,
+                "ruleSet": "discovery-rules",
+                "rule": "windup-discover-web-configuration",
+                "labels": ["discovery", "konveyor.io/include=always", "tag=Web XML"]
             }
         ]
     },
