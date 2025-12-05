@@ -216,3 +216,18 @@ export type AppDependency = {
     labels: string[];
     tags?: string[];
 };
+
+export type GeneratorTemplateRepository = {
+    repositoryType: RepositoryType;
+    url: string;
+    branch?: string;
+    rootPath?: string;
+    credentials?: CredentialsSourceControl;
+};
+
+export type AssetGeneratorData = {
+    name: string;
+    generatorType: string;
+    templateRepository: GeneratorTemplateRepository;
+    description?: string;
+};
