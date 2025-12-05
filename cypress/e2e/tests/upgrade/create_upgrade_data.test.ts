@@ -219,7 +219,7 @@ describe(["@pre-upgrade"], "Creating pre-requisites before an upgrade", () => {
         AssessmentQuestionnaire.disable(cloudReadinessQuestionnaire);
     });
 
-    it("Create new admin user to use after upgrade", function () {
+    it("Bug SSOSUP-1477: Create new admin user to use after upgrade", function () {
         const user = this.upgradeData.adminUser;
         const password = Cypress.env("pass");
         const userAdmin = new UserAdmin(getRandomUserData());

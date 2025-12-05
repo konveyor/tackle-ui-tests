@@ -1,4 +1,5 @@
 import {
+    checkSuccessAlert,
     click,
     clickByText,
     deleteFromArray,
@@ -9,7 +10,7 @@ import {
 } from "../../../../utils/utils";
 import { button, SEC, tdTag, trTag } from "../../../types/constants";
 import { UserData } from "../../../types/types";
-import { modalConfirm } from "../../../views/common.view";
+import { modalConfirm, successAlertMessage } from "../../../views/common.view";
 import * as loginView from "../../../views/login.view";
 import {
     addUserButton,
@@ -162,6 +163,11 @@ export class User {
         click(tempPasswordToggle);
         click(modalConfirmButton);
         click(modalConfirmButton);
+        checkSuccessAlert(
+            successAlertMessage,
+            `Success alert:The password has been set successfully.`,
+            true
+        );
     }
 
     addRole(role: string): void {
