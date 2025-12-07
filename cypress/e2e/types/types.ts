@@ -209,6 +209,19 @@ export type AppIssue = {
     labels?: string[];
 };
 
+export type AppInsight = {
+    name: string;
+    category: string;
+    sources: string[];
+    targets: string[];
+    incidents: number;
+    affectedFiles: number;
+    tags?: string[];
+    ruleSet?: string;
+    rule?: string;
+    labels?: string[];
+};
+
 export type AppDependency = {
     name: string;
     foundIn?: number;
